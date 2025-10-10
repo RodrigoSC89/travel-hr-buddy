@@ -4,7 +4,6 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import ProductRoadmap from "@/components/strategic/ProductRoadmap";
 import { Map } from "lucide-react";
 
-
 const ProductRoadmapPage = () => {
   return (
     <SidebarProvider>
@@ -24,7 +23,6 @@ const ProductRoadmapPage = () => {
           </div>
           <ProductRoadmap />
         </main>
-        
       </div>
     </SidebarProvider>
   );

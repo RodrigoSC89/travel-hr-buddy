@@ -11,12 +11,10 @@ const FleetTracking = () => {
         </div>
         <div>
           <h1 className="text-3xl font-bold">Rastreamento de Frota</h1>
-          <p className="text-muted-foreground">
-                Monitoramento em tempo real das embarcações
-          </p>
+          <p className="text-muted-foreground">Monitoramento em tempo real das embarcações</p>
         </div>
       </div>
-          
+
       <div className="h-[calc(100vh-200px)]">
         <VesselTrackingMap />
       </div>

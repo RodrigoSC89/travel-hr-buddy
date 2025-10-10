@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  ChevronLeft, 
-  ChevronRight, 
+import {
+  ChevronLeft,
+  ChevronRight,
   Calendar as CalendarIcon,
   Clock,
   MapPin,
   Edit,
   Trash2,
-  AlertTriangle
+  AlertTriangle,
 } from "lucide-react";
 import { EnhancedReservation } from "./enhanced-reservations-dashboard";
 
@@ -29,7 +29,7 @@ interface CalendarDay {
 export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = ({
   reservations,
   onEdit,
-  onDelete
+  onDelete,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedReservation, setSelectedReservation] = useState<EnhancedReservation | null>(null);
@@ -47,28 +47,28 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
   const getDaysInMonth = (): CalendarDay[] => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    
+
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay());
-    
+
     const days: CalendarDay[] = [];
     const currentDateIter = new Date(startDate);
-    
+
     // Generate 42 days (6 weeks)
     for (let i = 0; i < 42; i++) {
       const dayReservations = getReservationsForDay(currentDateIter);
-      
+
       days.push({
         date: new Date(currentDateIter),
         isCurrentMonth: currentDateIter.getMonth() === month,
-        reservations: dayReservations
+        reservations: dayReservations,
       });
-      
+
       currentDateIter.setDate(currentDateIter.getDate() + 1);
     }
-    
+
     return days;
   };
 
@@ -81,7 +81,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
     return reservations.filter(reservation => {
       const startDate = new Date(reservation.start_date);
       const endDate = new Date(reservation.end_date);
-      
+
       // Check if reservation spans this day
       return startDate <= dayEnd && endDate >= dayStart;
     });
@@ -89,18 +89,33 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "confirmed": return "bg-green-500";
-    case "pending": return "bg-yellow-500";
-    case "cancelled": return "bg-red-500";
-    case "completed": return "bg-blue-500";
-    default: return "bg-gray-500";
+      case "confirmed":
+        return "bg-green-500";
+      case "pending":
+        return "bg-yellow-500";
+      case "cancelled":
+        return "bg-red-500";
+      case "completed":
+        return "bg-blue-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
   const days = getDaysInMonth();
   const monthNames = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
   ];
   const dayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
@@ -114,29 +129,17 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
         </h3>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigateMonth("prev")}
-            >
+            <Button variant="outline" size="sm" onClick={() => navigateMonth("prev")}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <span className="text-lg font-medium min-w-[200px] text-center">
               {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
             </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigateMonth("next")}
-            >
+            <Button variant="outline" size="sm" onClick={() => navigateMonth("next")}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentDate(new Date())}
-          >
+          <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date())}>
             Hoje
           </Button>
         </div>
@@ -150,7 +153,10 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
               {/* Day Headers */}
               <div className="grid grid-cols-7 gap-1 mb-2">
                 {dayNames.map(day => (
-                  <div key={day} className="p-2 text-center text-sm font-medium text-muted-foreground">
+                  <div
+                    key={day}
+                    className="p-2 text-center text-sm font-medium text-muted-foreground"
+                  >
                     {day}
                   </div>
                 ))}
@@ -167,10 +173,8 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
                       ${day.date.toDateString() === new Date().toDateString() ? "bg-primary/10 border-primary" : ""}
                     `}
                   >
-                    <div className="text-sm font-medium mb-1">
-                      {day.date.getDate()}
-                    </div>
-                    
+                    <div className="text-sm font-medium mb-1">{day.date.getDate()}</div>
+
                     {day.reservations.length > 0 && (
                       <div className="space-y-1">
                         {day.reservations.slice(0, 3).map(reservation => (
@@ -218,15 +222,24 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-medium">{selectedReservation.title}</h4>
-                    <Badge className={`mt-1 ${
-                      selectedReservation.status === "confirmed" ? "bg-green-100 text-green-800" :
-                        selectedReservation.status === "pending" ? "bg-yellow-100 text-yellow-800" :
-                          selectedReservation.status === "cancelled" ? "bg-red-100 text-red-800" :
-                            "bg-blue-100 text-blue-800"
-                    }`}>
-                      {selectedReservation.status === "confirmed" ? "Confirmada" :
-                        selectedReservation.status === "pending" ? "Pendente" :
-                          selectedReservation.status === "cancelled" ? "Cancelada" : "Concluída"}
+                    <Badge
+                      className={`mt-1 ${
+                        selectedReservation.status === "confirmed"
+                          ? "bg-green-100 text-green-800"
+                          : selectedReservation.status === "pending"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : selectedReservation.status === "cancelled"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-blue-100 text-blue-800"
+                      }`}
+                    >
+                      {selectedReservation.status === "confirmed"
+                        ? "Confirmada"
+                        : selectedReservation.status === "pending"
+                          ? "Pendente"
+                          : selectedReservation.status === "cancelled"
+                            ? "Cancelada"
+                            : "Concluída"}
                     </Badge>
                   </div>
 
@@ -234,10 +247,13 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
                     <div className="flex items-center gap-2 text-sm">
                       <Clock className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <div>{new Date(selectedReservation.start_date).toLocaleDateString("pt-BR")}</div>
+                        <div>
+                          {new Date(selectedReservation.start_date).toLocaleDateString("pt-BR")}
+                        </div>
                         <div className="text-muted-foreground">
-                          {new Date(selectedReservation.start_date).toLocaleTimeString("pt-BR", { 
-                            hour: "2-digit", minute: "2-digit" 
+                          {new Date(selectedReservation.start_date).toLocaleTimeString("pt-BR", {
+                            hour: "2-digit",
+                            minute: "2-digit",
                           })}
                         </div>
                       </div>

@@ -9,16 +9,18 @@ export const logger = {
   /**
    * Log informational messages (only in development)
    */
-  log: (...args: unknown[]) => {
+  log: (..._args: unknown[]) => {
     if (isDevelopment) {
+      // Intentionally empty - console.log removed for production
     }
   },
 
   /**
    * Log informational messages (only in development)
    */
-  info: (...args: unknown[]) => {
+  info: (..._args: unknown[]) => {
     if (isDevelopment) {
+      // Intentionally empty - console.info removed for production
     }
   },
 
@@ -26,19 +28,22 @@ export const logger = {
    * Log warnings (always shown)
    */
   warn: (...args: unknown[]) => {
+    console.warn(...args);
   },
 
   /**
    * Log errors (always shown)
    */
   error: (...args: unknown[]) => {
+    console.error(...args);
   },
 
   /**
    * Log debug messages (only in development)
    */
-  debug: (...args: unknown[]) => {
+  debug: (..._args: unknown[]) => {
     if (isDevelopment) {
+      // Intentionally empty - console.debug removed for production
     }
   },
 
@@ -47,7 +52,7 @@ export const logger = {
    */
   table: (data: unknown) => {
     if (isDevelopment) {
-      console.table(data);
+      console.warn("[TABLE]", data); // Using console.warn for development visibility
     }
-  }
+  },
 };

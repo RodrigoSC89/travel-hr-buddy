@@ -11,23 +11,19 @@ interface ModuleErrorBoundaryProps {
  * Maritime module error boundary wrapper
  * Provides consistent error handling for all maritime modules
  */
-export const ModuleErrorBoundary: React.FC<ModuleErrorBoundaryProps> = ({ 
-  children, 
-  moduleName = "Módulo" 
+export const ModuleErrorBoundary: React.FC<ModuleErrorBoundaryProps> = ({
+  children,
+  moduleName = "Módulo",
 }) => {
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
     // Log error to Sentry monitoring service
-    Sentry.captureException(error, { 
+    Sentry.captureException(error, {
       tags: { module: moduleName },
-      contexts: { react: { componentStack: errorInfo.componentStack } }
+      contexts: { react: { componentStack: errorInfo.componentStack } },
     });
   };
 
-  return (
-    <ErrorBoundary onError={handleError}>
-      {children}
-    </ErrorBoundary>
-  );
+  return <ErrorBoundary onError={handleError}>{children}</ErrorBoundary>;
 };
 
 export default ModuleErrorBoundary;

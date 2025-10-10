@@ -5,16 +5,7 @@ import { AdvancedDocumentCenter } from "@/components/documents/advanced-document
 import IntelligentDocumentManager from "@/components/documents/intelligent-document-manager";
 import { DocumentValidator } from "@/components/ui/document-validator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  FileText, 
-  Scan, 
-  Brain, 
-  FileCheck, 
-  Search,
-  Archive,
-  Settings,
-  BarChart3
-} from "lucide-react";
+import { FileText, Scan, Brain, FileCheck, Archive, BarChart3 } from "lucide-react";
 
 const AdvancedDocumentsPage = () => {
   return (
@@ -22,9 +13,7 @@ const AdvancedDocumentsPage = () => {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-foreground">
-            Centro Avançado de Documentos
-          </h1>
+          <h1 className="text-4xl font-bold text-foreground">Centro Avançado de Documentos</h1>
           <p className="text-lg text-muted-foreground">
             Plataforma completa para digitalização, análise e gestão inteligente de documentos
           </p>
@@ -41,7 +30,7 @@ const AdvancedDocumentsPage = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="flex items-center gap-3 p-4">
               <Brain className="h-8 w-8 text-purple-500" />
@@ -51,7 +40,7 @@ const AdvancedDocumentsPage = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="flex items-center gap-3 p-4">
               <FileCheck className="h-8 w-8 text-green-500" />
@@ -61,7 +50,7 @@ const AdvancedDocumentsPage = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="flex items-center gap-3 p-4">
               <Archive className="h-8 w-8 text-orange-500" />
@@ -114,8 +103,8 @@ const AdvancedDocumentsPage = () => {
                   Scanner de Documentos Inteligente
                 </CardTitle>
                 <CardDescription>
-                  Capture documentos com câmera ou upload, com OCR avançado e análise de IA em tempo real. 
-                  Suporte completo para dispositivos móveis e tablets.
+                  Capture documentos com câmera ou upload, com OCR avançado e análise de IA em tempo
+                  real. Suporte completo para dispositivos móveis e tablets.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -133,7 +122,8 @@ const AdvancedDocumentsPage = () => {
                   Centro de Gestão de Documentos
                 </CardTitle>
                 <CardDescription>
-                  Sistema completo para organizar, categorizar e gerenciar documentos com fluxos de aprovação avançados.
+                  Sistema completo para organizar, categorizar e gerenciar documentos com fluxos de
+                  aprovação avançados.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -151,7 +141,8 @@ const AdvancedDocumentsPage = () => {
                   Análise Inteligente de Documentos
                 </CardTitle>
                 <CardDescription>
-                  IA avançada para análise de conteúdo, extração de insights e organização automática de documentos.
+                  IA avançada para análise de conteúdo, extração de insights e organização
+                  automática de documentos.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -169,24 +160,25 @@ const AdvancedDocumentsPage = () => {
                   Validação de Documentos
                 </CardTitle>
                 <CardDescription>
-                  Sistema de validação automática para certificados, licenças e outros documentos oficiais.
+                  Sistema de validação automática para certificados, licenças e outros documentos
+                  oficiais.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
                     <h3 className="text-lg font-semibold mb-3">Certificados Marítimos</h3>
-                    <DocumentValidator 
-                      documentType="certificate" 
-                      onValidationComplete={(result) => console.log("Certificado validado:", result)}
+                    <DocumentValidator
+                      documentType="certificate"
+                      onValidationComplete={result => console.warn("[DOC VALIDATION]", result)}
                     />
                   </div>
-                  
+
                   <div>
                     <h3 className="text-lg font-semibold mb-3">Licenças e Permissões</h3>
-                    <DocumentValidator 
+                    <DocumentValidator
                       documentType="license"
-                      onValidationComplete={(result) => console.log("Licença validada:", result)}
+                      onValidationComplete={result => console.warn("[DOC VALIDATION]", result)}
                     />
                   </div>
                 </div>
@@ -206,7 +198,7 @@ const AdvancedDocumentsPage = () => {
                   <p className="text-sm text-muted-foreground">Este mês (+23%)</p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Taxa de Precisão OCR</CardTitle>
@@ -216,7 +208,7 @@ const AdvancedDocumentsPage = () => {
                   <p className="text-sm text-muted-foreground">Média de confiança</p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Documentos Validados</CardTitle>
@@ -226,7 +218,7 @@ const AdvancedDocumentsPage = () => {
                   <p className="text-sm text-muted-foreground">Aprovados automaticamente</p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Tempo Médio de Processamento</CardTitle>
@@ -236,7 +228,7 @@ const AdvancedDocumentsPage = () => {
                   <p className="text-sm text-muted-foreground">Por documento</p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Categorias Detectadas</CardTitle>
@@ -246,7 +238,7 @@ const AdvancedDocumentsPage = () => {
                   <p className="text-sm text-muted-foreground">Tipos diferentes</p>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Economia de Tempo</CardTitle>
@@ -274,7 +266,7 @@ const AdvancedDocumentsPage = () => {
                       <li>• Relatórios de Vistoria (16%)</li>
                     </ul>
                   </div>
-                  
+
                   <div className="p-4 bg-green-50 rounded-lg">
                     <h4 className="font-medium text-green-900">Melhorias Detectadas</h4>
                     <ul className="mt-2 space-y-1 text-sm text-green-700">

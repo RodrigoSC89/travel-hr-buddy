@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { 
-  Activity, 
-  Wifi, 
-  WifiOff, 
+import {
+  Activity,
+  Wifi,
+  WifiOff,
   RefreshCw,
   Zap,
   Thermometer,
   Droplets,
-  Wind,
   Compass,
-  Gauge
+  Gauge,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -42,21 +41,21 @@ const sensorIcons = {
   pressure: Gauge,
   speed: Activity,
   power: Zap,
-  heading: Compass
+  heading: Compass,
 };
 
 const statusColors = {
   normal: "text-success",
   warning: "text-warning",
   critical: "text-danger",
-  offline: "text-muted-foreground"
+  offline: "text-muted-foreground",
 };
 
 const statusBadgeColors = {
   normal: "bg-success/10 text-success border-success/20",
   warning: "bg-warning/10 text-warning border-warning/20",
   critical: "bg-danger/10 text-danger border-danger/20",
-  offline: "bg-muted text-muted-foreground border-muted"
+  offline: "bg-muted text-muted-foreground border-muted",
 };
 
 // Mock data para demonstração
@@ -77,7 +76,7 @@ const mockVessels: VesselMonitor[] = [
         lastUpdate: new Date(),
         min: 70,
         max: 95,
-        target: 85
+        target: 85,
       },
       {
         id: "fuel_level",
@@ -89,7 +88,7 @@ const mockVessels: VesselMonitor[] = [
         lastUpdate: new Date(),
         min: 0,
         max: 100,
-        target: 50
+        target: 50,
       },
       {
         id: "speed",
@@ -98,7 +97,7 @@ const mockVessels: VesselMonitor[] = [
         value: 12.8,
         unit: "kts",
         status: "normal",
-        lastUpdate: new Date()
+        lastUpdate: new Date(),
       },
       {
         id: "heading",
@@ -107,9 +106,9 @@ const mockVessels: VesselMonitor[] = [
         value: 285,
         unit: "°",
         status: "normal",
-        lastUpdate: new Date()
-      }
-    ]
+        lastUpdate: new Date(),
+      },
+    ],
   },
   {
     vesselId: "pacifico",
@@ -127,7 +126,7 @@ const mockVessels: VesselMonitor[] = [
         lastUpdate: new Date(),
         min: 0,
         max: 2000,
-        target: 1500
+        target: 1500,
       },
       {
         id: "fuel_level",
@@ -136,9 +135,9 @@ const mockVessels: VesselMonitor[] = [
         value: 78.5,
         unit: "%",
         status: "normal",
-        lastUpdate: new Date()
-      }
-    ]
+        lastUpdate: new Date(),
+      },
+    ],
   },
   {
     vesselId: "artico",
@@ -153,10 +152,10 @@ const mockVessels: VesselMonitor[] = [
         value: 0,
         unit: "kW",
         status: "offline",
-        lastUpdate: new Date(Date.now() - 15 * 60 * 1000)
-      }
-    ]
-  }
+        lastUpdate: new Date(Date.now() - 15 * 60 * 1000),
+      },
+    ],
+  },
 ];
 
 interface RealTimeMonitorProps {
@@ -171,63 +170,65 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
   // Simular updates em tempo real
   useEffect(() => {
     const interval = setInterval(() => {
-      setVessels(prev => prev.map(vessel => {
-        if (!vessel.isOnline) return vessel;
-        
-        return {
-          ...vessel,
-          lastSeen: new Date(),
-          sensors: vessel.sensors.map(sensor => {
-            // Se sensor está offline, manter como está
-            if (sensor.status === "offline") {
-              return sensor;
-            }
-            
-            // Simular variação nos valores
-            let newValue = sensor.value;
-            const variation = (Math.random() - 0.5) * 2; // -1 a +1
-            
-            switch (sensor.type) {
-            case "temperature":
-              newValue = Math.max(70, Math.min(100, sensor.value + variation));
-              break;
-            case "fuel":
-              newValue = Math.max(0, Math.min(100, sensor.value + variation * 0.1));
-              break;
-            case "speed":
-              newValue = Math.max(0, Math.min(20, sensor.value + variation * 0.5));
-              break;
-            case "power":
-              newValue = Math.max(0, Math.min(2000, sensor.value + variation * 50));
-              break;
-            case "heading":
-              newValue = (sensor.value + variation * 2 + 360) % 360;
-              break;
-            }
-            
-            // Determinar novo status baseado no valor
-            let newStatus: SensorData["status"] = "normal";
-            if (sensor.type === "fuel" && newValue < 20) {
-              newStatus = "critical";
-            } else if (sensor.type === "fuel" && newValue < 30) {
-              newStatus = "warning";
-            } else if (sensor.type === "temperature" && (newValue > 95 || newValue < 70)) {
-              newStatus = "critical";
-            } else if (sensor.type === "temperature" && newValue > 90) {
-              newStatus = "warning";
-            } else {
-              newStatus = "normal";
-            }
-            
-            return {
-              ...sensor,
-              value: Number(newValue.toFixed(1)),
-              status: newStatus,
-              lastUpdate: new Date()
-            };
-          })
-        };
-      }));
+      setVessels(prev =>
+        prev.map(vessel => {
+          if (!vessel.isOnline) return vessel;
+
+          return {
+            ...vessel,
+            lastSeen: new Date(),
+            sensors: vessel.sensors.map(sensor => {
+              // Se sensor está offline, manter como está
+              if (sensor.status === "offline") {
+                return sensor;
+              }
+
+              // Simular variação nos valores
+              let newValue = sensor.value;
+              const variation = (Math.random() - 0.5) * 2; // -1 a +1
+
+              switch (sensor.type) {
+                case "temperature":
+                  newValue = Math.max(70, Math.min(100, sensor.value + variation));
+                  break;
+                case "fuel":
+                  newValue = Math.max(0, Math.min(100, sensor.value + variation * 0.1));
+                  break;
+                case "speed":
+                  newValue = Math.max(0, Math.min(20, sensor.value + variation * 0.5));
+                  break;
+                case "power":
+                  newValue = Math.max(0, Math.min(2000, sensor.value + variation * 50));
+                  break;
+                case "heading":
+                  newValue = (sensor.value + variation * 2 + 360) % 360;
+                  break;
+              }
+
+              // Determinar novo status baseado no valor
+              let newStatus: SensorData["status"] = "normal";
+              if (sensor.type === "fuel" && newValue < 20) {
+                newStatus = "critical";
+              } else if (sensor.type === "fuel" && newValue < 30) {
+                newStatus = "warning";
+              } else if (sensor.type === "temperature" && (newValue > 95 || newValue < 70)) {
+                newStatus = "critical";
+              } else if (sensor.type === "temperature" && newValue > 90) {
+                newStatus = "warning";
+              } else {
+                newStatus = "normal";
+              }
+
+              return {
+                ...sensor,
+                value: Number(newValue.toFixed(1)),
+                status: newStatus,
+                lastUpdate: new Date(),
+              };
+            }),
+          };
+        })
+      );
     }, 3000); // Update a cada 3 segundos
 
     return () => clearInterval(interval);
@@ -244,7 +245,7 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
     const diff = Date.now() - date.getTime();
     const minutes = Math.floor(diff / 60000);
     const seconds = Math.floor(diff / 1000);
-    
+
     if (minutes > 0) return `${minutes}m atrás`;
     return `${seconds}s atrás`;
   };
@@ -255,8 +256,9 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
   };
 
   const onlineVessels = vessels.filter(v => v.isOnline).length;
-  const criticalAlerts = vessels.reduce((count, vessel) => 
-    count + vessel.sensors.filter(s => s.status === "critical").length, 0
+  const criticalAlerts = vessels.reduce(
+    (count, vessel) => count + vessel.sensors.filter(s => s.status === "critical").length,
+    0
   );
 
   return (
@@ -267,12 +269,14 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Embarcações Online</p>
-              <p className="text-2xl font-bold text-success">{onlineVessels}/{vessels.length}</p>
+              <p className="text-2xl font-bold text-success">
+                {onlineVessels}/{vessels.length}
+              </p>
             </div>
             <Wifi className="text-success" size={24} />
           </div>
         </div>
-        
+
         <div className="bg-card p-4 rounded-lg border border-border">
           <div className="flex items-center justify-between">
             <div>
@@ -282,21 +286,23 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
             <Activity className="text-danger" size={24} />
           </div>
         </div>
-        
+
         <div className="bg-card p-4 rounded-lg border border-border">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Sensores Ativos</p>
               <p className="text-2xl font-bold text-primary">
-                {vessels.reduce((count, vessel) => 
-                  count + vessel.sensors.filter(s => s.status !== "offline").length, 0
+                {vessels.reduce(
+                  (count, vessel) =>
+                    count + vessel.sensors.filter(s => s.status !== "offline").length,
+                  0
                 )}
               </p>
             </div>
             <Activity className="text-primary" size={24} />
           </div>
         </div>
-        
+
         <div className="bg-card p-4 rounded-lg border border-border">
           <div className="flex items-center justify-between">
             <Button
@@ -314,7 +320,7 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
 
       {/* Vessels Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        {vessels.map((vessel) => (
+        {vessels.map(vessel => (
           <div
             key={vessel.vesselId}
             className={cn(
@@ -322,18 +328,16 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
               vessel.isOnline ? "border-border" : "border-danger/30",
               selectedVessel === vessel.vesselId && "ring-2 ring-primary"
             )}
-            onClick={() => setSelectedVessel(
-              selectedVessel === vessel.vesselId ? null : vessel.vesselId
-            )}
+            onClick={() =>
+              setSelectedVessel(selectedVessel === vessel.vesselId ? null : vessel.vesselId)
+            }
           >
             {/* Vessel Header */}
             <div className="p-4 border-b border-border">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-semibold text-lg">{vessel.vesselName}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {formatTimeAgo(vessel.lastSeen)}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{formatTimeAgo(vessel.lastSeen)}</p>
                 </div>
                 <div className="flex items-center space-x-2">
                   {vessel.isOnline ? (
@@ -341,9 +345,9 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
                   ) : (
                     <WifiOff className="text-danger" size={20} />
                   )}
-                  <Badge 
+                  <Badge
                     className={cn(
-                      vessel.isOnline 
+                      vessel.isOnline
                         ? "bg-success/10 text-success border-success/20"
                         : "bg-danger/10 text-danger border-danger/20"
                     )}
@@ -356,36 +360,28 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
 
             {/* Sensors */}
             <div className="p-4 space-y-3">
-              {vessel.sensors.map((sensor) => {
+              {vessel.sensors.map(sensor => {
                 const Icon = sensorIcons[sensor.type];
                 const progress = getSensorProgress(sensor);
-                
+
                 return (
                   <div key={sensor.id} className="flex items-center space-x-3">
-                    <div className={cn(
-                      "p-2 rounded-lg",
-                      statusBadgeColors[sensor.status]
-                    )}>
+                    <div className={cn("p-2 rounded-lg", statusBadgeColors[sensor.status])}>
                       <Icon size={16} />
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium truncate">
-                          {sensor.name}
-                        </span>
-                        <span className={cn(
-                          "text-sm font-bold",
-                          statusColors[sensor.status]
-                        )}>
+                        <span className="text-sm font-medium truncate">{sensor.name}</span>
+                        <span className={cn("text-sm font-bold", statusColors[sensor.status])}>
                           {sensor.value} {sensor.unit}
                         </span>
                       </div>
-                      
+
                       {sensor.min !== undefined && sensor.max !== undefined && (
                         <div className="mt-1">
                           <div className="w-full bg-accent rounded-full h-1.5">
-                            <div 
+                            <div
                               className={cn(
                                 "h-1.5 rounded-full transition-all duration-300",
                                 sensor.status === "normal" && "bg-success",
@@ -402,11 +398,9 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
                   </div>
                 );
               })}
-              
+
               {vessel.sensors.length === 0 && (
-                <p className="text-center text-muted-foreground py-4">
-                  Nenhum sensor disponível
-                </p>
+                <p className="text-center text-muted-foreground py-4">Nenhum sensor disponível</p>
               )}
             </div>
           </div>

@@ -6,7 +6,16 @@ import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle, XCircle, Clock, GitBranch, Volume2, VolumeX, WifiOff, Activity } from "lucide-react";
+import {
+  CheckCircle,
+  XCircle,
+  Clock,
+  GitBranch,
+  Volume2,
+  VolumeX,
+  WifiOff,
+  Activity,
+} from "lucide-react";
 import { format } from "date-fns";
 
 interface TestResult {
@@ -48,12 +57,15 @@ export default function AdminWallPage() {
           return;
         }
 
-        const res = await fetch(`${supabaseUrl}/rest/v1/test_results?select=*&order=created_at.desc&limit=50`, {
-          headers: {
-            apikey: supabaseKey,
-            Authorization: `Bearer ${supabaseKey}`,
-          },
-        });
+        const res = await fetch(
+          `${supabaseUrl}/rest/v1/test_results?select=*&order=created_at.desc&limit=50`,
+          {
+            headers: {
+              apikey: supabaseKey,
+              Authorization: `Bearer ${supabaseKey}`,
+            },
+          }
+        );
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -84,9 +96,9 @@ export default function AdminWallPage() {
           schema: "public",
           table: "test_results",
         },
-        (payload) => {
+        payload => {
           const newEntry = payload.new as TestResult;
-          setData((prev) => {
+          setData(prev => {
             const updated = [newEntry, ...prev];
             localStorage.setItem("ci-wall-data", JSON.stringify(updated));
             return updated;
@@ -96,7 +108,7 @@ export default function AdminWallPage() {
           if (newEntry.status === "failure" && newEntry.commit_hash !== lastAlert) {
             if (!muted) {
               const audio = new Audio("/alert.mp3");
-              audio.play().catch((err) => console.error("Failed to play alert:", err));
+              audio.play().catch(err => console.error("Failed to play alert:", err));
             }
             setLastAlert(newEntry.commit_hash);
 
@@ -108,7 +120,7 @@ export default function AdminWallPage() {
                 body: JSON.stringify({
                   text: `⚠️ Build Failed\nBranch: ${newEntry.branch}\nStatus: ${newEntry.status}\nCommit: ${newEntry.commit_hash}`,
                 }),
-              }).catch((err) => console.error("Failed to send Slack notification:", err));
+              }).catch(err => console.error("Failed to send Slack notification:", err));
             }
 
             // Send Telegram notification
@@ -120,7 +132,7 @@ export default function AdminWallPage() {
                   chat_id: TELEGRAM_CHAT_ID,
                   text: `⚠️ Build Failed\nBranch: ${newEntry.branch}\nStatus: ${newEntry.status}\nCommit: ${newEntry.commit_hash}`,
                 }),
-              }).catch((err) => console.error("Failed to send Telegram notification:", err));
+              }).catch(err => console.error("Failed to send Telegram notification:", err));
             }
           }
         }
@@ -134,27 +146,27 @@ export default function AdminWallPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "success":
-      return <CheckCircle className="text-green-500" size={32} />;
-    case "failure":
-      return <XCircle className="text-red-500" size={32} />;
-    case "in_progress":
-      return <Clock className="text-yellow-500 animate-pulse" size={32} />;
-    default:
-      return <Clock className="text-gray-500" size={32} />;
+      case "success":
+        return <CheckCircle className="text-green-500" size={32} />;
+      case "failure":
+        return <XCircle className="text-red-500" size={32} />;
+      case "in_progress":
+        return <Clock className="text-yellow-500 animate-pulse" size={32} />;
+      default:
+        return <Clock className="text-gray-500" size={32} />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "success":
-      return "bg-green-100 border-green-500 dark:bg-green-900/20";
-    case "failure":
-      return "bg-red-100 border-red-500 dark:bg-red-900/20";
-    case "in_progress":
-      return "bg-yellow-100 border-yellow-500 dark:bg-yellow-900/20";
-    default:
-      return "bg-gray-100 border-gray-500 dark:bg-gray-900/20";
+      case "success":
+        return "bg-green-100 border-green-500 dark:bg-green-900/20";
+      case "failure":
+        return "bg-red-100 border-red-500 dark:bg-red-900/20";
+      case "in_progress":
+        return "bg-yellow-100 border-yellow-500 dark:bg-yellow-900/20";
+      default:
+        return "bg-gray-100 border-gray-500 dark:bg-gray-900/20";
     }
   };
 
@@ -167,9 +179,15 @@ export default function AdminWallPage() {
           description="Monitoramento em tempo real de builds e testes"
           gradient="purple"
           badges={[
-            { icon: CheckCircle, label: `${data.filter((d) => d.status === "success").length} Sucesso` },
-            { icon: XCircle, label: `${data.filter((d) => d.status === "failure").length} Falhas` },
-            { icon: Clock, label: `${data.filter((d) => d.status === "in_progress").length} Em Progresso` }
+            {
+              icon: CheckCircle,
+              label: `${data.filter(d => d.status === "success").length} Sucesso`,
+            },
+            { icon: XCircle, label: `${data.filter(d => d.status === "failure").length} Falhas` },
+            {
+              icon: Clock,
+              label: `${data.filter(d => d.status === "in_progress").length} Em Progresso`,
+            },
           ]}
         />
 
@@ -208,7 +226,7 @@ export default function AdminWallPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-4xl font-bold text-green-500">
-                  {data.filter((d) => d.status === "success").length}
+                  {data.filter(d => d.status === "success").length}
                 </p>
               </CardContent>
             </Card>
@@ -222,7 +240,7 @@ export default function AdminWallPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-4xl font-bold text-red-500">
-                  {data.filter((d) => d.status === "failure").length}
+                  {data.filter(d => d.status === "failure").length}
                 </p>
               </CardContent>
             </Card>
@@ -236,7 +254,7 @@ export default function AdminWallPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-4xl font-bold text-yellow-500">
-                  {data.filter((d) => d.status === "in_progress").length}
+                  {data.filter(d => d.status === "in_progress").length}
                 </p>
               </CardContent>
             </Card>
@@ -249,7 +267,7 @@ export default function AdminWallPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {data.slice(0, 12).map((result) => (
+                {data.slice(0, 12).map(result => (
                   <Card
                     key={result.id}
                     className={`${getStatusColor(result.status)} border-2 transition-all hover:shadow-lg`}
@@ -276,11 +294,13 @@ export default function AdminWallPage() {
                         </div>
                         {result.coverage_percent !== null && (
                           <div className="text-sm">
-                            📊 Cobertura: <span className="font-bold">{result.coverage_percent}%</span>
+                            📊 Cobertura:{" "}
+                            <span className="font-bold">{result.coverage_percent}%</span>
                           </div>
                         )}
                         <div className="text-xs">
-                          Disparado por: <span className="font-semibold">{result.triggered_by}</span>
+                          Disparado por:{" "}
+                          <span className="font-semibold">{result.triggered_by}</span>
                         </div>
                       </div>
                     </CardContent>

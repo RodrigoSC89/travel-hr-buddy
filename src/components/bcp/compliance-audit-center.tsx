@@ -4,20 +4,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Shield, 
-  FileText, 
-  CheckCircle, 
+import {
+  Shield,
+  FileText,
+  CheckCircle,
   AlertTriangle,
-  Lock,
-  Eye,
-  Users,
   Globe,
   Scale,
   Building,
   Anchor,
   Search,
-  Download
+  Download,
 } from "lucide-react";
 
 export const ComplianceAuditCenter: React.FC = () => {
@@ -30,11 +27,23 @@ export const ComplianceAuditCenter: React.FC = () => {
       nextAudit: "2024-04-10",
       items: [
         { name: "Consentimentos", status: "compliant", details: "Sistema de opt-in implementado" },
-        { name: "Políticas de Privacidade", status: "compliant", details: "Política atualizada e publicada" },
-        { name: "Direito ao Esquecimento", status: "compliant", details: "Processo automatizado ativo" },
+        {
+          name: "Políticas de Privacidade",
+          status: "compliant",
+          details: "Política atualizada e publicada",
+        },
+        {
+          name: "Direito ao Esquecimento",
+          status: "compliant",
+          details: "Processo automatizado ativo",
+        },
         { name: "Relatórios DPO", status: "warning", details: "Relatório trimestral pendente" },
-        { name: "Minimização de Dados", status: "compliant", details: "Retenção de dados configurada" }
-      ]
+        {
+          name: "Minimização de Dados",
+          status: "compliant",
+          details: "Retenção de dados configurada",
+        },
+      ],
     },
     gdpr: {
       name: "GDPR",
@@ -43,11 +52,23 @@ export const ComplianceAuditCenter: React.FC = () => {
       lastAudit: "2024-01-08",
       nextAudit: "2024-04-08",
       items: [
-        { name: "Data Protection Impact Assessment", status: "compliant", details: "DPIA realizado e aprovado" },
+        {
+          name: "Data Protection Impact Assessment",
+          status: "compliant",
+          details: "DPIA realizado e aprovado",
+        },
         { name: "Privacy by Design", status: "compliant", details: "Implementado na arquitetura" },
-        { name: "Breach Notification", status: "compliant", details: "Processo de 72h implementado" },
-        { name: "Data Subject Rights", status: "compliant", details: "Portal de direitos disponível" }
-      ]
+        {
+          name: "Breach Notification",
+          status: "compliant",
+          details: "Processo de 72h implementado",
+        },
+        {
+          name: "Data Subject Rights",
+          status: "compliant",
+          details: "Portal de direitos disponível",
+        },
+      ],
     },
     iso27001: {
       name: "ISO 27001",
@@ -57,11 +78,19 @@ export const ComplianceAuditCenter: React.FC = () => {
       nextAudit: "2024-07-05",
       items: [
         { name: "Gestão de Riscos", status: "compliant", details: "Framework implementado" },
-        { name: "Controles de Segurança", status: "compliant", details: "143/143 controles ativos" },
+        {
+          name: "Controles de Segurança",
+          status: "compliant",
+          details: "143/143 controles ativos",
+        },
         { name: "Auditoria Interna", status: "warning", details: "Auditoria semestral agendada" },
         { name: "Melhoria Contínua", status: "compliant", details: "Processo PDCA ativo" },
-        { name: "Treinamento de Segurança", status: "compliant", details: "Programa anual completo" }
-      ]
+        {
+          name: "Treinamento de Segurança",
+          status: "compliant",
+          details: "Programa anual completo",
+        },
+      ],
     },
     imo: {
       name: "IMO/ISM Code",
@@ -74,9 +103,9 @@ export const ComplianceAuditCenter: React.FC = () => {
         { name: "Emergency Procedures", status: "compliant", details: "Procedimentos atualizados" },
         { name: "Crew Certification", status: "compliant", details: "Certificações em dia" },
         { name: "Vessel Documentation", status: "warning", details: "2 documentos vencendo" },
-        { name: "Port State Control", status: "compliant", details: "Última inspeção aprovada" }
-      ]
-    }
+        { name: "Port State Control", status: "compliant", details: "Última inspeção aprovada" },
+      ],
+    },
   });
 
   const [auditHistory] = useState([
@@ -89,7 +118,7 @@ export const ComplianceAuditCenter: React.FC = () => {
       result: "Aprovado",
       score: 95,
       findings: 1,
-      status: "completed"
+      status: "completed",
     },
     {
       id: "2",
@@ -100,7 +129,7 @@ export const ComplianceAuditCenter: React.FC = () => {
       result: "Aprovado com Observações",
       score: 88,
       findings: 3,
-      status: "completed"
+      status: "completed",
     },
     {
       id: "3",
@@ -111,8 +140,8 @@ export const ComplianceAuditCenter: React.FC = () => {
       result: "Aprovado",
       score: 92,
       findings: 2,
-      status: "completed"
-    }
+      status: "completed",
+    },
   ]);
 
   const [dataSubjectRequests] = useState([
@@ -123,7 +152,7 @@ export const ComplianceAuditCenter: React.FC = () => {
       date: "2024-01-14",
       status: "completed",
       responseTime: "24h",
-      legal: "LGPD Art. 18"
+      legal: "LGPD Art. 18",
     },
     {
       id: "2",
@@ -132,7 +161,7 @@ export const ComplianceAuditCenter: React.FC = () => {
       date: "2024-01-13",
       status: "in_progress",
       responseTime: "48h",
-      legal: "LGPD Art. 18"
+      legal: "LGPD Art. 18",
     },
     {
       id: "3",
@@ -141,41 +170,54 @@ export const ComplianceAuditCenter: React.FC = () => {
       date: "2024-01-12",
       status: "completed",
       responseTime: "72h",
-      legal: "GDPR Art. 20"
-    }
+      legal: "GDPR Art. 20",
+    },
   ]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "compliant": 
-    case "completed": return "text-green-500";
-    case "warning": 
-    case "in_progress": return "text-yellow-500";
-    case "non_compliant": 
-    case "failed": return "text-red-500";
-    default: return "text-muted-foreground";
+      case "compliant":
+      case "completed":
+        return "text-green-500";
+      case "warning":
+      case "in_progress":
+        return "text-yellow-500";
+      case "non_compliant":
+      case "failed":
+        return "text-red-500";
+      default:
+        return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "compliant": 
-    case "completed": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "warning": 
-    case "in_progress": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "non_compliant": 
-    case "failed": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+      case "compliant":
+      case "completed":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      case "warning":
+      case "in_progress":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "non_compliant":
+      case "failed":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getComplianceIcon = (standard: string) => {
     switch (standard) {
-    case "LGPD": return Building;
-    case "GDPR": return Globe;
-    case "ISO 27001": return Shield;
-    case "IMO/ISM Code": return Anchor;
-    default: return FileText;
+      case "LGPD":
+        return Building;
+      case "GDPR":
+        return Globe;
+      case "ISO 27001":
+        return Shield;
+      case "IMO/ISM Code":
+        return Anchor;
+      default:
+        return FileText;
     }
   };
 
@@ -195,7 +237,7 @@ export const ComplianceAuditCenter: React.FC = () => {
 
       {/* Compliance Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {Object.values(complianceStatus).map((standard) => {
+        {Object.values(complianceStatus).map(standard => {
           const IconComponent = getComplianceIcon(standard.name);
           return (
             <Card key={standard.name}>
@@ -245,7 +287,10 @@ export const ComplianceAuditCenter: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {complianceStatus.lgpd.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       {item.status === "compliant" ? (
                         <CheckCircle className="w-5 h-5 text-green-500" />
@@ -272,8 +317,11 @@ export const ComplianceAuditCenter: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {dataSubjectRequests.map((request) => (
-                    <div key={request.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  {dataSubjectRequests.map(request => (
+                    <div
+                      key={request.id}
+                      className="flex items-center justify-between p-3 border rounded-lg"
+                    >
                       <div>
                         <h4 className="font-medium">{request.type}</h4>
                         <p className="text-sm text-muted-foreground">
@@ -308,7 +356,10 @@ export const ComplianceAuditCenter: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {complianceStatus.gdpr.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       <CheckCircle className="w-5 h-5 text-green-500" />
                       <div>
@@ -316,9 +367,7 @@ export const ComplianceAuditCenter: React.FC = () => {
                         <p className="text-sm text-muted-foreground">{item.details}</p>
                       </div>
                     </div>
-                    <Badge className={getStatusBadge(item.status)}>
-                      Conforme
-                    </Badge>
+                    <Badge className={getStatusBadge(item.status)}>Conforme</Badge>
                   </div>
                 ))}
               </CardContent>
@@ -366,7 +415,10 @@ export const ComplianceAuditCenter: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {complianceStatus.iso27001.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       {item.status === "compliant" ? (
                         <CheckCircle className="w-5 h-5 text-green-500" />
@@ -422,7 +474,10 @@ export const ComplianceAuditCenter: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {complianceStatus.imo.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       {item.status === "compliant" ? (
                         <CheckCircle className="w-5 h-5 text-green-500" />
@@ -495,23 +550,26 @@ export const ComplianceAuditCenter: React.FC = () => {
             <Card>
               <CardContent className="p-0">
                 <div className="space-y-3 p-6">
-                  {auditHistory.map((audit) => (
-                    <div key={audit.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  {auditHistory.map(audit => (
+                    <div
+                      key={audit.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="flex items-center gap-4">
                         <div className="p-2 bg-primary/10 rounded-lg">
                           <FileText className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <h4 className="font-medium">{audit.standard} - {audit.type}</h4>
+                          <h4 className="font-medium">
+                            {audit.standard} - {audit.type}
+                          </h4>
                           <p className="text-sm text-muted-foreground">
                             {audit.auditor} • {audit.date}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <Badge className={getStatusBadge(audit.status)}>
-                          {audit.result}
-                        </Badge>
+                        <Badge className={getStatusBadge(audit.status)}>{audit.result}</Badge>
                         <p className="text-sm text-muted-foreground mt-1">
                           Score: {audit.score}% • {audit.findings} achados
                         </p>
@@ -538,14 +596,18 @@ export const ComplianceAuditCenter: React.FC = () => {
                       <span className="font-medium">LGPD - Auditoria Trimestral</span>
                       <p className="text-sm text-muted-foreground">Agendada para: 10/04/2024</p>
                     </div>
-                    <Button size="sm" variant="outline">Preparar</Button>
+                    <Button size="sm" variant="outline">
+                      Preparar
+                    </Button>
                   </div>
                   <div className="flex justify-between items-center p-3 border rounded-lg bg-blue-50 dark:bg-blue-900/20">
                     <div>
                       <span className="font-medium">ISO 27001 - Auditoria Interna</span>
                       <p className="text-sm text-muted-foreground">Agendada para: 05/07/2024</p>
                     </div>
-                    <Button size="sm" variant="outline">Preparar</Button>
+                    <Button size="sm" variant="outline">
+                      Preparar
+                    </Button>
                   </div>
                 </div>
               </CardContent>

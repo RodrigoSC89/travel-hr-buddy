@@ -5,9 +5,9 @@ import { ModuleHeader } from "@/components/ui/module-header";
 import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
 
 // Lazy loading do sistema de gamificação
-const GamificationSystem = React.lazy(() => 
+const GamificationSystem = React.lazy(() =>
   import("@/components/innovation/gamification-system").then(module => ({
-    default: module.GamificationSystem
+    default: module.GamificationSystem,
   }))
 );
 
@@ -22,10 +22,10 @@ const Gamification: React.FC = () => {
         badges={[
           { icon: Star, label: "247 Usuários Ativos" },
           { icon: Award, label: "8 Conquistas" },
-          { icon: Target, label: "Engajamento" }
+          { icon: Target, label: "Engajamento" },
         ]}
       />
-      
+
       <Suspense fallback={<DashboardSkeleton />}>
         <GamificationSystem />
       </Suspense>

@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
-import { FileText, Plus, Edit, Trash2, Calendar, Ship, Building, CheckCircle, AlertCircle } from "lucide-react";
+import { Edit, Ship, Building, CheckCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface PeotramTemplate {
@@ -32,9 +35,9 @@ interface TemplateManagerProps {
   onTemplateUpdate: (template: PeotramTemplate) => void;
 }
 
-export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({ 
-  templates, 
-  onTemplateUpdate 
+export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
+  templates,
+  onTemplateUpdate,
 }) => {
   const [selectedTemplate, setSelectedTemplate] = useState<PeotramTemplate | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -52,7 +55,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
 
       // Trigger refresh of templates list
       window.location.reload();
-      
+
       toast({
         title: "Sucesso",
         description: "Template PEOTRAM criado com sucesso!",
@@ -68,16 +71,13 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
 
   const updateTemplate = async (id: string, updates: any) => {
     try {
-      const { error } = await supabase
-        .from("peotram_templates")
-        .update(updates)
-        .eq("id", id);
+      const { error } = await supabase.from("peotram_templates").update(updates).eq("id", id);
 
       if (error) throw error;
 
       await onTemplateUpdate(editingTemplate as PeotramTemplate);
       setIsEditDialogOpen(false);
-      
+
       toast({
         title: "Sucesso",
         description: "Template atualizado com sucesso!",
@@ -109,12 +109,10 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
               <Ship className="h-5 w-5" />
               Templates para Embarcações
             </CardTitle>
-            <CardDescription>
-              Templates específicos para auditorias em navios
-            </CardDescription>
+            <CardDescription>Templates específicos para auditorias em navios</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {vesselTemplates.map((template) => (
+            {vesselTemplates.map(template => (
               <div key={template.id} className="border rounded-lg p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -168,7 +166,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {shoreTemplates.map((template) => (
+            {shoreTemplates.map(template => (
               <div key={template.id} className="border rounded-lg p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -216,13 +214,14 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              Editar Template PEOTRAM {editingTemplate.year} - {editingTemplate.checklist_type === "vessel" ? "Embarcação" : "Base Terrestre"}
+              Editar Template PEOTRAM {editingTemplate.year} -{" "}
+              {editingTemplate.checklist_type === "vessel" ? "Embarcação" : "Base Terrestre"}
             </DialogTitle>
             <DialogDescription>
               Configure os elementos e requisitos do template PEOTRAM
             </DialogDescription>
           </DialogHeader>
-          
+
           {editingTemplate.template_data?.elements && (
             <div className="space-y-4">
               {editingTemplate.template_data.elements.map((element, index) => (
@@ -237,7 +236,10 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
                       <Label className="text-sm font-medium">Requisitos:</Label>
                       <ul className="space-y-1">
                         {element.requirements.map((req, reqIndex) => (
-                          <li key={reqIndex} className="text-sm text-muted-foreground flex items-start gap-2">
+                          <li
+                            key={reqIndex}
+                            className="text-sm text-muted-foreground flex items-start gap-2"
+                          >
                             <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
                             {req}
                           </li>
@@ -249,16 +251,16 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
               ))}
             </div>
           )}
-          
+
           <div className="flex justify-end gap-2 pt-4 border-t">
             <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancelar
             </Button>
-            <Button 
+            <Button
               onClick={() => {
                 if (editingTemplate.id) {
                   updateTemplate(editingTemplate.id, {
-                    template_data: editingTemplate.template_data
+                    template_data: editingTemplate.template_data,
                   });
                 }
               }}

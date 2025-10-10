@@ -18,22 +18,22 @@ export class AudioRecorder {
           channelCount: 1,
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: true
-        }
+          autoGainControl: true,
+        },
       });
-      
+
       this.audioContext = new AudioContext({
         sampleRate: 24000,
       });
-      
+
       this.source = this.audioContext.createMediaStreamSource(this.stream);
       this.processor = this.audioContext.createScriptProcessor(4096, 1, 1);
-      
-      this.processor.onaudioprocess = (e) => {
+
+      this.processor.onaudioprocess = e => {
         const inputData = e.inputBuffer.getChannelData(0);
         this.onAudioData(new Float32Array(inputData));
       };
-      
+
       this.source.connect(this.processor);
       this.processor.connect(this.audioContext.destination);
     } catch (error) {
@@ -87,30 +87,30 @@ export class RealtimeChat {
   async init() {
     try {
       logger.log("Initializing realtime chat...");
-      
+
       // Check if we can make request (circuit breaker)
       if (!apiHealthMonitor.canMakeRequest("realtime")) {
         throw new Error("Realtime API circuit breaker is open. Service temporarily unavailable.");
       }
-      
+
       // Get ephemeral token from our Supabase Edge Function with retry
       let data, error;
       let retries = 0;
       const maxTokenRetries = 3;
       const startTime = Date.now();
-      
+
       while (retries < maxTokenRetries) {
         try {
           const result = await supabase.functions.invoke("realtime-voice-session");
           data = result.data;
           error = result.error;
-          
+
           if (!error && data?.client_secret?.value) {
             const responseTime = Date.now() - startTime;
             apiHealthMonitor.recordSuccess("supabase", responseTime);
             break;
           }
-          
+
           retries++;
           if (retries < maxTokenRetries) {
             logger.log(`Retrying token fetch (${retries}/${maxTokenRetries})...`);
@@ -121,7 +121,7 @@ export class RealtimeChat {
           retries++;
         }
       }
-      
+
       if (error || !data?.client_secret?.value) {
         logger.error("Failed to get ephemeral token after retries:", error);
         apiHealthMonitor.recordFailure("supabase", error as Error);
@@ -139,7 +139,7 @@ export class RealtimeChat {
         const state = this.pc?.connectionState;
         logger.log("Connection state changed:", state);
         this.onConnectionStateChange?.(state || "unknown");
-        
+
         if (state === "failed" || state === "disconnected") {
           logger.log("Connection lost, attempting to reconnect...");
           this.handleConnectionLoss();
@@ -150,41 +150,41 @@ export class RealtimeChat {
         }
       };
 
-      this.pc.onicecandidateerror = (event) => {
+      this.pc.onicecandidateerror = event => {
         logger.error("ICE candidate error:", event);
       };
 
       // Set up remote audio
-      this.pc.ontrack = (e) => {
+      this.pc.ontrack = e => {
         logger.log("Received remote audio track");
         this.audioEl.srcObject = e.streams[0];
       };
 
       // Add local audio track
-      const ms = await navigator.mediaDevices.getUserMedia({ 
+      const ms = await navigator.mediaDevices.getUserMedia({
         audio: {
           sampleRate: 24000,
           channelCount: 1,
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: true
-        }
+          autoGainControl: true,
+        },
       });
       this.pc.addTrack(ms.getTracks()[0]);
 
       // Set up data channel
       this.dc = this.pc.createDataChannel("oai-events");
-      this.dc.addEventListener("message", (e) => {
+      this.dc.addEventListener("message", e => {
         const event = JSON.parse(e.data);
         logger.log("Received event:", event.type, event);
-        
+
         // Processo de navegação por comandos de voz
         if (event.type === "conversation.item.input_audio_transcription.completed") {
           logger.log("User said:", event.transcript);
           // Processar comando de navegação
           this.processVoiceNavigation(event.transcript);
         }
-        
+
         this.onMessage(event);
       });
 
@@ -195,19 +195,19 @@ export class RealtimeChat {
       // Connect to OpenAI's Realtime API
       const baseUrl = "https://api.openai.com/v1/realtime";
       const model = "gpt-4o-realtime-preview-2024-12-17";
-      
+
       // Check circuit breaker
       if (!apiHealthMonitor.canMakeRequest("openai")) {
         throw new Error("OpenAI API circuit breaker is open. Service temporarily unavailable.");
       }
-      
+
       const apiStartTime = Date.now();
       const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
         method: "POST",
         body: offer.sdp,
         headers: {
           Authorization: `Bearer ${EPHEMERAL_KEY}`,
-          "Content-Type": "application/sdp"
+          "Content-Type": "application/sdp",
         },
       });
 
@@ -215,7 +215,7 @@ export class RealtimeChat {
         apiHealthMonitor.recordFailure("openai", new Error(`HTTP ${sdpResponse.status}`));
         throw new Error(`Failed to connect to OpenAI: ${sdpResponse.status}`);
       }
-      
+
       const apiResponseTime = Date.now() - apiStartTime;
       apiHealthMonitor.recordSuccess("openai", apiResponseTime);
 
@@ -223,21 +223,22 @@ export class RealtimeChat {
         type: "answer" as RTCSdpType,
         sdp: await sdpResponse.text(),
       };
-      
+
       await this.pc.setRemoteDescription(answer);
       logger.log("WebRTC connection established");
 
       // Start recording
-      this.recorder = new AudioRecorder((audioData) => {
+      this.recorder = new AudioRecorder(audioData => {
         if (this.dc?.readyState === "open") {
-          this.dc.send(JSON.stringify({
-            type: "input_audio_buffer.append",
-            audio: this.encodeAudioData(audioData)
-          }));
+          this.dc.send(
+            JSON.stringify({
+              type: "input_audio_buffer.append",
+              audio: this.encodeAudioData(audioData),
+            })
+          );
         }
       });
       await this.recorder.start();
-
     } catch (error) {
       logger.error("Error initializing chat:", error);
       apiHealthMonitor.recordFailure("realtime", error as Error);
@@ -249,18 +250,18 @@ export class RealtimeChat {
     const int16Array = new Int16Array(float32Array.length);
     for (let i = 0; i < float32Array.length; i++) {
       const s = Math.max(-1, Math.min(1, float32Array[i]));
-      int16Array[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+      int16Array[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
     }
-    
+
     const uint8Array = new Uint8Array(int16Array.buffer);
     let binary = "";
     const chunkSize = 0x8000;
-    
+
     for (let i = 0; i < uint8Array.length; i += chunkSize) {
       const chunk = uint8Array.subarray(i, Math.min(i + chunkSize, uint8Array.length));
       binary += String.fromCharCode.apply(null, Array.from(chunk));
     }
-    
+
     return btoa(binary);
   }
 
@@ -277,90 +278,90 @@ export class RealtimeChat {
         content: [
           {
             type: "input_text",
-            text
-          }
-        ]
-      }
+            text,
+          },
+        ],
+      },
     };
 
     this.dc.send(JSON.stringify(event));
-    this.dc.send(JSON.stringify({type: "response.create"}));
+    this.dc.send(JSON.stringify({ type: "response.create" }));
   }
 
   // Processar comandos de navegação por voz
   private processVoiceNavigation(transcript: string) {
     if (!transcript || !this.onNavigate) return;
-    
+
     const text = transcript.toLowerCase().trim();
     logger.log("Processing voice navigation for:", text);
-    
+
     // Mapeamento de comandos para módulos
     const navigationMap: Record<string, string> = {
-      "dashboard": "dashboard",
-      "painel": "dashboard",
-      "início": "dashboard",
-      "home": "dashboard",
-      
+      dashboard: "dashboard",
+      painel: "dashboard",
+      início: "dashboard",
+      home: "dashboard",
+
       "recursos humanos": "hr",
-      "rh": "hr",
-      "funcionários": "hr",
-      "tripulação": "hr",
-      
-      "viagens": "travel",
-      "travel": "travel",
-      "voos": "travel",
-      "voo": "travel",
-      "hotéis": "travel",
-      "hotel": "travel",
-      "passagens": "travel",
-      "passagem": "travel",
-      
-      "marítimo": "maritime",
-      "maritime": "maritime",
-      "frota": "maritime",
-      "navios": "maritime",
-      "navio": "maritime",
-      "embarcações": "maritime",
-      
-      "alertas": "price-alerts",
-      "preços": "price-alerts",
-      "monitoramento": "price-alerts",
-      
-      "analytics": "analytics",
-      "análises": "analytics",
-      "estatísticas": "analytics",
-      "métricas": "analytics",
-      
-      "relatórios": "reports",
-      "reports": "reports",
-      "relatório": "reports",
-      
-      "comunicação": "communication",
-      "communication": "communication",
-      "mensagens": "communication",
-      "chat": "communication",
-      
-      "configurações": "settings",
-      "settings": "settings",
-      "preferências": "settings",
-      
-      "inovação": "innovation",
-      "innovation": "innovation",
-      "automação": "innovation",
-      
-      "inteligência": "intelligence",
-      "intelligence": "intelligence",
-      "documentos": "intelligence",
-      
-      "otimização": "optimization",
-      "optimization": "optimization",
-      "performance": "optimization",
-      
-      "estratégico": "strategic",
-      "strategic": "strategic",
-      "estratégia": "strategic"
+      rh: "hr",
+      funcionários: "hr",
+      tripulação: "hr",
+
+      viagens: "travel",
+      travel: "travel",
+      voos: "travel",
+      voo: "travel",
+      hotéis: "travel",
+      hotel: "travel",
+      passagens: "travel",
+      passagem: "travel",
+
+      marítimo: "maritime",
+      maritime: "maritime",
+      frota: "maritime",
+      navios: "maritime",
+      navio: "maritime",
+      embarcações: "maritime",
+
+      alertas: "price-alerts",
+      preços: "price-alerts",
+      monitoramento: "price-alerts",
+
+      analytics: "analytics",
+      análises: "analytics",
+      estatísticas: "analytics",
+      métricas: "analytics",
+
+      relatórios: "reports",
+      reports: "reports",
+      relatório: "reports",
+
+      comunicação: "communication",
+      communication: "communication",
+      mensagens: "communication",
+      chat: "communication",
+
+      configurações: "settings",
+      settings: "settings",
+      preferências: "settings",
+
+      inovação: "innovation",
+      innovation: "innovation",
+      automação: "innovation",
+
+      inteligência: "intelligence",
+      intelligence: "intelligence",
+      documentos: "intelligence",
+
+      otimização: "optimization",
+      optimization: "optimization",
+      performance: "optimization",
+
+      estratégico: "strategic",
+      strategic: "strategic",
+      estratégia: "strategic",
     };
-    
+
     // Procurar correspondência
     for (const [command, module] of Object.entries(navigationMap)) {
       if (text.includes(command)) {
@@ -369,7 +370,7 @@ export class RealtimeChat {
         return;
       }
     }
-    
+
     // Verificar palavras-chave adicionais
     if (text.includes("buscar") && (text.includes("voo") || text.includes("passagem"))) {
       this.onNavigate("travel");
@@ -410,7 +411,7 @@ export class RealtimeChat {
     } catch (error) {
       logger.error("Reconnection failed:", error);
       this.isReconnecting = false;
-      
+
       // Try again if we haven't exhausted attempts
       if (this.reconnectAttempts < this.maxReconnectAttempts) {
         this.handleConnectionLoss();

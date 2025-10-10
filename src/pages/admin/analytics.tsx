@@ -128,6 +128,7 @@ export default function AnalyticsPage() {
       pdf.addImage(imgData, "PNG", 0, 0, width, height);
       pdf.save("ci-analytics.pdf");
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -147,13 +148,13 @@ export default function AnalyticsPage() {
             <Input
               type="date"
               value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              onChange={e => setStartDate(e.target.value)}
               placeholder="Data inicial"
             />
             <Input
               type="date"
               value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              onChange={e => setEndDate(e.target.value)}
               placeholder="Data final"
             />
             <Button onClick={exportPDF}>📄 Exportar PDF</Button>
@@ -179,13 +180,7 @@ export default function AnalyticsPage() {
                 <h2 className="text-lg font-semibold mb-2">📦 Builds por Status</h2>
                 <ResponsiveContainer width="100%" height={240}>
                   <PieChart>
-                    <Pie
-                      data={statusChart}
-                      dataKey="value"
-                      nameKey="status"
-                      outerRadius={80}
-                      label
-                    >
+                    <Pie data={statusChart} dataKey="value" nameKey="status" outerRadius={80} label>
                       {statusChart.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                       ))}

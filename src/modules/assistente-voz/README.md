@@ -5,6 +5,7 @@
 The Assistente de Voz (Voice Assistant) module provides **voice-activated control and natural language interaction** with the system. It enables hands-free operation and voice commands for improved accessibility and convenience.
 
 **Key Use Cases:**
+
 - Voice commands for system navigation
 - Voice-to-text transcription
 - Text-to-speech for accessibility

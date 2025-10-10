@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export class VoiceRecorder {
@@ -8,28 +8,28 @@ export class VoiceRecorder {
 
   async startRecording(): Promise<void> {
     try {
-      this.stream = await navigator.mediaDevices.getUserMedia({ 
+      this.stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           sampleRate: 44100,
           channelCount: 1,
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: true
-        } 
+          autoGainControl: true,
+        },
       });
-      
+
       this.mediaRecorder = new MediaRecorder(this.stream, {
-        mimeType: "audio/webm;codecs=opus"
+        mimeType: "audio/webm;codecs=opus",
       });
-      
+
       this.audioChunks = [];
-      
-      this.mediaRecorder.ondataavailable = (event) => {
+
+      this.mediaRecorder.ondataavailable = event => {
         if (event.data.size > 0) {
           this.audioChunks.push(event.data);
         }
       };
-      
+
       this.mediaRecorder.start(1000); // Collect data every second
     } catch (error) {
       throw error;
@@ -47,13 +47,13 @@ export class VoiceRecorder {
         try {
           const audioBlob = new Blob(this.audioChunks, { type: "audio/webm" });
           const base64Audio = await this.blobToBase64(audioBlob);
-          
+
           // Cleanup
           if (this.stream) {
             this.stream.getTracks().forEach(track => track.stop());
             this.stream = null;
           }
-          
+
           resolve(base64Audio);
         } catch (error) {
           reject(error);
@@ -92,7 +92,7 @@ export const useVoiceRecording = () => {
       if (!recorderRef.current) {
         recorderRef.current = new VoiceRecorder();
       }
-      
+
       await recorderRef.current.startRecording();
       setIsRecording(true);
     } catch (error) {
@@ -112,10 +112,10 @@ export const useVoiceRecording = () => {
 
       // Send to Supabase Edge Function for transcription
       const { data, error } = await supabase.functions.invoke("voice-to-text", {
-        body: { 
+        body: {
           audio: audioBase64,
-          language: "pt"
-        }
+          language: "pt",
+        },
       });
 
       if (error) {
@@ -134,7 +134,7 @@ export const useVoiceRecording = () => {
     isRecording,
     isProcessing,
     startRecording,
-    stopRecording
+    stopRecording,
   };
 };
 
@@ -148,11 +148,11 @@ export const useTextToSpeech = () => {
       console.log("Generating speech for:", text.substring(0, 50) + "...");
 
       const { data, error } = await supabase.functions.invoke("text-to-speech", {
-        body: { 
+        body: {
           text,
           voice,
-          speed: 1.0
-        }
+          speed: 1.0,
+        },
       });
 
       if (error) {
@@ -161,14 +161,19 @@ export const useTextToSpeech = () => {
 
       if (data?.audioContent) {
         // Create audio from base64
-        const audioBlob = new Blob([
-          new Uint8Array(
-            atob(data.audioContent).split("").map(c => c.charCodeAt(0))
-          )
-        ], { type: "audio/mp3" });
+        const audioBlob = new Blob(
+          [
+            new Uint8Array(
+              atob(data.audioContent)
+                .split("")
+                .map(c => c.charCodeAt(0))
+            ),
+          ],
+          { type: "audio/mp3" }
+        );
 
         const audioUrl = URL.createObjectURL(audioBlob);
-        
+
         if (audioRef.current) {
           audioRef.current.pause();
           audioRef.current.src = "";
@@ -199,7 +204,7 @@ export const useTextToSpeech = () => {
   return {
     isSpeaking,
     speak,
-    stopSpeaking
+    stopSpeaking,
   };
 };
 
@@ -211,11 +216,11 @@ export const useAIChat = () => {
       setIsThinking(true);
 
       const { data, error } = await supabase.functions.invoke("ai-chat", {
-        body: { 
+        body: {
           message,
           context,
-          language: "pt"
-        }
+          language: "pt",
+        },
       });
 
       if (error) {
@@ -232,6 +237,6 @@ export const useAIChat = () => {
 
   return {
     isThinking,
-    sendMessage
+    sendMessage,
   };
 };

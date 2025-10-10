@@ -13,7 +13,7 @@ export const OrganizationLayout: React.FC<OrganizationLayoutProps> = ({
   children,
   title,
   showBackButton = true,
-  requiresOrganization = true
+  requiresOrganization = true,
 }) => {
   return (
     <MultiTenantWrapper requiresOrganization={requiresOrganization}>

@@ -78,7 +78,7 @@ export const useExpenses = () => {
 
       if (createError) throw createError;
 
-      setExpenses((prev) => [data, ...prev]);
+      setExpenses(prev => [data, ...prev]);
       toast.success("Despesa criada com sucesso");
 
       return data;
@@ -100,9 +100,7 @@ export const useExpenses = () => {
 
       if (updateError) throw updateError;
 
-      setExpenses((prev) =>
-        prev.map((exp) => (exp.id === id ? data : exp))
-      );
+      setExpenses(prev => prev.map(exp => (exp.id === id ? data : exp)));
 
       toast.success("Despesa atualizada com sucesso");
 
@@ -116,14 +114,11 @@ export const useExpenses = () => {
 
   const deleteExpense = async (id: string) => {
     try {
-      const { error: deleteError } = await supabase
-        .from("expenses")
-        .delete()
-        .eq("id", id);
+      const { error: deleteError } = await supabase.from("expenses").delete().eq("id", id);
 
       if (deleteError) throw deleteError;
 
-      setExpenses((prev) => prev.filter((exp) => exp.id !== id));
+      setExpenses(prev => prev.filter(exp => exp.id !== id));
       toast.success("Despesa removida com sucesso");
     } catch (err: any) {
       const errorMessage = err.message || "Erro ao remover despesa";

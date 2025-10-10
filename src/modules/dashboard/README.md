@@ -5,6 +5,7 @@
 The Dashboard module serves as the **main control panel and overview system** for Nautilus One. It provides a centralized view of key performance indicators (KPIs), system metrics, and quick access to all major functionalities.
 
 **Key Use Cases:**
+
 - View real-time system metrics and KPIs
 - Quick navigation to all system modules
 - Monitor operational health and alerts

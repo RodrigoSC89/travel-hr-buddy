@@ -23,7 +23,8 @@ export async function testBookingConnection(): Promise<BookingTestResult> {
     return {
       success: false,
       message: "Booking.com API key not configured",
-      error: "Missing VITE_RAPIDAPI_KEY or VITE_BOOKING_API_KEY. Note: Booking.com typically requires RapidAPI subscription.",
+      error:
+        "Missing VITE_RAPIDAPI_KEY or VITE_BOOKING_API_KEY. Note: Booking.com typically requires RapidAPI subscription.",
     };
   }
 

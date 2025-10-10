@@ -18,59 +18,60 @@ export const useKeyboardShortcuts = (onGlobalSearch?: () => void) => {
       key: "k",
       ctrlKey: true,
       action: () => onGlobalSearch?.(),
-      description: "Abrir busca global"
+      description: "Abrir busca global",
     },
     {
       key: "1",
       ctrlKey: true,
       action: () => navigate("/"),
-      description: "Ir para Dashboard"
+      description: "Ir para Dashboard",
     },
     {
       key: "2",
       ctrlKey: true,
       action: () => navigate("/travel"),
-      description: "Ir para Viagens"
+      description: "Ir para Viagens",
     },
     {
       key: "3",
       ctrlKey: true,
       action: () => navigate("/maritime"),
-      description: "Ir para Sistema Marítimo"
+      description: "Ir para Sistema Marítimo",
     },
     {
       key: "4",
       ctrlKey: true,
       action: () => navigate("/human-resources"),
-      description: "Ir para RH"
+      description: "Ir para RH",
     },
     {
       key: "5",
       ctrlKey: true,
       action: () => navigate("/price-alerts"),
-      description: "Ir para Alertas"
+      description: "Ir para Alertas",
     },
     {
       key: "6",
       ctrlKey: true,
       action: () => navigate("/communication"),
-      description: "Ir para Comunicação"
+      description: "Ir para Comunicação",
     },
     {
       key: "s",
       ctrlKey: true,
       action: () => navigate("/settings"),
-      description: "Ir para Configurações"
-    }
+      description: "Ir para Configurações",
+    },
   ];
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const shortcut = shortcuts.find(s => 
-        s.key.toLowerCase() === event.key.toLowerCase() &&
-        !!s.ctrlKey === event.ctrlKey &&
-        !!s.altKey === event.altKey &&
-        !!s.shiftKey === event.shiftKey
+      const shortcut = shortcuts.find(
+        s =>
+          s.key.toLowerCase() === event.key.toLowerCase() &&
+          !!s.ctrlKey === event.ctrlKey &&
+          !!s.altKey === event.altKey &&
+          !!s.shiftKey === event.shiftKey
       );
 
       if (shortcut) {

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, RefObject } from "react";
+import { useEffect, useState, useRef } from "react";
 
 interface UseArrowNavigationOptions {
   isOpen: boolean;
@@ -40,46 +40,46 @@ export const useArrowNavigation = ({
       const prevKey = orientation === "vertical" ? "ArrowUp" : "ArrowLeft";
 
       switch (e.key) {
-      case nextKey:
-        e.preventDefault();
-        setFocusedIndex(prev => {
-          if (loop) {
-            return (prev + 1) % itemCount;
-          }
-          return Math.min(prev + 1, itemCount - 1);
-        });
-        break;
+        case nextKey:
+          e.preventDefault();
+          setFocusedIndex(prev => {
+            if (loop) {
+              return (prev + 1) % itemCount;
+            }
+            return Math.min(prev + 1, itemCount - 1);
+          });
+          break;
 
-      case prevKey:
-        e.preventDefault();
-        setFocusedIndex(prev => {
-          if (loop) {
-            return prev === 0 ? itemCount - 1 : prev - 1;
-          }
-          return Math.max(prev - 1, 0);
-        });
-        break;
+        case prevKey:
+          e.preventDefault();
+          setFocusedIndex(prev => {
+            if (loop) {
+              return prev === 0 ? itemCount - 1 : prev - 1;
+            }
+            return Math.max(prev - 1, 0);
+          });
+          break;
 
-      case "Home":
-        e.preventDefault();
-        setFocusedIndex(0);
-        break;
+        case "Home":
+          e.preventDefault();
+          setFocusedIndex(0);
+          break;
 
-      case "End":
-        e.preventDefault();
-        setFocusedIndex(itemCount - 1);
-        break;
+        case "End":
+          e.preventDefault();
+          setFocusedIndex(itemCount - 1);
+          break;
 
-      case "Enter":
-      case " ":
-        e.preventDefault();
-        onSelect?.(focusedIndex);
-        break;
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          onSelect?.(focusedIndex);
+          break;
 
-      case "Escape":
-        e.preventDefault();
-        onClose?.();
-        break;
+        case "Escape":
+          e.preventDefault();
+          onClose?.();
+          break;
       }
     };
 

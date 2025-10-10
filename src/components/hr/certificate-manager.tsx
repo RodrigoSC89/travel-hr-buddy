@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
@@ -13,18 +26,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Camera } from "@capacitor/camera";
 import { CameraResultType, CameraSource } from "@capacitor/camera";
 import { format } from "date-fns";
-import { 
+import {
   Camera as CameraIcon,
-  Upload, 
-  FileText, 
+  Upload,
+  FileText,
   Calendar as CalendarIcon,
   AlertTriangle,
   CheckCircle,
   Clock,
   Plus,
-  Eye,
   Download,
-  Trash2
+  Trash2,
 } from "lucide-react";
 
 interface Certificate {
@@ -57,13 +69,13 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  
+
   const [newCertificate, setNewCertificate] = useState({
     certificate_name: "",
     certificate_type: "",
     issuer: "",
     issue_date: null as Date | null,
-    expiry_date: null as Date | null
+    expiry_date: null as Date | null,
   });
 
   const certificateTypes = [
@@ -78,7 +90,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
     "Hotel Management",
     "Revenue Management",
     "Customer Service",
-    "Outros"
+    "Outros",
   ];
 
   useEffect(() => {
@@ -99,7 +111,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       toast({
         title: "Erro",
         description: "Erro ao carregar certificados",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -120,17 +132,17 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         const blob = await response.blob();
         const file = new File([blob], `certificate_${Date.now()}.jpg`, { type: "image/jpeg" });
         setSelectedFile(file);
-        
+
         toast({
           title: "Foto capturada",
-          description: "Foto do certificado capturada com sucesso"
+          description: "Foto do certificado capturada com sucesso",
         });
       }
     } catch (error) {
       toast({
         title: "Erro na câmera",
         description: "Não foi possível acessar a câmera. Tente fazer upload de um arquivo.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -140,11 +152,11 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
     if (file) {
       setSelectedFile(file);
       setCapturedImage(null);
-      
+
       // Create preview if it's an image
       if (file.type.startsWith("image/")) {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = e => {
           setCapturedImage(e.target?.result as string);
         };
         reader.readAsDataURL(file);
@@ -153,12 +165,17 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
   };
 
   const uploadCertificate = async () => {
-    if (!selectedFile || !newCertificate.certificate_name || !newCertificate.certificate_type || 
-        !newCertificate.issue_date || !newCertificate.expiry_date) {
+    if (
+      !selectedFile ||
+      !newCertificate.certificate_name ||
+      !newCertificate.certificate_type ||
+      !newCertificate.issue_date ||
+      !newCertificate.expiry_date
+    ) {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha todos os campos e selecione um arquivo",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -169,7 +186,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       // Upload file to storage
       const fileExt = selectedFile.name.split(".").pop();
       const fileName = `${employee.id}/${Date.now()}.${fileExt}`;
-      
+
       const { error: uploadError } = await supabase.storage
         .from("certificates")
         .upload(fileName, selectedFile);
@@ -177,23 +194,21 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       if (uploadError) throw uploadError;
 
       // Save certificate record
-      const { error: insertError } = await supabase
-        .from("employee_certificates")
-        .insert({
-          employee_id: employee.id,
-          certificate_name: newCertificate.certificate_name,
-          certificate_type: newCertificate.certificate_type,
-          file_path: fileName,
-          issue_date: format(newCertificate.issue_date, "yyyy-MM-dd"),
-          expiry_date: format(newCertificate.expiry_date, "yyyy-MM-dd"),
-          issuer: newCertificate.issuer || null
-        });
+      const { error: insertError } = await supabase.from("employee_certificates").insert({
+        employee_id: employee.id,
+        certificate_name: newCertificate.certificate_name,
+        certificate_type: newCertificate.certificate_type,
+        file_path: fileName,
+        issue_date: format(newCertificate.issue_date, "yyyy-MM-dd"),
+        expiry_date: format(newCertificate.expiry_date, "yyyy-MM-dd"),
+        issuer: newCertificate.issuer || null,
+      });
 
       if (insertError) throw insertError;
 
       toast({
         title: "Certificado adicionado",
-        description: "Certificado enviado com sucesso"
+        description: "Certificado enviado com sucesso",
       });
 
       // Reset form
@@ -202,18 +217,17 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         certificate_type: "",
         issuer: "",
         issue_date: null,
-        expiry_date: null
+        expiry_date: null,
       });
       setSelectedFile(null);
       setCapturedImage(null);
       setIsAddingCertificate(false);
       loadCertificates();
-
     } catch (error) {
       toast({
         title: "Erro no upload",
         description: "Erro ao enviar certificado",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsUploading(false);
@@ -238,7 +252,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       toast({
         title: "Erro no download",
         description: "Erro ao baixar certificado",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -262,7 +276,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
 
       toast({
         title: "Certificado removido",
-        description: "Certificado removido com sucesso"
+        description: "Certificado removido com sucesso",
       });
 
       loadCertificates();
@@ -270,21 +284,36 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       toast({
         title: "Erro ao remover",
         description: "Erro ao remover certificado",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "active":
-      return <Badge className="bg-success text-azure-50"><CheckCircle size={12} className="mr-1" />Ativo</Badge>;
-    case "expiring_soon":
-      return <Badge className="bg-warning text-azure-900"><Clock size={12} className="mr-1" />Expirando</Badge>;
-    case "expired":
-      return <Badge className="bg-destructive text-azure-50"><AlertTriangle size={12} className="mr-1" />Expirado</Badge>;
-    default:
-      return <Badge variant="secondary">{status}</Badge>;
+      case "active":
+        return (
+          <Badge className="bg-success text-azure-50">
+            <CheckCircle size={12} className="mr-1" />
+            Ativo
+          </Badge>
+        );
+      case "expiring_soon":
+        return (
+          <Badge className="bg-warning text-azure-900">
+            <Clock size={12} className="mr-1" />
+            Expirando
+          </Badge>
+        );
+      case "expired":
+        return (
+          <Badge className="bg-destructive text-azure-50">
+            <AlertTriangle size={12} className="mr-1" />
+            Expirado
+          </Badge>
+        );
+      default:
+        return <Badge variant="secondary">{status}</Badge>;
     }
   };
 
@@ -301,9 +330,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Certificados - {employee.name}</DialogTitle>
-          <DialogDescription>
-            Gerencie os certificados e suas validades
-          </DialogDescription>
+          <DialogDescription>Gerencie os certificados e suas validades</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -318,7 +345,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
 
           {/* Certificates List */}
           <div className="grid gap-4">
-            {certificates.map((certificate) => {
+            {certificates.map(certificate => {
               const expiryDays = getExpiryDays(certificate.expiry_date);
               return (
                 <Card key={certificate.id} className="p-4">
@@ -339,10 +366,12 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                           </div>
                         )}
                         <div>
-                          <span className="font-medium">Emissão:</span> {format(new Date(certificate.issue_date), "dd/MM/yyyy")}
+                          <span className="font-medium">Emissão:</span>{" "}
+                          {format(new Date(certificate.issue_date), "dd/MM/yyyy")}
                         </div>
                         <div>
-                          <span className="font-medium">Validade:</span> {format(new Date(certificate.expiry_date), "dd/MM/yyyy")}
+                          <span className="font-medium">Validade:</span>{" "}
+                          {format(new Date(certificate.expiry_date), "dd/MM/yyyy")}
                           {expiryDays >= 0 && expiryDays <= 30 && (
                             <span className="ml-2 text-warning font-medium">
                               ({expiryDays} dias restantes)
@@ -357,15 +386,15 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                       </div>
                     </div>
                     <div className="flex space-x-2">
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         onClick={() => downloadCertificate(certificate)}
                       >
                         <Download className="h-4 w-4" />
                       </Button>
-                      <Button 
-                        variant="destructive" 
+                      <Button
+                        variant="destructive"
                         size="sm"
                         onClick={() => deleteCertificate(certificate)}
                       >
@@ -397,9 +426,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
             <DialogContent className="max-w-md">
               <DialogHeader>
                 <DialogTitle>Adicionar Certificado</DialogTitle>
-                <DialogDescription>
-                  Faça upload de um novo certificado
-                </DialogDescription>
+                <DialogDescription>Faça upload de um novo certificado</DialogDescription>
               </DialogHeader>
 
               <div className="space-y-4">
@@ -407,16 +434,12 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                 <div className="space-y-3">
                   <Label>Arquivo do Certificado</Label>
                   <div className="flex space-x-2">
-                    <Button 
-                      variant="outline" 
-                      onClick={captureFromCamera}
-                      className="flex-1"
-                    >
+                    <Button variant="outline" onClick={captureFromCamera} className="flex-1">
                       <CameraIcon className="mr-2 h-4 w-4" />
                       Câmera
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       onClick={() => document.getElementById("file-input")?.click()}
                       className="flex-1"
                     >
@@ -431,18 +454,18 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                     onChange={handleFileSelect}
                     className="hidden"
                   />
-                  
+
                   {/* Preview */}
                   {capturedImage && (
                     <div className="mt-3">
-                      <img 
-                        src={capturedImage} 
-                        alt="Preview" 
+                      <img
+                        src={capturedImage}
+                        alt="Preview"
                         className="w-full h-40 object-cover rounded border"
                       />
                     </div>
                   )}
-                  
+
                   {selectedFile && (
                     <div className="text-sm text-muted-foreground">
                       Arquivo selecionado: {selectedFile.name}
@@ -457,23 +480,29 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                     <Input
                       id="cert-name"
                       value={newCertificate.certificate_name}
-                      onChange={(e) => setNewCertificate(prev => ({ ...prev, certificate_name: e.target.value }))}
+                      onChange={e =>
+                        setNewCertificate(prev => ({ ...prev, certificate_name: e.target.value }))
+                      }
                       placeholder="Ex: Certificado STCW Básico"
                     />
                   </div>
 
                   <div>
                     <Label htmlFor="cert-type">Tipo *</Label>
-                    <Select 
-                      value={newCertificate.certificate_type} 
-                      onValueChange={(value) => setNewCertificate(prev => ({ ...prev, certificate_type: value }))}
+                    <Select
+                      value={newCertificate.certificate_type}
+                      onValueChange={value =>
+                        setNewCertificate(prev => ({ ...prev, certificate_type: value }))
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o tipo" />
                       </SelectTrigger>
                       <SelectContent>
                         {certificateTypes.map(type => (
-                          <SelectItem key={type} value={type}>{type}</SelectItem>
+                          <SelectItem key={type} value={type}>
+                            {type}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -484,7 +513,9 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                     <Input
                       id="issuer"
                       value={newCertificate.issuer}
-                      onChange={(e) => setNewCertificate(prev => ({ ...prev, issuer: e.target.value }))}
+                      onChange={e =>
+                        setNewCertificate(prev => ({ ...prev, issuer: e.target.value }))
+                      }
                       placeholder="Ex: IMO, IATA, etc."
                     />
                   </div>
@@ -494,16 +525,23 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                       <Label>Data de Emissão *</Label>
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button variant="outline" className="w-full justify-start text-left font-normal">
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start text-left font-normal"
+                          >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {newCertificate.issue_date ? format(newCertificate.issue_date, "dd/MM/yyyy") : "Selecionar"}
+                            {newCertificate.issue_date
+                              ? format(newCertificate.issue_date, "dd/MM/yyyy")
+                              : "Selecionar"}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
                           <Calendar
                             mode="single"
                             selected={newCertificate.issue_date || undefined}
-                            onSelect={(date) => setNewCertificate(prev => ({ ...prev, issue_date: date || null }))}
+                            onSelect={date =>
+                              setNewCertificate(prev => ({ ...prev, issue_date: date || null }))
+                            }
                             initialFocus
                           />
                         </PopoverContent>
@@ -514,16 +552,23 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                       <Label>Data de Validade *</Label>
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button variant="outline" className="w-full justify-start text-left font-normal">
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start text-left font-normal"
+                          >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {newCertificate.expiry_date ? format(newCertificate.expiry_date, "dd/MM/yyyy") : "Selecionar"}
+                            {newCertificate.expiry_date
+                              ? format(newCertificate.expiry_date, "dd/MM/yyyy")
+                              : "Selecionar"}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
                           <Calendar
                             mode="single"
                             selected={newCertificate.expiry_date || undefined}
-                            onSelect={(date) => setNewCertificate(prev => ({ ...prev, expiry_date: date || null }))}
+                            onSelect={date =>
+                              setNewCertificate(prev => ({ ...prev, expiry_date: date || null }))
+                            }
                             initialFocus
                           />
                         </PopoverContent>

@@ -5,6 +5,7 @@
 The SGSO (Sistema de Gestão de Saúde e Segurança Ocupacional / Health and Safety Management System) module manages **occupational health, safety, and compliance** according to maritime and organizational safety standards.
 
 **Key Use Cases:**
+
 - Manage safety procedures and protocols
 - Track incidents and near-misses
 - Conduct safety audits and inspections

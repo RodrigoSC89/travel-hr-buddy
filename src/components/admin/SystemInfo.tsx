@@ -2,13 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Clock, 
-  Activity, 
-  Server, 
-  Zap,
-  RefreshCw
-} from "lucide-react";
+import { Clock, Activity, Server, Zap, RefreshCw } from "lucide-react";
 
 export const SystemInfo: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -46,7 +40,7 @@ export const SystemInfo: React.FC = () => {
     cpu: 45,
     memory: 62,
     activeUsers: 87,
-    requestsPerMin: 324
+    requestsPerMin: 324,
   };
 
   return (
@@ -58,15 +52,9 @@ export const SystemInfo: React.FC = () => {
               <Activity className="h-5 w-5 text-success" />
               Informações do Sistema
             </CardTitle>
-            <CardDescription>
-              Monitoramento em tempo real do Nautilus One
-            </CardDescription>
+            <CardDescription>Monitoramento em tempo real do Nautilus One</CardDescription>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={handleRefresh}
-          >
+          <Button variant="outline" size="sm" onClick={handleRefresh}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
@@ -80,9 +68,9 @@ export const SystemInfo: React.FC = () => {
             <div>
               <p className="text-sm text-muted-foreground">Data e Hora Atual</p>
               <p className="text-lg font-semibold">
-                {currentTime.toLocaleString("pt-BR", { 
-                  dateStyle: "short", 
-                  timeStyle: "medium" 
+                {currentTime.toLocaleString("pt-BR", {
+                  dateStyle: "short",
+                  timeStyle: "medium",
                 })}
               </p>
             </div>
@@ -103,14 +91,18 @@ export const SystemInfo: React.FC = () => {
             <Zap className="h-4 w-4 text-warning" />
             Status do Sistema
           </h4>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="p-3 bg-card border rounded-lg">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs text-muted-foreground">CPU</span>
-                <Badge 
-                  variant="outline" 
-                  className={systemHealth.cpu > 80 ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}
+                <Badge
+                  variant="outline"
+                  className={
+                    systemHealth.cpu > 80
+                      ? "bg-red-100 text-red-700"
+                      : "bg-green-100 text-green-700"
+                  }
                 >
                   {systemHealth.cpu}%
                 </Badge>
@@ -120,9 +112,13 @@ export const SystemInfo: React.FC = () => {
             <div className="p-3 bg-card border rounded-lg">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs text-muted-foreground">Memória</span>
-                <Badge 
-                  variant="outline" 
-                  className={systemHealth.memory > 80 ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}
+                <Badge
+                  variant="outline"
+                  className={
+                    systemHealth.memory > 80
+                      ? "bg-red-100 text-red-700"
+                      : "bg-green-100 text-green-700"
+                  }
                 >
                   {systemHealth.memory}%
                 </Badge>

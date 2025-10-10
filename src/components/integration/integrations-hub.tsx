@@ -5,26 +5,29 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Globe, 
-  Link, 
-  Code, 
-  Database, 
-  Smartphone, 
-  Mail, 
-  MessageSquare, 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Globe,
+  Link,
+  Code,
+  Database,
+  Smartphone,
+  Mail,
+  MessageSquare,
   Calendar,
   DollarSign,
   BarChart3,
-  Settings,
   Plus,
-  Trash2,
   RefreshCw,
   CheckCircle,
   AlertTriangle,
-  ExternalLink
+  ExternalLink,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -53,7 +56,7 @@ const IntegrationsHub = () => {
       description: "Automatize workflows conectando milhares de aplicativos",
       icon: Link,
       category: "automation",
-      status: "disconnected"
+      status: "disconnected",
     },
     {
       id: "slack",
@@ -62,7 +65,7 @@ const IntegrationsHub = () => {
       icon: MessageSquare,
       category: "communication",
       status: "connected",
-      lastSync: new Date(Date.now() - 30 * 60 * 1000)
+      lastSync: new Date(Date.now() - 30 * 60 * 1000),
     },
     {
       id: "google-calendar",
@@ -71,7 +74,7 @@ const IntegrationsHub = () => {
       icon: Calendar,
       category: "productivity",
       status: "connected",
-      lastSync: new Date(Date.now() - 15 * 60 * 1000)
+      lastSync: new Date(Date.now() - 15 * 60 * 1000),
     },
     {
       id: "stripe",
@@ -80,7 +83,7 @@ const IntegrationsHub = () => {
       icon: DollarSign,
       category: "payments",
       status: "error",
-      lastSync: new Date(Date.now() - 2 * 60 * 60 * 1000)
+      lastSync: new Date(Date.now() - 2 * 60 * 60 * 1000),
     },
     {
       id: "google-analytics",
@@ -89,7 +92,7 @@ const IntegrationsHub = () => {
       icon: BarChart3,
       category: "analytics",
       status: "connected",
-      lastSync: new Date(Date.now() - 5 * 60 * 1000)
+      lastSync: new Date(Date.now() - 5 * 60 * 1000),
     },
     {
       id: "mailchimp",
@@ -97,7 +100,7 @@ const IntegrationsHub = () => {
       description: "Marketing por email automatizado",
       icon: Mail,
       category: "marketing",
-      status: "disconnected"
+      status: "disconnected",
     },
     {
       id: "whatsapp-business",
@@ -105,7 +108,7 @@ const IntegrationsHub = () => {
       description: "Comunicação direta com clientes",
       icon: Smartphone,
       category: "communication",
-      status: "disconnected"
+      status: "disconnected",
     },
     {
       id: "postgresql",
@@ -114,53 +117,82 @@ const IntegrationsHub = () => {
       icon: Database,
       category: "database",
       status: "connected",
-      lastSync: new Date(Date.now() - 1 * 60 * 1000)
-    }
+      lastSync: new Date(Date.now() - 1 * 60 * 1000),
+    },
   ]);
 
   const categories = [
     { id: "all", name: "Todas", count: integrations.length },
-    { id: "communication", name: "Comunicação", count: integrations.filter(i => i.category === "communication").length },
-    { id: "automation", name: "Automação", count: integrations.filter(i => i.category === "automation").length },
-    { id: "analytics", name: "Analytics", count: integrations.filter(i => i.category === "analytics").length },
-    { id: "payments", name: "Pagamentos", count: integrations.filter(i => i.category === "payments").length },
-    { id: "productivity", name: "Produtividade", count: integrations.filter(i => i.category === "productivity").length },
-    { id: "marketing", name: "Marketing", count: integrations.filter(i => i.category === "marketing").length },
-    { id: "database", name: "Banco de Dados", count: integrations.filter(i => i.category === "database").length }
+    {
+      id: "communication",
+      name: "Comunicação",
+      count: integrations.filter(i => i.category === "communication").length,
+    },
+    {
+      id: "automation",
+      name: "Automação",
+      count: integrations.filter(i => i.category === "automation").length,
+    },
+    {
+      id: "analytics",
+      name: "Analytics",
+      count: integrations.filter(i => i.category === "analytics").length,
+    },
+    {
+      id: "payments",
+      name: "Pagamentos",
+      count: integrations.filter(i => i.category === "payments").length,
+    },
+    {
+      id: "productivity",
+      name: "Produtividade",
+      count: integrations.filter(i => i.category === "productivity").length,
+    },
+    {
+      id: "marketing",
+      name: "Marketing",
+      count: integrations.filter(i => i.category === "marketing").length,
+    },
+    {
+      id: "database",
+      name: "Banco de Dados",
+      count: integrations.filter(i => i.category === "database").length,
+    },
   ];
 
   const filteredIntegrations = integrations.filter(integration => {
     const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
-    const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         integration.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "connected":
-      return <CheckCircle className="w-4 h-4 text-green-600" />;
-    case "error":
-      return <AlertTriangle className="w-4 h-4 text-red-600" />;
-    default:
-      return <RefreshCw className="w-4 h-4 text-muted-foreground" />;
+      case "connected":
+        return <CheckCircle className="w-4 h-4 text-green-600" />;
+      case "error":
+        return <AlertTriangle className="w-4 h-4 text-red-600" />;
+      default:
+        return <RefreshCw className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "connected":
-      return "text-green-600 bg-green-100";
-    case "error":
-      return "text-red-600 bg-red-100";
-    default:
-      return "text-muted-foreground bg-gray-100";
+      case "connected":
+        return "text-green-600 bg-green-100";
+      case "error":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
   const handleTriggerZapier = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!zapierWebhook) {
       toast({
         title: "Erro",
@@ -183,13 +215,14 @@ const IntegrationsHub = () => {
           timestamp: new Date().toISOString(),
           triggered_from: window.location.origin,
           user_id: "user-123",
-          event_type: "manual_trigger"
+          event_type: "manual_trigger",
         }),
       });
 
       toast({
         title: "Webhook Enviado",
-        description: "A requisição foi enviada para o Zapier. Verifique o histórico do seu Zap para confirmar.",
+        description:
+          "A requisição foi enviada para o Zapier. Verifique o histórico do seu Zap para confirmar.",
       });
     } catch (error) {
       toast({
@@ -203,17 +236,19 @@ const IntegrationsHub = () => {
   };
 
   const toggleIntegration = (id: string) => {
-    setIntegrations(prev => prev.map(integration => {
-      if (integration.id === id) {
-        const newStatus = integration.status === "connected" ? "disconnected" : "connected";
-        return {
-          ...integration,
-          status: newStatus,
-          lastSync: newStatus === "connected" ? new Date() : undefined
-        };
-      }
-      return integration;
-    }));
+    setIntegrations(prev =>
+      prev.map(integration => {
+        if (integration.id === id) {
+          const newStatus = integration.status === "connected" ? "disconnected" : "connected";
+          return {
+            ...integration,
+            status: newStatus,
+            lastSync: newStatus === "connected" ? new Date() : undefined,
+          };
+        }
+        return integration;
+      })
+    );
 
     toast({
       title: "Integração atualizada",
@@ -222,15 +257,17 @@ const IntegrationsHub = () => {
   };
 
   const syncIntegration = (id: string) => {
-    setIntegrations(prev => prev.map(integration => {
-      if (integration.id === id && integration.status === "connected") {
-        return {
-          ...integration,
-          lastSync: new Date()
-        };
-      }
-      return integration;
-    }));
+    setIntegrations(prev =>
+      prev.map(integration => {
+        if (integration.id === id && integration.status === "connected") {
+          return {
+            ...integration,
+            lastSync: new Date(),
+          };
+        }
+        return integration;
+      })
+    );
 
     toast({
       title: "Sincronização concluída",
@@ -242,7 +279,7 @@ const IntegrationsHub = () => {
     if (!date) return "Nunca";
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
+
     if (diffInMinutes < 1) return "Agora";
     if (diffInMinutes < 60) return `${diffInMinutes}m atrás`;
     if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h atrás`;
@@ -261,7 +298,8 @@ const IntegrationsHub = () => {
             Hub de Integrações
           </h1>
           <p className="text-muted-foreground">
-            {connectedCount} conectadas · {errorCount} com erro · {integrations.length - connectedCount - errorCount} disponíveis
+            {connectedCount} conectadas · {errorCount} com erro ·{" "}
+            {integrations.length - connectedCount - errorCount} disponíveis
           </p>
         </div>
         <Button>
@@ -283,7 +321,7 @@ const IntegrationsHub = () => {
             <Input
               placeholder="Buscar integrações..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="md:max-w-xs"
             />
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -291,7 +329,7 @@ const IntegrationsHub = () => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((category) => (
+                {categories.map(category => (
                   <SelectItem key={category.id} value={category.id}>
                     {category.name} ({category.count})
                   </SelectItem>
@@ -301,7 +339,7 @@ const IntegrationsHub = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredIntegrations.map((integration) => (
+            {filteredIntegrations.map(integration => (
               <Card key={integration.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
@@ -312,26 +350,27 @@ const IntegrationsHub = () => {
                       <div>
                         <h3 className="font-semibold">{integration.name}</h3>
                         <Badge className={getStatusColor(integration.status)} variant="secondary">
-                          {integration.status === "connected" ? "Conectado" : 
-                            integration.status === "error" ? "Erro" : "Desconectado"}
+                          {integration.status === "connected"
+                            ? "Conectado"
+                            : integration.status === "error"
+                              ? "Erro"
+                              : "Desconectado"}
                         </Badge>
                       </div>
                     </div>
                     {getStatusIcon(integration.status)}
                   </div>
-                  
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {integration.description}
-                  </p>
-                  
+
+                  <p className="text-sm text-muted-foreground mb-4">{integration.description}</p>
+
                   {integration.lastSync && (
                     <p className="text-xs text-muted-foreground mb-4">
                       Última sinc: {getRelativeTime(integration.lastSync)}
                     </p>
                   )}
-                  
+
                   <div className="flex gap-2">
-                    <Button 
+                    <Button
                       variant={integration.status === "connected" ? "destructive" : "default"}
                       size="sm"
                       onClick={() => toggleIntegration(integration.id)}
@@ -340,8 +379,8 @@ const IntegrationsHub = () => {
                       {integration.status === "connected" ? "Desconectar" : "Conectar"}
                     </Button>
                     {integration.status === "connected" && (
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         onClick={() => syncIntegration(integration.id)}
                       >
@@ -375,13 +414,13 @@ const IntegrationsHub = () => {
                     type="url"
                     placeholder="https://hooks.zapier.com/hooks/catch/..."
                     value={zapierWebhook}
-                    onChange={(e) => setZapierWebhook(e.target.value)}
+                    onChange={e => setZapierWebhook(e.target.value)}
                   />
                   <p className="text-xs text-muted-foreground mt-1">
                     Cole a URL do webhook do seu Zap aqui
                   </p>
                 </div>
-                
+
                 <Button type="submit" disabled={isLoading}>
                   {isLoading ? (
                     <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
@@ -423,7 +462,12 @@ const IntegrationsHub = () => {
                 <div>
                   <Label>Eventos</Label>
                   <div className="grid grid-cols-2 gap-2 mt-2">
-                    {["user.created", "certificate.expired", "report.generated", "alert.triggered"].map((event) => (
+                    {[
+                      "user.created",
+                      "certificate.expired",
+                      "report.generated",
+                      "alert.triggered",
+                    ].map(event => (
                       <label key={event} className="flex items-center space-x-2">
                         <input type="checkbox" className="rounded" />
                         <span className="text-sm">{event}</span>
@@ -444,32 +488,26 @@ const IntegrationsHub = () => {
                 <Code className="w-5 h-5" />
                 API e Tokens
               </CardTitle>
-              <CardDescription>
-                Gerencie chaves de API e tokens de acesso
-              </CardDescription>
+              <CardDescription>Gerencie chaves de API e tokens de acesso</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div>
                   <Label>Chave da API</Label>
                   <div className="flex gap-2">
-                    <Input 
-                      type="password" 
-                      value="sk_live_xxxxxxxxxxxxxxxxxxxxx" 
-                      readOnly 
+                    <Input
+                      type="password"
+                      value="sk_live_xxxxxxxxxxxxxxxxxxxxx"
+                      readOnly
                       className="font-mono"
                     />
                     <Button variant="outline">Regenerar</Button>
                   </div>
                 </div>
-                
+
                 <div>
                   <Label>Base URL da API</Label>
-                  <Input 
-                    value="https://api.nautilus.com/v1" 
-                    readOnly 
-                    className="font-mono"
-                  />
+                  <Input value="https://api.nautilus.com/v1" readOnly className="font-mono" />
                 </div>
               </div>
 

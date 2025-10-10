@@ -18,34 +18,34 @@ export const useNotifications = () => {
     try {
       // Request permission for local notifications
       const localPermissions = await LocalNotifications.requestPermissions();
-      
+
       if (localPermissions.display === "granted") {
         setPermissionGranted(true);
-        
+
         // Request permission for push notifications
         await PushNotifications.requestPermissions();
-        
+
         // Register for push notifications
         await PushNotifications.register();
-        
-        // Add listeners
-        PushNotifications.addListener("registration", (token) => {
-        });
 
-        PushNotifications.addListener("registrationError", (error) => {
+        // Add listeners
+        PushNotifications.addListener("registration", token => {});
+
+        PushNotifications.addListener("registrationError", error => {
           console.error("Error on registration: " + JSON.stringify(error));
         });
 
-        PushNotifications.addListener("pushNotificationReceived", (notification) => {
+        PushNotifications.addListener("pushNotificationReceived", notification => {
           console.log("Push received: " + JSON.stringify(notification));
         });
 
-        PushNotifications.addListener("pushNotificationActionPerformed", (notification) => {
+        PushNotifications.addListener("pushNotificationActionPerformed", notification => {
           console.log("Push action performed: " + JSON.stringify(notification));
         });
       }
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const scheduleNotification = async (options: {
@@ -69,21 +69,23 @@ export const useNotifications = () => {
             sound: "default",
             attachments: undefined,
             actionTypeId: "",
-            extra: {}
-          }
-        ]
+            extra: {},
+          },
+        ],
       };
 
       await LocalNotifications.schedule(notificationOptions);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const cancelNotification = async (id: number) => {
     try {
       await LocalNotifications.cancel({ notifications: [{ id }] });
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   return {

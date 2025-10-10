@@ -1,18 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { 
-  MessageSquare, 
-  Bot, 
-  User, 
-  Copy, 
-  Download,
-  Trash2,
-  Clock
-} from "lucide-react";
-import { useVoiceRecording } from "@/hooks/use-voice-conversation";
+import { MessageSquare, Bot, User, Copy, Download, Trash2, Clock } from "lucide-react";
 
 interface Message {
   id: string;
@@ -28,11 +19,11 @@ interface VoiceHistoryProps {
 
 const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
   const [messages, setMessages] = React.useState<Message[]>([]);
-  
+
   const clearHistory = () => {
     setMessages([]);
   };
-  
+
   const exportConversation = () => {
     const data = JSON.stringify(messages, null, 2);
     const blob = new Blob([data], { type: "application/json" });
@@ -43,7 +34,7 @@ const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
     a.click();
     URL.revokeObjectURL(url);
   };
-  
+
   const loadConversationHistory = (id: string) => {
     // Implementation would load from localStorage or API
   };
@@ -52,30 +43,33 @@ const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("pt-BR", { 
-      hour: "2-digit", 
-      minute: "2-digit" 
+    return date.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getMessageIcon = (type: string) => {
     switch (type) {
-    case "user": return <User className="h-3 w-3" />;
-    case "assistant": return <Bot className="h-3 w-3" />;
-    default: return <MessageSquare className="h-3 w-3" />;
+      case "user":
+        return <User className="h-3 w-3" />;
+      case "assistant":
+        return <Bot className="h-3 w-3" />;
+      default:
+        return <MessageSquare className="h-3 w-3" />;
     }
   };
 
   const getMessageStyle = (type: string) => {
     switch (type) {
-    case "user": 
-      return "bg-primary text-primary-foreground ml-8";
-    case "assistant": 
-      return "bg-muted text-foreground mr-8";
-    case "system":
-      return "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 mx-4 border border-yellow-200 dark:border-yellow-800";
-    default: 
-      return "bg-muted text-foreground";
+      case "user":
+        return "bg-primary text-primary-foreground ml-8";
+      case "assistant":
+        return "bg-muted text-foreground mr-8";
+      case "system":
+        return "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 mx-4 border border-yellow-200 dark:border-yellow-800";
+      default:
+        return "bg-muted text-foreground";
     }
   };
 
@@ -87,7 +81,7 @@ const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
           <h3 className="text-lg font-semibold">Histórico da Conversa</h3>
           <Badge variant="secondary">{messages.length}</Badge>
         </div>
-        
+
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={exportConversation}>
             <Download className="h-3 w-3 mr-1" />
@@ -110,19 +104,12 @@ const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
             </div>
           ) : (
             messages.map((message, index) => (
-              <div
-                key={message.id || index}
-                className="group relative"
-              >
+              <div key={message.id || index} className="group relative">
                 <div className={`p-3 rounded-lg ${getMessageStyle(message.type)}`}>
                   <div className="flex items-start gap-2">
-                    <div className="flex-shrink-0 mt-0.5">
-                      {getMessageIcon(message.type)}
-                    </div>
+                    <div className="flex-shrink-0 mt-0.5">{getMessageIcon(message.type)}</div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm leading-relaxed">
-                        {message.content}
-                      </div>
+                      <div className="text-sm leading-relaxed">{message.content}</div>
                       {message.action && (
                         <Badge variant="outline" className="mt-2 text-xs">
                           Ação: {message.action}
@@ -154,8 +141,8 @@ const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
       {messages.length > 0 && (
         <div className="border-t pt-4">
           <div className="text-xs text-muted-foreground">
-            <strong>Dica:</strong> Clique no ícone de cópia para copiar uma mensagem. 
-            Use "Exportar" para salvar toda a conversa.
+            <strong>Dica:</strong> Clique no ícone de cópia para copiar uma mensagem. Use "Exportar"
+            para salvar toda a conversa.
           </div>
         </div>
       )}

@@ -13,48 +13,41 @@ import { PeotramRealtimeMonitoring } from "./peotram-realtime-monitoring";
 import { PeotramWorkflowManager } from "./peotram-workflow-manager";
 import { PeotramIntegrationHub } from "./peotram-integration-hub";
 import { PeotramAdvancedReporting } from "./peotram-advanced-reporting";
-import { PeotramEmergencyResponse } from "./peotram-emergency-response";
-import { PeotramEquipmentManager } from "./peotram-equipment-manager";
-import { PeotramIncidentManager } from "./peotram-incident-manager";
-import { PeotramCommunicationCenter } from "./peotram-communication-center";
-import { PeotramDocumentManager } from "./peotram-document-manager";
-import { PeotramComplianceTracker } from "./peotram-compliance-tracker";
-import { PeotramPerformanceKPI } from "./peotram-performance-kpi";
-import { PeotramEnvironmentalMonitor } from "./peotram-environmental-monitor";
 import { PeotramOCRProcessor } from "./peotram-ocr-processor";
 import { PeotramChecklistVersionManager } from "./peotram-checklist-version-manager";
 import { PeotramAdvancedAnalytics } from "./peotram-advanced-analytics";
 import { PeotramPredictiveAnalytics } from "./peotram-predictive-analytics";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useOrganizationPermissions } from "@/hooks/use-organization-permissions";
-import { 
-  BarChart3, 
-  FileCheck, 
-  AlertTriangle, 
-  Settings, 
+import {
+  BarChart3,
+  FileCheck,
+  AlertTriangle,
+  Settings,
   Plus,
   Download,
   Upload,
   Users,
-  Award,
   TrendingUp,
-  Clock,
-  Target,
   Eye,
   Edit,
   Calendar,
-  MapPin,
   Ship,
   Building,
-  Star,
   Shield,
   Zap,
   Activity,
-  Leaf
+  Leaf,
 } from "lucide-react";
 
 interface PeotramAudit {
@@ -121,7 +114,8 @@ export const EnhancedPeotramManager: React.FC = () => {
       setNonConformities(getDemoNonConformities());
       setTemplates(getDemoTemplates());
     } catch (error) {
-  } finally {
+      console.warn("[EMPTY CATCH]", error);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -137,7 +131,7 @@ export const EnhancedPeotramManager: React.FC = () => {
       auditorName: "João Silva",
       completedAt: "2024-12-15",
       nonConformitiesCount: 3,
-      createdAt: "2024-12-01"
+      createdAt: "2024-12-01",
     },
     {
       id: "AUDIT_002",
@@ -148,7 +142,7 @@ export const EnhancedPeotramManager: React.FC = () => {
       complianceScore: 0,
       auditorName: "Maria Santos",
       nonConformitiesCount: 0,
-      createdAt: "2024-12-10"
+      createdAt: "2024-12-10",
     },
     {
       id: "AUDIT_003",
@@ -160,8 +154,8 @@ export const EnhancedPeotramManager: React.FC = () => {
       auditorName: "Carlos Eduardo",
       completedAt: "2024-09-28",
       nonConformitiesCount: 1,
-      createdAt: "2024-09-15"
-    }
+      createdAt: "2024-09-15",
+    },
   ];
 
   const getDemoNonConformities = (): NonConformity[] => [
@@ -178,7 +172,7 @@ export const EnhancedPeotramManager: React.FC = () => {
       status: "in_progress",
       severity_score: 2,
       audit_date: "2024-12-15",
-      vessel_name: "MV Atlantic Explorer"
+      vessel_name: "MV Atlantic Explorer",
     },
     {
       id: "NC_002",
@@ -193,8 +187,8 @@ export const EnhancedPeotramManager: React.FC = () => {
       status: "open",
       severity_score: 1,
       audit_date: "2024-12-15",
-      vessel_name: "MV Atlantic Explorer"
-    }
+      vessel_name: "MV Atlantic Explorer",
+    },
   ];
 
   const getDemoTemplates = (): PeotramTemplate[] => [
@@ -205,7 +199,7 @@ export const EnhancedPeotramManager: React.FC = () => {
       template_data: { elements: [] },
       is_active: true,
       checklist_type: "vessel",
-      created_at: "2024-01-01"
+      created_at: "2024-01-01",
     },
     {
       id: "TPL_002",
@@ -214,8 +208,8 @@ export const EnhancedPeotramManager: React.FC = () => {
       template_data: { elements: [] },
       is_active: true,
       checklist_type: "shore",
-      created_at: "2024-01-01"
-    }
+      created_at: "2024-01-01",
+    },
   ];
 
   const handleSaveAudit = async (auditData: any) => {
@@ -243,21 +237,31 @@ export const EnhancedPeotramManager: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "bg-success/20 text-success border-success/30";
-    case "in-progress": return "bg-info/20 text-info border-info/30";
-    case "draft": return "bg-warning/20 text-warning border-warning/30";
-    case "approved": return "bg-primary/20 text-primary border-primary/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "completed":
+        return "bg-success/20 text-success border-success/30";
+      case "in-progress":
+        return "bg-info/20 text-info border-info/30";
+      case "draft":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "approved":
+        return "bg-primary/20 text-primary border-primary/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-    case "completed": return "Concluída";
-    case "in-progress": return "Em Andamento";
-    case "draft": return "Rascunho";
-    case "approved": return "Aprovada";
-    default: return status;
+      case "completed":
+        return "Concluída";
+      case "in-progress":
+        return "Em Andamento";
+      case "draft":
+        return "Rascunho";
+      case "approved":
+        return "Aprovada";
+      default:
+        return status;
     }
   };
 
@@ -283,7 +287,7 @@ export const EnhancedPeotramManager: React.FC = () => {
             Programa de Excelência Operacional no Transporte Aéreo e Marítimo
           </p>
         </div>
-        
+
         <div className="flex gap-2">
           <Dialog open={isNewAuditOpen} onOpenChange={setIsNewAuditOpen}>
             <DialogTrigger asChild>
@@ -303,12 +307,12 @@ export const EnhancedPeotramManager: React.FC = () => {
               />
             </DialogContent>
           </Dialog>
-          
+
           <Button variant="outline">
             <Download className="w-4 h-4 mr-2" />
             Exportar Dados
           </Button>
-          
+
           <Button variant="outline">
             <Upload className="w-4 h-4 mr-2" />
             Importar
@@ -510,7 +514,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {audits.map((audit) => (
+            {audits.map(audit => (
               <Card
                 key={audit.id}
                 className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-accent/5"
@@ -544,7 +548,7 @@ export const EnhancedPeotramManager: React.FC = () => {
                       {audit.status === "completed" ? `${audit.complianceScore}%` : "-"}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center justify-between text-sm">
                     <span className="flex items-center gap-1 text-muted-foreground">
                       <Users className="w-3 h-3" />
@@ -566,11 +570,11 @@ export const EnhancedPeotramManager: React.FC = () => {
                   )}
 
                   <div className="flex gap-2 pt-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="flex-1"
-                      onClick={(e) => {
+                      onClick={e => {
                         e.stopPropagation();
                         // Visualizar relatório
                       }}
@@ -578,11 +582,11 @@ export const EnhancedPeotramManager: React.FC = () => {
                       <Eye className="w-3 h-3 mr-1" />
                       Ver
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="flex-1"
-                      onClick={(e) => {
+                      onClick={e => {
                         e.stopPropagation();
                         setSelectedAudit(audit);
                       }}
@@ -596,7 +600,7 @@ export const EnhancedPeotramManager: React.FC = () => {
             ))}
 
             {/* Card para nova auditoria */}
-            <Card 
+            <Card
               className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-dashed border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10"
               onClick={() => setIsNewAuditOpen(true)}
             >
@@ -612,7 +616,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="non-conformities">
-          <PeotramNonConformities 
+          <PeotramNonConformities
             nonConformities={nonConformities}
             onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
           />
@@ -623,7 +627,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="templates">
-          <PeotramTemplateManager 
+          <PeotramTemplateManager
             templates={templates}
             onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
           />
@@ -643,14 +647,14 @@ export const EnhancedPeotramManager: React.FC = () => {
 
         <TabsContent value="management">
           {managementSubView === "non-conformities" && (
-            <PeotramNonConformities 
+            <PeotramNonConformities
               nonConformities={nonConformities}
               onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
             />
           )}
           {managementSubView === "reports" && <PeotramReportsGenerator />}
           {managementSubView === "templates" && (
-            <PeotramTemplateManager 
+            <PeotramTemplateManager
               templates={templates}
               onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
             />
@@ -670,7 +674,7 @@ export const EnhancedPeotramManager: React.FC = () => {
 
         {/* Manter as antigas abas para compatibilidade */}
         <TabsContent value="non-conformities">
-          <PeotramNonConformities 
+          <PeotramNonConformities
             nonConformities={nonConformities}
             onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
           />
@@ -681,7 +685,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="templates">
-          <PeotramTemplateManager 
+          <PeotramTemplateManager
             templates={templates}
             onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
           />

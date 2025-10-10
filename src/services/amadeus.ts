@@ -30,26 +30,23 @@ export async function testAmadeusConnection(): Promise<AmadeusTestResult> {
 
   try {
     // Test OAuth2 token endpoint
-    const response = await fetch(
-      "https://test.api.amadeus.com/v1/security/oauth2/token",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          grant_type: "client_credentials",
-          client_id: apiKey,
-          client_secret: apiSecret,
-        }),
-      }
-    );
+    const response = await fetch("https://test.api.amadeus.com/v1/security/oauth2/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "client_credentials",
+        client_id: apiKey,
+        client_secret: apiSecret,
+      }),
+    });
 
     const responseTime = Date.now() - startTime;
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      
+
       // Check for specific error types
       let errorMessage = `HTTP ${response.status}`;
       if (response.status === 401) {
@@ -59,7 +56,7 @@ export async function testAmadeusConnection(): Promise<AmadeusTestResult> {
       } else if (response.status === 429) {
         errorMessage = "Rate limit exceeded";
       }
-      
+
       return {
         success: false,
         message: `Amadeus API error: ${response.status} ${response.statusText}`,

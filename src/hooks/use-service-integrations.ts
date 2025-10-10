@@ -22,29 +22,30 @@ export const useServiceIntegrations = () => {
     );
   }, []);
 
-  const checkServiceHealth = useCallback(async (serviceName: string) => {
-    setIsChecking(true);
-    try {
-      const result = await integrationManager.connectService(serviceName);
-      refreshServices();
-      return result;
-    } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : "Unknown error" 
-      };
-    } finally {
-      setIsChecking(false);
-    }
-  }, [refreshServices]);
+  const checkServiceHealth = useCallback(
+    async (serviceName: string) => {
+      setIsChecking(true);
+      try {
+        const result = await integrationManager.connectService(serviceName);
+        refreshServices();
+        return result;
+      } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : "Unknown error",
+        };
+      } finally {
+        setIsChecking(false);
+      }
+    },
+    [refreshServices]
+  );
 
   const checkAllServices = useCallback(async () => {
     setIsChecking(true);
     try {
       const serviceNames = Array.from(integrationManager.getAllServices().keys());
-      await Promise.all(
-        serviceNames.map((name) => integrationManager.connectService(name))
-      );
+      await Promise.all(serviceNames.map(name => integrationManager.connectService(name)));
       refreshServices();
     } catch (error) {
       // Error checking services

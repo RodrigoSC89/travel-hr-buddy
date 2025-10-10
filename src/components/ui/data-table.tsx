@@ -1,19 +1,18 @@
 import React, { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
-import { 
-  ChevronUp, 
-  ChevronDown, 
-  Search, 
+import {
+  ChevronUp,
+  ChevronDown,
+  Search,
   Filter,
   Download,
   MoreHorizontal,
   Eye,
   Edit,
-  Trash2
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 
 export interface Column<T = any> {
   key: string;
@@ -64,7 +63,7 @@ export function DataTable<T extends Record<string, any>>({
   onRowClick,
   className,
   title,
-  description
+  description,
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<string | null>(null);
@@ -81,8 +80,7 @@ export function DataTable<T extends Record<string, any>>({
       result = result.filter(row =>
         columns.some(column => {
           const value = row[column.key];
-          return value && 
-            value.toString().toLowerCase().includes(searchTerm.toLowerCase());
+          return value && value.toString().toLowerCase().includes(searchTerm.toLowerCase());
         })
       );
     }
@@ -92,8 +90,7 @@ export function DataTable<T extends Record<string, any>>({
       if (value) {
         result = result.filter(row => {
           const rowValue = row[key];
-          return rowValue && 
-            rowValue.toString().toLowerCase().includes(value.toLowerCase());
+          return rowValue && rowValue.toString().toLowerCase().includes(value.toLowerCase());
         });
       }
     });
@@ -103,9 +100,9 @@ export function DataTable<T extends Record<string, any>>({
       result.sort((a, b) => {
         const aValue = a[sortColumn];
         const bValue = b[sortColumn];
-        
+
         if (aValue === bValue) return 0;
-        
+
         const comparison = aValue > bValue ? 1 : -1;
         return sortDirection === "asc" ? comparison : -comparison;
       });
@@ -117,13 +114,13 @@ export function DataTable<T extends Record<string, any>>({
   // Pagination
   const totalPages = Math.ceil(filteredData.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
-  const paginatedData = pagination 
+  const paginatedData = pagination
     ? filteredData.slice(startIndex, startIndex + pageSize)
     : filteredData;
 
   const handleSort = (columnKey: string) => {
     if (!sortable) return;
-    
+
     const column = columns.find(c => c.key === columnKey);
     if (!column?.sortable) return;
 
@@ -145,14 +142,14 @@ export function DataTable<T extends Record<string, any>>({
   const exportData = () => {
     const csv = [
       columns.map(col => col.header).join(","),
-      ...filteredData.map(row => 
-        columns.map(col => {
-          const value = row[col.key];
-          return typeof value === "string" && value.includes(",") 
-            ? `"${value}"` 
-            : value;
-        }).join(",")
-      )
+      ...filteredData.map(row =>
+        columns
+          .map(col => {
+            const value = row[col.key];
+            return typeof value === "string" && value.includes(",") ? `"${value}"` : value;
+          })
+          .join(",")
+      ),
     ].join("\n");
 
     const blob = new Blob([csv], { type: "text/csv" });
@@ -175,30 +172,28 @@ export function DataTable<T extends Record<string, any>>({
               {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
             </div>
             <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={exportData}
-                className="hidden sm:flex"
-              >
+              <Button variant="outline" size="sm" onClick={exportData} className="hidden sm:flex">
                 <Download size={16} className="mr-2" />
                 Exportar
               </Button>
             </div>
           </div>
-          
+
           {searchable && (
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
+                <Search
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+                  size={20}
+                />
                 <Input
                   placeholder="Buscar..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
-              
+
               {filterable && (
                 <Button variant="outline" size="sm">
                   <Filter size={16} className="mr-2" />
@@ -215,7 +210,7 @@ export function DataTable<T extends Record<string, any>>({
         <table className="w-full">
           <thead>
             <tr className="border-b border-border bg-accent/20">
-              {columns.map((column) => (
+              {columns.map(column => (
                 <th
                   key={column.key}
                   className={cn(
@@ -231,21 +226,21 @@ export function DataTable<T extends Record<string, any>>({
                     <span>{column.header}</span>
                     {column.sortable && sortable && (
                       <div className="flex flex-col">
-                        <ChevronUp 
-                          size={12} 
+                        <ChevronUp
+                          size={12}
                           className={cn(
                             "transition-colors",
                             sortColumn === column.key && sortDirection === "asc"
-                              ? "text-primary" 
+                              ? "text-primary"
                               : "text-muted-foreground/50"
                           )}
                         />
-                        <ChevronDown 
-                          size={12} 
+                        <ChevronDown
+                          size={12}
                           className={cn(
                             "transition-colors -mt-1",
                             sortColumn === column.key && sortDirection === "desc"
-                              ? "text-primary" 
+                              ? "text-primary"
                               : "text-muted-foreground/50"
                           )}
                         />
@@ -254,14 +249,18 @@ export function DataTable<T extends Record<string, any>>({
                   </div>
                 </th>
               ))}
-              {actions && <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">Ações</th>}
+              {actions && (
+                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">
+                  Ações
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
             {paginatedData.length === 0 ? (
               <tr>
-                <td 
-                  colSpan={columns.length + (actions ? 1 : 0)} 
+                <td
+                  colSpan={columns.length + (actions ? 1 : 0)}
                   className="px-6 py-12 text-center text-muted-foreground"
                 >
                   Nenhum resultado encontrado
@@ -277,7 +276,7 @@ export function DataTable<T extends Record<string, any>>({
                   )}
                   onClick={() => onRowClick?.(row)}
                 >
-                  {columns.map((column) => (
+                  {columns.map(column => (
                     <td
                       key={column.key}
                       className={cn(
@@ -286,10 +285,7 @@ export function DataTable<T extends Record<string, any>>({
                         column.align === "right" && "text-right"
                       )}
                     >
-                      {column.render 
-                        ? column.render(row[column.key], row)
-                        : row[column.key]
-                      }
+                      {column.render ? column.render(row[column.key], row) : row[column.key]}
                     </td>
                   ))}
                   {actions && (
@@ -299,7 +295,7 @@ export function DataTable<T extends Record<string, any>>({
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={(e) => {
+                            onClick={e => {
                               e.stopPropagation();
                               actions.view!(row);
                             }}
@@ -311,7 +307,7 @@ export function DataTable<T extends Record<string, any>>({
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={(e) => {
+                            onClick={e => {
                               e.stopPropagation();
                               actions.edit!(row);
                             }}
@@ -323,7 +319,7 @@ export function DataTable<T extends Record<string, any>>({
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={(e) => {
+                            onClick={e => {
                               e.stopPropagation();
                               actions.delete!(row);
                             }}
@@ -351,7 +347,8 @@ export function DataTable<T extends Record<string, any>>({
       {pagination && totalPages > 1 && (
         <div className="p-4 border-t border-border flex items-center justify-between">
           <div className="text-sm text-muted-foreground">
-            Mostrando {startIndex + 1}-{Math.min(startIndex + pageSize, filteredData.length)} de {filteredData.length} resultados
+            Mostrando {startIndex + 1}-{Math.min(startIndex + pageSize, filteredData.length)} de{" "}
+            {filteredData.length} resultados
           </div>
           <div className="flex items-center space-x-2">
             <Button
@@ -362,12 +359,12 @@ export function DataTable<T extends Record<string, any>>({
             >
               Anterior
             </Button>
-            
+
             <div className="flex items-center space-x-1">
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                 const page = i + 1;
                 const isActive = page === currentPage;
-                
+
                 return (
                   <Button
                     key={page}
@@ -381,7 +378,7 @@ export function DataTable<T extends Record<string, any>>({
                 );
               })}
             </div>
-            
+
             <Button
               variant="outline"
               size="sm"

@@ -35,47 +35,50 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setIsLoading(false);
-        
-        try {
-          if (event === "SIGNED_IN") {
-            toast({
-              title: "Bem-vindo!",
-              description: "Login realizado com sucesso.",
-            });
-          } else if (event === "SIGNED_OUT") {
-            toast({
-              title: "Desconectado",
-              description: "Você foi desconectado com sucesso.",
-            });
-          } else if (event === "TOKEN_REFRESHED") {
-            // Token refreshed successfully
-          } else if (event === "USER_UPDATED") {
-            // User data updated
-          }
-        } catch (err) {
-          // Ignorar erros de toast
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setIsLoading(false);
+
+      try {
+        if (event === "SIGNED_IN") {
+          toast({
+            title: "Bem-vindo!",
+            description: "Login realizado com sucesso.",
+          });
+        } else if (event === "SIGNED_OUT") {
+          toast({
+            title: "Desconectado",
+            description: "Você foi desconectado com sucesso.",
+          });
+        } else if (event === "TOKEN_REFRESHED") {
+          // Token refreshed successfully
+        } else if (event === "USER_UPDATED") {
+          // User data updated
         }
+      } catch (err) {
+        // Ignorar erros de toast
       }
-    );
+    });
 
     // THEN check for existing session with timeout
     const loadSession = async () => {
       try {
-        const timeoutPromise = new Promise<null>((_, reject) => 
+        const timeoutPromise = new Promise<null>((_, reject) =>
           setTimeout(() => reject(new Error("Timeout")), 5000)
         );
-        
+
         const sessionPromise = supabase.auth.getSession();
 
-        const { data: { session }, error } = await Promise.race([
-          sessionPromise,
-          timeoutPromise
-        ]).catch(() => ({ data: { session: null }, error: null })) as any;
+        const {
+          data: { session },
+          error,
+        } = (await Promise.race([sessionPromise, timeoutPromise]).catch(() => ({
+          data: { session: null },
+          error: null,
+        }))) as any;
 
         if (error) {
           try {
@@ -85,11 +88,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               variant: "destructive",
             });
           } catch (err) {
+            console.warn("[EMPTY CATCH]", err);
           }
         }
         setSession(session);
         setUser(session?.user ?? null);
       } catch (error) {
+        console.warn("[EMPTY CATCH]", error);
       } finally {
         setIsLoading(false);
       }
@@ -102,9 +107,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signUp = async (email: string, password: string, fullName: string) => {
     setIsLoading(true);
-    
+
     const redirectUrl = `${window.location.origin}/`;
-    
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -112,8 +117,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         emailRedirectTo: redirectUrl,
         data: {
           full_name: fullName,
-        }
-      }
+        },
+      },
     });
 
     if (error) {
@@ -135,7 +140,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
-    
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -161,7 +166,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const resetPassword = async (email: string) => {
     const redirectUrl = `${window.location.origin}/auth?type=recovery`;
-    
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: redirectUrl,
     });
@@ -192,9 +197,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     resetPassword,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

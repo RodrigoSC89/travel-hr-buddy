@@ -4,19 +4,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Shield, 
+import {
+  Shield,
   AlertTriangle,
   CheckCircle,
   Activity,
   Lock,
   Eye,
   Zap,
-  TrendingUp,
   User,
   MapPin,
   Clock,
-  XCircle
+  XCircle,
 } from "lucide-react";
 
 interface SecurityThreat {
@@ -56,12 +55,13 @@ export const AIThreatDetection: React.FC = () => {
       source: {
         ip: "203.45.78.91",
         location: "Localização Desconhecida",
-        user: "admin_test"
+        user: "admin_test",
       },
       status: "investigating",
       confidence: 94,
       affectedSystems: ["Sistema de Autenticação", "API Gateway"],
-      aiAnalysis: "Padrão de ataque de força bruta detectado. IP sem histórico legítimo de acesso. Recomenda-se bloqueio imediato."
+      aiAnalysis:
+        "Padrão de ataque de força bruta detectado. IP sem histórico legítimo de acesso. Recomenda-se bloqueio imediato.",
     },
     {
       id: "2",
@@ -73,12 +73,13 @@ export const AIThreatDetection: React.FC = () => {
       source: {
         ip: "192.168.1.45",
         location: "São Paulo, BR",
-        user: "joao.silva@company.com"
+        user: "joao.silva@company.com",
       },
       status: "active",
       confidence: 76,
       affectedSystems: ["Dashboard Executivo", "Dados de Tripulação"],
-      aiAnalysis: "Usuário acessando de localização diferente do padrão. Horário de acesso fora do expediente normal. Pode ser legítimo, mas requer verificação."
+      aiAnalysis:
+        "Usuário acessando de localização diferente do padrão. Horário de acesso fora do expediente normal. Pode ser legítimo, mas requer verificação.",
     },
     {
       id: "3",
@@ -89,12 +90,13 @@ export const AIThreatDetection: React.FC = () => {
       detectedAt: "2025-05-12T12:05:18",
       source: {
         ip: "45.123.67.89",
-        location: "Desconhecido"
+        location: "Desconhecido",
       },
       status: "resolved",
       confidence: 98,
       affectedSystems: ["API de Relatórios", "Banco de Dados"],
-      aiAnalysis: "Tentativa clara de exploração de vulnerabilidade. Padrão de ataque automatizado detectado. IP bloqueado automaticamente."
+      aiAnalysis:
+        "Tentativa clara de exploração de vulnerabilidade. Padrão de ataque automatizado detectado. IP bloqueado automaticamente.",
     },
     {
       id: "4",
@@ -105,12 +107,13 @@ export const AIThreatDetection: React.FC = () => {
       detectedAt: "2025-05-12T11:23:56",
       source: {
         ip: "Múltiplos IPs",
-        location: "Diversos países"
+        location: "Diversos países",
       },
       status: "investigating",
       confidence: 88,
       affectedSystems: ["API Gateway", "Load Balancer"],
-      aiAnalysis: "Possível ataque DDoS em andamento. Tráfego originado de botnet identificada. Sistema de mitigação ativado."
+      aiAnalysis:
+        "Possível ataque DDoS em andamento. Tráfego originado de botnet identificada. Sistema de mitigação ativado.",
     },
     {
       id: "5",
@@ -122,54 +125,73 @@ export const AIThreatDetection: React.FC = () => {
       source: {
         ip: "10.0.2.15",
         location: "Rede Interna",
-        user: "maria.santos@company.com"
+        user: "maria.santos@company.com",
       },
       status: "false_positive",
       confidence: 65,
       affectedSystems: ["Sistema de Documentos"],
-      aiAnalysis: "Padrão suspeito de download, mas usuário possui permissões adequadas. Ação dentro do escopo de trabalho normal após verificação."
-    }
+      aiAnalysis:
+        "Padrão suspeito de download, mas usuário possui permissões adequadas. Ação dentro do escopo de trabalho normal após verificação.",
+    },
   ]);
 
   const [metrics] = useState<SecurityMetric[]>([
     { name: "Tentativas de Intrusão", value: 23, trend: "down", status: "good" },
     { name: "Anomalias Detectadas", value: 45, trend: "up", status: "warning" },
     { name: "Taxa de Falsos Positivos", value: 8, trend: "down", status: "good" },
-    { name: "Tempo Médio de Resposta", value: 3.2, trend: "down", status: "good" }
+    { name: "Tempo Médio de Resposta", value: 3.2, trend: "down", status: "good" },
   ]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "destructive";
-    case "high": return "default";
-    case "medium": return "secondary";
-    case "low": return "outline";
-    default: return "outline";
+      case "critical":
+        return "destructive";
+      case "high":
+        return "default";
+      case "medium":
+        return "secondary";
+      case "low":
+        return "outline";
+      default:
+        return "outline";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "text-red-600";
-    case "investigating": return "text-yellow-600";
-    case "resolved": return "text-green-600";
-    case "false_positive": return "text-muted-foreground";
-    default: return "text-muted-foreground";
+      case "active":
+        return "text-red-600";
+      case "investigating":
+        return "text-yellow-600";
+      case "resolved":
+        return "text-green-600";
+      case "false_positive":
+        return "text-muted-foreground";
+      default:
+        return "text-muted-foreground";
     }
   };
 
   const getThreatIcon = (type: string) => {
     switch (type) {
-    case "intrusion": return <Shield className="h-5 w-5 text-red-600" />;
-    case "anomaly": return <Eye className="h-5 w-5 text-yellow-600" />;
-    case "suspicious": return <AlertTriangle className="h-5 w-5 text-orange-600" />;
-    case "malware": return <XCircle className="h-5 w-5 text-red-600" />;
-    case "ddos": return <Zap className="h-5 w-5 text-purple-600" />;
-    default: return <AlertTriangle className="h-5 w-5" />;
+      case "intrusion":
+        return <Shield className="h-5 w-5 text-red-600" />;
+      case "anomaly":
+        return <Eye className="h-5 w-5 text-yellow-600" />;
+      case "suspicious":
+        return <AlertTriangle className="h-5 w-5 text-orange-600" />;
+      case "malware":
+        return <XCircle className="h-5 w-5 text-red-600" />;
+      case "ddos":
+        return <Zap className="h-5 w-5 text-purple-600" />;
+      default:
+        return <AlertTriangle className="h-5 w-5" />;
     }
   };
 
-  const activeThreats = threats.filter(t => t.status === "active" || t.status === "investigating").length;
+  const activeThreats = threats.filter(
+    t => t.status === "active" || t.status === "investigating"
+  ).length;
   const criticalThreats = threats.filter(t => t.severity === "critical").length;
   const avgConfidence = Math.round(
     threats.reduce((sum, t) => sum + t.confidence, 0) / threats.length
@@ -188,7 +210,7 @@ export const AIThreatDetection: React.FC = () => {
             <p className="text-xs text-muted-foreground">Requerem atenção</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Nível Crítico</CardTitle>
@@ -198,7 +220,7 @@ export const AIThreatDetection: React.FC = () => {
             <p className="text-xs text-muted-foreground">Alta severidade</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Confiança IA</CardTitle>
@@ -208,7 +230,7 @@ export const AIThreatDetection: React.FC = () => {
             <p className="text-xs text-muted-foreground">Precisão média</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Status Sistema</CardTitle>
@@ -251,19 +273,23 @@ export const AIThreatDetection: React.FC = () => {
             </TabsList>
 
             <TabsContent value="threats" className="space-y-4 mt-4">
-              {threats.map((threat) => (
-                <Card key={threat.id} className={`border-l-4 ${
-                  threat.severity === "critical" ? "border-l-red-600" :
-                    threat.severity === "high" ? "border-l-orange-600" :
-                      threat.severity === "medium" ? "border-l-yellow-600" :
-                        "border-l-blue-600"
-                }`}>
+              {threats.map(threat => (
+                <Card
+                  key={threat.id}
+                  className={`border-l-4 ${
+                    threat.severity === "critical"
+                      ? "border-l-red-600"
+                      : threat.severity === "high"
+                        ? "border-l-orange-600"
+                        : threat.severity === "medium"
+                          ? "border-l-yellow-600"
+                          : "border-l-blue-600"
+                  }`}
+                >
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3">
-                        <div className="p-2 bg-muted rounded-lg">
-                          {getThreatIcon(threat.type)}
-                        </div>
+                        <div className="p-2 bg-muted rounded-lg">{getThreatIcon(threat.type)}</div>
                         <div>
                           <div className="flex items-center gap-2">
                             <CardTitle className="text-base">{threat.title}</CardTitle>
@@ -271,15 +297,19 @@ export const AIThreatDetection: React.FC = () => {
                               {threat.severity.toUpperCase()}
                             </Badge>
                           </div>
-                          <CardDescription className="mt-1">
-                            {threat.description}
-                          </CardDescription>
+                          <CardDescription className="mt-1">{threat.description}</CardDescription>
                         </div>
                       </div>
                       <div className={`text-sm font-medium ${getStatusColor(threat.status)}`}>
-                        {threat.status === "active" && <AlertTriangle className="h-4 w-4 inline mr-1" />}
-                        {threat.status === "investigating" && <Eye className="h-4 w-4 inline mr-1" />}
-                        {threat.status === "resolved" && <CheckCircle className="h-4 w-4 inline mr-1" />}
+                        {threat.status === "active" && (
+                          <AlertTriangle className="h-4 w-4 inline mr-1" />
+                        )}
+                        {threat.status === "investigating" && (
+                          <Eye className="h-4 w-4 inline mr-1" />
+                        )}
+                        {threat.status === "resolved" && (
+                          <CheckCircle className="h-4 w-4 inline mr-1" />
+                        )}
                         {threat.status.replace("_", " ").toUpperCase()}
                       </div>
                     </div>
@@ -392,25 +422,43 @@ export const AIThreatDetection: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-end justify-between mb-2">
-                        <div className="text-3xl font-bold">{metric.value}{metric.name.includes("Taxa") ? "%" : ""}</div>
-                        <div className={`flex items-center gap-1 text-sm ${
-                          metric.trend === "down" ? "text-green-600" : 
-                            metric.trend === "up" ? "text-red-600" : 
-                              "text-muted-foreground"
-                        }`}>
+                        <div className="text-3xl font-bold">
+                          {metric.value}
+                          {metric.name.includes("Taxa") ? "%" : ""}
+                        </div>
+                        <div
+                          className={`flex items-center gap-1 text-sm ${
+                            metric.trend === "down"
+                              ? "text-green-600"
+                              : metric.trend === "up"
+                                ? "text-red-600"
+                                : "text-muted-foreground"
+                          }`}
+                        >
                           {metric.trend === "up" ? "↗" : metric.trend === "down" ? "↘" : "→"}
-                          <span>{metric.trend === "up" ? "+" : metric.trend === "down" ? "-" : ""}
-                            {Math.abs(Math.random() * 15).toFixed(1)}%</span>
+                          <span>
+                            {metric.trend === "up" ? "+" : metric.trend === "down" ? "-" : ""}
+                            {Math.abs(Math.random() * 15).toFixed(1)}%
+                          </span>
                         </div>
                       </div>
                       <Progress value={metric.value} className="h-2" />
                       <div className="mt-2 text-xs text-muted-foreground">
-                        Status: <span className={
-                          metric.status === "good" ? "text-green-600" :
-                            metric.status === "warning" ? "text-yellow-600" :
-                              "text-red-600"
-                        }>
-                          {metric.status === "good" ? "Bom" : metric.status === "warning" ? "Atenção" : "Crítico"}
+                        Status:{" "}
+                        <span
+                          className={
+                            metric.status === "good"
+                              ? "text-green-600"
+                              : metric.status === "warning"
+                                ? "text-yellow-600"
+                                : "text-red-600"
+                          }
+                        >
+                          {metric.status === "good"
+                            ? "Bom"
+                            : metric.status === "warning"
+                              ? "Atenção"
+                              : "Crítico"}
                         </span>
                       </div>
                     </CardContent>
@@ -447,9 +495,12 @@ export const AIThreatDetection: React.FC = () => {
                       { name: "Proteção DDoS", status: "active" },
                       { name: "Detecção de Anomalias IA", status: "active" },
                       { name: "Análise Comportamental", status: "active" },
-                      { name: "Threat Intelligence Feed", status: "active" }
+                      { name: "Threat Intelligence Feed", status: "active" },
                     ].map((layer, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                      >
                         <div className="flex items-center gap-2">
                           <Shield className="h-4 w-4 text-green-600" />
                           <span className="text-sm font-medium">{layer.name}</span>
@@ -474,9 +525,12 @@ export const AIThreatDetection: React.FC = () => {
                       "Isolamento de sessões comprometidas",
                       "Notificação em tempo real",
                       "Backup automático antes de ações",
-                      "Log detalhado de todas atividades"
+                      "Log detalhado de todas atividades",
                     ].map((action, idx) => (
-                      <div key={idx} className="flex items-start gap-2 p-2 bg-blue-50 dark:bg-blue-950 rounded-lg">
+                      <div
+                        key={idx}
+                        className="flex items-start gap-2 p-2 bg-blue-50 dark:bg-blue-950 rounded-lg"
+                      >
                         <CheckCircle className="h-4 w-4 mt-0.5 text-blue-600" />
                         <span className="text-sm">{action}</span>
                       </div>

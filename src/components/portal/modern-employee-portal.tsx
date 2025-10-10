@@ -3,56 +3,43 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { 
-  User, 
-  Calendar, 
-  FileText, 
-  Award, 
-  Clock, 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  User,
+  Calendar,
+  FileText,
+  Award,
   Target,
-  TrendingUp,
   MessageSquare,
-  Bell,
   Download,
   Upload,
-  CheckCircle,
   AlertTriangle,
-  Settings,
   Star,
   BarChart3,
-  Eye,
-  Plus,
-  Edit,
-  Trash2,
   Brain,
   Shield,
-  Anchor,
-  Compass,
   Waves,
   Ship,
   GraduationCap,
   CreditCard,
-  Users,
-  Activity,
   BookOpen,
-  Mic,
-  Search,
-  Filter,
   RefreshCw,
-  ExternalLink
+  ExternalLink,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { format, differenceInDays, startOfWeek, endOfWeek, addDays } from "date-fns";
+import { format, startOfWeek, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 interface DashboardStats {
@@ -114,7 +101,7 @@ export const ModernEmployeePortal: React.FC = () => {
 
   const initializePortal = async () => {
     if (!user) return;
-    
+
     try {
       setLoading(true);
       await Promise.all([
@@ -122,13 +109,13 @@ export const ModernEmployeePortal: React.FC = () => {
         loadDashboardStats(),
         loadPersonalCalendar(),
         loadAIInsights(),
-        loadDocuments()
+        loadDocuments(),
       ]);
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do portal",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -158,7 +145,7 @@ export const ModernEmployeePortal: React.FC = () => {
             rank: "Ordinary Seaman",
             nationality: "Brasil",
             email: user?.email,
-            status: "available"
+            status: "available",
           })
           .select()
           .single();
@@ -169,7 +156,8 @@ export const ModernEmployeePortal: React.FC = () => {
         setUserProfile(profile);
       }
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const loadDashboardStats = async () => {
@@ -180,23 +168,30 @@ export const ModernEmployeePortal: React.FC = () => {
       const [embarkations, certifications, performance] = await Promise.all([
         supabase.from("crew_embarkations").select("*").eq("crew_member_id", userProfile.id),
         supabase.from("crew_certifications").select("*").eq("crew_member_id", userProfile.id),
-        supabase.from("crew_performance_reviews").select("*").eq("crew_member_id", userProfile.id)
+        supabase.from("crew_performance_reviews").select("*").eq("crew_member_id", userProfile.id),
       ]);
 
       const totalEmbarkations = embarkations.data?.length || 0;
-      const totalSeaDays = embarkations.data?.reduce((total, embark) => 
-        total + Math.ceil((embark.hours_worked || 0) / 24), 0) || 0;
-      
+      const totalSeaDays =
+        embarkations.data?.reduce(
+          (total, embark) => total + Math.ceil((embark.hours_worked || 0) / 24),
+          0
+        ) || 0;
+
       const validCerts = certifications.data?.filter(cert => cert.status === "valid").length || 0;
       const totalCerts = certifications.data?.length || 0;
       const complianceRate = totalCerts > 0 ? (validCerts / totalCerts) * 100 : 0;
-      
-      const avgPerformance = performance.data?.length > 0 
-        ? performance.data.reduce((sum, rev) => sum + rev.overall_score, 0) / performance.data.length
-        : 0;
 
-      const pendingCertificates = certifications.data?.filter(cert => 
-        cert.status === "expiring_soon" || cert.status === "expired").length || 0;
+      const avgPerformance =
+        performance.data?.length > 0
+          ? performance.data.reduce((sum, rev) => sum + rev.overall_score, 0) /
+            performance.data.length
+          : 0;
+
+      const pendingCertificates =
+        certifications.data?.filter(
+          cert => cert.status === "expiring_soon" || cert.status === "expired"
+        ).length || 0;
 
       setDashboardStats({
         totalEmbarkations,
@@ -206,10 +201,11 @@ export const ModernEmployeePortal: React.FC = () => {
         pendingCertificates,
         upcomingTraining: 0, // Implementar quando houver tabela de treinamentos
         recentPayments: [], // Implementar quando houver tabela de pagamentos
-        nextEmbarkation: null
+        nextEmbarkation: null,
       });
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const loadPersonalCalendar = async () => {
@@ -221,26 +217,29 @@ export const ModernEmployeePortal: React.FC = () => {
       const endDate = format(addDays(today, 90), "yyyy-MM-dd"); // Próximos 90 dias
 
       const [embarkations, certifications] = await Promise.all([
-        supabase.from("crew_embarkations")
+        supabase
+          .from("crew_embarkations")
           .select("*")
           .eq("crew_member_id", userProfile.id)
           .gte("embark_date", startDate)
           .lte("embark_date", endDate),
-        supabase.from("crew_certifications")
+        supabase
+          .from("crew_certifications")
           .select("*")
           .eq("crew_member_id", userProfile.id)
           .gte("expiry_date", startDate)
-          .lte("expiry_date", endDate)
+          .lte("expiry_date", endDate),
       ]);
 
       setPersonalCalendar({
         embarkations: embarkations.data || [],
         training: [], // Implementar quando houver tabela
         certifications: certifications.data || [],
-        medicalExams: [] // Implementar quando houver tabela
+        medicalExams: [], // Implementar quando houver tabela
       });
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const loadAIInsights = async () => {
@@ -249,7 +248,7 @@ export const ModernEmployeePortal: React.FC = () => {
     try {
       // Gerar insights de IA automaticamente
       await supabase.functions.invoke("crew-ai-insights", {
-        body: { crewMemberId: userProfile.id }
+        body: { crewMemberId: userProfile.id },
       });
 
       // Buscar insights da base de dados
@@ -271,12 +270,13 @@ export const ModernEmployeePortal: React.FC = () => {
         priority: insight.priority as "high" | "medium" | "low",
         category: insight.category,
         actionable: true,
-        deadline: insight.deadline
+        deadline: insight.deadline,
       }));
 
       setAIInsights(formattedInsights);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const loadDocuments = async () => {
@@ -292,7 +292,8 @@ export const ModernEmployeePortal: React.FC = () => {
       if (error) throw error;
       setDocuments(docs || []);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const handleAIChat = async (message: string) => {
@@ -312,9 +313,9 @@ export const ModernEmployeePortal: React.FC = () => {
           context: {
             userProfile,
             dashboardStats,
-            personalCalendar
-          }
-        }
+            personalCalendar,
+          },
+        },
       });
 
       if (error) throw error;
@@ -322,7 +323,7 @@ export const ModernEmployeePortal: React.FC = () => {
       const aiMessage = {
         role: "assistant",
         content: data.response || "Desculpe, não consegui processar sua mensagem.",
-        timestamp: new Date()
+        timestamp: new Date(),
       };
 
       setChatMessages(prev => [...prev, aiMessage]);
@@ -330,7 +331,7 @@ export const ModernEmployeePortal: React.FC = () => {
       const errorMessage = {
         role: "assistant",
         content: "Desculpe, ocorreu um erro. Tente novamente.",
-        timestamp: new Date()
+        timestamp: new Date(),
       };
       setChatMessages(prev => [...prev, errorMessage]);
     } finally {
@@ -352,24 +353,22 @@ export const ModernEmployeePortal: React.FC = () => {
       if (uploadError) throw uploadError;
 
       // Salvar metadados no banco
-      const { error: dbError } = await supabase
-        .from("crew_dossier_documents")
-        .insert({
-          crew_member_id: userProfile.id,
-          document_name: file.name,
-          document_category: "personal",
-          file_url: uploadData.path,
-          file_type: file.type,
-          file_size: file.size,
-          uploaded_by: user?.id,
-          verification_status: "pending"
-        });
+      const { error: dbError } = await supabase.from("crew_dossier_documents").insert({
+        crew_member_id: userProfile.id,
+        document_name: file.name,
+        document_category: "personal",
+        file_url: uploadData.path,
+        file_type: file.type,
+        file_size: file.size,
+        uploaded_by: user?.id,
+        verification_status: "pending",
+      });
 
       if (dbError) throw dbError;
 
       toast({
         title: "Documento enviado",
-        description: "Seu documento foi enviado para verificação"
+        description: "Seu documento foi enviado para verificação",
       });
 
       await loadDocuments();
@@ -377,7 +376,7 @@ export const ModernEmployeePortal: React.FC = () => {
       toast({
         title: "Erro no upload",
         description: "Não foi possível enviar o documento",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setUploadingDoc(false);
@@ -386,10 +385,14 @@ export const ModernEmployeePortal: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "high": return "destructive";
-    case "medium": return "default";
-    case "low": return "secondary";
-    default: return "outline";
+      case "high":
+        return "destructive";
+      case "medium":
+        return "default";
+      case "low":
+        return "secondary";
+      default:
+        return "outline";
     }
   };
 
@@ -417,9 +420,7 @@ export const ModernEmployeePortal: React.FC = () => {
               </AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-2xl font-bold">
-                Olá, {userProfile?.full_name || "Tripulante"}!
-              </h1>
+              <h1 className="text-2xl font-bold">Olá, {userProfile?.full_name || "Tripulante"}!</h1>
               <p className="text-azure-100">
                 {userProfile?.position} - {userProfile?.rank}
               </p>
@@ -428,7 +429,7 @@ export const ModernEmployeePortal: React.FC = () => {
               </Badge>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <Button
               variant="secondary"
@@ -438,7 +439,7 @@ export const ModernEmployeePortal: React.FC = () => {
             >
               {darkMode ? "☀️" : "🌙"}
             </Button>
-            
+
             <Dialog open={chatOpen} onOpenChange={setChatOpen}>
               <DialogTrigger asChild>
                 <Button variant="secondary" size="sm">
@@ -453,7 +454,7 @@ export const ModernEmployeePortal: React.FC = () => {
                     Tire dúvidas sobre regras, documentos e carreira
                   </DialogDescription>
                 </DialogHeader>
-                
+
                 <div className="flex flex-col h-[400px]">
                   <div className="flex-1 overflow-y-auto space-y-4 p-4 bg-muted/30 rounded-lg">
                     {chatMessages.length === 0 ? (
@@ -493,16 +494,16 @@ export const ModernEmployeePortal: React.FC = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center space-x-2 mt-4">
                     <Input
                       placeholder="Digite sua mensagem..."
                       value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && handleAIChat(newMessage)}
+                      onChange={e => setNewMessage(e.target.value)}
+                      onKeyPress={e => e.key === "Enter" && handleAIChat(newMessage)}
                       disabled={isProcessing}
                     />
-                    <Button 
+                    <Button
                       onClick={() => handleAIChat(newMessage)}
                       disabled={isProcessing || !newMessage.trim()}
                       size="sm"
@@ -513,7 +514,7 @@ export const ModernEmployeePortal: React.FC = () => {
                 </div>
               </DialogContent>
             </Dialog>
-            
+
             <Button
               variant="secondary"
               size="sm"
@@ -625,8 +626,8 @@ export const ModernEmployeePortal: React.FC = () => {
                 <AlertTriangle className="h-4 w-4 text-red-600" />
                 <AlertTitle className="text-red-800">Atenção Necessária</AlertTitle>
                 <AlertDescription className="text-red-700">
-                  Você possui {dashboardStats.pendingCertificates} certificado(s) expirando ou expirados. 
-                  Verifique na aba "Documentos" para mais detalhes.
+                  Você possui {dashboardStats.pendingCertificates} certificado(s) expirando ou
+                  expirados. Verifique na aba "Documentos" para mais detalhes.
                 </AlertDescription>
               </Alert>
             )}
@@ -645,8 +646,11 @@ export const ModernEmployeePortal: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {aiInsights.slice(0, 3).map((insight) => (
-                      <div key={insight.id} className="flex items-start space-x-3 p-3 bg-muted/50 rounded-lg">
+                    {aiInsights.slice(0, 3).map(insight => (
+                      <div
+                        key={insight.id}
+                        className="flex items-start space-x-3 p-3 bg-muted/50 rounded-lg"
+                      >
                         <div className="p-2 rounded-full bg-primary/10">
                           <Target className="h-4 w-4 text-primary" />
                         </div>
@@ -654,20 +658,21 @@ export const ModernEmployeePortal: React.FC = () => {
                           <div className="flex items-center justify-between mb-1">
                             <h4 className="font-medium">{insight.title}</h4>
                             <Badge variant={getPriorityColor(insight.priority)}>
-                              {insight.priority === "high" ? "Alta" : 
-                                insight.priority === "medium" ? "Média" : "Baixa"}
+                              {insight.priority === "high"
+                                ? "Alta"
+                                : insight.priority === "medium"
+                                  ? "Média"
+                                  : "Baixa"}
                             </Badge>
                           </div>
-                          <p className="text-sm text-muted-foreground">
-                            {insight.description}
-                          </p>
+                          <p className="text-sm text-muted-foreground">{insight.description}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                   {aiInsights.length > 3 && (
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="w-full mt-4"
                       onClick={() => setActiveTab("insights")}
                     >
@@ -687,9 +692,7 @@ export const ModernEmployeePortal: React.FC = () => {
                   <Calendar className="h-5 w-5" />
                   Calendário Pessoal
                 </CardTitle>
-                <CardDescription>
-                  Próximos embarques, treinamentos e vencimentos
-                </CardDescription>
+                <CardDescription>Próximos embarques, treinamentos e vencimentos</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -702,7 +705,7 @@ export const ModernEmployeePortal: React.FC = () => {
                       <p className="text-muted-foreground text-sm">Nenhum embarque agendado</p>
                     ) : (
                       <div className="space-y-2">
-                        {personalCalendar?.embarkations.map((embark) => (
+                        {personalCalendar?.embarkations.map(embark => (
                           <div key={embark.id} className="p-3 border rounded-lg">
                             <p className="font-medium">{embark.vessel_name}</p>
                             <p className="text-sm text-muted-foreground">
@@ -723,11 +726,12 @@ export const ModernEmployeePortal: React.FC = () => {
                       <p className="text-muted-foreground text-sm">Nenhum certificado vencendo</p>
                     ) : (
                       <div className="space-y-2">
-                        {personalCalendar?.certifications.map((cert) => (
+                        {personalCalendar?.certifications.map(cert => (
                           <div key={cert.id} className="p-3 border rounded-lg">
                             <p className="font-medium">{cert.certification_name}</p>
                             <p className="text-sm text-muted-foreground">
-                              Vence em {format(new Date(cert.expiry_date), "dd/MM/yyyy", { locale: ptBR })}
+                              Vence em{" "}
+                              {format(new Date(cert.expiry_date), "dd/MM/yyyy", { locale: ptBR })}
                             </p>
                           </div>
                         ))}
@@ -747,9 +751,7 @@ export const ModernEmployeePortal: React.FC = () => {
                   <FileText className="h-5 w-5" />
                   Central de Documentos
                 </CardTitle>
-                <CardDescription>
-                  Gerencie seus documentos pessoais e certificados
-                </CardDescription>
+                <CardDescription>Gerencie seus documentos pessoais e certificados</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
@@ -766,12 +768,12 @@ export const ModernEmployeePortal: React.FC = () => {
                       className="hidden"
                       multiple
                       accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                      onChange={(e) => {
+                      onChange={e => {
                         const files = Array.from(e.target.files || []);
                         files.forEach(handleDocumentUpload);
                       }}
                     />
-                    <Button 
+                    <Button
                       onClick={() => document.getElementById("file-upload")?.click()}
                       disabled={uploadingDoc}
                     >
@@ -781,20 +783,26 @@ export const ModernEmployeePortal: React.FC = () => {
 
                   {/* Documents List */}
                   <div className="space-y-3">
-                    {documents.map((doc) => (
-                      <div key={doc.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    {documents.map(doc => (
+                      <div
+                        key={doc.id}
+                        className="flex items-center justify-between p-4 border rounded-lg"
+                      >
                         <div className="flex items-center space-x-3">
                           <FileText className="h-5 w-5 text-blue-500" />
                           <div>
                             <p className="font-medium">{doc.document_name}</p>
                             <p className="text-sm text-muted-foreground">
-                              {doc.document_category} • {format(new Date(doc.upload_date), "dd/MM/yyyy")}
+                              {doc.document_category} •{" "}
+                              {format(new Date(doc.upload_date), "dd/MM/yyyy")}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <Badge 
-                            variant={doc.verification_status === "verified" ? "default" : "secondary"}
+                          <Badge
+                            variant={
+                              doc.verification_status === "verified" ? "default" : "secondary"
+                            }
                           >
                             {doc.verification_status === "verified" ? "Verificado" : "Pendente"}
                           </Badge>
@@ -818,9 +826,7 @@ export const ModernEmployeePortal: React.FC = () => {
                   <GraduationCap className="h-5 w-5" />
                   Área de Treinamentos
                 </CardTitle>
-                <CardDescription>
-                  Cursos disponíveis e seu progresso
-                </CardDescription>
+                <CardDescription>Cursos disponíveis e seu progresso</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-8">
@@ -842,9 +848,7 @@ export const ModernEmployeePortal: React.FC = () => {
                   <CreditCard className="h-5 w-5" />
                   Histórico de Pagamentos
                 </CardTitle>
-                <CardDescription>
-                  Salários, diárias e gratificações
-                </CardDescription>
+                <CardDescription>Salários, diárias e gratificações</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-8">
@@ -866,9 +870,7 @@ export const ModernEmployeePortal: React.FC = () => {
                   <User className="h-5 w-5" />
                   Dossiê Completo
                 </CardTitle>
-                <CardDescription>
-                  Acesse seu dossiê profissional completo
-                </CardDescription>
+                <CardDescription>Acesse seu dossiê profissional completo</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="text-center space-y-4">
@@ -878,7 +880,7 @@ export const ModernEmployeePortal: React.FC = () => {
                     <p className="text-muted-foreground mb-4">
                       Visualize todas suas informações profissionais, certificações e histórico
                     </p>
-                    <Button 
+                    <Button
                       onClick={() => window.open("/crew-dossier", "_blank")}
                       className="w-full max-w-sm"
                     >
@@ -917,14 +919,17 @@ export const ModernEmployeePortal: React.FC = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {aiInsights.map((insight) => (
+                    {aiInsights.map(insight => (
                       <Card key={insight.id} className="border-l-4 border-l-primary">
                         <CardContent className="p-4">
                           <div className="flex items-start justify-between mb-2">
                             <h3 className="font-medium">{insight.title}</h3>
                             <Badge variant={getPriorityColor(insight.priority)}>
-                              {insight.priority === "high" ? "Alta Prioridade" :
-                                insight.priority === "medium" ? "Média Prioridade" : "Baixa Prioridade"}
+                              {insight.priority === "high"
+                                ? "Alta Prioridade"
+                                : insight.priority === "medium"
+                                  ? "Média Prioridade"
+                                  : "Baixa Prioridade"}
                             </Badge>
                           </div>
                           <p className="text-muted-foreground mb-3">{insight.description}</p>

@@ -30,7 +30,8 @@ export const useUsers = () => {
       // Buscar todos os profiles
       const { data: profiles, error: profilesError } = await supabase
         .from("profiles")
-        .select(`
+        .select(
+          `
           id,
           email,
           full_name,
@@ -42,14 +43,15 @@ export const useUsers = () => {
           hire_date,
           manager_id,
           created_at
-        `)
+        `
+        )
         .order("created_at", { ascending: false });
 
       if (profilesError) throw profilesError;
 
       // Buscar roles para cada usuário
       const usersWithRoles = await Promise.all(
-        (profiles || []).map(async (profile) => {
+        (profiles || []).map(async profile => {
           const { data: roleData } = await supabase
             .from("user_roles")
             .select("role")
@@ -58,7 +60,7 @@ export const useUsers = () => {
 
           return {
             ...profile,
-            role: (roleData?.role || "employee") as UserRole
+            role: (roleData?.role || "employee") as UserRole,
           };
         })
       );
@@ -81,13 +83,7 @@ export const useUsers = () => {
       if (error) throw error;
 
       // Atualizar estado local
-      setUsers(prev => 
-        prev.map(user => 
-          user.id === userId 
-            ? { ...user, role: newRole }
-            : user
-        )
-      );
+      setUsers(prev => prev.map(user => (user.id === userId ? { ...user, role: newRole } : user)));
 
       return { success: true };
     } catch (err) {
@@ -107,7 +103,7 @@ export const useUsers = () => {
           status: profileData.status,
           employee_id: profileData.employee_id,
           hire_date: profileData.hire_date,
-          manager_id: profileData.manager_id
+          manager_id: profileData.manager_id,
         })
         .eq("id", userId);
 
@@ -119,13 +115,7 @@ export const useUsers = () => {
       }
 
       // Atualizar estado local
-      setUsers(prev => 
-        prev.map(user => 
-          user.id === userId 
-            ? { ...user, ...profileData }
-            : user
-        )
-      );
+      setUsers(prev => prev.map(user => (user.id === userId ? { ...user, ...profileData } : user)));
 
       return { success: true };
     } catch (err) {
@@ -134,16 +124,19 @@ export const useUsers = () => {
   };
 
   const getRoleStats = () => {
-    const stats = users.reduce((acc, user) => {
-      acc[user.role] = (acc[user.role] || 0) + 1;
-      return acc;
-    }, {} as Record<UserRole, number>);
+    const stats = users.reduce(
+      (acc, user) => {
+        acc[user.role] = (acc[user.role] || 0) + 1;
+        return acc;
+      },
+      {} as Record<UserRole, number>
+    );
 
     return {
       total: users.length,
       active: users.filter(u => u.status === "active").length,
       inactive: users.filter(u => u.status === "inactive").length,
-      byRole: stats
+      byRole: stats,
     };
   };
 
@@ -158,6 +151,6 @@ export const useUsers = () => {
     fetchUsers,
     updateUserRole,
     updateUserProfile,
-    getRoleStats
+    getRoleStats,
   };
 };

@@ -15,7 +15,7 @@ const BusinessIntelligencePage = () => {
         badges={[
           { icon: Sparkles, label: "IA Preditiva" },
           { icon: TrendingUp, label: "342 Insights" },
-          { icon: Target, label: "Decisões Estratégicas" }
+          { icon: Target, label: "Decisões Estratégicas" },
         ]}
       />
       <AdvancedBusinessIntelligence />

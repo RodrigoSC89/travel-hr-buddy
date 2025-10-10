@@ -2,19 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { 
-  Ship, 
-  Brain,
-  TrendingUp,
-  Navigation,
-  Leaf,
-  Users,
-  Network,
-  Zap,
-  Activity,
-  Shield
-} from "lucide-react";
+import { Ship, Brain, Navigation, Leaf, Users, Network, Zap, Activity, Shield } from "lucide-react";
 import InsightEngine from "@/components/maritime/insight-engine";
 import PatternRecognition from "@/components/maritime/pattern-recognition";
 import RealTimeRouteOptimizer from "@/components/maritime/route-optimizer";
@@ -42,16 +30,28 @@ const NautilusOne: React.FC = () => {
             Sistema Marítimo Integrado de IA e Gestão Inteligente
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 px-4 py-2">
+            <Badge
+              variant="secondary"
+              className="bg-primary/10 text-primary border-primary/20 px-4 py-2"
+            >
               🌊 Maritime Excellence
             </Badge>
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 px-4 py-2">
+            <Badge
+              variant="secondary"
+              className="bg-primary/10 text-primary border-primary/20 px-4 py-2"
+            >
               🤖 AI-Powered
             </Badge>
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 px-4 py-2">
+            <Badge
+              variant="secondary"
+              className="bg-primary/10 text-primary border-primary/20 px-4 py-2"
+            >
               🛡️ Compliance Ready
             </Badge>
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 px-4 py-2">
+            <Badge
+              variant="secondary"
+              className="bg-primary/10 text-primary border-primary/20 px-4 py-2"
+            >
               🌱 ESG Certified
             </Badge>
           </div>
@@ -59,7 +59,10 @@ const NautilusOne: React.FC = () => {
 
         {/* Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          <Card className="bg-gradient-to-br from-blue-500 to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("insights")}>
+          <Card
+            className="bg-gradient-to-br from-blue-500 to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+            onClick={() => setActiveModule("insights")}
+          >
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Brain className="h-5 w-5" />
@@ -72,7 +75,10 @@ const NautilusOne: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple-500 to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("patterns")}>
+          <Card
+            className="bg-gradient-to-br from-purple-500 to-pink-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+            onClick={() => setActiveModule("patterns")}
+          >
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Network className="h-5 w-5" />
@@ -85,7 +91,10 @@ const NautilusOne: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-500 to-emerald-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("routes")}>
+          <Card
+            className="bg-gradient-to-br from-green-500 to-emerald-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+            onClick={() => setActiveModule("routes")}
+          >
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Navigation className="h-5 w-5" />
@@ -98,7 +107,10 @@ const NautilusOne: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-yellow-500 to-orange-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("carbon")}>
+          <Card
+            className="bg-gradient-to-br from-yellow-500 to-orange-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+            onClick={() => setActiveModule("carbon")}
+          >
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Leaf className="h-5 w-5" />
@@ -111,7 +123,10 @@ const NautilusOne: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-indigo-500 to-blue-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("crew")}>
+          <Card
+            className="bg-gradient-to-br from-indigo-500 to-blue-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+            onClick={() => setActiveModule("crew")}
+          >
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
                 <Users className="h-5 w-5" />
@@ -193,7 +208,9 @@ const NautilusOne: React.FC = () => {
                     <CardContent className="space-y-3">
                       <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
                         <span className="font-medium">Route Optimizer</span>
-                        <Badge variant="default" className="bg-green-600">Ativo</Badge>
+                        <Badge variant="default" className="bg-green-600">
+                          Ativo
+                        </Badge>
                       </div>
                       <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
                         <span className="font-medium">DP Log Analyzer</span>
@@ -201,7 +218,9 @@ const NautilusOne: React.FC = () => {
                       </div>
                       <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
                         <span className="font-medium">Weather Integration</span>
-                        <Badge variant="default" className="bg-green-600">Ativo</Badge>
+                        <Badge variant="default" className="bg-green-600">
+                          Ativo
+                        </Badge>
                       </div>
                       <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
                         <span className="font-medium">Digital Twin 3D</span>
@@ -220,7 +239,9 @@ const NautilusOne: React.FC = () => {
                     <CardContent className="space-y-3">
                       <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
                         <span className="font-medium">Carbon Tracker</span>
-                        <Badge variant="default" className="bg-green-600">Ativo</Badge>
+                        <Badge variant="default" className="bg-green-600">
+                          Ativo
+                        </Badge>
                       </div>
                       <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
                         <span className="font-medium">EcoRoute Planner</span>
@@ -228,7 +249,9 @@ const NautilusOne: React.FC = () => {
                       </div>
                       <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
                         <span className="font-medium">ESG Reporting</span>
-                        <Badge variant="default" className="bg-green-600">Ativo</Badge>
+                        <Badge variant="default" className="bg-green-600">
+                          Ativo
+                        </Badge>
                       </div>
                       <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
                         <span className="font-medium">Environmental Monitor</span>
@@ -247,7 +270,9 @@ const NautilusOne: React.FC = () => {
                     <CardContent className="space-y-3">
                       <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-950 rounded-lg">
                         <span className="font-medium">Competency Heatmap</span>
-                        <Badge variant="default" className="bg-purple-600">Ativo</Badge>
+                        <Badge variant="default" className="bg-purple-600">
+                          Ativo
+                        </Badge>
                       </div>
                       <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-950 rounded-lg">
                         <span className="font-medium">AI Mentor</span>
@@ -255,11 +280,15 @@ const NautilusOne: React.FC = () => {
                       </div>
                       <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-950 rounded-lg">
                         <span className="font-medium">Training Manager</span>
-                        <Badge variant="default" className="bg-purple-600">Ativo</Badge>
+                        <Badge variant="default" className="bg-purple-600">
+                          Ativo
+                        </Badge>
                       </div>
                       <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-950 rounded-lg">
                         <span className="font-medium">Performance Analytics</span>
-                        <Badge variant="default" className="bg-purple-600">Ativo</Badge>
+                        <Badge variant="default" className="bg-purple-600">
+                          Ativo
+                        </Badge>
                       </div>
                     </CardContent>
                   </Card>

@@ -10,10 +10,8 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/sw.js", { scope: "/" })
-      .then((registration) => {
-      })
-      .catch((error) => {
-      });
+      .then(registration => {})
+      .catch(error => {});
   });
 }
 
@@ -22,5 +20,5 @@ createRoot(document.getElementById("root")!).render(
     <HelmetProvider>
       <App />
     </HelmetProvider>
-  </StrictMode>,
+  </StrictMode>
 );

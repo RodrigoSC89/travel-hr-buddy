@@ -5,10 +5,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Plus, Search, Edit, Trash2, Save, Eye, 
-  BookOpen, Video, FileText, Users,
-  Download, BarChart3
+import {
+  Plus,
+  Search,
+  Edit,
+  Trash2,
+  Save,
+  Eye,
+  BookOpen,
+  Video,
+  FileText,
+  Users,
+  Download,
+  BarChart3,
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -68,7 +77,7 @@ export const KnowledgeManagement: React.FC = () => {
     publishedItems: 0,
     totalViews: 0,
     topModules: [],
-    topContent: []
+    topContent: [],
   });
 
   const modules = [
@@ -78,7 +87,7 @@ export const KnowledgeManagement: React.FC = () => {
     { id: "travel", name: "Viagens" },
     { id: "reservations", name: "Reservas" },
     { id: "price-alerts", name: "Alertas de Preço" },
-    { id: "reports", name: "Relatórios" }
+    { id: "reports", name: "Relatórios" },
   ];
 
   const contentTypes = [
@@ -86,7 +95,7 @@ export const KnowledgeManagement: React.FC = () => {
     { id: "tutorial", name: "Tutorial" },
     { id: "faq", name: "FAQ" },
     { id: "guide", name: "Guia" },
-    { id: "video", name: "Vídeo" }
+    { id: "video", name: "Vídeo" },
   ];
 
   const loadKnowledgeItems = useCallback(async () => {
@@ -98,55 +107,59 @@ export const KnowledgeManagement: React.FC = () => {
 
       if (error) throw error;
 
-      const formattedData: KnowledgeItem[] = data?.map(item => ({
-        id: item.id,
-        title: item.title,
-        content: item.content,
-        type: item.type as "tutorial" | "faq" | "guide" | "video",
-        module: item.module,
-        tags: Array.isArray(item.tags) ? item.tags : [],
-        difficulty: item.difficulty as "beginner" | "intermediate" | "advanced",
-        status: item.status as "draft" | "published" | "archived",
-        author_id: item.author_id,
-        created_at: new Date(item.created_at),
-        updated_at: new Date(item.updated_at),
-        views: item.views || 0,
-        rating: item.rating || 0,
-        helpful_votes: item.helpful_votes || 0,
-        steps: Array.isArray(item.steps) ? item.steps : [],
-        metadata: typeof item.metadata === "object" && item.metadata !== null && !Array.isArray(item.metadata) 
-          ? item.metadata as Record<string, unknown>
-          : {}
-      })) || [];
+      const formattedData: KnowledgeItem[] =
+        data?.map(item => ({
+          id: item.id,
+          title: item.title,
+          content: item.content,
+          type: item.type as "tutorial" | "faq" | "guide" | "video",
+          module: item.module,
+          tags: Array.isArray(item.tags) ? item.tags : [],
+          difficulty: item.difficulty as "beginner" | "intermediate" | "advanced",
+          status: item.status as "draft" | "published" | "archived",
+          author_id: item.author_id,
+          created_at: new Date(item.created_at),
+          updated_at: new Date(item.updated_at),
+          views: item.views || 0,
+          rating: item.rating || 0,
+          helpful_votes: item.helpful_votes || 0,
+          steps: Array.isArray(item.steps) ? item.steps : [],
+          metadata:
+            typeof item.metadata === "object" &&
+            item.metadata !== null &&
+            !Array.isArray(item.metadata)
+              ? (item.metadata as Record<string, unknown>)
+              : {},
+        })) || [];
 
       setKnowledgeItems(formattedData);
-      
+
       // Calcular analytics
       const totalItems = formattedData.length;
       const publishedItems = formattedData.filter(item => item.status === "published").length;
       const totalViews = formattedData.reduce((sum, item) => sum + item.views, 0);
-      
-      const moduleCount = formattedData.reduce((acc, item) => {
-        acc[item.module] = (acc[item.module] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
-      
+
+      const moduleCount = formattedData.reduce(
+        (acc, item) => {
+          acc[item.module] = (acc[item.module] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
+
       const topModules = Object.entries(moduleCount)
         .map(([module, count]) => ({ module, count }))
         .sort((a, b) => b.count - a.count);
-      
-      const topContent = formattedData
-        .sort((a, b) => b.views - a.views)
-        .slice(0, 5);
+
+      const topContent = formattedData.sort((a, b) => b.views - a.views).slice(0, 5);
 
       setAnalytics({
         totalItems,
         publishedItems,
         totalViews,
         topModules,
-        topContent
+        topContent,
       });
-
     } catch (error) {
       toast({
         title: "Erro ao carregar",
@@ -161,13 +174,14 @@ export const KnowledgeManagement: React.FC = () => {
   }, [loadKnowledgeItems]);
 
   const filteredItems = knowledgeItems.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+
     const matchesModule = selectedModule === "all" || item.module === selectedModule;
     const matchesType = selectedType === "all" || item.type === selectedType;
-    
+
     return matchesSearch && matchesModule && matchesType;
   });
 
@@ -188,7 +202,7 @@ export const KnowledgeManagement: React.FC = () => {
       rating: 0,
       helpful_votes: 0,
       steps: [],
-      metadata: {}
+      metadata: {},
     });
     setIsEditDialogOpen(true);
   };
@@ -216,7 +230,7 @@ export const KnowledgeManagement: React.FC = () => {
             status: editingItem.status,
             steps: (editingItem.steps || []) as Record<string, unknown>[],
             metadata: (editingItem.metadata || {}) as Record<string, unknown>,
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           })
           .eq("id", editingItem.id);
 
@@ -228,20 +242,18 @@ export const KnowledgeManagement: React.FC = () => {
         });
       } else {
         // Criar novo item
-        const { error } = await supabase
-          .from("knowledge_base")
-          .insert({
-            title: editingItem.title,
-            content: editingItem.content,
-            type: editingItem.type,
-            module: editingItem.module,
-            tags: editingItem.tags as string[],
-            difficulty: editingItem.difficulty,
-            status: editingItem.status,
-            author_id: null,
-            steps: (editingItem.steps || []) as Record<string, unknown>[],
-            metadata: (editingItem.metadata || {}) as Record<string, unknown>
-          });
+        const { error } = await supabase.from("knowledge_base").insert({
+          title: editingItem.title,
+          content: editingItem.content,
+          type: editingItem.type,
+          module: editingItem.module,
+          tags: editingItem.tags as string[],
+          difficulty: editingItem.difficulty,
+          status: editingItem.status,
+          author_id: null,
+          steps: (editingItem.steps || []) as Record<string, unknown>[],
+          metadata: (editingItem.metadata || {}) as Record<string, unknown>,
+        });
 
         if (error) throw error;
 
@@ -250,11 +262,10 @@ export const KnowledgeManagement: React.FC = () => {
           description: "Novo conteúdo adicionado à base de conhecimento",
         });
       }
-      
+
       setIsEditDialogOpen(false);
       setEditingItem(null);
       loadKnowledgeItems(); // Recarregar dados
-      
     } catch (error) {
       toast({
         title: "Erro",
@@ -267,10 +278,7 @@ export const KnowledgeManagement: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (confirm("Tem certeza que deseja excluir este item?")) {
       try {
-        const { error } = await supabase
-          .from("knowledge_base")
-          .delete()
-          .eq("id", id);
+        const { error } = await supabase.from("knowledge_base").delete().eq("id", id);
 
         if (error) throw error;
 
@@ -298,7 +306,7 @@ export const KnowledgeManagement: React.FC = () => {
     link.href = url;
     link.download = "knowledge-base.json";
     link.click();
-    
+
     toast({
       title: "Exportação iniciada",
       description: "Base de conhecimento exportada com sucesso",
@@ -311,29 +319,42 @@ export const KnowledgeManagement: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "tutorial": return <BookOpen className="w-4 h-4" />;
-    case "video": return <Video className="w-4 h-4" />;
-    case "faq": return <FileText className="w-4 h-4" />;
-    case "guide": return <Users className="w-4 h-4" />;
-    default: return <BookOpen className="w-4 h-4" />;
+      case "tutorial":
+        return <BookOpen className="w-4 h-4" />;
+      case "video":
+        return <Video className="w-4 h-4" />;
+      case "faq":
+        return <FileText className="w-4 h-4" />;
+      case "guide":
+        return <Users className="w-4 h-4" />;
+      default:
+        return <BookOpen className="w-4 h-4" />;
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-    case "beginner": return "bg-success";
-    case "intermediate": return "bg-warning";
-    case "advanced": return "bg-status-error";
-    default: return "bg-muted";
+      case "beginner":
+        return "bg-success";
+      case "intermediate":
+        return "bg-warning";
+      case "advanced":
+        return "bg-status-error";
+      default:
+        return "bg-muted";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "published": return "bg-success";
-    case "draft": return "bg-warning";
-    case "archived": return "bg-muted";
-    default: return "bg-muted";
+      case "published":
+        return "bg-success";
+      case "draft":
+        return "bg-warning";
+      case "archived":
+        return "bg-muted";
+      default:
+        return "bg-muted";
     }
   };
 
@@ -378,18 +399,18 @@ export const KnowledgeManagement: React.FC = () => {
                       <Input
                         placeholder="Buscar por título, conteúdo ou tags..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={e => setSearchQuery(e.target.value)}
                         className="pl-10"
                       />
                     </div>
                   </div>
-                  
+
                   <Select value={selectedModule} onValueChange={setSelectedModule}>
                     <SelectTrigger className="w-48">
                       <SelectValue placeholder="Filtrar por módulo" />
                     </SelectTrigger>
                     <SelectContent>
-                      {modules.map((module) => (
+                      {modules.map(module => (
                         <SelectItem key={module.id} value={module.id}>
                           {module.name}
                         </SelectItem>
@@ -402,7 +423,7 @@ export const KnowledgeManagement: React.FC = () => {
                       <SelectValue placeholder="Filtrar por tipo" />
                     </SelectTrigger>
                     <SelectContent>
-                      {contentTypes.map((type) => (
+                      {contentTypes.map(type => (
                         <SelectItem key={type.id} value={type.id}>
                           {type.name}
                         </SelectItem>
@@ -415,7 +436,7 @@ export const KnowledgeManagement: React.FC = () => {
 
             {/* Lista de Conteúdo */}
             <div className="grid gap-4">
-              {filteredItems.map((item) => (
+              {filteredItems.map(item => (
                 <Card key={item.id} className="hover:shadow-md transition-shadow">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
@@ -426,29 +447,31 @@ export const KnowledgeManagement: React.FC = () => {
                           <Badge className={`${getStatusColor(item.status)} text-card-foreground`}>
                             {item.status}
                           </Badge>
-                          <Badge className={`${getDifficultyColor(item.difficulty)} text-card-foreground`}>
+                          <Badge
+                            className={`${getDifficultyColor(item.difficulty)} text-card-foreground`}
+                          >
                             {item.difficulty}
                           </Badge>
                         </div>
-                        
+
                         <p className="text-muted-foreground line-clamp-2">{item.content}</p>
-                        
+
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <span>📁 {getModuleName(item.module)}</span>
                           <span>👁️ {item.views} visualizações</span>
                           <span>⭐ {item.rating.toFixed(1)}</span>
                           <span>📅 {item.updated_at.toLocaleDateString("pt-BR")}</span>
                         </div>
-                        
+
                         <div className="flex flex-wrap gap-1">
-                          {item.tags.map((tag) => (
+                          {item.tags.map(tag => (
                             <Badge key={tag} variant="outline" className="text-xs">
                               {tag}
                             </Badge>
                           ))}
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-2 ml-4">
                         <Button variant="ghost" size="sm">
                           <Eye className="w-4 h-4" />
@@ -456,8 +479,8 @@ export const KnowledgeManagement: React.FC = () => {
                         <Button variant="ghost" size="sm" onClick={() => handleEdit(item)}>
                           <Edit className="w-4 h-4" />
                         </Button>
-                        <Button 
-                          variant="ghost" 
+                        <Button
+                          variant="ghost"
                           size="sm"
                           onClick={() => handleDelete(item.id)}
                           className="text-red-500 hover:text-red-700"
@@ -486,7 +509,7 @@ export const KnowledgeManagement: React.FC = () => {
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
@@ -498,7 +521,7 @@ export const KnowledgeManagement: React.FC = () => {
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
@@ -510,7 +533,7 @@ export const KnowledgeManagement: React.FC = () => {
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
@@ -532,12 +555,12 @@ export const KnowledgeManagement: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {analytics.topModules.map((module) => (
+                    {analytics.topModules.map(module => (
                       <div key={module.module} className="flex items-center justify-between">
                         <span className="font-medium">{getModuleName(module.module)}</span>
                         <div className="flex items-center gap-2">
                           <div className="w-24 bg-muted rounded-full h-2">
-                            <div 
+                            <div
                               className="bg-primary h-2 rounded-full"
                               style={{ width: `${(module.count / analytics.totalItems) * 100}%` }}
                             />
@@ -556,11 +579,13 @@ export const KnowledgeManagement: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {analytics.topContent.map((item) => (
+                    {analytics.topContent.map(item => (
                       <div key={item.id} className="flex items-center justify-between">
                         <div className="flex-1">
                           <p className="font-medium text-sm line-clamp-1">{item.title}</p>
-                          <p className="text-xs text-muted-foreground">{getModuleName(item.module)}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {getModuleName(item.module)}
+                          </p>
                         </div>
                         <Badge variant="outline">{item.views} views</Badge>
                       </div>
@@ -590,7 +615,7 @@ export const KnowledgeManagement: React.FC = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Notificações</label>
                     <Select defaultValue="all">
@@ -605,7 +630,7 @@ export const KnowledgeManagement: React.FC = () => {
                     </Select>
                   </div>
                 </div>
-                
+
                 <Button>
                   <Save className="w-4 h-4 mr-2" />
                   Salvar Configurações
@@ -619,14 +644,12 @@ export const KnowledgeManagement: React.FC = () => {
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>
-                {editingItem?.id ? "Editar Conteúdo" : "Novo Conteúdo"}
-              </DialogTitle>
+              <DialogTitle>{editingItem?.id ? "Editar Conteúdo" : "Novo Conteúdo"}</DialogTitle>
               <DialogDescription>
                 Preencha as informações do conteúdo da base de conhecimento
               </DialogDescription>
             </DialogHeader>
-            
+
             {editingItem && (
               <div className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
@@ -634,16 +657,18 @@ export const KnowledgeManagement: React.FC = () => {
                     <label className="text-sm font-medium">Título</label>
                     <Input
                       value={editingItem.title}
-                      onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
+                      onChange={e => setEditingItem({ ...editingItem, title: e.target.value })}
                       placeholder="Título do conteúdo"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Tipo</label>
-                    <Select 
-                      value={editingItem.type} 
-                      onValueChange={(value: "tutorial" | "faq" | "guide" | "video") => setEditingItem({ ...editingItem, type: value })}
+                    <Select
+                      value={editingItem.type}
+                      onValueChange={(value: "tutorial" | "faq" | "guide" | "video") =>
+                        setEditingItem({ ...editingItem, type: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -661,28 +686,32 @@ export const KnowledgeManagement: React.FC = () => {
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Módulo</label>
-                    <Select 
-                      value={editingItem.module} 
-                      onValueChange={(value) => setEditingItem({ ...editingItem, module: value })}
+                    <Select
+                      value={editingItem.module}
+                      onValueChange={value => setEditingItem({ ...editingItem, module: value })}
                     >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {modules.filter(m => m.id !== "all").map((module) => (
-                          <SelectItem key={module.id} value={module.id}>
-                            {module.name}
-                          </SelectItem>
-                        ))}
+                        {modules
+                          .filter(m => m.id !== "all")
+                          .map(module => (
+                            <SelectItem key={module.id} value={module.id}>
+                              {module.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Dificuldade</label>
-                    <Select 
-                      value={editingItem.difficulty} 
-                      onValueChange={(value: "beginner" | "intermediate" | "advanced") => setEditingItem({ ...editingItem, difficulty: value })}
+                    <Select
+                      value={editingItem.difficulty}
+                      onValueChange={(value: "beginner" | "intermediate" | "advanced") =>
+                        setEditingItem({ ...editingItem, difficulty: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -694,12 +723,14 @@ export const KnowledgeManagement: React.FC = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Status</label>
-                    <Select 
-                      value={editingItem.status} 
-                      onValueChange={(value: "draft" | "published" | "archived") => setEditingItem({ ...editingItem, status: value })}
+                    <Select
+                      value={editingItem.status}
+                      onValueChange={(value: "draft" | "published" | "archived") =>
+                        setEditingItem({ ...editingItem, status: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -717,10 +748,15 @@ export const KnowledgeManagement: React.FC = () => {
                   <label className="text-sm font-medium">Tags (separadas por vírgula)</label>
                   <Input
                     value={editingItem.tags.join(", ")}
-                    onChange={(e) => setEditingItem({ 
-                      ...editingItem, 
-                      tags: e.target.value.split(",").map(tag => tag.trim()).filter(Boolean)
-                    })}
+                    onChange={e =>
+                      setEditingItem({
+                        ...editingItem,
+                        tags: e.target.value
+                          .split(",")
+                          .map(tag => tag.trim())
+                          .filter(Boolean),
+                      })
+                    }
                     placeholder="tag1, tag2, tag3"
                   />
                 </div>
@@ -729,7 +765,7 @@ export const KnowledgeManagement: React.FC = () => {
                   <label className="text-sm font-medium">Conteúdo</label>
                   <Textarea
                     value={editingItem.content}
-                    onChange={(e) => setEditingItem({ ...editingItem, content: e.target.value })}
+                    onChange={e => setEditingItem({ ...editingItem, content: e.target.value })}
                     placeholder="Conteúdo do item"
                     rows={8}
                   />

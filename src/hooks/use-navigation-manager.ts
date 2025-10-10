@@ -10,16 +10,16 @@ export const useNavigationManager = () => {
 
   const navigateTo = (
     path: string,
-    options?: NavigateOptions & { 
+    options?: NavigateOptions & {
       showToast?: boolean;
       toastMessage?: string;
     }
   ) => {
     try {
       const { showToast = false, toastMessage, ...navigateOptions } = options || {};
-      
+
       navigate(path, navigateOptions);
-      
+
       if (showToast) {
         toast({
           title: "Navegação",

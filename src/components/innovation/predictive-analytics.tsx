@@ -4,22 +4,38 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  AlertTriangle, 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
   CheckCircle,
   Brain,
   BarChart3,
-  Calendar,
   Target,
   Zap,
   Clock,
   Settings,
-  Download
+  Download,
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 const PredictiveAnalytics: React.FC = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState("30d");
@@ -55,8 +71,9 @@ const PredictiveAnalytics: React.FC = () => {
       confidence: 94,
       timeframe: "15 dias",
       priority: "high",
-      description: "Baseado em padrões de vibração e temperatura, recomenda-se manutenção preventiva.",
-      actions: ["Verificar filtros", "Analisar óleo", "Inspeção visual"]
+      description:
+        "Baseado em padrões de vibração e temperatura, recomenda-se manutenção preventiva.",
+      actions: ["Verificar filtros", "Analisar óleo", "Inspeção visual"],
     },
     {
       id: 2,
@@ -65,7 +82,7 @@ const PredictiveAnalytics: React.FC = () => {
       timeframe: "7 dias",
       priority: "medium",
       description: "Padrão de consumo indica oportunidade de otimização de rota.",
-      actions: ["Revisar rotas", "Otimizar velocidade", "Calibrar sistemas"]
+      actions: ["Revisar rotas", "Otimizar velocidade", "Calibrar sistemas"],
     },
     {
       id: 3,
@@ -74,32 +91,40 @@ const PredictiveAnalytics: React.FC = () => {
       timeframe: "30 dias",
       priority: "low",
       description: "Todos os indicadores apontam para operação estável do sistema elétrico.",
-      actions: ["Monitoramento contínuo", "Manutenção programada"]
-    }
+      actions: ["Monitoramento contínuo", "Manutenção programada"],
+    },
   ];
 
   const modelAccuracy = {
     maintenance: 94.2,
     performance: 89.7,
     fuel: 91.3,
-    safety: 96.1
+    safety: 96.1,
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "high": return "destructive";
-    case "medium": return "warning";
-    case "low": return "default";
-    default: return "default";
+      case "high":
+        return "destructive";
+      case "medium":
+        return "warning";
+      case "low":
+        return "default";
+      default:
+        return "default";
     }
   };
 
   const getPredictionIcon = (prediction: string) => {
     switch (prediction) {
-    case "improving": return <TrendingUp className="h-4 w-4 text-success" />;
-    case "declining": return <TrendingDown className="h-4 w-4 text-destructive" />;
-    case "stable": return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
-    default: return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+      case "improving":
+        return <TrendingUp className="h-4 w-4 text-success" />;
+      case "declining":
+        return <TrendingDown className="h-4 w-4 text-destructive" />;
+      case "stable":
+        return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+      default:
+        return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -192,7 +217,7 @@ const PredictiveAnalytics: React.FC = () => {
                 <SelectItem value="safety">Segurança</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={selectedTimeframe} onValueChange={setSelectedTimeframe}>
               <SelectTrigger className="w-32">
                 <SelectValue placeholder="Período" />
@@ -211,7 +236,7 @@ const PredictiveAnalytics: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {predictions.map((prediction) => (
+            {predictions.map(prediction => (
               <Card key={prediction.id} className="relative">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -235,9 +260,7 @@ const PredictiveAnalytics: React.FC = () => {
                     <span>Prazo: {prediction.timeframe}</span>
                   </div>
 
-                  <p className="text-sm text-muted-foreground">
-                    {prediction.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{prediction.description}</p>
 
                   <div className="space-y-2">
                     <div className="text-sm font-medium">Ações Recomendadas:</div>
@@ -277,17 +300,17 @@ const PredictiveAnalytics: React.FC = () => {
                   <XAxis dataKey="month" />
                   <YAxis />
                   <Tooltip />
-                  <Line 
-                    type="monotone" 
-                    dataKey="predicted" 
-                    stroke="hsl(var(--primary))" 
+                  <Line
+                    type="monotone"
+                    dataKey="predicted"
+                    stroke="hsl(var(--primary))"
                     strokeWidth={2}
                     name="Predito"
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="actual" 
-                    stroke="hsl(var(--secondary))" 
+                  <Line
+                    type="monotone"
+                    dataKey="actual"
+                    stroke="hsl(var(--secondary))"
                     strokeWidth={2}
                     name="Real"
                   />
@@ -315,8 +338,12 @@ const PredictiveAnalytics: React.FC = () => {
                     </div>
                     <Progress value={item.efficiency} />
                     <div className="text-sm text-muted-foreground">
-                      Tendência: {item.prediction === "improving" ? "Melhorando" : 
-                        item.prediction === "declining" ? "Declinando" : "Estável"}
+                      Tendência:{" "}
+                      {item.prediction === "improving"
+                        ? "Melhorando"
+                        : item.prediction === "declining"
+                          ? "Declinando"
+                          : "Estável"}
                     </div>
                   </div>
                 </CardContent>
@@ -362,10 +389,12 @@ const PredictiveAnalytics: React.FC = () => {
                   <AlertTriangle className="h-4 w-4 text-destructive" />
                   <div className="flex-1">
                     <div className="font-medium text-sm">Alto Risco - Motor Auxiliar</div>
-                    <div className="text-xs text-muted-foreground">Temperatura elevada detectada</div>
+                    <div className="text-xs text-muted-foreground">
+                      Temperatura elevada detectada
+                    </div>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-3 p-3 bg-warning/10 rounded-lg">
                   <AlertTriangle className="h-4 w-4 text-warning" />
                   <div className="flex-1">

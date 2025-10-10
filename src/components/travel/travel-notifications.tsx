@@ -13,7 +13,6 @@ import {
   Hotel,
   Car,
   Clock,
-  MapPin,
   AlertTriangle,
   CheckCircle,
   Info,
@@ -22,7 +21,7 @@ import {
   Mail,
   MessageSquare,
   X,
-  Filter
+  Filter,
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -66,7 +65,7 @@ export const TravelNotifications = () => {
     carUpdates: true,
     priceAlerts: true,
     bookingReminders: true,
-    travelTips: false
+    travelTips: false,
   });
 
   // Mock notifications data
@@ -76,24 +75,26 @@ export const TravelNotifications = () => {
         id: "1",
         type: "flight",
         title: "Voo LATAM 8439 - Portão Alterado",
-        message: "Seu voo para Rio de Janeiro teve o portão alterado para B12. Check-in já disponível.",
+        message:
+          "Seu voo para Rio de Janeiro teve o portão alterado para B12. Check-in já disponível.",
         timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
         read: false,
         priority: "high",
         actionRequired: true,
         relatedBooking: "TR-2024-ABC123",
-        category: "Atualização de Voo"
+        category: "Atualização de Voo",
       },
       {
         id: "2",
         type: "hotel",
         title: "Check-in Antecipado Disponível",
-        message: "O Marriott Copacabana liberou check-in antecipado para 12:00. Confirme sua chegada.",
+        message:
+          "O Marriott Copacabana liberou check-in antecipado para 12:00. Confirme sua chegada.",
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
         read: false,
         priority: "medium",
         relatedBooking: "TR-2024-DEF456",
-        category: "Hotel"
+        category: "Hotel",
       },
       {
         id: "3",
@@ -103,29 +104,31 @@ export const TravelNotifications = () => {
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4), // 4 hours ago
         read: true,
         priority: "medium",
-        category: "Alerta de Preço"
+        category: "Alerta de Preço",
       },
       {
         id: "4",
         type: "reminder",
         title: "Lembrete: Documentação de Viagem",
-        message: "Não esqueça de verificar se seu passaporte está válido para a viagem internacional.",
+        message:
+          "Não esqueça de verificar se seu passaporte está válido para a viagem internacional.",
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
         read: true,
         priority: "low",
         relatedBooking: "TR-2024-GHI789",
-        category: "Lembrete"
+        category: "Lembrete",
       },
       {
         id: "5",
         type: "car",
         title: "Locadora de Veículo Confirmada",
-        message: "Sua reserva na Hertz foi confirmada. Retire na chegada do aeroporto Santos Dumont.",
+        message:
+          "Sua reserva na Hertz foi confirmada. Retire na chegada do aeroporto Santos Dumont.",
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 days ago
         read: true,
         priority: "low",
         relatedBooking: "TR-2024-JKL012",
-        category: "Locação de Veículos"
+        category: "Locação de Veículos",
       },
       {
         id: "6",
@@ -135,30 +138,26 @@ export const TravelNotifications = () => {
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
         read: true,
         priority: "low",
-        category: "Dicas de Viagem"
-      }
+        category: "Dicas de Viagem",
+      },
     ];
     setNotifications(mockNotifications);
   }, []);
 
   const unreadCount = notifications.filter(n => !n.read).length;
-  const filteredNotifications = notifications.filter(n => 
-    filterType === "all" || n.type === filterType || (filterType === "unread" && !n.read)
+  const filteredNotifications = notifications.filter(
+    n => filterType === "all" || n.type === filterType || (filterType === "unread" && !n.read)
   );
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
-    );
+    setNotifications(prev => prev.map(n => (n.id === id ? { ...n, read: true } : n)));
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(n => ({ ...n, read: true }))
-    );
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     toast({
       title: "Notificações marcadas como lidas",
-      description: "Todas as notificações foram marcadas como lidas."
+      description: "Todas as notificações foram marcadas como lidas.",
     });
   };
 
@@ -166,38 +165,54 @@ export const TravelNotifications = () => {
     setNotifications(prev => prev.filter(n => n.id !== id));
     toast({
       title: "Notificação removida",
-      description: "A notificação foi removida com sucesso."
+      description: "A notificação foi removida com sucesso.",
     });
   };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-    case "flight": return <Plane className="h-5 w-5" />;
-    case "hotel": return <Hotel className="h-5 w-5" />;
-    case "car": return <Car className="h-5 w-5" />;
-    case "alert": return <AlertTriangle className="h-5 w-5" />;
-    case "reminder": return <Clock className="h-5 w-5" />;
-    default: return <Bell className="h-5 w-5" />;
+      case "flight":
+        return <Plane className="h-5 w-5" />;
+      case "hotel":
+        return <Hotel className="h-5 w-5" />;
+      case "car":
+        return <Car className="h-5 w-5" />;
+      case "alert":
+        return <AlertTriangle className="h-5 w-5" />;
+      case "reminder":
+        return <Clock className="h-5 w-5" />;
+      default:
+        return <Bell className="h-5 w-5" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "urgent": return "destructive";
-    case "high": return "default";
-    case "medium": return "secondary";
-    case "low": return "outline";
-    default: return "secondary";
+      case "urgent":
+        return "destructive";
+      case "high":
+        return "default";
+      case "medium":
+        return "secondary";
+      case "low":
+        return "outline";
+      default:
+        return "secondary";
     }
   };
 
   const getPriorityText = (priority: string) => {
     switch (priority) {
-    case "urgent": return "Urgente";
-    case "high": return "Alta";
-    case "medium": return "Média";
-    case "low": return "Baixa";
-    default: return "Média";
+      case "urgent":
+        return "Urgente";
+      case "high":
+        return "Alta";
+      case "medium":
+        return "Média";
+      case "low":
+        return "Baixa";
+      default:
+        return "Média";
     }
   };
 
@@ -209,7 +224,7 @@ export const TravelNotifications = () => {
           <Filter className="h-4 w-4" />
           <select
             value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
+            onChange={e => setFilterType(e.target.value)}
             className="px-3 py-1 border rounded-md text-sm"
           >
             <option value="all">Todas</option>
@@ -235,19 +250,27 @@ export const TravelNotifications = () => {
       {/* Notifications List */}
       <ScrollArea className="h-[600px]">
         <div className="space-y-3">
-          {filteredNotifications.map((notification) => (
-            <Card 
-              key={notification.id} 
+          {filteredNotifications.map(notification => (
+            <Card
+              key={notification.id}
               className={`hover:shadow-md transition-shadow ${!notification.read ? "border-l-4 border-l-primary" : ""}`}
             >
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3 flex-1">
-                    <div className={`p-2 rounded-full ${notification.type === "alert" ? "bg-destructive/10 text-destructive" : 
-                      notification.type === "flight" ? "bg-blue-50 text-blue-600" :
-                        notification.type === "hotel" ? "bg-green-50 text-green-600" :
-                          notification.type === "car" ? "bg-purple-50 text-purple-600" :
-                            "bg-muted text-muted-foreground"}`}>
+                    <div
+                      className={`p-2 rounded-full ${
+                        notification.type === "alert"
+                          ? "bg-destructive/10 text-destructive"
+                          : notification.type === "flight"
+                            ? "bg-blue-50 text-blue-600"
+                            : notification.type === "hotel"
+                              ? "bg-green-50 text-green-600"
+                              : notification.type === "car"
+                                ? "bg-purple-50 text-purple-600"
+                                : "bg-muted text-muted-foreground"
+                      }`}
+                    >
                       {getNotificationIcon(notification.type)}
                     </div>
                     <div className="flex-1">
@@ -255,7 +278,10 @@ export const TravelNotifications = () => {
                         <h4 className={`font-medium ${!notification.read ? "font-semibold" : ""}`}>
                           {notification.title}
                         </h4>
-                        <Badge variant={getPriorityColor(notification.priority)} className="text-xs">
+                        <Badge
+                          variant={getPriorityColor(notification.priority)}
+                          className="text-xs"
+                        >
                           {getPriorityText(notification.priority)}
                         </Badge>
                         {notification.actionRequired && (
@@ -266,7 +292,11 @@ export const TravelNotifications = () => {
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">{notification.message}</p>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <span>{format(notification.timestamp, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}</span>
+                        <span>
+                          {format(notification.timestamp, "dd/MM/yyyy 'às' HH:mm", {
+                            locale: ptBR,
+                          })}
+                        </span>
                         <span>{notification.category}</span>
                         {notification.relatedBooking && (
                           <span className="font-mono">{notification.relatedBooking}</span>
@@ -280,7 +310,11 @@ export const TravelNotifications = () => {
                         <CheckCircle className="h-4 w-4" />
                       </Button>
                     )}
-                    <Button size="sm" variant="ghost" onClick={() => deleteNotification(notification.id)}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => deleteNotification(notification.id)}
+                    >
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
@@ -312,10 +346,10 @@ export const TravelNotifications = () => {
                   <Smartphone className="h-4 w-4" />
                   <Label htmlFor="push">Notificações Push</Label>
                 </div>
-                <Switch 
+                <Switch
                   id="push"
                   checked={settings.pushNotifications}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setSettings(prev => ({ ...prev, pushNotifications: checked }))
                   }
                 />
@@ -325,10 +359,10 @@ export const TravelNotifications = () => {
                   <Mail className="h-4 w-4" />
                   <Label htmlFor="email">Notificações por Email</Label>
                 </div>
-                <Switch 
+                <Switch
                   id="email"
                   checked={settings.emailNotifications}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setSettings(prev => ({ ...prev, emailNotifications: checked }))
                   }
                 />
@@ -338,10 +372,10 @@ export const TravelNotifications = () => {
                   <MessageSquare className="h-4 w-4" />
                   <Label htmlFor="sms">SMS</Label>
                 </div>
-                <Switch 
+                <Switch
                   id="sms"
                   checked={settings.smsNotifications}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setSettings(prev => ({ ...prev, smsNotifications: checked }))
                   }
                 />
@@ -360,10 +394,10 @@ export const TravelNotifications = () => {
                   <Plane className="h-4 w-4" />
                   <Label htmlFor="flights">Atualizações de Voos</Label>
                 </div>
-                <Switch 
+                <Switch
                   id="flights"
                   checked={settings.flightUpdates}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setSettings(prev => ({ ...prev, flightUpdates: checked }))
                   }
                 />
@@ -373,10 +407,10 @@ export const TravelNotifications = () => {
                   <Hotel className="h-4 w-4" />
                   <Label htmlFor="hotels">Atualizações de Hotéis</Label>
                 </div>
-                <Switch 
+                <Switch
                   id="hotels"
                   checked={settings.hotelUpdates}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setSettings(prev => ({ ...prev, hotelUpdates: checked }))
                   }
                 />
@@ -386,10 +420,10 @@ export const TravelNotifications = () => {
                   <Car className="h-4 w-4" />
                   <Label htmlFor="cars">Atualizações de Carros</Label>
                 </div>
-                <Switch 
+                <Switch
                   id="cars"
                   checked={settings.carUpdates}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setSettings(prev => ({ ...prev, carUpdates: checked }))
                   }
                 />
@@ -399,10 +433,10 @@ export const TravelNotifications = () => {
                   <AlertTriangle className="h-4 w-4" />
                   <Label htmlFor="alerts">Alertas de Preço</Label>
                 </div>
-                <Switch 
+                <Switch
                   id="alerts"
                   checked={settings.priceAlerts}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setSettings(prev => ({ ...prev, priceAlerts: checked }))
                   }
                 />
@@ -412,10 +446,10 @@ export const TravelNotifications = () => {
                   <Clock className="h-4 w-4" />
                   <Label htmlFor="reminders">Lembretes de Viagem</Label>
                 </div>
-                <Switch 
+                <Switch
                   id="reminders"
                   checked={settings.bookingReminders}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setSettings(prev => ({ ...prev, bookingReminders: checked }))
                   }
                 />
@@ -425,10 +459,10 @@ export const TravelNotifications = () => {
                   <Info className="h-4 w-4" />
                   <Label htmlFor="tips">Dicas de Viagem</Label>
                 </div>
-                <Switch 
+                <Switch
                   id="tips"
                   checked={settings.travelTips}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setSettings(prev => ({ ...prev, travelTips: checked }))
                   }
                 />
@@ -437,13 +471,15 @@ export const TravelNotifications = () => {
           </div>
 
           <div className="flex justify-end">
-            <Button onClick={() => {
-              setShowSettings(false);
-              toast({
-                title: "Configurações salvas",
-                description: "Suas preferências de notificação foram atualizadas."
-              });
-            }}>
+            <Button
+              onClick={() => {
+                setShowSettings(false);
+                toast({
+                  title: "Configurações salvas",
+                  description: "Suas preferências de notificação foram atualizadas.",
+                });
+              }}
+            >
               Salvar Configurações
             </Button>
           </div>

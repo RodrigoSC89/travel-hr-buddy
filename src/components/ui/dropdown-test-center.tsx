@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -24,31 +24,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { 
-  ChevronDown, 
-  Settings, 
-  User, 
-  Bell, 
-  Search, 
+import {
+  ChevronDown,
+  Settings,
+  User,
+  Bell,
+  Search,
   Filter,
   MoreHorizontal,
   Check,
   Calendar,
   Plus,
-  Download
+  Download,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export const DropdownTestCenter: React.FC = () => {
   const [selectedValue, setSelectedValue] = useState<string>("");
@@ -98,7 +93,9 @@ export const DropdownTestCenter: React.FC = () => {
                 <DropdownMenuItem>
                   <Bell className="mr-2 h-4 w-4" />
                   <span>Notificações</span>
-                  <Badge variant="secondary" className="ml-auto">12</Badge>
+                  <Badge variant="secondary" className="ml-auto">
+                    12
+                  </Badge>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Settings className="mr-2 h-4 w-4" />
@@ -106,9 +103,7 @@ export const DropdownTestCenter: React.FC = () => {
                   <DropdownMenuShortcut>⌘,</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-danger">
-                  Sair
-                </DropdownMenuItem>
+                <DropdownMenuItem className="text-danger">Sair</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -178,7 +173,7 @@ export const DropdownTestCenter: React.FC = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuCheckboxItem
                   checked={checkedItems.bookmarks}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setCheckedItems(prev => ({ ...prev, bookmarks: !!checked }))
                   }
                 >
@@ -186,7 +181,7 @@ export const DropdownTestCenter: React.FC = () => {
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   checked={checkedItems.urls}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setCheckedItems(prev => ({ ...prev, urls: !!checked }))
                   }
                 >
@@ -194,7 +189,7 @@ export const DropdownTestCenter: React.FC = () => {
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   checked={checkedItems.person}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setCheckedItems(prev => ({ ...prev, person: !!checked }))
                   }
                 >
@@ -202,15 +197,9 @@ export const DropdownTestCenter: React.FC = () => {
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-                  <DropdownMenuRadioItem value="top">
-                    Painel Superior
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="bottom">
-                    Painel Inferior
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="right">
-                    Painel Direito
-                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="top">Painel Superior</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="bottom">Painel Inferior</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="right">Painel Direito</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -251,19 +240,11 @@ export const DropdownTestCenter: React.FC = () => {
                     Exportar
                   </DropdownMenuSubTrigger>
                   <DropdownMenuSubContent>
-                    <DropdownMenuItem>
-                      Exportar PDF
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Exportar Excel
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Exportar CSV
-                    </DropdownMenuItem>
+                    <DropdownMenuItem>Exportar PDF</DropdownMenuItem>
+                    <DropdownMenuItem>Exportar Excel</DropdownMenuItem>
+                    <DropdownMenuItem>Exportar CSV</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      Exportar Tudo
-                    </DropdownMenuItem>
+                    <DropdownMenuItem>Exportar Tudo</DropdownMenuItem>
                   </DropdownMenuSubContent>
                 </DropdownMenuSub>
                 <DropdownMenuSub>
@@ -272,15 +253,9 @@ export const DropdownTestCenter: React.FC = () => {
                     Configurar
                   </DropdownMenuSubTrigger>
                   <DropdownMenuSubContent>
-                    <DropdownMenuItem>
-                      Layout
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Colunas
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Filtros
-                    </DropdownMenuItem>
+                    <DropdownMenuItem>Layout</DropdownMenuItem>
+                    <DropdownMenuItem>Colunas</DropdownMenuItem>
+                    <DropdownMenuItem>Filtros</DropdownMenuItem>
                   </DropdownMenuSubContent>
                 </DropdownMenuSub>
               </DropdownMenuContent>
@@ -306,12 +281,16 @@ export const DropdownTestCenter: React.FC = () => {
               <PopoverTrigger asChild>
                 <Button variant="outline" className="w-full">
                   Mostrar Notificações
-                  <Badge variant="destructive" className="ml-2">3</Badge>
+                  <Badge variant="destructive" className="ml-2">
+                    3
+                  </Badge>
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-80">
                 <div className="space-y-4">
-                  <h4 className="font-medium leading-none text-foreground">Notificações Recentes</h4>
+                  <h4 className="font-medium leading-none text-foreground">
+                    Notificações Recentes
+                  </h4>
                   <div className="space-y-3">
                     <div className="flex items-center space-x-3 p-2 rounded-md bg-muted/50">
                       <div className="w-2 h-2 bg-primary rounded-full"></div>

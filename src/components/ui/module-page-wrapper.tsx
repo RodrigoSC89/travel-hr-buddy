@@ -23,20 +23,20 @@ export const ModulePageWrapper: React.FC<ModulePageWrapperProps> = ({
   withBackButton = true,
 }) => {
   return (
-    <div className={cn(
-      "min-h-screen bg-gradient-to-br relative overflow-hidden",
-      gradientClasses[gradient],
-      className
-    )}>
+    <div
+      className={cn(
+        "min-h-screen bg-gradient-to-br relative overflow-hidden",
+        gradientClasses[gradient],
+        className
+      )}
+    >
       {/* Animated Background Elements */}
       <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-3xl pointer-events-none animate-float" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-secondary/10 to-transparent rounded-full blur-3xl pointer-events-none animate-float-reverse" />
-      
+
       {/* Content */}
-      <div className="relative z-10 container mx-auto p-6 space-y-6">
-        {children}
-      </div>
+      <div className="relative z-10 container mx-auto p-6 space-y-6">{children}</div>
     </div>
   );
 };

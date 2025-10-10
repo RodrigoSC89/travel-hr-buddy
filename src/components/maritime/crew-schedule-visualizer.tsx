@@ -34,7 +34,7 @@ const mockSchedules: CrewSchedule[] = [
     endDate: new Date(2024, 4, 15),
     status: "active",
     rotationType: "on",
-    alerts: ["Certificado STCW expira em 45 dias"]
+    alerts: ["Certificado STCW expira em 45 dias"],
   },
   {
     id: "2",
@@ -45,7 +45,7 @@ const mockSchedules: CrewSchedule[] = [
     endDate: new Date(2024, 5, 1),
     status: "upcoming",
     rotationType: "on",
-    alerts: []
+    alerts: [],
   },
   {
     id: "3",
@@ -56,7 +56,7 @@ const mockSchedules: CrewSchedule[] = [
     endDate: new Date(2024, 3, 1),
     status: "completed",
     rotationType: "on",
-    alerts: []
+    alerts: [],
   },
 ];
 
@@ -65,19 +65,19 @@ const mockVesselCapacity: VesselCapacity[] = [
     vessel: "MV Nautilus Pioneer",
     totalPositions: 25,
     filledPositions: 23,
-    criticalPositions: ["Second Engineer"]
+    criticalPositions: ["Second Engineer"],
   },
   {
     vessel: "MV Atlantic Explorer",
     totalPositions: 22,
     filledPositions: 22,
-    criticalPositions: []
+    criticalPositions: [],
   },
   {
     vessel: "MV Pacific Star",
     totalPositions: 28,
     filledPositions: 26,
-    criticalPositions: ["Radio Officer", "AB Seaman"]
+    criticalPositions: ["Radio Officer", "AB Seaman"],
   },
 ];
 
@@ -90,11 +90,16 @@ export const CrewScheduleVisualizer: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "bg-success text-azure-50";
-    case "upcoming": return "bg-info text-azure-50";
-    case "completed": return "bg-muted text-muted-foreground";
-    case "cancelled": return "bg-destructive text-azure-50";
-    default: return "bg-muted text-muted-foreground";
+      case "active":
+        return "bg-success text-azure-50";
+      case "upcoming":
+        return "bg-info text-azure-50";
+      case "completed":
+        return "bg-muted text-muted-foreground";
+      case "cancelled":
+        return "bg-destructive text-azure-50";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -105,14 +110,15 @@ export const CrewScheduleVisualizer: React.FC = () => {
   const optimizeRotations = () => {
     toast({
       title: "Otimização de Escalas",
-      description: "IA analisou e sugeriu otimizações para reduzir custos em 15% e melhorar bem-estar da tripulação.",
+      description:
+        "IA analisou e sugeriu otimizações para reduzir custos em 15% e melhorar bem-estar da tripulação.",
     });
   };
 
   const generateGanttView = () => {
     const months = [];
     const currentDate = new Date();
-    
+
     // Generate 12 months starting from current month
     for (let i = -2; i < 10; i++) {
       const month = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
@@ -136,8 +142,11 @@ export const CrewScheduleVisualizer: React.FC = () => {
         {/* Crew Rows */}
         {schedules
           .filter(schedule => selectedVessel === "all" || schedule.vessel === selectedVessel)
-          .map((schedule) => (
-            <div key={schedule.id} className="flex items-center border rounded-lg p-2 hover:bg-muted/50">
+          .map(schedule => (
+            <div
+              key={schedule.id}
+              className="flex items-center border rounded-lg p-2 hover:bg-muted/50"
+            >
               <div className="w-64 space-y-1">
                 <div className="font-medium text-sm">{schedule.crewMember}</div>
                 <div className="text-xs text-muted-foreground">{schedule.rank}</div>
@@ -149,29 +158,25 @@ export const CrewScheduleVisualizer: React.FC = () => {
                   </Badge>
                 )}
               </div>
-              
+
               <div className="flex-1 grid grid-cols-12 gap-1 relative">
                 {months.map((month, monthIndex) => {
                   const monthStart = new Date(month.getFullYear(), month.getMonth(), 1);
                   const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 0);
-                  
+
                   const isActive = schedule.startDate <= monthEnd && schedule.endDate >= monthStart;
-                  
+
                   return (
                     <div
                       key={monthIndex}
                       className={`h-8 rounded border flex items-center justify-center ${
-                        isActive 
+                        isActive
                           ? `${getRotationColor(schedule.rotationType)} text-azure-50 text-xs font-medium`
                           : "bg-background border-dashed"
                       }`}
                     >
-                      {isActive && schedule.rotationType === "on" && (
-                        <Ship className="w-3 h-3" />
-                      )}
-                      {isActive && schedule.rotationType === "off" && (
-                        <Clock className="w-3 h-3" />
-                      )}
+                      {isActive && schedule.rotationType === "on" && <Ship className="w-3 h-3" />}
+                      {isActive && schedule.rotationType === "off" && <Clock className="w-3 h-3" />}
                     </div>
                   );
                 })}
@@ -229,7 +234,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
               >
                 Todas
               </Button>
-              {Array.from(new Set(schedules.map(s => s.vessel))).map((vessel) => (
+              {Array.from(new Set(schedules.map(s => s.vessel))).map(vessel => (
                 <Button
                   key={vessel}
                   variant={selectedVessel === vessel ? "default" : "outline"}
@@ -271,20 +276,24 @@ export const CrewScheduleVisualizer: React.FC = () => {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium">{vessel.vessel}</h4>
-                    <Badge variant={vessel.criticalPositions.length === 0 ? "default" : "destructive"}>
+                    <Badge
+                      variant={vessel.criticalPositions.length === 0 ? "default" : "destructive"}
+                    >
                       {vessel.filledPositions}/{vessel.totalPositions}
                     </Badge>
                   </div>
-                  
+
                   <div className="w-full bg-muted rounded-full h-2">
                     <div
                       className={`h-2 rounded-full ${
                         vessel.criticalPositions.length === 0 ? "bg-success" : "bg-warning"
                       }`}
-                      style={{ width: `${(vessel.filledPositions / vessel.totalPositions) * 100}%` }}
+                      style={{
+                        width: `${(vessel.filledPositions / vessel.totalPositions) * 100}%`,
+                      }}
                     ></div>
                   </div>
-                  
+
                   {vessel.criticalPositions.length > 0 ? (
                     <div className="space-y-1">
                       <div className="flex items-center gap-1 text-destructive text-sm">

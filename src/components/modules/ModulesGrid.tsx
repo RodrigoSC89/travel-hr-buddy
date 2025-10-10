@@ -40,7 +40,7 @@ import {
   HelpCircle,
   Settings2,
   Eye,
-  LucideIcon
+  LucideIcon,
 } from "lucide-react";
 
 interface Module {
@@ -53,34 +53,160 @@ interface Module {
 }
 
 const modules: Module[] = [
-  { name: "Dashboard", icon: LayoutDashboard, category: "Core", slug: "dashboard", status: "functional" },
-  { name: "Sistema Marítimo", icon: Ship, category: "Operações", slug: "maritime", status: "functional" },
-  { name: "IA & Inovação", icon: BrainCircuit, category: "IA", slug: "innovation", status: "functional" },
-  { name: "Portal do Funcionário", icon: UserCheck, category: "RH", slug: "portal", status: "functional" },
+  {
+    name: "Dashboard",
+    icon: LayoutDashboard,
+    category: "Core",
+    slug: "dashboard",
+    status: "functional",
+  },
+  {
+    name: "Sistema Marítimo",
+    icon: Ship,
+    category: "Operações",
+    slug: "maritime",
+    status: "functional",
+  },
+  {
+    name: "IA & Inovação",
+    icon: BrainCircuit,
+    category: "IA",
+    slug: "innovation",
+    status: "functional",
+  },
+  {
+    name: "Portal do Funcionário",
+    icon: UserCheck,
+    category: "RH",
+    slug: "portal",
+    status: "functional",
+  },
   { name: "Viagens", icon: Plane, category: "Logística", slug: "travel", status: "functional" },
-  { name: "Alertas de Preços", icon: BellRing, category: "Financeiro", slug: "price-alerts", status: "functional" },
-  { name: "Hub de Integrações", icon: Plug, category: "Sistema", slug: "intelligence", status: "functional" },
-  { name: "Reservas", icon: CalendarCheck, category: "Logística", slug: "reservations", status: "functional" },
-  { name: "Comunicação", icon: MessageSquareText, category: "Sistema", slug: "communication", status: "functional" },
-  { name: "Configurações", icon: Settings, category: "Sistema", slug: "settings", status: "functional" },
+  {
+    name: "Alertas de Preços",
+    icon: BellRing,
+    category: "Financeiro",
+    slug: "price-alerts",
+    status: "functional",
+  },
+  {
+    name: "Hub de Integrações",
+    icon: Plug,
+    category: "Sistema",
+    slug: "intelligence",
+    status: "functional",
+  },
+  {
+    name: "Reservas",
+    icon: CalendarCheck,
+    category: "Logística",
+    slug: "reservations",
+    status: "functional",
+  },
+  {
+    name: "Comunicação",
+    icon: MessageSquareText,
+    category: "Sistema",
+    slug: "communication",
+    status: "functional",
+  },
+  {
+    name: "Configurações",
+    icon: Settings,
+    category: "Sistema",
+    slug: "settings",
+    status: "functional",
+  },
   { name: "Otimização", icon: Gauge, category: "IA", slug: "optimization", status: "functional" },
   { name: "Assistente de Voz", icon: Mic, category: "IA", slug: "voice", status: "functional" },
-  { name: "Centro de Notificações", icon: Bell, category: "Sistema", slug: "notifications", status: "pending" },
-  { name: "Monitor de Sistema", icon: Cpu, category: "Sistema", slug: "health-monitor", status: "functional" },
-  { name: "Documentos", icon: FileText, category: "Documentos", slug: "documents", status: "pending" },
-  { name: "Colaboração", icon: Users, category: "Comunicação", slug: "collaboration", status: "functional" },
-  { name: "Otimização Mobile", icon: Smartphone, category: "IA", slug: "mobile", status: "pending" },
-  { name: "Checklists Inteligentes", icon: ListChecks, category: "Operações", slug: "checklists", status: "functional" },
-  { name: "PEOTRAM", icon: HardDrive, category: "Operações", slug: "peotram", status: "functional" },
+  {
+    name: "Centro de Notificações",
+    icon: Bell,
+    category: "Sistema",
+    slug: "notifications",
+    status: "pending",
+  },
+  {
+    name: "Monitor de Sistema",
+    icon: Cpu,
+    category: "Sistema",
+    slug: "health-monitor",
+    status: "functional",
+  },
+  {
+    name: "Documentos",
+    icon: FileText,
+    category: "Documentos",
+    slug: "documents",
+    status: "pending",
+  },
+  {
+    name: "Colaboração",
+    icon: Users,
+    category: "Comunicação",
+    slug: "collaboration",
+    status: "functional",
+  },
+  {
+    name: "Otimização Mobile",
+    icon: Smartphone,
+    category: "IA",
+    slug: "mobile",
+    status: "pending",
+  },
+  {
+    name: "Checklists Inteligentes",
+    icon: ListChecks,
+    category: "Operações",
+    slug: "checklists",
+    status: "functional",
+  },
+  {
+    name: "PEOTRAM",
+    icon: HardDrive,
+    category: "Operações",
+    slug: "peotram",
+    status: "functional",
+  },
   { name: "PEO-DP", icon: Database, category: "Operações", slug: "peo-dp", status: "functional" },
   { name: "SGSO", icon: ShieldCheck, category: "Compliance", slug: "sgso", status: "functional" },
   { name: "Templates", icon: Copy, category: "Documentos", slug: "templates", status: "pending" },
-  { name: "Analytics Avançado", icon: BarChartBig, category: "Análise", slug: "analytics", status: "functional" },
-  { name: "Analytics Tempo Real", icon: Activity, category: "Análise", slug: "realtime", status: "pending" },
-  { name: "Monitor Avançado", icon: Monitor, category: "Sistema", slug: "system-monitor", status: "pending" },
-  { name: "Documentos IA", icon: FileCode2, category: "IA", slug: "documents-ai", status: "pending" },
+  {
+    name: "Analytics Avançado",
+    icon: BarChartBig,
+    category: "Análise",
+    slug: "analytics",
+    status: "functional",
+  },
+  {
+    name: "Analytics Tempo Real",
+    icon: Activity,
+    category: "Análise",
+    slug: "realtime",
+    status: "pending",
+  },
+  {
+    name: "Monitor Avançado",
+    icon: Monitor,
+    category: "Sistema",
+    slug: "system-monitor",
+    status: "pending",
+  },
+  {
+    name: "Documentos IA",
+    icon: FileCode2,
+    category: "IA",
+    slug: "documents-ai",
+    status: "pending",
+  },
   { name: "Assistente IA", icon: Bot, category: "IA", slug: "ai-assistant", status: "pending" },
-  { name: "Business Intelligence", icon: AreaChart, category: "Análise", slug: "bi", status: "pending" },
+  {
+    name: "Business Intelligence",
+    icon: AreaChart,
+    category: "Análise",
+    slug: "bi",
+    status: "pending",
+  },
   { name: "Smart Workflow", icon: Repeat, category: "IA", slug: "workflow", status: "pending" },
   { name: "Centro de Ajuda", icon: HelpCircle, category: "Ajuda", slug: "help", status: "pending" },
   { name: "Automação IA", icon: Settings2, category: "IA", slug: "automation", status: "pending" },
@@ -95,7 +221,7 @@ export default function ModulesGrid() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
-  const filtered = modules.filter((m) => {
+  const filtered = modules.filter(m => {
     const matchesSearch = m.name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = selectedCategory === "all" || m.category === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -123,7 +249,7 @@ export default function ModulesGrid() {
           <Input
             placeholder="🔍 Buscar módulo..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => setSearch(e.target.value)}
             className="max-w-xs"
           />
         </div>
@@ -137,7 +263,7 @@ export default function ModulesGrid() {
           >
             Todos
           </Button>
-          {categories.map((category) => (
+          {categories.map(category => (
             <Button
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}
@@ -154,7 +280,7 @@ export default function ModulesGrid() {
           {filtered.map((mod, i) => {
             const Icon = mod.icon;
             const isDisabled = mod.status === "pending";
-            
+
             return (
               <motion.div
                 key={i}
@@ -164,19 +290,20 @@ export default function ModulesGrid() {
                 whileHover={{ scale: isDisabled ? 1 : 1.03 }}
                 whileTap={{ scale: isDisabled ? 1 : 0.98 }}
               >
-                <Card className={`rounded-2xl shadow hover:shadow-lg transition-all ${
-                  isDisabled ? "opacity-60" : ""
-                }`}>
+                <Card
+                  className={`rounded-2xl shadow hover:shadow-lg transition-all ${
+                    isDisabled ? "opacity-60" : ""
+                  }`}
+                >
                   <CardContent className="flex flex-col items-center justify-center p-6 gap-3">
                     <div className="relative">
-                      <Icon className={`h-10 w-10 ${
-                        isDisabled ? "text-muted-foreground" : "text-primary"
-                      }`} />
+                      <Icon
+                        className={`h-10 w-10 ${
+                          isDisabled ? "text-muted-foreground" : "text-primary"
+                        }`}
+                      />
                       {isDisabled && (
-                        <Badge 
-                          variant="secondary" 
-                          className="absolute -top-2 -right-2 text-xs"
-                        >
+                        <Badge variant="secondary" className="absolute -top-2 -right-2 text-xs">
                           ⚠️
                         </Badge>
                       )}

@@ -15,16 +15,16 @@ export { useServiceIntegrations } from "@/hooks/use-service-integrations";
 // Components
 export { ServiceStatusPanel } from "@/components/integration/service-status-panel";
 export { ConnectionTestPanel } from "@/components/integration/connection-test-panel";
-export { 
+export {
   Loading,
-  LoadingState, 
+  LoadingState,
   LoadingOverlay,
   LoadingSkeleton,
   LoadingCard,
   LoadingDashboard,
   Skeleton,
   DashboardSkeleton,
-  CardSkeleton
+  CardSkeleton,
 } from "@/components/ui/Loading";
 export { EmptyState } from "@/components/ui/EmptyState";
 export { StatusBadge, StatusIndicator } from "@/components/ui/StatusBadge";

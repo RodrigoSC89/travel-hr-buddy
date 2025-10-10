@@ -3,42 +3,64 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { 
-  TrendingUp, 
-  BarChart3, 
-  PieChart, 
-  LineChart,
-  Download, 
-  Mail, 
+import {
+  TrendingUp,
+  BarChart3,
+  PieChart,
   Calendar,
   Filter,
   FileText,
   Eye,
-  Share,
-  Settings,
   Clock,
   Target,
   AlertTriangle,
   CheckCircle,
   Zap,
   Users,
-  Ship,
-  Building,
-  Globe
 } from "lucide-react";
-import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell } from "recharts";
+import {
+  LineChart as RechartsLineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart as RechartsPieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 interface Report {
   id: string;
   name: string;
   description: string;
-  type: "compliance-trend" | "performance-analysis" | "risk-assessment" | "operational-summary" | "custom";
+  type:
+    | "compliance-trend"
+    | "performance-analysis"
+    | "risk-assessment"
+    | "operational-summary"
+    | "custom";
   frequency: "manual" | "daily" | "weekly" | "monthly" | "quarterly";
   lastGenerated?: string;
   nextScheduled?: string;
@@ -65,7 +87,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
         nextScheduled: "2024-02-15",
         recipients: ["diretoria@empresa.com", "qualidade@empresa.com"],
         format: "pdf",
-        status: "active"
+        status: "active",
       },
       {
         id: "RPT002",
@@ -77,7 +99,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
         nextScheduled: "2024-01-27",
         recipients: ["ceo@empresa.com", "coo@empresa.com"],
         format: "powerpoint",
-        status: "active"
+        status: "active",
       },
       {
         id: "RPT003",
@@ -89,8 +111,8 @@ export const PeotramAdvancedReporting: React.FC = () => {
         nextScheduled: "2024-04-01",
         recipients: ["risco@empresa.com"],
         format: "excel",
-        status: "active"
-      }
+        status: "active",
+      },
     ];
   }
 
@@ -100,39 +122,48 @@ export const PeotramAdvancedReporting: React.FC = () => {
     { month: "Mar", score: 92, target: 90 },
     { month: "Apr", score: 87, target: 90 },
     { month: "May", score: 94, target: 90 },
-    { month: "Jun", score: 91, target: 90 }
+    { month: "Jun", score: 91, target: 90 },
   ];
 
   const performanceData = [
     { name: "Auditorias Concluídas", value: 45, color: "#22c55e" },
     { name: "Em Andamento", value: 12, color: "#3b82f6" },
     { name: "Pendentes", value: 8, color: "#f59e0b" },
-    { name: "Atrasadas", value: 3, color: "#ef4444" }
+    { name: "Atrasadas", value: 3, color: "#ef4444" },
   ];
 
   const riskData = [
     { category: "Operacional", critical: 2, high: 5, medium: 12, low: 8 },
     { category: "Ambiental", critical: 1, high: 3, medium: 8, low: 15 },
     { category: "Segurança", critical: 3, high: 7, medium: 10, low: 6 },
-    { category: "Regulatório", critical: 0, high: 2, medium: 6, low: 12 }
+    { category: "Regulatório", critical: 0, high: 2, medium: 6, low: 12 },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "bg-success/20 text-success border-success/30";
-    case "paused": return "bg-warning/20 text-warning border-warning/30";
-    case "draft": return "bg-muted/20 text-muted-foreground border-muted/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "active":
+        return "bg-success/20 text-success border-success/30";
+      case "paused":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "draft":
+        return "bg-muted/20 text-muted-foreground border-muted/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "compliance-trend": return <TrendingUp className="w-4 h-4" />;
-    case "performance-analysis": return <BarChart3 className="w-4 h-4" />;
-    case "risk-assessment": return <AlertTriangle className="w-4 h-4" />;
-    case "operational-summary": return <Target className="w-4 h-4" />;
-    default: return <FileText className="w-4 h-4" />;
+      case "compliance-trend":
+        return <TrendingUp className="w-4 h-4" />;
+      case "performance-analysis":
+        return <BarChart3 className="w-4 h-4" />;
+      case "risk-assessment":
+        return <AlertTriangle className="w-4 h-4" />;
+      case "operational-summary":
+        return <Target className="w-4 h-4" />;
+      default:
+        return <FileText className="w-4 h-4" />;
     }
   };
 
@@ -153,7 +184,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
             Análises detalhadas e relatórios personalizados do sistema PEOTRAM
           </p>
         </div>
-        
+
         <div className="flex gap-2">
           <Button variant="outline">
             <Filter className="w-4 h-4 mr-2" />
@@ -264,9 +295,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
                   <Button variant="outline" onClick={() => setIsNewReportOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={() => setIsNewReportOpen(false)}>
-                    Criar Relatório
-                  </Button>
+                  <Button onClick={() => setIsNewReportOpen(false)}>Criar Relatório</Button>
                 </div>
               </div>
             </DialogContent>
@@ -363,7 +392,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
 
         <TabsContent value="reports" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {reports.map((report) => (
+            {reports.map(report => (
               <Card key={report.id} className="hover:shadow-lg transition-all">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -409,27 +438,27 @@ export const PeotramAdvancedReporting: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2 pt-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="flex-1"
                       onClick={() => generateReport(report.id)}
                     >
                       <Zap className="w-3 h-3 mr-1" />
                       Gerar
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="flex-1"
                       onClick={() => setSelectedReport(report)}
                     >
                       <Eye className="w-3 h-3 mr-1" />
                       Visualizar
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="flex-1"
                       onClick={() => scheduleReport(report.id)}
                     >

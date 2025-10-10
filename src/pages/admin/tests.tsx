@@ -12,15 +12,17 @@ export default function TestDashboard() {
 
   useEffect(() => {
     fetch("/coverage/lcov-report/index.html")
-      .then((res) => res.text())
-      .then((html) => {
+      .then(res => res.text())
+      .then(html => {
         const match = html.match(/<span class='strong'>(\d+)%<\/span>/);
         if (match) {
           setLogs([`Cobertura total atual: ${match[1]}%`]);
         }
       })
       .catch(() => {
-        setLogs(["Relatório de cobertura não disponível. Execute 'npm run test:coverage' para gerar."]);
+        setLogs([
+          "Relatório de cobertura não disponível. Execute 'npm run test:coverage' para gerar.",
+        ]);
       });
   }, []);
 

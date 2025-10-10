@@ -5,41 +5,30 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  FileText, 
-  Upload, 
-  Download, 
-  Share2, 
-  Search, 
-  Filter, 
-  Eye, 
-  Edit, 
-  Trash2,
-  FolderPlus,
-  Calendar,
-  User,
-  Tag,
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  FileText,
+  Upload,
+  Download,
+  Search,
+  Eye,
+  Edit,
   Archive,
-  Star,
   Clock,
   CheckCircle,
-  AlertTriangle,
-  Lock,
-  Globe,
   Users,
-  FileCheck,
   Workflow,
-  BarChart3,
-  TrendingUp,
   RefreshCw,
-  Plus
+  Plus,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface Document {
   id: string;
@@ -83,7 +72,7 @@ interface DocumentTemplate {
 export const AdvancedDocumentCenter: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   const [documents, setDocuments] = useState<Document[]>([]);
   const [templates, setTemplates] = useState<DocumentTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -114,9 +103,17 @@ export const AdvancedDocumentCenter: React.FC = () => {
         viewCount: 156,
         collaborators: ["João Silva", "Maria Santos", "Pedro Costa"],
         approvals: [
-          { user: "Supervisor Marítimo", status: "approved", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-          { user: "Diretor Operacional", status: "approved", date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) }
-        ]
+          {
+            user: "Supervisor Marítimo",
+            status: "approved",
+            date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+          },
+          {
+            user: "Diretor Operacional",
+            status: "approved",
+            date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+          },
+        ],
       },
       {
         id: "2",
@@ -137,8 +134,8 @@ export const AdvancedDocumentCenter: React.FC = () => {
         collaborators: ["Ana Oliveira", "Carlos Ferreira"],
         approvals: [
           { user: "Gerente Financeiro", status: "pending", date: new Date() },
-          { user: "CFO", status: "pending", date: new Date() }
-        ]
+          { user: "CFO", status: "pending", date: new Date() },
+        ],
       },
       {
         id: "3",
@@ -157,9 +154,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
         downloadCount: 12,
         viewCount: 67,
         collaborators: ["Roberto Lima", "Fernanda Alves"],
-        approvals: [
-          { user: "Diretor de RH", status: "pending", date: new Date() }
-        ]
+        approvals: [{ user: "Diretor de RH", status: "pending", date: new Date() }],
       },
       {
         id: "4",
@@ -179,9 +174,13 @@ export const AdvancedDocumentCenter: React.FC = () => {
         viewCount: 234,
         collaborators: ["Qualidade ISO"],
         approvals: [
-          { user: "Auditor Interno", status: "approved", date: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000) }
-        ]
-      }
+          {
+            user: "Auditor Interno",
+            status: "approved",
+            date: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000),
+          },
+        ],
+      },
     ];
 
     const mockTemplates: DocumentTemplate[] = [
@@ -195,9 +194,14 @@ export const AdvancedDocumentCenter: React.FC = () => {
           { name: "Data do Incidente", type: "date", required: true },
           { name: "Local", type: "text", required: true },
           { name: "Descrição", type: "textarea", required: true },
-          { name: "Gravidade", type: "select", required: true, options: ["Baixa", "Média", "Alta", "Crítica"] },
-          { name: "Responsável", type: "text", required: true }
-        ]
+          {
+            name: "Gravidade",
+            type: "select",
+            required: true,
+            options: ["Baixa", "Média", "Alta", "Crítica"],
+          },
+          { name: "Responsável", type: "text", required: true },
+        ],
       },
       {
         id: "t2",
@@ -210,8 +214,8 @@ export const AdvancedDocumentCenter: React.FC = () => {
           { name: "Data de Início", type: "date", required: true },
           { name: "Data de Fim", type: "date", required: true },
           { name: "Motivo", type: "textarea", required: false },
-          { name: "Substituto", type: "text", required: true }
-        ]
+          { name: "Substituto", type: "text", required: true },
+        ],
       },
       {
         id: "t3",
@@ -221,12 +225,17 @@ export const AdvancedDocumentCenter: React.FC = () => {
         usageCount: 23,
         fields: [
           { name: "Nome do Fornecedor", type: "text", required: true },
-          { name: "Categoria", type: "select", required: true, options: ["Serviços", "Produtos", "Equipamentos"] },
+          {
+            name: "Categoria",
+            type: "select",
+            required: true,
+            options: ["Serviços", "Produtos", "Equipamentos"],
+          },
           { name: "Qualidade", type: "number", required: true },
           { name: "Pontualidade", type: "number", required: true },
-          { name: "Observações", type: "textarea", required: false }
-        ]
-      }
+          { name: "Observações", type: "textarea", required: false },
+        ],
+      },
     ];
 
     setDocuments(mockDocuments);
@@ -240,32 +249,48 @@ export const AdvancedDocumentCenter: React.FC = () => {
 
   const getFileTypeIcon = (type: string) => {
     switch (type) {
-    case "pdf": return "📄";
-    case "docx": return "📝";
-    case "xlsx": return "📊";
-    case "pptx": return "📊";
-    case "image": return "🖼️";
-    default: return "📁";
+      case "pdf":
+        return "📄";
+      case "docx":
+        return "📝";
+      case "xlsx":
+        return "📊";
+      case "pptx":
+        return "📊";
+      case "image":
+        return "🖼️";
+      default:
+        return "📁";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "approved": return "text-green-600 bg-green-100";
-    case "review": return "text-yellow-600 bg-yellow-100";
-    case "draft": return "text-blue-600 bg-blue-100";
-    case "archived": return "text-muted-foreground bg-gray-100";
-    default: return "text-muted-foreground bg-gray-100";
+      case "approved":
+        return "text-green-600 bg-green-100";
+      case "review":
+        return "text-yellow-600 bg-yellow-100";
+      case "draft":
+        return "text-blue-600 bg-blue-100";
+      case "archived":
+        return "text-muted-foreground bg-gray-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "approved": return <CheckCircle className="h-4 w-4" />;
-    case "review": return <Clock className="h-4 w-4" />;
-    case "draft": return <Edit className="h-4 w-4" />;
-    case "archived": return <Archive className="h-4 w-4" />;
-    default: return <FileText className="h-4 w-4" />;
+      case "approved":
+        return <CheckCircle className="h-4 w-4" />;
+      case "review":
+        return <Clock className="h-4 w-4" />;
+      case "draft":
+        return <Edit className="h-4 w-4" />;
+      case "archived":
+        return <Archive className="h-4 w-4" />;
+      default:
+        return <FileText className="h-4 w-4" />;
     }
   };
 
@@ -278,12 +303,13 @@ export const AdvancedDocumentCenter: React.FC = () => {
   };
 
   const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSearch =
+      doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = categoryFilter === "all" || doc.category === categoryFilter;
     const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
-    
+
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
@@ -295,12 +321,12 @@ export const AdvancedDocumentCenter: React.FC = () => {
   };
 
   const handleDownload = (documentId: string) => {
-    setDocuments(prev => prev.map(doc => 
-      doc.id === documentId 
-        ? { ...doc, downloadCount: doc.downloadCount + 1 }
-        : doc
-    ));
-    
+    setDocuments(prev =>
+      prev.map(doc =>
+        doc.id === documentId ? { ...doc, downloadCount: doc.downloadCount + 1 } : doc
+      )
+    );
+
     toast({
       title: "Download iniciado",
       description: "O documento está sendo baixado.",
@@ -308,22 +334,20 @@ export const AdvancedDocumentCenter: React.FC = () => {
   };
 
   const handleView = (document: Document) => {
-    setDocuments(prev => prev.map(doc => 
-      doc.id === document.id 
-        ? { ...doc, viewCount: doc.viewCount + 1 }
-        : doc
-    ));
-    
+    setDocuments(prev =>
+      prev.map(doc => (doc.id === document.id ? { ...doc, viewCount: doc.viewCount + 1 } : doc))
+    );
+
     setSelectedDocument(document);
   };
 
   const handleStatusChange = (documentId: string, newStatus: Document["status"]) => {
-    setDocuments(prev => prev.map(doc => 
-      doc.id === documentId 
-        ? { ...doc, status: newStatus, updatedAt: new Date() }
-        : doc
-    ));
-    
+    setDocuments(prev =>
+      prev.map(doc =>
+        doc.id === documentId ? { ...doc, status: newStatus, updatedAt: new Date() } : doc
+      )
+    );
+
     toast({
       title: "Status atualizado",
       description: `Documento marcado como ${newStatus}.`,
@@ -347,7 +371,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
             Gerencie documentos, templates e fluxos de aprovação
           </p>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <Button variant="outline" onClick={handleUpload}>
             <Upload className="h-4 w-4 mr-2" />
@@ -384,9 +408,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
             <div className="text-2xl font-bold">
               {documents.reduce((acc, doc) => acc + doc.downloadCount, 0)}
             </div>
-            <p className="text-xs text-muted-foreground">
-              +12% vs ontem
-            </p>
+            <p className="text-xs text-muted-foreground">+12% vs ontem</p>
           </CardContent>
         </Card>
 
@@ -399,9 +421,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
             <div className="text-2xl font-bold">
               {documents.filter(d => d.status === "review").length}
             </div>
-            <p className="text-xs text-muted-foreground">
-              aguardando aprovação
-            </p>
+            <p className="text-xs text-muted-foreground">aguardando aprovação</p>
           </CardContent>
         </Card>
 
@@ -412,9 +432,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{templates.length}</div>
-            <p className="text-xs text-muted-foreground">
-              disponíveis
-            </p>
+            <p className="text-xs text-muted-foreground">disponíveis</p>
           </CardContent>
         </Card>
       </div>
@@ -435,11 +453,11 @@ export const AdvancedDocumentCenter: React.FC = () => {
               <Input
                 placeholder="Buscar documentos..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-8"
               />
             </div>
-            
+
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Categoria" />
@@ -452,7 +470,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
                 <SelectItem value="certificados">Certificados</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-32">
                 <SelectValue placeholder="Status" />
@@ -467,15 +485,15 @@ export const AdvancedDocumentCenter: React.FC = () => {
             </Select>
 
             <div className="flex items-center space-x-2">
-              <Button 
-                variant={viewMode === "grid" ? "default" : "outline"} 
+              <Button
+                variant={viewMode === "grid" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setViewMode("grid")}
               >
                 Grid
               </Button>
-              <Button 
-                variant={viewMode === "list" ? "default" : "outline"} 
+              <Button
+                variant={viewMode === "list" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setViewMode("list")}
               >
@@ -487,7 +505,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
           {/* Lista/Grid de Documentos */}
           {viewMode === "grid" ? (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {filteredDocuments.map((doc) => (
+              {filteredDocuments.map(doc => (
                 <Card key={doc.id} className="cursor-pointer hover:shadow-md transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -500,21 +518,21 @@ export const AdvancedDocumentCenter: React.FC = () => {
                           </CardDescription>
                         </div>
                       </div>
-                      
+
                       <Badge className={getStatusColor(doc.status)}>
                         {getStatusIcon(doc.status)}
                         <span className="ml-1 capitalize">{doc.status}</span>
                       </Badge>
                     </div>
                   </CardHeader>
-                  
+
                   <CardContent>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <span>v{doc.version}</span>
                         <span>{formatFileSize(doc.size)}</span>
                       </div>
-                      
+
                       <div className="flex flex-wrap gap-1">
                         {doc.tags.slice(0, 3).map((tag, index) => (
                           <Badge key={index} variant="secondary" className="text-xs">
@@ -527,7 +545,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
                           </Badge>
                         )}
                       </div>
-                      
+
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <span className="flex items-center">
                           <Eye className="h-3 w-3 mr-1" />
@@ -542,22 +560,18 @@ export const AdvancedDocumentCenter: React.FC = () => {
                           {doc.collaborators.length}
                         </span>
                       </div>
-                      
+
                       <div className="flex items-center space-x-1">
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
+                        <Button
+                          size="sm"
+                          variant="outline"
                           className="flex-1"
                           onClick={() => handleView(doc)}
                         >
                           <Eye className="h-3 w-3 mr-1" />
                           Ver
                         </Button>
-                        <Button 
-                          size="sm" 
-                          className="flex-1"
-                          onClick={() => handleDownload(doc.id)}
-                        >
+                        <Button size="sm" className="flex-1" onClick={() => handleDownload(doc.id)}>
                           <Download className="h-3 w-3 mr-1" />
                           Baixar
                         </Button>
@@ -569,7 +583,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-2">
-              {filteredDocuments.map((doc) => (
+              {filteredDocuments.map(doc => (
                 <Card key={doc.id}>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
@@ -577,7 +591,9 @@ export const AdvancedDocumentCenter: React.FC = () => {
                         <span className="text-xl">{getFileTypeIcon(doc.type)}</span>
                         <div className="flex-1 min-w-0">
                           <h4 className="font-medium truncate">{doc.title}</h4>
-                          <p className="text-sm text-muted-foreground truncate">{doc.description}</p>
+                          <p className="text-sm text-muted-foreground truncate">
+                            {doc.description}
+                          </p>
                         </div>
                         <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                           <span>{formatFileSize(doc.size)}</span>
@@ -585,11 +601,9 @@ export const AdvancedDocumentCenter: React.FC = () => {
                           <span>{doc.createdBy}</span>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
-                        <Badge className={getStatusColor(doc.status)}>
-                          {doc.status}
-                        </Badge>
+                        <Badge className={getStatusColor(doc.status)}>{doc.status}</Badge>
                         <Button size="sm" variant="outline" onClick={() => handleView(doc)}>
                           <Eye className="h-3 w-3" />
                         </Button>
@@ -615,8 +629,11 @@ export const AdvancedDocumentCenter: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {templates.map((template) => (
-                  <Card key={template.id} className="cursor-pointer hover:shadow-md transition-shadow">
+                {templates.map(template => (
+                  <Card
+                    key={template.id}
+                    className="cursor-pointer hover:shadow-md transition-shadow"
+                  >
                     <CardHeader>
                       <CardTitle className="text-base">{template.name}</CardTitle>
                       <CardDescription>{template.description}</CardDescription>
@@ -629,11 +646,11 @@ export const AdvancedDocumentCenter: React.FC = () => {
                             {template.fields.length} campos
                           </span>
                         </div>
-                        
+
                         <div className="text-sm text-muted-foreground">
                           Usado {template.usageCount} vezes
                         </div>
-                        
+
                         <Button className="w-full" size="sm">
                           Usar Template
                         </Button>
@@ -650,45 +667,45 @@ export const AdvancedDocumentCenter: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Fluxo de Aprovações</CardTitle>
-              <CardDescription>
-                Documentos aguardando sua aprovação
-              </CardDescription>
+              <CardDescription>Documentos aguardando sua aprovação</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {documents.filter(doc => doc.status === "review").map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between p-4 border border-border rounded-lg">
-                    <div className="flex-1">
-                      <h4 className="font-medium">{doc.title}</h4>
-                      <p className="text-sm text-muted-foreground">{doc.description}</p>
-                      <div className="flex items-center space-x-4 mt-2 text-xs text-muted-foreground">
-                        <span>Criado por: {doc.createdBy}</span>
-                        <span>Versão: {doc.version}</span>
-                        <span>Atualizado: {doc.updatedAt.toLocaleDateString()}</span>
+                {documents
+                  .filter(doc => doc.status === "review")
+                  .map(doc => (
+                    <div
+                      key={doc.id}
+                      className="flex items-center justify-between p-4 border border-border rounded-lg"
+                    >
+                      <div className="flex-1">
+                        <h4 className="font-medium">{doc.title}</h4>
+                        <p className="text-sm text-muted-foreground">{doc.description}</p>
+                        <div className="flex items-center space-x-4 mt-2 text-xs text-muted-foreground">
+                          <span>Criado por: {doc.createdBy}</span>
+                          <span>Versão: {doc.version}</span>
+                          <span>Atualizado: {doc.updatedAt.toLocaleDateString()}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <Button size="sm" variant="outline" onClick={() => handleView(doc)}>
+                          <Eye className="h-3 w-3 mr-1" />
+                          Revisar
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleStatusChange(doc.id, "draft")}
+                        >
+                          Rejeitar
+                        </Button>
+                        <Button size="sm" onClick={() => handleStatusChange(doc.id, "approved")}>
+                          Aprovar
+                        </Button>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center space-x-2">
-                      <Button size="sm" variant="outline" onClick={() => handleView(doc)}>
-                        <Eye className="h-3 w-3 mr-1" />
-                        Revisar
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="destructive"
-                        onClick={() => handleStatusChange(doc.id, "draft")}
-                      >
-                        Rejeitar
-                      </Button>
-                      <Button 
-                        size="sm"
-                        onClick={() => handleStatusChange(doc.id, "approved")}
-                      >
-                        Aprovar
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </Card>
@@ -703,10 +720,10 @@ export const AdvancedDocumentCenter: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {["manuais", "relatórios", "políticas", "certificados"].map((category) => {
+                  {["manuais", "relatórios", "políticas", "certificados"].map(category => {
                     const count = documents.filter(d => d.category === category).length;
                     const percentage = (count / documents.length) * 100;
-                    
+
                     return (
                       <div key={category} className="flex items-center justify-between">
                         <span className="capitalize">{category}</span>

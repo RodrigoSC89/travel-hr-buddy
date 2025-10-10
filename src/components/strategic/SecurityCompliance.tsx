@@ -3,17 +3,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { 
-  Shield, 
-  Lock, 
-  Eye, 
-  FileText, 
-  UserCheck, 
+import {
+  Shield,
+  Lock,
+  Eye,
+  FileText,
+  UserCheck,
   AlertTriangle,
   CheckCircle,
   Clock,
   Globe,
-  Key
+  Key,
 } from "lucide-react";
 
 interface SecurityFeature {
@@ -43,7 +43,7 @@ export const SecurityCompliance = () => {
       description: "Autenticação de dois fatores obrigatória para todos os usuários",
       status: "active",
       priority: "high",
-      compliance: ["LGPD", "ISO 27001"]
+      compliance: ["LGPD", "ISO 27001"],
     },
     {
       id: "2",
@@ -51,7 +51,7 @@ export const SecurityCompliance = () => {
       description: "Criptografia AES-256 em repouso e TLS 1.3 em trânsito",
       status: "active",
       priority: "high",
-      compliance: ["LGPD", "GDPR", "SOX"]
+      compliance: ["LGPD", "GDPR", "SOX"],
     },
     {
       id: "3",
@@ -59,7 +59,7 @@ export const SecurityCompliance = () => {
       description: "Log completo de todas as ações de usuários com rastreabilidade",
       status: "active",
       priority: "high",
-      compliance: ["ISM Code", "SOX"]
+      compliance: ["ISM Code", "SOX"],
     },
     {
       id: "4",
@@ -67,7 +67,7 @@ export const SecurityCompliance = () => {
       description: "Controle baseado em funções com permissões granulares",
       status: "active",
       priority: "medium",
-      compliance: ["LGPD", "ISO 27001"]
+      compliance: ["LGPD", "ISO 27001"],
     },
     {
       id: "5",
@@ -75,7 +75,7 @@ export const SecurityCompliance = () => {
       description: "IA para detectar comportamentos suspeitos automaticamente",
       status: "pending",
       priority: "medium",
-      compliance: ["ISO 27001"]
+      compliance: ["ISO 27001"],
     },
     {
       id: "6",
@@ -83,8 +83,8 @@ export const SecurityCompliance = () => {
       description: "Backup diário com retenção de 7 anos e teste de restauração",
       status: "active",
       priority: "high",
-      compliance: ["LGPD", "ISM Code"]
-    }
+      compliance: ["LGPD", "ISM Code"],
+    },
   ];
 
   const complianceStandards: ComplianceStandard[] = [
@@ -95,7 +95,7 @@ export const SecurityCompliance = () => {
       coverage: 95,
       requirements: 84,
       completed: 80,
-      status: "compliant"
+      status: "compliant",
     },
     {
       id: "2",
@@ -104,7 +104,7 @@ export const SecurityCompliance = () => {
       coverage: 88,
       requirements: 99,
       completed: 87,
-      status: "in-progress"
+      status: "in-progress",
     },
     {
       id: "3",
@@ -113,7 +113,7 @@ export const SecurityCompliance = () => {
       coverage: 92,
       requirements: 156,
       completed: 143,
-      status: "compliant"
+      status: "compliant",
     },
     {
       id: "4",
@@ -122,7 +122,7 @@ export const SecurityCompliance = () => {
       coverage: 78,
       requirements: 114,
       completed: 89,
-      status: "in-progress"
+      status: "in-progress",
     },
     {
       id: "5",
@@ -131,48 +131,52 @@ export const SecurityCompliance = () => {
       coverage: 85,
       requirements: 48,
       completed: 41,
-      status: "in-progress"
-    }
+      status: "in-progress",
+    },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active":
-    case "compliant":
-      return "bg-success text-success-foreground";
-    case "pending":
-    case "in-progress":
-      return "bg-warning text-warning-foreground";
-    case "disabled":
-    case "non-compliant":
-      return "bg-danger text-danger-foreground";
-    default:
-      return "bg-muted text-muted-foreground";
+      case "active":
+      case "compliant":
+        return "bg-success text-success-foreground";
+      case "pending":
+      case "in-progress":
+        return "bg-warning text-warning-foreground";
+      case "disabled":
+      case "non-compliant":
+        return "bg-danger text-danger-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "high": return "bg-danger text-danger-foreground";
-    case "medium": return "bg-warning text-warning-foreground";
-    case "low": return "bg-info text-info-foreground";
-    default: return "bg-muted text-muted-foreground";
+      case "high":
+        return "bg-danger text-danger-foreground";
+      case "medium":
+        return "bg-warning text-warning-foreground";
+      case "low":
+        return "bg-info text-info-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "active":
-    case "compliant":
-      return <CheckCircle className="h-4 w-4 text-success" />;
-    case "pending":
-    case "in-progress":
-      return <Clock className="h-4 w-4 text-warning" />;
-    case "disabled":
-    case "non-compliant":
-      return <AlertTriangle className="h-4 w-4 text-danger" />;
-    default:
-      return <Shield className="h-4 w-4" />;
+      case "active":
+      case "compliant":
+        return <CheckCircle className="h-4 w-4 text-success" />;
+      case "pending":
+      case "in-progress":
+        return <Clock className="h-4 w-4 text-warning" />;
+      case "disabled":
+      case "non-compliant":
+        return <AlertTriangle className="h-4 w-4 text-danger" />;
+      default:
+        return <Shield className="h-4 w-4" />;
     }
   };
 
@@ -218,7 +222,7 @@ export const SecurityCompliance = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {securityFeatures.map((feature) => (
+            {securityFeatures.map(feature => (
               <div key={feature.id} className="border rounded-lg p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
@@ -229,24 +233,20 @@ export const SecurityCompliance = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Switch 
-                      checked={feature.status === "active"} 
+                    <Switch
+                      checked={feature.status === "active"}
                       disabled={feature.status === "pending"}
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex gap-2">
-                    <Badge className={getStatusColor(feature.status)}>
-                      {feature.status}
-                    </Badge>
-                    <Badge className={getPriorityColor(feature.priority)}>
-                      {feature.priority}
-                    </Badge>
+                    <Badge className={getStatusColor(feature.status)}>{feature.status}</Badge>
+                    <Badge className={getPriorityColor(feature.priority)}>{feature.priority}</Badge>
                   </div>
                   <div className="flex gap-1">
-                    {feature.compliance.map((standard) => (
+                    {feature.compliance.map(standard => (
                       <Badge key={standard} variant="outline" className="text-xs">
                         {standard}
                       </Badge>
@@ -269,7 +269,7 @@ export const SecurityCompliance = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {complianceStandards.map((standard) => (
+            {complianceStandards.map(standard => (
               <div key={standard.id} className="border rounded-lg p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
@@ -283,14 +283,16 @@ export const SecurityCompliance = () => {
                     {standard.coverage}% compliant
                   </Badge>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span>Progresso:</span>
-                    <span>{standard.completed}/{standard.requirements} requisitos</span>
+                    <span>
+                      {standard.completed}/{standard.requirements} requisitos
+                    </span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-2">
-                    <div 
+                    <div
                       className="bg-primary h-2 rounded-full transition-all"
                       style={{ width: `${standard.coverage}%` }}
                     />

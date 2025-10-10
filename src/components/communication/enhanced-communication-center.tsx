@@ -1,31 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  MessageSquare, 
-  Users, 
-  Settings, 
-  Inbox, 
+import {
+  MessageSquare,
+  Settings,
+  Inbox,
   Send,
   Bell,
-  BellOff,
-  Search,
-  Filter,
   Archive,
-  Trash2,
-  Star,
   AlertTriangle,
   Clock,
   CheckCircle2,
   PlusCircle,
   Hash,
-  Volume2,
-  VolumeX,
-  Eye,
-  EyeOff
 } from "lucide-react";
 import { InboxManager } from "./inbox-manager";
 import { ChannelManager } from "./channel-manager";
@@ -51,7 +41,7 @@ export const EnhancedCommunicationCenter = () => {
     activeChannels: 0,
     urgentMessages: 0,
     todayMessages: 0,
-    responseRate: 95
+    responseRate: 95,
   });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -70,13 +60,13 @@ export const EnhancedCommunicationCenter = () => {
         activeChannels: 8,
         urgentMessages: 3,
         todayMessages: 47,
-        responseRate: 95
+        responseRate: 95,
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao carregar estatísticas de comunicação",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -85,13 +75,20 @@ export const EnhancedCommunicationCenter = () => {
 
   const getTabIcon = (tab: string) => {
     switch (tab) {
-    case "inbox": return Inbox;
-    case "channels": return Hash;
-    case "compose": return Send;
-    case "notifications": return Bell;
-    case "analytics": return Archive;
-    case "settings": return Settings;
-    default: return MessageSquare;
+      case "inbox":
+        return Inbox;
+      case "channels":
+        return Hash;
+      case "compose":
+        return Send;
+      case "notifications":
+        return Bell;
+      case "analytics":
+        return Archive;
+      case "settings":
+        return Settings;
+      default:
+        return MessageSquare;
     }
   };
 
@@ -110,11 +107,9 @@ export const EnhancedCommunicationCenter = () => {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold">Centro de Comunicação</h1>
-            <p className="text-muted-foreground">
-              Comunicação interna profissional e inteligente
-            </p>
+            <p className="text-muted-foreground">Comunicação interna profissional e inteligente</p>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" className="gap-2">
               <Bell className="h-4 w-4" />
@@ -260,7 +255,7 @@ export const EnhancedCommunicationCenter = () => {
         </TabsList>
 
         <TabsContent value="inbox" className="mt-6">
-          <InboxManager 
+          <InboxManager
             unreadCount={stats.unreadMessages}
             urgentCount={stats.urgentMessages}
             onStatsUpdate={setStats}
@@ -268,18 +263,15 @@ export const EnhancedCommunicationCenter = () => {
         </TabsContent>
 
         <TabsContent value="channels" className="mt-6">
-          <ChannelManager 
-            activeChannels={stats.activeChannels}
-            onStatsUpdate={setStats}
-          />
+          <ChannelManager activeChannels={stats.activeChannels} onStatsUpdate={setStats} />
         </TabsContent>
 
         <TabsContent value="compose" className="mt-6">
-          <MessageComposer 
+          <MessageComposer
             onMessageSent={() => {
               toast({
                 title: "Sucesso",
-                description: "Mensagem enviada com sucesso"
+                description: "Mensagem enviada com sucesso",
               });
               loadCommunicationStats();
             }}

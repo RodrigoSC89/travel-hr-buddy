@@ -1,9 +1,9 @@
 /**
  * Comprehensive API Key Validation Utility
- * 
+ *
  * This utility tests and validates all external API keys and integrations
  * configured in the Nautilus One Travel HR Buddy system.
- * 
+ *
  * Usage:
  *   import { validateAllAPIKeys } from '@/utils/api-key-validator';
  *   const report = await validateAllAPIKeys();
@@ -22,7 +22,14 @@ import { testWhisperConnection } from "@/services/whisper";
 export interface APIKeyStatus {
   name: string;
   key: string;
-  status: "valid" | "invalid" | "expired" | "unauthorized" | "rate_limited" | "not_configured" | "unknown";
+  status:
+    | "valid"
+    | "invalid"
+    | "expired"
+    | "unauthorized"
+    | "rate_limited"
+    | "not_configured"
+    | "unknown";
   configured: boolean;
   responseTime?: number;
   message: string;
@@ -44,26 +51,39 @@ export interface APIValidationReport {
 /**
  * Determine status from test result
  */
-function determineStatus(result: { success: boolean; error?: string; message?: string; status?: string }): APIKeyStatus["status"] {
+function determineStatus(result: {
+  success: boolean;
+  error?: string;
+  message?: string;
+  status?: string;
+}): APIKeyStatus["status"] {
   if (!result.success) {
     const errorLower = (result.error || result.message || "").toLowerCase();
-    
+
     if (errorLower.includes("not configured") || errorLower.includes("missing")) {
       return "not_configured";
     }
-    if (errorLower.includes("401") || errorLower.includes("unauthorized") || errorLower.includes("invalid")) {
+    if (
+      errorLower.includes("401") ||
+      errorLower.includes("unauthorized") ||
+      errorLower.includes("invalid")
+    ) {
       return "unauthorized";
     }
-    if (errorLower.includes("403") || errorLower.includes("expired") || errorLower.includes("forbidden")) {
+    if (
+      errorLower.includes("403") ||
+      errorLower.includes("expired") ||
+      errorLower.includes("forbidden")
+    ) {
       return "expired";
     }
     if (errorLower.includes("429") || errorLower.includes("rate limit")) {
       return "rate_limited";
     }
-    
+
     return "invalid";
   }
-  
+
   return "valid";
 }
 
@@ -72,20 +92,20 @@ function determineStatus(result: { success: boolean; error?: string; message?: s
  */
 function getRecommendation(status: APIKeyStatus["status"], apiName: string): string {
   switch (status) {
-  case "valid":
-    return "API key is active and working correctly";
-  case "not_configured":
-    return `Configure ${apiName} API key in environment variables`;
-  case "unauthorized":
-    return "Invalid API key - verify credentials and rotate if necessary";
-  case "expired":
-    return "API key has expired - rotate immediately";
-  case "rate_limited":
-    return "Rate limit reached - consider upgrading plan or reducing usage";
-  case "invalid":
-    return "API connection failed - check credentials and network connectivity";
-  default:
-    return "Unknown status - manual inspection required";
+    case "valid":
+      return "API key is active and working correctly";
+    case "not_configured":
+      return `Configure ${apiName} API key in environment variables`;
+    case "unauthorized":
+      return "Invalid API key - verify credentials and rotate if necessary";
+    case "expired":
+      return "API key has expired - rotate immediately";
+    case "rate_limited":
+      return "Rate limit reached - consider upgrading plan or reducing usage";
+    case "invalid":
+      return "API connection failed - check credentials and network connectivity";
+    default:
+      return "Unknown status - manual inspection required";
   }
 }
 
@@ -101,7 +121,6 @@ function isConfigured(...keys: (string | undefined)[]): boolean {
  */
 export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   const results: APIKeyStatus[] = [];
-  
 
   // 1. OpenAI
   const openAIResult = await testOpenAIConnection();
@@ -173,7 +192,6 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   });
 
   // 5. Windy / OpenWeather
-  console.log("Testing Weather API (Windy/OpenWeather)...");
   const windyResult = await testWindyConnection();
   const windyStatus = determineStatus(windyResult);
   results.push({
@@ -259,16 +277,16 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
 
   // Calculate summary statistics
   const validCount = results.filter(r => r.status === "valid").length;
-  const invalidCount = results.filter(r => 
-    r.status === "invalid" || 
-    r.status === "unauthorized" || 
-    r.status === "expired" ||
-    r.status === "rate_limited"
+  const invalidCount = results.filter(
+    r =>
+      r.status === "invalid" ||
+      r.status === "unauthorized" ||
+      r.status === "expired" ||
+      r.status === "rate_limited"
   ).length;
   const notConfiguredCount = results.filter(r => r.status === "not_configured").length;
 
   const summary = generateSummary(results, validCount, invalidCount, notConfiguredCount);
-
 
   return {
     timestamp: new Date(),
@@ -291,7 +309,7 @@ function generateSummary(
   notConfiguredCount: number
 ): string {
   const lines: string[] = [];
-  
+
   lines.push("=".repeat(60));
   lines.push("API KEY VALIDATION REPORT");
   lines.push("=".repeat(60));
@@ -335,21 +353,21 @@ function generateSummary(
   lines.push("=".repeat(60));
   lines.push("SUMMARY");
   lines.push("=".repeat(60));
-  
+
   if (invalidCount > 0) {
     lines.push("⚠️  WARNING: Some API keys are invalid or expired!");
     lines.push("   Please review and rotate the affected keys.");
   }
-  
+
   if (notConfiguredCount > 0) {
     lines.push(`ℹ️  INFO: ${notConfiguredCount} API(s) not configured.`);
     lines.push("   Configure them if needed for full functionality.");
   }
-  
+
   if (validCount === results.length) {
     lines.push("🎉 SUCCESS: All configured APIs are valid and working!");
   }
-  
+
   lines.push("");
   lines.push("=".repeat(60));
 
@@ -359,8 +377,7 @@ function generateSummary(
 /**
  * Print the validation report to console
  */
-export function printValidationReport(report: APIValidationReport): void {
-}
+export function printValidationReport(report: APIValidationReport): void {}
 
 /**
  * Export validation report as JSON

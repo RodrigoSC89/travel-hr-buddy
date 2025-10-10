@@ -10,7 +10,7 @@ import { RoleBasedAccess } from "@/components/auth/role-based-access";
 import { ModuleList } from "@/components/admin/ModuleList";
 import { APIStatus } from "@/components/admin/APIStatus";
 import { SystemInfo } from "@/components/admin/SystemInfo";
-import { 
+import {
   Settings,
   Activity,
   Layers,
@@ -22,7 +22,7 @@ import {
   BarChart3,
   ExternalLink,
   Terminal,
-  FileText
+  FileText,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { usePermissions } from "@/hooks/use-permissions";
@@ -55,7 +55,7 @@ const ControlPanel = () => {
             badges={[
               { icon: Activity, label: "Sistema Ativo" },
               { icon: Shield, label: userRole === "admin" ? "Admin" : "Gerente" },
-              { icon: CheckCircle, label: "32 Módulos" }
+              { icon: CheckCircle, label: "32 Módulos" },
             ]}
           />
 
@@ -368,7 +368,8 @@ const ControlPanel = () => {
                   <CardContent>
                     <div className="space-y-2">
                       <p className="text-sm text-muted-foreground mb-3">
-                        Como administrador, você tem acesso a funcionalidades avançadas de gerenciamento do sistema.
+                        Como administrador, você tem acesso a funcionalidades avançadas de
+                        gerenciamento do sistema.
                       </p>
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm">

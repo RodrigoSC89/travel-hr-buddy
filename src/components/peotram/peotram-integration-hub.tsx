@@ -3,32 +3,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { 
-  Plug, 
-  Plus, 
-  Settings, 
-  Check, 
-  X, 
+import {
+  Plug,
+  Plus,
+  Settings,
+  Check,
+  X,
   RefreshCw,
   Database,
   Mail,
-  MessageSquare,
   FileText,
   Cloud,
   Smartphone,
   Globe,
-  Shield,
-  Zap,
   Activity,
   Download,
-  Upload,
-  Link,
-  AlertTriangle
+  AlertTriangle,
 } from "lucide-react";
 
 interface Integration {
@@ -58,7 +59,7 @@ export const PeotramIntegrationHub: React.FC = () => {
         status: "connected",
         lastSync: "2024-01-22 14:30",
         config: { endpoint: "https://erp.empresa.com/api", apiKey: "***" },
-        isActive: true
+        isActive: true,
       },
       {
         id: "INT002",
@@ -68,7 +69,7 @@ export const PeotramIntegrationHub: React.FC = () => {
         status: "connected",
         lastSync: "2024-01-22 15:45",
         config: { smtpServer: "smtp.empresa.com", port: 587 },
-        isActive: true
+        isActive: true,
       },
       {
         id: "INT003",
@@ -77,7 +78,7 @@ export const PeotramIntegrationHub: React.FC = () => {
         category: "reporting",
         status: "disconnected",
         config: { workspace: "", datasetId: "" },
-        isActive: false
+        isActive: false,
       },
       {
         id: "INT004",
@@ -87,7 +88,7 @@ export const PeotramIntegrationHub: React.FC = () => {
         status: "error",
         lastSync: "2024-01-21 10:15",
         config: { siteUrl: "https://empresa.sharepoint.com", folder: "/PEOTRAM" },
-        isActive: true
+        isActive: true,
       },
       {
         id: "INT005",
@@ -97,7 +98,7 @@ export const PeotramIntegrationHub: React.FC = () => {
         status: "connected",
         lastSync: "2024-01-22 16:00",
         config: { deviceCount: 12, lastVersion: "2.1.4" },
-        isActive: true
+        isActive: true,
       },
       {
         id: "INT006",
@@ -106,61 +107,83 @@ export const PeotramIntegrationHub: React.FC = () => {
         category: "external-api",
         status: "configuring",
         config: { endpoint: "https://api.antaq.gov.br", token: "" },
-        isActive: false
-      }
+        isActive: false,
+      },
     ];
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "connected": return "bg-success/20 text-success border-success/30";
-    case "error": return "bg-destructive/20 text-destructive border-destructive/30";
-    case "configuring": return "bg-warning/20 text-warning border-warning/30";
-    case "disconnected": return "bg-muted/20 text-muted-foreground border-muted/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "connected":
+        return "bg-success/20 text-success border-success/30";
+      case "error":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      case "configuring":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "disconnected":
+        return "bg-muted/20 text-muted-foreground border-muted/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "connected": return <Check className="w-4 h-4 text-success" />;
-    case "error": return <X className="w-4 h-4 text-destructive" />;
-    case "configuring": return <Settings className="w-4 h-4 text-warning" />;
-    case "disconnected": return <X className="w-4 h-4 text-muted-foreground" />;
-    default: return <X className="w-4 h-4 text-muted-foreground" />;
+      case "connected":
+        return <Check className="w-4 h-4 text-success" />;
+      case "error":
+        return <X className="w-4 h-4 text-destructive" />;
+      case "configuring":
+        return <Settings className="w-4 h-4 text-warning" />;
+      case "disconnected":
+        return <X className="w-4 h-4 text-muted-foreground" />;
+      default:
+        return <X className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "database": return <Database className="w-5 h-5" />;
-    case "communication": return <Mail className="w-5 h-5" />;
-    case "reporting": return <FileText className="w-5 h-5" />;
-    case "storage": return <Cloud className="w-5 h-5" />;
-    case "mobile": return <Smartphone className="w-5 h-5" />;
-    case "external-api": return <Globe className="w-5 h-5" />;
-    default: return <Plug className="w-5 h-5" />;
+      case "database":
+        return <Database className="w-5 h-5" />;
+      case "communication":
+        return <Mail className="w-5 h-5" />;
+      case "reporting":
+        return <FileText className="w-5 h-5" />;
+      case "storage":
+        return <Cloud className="w-5 h-5" />;
+      case "mobile":
+        return <Smartphone className="w-5 h-5" />;
+      case "external-api":
+        return <Globe className="w-5 h-5" />;
+      default:
+        return <Plug className="w-5 h-5" />;
     }
   };
 
   const getCategoryName = (category: string) => {
     switch (category) {
-    case "database": return "Banco de Dados";
-    case "communication": return "Comunicação";
-    case "reporting": return "Relatórios";
-    case "storage": return "Armazenamento";
-    case "mobile": return "Mobile";
-    case "external-api": return "API Externa";
-    default: return category;
+      case "database":
+        return "Banco de Dados";
+      case "communication":
+        return "Comunicação";
+      case "reporting":
+        return "Relatórios";
+      case "storage":
+        return "Armazenamento";
+      case "mobile":
+        return "Mobile";
+      case "external-api":
+        return "API Externa";
+      default:
+        return category;
     }
   };
 
   const toggleIntegration = (id: string) => {
-    setIntegrations(prev => 
-      prev.map(integration => 
-        integration.id === id 
-          ? { ...integration, isActive: !integration.isActive }
-          : integration
+    setIntegrations(prev =>
+      prev.map(integration =>
+        integration.id === id ? { ...integration, isActive: !integration.isActive } : integration
       )
     );
   };
@@ -174,11 +197,9 @@ export const PeotramIntegrationHub: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-foreground">Central de Integrações</h2>
-          <p className="text-muted-foreground">
-            Gerencie conexões com sistemas externos e APIs
-          </p>
+          <p className="text-muted-foreground">Gerencie conexões com sistemas externos e APIs</p>
         </div>
-        
+
         <div className="flex gap-2">
           <Button variant="outline">
             <RefreshCw className="w-4 h-4 mr-2" />
@@ -214,9 +235,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                   <Button variant="outline" onClick={() => setIsConfigOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={() => setIsConfigOpen(false)}>
-                    Configurar
-                  </Button>
+                  <Button onClick={() => setIsConfigOpen(false)}>Configurar</Button>
                 </div>
               </div>
             </DialogContent>
@@ -245,37 +264,43 @@ export const PeotramIntegrationHub: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
                   <Check className="w-8 h-8 text-success" />
                   <div>
-                    <p className="text-2xl font-bold">{integrations.filter(i => i.status === "connected").length}</p>
+                    <p className="text-2xl font-bold">
+                      {integrations.filter(i => i.status === "connected").length}
+                    </p>
                     <p className="text-sm text-muted-foreground">Conectadas</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
                   <AlertTriangle className="w-8 h-8 text-warning" />
                   <div>
-                    <p className="text-2xl font-bold">{integrations.filter(i => i.status === "error").length}</p>
+                    <p className="text-2xl font-bold">
+                      {integrations.filter(i => i.status === "error").length}
+                    </p>
                     <p className="text-sm text-muted-foreground">Com Erro</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
                   <Activity className="w-8 h-8 text-info" />
                   <div>
-                    <p className="text-2xl font-bold">{integrations.filter(i => i.isActive).length}</p>
+                    <p className="text-2xl font-bold">
+                      {integrations.filter(i => i.isActive).length}
+                    </p>
                     <p className="text-sm text-muted-foreground">Ativas</p>
                   </div>
                 </div>
@@ -284,7 +309,7 @@ export const PeotramIntegrationHub: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {integrations.map((integration) => (
+            {integrations.map(integration => (
               <Card key={integration.id} className="hover:shadow-lg transition-all">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -300,7 +325,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                         {getStatusIcon(integration.status)}
                         {integration.status}
                       </Badge>
-                      <Switch 
+                      <Switch
                         checked={integration.isActive}
                         onCheckedChange={() => toggleIntegration(integration.id)}
                       />
@@ -309,7 +334,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">{integration.description}</p>
-                  
+
                   {integration.lastSync && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <RefreshCw className="w-3 h-3" />
@@ -318,18 +343,18 @@ export const PeotramIntegrationHub: React.FC = () => {
                   )}
 
                   <div className="flex gap-2 pt-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="flex-1"
                       onClick={() => setSelectedIntegration(integration)}
                     >
                       <Settings className="w-3 h-3 mr-1" />
                       Configurar
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="flex-1"
                       onClick={() => syncIntegration(integration.id)}
                       disabled={integration.status !== "connected"}
@@ -346,43 +371,45 @@ export const PeotramIntegrationHub: React.FC = () => {
 
         <TabsContent value="active" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {integrations.filter(i => i.isActive).map((integration) => (
-              <Card key={integration.id} className="hover:shadow-lg transition-all">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      {getCategoryIcon(integration.category)}
-                      <CardTitle className="text-lg">{integration.name}</CardTitle>
+            {integrations
+              .filter(i => i.isActive)
+              .map(integration => (
+                <Card key={integration.id} className="hover:shadow-lg transition-all">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        {getCategoryIcon(integration.category)}
+                        <CardTitle className="text-lg">{integration.name}</CardTitle>
+                      </div>
+                      <Badge variant="outline" className={getStatusColor(integration.status)}>
+                        {getStatusIcon(integration.status)}
+                        {integration.status}
+                      </Badge>
                     </div>
-                    <Badge variant="outline" className={getStatusColor(integration.status)}>
-                      {getStatusIcon(integration.status)}
-                      {integration.status}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">{integration.description}</p>
-                  
-                  {integration.lastSync && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                      <RefreshCw className="w-3 h-3" />
-                      Última sincronização: {integration.lastSync}
-                    </div>
-                  )}
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">{integration.description}</p>
 
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1">
-                      <Activity className="w-3 h-3 mr-1" />
-                      Monitor
-                    </Button>
-                    <Button variant="outline" size="sm" className="flex-1">
-                      <Settings className="w-3 h-3 mr-1" />
-                      Configurar
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    {integration.lastSync && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                        <RefreshCw className="w-3 h-3" />
+                        Última sincronização: {integration.lastSync}
+                      </div>
+                    )}
+
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <Activity className="w-3 h-3 mr-1" />
+                        Monitor
+                      </Button>
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <Settings className="w-3 h-3 mr-1" />
+                        Configurar
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
           </div>
         </TabsContent>
 

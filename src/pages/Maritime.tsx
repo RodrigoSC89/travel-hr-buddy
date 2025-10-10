@@ -8,24 +8,21 @@ import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
 import { supabase } from "@/integrations/supabase/client";
-import { 
-  Ship, 
-  Users, 
-  AlertTriangle, 
-  CheckCircle, 
-  TrendingUp, 
+import {
+  Ship,
+  Users,
+  AlertTriangle,
+  CheckCircle,
+  TrendingUp,
   FileText,
   Calendar,
   Activity,
   Shield,
-  Globe,
   BarChart3,
   Settings,
-  MapPin,
-  Navigation,
   QrCode,
   Bell,
-  Wrench
+  Wrench,
 } from "lucide-react";
 import { ChecklistScheduler } from "../components/maritime/checklist-scheduler";
 import { ChecklistReports } from "../components/maritime/checklist-reports";
@@ -56,7 +53,7 @@ export default function Maritime() {
     pendingCertifications: 0,
     completedAudits: 0,
     activeAlerts: 0,
-    complianceScore: 0
+    complianceScore: 0,
   });
   const [loading, setLoading] = useState(true);
   const [vessels, setVessels] = useState<any[]>([]);
@@ -69,7 +66,7 @@ export default function Maritime() {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      
+
       // Carregar dados dos navios
       const { data: vesselsData, error: vesselsError } = await supabase
         .from("vessels")
@@ -89,14 +86,13 @@ export default function Maritime() {
         pendingCertifications: 8,
         completedAudits: 12,
         activeAlerts: 3,
-        complianceScore: 87
+        complianceScore: 87,
       });
-      
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao carregar dados do dashboard",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -104,30 +100,40 @@ export default function Maritime() {
   };
 
   const StatCard = ({ title, value, icon: Icon, variant = "default", trend, onClick }: any) => (
-    <Card className={onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""} onClick={onClick}>
+    <Card
+      className={onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""}
+      onClick={onClick}
+    >
       <CardContent className="pt-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className={`text-2xl font-bold ${
-              variant === "danger" ? "text-red-600" : 
-                variant === "warning" ? "text-yellow-600" : 
-                  variant === "success" ? "text-green-600" : ""
-            }`}>
+            <p
+              className={`text-2xl font-bold ${
+                variant === "danger"
+                  ? "text-red-600"
+                  : variant === "warning"
+                    ? "text-yellow-600"
+                    : variant === "success"
+                      ? "text-green-600"
+                      : ""
+              }`}
+            >
               {value}
             </p>
-            {trend && (
-              <p className="text-xs text-muted-foreground mt-1">
-                {trend}
-              </p>
-            )}
+            {trend && <p className="text-xs text-muted-foreground mt-1">{trend}</p>}
           </div>
-          <Icon className={`h-8 w-8 ${
-            variant === "danger" ? "text-red-600" : 
-              variant === "warning" ? "text-yellow-600" : 
-                variant === "success" ? "text-green-600" : 
-                  "text-muted-foreground"
-          }`} />
+          <Icon
+            className={`h-8 w-8 ${
+              variant === "danger"
+                ? "text-red-600"
+                : variant === "warning"
+                  ? "text-yellow-600"
+                  : variant === "success"
+                    ? "text-green-600"
+                    : "text-muted-foreground"
+            }`}
+          />
         </div>
       </CardContent>
     </Card>
@@ -151,7 +157,7 @@ export default function Maritime() {
         badges={[
           { icon: Users, label: `${stats.activeCrew} Tripulação` },
           { icon: CheckCircle, label: `${stats.complianceScore}% Compliance` },
-          { icon: TrendingUp, label: "Performance" }
+          { icon: TrendingUp, label: "Performance" },
         ]}
       />
 
@@ -237,13 +243,14 @@ export default function Maritime() {
                   <Ship className="h-5 w-5" />
                   Status da Frota
                 </CardTitle>
-                <CardDescription>
-                  Monitoramento em tempo real das embarcações
-                </CardDescription>
+                <CardDescription>Monitoramento em tempo real das embarcações</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {vessels.map((vessel, index) => (
-                  <div key={vessel.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={vessel.id}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div className="flex items-center space-x-3">
                       <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                       <div>
@@ -256,7 +263,11 @@ export default function Maritime() {
                     <Badge variant="outline">Operacional</Badge>
                   </div>
                 ))}
-                <Button variant="outline" className="w-full" onClick={() => navigate("/fleet-dashboard")}>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => navigate("/fleet-dashboard")}
+                >
                   Ver Todas as Embarcações
                 </Button>
               </CardContent>
@@ -269,56 +280,102 @@ export default function Maritime() {
                   <Activity className="h-5 w-5" />
                   Ações Rápidas
                 </CardTitle>
-                <CardDescription>
-                  Acesso direto às funcionalidades principais
-                </CardDescription>
+                <CardDescription>Acesso direto às funcionalidades principais</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/peotram")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => navigate("/peotram")}
+                >
                   <FileText className="h-4 w-4 mr-2" />
                   Nova Auditoria PEOTRAM
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/crew-management")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => navigate("/crew-management")}
+                >
                   <Users className="h-4 w-4 mr-2" />
                   Gerenciar Tripulação
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maritime-certifications")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => navigate("/maritime-certifications")}
+                >
                   <Shield className="h-4 w-4 mr-2" />
                   Verificar Certificações
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("dashboard")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => setActiveFeature("dashboard")}
+                >
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Dashboard de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("scheduler")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => setActiveFeature("scheduler")}
+                >
                   <Calendar className="h-4 w-4 mr-2" />
                   Agendamento de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("reports")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => setActiveFeature("reports")}
+                >
                   <FileText className="h-4 w-4 mr-2" />
                   Relatórios de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("qr-equipment")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => setActiveFeature("qr-equipment")}
+                >
                   <QrCode className="h-4 w-4 mr-2" />
                   QR Equipamentos
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("notifications")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => setActiveFeature("notifications")}
+                >
                   <Bell className="h-4 w-4 mr-2" />
                   Central de Notificações
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("fleet-monitor")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => setActiveFeature("fleet-monitor")}
+                >
                   <Activity className="h-4 w-4 mr-2" />
                   Monitor Tempo Real
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("performance")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => setActiveFeature("performance")}
+                >
                   <TrendingUp className="h-4 w-4 mr-2" />
                   Performance de Navios
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("iot-sensors")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => setActiveFeature("iot-sensors")}
+                >
                   <Activity className="h-4 w-4 mr-2" />
                   Sensores IoT
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("predictive-maintenance")}>
+                <Button
+                  className="w-full justify-start"
+                  variant="outline"
+                  onClick={() => setActiveFeature("predictive-maintenance")}
+                >
                   <Wrench className="h-4 w-4 mr-2" />
                   Manutenção Preditiva
                 </Button>
@@ -333,9 +390,7 @@ export default function Maritime() {
                 <Shield className="h-5 w-5" />
                 Visão Geral de Conformidade
               </CardTitle>
-              <CardDescription>
-                Status atual dos requisitos regulatórios
-              </CardDescription>
+              <CardDescription>Status atual dos requisitos regulatórios</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -376,9 +431,7 @@ export default function Maritime() {
           <Card>
             <CardHeader>
               <CardTitle>Gestão de Frota</CardTitle>
-              <CardDescription>
-                Controle detalhado de todas as embarcações
-              </CardDescription>
+              <CardDescription>Controle detalhado de todas as embarcações</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
@@ -387,7 +440,9 @@ export default function Maritime() {
                 <p className="text-muted-foreground mb-4">
                   Acesse a gestão completa da frota através do menu dedicado
                 </p>
-                <Button onClick={() => navigate("/fleet-dashboard")}>Ir para Gestão de Frota</Button>
+                <Button onClick={() => navigate("/fleet-dashboard")}>
+                  Ir para Gestão de Frota
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -397,9 +452,7 @@ export default function Maritime() {
           <Card>
             <CardHeader>
               <CardTitle>Conformidade Regulatória</CardTitle>
-              <CardDescription>
-                Monitoramento de compliance e auditorias
-              </CardDescription>
+              <CardDescription>Monitoramento de compliance e auditorias</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
@@ -418,18 +471,22 @@ export default function Maritime() {
           <Card>
             <CardHeader>
               <CardTitle>Operações Marítimas</CardTitle>
-              <CardDescription>
-                Controle operacional e logístico
-              </CardDescription>
+              <CardDescription>Controle operacional e logístico</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate("/task-management")}>
+                <div
+                  className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50"
+                  onClick={() => navigate("/task-management")}
+                >
                   <Calendar className="h-8 w-8 mx-auto mb-2 text-blue-600" />
                   <h4 className="font-semibold">Planejamento</h4>
                   <p className="text-sm text-muted-foreground">Cronogramas e roteiros</p>
                 </div>
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate("/fleet-tracking")}>
+                <div
+                  className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50"
+                  onClick={() => navigate("/fleet-tracking")}
+                >
                   <Activity className="h-8 w-8 mx-auto mb-2 text-green-600" />
                   <h4 className="font-semibold">Monitoramento</h4>
                   <p className="text-sm text-muted-foreground">Tempo real</p>
@@ -439,7 +496,10 @@ export default function Maritime() {
                   <h4 className="font-semibold">Manutenção</h4>
                   <p className="text-sm text-muted-foreground">Preventiva e corretiva</p>
                 </div>
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate("/analytics")}>
+                <div
+                  className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50"
+                  onClick={() => navigate("/analytics")}
+                >
                   <BarChart3 className="h-8 w-8 mx-auto mb-2 text-purple-600" />
                   <h4 className="font-semibold">Analytics</h4>
                   <p className="text-sm text-muted-foreground">KPIs operacionais</p>

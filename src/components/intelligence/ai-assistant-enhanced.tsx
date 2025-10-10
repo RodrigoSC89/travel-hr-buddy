@@ -4,29 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
-import { 
-  Brain, 
-  MessageCircle, 
-  Mic, 
-  MicOff, 
-  Send, 
-  Sparkles, 
-  Bot, 
-  User, 
-  Star, 
-  TrendingUp, 
-  Shield, 
-  Zap, 
+import {
+  Brain,
+  MessageCircle,
+  Mic,
+  MicOff,
+  Send,
+  Bot,
+  User,
+  Star,
+  TrendingUp,
+  Zap,
   Clock,
   BarChart3,
-  FileText,
-  Search,
-  Settings,
   Globe,
-  Heart,
   Crown,
-  Diamond
+  Diamond,
 } from "lucide-react";
 
 interface Message {
@@ -62,10 +55,11 @@ const AIAssistantEnhanced: React.FC = () => {
       {
         id: "welcome",
         type: "ai",
-        content: "Olá! Sou seu assistente de IA avançado do Nautilus One. Como posso ajudá-lo hoje? Posso analisar dados, fazer previsões, dar recomendações e muito mais!",
+        content:
+          "Olá! Sou seu assistente de IA avançado do Nautilus One. Como posso ajudá-lo hoje? Posso analisar dados, fazer previsões, dar recomendações e muito mais!",
         timestamp: new Date(),
-        category: "general"
-      }
+        category: "general",
+      },
     ]);
   }, []);
 
@@ -80,7 +74,7 @@ const AIAssistantEnhanced: React.FC = () => {
       description: "Perguntas gerais e navegação do sistema",
       icon: MessageCircle,
       color: "primary",
-      active: true
+      active: true,
     },
     {
       id: "analysis",
@@ -88,7 +82,7 @@ const AIAssistantEnhanced: React.FC = () => {
       description: "Análise profunda de métricas e KPIs",
       icon: BarChart3,
       color: "info",
-      active: true
+      active: true,
     },
     {
       id: "prediction",
@@ -96,7 +90,7 @@ const AIAssistantEnhanced: React.FC = () => {
       description: "Previsões baseadas em machine learning",
       icon: Brain,
       color: "success",
-      active: true
+      active: true,
     },
     {
       id: "recommendation",
@@ -104,8 +98,8 @@ const AIAssistantEnhanced: React.FC = () => {
       description: "Sugestões inteligentes e otimizações",
       icon: Star,
       color: "warning",
-      active: true
-    }
+      active: true,
+    },
   ];
 
   const quickActions = [
@@ -114,7 +108,7 @@ const AIAssistantEnhanced: React.FC = () => {
     { text: "Como otimizar o workflow de checklists?", category: "recommendation" },
     { text: "Relatório de conformidade PEOTRAM", category: "analysis" },
     { text: "Tendências de viagens corporativas", category: "prediction" },
-    { text: "Sugestões para reduzir custos", category: "recommendation" }
+    { text: "Sugestões para reduzir custos", category: "recommendation" },
   ];
 
   const handleSendMessage = async () => {
@@ -125,7 +119,7 @@ const AIAssistantEnhanced: React.FC = () => {
       type: "user",
       content: inputMessage,
       timestamp: new Date(),
-      category: selectedCapability as any
+      category: selectedCapability as any,
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -140,7 +134,7 @@ const AIAssistantEnhanced: React.FC = () => {
         type: "ai",
         content: aiResponse,
         timestamp: new Date(),
-        category: selectedCapability as any
+        category: selectedCapability as any,
       };
 
       setMessages(prev => [...prev, aiMessage]);
@@ -153,23 +147,23 @@ const AIAssistantEnhanced: React.FC = () => {
       general: [
         "Entendi sua pergunta. Com base nos dados do sistema Nautilus One, posso fornecer informações detalhadas sobre esse tópico.",
         "Excelente pergunta! O sistema possui recursos avançados para isso. Vou analisar as informações disponíveis.",
-        "Baseado na sua consulta, posso ajudar com análises específicas e recomendações personalizadas."
+        "Baseado na sua consulta, posso ajudar com análises específicas e recomendações personalizadas.",
       ],
       analysis: [
         "Analisando os dados... Identifiquei padrões interessantes nos últimos 30 dias. A performance geral está 12% acima da média.",
         "Com base na análise de dados históricos, observo uma tendência de crescimento sustentável em 85% dos indicadores.",
-        "Os dados mostram eficiência operacional de 94%, com oportunidades de melhoria em processos de aprovação."
+        "Os dados mostram eficiência operacional de 94%, com oportunidades de melhoria em processos de aprovação.",
       ],
       prediction: [
         "Usando algoritmos de machine learning, prevejo um aumento de 18% na demanda para o próximo trimestre.",
         "As previsões indicam uma probabilidade de 87% de atingimento das metas estabelecidas, com base em tendências atuais.",
-        "Modelo preditivo sugere otimização de recursos em 23% se implementadas as recomendações propostas."
+        "Modelo preditivo sugere otimização de recursos em 23% se implementadas as recomendações propostas.",
       ],
       recommendation: [
         "Recomendo implementar automação em 3 processos chave que resultará em economia de 35% do tempo.",
         "Sugiro ajustes na estratégia atual que podem aumentar a eficiência em 28% e reduzir custos em 15%.",
-        "Baseado na análise, recomendo priorizar a otimização do workflow de aprovações para melhor performance."
-      ]
+        "Baseado na análise, recomendo priorizar a otimização do workflow de aprovações para melhor performance.",
+      ],
     };
 
     const categoryResponses = responses[capability as keyof typeof responses] || responses.general;
@@ -198,17 +192,21 @@ const AIAssistantEnhanced: React.FC = () => {
       <div className="absolute inset-0 bg-dots opacity-20" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-success/10 to-transparent rounded-full blur-3xl" />
-      
+
       <div className="relative z-10 container mx-auto p-6 space-y-8">
         {/* Enhanced Hero Section */}
-        <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary-glow p-8 text-primary-foreground 
-          transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-          
+        <div
+          className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary-glow p-8 text-primary-foreground 
+          transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+        >
           {/* Animated Background Pattern */}
           <div className="absolute inset-0 bg-mesh opacity-20" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-success/15 to-transparent rounded-full blur-2xl animate-pulse" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: "1s" }} />
-          
+          <div
+            className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
+
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-4 rounded-2xl bg-primary/20 backdrop-blur-sm animate-pulse-glow">
@@ -224,12 +222,12 @@ const AIAssistantEnhanced: React.FC = () => {
                 </p>
               </div>
             </div>
-            
+
             <p className="text-lg opacity-95 mb-8 max-w-3xl drop-shadow-md font-medium">
-              Assistente de IA mais avançado do mercado com análise preditiva, processamento de linguagem natural 
-              e capacidades de automação extraordinárias.
+              Assistente de IA mais avançado do mercado com análise preditiva, processamento de
+              linguagem natural e capacidades de automação extraordinárias.
             </p>
-            
+
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center gap-2 bg-success/90 text-success-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-success shadow-lg border border-success/30">
                 <Brain className="h-5 w-5 animate-pulse" />
@@ -250,15 +248,17 @@ const AIAssistantEnhanced: React.FC = () => {
         {/* AI Capabilities */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {aiCapabilities.map((capability, index) => (
-            <Card 
-              key={capability.id} 
+            <Card
+              key={capability.id}
               className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
                 ${selectedCapability === capability.id ? "ring-2 ring-primary shadow-primary/25" : ""}
                 bg-gradient-to-br from-card via-card/95 to-${capability.color}/5 border-${capability.color}/20 hover:border-${capability.color}/40`}
               onClick={() => setSelectedCapability(capability.id)}
             >
               <CardContent className="p-4 flex items-center gap-3">
-                <div className={`p-3 rounded-xl bg-${capability.color}/20 group-hover:scale-110 transition-transform duration-300`}>
+                <div
+                  className={`p-3 rounded-xl bg-${capability.color}/20 group-hover:scale-110 transition-transform duration-300`}
+                >
                   <capability.icon className={`w-6 h-6 text-${capability.color}`} />
                 </div>
                 <div>
@@ -293,33 +293,37 @@ const AIAssistantEnhanced: React.FC = () => {
                   </Badge>
                 </CardDescription>
               </CardHeader>
-              
+
               <CardContent className="flex-1 flex flex-col">
                 <ScrollArea className="flex-1 pr-4">
                   <div className="space-y-4">
-                    {messages.map((message) => (
+                    {messages.map(message => (
                       <div
                         key={message.id}
                         className={`flex items-start gap-3 ${
                           message.type === "user" ? "flex-row-reverse" : "flex-row"
                         }`}
                       >
-                        <div className={`p-2 rounded-xl ${
-                          message.type === "user" 
-                            ? "bg-primary text-primary-foreground" 
-                            : "bg-gradient-to-br from-success/20 to-success/10 border border-success/30"
-                        }`}>
+                        <div
+                          className={`p-2 rounded-xl ${
+                            message.type === "user"
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-gradient-to-br from-success/20 to-success/10 border border-success/30"
+                          }`}
+                        >
                           {message.type === "user" ? (
                             <User className="w-4 h-4" />
                           ) : (
                             <Bot className="w-4 h-4 text-success" />
                           )}
                         </div>
-                        <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
-                          message.type === "user"
-                            ? "bg-primary text-primary-foreground ml-auto"
-                            : "bg-card border border-border shadow-sm"
-                        }`}>
+                        <div
+                          className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
+                            message.type === "user"
+                              ? "bg-primary text-primary-foreground ml-auto"
+                              : "bg-card border border-border shadow-sm"
+                          }`}
+                        >
                           <p className="text-sm">{message.content}</p>
                           <span className="text-xs opacity-70 mt-2 block">
                             {message.timestamp.toLocaleTimeString()}
@@ -327,7 +331,7 @@ const AIAssistantEnhanced: React.FC = () => {
                         </div>
                       </div>
                     ))}
-                    
+
                     {isProcessing && (
                       <div className="flex items-start gap-3">
                         <div className="p-2 rounded-xl bg-gradient-to-br from-success/20 to-success/10 border border-success/30">
@@ -336,9 +340,17 @@ const AIAssistantEnhanced: React.FC = () => {
                         <div className="bg-card border border-border shadow-sm px-4 py-3 rounded-2xl">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
-                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
-                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.4s" }} />
-                            <span className="text-sm text-muted-foreground ml-2">IA processando...</span>
+                            <div
+                              className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                              style={{ animationDelay: "0.2s" }}
+                            />
+                            <div
+                              className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                              style={{ animationDelay: "0.4s" }}
+                            />
+                            <span className="text-sm text-muted-foreground ml-2">
+                              IA processando...
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -346,16 +358,16 @@ const AIAssistantEnhanced: React.FC = () => {
                     <div ref={messagesEndRef} />
                   </div>
                 </ScrollArea>
-                
+
                 {/* Input Area */}
                 <div className="mt-4 space-y-3">
                   <div className="flex gap-2">
                     <div className="flex-1">
                       <Input
                         value={inputMessage}
-                        onChange={(e) => setInputMessage(e.target.value)}
+                        onChange={e => setInputMessage(e.target.value)}
                         placeholder="Digite sua pergunta para a IA..."
-                        onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                        onKeyPress={e => e.key === "Enter" && handleSendMessage()}
                         className="bg-background/50 backdrop-blur-sm"
                       />
                     </div>
@@ -367,7 +379,7 @@ const AIAssistantEnhanced: React.FC = () => {
                     >
                       {isVoiceActive ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                     </Button>
-                    <Button 
+                    <Button
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim() || isProcessing}
                       className="shrink-0"
@@ -375,7 +387,7 @@ const AIAssistantEnhanced: React.FC = () => {
                       <Send className="h-4 w-4" />
                     </Button>
                   </div>
-                  
+
                   {isVoiceActive && (
                     <div className="text-center py-2">
                       <div className="inline-flex items-center gap-2 px-3 py-1 bg-destructive/10 text-destructive rounded-full text-sm">

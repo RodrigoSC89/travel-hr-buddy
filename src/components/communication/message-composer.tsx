@@ -4,11 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { supabase } from "@/integrations/supabase/client";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import {
   Send,
@@ -17,7 +28,6 @@ import {
   User,
   Hash,
   AlertTriangle,
-  Star,
   Clock,
   FileText,
   Image,
@@ -26,11 +36,9 @@ import {
   AtSign,
   Save,
   Eye,
-  Zap,
   Building,
   UserCheck,
   Globe,
-  Shield
 } from "lucide-react";
 
 interface MessageComposerProps {
@@ -52,15 +60,15 @@ interface MessageTemplate {
   variables: string[];
 }
 
-export const MessageComposer: React.FC<MessageComposerProps> = ({
-  onMessageSent
-}) => {
+export const MessageComposer: React.FC<MessageComposerProps> = ({ onMessageSent }) => {
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [selectedRecipients, setSelectedRecipients] = useState<string[]>([]);
   const [messageContent, setMessageContent] = useState("");
   const [subject, setSubject] = useState("");
   const [priority, setPriority] = useState<"low" | "normal" | "high" | "critical">("normal");
-  const [category, setCategory] = useState<"general" | "hr" | "operations" | "emergency">("general");
+  const [category, setCategory] = useState<"general" | "hr" | "operations" | "emergency">(
+    "general"
+  );
   const [isUrgent, setIsUrgent] = useState(false);
   const [isBroadcast, setIsBroadcast] = useState(false);
   const [attachments, setAttachments] = useState<File[]>([]);
@@ -75,24 +83,24 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   // Real-time validation
   useEffect(() => {
     const errors: string[] = [];
-    
+
     if (messageContent.length > 5000) {
       errors.push("Mensagem excede o limite de 5000 caracteres");
     }
-    
+
     if (selectedRecipients.length === 0 && messageContent.trim()) {
       errors.push("Selecione ao menos um destinatário");
     }
-    
+
     if (attachments.length > 10) {
       errors.push("Máximo de 10 anexos permitidos");
     }
-    
+
     const totalSize = attachments.reduce((sum, file) => sum + file.size, 0);
     if (totalSize > 50 * 1024 * 1024) {
       errors.push("Tamanho total dos anexos excede 50MB");
     }
-    
+
     setValidationErrors(errors);
   }, [messageContent, selectedRecipients, attachments]);
 
@@ -111,28 +119,29 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         { id: "user-3", name: "Marina Santos", role: "Capitã", type: "user" },
         { id: "user-4", name: "João Oliveira", role: "DPO", type: "user" },
         { id: "user-5", name: "Pedro Costa", role: "Engenheiro Chefe", type: "user" },
-        
+
         // Channels
         { id: "channel-1", name: "Geral", type: "channel" },
         { id: "channel-2", name: "RH - Recursos Humanos", type: "channel" },
         { id: "channel-3", name: "Operações Marítimas", type: "channel" },
         { id: "channel-4", name: "Emergência", type: "channel" },
-        
+
         // Departments
         { id: "dept-1", name: "Departamento de RH", type: "department" },
         { id: "dept-2", name: "Operações", type: "department" },
         { id: "dept-3", name: "Engenharia e Máquinas", type: "department" },
         { id: "dept-4", name: "Deck e Navegação", type: "department" },
-        
+
         // Broadcast
         { id: "broadcast-1", name: "Todos os Usuários", type: "broadcast" },
         { id: "broadcast-2", name: "Tripulantes Embarcados", type: "broadcast" },
-        { id: "broadcast-3", name: "Equipe em Terra", type: "broadcast" }
+        { id: "broadcast-3", name: "Equipe em Terra", type: "broadcast" },
       ];
 
       setRecipients(mockRecipients);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const loadTemplates = async () => {
@@ -142,43 +151,46 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         {
           id: "1",
           name: "Confirmação de Embarque",
-          content: "Prezado {{nome}}, confirmo seu embarque para o dia {{data}} na embarcação {{embarcacao}}. Favor confirmar recebimento.",
+          content:
+            "Prezado {{nome}}, confirmo seu embarque para o dia {{data}} na embarcação {{embarcacao}}. Favor confirmar recebimento.",
           category: "operations",
-          variables: ["nome", "data", "embarcacao"]
+          variables: ["nome", "data", "embarcacao"],
         },
         {
           id: "2",
           name: "Lembrete de Certificação",
-          content: "Olá {{nome}}, sua certificação {{certificacao}} vence em {{dias}} dias. Favor providenciar a renovação.",
+          content:
+            "Olá {{nome}}, sua certificação {{certificacao}} vence em {{dias}} dias. Favor providenciar a renovação.",
           category: "hr",
-          variables: ["nome", "certificacao", "dias"]
+          variables: ["nome", "certificacao", "dias"],
         },
         {
           id: "3",
           name: "Comunicado Geral",
-          content: "Comunicamos que {{assunto}}. Para mais informações, entre em contato com {{contato}}.",
+          content:
+            "Comunicamos que {{assunto}}. Para mais informações, entre em contato com {{contato}}.",
           category: "general",
-          variables: ["assunto", "contato"]
+          variables: ["assunto", "contato"],
         },
         {
           id: "4",
           name: "Alerta de Emergência",
-          content: "ALERTA: {{situacao}}. Todos devem {{acao}}. Confirmem recebimento imediatamente.",
+          content:
+            "ALERTA: {{situacao}}. Todos devem {{acao}}. Confirmem recebimento imediatamente.",
           category: "emergency",
-          variables: ["situacao", "acao"]
-        }
+          variables: ["situacao", "acao"],
+        },
       ];
 
       setTemplates(mockTemplates);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const handleRecipientToggle = (recipientId: string) => {
-    setSelectedRecipients(prev => 
-      prev.includes(recipientId) 
-        ? prev.filter(id => id !== recipientId)
-        : [...prev, recipientId]
+    setSelectedRecipients(prev =>
+      prev.includes(recipientId) ? prev.filter(id => id !== recipientId) : [...prev, recipientId]
     );
   };
 
@@ -188,7 +200,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       setMessageContent(template.content);
       setSelectedTemplate(templateId);
       setIsTemplateDialogOpen(false);
-      
+
       // Auto-set category based on template
       if (["general", "hr", "operations", "emergency"].includes(template.category)) {
         setCategory(template.category as any);
@@ -213,22 +225,22 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement;
       const files = Array.from(target.files || []);
-      
+
       // Validate file sizes (max 10MB per image)
       const invalidFiles = files.filter(f => f.size > 10 * 1024 * 1024);
       if (invalidFiles.length > 0) {
         toast({
           title: "Erro",
           description: `${invalidFiles.length} arquivo(s) excedem o tamanho máximo de 10MB`,
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
-      
+
       setAttachments(prev => [...prev, ...files]);
       toast({
         title: "Sucesso",
-        description: `${files.length} imagem(ns) adicionada(s)`
+        description: `${files.length} imagem(ns) adicionada(s)`,
       });
     };
     input.click();
@@ -242,22 +254,22 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement;
       const files = Array.from(target.files || []);
-      
+
       // Validate file sizes (max 25MB per audio)
       const invalidFiles = files.filter(f => f.size > 25 * 1024 * 1024);
       if (invalidFiles.length > 0) {
         toast({
           title: "Erro",
           description: `${invalidFiles.length} arquivo(s) excedem o tamanho máximo de 25MB`,
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
-      
+
       setAttachments(prev => [...prev, ...files]);
       toast({
         title: "Sucesso",
-        description: `${files.length} áudio(s) adicionado(s)`
+        description: `${files.length} áudio(s) adicionado(s)`,
       });
     };
     input.click();
@@ -266,7 +278,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   const toggleEmojiPicker = () => {
     toast({
       title: "Emoji Picker",
-      description: "Funcionalidade de emojis em breve!"
+      description: "Funcionalidade de emojis em breve!",
     });
   };
 
@@ -276,7 +288,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         toast({
           title: "Aviso",
           description: "Não há conteúdo para salvar",
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
@@ -288,13 +300,13 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       toast({
         title: "Sucesso",
-        description: "Rascunho salvo com sucesso"
+        description: "Rascunho salvo com sucesso",
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar rascunho",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -307,7 +319,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         toast({
           title: "Erro",
           description: "Selecione destinatários e escreva uma mensagem",
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
@@ -333,7 +345,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       toast({
         title: "Erro",
         description: "Erro ao enviar mensagem",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -342,27 +354,38 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
   const getRecipientIcon = (type: string) => {
     switch (type) {
-    case "user": return User;
-    case "channel": return Hash;
-    case "department": return Building;
-    case "broadcast": return Globe;
-    default: return Users;
+      case "user":
+        return User;
+      case "channel":
+        return Hash;
+      case "department":
+        return Building;
+      case "broadcast":
+        return Globe;
+      default:
+        return Users;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical": return "text-destructive";
-    case "high": return "text-warning";
-    case "normal": return "text-primary";
-    case "low": return "text-muted-foreground";
-    default: return "text-muted-foreground";
+      case "critical":
+        return "text-destructive";
+      case "high":
+        return "text-warning";
+      case "normal":
+        return "text-primary";
+      case "low":
+        return "text-muted-foreground";
+      default:
+        return "text-muted-foreground";
     }
   };
 
-  const filteredRecipients = recipients.filter(r => 
-    r.name.toLowerCase().includes(recipientSearch.toLowerCase()) ||
-    r.role?.toLowerCase().includes(recipientSearch.toLowerCase())
+  const filteredRecipients = recipients.filter(
+    r =>
+      r.name.toLowerCase().includes(recipientSearch.toLowerCase()) ||
+      r.role?.toLowerCase().includes(recipientSearch.toLowerCase())
   );
 
   return (
@@ -378,14 +401,14 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           {/* Recipients Section */}
           <div className="space-y-4">
             <Label className="text-base font-medium">Destinatários</Label>
-            
+
             {/* Recipient Search */}
             <div className="relative">
               <AtSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar usuários, canais ou departamentos..."
                 value={recipientSearch}
-                onChange={(e) => setRecipientSearch(e.target.value)}
+                onChange={e => setRecipientSearch(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -398,13 +421,13 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                   {selectedRecipients.map(id => {
                     const recipient = recipients.find(r => r.id === id);
                     if (!recipient) return null;
-                    
+
                     const Icon = getRecipientIcon(recipient.type);
-                    
+
                     return (
-                      <Badge 
-                        key={id} 
-                        variant="secondary" 
+                      <Badge
+                        key={id}
+                        variant="secondary"
                         className="gap-1 cursor-pointer"
                         onClick={() => handleRecipientToggle(id)}
                       >
@@ -423,14 +446,12 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               {filteredRecipients.map(recipient => {
                 const Icon = getRecipientIcon(recipient.type);
                 const isSelected = selectedRecipients.includes(recipient.id);
-                
+
                 return (
                   <div
                     key={recipient.id}
                     className={`flex items-center gap-2 p-2 rounded cursor-pointer transition-colors ${
-                      isSelected 
-                        ? "bg-primary text-primary-foreground" 
-                        : "hover:bg-muted"
+                      isSelected ? "bg-primary text-primary-foreground" : "hover:bg-muted"
                     }`}
                     onClick={() => handleRecipientToggle(recipient.id)}
                   >
@@ -464,7 +485,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div>
               <Label>Categoria</Label>
               <Select value={category} onValueChange={(value: any) => setCategory(value)}>
@@ -498,7 +519,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             <Input
               placeholder="Assunto da mensagem..."
               value={subject}
-              onChange={(e) => setSubject(e.target.value)}
+              onChange={e => setSubject(e.target.value)}
             />
           </div>
 
@@ -547,22 +568,31 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                     </div>
                   </DialogContent>
                 </Dialog>
-                
-                <Button variant="outline" size="sm" onClick={toggleEmojiPicker} aria-label="Adicionar emoji">
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={toggleEmojiPicker}
+                  aria-label="Adicionar emoji"
+                >
                   <Smile className="h-4 w-4" />
                 </Button>
               </div>
             </div>
-            
+
             <Textarea
               placeholder="Digite sua mensagem aqui..."
               value={messageContent}
-              onChange={(e) => setMessageContent(e.target.value)}
+              onChange={e => setMessageContent(e.target.value)}
               className="min-h-32"
             />
-            
+
             <div className="flex items-center justify-between text-xs">
-              <span className={messageContent.length > 5000 ? "text-destructive" : "text-muted-foreground"}>
+              <span
+                className={
+                  messageContent.length > 5000 ? "text-destructive" : "text-muted-foreground"
+                }
+              >
                 {messageContent.length} / 5000 caracteres
               </span>
               {messageContent.length > 4500 && messageContent.length <= 5000 && (
@@ -593,20 +623,33 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                   </span>
                 </Button>
               </label>
-              <Button variant="outline" size="sm" onClick={handleImageUpload} aria-label="Adicionar imagem">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleImageUpload}
+                aria-label="Adicionar imagem"
+              >
                 <Image className="h-4 w-4 mr-2" />
                 Imagem
               </Button>
-              <Button variant="outline" size="sm" onClick={handleAudioUpload} aria-label="Adicionar áudio">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleAudioUpload}
+                aria-label="Adicionar áudio"
+              >
                 <Mic className="h-4 w-4 mr-2" />
                 Áudio
               </Button>
             </div>
-            
+
             {attachments.length > 0 && (
               <div className="space-y-2">
                 {attachments.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-2 bg-muted rounded"
+                  >
                     <div className="flex items-center gap-2">
                       <Paperclip className="h-4 w-4" />
                       <span className="text-sm">{file.name}</span>
@@ -614,11 +657,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                         ({(file.size / 1024).toFixed(1)} KB)
                       </span>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeAttachment(index)}
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => removeAttachment(index)}>
                       ×
                     </Button>
                   </div>
@@ -653,18 +692,14 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2">
-                  {priority === "critical" && (
-                    <Badge variant="destructive">CRÍTICA</Badge>
-                  )}
-                  {isUrgent && (
-                    <Badge variant="destructive">URGENTE</Badge>
-                  )}
-                  {isBroadcast && (
-                    <Badge variant="secondary">TRANSMISSÃO</Badge>
-                  )}
+                  {priority === "critical" && <Badge variant="destructive">CRÍTICA</Badge>}
+                  {isUrgent && <Badge variant="destructive">URGENTE</Badge>}
+                  {isBroadcast && <Badge variant="secondary">TRANSMISSÃO</Badge>}
                 </div>
                 {subject && (
-                  <p><strong>Assunto:</strong> {subject}</p>
+                  <p>
+                    <strong>Assunto:</strong> {subject}
+                  </p>
                 )}
                 <p className="text-muted-foreground">{messageContent}</p>
               </div>
@@ -677,10 +712,10 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               <Clock className="h-4 w-4" />
               <span>Salvar como rascunho</span>
             </div>
-            
+
             <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={saveDraft}
                 disabled={loading}
                 aria-label="Salvar rascunho"
@@ -688,8 +723,8 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                 <Save className="h-4 w-4 mr-2" />
                 Salvar Rascunho
               </Button>
-              <Button 
-                onClick={sendMessage} 
+              <Button
+                onClick={sendMessage}
                 disabled={loading || selectedRecipients.length === 0 || validationErrors.length > 0}
                 className="gap-2"
               >

@@ -4,18 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Mic, 
-  MicOff, 
-  Volume2, 
+import {
+  Mic,
+  MicOff,
+  Volume2,
   VolumeX,
   Brain,
   Trophy,
   Target,
-  Users,
   TrendingUp,
   Star,
-  Award
+  Award,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -56,7 +55,7 @@ interface Goal {
 
 export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps> = ({
   crewMemberId,
-  crewMemberName
+  crewMemberName,
 }) => {
   const [activeTab, setActiveTab] = useState<"voice" | "ai" | "gamification" | "goals">("voice");
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
@@ -64,7 +63,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
   const [goals, setGoals] = useState<Goal[]>([]);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const [isLoadingGamification, setIsLoadingGamification] = useState(false);
-  
+
   const { isRecording, isProcessing, startRecording, stopRecording } = useVoiceRecording();
   const { isSpeaking, speak, stopSpeaking } = useTextToSpeech();
   const { toast } = useToast();
@@ -83,7 +82,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
             title: "Transcrição completada",
             description: `"${transcribedText}"`,
           });
-          
+
           // Enviar para IA processar
           await processVoiceCommand(transcribedText);
         }
@@ -98,7 +97,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       toast({
         title: "Erro na interação por voz",
         description: "Tente novamente em alguns instantes.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -110,17 +109,18 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       const response = `Processando comando: "${text}". Esta funcionalidade será expandida em breve.`;
       await speak(response);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const generateAIInsights = async () => {
     setIsLoadingAI(true);
     try {
       const { data, error } = await supabase.functions.invoke("crew-ai-insights", {
-        body: { 
+        body: {
           crew_member_id: crewMemberId,
-          analysis_type: "comprehensive"
-        }
+          analysis_type: "comprehensive",
+        },
       });
 
       if (error) throw error;
@@ -135,7 +135,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       toast({
         title: "Erro ao gerar insights",
         description: "Não foi possível gerar a análise de IA.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoadingAI(false);
@@ -154,23 +154,25 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       if (error) throw error;
       setAiInsights(data || []);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const loadGamificationProfile = async () => {
     setIsLoadingGamification(true);
     try {
       const { data, error } = await supabase.functions.invoke("crew-gamification", {
-        body: { 
+        body: {
           crew_member_id: crewMemberId,
-          action_type: "get_profile"
-        }
+          action_type: "get_profile",
+        },
       });
 
       if (error) throw error;
       setGamificationProfile(data.profile);
     } catch (error) {
-  } finally {
+      console.warn("[EMPTY CATCH]", error);
+    } finally {
       setIsLoadingGamification(false);
     }
   };
@@ -178,25 +180,26 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
   const loadGoals = async () => {
     try {
       const { data, error } = await supabase.functions.invoke("crew-goal-tracker", {
-        body: { 
+        body: {
           crew_member_id: crewMemberId,
-          action: "get_goals"
-        }
+          action: "get_goals",
+        },
       });
 
       if (error) throw error;
       setGoals(data.result?.goals || []);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const createNewGoal = async () => {
     try {
       const { data, error } = await supabase.functions.invoke("crew-goal-tracker", {
-        body: { 
+        body: {
           crew_member_id: crewMemberId,
-          action: "suggest_goals"
-        }
+          action: "suggest_goals",
+        },
       });
 
       if (error) throw error;
@@ -206,7 +209,8 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         description: "Novas metas personalizadas foram sugeridas para você!",
       });
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const renderVoiceTab = () => (
@@ -229,11 +233,13 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
             >
               {isRecording ? <MicOff className="h-8 w-8" /> : <Mic className="h-8 w-8" />}
             </Button>
-            
+
             <p className="text-center text-sm text-muted-foreground">
-              {isRecording ? "Gravando... Clique para parar" : 
-                isProcessing ? "Processando..." : 
-                  "Clique para iniciar gravação"}
+              {isRecording
+                ? "Gravando... Clique para parar"
+                : isProcessing
+                  ? "Processando..."
+                  : "Clique para iniciar gravação"}
             </p>
           </div>
 
@@ -272,7 +278,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
               <p className="text-sm">Clique em "Gerar Análise" para começar.</p>
             </div>
           ) : (
-            aiInsights.map((insight) => (
+            aiInsights.map(insight => (
               <Card key={insight.id} className="border-l-4 border-l-primary">
                 <CardContent className="pt-4">
                   <div className="flex items-center justify-between mb-2">
@@ -309,13 +315,15 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
               <div className="text-center space-y-2">
                 <div className="flex items-center justify-center gap-2">
                   <Star className="h-6 w-6 text-yellow-500" />
-                  <span className="text-2xl font-bold">Nível {gamificationProfile.current_level}</span>
+                  <span className="text-2xl font-bold">
+                    Nível {gamificationProfile.current_level}
+                  </span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {gamificationProfile.total_experience_points} XP Total
                 </p>
-                <Progress 
-                  value={(gamificationProfile.total_experience_points % 500) / 5} 
+                <Progress
+                  value={(gamificationProfile.total_experience_points % 500) / 5}
                   className="w-full"
                 />
               </div>
@@ -342,9 +350,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
                   <TrendingUp className="h-4 w-4" />
                   <span className="font-medium">Ranking Global</span>
                 </div>
-                <Badge variant="secondary">
-                  #{gamificationProfile.leaderboard_rank || "N/A"}
-                </Badge>
+                <Badge variant="secondary">#{gamificationProfile.leaderboard_rank || "N/A"}</Badge>
               </div>
             </>
           ) : (
@@ -378,7 +384,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
               <p className="text-sm">Clique em "Sugerir Metas" para começar.</p>
             </div>
           ) : (
-            goals.map((goal) => (
+            goals.map(goal => (
               <Card key={goal.id} className="border-l-4 border-l-blue-500">
                 <CardContent className="pt-4">
                   <div className="flex items-center justify-between mb-2">
@@ -391,10 +397,12 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Progresso</span>
-                      <span>{goal.current_progress}/{goal.target_value}</span>
+                      <span>
+                        {goal.current_progress}/{goal.target_value}
+                      </span>
                     </div>
-                    <Progress 
-                      value={(goal.current_progress / goal.target_value) * 100} 
+                    <Progress
+                      value={(goal.current_progress / goal.target_value) * 100}
                       className="w-full"
                     />
                   </div>
@@ -427,7 +435,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           { id: "voice", label: "Voz", icon: Mic },
           { id: "ai", label: "IA", icon: Brain },
           { id: "gamification", label: "Conquistas", icon: Trophy },
-          { id: "goals", label: "Metas", icon: Target }
+          { id: "goals", label: "Metas", icon: Target },
         ].map(({ id, label, icon: Icon }) => (
           <button
             key={id}

@@ -7,15 +7,7 @@ import { NeuralRouteOptimizer } from "@/components/maritime/neural-route-optimiz
 import { CrewIntelligenceSystem } from "@/components/crew/crew-intelligence-system";
 import { PredictiveMaintenanceRevolution } from "@/components/maritime/predictive-maintenance-revolution";
 import { QuantumSecurityShield } from "@/components/security/quantum-security-shield";
-import { 
-  Brain, 
-  Navigation, 
-  Users,
-  Sparkles,
-  Wrench,
-  Shield,
-  Zap
-} from "lucide-react";
+import { Brain, Navigation, Users, Sparkles, Wrench, Shield, Zap } from "lucide-react";
 
 const MaritimeSupremo: React.FC = () => {
   return (
@@ -28,7 +20,7 @@ const MaritimeSupremo: React.FC = () => {
         badges={[
           { icon: Brain, label: "MaritimeGPT 3.0" },
           { icon: Zap, label: "IA Avançada" },
-          { icon: Shield, label: "Segurança Quântica" }
+          { icon: Shield, label: "Segurança Quântica" },
         ]}
       />
 

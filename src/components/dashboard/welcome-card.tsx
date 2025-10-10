@@ -18,48 +18,48 @@ export const WelcomeCard: React.FC = () => {
   const getWelcomeMessage = () => {
     const hour = new Date().getHours();
     let greeting = "Boa noite";
-    
+
     if (hour < 12) greeting = "Bom dia";
     else if (hour < 18) greeting = "Boa tarde";
-    
+
     return `${greeting}, ${displayName}!`;
   };
 
   const getQuickActions = () => {
     const actions = [];
-    
+
     if (userRole === "admin") {
       actions.push({
         icon: Users,
         label: "Gerenciar Usuários",
         action: () => navigate("/admin"),
-        variant: "default" as const
+        variant: "default" as const,
       });
     }
-    
+
     if (userRole === "hr_manager" || userRole === "admin") {
       actions.push({
         icon: FileText,
         label: "Relatórios de RH",
         action: () => navigate("/hr"),
-        variant: "secondary" as const
+        variant: "secondary" as const,
       });
     }
-    
+
     actions.push({
       icon: BarChart3,
       label: "Ver Analytics",
       action: () => navigate("/analytics"),
-      variant: "default" as const
+      variant: "default" as const,
     });
-    
+
     actions.push({
       icon: Settings,
       label: "Configurações",
       action: () => navigate("/settings"),
-      variant: "outline" as const
+      variant: "outline" as const,
     });
-    
+
     return actions.slice(0, 3); // Limitar a 3 ações
   };
 
@@ -79,9 +79,10 @@ export const WelcomeCard: React.FC = () => {
       <CardContent>
         <div className="space-y-4">
           <p className="text-sm text-foreground/80">
-            Bem-vindo ao sistema corporativo. Escolha uma das ações rápidas abaixo ou navegue pelos módulos disponíveis.
+            Bem-vindo ao sistema corporativo. Escolha uma das ações rápidas abaixo ou navegue pelos
+            módulos disponíveis.
           </p>
-          
+
           <div className="flex flex-wrap gap-2">
             {getQuickActions().map((action, index) => (
               <Button
@@ -97,10 +98,7 @@ export const WelcomeCard: React.FC = () => {
             ))}
           </div>
 
-          <RoleBasedAccess 
-            roles={["admin", "hr_manager"]} 
-            showFallback={false}
-          >
+          <RoleBasedAccess roles={["admin", "hr_manager"]} showFallback={false}>
             <div className="mt-4 p-3 bg-primary/20 rounded-lg border border-primary/40 shadow-sm">
               <p className="text-sm text-primary font-medium">
                 💡 Como administrador/gerente, você tem acesso a recursos especiais de gestão

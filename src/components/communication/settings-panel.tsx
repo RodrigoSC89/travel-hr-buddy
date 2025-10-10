@@ -4,7 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,24 +20,19 @@ import {
   User,
   Shield,
   Bell,
-  Database,
   Download,
   Upload,
   Trash2,
   Save,
   RotateCcw,
   Eye,
-  EyeOff,
-  Lock,
-  Unlock,
   Archive,
-  Clock,
   Globe,
   Smartphone,
   Mail,
   MessageSquare,
   Volume2,
-  VolumeX
+  VolumeX,
 } from "lucide-react";
 
 interface UserSettings {
@@ -80,13 +81,13 @@ export const SettingsPanel = () => {
       signature: "João Silva\nDPO - Dynamic Positioning Officer\nNautilus Maritime Solutions",
       avatar_url: "",
       timezone: "America/Sao_Paulo",
-      language: "pt-BR"
+      language: "pt-BR",
     },
     privacy: {
       show_online_status: true,
       allow_direct_messages: true,
       read_receipts: true,
-      typing_indicators: true
+      typing_indicators: true,
     },
     notifications: {
       email_enabled: true,
@@ -96,23 +97,23 @@ export const SettingsPanel = () => {
       desktop_enabled: true,
       quiet_hours_enabled: false,
       quiet_start: "22:00",
-      quiet_end: "08:00"
+      quiet_end: "08:00",
     },
     communication: {
       auto_archive_days: 90,
       message_preview: true,
       thread_grouping: true,
       ai_suggestions: true,
-      smart_replies: true
+      smart_replies: true,
     },
     security: {
       two_factor_enabled: false,
       session_timeout: 8,
       login_notifications: true,
-      device_verification: true
-    }
+      device_verification: true,
+    },
   });
-  
+
   const [loading, setLoading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const { toast } = useToast();
@@ -126,7 +127,8 @@ export const SettingsPanel = () => {
       // Mock loading settings - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const updateSettings = (section: keyof UserSettings, updates: any) => {
@@ -134,8 +136,8 @@ export const SettingsPanel = () => {
       ...prev,
       [section]: {
         ...prev[section],
-        ...updates
-      }
+        ...updates,
+      },
     }));
     setHasChanges(true);
   };
@@ -143,20 +145,20 @@ export const SettingsPanel = () => {
   const saveSettings = async () => {
     try {
       setLoading(true);
-      
+
       // Mock saving settings - replace with real Supabase update
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       setHasChanges(false);
       toast({
         title: "Sucesso",
-        description: "Configurações salvas com sucesso"
+        description: "Configurações salvas com sucesso",
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar configurações",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -170,13 +172,13 @@ export const SettingsPanel = () => {
         signature: "João Silva\nDPO - Dynamic Positioning Officer\nNautilus Maritime Solutions",
         avatar_url: "",
         timezone: "America/Sao_Paulo",
-        language: "pt-BR"
+        language: "pt-BR",
       },
       privacy: {
         show_online_status: true,
         allow_direct_messages: true,
         read_receipts: true,
-        typing_indicators: true
+        typing_indicators: true,
       },
       notifications: {
         email_enabled: true,
@@ -186,21 +188,21 @@ export const SettingsPanel = () => {
         desktop_enabled: true,
         quiet_hours_enabled: false,
         quiet_start: "22:00",
-        quiet_end: "08:00"
+        quiet_end: "08:00",
       },
       communication: {
         auto_archive_days: 90,
         message_preview: true,
         thread_grouping: true,
         ai_suggestions: true,
-        smart_replies: true
+        smart_replies: true,
       },
       security: {
         two_factor_enabled: false,
         session_timeout: 8,
         login_notifications: true,
-        device_verification: true
-      }
+        device_verification: true,
+      },
     });
     setHasChanges(true);
   };
@@ -218,18 +220,18 @@ export const SettingsPanel = () => {
           toast({
             title: "Erro",
             description: "A imagem deve ter no máximo 2MB",
-            variant: "destructive"
+            variant: "destructive",
           });
           return;
         }
-        
+
         // In a real implementation, upload to storage and get URL
         const url = URL.createObjectURL(file);
         updateSettings("profile", { avatar_url: url });
-        
+
         toast({
           title: "Sucesso",
-          description: "Foto de perfil atualizada"
+          description: "Foto de perfil atualizada",
         });
       }
     };
@@ -242,13 +244,13 @@ export const SettingsPanel = () => {
       const dataToExport = {
         settings,
         messages: [], // Would include user messages
-        export_date: new Date().toISOString()
+        export_date: new Date().toISOString(),
       };
-      
+
       const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
-        type: "application/json"
+        type: "application/json",
       });
-      
+
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -257,16 +259,16 @@ export const SettingsPanel = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      
+
       toast({
         title: "Sucesso",
-        description: "Dados exportados com sucesso"
+        description: "Dados exportados com sucesso",
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao exportar dados",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -282,9 +284,7 @@ export const SettingsPanel = () => {
               Configurações do Sistema
             </CardTitle>
             <div className="flex items-center gap-2">
-              {hasChanges && (
-                <Badge variant="warning">Alterações não salvas</Badge>
-              )}
+              {hasChanges && <Badge variant="warning">Alterações não salvas</Badge>}
               <Button variant="outline" onClick={resetSettings}>
                 <RotateCcw className="h-4 w-4 mr-2" />
                 Restaurar Padrão
@@ -339,26 +339,26 @@ export const SettingsPanel = () => {
                   <Label>Nome de Exibição</Label>
                   <Input
                     value={settings.profile.display_name}
-                    onChange={(e) => updateSettings("profile", { display_name: e.target.value })}
+                    onChange={e => updateSettings("profile", { display_name: e.target.value })}
                     placeholder="Seu nome completo"
                   />
                 </div>
-                
+
                 <div>
                   <Label>Assinatura</Label>
                   <Textarea
                     value={settings.profile.signature}
-                    onChange={(e) => updateSettings("profile", { signature: e.target.value })}
+                    onChange={e => updateSettings("profile", { signature: e.target.value })}
                     placeholder="Assinatura para suas mensagens"
                     className="min-h-20"
                   />
                 </div>
-                
+
                 <div>
                   <Label>Fuso Horário</Label>
-                  <Select 
+                  <Select
                     value={settings.profile.timezone}
-                    onValueChange={(value) => updateSettings("profile", { timezone: value })}
+                    onValueChange={value => updateSettings("profile", { timezone: value })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -371,12 +371,12 @@ export const SettingsPanel = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label>Idioma</Label>
-                  <Select 
+                  <Select
                     value={settings.profile.language}
-                    onValueChange={(value) => updateSettings("profile", { language: value })}
+                    onValueChange={value => updateSettings("profile", { language: value })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -401,7 +401,12 @@ export const SettingsPanel = () => {
                     <User className="h-8 w-8 text-muted-foreground" />
                   </div>
                   <div>
-                    <Button variant="outline" size="sm" onClick={handleAvatarUpload} aria-label="Enviar foto de perfil">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleAvatarUpload}
+                      aria-label="Enviar foto de perfil"
+                    >
                       <Upload className="h-4 w-4 mr-2" />
                       Enviar Foto
                     </Button>
@@ -410,12 +415,12 @@ export const SettingsPanel = () => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>URL do Avatar</Label>
                   <Input
                     value={settings.profile.avatar_url}
-                    onChange={(e) => updateSettings("profile", { avatar_url: e.target.value })}
+                    onChange={e => updateSettings("profile", { avatar_url: e.target.value })}
                     placeholder="https://exemplo.com/avatar.jpg"
                   />
                 </div>
@@ -437,56 +442,67 @@ export const SettingsPanel = () => {
                     <Mail className="h-4 w-4" />
                     <Label>Email</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.notifications.email_enabled}
-                    onCheckedChange={(checked) => updateSettings("notifications", { email_enabled: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("notifications", { email_enabled: checked })
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Smartphone className="h-4 w-4" />
                     <Label>Push (Celular)</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.notifications.push_enabled}
-                    onCheckedChange={(checked) => updateSettings("notifications", { push_enabled: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("notifications", { push_enabled: checked })
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <MessageSquare className="h-4 w-4" />
                     <Label>SMS</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.notifications.sms_enabled}
-                    onCheckedChange={(checked) => updateSettings("notifications", { sms_enabled: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("notifications", { sms_enabled: checked })
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Globe className="h-4 w-4" />
                     <Label>Desktop</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.notifications.desktop_enabled}
-                    onCheckedChange={(checked) => updateSettings("notifications", { desktop_enabled: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("notifications", { desktop_enabled: checked })
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {settings.notifications.sound_enabled ? 
-                      <Volume2 className="h-4 w-4" /> : 
+                    {settings.notifications.sound_enabled ? (
+                      <Volume2 className="h-4 w-4" />
+                    ) : (
                       <VolumeX className="h-4 w-4" />
-                    }
+                    )}
                     <Label>Som</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.notifications.sound_enabled}
-                    onCheckedChange={(checked) => updateSettings("notifications", { sound_enabled: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("notifications", { sound_enabled: checked })
+                    }
                   />
                 </div>
               </CardContent>
@@ -499,19 +515,23 @@ export const SettingsPanel = () => {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label>Ativar horário de silêncio</Label>
-                  <Switch 
+                  <Switch
                     checked={settings.notifications.quiet_hours_enabled}
-                    onCheckedChange={(checked) => updateSettings("notifications", { quiet_hours_enabled: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("notifications", { quiet_hours_enabled: checked })
+                    }
                   />
                 </div>
-                
+
                 {settings.notifications.quiet_hours_enabled && (
                   <div className="space-y-3">
                     <div>
                       <Label>Início</Label>
-                      <Select 
+                      <Select
                         value={settings.notifications.quiet_start}
-                        onValueChange={(value) => updateSettings("notifications", { quiet_start: value })}
+                        onValueChange={value =>
+                          updateSettings("notifications", { quiet_start: value })
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -528,12 +548,14 @@ export const SettingsPanel = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div>
                       <Label>Fim</Label>
-                      <Select 
+                      <Select
                         value={settings.notifications.quiet_end}
-                        onValueChange={(value) => updateSettings("notifications", { quiet_end: value })}
+                        onValueChange={value =>
+                          updateSettings("notifications", { quiet_end: value })
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -573,12 +595,14 @@ export const SettingsPanel = () => {
                         Outros usuários podem ver quando você está online
                       </p>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={settings.privacy.show_online_status}
-                      onCheckedChange={(checked) => updateSettings("privacy", { show_online_status: checked })}
+                      onCheckedChange={checked =>
+                        updateSettings("privacy", { show_online_status: checked })
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div>
                       <Label>Permitir mensagens diretas</Label>
@@ -586,13 +610,15 @@ export const SettingsPanel = () => {
                         Outros usuários podem enviar mensagens diretas
                       </p>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={settings.privacy.allow_direct_messages}
-                      onCheckedChange={(checked) => updateSettings("privacy", { allow_direct_messages: checked })}
+                      onCheckedChange={checked =>
+                        updateSettings("privacy", { allow_direct_messages: checked })
+                      }
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
@@ -601,12 +627,14 @@ export const SettingsPanel = () => {
                         Enviar confirmação quando ler mensagens
                       </p>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={settings.privacy.read_receipts}
-                      onCheckedChange={(checked) => updateSettings("privacy", { read_receipts: checked })}
+                      onCheckedChange={checked =>
+                        updateSettings("privacy", { read_receipts: checked })
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div>
                       <Label>Indicador de digitação</Label>
@@ -614,9 +642,11 @@ export const SettingsPanel = () => {
                         Mostrar quando estou digitando
                       </p>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={settings.privacy.typing_indicators}
-                      onCheckedChange={(checked) => updateSettings("privacy", { typing_indicators: checked })}
+                      onCheckedChange={checked =>
+                        updateSettings("privacy", { typing_indicators: checked })
+                      }
                     />
                   </div>
                 </div>
@@ -635,9 +665,11 @@ export const SettingsPanel = () => {
               <CardContent className="space-y-4">
                 <div>
                   <Label>Auto-arquivar mensagens após (dias)</Label>
-                  <Select 
+                  <Select
                     value={settings.communication.auto_archive_days.toString()}
-                    onValueChange={(value) => updateSettings("communication", { auto_archive_days: parseInt(value) })}
+                    onValueChange={value =>
+                      updateSettings("communication", { auto_archive_days: parseInt(value) })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -652,7 +684,7 @@ export const SettingsPanel = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Pré-visualização de mensagens</Label>
@@ -660,22 +692,24 @@ export const SettingsPanel = () => {
                       Mostrar prévia do conteúdo nas notificações
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.communication.message_preview}
-                    onCheckedChange={(checked) => updateSettings("communication", { message_preview: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("communication", { message_preview: checked })
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Agrupamento de threads</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Agrupar mensagens relacionadas
-                    </p>
+                    <p className="text-sm text-muted-foreground">Agrupar mensagens relacionadas</p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.communication.thread_grouping}
-                    onCheckedChange={(checked) => updateSettings("communication", { thread_grouping: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("communication", { thread_grouping: checked })
+                    }
                   />
                 </div>
               </CardContent>
@@ -689,16 +723,16 @@ export const SettingsPanel = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Sugestões de IA</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Receber sugestões inteligentes
-                    </p>
+                    <p className="text-sm text-muted-foreground">Receber sugestões inteligentes</p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.communication.ai_suggestions}
-                    onCheckedChange={(checked) => updateSettings("communication", { ai_suggestions: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("communication", { ai_suggestions: checked })
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Respostas inteligentes</Label>
@@ -706,9 +740,11 @@ export const SettingsPanel = () => {
                       Sugestões automáticas de resposta
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.communication.smart_replies}
-                    onCheckedChange={(checked) => updateSettings("communication", { smart_replies: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("communication", { smart_replies: checked })
+                    }
                   />
                 </div>
               </CardContent>
@@ -731,17 +767,21 @@ export const SettingsPanel = () => {
                       Adicionar uma camada extra de segurança
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.security.two_factor_enabled}
-                    onCheckedChange={(checked) => updateSettings("security", { two_factor_enabled: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("security", { two_factor_enabled: checked })
+                    }
                   />
                 </div>
-                
+
                 <div>
                   <Label>Timeout de sessão (horas)</Label>
-                  <Select 
+                  <Select
                     value={settings.security.session_timeout.toString()}
-                    onValueChange={(value) => updateSettings("security", { session_timeout: parseInt(value) })}
+                    onValueChange={value =>
+                      updateSettings("security", { session_timeout: parseInt(value) })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -755,20 +795,20 @@ export const SettingsPanel = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Notificações de login</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Alertar sobre novos logins
-                    </p>
+                    <p className="text-sm text-muted-foreground">Alertar sobre novos logins</p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.security.login_notifications}
-                    onCheckedChange={(checked) => updateSettings("security", { login_notifications: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("security", { login_notifications: checked })
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Verificação de dispositivo</Label>
@@ -776,9 +816,11 @@ export const SettingsPanel = () => {
                       Verificar dispositivos não reconhecidos
                     </p>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.security.device_verification}
-                    onCheckedChange={(checked) => updateSettings("security", { device_verification: checked })}
+                    onCheckedChange={checked =>
+                      updateSettings("security", { device_verification: checked })
+                    }
                   />
                 </div>
               </CardContent>
@@ -794,26 +836,26 @@ export const SettingsPanel = () => {
                     <Download className="h-4 w-4 mr-2" />
                     Exportar Meus Dados
                   </Button>
-                  
+
                   <Button variant="outline" className="w-full justify-start">
                     <Archive className="h-4 w-4 mr-2" />
                     Arquivar Mensagens Antigas
                   </Button>
-                  
+
                   <Button variant="destructive" className="w-full justify-start">
                     <Trash2 className="h-4 w-4 mr-2" />
                     Excluir Todas as Mensagens
                   </Button>
                 </div>
-                
+
                 <div className="p-3 bg-muted rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
                     <Shield className="h-4 w-4" />
                     <span className="font-medium text-sm">Política de Retenção</span>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Mensagens são mantidas conforme a política de retenção da empresa. 
-                    Dados sensíveis são criptografados e protegidos.
+                    Mensagens são mantidas conforme a política de retenção da empresa. Dados
+                    sensíveis são criptografados e protegidos.
                   </p>
                 </div>
               </CardContent>

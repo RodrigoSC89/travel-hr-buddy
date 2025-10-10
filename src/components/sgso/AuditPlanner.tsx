@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import {
   Calendar,
   CheckCircle,
@@ -13,7 +12,7 @@ import {
   Users,
   Target,
   TrendingUp,
-  Plus
+  Plus,
 } from "lucide-react";
 
 interface Audit {
@@ -39,7 +38,7 @@ const SAMPLE_AUDITS: Audit[] = [
     status: "planned",
     scheduled_date: "2024-10-15",
     auditor: "Eng. Roberto Santos",
-    practices_covered: [13]
+    practices_covered: [13],
   },
   {
     id: "2",
@@ -50,7 +49,7 @@ const SAMPLE_AUDITS: Audit[] = [
     scheduled_date: "2024-10-08",
     auditor: "Auditor ANP - Maria Costa",
     findings_count: 5,
-    practices_covered: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+    practices_covered: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
   },
   {
     id: "3",
@@ -60,7 +59,7 @@ const SAMPLE_AUDITS: Audit[] = [
     status: "overdue",
     scheduled_date: "2024-09-30",
     auditor: "Eng. João Oliveira",
-    practices_covered: [17]
+    practices_covered: [17],
   },
   {
     id: "4",
@@ -73,7 +72,7 @@ const SAMPLE_AUDITS: Audit[] = [
     auditor: "Bureau Veritas - Carlos Lima",
     findings_count: 3,
     non_conformities: 0,
-    practices_covered: [1, 2, 3, 4, 5, 8, 9, 10, 11, 12]
+    practices_covered: [1, 2, 3, 4, 5, 8, 9, 10, 11, 12],
   },
   {
     id: "5",
@@ -83,8 +82,8 @@ const SAMPLE_AUDITS: Audit[] = [
     status: "planned",
     scheduled_date: "2024-11-05",
     auditor: "RH - Ana Paula",
-    practices_covered: [4]
-  }
+    practices_covered: [4],
+  },
 ];
 
 const getStatusConfig = (status: string) => {
@@ -93,26 +92,26 @@ const getStatusConfig = (status: string) => {
       icon: Calendar,
       color: "bg-blue-600 text-white",
       label: "Planejada",
-      badgeVariant: "default" as const
+      badgeVariant: "default" as const,
     },
     in_progress: {
       icon: Clock,
       color: "bg-yellow-600 text-white",
       label: "Em Andamento",
-      badgeVariant: "default" as const
+      badgeVariant: "default" as const,
     },
     completed: {
       icon: CheckCircle,
       color: "bg-green-600 text-white",
       label: "Concluída",
-      badgeVariant: "default" as const
+      badgeVariant: "default" as const,
     },
     overdue: {
       icon: AlertTriangle,
       color: "bg-red-600 text-white",
       label: "Atrasada",
-      badgeVariant: "destructive" as const
-    }
+      badgeVariant: "destructive" as const,
+    },
   };
   return configs[status as keyof typeof configs] || configs.planned;
 };
@@ -122,7 +121,7 @@ const getTypeLabel = (type: string) => {
     internal: "Interna",
     external: "Externa",
     regulatory: "Regulatória",
-    certification: "Certificação"
+    certification: "Certificação",
   };
   return labels[type as keyof typeof labels] || type;
 };
@@ -137,9 +136,8 @@ export const AuditPlanner: React.FC = () => {
   const completedCount = SAMPLE_AUDITS.filter(a => a.status === "completed").length;
   const overdueCount = SAMPLE_AUDITS.filter(a => a.status === "overdue").length;
 
-  const filteredAudits = selectedType === "all"
-    ? SAMPLE_AUDITS
-    : SAMPLE_AUDITS.filter(a => a.type === selectedType);
+  const filteredAudits =
+    selectedType === "all" ? SAMPLE_AUDITS : SAMPLE_AUDITS.filter(a => a.type === selectedType);
 
   const totalAudits = SAMPLE_AUDITS.length;
   const completionRate = Math.round((completedCount / totalAudits) * 100);
@@ -253,7 +251,7 @@ export const AuditPlanner: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {filteredAudits.map((audit) => {
+            {filteredAudits.map(audit => {
               const statusConfig = getStatusConfig(audit.status);
               const StatusIcon = statusConfig.icon;
 
@@ -268,9 +266,7 @@ export const AuditPlanner: React.FC = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h3 className="text-lg font-bold text-gray-900">{audit.title}</h3>
-                            <Badge className={statusConfig.color}>
-                              {statusConfig.label}
-                            </Badge>
+                            <Badge className={statusConfig.color}>{statusConfig.label}</Badge>
                             <Badge variant="outline" className="bg-white">
                               {getTypeLabel(audit.type)}
                             </Badge>
@@ -281,7 +277,9 @@ export const AuditPlanner: React.FC = () => {
                           </p>
                           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
-                              <p className="text-xs text-muted-foreground font-medium">Data Agendada</p>
+                              <p className="text-xs text-muted-foreground font-medium">
+                                Data Agendada
+                              </p>
                               <p className="text-sm font-bold text-gray-900">
                                 <Calendar className="h-3 w-3 inline mr-1" />
                                 {new Date(audit.scheduled_date).toLocaleDateString("pt-BR")}
@@ -295,7 +293,9 @@ export const AuditPlanner: React.FC = () => {
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-muted-foreground font-medium">Práticas Cobertas</p>
+                              <p className="text-xs text-muted-foreground font-medium">
+                                Práticas Cobertas
+                              </p>
                               <p className="text-sm font-bold text-gray-900">
                                 {audit.practices_covered.length} de 17
                               </p>
@@ -317,7 +317,8 @@ export const AuditPlanner: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => handleViewDetails("audit", audit.id)} disabled={isLoading}
+                          onClick={() => handleViewDetails("audit", audit.id)}
+                          disabled={isLoading}
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Detalhes
@@ -326,7 +327,8 @@ export const AuditPlanner: React.FC = () => {
                           <Button
                             size="sm"
                             className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
-                            onClick={() => showInfo("Iniciando Auditoria", "Preparando auditoria")} disabled={isLoading}
+                            onClick={() => showInfo("Iniciando Auditoria", "Preparando auditoria")}
+                            disabled={isLoading}
                           >
                             <CheckCircle className="h-4 w-4 mr-2" />
                             {audit.status === "in_progress" ? "Continuar" : "Iniciar"}
@@ -359,28 +361,32 @@ export const AuditPlanner: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleCreate("Auditoria")} disabled={isLoading}
+              onClick={() => handleCreate("Auditoria")}
+              disabled={isLoading}
             >
               <Plus className="h-6 w-6" />
               <span className="font-semibold">Nova Auditoria</span>
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo("Calendário", "Abrindo calendário de auditorias")} disabled={isLoading}
+              onClick={() => showInfo("Calendário", "Abrindo calendário de auditorias")}
+              disabled={isLoading}
             >
               <Calendar className="h-6 w-6" />
               <span className="font-semibold">Calendário</span>
             </Button>
             <Button
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleGenerateReport("Relatório de Auditorias")} disabled={isLoading}
+              onClick={() => handleGenerateReport("Relatório de Auditorias")}
+              disabled={isLoading}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button
               className="bg-purple-600 hover:bg-purple-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo("Tendências", "Abrindo análise de tendências")} disabled={isLoading}
+              onClick={() => showInfo("Tendências", "Abrindo análise de tendências")}
+              disabled={isLoading}
             >
               <TrendingUp className="h-6 w-6" />
               <span className="font-semibold">Tendências</span>

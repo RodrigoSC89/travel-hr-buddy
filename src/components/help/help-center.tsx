@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { 
-  HelpCircle, 
-  BookOpen, 
-  MessageSquare, 
-  Video, 
-  Download, 
-  Search, 
+import {
+  HelpCircle,
+  BookOpen,
+  MessageSquare,
+  Video,
+  Download,
+  Search,
   ExternalLink,
   Phone,
   Mail,
@@ -21,7 +21,7 @@ import {
   Lightbulb,
   Users,
   Settings,
-  Zap
+  Zap,
 } from "lucide-react";
 
 interface Article {
@@ -54,7 +54,7 @@ const HelpCenter = () => {
     { id: "certificates", name: "Certificados", icon: FileText },
     { id: "reports", name: "Relatórios", icon: FileText },
     { id: "integration", name: "Integrações", icon: Zap },
-    { id: "settings", name: "Configurações", icon: Settings }
+    { id: "settings", name: "Configurações", icon: Settings },
   ];
 
   const articles: Article[] = [
@@ -65,7 +65,7 @@ const HelpCenter = () => {
       category: "user-management",
       readTime: 5,
       rating: 4.8,
-      views: 1250
+      views: 1250,
     },
     {
       id: "2",
@@ -74,7 +74,7 @@ const HelpCenter = () => {
       category: "certificates",
       readTime: 8,
       rating: 4.9,
-      views: 890
+      views: 890,
     },
     {
       id: "3",
@@ -83,7 +83,7 @@ const HelpCenter = () => {
       category: "reports",
       readTime: 12,
       rating: 4.7,
-      views: 650
+      views: 650,
     },
     {
       id: "4",
@@ -92,7 +92,7 @@ const HelpCenter = () => {
       category: "getting-started",
       readTime: 15,
       rating: 4.9,
-      views: 2100
+      views: 2100,
     },
     {
       id: "5",
@@ -101,8 +101,8 @@ const HelpCenter = () => {
       category: "integration",
       readTime: 10,
       rating: 4.6,
-      views: 420
-    }
+      views: 420,
+    },
   ];
 
   const videoTutorials: VideoTutorial[] = [
@@ -112,7 +112,7 @@ const HelpCenter = () => {
       duration: "15:30",
       thumbnail: "/placeholder-video-1.jpg",
       category: "getting-started",
-      level: "beginner"
+      level: "beginner",
     },
     {
       id: "2",
@@ -120,7 +120,7 @@ const HelpCenter = () => {
       duration: "22:45",
       thumbnail: "/placeholder-video-2.jpg",
       category: "certificates",
-      level: "intermediate"
+      level: "intermediate",
     },
     {
       id: "3",
@@ -128,33 +128,38 @@ const HelpCenter = () => {
       duration: "18:20",
       thumbnail: "/placeholder-video-3.jpg",
       category: "settings",
-      level: "advanced"
-    }
+      level: "advanced",
+    },
   ];
 
   const faqItems = [
     {
       question: "Como posso alterar minha senha?",
-      answer: "Vá para Configurações > Perfil > Alterar Senha. Digite sua senha atual e a nova senha duas vezes."
+      answer:
+        "Vá para Configurações > Perfil > Alterar Senha. Digite sua senha atual e a nova senha duas vezes.",
     },
     {
       question: "Por que não consigo ver alguns módulos?",
-      answer: "Os módulos visíveis dependem das suas permissões. Entre em contato com o administrador para solicitar acesso."
+      answer:
+        "Os módulos visíveis dependem das suas permissões. Entre em contato com o administrador para solicitar acesso.",
     },
     {
       question: "Como funciona o sistema de backup?",
-      answer: "O sistema realiza backups automáticos diários. Você pode configurar a frequência em Administração > Backup."
+      answer:
+        "O sistema realiza backups automáticos diários. Você pode configurar a frequência em Administração > Backup.",
     },
     {
       question: "Posso exportar relatórios?",
-      answer: "Sim! Todos os relatórios podem ser exportados em PDF, Excel ou CSV usando o botão \"Exportar\"."
-    }
+      answer:
+        'Sim! Todos os relatórios podem ser exportados em PDF, Excel ou CSV usando o botão "Exportar".',
+    },
   ];
 
   const filteredArticles = articles.filter(article => {
     const matchesCategory = selectedCategory === "all" || article.category === selectedCategory;
-    const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         article.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      article.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -166,27 +171,27 @@ const HelpCenter = () => {
 
   const getLevelColor = (level: string) => {
     switch (level) {
-    case "beginner":
-      return "text-green-600 bg-green-100";
-    case "intermediate":
-      return "text-yellow-600 bg-yellow-100";
-    case "advanced":
-      return "text-red-600 bg-red-100";
-    default:
-      return "text-muted-foreground bg-gray-100";
+      case "beginner":
+        return "text-green-600 bg-green-100";
+      case "intermediate":
+        return "text-yellow-600 bg-yellow-100";
+      case "advanced":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getLevelText = (level: string) => {
     switch (level) {
-    case "beginner":
-      return "Iniciante";
-    case "intermediate":
-      return "Intermediário";
-    case "advanced":
-      return "Avançado";
-    default:
-      return level;
+      case "beginner":
+        return "Iniciante";
+      case "intermediate":
+        return "Intermediário";
+      case "advanced":
+        return "Avançado";
+      default:
+        return level;
     }
   };
 
@@ -220,14 +225,14 @@ const HelpCenter = () => {
         <Input
           placeholder="Buscar artigos, tutoriais..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={e => setSearchTerm(e.target.value)}
           className="pl-10"
         />
       </div>
 
       {/* Categorias */}
       <div className="flex flex-wrap gap-2">
-        {categories.map((category) => (
+        {categories.map(category => (
           <Button
             key={category.id}
             variant={selectedCategory === category.id ? "default" : "outline"}
@@ -251,15 +256,13 @@ const HelpCenter = () => {
 
         <TabsContent value="articles" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredArticles.map((article) => (
+            {filteredArticles.map(article => (
               <Card key={article.id} className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <CardTitle className="text-lg">{article.title}</CardTitle>
-                      <CardDescription className="mt-2">
-                        {article.description}
-                      </CardDescription>
+                      <CardDescription className="mt-2">{article.description}</CardDescription>
                     </div>
                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
                   </div>
@@ -296,7 +299,7 @@ const HelpCenter = () => {
 
         <TabsContent value="videos" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredVideos.map((video) => (
+            {filteredVideos.map(video => (
               <Card key={video.id} className="hover:shadow-md transition-shadow cursor-pointer">
                 <div className="relative">
                   <div className="aspect-video bg-muted rounded-t-lg flex items-center justify-center">
@@ -352,9 +355,7 @@ const HelpCenter = () => {
                   <MessageSquare className="w-5 h-5" />
                   Chat ao Vivo
                 </CardTitle>
-                <CardDescription>
-                  Fale conosco em tempo real para suporte imediato
-                </CardDescription>
+                <CardDescription>Fale conosco em tempo real para suporte imediato</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -403,16 +404,15 @@ const HelpCenter = () => {
                   <Phone className="w-5 h-5" />
                   Telefone
                 </CardTitle>
-                <CardDescription>
-                  Suporte telefônico em horário comercial
-                </CardDescription>
+                <CardDescription>Suporte telefônico em horário comercial</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="text-sm">
                     <p className="font-medium">+55 (11) 1234-5678</p>
                     <p className="text-muted-foreground">
-                      Seg - Sex: 9h às 18h<br />
+                      Seg - Sex: 9h às 18h
+                      <br />
                       Sáb: 9h às 12h
                     </p>
                   </div>
@@ -430,9 +430,7 @@ const HelpCenter = () => {
                   <Download className="w-5 h-5" />
                   Recursos
                 </CardTitle>
-                <CardDescription>
-                  Documentos e guias para download
-                </CardDescription>
+                <CardDescription>Documentos e guias para download</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">

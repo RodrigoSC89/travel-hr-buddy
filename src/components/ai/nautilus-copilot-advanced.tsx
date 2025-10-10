@@ -5,27 +5,23 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { 
-  Bot, 
-  Send, 
-  Mic, 
-  MicOff, 
-  Paperclip, 
-  MoreHorizontal,
+import {
+  Bot,
+  Send,
+  Mic,
+  MicOff,
+  Paperclip,
   Sparkles,
   Brain,
   Zap,
   Target,
   TrendingUp,
   FileText,
-  Image,
   BarChart3,
   Users,
   Ship,
   Calendar,
-  Settings,
-  Lightbulb
+  Lightbulb,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -74,8 +70,8 @@ const NautilusCopilotAdvanced: React.FC = () => {
       examples: [
         "Show me fuel consumption trends for Vessel A",
         "Which route is most efficient for cargo delivery?",
-        "Compare performance metrics across the fleet"
-      ]
+        "Compare performance metrics across the fleet",
+      ],
     },
     {
       id: "2",
@@ -86,8 +82,8 @@ const NautilusCopilotAdvanced: React.FC = () => {
       examples: [
         "Check upcoming certificate expirations",
         "Generate PEOTRAM compliance report",
-        "Review safety audit findings"
-      ]
+        "Review safety audit findings",
+      ],
     },
     {
       id: "3",
@@ -98,8 +94,8 @@ const NautilusCopilotAdvanced: React.FC = () => {
       examples: [
         "Schedule crew rotation for next month",
         "Find certified officers for emergency deployment",
-        "Track training completion rates"
-      ]
+        "Track training completion rates",
+      ],
     },
     {
       id: "4",
@@ -110,8 +106,8 @@ const NautilusCopilotAdvanced: React.FC = () => {
       examples: [
         "Predict next maintenance window for engines",
         "Forecast freight rates for Q2",
-        "Identify potential safety risks"
-      ]
+        "Identify potential safety risks",
+      ],
     },
     {
       id: "5",
@@ -122,8 +118,8 @@ const NautilusCopilotAdvanced: React.FC = () => {
       examples: [
         "Set up automatic port arrival notifications",
         "Create weekly performance reports",
-        "Automate certificate renewal reminders"
-      ]
+        "Automate certificate renewal reminders",
+      ],
     },
     {
       id: "6",
@@ -134,9 +130,9 @@ const NautilusCopilotAdvanced: React.FC = () => {
       examples: [
         "Summarize latest industry regulations",
         "Extract key terms from charter agreements",
-        "Analyze incident report patterns"
-      ]
-    }
+        "Analyze incident report patterns",
+      ],
+    },
   ];
 
   const initialMessage: Message = {
@@ -157,8 +153,8 @@ What would you like assistance with today?`,
       "Show me fleet performance overview",
       "Check upcoming certificate expirations",
       "Schedule crew for next voyage",
-      "Generate compliance report"
-    ]
+      "Generate compliance report",
+    ],
   };
 
   useEffect(() => {
@@ -178,7 +174,7 @@ What would you like assistance with today?`,
       id: Date.now().toString(),
       type: "user",
       content: inputValue,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -197,20 +193,16 @@ What would you like assistance with today?`,
             id: "1",
             label: "View Details",
             icon: <BarChart3 className="h-3 w-3" />,
-            action: () => toast({ title: "Opening detailed view..." })
+            action: () => toast({ title: "Opening detailed view..." }),
           },
           {
             id: "2",
             label: "Export Data",
             icon: <FileText className="h-3 w-3" />,
-            action: () => toast({ title: "Exporting data..." })
-          }
+            action: () => toast({ title: "Exporting data..." }),
+          },
         ],
-        suggestions: [
-          "Tell me more about this",
-          "Show related metrics",
-          "Set up monitoring alert"
-        ]
+        suggestions: ["Tell me more about this", "Show related metrics", "Set up monitoring alert"],
       };
 
       setMessages(prev => [...prev, aiResponse]);
@@ -221,14 +213,14 @@ What would you like assistance with today?`,
   const generateAIResponse = (input: string): string => {
     const responses = [
       "Based on your fleet data, I've identified several optimization opportunities. Your vessels are showing 15% higher fuel consumption than industry average. I recommend reviewing route planning and engine maintenance schedules.",
-      
+
       "I found 3 certificates expiring in the next 30 days. Would you like me to initiate the renewal process? I can also set up automatic reminders for future expirations.",
-      
+
       "Crew scheduling analysis complete. I've identified optimal rotation patterns that could reduce fatigue by 20% while maintaining operational efficiency. Shall I generate the updated schedule?",
-      
-      "Your PEOTRAM compliance score is 94.2%. I've detected minor gaps in documentation for safety procedures. I can help generate the missing reports and set up preventive measures."
+
+      "Your PEOTRAM compliance score is 94.2%. I've detected minor gaps in documentation for safety procedures. I can help generate the missing reports and set up preventive measures.",
     ];
-    
+
     return responses[Math.floor(Math.random() * responses.length)];
   };
 
@@ -240,24 +232,29 @@ What would you like assistance with today?`,
     setIsListening(!isListening);
     toast({
       title: isListening ? "Voice input stopped" : "Voice input started",
-      description: isListening ? "Click again to start listening" : "Speak your question"
+      description: isListening ? "Click again to start listening" : "Speak your question",
     });
   };
 
   const getCategoryColor = (category: CopilotCapability["category"]) => {
     switch (category) {
-    case "analytics": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-    case "automation": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
-    case "compliance": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-    case "operations": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
-    default: return "bg-muted text-muted-foreground";
+      case "analytics":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+      case "automation":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
+      case "compliance":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+      case "operations":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const handleScheduleMaintenance = () => {
     toast({
       title: "🔧 Agendar Manutenção",
-      description: "Abrindo sistema de agendamento de manutenção preventiva"
+      description: "Abrindo sistema de agendamento de manutenção preventiva",
     });
     // TODO: Open maintenance scheduling dialog
   };
@@ -265,7 +262,7 @@ What would you like assistance with today?`,
   const handleGenerateReport = () => {
     toast({
       title: "📄 Gerar Relatório",
-      description: "Iniciando geração de relatório operacional"
+      description: "Iniciando geração de relatório operacional",
     });
     // TODO: Open report generation dialog
   };
@@ -273,7 +270,7 @@ What would you like assistance with today?`,
   const handleCrewPlanning = () => {
     toast({
       title: "👥 Planejamento de Tripulação",
-      description: "Abrindo ferramenta de planejamento e escalas de tripulação"
+      description: "Abrindo ferramenta de planejamento e escalas de tripulação",
     });
     // TODO: Open crew planning interface
   };
@@ -314,12 +311,14 @@ What would you like assistance with today?`,
             <CardContent className="flex-1 flex flex-col p-0">
               <ScrollArea className="flex-1 px-6">
                 <div className="space-y-4 pb-4">
-                  {messages.map((message) => (
+                  {messages.map(message => (
                     <div
                       key={message.id}
                       className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
                     >
-                      <div className={`max-w-[80%] ${message.type === "user" ? "order-2" : "order-1"}`}>
+                      <div
+                        className={`max-w-[80%] ${message.type === "user" ? "order-2" : "order-1"}`}
+                      >
                         <div
                           className={`rounded-lg p-4 ${
                             message.type === "user"
@@ -328,10 +327,10 @@ What would you like assistance with today?`,
                           }`}
                         >
                           <p className="whitespace-pre-wrap">{message.content}</p>
-                          
+
                           {message.actions && (
                             <div className="flex gap-2 mt-3">
-                              {message.actions.map((action) => (
+                              {message.actions.map(action => (
                                 <Button
                                   key={action.id}
                                   variant="outline"
@@ -345,7 +344,7 @@ What would you like assistance with today?`,
                               ))}
                             </div>
                           )}
-                          
+
                           {message.suggestions && (
                             <div className="flex flex-wrap gap-1 mt-3">
                               {message.suggestions.map((suggestion, index) => (
@@ -368,7 +367,7 @@ What would you like assistance with today?`,
                       </div>
                     </div>
                   ))}
-                  
+
                   {isProcessing && (
                     <div className="flex justify-start">
                       <div className="bg-muted rounded-lg p-4 max-w-[80%]">
@@ -393,25 +392,22 @@ What would you like assistance with today?`,
                   >
                     {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </Button>
-                  
+
                   <div className="flex-1">
                     <Input
                       value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
+                      onChange={e => setInputValue(e.target.value)}
                       placeholder="Ask me anything about your maritime operations..."
-                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                      onKeyPress={e => e.key === "Enter" && handleSendMessage()}
                       disabled={isProcessing}
                     />
                   </div>
-                  
-                  <Button
-                    variant="outline"
-                    size="icon"
-                  >
+
+                  <Button variant="outline" size="icon">
                     <Paperclip className="h-4 w-4" />
                   </Button>
-                  
-                  <Button 
+
+                  <Button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim() || isProcessing}
                     className="btn-nautical"
@@ -426,24 +422,22 @@ What would you like assistance with today?`,
 
         <TabsContent value="capabilities" className="flex-1">
           <div className="grid gap-4 md:grid-cols-2">
-            {capabilities.map((capability) => (
+            {capabilities.map(capability => (
               <Card key={capability.id} className="card-elegant hover-lift">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center gap-2 text-base">
                     {capability.icon}
                     {capability.name}
-                    <Badge 
-                      variant="secondary" 
+                    <Badge
+                      variant="secondary"
                       className={`ml-auto ${getCategoryColor(capability.category)}`}
                     >
                       {capability.category}
                     </Badge>
                   </CardTitle>
-                  <p className="text-sm text-muted-foreground">
-                    {capability.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{capability.description}</p>
                 </CardHeader>
-                
+
                 <CardContent>
                   <div className="space-y-2">
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
@@ -525,15 +519,30 @@ What would you like assistance with today?`,
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button variant="outline" size="sm" className="w-full justify-start" onClick={handleScheduleMaintenance}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={handleScheduleMaintenance}
+                >
                   <Calendar className="h-3 w-3 mr-2" />
                   Schedule Maintenance
                 </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start" onClick={handleGenerateReport}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={handleGenerateReport}
+                >
                   <FileText className="h-3 w-3 mr-2" />
                   Generate Report
                 </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start" onClick={handleCrewPlanning}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={handleCrewPlanning}
+                >
                   <Users className="h-3 w-3 mr-2" />
                   Crew Planning
                 </Button>

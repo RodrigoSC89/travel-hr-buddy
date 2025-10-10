@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import { QrCode, Scan, Plus, Edit, Trash2, MapPin, AlertTriangle } from "lucide-react";
+import { QrCode, Scan, Plus, Edit, MapPin, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 
@@ -55,19 +62,27 @@ export const QREquipmentManager = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "operational": return "bg-green-100 text-green-800";
-    case "maintenance": return "bg-yellow-100 text-yellow-800";
-    case "critical": return "bg-red-100 text-red-800";
-    default: return "bg-secondary text-secondary-foreground";
+      case "operational":
+        return "bg-green-100 text-green-800";
+      case "maintenance":
+        return "bg-yellow-100 text-yellow-800";
+      case "critical":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "operational": return <div className="w-2 h-2 bg-green-500 rounded-full" />;
-    case "maintenance": return <div className="w-2 h-2 bg-yellow-500 rounded-full" />;
-    case "critical": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    default: return <div className="w-2 h-2 bg-gray-500 rounded-full" />;
+      case "operational":
+        return <div className="w-2 h-2 bg-green-500 rounded-full" />;
+      case "maintenance":
+        return <div className="w-2 h-2 bg-yellow-500 rounded-full" />;
+      case "critical":
+        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      default:
+        return <div className="w-2 h-2 bg-gray-500 rounded-full" />;
     }
   };
 
@@ -144,9 +159,7 @@ export const QREquipmentManager = () => {
                 <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
                   Cancelar
                 </Button>
-                <Button onClick={handleCreateEquipment}>
-                  Cadastrar e Gerar QR
-                </Button>
+                <Button onClick={handleCreateEquipment}>Cadastrar e Gerar QR</Button>
               </div>
             </DialogContent>
           </Dialog>
@@ -162,7 +175,7 @@ export const QREquipmentManager = () => {
 
         <TabsContent value="list" className="space-y-4">
           <div className="grid gap-4">
-            {equipment.map((item) => (
+            {equipment.map(item => (
               <Card key={item.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -177,8 +190,11 @@ export const QREquipmentManager = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Badge className={getStatusColor(item.status)}>
-                        {item.status === "operational" ? "Operacional" : 
-                          item.status === "maintenance" ? "Manutenção" : "Crítico"}
+                        {item.status === "operational"
+                          ? "Operacional"
+                          : item.status === "maintenance"
+                            ? "Manutenção"
+                            : "Crítico"}
                       </Badge>
                       <Button variant="outline" size="sm">
                         <QrCode className="h-4 w-4" />
@@ -194,15 +210,21 @@ export const QREquipmentManager = () => {
                     </div>
                     <div>
                       <div className="font-medium">Última Inspeção</div>
-                      <div className="text-muted-foreground">{item.lastInspection.toLocaleDateString("pt-BR")}</div>
+                      <div className="text-muted-foreground">
+                        {item.lastInspection.toLocaleDateString("pt-BR")}
+                      </div>
                     </div>
                     <div>
                       <div className="font-medium">Próxima Inspeção</div>
-                      <div className="text-muted-foreground">{item.nextInspection.toLocaleDateString("pt-BR")}</div>
+                      <div className="text-muted-foreground">
+                        {item.nextInspection.toLocaleDateString("pt-BR")}
+                      </div>
                     </div>
                     <div>
                       <div className="font-medium">Checklist</div>
-                      <div className="text-muted-foreground capitalize">{item.checklist || "N/A"}</div>
+                      <div className="text-muted-foreground capitalize">
+                        {item.checklist || "N/A"}
+                      </div>
                     </div>
                   </div>
                   <div className="flex justify-end space-x-2 mt-4">
@@ -238,7 +260,8 @@ export const QREquipmentManager = () => {
                 <MapPin className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                 <h3 className="text-lg font-semibold mb-2">Mapa Interativo</h3>
                 <p className="text-muted-foreground">
-                  Aqui seria exibido um mapa interativo mostrando a localização de todos os equipamentos
+                  Aqui seria exibido um mapa interativo mostrando a localização de todos os
+                  equipamentos
                 </p>
               </div>
             </CardContent>
@@ -247,43 +270,43 @@ export const QREquipmentManager = () => {
 
         <TabsContent value="maintenance" className="space-y-4">
           <div className="grid gap-4">
-            {equipment.filter(item => item.status !== "operational").map((item) => (
-              <Card key={item.id}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      {getStatusIcon(item.status)}
-                      <div>
-                        <CardTitle className="text-lg">{item.name}</CardTitle>
-                        <CardDescription>{item.location}</CardDescription>
+            {equipment
+              .filter(item => item.status !== "operational")
+              .map(item => (
+                <Card key={item.id}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        {getStatusIcon(item.status)}
+                        <div>
+                          <CardTitle className="text-lg">{item.name}</CardTitle>
+                          <CardDescription>{item.location}</CardDescription>
+                        </div>
                       </div>
+                      <Badge className={getStatusColor(item.status)}>
+                        {item.status === "maintenance" ? "Manutenção Agendada" : "Crítico"}
+                      </Badge>
                     </div>
-                    <Badge className={getStatusColor(item.status)}>
-                      {item.status === "maintenance" ? "Manutenção Agendada" : "Crítico"}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="text-sm">
-                      <span className="font-medium">Próxima Inspeção: </span>
-                      {item.nextInspection.toLocaleDateString("pt-BR")}
-                    </div>
-                    {item.notes && (
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
                       <div className="text-sm">
-                        <span className="font-medium">Observações: </span>
-                        {item.notes}
+                        <span className="font-medium">Próxima Inspeção: </span>
+                        {item.nextInspection.toLocaleDateString("pt-BR")}
                       </div>
-                    )}
-                  </div>
-                  <div className="flex justify-end space-x-2 mt-4">
-                    <Button size="sm">
-                      Agendar Manutenção
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                      {item.notes && (
+                        <div className="text-sm">
+                          <span className="font-medium">Observações: </span>
+                          {item.notes}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex justify-end space-x-2 mt-4">
+                      <Button size="sm">Agendar Manutenção</Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
           </div>
         </TabsContent>
       </Tabs>

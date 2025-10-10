@@ -14,14 +14,14 @@ export const LoginForm: React.FC = () => {
   const { signIn } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [loginData, setLoginData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -31,7 +31,7 @@ export const LoginForm: React.FC = () => {
 
     try {
       const { error } = await signIn(loginData.email, loginData.password);
-      
+
       if (error) {
         setError(error.message);
         toast({
@@ -58,18 +58,16 @@ export const LoginForm: React.FC = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Nautilus System</CardTitle>
-          <CardDescription>
-            Sistema Inteligente de Gestão Empresarial
-          </CardDescription>
+          <CardDescription>Sistema Inteligente de Gestão Empresarial</CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="signup">Cadastro</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
@@ -81,13 +79,13 @@ export const LoginForm: React.FC = () => {
                       type="email"
                       placeholder="seu@email.com"
                       value={loginData.email}
-                      onChange={(e) => setLoginData(prev => ({ ...prev, email: e.target.value }))}
+                      onChange={e => setLoginData(prev => ({ ...prev, email: e.target.value }))}
                       className="pl-10"
                       required
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="login-password">Senha</Label>
                   <div className="relative">
@@ -97,7 +95,7 @@ export const LoginForm: React.FC = () => {
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       value={loginData.password}
-                      onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
+                      onChange={e => setLoginData(prev => ({ ...prev, password: e.target.value }))}
                       className="pl-10 pr-10"
                       required
                     />
@@ -108,21 +106,17 @@ export const LoginForm: React.FC = () => {
                       className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
                 </div>
-                
+
                 {error && (
                   <Alert variant="destructive">
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
-                
+
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Entrar

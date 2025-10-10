@@ -3,28 +3,44 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  BarChart3, 
-  PieChart as PieChartIcon,
+import {
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
   Activity,
   Fuel,
   DollarSign,
   Clock,
-  MapPin,
-  AlertTriangle,
   CheckCircle,
   Target,
   Zap,
   Ship,
   Users,
-  Gauge
 } from "lucide-react";
 
 interface FleetMetrics {
@@ -85,7 +101,7 @@ export const AdvancedFleetAnalytics = () => {
   const loadAnalyticsData = useCallback(async () => {
     try {
       setLoading(true);
-      
+
       // Mock analytics data - In production, this would come from actual calculations
       const mockMetrics: FleetMetrics = {
         efficiency: 87.5,
@@ -97,25 +113,121 @@ export const AdvancedFleetAnalytics = () => {
         vessel_utilization: 92.3,
         crew_efficiency: 89.1,
         safety_score: 96.2,
-        environmental_score: 88.7
+        environmental_score: 88.7,
       };
 
       const mockPerformanceData: PerformanceData[] = [
-        { date: "2024-01-01", fuel_efficiency: 85, operational_cost: 120000, revenue: 420000, vessel_count: 5, crew_satisfaction: 87, safety_incidents: 2 },
-        { date: "2024-01-02", fuel_efficiency: 87, operational_cost: 118000, revenue: 435000, vessel_count: 5, crew_satisfaction: 89, safety_incidents: 1 },
-        { date: "2024-01-03", fuel_efficiency: 89, operational_cost: 115000, revenue: 445000, vessel_count: 5, crew_satisfaction: 91, safety_incidents: 0 },
-        { date: "2024-01-04", fuel_efficiency: 86, operational_cost: 122000, revenue: 430000, vessel_count: 5, crew_satisfaction: 88, safety_incidents: 1 },
-        { date: "2024-01-05", fuel_efficiency: 90, operational_cost: 112000, revenue: 465000, vessel_count: 5, crew_satisfaction: 93, safety_incidents: 0 },
-        { date: "2024-01-06", fuel_efficiency: 88, operational_cost: 119000, revenue: 450000, vessel_count: 5, crew_satisfaction: 90, safety_incidents: 1 },
-        { date: "2024-01-07", fuel_efficiency: 91, operational_cost: 110000, revenue: 470000, vessel_count: 5, crew_satisfaction: 94, safety_incidents: 0 }
+        {
+          date: "2024-01-01",
+          fuel_efficiency: 85,
+          operational_cost: 120000,
+          revenue: 420000,
+          vessel_count: 5,
+          crew_satisfaction: 87,
+          safety_incidents: 2,
+        },
+        {
+          date: "2024-01-02",
+          fuel_efficiency: 87,
+          operational_cost: 118000,
+          revenue: 435000,
+          vessel_count: 5,
+          crew_satisfaction: 89,
+          safety_incidents: 1,
+        },
+        {
+          date: "2024-01-03",
+          fuel_efficiency: 89,
+          operational_cost: 115000,
+          revenue: 445000,
+          vessel_count: 5,
+          crew_satisfaction: 91,
+          safety_incidents: 0,
+        },
+        {
+          date: "2024-01-04",
+          fuel_efficiency: 86,
+          operational_cost: 122000,
+          revenue: 430000,
+          vessel_count: 5,
+          crew_satisfaction: 88,
+          safety_incidents: 1,
+        },
+        {
+          date: "2024-01-05",
+          fuel_efficiency: 90,
+          operational_cost: 112000,
+          revenue: 465000,
+          vessel_count: 5,
+          crew_satisfaction: 93,
+          safety_incidents: 0,
+        },
+        {
+          date: "2024-01-06",
+          fuel_efficiency: 88,
+          operational_cost: 119000,
+          revenue: 450000,
+          vessel_count: 5,
+          crew_satisfaction: 90,
+          safety_incidents: 1,
+        },
+        {
+          date: "2024-01-07",
+          fuel_efficiency: 91,
+          operational_cost: 110000,
+          revenue: 470000,
+          vessel_count: 5,
+          crew_satisfaction: 94,
+          safety_incidents: 0,
+        },
       ];
 
       const mockVesselPerformance: VesselPerformance[] = [
-        { vessel_name: "MV Atlantic Explorer", efficiency: 94, fuel_consumption: 185, utilization: 96, maintenance_score: 92, profit: 85000, status: "excellent" },
-        { vessel_name: "MS Ocean Pioneer", efficiency: 89, fuel_consumption: 220, utilization: 91, maintenance_score: 88, profit: 78000, status: "good" },
-        { vessel_name: "MV Pacific Star", efficiency: 85, fuel_consumption: 245, utilization: 87, maintenance_score: 85, profit: 72000, status: "good" },
-        { vessel_name: "MS Baltic Wind", efficiency: 82, fuel_consumption: 265, utilization: 89, maintenance_score: 79, profit: 65000, status: "average" },
-        { vessel_name: "MV Nordic Crown", efficiency: 79, fuel_consumption: 285, utilization: 84, maintenance_score: 76, profit: 58000, status: "average" }
+        {
+          vessel_name: "MV Atlantic Explorer",
+          efficiency: 94,
+          fuel_consumption: 185,
+          utilization: 96,
+          maintenance_score: 92,
+          profit: 85000,
+          status: "excellent",
+        },
+        {
+          vessel_name: "MS Ocean Pioneer",
+          efficiency: 89,
+          fuel_consumption: 220,
+          utilization: 91,
+          maintenance_score: 88,
+          profit: 78000,
+          status: "good",
+        },
+        {
+          vessel_name: "MV Pacific Star",
+          efficiency: 85,
+          fuel_consumption: 245,
+          utilization: 87,
+          maintenance_score: 85,
+          profit: 72000,
+          status: "good",
+        },
+        {
+          vessel_name: "MS Baltic Wind",
+          efficiency: 82,
+          fuel_consumption: 265,
+          utilization: 89,
+          maintenance_score: 79,
+          profit: 65000,
+          status: "average",
+        },
+        {
+          vessel_name: "MV Nordic Crown",
+          efficiency: 79,
+          fuel_consumption: 285,
+          utilization: 84,
+          maintenance_score: 76,
+          profit: 58000,
+          status: "average",
+        },
       ];
 
       const mockPredictiveInsights: PredictiveInsight[] = [
@@ -128,7 +240,7 @@ export const AdvancedFleetAnalytics = () => {
           confidence: 92,
           potential_savings: 45000,
           action_required: true,
-          timeline: "15 dias"
+          timeline: "15 dias",
         },
         {
           id: "2",
@@ -139,7 +251,7 @@ export const AdvancedFleetAnalytics = () => {
           confidence: 87,
           potential_savings: 15000,
           action_required: false,
-          timeline: "Próxima viagem"
+          timeline: "Próxima viagem",
         },
         {
           id: "3",
@@ -150,7 +262,7 @@ export const AdvancedFleetAnalytics = () => {
           confidence: 84,
           potential_savings: 12000,
           action_required: false,
-          timeline: "30 dias"
+          timeline: "30 dias",
         },
         {
           id: "4",
@@ -161,20 +273,19 @@ export const AdvancedFleetAnalytics = () => {
           confidence: 78,
           potential_savings: 8000,
           action_required: false,
-          timeline: "60 dias"
-        }
+          timeline: "60 dias",
+        },
       ];
 
       setMetrics(mockMetrics);
       setPerformanceData(mockPerformanceData);
       setVesselPerformance(mockVesselPerformance);
       setPredictiveInsights(mockPredictiveInsights);
-      
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao carregar dados de analytics",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -183,18 +294,23 @@ export const AdvancedFleetAnalytics = () => {
 
   const getStatusColor = (status: VesselPerformance["status"]) => {
     switch (status) {
-    case "excellent": return "bg-success";
-    case "good": return "bg-info";
-    case "average": return "bg-warning";
-    case "poor": return "bg-status-error";
-    default: return "bg-muted";
+      case "excellent":
+        return "bg-success";
+      case "good":
+        return "bg-info";
+      case "average":
+        return "bg-warning";
+      case "poor":
+        return "bg-status-error";
+      default:
+        return "bg-muted";
     }
   };
 
   // Função para carregar dados de analytics
   useEffect(() => {
     loadAnalyticsData();
-    
+
     // Set up real-time updates
     const subscription = supabase
       .channel("fleet-analytics")
@@ -210,20 +326,29 @@ export const AdvancedFleetAnalytics = () => {
 
   const getStatusText = (status: VesselPerformance["status"]) => {
     switch (status) {
-    case "excellent": return "Excelente";
-    case "good": return "Bom";
-    case "average": return "Médio";
-    case "poor": return "Ruim";
-    default: return "Desconhecido";
+      case "excellent":
+        return "Excelente";
+      case "good":
+        return "Bom";
+      case "average":
+        return "Médio";
+      case "poor":
+        return "Ruim";
+      default:
+        return "Desconhecido";
     }
   };
 
   const getImpactColor = (impact: PredictiveInsight["impact"]) => {
     switch (impact) {
-    case "high": return "text-red-600 bg-red-100";
-    case "medium": return "text-yellow-600 bg-yellow-100";
-    case "low": return "text-green-600 bg-green-100";
-    default: return "text-muted-foreground bg-gray-100";
+      case "high":
+        return "text-red-600 bg-red-100";
+      case "medium":
+        return "text-yellow-600 bg-yellow-100";
+      case "low":
+        return "text-green-600 bg-green-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
@@ -247,7 +372,7 @@ export const AdvancedFleetAnalytics = () => {
             Análise em tempo real e insights preditivos para otimização operacional
           </p>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger className="w-32">
@@ -260,7 +385,7 @@ export const AdvancedFleetAnalytics = () => {
               <SelectItem value="1y">1 ano</SelectItem>
             </SelectContent>
           </Select>
-          
+
           <Button variant="outline" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Exportar
@@ -368,7 +493,12 @@ export const AdvancedFleetAnalytics = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="fuel_efficiency" stroke="#8884d8" name="Eficiência %" />
+                    <Line
+                      type="monotone"
+                      dataKey="fuel_efficiency"
+                      stroke="#8884d8"
+                      name="Eficiência %"
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -386,8 +516,22 @@ export const AdvancedFleetAnalytics = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Area type="monotone" dataKey="revenue" stackId="1" stroke="#82ca9d" fill="#82ca9d" name="Receita" />
-                    <Area type="monotone" dataKey="operational_cost" stackId="2" stroke="#ffc658" fill="#ffc658" name="Custos" />
+                    <Area
+                      type="monotone"
+                      dataKey="revenue"
+                      stackId="1"
+                      stroke="#82ca9d"
+                      fill="#82ca9d"
+                      name="Receita"
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="operational_cost"
+                      stackId="2"
+                      stroke="#ffc658"
+                      fill="#ffc658"
+                      name="Custos"
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -410,10 +554,8 @@ export const AdvancedFleetAnalytics = () => {
                     <span className="font-semibold">{metrics?.crew_efficiency}%</span>
                   </div>
                   <Progress value={metrics?.crew_efficiency} className="h-2" />
-                  
-                  <div className="text-xs text-muted-foreground">
-                    +3.2% vs período anterior
-                  </div>
+
+                  <div className="text-xs text-muted-foreground">+3.2% vs período anterior</div>
                 </div>
               </CardContent>
             </Card>
@@ -432,10 +574,8 @@ export const AdvancedFleetAnalytics = () => {
                     <span className="font-semibold">{metrics?.fuel_consumption}</span>
                   </div>
                   <Progress value={75} className="h-2" />
-                  
-                  <div className="text-xs text-green-600">
-                    -5.8% vs período anterior
-                  </div>
+
+                  <div className="text-xs text-green-600">-5.8% vs período anterior</div>
                 </div>
               </CardContent>
             </Card>
@@ -454,10 +594,8 @@ export const AdvancedFleetAnalytics = () => {
                     <span className="font-semibold">{metrics?.environmental_score}%</span>
                   </div>
                   <Progress value={metrics?.environmental_score} className="h-2" />
-                  
-                  <div className="text-xs text-green-600">
-                    +1.9% vs período anterior
-                  </div>
+
+                  <div className="text-xs text-green-600">+1.9% vs período anterior</div>
                 </div>
               </CardContent>
             </Card>
@@ -478,9 +616,24 @@ export const AdvancedFleetAnalytics = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="fuel_efficiency" stroke="#8884d8" name="Eficiência" />
-                    <Line type="monotone" dataKey="crew_satisfaction" stroke="#82ca9d" name="Satisfação" />
-                    <Line type="monotone" dataKey="safety_incidents" stroke="#ff7c7c" name="Incidentes" />
+                    <Line
+                      type="monotone"
+                      dataKey="fuel_efficiency"
+                      stroke="#8884d8"
+                      name="Eficiência"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="crew_satisfaction"
+                      stroke="#82ca9d"
+                      name="Satisfação"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="safety_incidents"
+                      stroke="#ff7c7c"
+                      name="Incidentes"
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -498,7 +651,7 @@ export const AdvancedFleetAnalytics = () => {
                         { name: "Combustível", value: 45, fill: "#8884d8" },
                         { name: "Manutenção", value: 25, fill: "#82ca9d" },
                         { name: "Tripulação", value: 20, fill: "#ffc658" },
-                        { name: "Outros", value: 10, fill: "#ff7c7c" }
+                        { name: "Outros", value: 10, fill: "#ff7c7c" },
                       ]}
                       cx="50%"
                       cy="50%"
@@ -512,7 +665,7 @@ export const AdvancedFleetAnalytics = () => {
                         { name: "Combustível", value: 45, fill: "#8884d8" },
                         { name: "Manutenção", value: 25, fill: "#82ca9d" },
                         { name: "Tripulação", value: 20, fill: "#ffc658" },
-                        { name: "Outros", value: 10, fill: "#ff7c7c" }
+                        { name: "Outros", value: 10, fill: "#ff7c7c" },
                       ].map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
@@ -532,7 +685,7 @@ export const AdvancedFleetAnalytics = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {vesselPerformance.map((vessel) => (
+                {vesselPerformance.map(vessel => (
                   <div key={vessel.vessel_name} className="border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-4">
                       <div>
@@ -548,26 +701,26 @@ export const AdvancedFleetAnalytics = () => {
                         <div className="text-xs text-muted-foreground">Lucro mensal</div>
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div>
                         <div className="text-sm text-muted-foreground">Eficiência</div>
                         <div className="font-semibold">{vessel.efficiency}%</div>
                         <Progress value={vessel.efficiency} className="h-1 mt-1" />
                       </div>
-                      
+
                       <div>
                         <div className="text-sm text-muted-foreground">Utilização</div>
                         <div className="font-semibold">{vessel.utilization}%</div>
                         <Progress value={vessel.utilization} className="h-1 mt-1" />
                       </div>
-                      
+
                       <div>
                         <div className="text-sm text-muted-foreground">Manutenção</div>
                         <div className="font-semibold">{vessel.maintenance_score}%</div>
                         <Progress value={vessel.maintenance_score} className="h-1 mt-1" />
                       </div>
-                      
+
                       <div>
                         <div className="text-sm text-muted-foreground">Combustível</div>
                         <div className="font-semibold">{vessel.fuel_consumption}L/h</div>
@@ -591,25 +744,26 @@ export const AdvancedFleetAnalytics = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {predictiveInsights.map((insight) => (
+                {predictiveInsights.map(insight => (
                   <div key={insight.id} className="border rounded-lg p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <h3 className="font-semibold">{insight.title}</h3>
                           <Badge className={getImpactColor(insight.impact)}>
-                            {insight.impact === "high" ? "Alto Impacto" : 
-                              insight.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
+                            {insight.impact === "high"
+                              ? "Alto Impacto"
+                              : insight.impact === "medium"
+                                ? "Médio Impacto"
+                                : "Baixo Impacto"}
                           </Badge>
                           {insight.action_required && (
                             <Badge variant="destructive">Ação Necessária</Badge>
                           )}
                         </div>
-                        
-                        <p className="text-sm text-muted-foreground mb-3">
-                          {insight.description}
-                        </p>
-                        
+
+                        <p className="text-sm text-muted-foreground mb-3">{insight.description}</p>
+
                         <div className="flex items-center gap-4 text-xs">
                           <div className="flex items-center gap-1">
                             <Target className="h-3 w-3" />
@@ -625,11 +779,8 @@ export const AdvancedFleetAnalytics = () => {
                           </div>
                         </div>
                       </div>
-                      
-                      <Button 
-                        variant={insight.action_required ? "default" : "outline"} 
-                        size="sm"
-                      >
+
+                      <Button variant={insight.action_required ? "default" : "outline"} size="sm">
                         {insight.action_required ? "Implementar" : "Ver Detalhes"}
                       </Button>
                     </div>

@@ -4,7 +4,6 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import UserOnboardingCenter from "@/components/onboarding/user-onboarding-center";
 import { UserPlus } from "lucide-react";
 
-
 const UserOnboardingPage = () => {
   return (
     <SidebarProvider>
@@ -24,7 +23,6 @@ const UserOnboardingPage = () => {
           </div>
           <UserOnboardingCenter />
         </main>
-        
       </div>
     </SidebarProvider>
   );

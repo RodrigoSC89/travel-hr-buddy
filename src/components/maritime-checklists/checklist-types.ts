@@ -2,7 +2,16 @@ export interface ChecklistItem {
   id: string;
   title: string;
   description?: string;
-  type: "boolean" | "text" | "number" | "select" | "multiselect" | "file" | "photo" | "signature" | "measurement";
+  type:
+    | "boolean"
+    | "text"
+    | "number"
+    | "select"
+    | "multiselect"
+    | "file"
+    | "photo"
+    | "signature"
+    | "measurement";
   required: boolean;
   category: string;
   order: number;
@@ -119,7 +128,12 @@ export interface ChecklistAIAnalysis {
 
 export interface Anomaly {
   itemId: string;
-  type: "missing_value" | "unexpected_value" | "out_of_range" | "pattern_deviation" | "evidence_mismatch";
+  type:
+    | "missing_value"
+    | "unexpected_value"
+    | "out_of_range"
+    | "pattern_deviation"
+    | "evidence_mismatch";
   severity: "low" | "medium" | "high" | "critical";
   description: string;
   suggestion: string;
@@ -170,7 +184,10 @@ export interface ChecklistTemplate {
   type: "dp" | "machine_routine" | "nautical_routine" | "safety" | "environmental" | "custom";
   version: string;
   description: string;
-  items: Omit<ChecklistItem, "value" | "evidence" | "notes" | "timestamp" | "inspector" | "status">[];
+  items: Omit<
+    ChecklistItem,
+    "value" | "evidence" | "notes" | "timestamp" | "inspector" | "status"
+  >[];
   estimatedDuration: number;
   frequency: "daily" | "weekly" | "monthly" | "quarterly" | "annually" | "custom";
   applicableVesselTypes: string[];
@@ -241,7 +258,12 @@ export interface IoTSensor {
 export interface ChecklistReport {
   id: string;
   title: string;
-  type: "vessel_summary" | "compliance_report" | "anomaly_report" | "trend_analysis" | "comparative_analysis";
+  type:
+    | "vessel_summary"
+    | "compliance_report"
+    | "anomaly_report"
+    | "trend_analysis"
+    | "comparative_analysis";
   filters: ReportFilters;
   data: any;
   generatedAt: string;

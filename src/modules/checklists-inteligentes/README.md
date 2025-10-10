@@ -5,6 +5,7 @@
 The Checklists Inteligentes (Smart Checklists) module provides **AI-powered intelligent checklists** for various operational processes, with context-aware suggestions and automated completion tracking.
 
 **Key Use Cases:**
+
 - Create and manage operational checklists
 - Maritime safety checklists (SGSO integration)
 - AI-powered checklist suggestions

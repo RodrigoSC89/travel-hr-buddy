@@ -4,7 +4,7 @@
  */
 
 // Re-export from the new unified MetricCard component
-export { 
+export {
   MetricCard as KPICard,
-  type MetricCardProps as KPICardProps
+  type MetricCardProps as KPICardProps,
 } from "@/components/ui/MetricCard";

@@ -4,18 +4,23 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Target, 
-  AlertTriangle, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Target,
+  AlertTriangle,
   BarChart3,
   Brain,
-  Calendar,
   RefreshCw,
-  Zap
+  Zap,
 } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PredictionData {
   metric: string;
@@ -39,7 +44,7 @@ const PredictiveAnalytics: React.FC = () => {
     { value: "30_days", label: "30 Dias" },
     { value: "90_days", label: "90 Dias" },
     { value: "6_months", label: "6 Meses" },
-    { value: "1_year", label: "1 Ano" }
+    { value: "1_year", label: "1 Ano" },
   ];
 
   const generatePredictions = useCallback(async () => {
@@ -49,8 +54,8 @@ const PredictiveAnalytics: React.FC = () => {
       const { data, error } = await supabase.functions.invoke("generate-predictions", {
         body: {
           timeframe: selectedTimeframe,
-          includeFactors: true
-        }
+          includeFactors: true,
+        },
       });
 
       if (error) throw error;
@@ -58,7 +63,7 @@ const PredictiveAnalytics: React.FC = () => {
       if (data.success) {
         setPredictions(data.predictions);
         setLastUpdated(new Date());
-        
+
         toast({
           title: "Análises Atualizadas",
           description: "Previsões geradas com sucesso",
@@ -67,7 +72,6 @@ const PredictiveAnalytics: React.FC = () => {
         throw new Error(data.error || "Erro ao gerar previsões");
       }
     } catch (error) {
-      
       // Mock data for demonstration
       const mockPredictions: PredictionData[] = [
         {
@@ -77,7 +81,7 @@ const PredictiveAnalytics: React.FC = () => {
           confidence: 87,
           trend: "up",
           timeframe: selectedTimeframe,
-          factors: ["Sazonalidade", "Novos clientes", "Expansão de mercado"]
+          factors: ["Sazonalidade", "Novos clientes", "Expansão de mercado"],
         },
         {
           metric: "Satisfação do Cliente",
@@ -86,7 +90,7 @@ const PredictiveAnalytics: React.FC = () => {
           confidence: 92,
           trend: "up",
           timeframe: selectedTimeframe,
-          factors: ["Melhoria no atendimento", "Novos treinamentos", "Feedback proativo"]
+          factors: ["Melhoria no atendimento", "Novos treinamentos", "Feedback proativo"],
         },
         {
           metric: "Rotatividade de Funcionários",
@@ -95,7 +99,7 @@ const PredictiveAnalytics: React.FC = () => {
           confidence: 78,
           trend: "down",
           timeframe: selectedTimeframe,
-          factors: ["Programa de retenção", "Melhores benefícios", "Cultura organizacional"]
+          factors: ["Programa de retenção", "Melhores benefícios", "Cultura organizacional"],
         },
         {
           metric: "Produtividade da Equipe",
@@ -104,7 +108,7 @@ const PredictiveAnalytics: React.FC = () => {
           confidence: 85,
           trend: "up",
           timeframe: selectedTimeframe,
-          factors: ["Automatização", "Novos processos", "Capacitação técnica"]
+          factors: ["Automatização", "Novos processos", "Capacitação técnica"],
         },
         {
           metric: "Custos Operacionais",
@@ -113,13 +117,13 @@ const PredictiveAnalytics: React.FC = () => {
           confidence: 81,
           trend: "up",
           timeframe: selectedTimeframe,
-          factors: ["Inflação", "Expansão da equipe", "Investimentos em tecnologia"]
-        }
+          factors: ["Inflação", "Expansão da equipe", "Investimentos em tecnologia"],
+        },
       ];
 
       setPredictions(mockPredictions);
       setLastUpdated(new Date());
-      
+
       toast({
         title: "Usando dados simulados",
         description: "Conecte-se à API para obter previsões reais",
@@ -136,17 +140,23 @@ const PredictiveAnalytics: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="w-4 h-4 text-green-600" />;
-    case "down": return <TrendingDown className="w-4 h-4 text-red-600" />;
-    default: return <Target className="w-4 h-4 text-yellow-600" />;
+      case "up":
+        return <TrendingUp className="w-4 h-4 text-green-600" />;
+      case "down":
+        return <TrendingDown className="w-4 h-4 text-red-600" />;
+      default:
+        return <Target className="w-4 h-4 text-yellow-600" />;
     }
   };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-    case "up": return "text-green-600";
-    case "down": return "text-red-600";
-    default: return "text-yellow-600";
+      case "up":
+        return "text-green-600";
+      case "down":
+        return "text-red-600";
+      default:
+        return "text-yellow-600";
     }
   };
 
@@ -160,7 +170,11 @@ const PredictiveAnalytics: React.FC = () => {
     if (metric.includes("Receita") || metric.includes("Custos")) {
       return `R$ ${value.toLocaleString()}`;
     }
-    if (metric.includes("Satisfação") || metric.includes("Produtividade") || metric.includes("Rotatividade")) {
+    if (
+      metric.includes("Satisfação") ||
+      metric.includes("Produtividade") ||
+      metric.includes("Rotatividade")
+    ) {
       return `${value}%`;
     }
     return value.toString();
@@ -186,7 +200,7 @@ const PredictiveAnalytics: React.FC = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {timeframes.map((tf) => (
+                  {timeframes.map(tf => (
                     <SelectItem key={tf.value} value={tf.value}>
                       {tf.label}
                     </SelectItem>
@@ -261,10 +275,7 @@ const PredictiveAnalytics: React.FC = () => {
                           {prediction.confidence}%
                         </span>
                       </div>
-                      <Progress 
-                        value={prediction.confidence} 
-                        className="h-2"
-                      />
+                      <Progress value={prediction.confidence} className="h-2" />
                     </div>
 
                     <div>
@@ -306,22 +317,27 @@ const PredictiveAnalytics: React.FC = () => {
                     <div key={idx} className="flex items-start gap-2">
                       <TrendingUp className="w-4 h-4 text-green-600 mt-0.5" />
                       <p className="text-sm">
-                        {p.metric} deve aumentar {Math.abs(calculateChange(p.current, p.predicted)).toFixed(1)}%
+                        {p.metric} deve aumentar{" "}
+                        {Math.abs(calculateChange(p.current, p.predicted)).toFixed(1)}%
                       </p>
                     </div>
                   ))}
               </div>
-              
+
               <div className="space-y-3">
                 <h4 className="font-medium text-red-600">Pontos de Atenção</h4>
                 {predictions
-                  .filter(p => (p.trend === "up" && p.metric.includes("Custos")) || (p.trend === "down" && !p.metric.includes("Rotatividade")))
+                  .filter(
+                    p =>
+                      (p.trend === "up" && p.metric.includes("Custos")) ||
+                      (p.trend === "down" && !p.metric.includes("Rotatividade"))
+                  )
                   .slice(0, 3)
                   .map((p, idx) => (
                     <div key={idx} className="flex items-start gap-2">
                       <AlertTriangle className="w-4 h-4 text-red-600 mt-0.5" />
                       <p className="text-sm">
-                        {p.metric}: monitorar tendência de 
+                        {p.metric}: monitorar tendência de
                         {p.trend === "up" ? " aumento" : " redução"}
                       </p>
                     </div>

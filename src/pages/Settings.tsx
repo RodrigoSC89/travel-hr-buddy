@@ -15,7 +15,7 @@ const Settings = () => {
         badges={[
           { icon: User, label: "Perfil" },
           { icon: Bell, label: "Notificações" },
-          { icon: Shield, label: "Segurança" }
+          { icon: Shield, label: "Segurança" },
         ]}
       />
       <EnhancedSettingsHub />

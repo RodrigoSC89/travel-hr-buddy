@@ -1,10 +1,24 @@
 import React, { useState } from "react";
-import { FileText, Download, Calendar, Filter, BarChart3, TrendingUp, AlertTriangle } from "lucide-react";
+import {
+  FileText,
+  Download,
+  Calendar,
+  Filter,
+  BarChart3,
+  TrendingUp,
+  AlertTriangle,
+} from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -63,20 +77,29 @@ export const ChecklistReports = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "bg-green-100 text-green-800";
-    case "generating": return "bg-blue-100 text-blue-800";
-    case "failed": return "bg-red-100 text-red-800";
-    default: return "bg-secondary text-secondary-foreground";
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "generating":
+        return "bg-blue-100 text-blue-800";
+      case "failed":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "compliance": return <FileText className="h-4 w-4" />;
-    case "performance": return <BarChart3 className="h-4 w-4" />;
-    case "audit": return <AlertTriangle className="h-4 w-4" />;
-    case "trend": return <TrendingUp className="h-4 w-4" />;
-    default: return <FileText className="h-4 w-4" />;
+      case "compliance":
+        return <FileText className="h-4 w-4" />;
+      case "performance":
+        return <BarChart3 className="h-4 w-4" />;
+      case "audit":
+        return <AlertTriangle className="h-4 w-4" />;
+      case "trend":
+        return <TrendingUp className="h-4 w-4" />;
+      default:
+        return <FileText className="h-4 w-4" />;
     }
   };
 
@@ -94,8 +117,8 @@ export const ChecklistReports = () => {
     });
   };
 
-  const filteredReports = reports.filter(report => 
-    filterType === "all" || report.type === filterType
+  const filteredReports = reports.filter(
+    report => filterType === "all" || report.type === filterType
   );
 
   return (
@@ -156,7 +179,7 @@ export const ChecklistReports = () => {
 
         <TabsContent value="reports" className="space-y-4">
           <div className="grid gap-4">
-            {filteredReports.map((report) => (
+            {filteredReports.map(report => (
               <Card key={report.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -165,49 +188,71 @@ export const ChecklistReports = () => {
                       <div>
                         <CardTitle className="text-lg">{report.title}</CardTitle>
                         <CardDescription>
-                          Gerado em {report.generatedAt.toLocaleDateString("pt-BR")} • {report.period}
+                          Gerado em {report.generatedAt.toLocaleDateString("pt-BR")} •{" "}
+                          {report.period}
                         </CardDescription>
                       </div>
                     </div>
                     <Badge className={getStatusColor(report.status)}>
-                      {report.status === "completed" ? "Concluído" : 
-                        report.status === "generating" ? "Gerando" : "Falhou"}
+                      {report.status === "completed"
+                        ? "Concluído"
+                        : report.status === "generating"
+                          ? "Gerando"
+                          : "Falhou"}
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-primary">{report.metrics.totalChecklists}</div>
+                      <div className="text-2xl font-bold text-primary">
+                        {report.metrics.totalChecklists}
+                      </div>
                       <div className="text-sm text-muted-foreground">Total de Checklists</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600">{report.metrics.completedChecklists}</div>
+                      <div className="text-2xl font-bold text-green-600">
+                        {report.metrics.completedChecklists}
+                      </div>
                       <div className="text-sm text-muted-foreground">Concluídos</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600">{report.metrics.complianceRate}%</div>
+                      <div className="text-2xl font-bold text-blue-600">
+                        {report.metrics.complianceRate}%
+                      </div>
                       <div className="text-sm text-muted-foreground">Conformidade</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-red-600">{report.metrics.criticalIssues}</div>
+                      <div className="text-2xl font-bold text-red-600">
+                        {report.metrics.criticalIssues}
+                      </div>
                       <div className="text-sm text-muted-foreground">Críticos</div>
                     </div>
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Taxa de Conclusão</span>
-                      <span>{((report.metrics.completedChecklists / report.metrics.totalChecklists) * 100).toFixed(1)}%</span>
+                      <span>
+                        {(
+                          (report.metrics.completedChecklists / report.metrics.totalChecklists) *
+                          100
+                        ).toFixed(1)}
+                        %
+                      </span>
                     </div>
-                    <Progress value={(report.metrics.completedChecklists / report.metrics.totalChecklists) * 100} />
+                    <Progress
+                      value={
+                        (report.metrics.completedChecklists / report.metrics.totalChecklists) * 100
+                      }
+                    />
                   </div>
                   <div className="flex justify-end space-x-2 mt-4">
                     <Button variant="outline" size="sm">
                       <FileText className="h-4 w-4 mr-1" />
                       Visualizar
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       onClick={() => handleDownloadReport(report.id)}
                     >
@@ -230,9 +275,7 @@ export const ChecklistReports = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">94.5%</div>
-                <p className="text-xs text-muted-foreground">
-                  +2.1% em relação ao mês anterior
-                </p>
+                <p className="text-xs text-muted-foreground">+2.1% em relação ao mês anterior</p>
               </CardContent>
             </Card>
             <Card>
@@ -242,9 +285,7 @@ export const ChecklistReports = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">1,234</div>
-                <p className="text-xs text-muted-foreground">
-                  +12% em relação ao mês anterior
-                </p>
+                <p className="text-xs text-muted-foreground">+12% em relação ao mês anterior</p>
               </CardContent>
             </Card>
             <Card>
@@ -254,9 +295,7 @@ export const ChecklistReports = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">23</div>
-                <p className="text-xs text-muted-foreground">
-                  -5% em relação ao mês anterior
-                </p>
+                <p className="text-xs text-muted-foreground">-5% em relação ao mês anterior</p>
               </CardContent>
             </Card>
             <Card>
@@ -266,9 +305,7 @@ export const ChecklistReports = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">45min</div>
-                <p className="text-xs text-muted-foreground">
-                  -3min em relação ao mês anterior
-                </p>
+                <p className="text-xs text-muted-foreground">-3min em relação ao mês anterior</p>
               </CardContent>
             </Card>
           </div>

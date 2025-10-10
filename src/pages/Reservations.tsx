@@ -15,7 +15,7 @@ const Reservations: React.FC = () => {
         badges={[
           { icon: Clock, label: "Agendamento Inteligente" },
           { icon: CheckCircle, label: "Confirmações Automáticas" },
-          { icon: TrendingUp, label: "Otimização" }
+          { icon: TrendingUp, label: "Otimização" },
         ]}
       />
       <EnhancedReservationsDashboard />

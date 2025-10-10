@@ -5,6 +5,7 @@
 The Analytics Tempo Real (Real-time Analytics) module provides **live data streaming and real-time analytical dashboards** for monitoring current system state and instant insights.
 
 **Key Use Cases:**
+
 - Real-time dashboard monitoring
 - Live data streaming and updates
 - Instant metric tracking

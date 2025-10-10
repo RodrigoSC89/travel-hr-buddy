@@ -2,17 +2,31 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle, AlertCircle, FileText, Save, Send, Camera, Mic, Upload, Plus, Trash2, Star, Award, Brain } from "lucide-react";
+import {
+  CheckCircle,
+  AlertCircle,
+  FileText,
+  Save,
+  Camera,
+  Mic,
+  Upload,
+  Star,
+  Award,
+  Brain,
+} from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface AuditElement {
@@ -60,7 +74,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
   auditId,
   template,
   onSave,
-  onComplete
+  onComplete,
 }) => {
   const [currentElementIndex, setCurrentElementIndex] = useState(0);
   const [auditResponses, setAuditResponses] = useState<Record<string, AuditResponse[]>>({});
@@ -76,7 +90,8 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
     // Calculate overall progress
     const totalRequirements = elements.reduce((acc, el) => acc + el.requirements.length, 0);
     const completedRequirements = Object.values(auditResponses).reduce(
-      (acc, responses) => acc + responses.length, 0
+      (acc, responses) => acc + responses.length,
+      0
     );
     setOverallProgress((completedRequirements / totalRequirements) * 100);
   }, [auditResponses, elements]);
@@ -84,14 +99,14 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
   const addResponse = (elementNumber: string, response: AuditResponse) => {
     setAuditResponses(prev => ({
       ...prev,
-      [elementNumber]: [...(prev[elementNumber] || []), response]
+      [elementNumber]: [...(prev[elementNumber] || []), response],
     }));
   };
 
   const updateResponse = (elementNumber: string, index: number, response: AuditResponse) => {
     setAuditResponses(prev => ({
       ...prev,
-      [elementNumber]: prev[elementNumber].map((r, i) => i === index ? response : r)
+      [elementNumber]: prev[elementNumber].map((r, i) => (i === index ? response : r)),
     }));
   };
 
@@ -103,21 +118,21 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
     setIsAnalyzing(true);
     try {
       const elementResponses = auditResponses[elementNumber] || [];
-      
+
       const { data, error } = await supabase.functions.invoke("peotram-ai-analysis", {
         body: {
           audit_id: auditId,
           element_number: elementNumber,
           responses: elementResponses,
-          element_name: currentElement.name
-        }
+          element_name: currentElement.name,
+        },
       });
 
       if (error) throw error;
 
       setAiInsights(prev => ({
         ...prev,
-        [elementNumber]: data.analysis
+        [elementNumber]: data.analysis,
       }));
 
       toast({
@@ -147,19 +162,17 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
 
       // Save non-conformities
       for (const nc of nonConformities) {
-        await supabase
-          .from("peotram_non_conformities")
-          .insert({
-            audit_id: auditId,
-            element_number: nc.element_number,
-            element_name: nc.element_name,
-            non_conformity_type: nc.type,
-            description: nc.description,
-            evidence_urls: nc.evidence_urls,
-            corrective_action: nc.corrective_action,
-            responsible_person: nc.responsible_person,
-            target_date: nc.target_date
-          });
+        await supabase.from("peotram_non_conformities").insert({
+          audit_id: auditId,
+          element_number: nc.element_number,
+          element_name: nc.element_name,
+          non_conformity_type: nc.type,
+          description: nc.description,
+          evidence_urls: nc.evidence_urls,
+          corrective_action: nc.corrective_action,
+          responsible_person: nc.responsible_person,
+          target_date: nc.target_date,
+        });
       }
 
       toast({
@@ -179,17 +192,17 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
 
   const completeAudit = async () => {
     await saveAudit();
-    
+
     // Calculate final scores and update audit status
     const complianceScore = calculateComplianceScore();
-    
+
     await supabase
       .from("peotram_audits")
       .update({
         status: "completed",
         compliance_score: complianceScore,
         elements_evaluated: elements.length,
-        non_conformities_count: nonConformities.length
+        non_conformities_count: nonConformities.length,
       })
       .eq("id", auditId);
 
@@ -204,30 +217,32 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
   const calculateComplianceScore = () => {
     const allResponses = Object.values(auditResponses).flat();
     const compliantResponses = allResponses.filter(r => r.score === "compliant").length;
-    return allResponses.length > 0 ? Math.round((compliantResponses / allResponses.length) * 100) : 0;
+    return allResponses.length > 0
+      ? Math.round((compliantResponses / allResponses.length) * 100)
+      : 0;
   };
 
   const getScoreColor = (score: string) => {
     switch (score) {
-    case "compliant":
-      return "text-green-600";
-    case "partial":
-      return "text-yellow-600";
-    case "non-compliant":
-      return "text-red-600";
-    default:
-      return "text-muted-foreground";
+      case "compliant":
+        return "text-green-600";
+      case "partial":
+        return "text-yellow-600";
+      case "non-compliant":
+        return "text-red-600";
+      default:
+        return "text-muted-foreground";
     }
   };
 
   const getScoreIcon = (score: string) => {
     switch (score) {
-    case "compliant":
-      return <CheckCircle className="h-4 w-4 text-green-600" />;
-    case "non-compliant":
-      return <AlertCircle className="h-4 w-4 text-red-600" />;
-    default:
-      return <FileText className="h-4 w-4 text-muted-foreground" />;
+      case "compliant":
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
+      case "non-compliant":
+        return <AlertCircle className="h-4 w-4 text-red-600" />;
+      default:
+        return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -242,7 +257,8 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                 Elemento {currentElement.number}: {currentElement.name}
               </CardTitle>
               <CardDescription>
-                Elemento {currentElementIndex + 1} de {elements.length} • {overallProgress.toFixed(0)}% concluído
+                Elemento {currentElementIndex + 1} de {elements.length} •{" "}
+                {overallProgress.toFixed(0)}% concluído
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
@@ -276,8 +292,9 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
               <div className="space-y-2">
                 {elements.map((element, index) => {
                   const elementResponses = auditResponses[element.number] || [];
-                  const completionRate = (elementResponses.length / element.requirements.length) * 100;
-                  
+                  const completionRate =
+                    (elementResponses.length / element.requirements.length) * 100;
+
                   return (
                     <Button
                       key={element.number}
@@ -294,9 +311,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                             <CheckCircle className="h-4 w-4 text-green-600" />
                           )}
                         </div>
-                        <p className="font-medium text-sm line-clamp-2">
-                          {element.name}
-                        </p>
+                        <p className="font-medium text-sm line-clamp-2">{element.name}</p>
                         <Progress value={completionRate} className="mt-2" />
                         <p className="text-xs text-muted-foreground mt-1">
                           {elementResponses.length}/{element.requirements.length} requisitos
@@ -316,9 +331,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
           <Card>
             <CardHeader>
               <CardTitle>Requisitos do Elemento</CardTitle>
-              <CardDescription>
-                Avalie cada requisito e forneça evidências
-              </CardDescription>
+              <CardDescription>Avalie cada requisito e forneça evidências</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -327,7 +340,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                   const existingResponse = auditResponses[currentElement.number]?.find(
                     r => r.requirement_code === requirementCode
                   );
-                  
+
                   return (
                     <div key={requirementCode} className="border rounded-lg p-4 space-y-4">
                       <div className="flex items-start justify-between">
@@ -339,12 +352,12 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                         </div>
                         {existingResponse && getScoreIcon(existingResponse.score)}
                       </div>
-                      
+
                       <RequirementForm
                         requirementCode={requirementCode}
                         elementNumber={currentElement.number}
                         existingResponse={existingResponse}
-                        onSave={(response) => {
+                        onSave={response => {
                           if (existingResponse) {
                             const index = auditResponses[currentElement.number].findIndex(
                               r => r.requirement_code === requirementCode
@@ -394,17 +407,19 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                       <p className="text-sm text-muted-foreground">Recomendações</p>
                     </div>
                   </div>
-                  
+
                   {aiInsights[currentElement.number].recommendations && (
                     <div>
                       <h4 className="font-medium mb-2">Recomendações Prioritárias:</h4>
                       <ul className="space-y-1">
-                        {aiInsights[currentElement.number].recommendations.slice(0, 3).map((rec: string, index: number) => (
-                          <li key={index} className="text-sm flex items-start gap-2">
-                            <Star className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
-                            {rec}
-                          </li>
-                        ))}
+                        {aiInsights[currentElement.number].recommendations
+                          .slice(0, 3)
+                          .map((rec: string, index: number) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <Star className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
+                              {rec}
+                            </li>
+                          ))}
                       </ul>
                     </div>
                   )}
@@ -422,13 +437,13 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
             >
               Elemento Anterior
             </Button>
-            
+
             <div className="flex gap-2">
               <Button variant="outline" onClick={saveAudit}>
                 <Save className="h-4 w-4 mr-2" />
                 Salvar
               </Button>
-              
+
               {currentElementIndex === elements.length - 1 ? (
                 <Button onClick={completeAudit}>
                   <Award className="h-4 w-4 mr-2" />
@@ -436,7 +451,9 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                 </Button>
               ) : (
                 <Button
-                  onClick={() => setCurrentElementIndex(Math.min(elements.length - 1, currentElementIndex + 1))}
+                  onClick={() =>
+                    setCurrentElementIndex(Math.min(elements.length - 1, currentElementIndex + 1))
+                  }
                 >
                   Próximo Elemento
                 </Button>
@@ -467,13 +484,13 @@ const RequirementForm: React.FC<{
       evidence_urls: [],
       auditor_comments: "",
       recommendations: "",
-      criticality: "low"
+      criticality: "low",
     }
   );
 
   const handleSave = () => {
     onSave(formData);
-    
+
     if (formData.score === "non-compliant") {
       // Automatically suggest creating a non-conformity
       onAddNonConformity({
@@ -484,10 +501,10 @@ const RequirementForm: React.FC<{
         evidence_urls: formData.evidence_urls,
         corrective_action: "",
         responsible_person: "",
-        target_date: ""
+        target_date: "",
       });
     }
-    
+
     toast({
       title: "Requisito Salvo",
       description: `Avaliação do requisito ${requirementCode} salva.`,
@@ -505,23 +522,31 @@ const RequirementForm: React.FC<{
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="compliant" id="compliant" />
-              <Label htmlFor="compliant" className="text-green-600">Conforme</Label>
+              <Label htmlFor="compliant" className="text-green-600">
+                Conforme
+              </Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="partial" id="partial" />
-              <Label htmlFor="partial" className="text-yellow-600">Parcialmente Conforme</Label>
+              <Label htmlFor="partial" className="text-yellow-600">
+                Parcialmente Conforme
+              </Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="non-compliant" id="non-compliant" />
-              <Label htmlFor="non-compliant" className="text-red-600">Não Conforme</Label>
+              <Label htmlFor="non-compliant" className="text-red-600">
+                Não Conforme
+              </Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="not-applicable" id="not-applicable" />
-              <Label htmlFor="not-applicable" className="text-muted-foreground">Não Aplicável</Label>
+              <Label htmlFor="not-applicable" className="text-muted-foreground">
+                Não Aplicável
+              </Label>
             </div>
           </RadioGroup>
         </div>
-        
+
         <div className="space-y-2">
           <Label>Criticidade</Label>
           <Select
@@ -540,34 +565,34 @@ const RequirementForm: React.FC<{
           </Select>
         </div>
       </div>
-      
+
       <div className="space-y-2">
         <Label>Descrição da Evidência</Label>
         <Textarea
           value={formData.evidence_description}
-          onChange={(e) => setFormData(prev => ({ ...prev, evidence_description: e.target.value }))}
+          onChange={e => setFormData(prev => ({ ...prev, evidence_description: e.target.value }))}
           placeholder="Descreva as evidências observadas..."
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label>Comentários do Auditor</Label>
         <Textarea
           value={formData.auditor_comments}
-          onChange={(e) => setFormData(prev => ({ ...prev, auditor_comments: e.target.value }))}
+          onChange={e => setFormData(prev => ({ ...prev, auditor_comments: e.target.value }))}
           placeholder="Comentários e observações do auditor..."
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label>Recomendações</Label>
         <Textarea
           value={formData.recommendations}
-          onChange={(e) => setFormData(prev => ({ ...prev, recommendations: e.target.value }))}
+          onChange={e => setFormData(prev => ({ ...prev, recommendations: e.target.value }))}
           placeholder="Recomendações para melhoria..."
         />
       </div>
-      
+
       <div className="flex gap-2">
         <Button variant="outline" size="sm">
           <Camera className="h-4 w-4 mr-2" />
@@ -582,7 +607,7 @@ const RequirementForm: React.FC<{
           Upload
         </Button>
       </div>
-      
+
       <Button onClick={handleSave} className="w-full">
         <Save className="h-4 w-4 mr-2" />
         Salvar Avaliação

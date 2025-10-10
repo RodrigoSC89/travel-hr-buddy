@@ -4,7 +4,6 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import SystemAuditor from "@/components/testing/system-auditor";
 import { TestTube } from "lucide-react";
 
-
 const SystemAuditorPage = () => {
   return (
     <SidebarProvider>
@@ -24,7 +23,6 @@ const SystemAuditorPage = () => {
           </div>
           <SystemAuditor />
         </main>
-        
       </div>
     </SidebarProvider>
   );

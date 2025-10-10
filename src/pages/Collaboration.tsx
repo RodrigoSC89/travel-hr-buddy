@@ -14,10 +14,10 @@ const Collaboration = () => {
         gradient="green"
         badges={[
           { icon: MessageSquare, label: "Chat em Tempo Real" },
-          { icon: Share2, label: "Compartilhamento" }
+          { icon: Share2, label: "Compartilhamento" },
         ]}
       />
-      
+
       <div className="h-[calc(100vh-400px)]">
         <RealTimeWorkspace />
       </div>

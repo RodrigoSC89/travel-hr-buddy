@@ -3,17 +3,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  User, 
-  Ship, 
-  Award, 
-  Calendar, 
-  FileText, 
+import {
+  User,
+  Ship,
+  Award,
+  FileText,
   AlertTriangle,
   CheckCircle,
   Clock,
   ExternalLink,
-  TrendingUp
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -88,7 +86,7 @@ export const EmployeeDossierSummary: React.FC = () => {
             rank: "Ordinary Seaman",
             nationality: "Brasil",
             email: user.email,
-            status: "available"
+            status: "available",
           })
           .select()
           .single();
@@ -133,7 +131,7 @@ export const EmployeeDossierSummary: React.FC = () => {
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -142,31 +140,31 @@ export const EmployeeDossierSummary: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "valid":
-    case "active":
-      return "bg-green-100 text-green-800";
-    case "expiring_soon":
-    case "expiring":
-      return "bg-yellow-100 text-yellow-800";
-    case "expired":
-      return "bg-red-100 text-red-800";
-    default:
-      return "bg-secondary text-secondary-foreground";
+      case "valid":
+      case "active":
+        return "bg-green-100 text-green-800";
+      case "expiring_soon":
+      case "expiring":
+        return "bg-yellow-100 text-yellow-800";
+      case "expired":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "valid":
-    case "active":
-      return <CheckCircle className="h-4 w-4" />;
-    case "expiring_soon":
-    case "expiring":
-      return <Clock className="h-4 w-4" />;
-    case "expired":
-      return <AlertTriangle className="h-4 w-4" />;
-    default:
-      return <Clock className="h-4 w-4" />;
+      case "valid":
+      case "active":
+        return <CheckCircle className="h-4 w-4" />;
+      case "expiring_soon":
+      case "expiring":
+        return <Clock className="h-4 w-4" />;
+      case "expired":
+        return <AlertTriangle className="h-4 w-4" />;
+      default:
+        return <Clock className="h-4 w-4" />;
     }
   };
 
@@ -196,12 +194,8 @@ export const EmployeeDossierSummary: React.FC = () => {
       <div className="text-center py-8">
         <User className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
         <h3 className="text-lg font-medium mb-2">Dossiê não encontrado</h3>
-        <p className="text-muted-foreground mb-4">
-          Seu perfil de tripulante ainda não foi criado
-        </p>
-        <Button onClick={fetchDossierData}>
-          Tentar Novamente
-        </Button>
+        <p className="text-muted-foreground mb-4">Seu perfil de tripulante ainda não foi criado</p>
+        <Button onClick={fetchDossierData}>Tentar Novamente</Button>
       </div>
     );
   }
@@ -268,9 +262,7 @@ export const EmployeeDossierSummary: React.FC = () => {
             <Award className="h-5 w-5" />
             Certificações
           </CardTitle>
-          <CardDescription>
-            Status das suas principais certificações
-          </CardDescription>
+          <CardDescription>Status das suas principais certificações</CardDescription>
         </CardHeader>
         <CardContent>
           {certifications.length === 0 ? (
@@ -280,21 +272,25 @@ export const EmployeeDossierSummary: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-3">
-              {certifications.map((cert) => (
-                <div key={cert.id} className="flex items-center justify-between p-3 border rounded-lg">
+              {certifications.map(cert => (
+                <div
+                  key={cert.id}
+                  className="flex items-center justify-between p-3 border rounded-lg"
+                >
                   <div className="flex items-center space-x-3">
                     {getStatusIcon(cert.status)}
                     <div>
                       <div className="font-medium">{cert.certification_name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {cert.issuing_authority}
-                      </div>
+                      <div className="text-sm text-muted-foreground">{cert.issuing_authority}</div>
                     </div>
                   </div>
                   <div className="text-right">
                     <Badge className={getStatusColor(cert.status)}>
-                      {cert.status === "valid" ? "Válido" :
-                        cert.status === "expiring_soon" ? "Vencendo" : "Expirado"}
+                      {cert.status === "valid"
+                        ? "Válido"
+                        : cert.status === "expiring_soon"
+                          ? "Vencendo"
+                          : "Expirado"}
                     </Badge>
                     <div className="text-xs text-muted-foreground mt-1">
                       {format(new Date(cert.expiry_date), "dd/MM/yyyy")}
@@ -314,9 +310,7 @@ export const EmployeeDossierSummary: React.FC = () => {
             <Ship className="h-5 w-5" />
             Histórico de Embarques
           </CardTitle>
-          <CardDescription>
-            Seus embarques mais recentes
-          </CardDescription>
+          <CardDescription>Seus embarques mais recentes</CardDescription>
         </CardHeader>
         <CardContent>
           {embarkations.length === 0 ? (
@@ -326,13 +320,14 @@ export const EmployeeDossierSummary: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-3">
-              {embarkations.map((embark) => (
-                <div key={embark.id} className="flex items-center justify-between p-3 border rounded-lg">
+              {embarkations.map(embark => (
+                <div
+                  key={embark.id}
+                  className="flex items-center justify-between p-3 border rounded-lg"
+                >
                   <div>
                     <div className="font-medium">{embark.vessel_name}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {embark.function_role}
-                    </div>
+                    <div className="text-sm text-muted-foreground">{embark.function_role}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-medium">
@@ -351,17 +346,11 @@ export const EmployeeDossierSummary: React.FC = () => {
 
       {/* Ações */}
       <div className="flex gap-4">
-        <Button 
-          onClick={() => window.open("/crew-dossier", "_blank")} 
-          className="flex-1"
-        >
+        <Button onClick={() => window.open("/crew-dossier", "_blank")} className="flex-1">
           <ExternalLink className="h-4 w-4 mr-2" />
           Ver Dossiê Completo
         </Button>
-        <Button 
-          variant="outline" 
-          onClick={fetchDossierData}
-        >
+        <Button variant="outline" onClick={fetchDossierData}>
           Atualizar Dados
         </Button>
       </div>

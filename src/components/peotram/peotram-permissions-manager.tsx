@@ -1,16 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
-import { UserCheck, Users, Ship, Building, Plus, Edit, Trash2, Shield, Eye, Calendar, Clock } from "lucide-react";
+import {
+  UserCheck,
+  Users,
+  Ship,
+  Building,
+  Plus,
+  Trash2,
+  Shield,
+  Calendar,
+  Clock,
+} from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface User {
@@ -60,7 +81,7 @@ export const PeotramPermissionsManager: React.FC = () => {
     vessel_access: [] as string[],
     area_access: [] as string[],
     location_type: "vessel" as "vessel" | "shore" | "both",
-    expires_at: ""
+    expires_at: "",
   });
 
   useEffect(() => {
@@ -70,11 +91,7 @@ export const PeotramPermissionsManager: React.FC = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      await Promise.all([
-        fetchUsers(),
-        fetchPermissions(),
-        fetchVessels()
-      ]);
+      await Promise.all([fetchUsers(), fetchPermissions(), fetchVessels()]);
     } finally {
       setLoading(false);
     }
@@ -82,40 +99,42 @@ export const PeotramPermissionsManager: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("id, email, full_name");
+      const { data, error } = await supabase.from("profiles").select("id, email, full_name");
 
       if (error) throw error;
       setUsers(data || []);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const fetchPermissions = async () => {
     try {
       const { data, error } = await supabase
         .from("user_feature_permissions")
-        .select(`
+        .select(
+          `
           *,
           profiles (
             full_name
           )
-        `)
+        `
+        )
         .eq("feature_module", "peotram")
         .order("granted_at", { ascending: false });
 
       if (error) throw error;
-      
+
       const mappedPermissions = (data || []).map((permission: any) => ({
         ...permission,
         permission_level: permission.permission_level as "none" | "read" | "write" | "admin",
-        location_type: permission.location_type as "vessel" | "shore" | "both"
+        location_type: permission.location_type as "vessel" | "shore" | "both",
       }));
-      
+
       setPermissions(mappedPermissions);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const fetchVessels = async () => {
@@ -128,18 +147,21 @@ export const PeotramPermissionsManager: React.FC = () => {
       if (error) throw error;
       setVessels(data || []);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const createPermission = async () => {
     try {
       const { data, error } = await supabase
         .from("user_feature_permissions")
-        .insert([{
-          ...permissionForm,
-          is_active: true,
-          expires_at: permissionForm.expires_at || null
-        }])
+        .insert([
+          {
+            ...permissionForm,
+            is_active: true,
+            expires_at: permissionForm.expires_at || null,
+          },
+        ])
         .select()
         .single();
 
@@ -158,7 +180,7 @@ export const PeotramPermissionsManager: React.FC = () => {
         vessel_access: [],
         area_access: [],
         location_type: "both",
-        expires_at: ""
+        expires_at: "",
       });
       fetchPermissions();
     } catch (error) {
@@ -200,10 +222,7 @@ export const PeotramPermissionsManager: React.FC = () => {
 
   const deletePermission = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from("user_feature_permissions")
-        .delete()
-        .eq("id", id);
+      const { error } = await supabase.from("user_feature_permissions").delete().eq("id", id);
 
       if (error) throw error;
 
@@ -224,32 +243,33 @@ export const PeotramPermissionsManager: React.FC = () => {
 
   const getPermissionLevelColor = (level: string) => {
     switch (level) {
-    case "admin":
-      return "destructive";
-    case "write":
-      return "default";
-    case "read":
-      return "secondary";
-    default:
-      return "outline";
+      case "admin":
+        return "destructive";
+      case "write":
+        return "default";
+      case "read":
+        return "secondary";
+      default:
+        return "outline";
     }
   };
 
   const getPermissionLevelText = (level: string) => {
     switch (level) {
-    case "admin":
-      return "Administrador";
-    case "write":
-      return "Escrita";
-    case "read":
-      return "Leitura";
-    default:
-      return "Nenhuma";
+      case "admin":
+        return "Administrador";
+      case "write":
+        return "Escrita";
+      case "read":
+        return "Leitura";
+      default:
+        return "Nenhuma";
     }
   };
 
   const filteredPermissions = permissions.filter(permission => {
-    const userName = permission.profiles?.full_name || users.find(u => u.id === permission.user_id)?.email || "";
+    const userName =
+      permission.profiles?.full_name || users.find(u => u.id === permission.user_id)?.email || "";
     return userName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -261,15 +281,15 @@ export const PeotramPermissionsManager: React.FC = () => {
     "Navegação",
     "Operações de Carga",
     "Manutenção",
-    "Administração"
+    "Administração",
   ];
 
   const stats = {
     totalUsers: permissions.length,
     activePermissions: permissions.filter(p => p.is_active).length,
     adminUsers: permissions.filter(p => p.permission_level === "admin").length,
-    expiringPermissions: permissions.filter(p => 
-      p.expires_at && new Date(p.expires_at) <= new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    expiringPermissions: permissions.filter(
+      p => p.expires_at && new Date(p.expires_at) <= new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     ).length,
   };
 
@@ -288,7 +308,7 @@ export const PeotramPermissionsManager: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -300,7 +320,7 @@ export const PeotramPermissionsManager: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -312,7 +332,7 @@ export const PeotramPermissionsManager: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -334,7 +354,7 @@ export const PeotramPermissionsManager: React.FC = () => {
             Configure o acesso dos usuários ao sistema PEOTRAM
           </p>
         </div>
-        
+
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -349,20 +369,22 @@ export const PeotramPermissionsManager: React.FC = () => {
                 Defina as permissões de acesso ao sistema PEOTRAM para um usuário
               </DialogDescription>
             </DialogHeader>
-            
+
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Usuário</Label>
-                  <Select 
-                    value={permissionForm.user_id} 
-                    onValueChange={(value) => setPermissionForm(prev => ({ ...prev, user_id: value }))}
+                  <Select
+                    value={permissionForm.user_id}
+                    onValueChange={value =>
+                      setPermissionForm(prev => ({ ...prev, user_id: value }))
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o usuário" />
                     </SelectTrigger>
                     <SelectContent>
-                      {users.map((user) => (
+                      {users.map(user => (
                         <SelectItem key={user.id} value={user.id}>
                           {user.raw_user_meta_data?.full_name || user.email}
                         </SelectItem>
@@ -370,12 +392,14 @@ export const PeotramPermissionsManager: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Nível de Permissão</Label>
-                  <Select 
-                    value={permissionForm.permission_level} 
-                    onValueChange={(value: any) => setPermissionForm(prev => ({ ...prev, permission_level: value }))}
+                  <Select
+                    value={permissionForm.permission_level}
+                    onValueChange={(value: any) =>
+                      setPermissionForm(prev => ({ ...prev, permission_level: value }))
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -387,12 +411,14 @@ export const PeotramPermissionsManager: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Tipo de Local</Label>
-                  <Select 
-                    value={permissionForm.location_type} 
-                    onValueChange={(value: any) => setPermissionForm(prev => ({ ...prev, location_type: value }))}
+                  <Select
+                    value={permissionForm.location_type}
+                    onValueChange={(value: any) =>
+                      setPermissionForm(prev => ({ ...prev, location_type: value }))
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -404,42 +430,45 @@ export const PeotramPermissionsManager: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Data de Expiração (Opcional)</Label>
                   <Input
                     type="date"
                     value={permissionForm.expires_at}
-                    onChange={(e) => setPermissionForm(prev => ({ ...prev, expires_at: e.target.value }))}
+                    onChange={e =>
+                      setPermissionForm(prev => ({ ...prev, expires_at: e.target.value }))
+                    }
                   />
                 </div>
               </div>
-              
-              {(permissionForm.location_type === "vessel" || permissionForm.location_type === "both") && (
+
+              {(permissionForm.location_type === "vessel" ||
+                permissionForm.location_type === "both") && (
                 <div className="space-y-2">
                   <Label>Acesso a Embarcações</Label>
                   <div className="border rounded-lg p-3 max-h-32 overflow-y-auto">
                     <div className="space-y-2">
-                      {vessels.map((vessel) => (
+                      {vessels.map(vessel => (
                         <div key={vessel.id} className="flex items-center space-x-2">
                           <Checkbox
                             id={`vessel-${vessel.id}`}
                             checked={permissionForm.vessel_access.includes(vessel.id)}
-                            onCheckedChange={(checked) => {
+                            onCheckedChange={checked => {
                               if (checked) {
                                 setPermissionForm(prev => ({
                                   ...prev,
-                                  vessel_access: [...prev.vessel_access, vessel.id]
+                                  vessel_access: [...prev.vessel_access, vessel.id],
                                 }));
                               } else {
                                 setPermissionForm(prev => ({
                                   ...prev,
-                                  vessel_access: prev.vessel_access.filter(id => id !== vessel.id)
+                                  vessel_access: prev.vessel_access.filter(id => id !== vessel.id),
                                 }));
                               }
                             }}
                           />
-                          <Label 
+                          <Label
                             htmlFor={`vessel-${vessel.id}`}
                             className="text-sm font-normal cursor-pointer"
                           >
@@ -454,32 +483,33 @@ export const PeotramPermissionsManager: React.FC = () => {
                   </p>
                 </div>
               )}
-              
-              {(permissionForm.location_type === "shore" || permissionForm.location_type === "both") && (
+
+              {(permissionForm.location_type === "shore" ||
+                permissionForm.location_type === "both") && (
                 <div className="space-y-2">
                   <Label>Acesso a Áreas</Label>
                   <div className="border rounded-lg p-3 max-h-32 overflow-y-auto">
                     <div className="space-y-2">
-                      {areas.map((area) => (
+                      {areas.map(area => (
                         <div key={area} className="flex items-center space-x-2">
                           <Checkbox
                             id={`area-${area}`}
                             checked={permissionForm.area_access.includes(area)}
-                            onCheckedChange={(checked) => {
+                            onCheckedChange={checked => {
                               if (checked) {
                                 setPermissionForm(prev => ({
                                   ...prev,
-                                  area_access: [...prev.area_access, area]
+                                  area_access: [...prev.area_access, area],
                                 }));
                               } else {
                                 setPermissionForm(prev => ({
                                   ...prev,
-                                  area_access: prev.area_access.filter(a => a !== area)
+                                  area_access: prev.area_access.filter(a => a !== area),
                                 }));
                               }
                             }}
                           />
-                          <Label 
+                          <Label
                             htmlFor={`area-${area}`}
                             className="text-sm font-normal cursor-pointer"
                           >
@@ -494,15 +524,12 @@ export const PeotramPermissionsManager: React.FC = () => {
                   </p>
                 </div>
               )}
-              
+
               <div className="flex justify-end gap-2 pt-4 border-t">
                 <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button 
-                  onClick={createPermission}
-                  disabled={!permissionForm.user_id}
-                >
+                <Button onClick={createPermission} disabled={!permissionForm.user_id}>
                   Criar Permissão
                 </Button>
               </div>
@@ -519,7 +546,7 @@ export const PeotramPermissionsManager: React.FC = () => {
               <Input
                 placeholder="Buscar usuários..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
@@ -546,7 +573,7 @@ export const PeotramPermissionsManager: React.FC = () => {
             </CardContent>
           </Card>
         ) : (
-          filteredPermissions.map((permission) => (
+          filteredPermissions.map(permission => (
             <Card key={permission.id}>
               <CardContent className="pt-6">
                 <div className="flex flex-col md:flex-row gap-4">
@@ -554,7 +581,8 @@ export const PeotramPermissionsManager: React.FC = () => {
                     <div className="flex items-start justify-between">
                       <div className="space-y-1">
                         <h3 className="font-semibold">
-                          {permission.profiles?.full_name || users.find(u => u.id === permission.user_id)?.email}
+                          {permission.profiles?.full_name ||
+                            users.find(u => u.id === permission.user_id)?.email}
                         </h3>
                         <div className="flex items-center gap-2">
                           <Badge variant={getPermissionLevelColor(permission.permission_level)}>
@@ -576,20 +604,18 @@ export const PeotramPermissionsManager: React.FC = () => {
                             </Badge>
                           )}
                           {permission.location_type === "both" && (
-                            <Badge variant="outline">
-                              Ambos
-                            </Badge>
+                            <Badge variant="outline">Ambos</Badge>
                           )}
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       {permission.vessel_access.length > 0 && (
                         <div>
                           <p className="text-sm font-medium">Embarcações:</p>
                           <div className="flex flex-wrap gap-1">
-                            {permission.vessel_access.map((vesselId) => {
+                            {permission.vessel_access.map(vesselId => {
                               const vessel = vessels.find(v => v.id === vesselId);
                               return vessel ? (
                                 <Badge key={vesselId} variant="secondary" className="text-xs">
@@ -600,12 +626,12 @@ export const PeotramPermissionsManager: React.FC = () => {
                           </div>
                         </div>
                       )}
-                      
+
                       {permission.area_access.length > 0 && (
                         <div>
                           <p className="text-sm font-medium">Áreas:</p>
                           <div className="flex flex-wrap gap-1">
-                            {permission.area_access.map((area) => (
+                            {permission.area_access.map(area => (
                               <Badge key={area} variant="secondary" className="text-xs">
                                 {area}
                               </Badge>
@@ -613,13 +639,13 @@ export const PeotramPermissionsManager: React.FC = () => {
                           </div>
                         </div>
                       )}
-                      
+
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
                           Criado em {new Date(permission.granted_at).toLocaleDateString("pt-BR")}
                         </div>
-                        
+
                         {permission.expires_at && (
                           <div className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
@@ -629,7 +655,7 @@ export const PeotramPermissionsManager: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-col justify-start items-end gap-2">
                     <div className="flex gap-2">
                       <Button

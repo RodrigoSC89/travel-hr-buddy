@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useKeyboardShortcuts } from "./use-keyboard-shortcuts";
@@ -78,12 +78,12 @@ export const useSystemActions = () => {
       });
       return;
     }
-    
+
     toast({
       title: "Atualizando",
       description: "Carregando dados mais recentes",
     });
-    
+
     // Implementar refresh dos dados
     setTimeout(() => {
       window.location.reload();

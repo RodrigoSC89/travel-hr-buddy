@@ -3,25 +3,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Users, 
-  UserPlus, 
-  Search, 
-  Filter, 
+import {
+  Users,
+  UserPlus,
+  Search,
   MoreHorizontal,
   Shield,
-  User,
   Mail,
-  Phone,
   Building,
   TestTube,
   Edit,
-  Trash2,
-  Settings
+  Settings,
 } from "lucide-react";
 
 interface UsersProfilesTabProps {
@@ -43,7 +44,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
       status: "active",
       department: "TI",
       lastLogin: "2024-09-29T10:30:00Z",
-      avatar: "/api/placeholder/32/32"
+      avatar: "/api/placeholder/32/32",
     },
     {
       id: "2",
@@ -53,7 +54,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
       status: "active",
       department: "Recursos Humanos",
       lastLogin: "2024-09-29T09:15:00Z",
-      avatar: "/api/placeholder/32/32"
+      avatar: "/api/placeholder/32/32",
     },
     {
       id: "3",
@@ -63,7 +64,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
       status: "active",
       department: "Operações",
       lastLogin: "2024-09-28T16:45:00Z",
-      avatar: "/api/placeholder/32/32"
+      avatar: "/api/placeholder/32/32",
     },
     {
       id: "4",
@@ -73,23 +74,27 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
       status: "inactive",
       department: "Navegação",
       lastLogin: "2024-09-20T14:20:00Z",
-      avatar: "/api/placeholder/32/32"
-    }
+      avatar: "/api/placeholder/32/32",
+    },
   ];
 
   const roles = [
     { value: "admin", label: "Administrador", color: "bg-red-100 text-red-800" },
     { value: "hr_manager", label: "Gerente RH", color: "bg-blue-100 text-blue-800" },
-    { value: "employee", label: "Funcionário", color: "bg-green-100 text-green-800" }
+    { value: "employee", label: "Funcionário", color: "bg-green-100 text-green-800" },
   ];
 
   const modulePermissions = [
     { id: "communication", name: "Comunicação", description: "Acesso ao módulo de comunicação" },
     { id: "crew", name: "Tripulação", description: "Gestão de tripulação e equipagem" },
     { id: "vessels", name: "Embarcações", description: "Gestão de embarcações e frotas" },
-    { id: "certificates", name: "Certificações", description: "Gestão de certificados e documentos" },
+    {
+      id: "certificates",
+      name: "Certificações",
+      description: "Gestão de certificados e documentos",
+    },
     { id: "reports", name: "Relatórios", description: "Acesso aos relatórios do sistema" },
-    { id: "settings", name: "Configurações", description: "Acesso às configurações do sistema" }
+    { id: "settings", name: "Configurações", description: "Acesso às configurações do sistema" },
   ];
 
   const getRoleInfo = (role: string) => {
@@ -97,17 +102,22 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
   };
 
   const getStatusBadge = (status: string) => {
-    return status === "active" 
-      ? <Badge className="bg-green-100 text-green-800">Ativo</Badge>
-      : <Badge variant="outline" className="text-muted-foreground">Inativo</Badge>;
+    return status === "active" ? (
+      <Badge className="bg-green-100 text-green-800">Ativo</Badge>
+    ) : (
+      <Badge variant="outline" className="text-muted-foreground">
+        Inativo
+      </Badge>
+    );
   };
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = selectedRole === "all" || user.role === selectedRole;
     const matchesStatus = selectedStatus === "all" || user.status === selectedStatus;
-    
+
     return matchesSearch && matchesRole && matchesStatus;
   });
 
@@ -138,7 +148,12 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                   <CardTitle className="flex items-center gap-2">
                     <Users className="w-5 h-5 text-primary" />
                     Gerenciamento de Usuários
-                    {testMode && <Badge variant="outline" className="ml-2"><TestTube className="w-3 h-3 mr-1" />Teste</Badge>}
+                    {testMode && (
+                      <Badge variant="outline" className="ml-2">
+                        <TestTube className="w-3 h-3 mr-1" />
+                        Teste
+                      </Badge>
+                    )}
                   </CardTitle>
                   <CardDescription>
                     Gerencie usuários, cargos e permissões do sistema
@@ -159,7 +174,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                     <Input
                       placeholder="Buscar usuários por nome ou email..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={e => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>
@@ -191,18 +206,24 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
 
               {/* Users List */}
               <div className="space-y-4">
-                {filteredUsers.map((user) => {
+                {filteredUsers.map(user => {
                   const roleInfo = getRoleInfo(user.role);
                   return (
-                    <div key={user.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
+                    <div
+                      key={user.id}
+                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50"
+                    >
                       <div className="flex items-center gap-4">
                         <Avatar>
                           <AvatarImage src={user.avatar} />
                           <AvatarFallback>
-                            {user.name.split(" ").map(n => n[0]).join("")}
+                            {user.name
+                              .split(" ")
+                              .map(n => n[0])
+                              .join("")}
                           </AvatarFallback>
                         </Avatar>
-                        
+
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
                             <h4 className="font-medium">{user.name}</h4>
@@ -220,11 +241,9 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-3">
-                        <Badge className={roleInfo.color}>
-                          {roleInfo.label}
-                        </Badge>
+                        <Badge className={roleInfo.color}>{roleInfo.label}</Badge>
                         <div className="text-xs text-muted-foreground">
                           Último login: {new Date(user.lastLogin).toLocaleDateString("pt-BR")}
                         </div>
@@ -248,12 +267,10 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                 <Shield className="w-5 h-5 text-primary" />
                 Configuração de Cargos
               </CardTitle>
-              <CardDescription>
-                Configure permissões e responsabilidades por cargo
-              </CardDescription>
+              <CardDescription>Configure permissões e responsabilidades por cargo</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {roles.map((role) => (
+              {roles.map(role => (
                 <div key={role.value} className="p-4 border rounded-lg">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
@@ -265,7 +282,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                       Editar
                     </Button>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
                     {role.value === "admin" && (
                       <>
@@ -306,9 +323,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                 <Settings className="w-5 h-5 text-primary" />
                 Atribuição de Módulos por Escopo
               </CardTitle>
-              <CardDescription>
-                Configure quais módulos cada cargo pode acessar
-              </CardDescription>
+              <CardDescription>Configure quais módulos cada cargo pode acessar</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
@@ -322,12 +337,14 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                     </tr>
                   </thead>
                   <tbody>
-                    {modulePermissions.map((module) => (
+                    {modulePermissions.map(module => (
                       <tr key={module.id} className="border-b">
                         <td className="p-3">
                           <div>
                             <div className="font-medium">{module.name}</div>
-                            <div className="text-sm text-muted-foreground">{module.description}</div>
+                            <div className="text-sm text-muted-foreground">
+                              {module.description}
+                            </div>
                           </div>
                         </td>
                         <td className="text-center p-3">

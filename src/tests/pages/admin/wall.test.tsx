@@ -55,7 +55,9 @@ describe("AdminWallPage Component", () => {
   });
 
   it("should render the wall title", () => {
-    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+      new Error("Not found")
+    );
     render(
       <MemoryRouter>
         <OrganizationProvider>
@@ -63,13 +65,15 @@ describe("AdminWallPage Component", () => {
         </OrganizationProvider>
       </MemoryRouter>
     );
-    
+
     const title = screen.getByText(/CI\/CD TV Wall/i);
     expect(title).toBeInTheDocument();
   });
 
   it("should display monitoring subtitle", () => {
-    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+      new Error("Not found")
+    );
     render(
       <MemoryRouter>
         <OrganizationProvider>
@@ -77,13 +81,15 @@ describe("AdminWallPage Component", () => {
         </OrganizationProvider>
       </MemoryRouter>
     );
-    
+
     const subtitle = screen.getByText(/Monitoramento em tempo real de builds e testes/i);
     expect(subtitle).toBeInTheDocument();
   });
 
   it("should render stats cards for success, failures and in progress", () => {
-    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+      new Error("Not found")
+    );
     render(
       <MemoryRouter>
         <OrganizationProvider>
@@ -91,14 +97,16 @@ describe("AdminWallPage Component", () => {
         </OrganizationProvider>
       </MemoryRouter>
     );
-    
+
     expect(screen.getAllByText(/Sucesso/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Falhas/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Em Progresso/i).length).toBeGreaterThan(0);
   });
 
   it("should display mute/unmute button", () => {
-    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+      new Error("Not found")
+    );
     render(
       <MemoryRouter>
         <OrganizationProvider>
@@ -106,7 +114,7 @@ describe("AdminWallPage Component", () => {
         </OrganizationProvider>
       </MemoryRouter>
     );
-    
+
     const muteButton = screen.getByText(/Alertas Ativos/i);
     expect(muteButton).toBeInTheDocument();
   });
@@ -124,10 +132,12 @@ describe("AdminWallPage Component", () => {
         triggered_by: "push",
       },
     ]);
-    
+
     localStorageMock.getItem.mockReturnValue(cachedData);
-    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Network error"));
-    
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+      new Error("Network error")
+    );
+
     render(
       <MemoryRouter>
         <OrganizationProvider>
@@ -135,15 +145,17 @@ describe("AdminWallPage Component", () => {
         </OrganizationProvider>
       </MemoryRouter>
     );
-    
+
     // Note: The offline badge appears after the fetch fails
     // In a real test with async handling, you'd use waitFor here
   });
 
   it("should display empty state when no data available", () => {
-    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+      new Error("Not found")
+    );
     localStorageMock.getItem.mockReturnValue(null);
-    
+
     render(
       <MemoryRouter>
         <OrganizationProvider>
@@ -151,7 +163,7 @@ describe("AdminWallPage Component", () => {
         </OrganizationProvider>
       </MemoryRouter>
     );
-    
+
     expect(screen.getByText(/Nenhum resultado de teste disponível/i)).toBeInTheDocument();
   });
 });

@@ -4,45 +4,43 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { format, differenceInDays } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { 
-  Search, 
-  Calendar as CalendarIcon, 
-  MapPin, 
-  Star, 
-  Wifi, 
-  Car, 
-  Utensils, 
+import {
+  Search,
+  Calendar as CalendarIcon,
+  MapPin,
+  Star,
+  Wifi,
+  Car,
+  Utensils,
   Plus,
   ExternalLink,
   Building,
-  User,
   CreditCard,
   Download,
-  Upload,
   Brain,
   AlertTriangle,
   CheckCircle,
   Clock,
-  Phone,
-  Mail,
-  Globe,
   Printer,
   QrCode,
   Bookmark,
   Filter,
   RotateCcw,
   TrendingUp,
-  Zap
 } from "lucide-react";
 
 interface Hotel {
@@ -95,7 +93,7 @@ interface TravelItinerary {
 export const EnhancedHotelSearch: React.FC = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("search");
-  
+
   // Search states
   const [destination, setDestination] = useState("");
   const [checkInDate, setCheckInDate] = useState<Date>();
@@ -105,17 +103,17 @@ export const EnhancedHotelSearch: React.FC = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  
+
   // Data states
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [reservations, setReservations] = useState<HotelReservation[]>([]);
   const [itineraries, setItineraries] = useState<TravelItinerary[]>([]);
   const [aiSuggestions, setAiSuggestions] = useState<any[]>([]);
-  
+
   // Filter states
   const [sortBy, setSortBy] = useState("price");
   const [showOnlyAvailable, setShowOnlyAvailable] = useState(true);
-  
+
   // Mock data for demonstration
   const mockHotels: Hotel[] = [
     {
@@ -126,7 +124,8 @@ export const EnhancedHotelSearch: React.FC = () => {
       rating: 4.8,
       price: 450,
       originalPrice: 580,
-      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image:
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       amenities: ["WiFi Gratuito", "Piscina", "Spa", "Restaurante", "Academia", "Estacionamento"],
       distance: "200m da praia de Copacabana",
       description: "Luxuoso hotel histórico com vista para a praia de Copacabana",
@@ -136,8 +135,12 @@ export const EnhancedHotelSearch: React.FC = () => {
       email: "reservas@copacabanapalace.com.br",
       website: "https://www.copacabanapalace.com.br",
       roomTypes: ["Quarto Standard", "Suíte Vista Mar", "Suíte Presidencial"],
-      policies: ["Cancelamento grátis até 24h antes", "Pets permitidos", "Check-in antecipado sujeito à disponibilidade"],
-      bookingUrl: "https://www.booking.com/hotel/br/copacabana-palace.html"
+      policies: [
+        "Cancelamento grátis até 24h antes",
+        "Pets permitidos",
+        "Check-in antecipado sujeito à disponibilidade",
+      ],
+      bookingUrl: "https://www.booking.com/hotel/br/copacabana-palace.html",
     },
     {
       id: "2",
@@ -147,7 +150,8 @@ export const EnhancedHotelSearch: React.FC = () => {
       rating: 4.6,
       price: 320,
       originalPrice: 420,
-      image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image:
+        "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       amenities: ["WiFi Gratuito", "Academia", "Business Center", "Spa", "Restaurante"],
       distance: "500m da Av. Paulista",
       description: "Hotel moderno no coração financeiro de São Paulo",
@@ -157,8 +161,12 @@ export const EnhancedHotelSearch: React.FC = () => {
       email: "reservas@uniquegarden.com.br",
       website: "https://www.uniquegarden.com.br",
       roomTypes: ["Quarto Executivo", "Suíte Master", "Suíte Presidencial"],
-      policies: ["Cancelamento grátis até 48h antes", "Business Center 24h", "Serviço de quarto 24h"],
-      bookingUrl: "https://www.booking.com/hotel/br/unique-garden.html"
+      policies: [
+        "Cancelamento grátis até 48h antes",
+        "Business Center 24h",
+        "Serviço de quarto 24h",
+      ],
+      bookingUrl: "https://www.booking.com/hotel/br/unique-garden.html",
     },
     {
       id: "3",
@@ -168,7 +176,8 @@ export const EnhancedHotelSearch: React.FC = () => {
       rating: 4.4,
       price: 180,
       originalPrice: 240,
-      image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image:
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       amenities: ["WiFi Gratuito", "Café da manhã", "Vista para o mar", "Ar condicionado"],
       distance: "50m do centro histórico",
       description: "Pousada charmosa no coração do Pelourinho",
@@ -178,9 +187,13 @@ export const EnhancedHotelSearch: React.FC = () => {
       email: "reservas@villabahia.com.br",
       website: "https://www.villabahia.com.br",
       roomTypes: ["Quarto Standard", "Quarto Superior", "Suíte Master"],
-      policies: ["Cancelamento grátis até 24h antes", "Café da manhã incluso", "Tour histórico gratuito"],
-      bookingUrl: "https://www.booking.com/hotel/br/villa-bahia.html"
-    }
+      policies: [
+        "Cancelamento grátis até 24h antes",
+        "Café da manhã incluso",
+        "Tour histórico gratuito",
+      ],
+      bookingUrl: "https://www.booking.com/hotel/br/villa-bahia.html",
+    },
   ];
 
   useEffect(() => {
@@ -206,7 +219,7 @@ export const EnhancedHotelSearch: React.FC = () => {
         totalPrice: 1350,
         status: "confirmed",
         confirmationCode: "CPL-2024-001",
-        createdAt: new Date("2024-01-10")
+        createdAt: new Date("2024-01-10"),
       },
       {
         id: "2",
@@ -218,8 +231,8 @@ export const EnhancedHotelSearch: React.FC = () => {
         totalPrice: 640,
         status: "pending",
         confirmationCode: "UG-2024-002",
-        createdAt: new Date("2024-01-15")
-      }
+        createdAt: new Date("2024-01-15"),
+      },
     ];
     setReservations(mockReservations);
   };
@@ -235,7 +248,7 @@ export const EnhancedHotelSearch: React.FC = () => {
         hotels: reservations.slice(0, 1),
         activities: ["Reunião cliente A", "Apresentação proposta", "Visita obra portuária"],
         totalCost: 1350,
-        status: "planned"
+        status: "planned",
       },
       {
         id: "2",
@@ -246,8 +259,8 @@ export const EnhancedHotelSearch: React.FC = () => {
         hotels: reservations.slice(1, 2),
         activities: ["Conferência TechBrazil", "Workshop IA", "Networking"],
         totalCost: 640,
-        status: "planned"
-      }
+        status: "planned",
+      },
     ];
     setItineraries(mockItineraries);
   };
@@ -261,26 +274,27 @@ export const EnhancedHotelSearch: React.FC = () => {
           title: "Economia Identificada",
           description: "Reserve com 2 semanas de antecedência e economize até 25%",
           savings: 112,
-          priority: "high"
+          priority: "high",
         },
         {
           type: "alternative_dates",
           title: "Datas Alternativas",
           description: "Mudando para terça-feira, economize R$ 80 por noite",
           savings: 80,
-          priority: "medium"
+          priority: "medium",
         },
         {
           type: "package_deal",
           title: "Pacote Disponível",
           description: "Hotel + transfer aeroporto por apenas R$ 50 extra",
           savings: -50,
-          priority: "low"
-        }
+          priority: "low",
+        },
       ];
       setAiSuggestions(suggestions);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const handleSearch = async () => {
@@ -288,7 +302,7 @@ export const EnhancedHotelSearch: React.FC = () => {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha destino, check-in e check-out",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -297,13 +311,13 @@ export const EnhancedHotelSearch: React.FC = () => {
       toast({
         title: "Datas inválidas",
         description: "A data de check-out deve ser posterior ao check-in",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
     setIsSearching(true);
-    
+
     try {
       // Chamar API Amadeus para busca real
       const { data, error } = await supabase.functions.invoke("amadeus-search", {
@@ -313,8 +327,8 @@ export const EnhancedHotelSearch: React.FC = () => {
           checkIn: format(checkInDate, "yyyy-MM-dd"),
           checkOut: format(checkOutDate, "yyyy-MM-dd"),
           adults: guests,
-          rooms: rooms
-        }
+          rooms: rooms,
+        },
       });
 
       if (error) throw error;
@@ -331,31 +345,37 @@ export const EnhancedHotelSearch: React.FC = () => {
           image: `https://images.unsplash.com/photo-${1566073771259 + index}?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80`,
           amenities: ["WiFi Gratuito", "Café da manhã"],
           distance: "Centro da cidade",
-          bookingUrl: generateBookingUrl(offer, { destination, checkInDate, checkOutDate, guests, rooms }),
+          bookingUrl: generateBookingUrl(offer, {
+            destination,
+            checkInDate,
+            checkOutDate,
+            guests,
+            rooms,
+          }),
           description: `Hotel disponível em ${destination}`,
           checkInTime: "14:00",
-          checkOutTime: "11:00"
+          checkOutTime: "11:00",
         }));
 
         setHotels(transformedHotels);
         toast({
           title: "Busca concluída",
-          description: `${transformedHotels.length} hotéis encontrados!`
+          description: `${transformedHotels.length} hotéis encontrados!`,
         });
       } else {
         throw new Error("Nenhum hotel encontrado");
       }
     } catch (error) {
       // Usar dados mock como fallback
-      const filteredHotels = mockHotels.filter(hotel => 
+      const filteredHotels = mockHotels.filter(hotel =>
         hotel.location.toLowerCase().includes(destination.toLowerCase())
       );
       setHotels(filteredHotels.length > 0 ? filteredHotels : mockHotels);
-      
+
       toast({
         title: "Dados de demonstração",
         description: "Exibindo hotéis de exemplo",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsSearching(false);
@@ -367,7 +387,7 @@ export const EnhancedHotelSearch: React.FC = () => {
     const cityName = encodeURIComponent(searchParams.destination);
     const checkin = format(searchParams.checkInDate, "yyyy-MM-dd");
     const checkout = format(searchParams.checkOutDate, "yyyy-MM-dd");
-    
+
     return `https://www.booking.com/searchresults.html?ss=${cityName}&checkin=${checkin}&checkout=${checkout}&group_adults=${searchParams.guests}&group_children=0&no_rooms=${searchParams.rooms}&selected_currency=BRL`;
   };
 
@@ -376,18 +396,18 @@ export const EnhancedHotelSearch: React.FC = () => {
       toast({
         title: "Selecione as datas",
         description: "Escolha as datas de check-in e check-out",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
     const nights = differenceInDays(checkOutDate, checkInDate);
     const totalPrice = hotel.price * nights * rooms;
-    
+
     // Simular processo de reserva
     toast({
       title: "Processando reserva...",
-      description: `${hotel.name} - ${nights} noites`
+      description: `${hotel.name} - ${nights} noites`,
     });
 
     // Simular delay de processamento
@@ -402,13 +422,13 @@ export const EnhancedHotelSearch: React.FC = () => {
         totalPrice,
         status: "confirmed",
         confirmationCode: `HTL-${Date.now().toString().slice(-6)}`,
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
       setReservations(prev => [newReservation, ...prev]);
       toast({
         title: "Reserva confirmada!",
-        description: `Código: ${newReservation.confirmationCode}`
+        description: `Código: ${newReservation.confirmationCode}`,
       });
       setActiveTab("reservations");
     }, 2000);
@@ -424,48 +444,56 @@ export const EnhancedHotelSearch: React.FC = () => {
           name: h.hotel.name,
           address: h.hotel.address,
           checkin: format(h.checkIn, "dd/MM/yyyy"),
-          checkout: format(h.checkOut, "dd/MM/yyyy")
+          checkout: format(h.checkOut, "dd/MM/yyyy"),
         })),
         activities: itinerary.activities,
-        totalCost: itinerary.totalCost
+        totalCost: itinerary.totalCost,
       };
 
       // Simular geração de PDF
       toast({
         title: "Exportando itinerário...",
-        description: "Gerando arquivo PDF"
+        description: "Gerando arquivo PDF",
       });
 
       setTimeout(() => {
         toast({
           title: "Itinerário exportado!",
-          description: "PDF salvo em Downloads"
+          description: "PDF salvo em Downloads",
         });
       }, 1500);
     } catch (error) {
       toast({
         title: "Erro ao exportar",
         description: "Tente novamente",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "confirmed": return "bg-green-100 text-green-800";
-    case "pending": return "bg-yellow-100 text-yellow-800";
-    case "cancelled": return "bg-red-100 text-red-800";
-    default: return "bg-secondary text-secondary-foreground";
+      case "confirmed":
+        return "bg-green-100 text-green-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "cancelled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "confirmed": return <CheckCircle className="h-4 w-4" />;
-    case "pending": return <Clock className="h-4 w-4" />;
-    case "cancelled": return <AlertTriangle className="h-4 w-4" />;
-    default: return <Clock className="h-4 w-4" />;
+      case "confirmed":
+        return <CheckCircle className="h-4 w-4" />;
+      case "pending":
+        return <Clock className="h-4 w-4" />;
+      case "cancelled":
+        return <AlertTriangle className="h-4 w-4" />;
+      default:
+        return <Clock className="h-4 w-4" />;
     }
   };
 
@@ -482,18 +510,25 @@ export const EnhancedHotelSearch: React.FC = () => {
 
   const filteredHotels = hotels.filter(hotel => {
     const matchesPrice = hotel.price >= priceRange.min && hotel.price <= priceRange.max;
-    const matchesAmenities = selectedAmenities.length === 0 || 
-      selectedAmenities.some(amenity => hotel.amenities.some(ha => ha.toLowerCase().includes(amenity.toLowerCase())));
-    
+    const matchesAmenities =
+      selectedAmenities.length === 0 ||
+      selectedAmenities.some(amenity =>
+        hotel.amenities.some(ha => ha.toLowerCase().includes(amenity.toLowerCase()))
+      );
+
     return matchesPrice && matchesAmenities;
   });
 
   const sortedHotels = [...filteredHotels].sort((a, b) => {
     switch (sortBy) {
-    case "price": return a.price - b.price;
-    case "rating": return b.rating - a.rating;
-    case "name": return a.name.localeCompare(b.name);
-    default: return 0;
+      case "price":
+        return a.price - b.price;
+      case "rating":
+        return b.rating - a.rating;
+      case "name":
+        return a.name.localeCompare(b.name);
+      default:
+        return 0;
     }
   });
 
@@ -528,7 +563,9 @@ export const EnhancedHotelSearch: React.FC = () => {
                   <h4 className="font-semibold text-purple-800 mb-2">{suggestion.title}</h4>
                   <p className="text-sm text-purple-600 mb-3">{suggestion.description}</p>
                   <Badge variant={suggestion.priority === "high" ? "destructive" : "secondary"}>
-                    {suggestion.savings > 0 ? `+R$ ${suggestion.savings}` : `R$ ${Math.abs(suggestion.savings)}`}
+                    {suggestion.savings > 0
+                      ? `+R$ ${suggestion.savings}`
+                      : `R$ ${Math.abs(suggestion.savings)}`}
                   </Badge>
                 </div>
               ))}
@@ -563,9 +600,7 @@ export const EnhancedHotelSearch: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Encontre sua hospedagem ideal</CardTitle>
-              <CardDescription>
-                Sistema avançado de busca com filtros inteligentes
-              </CardDescription>
+              <CardDescription>Sistema avançado de busca com filtros inteligentes</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -577,7 +612,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                       id="destination"
                       placeholder="Cidade ou região"
                       value={destination}
-                      onChange={(e) => setDestination(e.target.value)}
+                      onChange={e => setDestination(e.target.value)}
                       className="pl-10"
                     />
                   </div>
@@ -603,7 +638,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                         mode="single"
                         selected={checkInDate}
                         onSelect={setCheckInDate}
-                        disabled={(date) => date < new Date()}
+                        disabled={date => date < new Date()}
                         initialFocus
                         className="pointer-events-auto"
                       />
@@ -631,7 +666,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                         mode="single"
                         selected={checkOutDate}
                         onSelect={setCheckOutDate}
-                        disabled={(date) => date <= (checkInDate || new Date())}
+                        disabled={date => date <= (checkInDate || new Date())}
                         initialFocus
                         className="pointer-events-auto"
                       />
@@ -648,7 +683,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                       min="1"
                       max="10"
                       value={guests}
-                      onChange={(e) => setGuests(Number(e.target.value))}
+                      onChange={e => setGuests(Number(e.target.value))}
                       className="flex-1"
                     />
                     <Input
@@ -656,7 +691,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                       min="1"
                       max="5"
                       value={rooms}
-                      onChange={(e) => setRooms(Number(e.target.value))}
+                      onChange={e => setRooms(Number(e.target.value))}
                       placeholder="Quartos"
                       className="flex-1"
                     />
@@ -670,7 +705,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                   <Filter className="h-4 w-4" />
                   <Label className="text-sm font-medium">Filtros</Label>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label className="text-xs">Faixa de Preço (por noite)</Label>
@@ -679,14 +714,18 @@ export const EnhancedHotelSearch: React.FC = () => {
                         type="number"
                         placeholder="Min"
                         value={priceRange.min}
-                        onChange={(e) => setPriceRange(prev => ({ ...prev, min: Number(e.target.value) }))}
+                        onChange={e =>
+                          setPriceRange(prev => ({ ...prev, min: Number(e.target.value) }))
+                        }
                         className="text-xs"
                       />
                       <Input
                         type="number"
                         placeholder="Max"
                         value={priceRange.max}
-                        onChange={(e) => setPriceRange(prev => ({ ...prev, max: Number(e.target.value) }))}
+                        onChange={e =>
+                          setPriceRange(prev => ({ ...prev, max: Number(e.target.value) }))
+                        }
                         className="text-xs"
                       />
                     </div>
@@ -696,7 +735,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                     <Label className="text-xs">Ordenar por</Label>
                     <select
                       value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
+                      onChange={e => setSortBy(e.target.value)}
                       className="w-full px-3 py-2 border rounded-md bg-background text-xs"
                     >
                       <option value="price">Menor preço</option>
@@ -714,8 +753,8 @@ export const EnhancedHotelSearch: React.FC = () => {
                           variant={selectedAmenities.includes(amenity) ? "default" : "outline"}
                           className="cursor-pointer text-xs"
                           onClick={() => {
-                            setSelectedAmenities(prev => 
-                              prev.includes(amenity) 
+                            setSelectedAmenities(prev =>
+                              prev.includes(amenity)
                                 ? prev.filter(a => a !== amenity)
                                 : [...prev, amenity]
                             );
@@ -729,12 +768,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                 </div>
               </div>
 
-              <Button 
-                onClick={handleSearch} 
-                disabled={isSearching}
-                className="w-full"
-                size="lg"
-              >
+              <Button onClick={handleSearch} disabled={isSearching} className="w-full" size="lg">
                 {isSearching ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -754,9 +788,7 @@ export const EnhancedHotelSearch: React.FC = () => {
           {sortedHotels.length > 0 && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-semibold">
-                  {sortedHotels.length} hotéis encontrados
-                </h2>
+                <h2 className="text-2xl font-semibold">{sortedHotels.length} hotéis encontrados</h2>
                 <Button variant="outline" size="sm" onClick={() => setHotels([])}>
                   <RotateCcw className="h-4 w-4 mr-1" />
                   Limpar
@@ -764,12 +796,15 @@ export const EnhancedHotelSearch: React.FC = () => {
               </div>
 
               <div className="grid gap-6">
-                {sortedHotels.map((hotel) => (
-                  <Card key={hotel.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                {sortedHotels.map(hotel => (
+                  <Card
+                    key={hotel.id}
+                    className="overflow-hidden hover:shadow-lg transition-shadow"
+                  >
                     <div className="flex flex-col lg:flex-row">
                       <div className="lg:w-1/3">
-                        <img 
-                          src={hotel.image} 
+                        <img
+                          src={hotel.image}
                           alt={hotel.name}
                           className="w-full h-48 lg:h-full object-cover"
                         />
@@ -787,7 +822,9 @@ export const EnhancedHotelSearch: React.FC = () => {
                               <div className="flex items-center mb-2">
                                 <Star className="h-4 w-4 text-yellow-500 mr-1" />
                                 <span className="font-medium">{hotel.rating}</span>
-                                <span className="text-sm text-muted-foreground ml-2">{hotel.distance}</span>
+                                <span className="text-sm text-muted-foreground ml-2">
+                                  {hotel.distance}
+                                </span>
                               </div>
                               <p className="text-sm text-muted-foreground">{hotel.description}</p>
                             </div>
@@ -804,7 +841,11 @@ export const EnhancedHotelSearch: React.FC = () => {
                               <div className="text-sm text-muted-foreground">por noite</div>
                               {hotel.originalPrice && (
                                 <Badge variant="destructive" className="mt-1">
-                                  {Math.round(((hotel.originalPrice - hotel.price) / hotel.originalPrice) * 100)}% OFF
+                                  {Math.round(
+                                    ((hotel.originalPrice - hotel.price) / hotel.originalPrice) *
+                                      100
+                                  )}
+                                  % OFF
                                 </Badge>
                               )}
                             </div>
@@ -812,7 +853,11 @@ export const EnhancedHotelSearch: React.FC = () => {
 
                           <div className="flex flex-wrap gap-2">
                             {hotel.amenities.slice(0, 6).map((amenity, index) => (
-                              <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                              <Badge
+                                key={index}
+                                variant="secondary"
+                                className="flex items-center gap-1"
+                              >
                                 {getAmenityIcon(amenity)}
                                 <span className="text-xs">{amenity}</span>
                               </Badge>
@@ -820,16 +865,13 @@ export const EnhancedHotelSearch: React.FC = () => {
                           </div>
 
                           <div className="flex flex-col sm:flex-row gap-3">
-                            <Button 
-                              onClick={() => handleBookHotel(hotel)}
-                              className="flex-1"
-                            >
+                            <Button onClick={() => handleBookHotel(hotel)} className="flex-1">
                               <Bookmark className="h-4 w-4 mr-2" />
                               Reservar Agora
                             </Button>
-                            
+
                             {hotel.bookingUrl && (
-                              <Button 
+                              <Button
                                 variant="outline"
                                 onClick={() => window.open(hotel.bookingUrl, "_blank")}
                                 className="flex-1"
@@ -850,7 +892,11 @@ export const EnhancedHotelSearch: React.FC = () => {
                                   <DialogTitle>{hotel.name}</DialogTitle>
                                 </DialogHeader>
                                 <div className="space-y-4">
-                                  <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover rounded" />
+                                  <img
+                                    src={hotel.image}
+                                    alt={hotel.name}
+                                    className="w-full h-48 object-cover rounded"
+                                  />
                                   <div className="grid grid-cols-2 gap-4 text-sm">
                                     <div>
                                       <strong>Endereço:</strong> {hotel.address}
@@ -907,9 +953,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                 <Bookmark className="h-5 w-5" />
                 Minhas Reservas
               </CardTitle>
-              <CardDescription>
-                Gerencie suas reservas de hospedagem
-              </CardDescription>
+              <CardDescription>Gerencie suas reservas de hospedagem</CardDescription>
             </CardHeader>
             <CardContent>
               {reservations.length === 0 ? (
@@ -922,7 +966,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {reservations.map((reservation) => (
+                  {reservations.map(reservation => (
                     <Card key={reservation.id} className="border border-muted">
                       <CardContent className="p-6">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -932,20 +976,27 @@ export const EnhancedHotelSearch: React.FC = () => {
                               <Badge className={getStatusColor(reservation.status)}>
                                 {getStatusIcon(reservation.status)}
                                 <span className="ml-1">
-                                  {reservation.status === "confirmed" ? "Confirmada" :
-                                    reservation.status === "pending" ? "Pendente" : "Cancelada"}
+                                  {reservation.status === "confirmed"
+                                    ? "Confirmada"
+                                    : reservation.status === "pending"
+                                      ? "Pendente"
+                                      : "Cancelada"}
                                 </span>
                               </Badge>
                             </div>
-                            
+
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                               <div>
                                 <span className="text-muted-foreground">Check-in:</span>
-                                <div className="font-medium">{format(reservation.checkIn, "dd/MM/yyyy")}</div>
+                                <div className="font-medium">
+                                  {format(reservation.checkIn, "dd/MM/yyyy")}
+                                </div>
                               </div>
                               <div>
                                 <span className="text-muted-foreground">Check-out:</span>
-                                <div className="font-medium">{format(reservation.checkOut, "dd/MM/yyyy")}</div>
+                                <div className="font-medium">
+                                  {format(reservation.checkOut, "dd/MM/yyyy")}
+                                </div>
                               </div>
                               <div>
                                 <span className="text-muted-foreground">Hóspedes:</span>
@@ -959,8 +1010,12 @@ export const EnhancedHotelSearch: React.FC = () => {
 
                             {reservation.confirmationCode && (
                               <div className="mt-3 p-3 bg-muted rounded-lg">
-                                <span className="text-sm text-muted-foreground">Código de confirmação:</span>
-                                <div className="font-mono font-medium">{reservation.confirmationCode}</div>
+                                <span className="text-sm text-muted-foreground">
+                                  Código de confirmação:
+                                </span>
+                                <div className="font-mono font-medium">
+                                  {reservation.confirmationCode}
+                                </div>
                               </div>
                             )}
                           </div>
@@ -970,8 +1025,8 @@ export const EnhancedHotelSearch: React.FC = () => {
                               R$ {reservation.totalPrice}
                             </div>
                             <div className="space-y-2">
-                              <Button 
-                                variant="outline" 
+                              <Button
+                                variant="outline"
                                 size="sm"
                                 onClick={() => window.open(reservation.hotel.bookingUrl, "_blank")}
                               >
@@ -1002,9 +1057,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                 <CalendarIcon className="h-5 w-5" />
                 Roteiros de Viagem
               </CardTitle>
-              <CardDescription>
-                Organize e gerencie seus itinerários completos
-              </CardDescription>
+              <CardDescription>Organize e gerencie seus itinerários completos</CardDescription>
             </CardHeader>
             <CardContent>
               {itineraries.length === 0 ? (
@@ -1021,7 +1074,7 @@ export const EnhancedHotelSearch: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {itineraries.map((itinerary) => (
+                  {itineraries.map(itinerary => (
                     <Card key={itinerary.id} className="border border-muted">
                       <CardContent className="p-6">
                         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
@@ -1033,7 +1086,8 @@ export const EnhancedHotelSearch: React.FC = () => {
                               <span className="mx-2">•</span>
                               <CalendarIcon className="h-4 w-4 mr-1" />
                               <span>
-                                {format(itinerary.startDate, "dd/MM")} - {format(itinerary.endDate, "dd/MM/yyyy")}
+                                {format(itinerary.startDate, "dd/MM")} -{" "}
+                                {format(itinerary.endDate, "dd/MM/yyyy")}
                               </span>
                             </div>
 
@@ -1044,7 +1098,8 @@ export const EnhancedHotelSearch: React.FC = () => {
                                   <div key={index} className="text-sm p-3 bg-muted rounded-lg">
                                     <div className="font-medium">{hotel.hotel.name}</div>
                                     <div className="text-muted-foreground">
-                                      {format(hotel.checkIn, "dd/MM")} - {format(hotel.checkOut, "dd/MM")}
+                                      {format(hotel.checkIn, "dd/MM")} -{" "}
+                                      {format(hotel.checkOut, "dd/MM")}
                                     </div>
                                   </div>
                                 ))}
@@ -1054,7 +1109,10 @@ export const EnhancedHotelSearch: React.FC = () => {
                                 <h4 className="font-medium mb-2">Atividades</h4>
                                 <div className="space-y-1">
                                   {itinerary.activities.map((activity, index) => (
-                                    <div key={index} className="text-sm p-2 bg-muted rounded flex items-center">
+                                    <div
+                                      key={index}
+                                      className="text-sm p-2 bg-muted rounded flex items-center"
+                                    >
                                       <CheckCircle className="h-3 w-3 mr-2 text-green-600" />
                                       {activity}
                                     </div>
@@ -1069,8 +1127,8 @@ export const EnhancedHotelSearch: React.FC = () => {
                               R$ {itinerary.totalCost}
                             </div>
                             <div className="space-y-2">
-                              <Button 
-                                variant="outline" 
+                              <Button
+                                variant="outline"
                                 size="sm"
                                 onClick={() => exportItinerary(itinerary)}
                                 className="w-full"
@@ -1118,7 +1176,9 @@ export const EnhancedHotelSearch: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Reservas Ativas</p>
-                    <p className="text-2xl font-bold">{reservations.filter(r => r.status === "confirmed").length}</p>
+                    <p className="text-2xl font-bold">
+                      {reservations.filter(r => r.status === "confirmed").length}
+                    </p>
                   </div>
                   <Bookmark className="h-8 w-8 text-green-500" />
                 </div>

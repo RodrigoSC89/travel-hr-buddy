@@ -5,6 +5,7 @@
 The Alertas de Preços (Price Alerts) module provides **intelligent price monitoring and alerting** for travel services. It helps organizations optimize travel budgets by tracking price fluctuations and notifying users of optimal booking opportunities.
 
 **Key Use Cases:**
+
 - Set price alerts for flights and hotels
 - Monitor price trends and patterns
 - Receive notifications when prices drop

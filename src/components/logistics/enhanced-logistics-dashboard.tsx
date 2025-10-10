@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
+import {
   Table,
   TableBody,
   TableCell,
@@ -12,29 +12,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { 
-  Truck, 
-  Package, 
-  MapPin, 
-  Clock, 
-  TrendingUp, 
-  AlertTriangle, 
-  CheckCircle, 
-  Calendar, 
-  BarChart3, 
-  Star, 
-  Globe, 
-  Zap, 
-  Shield, 
-  Crown, 
-  Diamond, 
+import {
+  Truck,
+  Package,
+  MapPin,
+  TrendingUp,
+  AlertTriangle,
+  CheckCircle,
+  Calendar,
+  BarChart3,
+  Star,
+  Globe,
+  Zap,
+  Crown,
+  Diamond,
   Activity,
-  Users,
-  Target,
   Plane,
   Ship,
   Navigation,
-  Anchor
 } from "lucide-react";
 
 interface LogisticsData {
@@ -69,7 +64,7 @@ const EnhancedLogisticsDashboard: React.FC = () => {
       estimatedDelivery: "2024-01-20",
       cost: 15000,
       weight: 25000,
-      priority: "high"
+      priority: "high",
     },
     {
       id: "LOG-002",
@@ -81,7 +76,7 @@ const EnhancedLogisticsDashboard: React.FC = () => {
       estimatedDelivery: "2024-01-18",
       cost: 8500,
       weight: 500,
-      priority: "critical"
+      priority: "critical",
     },
     {
       id: "LOG-003",
@@ -93,50 +88,64 @@ const EnhancedLogisticsDashboard: React.FC = () => {
       estimatedDelivery: "2024-01-25",
       cost: 3200,
       weight: 1200,
-      priority: "medium"
-    }
+      priority: "medium",
+    },
   ];
 
   const quickStats = [
     { icon: Package, label: "Cargas Ativas", value: "124", color: "primary", trend: "+12%" },
     { icon: Truck, label: "Em Trânsito", value: "89", color: "info", trend: "+8%" },
     { icon: CheckCircle, label: "Entregues Hoje", value: "45", color: "success", trend: "+15%" },
-    { icon: AlertTriangle, label: "Atrasadas", value: "3", color: "warning", trend: "-5%" }
+    { icon: AlertTriangle, label: "Atrasadas", value: "3", color: "warning", trend: "-5%" },
   ];
 
   const transportModes = [
     { icon: Ship, name: "Marítimo", count: 45, percentage: 36, color: "info" },
     { icon: Plane, name: "Aéreo", count: 32, percentage: 26, color: "primary" },
     { icon: Truck, name: "Terrestre", count: 38, percentage: 31, color: "success" },
-    { icon: Navigation, name: "Multimodal", count: 9, percentage: 7, color: "warning" }
+    { icon: Navigation, name: "Multimodal", count: 9, percentage: 7, color: "warning" },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "delivered": return "success";
-    case "in_transit": return "info";
-    case "delayed": return "destructive";
-    case "pending": return "warning";
-    default: return "secondary";
+      case "delivered":
+        return "success";
+      case "in_transit":
+        return "info";
+      case "delayed":
+        return "destructive";
+      case "pending":
+        return "warning";
+      default:
+        return "secondary";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical": return "destructive";
-    case "high": return "warning";
-    case "medium": return "info";
-    case "low": return "success";
-    default: return "secondary";
+      case "critical":
+        return "destructive";
+      case "high":
+        return "warning";
+      case "medium":
+        return "info";
+      case "low":
+        return "success";
+      default:
+        return "secondary";
     }
   };
 
   const getTransportIcon = (type: string) => {
     switch (type) {
-    case "maritime": return Ship;
-    case "air": return Plane;
-    case "ground": return Truck;
-    default: return Package;
+      case "maritime":
+        return Ship;
+      case "air":
+        return Plane;
+      case "ground":
+        return Truck;
+      default:
+        return Package;
     }
   };
 
@@ -156,7 +165,7 @@ const EnhancedLogisticsDashboard: React.FC = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {logisticsData.map((item) => {
+          {logisticsData.map(item => {
             const Icon = getTransportIcon(item.type);
             return (
               <TableRow key={item.id}>
@@ -165,19 +174,29 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Icon className="w-4 h-4" />
                     <span className="capitalize">
-                      {item.type === "maritime" ? "Marítimo" : item.type === "air" ? "Aéreo" : "Terrestre"}
+                      {item.type === "maritime"
+                        ? "Marítimo"
+                        : item.type === "air"
+                          ? "Aéreo"
+                          : "Terrestre"}
                     </span>
                   </div>
                 </TableCell>
-                <TableCell>{item.origin} → {item.destination}</TableCell>
                 <TableCell>
-                  <Badge 
-                    variant="outline" 
+                  {item.origin} → {item.destination}
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant="outline"
                     className={`bg-${getStatusColor(item.status)}/10 text-${getStatusColor(item.status)} border-${getStatusColor(item.status)}/30`}
                   >
-                    {item.status === "in_transit" ? "Em Trânsito" : 
-                      item.status === "delivered" ? "Entregue" : 
-                        item.status === "pending" ? "Pendente" : "Atrasado"}
+                    {item.status === "in_transit"
+                      ? "Em Trânsito"
+                      : item.status === "delivered"
+                        ? "Entregue"
+                        : item.status === "pending"
+                          ? "Pendente"
+                          : "Atrasado"}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -187,17 +206,27 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge 
-                    variant="outline" 
+                  <Badge
+                    variant="outline"
                     className={`bg-${getPriorityColor(item.priority)}/10 text-${getPriorityColor(item.priority)} border-${getPriorityColor(item.priority)}/30`}
                   >
-                    {item.priority === "critical" ? "Crítica" : 
-                      item.priority === "high" ? "Alta" : 
-                        item.priority === "medium" ? "Média" : "Baixa"}
+                    {item.priority === "critical"
+                      ? "Crítica"
+                      : item.priority === "high"
+                        ? "Alta"
+                        : item.priority === "medium"
+                          ? "Média"
+                          : "Baixa"}
                   </Badge>
                 </TableCell>
-                <TableCell>{new Date(item.estimatedDelivery).toLocaleDateString("pt-BR")}</TableCell>
-                <TableCell>{new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(item.cost)}</TableCell>
+                <TableCell>
+                  {new Date(item.estimatedDelivery).toLocaleDateString("pt-BR")}
+                </TableCell>
+                <TableCell>
+                  {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
+                    item.cost
+                  )}
+                </TableCell>
               </TableRow>
             );
           })}
@@ -212,17 +241,21 @@ const EnhancedLogisticsDashboard: React.FC = () => {
       <div className="absolute inset-0 bg-dots opacity-20" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-info/10 to-transparent rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-primary/10 to-transparent rounded-full blur-3xl" />
-      
+
       <div className="relative z-10 container mx-auto p-6 space-y-8">
         {/* Enhanced Hero Section */}
-        <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-info via-info/90 to-info-glow p-8 text-info-foreground 
-          transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-          
+        <div
+          className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-info via-info/90 to-info-glow p-8 text-info-foreground 
+          transition-all duration-1000 transform ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+        >
           {/* Animated Background Pattern */}
           <div className="absolute inset-0 bg-mesh opacity-20" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/15 to-transparent rounded-full blur-2xl animate-pulse" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-success/20 to-transparent rounded-full blur-xl animate-pulse" style={{ animationDelay: "1s" }} />
-          
+          <div
+            className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-success/20 to-transparent rounded-full blur-xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
+
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-4 rounded-2xl bg-info/20 backdrop-blur-sm animate-pulse-glow">
@@ -238,12 +271,12 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                 </p>
               </div>
             </div>
-            
+
             <p className="text-lg opacity-95 mb-8 max-w-3xl drop-shadow-md font-medium">
-              Plataforma revolucionária de logística com IA preditiva, otimização de rotas em tempo real 
-              e gestão completa de cargas marítimas, aéreas e terrestres.
+              Plataforma revolucionária de logística com IA preditiva, otimização de rotas em tempo
+              real e gestão completa de cargas marítimas, aéreas e terrestres.
             </p>
-            
+
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center gap-2 bg-primary/90 text-primary-foreground px-4 py-2 rounded-xl backdrop-blur-sm hover:scale-105 transition-transform duration-300 hover:bg-primary shadow-lg border border-primary/30">
                 <Zap className="h-5 w-5 animate-pulse" />
@@ -264,10 +297,15 @@ const EnhancedLogisticsDashboard: React.FC = () => {
         {/* Quick Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {quickStats.map((stat, index) => (
-            <Card key={index} className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
-              bg-gradient-to-br from-card via-card/95 to-${stat.color}/5 border-${stat.color}/20 hover:border-${stat.color}/40`}>
+            <Card
+              key={index}
+              className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
+              bg-gradient-to-br from-card via-card/95 to-${stat.color}/5 border-${stat.color}/20 hover:border-${stat.color}/40`}
+            >
               <CardContent className="p-4 flex items-center gap-3">
-                <div className={`p-3 rounded-xl bg-${stat.color}/20 group-hover:scale-110 transition-transform duration-300`}>
+                <div
+                  className={`p-3 rounded-xl bg-${stat.color}/20 group-hover:scale-110 transition-transform duration-300`}
+                >
                   <stat.icon className={`w-6 h-6 text-${stat.color}`} />
                 </div>
                 <div className="flex-1">
@@ -287,19 +325,31 @@ const EnhancedLogisticsDashboard: React.FC = () => {
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <div className="flex justify-center">
             <TabsList className="grid grid-cols-4 w-full max-w-2xl h-14 bg-card/50 backdrop-blur-sm border border-border/50">
-              <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsTrigger
+                value="overview"
+                className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
                 <BarChart3 className="h-5 w-5" />
                 <span className="hidden md:inline">Visão Geral</span>
               </TabsTrigger>
-              <TabsTrigger value="shipments" className="flex items-center gap-2 data-[state=active]:bg-info data-[state=active]:text-info-foreground">
+              <TabsTrigger
+                value="shipments"
+                className="flex items-center gap-2 data-[state=active]:bg-info data-[state=active]:text-info-foreground"
+              >
                 <Package className="h-5 w-5" />
                 <span className="hidden md:inline">Carregamentos</span>
               </TabsTrigger>
-              <TabsTrigger value="routes" className="flex items-center gap-2 data-[state=active]:bg-success data-[state=active]:text-success-foreground">
+              <TabsTrigger
+                value="routes"
+                className="flex items-center gap-2 data-[state=active]:bg-success data-[state=active]:text-success-foreground"
+              >
                 <MapPin className="h-5 w-5" />
                 <span className="hidden md:inline">Rotas</span>
               </TabsTrigger>
-              <TabsTrigger value="analytics" className="flex items-center gap-2 data-[state=active]:bg-warning data-[state=active]:text-warning-foreground">
+              <TabsTrigger
+                value="analytics"
+                className="flex items-center gap-2 data-[state=active]:bg-warning data-[state=active]:text-warning-foreground"
+              >
                 <Activity className="h-5 w-5" />
                 <span className="hidden md:inline">Analytics</span>
               </TabsTrigger>
@@ -332,7 +382,9 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                           </div>
                           <div className="text-right">
                             <span className="font-bold">{mode.count}</span>
-                            <span className="text-sm text-muted-foreground ml-2">({mode.percentage}%)</span>
+                            <span className="text-sm text-muted-foreground ml-2">
+                              ({mode.percentage}%)
+                            </span>
                           </div>
                         </div>
                         <Progress value={mode.percentage} className="h-2" />
@@ -389,9 +441,7 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                   </Badge>
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                {renderLogisticsTable()}
-              </CardContent>
+              <CardContent>{renderLogisticsTable()}</CardContent>
             </Card>
           </TabsContent>
 
@@ -415,16 +465,23 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                     Sistema de Rotas Inteligente
                   </h3>
                   <p className="text-muted-foreground text-lg mb-6 max-w-md mx-auto">
-                    Mapa interativo com otimização de rotas em tempo real será disponibilizado em breve
+                    Mapa interativo com otimização de rotas em tempo real será disponibilizado em
+                    breve
                   </p>
                   <div className="flex justify-center gap-2">
-                    <Badge variant="outline" className="bg-success/10 text-success border-success/30">
+                    <Badge
+                      variant="outline"
+                      className="bg-success/10 text-success border-success/30"
+                    >
                       IA Preditiva
                     </Badge>
                     <Badge variant="outline" className="bg-info/10 text-info border-info/30">
                       Tempo Real
                     </Badge>
-                    <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
+                    <Badge
+                      variant="outline"
+                      className="bg-warning/10 text-warning border-warning/30"
+                    >
                       Otimização Automática
                     </Badge>
                   </div>
@@ -456,13 +513,19 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                     Dashboard analítico completo com métricas avançadas e insights de performance
                   </p>
                   <div className="flex justify-center gap-2">
-                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
+                    <Badge
+                      variant="outline"
+                      className="bg-primary/10 text-primary border-primary/30"
+                    >
                       KPIs em Tempo Real
                     </Badge>
                     <Badge variant="outline" className="bg-info/10 text-info border-info/30">
                       Previsões IA
                     </Badge>
-                    <Badge variant="outline" className="bg-success/10 text-success border-success/30">
+                    <Badge
+                      variant="outline"
+                      className="bg-success/10 text-success border-success/30"
+                    >
                       Relatórios Automáticos
                     </Badge>
                   </div>

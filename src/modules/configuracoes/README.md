@@ -5,6 +5,7 @@
 The Configurações (Settings) module provides **comprehensive system and user configuration management**. It allows users to customize their experience and administrators to configure system-wide settings.
 
 **Key Use Cases:**
+
 - Manage user preferences and profile
 - Configure system settings and defaults
 - Set up integrations and API keys

@@ -4,7 +4,4 @@
  */
 
 // Re-export from the new unified EmptyState component
-export { 
-  EmptyState,
-  type EmptyStateProps
-} from "./EmptyState";
+export { EmptyState, type EmptyStateProps } from "./EmptyState";

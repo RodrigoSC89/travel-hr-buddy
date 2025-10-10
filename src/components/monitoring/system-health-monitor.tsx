@@ -4,20 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import {
   Activity,
   Cpu,
   HardDrive,
   Wifi,
   Database,
-  Server,
   Globe,
   AlertTriangle,
   CheckCircle,
   Clock,
   Zap,
-  BarChart3,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
 
 interface SystemMetrics {
@@ -50,7 +48,7 @@ export const SystemHealthMonitor: React.FC = () => {
     try {
       // Simulate real system metrics
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       const newMetrics: SystemMetrics = {
         cpu: Math.floor(Math.random() * 100),
         memory: Math.floor(Math.random() * 100),
@@ -60,20 +58,20 @@ export const SystemHealthMonitor: React.FC = () => {
         activeUsers: Math.floor(Math.random() * 150) + 50,
         responseTime: Math.floor(Math.random() * 500) + 100,
         uptime: "15d 8h 42m",
-        lastUpdate: new Date()
+        lastUpdate: new Date(),
       };
 
       setMetrics(newMetrics);
 
       // Generate alerts based on metrics
       const newAlerts: SystemAlert[] = [];
-      
+
       if (newMetrics.cpu > 80) {
         newAlerts.push({
           id: Date.now().toString(),
           type: "warning",
           message: `Alto uso de CPU: ${newMetrics.cpu}%`,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
 
@@ -82,7 +80,7 @@ export const SystemHealthMonitor: React.FC = () => {
           id: (Date.now() + 1).toString(),
           type: "error",
           message: `Memória crítica: ${newMetrics.memory}%`,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
 
@@ -91,7 +89,7 @@ export const SystemHealthMonitor: React.FC = () => {
           id: (Date.now() + 2).toString(),
           type: "warning",
           message: `Tempo de resposta alto: ${newMetrics.responseTime}ms`,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
 
@@ -114,10 +112,10 @@ export const SystemHealthMonitor: React.FC = () => {
 
   useEffect(() => {
     loadSystemMetrics();
-    
+
     // Auto-refresh every 30 seconds
     const interval = setInterval(loadSystemMetrics, 30000);
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -135,9 +133,12 @@ export const SystemHealthMonitor: React.FC = () => {
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-    case "error": return <AlertTriangle className="w-4 h-4 text-red-500" />;
-    case "warning": return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-    default: return <CheckCircle className="w-4 h-4 text-blue-500" />;
+      case "error":
+        return <AlertTriangle className="w-4 h-4 text-red-500" />;
+      case "warning":
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      default:
+        return <CheckCircle className="w-4 h-4 text-blue-500" />;
     }
   };
 
@@ -168,9 +169,7 @@ export const SystemHealthMonitor: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Monitor de Sistema</h2>
-          <p className="text-muted-foreground">
-            Monitoramento em tempo real da saúde do sistema
-          </p>
+          <p className="text-muted-foreground">Monitoramento em tempo real da saúde do sistema</p>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="flex items-center gap-1">
@@ -200,14 +199,12 @@ export const SystemHealthMonitor: React.FC = () => {
             <div className={`text-2xl font-bold ${getStatusColor(metrics.cpu)}`}>
               {metrics.cpu}%
             </div>
-            <Progress 
-              value={metrics.cpu} 
+            <Progress
+              value={metrics.cpu}
               className="mt-2"
               style={{ "--progress-foreground": getProgressColor(metrics.cpu) } as any}
             />
-            <p className="text-xs text-muted-foreground mt-1">
-              Processamento
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Processamento</p>
           </CardContent>
         </Card>
 
@@ -222,14 +219,12 @@ export const SystemHealthMonitor: React.FC = () => {
             <div className={`text-2xl font-bold ${getStatusColor(metrics.memory)}`}>
               {metrics.memory}%
             </div>
-            <Progress 
-              value={metrics.memory} 
+            <Progress
+              value={metrics.memory}
               className="mt-2"
               style={{ "--progress-foreground": getProgressColor(metrics.memory) } as any}
             />
-            <p className="text-xs text-muted-foreground mt-1">
-              RAM em uso
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">RAM em uso</p>
           </CardContent>
         </Card>
 
@@ -244,14 +239,12 @@ export const SystemHealthMonitor: React.FC = () => {
             <div className={`text-2xl font-bold ${getStatusColor(metrics.database)}`}>
               {metrics.database}%
             </div>
-            <Progress 
-              value={metrics.database} 
+            <Progress
+              value={metrics.database}
               className="mt-2"
               style={{ "--progress-foreground": getProgressColor(metrics.database) } as any}
             />
-            <p className="text-xs text-muted-foreground mt-1">
-              Conexões ativas
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Conexões ativas</p>
           </CardContent>
         </Card>
 
@@ -266,14 +259,12 @@ export const SystemHealthMonitor: React.FC = () => {
             <div className={`text-2xl font-bold ${getStatusColor(metrics.network)}`}>
               {metrics.network}%
             </div>
-            <Progress 
-              value={metrics.network} 
+            <Progress
+              value={metrics.network}
               className="mt-2"
               style={{ "--progress-foreground": getProgressColor(metrics.network) } as any}
             />
-            <p className="text-xs text-muted-foreground mt-1">
-              Banda utilizada
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Banda utilizada</p>
           </CardContent>
         </Card>
       </div>
@@ -288,12 +279,8 @@ export const SystemHealthMonitor: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-primary">
-              {metrics.activeUsers}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Conectados agora
-            </p>
+            <div className="text-2xl font-bold text-primary">{metrics.activeUsers}</div>
+            <p className="text-xs text-muted-foreground mt-1">Conectados agora</p>
           </CardContent>
         </Card>
 
@@ -305,12 +292,12 @@ export const SystemHealthMonitor: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${metrics.responseTime > 400 ? "text-red-600" : metrics.responseTime > 200 ? "text-yellow-600" : "text-green-600"}`}>
+            <div
+              className={`text-2xl font-bold ${metrics.responseTime > 400 ? "text-red-600" : metrics.responseTime > 200 ? "text-yellow-600" : "text-green-600"}`}
+            >
               {metrics.responseTime}ms
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Média das requisições
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Média das requisições</p>
           </CardContent>
         </Card>
 
@@ -322,12 +309,8 @@ export const SystemHealthMonitor: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-success">
-              {metrics.uptime}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Sistema ativo
-            </p>
+            <div className="text-2xl font-bold text-success">{metrics.uptime}</div>
+            <p className="text-xs text-muted-foreground mt-1">Sistema ativo</p>
           </CardContent>
         </Card>
       </div>
@@ -344,11 +327,8 @@ export const SystemHealthMonitor: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {alerts.map((alert) => (
-                <div
-                  key={alert.id}
-                  className="flex items-center gap-3 p-3 border rounded-lg"
-                >
+              {alerts.map(alert => (
+                <div key={alert.id} className="flex items-center gap-3 p-3 border rounded-lg">
                   {getAlertIcon(alert.type)}
                   <div className="flex-1">
                     <p className="text-sm font-medium">{alert.message}</p>

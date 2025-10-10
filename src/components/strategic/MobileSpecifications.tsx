@@ -1,12 +1,10 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { 
-  Smartphone, 
-  Wifi, 
-  WifiOff, 
-  Bell, 
+import {
+  Smartphone,
+  WifiOff,
+  Bell,
   Download,
   Shield,
   Users,
@@ -15,7 +13,6 @@ import {
   QrCode,
   Compass,
   Battery,
-  Signal
 } from "lucide-react";
 
 interface MobileFeature {
@@ -42,7 +39,7 @@ export const MobileSpecifications = () => {
       priority: "core",
       complexity: "high",
       estimatedDays: 21,
-      dependencies: ["Local Database", "Sync Engine"]
+      dependencies: ["Local Database", "Sync Engine"],
     },
     {
       id: "2",
@@ -51,7 +48,7 @@ export const MobileSpecifications = () => {
       priority: "core",
       complexity: "medium",
       estimatedDays: 14,
-      dependencies: ["GPS", "Camera", "Biometrics"]
+      dependencies: ["GPS", "Camera", "Biometrics"],
     },
     {
       id: "3",
@@ -60,7 +57,7 @@ export const MobileSpecifications = () => {
       priority: "core",
       complexity: "medium",
       estimatedDays: 10,
-      dependencies: ["Firebase/FCM", "WebSocket"]
+      dependencies: ["Firebase/FCM", "WebSocket"],
     },
     {
       id: "4",
@@ -69,7 +66,7 @@ export const MobileSpecifications = () => {
       priority: "important",
       complexity: "low",
       estimatedDays: 7,
-      dependencies: ["Camera", "ML Kit"]
+      dependencies: ["Camera", "ML Kit"],
     },
     {
       id: "5",
@@ -78,7 +75,7 @@ export const MobileSpecifications = () => {
       priority: "core",
       complexity: "medium",
       estimatedDays: 12,
-      dependencies: ["Camera", "File Upload", "Forms"]
+      dependencies: ["Camera", "File Upload", "Forms"],
     },
     {
       id: "6",
@@ -87,7 +84,7 @@ export const MobileSpecifications = () => {
       priority: "important",
       complexity: "high",
       estimatedDays: 28,
-      dependencies: ["Maps API", "Weather API", "GPS"]
+      dependencies: ["Maps API", "Weather API", "GPS"],
     },
     {
       id: "7",
@@ -96,7 +93,7 @@ export const MobileSpecifications = () => {
       priority: "core",
       complexity: "medium",
       estimatedDays: 8,
-      dependencies: ["GPS", "Emergency Services API"]
+      dependencies: ["GPS", "Emergency Services API"],
     },
     {
       id: "8",
@@ -105,8 +102,8 @@ export const MobileSpecifications = () => {
       priority: "important",
       complexity: "medium",
       estimatedDays: 15,
-      dependencies: ["Biometric APIs", "Encryption"]
-    }
+      dependencies: ["Biometric APIs", "Encryption"],
+    },
   ];
 
   const technicalSpecs: TechnicalSpec[] = [
@@ -116,8 +113,8 @@ export const MobileSpecifications = () => {
         "iOS 14.0+ (iPhone 8 ou superior)",
         "Android 8.0+ (API Level 26)",
         "React Native 0.73+ ou Flutter 3.16+",
-        "Suporte a tablets (iPad, Android tablets)"
-      ]
+        "Suporte a tablets (iPad, Android tablets)",
+      ],
     },
     {
       category: "Conectividade",
@@ -126,8 +123,8 @@ export const MobileSpecifications = () => {
         "Bluetooth 5.0+ (para sensores)",
         "NFC (para check-ins)",
         "Satélite (Iridium para emergências)",
-        "Modo offline completo"
-      ]
+        "Modo offline completo",
+      ],
     },
     {
       category: "Hardware",
@@ -136,8 +133,8 @@ export const MobileSpecifications = () => {
         "Câmera traseira 8MP+",
         "Sensor de movimento (acelerômetro, giroscópio)",
         "Microfone para comandos de voz",
-        "Mínimo 4GB RAM, 64GB storage"
-      ]
+        "Mínimo 4GB RAM, 64GB storage",
+      ],
     },
     {
       category: "Segurança",
@@ -146,8 +143,8 @@ export const MobileSpecifications = () => {
         "Certificado SSL/TLS 1.3",
         "Biometria nativa do dispositivo",
         "Wipe remoto em caso de perda",
-        "VPN automática para dados sensíveis"
-      ]
+        "VPN automática para dados sensíveis",
+      ],
     },
     {
       category: "Performance",
@@ -156,26 +153,34 @@ export const MobileSpecifications = () => {
         "Sincronização em background",
         "Cache inteligente (até 500MB)",
         "Compressão de dados automática",
-        "Bateria otimizada (8h+ uso contínuo)"
-      ]
-    }
+        "Bateria otimizada (8h+ uso contínuo)",
+      ],
+    },
   ];
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "core": return "bg-danger text-danger-foreground";
-    case "important": return "bg-warning text-warning-foreground";
-    case "nice-to-have": return "bg-info text-info-foreground";
-    default: return "bg-muted text-muted-foreground";
+      case "core":
+        return "bg-danger text-danger-foreground";
+      case "important":
+        return "bg-warning text-warning-foreground";
+      case "nice-to-have":
+        return "bg-info text-info-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-    case "high": return "bg-danger text-danger-foreground";
-    case "medium": return "bg-warning text-warning-foreground";
-    case "low": return "bg-success text-success-foreground";
-    default: return "bg-muted text-muted-foreground";
+      case "high":
+        return "bg-danger text-danger-foreground";
+      case "medium":
+        return "bg-warning text-warning-foreground";
+      case "low":
+        return "bg-success text-success-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -192,7 +197,8 @@ export const MobileSpecifications = () => {
   };
 
   const totalDays = coreFeatures.reduce((sum, feature) => sum + feature.estimatedDays, 0);
-  const averageComplexity = coreFeatures.filter(f => f.complexity === "high").length / coreFeatures.length;
+  const averageComplexity =
+    coreFeatures.filter(f => f.complexity === "high").length / coreFeatures.length;
 
   return (
     <div className="space-y-6">
@@ -236,37 +242,31 @@ export const MobileSpecifications = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {coreFeatures.map((feature) => (
+            {coreFeatures.map(feature => (
               <div key={feature.id} className="border rounded-lg p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="text-primary">
-                      {getFeatureIcon(feature.name)}
-                    </div>
+                    <div className="text-primary">{getFeatureIcon(feature.name)}</div>
                     <div>
                       <h4 className="font-semibold">{feature.name}</h4>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {feature.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground mt-1">{feature.description}</p>
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Badge className={getPriorityColor(feature.priority)}>
-                      {feature.priority}
-                    </Badge>
+                    <Badge className={getPriorityColor(feature.priority)}>{feature.priority}</Badge>
                     <Badge className={getComplexityColor(feature.complexity)}>
                       {feature.complexity}
                     </Badge>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex gap-4 text-sm text-muted-foreground">
                     <span>⏱️ {feature.estimatedDays} dias</span>
                     <span>🔧 {feature.dependencies.length} dependências</span>
                   </div>
                   <div className="flex gap-1">
-                    {feature.dependencies.slice(0, 3).map((dep) => (
+                    {feature.dependencies.slice(0, 3).map(dep => (
                       <Badge key={dep} variant="outline" className="text-xs">
                         {dep}
                       </Badge>
@@ -294,12 +294,15 @@ export const MobileSpecifications = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {technicalSpecs.map((spec) => (
+            {technicalSpecs.map(spec => (
               <div key={spec.category} className="border rounded-lg p-4">
                 <h4 className="font-semibold mb-3">{spec.category}</h4>
                 <ul className="space-y-2">
                   {spec.requirements.map((req, index) => (
-                    <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                    <li
+                      key={index}
+                      className="text-sm text-muted-foreground flex items-start gap-2"
+                    >
                       <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
                       {req}
                     </li>
@@ -333,7 +336,7 @@ export const MobileSpecifications = () => {
                 <li>• Notificações push</li>
               </ul>
             </div>
-            
+
             <div className="border-l-4 border-warning pl-4">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-semibold">Fase 2 - Funcionalidades Avançadas (Q2 2025)</h4>
@@ -346,7 +349,7 @@ export const MobileSpecifications = () => {
                 <li>• Biometria avançada</li>
               </ul>
             </div>
-            
+
             <div className="border-l-4 border-success pl-4">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-semibold">Fase 3 - Recursos Premium (Q3 2025)</h4>
@@ -380,7 +383,7 @@ export const MobileSpecifications = () => {
                 Máxima reutilização de código, integração nativa, comunidade ativa
               </p>
             </div>
-            
+
             <div className="text-center border rounded-lg p-4">
               <h4 className="font-semibold mb-2">Banco Local</h4>
               <Badge className="bg-info text-info-foreground mb-2">WatermelonDB</Badge>
@@ -388,7 +391,7 @@ export const MobileSpecifications = () => {
                 Sincronização automática, performance offline, SQLite otimizado
               </p>
             </div>
-            
+
             <div className="text-center border rounded-lg p-4">
               <h4 className="font-semibold mb-2">Notificações</h4>
               <Badge className="bg-warning text-warning-foreground mb-2">Firebase FCM</Badge>

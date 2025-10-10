@@ -5,12 +5,16 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import {
   Bell,
-  BellOff,
   Mail,
   MessageSquare,
   Smartphone,
@@ -22,17 +26,12 @@ import {
   AlertTriangle,
   Info,
   Star,
-  Archive,
   Trash2,
-  Filter,
-  Search,
   Eye,
-  EyeOff,
   Shield,
   Zap,
   User,
-  Building,
-  Globe
+  Globe,
 } from "lucide-react";
 
 interface Notification {
@@ -78,14 +77,14 @@ export const NotificationCenter = () => {
       message: true,
       reminder: true,
       alert: true,
-      update: true
+      update: true,
     },
     priorities: {
       low: true,
       normal: true,
       high: true,
-      critical: true
-    }
+      critical: true,
+    },
   });
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
@@ -106,7 +105,7 @@ export const NotificationCenter = () => {
   const loadNotifications = async () => {
     try {
       setLoading(true);
-      
+
       // Mock notifications data
       const mockNotifications: Notification[] = [
         {
@@ -120,7 +119,7 @@ export const NotificationCenter = () => {
           is_read: false,
           is_important: false,
           created_at: new Date().toISOString(),
-          action_required: true
+          action_required: true,
         },
         {
           id: "2",
@@ -133,7 +132,7 @@ export const NotificationCenter = () => {
           is_read: false,
           is_important: true,
           created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          action_required: true
+          action_required: true,
         },
         {
           id: "3",
@@ -146,7 +145,7 @@ export const NotificationCenter = () => {
           is_read: true,
           is_important: true,
           created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          action_required: false
+          action_required: false,
         },
         {
           id: "4",
@@ -159,7 +158,7 @@ export const NotificationCenter = () => {
           is_read: false,
           is_important: false,
           created_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-          action_required: false
+          action_required: false,
         },
         {
           id: "5",
@@ -172,8 +171,8 @@ export const NotificationCenter = () => {
           is_read: true,
           is_important: false,
           created_at: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
-          action_required: false
-        }
+          action_required: false,
+        },
       ];
 
       setNotifications(mockNotifications);
@@ -181,7 +180,7 @@ export const NotificationCenter = () => {
       toast({
         title: "Erro",
         description: "Erro ao carregar notificações",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -193,14 +192,16 @@ export const NotificationCenter = () => {
       // Mock settings loading - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const setupRealTimeSubscription = () => {
     // Mock real-time subscription for new notifications
     const interval = setInterval(() => {
       // Simulate new notification occasionally
-      if (Math.random() < 0.1) { // 10% chance every 30 seconds
+      if (Math.random() < 0.1) {
+        // 10% chance every 30 seconds
         const newNotification: Notification = {
           id: Date.now().toString(),
           title: "Nova notificação",
@@ -212,14 +213,14 @@ export const NotificationCenter = () => {
           is_read: false,
           is_important: false,
           created_at: new Date().toISOString(),
-          action_required: false
+          action_required: false,
         };
-        
+
         setNotifications(prev => [newNotification, ...prev]);
-        
+
         toast({
           title: newNotification.title,
-          description: newNotification.message
+          description: newNotification.message,
         });
       }
     }, 30000);
@@ -232,19 +233,19 @@ export const NotificationCenter = () => {
 
     // Filter by tab
     switch (activeTab) {
-    case "unread":
-      filtered = filtered.filter(n => !n.is_read);
-      break;
-    case "important":
-      filtered = filtered.filter(n => n.is_important);
-      break;
-    case "action":
-      filtered = filtered.filter(n => n.action_required);
-      break;
-    case "archived":
-      // Mock archived filter
-      filtered = [];
-      break;
+      case "unread":
+        filtered = filtered.filter(n => !n.is_read);
+        break;
+      case "important":
+        filtered = filtered.filter(n => n.is_important);
+        break;
+      case "action":
+        filtered = filtered.filter(n => n.action_required);
+        break;
+      case "archived":
+        // Mock archived filter
+        filtered = [];
+        break;
     }
 
     // Filter by type
@@ -262,96 +263,105 @@ export const NotificationCenter = () => {
 
   const markAsRead = async (notificationId: string) => {
     try {
-      setNotifications(prev => 
-        prev.map(n => 
-          n.id === notificationId 
-            ? { ...n, is_read: true }
-            : n
-        )
+      setNotifications(prev =>
+        prev.map(n => (n.id === notificationId ? { ...n, is_read: true } : n))
       );
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const markAllAsRead = async () => {
     try {
-      setNotifications(prev => 
-        prev.map(n => ({ ...n, is_read: true }))
-      );
-      
+      setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+
       toast({
         title: "Sucesso",
-        description: "Todas as notificações foram marcadas como lidas"
+        description: "Todas as notificações foram marcadas como lidas",
       });
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const toggleImportant = async (notificationId: string) => {
     try {
-      setNotifications(prev => 
-        prev.map(n => 
-          n.id === notificationId 
-            ? { ...n, is_important: !n.is_important }
-            : n
-        )
+      setNotifications(prev =>
+        prev.map(n => (n.id === notificationId ? { ...n, is_important: !n.is_important } : n))
       );
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const deleteNotification = async (notificationId: string) => {
     try {
       setNotifications(prev => prev.filter(n => n.id !== notificationId));
-      
+
       toast({
         title: "Sucesso",
-        description: "Notificação removida"
+        description: "Notificação removida",
       });
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const updateSettings = async (newSettings: Partial<NotificationSettings>) => {
     try {
       setSettings(prev => ({ ...prev, ...newSettings }));
-      
+
       toast({
         title: "Sucesso",
-        description: "Configurações atualizadas"
+        description: "Configurações atualizadas",
       });
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-    case "error": return AlertTriangle;
-    case "warning": return AlertTriangle;
-    case "success": return CheckCircle2;
-    case "urgent": return Zap;
-    default: return Info;
+      case "error":
+        return AlertTriangle;
+      case "warning":
+        return AlertTriangle;
+      case "success":
+        return CheckCircle2;
+      case "urgent":
+        return Zap;
+      default:
+        return Info;
     }
   };
 
   const getNotificationColor = (type: string, priority: string) => {
     if (priority === "critical") return "border-l-destructive bg-destructive/5";
-    
+
     switch (type) {
-    case "error": return "border-l-destructive bg-destructive/5";
-    case "warning": return "border-l-warning bg-warning/5";
-    case "success": return "border-l-success bg-success/5";
-    case "urgent": return "border-l-warning bg-warning/5";
-    default: return "border-l-info bg-info/5";
+      case "error":
+        return "border-l-destructive bg-destructive/5";
+      case "warning":
+        return "border-l-warning bg-warning/5";
+      case "success":
+        return "border-l-success bg-success/5";
+      case "urgent":
+        return "border-l-warning bg-warning/5";
+      default:
+        return "border-l-info bg-info/5";
     }
   };
 
   const getSourceIcon = (source: string) => {
     switch (source) {
-    case "user": return User;
-    case "ai": return Zap;
-    case "external": return Globe;
-    default: return Shield;
+      case "user":
+        return User;
+      case "ai":
+        return Zap;
+      case "external":
+        return Globe;
+      default:
+        return Shield;
     }
   };
 
@@ -359,7 +369,7 @@ export const NotificationCenter = () => {
     const now = new Date();
     const date = new Date(dateString);
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 1) return "Agora mesmo";
     if (diffInHours < 24) return `${diffInHours}h atrás`;
     return `${Math.floor(diffInHours / 24)}d atrás`;
@@ -411,7 +421,7 @@ export const NotificationCenter = () => {
                 <SelectItem value="urgent">Urgente</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Select value={selectedPriority} onValueChange={setSelectedPriority}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Prioridade" />
@@ -431,9 +441,7 @@ export const NotificationCenter = () => {
       {/* Notifications Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="all">
-            Todas ({notifications.length})
-          </TabsTrigger>
+          <TabsTrigger value="all">Todas ({notifications.length})</TabsTrigger>
           <TabsTrigger value="unread" className="gap-2">
             Não Lidas
             {unreadCount > 0 && (
@@ -458,9 +466,7 @@ export const NotificationCenter = () => {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="settings">
-            Configurações
-          </TabsTrigger>
+          <TabsTrigger value="settings">Configurações</TabsTrigger>
         </TabsList>
 
         {/* Notifications List */}
@@ -484,9 +490,9 @@ export const NotificationCenter = () => {
                 filteredNotifications.map(notification => {
                   const NotificationIcon = getNotificationIcon(notification.type);
                   const SourceIcon = getSourceIcon(notification.source);
-                  
+
                   return (
-                    <Card 
+                    <Card
                       key={notification.id}
                       className={`border-l-4 ${getNotificationColor(notification.type, notification.priority)} ${
                         !notification.is_read ? "shadow-md" : ""
@@ -494,32 +500,47 @@ export const NotificationCenter = () => {
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start gap-4">
-                          <div className={`p-2 rounded-lg ${
-                            notification.type === "error" ? "bg-destructive/10" :
-                              notification.type === "warning" ? "bg-warning/10" :
-                                notification.type === "success" ? "bg-success/10" :
-                                  "bg-info/10"
-                          }`}>
-                            <NotificationIcon className={`h-4 w-4 ${
-                              notification.type === "error" ? "text-destructive" :
-                                notification.type === "warning" ? "text-warning" :
-                                  notification.type === "success" ? "text-success" :
-                                    "text-info"
-                            }`} />
+                          <div
+                            className={`p-2 rounded-lg ${
+                              notification.type === "error"
+                                ? "bg-destructive/10"
+                                : notification.type === "warning"
+                                  ? "bg-warning/10"
+                                  : notification.type === "success"
+                                    ? "bg-success/10"
+                                    : "bg-info/10"
+                            }`}
+                          >
+                            <NotificationIcon
+                              className={`h-4 w-4 ${
+                                notification.type === "error"
+                                  ? "text-destructive"
+                                  : notification.type === "warning"
+                                    ? "text-warning"
+                                    : notification.type === "success"
+                                      ? "text-success"
+                                      : "text-info"
+                              }`}
+                            />
                           </div>
-                          
+
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
-                                <h4 className={`font-medium ${!notification.is_read ? "font-semibold" : ""}`}>
+                                <h4
+                                  className={`font-medium ${!notification.is_read ? "font-semibold" : ""}`}
+                                >
                                   {notification.title}
                                 </h4>
-                                <Badge 
+                                <Badge
                                   variant={
-                                    notification.priority === "critical" ? "destructive" :
-                                      notification.priority === "high" ? "warning" :
-                                        notification.priority === "normal" ? "secondary" :
-                                          "outline"
+                                    notification.priority === "critical"
+                                      ? "destructive"
+                                      : notification.priority === "high"
+                                        ? "warning"
+                                        : notification.priority === "normal"
+                                          ? "secondary"
+                                          : "outline"
                                   }
                                   className="text-xs"
                                 >
@@ -537,11 +558,13 @@ export const NotificationCenter = () => {
                                 {formatTimeAgo(notification.created_at)}
                               </div>
                             </div>
-                            
-                            <p className={`text-sm ${!notification.is_read ? "font-medium" : "text-muted-foreground"} mb-3`}>
+
+                            <p
+                              className={`text-sm ${!notification.is_read ? "font-medium" : "text-muted-foreground"} mb-3`}
+                            >
                               {notification.message}
                             </p>
-                            
+
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <Badge variant="outline" className="text-xs">
@@ -551,7 +574,7 @@ export const NotificationCenter = () => {
                                   {notification.source}
                                 </Badge>
                               </div>
-                              
+
                               <div className="flex items-center gap-1">
                                 {!notification.is_read && (
                                   <Button
@@ -567,7 +590,9 @@ export const NotificationCenter = () => {
                                   size="sm"
                                   onClick={() => toggleImportant(notification.id)}
                                 >
-                                  <Star className={`h-4 w-4 ${notification.is_important ? "fill-current text-yellow-500" : ""}`} />
+                                  <Star
+                                    className={`h-4 w-4 ${notification.is_important ? "fill-current text-yellow-500" : ""}`}
+                                  />
                                 </Button>
                                 <Button
                                   variant="ghost"
@@ -605,42 +630,46 @@ export const NotificationCenter = () => {
                     <Mail className="h-4 w-4" />
                     <Label>Email</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.email_enabled}
-                    onCheckedChange={(checked) => updateSettings({ email_enabled: checked })}
+                    onCheckedChange={checked => updateSettings({ email_enabled: checked })}
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Smartphone className="h-4 w-4" />
                     <Label>Push (Celular)</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.push_enabled}
-                    onCheckedChange={(checked) => updateSettings({ push_enabled: checked })}
+                    onCheckedChange={checked => updateSettings({ push_enabled: checked })}
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <MessageSquare className="h-4 w-4" />
                     <Label>SMS</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.sms_enabled}
-                    onCheckedChange={(checked) => updateSettings({ sms_enabled: checked })}
+                    onCheckedChange={checked => updateSettings({ sms_enabled: checked })}
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {settings.sound_enabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                    {settings.sound_enabled ? (
+                      <Volume2 className="h-4 w-4" />
+                    ) : (
+                      <VolumeX className="h-4 w-4" />
+                    )}
                     <Label>Som</Label>
                   </div>
-                  <Switch 
+                  <Switch
                     checked={settings.sound_enabled}
-                    onCheckedChange={(checked) => updateSettings({ sound_enabled: checked })}
+                    onCheckedChange={checked => updateSettings({ sound_enabled: checked })}
                   />
                 </div>
               </CardContent>
@@ -653,19 +682,19 @@ export const NotificationCenter = () => {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label>Ativar horário de silêncio</Label>
-                  <Switch 
+                  <Switch
                     checked={settings.quiet_hours_enabled}
-                    onCheckedChange={(checked) => updateSettings({ quiet_hours_enabled: checked })}
+                    onCheckedChange={checked => updateSettings({ quiet_hours_enabled: checked })}
                   />
                 </div>
-                
+
                 {settings.quiet_hours_enabled && (
                   <div className="space-y-3">
                     <div>
                       <Label>Início</Label>
-                      <Select 
-                        value={settings.quiet_start} 
-                        onValueChange={(value) => updateSettings({ quiet_start: value })}
+                      <Select
+                        value={settings.quiet_start}
+                        onValueChange={value => updateSettings({ quiet_start: value })}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -682,12 +711,12 @@ export const NotificationCenter = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div>
                       <Label>Fim</Label>
-                      <Select 
-                        value={settings.quiet_end} 
-                        onValueChange={(value) => updateSettings({ quiet_end: value })}
+                      <Select
+                        value={settings.quiet_end}
+                        onValueChange={value => updateSettings({ quiet_end: value })}
                       >
                         <SelectTrigger>
                           <SelectValue />

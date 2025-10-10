@@ -6,17 +6,16 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Brain, 
-  MessageSquare, 
-  TrendingUp, 
+import {
+  Brain,
+  MessageSquare,
+  TrendingUp,
   AlertTriangle,
   CheckCircle,
   Clock,
-  Users,
   BarChart3,
   Lightbulb,
-  Zap
+  Zap,
 } from "lucide-react";
 
 interface AITask {
@@ -53,7 +52,7 @@ export const AIAssistantPanel = () => {
       status: "analyzing",
       progress: 67,
       module: "Logística",
-      estimatedTime: "2min restantes"
+      estimatedTime: "2min restantes",
     },
     {
       id: "2",
@@ -61,7 +60,7 @@ export const AIAssistantPanel = () => {
       status: "completed",
       progress: 100,
       module: "Analytics",
-      result: "Aumento de 23% previsto"
+      result: "Aumento de 23% previsto",
     },
     {
       id: "3",
@@ -69,8 +68,8 @@ export const AIAssistantPanel = () => {
       status: "analyzing",
       progress: 34,
       module: "RH Marítimo",
-      estimatedTime: "5min restantes"
-    }
+      estimatedTime: "5min restantes",
+    },
   ];
 
   const insights: AIInsight[] = [
@@ -81,7 +80,7 @@ export const AIAssistantPanel = () => {
       description: "Alterando horários de atracação em 3 portos, economia estimada de R$ 45k/mês",
       confidence: 89,
       impact: "high",
-      actionable: true
+      actionable: true,
     },
     {
       id: "2",
@@ -90,7 +89,7 @@ export const AIAssistantPanel = () => {
       description: "Condições climáticas adversas detectadas. Sugerido adiamento de 6h",
       confidence: 94,
       impact: "medium",
-      actionable: true
+      actionable: true,
     },
     {
       id: "3",
@@ -99,34 +98,46 @@ export const AIAssistantPanel = () => {
       description: "Demanda elevada para cargas especiais no Q4. Potencial revenue +15%",
       confidence: 76,
       impact: "high",
-      actionable: false
-    }
+      actionable: false,
+    },
   ];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "analyzing": return <Clock className="h-4 w-4 text-warning animate-pulse" />;
-    case "completed": return <CheckCircle className="h-4 w-4 text-success" />;
-    case "failed": return <AlertTriangle className="h-4 w-4 text-danger" />;
-    default: return <Clock className="h-4 w-4" />;
+      case "analyzing":
+        return <Clock className="h-4 w-4 text-warning animate-pulse" />;
+      case "completed":
+        return <CheckCircle className="h-4 w-4 text-success" />;
+      case "failed":
+        return <AlertTriangle className="h-4 w-4 text-danger" />;
+      default:
+        return <Clock className="h-4 w-4" />;
     }
   };
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-    case "optimization": return <TrendingUp className="h-4 w-4 text-success" />;
-    case "risk": return <AlertTriangle className="h-4 w-4 text-danger" />;
-    case "opportunity": return <Lightbulb className="h-4 w-4 text-warning" />;
-    default: return <Brain className="h-4 w-4" />;
+      case "optimization":
+        return <TrendingUp className="h-4 w-4 text-success" />;
+      case "risk":
+        return <AlertTriangle className="h-4 w-4 text-danger" />;
+      case "opportunity":
+        return <Lightbulb className="h-4 w-4 text-warning" />;
+      default:
+        return <Brain className="h-4 w-4" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-    case "high": return "bg-danger text-danger-foreground";
-    case "medium": return "bg-warning text-warning-foreground";
-    case "low": return "bg-info text-info-foreground";
-    default: return "bg-muted text-muted-foreground";
+      case "high":
+        return "bg-danger text-danger-foreground";
+      case "medium":
+        return "bg-warning text-warning-foreground";
+      case "low":
+        return "bg-info text-info-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -141,11 +152,12 @@ export const AIAssistantPanel = () => {
         .select("*")
         .order("created_at", { ascending: false })
         .limit(5);
-      
+
       if (error) throw error;
       setAiInsights(data || []);
     } catch (error) {
-  } finally {
+      console.warn("[EMPTY CATCH]", error);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -155,19 +167,19 @@ export const AIAssistantPanel = () => {
       setIsProcessing(true);
       try {
         const { data, error } = await supabase.functions.invoke("smart-insights-generator", {
-          body: { 
+          body: {
             query: query,
-            context: "ai_assistant_query"
-          }
+            context: "ai_assistant_query",
+          },
         });
-        
+
         if (error) throw error;
-        
+
         toast({
           title: "Análise concluída!",
           description: "Nova análise foi gerada com base em sua consulta.",
         });
-        
+
         setQuery("");
         fetchAIInsights(); // Refresh insights
       } catch (error) {
@@ -227,12 +239,12 @@ export const AIAssistantPanel = () => {
             <Input
               placeholder="Ex: 'Analisar eficiência da frota no último trimestre'"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleQuery()}
+              onChange={e => setQuery(e.target.value)}
+              onKeyPress={e => e.key === "Enter" && handleQuery()}
               disabled={isProcessing}
             />
-            <Button 
-              onClick={handleQuery} 
+            <Button
+              onClick={handleQuery}
               disabled={!query.trim() || isProcessing}
               className="min-w-24"
             >
@@ -266,7 +278,7 @@ export const AIAssistantPanel = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {activeTasks.map((task) => (
+            {activeTasks.map(task => (
               <div key={task.id} className="border rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -275,24 +287,20 @@ export const AIAssistantPanel = () => {
                   </div>
                   <Badge variant="outline">{task.module}</Badge>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Progresso</span>
                     <span>{task.progress}%</span>
                   </div>
                   <Progress value={task.progress} className="h-2" />
-                  
+
                   {task.estimatedTime && (
-                    <div className="text-sm text-muted-foreground">
-                      ⏱️ {task.estimatedTime}
-                    </div>
+                    <div className="text-sm text-muted-foreground">⏱️ {task.estimatedTime}</div>
                   )}
-                  
+
                   {task.result && (
-                    <div className="text-sm font-medium text-success">
-                      ✅ {task.result}
-                    </div>
+                    <div className="text-sm font-medium text-success">✅ {task.result}</div>
                   )}
                 </div>
               </div>
@@ -311,32 +319,32 @@ export const AIAssistantPanel = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {insights.map((insight) => (
+            {insights.map(insight => (
               <div key={insight.id} className="border rounded-lg p-4 hover-lift">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-start gap-3">
                     {getInsightIcon(insight.type)}
                     <div>
                       <h4 className="font-semibold">{insight.title}</h4>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {insight.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground mt-1">{insight.description}</p>
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Badge className={getImpactColor(insight.impact)}>
-                      {insight.impact}
-                    </Badge>
-                    <Badge variant="outline">
-                      {insight.confidence}% confiança
-                    </Badge>
+                    <Badge className={getImpactColor(insight.impact)}>{insight.impact}</Badge>
+                    <Badge variant="outline">{insight.confidence}% confiança</Badge>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Badge 
-                      variant={insight.type === "risk" ? "destructive" : insight.type === "optimization" ? "default" : "secondary"}
+                    <Badge
+                      variant={
+                        insight.type === "risk"
+                          ? "destructive"
+                          : insight.type === "optimization"
+                            ? "default"
+                            : "secondary"
+                      }
                     >
                       {insight.type}
                     </Badge>
@@ -346,15 +354,13 @@ export const AIAssistantPanel = () => {
                       </Badge>
                     )}
                   </div>
-                  
+
                   {insight.actionable && (
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm">
                         Ignorar
                       </Button>
-                      <Button size="sm">
-                        Aplicar
-                      </Button>
+                      <Button size="sm">Aplicar</Button>
                     </div>
                   )}
                 </div>

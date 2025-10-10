@@ -5,6 +5,7 @@
 The Colaboração (Collaboration) module provides **team collaboration tools and workspace management** for enhanced productivity and teamwork across the organization.
 
 **Key Use Cases:**
+
 - Create and manage team workspaces
 - Collaborate on shared projects
 - Real-time co-editing

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Zap, Settings, FileText, Users, Lightbulb } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Zap, Settings, FileText, Lightbulb } from "lucide-react";
 
 import { SmartOnboardingWizard } from "./smart-onboarding-wizard";
 import { AISuggestionsPanel } from "./ai-suggestions-panel";

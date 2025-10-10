@@ -4,22 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Zap, 
-  CheckCircle, 
-  Clock, 
-  Play, 
-  Pause, 
-  Settings, 
-  Calendar,
+import {
+  Zap,
+  CheckCircle,
+  Clock,
+  Play,
+  Pause,
+  Settings,
   TrendingUp,
-  AlertTriangle,
   Users,
-  FileText,
-  Mail,
   Database,
   Workflow,
-  Bot
+  Bot,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -59,7 +55,7 @@ export const SmartWorkflow = () => {
         executions: 847,
         successRate: 98.5,
         lastRun: "2 horas atrás",
-        timeSaved: "156h"
+        timeSaved: "156h",
       },
       {
         id: "2",
@@ -68,7 +64,7 @@ export const SmartWorkflow = () => {
         executions: 2341,
         successRate: 99.2,
         lastRun: "15 min atrás",
-        timeSaved: "420h"
+        timeSaved: "420h",
       },
       {
         id: "3",
@@ -77,7 +73,7 @@ export const SmartWorkflow = () => {
         executions: 156,
         successRate: 97.8,
         lastRun: "3 dias atrás",
-        timeSaved: "89h"
+        timeSaved: "89h",
       },
       {
         id: "4",
@@ -86,8 +82,8 @@ export const SmartWorkflow = () => {
         executions: 1205,
         successRate: 100,
         lastRun: "1 hora atrás",
-        timeSaved: "203h"
-      }
+        timeSaved: "203h",
+      },
     ]);
 
     setTemplates([
@@ -100,7 +96,7 @@ export const SmartWorkflow = () => {
         actions: ["Notificar gestor", "Criar ticket", "Atualizar planilha"],
         estimatedTimeSaved: "4h/semana",
         complexity: "medium",
-        popularity: 87
+        popularity: 87,
       },
       {
         id: "2",
@@ -111,7 +107,7 @@ export const SmartWorkflow = () => {
         actions: ["Enviar email", "Criar usuário", "Agendar reunião"],
         estimatedTimeSaved: "2h/contratação",
         complexity: "simple",
-        popularity: 92
+        popularity: 92,
       },
       {
         id: "3",
@@ -122,20 +118,24 @@ export const SmartWorkflow = () => {
         actions: ["Coletar dados", "Gerar gráficos", "Enviar relatório"],
         estimatedTimeSaved: "6h/semana",
         complexity: "complex",
-        popularity: 76
-      }
+        popularity: 76,
+      },
     ]);
   }, []);
 
   const toggleWorkflow = (id: string) => {
-    setActiveWorkflows(prev => 
-      prev.map(workflow => 
-        workflow.id === id 
-          ? { ...workflow, status: workflow.status === "running" ? "paused" : "running" as "running" | "paused" }
+    setActiveWorkflows(prev =>
+      prev.map(workflow =>
+        workflow.id === id
+          ? {
+              ...workflow,
+              status:
+                workflow.status === "running" ? "paused" : ("running" as "running" | "paused"),
+            }
           : workflow
       )
     );
-    
+
     toast({
       title: "Status atualizado",
       description: "Workflow foi pausado/reativado",
@@ -144,28 +144,40 @@ export const SmartWorkflow = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "running": return "bg-success";
-    case "paused": return "bg-warning";
-    case "error": return "bg-destructive";
-    default: return "bg-muted";
+      case "running":
+        return "bg-success";
+      case "paused":
+        return "bg-warning";
+      case "error":
+        return "bg-destructive";
+      default:
+        return "bg-muted";
     }
   };
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-    case "simple": return "bg-green-100 text-green-700";
-    case "medium": return "bg-yellow-100 text-yellow-700";
-    case "complex": return "bg-red-100 text-red-700";
-    default: return "bg-secondary text-secondary-foreground";
+      case "simple":
+        return "bg-green-100 text-green-700";
+      case "medium":
+        return "bg-yellow-100 text-yellow-700";
+      case "complex":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "Financeiro": return <Database className="h-4 w-4" />;
-    case "RH": return <Users className="h-4 w-4" />;
-    case "Analytics": return <TrendingUp className="h-4 w-4" />;
-    default: return <Workflow className="h-4 w-4" />;
+      case "Financeiro":
+        return <Database className="h-4 w-4" />;
+      case "RH":
+        return <Users className="h-4 w-4" />;
+      case "Analytics":
+        return <TrendingUp className="h-4 w-4" />;
+      default:
+        return <Workflow className="h-4 w-4" />;
     }
   };
 
@@ -245,7 +257,7 @@ export const SmartWorkflow = () => {
 
         <TabsContent value="active" className="space-y-4">
           <div className="grid gap-4">
-            {activeWorkflows.map((workflow) => (
+            {activeWorkflows.map(workflow => (
               <Card key={workflow.id}>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
@@ -254,17 +266,18 @@ export const SmartWorkflow = () => {
                       <div>
                         <h3 className="font-semibold">{workflow.name}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {workflow.executions} execuções • {workflow.successRate}% sucesso • {workflow.lastRun}
+                          {workflow.executions} execuções • {workflow.successRate}% sucesso •{" "}
+                          {workflow.lastRun}
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
                       <div className="text-right">
                         <p className="text-sm font-medium">{workflow.timeSaved}</p>
                         <p className="text-xs text-muted-foreground">economizadas</p>
                       </div>
-                      
+
                       <div className="flex gap-2">
                         <Button
                           variant="outline"
@@ -283,7 +296,7 @@ export const SmartWorkflow = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="mt-4">
                     <div className="flex justify-between text-xs text-muted-foreground mb-1">
                       <span>Taxa de Sucesso</span>
@@ -299,7 +312,7 @@ export const SmartWorkflow = () => {
 
         <TabsContent value="templates" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {templates.map((template) => (
+            {templates.map(template => (
               <Card key={template.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-start justify-between">
@@ -307,7 +320,10 @@ export const SmartWorkflow = () => {
                       {getCategoryIcon(template.category)}
                       <div>
                         <h3 className="font-semibold">{template.name}</h3>
-                        <Badge variant="outline" className={getComplexityColor(template.complexity)}>
+                        <Badge
+                          variant="outline"
+                          className={getComplexityColor(template.complexity)}
+                        >
                           {template.complexity}
                         </Badge>
                       </div>
@@ -315,10 +331,10 @@ export const SmartWorkflow = () => {
                     <Badge variant="secondary">{template.popularity}%</Badge>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">{template.description}</p>
-                  
+
                   <div className="space-y-2">
                     <p className="text-xs font-medium">Triggers:</p>
                     <div className="flex flex-wrap gap-1">
@@ -329,7 +345,7 @@ export const SmartWorkflow = () => {
                       ))}
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <p className="text-xs font-medium">Ações:</p>
                     <div className="flex flex-wrap gap-1">
@@ -340,14 +356,12 @@ export const SmartWorkflow = () => {
                       ))}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between pt-4">
                     <span className="text-sm font-medium text-primary">
                       {template.estimatedTimeSaved}
                     </span>
-                    <Button size="sm">
-                      Usar Template
-                    </Button>
+                    <Button size="sm">Usar Template</Button>
                   </div>
                 </CardContent>
               </Card>

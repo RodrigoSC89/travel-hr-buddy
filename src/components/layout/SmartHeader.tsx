@@ -32,11 +32,7 @@ export function SmartHeader() {
           className="rounded-full hover:bg-zinc-700 dark:hover:bg-zinc-800 transition-colors"
           title={theme === "dark" ? "Modo Claro" : "Modo Escuro"}
         >
-          {theme === "dark" ? (
-            <Sun className="w-5 h-5" />
-          ) : (
-            <Moon className="w-5 h-5" />
-          )}
+          {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </Button>
 
         {/* Notifications */}

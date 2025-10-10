@@ -5,9 +5,9 @@ import { ModuleHeader } from "@/components/ui/module-header";
 import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
 
 // Lazy loading do sistema blockchain
-const BlockchainDocuments = React.lazy(() => 
+const BlockchainDocuments = React.lazy(() =>
   import("@/components/innovation/blockchain-documents").then(module => ({
-    default: module.BlockchainDocuments
+    default: module.BlockchainDocuments,
   }))
 );
 
@@ -22,10 +22,10 @@ const Blockchain: React.FC = () => {
         badges={[
           { icon: Lock, label: "Segurança Máxima" },
           { icon: CheckCircle, label: "Validação Distribuída" },
-          { icon: FileCheck, label: "Certificação" }
+          { icon: FileCheck, label: "Certificação" },
         ]}
       />
-      
+
       <Suspense fallback={<DashboardSkeleton />}>
         <BlockchainDocuments />
       </Suspense>

@@ -42,7 +42,7 @@ describe("TestDashboard Component", () => {
         </OrganizationProvider>
       </MemoryRouter>
     );
-    
+
     await waitFor(() => {
       const title = screen.getByText(/Painel de Testes Automatizados/i);
       expect(title).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe("TestDashboard Component", () => {
 
   it("should display fallback message when coverage report is not available", async () => {
     (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
-    
+
     render(
       <MemoryRouter>
         <OrganizationProvider>
@@ -59,7 +59,7 @@ describe("TestDashboard Component", () => {
         </OrganizationProvider>
       </MemoryRouter>
     );
-    
+
     await waitFor(() => {
       expect(screen.getByText(/Relatório de cobertura não disponível/i)).toBeInTheDocument();
     });
@@ -70,7 +70,7 @@ describe("TestDashboard Component", () => {
     (global.fetch as any).mockResolvedValueOnce({
       text: () => Promise.resolve(mockHtml),
     });
-    
+
     render(
       <MemoryRouter>
         <OrganizationProvider>
@@ -78,7 +78,7 @@ describe("TestDashboard Component", () => {
         </OrganizationProvider>
       </MemoryRouter>
     );
-    
+
     await waitFor(() => {
       expect(screen.getByText(/Cobertura total atual: 85%/i)).toBeInTheDocument();
     });
@@ -86,7 +86,7 @@ describe("TestDashboard Component", () => {
 
   it("should render link to full coverage report", async () => {
     (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
-    
+
     render(
       <MemoryRouter>
         <OrganizationProvider>
@@ -94,7 +94,7 @@ describe("TestDashboard Component", () => {
         </OrganizationProvider>
       </MemoryRouter>
     );
-    
+
     // Wait for the organization provider to finish loading
     await waitFor(() => {
       const link = screen.getByRole("link", { name: /Ver relatório de cobertura HTML completo/i });

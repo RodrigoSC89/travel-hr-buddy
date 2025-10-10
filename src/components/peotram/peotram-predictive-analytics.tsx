@@ -12,9 +12,8 @@ import {
   Activity,
   Zap,
   CheckCircle,
-  XCircle,
   Clock,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -46,69 +45,103 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       type: "failure",
       severity: "high",
       title: "Risco de Não Conformidade em Elemento 03",
-      description: "Análise preditiva indica 78% de probabilidade de não conformidade em \"Gestão de Riscos\" no próximo ciclo de auditoria",
+      description:
+        'Análise preditiva indica 78% de probabilidade de não conformidade em "Gestão de Riscos" no próximo ciclo de auditoria',
       probability: 78,
       timeframe: "30-45 dias",
       actionItems: [
         "Revisar procedimentos de identificação de riscos",
         "Atualizar matriz de riscos operacionais",
-        "Treinar equipe em metodologias HAZOP"
+        "Treinar equipe em metodologias HAZOP",
       ],
-      impact: "significant"
+      impact: "significant",
     },
     {
       id: "insight-2",
       type: "trend",
       severity: "medium",
       title: "Tendência de Declínio em Treinamentos",
-      description: "Padrão de ML detectou queda gradual na pontuação de treinamentos nos últimos 3 ciclos",
+      description:
+        "Padrão de ML detectou queda gradual na pontuação de treinamentos nos últimos 3 ciclos",
       probability: 65,
       timeframe: "60 dias",
       actionItems: [
         "Implementar programa de reciclagem trimestral",
         "Revisar eficácia dos treinamentos atuais",
-        "Considerar plataforma e-learning"
+        "Considerar plataforma e-learning",
       ],
-      impact: "moderate"
+      impact: "moderate",
     },
     {
       id: "insight-3",
       type: "recommendation",
       severity: "low",
       title: "Oportunidade de Melhoria em Documentação",
-      description: "IA sugere otimização no processo de gestão documental baseado em best practices do setor",
+      description:
+        "IA sugere otimização no processo de gestão documental baseado em best practices do setor",
       probability: 85,
       timeframe: "Imediato",
       actionItems: [
         "Implementar controle de versão digital",
         "Adotar padrão ISO 9001 para documentos",
-        "Automatizar alertas de validade"
+        "Automatizar alertas de validade",
       ],
-      impact: "moderate"
+      impact: "moderate",
     },
     {
       id: "insight-4",
       type: "risk",
       severity: "high",
       title: "Risco de Vencimento Múltiplo de Certificações",
-      description: "Cluster analysis identificou 8 certificações críticas vencendo simultaneamente em 45 dias",
+      description:
+        "Cluster analysis identificou 8 certificações críticas vencendo simultaneamente em 45 dias",
       probability: 95,
       timeframe: "45 dias",
       actionItems: [
         "Priorizar renovação de certificações STCW",
         "Escalonar vencimentos futuros",
-        "Implementar sistema de alertas preventivos"
+        "Implementar sistema de alertas preventivos",
       ],
-      impact: "critical"
-    }
+      impact: "critical",
+    },
   ]);
 
   const [forecasts, setForecasts] = useState<ComplianceForecast[]>([
-    { element: "ELEM_01 - Liderança", currentScore: 92, predictedScore: 94, trend: "improving", confidence: 87 },
-    { element: "ELEM_02 - Conformidade Legal", currentScore: 88, predictedScore: 88, trend: "stable", confidence: 82 },
-    { element: "ELEM_03 - Gestão de Riscos", currentScore: 85, predictedScore: 78, trend: "declining", confidence: 79 },
-    { element: "ELEM_04 - Treinamento", currentScore: 90, predictedScore: 86, trend: "declining", confidence: 84 },
-    { element: "ELEM_05 - Operações", currentScore: 83, predictedScore: 85, trend: "improving", confidence: 76 },
+    {
+      element: "ELEM_01 - Liderança",
+      currentScore: 92,
+      predictedScore: 94,
+      trend: "improving",
+      confidence: 87,
+    },
+    {
+      element: "ELEM_02 - Conformidade Legal",
+      currentScore: 88,
+      predictedScore: 88,
+      trend: "stable",
+      confidence: 82,
+    },
+    {
+      element: "ELEM_03 - Gestão de Riscos",
+      currentScore: 85,
+      predictedScore: 78,
+      trend: "declining",
+      confidence: 79,
+    },
+    {
+      element: "ELEM_04 - Treinamento",
+      currentScore: 90,
+      predictedScore: 86,
+      trend: "declining",
+      confidence: 84,
+    },
+    {
+      element: "ELEM_05 - Operações",
+      currentScore: 83,
+      predictedScore: 85,
+      trend: "improving",
+      confidence: 76,
+    },
   ]);
 
   const runPredictiveAnalysis = async () => {
@@ -119,7 +152,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
     setTimeout(() => {
       setIsAnalyzing(false);
       toast.success("Análise preditiva concluída!", {
-        description: `${insights.length} insights gerados com confiança média de 81%`
+        description: `${insights.length} insights gerados com confiança média de 81%`,
       });
     }, 3000);
   };
@@ -128,7 +161,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
     const colors = {
       high: "bg-red-100 text-red-800 border-red-200",
       medium: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      low: "bg-blue-100 text-blue-800 border-blue-200"
+      low: "bg-blue-100 text-blue-800 border-blue-200",
     };
     return colors[severity];
   };
@@ -137,7 +170,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
     const variants = {
       critical: "bg-red-100 text-red-800",
       significant: "bg-orange-100 text-orange-800",
-      moderate: "bg-yellow-100 text-yellow-800"
+      moderate: "bg-yellow-100 text-yellow-800",
     };
     return variants[impact];
   };
@@ -153,7 +186,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       failure: <AlertTriangle className="h-5 w-5 text-red-600" />,
       trend: <TrendingUp className="h-5 w-5 text-blue-600" />,
       recommendation: <Lightbulb className="h-5 w-5 text-yellow-600" />,
-      risk: <Target className="h-5 w-5 text-orange-600" />
+      risk: <Target className="h-5 w-5 text-orange-600" />,
     };
     return icons[type];
   };
@@ -175,8 +208,8 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
                 </CardDescription>
               </div>
             </div>
-            <Button 
-              onClick={runPredictiveAnalysis} 
+            <Button
+              onClick={runPredictiveAnalysis}
               disabled={isAnalyzing}
               className="bg-purple-600 hover:bg-purple-700"
             >
@@ -208,7 +241,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {insights.map((insight) => (
+          {insights.map(insight => (
             <div
               key={insight.id}
               className={`p-4 rounded-lg border-2 ${getSeverityColor(insight.severity)}`}
@@ -220,8 +253,11 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
                     <div className="flex items-center gap-2 mb-2">
                       <h3 className="font-semibold">{insight.title}</h3>
                       <Badge className={getImpactBadge(insight.impact)}>
-                        {insight.impact === "critical" ? "Crítico" :
-                          insight.impact === "significant" ? "Significativo" : "Moderado"}
+                        {insight.impact === "critical"
+                          ? "Crítico"
+                          : insight.impact === "significant"
+                            ? "Significativo"
+                            : "Moderado"}
                       </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground">{insight.description}</p>
@@ -292,11 +328,15 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
                   <div className="text-muted-foreground">→</div>
                   <div className="text-right">
                     <p className="text-sm text-muted-foreground">Previsto</p>
-                    <p className={`text-lg font-bold ${
-                      forecast.predictedScore > forecast.currentScore ? "text-green-600" :
-                        forecast.predictedScore < forecast.currentScore ? "text-red-600" :
-                          "text-muted-foreground"
-                    }`}>
+                    <p
+                      className={`text-lg font-bold ${
+                        forecast.predictedScore > forecast.currentScore
+                          ? "text-green-600"
+                          : forecast.predictedScore < forecast.currentScore
+                            ? "text-red-600"
+                            : "text-muted-foreground"
+                      }`}
+                    >
                       {forecast.predictedScore}%
                     </p>
                   </div>
@@ -335,8 +375,8 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
           </div>
           <div className="mt-4 p-3 bg-white rounded-lg">
             <p className="text-xs text-muted-foreground">
-              <strong>Nota:</strong> As previsões são baseadas em análise de padrões históricos de 500+ auditorias.
-              Recomenda-se validação humana antes de ações críticas.
+              <strong>Nota:</strong> As previsões são baseadas em análise de padrões históricos de
+              500+ auditorias. Recomenda-se validação humana antes de ações críticas.
             </p>
           </div>
         </CardContent>

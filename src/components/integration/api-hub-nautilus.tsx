@@ -4,17 +4,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Network, 
+import {
+  Network,
   Code,
   Key,
   Activity,
@@ -26,7 +26,6 @@ import {
   Globe,
   Shield,
   Clock,
-  TrendingUp
 } from "lucide-react";
 
 interface APIEndpoint {
@@ -73,7 +72,7 @@ export const APIHubNautilus: React.FC = () => {
       status: "active",
       version: "v1.0",
       usageToday: 4523,
-      avgResponseTime: 145
+      avgResponseTime: 145,
     },
     {
       id: "2",
@@ -87,7 +86,7 @@ export const APIHubNautilus: React.FC = () => {
       status: "active",
       version: "v1.0",
       usageToday: 2341,
-      avgResponseTime: 312
+      avgResponseTime: 312,
     },
     {
       id: "3",
@@ -101,7 +100,7 @@ export const APIHubNautilus: React.FC = () => {
       status: "active",
       version: "v1.2",
       usageToday: 156,
-      avgResponseTime: 2450
+      avgResponseTime: 2450,
     },
     {
       id: "4",
@@ -115,7 +114,7 @@ export const APIHubNautilus: React.FC = () => {
       status: "active",
       version: "v1.0",
       usageToday: 1823,
-      avgResponseTime: 98
+      avgResponseTime: 98,
     },
     {
       id: "5",
@@ -129,7 +128,7 @@ export const APIHubNautilus: React.FC = () => {
       status: "beta",
       version: "v2.0-beta",
       usageToday: 8734,
-      avgResponseTime: 67
+      avgResponseTime: 67,
     },
     {
       id: "6",
@@ -143,8 +142,8 @@ export const APIHubNautilus: React.FC = () => {
       status: "active",
       version: "v1.1",
       usageToday: 542,
-      avgResponseTime: 1234
-    }
+      avgResponseTime: 1234,
+    },
   ]);
 
   const [integrations] = useState<Integration[]>([
@@ -157,7 +156,7 @@ export const APIHubNautilus: React.FC = () => {
       lastSync: "2025-05-12T14:30:00",
       apiCalls: 45234,
       uptime: 99.8,
-      credentials: { type: "API Key", configured: true }
+      credentials: { type: "API Key", configured: true },
     },
     {
       id: "2",
@@ -168,7 +167,7 @@ export const APIHubNautilus: React.FC = () => {
       lastSync: "2025-05-12T14:32:00",
       apiCalls: 23145,
       uptime: 99.5,
-      credentials: { type: "OAuth 2.0", configured: true }
+      credentials: { type: "OAuth 2.0", configured: true },
     },
     {
       id: "3",
@@ -179,7 +178,7 @@ export const APIHubNautilus: React.FC = () => {
       lastSync: "2025-05-12T14:33:00",
       apiCalls: 156789,
       uptime: 99.9,
-      credentials: { type: "IAM Role", configured: true }
+      credentials: { type: "IAM Role", configured: true },
     },
     {
       id: "4",
@@ -190,7 +189,7 @@ export const APIHubNautilus: React.FC = () => {
       lastSync: "2025-05-10T08:15:00",
       apiCalls: 8934,
       uptime: 97.2,
-      credentials: { type: "API Key", configured: false }
+      credentials: { type: "API Key", configured: false },
     },
     {
       id: "5",
@@ -201,36 +200,50 @@ export const APIHubNautilus: React.FC = () => {
       lastSync: "2025-05-12T14:31:00",
       apiCalls: 12456,
       uptime: 98.7,
-      credentials: { type: "Custom Auth", configured: true }
-    }
+      credentials: { type: "Custom Auth", configured: true },
+    },
   ]);
 
   const getMethodColor = (method: string) => {
     switch (method) {
-    case "GET": return "bg-green-600";
-    case "POST": return "bg-blue-600";
-    case "PUT": return "bg-yellow-600";
-    case "DELETE": return "bg-red-600";
-    case "PATCH": return "bg-purple-600";
-    default: return "bg-gray-600";
+      case "GET":
+        return "bg-green-600";
+      case "POST":
+        return "bg-blue-600";
+      case "PUT":
+        return "bg-yellow-600";
+      case "DELETE":
+        return "bg-red-600";
+      case "PATCH":
+        return "bg-purple-600";
+      default:
+        return "bg-gray-600";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "default";
-    case "beta": return "secondary";
-    case "deprecated": return "destructive";
-    default: return "outline";
+      case "active":
+        return "default";
+      case "beta":
+        return "secondary";
+      case "deprecated":
+        return "destructive";
+      default:
+        return "outline";
     }
   };
 
   const getIntegrationStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "text-green-600";
-    case "inactive": return "text-muted-foreground";
-    case "error": return "text-red-600";
-    default: return "text-muted-foreground";
+      case "active":
+        return "text-green-600";
+      case "inactive":
+        return "text-muted-foreground";
+      case "error":
+        return "text-red-600";
+      default:
+        return "text-muted-foreground";
     }
   };
 
@@ -239,7 +252,7 @@ export const APIHubNautilus: React.FC = () => {
     endpoints.reduce((sum, e) => sum + e.avgResponseTime, 0) / endpoints.length
   );
   const activeIntegrations = integrations.filter(i => i.status === "active").length;
-  
+
   const { toast } = useToast();
   const [filterCategory, setFilterCategory] = useState({
     vessel: true,
@@ -247,13 +260,13 @@ export const APIHubNautilus: React.FC = () => {
     weather: true,
     routes: true,
     analytics: true,
-    iot: true
+    iot: true,
   });
 
   const handleDocumentation = () => {
     toast({
       title: "📚 Documentação API",
-      description: "Abrindo documentação completa com exemplos e referências"
+      description: "Abrindo documentação completa com exemplos e referências",
     });
     // TODO: Open documentation page or modal
   };
@@ -261,7 +274,7 @@ export const APIHubNautilus: React.FC = () => {
   const handleNewAPIKey = () => {
     toast({
       title: "🔑 Nova API Key",
-      description: "Gerando nova chave de autenticação segura"
+      description: "Gerando nova chave de autenticação segura",
     });
     // TODO: Open API key generation dialog
   };
@@ -269,7 +282,7 @@ export const APIHubNautilus: React.FC = () => {
   const handleTestAPI = (endpointName: string) => {
     toast({
       title: "🧪 Testar API",
-      description: `Abrindo console de testes para ${endpointName}`
+      description: `Abrindo console de testes para ${endpointName}`,
     });
     // TODO: Open API testing console
   };
@@ -277,7 +290,7 @@ export const APIHubNautilus: React.FC = () => {
   const handleViewDocumentation = (endpointName: string) => {
     toast({
       title: "📚 Documentação",
-      description: `Abrindo documentação detalhada de ${endpointName}`
+      description: `Abrindo documentação detalhada de ${endpointName}`,
     });
     // TODO: Open API documentation modal
   };
@@ -285,7 +298,7 @@ export const APIHubNautilus: React.FC = () => {
   const handleDownloadExamples = (endpointName: string) => {
     toast({
       title: "📥 Baixar Exemplos",
-      description: `Baixando exemplos de código para ${endpointName}`
+      description: `Baixando exemplos de código para ${endpointName}`,
     });
     // TODO: Download code examples
   };
@@ -293,7 +306,7 @@ export const APIHubNautilus: React.FC = () => {
   const handleConfigureIntegration = (integrationName: string) => {
     toast({
       title: "⚙️ Configurar Integração",
-      description: `Abrindo configurações de ${integrationName}`
+      description: `Abrindo configurações de ${integrationName}`,
     });
     // TODO: Open integration configuration dialog
   };
@@ -301,7 +314,7 @@ export const APIHubNautilus: React.FC = () => {
   const handleViewLogs = (integrationName: string) => {
     toast({
       title: "📋 Logs da Integração",
-      description: `Visualizando logs de ${integrationName}`
+      description: `Visualizando logs de ${integrationName}`,
     });
     // TODO: Open logs viewer
   };
@@ -309,7 +322,7 @@ export const APIHubNautilus: React.FC = () => {
   const handleTestIntegration = (integrationName: string) => {
     toast({
       title: "🧪 Testar Integração",
-      description: `Testando conexão com ${integrationName}`
+      description: `Testando conexão com ${integrationName}`,
     });
     // TODO: Run integration test
   };
@@ -317,7 +330,7 @@ export const APIHubNautilus: React.FC = () => {
   const handleDownloadSDK = (sdkName: string) => {
     toast({
       title: "📦 Baixar SDK",
-      description: `Baixando ${sdkName}`
+      description: `Baixando ${sdkName}`,
     });
     // TODO: Download SDK package
   };
@@ -335,7 +348,7 @@ export const APIHubNautilus: React.FC = () => {
             <p className="text-xs text-muted-foreground">API disponíveis</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Chamadas Hoje</CardTitle>
@@ -345,7 +358,7 @@ export const APIHubNautilus: React.FC = () => {
             <p className="text-xs text-muted-foreground">Requisições</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Tempo Resposta</CardTitle>
@@ -355,7 +368,7 @@ export const APIHubNautilus: React.FC = () => {
             <p className="text-xs text-muted-foreground">Média</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium">Integrações</CardTitle>
@@ -409,16 +422,14 @@ export const APIHubNautilus: React.FC = () => {
                 <Input placeholder="Buscar endpoints..." className="flex-1" />
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline">
-                      Filtrar
-                    </Button>
+                    <Button variant="outline">Filtrar</Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>Filtrar por Categoria</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuCheckboxItem
                       checked={filterCategory.vessel}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={checked =>
                         setFilterCategory(prev => ({ ...prev, vessel: !!checked }))
                       }
                     >
@@ -426,7 +437,7 @@ export const APIHubNautilus: React.FC = () => {
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem
                       checked={filterCategory.crew}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={checked =>
                         setFilterCategory(prev => ({ ...prev, crew: !!checked }))
                       }
                     >
@@ -434,7 +445,7 @@ export const APIHubNautilus: React.FC = () => {
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem
                       checked={filterCategory.weather}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={checked =>
                         setFilterCategory(prev => ({ ...prev, weather: !!checked }))
                       }
                     >
@@ -442,7 +453,7 @@ export const APIHubNautilus: React.FC = () => {
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem
                       checked={filterCategory.routes}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={checked =>
                         setFilterCategory(prev => ({ ...prev, routes: !!checked }))
                       }
                     >
@@ -450,7 +461,7 @@ export const APIHubNautilus: React.FC = () => {
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem
                       checked={filterCategory.analytics}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={checked =>
                         setFilterCategory(prev => ({ ...prev, analytics: !!checked }))
                       }
                     >
@@ -458,7 +469,7 @@ export const APIHubNautilus: React.FC = () => {
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem
                       checked={filterCategory.iot}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={checked =>
                         setFilterCategory(prev => ({ ...prev, iot: !!checked }))
                       }
                     >
@@ -469,87 +480,107 @@ export const APIHubNautilus: React.FC = () => {
               </div>
 
               {/* Endpoints List */}
-              {endpoints.filter(endpoint => filterCategory[endpoint.category]).map((endpoint) => (
-                <Card key={endpoint.id} className="border-l-4 border-l-blue-500">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-3">
-                        <div className="flex flex-col gap-2">
-                          <Badge className={getMethodColor(endpoint.method)}>
-                            {endpoint.method}
-                          </Badge>
-                          <Badge variant={getStatusColor(endpoint.status) as any}>
-                            {endpoint.status}
-                          </Badge>
+              {endpoints
+                .filter(endpoint => filterCategory[endpoint.category])
+                .map(endpoint => (
+                  <Card key={endpoint.id} className="border-l-4 border-l-blue-500">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-3">
+                          <div className="flex flex-col gap-2">
+                            <Badge className={getMethodColor(endpoint.method)}>
+                              {endpoint.method}
+                            </Badge>
+                            <Badge variant={getStatusColor(endpoint.status) as any}>
+                              {endpoint.status}
+                            </Badge>
+                          </div>
+                          <div>
+                            <CardTitle className="text-base">{endpoint.name}</CardTitle>
+                            <code className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded mt-1 inline-block">
+                              {endpoint.path}
+                            </code>
+                            <CardDescription className="mt-2">
+                              {endpoint.description}
+                            </CardDescription>
+                          </div>
                         </div>
-                        <div>
-                          <CardTitle className="text-base">{endpoint.name}</CardTitle>
-                          <code className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded mt-1 inline-block">
-                            {endpoint.path}
-                          </code>
-                          <CardDescription className="mt-2">
-                            {endpoint.description}
-                          </CardDescription>
+                        <Badge variant="outline">v{endpoint.version}</Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {/* Stats Grid */}
+                      <div className="grid grid-cols-4 gap-4">
+                        <div className="bg-muted/50 p-3 rounded-lg">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Activity className="h-4 w-4 text-blue-600" />
+                            <span className="text-xs text-muted-foreground">Uso Hoje</span>
+                          </div>
+                          <div className="text-lg font-bold">
+                            {endpoint.usageToday.toLocaleString()}
+                          </div>
+                        </div>
+                        <div className="bg-muted/50 p-3 rounded-lg">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Clock className="h-4 w-4 text-green-600" />
+                            <span className="text-xs text-muted-foreground">Resp. Média</span>
+                          </div>
+                          <div className="text-lg font-bold">{endpoint.avgResponseTime}ms</div>
+                        </div>
+                        <div className="bg-muted/50 p-3 rounded-lg">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Shield className="h-4 w-4 text-purple-600" />
+                            <span className="text-xs text-muted-foreground">Auth</span>
+                          </div>
+                          <div className="text-sm font-medium">
+                            {endpoint.authentication.toUpperCase()}
+                          </div>
+                        </div>
+                        <div className="bg-muted/50 p-3 rounded-lg">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Zap className="h-4 w-4 text-yellow-600" />
+                            <span className="text-xs text-muted-foreground">Rate Limit</span>
+                          </div>
+                          <div className="text-sm font-medium">{endpoint.rateLimit}</div>
                         </div>
                       </div>
-                      <Badge variant="outline">v{endpoint.version}</Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-4 gap-4">
-                      <div className="bg-muted/50 p-3 rounded-lg">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Activity className="h-4 w-4 text-blue-600" />
-                          <span className="text-xs text-muted-foreground">Uso Hoje</span>
-                        </div>
-                        <div className="text-lg font-bold">{endpoint.usageToday.toLocaleString()}</div>
-                      </div>
-                      <div className="bg-muted/50 p-3 rounded-lg">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Clock className="h-4 w-4 text-green-600" />
-                          <span className="text-xs text-muted-foreground">Resp. Média</span>
-                        </div>
-                        <div className="text-lg font-bold">{endpoint.avgResponseTime}ms</div>
-                      </div>
-                      <div className="bg-muted/50 p-3 rounded-lg">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Shield className="h-4 w-4 text-purple-600" />
-                          <span className="text-xs text-muted-foreground">Auth</span>
-                        </div>
-                        <div className="text-sm font-medium">{endpoint.authentication.toUpperCase()}</div>
-                      </div>
-                      <div className="bg-muted/50 p-3 rounded-lg">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Zap className="h-4 w-4 text-yellow-600" />
-                          <span className="text-xs text-muted-foreground">Rate Limit</span>
-                        </div>
-                        <div className="text-sm font-medium">{endpoint.rateLimit}</div>
-                      </div>
-                    </div>
 
-                    {/* Actions */}
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleTestAPI(endpoint.name)}>
-                        <Code className="h-4 w-4 mr-2" />
-                        Testar API
-                      </Button>
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleViewDocumentation(endpoint.name)}>
-                        <Book className="h-4 w-4 mr-2" />
-                        Documentação
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleDownloadExamples(endpoint.name)}>
-                        <Download className="h-4 w-4 mr-2" />
-                        Exemplos
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                      {/* Actions */}
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => handleTestAPI(endpoint.name)}
+                        >
+                          <Code className="h-4 w-4 mr-2" />
+                          Testar API
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => handleViewDocumentation(endpoint.name)}
+                        >
+                          <Book className="h-4 w-4 mr-2" />
+                          Documentação
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleDownloadExamples(endpoint.name)}
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          Exemplos
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
             </TabsContent>
 
             <TabsContent value="integrations" className="space-y-4 mt-4">
-              {integrations.map((integration) => (
+              {integrations.map(integration => (
                 <Card key={integration.id} className="border-l-4 border-l-purple-500">
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -562,19 +593,21 @@ export const APIHubNautilus: React.FC = () => {
                             {integration.name}
                             <Badge variant="outline">{integration.type}</Badge>
                           </CardTitle>
-                          <CardDescription className="mt-1">
-                            {integration.provider}
-                          </CardDescription>
+                          <CardDescription className="mt-1">{integration.provider}</CardDescription>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className={`flex items-center gap-1 ${getIntegrationStatusColor(integration.status)}`}>
+                        <div
+                          className={`flex items-center gap-1 ${getIntegrationStatusColor(integration.status)}`}
+                        >
                           {integration.status === "active" ? (
                             <CheckCircle className="h-4 w-4" />
                           ) : (
                             <AlertCircle className="h-4 w-4" />
                           )}
-                          <span className="text-sm font-medium">{integration.status.toUpperCase()}</span>
+                          <span className="text-sm font-medium">
+                            {integration.status.toUpperCase()}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -584,11 +617,15 @@ export const APIHubNautilus: React.FC = () => {
                     <div className="grid grid-cols-3 gap-4">
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="text-xs text-muted-foreground mb-1">Uptime</div>
-                        <div className="text-xl font-bold text-green-600">{integration.uptime}%</div>
+                        <div className="text-xl font-bold text-green-600">
+                          {integration.uptime}%
+                        </div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="text-xs text-muted-foreground mb-1">API Calls</div>
-                        <div className="text-xl font-bold">{(integration.apiCalls / 1000).toFixed(1)}k</div>
+                        <div className="text-xl font-bold">
+                          {(integration.apiCalls / 1000).toFixed(1)}k
+                        </div>
                       </div>
                       <div className="bg-muted/50 p-3 rounded-lg">
                         <div className="text-xs text-muted-foreground mb-1">Última Sync</div>
@@ -619,13 +656,27 @@ export const APIHubNautilus: React.FC = () => {
 
                     {/* Actions */}
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleConfigureIntegration(integration.name)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => handleConfigureIntegration(integration.name)}
+                      >
                         Configurar
                       </Button>
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleViewLogs(integration.name)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => handleViewLogs(integration.name)}
+                      >
                         Logs
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleTestIntegration(integration.name)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleTestIntegration(integration.name)}
+                      >
                         Testar
                       </Button>
                     </div>
@@ -638,23 +689,30 @@ export const APIHubNautilus: React.FC = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>SDKs Disponíveis</CardTitle>
-                  <CardDescription>
-                    Bibliotecas oficiais para integração rápida
-                  </CardDescription>
+                  <CardDescription>Bibliotecas oficiais para integração rápida</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {[
                     { name: "JavaScript/TypeScript SDK", version: "v2.1.0", downloads: "45.2k" },
                     { name: "Python SDK", version: "v1.8.3", downloads: "32.1k" },
                     { name: "Java SDK", version: "v1.5.0", downloads: "18.7k" },
-                    { name: "C# .NET SDK", version: "v1.3.2", downloads: "12.4k" }
+                    { name: "C# .NET SDK", version: "v1.3.2", downloads: "12.4k" },
                   ].map((sdk, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between p-4 bg-muted/50 rounded-lg"
+                    >
                       <div>
                         <div className="font-medium">{sdk.name}</div>
-                        <div className="text-sm text-muted-foreground">v{sdk.version} • {sdk.downloads} downloads</div>
+                        <div className="text-sm text-muted-foreground">
+                          v{sdk.version} • {sdk.downloads} downloads
+                        </div>
                       </div>
-                      <Button size="sm" variant="outline" onClick={() => handleDownloadSDK(sdk.name)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDownloadSDK(sdk.name)}
+                      >
                         <Download className="h-4 w-4 mr-2" />
                         Download
                       </Button>
@@ -674,7 +732,7 @@ export const APIHubNautilus: React.FC = () => {
                     "Exemplos de Código",
                     "Webhooks e Callbacks",
                     "Autenticação e Segurança",
-                    "Limites e Quotas"
+                    "Limites e Quotas",
                   ].map((doc, idx) => (
                     <Button key={idx} variant="ghost" className="w-full justify-start">
                       <Book className="h-4 w-4 mr-2" />
@@ -699,7 +757,7 @@ export const APIHubNautilus: React.FC = () => {
                           <span className="font-medium">99.87%</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-green-500" style={{width: "99.87%"}}></div>
+                          <div className="h-full bg-green-500" style={{ width: "99.87%" }}></div>
                         </div>
                       </div>
                       <div>
@@ -708,7 +766,7 @@ export const APIHubNautilus: React.FC = () => {
                           <span className="font-medium">245ms</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-blue-500" style={{width: "78%"}}></div>
+                          <div className="h-full bg-blue-500" style={{ width: "78%" }}></div>
                         </div>
                       </div>
                       <div>
@@ -717,7 +775,7 @@ export const APIHubNautilus: React.FC = () => {
                           <span className="font-medium">0.13%</span>
                         </div>
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-red-500" style={{width: "0.13%"}}></div>
+                          <div className="h-full bg-red-500" style={{ width: "0.13%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -735,7 +793,7 @@ export const APIHubNautilus: React.FC = () => {
                         { category: "Vessel Data", percentage: 25, color: "bg-blue-500" },
                         { category: "Weather", percentage: 13, color: "bg-green-500" },
                         { category: "Analytics", percentage: 9, color: "bg-yellow-500" },
-                        { category: "Crew", percentage: 5, color: "bg-red-500" }
+                        { category: "Crew", percentage: 5, color: "bg-red-500" },
                       ].map((item, idx) => (
                         <div key={idx}>
                           <div className="flex justify-between text-sm mb-1">
@@ -743,7 +801,10 @@ export const APIHubNautilus: React.FC = () => {
                             <span className="font-medium">{item.percentage}%</span>
                           </div>
                           <div className="h-2 bg-muted rounded-full overflow-hidden">
-                            <div className={`h-full ${item.color}`} style={{width: `${item.percentage}%`}}></div>
+                            <div
+                              className={`h-full ${item.color}`}
+                              style={{ width: `${item.percentage}%` }}
+                            ></div>
                           </div>
                         </div>
                       ))}

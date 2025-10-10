@@ -1,20 +1,18 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Brain, 
-  Save, 
-  RefreshCw, 
-  Zap,
-  MessageSquare,
-  Settings
-} from "lucide-react";
+import { Brain, Save, RefreshCw, MessageSquare } from "lucide-react";
 
 interface PersonalitySettings {
   tone: "formal" | "casual" | "friendly" | "professional";
@@ -34,20 +32,20 @@ interface VoicePersonalityProps {
 
 const expertiseOptions = [
   "Recursos Humanos",
-  "Viagens Corporativas", 
+  "Viagens Corporativas",
   "Análise de Dados",
   "Gestão de Projetos",
   "Finanças",
   "Tecnologia",
   "Marketing",
-  "Operações"
+  "Operações",
 ];
 
 const VoicePersonality: React.FC<VoicePersonalityProps> = ({
   isOpen,
   onClose,
   onSave,
-  currentSettings
+  currentSettings,
 }) => {
   const [settings, setSettings] = useState<PersonalitySettings>(currentSettings);
 
@@ -56,7 +54,7 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
       ...prev,
       expertise: prev.expertise.includes(expertise)
         ? prev.expertise.filter(e => e !== expertise)
-        : [...prev.expertise, expertise]
+        : [...prev.expertise, expertise],
     }));
   };
 
@@ -72,7 +70,7 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
       expertise: ["Recursos Humanos", "Viagens Corporativas"],
       customInstructions: "",
       contextAwareness: true,
-      proactiveHelp: true
+      proactiveHelp: true,
     });
   };
 
@@ -95,7 +93,10 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
           {/* Tone Settings */}
           <div className="space-y-3">
             <Label>Tom de Comunicação</Label>
-            <Select value={settings.tone} onValueChange={(value) => setSettings(prev => ({ ...prev, tone: value as any }))}>
+            <Select
+              value={settings.tone}
+              onValueChange={value => setSettings(prev => ({ ...prev, tone: value as any }))}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -111,7 +112,12 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
           {/* Response Length */}
           <div className="space-y-3">
             <Label>Estilo de Resposta</Label>
-            <Select value={settings.responseLength} onValueChange={(value) => setSettings(prev => ({ ...prev, responseLength: value as any }))}>
+            <Select
+              value={settings.responseLength}
+              onValueChange={value =>
+                setSettings(prev => ({ ...prev, responseLength: value as any }))
+              }
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -127,13 +133,13 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
           <div className="space-y-3">
             <Label>Áreas de Especialização</Label>
             <div className="grid grid-cols-2 gap-2">
-              {expertiseOptions.map((expertise) => (
+              {expertiseOptions.map(expertise => (
                 <div
                   key={expertise}
                   onClick={() => handleExpertiseToggle(expertise)}
                   className="cursor-pointer"
                 >
-                  <Badge 
+                  <Badge
                     variant={settings.expertise.includes(expertise) ? "default" : "outline"}
                     className="w-full justify-center py-2 hover:bg-primary/10"
                   >
@@ -150,7 +156,7 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
             <Textarea
               placeholder="Ex: Sempre mencione políticas da empresa ao falar sobre RH, priorize sugestões sustentáveis para viagens..."
               value={settings.customInstructions}
-              onChange={(e) => setSettings(prev => ({ ...prev, customInstructions: e.target.value }))}
+              onChange={e => setSettings(prev => ({ ...prev, customInstructions: e.target.value }))}
               rows={4}
             />
           </div>
@@ -158,7 +164,7 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
           {/* Advanced Settings */}
           <div className="space-y-4">
             <Label className="text-base font-medium">Configurações Avançadas</Label>
-            
+
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label>Consciência Contextual</Label>
@@ -166,9 +172,11 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
                   Lembrar do contexto da conversa e histórico
                 </div>
               </div>
-              <Switch 
+              <Switch
                 checked={settings.contextAwareness}
-                onCheckedChange={(checked) => setSettings(prev => ({ ...prev, contextAwareness: checked }))}
+                onCheckedChange={checked =>
+                  setSettings(prev => ({ ...prev, contextAwareness: checked }))
+                }
               />
             </div>
 
@@ -179,9 +187,11 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
                   Sugerir ações e oferecer ajuda antecipada
                 </div>
               </div>
-              <Switch 
+              <Switch
                 checked={settings.proactiveHelp}
-                onCheckedChange={(checked) => setSettings(prev => ({ ...prev, proactiveHelp: checked }))}
+                onCheckedChange={checked =>
+                  setSettings(prev => ({ ...prev, proactiveHelp: checked }))
+                }
               />
             </div>
           </div>
@@ -193,11 +203,24 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
               <span className="text-sm font-medium">Preview da Personalidade</span>
             </div>
             <div className="text-sm">
-              <strong>Tom:</strong> {settings.tone === "formal" ? "Formal e respeitoso" : settings.tone === "professional" ? "Profissional" : settings.tone === "friendly" ? "Amigável" : "Casual"}
+              <strong>Tom:</strong>{" "}
+              {settings.tone === "formal"
+                ? "Formal e respeitoso"
+                : settings.tone === "professional"
+                  ? "Profissional"
+                  : settings.tone === "friendly"
+                    ? "Amigável"
+                    : "Casual"}
               <br />
-              <strong>Especialidades:</strong> {settings.expertise.join(", ") || "Nenhuma selecionada"}
+              <strong>Especialidades:</strong>{" "}
+              {settings.expertise.join(", ") || "Nenhuma selecionada"}
               <br />
-              <strong>Estilo:</strong> Respostas {settings.responseLength === "concise" ? "concisas" : settings.responseLength === "balanced" ? "equilibradas" : "detalhadas"}
+              <strong>Estilo:</strong> Respostas{" "}
+              {settings.responseLength === "concise"
+                ? "concisas"
+                : settings.responseLength === "balanced"
+                  ? "equilibradas"
+                  : "detalhadas"}
             </div>
           </div>
         </div>

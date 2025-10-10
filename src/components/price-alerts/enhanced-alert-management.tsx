@@ -5,20 +5,25 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  TrendingUp, 
-  Ship, 
-  Bell, 
-  Settings, 
-  Clock, 
-  MapPin, 
+import {
+  TrendingUp,
+  Ship,
+  Bell,
+  Settings,
+  Clock,
+  MapPin,
   Target,
-  BarChart3,
   AlertTriangle,
   CheckCircle,
-  History
+  History,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -80,7 +85,7 @@ const mockAlerts: PriceAlert[] = [
     triggeredCount: 3,
     lastTriggered: new Date(2024, 0, 15),
     notifications: { email: true, push: true, sms: false },
-    customRules: { timeOfDay: "09:00", dayOfWeek: ["segunda", "terça"] }
+    customRules: { timeOfDay: "09:00", dayOfWeek: ["segunda", "terça"] },
   },
   {
     id: "2",
@@ -94,7 +99,7 @@ const mockAlerts: PriceAlert[] = [
     isActive: true,
     triggeredCount: 1,
     notifications: { email: true, push: false, sms: true },
-    customRules: { season: "baixa" }
+    customRules: { season: "baixa" },
   },
 ];
 
@@ -106,7 +111,7 @@ const mockGroups: AlertGroup[] = [
     vessel: "MV Nautilus Pioneer",
     alerts: ["1"],
     avgSavings: 15.5,
-    status: "active"
+    status: "active",
   },
   {
     id: "2",
@@ -115,7 +120,7 @@ const mockGroups: AlertGroup[] = [
     vessel: "MV Atlantic Explorer",
     alerts: ["2"],
     avgSavings: 22.3,
-    status: "active"
+    status: "active",
   },
 ];
 
@@ -128,7 +133,7 @@ const mockHistory: AlertHistory[] = [
     newPrice: 795,
     actionTaken: "purchased",
     savings: 1200,
-    notes: "Compra aprovada pelo gestor"
+    notes: "Compra aprovada pelo gestor",
   },
   {
     id: "2",
@@ -137,7 +142,7 @@ const mockHistory: AlertHistory[] = [
     previousPrice: 120,
     newPrice: 108,
     actionTaken: "ignored",
-    notes: "Estoque ainda suficiente"
+    notes: "Estoque ainda suficiente",
   },
 ];
 
@@ -150,12 +155,10 @@ export const EnhancedAlertManagement: React.FC = () => {
   const { toast } = useToast();
 
   const toggleAlert = (alertId: string) => {
-    setAlerts(alerts.map(alert => 
-      alert.id === alertId 
-        ? { ...alert, isActive: !alert.isActive }
-        : alert
-    ));
-    
+    setAlerts(
+      alerts.map(alert => (alert.id === alertId ? { ...alert, isActive: !alert.isActive } : alert))
+    );
+
     toast({
       title: "Alerta Atualizado",
       description: "Configuração do alerta foi modificada com sucesso.",
@@ -171,14 +174,14 @@ export const EnhancedAlertManagement: React.FC = () => {
 
   const getThresholdLabel = (alert: PriceAlert) => {
     switch (alert.thresholdType) {
-    case "below":
-      return `Abaixo de R$ ${alert.targetPrice}`;
-    case "above":
-      return `Acima de R$ ${alert.targetPrice}`;
-    case "change":
-      return `Variação ${alert.changePercentage}%`;
-    default:
-      return "N/A";
+      case "below":
+        return `Abaixo de R$ ${alert.targetPrice}`;
+      case "above":
+        return `Acima de R$ ${alert.targetPrice}`;
+      case "change":
+        return `Variação ${alert.changePercentage}%`;
+      default:
+        return "N/A";
     }
   };
 
@@ -188,10 +191,14 @@ export const EnhancedAlertManagement: React.FC = () => {
 
   const getActionColor = (action: string) => {
     switch (action) {
-    case "purchased": return "bg-success text-azure-50";
-    case "ignored": return "bg-muted text-muted-foreground";
-    case "snoozed": return "bg-warning text-azure-900";
-    default: return "bg-muted text-muted-foreground";
+      case "purchased":
+        return "bg-success text-azure-50";
+      case "ignored":
+        return "bg-muted text-muted-foreground";
+      case "snoozed":
+        return "bg-warning text-azure-900";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -231,7 +238,7 @@ export const EnhancedAlertManagement: React.FC = () => {
         {/* Individual Alerts */}
         <TabsContent value="alerts" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {alerts.map((alert) => (
+            {alerts.map(alert => (
               <Card key={alert.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
@@ -282,9 +289,21 @@ export const EnhancedAlertManagement: React.FC = () => {
 
                   <div className="flex justify-between items-center pt-2 border-t">
                     <div className="flex gap-1">
-                      {alert.notifications.email && <Badge variant="outline" className="text-xs">Email</Badge>}
-                      {alert.notifications.push && <Badge variant="outline" className="text-xs">Push</Badge>}
-                      {alert.notifications.sms && <Badge variant="outline" className="text-xs">SMS</Badge>}
+                      {alert.notifications.email && (
+                        <Badge variant="outline" className="text-xs">
+                          Email
+                        </Badge>
+                      )}
+                      {alert.notifications.push && (
+                        <Badge variant="outline" className="text-xs">
+                          Push
+                        </Badge>
+                      )}
+                      {alert.notifications.sms && (
+                        <Badge variant="outline" className="text-xs">
+                          SMS
+                        </Badge>
+                      )}
                     </div>
                     <Button variant="ghost" size="sm">
                       <Settings className="w-3 h-3" />
@@ -299,12 +318,18 @@ export const EnhancedAlertManagement: React.FC = () => {
         {/* Groups by Route */}
         <TabsContent value="groups" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {groups.map((group) => (
+            {groups.map(group => (
               <Card key={group.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{group.name}</CardTitle>
-                    <Badge className={group.status === "active" ? "bg-success text-azure-50" : "bg-muted text-muted-foreground"}>
+                    <Badge
+                      className={
+                        group.status === "active"
+                          ? "bg-success text-azure-50"
+                          : "bg-muted text-muted-foreground"
+                      }
+                    >
                       {group.status}
                     </Badge>
                   </div>
@@ -363,7 +388,7 @@ export const EnhancedAlertManagement: React.FC = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div>
                     <Label>Frequência Máxima</Label>
                     <Select>
@@ -385,7 +410,7 @@ export const EnhancedAlertManagement: React.FC = () => {
                     <Label>Limiar de Urgência (%)</Label>
                     <Input type="number" placeholder="Ex: 20" />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label>Notificações por Canal</Label>
                     <div className="space-y-2">
@@ -405,10 +430,8 @@ export const EnhancedAlertManagement: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
-              <Button className="w-full">
-                Salvar Configurações
-              </Button>
+
+              <Button className="w-full">Salvar Configurações</Button>
             </CardContent>
           </Card>
         </TabsContent>
@@ -424,36 +447,44 @@ export const EnhancedAlertManagement: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {history.map((item) => (
+                {history.map(item => (
                   <div key={item.id} className="p-4 border rounded-lg hover:bg-muted/50">
                     <div className="flex items-start justify-between">
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <Badge className={getActionColor(item.actionTaken)}>
-                            {item.actionTaken === "purchased" ? "Comprado" : 
-                              item.actionTaken === "ignored" ? "Ignorado" : "Adiado"}
+                            {item.actionTaken === "purchased"
+                              ? "Comprado"
+                              : item.actionTaken === "ignored"
+                                ? "Ignorado"
+                                : "Adiado"}
                           </Badge>
                           <span className="text-sm text-muted-foreground">
                             {item.triggeredAt.toLocaleString("pt-BR")}
                           </span>
                         </div>
-                        
+
                         <div className="space-y-1">
                           <div className="text-sm">
-                            <span className="font-medium">Preço:</span> 
+                            <span className="font-medium">Preço:</span>
                             R$ {item.previousPrice} → R$ {item.newPrice}
-                            <span className={`ml-2 ${item.newPrice < item.previousPrice ? "text-success" : "text-destructive"}`}>
+                            <span
+                              className={`ml-2 ${item.newPrice < item.previousPrice ? "text-success" : "text-destructive"}`}
+                            >
                               ({item.newPrice < item.previousPrice ? "-" : "+"}
-                              {Math.abs(((item.newPrice - item.previousPrice) / item.previousPrice) * 100).toFixed(1)}%)
+                              {Math.abs(
+                                ((item.newPrice - item.previousPrice) / item.previousPrice) * 100
+                              ).toFixed(1)}
+                              %)
                             </span>
                           </div>
-                          
+
                           {item.savings && (
                             <div className="text-sm text-success">
                               <span className="font-medium">Economia:</span> R$ {item.savings}
                             </div>
                           )}
-                          
+
                           {item.notes && (
                             <div className="text-sm text-muted-foreground">
                               <span className="font-medium">Notas:</span> {item.notes}
@@ -461,7 +492,7 @@ export const EnhancedAlertManagement: React.FC = () => {
                           )}
                         </div>
                       </div>
-                      
+
                       <div className="text-right">
                         {item.actionTaken === "purchased" ? (
                           <CheckCircle className="w-5 h-5 text-success" />

@@ -3,20 +3,18 @@ import { EnhancedMobileSupport } from "@/components/mobile/enhanced-mobile-suppo
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Smartphone, 
-  Download, 
-  Star, 
-  Shield, 
+import {
+  Smartphone,
+  Download,
+  Shield,
   Zap,
   Camera,
   Bell,
   MapPin,
   Wifi,
-  Battery,
   Settings,
   CheckCircle,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react";
 
 const MobileAppPage = () => {
@@ -24,40 +22,42 @@ const MobileAppPage = () => {
     {
       icon: <Camera className="h-6 w-6" />,
       title: "Scanner de Documentos",
-      description: "Capture e digitalize documentos com OCR avançado diretamente do seu dispositivo móvel"
+      description:
+        "Capture e digitalize documentos com OCR avançado diretamente do seu dispositivo móvel",
     },
     {
       icon: <Bell className="h-6 w-6" />,
       title: "Notificações Push",
-      description: "Receba alertas importantes sobre vencimentos, atualizações e eventos críticos"
+      description: "Receba alertas importantes sobre vencimentos, atualizações e eventos críticos",
     },
     {
       icon: <MapPin className="h-6 w-6" />,
       title: "Localização GPS",
-      description: "Rastreamento preciso para operações marítimas e gestão de frota em tempo real"
+      description: "Rastreamento preciso para operações marítimas e gestão de frota em tempo real",
     },
     {
       icon: <Wifi className="h-6 w-6" />,
       title: "Modo Offline",
-      description: "Continue trabalhando mesmo sem conexão, com sincronização automática"
+      description: "Continue trabalhando mesmo sem conexão, com sincronização automática",
     },
     {
       icon: <Shield className="h-6 w-6" />,
       title: "Segurança Avançada",
-      description: "Biometria, criptografia e proteção de dados de acordo com regulamentações marítimas"
+      description:
+        "Biometria, criptografia e proteção de dados de acordo com regulamentações marítimas",
     },
     {
       icon: <Zap className="h-6 w-6" />,
       title: "Performance Otimizada",
-      description: "Carregamento rápido e consumo eficiente de bateria para uso contínuo"
-    }
+      description: "Carregamento rápido e consumo eficiente de bateria para uso contínuo",
+    },
   ];
 
   const statistics = [
     { label: "Download Size", value: "12.5 MB", color: "text-blue-600" },
     { label: "Compatibilidade", value: "iOS 12+ / Android 8+", color: "text-green-600" },
     { label: "Avaliação", value: "4.8/5", color: "text-yellow-600" },
-    { label: "Usuários Ativos", value: "15,000+", color: "text-purple-600" }
+    { label: "Usuários Ativos", value: "15,000+", color: "text-purple-600" },
   ];
 
   return (
@@ -75,13 +75,11 @@ const MobileAppPage = () => {
               </div>
             </div>
           </div>
-          
+
           <div>
-            <h1 className="text-4xl font-bold text-foreground mb-2">
-              Nautilus Mobile
-            </h1>
+            <h1 className="text-4xl font-bold text-foreground mb-2">Nautilus Mobile</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Aplicativo móvel profissional para gestão marítima com recursos avançados de OCR, 
+              Aplicativo móvel profissional para gestão marítima com recursos avançados de OCR,
               notificações push e funcionalidades offline
             </p>
           </div>
@@ -101,12 +99,8 @@ const MobileAppPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
             {statistics.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className={`text-2xl font-bold ${stat.color}`}>
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {stat.label}
-                </div>
+                <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -120,20 +114,16 @@ const MobileAppPage = () => {
               Recursos profissionais desenvolvidos especificamente para o setor marítimo
             </p>
           </div>
-          
+
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, index) => (
               <Card key={index} className="border-2 hover:border-primary transition-colors">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 bg-primary/10 rounded-lg text-primary">
-                      {feature.icon}
-                    </div>
+                    <div className="p-3 bg-primary/10 rounded-lg text-primary">{feature.icon}</div>
                     <div className="flex-1">
                       <h3 className="font-semibold mb-2">{feature.title}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        {feature.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground">{feature.description}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -178,19 +168,27 @@ const MobileAppPage = () => {
                 </h3>
                 <ol className="space-y-3 text-sm">
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">1</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">
+                      1
+                    </span>
                     <span>Abra o site no Safari</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">2</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">
+                      2
+                    </span>
                     <span>Toque no ícone de compartilhamento</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">3</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">
+                      3
+                    </span>
                     <span>Selecione "Adicionar à Tela de Início"</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">4</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">
+                      4
+                    </span>
                     <span>Confirme a instalação</span>
                   </li>
                 </ol>
@@ -206,19 +204,27 @@ const MobileAppPage = () => {
                 </h3>
                 <ol className="space-y-3 text-sm">
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">1</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">
+                      1
+                    </span>
                     <span>Abra o site no Chrome</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">2</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">
+                      2
+                    </span>
                     <span>Toque no banner "Instalar App"</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">3</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">
+                      3
+                    </span>
                     <span>Ou use menu &gt; "Instalar app"</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">4</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">
+                      4
+                    </span>
                     <span>Confirme a instalação</span>
                   </li>
                 </ol>
@@ -263,7 +269,8 @@ const MobileAppPage = () => {
           <CardContent className="p-8 text-center">
             <h2 className="text-2xl font-bold mb-2">Pronto para começar?</h2>
             <p className="text-muted-foreground mb-6">
-              Instale o app agora e tenha acesso a todas as funcionalidades do Nautilus na palma da sua mão
+              Instale o app agora e tenha acesso a todas as funcionalidades do Nautilus na palma da
+              sua mão
             </p>
             <div className="flex justify-center gap-4">
               <Button size="lg" className="gap-2">

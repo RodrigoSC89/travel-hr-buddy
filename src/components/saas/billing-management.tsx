@@ -4,19 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { 
-  CreditCard, 
-  Download, 
-  Calendar, 
-  TrendingUp, 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  CreditCard,
+  Download,
+  Calendar,
+  TrendingUp,
   AlertTriangle,
   CheckCircle,
   Clock,
   Users,
   Ship,
-  Database
+  Database,
 } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
 
@@ -44,25 +51,25 @@ const mockInvoices: Invoice[] = [
     number: "INV-2024-001",
     date: "2024-01-01",
     due_date: "2024-01-15",
-    amount: 299.00,
-    status: "paid"
+    amount: 299.0,
+    status: "paid",
   },
   {
     id: "2",
     number: "INV-2024-002",
     date: "2024-02-01",
     due_date: "2024-02-15",
-    amount: 299.00,
-    status: "paid"
+    amount: 299.0,
+    status: "paid",
   },
   {
     id: "3",
     number: "INV-2024-003",
     date: "2024-03-01",
     due_date: "2024-03-15",
-    amount: 299.00,
-    status: "pending"
-  }
+    amount: 299.0,
+    status: "pending",
+  },
 ];
 
 export const BillingManagement: React.FC = () => {
@@ -80,53 +87,61 @@ export const BillingManagement: React.FC = () => {
   }
 
   const currentPlan = tenantPlans.find(plan => plan.slug === currentTenant.plan_type);
-  
+
   const usageMetrics: UsageMetric[] = [
     {
       name: "Usuários",
       current: tenantUsage?.active_users || 0,
       limit: currentTenant.max_users,
       unit: "usuários",
-      icon: Users
+      icon: Users,
     },
     {
       name: "Embarcações",
       current: 3,
       limit: currentTenant.max_vessels,
       unit: "embarcações",
-      icon: Ship
+      icon: Ship,
     },
     {
       name: "Armazenamento",
       current: tenantUsage?.storage_used_gb || 0,
       limit: currentTenant.max_storage_gb,
       unit: "GB",
-      icon: Database
-    }
+      icon: Database,
+    },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "paid": return "bg-green-100 text-green-800";
-    case "pending": return "bg-yellow-100 text-yellow-800";
-    case "overdue": return "bg-red-100 text-red-800";
-    default: return "bg-secondary text-secondary-foreground";
+      case "paid":
+        return "bg-green-100 text-green-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "overdue":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-    case "paid": return "Pago";
-    case "pending": return "Pendente";
-    case "overdue": return "Vencido";
-    default: return status;
+      case "paid":
+        return "Pago";
+      case "pending":
+        return "Pendente";
+      case "overdue":
+        return "Vencido";
+      default:
+        return status;
     }
   };
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
-      currency: "BRL"
+      currency: "BRL",
     }).format(amount);
   };
 
@@ -168,9 +183,7 @@ export const BillingManagement: React.FC = () => {
                 {formatCurrency(currentPlan?.price_monthly || 0)}
               </div>
               <div className="text-sm text-muted-foreground">/mês</div>
-              <Button onClick={() => setIsUpgradeDialogOpen(true)}>
-                Alterar Plano
-              </Button>
+              <Button onClick={() => setIsUpgradeDialogOpen(true)}>Alterar Plano</Button>
             </div>
           </div>
         </CardContent>
@@ -186,10 +199,10 @@ export const BillingManagement: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {usageMetrics.map((metric) => {
+            {usageMetrics.map(metric => {
               const percentage = getUsagePercentage(metric.current, metric.limit);
               const Icon = metric.icon;
-              
+
               return (
                 <div key={metric.name} className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -197,27 +210,24 @@ export const BillingManagement: React.FC = () => {
                       <Icon className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">{metric.name}</span>
                     </div>
-                    {percentage >= 80 && (
-                      <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                    )}
+                    {percentage >= 80 && <AlertTriangle className="h-4 w-4 text-yellow-500" />}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span>{metric.current} {metric.unit}</span>
+                      <span>
+                        {metric.current} {metric.unit}
+                      </span>
                       <span className="text-muted-foreground">
                         de {metric.limit} {metric.unit}
                       </span>
                     </div>
-                    <Progress 
-                      value={percentage} 
-                      className="h-2" 
-                    />
+                    <Progress value={percentage} className="h-2" />
                     <div className="text-xs text-muted-foreground">
                       {percentage.toFixed(1)}% utilizado
                     </div>
                   </div>
-                  
+
                   {percentage >= 90 && (
                     <div className="text-xs text-red-600 bg-red-50 p-2 rounded">
                       Limite quase atingido. Considere fazer upgrade.
@@ -256,11 +266,13 @@ export const BillingManagement: React.FC = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {mockInvoices.map((invoice) => (
+                  {mockInvoices.map(invoice => (
                     <TableRow key={invoice.id}>
                       <TableCell className="font-medium">{invoice.number}</TableCell>
                       <TableCell>{new Date(invoice.date).toLocaleDateString("pt-BR")}</TableCell>
-                      <TableCell>{new Date(invoice.due_date).toLocaleDateString("pt-BR")}</TableCell>
+                      <TableCell>
+                        {new Date(invoice.due_date).toLocaleDateString("pt-BR")}
+                      </TableCell>
                       <TableCell>{formatCurrency(invoice.amount)}</TableCell>
                       <TableCell>
                         <Badge className={getStatusColor(invoice.status)}>
@@ -297,10 +309,12 @@ export const BillingManagement: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="secondary">Principal</Badge>
-                    <Button variant="ghost" size="sm">Editar</Button>
+                    <Button variant="ghost" size="sm">
+                      Editar
+                    </Button>
                   </div>
                 </div>
-                
+
                 <Button variant="outline" className="w-full">
                   + Adicionar Método de Pagamento
                 </Button>
@@ -324,7 +338,7 @@ export const BillingManagement: React.FC = () => {
                   </div>
                   <Badge variant="secondary">Ativo</Badge>
                 </div>
-                
+
                 <div className="flex items-center gap-3 p-3 border rounded-lg">
                   <CheckCircle className="h-5 w-5 text-green-500" />
                   <div className="flex-1">
@@ -333,7 +347,7 @@ export const BillingManagement: React.FC = () => {
                   </div>
                   <span className="text-sm font-medium">{formatCurrency(299)}</span>
                 </div>
-                
+
                 <div className="flex items-center gap-3 p-3 border rounded-lg">
                   <Clock className="h-5 w-5 text-blue-500" />
                   <div className="flex-1">
@@ -355,11 +369,13 @@ export const BillingManagement: React.FC = () => {
             <DialogTitle>Alterar Plano</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4">
-            {tenantPlans.map((plan) => (
+            {tenantPlans.map(plan => (
               <Card
                 key={plan.id}
                 className={`cursor-pointer transition-colors ${
-                  plan.slug === currentTenant.plan_type ? "ring-2 ring-primary" : "hover:bg-muted/50"
+                  plan.slug === currentTenant.plan_type
+                    ? "ring-2 ring-primary"
+                    : "hover:bg-muted/50"
                 }`}
               >
                 <CardContent className="p-6">
@@ -378,13 +394,13 @@ export const BillingManagement: React.FC = () => {
                       </div>
                     </div>
                     <div className="text-right space-y-2">
-                      <div className="text-3xl font-bold">
-                        {formatCurrency(plan.price_monthly)}
-                      </div>
+                      <div className="text-3xl font-bold">{formatCurrency(plan.price_monthly)}</div>
                       <div className="text-sm text-muted-foreground">/mês</div>
                       {plan.slug !== currentTenant.plan_type && (
                         <Button>
-                          {plan.price_monthly > (currentPlan?.price_monthly || 0) ? "Upgrade" : "Downgrade"}
+                          {plan.price_monthly > (currentPlan?.price_monthly || 0)
+                            ? "Upgrade"
+                            : "Downgrade"}
                         </Button>
                       )}
                     </div>

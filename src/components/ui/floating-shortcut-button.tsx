@@ -31,25 +31,24 @@ export const FloatingShortcutButton: React.FC<FloatingShortcutButtonProps> = ({
   ariaLabel,
   spinning = false,
   tabIndex = 0,
-  style
+  style,
 }) => {
   const sizeClasses = {
     sm: "w-12 h-12",
     md: "w-14 h-14",
-    lg: "w-16 h-16"
+    lg: "w-16 h-16",
   } as const;
-
 
   const iconSizes = {
     sm: "w-5 h-5",
     md: "w-6 h-6",
-    lg: "w-8 h-8"
+    lg: "w-8 h-8",
   } as const;
 
   // Allow both Tailwind utility classes and raw colors (hex/rgb/hsl)
-  const isRawColor = (v?: string) => !!v && (/^#|^rgb\(|^hsl\(|^var\(/i.test(v));
+  const isRawColor = (v?: string) => !!v && /^#|^rgb\(|^hsl\(|^var\(/i.test(v);
 
-  const handleKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (e) => {
+  const handleKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = e => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       if (!disabled) onClick();
@@ -59,7 +58,7 @@ export const FloatingShortcutButton: React.FC<FloatingShortcutButtonProps> = ({
   const renderIcon = () => {
     if (React.isValidElement(icon)) {
       return React.cloneElement(icon as React.ReactElement, {
-        className: cn(iconSizes[size], spinning && "animate-spin")
+        className: cn(iconSizes[size], spinning && "animate-spin"),
       });
     }
     const IconComp = icon as LucideIcon;
@@ -99,7 +98,9 @@ export const FloatingShortcutButton: React.FC<FloatingShortcutButtonProps> = ({
               className
             )}
           >
-            <span className={cn(!isRawColor(iconColor) && iconColor)} style={iconSpanStyle}>{renderIcon()}</span>
+            <span className={cn(!isRawColor(iconColor) && iconColor)} style={iconSpanStyle}>
+              {renderIcon()}
+            </span>
           </Button>
         </TooltipTrigger>
         <TooltipContent side="left" className="bg-azure-800 text-azure-50 border-azure-600">

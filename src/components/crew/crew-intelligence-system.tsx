@@ -3,15 +3,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Users, 
-  Brain, 
+import {
+  Brain,
   Eye,
   Battery,
-  TrendingUp,
-  TrendingDown,
-  Award,
   Target,
   Clock,
   AlertTriangle,
@@ -24,7 +19,6 @@ import {
   Zap,
   Shield,
   Calendar,
-  BarChart3
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -99,7 +93,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
             description: "1000 horas sem incidentes",
             points: 500,
             icon: "🏆",
-            date: new Date("2025-01-15")
+            date: new Date("2025-01-15"),
           },
           {
             id: "a2",
@@ -107,8 +101,8 @@ export const CrewIntelligenceSystem: React.FC = () => {
             description: "Treinamento de 5 oficiais",
             points: 300,
             icon: "👨‍🏫",
-            date: new Date("2025-01-10")
-          }
+            date: new Date("2025-01-10"),
+          },
         ],
         trainingProgress: [
           {
@@ -117,7 +111,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
             category: "Management",
             progress: 75,
             dueDate: new Date("2025-03-01"),
-            priority: "medium"
+            priority: "medium",
           },
           {
             id: "t2",
@@ -125,10 +119,10 @@ export const CrewIntelligenceSystem: React.FC = () => {
             category: "Security",
             progress: 40,
             dueDate: new Date("2025-02-15"),
-            priority: "high"
-          }
+            priority: "high",
+          },
         ],
-        alertLevel: "green"
+        alertLevel: "green",
       },
       {
         id: "2",
@@ -147,8 +141,8 @@ export const CrewIntelligenceSystem: React.FC = () => {
             description: "15% economia de combustível",
             points: 400,
             icon: "⚡",
-            date: new Date("2025-01-20")
-          }
+            date: new Date("2025-01-20"),
+          },
         ],
         trainingProgress: [
           {
@@ -157,10 +151,10 @@ export const CrewIntelligenceSystem: React.FC = () => {
             category: "Technical",
             progress: 60,
             dueDate: new Date("2025-02-28"),
-            priority: "high"
-          }
+            priority: "high",
+          },
         ],
-        alertLevel: "yellow"
+        alertLevel: "yellow",
       },
       {
         id: "3",
@@ -179,8 +173,8 @@ export const CrewIntelligenceSystem: React.FC = () => {
             description: "Detecção precoce de risco",
             points: 250,
             icon: "👁️",
-            date: new Date("2025-01-18")
-          }
+            date: new Date("2025-01-18"),
+          },
         ],
         trainingProgress: [
           {
@@ -189,11 +183,11 @@ export const CrewIntelligenceSystem: React.FC = () => {
             category: "Operations",
             progress: 30,
             dueDate: new Date("2025-02-20"),
-            priority: "high"
-          }
+            priority: "high",
+          },
         ],
-        alertLevel: "red"
-      }
+        alertLevel: "red",
+      },
     ];
 
     setCrewMembers(mockCrew);
@@ -210,15 +204,15 @@ export const CrewIntelligenceSystem: React.FC = () => {
           currentShift: "00:00 - 12:00",
           recommendedShift: "08:00 - 16:00",
           reason: "Alto nível de fadiga detectado. Recomenda-se descanso imediato de 10 horas.",
-          impact: "positive"
+          impact: "positive",
         },
         {
           crewMemberId: "2",
           currentShift: "12:00 - 20:00",
           recommendedShift: "14:00 - 22:00",
           reason: "Fadiga moderada. Ajuste de 2 horas para otimizar desempenho.",
-          impact: "positive"
-        }
+          impact: "positive",
+        },
       ];
 
       setShiftOptimizations(optimizations);
@@ -239,17 +233,23 @@ export const CrewIntelligenceSystem: React.FC = () => {
 
   const getAlertBadgeColor = (alert: CrewMember["alertLevel"]) => {
     switch (alert) {
-    case "green": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "yellow": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "red": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      case "green":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      case "yellow":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "red":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
     }
   };
 
   const getPriorityColor = (priority: TrainingModule["priority"]) => {
     switch (priority) {
-    case "low": return "text-muted-foreground";
-    case "medium": return "text-yellow-600";
-    case "high": return "text-red-600";
+      case "low":
+        return "text-muted-foreground";
+      case "medium":
+        return "text-yellow-600";
+      case "high":
+        return "text-red-600";
     }
   };
 
@@ -291,8 +291,8 @@ export const CrewIntelligenceSystem: React.FC = () => {
 
       {/* Crew Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {crewMembers.map((crew) => (
-          <Card 
+        {crewMembers.map(crew => (
+          <Card
             key={crew.id}
             className={`cursor-pointer transition-all ${
               selectedCrew?.id === crew.id ? "border-primary border-2" : "hover:border-primary/50"
@@ -306,8 +306,11 @@ export const CrewIntelligenceSystem: React.FC = () => {
                   <p className="text-sm text-muted-foreground">{crew.position}</p>
                 </div>
                 <Badge className={getAlertBadgeColor(crew.alertLevel)}>
-                  {crew.alertLevel === "green" ? "✅ OK" : 
-                    crew.alertLevel === "yellow" ? "⚠️ Atenção" : "🔴 Alerta"}
+                  {crew.alertLevel === "green"
+                    ? "✅ OK"
+                    : crew.alertLevel === "yellow"
+                      ? "⚠️ Atenção"
+                      : "🔴 Alerta"}
                 </Badge>
               </div>
 
@@ -322,7 +325,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
                     <span className="font-medium">{crew.fatigueLevel}%</span>
                   </div>
                   <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className={`h-full ${getFatigueLevelColor(crew.fatigueLevel)} transition-all`}
                       style={{ width: `${crew.fatigueLevel}%` }}
                     />
@@ -379,7 +382,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {selectedCrew.trainingProgress.map((module) => (
+              {selectedCrew.trainingProgress.map(module => (
                 <div key={module.id} className="p-3 border rounded-lg space-y-2">
                   <div className="flex items-start justify-between">
                     <div>
@@ -387,8 +390,11 @@ export const CrewIntelligenceSystem: React.FC = () => {
                       <p className="text-xs text-muted-foreground">{module.category}</p>
                     </div>
                     <Badge className={getPriorityColor(module.priority)}>
-                      {module.priority === "high" ? "🔥 Alta" : 
-                        module.priority === "medium" ? "⚡ Média" : "📋 Baixa"}
+                      {module.priority === "high"
+                        ? "🔥 Alta"
+                        : module.priority === "medium"
+                          ? "⚡ Média"
+                          : "📋 Baixa"}
                     </Badge>
                   </div>
                   <Progress value={module.progress} className="h-2" />
@@ -411,9 +417,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
                 <Trophy className="h-5 w-5 text-yellow-500" />
                 Conquistas e Gamificação
               </CardTitle>
-              <CardDescription>
-                Sistema de mérito e reconhecimento
-              </CardDescription>
+              <CardDescription>Sistema de mérito e reconhecimento</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="p-4 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg">
@@ -426,16 +430,18 @@ export const CrewIntelligenceSystem: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                <Progress 
-                  value={(selectedCrew.achievements.reduce((sum, a) => sum + a.points, 0) / 1000) * 100} 
-                  className="h-2" 
+                <Progress
+                  value={
+                    (selectedCrew.achievements.reduce((sum, a) => sum + a.points, 0) / 1000) * 100
+                  }
+                  className="h-2"
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   Próxima recompensa: 1000 pontos
                 </p>
               </div>
 
-              {selectedCrew.achievements.map((achievement) => (
+              {selectedCrew.achievements.map(achievement => (
                 <div key={achievement.id} className="flex items-start gap-3 p-3 border rounded-lg">
                   <div className="text-3xl">{achievement.icon}</div>
                   <div className="flex-1">
@@ -486,14 +492,18 @@ export const CrewIntelligenceSystem: React.FC = () => {
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <span className="text-xs font-medium text-muted-foreground">Escala Atual</span>
+                      <span className="text-xs font-medium text-muted-foreground">
+                        Escala Atual
+                      </span>
                       <div className="flex items-center gap-2 mt-1">
                         <Clock className="h-4 w-4 text-red-500" />
                         <span className="font-medium">{opt.currentShift}</span>
                       </div>
                     </div>
                     <div>
-                      <span className="text-xs font-medium text-muted-foreground">Escala Recomendada</span>
+                      <span className="text-xs font-medium text-muted-foreground">
+                        Escala Recomendada
+                      </span>
                       <div className="flex items-center gap-2 mt-1">
                         <CheckCircle className="h-4 w-4 text-green-500" />
                         <span className="font-medium">{opt.recommendedShift}</span>
@@ -542,9 +552,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
                 <CheckCircle className="h-5 w-5 text-green-500" />
               </div>
               <Progress value={100} className="h-2 mb-2" />
-              <p className="text-xs text-muted-foreground">
-                100% das certificações atualizadas
-              </p>
+              <p className="text-xs text-muted-foreground">100% das certificações atualizadas</p>
             </div>
             <div className="p-4 border rounded-lg">
               <div className="flex items-center justify-between mb-2">

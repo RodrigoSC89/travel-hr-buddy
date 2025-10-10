@@ -1,40 +1,37 @@
 import React, { useState, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { 
-  Ship, 
-  Users, 
-  Shield, 
-  TrendingUp, 
-  Globe, 
+import {
+  Ship,
+  Users,
+  Shield,
+  TrendingUp,
+  Globe,
   AlertTriangle,
-  CheckCircle,
   Clock,
-  Anchor,
   Compass,
   Radio,
   Heart,
   Brain,
-  Zap
+  Zap,
 } from "lucide-react";
 
 // Lazy loading dos componentes pesados
-const VesselManagement = React.lazy(() => 
+const VesselManagement = React.lazy(() =>
   import("./vessel-management").then(module => ({
-    default: module.VesselManagement
+    default: module.VesselManagement,
   }))
 );
-const CrewRotationPlanner = React.lazy(() => 
+const CrewRotationPlanner = React.lazy(() =>
   import("./crew-management-dashboard").then(module => ({
-    default: module.CrewManagementDashboard
+    default: module.CrewManagementDashboard,
   }))
 );
-const CertificationManager = React.lazy(() => 
+const CertificationManager = React.lazy(() =>
   import("./maritime-certification-manager").then(module => ({
-    default: module.MaritimeCertificationManager
+    default: module.MaritimeCertificationManager,
   }))
 );
 
@@ -68,38 +65,44 @@ export const MaritimeDashboard: React.FC = () => {
     }
 
     switch (activeModule) {
-    case "vessels":
-      return (
-        <Suspense fallback={
-          <div className="flex items-center justify-center p-8">
-            <LoadingSpinner size="lg" />
-          </div>
-        }>
-          <VesselManagement />
-        </Suspense>
-      );
-    case "crew":
-      return (
-        <Suspense fallback={
-          <div className="flex items-center justify-center p-8">
-            <LoadingSpinner size="lg" />
-          </div>
-        }>
-          <CrewRotationPlanner />
-        </Suspense>
-      );
-    case "certifications":
-      return (
-        <Suspense fallback={
-          <div className="flex items-center justify-center p-8">
-            <LoadingSpinner size="lg" />
-          </div>
-        }>
-          <CertificationManager />
-        </Suspense>
-      );
-    default:
-      return <OverviewDashboard onNavigate={handleModuleChange} />;
+      case "vessels":
+        return (
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center p-8">
+                <LoadingSpinner size="lg" />
+              </div>
+            }
+          >
+            <VesselManagement />
+          </Suspense>
+        );
+      case "crew":
+        return (
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center p-8">
+                <LoadingSpinner size="lg" />
+              </div>
+            }
+          >
+            <CrewRotationPlanner />
+          </Suspense>
+        );
+      case "certifications":
+        return (
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center p-8">
+                <LoadingSpinner size="lg" />
+              </div>
+            }
+          >
+            <CertificationManager />
+          </Suspense>
+        );
+      default:
+        return <OverviewDashboard onNavigate={handleModuleChange} />;
     }
   };
 
@@ -142,15 +145,17 @@ export const MaritimeDashboard: React.FC = () => {
             <Users className="h-4 w-4" />
             Tripulação
           </TabsTrigger>
-          <TabsTrigger value="certifications" className="flex items-center gap-2" disabled={isLoading}>
+          <TabsTrigger
+            value="certifications"
+            className="flex items-center gap-2"
+            disabled={isLoading}
+          >
             <Shield className="h-4 w-4" />
             Certificações
           </TabsTrigger>
         </TabsList>
 
-        <div className="mt-6">
-          {renderModuleContent()}
-        </div>
+        <div className="mt-6">{renderModuleContent()}</div>
       </Tabs>
     </div>
   );
@@ -165,16 +170,18 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
     <div className="space-y-8">
       {/* Hero Section */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-900 p-8 text-azure-50">
-        <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
-        }}></div>
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+          }}
+        ></div>
         <div className="relative z-10">
-          <h2 className="text-3xl font-bold mb-4">
-            Revolução na Gestão Marítima
-          </h2>
+          <h2 className="text-3xl font-bold mb-4">Revolução na Gestão Marítima</h2>
           <p className="text-lg opacity-90 mb-6 max-w-3xl">
-            Sistema pioneiro que combina IA, IoT e automação para transformar completamente 
-            a gestão de recursos humanos e operações marítimas.
+            Sistema pioneiro que combina IA, IoT e automação para transformar completamente a gestão
+            de recursos humanos e operações marítimas.
           </p>
           <div className="flex flex-wrap gap-4">
             <div className="flex items-center gap-2 bg-azure-100/20 px-4 py-2 rounded-lg">
@@ -202,9 +209,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-800">24</div>
-            <p className="text-xs text-blue-600">
-              18 em navegação, 6 no porto
-            </p>
+            <p className="text-xs text-blue-600">18 em navegação, 6 no porto</p>
           </CardContent>
         </Card>
 
@@ -215,9 +220,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-800">487</div>
-            <p className="text-xs text-green-600">
-              324 a bordo, 163 em terra
-            </p>
+            <p className="text-xs text-green-600">324 a bordo, 163 em terra</p>
           </CardContent>
         </Card>
 
@@ -228,9 +231,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-purple-800">97.8%</div>
-            <p className="text-xs text-purple-600">
-              +2.1% vs mês anterior
-            </p>
+            <p className="text-xs text-purple-600">+2.1% vs mês anterior</p>
           </CardContent>
         </Card>
 
@@ -241,9 +242,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-orange-800">94.5%</div>
-            <p className="text-xs text-orange-600">
-              Otimização automática
-            </p>
+            <p className="text-xs text-orange-600">Otimização automática</p>
           </CardContent>
         </Card>
       </div>
@@ -256,13 +255,11 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
               <Compass className="h-5 w-5" />
               Módulos Inovadores
             </CardTitle>
-            <CardDescription>
-              Funcionalidades revolucionárias para gestão marítima
-            </CardDescription>
+            <CardDescription>Funcionalidades revolucionárias para gestão marítima</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div 
+              <div
                 className="p-4 border rounded-lg cursor-pointer hover:bg-blue-50 transition-colors"
                 onClick={() => onNavigate("vessels")}
               >
@@ -273,16 +270,23 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
                   <h3 className="font-semibold">Gestão de Embarcações</h3>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Controle total da frota com rastreamento em tempo real, compliance automático e análise preditiva
+                  Controle total da frota com rastreamento em tempo real, compliance automático e
+                  análise preditiva
                 </p>
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-xs">IoT</Badge>
-                  <Badge variant="secondary" className="text-xs">Real-time</Badge>
-                  <Badge variant="secondary" className="text-xs">Preditivo</Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    IoT
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    Real-time
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    Preditivo
+                  </Badge>
                 </div>
               </div>
 
-              <div 
+              <div
                 className="p-4 border rounded-lg cursor-pointer hover:bg-green-50 transition-colors"
                 onClick={() => onNavigate("crew")}
               >
@@ -293,16 +297,23 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
                   <h3 className="font-semibold">Rotação Inteligente</h3>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">
-                  IA planeja rotações otimizadas, reduz custos e garante compliance com regulamentações internacionais
+                  IA planeja rotações otimizadas, reduz custos e garante compliance com
+                  regulamentações internacionais
                 </p>
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-xs">IA</Badge>
-                  <Badge variant="secondary" className="text-xs">Otimização</Badge>
-                  <Badge variant="secondary" className="text-xs">Global</Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    IA
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    Otimização
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    Global
+                  </Badge>
                 </div>
               </div>
 
-              <div 
+              <div
                 className="p-4 border rounded-lg cursor-pointer hover:bg-purple-50 transition-colors"
                 onClick={() => onNavigate("certifications")}
               >
@@ -313,12 +324,19 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
                   <h3 className="font-semibold">Certificações Automáticas</h3>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Sistema automatizado de compliance STCW, MLC e ISM com renovações inteligentes e alertas preditivos
+                  Sistema automatizado de compliance STCW, MLC e ISM com renovações inteligentes e
+                  alertas preditivos
                 </p>
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-xs">STCW</Badge>
-                  <Badge variant="secondary" className="text-xs">MLC</Badge>
-                  <Badge variant="secondary" className="text-xs">Automático</Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    STCW
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    MLC
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    Automático
+                  </Badge>
                 </div>
               </div>
 
@@ -330,12 +348,19 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
                   <h3 className="font-semibold">Wellness Marítimo</h3>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Monitoramento avançado de saúde mental, telemedicina e programas de bem-estar para tripulação
+                  Monitoramento avançado de saúde mental, telemedicina e programas de bem-estar para
+                  tripulação
                 </p>
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-xs">Wellness</Badge>
-                  <Badge variant="secondary" className="text-xs">Telemedicina</Badge>
-                  <Badge variant="secondary" className="text-xs">IA Mental</Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    Wellness
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    Telemedicina
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    IA Mental
+                  </Badge>
                 </div>
               </div>
             </div>
@@ -426,42 +451,47 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
             <div className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-lg">
               <h4 className="font-semibold text-blue-800 mb-2">🧠 IA Preditiva Avançada</h4>
               <p className="text-sm text-blue-600">
-                Algoritmos proprietários preveem necessidades de pessoal, otimizam escalas e antecipam problemas
+                Algoritmos proprietários preveem necessidades de pessoal, otimizam escalas e
+                antecipam problemas
               </p>
             </div>
-            
+
             <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg">
               <h4 className="font-semibold text-green-800 mb-2">🌐 Compliance Global Automático</h4>
               <p className="text-sm text-green-600">
-                Sistema atualiza automaticamente com mudanças regulamentares internacionais (IMO, MLC, STCW)
+                Sistema atualiza automaticamente com mudanças regulamentares internacionais (IMO,
+                MLC, STCW)
               </p>
             </div>
-            
+
             <div className="p-4 bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-lg">
               <h4 className="font-semibold text-purple-800 mb-2">🩺 Telemedicina Marítima</h4>
               <p className="text-sm text-purple-600">
                 Consultório médico virtual com IA diagnóstica e conexão com especialistas em terra
               </p>
             </div>
-            
+
             <div className="p-4 bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200 rounded-lg">
               <h4 className="font-semibold text-orange-800 mb-2">📡 IoT Marítimo Integrado</h4>
               <p className="text-sm text-orange-600">
-                Sensores inteligentes monitoram embarcações, equipamentos e até sinais vitais da tripulação
+                Sensores inteligentes monitoram embarcações, equipamentos e até sinais vitais da
+                tripulação
               </p>
             </div>
-            
+
             <div className="p-4 bg-gradient-to-br from-teal-50 to-cyan-50 border border-teal-200 rounded-lg">
               <h4 className="font-semibold text-teal-800 mb-2">🤖 Assistente IA Marítimo</h4>
               <p className="text-sm text-teal-600">
-                Chatbot especializado em regulamentações marítimas, emergências e suporte operacional 24/7
+                Chatbot especializado em regulamentações marítimas, emergências e suporte
+                operacional 24/7
               </p>
             </div>
-            
+
             <div className="p-4 bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-200 rounded-lg">
               <h4 className="font-semibold text-indigo-800 mb-2">🎯 Otimização Quântica</h4>
               <p className="text-sm text-indigo-600">
-                Algoritmos quânticos resolvem problemas complexos de logística e alocação de recursos
+                Algoritmos quânticos resolvem problemas complexos de logística e alocação de
+                recursos
               </p>
             </div>
           </div>

@@ -15,7 +15,7 @@ const IoTPage: React.FC = () => {
         badges={[
           { icon: Activity, label: "342 Dispositivos" },
           { icon: Wifi, label: "99.2% Online" },
-          { icon: Zap, label: "Tempo Real" }
+          { icon: Zap, label: "Tempo Real" },
         ]}
       />
       <IoTDashboard />

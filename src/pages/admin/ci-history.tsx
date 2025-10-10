@@ -1,14 +1,26 @@
 import React, { useState, useMemo } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
-import { CheckCircle, XCircle, Clock, GitBranch, Calendar, Filter } from "lucide-react";
+import { GitBranch } from "lucide-react";
 import { format } from "date-fns";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 
@@ -41,7 +53,7 @@ const mockWorkflowRuns: WorkflowRun[] = [
     triggeredBy: "push",
     commit_hash: "abc1234567",
     coverage_percent: 85,
-    triggered_by: "push"
+    triggered_by: "push",
   },
   {
     id: "2",
@@ -55,7 +67,7 @@ const mockWorkflowRuns: WorkflowRun[] = [
     triggeredBy: "pull_request",
     commit_hash: "def5678901",
     coverage_percent: 72,
-    triggered_by: "pull_request"
+    triggered_by: "pull_request",
   },
   {
     id: "3",
@@ -69,7 +81,7 @@ const mockWorkflowRuns: WorkflowRun[] = [
     triggeredBy: "push",
     commit_hash: "ghi9012345",
     coverage_percent: 83,
-    triggered_by: "push"
+    triggered_by: "push",
   },
   {
     id: "4",
@@ -83,7 +95,7 @@ const mockWorkflowRuns: WorkflowRun[] = [
     triggeredBy: "push",
     commit_hash: "jkl3456789",
     coverage_percent: 80,
-    triggered_by: "push"
+    triggered_by: "push",
   },
   {
     id: "5",
@@ -97,7 +109,7 @@ const mockWorkflowRuns: WorkflowRun[] = [
     triggeredBy: "pull_request",
     commit_hash: "mno7890123",
     coverage_percent: 68,
-    triggered_by: "pull_request"
+    triggered_by: "pull_request",
   },
   {
     id: "6",
@@ -111,7 +123,7 @@ const mockWorkflowRuns: WorkflowRun[] = [
     triggeredBy: "push",
     commit_hash: "pqr1234567",
     coverage_percent: 78,
-    triggered_by: "push"
+    triggered_by: "push",
   },
   {
     id: "7",
@@ -125,7 +137,7 @@ const mockWorkflowRuns: WorkflowRun[] = [
     triggeredBy: "push",
     commit_hash: "stu5678901",
     coverage_percent: 87,
-    triggered_by: "push"
+    triggered_by: "push",
   },
   {
     id: "8",
@@ -139,8 +151,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
     triggeredBy: "push",
     commit_hash: "vwx2345678",
     coverage_percent: 75,
-    triggered_by: "push"
-  }
+    triggered_by: "push",
+  },
 ];
 
 export default function CIHistoryPage() {
@@ -157,9 +169,7 @@ export default function CIHistoryPage() {
 
     // Filter by branch
     if (branch) {
-      result = result.filter(run => 
-        run.branch.toLowerCase().includes(branch.toLowerCase())
-      );
+      result = result.filter(run => run.branch.toLowerCase().includes(branch.toLowerCase()));
     }
 
     // Filter by status
@@ -169,19 +179,15 @@ export default function CIHistoryPage() {
 
     // Filter by date range
     if (startDate) {
-      result = result.filter(run => 
-        new Date(run.created_at) >= new Date(startDate)
-      );
+      result = result.filter(run => new Date(run.created_at) >= new Date(startDate));
     }
     if (endDate) {
-      result = result.filter(run => 
-        new Date(run.created_at) <= new Date(endDate + "T23:59:59Z")
-      );
+      result = result.filter(run => new Date(run.created_at) <= new Date(endDate + "T23:59:59Z"));
     }
 
     // Sort by date (descending - newest first)
-    return result.sort((a, b) => 
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    return result.sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
   }, [branch, status, startDate, endDate]);
 
@@ -198,7 +204,7 @@ export default function CIHistoryPage() {
       .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
       .map(run => ({
         name: format(new Date(run.created_at), "dd/MM"),
-        coverage: run.coverage_percent
+        coverage: run.coverage_percent,
       }));
   }, []);
 
@@ -211,12 +217,12 @@ export default function CIHistoryPage() {
       r.status,
       r.coverage_percent ? `${r.coverage_percent}%` : "—",
       r.triggered_by,
-      format(new Date(r.created_at), "dd/MM/yyyy HH:mm")
+      format(new Date(r.created_at), "dd/MM/yyyy HH:mm"),
     ]);
 
     const csvContent = [
       headers.join(","),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(",")),
     ].join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -242,13 +248,16 @@ export default function CIHistoryPage() {
         <div className="space-y-6">
           {/* Filters */}
           <div className="flex gap-4 mb-4 items-center flex-wrap">
-            <Input 
-              type="text" 
-              placeholder="Filtrar por branch..." 
-              value={branch} 
-              onChange={(e) => setBranch(e.target.value)} 
+            <Input
+              type="text"
+              placeholder="Filtrar por branch..."
+              value={branch}
+              onChange={e => setBranch(e.target.value)}
             />
-            <Select value={status || "all"} onValueChange={(val) => setStatus(val === "all" ? "" : val)}>
+            <Select
+              value={status || "all"}
+              onValueChange={val => setStatus(val === "all" ? "" : val)}
+            >
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -258,16 +267,8 @@ export default function CIHistoryPage() {
                 <SelectItem value="failure">❌ Falha</SelectItem>
               </SelectContent>
             </Select>
-            <Input 
-              type="date" 
-              value={startDate} 
-              onChange={(e) => setStartDate(e.target.value)} 
-            />
-            <Input 
-              type="date" 
-              value={endDate} 
-              onChange={(e) => setEndDate(e.target.value)} 
-            />
+            <Input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+            <Input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
             <Button onClick={exportCSV}>📤 Exportar CSV</Button>
           </div>
 
@@ -280,7 +281,13 @@ export default function CIHistoryPage() {
                   <XAxis dataKey="name" />
                   <YAxis domain={[0, 100]} />
                   <Tooltip />
-                  <Line type="monotone" dataKey="coverage" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} />
+                  <Line
+                    type="monotone"
+                    dataKey="coverage"
+                    stroke="#10b981"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -301,12 +308,16 @@ export default function CIHistoryPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginated.map((r) => (
+                  {paginated.map(r => (
                     <TableRow key={r.id}>
-                      <TableCell className="font-mono text-xs">{r.commit_hash.slice(0, 7)}</TableCell>
+                      <TableCell className="font-mono text-xs">
+                        {r.commit_hash.slice(0, 7)}
+                      </TableCell>
                       <TableCell>{r.branch}</TableCell>
                       <TableCell>
-                        <span className={`text-sm font-medium ${r.status === "success" ? "text-green-600" : "text-red-500"}`}>
+                        <span
+                          className={`text-sm font-medium ${r.status === "success" ? "text-green-600" : "text-red-500"}`}
+                        >
                           {r.status}
                         </span>
                       </TableCell>
@@ -319,8 +330,16 @@ export default function CIHistoryPage() {
               </Table>
 
               <div className="flex justify-between pt-4">
-                <Button variant="outline" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>⬅️ Anterior</Button>
-                <Button variant="outline" disabled={(page + 1) * pageSize >= filtered.length} onClick={() => setPage((p) => p + 1)}>Próxima ➡️</Button>
+                <Button variant="outline" disabled={page === 0} onClick={() => setPage(p => p - 1)}>
+                  ⬅️ Anterior
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={(page + 1) * pageSize >= filtered.length}
+                  onClick={() => setPage(p => p + 1)}
+                >
+                  Próxima ➡️
+                </Button>
               </div>
             </CardContent>
           </Card>

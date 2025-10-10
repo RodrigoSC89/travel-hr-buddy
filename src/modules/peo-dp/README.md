@@ -5,6 +5,7 @@
 The PEO-DP (Gestão de RH e Pessoal) module is the **comprehensive HR and personnel management system**. It handles all aspects of human resources including employee records, payroll, benefits, and workforce management.
 
 **Key Use Cases:**
+
 - Manage employee records and profiles
 - Process payroll and compensation
 - Administer benefits and insurance

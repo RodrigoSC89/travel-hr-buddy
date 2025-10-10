@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { FileText, Download, Loader2, Calendar, Settings, Sparkles } from "lucide-react";
+import { FileText, Download, Loader2, Sparkles } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface AIReportGeneratorProps {
@@ -19,7 +25,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
   const [format, setFormat] = useState<string>("summary");
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-    end: new Date().toISOString().split("T")[0]
+    end: new Date().toISOString().split("T")[0],
   });
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [customPrompt, setCustomPrompt] = useState("");
@@ -30,13 +36,13 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     { value: "hr", label: "Recursos Humanos", icon: "👥" },
     { value: "operational", label: "Operacional", icon: "⚙️" },
     { value: "analytics", label: "Analytics", icon: "📊" },
-    { value: "custom", label: "Personalizado", icon: "🎯" }
+    { value: "custom", label: "Personalizado", icon: "🎯" },
   ];
 
   const formats = [
     { value: "summary", label: "Resumo Executivo" },
     { value: "detailed", label: "Detalhado" },
-    { value: "executive", label: "Executivo" }
+    { value: "executive", label: "Executivo" },
   ];
 
   const availableModules = [
@@ -44,7 +50,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     { id: "certificates", label: "Certificados" },
     { id: "analytics", label: "Analytics" },
     { id: "operational", label: "Operacional" },
-    { id: "alerts", label: "Alertas de Preço" }
+    { id: "alerts", label: "Alertas de Preço" },
   ];
 
   const generateReport = async () => {
@@ -66,8 +72,8 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
           dateRange,
           modules: selectedModules,
           format,
-          customPrompt: customPrompt || undefined
-        }
+          customPrompt: customPrompt || undefined,
+        },
       });
 
       if (error) throw error;
@@ -75,7 +81,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
       if (data.success) {
         setLastReport(data.report);
         onReportGenerated?.(data.report);
-        
+
         toast({
           title: "Relatório Gerado",
           description: "Relatório criado com sucesso usando IA",
@@ -132,7 +138,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
                 <SelectValue placeholder="Selecione o tipo de relatório" />
               </SelectTrigger>
               <SelectContent>
-                {reportTypes.map((type) => (
+                {reportTypes.map(type => (
                   <SelectItem key={type.value} value={type.value}>
                     <div className="flex items-center gap-2">
                       <span>{type.icon}</span>
@@ -152,7 +158,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {formats.map((fmt) => (
+                {formats.map(fmt => (
                   <SelectItem key={fmt.value} value={fmt.value}>
                     {fmt.label}
                   </SelectItem>
@@ -168,7 +174,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
               <input
                 type="date"
                 value={dateRange.start}
-                onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
+                onChange={e => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               />
             </div>
@@ -177,7 +183,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
               <input
                 type="date"
                 value={dateRange.end}
-                onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
+                onChange={e => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               />
             </div>
@@ -187,12 +193,12 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
           <div className="space-y-2">
             <Label>Módulos para Incluir (Opcional)</Label>
             <div className="grid grid-cols-2 gap-3">
-              {availableModules.map((module) => (
+              {availableModules.map(module => (
                 <div key={module.id} className="flex items-center space-x-2">
                   <Checkbox
                     id={module.id}
                     checked={selectedModules.includes(module.id)}
-                    onCheckedChange={(checked) => handleModuleChange(module.id, !!checked)}
+                    onCheckedChange={checked => handleModuleChange(module.id, !!checked)}
                   />
                   <Label htmlFor={module.id} className="text-sm font-normal">
                     {module.label}
@@ -208,7 +214,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
               <Label>Instruções Personalizadas</Label>
               <Textarea
                 value={customPrompt}
-                onChange={(e) => setCustomPrompt(e.target.value)}
+                onChange={e => setCustomPrompt(e.target.value)}
                 placeholder="Descreva que tipo de análise ou insights específicos você gostaria no relatório..."
                 rows={3}
               />
@@ -241,11 +247,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">Último Relatório Gerado</CardTitle>
-                  <Button
-                    onClick={downloadReport}
-                    variant="outline"
-                    size="sm"
-                  >
+                  <Button onClick={downloadReport} variant="outline" size="sm">
                     <Download className="w-4 h-4 mr-2" />
                     Download
                   </Button>

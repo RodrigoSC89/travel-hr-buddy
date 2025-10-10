@@ -45,3 +45,6 @@ temp/
 # Test coverage
 coverage
 .nyc_output
+
+# Generated reports
+ANY_TYPES_REPORT.md

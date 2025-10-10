@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
-export type UserRole = 
-  | "admin" 
-  | "hr_manager" 
+export type UserRole =
+  | "admin"
+  | "hr_manager"
   | "hr_analyst"
   | "department_manager"
   | "supervisor"
@@ -63,7 +63,7 @@ export const usePermissions = () => {
           if (permissionsError) {
             // Error fetching permissions, will use empty array
           } else {
-            setPermissions(permissionsData as RolePermission[] || []);
+            setPermissions((permissionsData as RolePermission[]) || []);
           }
         }
       } catch (error) {
@@ -86,33 +86,33 @@ export const usePermissions = () => {
     if (!rolePermission) return false;
 
     switch (type) {
-    case "read":
-      return rolePermission.can_read;
-    case "write":
-      return rolePermission.can_write;
-    case "delete":
-      return rolePermission.can_delete;
-    case "manage":
-      return rolePermission.can_manage;
-    default:
-      return false;
+      case "read":
+        return rolePermission.can_read;
+      case "write":
+        return rolePermission.can_write;
+      case "delete":
+        return rolePermission.can_delete;
+      case "manage":
+        return rolePermission.can_manage;
+      default:
+        return false;
     }
   };
 
   const canAccessModule = (module: string): boolean => {
     switch (module) {
-    case "admin":
-      return userRole === "admin";
-    case "hr":
-      return hasPermission("users", "read") || hasPermission("certificates", "read");
-    case "reports":
-      return hasPermission("reports", "read");
-    case "analytics":
-      return hasPermission("analytics", "read");
-    case "settings":
-      return hasPermission("system_settings", "read");
-    default:
-      return true; // Módulos básicos acessíveis a todos
+      case "admin":
+        return userRole === "admin";
+      case "hr":
+        return hasPermission("users", "read") || hasPermission("certificates", "read");
+      case "reports":
+        return hasPermission("reports", "read");
+      case "analytics":
+        return hasPermission("analytics", "read");
+      case "settings":
+        return hasPermission("system_settings", "read");
+      default:
+        return true; // Módulos básicos acessíveis a todos
     }
   };
 
@@ -125,7 +125,7 @@ export const usePermissions = () => {
       supervisor: "Supervisor",
       coordinator: "Coordenador",
       manager: "Gerente",
-      employee: "Funcionário"
+      employee: "Funcionário",
     };
     return roleNames[role] || "Funcionário";
   };
@@ -136,6 +136,6 @@ export const usePermissions = () => {
     isLoading,
     hasPermission,
     canAccessModule,
-    getRoleDisplayName
+    getRoleDisplayName,
   };
 };

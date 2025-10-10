@@ -1,42 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Users, 
-  DollarSign, 
-  Target, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Users,
+  DollarSign,
+  Target,
   Activity,
   BarChart3,
-  PieChart,
-  LineChart,
   Clock,
   Zap,
   Award,
   AlertTriangle,
   CheckCircle,
   Calendar,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
-import { 
-  LineChart as RechartsLineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  LineChart as RechartsLineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   AreaChart,
   Area,
-  BarChart,
-  Bar,
   PieChart as RechartsPieChart,
   Pie,
-  Cell
+  Cell,
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 
@@ -53,9 +49,9 @@ const EnhancedMetricsDashboard = () => {
       efficiency: { value: 94.2, change: 2.8, trend: "up", target: 95 },
       satisfaction: { value: 4.6, change: 4.5, trend: "up", target: 4.8 },
       conversion: { value: 3.2, change: -1.1, trend: "down", target: 3.5 },
-      retention: { value: 89.5, change: 5.2, trend: "up", target: 90 }
+      retention: { value: 89.5, change: 5.2, trend: "up", target: 90 },
     },
-    timeRange: "last30days"
+    timeRange: "last30days",
   });
 
   const monthlyData = [
@@ -64,7 +60,7 @@ const EnhancedMetricsDashboard = () => {
     { month: "Mar", revenue: 2180000, users: 1120, efficiency: 90.8 },
     { month: "Abr", revenue: 2320000, users: 1180, efficiency: 93.5 },
     { month: "Mai", revenue: 2450000, users: 1245, efficiency: 94.2 },
-    { month: "Jun", revenue: 2380000, users: 1198, efficiency: 93.8 }
+    { month: "Jun", revenue: 2380000, users: 1198, efficiency: 93.8 },
   ];
 
   const departmentData = [
@@ -72,11 +68,11 @@ const EnhancedMetricsDashboard = () => {
     { name: "Marketing", value: 25, color: "hsl(var(--secondary))" },
     { name: "Operações", value: 20, color: "hsl(var(--accent))" },
     { name: "RH", value: 15, color: "hsl(var(--warning))" },
-    { name: "TI", value: 10, color: "hsl(var(--info))" }
+    { name: "TI", value: 10, color: "hsl(var(--info))" },
   ];
 
   const performanceMetrics = [
-    { 
+    {
       title: "Performance Operacional",
       value: 94.2,
       target: 95,
@@ -84,7 +80,7 @@ const EnhancedMetricsDashboard = () => {
       trend: "up",
       icon: Activity,
       color: "text-green-600",
-      bgColor: "bg-green-50 border-green-200"
+      bgColor: "bg-green-50 border-green-200",
     },
     {
       title: "Eficiência de Processos",
@@ -94,7 +90,7 @@ const EnhancedMetricsDashboard = () => {
       trend: "up",
       icon: Zap,
       color: "text-blue-600",
-      bgColor: "bg-blue-50 border-blue-200"
+      bgColor: "bg-blue-50 border-blue-200",
     },
     {
       title: "Qualidade de Serviço",
@@ -104,7 +100,7 @@ const EnhancedMetricsDashboard = () => {
       trend: "up",
       icon: Award,
       color: "text-purple-600",
-      bgColor: "bg-purple-50 border-purple-200"
+      bgColor: "bg-purple-50 border-purple-200",
     },
     {
       title: "Tempo de Resposta",
@@ -114,26 +110,26 @@ const EnhancedMetricsDashboard = () => {
       trend: "down",
       icon: Clock,
       color: "text-orange-600",
-      bgColor: "bg-orange-50 border-orange-200"
-    }
+      bgColor: "bg-orange-50 border-orange-200",
+    },
   ];
 
   const refreshData = async () => {
     setIsRefreshing(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     // Simular atualização dos dados
     setMetricsData(prev => ({
       ...prev,
       kpis: {
         ...prev.kpis,
-        efficiency: { 
-          ...prev.kpis.efficiency, 
-          value: prev.kpis.efficiency.value + (Math.random() * 2 - 1) 
-        }
-      }
+        efficiency: {
+          ...prev.kpis.efficiency,
+          value: prev.kpis.efficiency.value + (Math.random() * 2 - 1),
+        },
+      },
     }));
-    
+
     setIsRefreshing(false);
     toast({
       title: "Métricas atualizadas",
@@ -142,7 +138,11 @@ const EnhancedMetricsDashboard = () => {
   };
 
   const getTrendIcon = (trend: string) => {
-    return trend === "up" ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />;
+    return trend === "up" ? (
+      <TrendingUp className="w-4 h-4" />
+    ) : (
+      <TrendingDown className="w-4 h-4" />
+    );
   };
 
   const getTrendColor = (trend: string) => {
@@ -163,11 +163,7 @@ const EnhancedMetricsDashboard = () => {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            onClick={refreshData}
-            disabled={isRefreshing}
-          >
+          <Button variant="outline" onClick={refreshData} disabled={isRefreshing}>
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
@@ -186,24 +182,32 @@ const EnhancedMetricsDashboard = () => {
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground capitalize">
-                    {key === "revenue" ? "Receita" : 
-                      key === "users" ? "Usuários" :
-                        key === "efficiency" ? "Eficiência" :
-                          key === "satisfaction" ? "Satisfação" :
-                            key === "conversion" ? "Conversão" : "Retenção"}
+                    {key === "revenue"
+                      ? "Receita"
+                      : key === "users"
+                        ? "Usuários"
+                        : key === "efficiency"
+                          ? "Eficiência"
+                          : key === "satisfaction"
+                            ? "Satisfação"
+                            : key === "conversion"
+                              ? "Conversão"
+                              : "Retenção"}
                   </p>
                   <p className="text-2xl font-bold">
-                    {key === "revenue" ? `R$ ${(kpi.value / 1000000).toFixed(1)}M` :
-                      key === "satisfaction" ? `${kpi.value}/5` :
-                        key === "conversion" || key === "efficiency" || key === "retention" ? 
-                          `${kpi.value.toFixed(1)}%` : kpi.value}
+                    {key === "revenue"
+                      ? `R$ ${(kpi.value / 1000000).toFixed(1)}M`
+                      : key === "satisfaction"
+                        ? `${kpi.value}/5`
+                        : key === "conversion" || key === "efficiency" || key === "retention"
+                          ? `${kpi.value.toFixed(1)}%`
+                          : kpi.value}
                   </p>
                   <div className="flex items-center gap-1">
-                    <span className={getTrendColor(kpi.trend)}>
-                      {getTrendIcon(kpi.trend)}
-                    </span>
+                    <span className={getTrendColor(kpi.trend)}>{getTrendIcon(kpi.trend)}</span>
                     <span className={`text-sm ${getTrendColor(kpi.trend)}`}>
-                      {kpi.change > 0 ? "+" : ""}{kpi.change.toFixed(1)}%
+                      {kpi.change > 0 ? "+" : ""}
+                      {kpi.change.toFixed(1)}%
                     </span>
                   </div>
                 </div>
@@ -217,14 +221,14 @@ const EnhancedMetricsDashboard = () => {
                     {key === "retention" && <Award className="w-6 h-6" />}
                   </div>
                   <div className="mt-2">
-                    <Progress 
-                      value={(kpi.value / kpi.target) * 100} 
-                      className="h-2 w-16" 
-                    />
+                    <Progress value={(kpi.value / kpi.target) * 100} className="h-2 w-16" />
                     <p className="text-xs text-muted-foreground mt-1">
-                      Meta: {key === "revenue" ? `${(kpi.target / 1000000).toFixed(1)}M` :
-                        key === "satisfaction" ? `${kpi.target}/5` :
-                          `${kpi.target}%`}
+                      Meta:{" "}
+                      {key === "revenue"
+                        ? `${(kpi.target / 1000000).toFixed(1)}M`
+                        : key === "satisfaction"
+                          ? `${kpi.target}/5`
+                          : `${kpi.target}%`}
                     </p>
                   </div>
                 </div>
@@ -257,15 +261,18 @@ const EnhancedMetricsDashboard = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
                     <YAxis />
-                    <Tooltip 
-                      formatter={(value) => [`R$ ${(value as number / 1000000).toFixed(1)}M`, "Receita"]}
+                    <Tooltip
+                      formatter={value => [
+                        `R$ ${((value as number) / 1000000).toFixed(1)}M`,
+                        "Receita",
+                      ]}
                     />
-                    <Area 
-                      type="monotone" 
-                      dataKey="revenue" 
-                      stroke="hsl(var(--primary))" 
-                      fill="hsl(var(--primary))" 
-                      fillOpacity={0.6} 
+                    <Area
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke="hsl(var(--primary))"
+                      fill="hsl(var(--primary))"
+                      fillOpacity={0.6}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -294,7 +301,7 @@ const EnhancedMetricsDashboard = () => {
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value) => [`${value}%`, "Participação"]} />
+                    <Tooltip formatter={value => [`${value}%`, "Participação"]} />
                   </RechartsPieChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -315,34 +322,42 @@ const EnhancedMetricsDashboard = () => {
                       </div>
                       <div className="space-y-1">
                         <p className="text-2xl font-bold">
-                          {metric.title === "Tempo de Resposta" ? 
-                            `${metric.value}s` : `${metric.value}%`}
+                          {metric.title === "Tempo de Resposta"
+                            ? `${metric.value}s`
+                            : `${metric.value}%`}
                         </p>
                         <div className="flex items-center gap-1">
                           <span className={getTrendColor(metric.trend)}>
                             {getTrendIcon(metric.trend)}
                           </span>
                           <span className={`text-sm ${getTrendColor(metric.trend)}`}>
-                            {metric.change > 0 ? "+" : ""}{metric.change.toFixed(1)}%
+                            {metric.change > 0 ? "+" : ""}
+                            {metric.change.toFixed(1)}%
                           </span>
                         </div>
                       </div>
                     </div>
                     <div className="text-right space-y-2">
-                      <Progress 
-                        value={metric.title === "Tempo de Resposta" ? 
-                          Math.max(0, 100 - (metric.value / metric.target) * 100) :
-                          (metric.value / metric.target) * 100} 
-                        className="h-2 w-20" 
+                      <Progress
+                        value={
+                          metric.title === "Tempo de Resposta"
+                            ? Math.max(0, 100 - (metric.value / metric.target) * 100)
+                            : (metric.value / metric.target) * 100
+                        }
+                        className="h-2 w-20"
                       />
                       <p className="text-xs text-muted-foreground">
-                        Meta: {metric.title === "Tempo de Resposta" ? 
-                          `${metric.target}s` : `${metric.target}%`}
+                        Meta:{" "}
+                        {metric.title === "Tempo de Resposta"
+                          ? `${metric.target}s`
+                          : `${metric.target}%`}
                       </p>
                       <Badge variant={metric.value >= metric.target ? "default" : "secondary"}>
-                        {metric.value >= metric.target ? 
-                          <CheckCircle className="w-3 h-3 mr-1" /> :
-                          <AlertTriangle className="w-3 h-3 mr-1" />}
+                        {metric.value >= metric.target ? (
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                        ) : (
+                          <AlertTriangle className="w-3 h-3 mr-1" />
+                        )}
                         {metric.value >= metric.target ? "Alcançado" : "Em progresso"}
                       </Badge>
                     </div>
@@ -367,19 +382,19 @@ const EnhancedMetricsDashboard = () => {
                   <YAxis yAxisId="left" />
                   <YAxis yAxisId="right" orientation="right" />
                   <Tooltip />
-                  <Line 
+                  <Line
                     yAxisId="left"
-                    type="monotone" 
-                    dataKey="users" 
-                    stroke="hsl(var(--primary))" 
+                    type="monotone"
+                    dataKey="users"
+                    stroke="hsl(var(--primary))"
                     strokeWidth={3}
                     name="Usuários"
                   />
-                  <Line 
+                  <Line
                     yAxisId="right"
-                    type="monotone" 
-                    dataKey="efficiency" 
-                    stroke="hsl(var(--accent))" 
+                    type="monotone"
+                    dataKey="efficiency"
+                    stroke="hsl(var(--accent))"
                     strokeWidth={3}
                     name="Eficiência %"
                   />
@@ -407,9 +422,7 @@ const EnhancedMetricsDashboard = () => {
                 </div>
                 <div className="p-3 bg-green-50 rounded-lg">
                   <p className="font-medium text-green-800">Crescimento de Usuários</p>
-                  <p className="text-sm text-green-600">
-                    8.3% de crescimento consistente
-                  </p>
+                  <p className="text-sm text-green-600">8.3% de crescimento consistente</p>
                 </div>
               </CardContent>
             </Card>
@@ -424,9 +437,7 @@ const EnhancedMetricsDashboard = () => {
               <CardContent className="space-y-3">
                 <div className="p-3 bg-orange-50 rounded-lg">
                   <p className="font-medium text-orange-800">Taxa de Conversão</p>
-                  <p className="text-sm text-orange-600">
-                    Queda de 1.1% - revisar funil de vendas
-                  </p>
+                  <p className="text-sm text-orange-600">Queda de 1.1% - revisar funil de vendas</p>
                 </div>
                 <div className="p-3 bg-orange-50 rounded-lg">
                   <p className="font-medium text-orange-800">Tempo de Resposta</p>

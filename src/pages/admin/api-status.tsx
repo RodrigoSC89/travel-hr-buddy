@@ -23,15 +23,7 @@ import {
 } from "chart.js";
 
 // Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 type Status = "checking" | "valid" | "invalid" | "missing";
 
@@ -39,7 +31,12 @@ interface Service {
   name: string;
   envKey: string;
   endpoint: string;
-  validate: () => Promise<{ success: boolean; message: string; responseTime?: number; error?: string }>;
+  validate: () => Promise<{
+    success: boolean;
+    message: string;
+    responseTime?: number;
+    error?: string;
+  }>;
 }
 
 interface HistorySnapshot {
@@ -78,17 +75,20 @@ export default function ApiStatusPage() {
   const [status, setStatus] = useState<Record<string, Status>>({});
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<HistorySnapshot[]>([]);
-  const [responseData, setResponseData] = useState<Record<string, { message?: string; responseTime?: number; error?: string }>>({});
+  const [responseData, setResponseData] = useState<
+    Record<string, { message?: string; responseTime?: number; error?: string }>
+  >({});
 
   const checkAll = async () => {
     setLoading(true);
     const results: Record<string, Status> = {};
-    const dataResults: Record<string, { message?: string; responseTime?: number; error?: string }> = {};
-    
+    const dataResults: Record<string, { message?: string; responseTime?: number; error?: string }> =
+      {};
+
     for (const service of services) {
       results[service.name] = "checking";
       setStatus({ ...results });
-      
+
       const result = await service.validate();
       results[service.name] = result.success ? "valid" : "invalid";
       dataResults[service.name] = {
@@ -99,14 +99,14 @@ export default function ApiStatusPage() {
       setStatus({ ...results });
       setResponseData({ ...dataResults });
     }
-    
+
     // Add to history
     const snapshot: HistorySnapshot = {
       timestamp: new Date().toISOString(),
       ...results,
     };
-    setHistory((prev) => [...prev, snapshot]);
-    
+    setHistory(prev => [...prev, snapshot]);
+
     setLoading(false);
   };
 
@@ -127,13 +127,13 @@ export default function ApiStatusPage() {
   };
 
   // Prepare chart data
-  const labels = history.map((h) => new Date(h.timestamp).toLocaleTimeString());
-  
+  const labels = history.map(h => new Date(h.timestamp).toLocaleTimeString());
+
   const chartData = {
     labels,
     datasets: services.map((s, i) => ({
       label: s.name,
-      data: history.map((h) => (h[s.name] === "valid" ? 1 : 0)),
+      data: history.map(h => (h[s.name] === "valid" ? 1 : 0)),
       borderColor: `hsl(${(i * 80) % 360}, 70%, 50%)`,
       backgroundColor: `hsla(${(i * 80) % 360}, 70%, 50%, 0.1)`,
       fill: false,
@@ -159,7 +159,7 @@ export default function ApiStatusPage() {
         max: 1,
         ticks: {
           stepSize: 1,
-          callback: function(value: number | string) {
+          callback: function (value: number | string) {
             return value === 1 ? "✅ Valid" : "❌ Invalid";
           },
         },
@@ -178,15 +178,15 @@ export default function ApiStatusPage() {
           badges={[
             {
               icon: CheckCircle,
-              label: `${Object.values(status).filter((s) => s === "valid").length} Valid`,
+              label: `${Object.values(status).filter(s => s === "valid").length} Valid`,
             },
             {
               icon: XCircle,
-              label: `${Object.values(status).filter((s) => s === "invalid").length} Invalid`,
+              label: `${Object.values(status).filter(s => s === "invalid").length} Invalid`,
             },
             {
               icon: Clock,
-              label: `${Object.values(status).filter((s) => s === "checking").length} Checking`,
+              label: `${Object.values(status).filter(s => s === "checking").length} Checking`,
             },
           ]}
         />
@@ -196,15 +196,11 @@ export default function ApiStatusPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex gap-3">
-                <Button 
-                  onClick={checkAll} 
-                  disabled={loading}
-                  className="flex items-center gap-2"
-                >
+                <Button onClick={checkAll} disabled={loading} className="flex items-center gap-2">
                   <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
                   {loading ? "Checking..." : "🔁 Retest APIs"}
                 </Button>
-                <Button 
+                <Button
                   onClick={downloadLog}
                   variant="outline"
                   className="flex items-center gap-2"
@@ -226,7 +222,7 @@ export default function ApiStatusPage() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-4">
-                {services.map((s) => (
+                {services.map(s => (
                   <li
                     key={s.name}
                     className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
@@ -268,9 +264,7 @@ export default function ApiStatusPage() {
             <Card>
               <CardHeader>
                 <CardTitle>📊 Availability History</CardTitle>
-                <CardDescription>
-                  Visual representation of API status over time
-                </CardDescription>
+                <CardDescription>Visual representation of API status over time</CardDescription>
               </CardHeader>
               <CardContent>
                 <div style={{ height: "300px" }}>
@@ -307,31 +301,31 @@ VITE_SUPABASE_PUBLISHABLE_KEY=eyJ...`}
 
 function renderStatus(state: Status | undefined) {
   switch (state) {
-  case "valid":
-    return (
-      <Badge variant="default" className="bg-green-600 text-white">
+    case "valid":
+      return (
+        <Badge variant="default" className="bg-green-600 text-white">
           ✅ Valid
-      </Badge>
-    );
-  case "invalid":
-    return (
-      <Badge variant="destructive" className="bg-red-600 text-white">
+        </Badge>
+      );
+    case "invalid":
+      return (
+        <Badge variant="destructive" className="bg-red-600 text-white">
           ❌ Invalid
-      </Badge>
-    );
-  case "missing":
-    return (
-      <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
+        </Badge>
+      );
+    case "missing":
+      return (
+        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
           ⚠️ Missing Key
-      </Badge>
-    );
-  case "checking":
-    return (
-      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
+        </Badge>
+      );
+    case "checking":
+      return (
+        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
           ⏳ Checking...
-      </Badge>
-    );
-  default:
-    return <Badge variant="outline">-</Badge>;
+        </Badge>
+      );
+    default:
+      return <Badge variant="outline">-</Badge>;
   }
 }

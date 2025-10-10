@@ -2,14 +2,20 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  BarChart3, 
-  TrendingUp, 
-  DollarSign, 
+import {
+  BarChart3,
+  TrendingUp,
+  DollarSign,
   Calendar,
   Download,
   Eye,
@@ -18,7 +24,7 @@ import {
   Globe,
   Ship,
   Clock,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 
 interface KPIMetric {
@@ -68,31 +74,32 @@ export const BusinessIntelligence = () => {
         .from("ai_reports")
         .select("*")
         .order("created_at", { ascending: false });
-      
+
       if (error) throw error;
       setAiReports(data || []);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const generateReport = async (type: string) => {
     setIsGenerating(true);
     try {
       const { data, error } = await supabase.functions.invoke("generate-ai-report", {
-        body: { 
+        body: {
           type,
           period: selectedPeriod,
-          department: selectedDepartment 
-        }
+          department: selectedDepartment,
+        },
       });
-      
+
       if (error) throw error;
-      
+
       toast({
         title: "Relatório gerado!",
         description: "Novo relatório de BI foi criado com sucesso.",
       });
-      
+
       fetchReports();
     } catch (error) {
       toast({
@@ -113,7 +120,7 @@ export const BusinessIntelligence = () => {
       change: 8.2,
       trend: "up",
       target: "R$ 15M",
-      unit: "BRL"
+      unit: "BRL",
     },
     {
       id: "2",
@@ -122,7 +129,7 @@ export const BusinessIntelligence = () => {
       change: 2.1,
       trend: "up",
       target: "95%",
-      unit: "%"
+      unit: "%",
     },
     {
       id: "3",
@@ -131,7 +138,7 @@ export const BusinessIntelligence = () => {
       change: -3.8,
       trend: "down",
       target: "R$ 42k",
-      unit: "BRL"
+      unit: "BRL",
     },
     {
       id: "4",
@@ -140,7 +147,7 @@ export const BusinessIntelligence = () => {
       change: -12.3,
       trend: "down",
       target: "16h",
-      unit: "hours"
+      unit: "hours",
     },
     {
       id: "5",
@@ -149,7 +156,7 @@ export const BusinessIntelligence = () => {
       change: 4.2,
       trend: "up",
       target: "4.8/5",
-      unit: "rating"
+      unit: "rating",
     },
     {
       id: "6",
@@ -158,8 +165,8 @@ export const BusinessIntelligence = () => {
       change: 5.7,
       trend: "up",
       target: "25%",
-      unit: "%"
-    }
+      unit: "%",
+    },
   ];
 
   const reports: Report[] = [
@@ -170,7 +177,7 @@ export const BusinessIntelligence = () => {
       lastGenerated: "2024-01-15",
       frequency: "monthly",
       recipients: 8,
-      status: "ready"
+      status: "ready",
     },
     {
       id: "2",
@@ -179,7 +186,7 @@ export const BusinessIntelligence = () => {
       lastGenerated: "2024-01-16",
       frequency: "weekly",
       recipients: 12,
-      status: "ready"
+      status: "ready",
     },
     {
       id: "3",
@@ -188,7 +195,7 @@ export const BusinessIntelligence = () => {
       lastGenerated: "2024-01-10",
       frequency: "quarterly",
       recipients: 5,
-      status: "generating"
+      status: "generating",
     },
     {
       id: "4",
@@ -197,8 +204,8 @@ export const BusinessIntelligence = () => {
       lastGenerated: "2024-01-16",
       frequency: "daily",
       recipients: 15,
-      status: "scheduled"
-    }
+      status: "scheduled",
+    },
   ];
 
   const benchmarks: Benchmark[] = [
@@ -209,7 +216,7 @@ export const BusinessIntelligence = () => {
       industryAverage: 82.1,
       marketLeader: 91.2,
       unit: "%",
-      performance: "above"
+      performance: "above",
     },
     {
       id: "2",
@@ -218,7 +225,7 @@ export const BusinessIntelligence = () => {
       industryAverage: 22.3,
       marketLeader: 15.2,
       unit: "hours",
-      performance: "above"
+      performance: "above",
     },
     {
       id: "3",
@@ -227,7 +234,7 @@ export const BusinessIntelligence = () => {
       industryAverage: 1.2,
       marketLeader: 0.3,
       unit: "per 1000 trips",
-      performance: "above"
+      performance: "above",
     },
     {
       id: "4",
@@ -236,8 +243,8 @@ export const BusinessIntelligence = () => {
       industryAverage: 4.2,
       marketLeader: 4.9,
       unit: "/5",
-      performance: "above"
-    }
+      performance: "above",
+    },
   ];
 
   const getTrendIcon = (trend: string, change: number) => {
@@ -248,29 +255,42 @@ export const BusinessIntelligence = () => {
 
   const getReportIcon = (type: string) => {
     switch (type) {
-    case "financial": return <DollarSign className="h-4 w-4 text-success" />;
-    case "operational": return <Ship className="h-4 w-4 text-primary" />;
-    case "compliance": return <AlertCircle className="h-4 w-4 text-warning" />;
-    case "performance": return <Target className="h-4 w-4 text-info" />;
-    default: return <BarChart3 className="h-4 w-4" />;
+      case "financial":
+        return <DollarSign className="h-4 w-4 text-success" />;
+      case "operational":
+        return <Ship className="h-4 w-4 text-primary" />;
+      case "compliance":
+        return <AlertCircle className="h-4 w-4 text-warning" />;
+      case "performance":
+        return <Target className="h-4 w-4 text-info" />;
+      default:
+        return <BarChart3 className="h-4 w-4" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "ready": return "bg-success text-success-foreground";
-    case "generating": return "bg-warning text-warning-foreground";
-    case "scheduled": return "bg-info text-info-foreground";
-    default: return "bg-muted text-muted-foreground";
+      case "ready":
+        return "bg-success text-success-foreground";
+      case "generating":
+        return "bg-warning text-warning-foreground";
+      case "scheduled":
+        return "bg-info text-info-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getPerformanceColor = (performance: string) => {
     switch (performance) {
-    case "above": return "text-success";
-    case "below": return "text-danger";
-    case "equal": return "text-warning";
-    default: return "text-muted-foreground";
+      case "above":
+        return "text-success";
+      case "below":
+        return "text-danger";
+      case "equal":
+        return "text-warning";
+      default:
+        return "text-muted-foreground";
     }
   };
 
@@ -328,33 +348,38 @@ export const BusinessIntelligence = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {kpiMetrics.map((metric) => (
+            {kpiMetrics.map(metric => (
               <div key={metric.id} className="border rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-medium text-sm">{metric.name}</h4>
                   {getTrendIcon(metric.trend, metric.change)}
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="text-2xl font-bold">{metric.value}</div>
-                  
+
                   <div className="flex items-center gap-2">
-                    <span className={`text-sm ${metric.change > 0 ? "text-success" : "text-danger"}`}>
-                      {metric.change > 0 ? "+" : ""}{metric.change}%
+                    <span
+                      className={`text-sm ${metric.change > 0 ? "text-success" : "text-danger"}`}
+                    >
+                      {metric.change > 0 ? "+" : ""}
+                      {metric.change}%
                     </span>
                     <span className="text-xs text-muted-foreground">vs período anterior</span>
                   </div>
-                  
+
                   {metric.target && (
-                    <div className="text-xs text-muted-foreground">
-                      Meta: {metric.target}
-                    </div>
+                    <div className="text-xs text-muted-foreground">Meta: {metric.target}</div>
                   )}
-                  
+
                   {metric.target && (
-                    <Progress 
-                      value={parseFloat(metric.value.replace(/[^\d.]/g, "")) / parseFloat(metric.target.replace(/[^\d.]/g, "")) * 100} 
-                      className="h-1" 
+                    <Progress
+                      value={
+                        (parseFloat(metric.value.replace(/[^\d.]/g, "")) /
+                          parseFloat(metric.target.replace(/[^\d.]/g, ""))) *
+                        100
+                      }
+                      className="h-1"
                     />
                   )}
                 </div>
@@ -374,7 +399,7 @@ export const BusinessIntelligence = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {reports.map((report) => (
+            {reports.map(report => (
               <div key={report.id} className="border rounded-lg p-4 hover-lift">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -388,11 +413,9 @@ export const BusinessIntelligence = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
-                    <Badge className={getStatusColor(report.status)}>
-                      {report.status}
-                    </Badge>
+                    <Badge className={getStatusColor(report.status)}>{report.status}</Badge>
                     <Button variant="outline" size="sm">
                       <Eye className="h-4 w-4 mr-2" />
                       Ver
@@ -419,32 +442,41 @@ export const BusinessIntelligence = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {benchmarks.map((benchmark) => (
+            {benchmarks.map(benchmark => (
               <div key={benchmark.id} className="border rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-semibold">{benchmark.metric}</h4>
-                  <Badge className={getPerformanceColor(benchmark.performance) + " border"} variant="outline">
-                    {benchmark.performance === "above" ? "Acima da Média" : 
-                      benchmark.performance === "below" ? "Abaixo da Média" : "Na Média"}
+                  <Badge
+                    className={getPerformanceColor(benchmark.performance) + " border"}
+                    variant="outline"
+                  >
+                    {benchmark.performance === "above"
+                      ? "Acima da Média"
+                      : benchmark.performance === "below"
+                        ? "Abaixo da Média"
+                        : "Na Média"}
                   </Badge>
                 </div>
-                
+
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <div className="text-lg font-bold text-primary">
-                      {benchmark.ourValue}{benchmark.unit}
+                      {benchmark.ourValue}
+                      {benchmark.unit}
                     </div>
                     <div className="text-xs text-muted-foreground">Nossa Performance</div>
                   </div>
                   <div>
                     <div className="text-lg font-bold text-muted-foreground">
-                      {benchmark.industryAverage}{benchmark.unit}
+                      {benchmark.industryAverage}
+                      {benchmark.unit}
                     </div>
                     <div className="text-xs text-muted-foreground">Média do Setor</div>
                   </div>
                   <div>
                     <div className="text-lg font-bold text-success">
-                      {benchmark.marketLeader}{benchmark.unit}
+                      {benchmark.marketLeader}
+                      {benchmark.unit}
                     </div>
                     <div className="text-xs text-muted-foreground">Líder de Mercado</div>
                   </div>

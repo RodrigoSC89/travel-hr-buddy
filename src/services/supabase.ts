@@ -32,7 +32,7 @@ export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
   try {
     // Test 1: Check if we can get session (should not crash)
     const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-    
+
     if (sessionError) {
       return {
         success: false,
@@ -43,10 +43,7 @@ export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
     }
 
     // Test 2: Try a simple database query (health check)
-    const { error: dbError } = await supabase
-      .from("profiles")
-      .select("id")
-      .limit(1);
+    const { error: dbError } = await supabase.from("profiles").select("id").limit(1);
 
     const responseTime = Date.now() - startTime;
 
@@ -59,7 +56,7 @@ export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
       } else if (dbError.message.includes("not found")) {
         errorMessage = "Supabase URL or table not found";
       }
-      
+
       return {
         success: false,
         message: "Supabase database connection failed",

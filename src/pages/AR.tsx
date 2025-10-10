@@ -5,9 +5,9 @@ import { ModuleHeader } from "@/components/ui/module-header";
 import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
 
 // Lazy loading da interface AR
-const ARInterface = React.lazy(() => 
+const ARInterface = React.lazy(() =>
   import("@/components/innovation/ar-interface").then(module => ({
-    default: module.ARInterface
+    default: module.ARInterface,
   }))
 );
 
@@ -22,10 +22,10 @@ const AR: React.FC = () => {
         badges={[
           { icon: Camera, label: "Interface Imersiva" },
           { icon: Sparkles, label: "Tecnologia Avançada" },
-          { icon: Zap, label: "3 Aplicações" }
+          { icon: Zap, label: "3 Aplicações" },
         ]}
       />
-      
+
       <Suspense fallback={<DashboardSkeleton />}>
         <ARInterface />
       </Suspense>

@@ -6,19 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  User, 
-  Calendar, 
-  FileText, 
-  Award, 
-  Clock, 
+import {
+  FileText,
+  Award,
+  Clock,
   Target,
   TrendingUp,
-  MessageSquare,
-  Bell,
   Download,
   Upload,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -51,15 +47,15 @@ export const EmployeePortal: React.FC = () => {
       hours: 8,
       project: "Nautilus One",
       description: "Desenvolvimento de funcionalidades",
-      status: "approved"
+      status: "approved",
     },
     {
       date: "2024-01-16",
       hours: 7.5,
       project: "Maritime System",
       description: "Testes e validação",
-      status: "pending"
-    }
+      status: "pending",
+    },
   ]);
 
   const [achievements] = useState<Achievement[]>([
@@ -70,7 +66,7 @@ export const EmployeePortal: React.FC = () => {
       points: 100,
       earned: true,
       earnedDate: "2024-01-08",
-      category: "productivity"
+      category: "productivity",
     },
     {
       id: "2",
@@ -79,7 +75,7 @@ export const EmployeePortal: React.FC = () => {
       points: 250,
       earned: true,
       earnedDate: "2024-01-12",
-      category: "collaboration"
+      category: "collaboration",
     },
     {
       id: "3",
@@ -87,22 +83,22 @@ export const EmployeePortal: React.FC = () => {
       description: "Sugira uma melhoria implementada",
       points: 500,
       earned: false,
-      category: "innovation"
-    }
+      category: "innovation",
+    },
   ]);
 
   const [newTimeEntry, setNewTimeEntry] = useState({
     date: "",
     hours: "",
     project: "",
-    description: ""
+    description: "",
   });
 
   const [leaveRequest, setLeaveRequest] = useState({
     startDate: "",
     endDate: "",
     type: "vacation",
-    reason: ""
+    reason: "",
   });
 
   const totalPoints = achievements.filter(a => a.earned).reduce((sum, a) => sum + a.points, 0);
@@ -120,7 +116,7 @@ export const EmployeePortal: React.FC = () => {
       toast({
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -128,15 +124,15 @@ export const EmployeePortal: React.FC = () => {
     const entry: TimeEntry = {
       ...newTimeEntry,
       hours: parseFloat(newTimeEntry.hours),
-      status: "pending"
+      status: "pending",
     };
 
     setTimeEntries([...timeEntries, entry]);
     setNewTimeEntry({ date: "", hours: "", project: "", description: "" });
-    
+
     toast({
       title: "Entrada registrada",
-      description: "Suas horas foram registradas para aprovação"
+      description: "Suas horas foram registradas para aprovação",
     });
   };
 
@@ -145,16 +141,16 @@ export const EmployeePortal: React.FC = () => {
       toast({
         title: "Erro",
         description: "Selecione as datas de início e fim",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
     toast({
       title: "Solicitação enviada",
-      description: "Sua solicitação de licença foi enviada para aprovação"
+      description: "Sua solicitação de licença foi enviada para aprovação",
     });
-    
+
     setLeaveRequest({ startDate: "", endDate: "", type: "vacation", reason: "" });
   };
 
@@ -163,9 +159,7 @@ export const EmployeePortal: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Portal do Funcionário</h1>
-          <p className="text-muted-foreground">
-            Bem-vindo(a), {user?.email?.split("@")[0]}
-          </p>
+          <p className="text-muted-foreground">Bem-vindo(a), {user?.email?.split("@")[0]}</p>
         </div>
         <div className="text-right">
           <div className="text-2xl font-bold text-primary">{totalPoints} pts</div>
@@ -192,7 +186,9 @@ export const EmployeePortal: React.FC = () => {
             <div className="flex items-center space-x-4">
               <Award className="h-8 w-8 text-yellow-500" />
               <div>
-                <div className="text-2xl font-bold">{achievements.filter(a => a.earned).length}</div>
+                <div className="text-2xl font-bold">
+                  {achievements.filter(a => a.earned).length}
+                </div>
                 <div className="text-sm text-muted-foreground">Conquistas</div>
               </div>
             </div>
@@ -238,28 +234,26 @@ export const EmployeePortal: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Registro de Horas</CardTitle>
-              <CardDescription>
-                Registre suas horas trabalhadas por projeto
-              </CardDescription>
+              <CardDescription>Registre suas horas trabalhadas por projeto</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Input
                   type="date"
                   value={newTimeEntry.date}
-                  onChange={(e) => setNewTimeEntry({...newTimeEntry, date: e.target.value})}
+                  onChange={e => setNewTimeEntry({ ...newTimeEntry, date: e.target.value })}
                 />
                 <Input
                   type="number"
                   placeholder="Horas"
                   step="0.5"
                   value={newTimeEntry.hours}
-                  onChange={(e) => setNewTimeEntry({...newTimeEntry, hours: e.target.value})}
+                  onChange={e => setNewTimeEntry({ ...newTimeEntry, hours: e.target.value })}
                 />
                 <Input
                   placeholder="Projeto"
                   value={newTimeEntry.project}
-                  onChange={(e) => setNewTimeEntry({...newTimeEntry, project: e.target.value})}
+                  onChange={e => setNewTimeEntry({ ...newTimeEntry, project: e.target.value })}
                 />
                 <Button onClick={addTimeEntry} className="w-full">
                   Adicionar
@@ -268,12 +262,15 @@ export const EmployeePortal: React.FC = () => {
               <Textarea
                 placeholder="Descrição das atividades (opcional)"
                 value={newTimeEntry.description}
-                onChange={(e) => setNewTimeEntry({...newTimeEntry, description: e.target.value})}
+                onChange={e => setNewTimeEntry({ ...newTimeEntry, description: e.target.value })}
               />
 
               <div className="space-y-2">
                 {timeEntries.map((entry, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div className="flex-1">
                       <div className="font-medium">{entry.project}</div>
                       <div className="text-sm text-muted-foreground">
@@ -285,12 +282,20 @@ export const EmployeePortal: React.FC = () => {
                         </div>
                       )}
                     </div>
-                    <Badge variant={
-                      entry.status === "approved" ? "default" : 
-                        entry.status === "pending" ? "secondary" : "destructive"
-                    }>
-                      {entry.status === "approved" ? "Aprovado" :
-                        entry.status === "pending" ? "Pendente" : "Rejeitado"}
+                    <Badge
+                      variant={
+                        entry.status === "approved"
+                          ? "default"
+                          : entry.status === "pending"
+                            ? "secondary"
+                            : "destructive"
+                      }
+                    >
+                      {entry.status === "approved"
+                        ? "Aprovado"
+                        : entry.status === "pending"
+                          ? "Pendente"
+                          : "Rejeitado"}
                     </Badge>
                   </div>
                 ))}
@@ -313,18 +318,18 @@ export const EmployeePortal: React.FC = () => {
                   type="date"
                   placeholder="Data de início"
                   value={leaveRequest.startDate}
-                  onChange={(e) => setLeaveRequest({...leaveRequest, startDate: e.target.value})}
+                  onChange={e => setLeaveRequest({ ...leaveRequest, startDate: e.target.value })}
                 />
                 <Input
                   type="date"
                   placeholder="Data de fim"
                   value={leaveRequest.endDate}
-                  onChange={(e) => setLeaveRequest({...leaveRequest, endDate: e.target.value})}
+                  onChange={e => setLeaveRequest({ ...leaveRequest, endDate: e.target.value })}
                 />
-                <select 
+                <select
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   value={leaveRequest.type}
-                  onChange={(e) => setLeaveRequest({...leaveRequest, type: e.target.value})}
+                  onChange={e => setLeaveRequest({ ...leaveRequest, type: e.target.value })}
                 >
                   <option value="vacation">Férias</option>
                   <option value="sick">Licença Médica</option>
@@ -335,7 +340,7 @@ export const EmployeePortal: React.FC = () => {
               <Textarea
                 placeholder="Motivo (opcional para férias, obrigatório para outros tipos)"
                 value={leaveRequest.reason}
-                onChange={(e) => setLeaveRequest({...leaveRequest, reason: e.target.value})}
+                onChange={e => setLeaveRequest({ ...leaveRequest, reason: e.target.value })}
               />
               <Button onClick={submitLeaveRequest} className="w-full">
                 Enviar Solicitação
@@ -354,11 +359,20 @@ export const EmployeePortal: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {achievements.map((achievement) => (
-                  <div key={achievement.id} className={`p-4 border rounded-lg ${achievement.earned ? "bg-green-50 border-green-200" : "bg-gray-50"}`}>
+                {achievements.map(achievement => (
+                  <div
+                    key={achievement.id}
+                    className={`p-4 border rounded-lg ${achievement.earned ? "bg-green-50 border-green-200" : "bg-gray-50"}`}
+                  >
                     <div className="flex items-start space-x-3">
-                      <div className={`p-2 rounded-full ${achievement.earned ? "bg-green-100 text-green-600" : "bg-gray-100 text-muted-foreground"}`}>
-                        {achievement.earned ? <CheckCircle className="h-5 w-5" /> : <Award className="h-5 w-5" />}
+                      <div
+                        className={`p-2 rounded-full ${achievement.earned ? "bg-green-100 text-green-600" : "bg-gray-100 text-muted-foreground"}`}
+                      >
+                        {achievement.earned ? (
+                          <CheckCircle className="h-5 w-5" />
+                        ) : (
+                          <Award className="h-5 w-5" />
+                        )}
                       </div>
                       <div className="flex-1">
                         <h3 className="font-medium">{achievement.title}</h3>
@@ -384,9 +398,7 @@ export const EmployeePortal: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Documentos Pessoais</CardTitle>
-              <CardDescription>
-                Gerencie seus documentos e certificados
-              </CardDescription>
+              <CardDescription>Gerencie seus documentos e certificados</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
@@ -396,14 +408,17 @@ export const EmployeePortal: React.FC = () => {
                 </p>
                 <Button variant="outline">Selecionar Arquivos</Button>
               </div>
-              
+
               <div className="space-y-2">
                 {[
                   { name: "Certificado STCW.pdf", date: "2024-01-10", status: "verified" },
                   { name: "Carteira de Trabalho.pdf", date: "2024-01-08", status: "pending" },
-                  { name: "Exame Médico.pdf", date: "2024-01-05", status: "verified" }
+                  { name: "Exame Médico.pdf", date: "2024-01-05", status: "verified" },
                 ].map((doc, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div className="flex items-center space-x-3">
                       <FileText className="h-5 w-5 text-blue-500" />
                       <div>
@@ -432,9 +447,7 @@ export const EmployeePortal: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Dossiê do Tripulante</CardTitle>
-              <CardDescription>
-                Visualize e gerencie suas informações de tripulante
-              </CardDescription>
+              <CardDescription>Visualize e gerencie suas informações de tripulante</CardDescription>
             </CardHeader>
             <CardContent>
               <EmployeeDossierSummary />
@@ -446,9 +459,7 @@ export const EmployeePortal: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Feedback e Avaliações</CardTitle>
-              <CardDescription>
-                Visualize avaliações e forneça feedback
-              </CardDescription>
+              <CardDescription>Visualize avaliações e forneça feedback</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -479,7 +490,8 @@ export const EmployeePortal: React.FC = () => {
                 <CardContent className="p-4">
                   <h3 className="font-medium mb-3">Comentário mais recente:</h3>
                   <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground">
-                    "Excelente desempenho no projeto Nautilus One. Demonstrou grande capacidade de resolver problemas complexos e colaborar efetivamente com a equipe."
+                    "Excelente desempenho no projeto Nautilus One. Demonstrou grande capacidade de
+                    resolver problemas complexos e colaborar efetivamente com a equipe."
                   </blockquote>
                   <div className="text-sm text-muted-foreground mt-2">
                     - Supervisor, 15 de Janeiro de 2024

@@ -1,17 +1,28 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  UserPlus, 
-  Search, 
+import {
+  UserPlus,
+  Search,
   Filter,
-  Users,
   MapPin,
   Phone,
   Mail,
@@ -20,7 +31,7 @@ import {
   Award,
   Calendar,
   Edit,
-  Trash2
+  Trash2,
 } from "lucide-react";
 
 interface Employee {
@@ -54,7 +65,7 @@ const mockEmployees: Employee[] = [
     certifications: ["STCW Basic Safety", "DP Certificate", "Leadership"],
     rating: 4.8,
     salary: 12000,
-    manager: "Carlos Santos"
+    manager: "Carlos Santos",
   },
   {
     id: "002",
@@ -68,7 +79,7 @@ const mockEmployees: Employee[] = [
     status: "travel",
     certifications: ["IATA Certified", "Corporate Travel", "GDS Expert"],
     rating: 4.6,
-    salary: 8500
+    salary: 8500,
   },
   {
     id: "003",
@@ -82,7 +93,7 @@ const mockEmployees: Employee[] = [
     status: "vacation",
     certifications: ["HR Management", "Recruitment Specialist"],
     rating: 4.9,
-    salary: 7000
+    salary: 7000,
   },
   {
     id: "004",
@@ -96,8 +107,8 @@ const mockEmployees: Employee[] = [
     status: "active",
     certifications: ["Hotel Management", "Revenue Management", "Customer Service"],
     rating: 4.7,
-    salary: 9000
-  }
+    salary: 9000,
+  },
 ];
 
 export const EmployeeManagement = () => {
@@ -119,15 +130,20 @@ export const EmployeeManagement = () => {
     status: "active",
     certifications: [],
     rating: 4.0,
-    salary: 0
+    salary: 0,
   });
 
   const handleCreateEmployee = () => {
-    if (!newEmployee.name || !newEmployee.position || !newEmployee.department || !newEmployee.email) {
+    if (
+      !newEmployee.name ||
+      !newEmployee.position ||
+      !newEmployee.department ||
+      !newEmployee.email
+    ) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -141,10 +157,10 @@ export const EmployeeManagement = () => {
       phone: newEmployee.phone || "",
       location: newEmployee.location || "",
       startDate: new Date().toISOString().split("T")[0],
-      status: newEmployee.status as Employee["status"] || "active",
+      status: (newEmployee.status as Employee["status"]) || "active",
       certifications: newEmployee.certifications || [],
       rating: newEmployee.rating || 4.0,
-      salary: newEmployee.salary || 0
+      salary: newEmployee.salary || 0,
     };
 
     setEmployees(prev => [...prev, employee]);
@@ -158,10 +174,10 @@ export const EmployeeManagement = () => {
       status: "active",
       certifications: [],
       rating: 4.0,
-      salary: 0
+      salary: 0,
     });
     setIsCreatingEmployee(false);
-    
+
     toast({
       title: "Funcionário criado",
       description: `${employee.name} foi adicionado ao sistema`,
@@ -178,20 +194,22 @@ export const EmployeeManagement = () => {
   };
 
   const handleStatusChange = (employeeId: string, newStatus: Employee["status"]) => {
-    setEmployees(prev => prev.map(emp => 
-      emp.id === employeeId ? { ...emp, status: newStatus } : emp
-    ));
+    setEmployees(prev =>
+      prev.map(emp => (emp.id === employeeId ? { ...emp, status: newStatus } : emp))
+    );
     toast({
       title: "Status atualizado",
-      description: "Status do funcionário foi alterado com sucesso"
+      description: "Status do funcionário foi alterado com sucesso",
     });
   };
 
   const filteredEmployees = employees.filter(employee => {
-    const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         employee.department.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
+    const matchesSearch =
+      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.department.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDepartment =
+      selectedDepartment === "all" || employee.department === selectedDepartment;
     const matchesStatus = selectedStatus === "all" || employee.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
   });
@@ -200,21 +218,31 @@ export const EmployeeManagement = () => {
 
   const getStatusColor = (status: Employee["status"]) => {
     switch (status) {
-    case "active": return "bg-green-100 text-green-800 border-green-200";
-    case "vacation": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    case "travel": return "bg-blue-100 text-blue-800 border-blue-200";
-    case "inactive": return "bg-secondary text-secondary-foreground border-border";
-    default: return "bg-secondary text-secondary-foreground border-border";
+      case "active":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "vacation":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "travel":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "inactive":
+        return "bg-secondary text-secondary-foreground border-border";
+      default:
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getStatusLabel = (status: Employee["status"]) => {
     switch (status) {
-    case "active": return "Ativo";
-    case "vacation": return "Férias";
-    case "travel": return "Viagem";
-    case "inactive": return "Inativo";
-    default: return "N/A";
+      case "active":
+        return "Ativo";
+      case "vacation":
+        return "Férias";
+      case "travel":
+        return "Viagem";
+      case "inactive":
+        return "Inativo";
+      default:
+        return "N/A";
     }
   };
 
@@ -241,26 +269,35 @@ export const EmployeeManagement = () => {
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">Nome *</Label>
+                <Label htmlFor="name" className="text-right">
+                  Nome *
+                </Label>
                 <Input
                   id="name"
                   value={newEmployee.name || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={e => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="position" className="text-right">Cargo *</Label>
+                <Label htmlFor="position" className="text-right">
+                  Cargo *
+                </Label>
                 <Input
                   id="position"
                   value={newEmployee.position || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, position: e.target.value }))}
+                  onChange={e => setNewEmployee(prev => ({ ...prev, position: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="department" className="text-right">Departamento *</Label>
-                <Select value={newEmployee.department || ""} onValueChange={(value) => setNewEmployee(prev => ({ ...prev, department: value }))}>
+                <Label htmlFor="department" className="text-right">
+                  Departamento *
+                </Label>
+                <Select
+                  value={newEmployee.department || ""}
+                  onValueChange={value => setNewEmployee(prev => ({ ...prev, department: value }))}
+                >
                   <SelectTrigger className="col-span-3">
                     <SelectValue placeholder="Selecione o departamento" />
                   </SelectTrigger>
@@ -275,40 +312,50 @@ export const EmployeeManagement = () => {
                 </Select>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="email" className="text-right">Email *</Label>
+                <Label htmlFor="email" className="text-right">
+                  Email *
+                </Label>
                 <Input
                   id="email"
                   type="email"
                   value={newEmployee.email || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, email: e.target.value }))}
+                  onChange={e => setNewEmployee(prev => ({ ...prev, email: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="phone" className="text-right">Telefone</Label>
+                <Label htmlFor="phone" className="text-right">
+                  Telefone
+                </Label>
                 <Input
                   id="phone"
                   value={newEmployee.phone || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, phone: e.target.value }))}
+                  onChange={e => setNewEmployee(prev => ({ ...prev, phone: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="location" className="text-right">Localização</Label>
+                <Label htmlFor="location" className="text-right">
+                  Localização
+                </Label>
                 <Input
                   id="location"
                   value={newEmployee.location || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, location: e.target.value }))}
+                  onChange={e => setNewEmployee(prev => ({ ...prev, location: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="salary" className="text-right">Salário (R$)</Label>
+                <Label htmlFor="salary" className="text-right">
+                  Salário (R$)
+                </Label>
                 <Input
                   id="salary"
                   type="number"
                   value={newEmployee.salary || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, salary: parseFloat(e.target.value) || 0 }))}
+                  onChange={e =>
+                    setNewEmployee(prev => ({ ...prev, salary: parseFloat(e.target.value) || 0 }))
+                  }
                   className="col-span-3"
                 />
               </div>
@@ -317,9 +364,7 @@ export const EmployeeManagement = () => {
               <Button variant="outline" onClick={() => setIsCreatingEmployee(false)}>
                 Cancelar
               </Button>
-              <Button onClick={handleCreateEmployee}>
-                Criar Funcionário
-              </Button>
+              <Button onClick={handleCreateEmployee}>Criar Funcionário</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -329,11 +374,14 @@ export const EmployeeManagement = () => {
       <Card className="p-6">
         <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
+            <Search
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+              size={20}
+            />
             <Input
               placeholder="Buscar funcionários..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -346,7 +394,9 @@ export const EmployeeManagement = () => {
               <SelectContent>
                 <SelectItem value="all">Todos os Departamentos</SelectItem>
                 {departments.map(dept => (
-                  <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                  <SelectItem key={dept} value={dept}>
+                    {dept}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -368,14 +418,17 @@ export const EmployeeManagement = () => {
 
       {/* Employees Grid */}
       <div className="grid gap-4">
-        {filteredEmployees.map((employee) => (
+        {filteredEmployees.map(employee => (
           <Card key={employee.id} className="hover:shadow-lg transition-all">
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-azure-50 font-bold text-lg">
-                      {employee.name.split(" ").map(n => n[0]).join("")}
+                      {employee.name
+                        .split(" ")
+                        .map(n => n[0])
+                        .join("")}
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold">{employee.name}</h3>
@@ -385,7 +438,7 @@ export const EmployeeManagement = () => {
                       </Badge>
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-muted-foreground">
@@ -416,7 +469,9 @@ export const EmployeeManagement = () => {
                         <Star className="w-4 h-4 text-yellow-500" />
                         <span className="font-medium">{employee.rating}</span>
                         <Award className="w-4 h-4 text-blue-500 ml-2" />
-                        <span className="text-muted-foreground">{employee.certifications.length} cert.</span>
+                        <span className="text-muted-foreground">
+                          {employee.certifications.length} cert.
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -431,7 +486,12 @@ export const EmployeeManagement = () => {
                 </div>
 
                 <div className="flex flex-col gap-2 mt-4 md:mt-0">
-                  <Select value={employee.status} onValueChange={(value) => handleStatusChange(employee.id, value as Employee["status"])}>
+                  <Select
+                    value={employee.status}
+                    onValueChange={value =>
+                      handleStatusChange(employee.id, value as Employee["status"])
+                    }
+                  >
                     <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>
@@ -443,8 +503,8 @@ export const EmployeeManagement = () => {
                     </SelectContent>
                   </Select>
                   <div className="flex gap-2">
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       variant="outline"
                       onClick={() => {
                         setSelectedEmployee(employee);
@@ -454,8 +514,8 @@ export const EmployeeManagement = () => {
                       <Edit className="w-4 h-4 mr-1" />
                       Editar
                     </Button>
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       variant="outline"
                       onClick={() => handleRemoveEmployee(employee.id)}
                     >
@@ -480,7 +540,10 @@ export const EmployeeManagement = () => {
             <div className="space-y-6 py-4">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-azure-50 font-bold text-xl">
-                  {selectedEmployee.name.split(" ").map(n => n[0]).join("")}
+                  {selectedEmployee.name
+                    .split(" ")
+                    .map(n => n[0])
+                    .join("")}
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold">{selectedEmployee.name}</h3>
@@ -490,7 +553,7 @@ export const EmployeeManagement = () => {
                   </Badge>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label className="text-sm font-medium">Departamento</Label>
@@ -528,7 +591,9 @@ export const EmployeeManagement = () => {
                   <Label className="text-sm font-medium">Certificações</Label>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {selectedEmployee.certifications.map((cert, index) => (
-                      <Badge key={index} variant="secondary">{cert}</Badge>
+                      <Badge key={index} variant="secondary">
+                        {cert}
+                      </Badge>
                     ))}
                   </div>
                 </div>

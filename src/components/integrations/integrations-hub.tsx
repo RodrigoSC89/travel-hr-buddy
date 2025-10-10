@@ -4,21 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Globe, 
-  Zap, 
-  CheckCircle, 
-  AlertTriangle, 
-  Settings, 
+import {
+  Globe,
+  Zap,
+  CheckCircle,
+  AlertTriangle,
+  Settings,
   Plus,
   ExternalLink,
   Database,
-  Cloud,
-  Smartphone,
-  Mail,
   MessageSquare,
   CreditCard,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -45,7 +42,7 @@ export const IntegrationsHub: React.FC = () => {
       status: "connected",
       icon: Database,
       isEnabled: true,
-      lastSync: "2024-01-15T10:30:00Z"
+      lastSync: "2024-01-15T10:30:00Z",
     },
     {
       id: "2",
@@ -54,7 +51,7 @@ export const IntegrationsHub: React.FC = () => {
       category: "communication",
       status: "disconnected",
       icon: MessageSquare,
-      isEnabled: false
+      isEnabled: false,
     },
     {
       id: "3",
@@ -64,7 +61,7 @@ export const IntegrationsHub: React.FC = () => {
       status: "connected",
       icon: BarChart3,
       isEnabled: true,
-      lastSync: "2024-01-15T11:00:00Z"
+      lastSync: "2024-01-15T11:00:00Z",
     },
     {
       id: "4",
@@ -73,7 +70,7 @@ export const IntegrationsHub: React.FC = () => {
       category: "payment",
       status: "error",
       icon: CreditCard,
-      isEnabled: false
+      isEnabled: false,
     },
     {
       id: "5",
@@ -83,48 +80,62 @@ export const IntegrationsHub: React.FC = () => {
       status: "connected",
       icon: Zap,
       isEnabled: true,
-      lastSync: "2024-01-15T10:45:00Z"
-    }
+      lastSync: "2024-01-15T10:45:00Z",
+    },
   ]);
 
   const { toast } = useToast();
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "connected": return "text-green-600 bg-green-100";
-    case "disconnected": return "text-muted-foreground bg-muted";
-    case "error": return "text-destructive bg-destructive/10";
-    default: return "text-muted-foreground bg-muted";
+      case "connected":
+        return "text-green-600 bg-green-100";
+      case "disconnected":
+        return "text-muted-foreground bg-muted";
+      case "error":
+        return "text-destructive bg-destructive/10";
+      default:
+        return "text-muted-foreground bg-muted";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-    case "connected": return "Conectado";
-    case "disconnected": return "Desconectado";
-    case "error": return "Erro";
-    default: return "Desconhecido";
+      case "connected":
+        return "Conectado";
+      case "disconnected":
+        return "Desconectado";
+      case "error":
+        return "Erro";
+      default:
+        return "Desconhecido";
     }
   };
 
   const getCategoryLabel = (category: string) => {
     switch (category) {
-    case "data": return "Dados";
-    case "communication": return "Comunicação";
-    case "payment": return "Pagamentos";
-    case "analytics": return "Analytics";
-    case "automation": return "Automação";
-    default: return "Outros";
+      case "data":
+        return "Dados";
+      case "communication":
+        return "Comunicação";
+      case "payment":
+        return "Pagamentos";
+      case "analytics":
+        return "Analytics";
+      case "automation":
+        return "Automação";
+      default:
+        return "Outros";
     }
   };
 
   const handleToggleIntegration = (id: string) => {
-    setIntegrations(prev => prev.map(integration => 
-      integration.id === id 
-        ? { ...integration, isEnabled: !integration.isEnabled }
-        : integration
-    ));
-    
+    setIntegrations(prev =>
+      prev.map(integration =>
+        integration.id === id ? { ...integration, isEnabled: !integration.isEnabled } : integration
+      )
+    );
+
     const integration = integrations.find(i => i.id === id);
     toast({
       title: "Integração Atualizada",
@@ -224,7 +235,7 @@ export const IntegrationsHub: React.FC = () => {
 
         <TabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {integrations.map((integration) => {
+            {integrations.map(integration => {
               const Icon = integration.icon;
               return (
                 <Card key={integration.id}>
@@ -234,7 +245,7 @@ export const IntegrationsHub: React.FC = () => {
                         <Icon className="h-5 w-5 text-primary" />
                         <CardTitle className="text-lg">{integration.name}</CardTitle>
                       </div>
-                      <Switch 
+                      <Switch
                         checked={integration.isEnabled}
                         onCheckedChange={() => handleToggleIntegration(integration.id)}
                       />
@@ -247,20 +258,19 @@ export const IntegrationsHub: React.FC = () => {
                         <Badge className={getStatusColor(integration.status)}>
                           {getStatusLabel(integration.status)}
                         </Badge>
-                        <Badge variant="outline">
-                          {getCategoryLabel(integration.category)}
-                        </Badge>
+                        <Badge variant="outline">{getCategoryLabel(integration.category)}</Badge>
                       </div>
-                      
+
                       {integration.lastSync && (
                         <p className="text-xs text-muted-foreground">
-                          Última sincronização: {new Date(integration.lastSync).toLocaleString("pt-BR")}
+                          Última sincronização:{" "}
+                          {new Date(integration.lastSync).toLocaleString("pt-BR")}
                         </p>
                       )}
-                      
+
                       <div className="flex gap-2">
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           onClick={() => handleTestConnection(integration.id)}
                           className="flex-1"
@@ -284,7 +294,7 @@ export const IntegrationsHub: React.FC = () => {
 
         <TabsContent value="data" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {getIntegrationsByCategory("data").map((integration) => {
+            {getIntegrationsByCategory("data").map(integration => {
               const Icon = integration.icon;
               return (
                 <Card key={integration.id}>
@@ -316,7 +326,7 @@ export const IntegrationsHub: React.FC = () => {
 
         <TabsContent value="communication" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {getIntegrationsByCategory("communication").map((integration) => {
+            {getIntegrationsByCategory("communication").map(integration => {
               const Icon = integration.icon;
               return (
                 <Card key={integration.id}>
@@ -348,7 +358,7 @@ export const IntegrationsHub: React.FC = () => {
 
         <TabsContent value="analytics" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {getIntegrationsByCategory("analytics").map((integration) => {
+            {getIntegrationsByCategory("analytics").map(integration => {
               const Icon = integration.icon;
               return (
                 <Card key={integration.id}>
@@ -382,9 +392,7 @@ export const IntegrationsHub: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Configurações Globais</CardTitle>
-              <CardDescription>
-                Gerencie as configurações gerais de integrações
-              </CardDescription>
+              <CardDescription>Gerencie as configurações gerais de integrações</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
@@ -396,7 +404,7 @@ export const IntegrationsHub: React.FC = () => {
                 </div>
                 <Switch defaultChecked />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Notificações de erro</p>
@@ -406,7 +414,7 @@ export const IntegrationsHub: React.FC = () => {
                 </div>
                 <Switch defaultChecked />
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Logs detalhados</p>

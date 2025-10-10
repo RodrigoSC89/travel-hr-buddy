@@ -4,16 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Bot, 
-  User, 
-  Send, 
-  Mic, 
-  MicOff, 
-  Lightbulb,
-  Settings,
-  Sparkles
-} from "lucide-react";
+import { Bot, User, Send, Mic, MicOff, Lightbulb, Settings, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -81,7 +72,7 @@ interface AIAssistantProps {
 export const AIAssistant: React.FC<AIAssistantProps> = ({
   context = "general",
   module = "dashboard",
-  onAction
+  onAction,
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -111,7 +102,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         toast({
           title: "Erro no reconhecimento de voz",
           description: "Não foi possível capturar o áudio",
-          variant: "destructive"
+          variant: "destructive",
         });
       };
 
@@ -123,20 +114,22 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
     }
 
     // Add welcome message
-    setMessages([{
-      id: "1",
-      type: "assistant",
-      content: `Olá! Sou seu assistente inteligente para o módulo ${module}. Como posso ajudá-lo hoje?`,
-      timestamp: new Date(),
-      metadata: {
-        suggestions: [
-          "Gerar relatório de desempenho",
-          "Analisar métricas do sistema",
-          "Sugerir otimizações",
-          "Verificar notificações"
-        ]
-      }
-    }]);
+    setMessages([
+      {
+        id: "1",
+        type: "assistant",
+        content: `Olá! Sou seu assistente inteligente para o módulo ${module}. Como posso ajudá-lo hoje?`,
+        timestamp: new Date(),
+        metadata: {
+          suggestions: [
+            "Gerar relatório de desempenho",
+            "Analisar métricas do sistema",
+            "Sugerir otimizações",
+            "Verificar notificações",
+          ],
+        },
+      },
+    ]);
   }, [module, toast]);
 
   useEffect(() => {
@@ -152,7 +145,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       toast({
         title: "Recurso não disponível",
         description: "Reconhecimento de voz não é suportado neste navegador",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -173,7 +166,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       id: Date.now().toString(),
       type: "user",
       content: input.trim(),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -188,8 +181,8 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           context,
           module,
           user_id: user?.id,
-          conversation_history: messages.slice(-5) // Last 5 messages for context
-        }
+          conversation_history: messages.slice(-5), // Last 5 messages for context
+        },
       });
 
       if (error) throw error;
@@ -199,7 +192,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         type: "assistant",
         content: data.response,
         timestamp: new Date(),
-        metadata: data.metadata
+        metadata: data.metadata,
       };
 
       setMessages(prev => [...prev, assistantMessage]);
@@ -212,20 +205,19 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           }
         });
       }
-
     } catch (error) {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: "system",
         content: "Desculpe, ocorreu um erro ao processar sua mensagem. Tente novamente.",
-        timestamp: new Date()
+        timestamp: new Date(),
       };
       setMessages(prev => [...prev, errorMessage]);
-      
+
       toast({
         title: "Erro no assistente",
         description: "Não foi possível processar sua mensagem",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -240,7 +232,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
     if (onAction) {
       onAction(action, data);
     }
-    
+
     toast({
       title: "Ação executada",
       description: `${action} foi executado com sucesso`,
@@ -253,26 +245,41 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
     return (
       <div key={message.id} className={`flex gap-3 mb-4 ${isUser ? "flex-row-reverse" : ""}`}>
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-          isUser ? "bg-primary text-primary-foreground" : 
-            isSystem ? "bg-muted text-muted-foreground" : "bg-accent text-accent-foreground"
-        }`}>
-          {isUser ? <User className="w-4 h-4" /> : 
-            isSystem ? <Settings className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center ${
+            isUser
+              ? "bg-primary text-primary-foreground"
+              : isSystem
+                ? "bg-muted text-muted-foreground"
+                : "bg-accent text-accent-foreground"
+          }`}
+        >
+          {isUser ? (
+            <User className="w-4 h-4" />
+          ) : isSystem ? (
+            <Settings className="w-4 h-4" />
+          ) : (
+            <Bot className="w-4 h-4" />
+          )}
         </div>
-        
+
         <div className={`flex-1 ${isUser ? "text-right" : ""}`}>
-          <div className={`inline-block p-3 rounded-lg max-w-[80%] ${
-            isUser ? "bg-primary text-primary-foreground" : 
-              isSystem ? "bg-muted text-muted-foreground" : "bg-accent text-accent-foreground"
-          }`}>
+          <div
+            className={`inline-block p-3 rounded-lg max-w-[80%] ${
+              isUser
+                ? "bg-primary text-primary-foreground"
+                : isSystem
+                  ? "bg-muted text-muted-foreground"
+                  : "bg-accent text-accent-foreground"
+            }`}
+          >
             <p className="text-sm">{message.content}</p>
           </div>
-          
+
           <p className="text-xs text-muted-foreground mt-1">
-            {message.timestamp.toLocaleTimeString("pt-BR", { 
-              hour: "2-digit", 
-              minute: "2-digit" 
+            {message.timestamp.toLocaleTimeString("pt-BR", {
+              hour: "2-digit",
+              minute: "2-digit",
             })}
           </p>
 
@@ -326,7 +333,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           </Badge>
         </CardTitle>
       </CardHeader>
-      
+
       <CardContent className="flex-1 flex flex-col">
         <ScrollArea className="flex-1 pr-4">
           {messages.map(renderMessage)}
@@ -352,12 +359,12 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         <div className="flex gap-2 pt-4 border-t">
           <Input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             placeholder="Digite sua mensagem ou use o microfone..."
-            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+            onKeyPress={e => e.key === "Enter" && handleSendMessage()}
             className="flex-1"
           />
-          
+
           <Button
             variant="outline"
             size="icon"
@@ -366,12 +373,8 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           >
             {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </Button>
-          
-          <Button 
-            onClick={handleSendMessage}
-            disabled={!input.trim() || isLoading}
-            size="icon"
-          >
+
+          <Button onClick={handleSendMessage} disabled={!input.trim() || isLoading} size="icon">
             <Send className="w-4 h-4" />
           </Button>
         </div>

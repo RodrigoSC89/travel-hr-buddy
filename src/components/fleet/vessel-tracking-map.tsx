@@ -41,7 +41,7 @@ const VesselTrackingMap = () => {
         toast({
           title: "Erro de Configuração",
           description: "Token do Mapbox não configurado",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     };
@@ -54,7 +54,7 @@ const VesselTrackingMap = () => {
 
     // Initialize map
     mapboxgl.accessToken = mapboxToken;
-    
+
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/satellite-streets-v12",
@@ -97,7 +97,7 @@ const VesselTrackingMap = () => {
           status: "active",
           last_update: new Date().toISOString(),
           captain: "Capitão Silva",
-          destination: "Porto de Santos"
+          destination: "Porto de Santos",
         },
         {
           id: "2",
@@ -110,20 +110,20 @@ const VesselTrackingMap = () => {
           status: "anchored",
           last_update: new Date().toISOString(),
           captain: "Capitão Costa",
-          destination: "Porto do Rio de Janeiro"
+          destination: "Porto do Rio de Janeiro",
         },
         {
           id: "3",
           name: "Pacific Star",
           type: "Container",
           latitude: -8.0476,
-          longitude: -34.8770,
+          longitude: -34.877,
           course: 270,
           speed: 15.2,
           status: "active",
           last_update: new Date().toISOString(),
           captain: "Capitão Oliveira",
-          destination: "Porto de Recife"
+          destination: "Porto de Recife",
         },
         {
           id: "4",
@@ -136,8 +136,8 @@ const VesselTrackingMap = () => {
           status: "maintenance",
           last_update: new Date().toISOString(),
           captain: "Capitão Santos",
-          destination: "Porto de Paranaguá"
-        }
+          destination: "Porto de Paranaguá",
+        },
       ];
 
       setVessels(mockVessels);
@@ -149,7 +149,7 @@ const VesselTrackingMap = () => {
       toast({
         title: "Erro",
         description: "Falha ao carregar dados das embarcações",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -180,7 +180,7 @@ const VesselTrackingMap = () => {
         ${getVesselMarkerStyle(vessel.status)}
         transform: rotate(${vessel.course}deg);
       `;
-      
+
       el.innerHTML = "⛵";
       el.title = vessel.name;
 
@@ -189,28 +189,26 @@ const VesselTrackingMap = () => {
         map.current?.flyTo({
           center: [vessel.longitude, vessel.latitude],
           zoom: 10,
-          duration: 2000
+          duration: 2000,
         });
       });
 
-      new mapboxgl.Marker(el)
-        .setLngLat([vessel.longitude, vessel.latitude])
-        .addTo(map.current!);
+      new mapboxgl.Marker(el).setLngLat([vessel.longitude, vessel.latitude]).addTo(map.current!);
     });
   };
 
   const getVesselMarkerStyle = (status: string) => {
     switch (status) {
-    case "active":
-      return "background-color: #10b981;";
-    case "anchored":
-      return "background-color: #f59e0b;";
-    case "maintenance":
-      return "background-color: #ef4444;";
-    case "emergency":
-      return "background-color: #dc2626; animation: pulse 1s infinite;";
-    default:
-      return "background-color: #6b7280;";
+      case "active":
+        return "background-color: #10b981;";
+      case "anchored":
+        return "background-color: #f59e0b;";
+      case "maintenance":
+        return "background-color: #ef4444;";
+      case "emergency":
+        return "background-color: #dc2626; animation: pulse 1s infinite;";
+      default:
+        return "background-color: #6b7280;";
     }
   };
 
@@ -219,7 +217,7 @@ const VesselTrackingMap = () => {
       active: { label: "Ativa", variant: "default" as const, color: "bg-green-500" },
       anchored: { label: "Ancorada", variant: "secondary" as const, color: "bg-yellow-500" },
       maintenance: { label: "Manutenção", variant: "destructive" as const, color: "bg-red-500" },
-      emergency: { label: "Emergência", variant: "destructive" as const, color: "bg-red-600" }
+      emergency: { label: "Emergência", variant: "destructive" as const, color: "bg-red-600" },
     };
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
@@ -231,7 +229,7 @@ const VesselTrackingMap = () => {
       map.current.flyTo({
         center: [vessel.longitude, vessel.latitude],
         zoom: 12,
-        duration: 2000
+        duration: 2000,
       });
       setSelectedVessel(vessel);
     }
@@ -250,8 +248,8 @@ const VesselTrackingMap = () => {
           </CardHeader>
           <CardContent className="space-y-3">
             {vessels.map(vessel => (
-              <Card 
-                key={vessel.id} 
+              <Card
+                key={vessel.id}
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   selectedVessel?.id === vessel.id ? "ring-2 ring-primary" : ""
                 }`}
@@ -295,7 +293,7 @@ const VesselTrackingMap = () => {
                 <h3 className="font-medium">{selectedVessel.name}</h3>
                 <p className="text-sm text-muted-foreground">{selectedVessel.type}</p>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div>
                   <span className="text-muted-foreground">Capitão:</span>
@@ -324,7 +322,9 @@ const VesselTrackingMap = () => {
 
               <div>
                 <span className="text-muted-foreground">Última atualização:</span>
-                <p className="text-sm">{new Date(selectedVessel.last_update).toLocaleString("pt-BR")}</p>
+                <p className="text-sm">
+                  {new Date(selectedVessel.last_update).toLocaleString("pt-BR")}
+                </p>
               </div>
 
               <div className="space-y-2 pt-2">
@@ -345,7 +345,7 @@ const VesselTrackingMap = () => {
       {/* Map */}
       <div className="lg:col-span-3 relative">
         <div ref={mapContainer} className="w-full h-full rounded-lg" />
-        
+
         {/* Map Controls */}
         <div className="absolute top-4 left-4 space-y-2">
           <Card className="p-2">

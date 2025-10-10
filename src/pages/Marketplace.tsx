@@ -4,7 +4,6 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { IntegrationMarketplace } from "@/components/strategic/IntegrationMarketplace";
 import { Store } from "lucide-react";
 
-
 const Marketplace = () => {
   return (
     <SidebarProvider>
@@ -17,14 +16,11 @@ const Marketplace = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold">Marketplace</h1>
-              <p className="text-muted-foreground">
-                Integrações e extensões para o Nautilus
-              </p>
+              <p className="text-muted-foreground">Integrações e extensões para o Nautilus</p>
             </div>
           </div>
           <IntegrationMarketplace />
         </main>
-        
       </div>
     </SidebarProvider>
   );

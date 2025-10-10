@@ -23,7 +23,7 @@ export const modulePermissions: ModuleAccess[] = [
 ];
 
 export function canAccess(slug: string, role: Role): boolean {
-  const mod = modulePermissions.find((m) => m.slug === slug);
+  const mod = modulePermissions.find(m => m.slug === slug);
   if (!mod) return true; // módulo não registrado = público
   return mod.roles.includes(role);
 }

@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  Ship, 
-  Brain, 
-  Bell, 
-  BarChart2, 
+import {
+  LayoutDashboard,
+  Ship,
+  Brain,
+  Bell,
+  BarChart2,
   Folder,
   ChevronDown,
   ChevronRight,
   Menu,
-  X
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -119,10 +119,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
 
       {/* Overlay for mobile */}
       {isMobileOpen && (
-        <div
-          className="lg:hidden fixed inset-0 bg-black/50 z-40"
-          onClick={closeMobileMenu}
-        />
+        <div className="lg:hidden fixed inset-0 bg-black/50 z-40" onClick={closeMobileMenu} />
       )}
 
       {/* Sidebar */}
@@ -142,7 +139,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
         </div>
 
         <nav className="space-y-1 p-2">
-          {groupedModules.map((group) => (
+          {groupedModules.map(group => (
             <div key={group.title}>
               <button
                 className={cn(
@@ -161,10 +158,10 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
                   <ChevronRight className="w-4 h-4" />
                 )}
               </button>
-              
+
               {openSection === group.title && (
                 <div className="ml-4 mt-1 space-y-0.5 border-l border-zinc-700 pl-2">
-                  {group.items.map((item) => (
+                  {group.items.map(item => (
                     <Link
                       to={item.path}
                       key={item.path}

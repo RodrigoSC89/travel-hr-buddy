@@ -11,9 +11,7 @@ const AdvancedAuth = () => {
         </div>
         <div>
           <h1 className="text-3xl font-bold">Autenticação Avançada</h1>
-          <p className="text-muted-foreground">
-                Sistema completo de segurança
-          </p>
+          <p className="text-muted-foreground">Sistema completo de segurança</p>
         </div>
       </div>
       <AdvancedAuthenticationSystem />

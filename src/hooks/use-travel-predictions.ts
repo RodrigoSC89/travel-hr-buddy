@@ -43,92 +43,98 @@ export const useTravelPredictions = () => {
   const [loading, setLoading] = useState(false);
   const [predictions, setPredictions] = useState<PredictionData | null>(null);
 
-  const generatePrediction = useCallback(async (type: "flight" | "hotel", route: string) => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("travel-predictive-analysis", {
-        body: {
-          action: "generate_predictions",
-          type,
-          route
-        }
-      });
+  const generatePrediction = useCallback(
+    async (type: "flight" | "hotel", route: string) => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase.functions.invoke("travel-predictive-analysis", {
+          body: {
+            action: "generate_predictions",
+            type,
+            route,
+          },
+        });
 
-      if (error) throw error;
-      
-      setPredictions(data.data);
-      return data.data;
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao gerar predições. Tente novamente.",
-        variant: "destructive"
-      });
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [toast]);
+        if (error) throw error;
+
+        setPredictions(data.data);
+        return data.data;
+      } catch (error) {
+        toast({
+          title: "Erro",
+          description: "Erro ao gerar predições. Tente novamente.",
+          variant: "destructive",
+        });
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [toast]
+  );
 
   const storePriceData = useCallback(async (priceData: PriceData) => {
     try {
       const { error } = await supabase.functions.invoke("travel-predictive-analysis", {
         body: {
           action: "store_price_data",
-          data: priceData
-        }
+          data: priceData,
+        },
       });
 
       if (error) throw error;
-      
+
       return { success: true };
     } catch (error) {
       return { success: false, error };
     }
   }, []);
 
-  const createPriceAlert = useCallback(async (alertData: {
-    type: "flight" | "hotel";
-    route: string;
-    targetPrice: number;
-    currentPrice?: number;
-    alertType?: string;
-    travelDate?: string;
-    passengers?: number;
-  }) => {
-    try {
-      const { data: userData } = await supabase.auth.getUser();
-      if (!userData?.user) {
-        throw new Error("Usuário não autenticado");
-      }
-
-      const { error } = await supabase.functions.invoke("travel-predictive-analysis", {
-        body: {
-          action: "create_price_alert",
-          data: {
-            userId: userData.user.id,
-            ...alertData
-          }
+  const createPriceAlert = useCallback(
+    async (alertData: {
+      type: "flight" | "hotel";
+      route: string;
+      targetPrice: number;
+      currentPrice?: number;
+      alertType?: string;
+      travelDate?: string;
+      passengers?: number;
+    }) => {
+      try {
+        const { data: userData } = await supabase.auth.getUser();
+        if (!userData?.user) {
+          throw new Error("Usuário não autenticado");
         }
-      });
 
-      if (error) throw error;
-      
-      toast({
-        title: "Alerta Criado",
-        description: "Você será notificado quando o preço atingir o valor desejado."
-      });
-      
-      return { success: true };
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao criar alerta. Tente novamente.",
-        variant: "destructive"
-      });
-      return { success: false, error };
-    }
-  }, [toast]);
+        const { error } = await supabase.functions.invoke("travel-predictive-analysis", {
+          body: {
+            action: "create_price_alert",
+            data: {
+              userId: userData.user.id,
+              ...alertData,
+            },
+          },
+        });
+
+        if (error) throw error;
+
+        toast({
+          title: "Alerta Criado",
+          description: "Você será notificado quando o preço atingir o valor desejado.",
+        });
+
+        return { success: true };
+      } catch (error) {
+        toast({
+          title: "Erro",
+          description: "Erro ao criar alerta. Tente novamente.",
+          variant: "destructive",
+        });
+        return { success: false, error };
+      }
+    },
+    [toast]
+  );
 
   const getRecommendations = useCallback(async () => {
     try {
@@ -140,12 +146,12 @@ export const useTravelPredictions = () => {
       const { data, error } = await supabase.functions.invoke("travel-predictive-analysis", {
         body: {
           action: "get_recommendations",
-          data: { userId: userData.user.id }
-        }
+          data: { userId: userData.user.id },
+        },
       });
 
       if (error) throw error;
-      
+
       return data.data || [];
     } catch (error) {
       return [];
@@ -158,12 +164,12 @@ export const useTravelPredictions = () => {
         body: {
           action: "analyze_trends",
           type,
-          route
-        }
+          route,
+        },
       });
 
       if (error) throw error;
-      
+
       return data.data;
     } catch (error) {
       return null;
@@ -186,23 +192,30 @@ export const useTravelPredictions = () => {
       demandLevel: predictions.demand_level,
       bestBookingPeriod: {
         start: predictions.best_booking_window_start,
-        end: predictions.best_booking_window_end
+        end: predictions.best_booking_window_end,
       },
-      recommendation: predictions.recommendation
+      recommendation: predictions.recommendation,
     };
   }, []);
 
-  const formatPredictionSummary = useCallback((predictions: PredictionData | null) => {
-    if (!predictions) return "Nenhuma predição disponível";
+  const formatPredictionSummary = useCallback(
+    (predictions: PredictionData | null) => {
+      if (!predictions) return "Nenhuma predição disponível";
 
-    const insights = getInsights(predictions);
-    if (!insights) return "Erro ao processar predição";
+      const insights = getInsights(predictions);
+      if (!insights) return "Erro ao processar predição";
 
-    const trend = predictions.price_trend === "rising" ? "alta" : 
-      predictions.price_trend === "falling" ? "baixa" : "estável";
-    
-    return `Tendência de ${trend} com ${Math.round(insights.confidence * 100)}% de confiança. ${insights.recommendation}`;
-  }, [getInsights]);
+      const trend =
+        predictions.price_trend === "rising"
+          ? "alta"
+          : predictions.price_trend === "falling"
+            ? "baixa"
+            : "estável";
+
+      return `Tendência de ${trend} com ${Math.round(insights.confidence * 100)}% de confiança. ${insights.recommendation}`;
+    },
+    [getInsights]
+  );
 
   return {
     loading,
@@ -213,6 +226,6 @@ export const useTravelPredictions = () => {
     getRecommendations,
     analyzeTrends,
     getInsights,
-    formatPredictionSummary
+    formatPredictionSummary,
   };
 };

@@ -4,15 +4,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { 
-  CheckCircle, 
-  XCircle, 
-  AlertTriangle, 
-  Play, 
+import {
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  Play,
   RefreshCw,
   FileCheck,
   Shield,
-  Activity
+  Activity,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -65,23 +65,68 @@ const SystemAuditor: React.FC = () => {
         status: "pending",
         progress: 0,
         tests: [
-          { id: "auth-1", name: "Login de Usuário", description: "Testar login com credenciais válidas", status: "pending" },
-          { id: "auth-2", name: "Proteção de Rotas", description: "Verificar bloqueio de rotas protegidas", status: "pending" },
-          { id: "auth-3", name: "Controle de Permissões", description: "Testar RBAC por perfil", status: "pending" },
-          { id: "auth-4", name: "Expiração de Sessão", description: "Verificar timeout de sessão", status: "pending" }
-        ]
+          {
+            id: "auth-1",
+            name: "Login de Usuário",
+            description: "Testar login com credenciais válidas",
+            status: "pending",
+          },
+          {
+            id: "auth-2",
+            name: "Proteção de Rotas",
+            description: "Verificar bloqueio de rotas protegidas",
+            status: "pending",
+          },
+          {
+            id: "auth-3",
+            name: "Controle de Permissões",
+            description: "Testar RBAC por perfil",
+            status: "pending",
+          },
+          {
+            id: "auth-4",
+            name: "Expiração de Sessão",
+            description: "Verificar timeout de sessão",
+            status: "pending",
+          },
+        ],
       },
       {
         name: "Módulos Principais",
         status: "pending",
         progress: 0,
         tests: [
-          { id: "mod-1", name: "Dashboard", description: "Carregar dashboard principal", status: "pending" },
-          { id: "mod-2", name: "Gestão de Usuários", description: "CRUD de usuários", status: "pending" },
-          { id: "mod-3", name: "Sistema Marítimo", description: "Funcionalidades navais", status: "pending" },
-          { id: "mod-4", name: "Viagens e Reservas", description: "Busca e booking", status: "pending" },
-          { id: "mod-5", name: "Relatórios", description: "Geração de relatórios", status: "pending" }
-        ]
+          {
+            id: "mod-1",
+            name: "Dashboard",
+            description: "Carregar dashboard principal",
+            status: "pending",
+          },
+          {
+            id: "mod-2",
+            name: "Gestão de Usuários",
+            description: "CRUD de usuários",
+            status: "pending",
+          },
+          {
+            id: "mod-3",
+            name: "Sistema Marítimo",
+            description: "Funcionalidades navais",
+            status: "pending",
+          },
+          {
+            id: "mod-4",
+            name: "Viagens e Reservas",
+            description: "Busca e booking",
+            status: "pending",
+          },
+          {
+            id: "mod-5",
+            name: "Relatórios",
+            description: "Geração de relatórios",
+            status: "pending",
+          },
+        ],
       },
       {
         name: "Integração e IA",
@@ -89,11 +134,26 @@ const SystemAuditor: React.FC = () => {
         progress: 0,
         tests: [
           { id: "ai-1", name: "Assistente IA", description: "Nautilus Copilot", status: "pending" },
-          { id: "ai-2", name: "Análise Preditiva", description: "Previsões de viagem", status: "pending" },
-          { id: "ai-3", name: "OCR Documentos", description: "Análise de checklists", status: "pending" },
-          { id: "ai-4", name: "PEOTRAM IA", description: "Auditoria automática", status: "pending" }
-        ]
-      }
+          {
+            id: "ai-2",
+            name: "Análise Preditiva",
+            description: "Previsões de viagem",
+            status: "pending",
+          },
+          {
+            id: "ai-3",
+            name: "OCR Documentos",
+            description: "Análise de checklists",
+            status: "pending",
+          },
+          {
+            id: "ai-4",
+            name: "PEOTRAM IA",
+            description: "Auditoria automática",
+            status: "pending",
+          },
+        ],
+      },
     ];
     setTestSuites(suites);
   };
@@ -126,10 +186,10 @@ const SystemAuditor: React.FC = () => {
 
       setAuditProgress(100);
       setAuditResults(results);
-      
+
       const criticalIssues = results.filter(r => r.severity === "critical").length;
       const highIssues = results.filter(r => r.severity === "high").length;
-      
+
       if (criticalIssues > 0) {
         toast.error(`Auditoria concluída: ${criticalIssues} problemas críticos encontrados`);
       } else if (highIssues > 0) {
@@ -137,7 +197,6 @@ const SystemAuditor: React.FC = () => {
       } else {
         toast.success("Auditoria concluída: Sistema aprovado para homologação");
       }
-
     } catch (error) {
       toast.error("Erro durante a auditoria do sistema");
     } finally {
@@ -152,7 +211,7 @@ const SystemAuditor: React.FC = () => {
       { path: "/hr", name: "Recursos Humanos" },
       { path: "/maritime", name: "Sistema Marítimo" },
       { path: "/travel", name: "Viagens" },
-      { path: "/reports", name: "Relatórios" }
+      { path: "/reports", name: "Relatórios" },
     ];
 
     const results: AuditResult[] = [];
@@ -162,7 +221,7 @@ const SystemAuditor: React.FC = () => {
         module: module.name,
         status: "success",
         description: "Módulo implementado e funcional",
-        severity: "low"
+        severity: "low",
       });
     }
 
@@ -178,7 +237,7 @@ const SystemAuditor: React.FC = () => {
         module: "Segurança HTTPS",
         status: "success",
         description: "Conexão segura ativa",
-        severity: "low"
+        severity: "low",
       });
     } else {
       results.push({
@@ -186,19 +245,21 @@ const SystemAuditor: React.FC = () => {
         status: "warning",
         description: "Ambiente de desenvolvimento detectado",
         severity: "medium",
-        actionRequired: "Configurar HTTPS em produção"
+        actionRequired: "Configurar HTTPS em produção",
       });
     }
 
     // Verificar autenticação
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session) {
         results.push({
           module: "Sistema de Autenticação",
           status: "success",
           description: "Sessão de usuário válida",
-          severity: "low"
+          severity: "low",
         });
       } else {
         results.push({
@@ -206,7 +267,7 @@ const SystemAuditor: React.FC = () => {
           status: "warning",
           description: "Usuário não autenticado",
           severity: "medium",
-          actionRequired: "Testar com usuário logado"
+          actionRequired: "Testar com usuário logado",
         });
       }
     } catch (error) {
@@ -215,7 +276,7 @@ const SystemAuditor: React.FC = () => {
         status: "error",
         description: "Erro ao verificar autenticação",
         severity: "high",
-        details: String(error)
+        details: String(error),
       });
     }
 
@@ -231,7 +292,7 @@ const SystemAuditor: React.FC = () => {
       module: "Responsividade Mobile",
       status: "success",
       description: `Interface ${isMobile ? "mobile" : "desktop"} otimizada`,
-      severity: "low"
+      severity: "low",
     });
 
     // Verificar performance geral
@@ -239,7 +300,7 @@ const SystemAuditor: React.FC = () => {
       module: "Performance Geral",
       status: "success",
       description: "Sistema otimizado e responsivo",
-      severity: "low"
+      severity: "low",
     });
 
     return results;
@@ -252,12 +313,12 @@ const SystemAuditor: React.FC = () => {
     try {
       const { data, error } = await supabase.from("profiles").select("count").limit(1);
       if (error) throw error;
-      
+
       results.push({
         module: "Integração Supabase",
         status: "success",
         description: "Conexão com banco de dados ativa",
-        severity: "low"
+        severity: "low",
       });
     } catch (error) {
       results.push({
@@ -266,7 +327,7 @@ const SystemAuditor: React.FC = () => {
         description: "Falha na conexão com banco",
         severity: "critical",
         details: String(error),
-        actionRequired: "Verificar configuração de conexão"
+        actionRequired: "Verificar configuração de conexão",
       });
     }
 
@@ -280,7 +341,7 @@ const SystemAuditor: React.FC = () => {
     setTestSuites(newTestSuites);
 
     const suite = newTestSuites[suiteIndex];
-    
+
     for (let testIndex = 0; testIndex < suite.tests.length; testIndex++) {
       const updatedSuites = [...testSuites];
       updatedSuites[suiteIndex].tests[testIndex].status = "running";
@@ -288,13 +349,17 @@ const SystemAuditor: React.FC = () => {
 
       // Simular execução do teste
       await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
-      
+
       const success = Math.random() > 0.2; // 80% de chance de sucesso
-      
+
       const finalSuites = [...testSuites];
       finalSuites[suiteIndex].tests[testIndex].status = success ? "passed" : "failed";
-      finalSuites[suiteIndex].tests[testIndex].result = success ? "Teste aprovado" : "Falha detectada";
-      finalSuites[suiteIndex].tests[testIndex].executionTime = Math.floor(1000 + Math.random() * 2000);
+      finalSuites[suiteIndex].tests[testIndex].result = success
+        ? "Teste aprovado"
+        : "Falha detectada";
+      finalSuites[suiteIndex].tests[testIndex].executionTime = Math.floor(
+        1000 + Math.random() * 2000
+      );
       finalSuites[suiteIndex].progress = ((testIndex + 1) / suite.tests.length) * 100;
       setTestSuites(finalSuites);
     }
@@ -323,29 +388,34 @@ const SystemAuditor: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "success":
-    case "passed":
-    case "completed":
-      return <CheckCircle className="w-4 h-4 text-green-500" />;
-    case "warning":
-      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-    case "error":
-    case "failed":
-      return <XCircle className="w-4 h-4 text-red-500" />;
-    case "running":
-      return <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />;
-    default:
-      return <Activity className="w-4 h-4 text-muted-foreground" />;
+      case "success":
+      case "passed":
+      case "completed":
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case "warning":
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      case "error":
+      case "failed":
+        return <XCircle className="w-4 h-4 text-red-500" />;
+      case "running":
+        return <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />;
+      default:
+        return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-100 text-red-800 border-red-200";
-    case "high": return "bg-orange-100 text-orange-800 border-orange-200";
-    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    case "low": return "bg-green-100 text-green-800 border-green-200";
-    default: return "bg-secondary text-secondary-foreground border-border";
+      case "critical":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "high":
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "low":
+        return "bg-green-100 text-green-800 border-green-200";
+      default:
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
@@ -368,7 +438,7 @@ const SystemAuditor: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -380,7 +450,7 @@ const SystemAuditor: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -392,7 +462,7 @@ const SystemAuditor: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -431,8 +501,8 @@ const SystemAuditor: React.FC = () => {
                     Verificação completa de módulos, segurança e integrações
                   </CardDescription>
                 </div>
-                <Button 
-                  onClick={runSystemAudit} 
+                <Button
+                  onClick={runSystemAudit}
                   disabled={isAuditing}
                   className="flex items-center gap-2"
                 >
@@ -498,8 +568,8 @@ const SystemAuditor: React.FC = () => {
                     Suítes de testes automatizados para validação funcional
                   </CardDescription>
                 </div>
-                <Button 
-                  onClick={runAllTests} 
+                <Button
+                  onClick={runAllTests}
                   disabled={isTesting}
                   className="flex items-center gap-2"
                 >
@@ -535,7 +605,10 @@ const SystemAuditor: React.FC = () => {
                     </CardHeader>
                     <CardContent className="space-y-2">
                       {suite.tests.map((test, testIndex) => (
-                        <div key={test.id} className="flex items-center justify-between p-2 rounded bg-secondary/50">
+                        <div
+                          key={test.id}
+                          className="flex items-center justify-between p-2 rounded bg-secondary/50"
+                        >
                           <div className="flex items-center gap-2">
                             {getStatusIcon(test.status)}
                             <div>
@@ -565,9 +638,7 @@ const SystemAuditor: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Preparação para Deploy</CardTitle>
-              <CardDescription>
-                Checklist final e configurações de produção
-              </CardDescription>
+              <CardDescription>Checklist final e configurações de produção</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -585,7 +656,7 @@ const SystemAuditor: React.FC = () => {
                       "Integrações funcionais",
                       "Backup configurado",
                       "Monitoramento ativo",
-                      "Documentação atualizada"
+                      "Documentação atualizada",
                     ].map((item, index) => (
                       <div key={index} className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-green-500" />
@@ -620,8 +691,8 @@ const SystemAuditor: React.FC = () => {
                   <h4 className="font-medium text-green-800">Sistema Pronto para Deploy</h4>
                 </div>
                 <p className="text-sm text-green-700">
-                  Todas as verificações foram concluídas com sucesso. O sistema Nautilus One 
-                  está aprovado para publicação em ambiente de produção.
+                  Todas as verificações foram concluídas com sucesso. O sistema Nautilus One está
+                  aprovado para publicação em ambiente de produção.
                 </p>
               </div>
             </CardContent>

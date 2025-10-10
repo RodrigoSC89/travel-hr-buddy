@@ -41,7 +41,7 @@ interface OrganizationContextType {
   userRole: string | null;
   isLoading: boolean;
   error: string | null;
-  
+
   // Funções
   switchOrganization: (orgId: string) => Promise<void>;
   updateBranding: (branding: Partial<OrganizationBranding>) => Promise<void>;
@@ -93,12 +93,12 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         features: { peotram: true, fleet_management: true, analytics: true, ai_analysis: true },
         trial_ends_at: null,
         subscription_ends_at: null,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
-      
+
       setCurrentOrganization(demoOrg);
       setUserRole("admin");
-      
+
       // Definir branding padrão antes de tentar carregar do Supabase
       const demoBranding: OrganizationBranding = {
         id: "demo-branding",
@@ -114,29 +114,38 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         timezone: "America/Sao_Paulo",
         custom_fields: {},
         business_rules: {} as any,
-        enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as any,
-        module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as any
+        enabled_modules: [
+          "fleet",
+          "crew",
+          "certificates",
+          "analytics",
+          "travel",
+          "documents",
+        ] as any,
+        module_settings: {
+          peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true },
+        } as any,
       };
-      
+
       setCurrentBranding(demoBranding);
       applyBrandingTheme(demoBranding);
-      
+
       // Tentar carregar branding real do Supabase (com timeout)
       try {
-        const timeoutPromise = new Promise<null>((_, reject) => 
+        const timeoutPromise = new Promise<null>((_, reject) =>
           setTimeout(() => reject(new Error("Timeout")), 3000)
         );
-        
+
         const fetchPromise = supabase
           .from("organization_branding")
           .select("*")
           .eq("organization_id", "550e8400-e29b-41d4-a716-446655440000")
           .maybeSingle();
 
-        const { data: branding, error: brandingError } = await Promise.race([
+        const { data: branding, error: brandingError } = (await Promise.race([
           fetchPromise,
-          timeoutPromise
-        ]).catch(() => ({ data: null, error: null })) as any;
+          timeoutPromise,
+        ]).catch(() => ({ data: null, error: null }))) as any;
 
         if (!brandingError && branding) {
           setCurrentBranding(branding as any);
@@ -154,17 +163,17 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const applyBrandingTheme = (branding: OrganizationBranding) => {
     const root = document.documentElement;
-    
+
     // Aplicar cores personalizadas
     root.style.setProperty("--primary", branding.primary_color);
     root.style.setProperty("--secondary", branding.secondary_color);
     root.style.setProperty("--accent", branding.accent_color);
-    
+
     // Atualizar título da página
     if (branding.company_name) {
       document.title = `${branding.company_name} - Nautilus One`;
     }
-    
+
     // Aplicar tema escuro/claro se especificado
     if (branding.theme_mode !== "auto") {
       document.documentElement.classList.toggle("dark", branding.theme_mode === "dark");
@@ -182,10 +191,18 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     try {
       const updateData: any = {
         ...brandingUpdate,
-        business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules as any : undefined,
-        enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules as any : undefined,
-        custom_fields: brandingUpdate.custom_fields ? brandingUpdate.custom_fields as any : undefined,
-        module_settings: brandingUpdate.module_settings ? brandingUpdate.module_settings as any : undefined
+        business_rules: brandingUpdate.business_rules
+          ? (brandingUpdate.business_rules as any)
+          : undefined,
+        enabled_modules: brandingUpdate.enabled_modules
+          ? (brandingUpdate.enabled_modules as any)
+          : undefined,
+        custom_fields: brandingUpdate.custom_fields
+          ? (brandingUpdate.custom_fields as any)
+          : undefined,
+        module_settings: brandingUpdate.module_settings
+          ? (brandingUpdate.module_settings as any)
+          : undefined,
       };
 
       const { data, error } = await supabase
@@ -207,7 +224,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const checkPermission = (permission: string): boolean => {
     // Para demo, admin tem todas as permissões
     if (userRole === "admin") return true;
-    
+
     // Hierarquia de permissões simplificada
     const roleHierarchy = {
       owner: ["all"],
@@ -215,7 +232,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       manager: ["manage_data", "view_analytics", "manage_team"],
       operator: ["manage_data", "view_data"],
       member: ["view_data"],
-      viewer: ["view_data"]
+      viewer: ["view_data"],
     };
 
     const userPermissions = roleHierarchy[userRole as keyof typeof roleHierarchy] || [];
@@ -232,19 +249,19 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         status: "active",
         full_name: "Administrador",
         joined_at: new Date().toISOString(),
-        last_active_at: new Date().toISOString()
+        last_active_at: new Date().toISOString(),
       },
       {
-        id: "2", 
+        id: "2",
         email: "user@nautilus.com",
         role: "member",
         status: "active",
         full_name: "Usuário Demo",
         joined_at: new Date().toISOString(),
-        last_active_at: new Date().toISOString()
-      }
+        last_active_at: new Date().toISOString(),
+      },
     ];
-    
+
     return mockUsers;
   };
 
@@ -253,11 +270,9 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     // Invite functionality to be implemented
   };
 
-  const removeUser = async (userId: string) => {
-  };
+  const removeUser = async (userId: string) => {};
 
-  const updateUserRole = async (userId: string, role: string) => {
-  };
+  const updateUserRole = async (userId: string, role: string) => {};
 
   const value: OrganizationContextType = {
     currentOrganization,
@@ -271,12 +286,8 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     getCurrentOrganizationUsers,
     inviteUser,
     removeUser,
-    updateUserRole
+    updateUserRole,
   };
 
-  return (
-    <OrganizationContext.Provider value={value}>
-      {children}
-    </OrganizationContext.Provider>
-  );
+  return <OrganizationContext.Provider value={value}>{children}</OrganizationContext.Provider>;
 };

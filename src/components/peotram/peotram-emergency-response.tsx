@@ -3,18 +3,30 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  AlertTriangle, 
-  Siren, 
-  Phone, 
-  MapPin, 
-  Clock, 
-  Users, 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  AlertTriangle,
+  Siren,
+  Phone,
+  MapPin,
+  Clock,
+  Users,
   Activity,
   Radio,
   Shield,
@@ -22,7 +34,7 @@ import {
   Heart,
   Flame,
   Waves,
-  Plus
+  Plus,
 } from "lucide-react";
 
 interface EmergencyContact {
@@ -75,7 +87,7 @@ export const PeotramEmergencyResponse: React.FC = () => {
         location: "Deck Principal - Seção 3",
         description: "Princípio de incêndio detectado no sistema elétrico",
         reportedBy: "João Silva",
-        reportedAt: "2024-01-22T10:30:00Z"
+        reportedAt: "2024-01-22T10:30:00Z",
       },
       {
         id: "INC002",
@@ -86,8 +98,8 @@ export const PeotramEmergencyResponse: React.FC = () => {
         description: "Tripulante com ferimento no braço",
         reportedBy: "Maria Santos",
         reportedAt: "2024-01-22T08:15:00Z",
-        respondedAt: "2024-01-22T08:18:00Z"
-      }
+        respondedAt: "2024-01-22T08:18:00Z",
+      },
     ];
   }
 
@@ -100,7 +112,7 @@ export const PeotramEmergencyResponse: React.FC = () => {
         phone: "+55 11 99999-0001",
         email: "capitao@embarcacao.com",
         department: "Comando",
-        priority: "primary"
+        priority: "primary",
       },
       {
         id: "CONT002",
@@ -109,8 +121,8 @@ export const PeotramEmergencyResponse: React.FC = () => {
         phone: "+55 11 99999-0002",
         email: "medico@embarcacao.com",
         department: "Saúde",
-        priority: "primary"
-      }
+        priority: "primary",
+      },
     ];
   }
 
@@ -126,43 +138,59 @@ export const PeotramEmergencyResponse: React.FC = () => {
           "Comunicar à ponte de comando",
           "Isolar área afetada",
           "Utilizar equipamentos de combate apropriados",
-          "Avaliar necessidade de abandono"
+          "Avaliar necessidade de abandono",
         ],
         contacts: ["CONT001", "CONT002"],
         resources: ["Extintores CO2", "Mangueiras", "Equipamentos de proteção"],
-        lastUpdated: "2024-01-15"
-      }
+        lastUpdated: "2024-01-15",
+      },
     ];
   }
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
-    case "high": return "bg-destructive/10 text-destructive border-destructive/20";
-    case "medium": return "bg-warning/20 text-warning border-warning/30";
-    case "low": return "bg-info/20 text-info border-info/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "critical":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      case "high":
+        return "bg-destructive/10 text-destructive border-destructive/20";
+      case "medium":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "low":
+        return "bg-info/20 text-info border-info/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "resolved": return "bg-success/20 text-success border-success/30";
-    case "contained": return "bg-warning/20 text-warning border-warning/30";
-    case "active": return "bg-destructive/20 text-destructive border-destructive/30";
-    default: return "bg-muted/20 text-muted-foreground border-muted/30";
+      case "resolved":
+        return "bg-success/20 text-success border-success/30";
+      case "contained":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "active":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      default:
+        return "bg-muted/20 text-muted-foreground border-muted/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "fire": return <Flame className="w-4 h-4" />;
-    case "medical": return <Heart className="w-4 h-4" />;
-    case "collision": return <Zap className="w-4 h-4" />;
-    case "pollution": return <Waves className="w-4 h-4" />;
-    case "security": return <Shield className="w-4 h-4" />;
-    case "weather": return <Activity className="w-4 h-4" />;
-    default: return <AlertTriangle className="w-4 h-4" />;
+      case "fire":
+        return <Flame className="w-4 h-4" />;
+      case "medical":
+        return <Heart className="w-4 h-4" />;
+      case "collision":
+        return <Zap className="w-4 h-4" />;
+      case "pollution":
+        return <Waves className="w-4 h-4" />;
+      case "security":
+        return <Shield className="w-4 h-4" />;
+      case "weather":
+        return <Activity className="w-4 h-4" />;
+      default:
+        return <AlertTriangle className="w-4 h-4" />;
     }
   };
 
@@ -175,7 +203,7 @@ export const PeotramEmergencyResponse: React.FC = () => {
             Gestão de incidentes e procedimentos de emergência
           </p>
         </div>
-        
+
         <div className="flex gap-2">
           <Button variant="destructive">
             <Siren className="w-4 h-4 mr-2" />
@@ -257,7 +285,7 @@ export const PeotramEmergencyResponse: React.FC = () => {
 
         <TabsContent value="incidents" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {incidents.map((incident) => (
+            {incidents.map(incident => (
               <Card key={incident.id} className="border-l-4 border-l-destructive">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -291,7 +319,7 @@ export const PeotramEmergencyResponse: React.FC = () => {
                       <span>{incident.reportedBy}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm" className="flex-1">
                       <Radio className="w-3 h-3 mr-1" />
@@ -310,7 +338,7 @@ export const PeotramEmergencyResponse: React.FC = () => {
 
         <TabsContent value="procedures" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {procedures.map((procedure) => (
+            {procedures.map(procedure => (
               <Card key={procedure.id}>
                 <CardHeader>
                   <div className="flex items-center gap-2">
@@ -328,7 +356,7 @@ export const PeotramEmergencyResponse: React.FC = () => {
                       ))}
                     </ol>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm" className="flex-1">
                       Ver Detalhes
@@ -345,7 +373,7 @@ export const PeotramEmergencyResponse: React.FC = () => {
 
         <TabsContent value="contacts" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {contacts.map((contact) => (
+            {contacts.map(contact => (
               <Card key={contact.id}>
                 <CardHeader>
                   <CardTitle className="text-lg">{contact.name}</CardTitle>
@@ -356,14 +384,17 @@ export const PeotramEmergencyResponse: React.FC = () => {
                     <Phone className="w-4 h-4 text-muted-foreground" />
                     <span>{contact.phone}</span>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {contact.department}
-                  </div>
-                  <Badge variant="outline" className={
-                    contact.priority === "primary" ? "bg-success/20 text-success border-success/30" :
-                      contact.priority === "secondary" ? "bg-warning/20 text-warning border-warning/30" :
-                        "bg-muted/20 text-muted-foreground border-muted/30"
-                  }>
+                  <div className="text-sm text-muted-foreground">{contact.department}</div>
+                  <Badge
+                    variant="outline"
+                    className={
+                      contact.priority === "primary"
+                        ? "bg-success/20 text-success border-success/30"
+                        : contact.priority === "secondary"
+                          ? "bg-warning/20 text-warning border-warning/30"
+                          : "bg-muted/20 text-muted-foreground border-muted/30"
+                    }
+                  >
                     {contact.priority}
                   </Badge>
                   <Button variant="outline" size="sm" className="w-full">

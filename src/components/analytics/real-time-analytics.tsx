@@ -4,14 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
   ResponsiveContainer,
   LineChart,
   Line,
@@ -19,24 +19,20 @@ import {
   Pie,
   Cell,
   AreaChart,
-  Area
+  Area,
 } from "recharts";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Users, 
-  DollarSign, 
-  Package, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Users,
+  DollarSign,
+  Package,
   Activity,
-  Monitor,
-  Zap,
-  Globe,
   Clock,
-  Target,
   Filter,
   RefreshCw,
   Download,
-  Share2
+  Share2,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -70,7 +66,7 @@ const RealTimeAnalytics = () => {
       change: "+12.5%",
       trend: "up",
       icon: <Users className="w-4 h-4" />,
-      description: "Usuários online agora"
+      description: "Usuários online agora",
     },
     {
       title: "Receita Mensal",
@@ -78,7 +74,7 @@ const RealTimeAnalytics = () => {
       change: "+8.2%",
       trend: "up",
       icon: <DollarSign className="w-4 h-4" />,
-      description: "Receita do mês atual"
+      description: "Receita do mês atual",
     },
     {
       title: "Transações",
@@ -86,7 +82,7 @@ const RealTimeAnalytics = () => {
       change: "-2.1%",
       trend: "down",
       icon: <Package className="w-4 h-4" />,
-      description: "Transações hoje"
+      description: "Transações hoje",
     },
     {
       title: "Performance",
@@ -94,8 +90,8 @@ const RealTimeAnalytics = () => {
       change: "+0.3%",
       trend: "up",
       icon: <Activity className="w-4 h-4" />,
-      description: "Uptime do sistema"
-    }
+      description: "Uptime do sistema",
+    },
   ]);
 
   const [chartData] = useState<ChartData[]>([
@@ -111,7 +107,7 @@ const RealTimeAnalytics = () => {
     { name: "CPU", value: 65, color: "#8884d8" },
     { name: "Memória", value: 78, color: "#82ca9d" },
     { name: "Disco", value: 45, color: "#ffc658" },
-    { name: "Rede", value: 32, color: "#ff7300" }
+    { name: "Rede", value: 32, color: "#ff7300" },
   ]);
 
   // Simulate real-time updates
@@ -120,13 +116,15 @@ const RealTimeAnalytics = () => {
 
     const interval = setInterval(() => {
       setLastUpdate(new Date());
-      
+
       // Update metrics with random variations
-      setMetrics(prev => prev.map(metric => ({
-        ...metric,
-        value: generateRandomValue(metric.title),
-        change: generateRandomChange()
-      })));
+      setMetrics(prev =>
+        prev.map(metric => ({
+          ...metric,
+          value: generateRandomValue(metric.title),
+          change: generateRandomChange(),
+        }))
+      );
     }, 3000);
 
     return () => clearInterval(interval);
@@ -134,16 +132,16 @@ const RealTimeAnalytics = () => {
 
   const generateRandomValue = (title: string): string => {
     switch (title) {
-    case "Usuários Ativos":
-      return (2800 + Math.floor(Math.random() * 100)).toLocaleString();
-    case "Receita Mensal":
-      return `R$ ${(84000 + Math.floor(Math.random() * 2000)).toLocaleString()}`;
-    case "Transações":
-      return (1400 + Math.floor(Math.random() * 100)).toLocaleString();
-    case "Performance":
-      return `${(98 + Math.random() * 2).toFixed(1)}%`;
-    default:
-      return "0";
+      case "Usuários Ativos":
+        return (2800 + Math.floor(Math.random() * 100)).toLocaleString();
+      case "Receita Mensal":
+        return `R$ ${(84000 + Math.floor(Math.random() * 2000)).toLocaleString()}`;
+      case "Transações":
+        return (1400 + Math.floor(Math.random() * 100)).toLocaleString();
+      case "Performance":
+        return `${(98 + Math.random() * 2).toFixed(1)}%`;
+      default:
+        return "0";
     }
   };
 
@@ -155,25 +153,25 @@ const RealTimeAnalytics = () => {
   const exportData = () => {
     toast({
       title: "Exportando dados",
-      description: "Relatório será enviado por email"
+      description: "Relatório será enviado por email",
     });
   };
 
   const shareReport = () => {
     toast({
       title: "Compartilhando relatório",
-      description: "Link compartilhado copiado"
+      description: "Link compartilhado copiado",
     });
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up":
-      return <TrendingUp className="w-4 h-4 text-green-500" />;
-    case "down":
-      return <TrendingDown className="w-4 h-4 text-red-500" />;
-    default:
-      return <Activity className="w-4 h-4 text-blue-500" />;
+      case "up":
+        return <TrendingUp className="w-4 h-4 text-green-500" />;
+      case "down":
+        return <TrendingDown className="w-4 h-4 text-red-500" />;
+      default:
+        return <Activity className="w-4 h-4 text-blue-500" />;
     }
   };
 
@@ -183,24 +181,22 @@ const RealTimeAnalytics = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Analytics em Tempo Real</h1>
-          <p className="text-muted-foreground">
-            Monitoramento avançado de métricas empresariais
-          </p>
+          <p className="text-muted-foreground">Monitoramento avançado de métricas empresariais</p>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${isLive ? "bg-green-500 animate-pulse" : "bg-gray-400"}`} />
-            <span className="text-sm font-medium">
-              {isLive ? "AO VIVO" : "PAUSADO"}
-            </span>
+            <div
+              className={`w-2 h-2 rounded-full ${isLive ? "bg-green-500 animate-pulse" : "bg-gray-400"}`}
+            />
+            <span className="text-sm font-medium">{isLive ? "AO VIVO" : "PAUSADO"}</span>
           </div>
-          
+
           <Badge variant="outline" className="gap-2">
             <Clock className="w-3 h-3" />
             Atualizado: {lastUpdate.toLocaleTimeString()}
           </Badge>
-          
+
           <Button
             variant={isLive ? "destructive" : "default"}
             size="sm"
@@ -217,10 +213,10 @@ const RealTimeAnalytics = () => {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4" />
-          <select 
+          <select
             className="bg-background border border-border rounded px-3 py-1"
             value={selectedTimeRange}
-            onChange={(e) => setSelectedTimeRange(e.target.value)}
+            onChange={e => setSelectedTimeRange(e.target.value)}
           >
             <option value="1h">Última hora</option>
             <option value="24h">Últimas 24h</option>
@@ -228,12 +224,12 @@ const RealTimeAnalytics = () => {
             <option value="30d">Últimos 30 dias</option>
           </select>
         </div>
-        
+
         <Button variant="outline" size="sm" onClick={exportData} className="gap-2">
           <Download className="w-4 h-4" />
           Exportar
         </Button>
-        
+
         <Button variant="outline" size="sm" onClick={shareReport} className="gap-2">
           <Share2 className="w-4 h-4" />
           Compartilhar
@@ -245,9 +241,7 @@ const RealTimeAnalytics = () => {
         {metrics.map((metric, index) => (
           <Card key={index} className="border-border">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {metric.title}
-              </CardTitle>
+              <CardTitle className="text-sm font-medium">{metric.title}</CardTitle>
               {metric.icon}
             </CardHeader>
             <CardContent>
@@ -259,9 +253,7 @@ const RealTimeAnalytics = () => {
                 </span>
                 <span>vs. período anterior</span>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {metric.description}
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">{metric.description}</p>
             </CardContent>
           </Card>
         ))}
@@ -275,15 +267,13 @@ const RealTimeAnalytics = () => {
           <TabsTrigger value="users">Usuários</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader>
                 <CardTitle>Crescimento Mensal</CardTitle>
-                <CardDescription>
-                  Evolução de usuários e receita
-                </CardDescription>
+                <CardDescription>Evolução de usuários e receita</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -293,19 +283,19 @@ const RealTimeAnalytics = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Area 
-                      type="monotone" 
-                      dataKey="users" 
-                      stackId="1" 
-                      stroke="#8884d8" 
-                      fill="#8884d8" 
+                    <Area
+                      type="monotone"
+                      dataKey="users"
+                      stackId="1"
+                      stroke="#8884d8"
+                      fill="#8884d8"
                     />
-                    <Area 
-                      type="monotone" 
-                      dataKey="revenue" 
-                      stackId="1" 
-                      stroke="#82ca9d" 
-                      fill="#82ca9d" 
+                    <Area
+                      type="monotone"
+                      dataKey="revenue"
+                      stackId="1"
+                      stroke="#82ca9d"
+                      fill="#82ca9d"
                     />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -315,9 +305,7 @@ const RealTimeAnalytics = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Uso de Recursos</CardTitle>
-                <CardDescription>
-                  Monitoramento de infraestrutura
-                </CardDescription>
+                <CardDescription>Monitoramento de infraestrutura</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -348,9 +336,7 @@ const RealTimeAnalytics = () => {
           <Card>
             <CardHeader>
               <CardTitle>Receita Detalhada</CardTitle>
-              <CardDescription>
-                Análise temporal de faturamento
-              </CardDescription>
+              <CardDescription>Análise temporal de faturamento</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
@@ -360,12 +346,7 @@ const RealTimeAnalytics = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="revenue" 
-                    stroke="#8884d8" 
-                    strokeWidth={2}
-                  />
+                  <Line type="monotone" dataKey="revenue" stroke="#8884d8" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -376,9 +357,7 @@ const RealTimeAnalytics = () => {
           <Card>
             <CardHeader>
               <CardTitle>Base de Usuários</CardTitle>
-              <CardDescription>
-                Crescimento e engajamento
-              </CardDescription>
+              <CardDescription>Crescimento e engajamento</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
@@ -400,9 +379,7 @@ const RealTimeAnalytics = () => {
             {performanceData.map((item, index) => (
               <Card key={index}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    {item.name}
-                  </CardTitle>
+                  <CardTitle className="text-sm font-medium">{item.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold mb-2">{item.value}%</div>

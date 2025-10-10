@@ -3,22 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  RefreshCw, 
-  Database, 
-  Wifi, 
-  WifiOff, 
-  Upload, 
-  Download,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-  Info
-} from "lucide-react";
+import { RefreshCw, Database, Wifi, WifiOff, Upload, Clock, CheckCircle, Info } from "lucide-react";
 import { useOfflineStorage } from "@/hooks/use-offline-storage";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface SyncItem {
@@ -35,17 +23,17 @@ export const OfflineSyncManager: React.FC = () => {
   const [isSync, setIsSync] = useState(false);
   const [syncProgress, setSyncProgress] = useState(0);
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
-  
-  const { 
-    isOnline, 
-    cacheSize, 
-    syncPendingChanges, 
-    clearCache, 
+
+  const {
+    isOnline,
+    cacheSize,
+    syncPendingChanges,
+    clearCache,
     getPendingChanges,
     saveToCache,
-    addPendingChange
+    addPendingChange,
   } = useOfflineStorage();
-  
+
   const onlineStatus = useOnlineStatus();
   const { toast } = useToast();
   const { user } = useAuth();
@@ -56,7 +44,8 @@ export const OfflineSyncManager: React.FC = () => {
       const pending = await getPendingChanges();
       setSyncItems(pending);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   // Sincronização manual
@@ -65,7 +54,7 @@ export const OfflineSyncManager: React.FC = () => {
       toast({
         title: "Sync Impossível",
         description: "Você precisa estar online para sincronizar",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -75,7 +64,7 @@ export const OfflineSyncManager: React.FC = () => {
 
     try {
       const pendingItems = await getPendingChanges();
-      
+
       if (pendingItems.length === 0) {
         toast({
           title: "Nada para Sincronizar",
@@ -89,22 +78,22 @@ export const OfflineSyncManager: React.FC = () => {
       for (let i = 0; i < pendingItems.length; i++) {
         const item = pendingItems[i];
         setSyncProgress(((i + 1) / pendingItems.length) * 100);
-        
+
         try {
           // Simular sincronização com delay
           await new Promise(resolve => setTimeout(resolve, 500));
-          
+
           // Aqui você faria a sincronização real com APIs
           await simulateSyncAction(item);
-          
         } catch (error) {
-  }
+          console.warn("[EMPTY CATCH]", error);
+        }
       }
 
       // Executar sync real
       await syncPendingChanges();
       setLastSyncTime(new Date());
-      
+
       toast({
         title: "Sincronização Completa",
         description: `${pendingItems.length} item(s) sincronizado(s) com sucesso`,
@@ -112,12 +101,11 @@ export const OfflineSyncManager: React.FC = () => {
 
       // Recarregar itens
       await loadPendingItems();
-      
     } catch (error) {
       toast({
         title: "Erro na Sincronização",
         description: "Alguns itens podem não ter sido sincronizados",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsSync(false);
@@ -128,12 +116,12 @@ export const OfflineSyncManager: React.FC = () => {
   // Simular ação de sincronização
   const simulateSyncAction = async (item: SyncItem) => {
     switch (item.action) {
-    case "create_note":
-    case "update_profile":
-    case "save_preference":
-      // Simular salvamento no banco
-      break;
-    default:
+      case "create_note":
+      case "update_profile":
+      case "save_preference":
+        // Simular salvamento no banco
+        break;
+      default:
     }
   };
 
@@ -142,31 +130,31 @@ export const OfflineSyncManager: React.FC = () => {
     const sampleActions = [
       {
         action: "create_note",
-        data: { 
+        data: {
           title: "Nota Offline",
           content: "Esta nota foi criada offline",
-          created_at: new Date().toISOString()
-        }
+          created_at: new Date().toISOString(),
+        },
       },
       {
         action: "update_profile",
         data: {
           field: "last_activity",
-          value: new Date().toISOString()
-        }
+          value: new Date().toISOString(),
+        },
       },
       {
         action: "save_preference",
         data: {
           theme: "dark",
-          notifications: true
-        }
-      }
+          notifications: true,
+        },
+      },
     ];
 
     const randomAction = sampleActions[Math.floor(Math.random() * sampleActions.length)];
     await addPendingChange(randomAction.action, randomAction.data);
-    
+
     toast({
       title: "Ação Offline Criada",
       description: `Ação "${randomAction.action}" será sincronizada quando online`,
@@ -180,7 +168,7 @@ export const OfflineSyncManager: React.FC = () => {
     try {
       await clearCache();
       await loadPendingItems();
-      
+
       toast({
         title: "Cache Limpo",
         description: "Todos os dados em cache foram removidos",
@@ -189,14 +177,14 @@ export const OfflineSyncManager: React.FC = () => {
       toast({
         title: "Erro",
         description: "Não foi possível limpar o cache",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   useEffect(() => {
     loadPendingItems();
-    
+
     // Recarregar quando voltar online
     if (isOnline) {
       const timer = setTimeout(() => {
@@ -208,19 +196,27 @@ export const OfflineSyncManager: React.FC = () => {
 
   const getActionIcon = (action: string) => {
     switch (action) {
-    case "create_note": return <Upload className="h-4 w-4 text-blue-500" />;
-    case "update_profile": return <RefreshCw className="h-4 w-4 text-green-500" />;
-    case "save_preference": return <Database className="h-4 w-4 text-purple-500" />;
-    default: return <Info className="h-4 w-4 text-muted-foreground" />;
+      case "create_note":
+        return <Upload className="h-4 w-4 text-blue-500" />;
+      case "update_profile":
+        return <RefreshCw className="h-4 w-4 text-green-500" />;
+      case "save_preference":
+        return <Database className="h-4 w-4 text-purple-500" />;
+      default:
+        return <Info className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getActionDescription = (action: string) => {
     switch (action) {
-    case "create_note": return "Criar nova nota";
-    case "update_profile": return "Atualizar perfil";
-    case "save_preference": return "Salvar preferência";
-    default: return action;
+      case "create_note":
+        return "Criar nova nota";
+      case "update_profile":
+        return "Atualizar perfil";
+      case "save_preference":
+        return "Salvar preferência";
+      default:
+        return action;
     }
   };
 
@@ -248,7 +244,7 @@ export const OfflineSyncManager: React.FC = () => {
             </div>
           </div>
         </Card>
-        
+
         <Card className="p-4">
           <div className="flex items-center gap-2">
             <Database className="h-5 w-5 text-blue-500" />
@@ -258,7 +254,7 @@ export const OfflineSyncManager: React.FC = () => {
             </div>
           </div>
         </Card>
-        
+
         <Card className="p-4">
           <div className="flex items-center gap-2">
             <RefreshCw className="h-5 w-5 text-orange-500" />
@@ -268,7 +264,7 @@ export const OfflineSyncManager: React.FC = () => {
             </div>
           </div>
         </Card>
-        
+
         <Card className="p-4">
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-purple-500" />
@@ -297,7 +293,7 @@ export const OfflineSyncManager: React.FC = () => {
 
       {/* Action Buttons */}
       <div className="flex gap-2 flex-wrap">
-        <Button 
+        <Button
           onClick={performManualSync}
           disabled={!isOnline || isSync || syncItems.length === 0}
           className="flex items-center gap-2"
@@ -309,8 +305,8 @@ export const OfflineSyncManager: React.FC = () => {
           )}
           Sincronizar Agora ({syncItems.length})
         </Button>
-        
-        <Button 
+
+        <Button
           onClick={addSampleOfflineAction}
           variant="outline"
           className="flex items-center gap-2"
@@ -318,12 +314,8 @@ export const OfflineSyncManager: React.FC = () => {
           <Upload className="h-4 w-4" />
           Simular Ação Offline
         </Button>
-        
-        <Button 
-          onClick={handleClearCache}
-          variant="outline"
-          className="flex items-center gap-2"
-        >
+
+        <Button onClick={handleClearCache} variant="outline" className="flex items-center gap-2">
           <Database className="h-4 w-4" />
           Limpar Cache
         </Button>
@@ -340,8 +332,11 @@ export const OfflineSyncManager: React.FC = () => {
         <CardContent className="px-0">
           {syncItems.length > 0 ? (
             <div className="space-y-4">
-              {syncItems.map((item) => (
-                <div key={item.id} className="flex items-center justify-between p-3 border border-border rounded-lg">
+              {syncItems.map(item => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between p-3 border border-border rounded-lg"
+                >
                   <div className="flex items-center gap-3">
                     {getActionIcon(item.action)}
                     <div>

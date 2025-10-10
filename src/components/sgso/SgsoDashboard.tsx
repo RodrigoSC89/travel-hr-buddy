@@ -14,7 +14,7 @@ import {
   Clock,
   Activity,
   Bell,
-  Calendar
+  Calendar,
 } from "lucide-react";
 import { AnpPracticesManager } from "./AnpPracticesManager";
 import { RiskAssessmentMatrix } from "./RiskAssessmentMatrix";
@@ -35,7 +35,7 @@ export const SgsoDashboard: React.FC = () => {
       compliant: 10,
       nonCompliant: 3,
       inProgress: 3,
-      pending: 1
+      pending: 1,
     },
     incidents: {
       total: 12,
@@ -43,25 +43,25 @@ export const SgsoDashboard: React.FC = () => {
       high: 3,
       medium: 5,
       low: 3,
-      openIncidents: 4
+      openIncidents: 4,
     },
     risks: {
       critical: 1,
       high: 2,
       medium: 8,
       low: 15,
-      totalRisks: 26
+      totalRisks: 26,
     },
     audits: {
       completed: 8,
       planned: 3,
-      overdue: 1
+      overdue: 1,
     },
     training: {
       upToDate: 87,
       expiringSoon: 5,
-      expired: 2
-    }
+      expired: 2,
+    },
   };
 
   return (
@@ -162,70 +162,68 @@ export const SgsoDashboard: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Módulos SGSO</CardTitle>
-          <CardDescription>
-            Gestão completa do Sistema de Segurança Operacional
-          </CardDescription>
+          <CardDescription>Gestão completa do Sistema de Segurança Operacional</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-9 w-full h-auto gap-2 bg-gray-100 p-2">
-              <TabsTrigger 
-                value="overview" 
+              <TabsTrigger
+                value="overview"
                 className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <Shield className="h-4 w-4 mr-2" />
                 Visão Geral
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="practices"
                 className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <CheckCircle className="h-4 w-4 mr-2" />
                 17 Práticas
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="risks"
                 className="data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Riscos
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="incidents"
                 className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <Bell className="h-4 w-4 mr-2" />
                 Incidentes
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="emergency"
                 className="data-[state=active]:bg-white data-[state=active]:text-red-700 data-[state=active]:font-bold min-h-[44px]"
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Emergência
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="audits"
                 className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 Auditorias
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="training"
                 className="data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <Users className="h-4 w-4 mr-2" />
                 Treinamentos
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="nc"
                 className="data-[state=active]:bg-white data-[state=active]:text-yellow-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <XCircle className="h-4 w-4 mr-2" />
                 NCs
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="metrics"
                 className="data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:font-bold min-h-[44px]"
               >
@@ -244,22 +242,57 @@ export const SgsoDashboard: React.FC = () => {
                   <CardContent>
                     <div className="space-y-3">
                       {[
-                        { type: "incident", title: "Novo incidente registrado", time: "2 horas atrás", severity: "high" },
-                        { type: "audit", title: "Auditoria ANP concluída", time: "5 horas atrás", severity: "info" },
-                        { type: "practice", title: "Prática 4 atualizada", time: "1 dia atrás", severity: "warning" },
-                        { type: "risk", title: "Novo risco identificado", time: "2 dias atrás", severity: "medium" }
+                        {
+                          type: "incident",
+                          title: "Novo incidente registrado",
+                          time: "2 horas atrás",
+                          severity: "high",
+                        },
+                        {
+                          type: "audit",
+                          title: "Auditoria ANP concluída",
+                          time: "5 horas atrás",
+                          severity: "info",
+                        },
+                        {
+                          type: "practice",
+                          title: "Prática 4 atualizada",
+                          time: "1 dia atrás",
+                          severity: "warning",
+                        },
+                        {
+                          type: "risk",
+                          title: "Novo risco identificado",
+                          time: "2 dias atrás",
+                          severity: "medium",
+                        },
                       ].map((activity, index) => (
-                        <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                          <div className={`p-2 rounded-full ${
-                            activity.severity === "high" ? "bg-red-100" :
-                              activity.severity === "warning" ? "bg-yellow-100" :
-                                activity.severity === "info" ? "bg-blue-100" : "bg-gray-100"
-                          }`}>
-                            <Activity className={`h-4 w-4 ${
-                              activity.severity === "high" ? "text-red-600" :
-                                activity.severity === "warning" ? "text-yellow-600" :
-                                  activity.severity === "info" ? "text-blue-600" : "text-muted-foreground"
-                            }`} />
+                        <div
+                          key={index}
+                          className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
+                        >
+                          <div
+                            className={`p-2 rounded-full ${
+                              activity.severity === "high"
+                                ? "bg-red-100"
+                                : activity.severity === "warning"
+                                  ? "bg-yellow-100"
+                                  : activity.severity === "info"
+                                    ? "bg-blue-100"
+                                    : "bg-gray-100"
+                            }`}
+                          >
+                            <Activity
+                              className={`h-4 w-4 ${
+                                activity.severity === "high"
+                                  ? "text-red-600"
+                                  : activity.severity === "warning"
+                                    ? "text-yellow-600"
+                                    : activity.severity === "info"
+                                      ? "text-blue-600"
+                                      : "text-muted-foreground"
+                              }`}
+                            />
                           </div>
                           <div className="flex-1">
                             <p className="font-semibold text-sm text-gray-900">{activity.title}</p>
@@ -281,15 +314,27 @@ export const SgsoDashboard: React.FC = () => {
                       {[
                         { task: "Auditoria interna Prática 13", due: "Amanhã", priority: "high" },
                         { task: "Revisão matriz de riscos", due: "3 dias", priority: "medium" },
-                        { task: "Treinamento SGSO tripulação", due: "1 semana", priority: "medium" },
-                        { task: "Relatório ANP mensal", due: "2 semanas", priority: "low" }
+                        {
+                          task: "Treinamento SGSO tripulação",
+                          due: "1 semana",
+                          priority: "medium",
+                        },
+                        { task: "Relatório ANP mensal", due: "2 semanas", priority: "low" },
                       ].map((task, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200"
+                        >
                           <div className="flex items-center gap-3">
-                            <Clock className={`h-4 w-4 ${
-                              task.priority === "high" ? "text-red-600" :
-                                task.priority === "medium" ? "text-yellow-600" : "text-blue-600"
-                            }`} />
+                            <Clock
+                              className={`h-4 w-4 ${
+                                task.priority === "high"
+                                  ? "text-red-600"
+                                  : task.priority === "medium"
+                                    ? "text-yellow-600"
+                                    : "text-blue-600"
+                              }`}
+                            />
                             <span className="font-semibold text-sm text-gray-900">{task.task}</span>
                           </div>
                           <Badge variant="outline" className="text-xs">

@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Smartphone, 
-  Download, 
-  Settings, 
-  Shield, 
-  Battery, 
+import {
+  Smartphone,
+  Download,
+  Settings,
+  Shield,
+  Battery,
   Wifi,
   Camera,
   MapPin,
   Bell,
-  RotateCcw
+  RotateCcw,
 } from "lucide-react";
 
 export const NativeAppManager: React.FC = () => {
@@ -26,7 +26,7 @@ export const NativeAppManager: React.FC = () => {
     { name: "Camera Integration", status: "active", icon: Camera },
     { name: "GPS Tracking", status: "active", icon: MapPin },
     { name: "Biometric Auth", status: "pending", icon: Shield },
-    { name: "Background Sync", status: "active", icon: Wifi }
+    { name: "Background Sync", status: "active", icon: Wifi },
   ]);
 
   const handleInstallApp = () => {
@@ -74,7 +74,7 @@ export const NativeAppManager: React.FC = () => {
               {appStatus === "installed" && "Instalado"}
             </Badge>
           </div>
-          
+
           {appStatus === "installing" && (
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
@@ -128,9 +128,7 @@ export const NativeAppManager: React.FC = () => {
                         <IconComponent className="w-5 h-5 text-primary" />
                         <span>{feature.name}</span>
                       </div>
-                      <Badge 
-                        variant={feature.status === "active" ? "default" : "secondary"}
-                      >
+                      <Badge variant={feature.status === "active" ? "default" : "secondary"}>
                         {feature.status === "active" ? "Ativo" : "Pendente"}
                       </Badge>
                     </div>
@@ -182,19 +180,27 @@ export const NativeAppManager: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span>Notificações Push</span>
-                  <Button variant="outline" size="sm">Configurar</Button>
+                  <Button variant="outline" size="sm">
+                    Configurar
+                  </Button>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Sync Offline</span>
-                  <Button variant="outline" size="sm">Gerenciar</Button>
+                  <Button variant="outline" size="sm">
+                    Gerenciar
+                  </Button>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Permissões</span>
-                  <Button variant="outline" size="sm">Revisar</Button>
+                  <Button variant="outline" size="sm">
+                    Revisar
+                  </Button>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Cache</span>
-                  <Button variant="outline" size="sm">Limpar</Button>
+                  <Button variant="outline" size="sm">
+                    Limpar
+                  </Button>
                 </div>
               </div>
             </CardContent>

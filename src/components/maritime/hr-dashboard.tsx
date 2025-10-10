@@ -3,34 +3,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Users, 
-  Shield, 
-  Calendar, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock,
+import {
+  Users,
+  Shield,
+  Calendar,
+  AlertTriangle,
   Heart,
   Stethoscope,
   GraduationCap,
-  Anchor,
-  Ship,
-  Map,
   Phone,
   Mail,
   FileText,
   TrendingUp,
   BarChart3,
   Zap,
-  Globe,
-  Award,
-  Camera
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { CrewScheduleVisualizer } from "./crew-schedule-visualizer";
 
 interface CrewMember {
@@ -129,7 +118,7 @@ export const MaritimeHRDashboard: React.FC = () => {
         contract: {
           start_date: "2023-06-01",
           end_date: "2024-02-01",
-          duration_months: 8
+          duration_months: 8,
         },
         certifications: [
           {
@@ -141,29 +130,29 @@ export const MaritimeHRDashboard: React.FC = () => {
             issuing_authority: "Brazilian Maritime Authority",
             certificate_number: "BMA-2020-M-001",
             status: "valid",
-            renewal_required: false
-          }
+            renewal_required: false,
+          },
         ],
         medical: {
           last_checkup: "2023-11-15",
           next_due: "2024-05-15",
-          status: "valid"
+          status: "valid",
         },
         contact: {
           email: "joao.silva@nautilus.com",
           phone: "+55 11 99999-0001",
-          emergency_contact: "+55 11 88888-0001"
+          emergency_contact: "+55 11 88888-0001",
         },
         performance: {
           rating: 9.2,
           last_evaluation: "2023-12-01",
-          areas_improvement: ["Bridge Team Management", "Digital Navigation"]
+          areas_improvement: ["Bridge Team Management", "Digital Navigation"],
         },
         sea_service: {
           total_months: 180,
           vessels_served: ["MV Atlantic Explorer", "MV Pacific Star", "MV Nautilus Pioneer"],
-          last_voyage_end: "2023-05-30"
-        }
+          last_voyage_end: "2023-05-30",
+        },
       },
       {
         id: "2",
@@ -175,7 +164,7 @@ export const MaritimeHRDashboard: React.FC = () => {
         contract: {
           start_date: "2023-08-01",
           end_date: "2024-04-01",
-          duration_months: 8
+          duration_months: 8,
         },
         certifications: [
           {
@@ -187,30 +176,30 @@ export const MaritimeHRDashboard: React.FC = () => {
             issuing_authority: "Brazilian Maritime Authority",
             certificate_number: "BMA-2019-CO-002",
             status: "expiring",
-            renewal_required: true
-          }
+            renewal_required: true,
+          },
         ],
         medical: {
           last_checkup: "2023-10-20",
           next_due: "2024-04-20",
-          status: "valid"
+          status: "valid",
         },
         contact: {
           email: "maria.santos@nautilus.com",
           phone: "+55 11 99999-0002",
-          emergency_contact: "+55 11 88888-0002"
+          emergency_contact: "+55 11 88888-0002",
         },
         performance: {
           rating: 8.8,
           last_evaluation: "2023-11-15",
-          areas_improvement: ["ECDIS Advanced", "Cargo Operations"]
+          areas_improvement: ["ECDIS Advanced", "Cargo Operations"],
         },
         sea_service: {
           total_months: 96,
           vessels_served: ["MV Coastal Runner", "MV Atlantic Explorer"],
-          last_voyage_end: "2023-07-15"
-        }
-      }
+          last_voyage_end: "2023-07-15",
+        },
+      },
     ];
 
     const mockTraining: TrainingProgram[] = [
@@ -223,7 +212,7 @@ export const MaritimeHRDashboard: React.FC = () => {
         completion_rate: 85,
         next_session: "2024-02-15T09:00:00Z",
         instructor: "Capt. Roberto Lima",
-        virtual_reality: true
+        virtual_reality: true,
       },
       {
         id: "2",
@@ -234,8 +223,8 @@ export const MaritimeHRDashboard: React.FC = () => {
         completion_rate: 92,
         next_session: "2024-02-20T14:00:00Z",
         instructor: "Dr. Ana Carvalho",
-        virtual_reality: false
-      }
+        virtual_reality: false,
+      },
     ];
 
     const mockWellness: WellnessMetric[] = [
@@ -247,8 +236,8 @@ export const MaritimeHRDashboard: React.FC = () => {
         physical_health: 9,
         mental_health: 8,
         fatigue_level: 4,
-        social_connection: 7
-      }
+        social_connection: 7,
+      },
     ];
 
     setCrewMembers(mockCrew);
@@ -259,40 +248,57 @@ export const MaritimeHRDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "onboard": return "text-blue-600 bg-blue-100";
-    case "on_leave": return "text-green-600 bg-green-100";
-    case "available": return "text-muted-foreground bg-gray-100";
-    case "training": return "text-purple-600 bg-purple-100";
-    case "medical_leave": return "text-red-600 bg-red-100";
-    default: return "text-muted-foreground bg-gray-100";
+      case "onboard":
+        return "text-blue-600 bg-blue-100";
+      case "on_leave":
+        return "text-green-600 bg-green-100";
+      case "available":
+        return "text-muted-foreground bg-gray-100";
+      case "training":
+        return "text-purple-600 bg-purple-100";
+      case "medical_leave":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-    case "onboard": return "A Bordo";
-    case "on_leave": return "De Folga";
-    case "available": return "Disponível";
-    case "training": return "Treinamento";
-    case "medical_leave": return "Licença Médica";
-    default: return "Desconhecido";
+      case "onboard":
+        return "A Bordo";
+      case "on_leave":
+        return "De Folga";
+      case "available":
+        return "Disponível";
+      case "training":
+        return "Treinamento";
+      case "medical_leave":
+        return "Licença Médica";
+      default:
+        return "Desconhecido";
     }
   };
 
   const getCertificationStatusColor = (status: string) => {
     switch (status) {
-    case "valid": return "text-green-600 bg-green-100";
-    case "expiring": return "text-yellow-600 bg-yellow-100";
-    case "expired": return "text-red-600 bg-red-100";
-    default: return "text-muted-foreground bg-gray-100";
+      case "valid":
+        return "text-green-600 bg-green-100";
+      case "expiring":
+        return "text-yellow-600 bg-yellow-100";
+      case "expired":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-muted-foreground bg-gray-100";
     }
   };
 
   const handleWellnessAlert = () => {
     toast({
       title: "Alerta de Bem-estar",
-      description: "IA detectou sinais de estresse elevado em 2 tripulantes. Consulta com psicólogo recomendada.",
-      variant: "destructive"
+      description:
+        "IA detectou sinais de estresse elevado em 2 tripulantes. Consulta com psicólogo recomendada.",
+      variant: "destructive",
     });
   };
 
@@ -306,14 +312,16 @@ export const MaritimeHRDashboard: React.FC = () => {
   const handleComplianceCheck = () => {
     toast({
       title: "Verificação de Compliance",
-      description: "Sistema detectou 3 certificações vencendo nos próximos 30 dias. Renovação automática iniciada.",
+      description:
+        "Sistema detectou 3 certificações vencendo nos próximos 30 dias. Renovação automática iniciada.",
     });
   };
 
   const handlePlanRotation = () => {
     toast({
       title: "🗓️ Planejamento de Rotação",
-      description: "Abrindo ferramenta de planejamento inteligente de escalas e rotações de tripulação",
+      description:
+        "Abrindo ferramenta de planejamento inteligente de escalas e rotações de tripulação",
     });
     // TODO: Implement rotation planning dialog/page
   };
@@ -322,24 +330,26 @@ export const MaritimeHRDashboard: React.FC = () => {
     <div className="space-y-6">
       {/* Header Section */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-900 via-blue-800 to-cyan-900 p-8 text-azure-50">
-        <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
-        }}></div>
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+          }}
+        ></div>
         <div className="relative z-10">
           <div className="flex items-center gap-4 mb-6">
             <div className="p-4 bg-azure-100/20 rounded-2xl">
               <Users className="h-12 w-12" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold mb-2">
-                RH Marítimo Inteligente
-              </h1>
+              <h1 className="text-4xl font-bold mb-2">RH Marítimo Inteligente</h1>
               <p className="text-xl opacity-90">
                 Gestão Avançada de Recursos Humanos para Operações Marítimas
               </p>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="bg-azure-100/20 p-4 rounded-xl">
               <div className="flex items-center gap-2 mb-2">
@@ -412,8 +422,11 @@ export const MaritimeHRDashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {crewMembers.map((crew) => (
-                    <div key={crew.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                  {crewMembers.map(crew => (
+                    <div
+                      key={crew.id}
+                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                    >
                       <div className="flex items-center gap-4">
                         <div className="p-2 bg-blue-100 rounded-lg">
                           <Users className="h-5 w-5 text-blue-600" />
@@ -421,7 +434,9 @@ export const MaritimeHRDashboard: React.FC = () => {
                         <div>
                           <h3 className="font-semibold">{crew.name}</h3>
                           <p className="text-sm text-muted-foreground">{crew.rank}</p>
-                          <p className="text-xs text-muted-foreground">{crew.vessel || "Sem embarcação"}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {crew.vessel || "Sem embarcação"}
+                          </p>
                         </div>
                       </div>
                       <div className="text-right">
@@ -448,33 +463,33 @@ export const MaritimeHRDashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <Button 
-                    onClick={handleWellnessAlert} 
-                    variant="outline" 
+                  <Button
+                    onClick={handleWellnessAlert}
+                    variant="outline"
                     className="w-full justify-start"
                   >
                     <Heart className="h-4 w-4 mr-2" />
                     Verificar Bem-estar
                   </Button>
-                  <Button 
-                    onClick={handleTelemedicine} 
-                    variant="outline" 
+                  <Button
+                    onClick={handleTelemedicine}
+                    variant="outline"
                     className="w-full justify-start"
                   >
                     <Stethoscope className="h-4 w-4 mr-2" />
                     Telemedicina
                   </Button>
-                  <Button 
-                    onClick={handleComplianceCheck} 
-                    variant="outline" 
+                  <Button
+                    onClick={handleComplianceCheck}
+                    variant="outline"
                     className="w-full justify-start"
                   >
                     <Shield className="h-4 w-4 mr-2" />
                     Verificar Compliance
                   </Button>
-                  <Button 
+                  <Button
                     onClick={handlePlanRotation}
-                    variant="outline" 
+                    variant="outline"
                     className="w-full justify-start"
                   >
                     <Calendar className="h-4 w-4 mr-2" />
@@ -561,11 +576,13 @@ export const MaritimeHRDashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {crewMembers.map((crew) => (
-                    <div 
+                  {crewMembers.map(crew => (
+                    <div
                       key={crew.id}
                       className={`p-3 border rounded-lg cursor-pointer transition-colors ${
-                        selectedCrew?.id === crew.id ? "bg-primary/10 border-primary" : "hover:bg-muted/50"
+                        selectedCrew?.id === crew.id
+                          ? "bg-primary/10 border-primary"
+                          : "hover:bg-muted/50"
                       }`}
                       onClick={() => setSelectedCrew(crew)}
                     >
@@ -577,7 +594,7 @@ export const MaritimeHRDashboard: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                
+
                 <div className="mt-4">
                   <Button className="w-full">
                     <Users className="h-4 w-4 mr-2" />
@@ -616,7 +633,10 @@ export const MaritimeHRDashboard: React.FC = () => {
                           </div>
                           <div className="flex justify-between">
                             <span>Status:</span>
-                            <Badge className={getStatusColor(selectedCrew.status)} variant="outline">
+                            <Badge
+                              className={getStatusColor(selectedCrew.status)}
+                              variant="outline"
+                            >
                               {getStatusLabel(selectedCrew.status)}
                             </Badge>
                           </div>
@@ -629,7 +649,9 @@ export const MaritimeHRDashboard: React.FC = () => {
                           <div className="flex justify-between">
                             <span>Início:</span>
                             <span className="font-medium">
-                              {new Date(selectedCrew.contract.start_date).toLocaleDateString("pt-BR")}
+                              {new Date(selectedCrew.contract.start_date).toLocaleDateString(
+                                "pt-BR"
+                              )}
                             </span>
                           </div>
                           <div className="flex justify-between">
@@ -640,7 +662,9 @@ export const MaritimeHRDashboard: React.FC = () => {
                           </div>
                           <div className="flex justify-between">
                             <span>Duração:</span>
-                            <span className="font-medium">{selectedCrew.contract.duration_months} meses</span>
+                            <span className="font-medium">
+                              {selectedCrew.contract.duration_months} meses
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -650,11 +674,13 @@ export const MaritimeHRDashboard: React.FC = () => {
                         <div className="mt-2 space-y-2 text-sm">
                           <div className="flex justify-between">
                             <span>Avaliação:</span>
-                            <span className="font-medium">{selectedCrew.performance.rating}/10</span>
+                            <span className="font-medium">
+                              {selectedCrew.performance.rating}/10
+                            </span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                              className="bg-green-600 h-2 rounded-full" 
+                            <div
+                              className="bg-green-600 h-2 rounded-full"
                               style={{ width: `${selectedCrew.performance.rating * 10}%` }}
                             ></div>
                           </div>
@@ -677,7 +703,9 @@ export const MaritimeHRDashboard: React.FC = () => {
                           <div className="flex justify-between">
                             <span>Último Exame:</span>
                             <span className="font-medium">
-                              {new Date(selectedCrew.medical.last_checkup).toLocaleDateString("pt-BR")}
+                              {new Date(selectedCrew.medical.last_checkup).toLocaleDateString(
+                                "pt-BR"
+                              )}
                             </span>
                           </div>
                           <div className="flex justify-between">
@@ -708,7 +736,9 @@ export const MaritimeHRDashboard: React.FC = () => {
                           </div>
                           <div className="flex items-center gap-2">
                             <AlertTriangle className="h-3 w-3" />
-                            <span className="font-medium">{selectedCrew.contact.emergency_contact}</span>
+                            <span className="font-medium">
+                              {selectedCrew.contact.emergency_contact}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -718,16 +748,22 @@ export const MaritimeHRDashboard: React.FC = () => {
                         <div className="mt-2 space-y-2 text-sm">
                           <div className="flex justify-between">
                             <span>Total de Meses:</span>
-                            <span className="font-medium">{selectedCrew.sea_service.total_months}</span>
+                            <span className="font-medium">
+                              {selectedCrew.sea_service.total_months}
+                            </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Embarcações Servidas:</span>
-                            <span className="font-medium">{selectedCrew.sea_service.vessels_served.length}</span>
+                            <span className="font-medium">
+                              {selectedCrew.sea_service.vessels_served.length}
+                            </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Última Viagem:</span>
                             <span className="font-medium">
-                              {new Date(selectedCrew.sea_service.last_voyage_end).toLocaleDateString("pt-BR")}
+                              {new Date(
+                                selectedCrew.sea_service.last_voyage_end
+                              ).toLocaleDateString("pt-BR")}
                             </span>
                           </div>
                         </div>
@@ -805,8 +841,11 @@ export const MaritimeHRDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4">
-                {trainingPrograms.map((program) => (
-                  <div key={program.id} className="flex items-center justify-between p-4 border rounded-lg">
+                {trainingPrograms.map(program => (
+                  <div
+                    key={program.id}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center gap-4">
                       <div className="p-2 bg-purple-100 rounded-lg">
                         <GraduationCap className="h-5 w-5 text-purple-600" />

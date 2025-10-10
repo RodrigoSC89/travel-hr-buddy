@@ -17,10 +17,7 @@ export class SupabaseManager {
   /**
    * Execute a Supabase operation with automatic retry on failure
    */
-  async executeWithRetry<T>(
-    operation: () => Promise<T>,
-    retryCount = 0
-  ): Promise<T> {
+  async executeWithRetry<T>(operation: () => Promise<T>, retryCount = 0): Promise<T> {
     try {
       const result = await operation();
       // Reset retry count on success
@@ -34,11 +31,11 @@ export class SupabaseManager {
           `Supabase operation failed, retrying in ${delay}ms (attempt ${retryCount + 1}/${this.maxRetries})`,
           error
         );
-        
-        await new Promise((resolve) => setTimeout(resolve, delay));
+
+        await new Promise(resolve => setTimeout(resolve, delay));
         return this.executeWithRetry(operation, retryCount + 1);
       }
-      
+
       throw error;
     }
   }
@@ -55,12 +52,8 @@ export class SupabaseManager {
    */
   async healthCheck(): Promise<boolean> {
     try {
-      const { error } = await this.client
-        .from("profiles")
-        .select("id")
-        .limit(1)
-        .single();
-      
+      const { error } = await this.client.from("profiles").select("id").limit(1).single();
+
       return !error || error.code === "PGRST116"; // No rows is ok
     } catch (error) {
       return false;

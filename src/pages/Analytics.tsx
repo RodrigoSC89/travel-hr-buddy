@@ -21,7 +21,7 @@ const Analytics = () => {
           badges={[
             { icon: Brain, label: "IA Preditiva" },
             { icon: TrendingUp, label: "Tendências" },
-            { icon: Target, label: "KPIs" }
+            { icon: Target, label: "KPIs" },
           ]}
         />
 
@@ -57,9 +57,7 @@ const Analytics = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Indicadores Chave de Performance</CardTitle>
-                <CardDescription>
-                  Monitore os KPIs mais importantes do seu negócio
-                </CardDescription>
+                <CardDescription>Monitore os KPIs mais importantes do seu negócio</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-12">

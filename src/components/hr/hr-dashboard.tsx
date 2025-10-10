@@ -5,17 +5,41 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { StatsCard } from "@/components/ui/stats-card";
 import { DataTable, Column } from "@/components/ui/data-table";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CertificateManager } from "./certificate-manager";
 import { CertificateAlerts } from "./certificate-alerts";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Users, 
-  UserPlus, 
-  Search, 
+import {
+  Users,
+  UserPlus,
+  Search,
   Filter,
   Calendar,
   Award,
@@ -26,7 +50,7 @@ import {
   Star,
   UserMinus,
   Trash2,
-  FileText
+  FileText,
 } from "lucide-react";
 
 interface Employee {
@@ -56,7 +80,7 @@ const mockEmployees: Employee[] = [
     startDate: "2022-03-15",
     status: "active",
     certifications: ["STCW Basic Safety", "DP Certificate", "Leadership"],
-    rating: 4.8
+    rating: 4.8,
   },
   {
     id: "002",
@@ -69,7 +93,7 @@ const mockEmployees: Employee[] = [
     startDate: "2021-07-20",
     status: "travel",
     certifications: ["IATA Certified", "Corporate Travel", "GDS Expert"],
-    rating: 4.6
+    rating: 4.6,
   },
   {
     id: "003",
@@ -82,7 +106,7 @@ const mockEmployees: Employee[] = [
     startDate: "2023-01-10",
     status: "vacation",
     certifications: ["HR Management", "Recruitment Specialist"],
-    rating: 4.9
+    rating: 4.9,
   },
   {
     id: "004",
@@ -95,8 +119,8 @@ const mockEmployees: Employee[] = [
     startDate: "2020-11-05",
     status: "active",
     certifications: ["Hotel Management", "Revenue Management", "Customer Service"],
-    rating: 4.7
-  }
+    rating: 4.7,
+  },
 ];
 
 export const HRDashboard = () => {
@@ -111,7 +135,8 @@ export const HRDashboard = () => {
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [employeeToRemove, setEmployeeToRemove] = useState<Employee | null>(null);
   const [certificateManagerOpen, setCertificateManagerOpen] = useState(false);
-  const [selectedEmployeeForCertificates, setSelectedEmployeeForCertificates] = useState<Employee | null>(null);
+  const [selectedEmployeeForCertificates, setSelectedEmployeeForCertificates] =
+    useState<Employee | null>(null);
   const [newEmployee, setNewEmployee] = useState<Partial<Employee>>({
     name: "",
     position: "",
@@ -121,29 +146,32 @@ export const HRDashboard = () => {
     location: "",
     status: "active",
     certifications: [],
-    rating: 0
+    rating: 0,
   });
 
   const handleEmployeeSelect = (employeeId: string) => {
-    setSelectedEmployees(prev => 
-      prev.includes(employeeId) 
-        ? prev.filter(id => id !== employeeId)
-        : [...prev, employeeId]
+    setSelectedEmployees(prev =>
+      prev.includes(employeeId) ? prev.filter(id => id !== employeeId) : [...prev, employeeId]
     );
   };
 
   const handleStatusChange = (employeeId: string, newStatus: Employee["status"]) => {
-    setEmployees(prev => prev.map(emp => 
-      emp.id === employeeId ? { ...emp, status: newStatus } : emp
-    ));
+    setEmployees(prev =>
+      prev.map(emp => (emp.id === employeeId ? { ...emp, status: newStatus } : emp))
+    );
   };
 
   const handleCreateEmployee = () => {
-    if (!newEmployee.name || !newEmployee.position || !newEmployee.department || !newEmployee.email) {
+    if (
+      !newEmployee.name ||
+      !newEmployee.position ||
+      !newEmployee.department ||
+      !newEmployee.email
+    ) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -157,9 +185,9 @@ export const HRDashboard = () => {
       phone: newEmployee.phone || "",
       location: newEmployee.location || "",
       startDate: new Date().toISOString().split("T")[0],
-      status: newEmployee.status as Employee["status"] || "active",
+      status: (newEmployee.status as Employee["status"]) || "active",
       certifications: newEmployee.certifications || [],
-      rating: newEmployee.rating || 4.0
+      rating: newEmployee.rating || 4.0,
     };
 
     setEmployees(prev => [...prev, employee]);
@@ -172,10 +200,10 @@ export const HRDashboard = () => {
       location: "",
       status: "active",
       certifications: [],
-      rating: 0
+      rating: 0,
     });
     setNewEmployeeOpen(false);
-    
+
     toast({
       title: "Funcionário criado",
       description: `${employee.name} foi adicionado ao sistema`,
@@ -210,65 +238,75 @@ export const HRDashboard = () => {
       render: (value, row) => (
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 rounded-full gradient-ocean flex items-center justify-center text-azure-50 font-bold text-sm">
-            {value.split(" ").map((n: string) => n[0]).join("")}
+            {value
+              .split(" ")
+              .map((n: string) => n[0])
+              .join("")}
           </div>
           <div>
             <div className="font-medium">{value}</div>
             <div className="text-sm text-muted-foreground">{row.position}</div>
           </div>
         </div>
-      )
+      ),
     },
     {
       key: "department",
       header: "Departamento",
-      sortable: true
+      sortable: true,
     },
     {
       key: "status",
       header: "Status",
-      render: (value) => (
-        <Badge 
+      render: value => (
+        <Badge
           className={
-            value === "active" ? "bg-success/10 text-success border-success/20" :
-              value === "vacation" ? "bg-warning/10 text-warning border-warning/20" :
-                value === "travel" ? "bg-info/10 text-info border-info/20" :
-                  "bg-muted text-muted-foreground border-muted"
+            value === "active"
+              ? "bg-success/10 text-success border-success/20"
+              : value === "vacation"
+                ? "bg-warning/10 text-warning border-warning/20"
+                : value === "travel"
+                  ? "bg-info/10 text-info border-info/20"
+                  : "bg-muted text-muted-foreground border-muted"
           }
         >
-          {value === "active" ? "Ativo" :
-            value === "vacation" ? "Férias" :
-              value === "travel" ? "Viagem" : "Inativo"}
+          {value === "active"
+            ? "Ativo"
+            : value === "vacation"
+              ? "Férias"
+              : value === "travel"
+                ? "Viagem"
+                : "Inativo"}
         </Badge>
-      )
+      ),
     },
     {
       key: "rating",
       header: "Avaliação",
       align: "center" as const,
-      render: (value) => (
+      render: value => (
         <div className="flex items-center justify-center">
           <Star size={16} className="mr-1 text-warning" fill="currentColor" />
           {value}
         </div>
-      )
+      ),
     },
     {
       key: "certifications",
       header: "Certificações",
       align: "center" as const,
-      render: (value) => (
+      render: value => (
         <div className="flex items-center justify-center">
           <Award size={16} className="mr-1 text-primary" />
           {value.length}
         </div>
-      )
+      ),
     },
     {
       key: "location",
       header: "Localização",
-      sortable: true
-    }
+      sortable: true,
+    },
   ];
 
   const stats = [
@@ -277,33 +315,35 @@ export const HRDashboard = () => {
       value: employees.length.toString(),
       icon: Users,
       change: { value: 5, type: "increase" as const },
-      variant: "ocean" as const
+      variant: "ocean" as const,
     },
     {
       title: "Funcionários Ativos",
       value: employees.filter(e => e.status === "active").length.toString(),
       icon: Briefcase,
-      variant: "success" as const
+      variant: "success" as const,
     },
     {
       title: "Em Viagem",
       value: employees.filter(e => e.status === "travel").length.toString(),
       icon: MapPin,
-      variant: "warning" as const
+      variant: "warning" as const,
     },
     {
       title: "Média de Avaliação",
       value: (employees.reduce((acc, emp) => acc + emp.rating, 0) / employees.length).toFixed(1),
       icon: Star,
-      variant: "default" as const
-    }
+      variant: "default" as const,
+    },
   ];
 
   const filteredEmployees = employees.filter(employee => {
-    const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         employee.department.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
+    const matchesSearch =
+      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.department.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDepartment =
+      selectedDepartment === "all" || employee.department === selectedDepartment;
     return matchesSearch && matchesDepartment;
   });
 
@@ -311,21 +351,31 @@ export const HRDashboard = () => {
 
   const getStatusColor = (status: Employee["status"]) => {
     switch (status) {
-    case "active": return "bg-success text-azure-50";
-    case "vacation": return "bg-warning text-azure-900";
-    case "travel": return "bg-info text-azure-50";
-    case "inactive": return "bg-muted text-muted-foreground";
-    default: return "bg-muted text-muted-foreground";
+      case "active":
+        return "bg-success text-azure-50";
+      case "vacation":
+        return "bg-warning text-azure-900";
+      case "travel":
+        return "bg-info text-azure-50";
+      case "inactive":
+        return "bg-muted text-muted-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusLabel = (status: Employee["status"]) => {
     switch (status) {
-    case "active": return "Ativo";
-    case "vacation": return "Férias";
-    case "travel": return "Viagem";
-    case "inactive": return "Inativo";
-    default: return "N/A";
+      case "active":
+        return "Ativo";
+      case "vacation":
+        return "Férias";
+      case "travel":
+        return "Viagem";
+      case "inactive":
+        return "Inativo";
+      default:
+        return "N/A";
     }
   };
 
@@ -342,8 +392,8 @@ export const HRDashboard = () => {
           </p>
         </div>
         <div className="flex items-center space-x-2 mt-4 md:mt-0">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => setShowTable(!showTable)}
             className={showTable ? "bg-accent" : ""}
           >
@@ -359,9 +409,7 @@ export const HRDashboard = () => {
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>Novo Funcionário</DialogTitle>
-                <DialogDescription>
-                  Adicione um novo funcionário ao sistema
-                </DialogDescription>
+                <DialogDescription>Adicione um novo funcionário ao sistema</DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -371,7 +419,7 @@ export const HRDashboard = () => {
                   <Input
                     id="name"
                     value={newEmployee.name || ""}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={e => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
                     className="col-span-3"
                   />
                 </div>
@@ -382,7 +430,7 @@ export const HRDashboard = () => {
                   <Input
                     id="position"
                     value={newEmployee.position || ""}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, position: e.target.value }))}
+                    onChange={e => setNewEmployee(prev => ({ ...prev, position: e.target.value }))}
                     className="col-span-3"
                   />
                 </div>
@@ -390,7 +438,12 @@ export const HRDashboard = () => {
                   <Label htmlFor="department" className="text-right">
                     Departamento *
                   </Label>
-                  <Select value={newEmployee.department || ""} onValueChange={(value) => setNewEmployee(prev => ({ ...prev, department: value }))}>
+                  <Select
+                    value={newEmployee.department || ""}
+                    onValueChange={value =>
+                      setNewEmployee(prev => ({ ...prev, department: value }))
+                    }
+                  >
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Selecione o departamento" />
                     </SelectTrigger>
@@ -412,7 +465,7 @@ export const HRDashboard = () => {
                     id="email"
                     type="email"
                     value={newEmployee.email || ""}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, email: e.target.value }))}
+                    onChange={e => setNewEmployee(prev => ({ ...prev, email: e.target.value }))}
                     className="col-span-3"
                   />
                 </div>
@@ -423,7 +476,7 @@ export const HRDashboard = () => {
                   <Input
                     id="phone"
                     value={newEmployee.phone || ""}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, phone: e.target.value }))}
+                    onChange={e => setNewEmployee(prev => ({ ...prev, phone: e.target.value }))}
                     className="col-span-3"
                   />
                 </div>
@@ -434,7 +487,7 @@ export const HRDashboard = () => {
                   <Input
                     id="location"
                     value={newEmployee.location || ""}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, location: e.target.value }))}
+                    onChange={e => setNewEmployee(prev => ({ ...prev, location: e.target.value }))}
                     className="col-span-3"
                   />
                 </div>
@@ -467,11 +520,14 @@ export const HRDashboard = () => {
       <Card className="p-6">
         <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
+            <Search
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+              size={20}
+            />
             <Input
               placeholder="Buscar funcionários..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -479,12 +535,14 @@ export const HRDashboard = () => {
             <Filter size={20} className="text-muted-foreground" />
             <select
               value={selectedDepartment}
-              onChange={(e) => setSelectedDepartment(e.target.value)}
+              onChange={e => setSelectedDepartment(e.target.value)}
               className="px-3 py-2 border border-border rounded-lg bg-background text-foreground"
             >
               <option value="all">Todos os Departamentos</option>
               {departments.map(dept => (
-                <option key={dept} value={dept}>{dept}</option>
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
               ))}
             </select>
           </div>
@@ -503,20 +561,26 @@ export const HRDashboard = () => {
           pagination={true}
           pageSize={10}
           actions={{
-            view: (employee) => handleViewProfile(employee),
-            edit: (employee) => handleViewProfile(employee),
-            delete: (employee) => setEmployeeToRemove(employee)
+            view: employee => handleViewProfile(employee),
+            edit: employee => handleViewProfile(employee),
+            delete: employee => setEmployeeToRemove(employee),
           }}
-          onRowClick={(employee) => handleViewProfile(employee)}
+          onRowClick={employee => handleViewProfile(employee)}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredEmployees.map((employee) => (
-            <Card key={employee.id} className="p-6 hover:shadow-nautical transition-all duration-300">
+          {filteredEmployees.map(employee => (
+            <Card
+              key={employee.id}
+              className="p-6 hover:shadow-nautical transition-all duration-300"
+            >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 rounded-full gradient-ocean flex items-center justify-center text-azure-50 font-bold text-lg">
-                    {employee.name.split(" ").map(n => n[0]).join("")}
+                    {employee.name
+                      .split(" ")
+                      .map(n => n[0])
+                      .join("")}
                   </div>
                   <div>
                     <h3 className="font-semibold text-lg">{employee.name}</h3>
@@ -583,26 +647,28 @@ export const HRDashboard = () => {
 
               {/* Actions */}
               <div className="flex space-x-2 mt-4 pt-4 border-t border-border">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   className="flex-1"
                   onClick={() => handleViewProfile(employee)}
                 >
                   Ver Perfil
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   className="ml-2"
                   onClick={() => handleOpenCertificates(employee)}
                 >
                   <FileText size={16} />
                 </Button>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   className={`flex-1 ${
-                    selectedEmployees.includes(employee.id) ? "bg-success hover:bg-success/90" : "gradient-ocean"
+                    selectedEmployees.includes(employee.id)
+                      ? "bg-success hover:bg-success/90"
+                      : "gradient-ocean"
                   }`}
                   onClick={() => handleEmployeeSelect(employee.id)}
                 >
@@ -610,11 +676,11 @@ export const HRDashboard = () => {
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       variant="destructive"
                       className="ml-2"
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={e => e.stopPropagation()}
                     >
                       <UserMinus size={16} />
                     </Button>
@@ -623,13 +689,13 @@ export const HRDashboard = () => {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Remover Funcionário</AlertDialogTitle>
                       <AlertDialogDescription>
-                        Tem certeza que deseja remover <strong>{employee.name}</strong> do sistema? 
+                        Tem certeza que deseja remover <strong>{employee.name}</strong> do sistema?
                         Esta ação não pode ser desfeita.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                      <AlertDialogAction 
+                      <AlertDialogAction
                         onClick={() => handleRemoveEmployee(employee)}
                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                       >
@@ -649,9 +715,7 @@ export const HRDashboard = () => {
         <Card className="p-12 text-center">
           <Users className="mx-auto mb-4 text-muted-foreground" size={48} />
           <h3 className="text-lg font-semibold mb-2">Nenhum funcionário encontrado</h3>
-          <p className="text-muted-foreground">
-            Tente ajustar os filtros ou termos de busca
-          </p>
+          <p className="text-muted-foreground">Tente ajustar os filtros ou termos de busca</p>
         </Card>
       )}
 
@@ -660,15 +724,16 @@ export const HRDashboard = () => {
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle>Perfil do Funcionário</DialogTitle>
-            <DialogDescription>
-              Informações detalhadas do funcionário
-            </DialogDescription>
+            <DialogDescription>Informações detalhadas do funcionário</DialogDescription>
           </DialogHeader>
           {selectedEmployee && (
             <div className="grid gap-6 py-4">
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 rounded-full gradient-ocean flex items-center justify-center text-azure-50 font-bold text-xl">
-                  {selectedEmployee.name.split(" ").map(n => n[0]).join("")}
+                  {selectedEmployee.name
+                    .split(" ")
+                    .map(n => n[0])
+                    .join("")}
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold">{selectedEmployee.name}</h3>
@@ -678,7 +743,7 @@ export const HRDashboard = () => {
                   </Badge>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-medium mb-2">Informações de Contato</h4>
@@ -697,7 +762,7 @@ export const HRDashboard = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 className="font-medium mb-2">Informações Profissionais</h4>
                   <div className="space-y-2 text-sm">
@@ -716,9 +781,11 @@ export const HRDashboard = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div>
-                <h4 className="font-medium mb-2">Certificações ({selectedEmployee.certifications.length})</h4>
+                <h4 className="font-medium mb-2">
+                  Certificações ({selectedEmployee.certifications.length})
+                </h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedEmployee.certifications.map((cert, index) => (
                     <Badge key={index} variant="secondary">
@@ -733,12 +800,14 @@ export const HRDashboard = () => {
             <Button variant="outline" onClick={() => setEmployeeProfileOpen(false)}>
               Fechar
             </Button>
-            <Button onClick={() => {
-              toast({
-                title: "Edição em desenvolvimento",
-                description: "Funcionalidade de edição será implementada em breve",
-              });
-            }}>
+            <Button
+              onClick={() => {
+                toast({
+                  title: "Edição em desenvolvimento",
+                  description: "Funcionalidade de edição será implementada em breve",
+                });
+              }}
+            >
               Editar Funcionário
             </Button>
             <AlertDialog>
@@ -752,13 +821,13 @@ export const HRDashboard = () => {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Remover Funcionário</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Tem certeza que deseja remover <strong>{selectedEmployee?.name}</strong> do sistema? 
-                    Esta ação não pode ser desfeita.
+                    Tem certeza que deseja remover <strong>{selectedEmployee?.name}</strong> do
+                    sistema? Esta ação não pode ser desfeita.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction 
+                  <AlertDialogAction
                     onClick={() => {
                       if (selectedEmployee) {
                         handleRemoveEmployee(selectedEmployee);
@@ -782,13 +851,13 @@ export const HRDashboard = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Remover Funcionário</AlertDialogTitle>
             <AlertDialogDescription>
-              Tem certeza que deseja remover <strong>{employeeToRemove?.name}</strong> do sistema? 
+              Tem certeza que deseja remover <strong>{employeeToRemove?.name}</strong> do sistema?
               Esta ação não pode ser desfeita.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction 
+            <AlertDialogAction
               onClick={() => employeeToRemove && handleRemoveEmployee(employeeToRemove)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
@@ -800,12 +869,12 @@ export const HRDashboard = () => {
 
       {/* Certificate Manager */}
       {certificateManagerOpen && selectedEmployeeForCertificates && (
-        <CertificateManager 
-          employee={selectedEmployeeForCertificates} 
+        <CertificateManager
+          employee={selectedEmployeeForCertificates}
           onClose={() => {
             setCertificateManagerOpen(false);
             setSelectedEmployeeForCertificates(null);
-          }} 
+          }}
         />
       )}
     </div>

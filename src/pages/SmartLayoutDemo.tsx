@@ -27,9 +27,7 @@ export default function SmartLayoutDemo() {
               <CheckCircle2 className="w-5 h-5 text-green-500" />
               Recursos Implementados
             </CardTitle>
-            <CardDescription>
-              Todas as melhorias do sistema Nautilus One
-            </CardDescription>
+            <CardDescription>Todas as melhorias do sistema Nautilus One</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-start gap-2">
@@ -77,9 +75,7 @@ export default function SmartLayoutDemo() {
               <Zap className="w-5 h-5 text-yellow-500" />
               Funcionalidades do Header
             </CardTitle>
-            <CardDescription>
-              Barra superior inteligente
-            </CardDescription>
+            <CardDescription>Barra superior inteligente</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center gap-2">
@@ -108,9 +104,7 @@ export default function SmartLayoutDemo() {
             <Palette className="w-5 h-5 text-purple-500" />
             Design System
           </CardTitle>
-          <CardDescription>
-            Padrões visuais modernos e consistentes
-          </CardDescription>
+          <CardDescription>Padrões visuais modernos e consistentes</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -149,9 +143,7 @@ export default function SmartLayoutDemo() {
             <Smartphone className="w-5 h-5 text-blue-500" />
             Responsividade
           </CardTitle>
-          <CardDescription>
-            Adaptado para todos os dispositivos
-          </CardDescription>
+          <CardDescription>Adaptado para todos os dispositivos</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 md:grid-cols-3">

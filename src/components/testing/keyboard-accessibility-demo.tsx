@@ -2,17 +2,54 @@ import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Keyboard, Mouse, Check, Info } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Keyboard, Check, Info } from "lucide-react";
 
 /**
  * Keyboard Accessibility Demo Component
- * 
+ *
  * This component demonstrates all keyboard accessibility features
  * implemented across the application.
  */
@@ -39,10 +76,19 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
               Testing Instructions
             </h3>
             <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-disc list-inside">
-              <li>Use <Badge variant="outline">Tab</Badge> to navigate between components</li>
-              <li>Use <Badge variant="outline">Enter</Badge> or <Badge variant="outline">Space</Badge> to activate</li>
-              <li>Use <Badge variant="outline">Esc</Badge> to close modals and menus</li>
-              <li>Use <Badge variant="outline">Arrow Keys</Badge> to navigate within menus</li>
+              <li>
+                Use <Badge variant="outline">Tab</Badge> to navigate between components
+              </li>
+              <li>
+                Use <Badge variant="outline">Enter</Badge> or <Badge variant="outline">Space</Badge>{" "}
+                to activate
+              </li>
+              <li>
+                Use <Badge variant="outline">Esc</Badge> to close modals and menus
+              </li>
+              <li>
+                Use <Badge variant="outline">Arrow Keys</Badge> to navigate within menus
+              </li>
               <li>All components should show visible focus indicators</li>
             </ul>
           </div>
@@ -91,8 +137,8 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This demonstrates an accessible confirmation dialog.
-                    Use Tab to move between Cancel and Continue buttons.
+                    This demonstrates an accessible confirmation dialog. Use Tab to move between
+                    Cancel and Continue buttons.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -165,9 +211,15 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
                   </SheetDescription>
                 </SheetHeader>
                 <div className="space-y-4 mt-4">
-                  <Button className="w-full" variant="outline">Button 1</Button>
-                  <Button className="w-full" variant="outline">Button 2</Button>
-                  <Button className="w-full" variant="outline">Button 3</Button>
+                  <Button className="w-full" variant="outline">
+                    Button 1
+                  </Button>
+                  <Button className="w-full" variant="outline">
+                    Button 2
+                  </Button>
+                  <Button className="w-full" variant="outline">
+                    Button 3
+                  </Button>
                 </div>
               </SheetContent>
             </Sheet>
@@ -189,7 +241,9 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
                   <p className="text-sm text-muted-foreground">
                     This popover is keyboard accessible. Click outside or press Escape to close.
                   </p>
-                  <Button size="sm" variant="outline">Action Button</Button>
+                  <Button size="sm" variant="outline">
+                    Action Button
+                  </Button>
                 </div>
               </PopoverContent>
             </Popover>
@@ -201,7 +255,7 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
             <p className="text-sm text-muted-foreground">
               Arrow keys navigate options, Enter selects
             </p>
-            <Select onValueChange={(value) => setSelectedAction(`Selected: ${value}`)}>
+            <Select onValueChange={value => setSelectedAction(`Selected: ${value}`)}>
               <SelectTrigger className="w-[280px]">
                 <SelectValue placeholder="Select an option (Tab + Enter)" />
               </SelectTrigger>
@@ -259,7 +313,8 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
           <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg border border-green-200 dark:border-green-800">
             <p className="text-sm text-green-800 dark:text-green-200 flex items-center gap-2">
               <Check className="h-5 w-5" />
-              <strong>All components are fully keyboard accessible!</strong> Users can navigate and interact with every element using only the keyboard.
+              <strong>All components are fully keyboard accessible!</strong> Users can navigate and
+              interact with every element using only the keyboard.
             </p>
           </div>
         </CardContent>

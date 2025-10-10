@@ -4,17 +4,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Ship, 
-  Navigation, 
-  Gauge, 
-  Fuel, 
+import {
+  Ship,
+  Navigation,
+  Gauge,
+  Fuel,
   AlertTriangle,
   MapPin,
   Clock,
   Activity,
-  TrendingUp,
-  Anchor
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -41,15 +39,19 @@ export const RealTimeFleetMonitor = () => {
 
   useEffect(() => {
     loadFleetData();
-    
+
     // Set up real-time subscription
     const channel = supabase
       .channel("fleet-updates")
-      .on("postgres_changes", {
-        event: "*",
-        schema: "public",
-        table: "vessels"
-      }, handleFleetUpdate)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "vessels",
+        },
+        handleFleetUpdate
+      )
       .subscribe();
 
     // Set up periodic updates
@@ -66,39 +68,37 @@ export const RealTimeFleetMonitor = () => {
   const loadFleetData = async () => {
     try {
       setLoading(true);
-      
-      const { data: vesselsData, error } = await supabase
-        .from("vessels")
-        .select("*")
-        .limit(10);
+
+      const { data: vesselsData, error } = await supabase.from("vessels").select("*").limit(10);
 
       if (error) throw error;
 
       // Transform data to match our interface with mock performance data
-      const transformedVessels: VesselMetrics[] = vesselsData?.map(vessel => ({
-        id: vessel.id,
-        name: vessel.name,
-        status: vessel.status || "operational",
-        location: vessel.current_location && 
-                 typeof vessel.current_location === "object"
-          ? { 
-            lat: (vessel.current_location as any).lat || -23.5505, 
-            lon: (vessel.current_location as any).lon || -46.6333 
-          }
-          : { lat: -23.5505, lon: -46.6333 },
-        speed: Math.random() * 20 + 5, // Mock speed 5-25 knots
-        heading: Math.random() * 360, // Mock heading 0-360 degrees
-        fuelLevel: Math.random() * 100, // Mock fuel level 0-100%
-        engineHours: Math.floor(Math.random() * 5000 + 1000), // Mock engine hours
-        lastMaintenance: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
-        nextMaintenance: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000),
-        crew: Math.floor(Math.random() * 20 + 5) // Mock crew size 5-25
-      })) || [];
+      const transformedVessels: VesselMetrics[] =
+        vesselsData?.map(vessel => ({
+          id: vessel.id,
+          name: vessel.name,
+          status: vessel.status || "operational",
+          location:
+            vessel.current_location && typeof vessel.current_location === "object"
+              ? {
+                  lat: (vessel.current_location as any).lat || -23.5505,
+                  lon: (vessel.current_location as any).lon || -46.6333,
+                }
+              : { lat: -23.5505, lon: -46.6333 },
+          speed: Math.random() * 20 + 5, // Mock speed 5-25 knots
+          heading: Math.random() * 360, // Mock heading 0-360 degrees
+          fuelLevel: Math.random() * 100, // Mock fuel level 0-100%
+          engineHours: Math.floor(Math.random() * 5000 + 1000), // Mock engine hours
+          lastMaintenance: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+          nextMaintenance: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000),
+          crew: Math.floor(Math.random() * 20 + 5), // Mock crew size 5-25
+        })) || [];
 
       setVessels(transformedVessels);
-      
     } catch (error) {
-  } finally {
+      console.warn("[EMPTY CATCH]", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -106,47 +106,56 @@ export const RealTimeFleetMonitor = () => {
   const handleFleetUpdate = (payload: any) => {
     // Update specific vessel data
     if (payload.eventType === "UPDATE") {
-      setVessels(prev => prev.map(vessel => 
-        vessel.id === payload.new.id 
-          ? { ...vessel, ...payload.new }
-          : vessel
-      ));
+      setVessels(prev =>
+        prev.map(vessel => (vessel.id === payload.new.id ? { ...vessel, ...payload.new } : vessel))
+      );
     }
   };
 
   const updateVesselPositions = async () => {
     // Simulate real-time position updates
-    setVessels(prev => prev.map(vessel => ({
-      ...vessel,
-      speed: Math.max(0, vessel.speed + (Math.random() - 0.5) * 2),
-      heading: (vessel.heading + (Math.random() - 0.5) * 10) % 360,
-      location: {
-        lat: vessel.location.lat + (Math.random() - 0.5) * 0.01,
-        lon: vessel.location.lon + (Math.random() - 0.5) * 0.01
-      }
-    })));
+    setVessels(prev =>
+      prev.map(vessel => ({
+        ...vessel,
+        speed: Math.max(0, vessel.speed + (Math.random() - 0.5) * 2),
+        heading: (vessel.heading + (Math.random() - 0.5) * 10) % 360,
+        location: {
+          lat: vessel.location.lat + (Math.random() - 0.5) * 0.01,
+          lon: vessel.location.lon + (Math.random() - 0.5) * 0.01,
+        },
+      }))
+    );
   };
 
-  const updateWeatherForVessel = async (vesselId: string, location: { lat: number; lon: number }) => {
+  const updateWeatherForVessel = async (
+    vesselId: string,
+    location: { lat: number; lon: number }
+  ) => {
     try {
       const { data, error } = await supabase.functions.invoke("maritime-weather", {
-        body: { location, vesselId }
+        body: { location, vesselId },
       });
 
       if (error) throw error;
 
       setWeatherData(data.weather);
     } catch (error) {
-  }
+      console.warn("[EMPTY CATCH]", error);
+    }
   };
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-    case "operational": return "bg-green-100 text-green-800";
-    case "maintenance": return "bg-yellow-100 text-yellow-800";
-    case "emergency": return "bg-red-100 text-red-800";
-    case "docked": return "bg-blue-100 text-blue-800";
-    default: return "bg-secondary text-secondary-foreground";
+      case "operational":
+        return "bg-green-100 text-green-800";
+      case "maintenance":
+        return "bg-yellow-100 text-yellow-800";
+      case "emergency":
+        return "bg-red-100 text-red-800";
+      case "docked":
+        return "bg-blue-100 text-blue-800";
+      default:
+        return "bg-secondary text-secondary-foreground";
     }
   };
 
@@ -189,9 +198,9 @@ export const RealTimeFleetMonitor = () => {
 
       {/* Fleet Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {vessels.map((vessel) => (
-          <Card 
-            key={vessel.id} 
+        {vessels.map(vessel => (
+          <Card
+            key={vessel.id}
             className={`cursor-pointer transition-all hover:shadow-md ${
               selectedVessel === vessel.id ? "ring-2 ring-primary" : ""
             }`}
@@ -206,9 +215,7 @@ export const RealTimeFleetMonitor = () => {
                   <Ship className="h-5 w-5" />
                   {vessel.name}
                 </CardTitle>
-                <Badge className={getStatusColor(vessel.status)}>
-                  {vessel.status}
-                </Badge>
+                <Badge className={getStatusColor(vessel.status)}>{vessel.status}</Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -230,7 +237,7 @@ export const RealTimeFleetMonitor = () => {
                   <span>{vessel.crew} crew</span>
                 </div>
               </div>
-              
+
               <div className="space-y-1">
                 <div className="flex justify-between text-xs">
                   <span>Combustível</span>
@@ -258,9 +265,7 @@ export const RealTimeFleetMonitor = () => {
               <Ship className="h-5 w-5" />
               {selectedVesselData.name} - Detalhes
             </CardTitle>
-            <CardDescription>
-              Informações detalhadas da embarcação selecionada
-            </CardDescription>
+            <CardDescription>Informações detalhadas da embarcação selecionada</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="overview" className="w-full">
@@ -280,12 +285,18 @@ export const RealTimeFleetMonitor = () => {
                   </div>
                   <div className="text-center p-4 border rounded-lg">
                     <Navigation className="h-8 w-8 mx-auto mb-2 text-green-500" />
-                    <div className="text-2xl font-bold">{selectedVesselData.heading.toFixed(0)}°</div>
+                    <div className="text-2xl font-bold">
+                      {selectedVesselData.heading.toFixed(0)}°
+                    </div>
                     <div className="text-sm text-muted-foreground">Rumo</div>
                   </div>
                   <div className="text-center p-4 border rounded-lg">
-                    <Fuel className={`h-8 w-8 mx-auto mb-2 ${getFuelLevelColor(selectedVesselData.fuelLevel)}`} />
-                    <div className="text-2xl font-bold">{selectedVesselData.fuelLevel.toFixed(0)}%</div>
+                    <Fuel
+                      className={`h-8 w-8 mx-auto mb-2 ${getFuelLevelColor(selectedVesselData.fuelLevel)}`}
+                    />
+                    <div className="text-2xl font-bold">
+                      {selectedVesselData.fuelLevel.toFixed(0)}%
+                    </div>
                     <div className="text-sm text-muted-foreground">Combustível</div>
                   </div>
                   <div className="text-center p-4 border rounded-lg">
@@ -303,7 +314,9 @@ export const RealTimeFleetMonitor = () => {
                       <CardTitle className="text-lg">Horas de Motor</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-3xl font-bold">{selectedVesselData.engineHours.toLocaleString()}</div>
+                      <div className="text-3xl font-bold">
+                        {selectedVesselData.engineHours.toLocaleString()}
+                      </div>
                       <p className="text-sm text-muted-foreground">Horas totais de operação</p>
                     </CardContent>
                   </Card>
@@ -333,7 +346,11 @@ export const RealTimeFleetMonitor = () => {
                         {selectedVesselData.lastMaintenance.toLocaleDateString("pt-BR")}
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        {Math.floor((Date.now() - selectedVesselData.lastMaintenance.getTime()) / (1000 * 60 * 60 * 24))} dias atrás
+                        {Math.floor(
+                          (Date.now() - selectedVesselData.lastMaintenance.getTime()) /
+                            (1000 * 60 * 60 * 24)
+                        )}{" "}
+                        dias atrás
                       </p>
                     </CardContent>
                   </Card>
@@ -349,7 +366,12 @@ export const RealTimeFleetMonitor = () => {
                         {selectedVesselData.nextMaintenance.toLocaleDateString("pt-BR")}
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        Em {Math.floor((selectedVesselData.nextMaintenance.getTime() - Date.now()) / (1000 * 60 * 60 * 24))} dias
+                        Em{" "}
+                        {Math.floor(
+                          (selectedVesselData.nextMaintenance.getTime() - Date.now()) /
+                            (1000 * 60 * 60 * 24)
+                        )}{" "}
+                        dias
                       </p>
                     </CardContent>
                   </Card>
@@ -374,19 +396,24 @@ export const RealTimeFleetMonitor = () => {
                         </div>
                         <div className="flex justify-between">
                           <span>Visibilidade:</span>
-                          <span>{(weatherData.current.visibility/1000).toFixed(1)} km</span>
+                          <span>{(weatherData.current.visibility / 1000).toFixed(1)} km</span>
                         </div>
                       </CardContent>
                     </Card>
-                    
+
                     {weatherData.alerts.length > 0 && (
                       <Card>
                         <CardHeader>
-                          <CardTitle className="text-lg text-red-600">Alertas Meteorológicos</CardTitle>
+                          <CardTitle className="text-lg text-red-600">
+                            Alertas Meteorológicos
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
                           {weatherData.alerts.map((alert: any, index: number) => (
-                            <div key={index} className="p-2 bg-red-50 border border-red-200 rounded mb-2">
+                            <div
+                              key={index}
+                              className="p-2 bg-red-50 border border-red-200 rounded mb-2"
+                            >
                               <p className="text-sm text-red-800">{alert.message}</p>
                             </div>
                           ))}
@@ -396,7 +423,11 @@ export const RealTimeFleetMonitor = () => {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <Button onClick={() => updateWeatherForVessel(selectedVesselData.id, selectedVesselData.location)}>
+                    <Button
+                      onClick={() =>
+                        updateWeatherForVessel(selectedVesselData.id, selectedVesselData.location)
+                      }
+                    >
                       Carregar Dados Meteorológicos
                     </Button>
                   </div>

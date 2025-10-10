@@ -1,6 +1,6 @@
 /**
  * Test suite for weekly-report-cron.js
- * 
+ *
  * These tests validate the script's structure and error handling
  * without requiring actual email credentials or Supabase connection.
  */
@@ -34,7 +34,7 @@ describe("Weekly Report Cron Script", () => {
     const child = spawn("node", ["--check", scriptPath]);
 
     await new Promise((resolve, reject) => {
-      child.on("exit", (code) => {
+      child.on("exit", code => {
         if (code === 0) {
           resolve();
         } else {
@@ -42,7 +42,7 @@ describe("Weekly Report Cron Script", () => {
         }
       });
 
-      child.on("error", (err) => {
+      child.on("error", err => {
         reject(err);
       });
     });
@@ -62,24 +62,28 @@ describe("Weekly Report Cron Script", () => {
       let stdout = "";
       let stderr = "";
 
-      child.stdout.on("data", (data) => {
+      child.stdout.on("data", data => {
         stdout += data.toString();
       });
 
-      child.stderr.on("data", (data) => {
+      child.stderr.on("data", data => {
         stderr += data.toString();
       });
 
-      child.on("exit", (code) => {
+      child.on("exit", code => {
         const output = stdout + stderr;
         if (code === 1 && output.includes("SUPABASE_KEY")) {
           resolve();
         } else {
-          reject(new Error(`Expected exit code 1 with SUPABASE_KEY error, got code ${code}, output: ${output}`));
+          reject(
+            new Error(
+              `Expected exit code 1 with SUPABASE_KEY error, got code ${code}, output: ${output}`
+            )
+          );
         }
       });
 
-      child.on("error", (err) => {
+      child.on("error", err => {
         reject(err);
       });
     });
@@ -100,24 +104,28 @@ describe("Weekly Report Cron Script", () => {
       let stdout = "";
       let stderr = "";
 
-      child.stdout.on("data", (data) => {
+      child.stdout.on("data", data => {
         stdout += data.toString();
       });
 
-      child.stderr.on("data", (data) => {
+      child.stderr.on("data", data => {
         stderr += data.toString();
       });
 
-      child.on("exit", (code) => {
+      child.on("exit", code => {
         const output = stdout + stderr;
         if (code === 1 && output.includes("EMAIL_USER")) {
           resolve();
         } else {
-          reject(new Error(`Expected exit code 1 with EMAIL_USER error, got code ${code}, output: ${output}`));
+          reject(
+            new Error(
+              `Expected exit code 1 with EMAIL_USER error, got code ${code}, output: ${output}`
+            )
+          );
         }
       });
 
-      child.on("error", (err) => {
+      child.on("error", err => {
         reject(err);
       });
     });
@@ -130,7 +138,7 @@ describe("Weekly Report Cron Script", () => {
 
   it("should contain required imports", () => {
     const content = fs.readFileSync(scriptPath, "utf8");
-    
+
     // Check for required imports
     expect(content).toContain("nodemailer");
     expect(content).toContain("jsPDF");
@@ -140,7 +148,7 @@ describe("Weekly Report Cron Script", () => {
 
   it("should contain main function", () => {
     const content = fs.readFileSync(scriptPath, "utf8");
-    
+
     // Check for main functions
     expect(content).toContain("gerarPDF");
     expect(content).toContain("enviarEmail");
@@ -150,7 +158,7 @@ describe("Weekly Report Cron Script", () => {
 
   it("should have proper error handling", () => {
     const content = fs.readFileSync(scriptPath, "utf8");
-    
+
     // Check for error handling
     expect(content).toContain("try");
     expect(content).toContain("catch");
@@ -160,7 +168,7 @@ describe("Weekly Report Cron Script", () => {
 
   it("should have configuration validation", () => {
     const content = fs.readFileSync(scriptPath, "utf8");
-    
+
     // Check for validation
     expect(content).toContain("SUPABASE_KEY");
     expect(content).toContain("EMAIL_USER");

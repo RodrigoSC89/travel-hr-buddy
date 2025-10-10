@@ -2,22 +2,21 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Bell, 
-  Mail, 
-  Smartphone, 
-  Monitor, 
-  Clock, 
+import {
+  Bell,
+  Mail,
+  Smartphone,
+  Monitor,
+  Clock,
   Settings,
   TestTube,
   Users,
   Ship,
   Award,
-  MessageSquare
+  MessageSquare,
 } from "lucide-react";
 
 interface NotificationSettings {
@@ -38,14 +37,14 @@ interface NotificationsAlertsTabProps {
 export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
   settings,
   onUpdate,
-  testMode
+  testMode,
 }) => {
   const updateModuleSetting = (module: string, enabled: boolean) => {
     onUpdate({
       moduleSettings: {
         ...settings.moduleSettings,
-        [module]: enabled
-      }
+        [module]: enabled,
+      },
     });
   };
 
@@ -56,7 +55,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       description: "Alertas importantes enviados para o e-mail",
       icon: Mail,
       enabled: settings.emailAlerts,
-      onToggle: (enabled: boolean) => onUpdate({ emailAlerts: enabled })
+      onToggle: (enabled: boolean) => onUpdate({ emailAlerts: enabled }),
     },
     {
       id: "push",
@@ -64,7 +63,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       description: "Notificações em tempo real no navegador",
       icon: Smartphone,
       enabled: settings.pushNotifications,
-      onToggle: (enabled: boolean) => onUpdate({ pushNotifications: enabled })
+      onToggle: (enabled: boolean) => onUpdate({ pushNotifications: enabled }),
     },
     {
       id: "system",
@@ -72,8 +71,8 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       description: "Notificações internas do sistema",
       icon: Monitor,
       enabled: settings.systemAlerts,
-      onToggle: (enabled: boolean) => onUpdate({ systemAlerts: enabled })
-    }
+      onToggle: (enabled: boolean) => onUpdate({ systemAlerts: enabled }),
+    },
   ];
 
   const moduleNotifications = [
@@ -83,7 +82,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       description: "Novas mensagens e atualizações de canais",
       icon: MessageSquare,
       color: "text-blue-600",
-      enabled: settings.moduleSettings.communication || false
+      enabled: settings.moduleSettings.communication || false,
     },
     {
       id: "crew",
@@ -91,7 +90,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       description: "Embarques, desembarques e atualizações de pessoal",
       icon: Users,
       color: "text-green-600",
-      enabled: settings.moduleSettings.crew || false
+      enabled: settings.moduleSettings.crew || false,
     },
     {
       id: "vessels",
@@ -99,7 +98,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       description: "Status das embarcações e manutenções",
       icon: Ship,
       color: "text-purple-600",
-      enabled: settings.moduleSettings.vessels || false
+      enabled: settings.moduleSettings.vessels || false,
     },
     {
       id: "certificates",
@@ -107,15 +106,15 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       description: "Vencimentos e renovações de certificados",
       icon: Award,
       color: "text-orange-600",
-      enabled: settings.moduleSettings.certificates || false
-    }
+      enabled: settings.moduleSettings.certificates || false,
+    },
   ];
 
   const frequencies = [
     { value: "immediate", label: "Imediata" },
     { value: "hourly", label: "A cada hora" },
     { value: "daily", label: "Diariamente" },
-    { value: "weekly", label: "Semanalmente" }
+    { value: "weekly", label: "Semanalmente" },
   ];
 
   return (
@@ -126,7 +125,12 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
           <CardTitle className="flex items-center gap-2">
             <Bell className="w-5 h-5 text-primary" />
             Configurações Globais de Notificação
-            {testMode && <Badge variant="outline" className="ml-2"><TestTube className="w-3 h-3 mr-1" />Teste</Badge>}
+            {testMode && (
+              <Badge variant="outline" className="ml-2">
+                <TestTube className="w-3 h-3 mr-1" />
+                Teste
+              </Badge>
+            )}
           </CardTitle>
           <CardDescription>
             Configure como e quando você deseja receber alertas e notificações
@@ -134,16 +138,13 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {notificationTypes.map((type) => {
+            {notificationTypes.map(type => {
               const Icon = type.icon;
               return (
                 <div key={type.id} className="p-4 border rounded-lg">
                   <div className="flex items-center justify-between mb-3">
                     <Icon className="w-5 h-5 text-primary" />
-                    <Switch
-                      checked={type.enabled}
-                      onCheckedChange={type.onToggle}
-                    />
+                    <Switch checked={type.enabled} onCheckedChange={type.onToggle} />
                   </div>
                   <h4 className="font-medium mb-1">{type.title}</h4>
                   <p className="text-sm text-muted-foreground">{type.description}</p>
@@ -173,7 +174,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
                 id="scheduleStart"
                 type="time"
                 value={settings.scheduleStart}
-                onChange={(e) => onUpdate({ scheduleStart: e.target.value })}
+                onChange={e => onUpdate({ scheduleStart: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
                 Início do período para envio de notificações
@@ -186,7 +187,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
                 id="scheduleEnd"
                 type="time"
                 value={settings.scheduleEnd}
-                onChange={(e) => onUpdate({ scheduleEnd: e.target.value })}
+                onChange={e => onUpdate({ scheduleEnd: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
                 Fim do período para envio de notificações
@@ -230,7 +231,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
                   </div>
                   <Switch
                     checked={module.enabled}
-                    onCheckedChange={(enabled) => updateModuleSetting(module.id, enabled)}
+                    onCheckedChange={enabled => updateModuleSetting(module.id, enabled)}
                   />
                 </div>
                 {index < moduleNotifications.length - 1 && <Separator className="mt-4" />}
@@ -247,9 +248,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
             <Bell className="w-5 h-5 text-primary" />
             Categorias de Alertas
           </CardTitle>
-          <CardDescription>
-            Configure diferentes tipos de alertas e sua urgência
-          </CardDescription>
+          <CardDescription>Configure diferentes tipos de alertas e sua urgência</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -281,9 +280,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
                 <Switch defaultChecked />
               </div>
               <h5 className="font-medium mb-1">Alertas Informativos</h5>
-              <p className="text-sm text-muted-foreground">
-                Lembretes, dicas, atualizações gerais
-              </p>
+              <p className="text-sm text-muted-foreground">Lembretes, dicas, atualizações gerais</p>
             </div>
           </div>
         </CardContent>

@@ -13,17 +13,15 @@ import {
   GraduationCap,
   Wrench,
   Radio,
-  Settings,
   TestTube,
   Plus,
   Edit,
   Eye,
-  Download,
   CheckCircle,
   AlertTriangle,
   TrendingUp,
   Target,
-  Shield
+  Shield,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -60,7 +58,7 @@ const SECTIONS = [
     icon: Users,
     description: "Organograma, responsabilidades e estrutura",
     color: "text-blue-600",
-    bgColor: "bg-blue-50"
+    bgColor: "bg-blue-50",
   },
   {
     id: "training",
@@ -68,7 +66,7 @@ const SECTIONS = [
     icon: GraduationCap,
     description: "Certificações, competências e capacitação",
     color: "text-green-600",
-    bgColor: "bg-green-50"
+    bgColor: "bg-green-50",
   },
   {
     id: "procedures",
@@ -76,7 +74,7 @@ const SECTIONS = [
     icon: FileText,
     description: "FMEA, ASOG, contingência e emergência",
     color: "text-purple-600",
-    bgColor: "bg-purple-50"
+    bgColor: "bg-purple-50",
   },
   {
     id: "operation",
@@ -84,7 +82,7 @@ const SECTIONS = [
     icon: Radio,
     description: "Watch keeping, comunicação e protocolos",
     color: "text-orange-600",
-    bgColor: "bg-orange-50"
+    bgColor: "bg-orange-50",
   },
   {
     id: "maintenance",
@@ -92,7 +90,7 @@ const SECTIONS = [
     icon: Wrench,
     description: "Preventiva, preditiva e corretiva",
     color: "text-red-600",
-    bgColor: "bg-red-50"
+    bgColor: "bg-red-50",
   },
   {
     id: "testing",
@@ -100,8 +98,8 @@ const SECTIONS = [
     icon: TestTube,
     description: "DP trials, capability plots e validação",
     color: "text-indigo-600",
-    bgColor: "bg-indigo-50"
-  }
+    bgColor: "bg-indigo-50",
+  },
 ];
 
 export const PeoDpManager: React.FC = () => {
@@ -120,10 +118,10 @@ export const PeoDpManager: React.FC = () => {
         procedures: { completed: 15, total: 20, status: "in_progress", last_updated: new Date() },
         operation: { completed: 18, total: 18, status: "completed", last_updated: new Date() },
         maintenance: { completed: 10, total: 12, status: "in_progress", last_updated: new Date() },
-        testing: { completed: 0, total: 8, status: "pending", last_updated: new Date() }
+        testing: { completed: 0, total: 8, status: "pending", last_updated: new Date() },
       },
-      overall_compliance: 73
-    }
+      overall_compliance: 73,
+    },
   ]);
 
   const [selectedPlan, setSelectedPlan] = useState<DPPlan | null>(plans[0] || null);
@@ -145,7 +143,7 @@ export const PeoDpManager: React.FC = () => {
       draft: { label: "Rascunho", color: "bg-secondary text-secondary-foreground" },
       in_review: { label: "Em Revisão", color: "bg-yellow-100 text-yellow-800" },
       approved: { label: "Aprovado", color: "bg-blue-100 text-blue-800" },
-      active: { label: "Ativo", color: "bg-green-100 text-green-800" }
+      active: { label: "Ativo", color: "bg-green-100 text-green-800" },
     };
     const variant = variants[status];
     return <Badge className={variant.color}>{variant.label}</Badge>;
@@ -180,9 +178,7 @@ export const PeoDpManager: React.FC = () => {
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Em Revisão
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Em Revisão</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-yellow-600">
@@ -198,9 +194,11 @@ export const PeoDpManager: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-3xl font-bold ${getComplianceColor(
-              plans.reduce((sum, p) => sum + p.overall_compliance, 0) / plans.length
-            )}`}>
+            <div
+              className={`text-3xl font-bold ${getComplianceColor(
+                plans.reduce((sum, p) => sum + p.overall_compliance, 0) / plans.length
+              )}`}
+            >
               {Math.round(plans.reduce((sum, p) => sum + p.overall_compliance, 0) / plans.length)}%
             </div>
           </CardContent>
@@ -215,8 +213,12 @@ export const PeoDpManager: React.FC = () => {
           <CardContent>
             <div className="text-3xl font-bold text-red-600">
               {plans.reduce((sum, p) => {
-                return sum + Object.values(p.sections).reduce((s, section) => 
-                  s + (section.total - section.completed), 0
+                return (
+                  sum +
+                  Object.values(p.sections).reduce(
+                    (s, section) => s + (section.total - section.completed),
+                    0
+                  )
                 );
               }, 0)}
             </div>
@@ -225,7 +227,7 @@ export const PeoDpManager: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <Tabs value={activeView} onValueChange={(v) => setActiveView(v as any)} className="space-y-6">
+      <Tabs value={activeView} onValueChange={v => setActiveView(v as any)} className="space-y-6">
         <div className="flex items-center justify-between">
           <TabsList className="grid w-full max-w-md grid-cols-3">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
@@ -265,7 +267,9 @@ export const PeoDpManager: React.FC = () => {
                       </CardDescription>
                     </div>
                     <div className="text-right">
-                      <div className={`text-4xl font-bold ${getComplianceColor(selectedPlan.overall_compliance)}`}>
+                      <div
+                        className={`text-4xl font-bold ${getComplianceColor(selectedPlan.overall_compliance)}`}
+                      >
                         {selectedPlan.overall_compliance}%
                       </div>
                       <p className="text-sm text-muted-foreground">Compliance</p>
@@ -276,8 +280,9 @@ export const PeoDpManager: React.FC = () => {
 
               {/* Sections Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {SECTIONS.map((section) => {
-                  const sectionData = selectedPlan.sections[section.id as keyof typeof selectedPlan.sections];
+                {SECTIONS.map(section => {
+                  const sectionData =
+                    selectedPlan.sections[section.id as keyof typeof selectedPlan.sections];
                   const progress = getSectionProgress(sectionData);
                   const Icon = section.icon;
 
@@ -306,7 +311,7 @@ export const PeoDpManager: React.FC = () => {
                         </div>
                         <Progress value={progress} className="h-2" />
                         <div className="flex items-center justify-between">
-                          <Badge 
+                          <Badge
                             variant={sectionData.status === "completed" ? "default" : "secondary"}
                             className="text-xs"
                           >
@@ -383,11 +388,13 @@ export const PeoDpManager: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {plans.map((plan) => (
+                {plans.map(plan => (
                   <div
                     key={plan.id}
                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                      selectedPlan?.id === plan.id ? "bg-primary/5 border-primary" : "hover:bg-muted/50"
+                      selectedPlan?.id === plan.id
+                        ? "bg-primary/5 border-primary"
+                        : "hover:bg-muted/50"
                     }`}
                     onClick={() => setSelectedPlan(plan)}
                   >
@@ -403,7 +410,9 @@ export const PeoDpManager: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="text-right">
-                          <p className={`text-lg font-bold ${getComplianceColor(plan.overall_compliance)}`}>
+                          <p
+                            className={`text-lg font-bold ${getComplianceColor(plan.overall_compliance)}`}
+                          >
                             {plan.overall_compliance}%
                           </p>
                           <p className="text-xs text-muted-foreground">Compliance</p>
@@ -423,9 +432,7 @@ export const PeoDpManager: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Analytics e Insights</CardTitle>
-              <CardDescription>
-                Análise avançada de compliance e performance
-              </CardDescription>
+              <CardDescription>Análise avançada de compliance e performance</CardDescription>
             </CardHeader>
             <CardContent className="py-12 text-center text-muted-foreground">
               <TrendingUp className="h-12 w-12 mx-auto mb-3 opacity-50" />
@@ -441,10 +448,7 @@ export const PeoDpManager: React.FC = () => {
           <DialogHeader>
             <DialogTitle>Criar Novo Plano PEO-DP</DialogTitle>
           </DialogHeader>
-          <PeoDpWizard
-            onComplete={handleWizardComplete}
-            onCancel={() => setIsWizardOpen(false)}
-          />
+          <PeoDpWizard onComplete={handleWizardComplete} onCancel={() => setIsWizardOpen(false)} />
         </DialogContent>
       </Dialog>
     </div>

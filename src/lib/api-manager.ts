@@ -28,11 +28,7 @@ export class APIManager {
   /**
    * Make an API request with retry logic
    */
-  async makeRequest<T>(
-    endpoint: string,
-    options?: RequestInit,
-    retryCount = 0
-  ): Promise<T> {
+  async makeRequest<T>(endpoint: string, options?: RequestInit, retryCount = 0): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const headers = {
       "Content-Type": "application/json",
@@ -51,11 +47,7 @@ export class APIManager {
         } catch {
           errorData = { message: errorBody };
         }
-        throw new APIError(
-          `Request failed: ${response.statusText}`,
-          response.status,
-          errorData
-        );
+        throw new APIError(`Request failed: ${response.statusText}`, response.status, errorData);
       }
 
       return response.json();
@@ -68,12 +60,12 @@ export class APIManager {
             `API request failed, retrying in ${delay}ms (attempt ${retryCount + 1}/${this.maxRetries})`,
             error
           );
-          
-          await new Promise((resolve) => setTimeout(resolve, delay));
+
+          await new Promise(resolve => setTimeout(resolve, delay));
           return this.makeRequest<T>(endpoint, options, retryCount + 1);
         }
       }
-      
+
       throw error;
     }
   }
@@ -88,7 +80,11 @@ export class APIManager {
   /**
    * POST request
    */
-  async post<T>(endpoint: string, data?: Record<string, unknown>, options?: RequestInit): Promise<T> {
+  async post<T>(
+    endpoint: string,
+    data?: Record<string, unknown>,
+    options?: RequestInit
+  ): Promise<T> {
     return this.makeRequest<T>(endpoint, {
       ...options,
       method: "POST",
@@ -99,7 +95,11 @@ export class APIManager {
   /**
    * PUT request
    */
-  async put<T>(endpoint: string, data?: Record<string, unknown>, options?: RequestInit): Promise<T> {
+  async put<T>(
+    endpoint: string,
+    data?: Record<string, unknown>,
+    options?: RequestInit
+  ): Promise<T> {
     return this.makeRequest<T>(endpoint, {
       ...options,
       method: "PUT",

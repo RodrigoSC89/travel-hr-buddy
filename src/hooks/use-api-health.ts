@@ -19,9 +19,9 @@ export const useAPIHealth = (apiName?: string) => {
 
   useEffect(() => {
     // Subscribe to health status updates
-    const unsubscribe = apiHealthMonitor.subscribe((status) => {
+    const unsubscribe = apiHealthMonitor.subscribe(status => {
       setHealthStatus(status);
-      
+
       if (apiName) {
         setSpecificStatus(status.get(apiName));
       }

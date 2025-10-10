@@ -3,16 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
-import { 
-  Brain, 
-  TrendingUp, 
-  AlertCircle, 
-  Lightbulb, 
+import {
+  Brain,
+  TrendingUp,
+  AlertCircle,
+  Lightbulb,
   Target,
   Users,
   Clock,
   DollarSign,
-  Activity
+  Activity,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -55,7 +55,7 @@ export const SmartInsights: React.FC = () => {
   const generateInsights = async () => {
     try {
       setIsGenerating(true);
-      
+
       // Call the new smart insights edge function
       const { data, error } = await supabase.functions.invoke("smart-insights-generator", {
         body: {
@@ -63,27 +63,29 @@ export const SmartInsights: React.FC = () => {
           context: "optimization",
           userBehavior: {
             lastLogin: new Date().toISOString(),
-            activeModule: "optimization"
-          }
-        }
+            activeModule: "optimization",
+          },
+        },
       });
 
       if (error) throw error;
 
       if (data.success && data.insights) {
-        setInsights(data.insights.map((insight: any) => ({
-          id: insight.id || Math.random().toString(),
-          type: insight.priority === "high" ? "warning" : "recommendation",
-          title: insight.title,
-          description: insight.description,
-          impact: insight.priority,
-          confidence: insight.confidence,
-          category: insight.category,
-          actionable: insight.actionable,
-          estimatedValue: insight.impact_value,
-          timeFrame: "1-2 semanas",
-          relatedModule: insight.related_module
-        })));
+        setInsights(
+          data.insights.map((insight: any) => ({
+            id: insight.id || Math.random().toString(),
+            type: insight.priority === "high" ? "warning" : "recommendation",
+            title: insight.title,
+            description: insight.description,
+            impact: insight.priority,
+            confidence: insight.confidence,
+            category: insight.category,
+            actionable: insight.actionable,
+            estimatedValue: insight.impact_value,
+            timeFrame: "1-2 semanas",
+            relatedModule: insight.related_module,
+          }))
+        );
       }
     } catch (error) {
       // Fallback to mock data
@@ -99,27 +101,29 @@ export const SmartInsights: React.FC = () => {
         id: "efficiency_1",
         type: "recommendation",
         title: "Automatizar Relatórios de Certificação",
-        description: "Detectamos que 78% dos relatórios são gerados manualmente. A automação pode economizar 12 horas/semana.",
+        description:
+          "Detectamos que 78% dos relatórios são gerados manualmente. A automação pode economizar 12 horas/semana.",
         impact: "high",
         confidence: 92,
         category: "efficiency",
         actionable: true,
         estimatedValue: "12 horas/semana",
         timeFrame: "2 semanas",
-        relatedModule: "RH Marítimo"
+        relatedModule: "RH Marítimo",
       },
       {
         id: "cost_1",
         type: "opportunity",
         title: "Otimização de Rotas Marítimas",
-        description: "IA identificou rotas 15% mais eficientes que podem reduzir custos de combustível.",
+        description:
+          "IA identificou rotas 15% mais eficientes que podem reduzir custos de combustível.",
         impact: "high",
         confidence: 87,
         category: "cost",
         actionable: true,
         estimatedValue: "R$ 45.000/mês",
         timeFrame: "1 mês",
-        relatedModule: "Logística Marítima"
+        relatedModule: "Logística Marítima",
       },
       {
         id: "security_1",
@@ -131,34 +135,36 @@ export const SmartInsights: React.FC = () => {
         category: "security",
         actionable: true,
         timeFrame: "Imediato",
-        relatedModule: "RH Marítimo"
+        relatedModule: "RH Marítimo",
       },
       {
         id: "ux_1",
         type: "recommendation",
         title: "Simplificar Fluxo de Reservas",
-        description: "Usuários abandonam 34% das reservas na etapa 3. Sugerimos redesign do processo.",
+        description:
+          "Usuários abandonam 34% das reservas na etapa 3. Sugerimos redesign do processo.",
         impact: "medium",
         confidence: 85,
         category: "user_experience",
         actionable: true,
         estimatedValue: "34% mais conversões",
         timeFrame: "3 semanas",
-        relatedModule: "Reservas"
+        relatedModule: "Reservas",
       },
       {
         id: "growth_1",
         type: "prediction",
         title: "Crescimento de Demanda Previsto",
-        description: "IA prevê aumento de 28% na demanda por serviços marítimos no próximo trimestre.",
+        description:
+          "IA prevê aumento de 28% na demanda por serviços marítimos no próximo trimestre.",
         impact: "medium",
         confidence: 79,
         category: "growth",
         actionable: true,
         estimatedValue: "28% crescimento",
         timeFrame: "Q1 2025",
-        relatedModule: "Dashboard"
-      }
+        relatedModule: "Dashboard",
+      },
     ];
 
     setInsights(mockInsights);
@@ -170,24 +176,25 @@ export const SmartInsights: React.FC = () => {
       const { data, error } = await supabase.functions.invoke("performance-monitor", {
         body: {
           userId: "demo-user",
-          category: "all"
-        }
+          category: "all",
+        },
       });
 
       if (error) throw error;
 
       if (data.success) {
         // Convert performance data to predictions format
-        const predictiveData = data.metrics?.slice(0, 4).map((metric: any, index: number) => ({
-          id: `prediction_${index}`,
-          name: `Previsão ${metric.name}`,
-          currentValue: metric.value,
-          predictedValue: metric.target || metric.value * 1.1,
-          trend: metric.value < (metric.target || metric.value * 1.1) ? "up" : "down",
-          confidence: 85 + Math.floor(Math.random() * 10),
-          timeFrame: "30 dias",
-          unit: metric.unit
-        })) || [];
+        const predictiveData =
+          data.metrics?.slice(0, 4).map((metric: any, index: number) => ({
+            id: `prediction_${index}`,
+            name: `Previsão ${metric.name}`,
+            currentValue: metric.value,
+            predictedValue: metric.target || metric.value * 1.1,
+            trend: metric.value < (metric.target || metric.value * 1.1) ? "up" : "down",
+            confidence: 85 + Math.floor(Math.random() * 10),
+            timeFrame: "30 dias",
+            unit: metric.unit,
+          })) || [];
 
         setPredictions(predictiveData);
       }
@@ -206,7 +213,7 @@ export const SmartInsights: React.FC = () => {
         trend: "up",
         confidence: 88,
         timeFrame: "30 dias",
-        unit: "%"
+        unit: "%",
       },
       {
         id: "operational_costs",
@@ -216,7 +223,7 @@ export const SmartInsights: React.FC = () => {
         trend: "down",
         confidence: 82,
         timeFrame: "60 dias",
-        unit: "R$"
+        unit: "R$",
       },
       {
         id: "crew_satisfaction",
@@ -226,7 +233,7 @@ export const SmartInsights: React.FC = () => {
         trend: "up",
         confidence: 75,
         timeFrame: "90 dias",
-        unit: "/5"
+        unit: "/5",
       },
       {
         id: "maintenance_efficiency",
@@ -236,8 +243,8 @@ export const SmartInsights: React.FC = () => {
         trend: "up",
         confidence: 91,
         timeFrame: "45 dias",
-        unit: "%"
-      }
+        unit: "%",
+      },
     ];
 
     setPredictions(mockPredictions);
@@ -256,7 +263,7 @@ export const SmartInsights: React.FC = () => {
         impact: insight.impact,
         effort: "easy",
         estimated_improvement: insight.estimatedValue || "Melhoria significativa",
-        status: "completed"
+        status: "completed",
       });
 
       if (error) throw error;
@@ -277,57 +284,57 @@ export const SmartInsights: React.FC = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "recommendation":
-      return <Lightbulb className="h-4 w-4 text-warning" />;
-    case "warning":
-      return <AlertCircle className="h-4 w-4 text-danger" />;
-    case "opportunity":
-      return <Target className="h-4 w-4 text-success" />;
-    case "prediction":
-      return <TrendingUp className="h-4 w-4 text-info" />;
-    default:
-      return <Brain className="h-4 w-4" />;
+      case "recommendation":
+        return <Lightbulb className="h-4 w-4 text-warning" />;
+      case "warning":
+        return <AlertCircle className="h-4 w-4 text-danger" />;
+      case "opportunity":
+        return <Target className="h-4 w-4 text-success" />;
+      case "prediction":
+        return <TrendingUp className="h-4 w-4 text-info" />;
+      default:
+        return <Brain className="h-4 w-4" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "efficiency":
-      return <Activity className="h-4 w-4" />;
-    case "cost":
-      return <DollarSign className="h-4 w-4" />;
-    case "user_experience":
-      return <Users className="h-4 w-4" />;
-    case "security":
-      return <AlertCircle className="h-4 w-4" />;
-    case "growth":
-      return <TrendingUp className="h-4 w-4" />;
-    default:
-      return <Brain className="h-4 w-4" />;
+      case "efficiency":
+        return <Activity className="h-4 w-4" />;
+      case "cost":
+        return <DollarSign className="h-4 w-4" />;
+      case "user_experience":
+        return <Users className="h-4 w-4" />;
+      case "security":
+        return <AlertCircle className="h-4 w-4" />;
+      case "growth":
+        return <TrendingUp className="h-4 w-4" />;
+      default:
+        return <Brain className="h-4 w-4" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-    case "high":
-      return "bg-danger text-danger-foreground";
-    case "medium":
-      return "bg-warning text-warning-foreground";
-    case "low":
-      return "bg-info text-info-foreground";
-    default:
-      return "bg-muted text-muted-foreground";
+      case "high":
+        return "bg-danger text-danger-foreground";
+      case "medium":
+        return "bg-warning text-warning-foreground";
+      case "low":
+        return "bg-info text-info-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up":
-      return <TrendingUp className="h-4 w-4 text-success" />;
-    case "down":
-      return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
-    default:
-      return <div className="h-4 w-4 rounded-full bg-muted" />;
+      case "up":
+        return <TrendingUp className="h-4 w-4 text-success" />;
+      case "down":
+        return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
+      default:
+        return <div className="h-4 w-4 rounded-full bg-muted" />;
     }
   };
 
@@ -343,7 +350,8 @@ export const SmartInsights: React.FC = () => {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
-            IA analisou padrões de uso e identificou oportunidades de melhoria baseadas em dados reais.
+            IA analisou padrões de uso e identificou oportunidades de melhoria baseadas em dados
+            reais.
           </p>
         </CardContent>
       </Card>
@@ -358,28 +366,22 @@ export const SmartInsights: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {insights.map((insight) => (
+            {insights.map(insight => (
               <div key={insight.id} className="border rounded-lg p-4 hover-lift">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-start gap-3">
                     {getTypeIcon(insight.type)}
                     <div className="flex-1">
                       <h4 className="font-semibold">{insight.title}</h4>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        {insight.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground mb-2">{insight.description}</p>
                       <div className="flex items-center gap-2 mb-2">
                         {getCategoryIcon(insight.category)}
                         <span className="text-sm">{insight.relatedModule}</span>
-                        <Badge variant="outline">
-                          {insight.confidence}% confiança
-                        </Badge>
+                        <Badge variant="outline">{insight.confidence}% confiança</Badge>
                       </div>
                     </div>
                   </div>
-                  <Badge className={getImpactColor(insight.impact)}>
-                    {insight.impact} impact
-                  </Badge>
+                  <Badge className={getImpactColor(insight.impact)}>{insight.impact} impact</Badge>
                 </div>
 
                 {insight.estimatedValue && (
@@ -387,9 +389,7 @@ export const SmartInsights: React.FC = () => {
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
                         <DollarSign className="h-4 w-4 text-success" />
-                        <span className="text-sm font-medium">
-                          {insight.estimatedValue}
-                        </span>
+                        <span className="text-sm font-medium">{insight.estimatedValue}</span>
                       </div>
                       {insight.timeFrame && (
                         <div className="flex items-center gap-1">
@@ -400,7 +400,7 @@ export const SmartInsights: React.FC = () => {
                     </div>
 
                     {insight.actionable && (
-                      <Button 
+                      <Button
                         size="sm"
                         onClick={() => implementInsight(insight)}
                         disabled={isGenerating}
@@ -427,30 +427,28 @@ export const SmartInsights: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {predictions.map((prediction) => (
+            {predictions.map(prediction => (
               <div key={prediction.id} className="border rounded-lg p-4 hover-lift">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-semibold">{prediction.name}</h4>
                   {getTrendIcon(prediction.trend)}
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Atual:</span>
                     <span className="font-medium">
-                      {prediction.unit === "R$" 
+                      {prediction.unit === "R$"
                         ? `R$ ${prediction.currentValue.toLocaleString()}`
-                        : `${prediction.currentValue}${prediction.unit}`
-                      }
+                        : `${prediction.currentValue}${prediction.unit}`}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Previsto:</span>
                     <span className="font-medium">
-                      {prediction.unit === "R$" 
+                      {prediction.unit === "R$"
                         ? `R$ ${prediction.predictedValue.toLocaleString()}`
-                        : `${prediction.predictedValue}${prediction.unit}`
-                      }
+                        : `${prediction.predictedValue}${prediction.unit}`}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">

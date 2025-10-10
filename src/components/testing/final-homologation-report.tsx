@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  FileText, 
-  CheckCircle, 
-  Download, 
+import {
+  FileText,
+  CheckCircle,
+  Download,
   Calendar,
   User,
   Shield,
@@ -15,7 +15,7 @@ import {
   Eye,
   Smartphone,
   Globe,
-  Activity
+  Activity,
 } from "lucide-react";
 
 interface TestModule {
@@ -42,21 +42,141 @@ export const FinalHomologationReport: React.FC = () => {
   const [reportGenerated, setReportGenerated] = React.useState(false);
 
   const testedModules: TestModule[] = [
-    { name: "Autenticação & Segurança", status: "passed", testsRun: 45, testsPassed: 45, coverage: 100, lastTested: "2025-09-27", critical: true },
-    { name: "Dashboard Principal", status: "passed", testsRun: 32, testsPassed: 32, coverage: 100, lastTested: "2025-09-27", critical: true },
-    { name: "Sistema Marítimo", status: "passed", testsRun: 78, testsPassed: 78, coverage: 100, lastTested: "2025-09-27", critical: true },
-    { name: "Recursos Humanos", status: "passed", testsRun: 56, testsPassed: 56, coverage: 100, lastTested: "2025-09-27", critical: true },
-    { name: "Gestão de Viagens", status: "passed", testsRun: 41, testsPassed: 41, coverage: 100, lastTested: "2025-09-27", critical: true },
-    { name: "Alertas de Preços", status: "passed", testsRun: 29, testsPassed: 29, coverage: 100, lastTested: "2025-09-27", critical: false },
-    { name: "Sistema de Reservas", status: "passed", testsRun: 34, testsPassed: 34, coverage: 100, lastTested: "2025-09-27", critical: false },
-    { name: "Comunicação", status: "passed", testsRun: 38, testsPassed: 38, coverage: 100, lastTested: "2025-09-27", critical: false },
-    { name: "Relatórios & Analytics", status: "passed", testsRun: 52, testsPassed: 52, coverage: 100, lastTested: "2025-09-27", critical: true },
-    { name: "PEOTRAM", status: "passed", testsRun: 67, testsPassed: 67, coverage: 100, lastTested: "2025-09-27", critical: true },
-    { name: "Assistente IA", status: "passed", testsRun: 28, testsPassed: 28, coverage: 100, lastTested: "2025-09-27", critical: false },
-    { name: "Interface de Voz", status: "passed", testsRun: 22, testsPassed: 22, coverage: 100, lastTested: "2025-09-27", critical: false },
-    { name: "Portal do Funcionário", status: "passed", testsRun: 35, testsPassed: 35, coverage: 100, lastTested: "2025-09-27", critical: false },
-    { name: "Sistema Multi-tenant", status: "passed", testsRun: 43, testsPassed: 43, coverage: 100, lastTested: "2025-09-27", critical: true },
-    { name: "Mobile & PWA", status: "passed", testsRun: 31, testsPassed: 31, coverage: 100, lastTested: "2025-09-27", critical: true }
+    {
+      name: "Autenticação & Segurança",
+      status: "passed",
+      testsRun: 45,
+      testsPassed: 45,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: true,
+    },
+    {
+      name: "Dashboard Principal",
+      status: "passed",
+      testsRun: 32,
+      testsPassed: 32,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: true,
+    },
+    {
+      name: "Sistema Marítimo",
+      status: "passed",
+      testsRun: 78,
+      testsPassed: 78,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: true,
+    },
+    {
+      name: "Recursos Humanos",
+      status: "passed",
+      testsRun: 56,
+      testsPassed: 56,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: true,
+    },
+    {
+      name: "Gestão de Viagens",
+      status: "passed",
+      testsRun: 41,
+      testsPassed: 41,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: true,
+    },
+    {
+      name: "Alertas de Preços",
+      status: "passed",
+      testsRun: 29,
+      testsPassed: 29,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: false,
+    },
+    {
+      name: "Sistema de Reservas",
+      status: "passed",
+      testsRun: 34,
+      testsPassed: 34,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: false,
+    },
+    {
+      name: "Comunicação",
+      status: "passed",
+      testsRun: 38,
+      testsPassed: 38,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: false,
+    },
+    {
+      name: "Relatórios & Analytics",
+      status: "passed",
+      testsRun: 52,
+      testsPassed: 52,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: true,
+    },
+    {
+      name: "PEOTRAM",
+      status: "passed",
+      testsRun: 67,
+      testsPassed: 67,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: true,
+    },
+    {
+      name: "Assistente IA",
+      status: "passed",
+      testsRun: 28,
+      testsPassed: 28,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: false,
+    },
+    {
+      name: "Interface de Voz",
+      status: "passed",
+      testsRun: 22,
+      testsPassed: 22,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: false,
+    },
+    {
+      name: "Portal do Funcionário",
+      status: "passed",
+      testsRun: 35,
+      testsPassed: 35,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: false,
+    },
+    {
+      name: "Sistema Multi-tenant",
+      status: "passed",
+      testsRun: 43,
+      testsPassed: 43,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: true,
+    },
+    {
+      name: "Mobile & PWA",
+      status: "passed",
+      testsRun: 31,
+      testsPassed: 31,
+      coverage: 100,
+      lastTested: "2025-09-27",
+      critical: true,
+    },
   ];
 
   const reportSections: ReportSection[] = [
@@ -69,8 +189,8 @@ export const FinalHomologationReport: React.FC = () => {
         "15 módulos principais implementados e validados",
         "622 testes funcionais executados com 100% de aprovação",
         "Fluxos end-to-end validados em todos os dispositivos",
-        "APIs e integrações testadas e funcionais"
-      ]
+        "APIs e integrações testadas e funcionais",
+      ],
     },
     {
       title: "Segurança Validada",
@@ -82,8 +202,8 @@ export const FinalHomologationReport: React.FC = () => {
         "Autenticação JWT com renovação automática",
         "Headers de segurança configurados (CSP, HSTS, etc.)",
         "Validação de entrada em todos os formulários",
-        "Secrets gerenciados de forma segura"
-      ]
+        "Secrets gerenciados de forma segura",
+      ],
     },
     {
       title: "Performance Otimizada",
@@ -95,8 +215,8 @@ export const FinalHomologationReport: React.FC = () => {
         "Core Web Vitals: Todos em verde",
         "Bundle otimizado com code splitting",
         "Lazy loading implementado",
-        "Cache inteligente configurado"
-      ]
+        "Cache inteligente configurado",
+      ],
     },
     {
       title: "Acessibilidade WCAG AA+",
@@ -108,8 +228,8 @@ export const FinalHomologationReport: React.FC = () => {
         "Contraste 7:1+ (WCAG AAA) em elementos críticos",
         "Navegação por teclado 100% funcional",
         "Screen readers totalmente compatíveis",
-        "ARIA labels e landmarks implementados"
-      ]
+        "ARIA labels e landmarks implementados",
+      ],
     },
     {
       title: "Responsividade Universal",
@@ -121,8 +241,8 @@ export const FinalHomologationReport: React.FC = () => {
         "Tablet (768px+): Interface adaptada para tablets",
         "Desktop (1024px+): Experiência completa de desktop",
         "4K+ (1920px+): Suporte a monitores grandes",
-        "Touch targets mínimo de 44px implementados"
-      ]
+        "Touch targets mínimo de 44px implementados",
+      ],
     },
     {
       title: "Compatibilidade Total",
@@ -134,18 +254,18 @@ export const FinalHomologationReport: React.FC = () => {
         "iOS Safari, Chrome Mobile, Samsung Internet",
         "Degradação elegante para navegadores antigos",
         "PWA instalável em todos os dispositivos",
-        "Offline support implementado"
-      ]
-    }
+        "Offline support implementado",
+      ],
+    },
   ];
 
   const generateReport = async () => {
     setIsGenerating(true);
     setReportGenerated(false);
-    
+
     // Simular geração de relatório
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     setReportGenerated(true);
     setIsGenerating(false);
   };
@@ -163,8 +283,8 @@ export const FinalHomologationReport: React.FC = () => {
         passedTests: testedModules.reduce((acc, mod) => acc + mod.testsPassed, 0),
         coverage: 100,
         criticalModules: testedModules.filter(mod => mod.critical).length,
-        recommendation: "APROVADO PARA DEPLOY IMEDIATO"
-      }
+        recommendation: "APROVADO PARA DEPLOY IMEDIATO",
+      },
     };
 
     const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: "application/json" });
@@ -180,12 +300,12 @@ export const FinalHomologationReport: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "passed":
-      return <CheckCircle className="w-4 h-4 text-success" />;
-    case "complete":
-      return <CheckCircle className="w-4 h-4 text-success" />;
-    default:
-      return <CheckCircle className="w-4 h-4 text-success" />;
+      case "passed":
+        return <CheckCircle className="w-4 h-4 text-success" />;
+      case "complete":
+        return <CheckCircle className="w-4 h-4 text-success" />;
+      default:
+        return <CheckCircle className="w-4 h-4 text-success" />;
     }
   };
 
@@ -211,8 +331,8 @@ export const FinalHomologationReport: React.FC = () => {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button 
-                  onClick={generateReport} 
+                <Button
+                  onClick={generateReport}
                   disabled={isGenerating}
                   variant="outline"
                   className="gap-2"
@@ -220,10 +340,7 @@ export const FinalHomologationReport: React.FC = () => {
                   <FileText className="w-4 h-4" />
                   {isGenerating ? "Gerando..." : "Gerar Relatório"}
                 </Button>
-                <Button 
-                  onClick={downloadReport}
-                  className="gap-2"
-                >
+                <Button onClick={downloadReport} className="gap-2">
                   <Download className="w-4 h-4" />
                   Download
                 </Button>
@@ -235,13 +352,11 @@ export const FinalHomologationReport: React.FC = () => {
               <CardContent className="pt-6">
                 <div className="text-center space-y-4">
                   <div className="text-6xl">🏆</div>
-                  <h3 className="text-3xl font-bold text-success">
-                    SISTEMA CERTIFICADO
-                  </h3>
+                  <h3 className="text-3xl font-bold text-success">SISTEMA CERTIFICADO</h3>
                   <p className="text-success text-lg font-medium">
                     Nautilus One v1.0.0 - Aprovado para Deploy em Produção
                   </p>
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
                     <div className="text-center">
                       <div className="text-2xl font-bold text-success">{totalTests}</div>
@@ -285,10 +400,12 @@ export const FinalHomologationReport: React.FC = () => {
                             </p>
                           </div>
                           {module.critical && (
-                            <Badge variant="destructive" className="text-xs">CRÍTICO</Badge>
+                            <Badge variant="destructive" className="text-xs">
+                              CRÍTICO
+                            </Badge>
                           )}
                         </div>
-                        
+
                         <div className="space-y-2">
                           <div className="flex justify-between text-xs">
                             <span>Cobertura</span>
@@ -311,9 +428,7 @@ export const FinalHomologationReport: React.FC = () => {
                   <Card key={index} className="border border-border/50">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="p-2 bg-success/10 rounded-lg">
-                          {section.icon}
-                        </div>
+                        <div className="p-2 bg-success/10 rounded-lg">{section.icon}</div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h3 className="font-semibold">{section.title}</h3>
@@ -322,7 +437,10 @@ export const FinalHomologationReport: React.FC = () => {
                           <p className="text-muted-foreground mb-3">{section.content}</p>
                           <ul className="space-y-1">
                             {section.details.map((detail, detailIndex) => (
-                              <li key={detailIndex} className="text-sm text-muted-foreground flex items-center gap-2">
+                              <li
+                                key={detailIndex}
+                                className="text-sm text-muted-foreground flex items-center gap-2"
+                              >
                                 <CheckCircle className="w-3 h-3 text-success" />
                                 {detail}
                               </li>
@@ -340,14 +458,12 @@ export const FinalHomologationReport: React.FC = () => {
                   <CardContent className="pt-6">
                     <div className="text-center space-y-6">
                       <div className="text-8xl">🎯</div>
-                      
+
                       <div>
                         <h2 className="text-3xl font-bold text-primary mb-2">
                           CERTIFICADO DE HOMOLOGAÇÃO
                         </h2>
-                        <p className="text-lg text-muted-foreground">
-                          Sistema Nautilus One v1.0.0
-                        </p>
+                        <p className="text-lg text-muted-foreground">Sistema Nautilus One v1.0.0</p>
                       </div>
 
                       <div className="bg-background p-6 rounded-lg border max-w-2xl mx-auto">
@@ -357,27 +473,29 @@ export const FinalHomologationReport: React.FC = () => {
                             <span className="font-medium">Certificado por:</span>
                             <span>Sistema de Validação Automatizada Nautilus</span>
                           </div>
-                          
+
                           <div className="flex items-center gap-2">
                             <Calendar className="w-5 h-5 text-primary" />
                             <span className="font-medium">Data de Homologação:</span>
                             <span>{new Date().toLocaleDateString("pt-BR")}</span>
                           </div>
-                          
+
                           <div className="flex items-center gap-2">
                             <Shield className="w-5 h-5 text-primary" />
                             <span className="font-medium">Nível de Certificação:</span>
-                            <Badge className="bg-success text-success-foreground">PRODUÇÃO READY</Badge>
+                            <Badge className="bg-success text-success-foreground">
+                              PRODUÇÃO READY
+                            </Badge>
                           </div>
-                          
+
                           <div className="pt-4 border-t">
                             <p className="text-sm text-muted-foreground text-center">
-                              Este sistema foi testado e validado de acordo com os mais altos 
-                              padrões de qualidade, segurança, performance e acessibilidade. 
-                              Está aprovado para deploy imediato em ambiente de produção.
+                              Este sistema foi testado e validado de acordo com os mais altos
+                              padrões de qualidade, segurança, performance e acessibilidade. Está
+                              aprovado para deploy imediato em ambiente de produção.
                             </p>
                           </div>
-                          
+
                           <div className="text-center pt-4">
                             <Badge className="bg-primary text-primary-foreground text-lg px-6 py-2">
                               ✅ APROVADO PARA PRODUÇÃO

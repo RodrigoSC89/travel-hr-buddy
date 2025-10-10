@@ -44,18 +44,16 @@ const Health = () => {
     },
   ];
 
-  const requiredChecks = envChecks.filter((check) => check.required);
-  const optionalChecks = envChecks.filter((check) => !check.required);
+  const requiredChecks = envChecks.filter(check => check.required);
+  const optionalChecks = envChecks.filter(check => !check.required);
 
-  const allRequiredLoaded = requiredChecks.every((check) => check.value);
+  const allRequiredLoaded = requiredChecks.every(check => check.value);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 p-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            🚢 Nautilus One Health Check
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">🚢 Nautilus One Health Check</h1>
           <p className="text-gray-600">System Status and Environment Diagnostics</p>
         </div>
 
@@ -84,9 +82,7 @@ const Health = () => {
               </div>
               <div>
                 <p className="text-gray-600">Environment:</p>
-                <p className="font-semibold">
-                  {import.meta.env.MODE || "development"}
-                </p>
+                <p className="font-semibold">{import.meta.env.MODE || "development"}</p>
               </div>
               <div>
                 <p className="text-gray-600">Vite Version:</p>
@@ -110,7 +106,7 @@ const Health = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {requiredChecks.map((check) => (
+              {requiredChecks.map(check => (
                 <div
                   key={check.key}
                   className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
@@ -150,7 +146,7 @@ const Health = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {optionalChecks.map((check) => (
+              {optionalChecks.map(check => (
                 <div
                   key={check.key}
                   className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
@@ -182,15 +178,16 @@ const Health = () => {
 
         {/* Instructions */}
         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h3 className="font-semibold text-blue-900 mb-2">
-            📝 Configuration Instructions
-          </h3>
-          <p className="text-sm text-blue-800 mb-2">
-            If you see missing required variables:
-          </p>
+          <h3 className="font-semibold text-blue-900 mb-2">📝 Configuration Instructions</h3>
+          <p className="text-sm text-blue-800 mb-2">If you see missing required variables:</p>
           <ol className="text-sm text-blue-800 list-decimal list-inside space-y-1">
-            <li>Copy <code className="bg-blue-100 px-1 rounded">.env.example</code> to <code className="bg-blue-100 px-1 rounded">.env</code></li>
-            <li>Add your API keys to the <code className="bg-blue-100 px-1 rounded">.env</code> file</li>
+            <li>
+              Copy <code className="bg-blue-100 px-1 rounded">.env.example</code> to{" "}
+              <code className="bg-blue-100 px-1 rounded">.env</code>
+            </li>
+            <li>
+              Add your API keys to the <code className="bg-blue-100 px-1 rounded">.env</code> file
+            </li>
             <li>Restart the development server</li>
           </ol>
         </div>

@@ -13,7 +13,7 @@ import {
   Clock,
   TrendingUp,
   FileText,
-  Award
+  Award,
 } from "lucide-react";
 
 interface Training {
@@ -40,7 +40,7 @@ const SAMPLE_TRAININGS: Training[] = [
     total: 25,
     validity_months: 24,
     last_conducted: "2023-05-15",
-    next_due: "2025-05-15"
+    next_due: "2025-05-15",
   },
   {
     id: "2",
@@ -52,7 +52,7 @@ const SAMPLE_TRAININGS: Training[] = [
     total: 25,
     validity_months: 12,
     last_conducted: "2024-01-10",
-    next_due: "2025-01-10"
+    next_due: "2025-01-10",
   },
   {
     id: "3",
@@ -64,7 +64,7 @@ const SAMPLE_TRAININGS: Training[] = [
     total: 25,
     validity_months: 12,
     last_conducted: "2024-03-20",
-    next_due: "2025-03-20"
+    next_due: "2025-03-20",
   },
   {
     id: "4",
@@ -76,7 +76,7 @@ const SAMPLE_TRAININGS: Training[] = [
     total: 25,
     validity_months: 24,
     last_conducted: "2022-08-15",
-    next_due: "2024-08-15"
+    next_due: "2024-08-15",
   },
   {
     id: "5",
@@ -87,36 +87,36 @@ const SAMPLE_TRAININGS: Training[] = [
     certified: 0,
     total: 25,
     validity_months: 12,
-    next_due: "2025-12-31"
-  }
+    next_due: "2025-12-31",
+  },
 ];
 
 const getStatusConfig = (status: string) => {
   const configs = {
-    valid: { 
-      icon: CheckCircle, 
-      color: "bg-green-600 text-white", 
+    valid: {
+      icon: CheckCircle,
+      color: "bg-green-600 text-white",
       label: "Válido",
-      badgeVariant: "default" as const
+      badgeVariant: "default" as const,
     },
-    expiring_soon: { 
-      icon: AlertTriangle, 
-      color: "bg-yellow-600 text-white", 
+    expiring_soon: {
+      icon: AlertTriangle,
+      color: "bg-yellow-600 text-white",
       label: "Expirando",
-      badgeVariant: "default" as const
+      badgeVariant: "default" as const,
     },
-    expired: { 
-      icon: XCircle, 
-      color: "bg-red-600 text-white", 
+    expired: {
+      icon: XCircle,
+      color: "bg-red-600 text-white",
       label: "Expirado",
-      badgeVariant: "destructive" as const
+      badgeVariant: "destructive" as const,
     },
-    pending: { 
-      icon: Clock, 
-      color: "bg-gray-600 text-white", 
+    pending: {
+      icon: Clock,
+      color: "bg-gray-600 text-white",
       label: "Pendente",
-      badgeVariant: "outline" as const
-    }
+      badgeVariant: "outline" as const,
+    },
   };
   return configs[status as keyof typeof configs] || configs.pending;
 };
@@ -131,9 +131,10 @@ export const TrainingCompliance: React.FC = () => {
   const expiredCount = SAMPLE_TRAININGS.filter(t => t.status === "expired").length;
   const pendingCount = SAMPLE_TRAININGS.filter(t => t.status === "pending").length;
 
-  const filteredTrainings = selectedCategory === "all" 
-    ? SAMPLE_TRAININGS 
-    : SAMPLE_TRAININGS.filter(t => t.category === selectedCategory);
+  const filteredTrainings =
+    selectedCategory === "all"
+      ? SAMPLE_TRAININGS
+      : SAMPLE_TRAININGS.filter(t => t.category === selectedCategory);
 
   const overallCompliance = Math.round(
     SAMPLE_TRAININGS.reduce((acc, t) => acc + t.completion_rate, 0) / SAMPLE_TRAININGS.length
@@ -255,7 +256,7 @@ export const TrainingCompliance: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {filteredTrainings.map((training) => {
+            {filteredTrainings.map(training => {
               const statusConfig = getStatusConfig(training.status);
               const StatusIcon = statusConfig.icon;
 
@@ -270,18 +271,22 @@ export const TrainingCompliance: React.FC = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h3 className="text-lg font-bold text-gray-900">{training.name}</h3>
-                            <Badge className={statusConfig.color}>
-                              {statusConfig.label}
-                            </Badge>
+                            <Badge className={statusConfig.color}>{statusConfig.label}</Badge>
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
                             <div>
-                              <p className="text-xs text-muted-foreground font-medium">Taxa de Conclusão</p>
-                              <p className="text-xl font-bold text-gray-900">{training.completion_rate}%</p>
+                              <p className="text-xs text-muted-foreground font-medium">
+                                Taxa de Conclusão
+                              </p>
+                              <p className="text-xl font-bold text-gray-900">
+                                {training.completion_rate}%
+                              </p>
                               <Progress value={training.completion_rate} className="mt-1" />
                             </div>
                             <div>
-                              <p className="text-xs text-muted-foreground font-medium">Certificados</p>
+                              <p className="text-xs text-muted-foreground font-medium">
+                                Certificados
+                              </p>
                               <p className="text-xl font-bold text-gray-900">
                                 {training.certified} / {training.total}
                               </p>
@@ -291,7 +296,9 @@ export const TrainingCompliance: React.FC = () => {
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-muted-foreground font-medium">Próxima Data</p>
+                              <p className="text-xs text-muted-foreground font-medium">
+                                Próxima Data
+                              </p>
                               <p className="text-sm font-bold text-gray-900">
                                 <Calendar className="h-3 w-3 inline mr-1" />
                                 {training.next_due || "A definir"}
@@ -304,19 +311,21 @@ export const TrainingCompliance: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex gap-2 ml-4">
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => handleViewDetails("training", training.id)} disabled={isLoading}
+                          onClick={() => handleViewDetails("training", training.id)}
+                          disabled={isLoading}
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Detalhes
                         </Button>
-                        <Button 
+                        <Button
                           size="sm"
                           className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
-                          onClick={() => showInfo("Agendando Treinamento", "Abrindo agenda")} disabled={isLoading}
+                          onClick={() => showInfo("Agendando Treinamento", "Abrindo agenda")}
+                          disabled={isLoading}
                         >
                           <Calendar className="h-4 w-4 mr-2" />
                           Agendar
@@ -346,28 +355,29 @@ export const TrainingCompliance: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button 
+            <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleCreate("Treinamento")} disabled={isLoading}
+              onClick={() => handleCreate("Treinamento")}
+              disabled={isLoading}
             >
               <Award className="h-6 w-6" />
               <span className="font-semibold">Novo Treinamento</span>
             </Button>
-            <Button 
+            <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
               onClick={() => console.log("Relatório compliance")}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
-            <Button 
+            <Button
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
               onClick={() => console.log("Certificados expirados")}
             >
               <AlertTriangle className="h-6 w-6" />
               <span className="font-semibold">Expirados</span>
             </Button>
-            <Button 
+            <Button
               className="bg-purple-600 hover:bg-purple-700 text-white min-h-[56px] flex-col gap-2"
               onClick={() => console.log("Matriz competências")}
             >

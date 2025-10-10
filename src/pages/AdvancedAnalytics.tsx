@@ -15,7 +15,7 @@ export default function AdvancedAnalytics() {
         badges={[
           { icon: TrendingUp, label: "Análise em Tempo Real" },
           { icon: Sparkles, label: "IA Insights" },
-          { icon: Target, label: "KPIs Customizados" }
+          { icon: Target, label: "KPIs Customizados" },
         ]}
       />
       <AdvancedFleetAnalytics />

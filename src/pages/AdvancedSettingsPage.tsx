@@ -9,20 +9,16 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { OrganizationLayout } from "@/components/layout/organization-layout";
-import { 
-  Settings, 
-  Bell, 
-  Shield, 
-  Palette, 
-  Globe, 
-  Users, 
-  Database,
+import {
+  Settings,
+  Bell,
+  Shield,
+  Palette,
   Monitor,
   Save,
   RotateCcw,
   Download,
-  Upload,
-  AlertTriangle
+  AlertTriangle,
 } from "lucide-react";
 
 interface SystemSettings {
@@ -57,25 +53,25 @@ export default function AdvancedSettingsPage() {
       emailEnabled: true,
       pushEnabled: true,
       smsEnabled: false,
-      frequency: "immediate"
+      frequency: "immediate",
     },
     security: {
       twoFactorRequired: false,
       sessionTimeout: 30,
       passwordComplexity: "medium",
-      loginAttempts: 3
+      loginAttempts: 3,
     },
     appearance: {
       theme: "dark",
       language: "pt-BR",
-      timezone: "America/Sao_Paulo"
+      timezone: "America/Sao_Paulo",
     },
     performance: {
       cacheEnabled: true,
       compressionEnabled: true,
       lazyLoadingEnabled: true,
-      analyticsEnabled: true
-    }
+      analyticsEnabled: true,
+    },
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -86,27 +82,27 @@ export default function AdvancedSettingsPage() {
       ...prev,
       [category]: {
         ...prev[category],
-        [key]: value
-      }
+        [key]: value,
+      },
     }));
   };
 
   const saveSettings = async () => {
     try {
       setIsLoading(true);
-      
+
       // Simular salvamento
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       toast({
         title: "Configurações salvas",
-        description: "Todas as configurações foram atualizadas com sucesso"
+        description: "Todas as configurações foram atualizadas com sucesso",
       });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao salvar configurações",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -120,30 +116,30 @@ export default function AdvancedSettingsPage() {
         emailEnabled: true,
         pushEnabled: true,
         smsEnabled: false,
-        frequency: "immediate"
+        frequency: "immediate",
       },
       security: {
         twoFactorRequired: false,
         sessionTimeout: 30,
         passwordComplexity: "medium",
-        loginAttempts: 3
+        loginAttempts: 3,
       },
       appearance: {
         theme: "dark",
         language: "pt-BR",
-        timezone: "America/Sao_Paulo"
+        timezone: "America/Sao_Paulo",
       },
       performance: {
         cacheEnabled: true,
         compressionEnabled: true,
         lazyLoadingEnabled: true,
-        analyticsEnabled: true
-      }
+        analyticsEnabled: true,
+      },
     });
-    
+
     toast({
       title: "Configurações restauradas",
-      description: "Todas as configurações foram restauradas aos valores padrão"
+      description: "Todas as configurações foram restauradas aos valores padrão",
     });
   };
 
@@ -155,10 +151,10 @@ export default function AdvancedSettingsPage() {
     link.href = url;
     link.download = "nautilus-settings.json";
     link.click();
-    
+
     toast({
       title: "Configurações exportadas",
-      description: "Arquivo de configurações baixado com sucesso"
+      description: "Arquivo de configurações baixado com sucesso",
     });
   };
 
@@ -241,12 +237,14 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="email-notifications"
                       checked={settings.notifications.emailEnabled}
-                      onCheckedChange={(checked) => updateSettings("notifications", "emailEnabled", checked)}
+                      onCheckedChange={checked =>
+                        updateSettings("notifications", "emailEnabled", checked)
+                      }
                     />
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div className="flex items-center justify-between">
                     <div>
                       <Label htmlFor="push-notifications">Notificações Push</Label>
@@ -257,12 +255,14 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="push-notifications"
                       checked={settings.notifications.pushEnabled}
-                      onCheckedChange={(checked) => updateSettings("notifications", "pushEnabled", checked)}
+                      onCheckedChange={checked =>
+                        updateSettings("notifications", "pushEnabled", checked)
+                      }
                     />
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div className="flex items-center justify-between">
                     <div>
                       <Label htmlFor="sms-notifications">Notificações SMS</Label>
@@ -273,19 +273,21 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="sms-notifications"
                       checked={settings.notifications.smsEnabled}
-                      onCheckedChange={(checked) => updateSettings("notifications", "smsEnabled", checked)}
+                      onCheckedChange={checked =>
+                        updateSettings("notifications", "smsEnabled", checked)
+                      }
                     />
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div>
                     <Label htmlFor="notification-frequency">Frequência de Notificações</Label>
                     <select
                       id="notification-frequency"
                       className="w-full mt-2 p-2 border rounded-md"
                       value={settings.notifications.frequency}
-                      onChange={(e) => updateSettings("notifications", "frequency", e.target.value)}
+                      onChange={e => updateSettings("notifications", "frequency", e.target.value)}
                     >
                       <option value="immediate">Imediata</option>
                       <option value="hourly">A cada hora</option>
@@ -304,9 +306,7 @@ export default function AdvancedSettingsPage() {
                   <Shield className="w-5 h-5" />
                   Configurações de Segurança
                 </CardTitle>
-                <CardDescription>
-                  Configure as políticas de segurança do sistema
-                </CardDescription>
+                <CardDescription>Configure as políticas de segurança do sistema</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
@@ -320,46 +320,56 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="two-factor"
                       checked={settings.security.twoFactorRequired}
-                      onCheckedChange={(checked) => updateSettings("security", "twoFactorRequired", checked)}
+                      onCheckedChange={checked =>
+                        updateSettings("security", "twoFactorRequired", checked)
+                      }
                     />
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div>
                     <Label htmlFor="session-timeout">Timeout de Sessão (minutos)</Label>
                     <Input
                       id="session-timeout"
                       type="number"
                       value={settings.security.sessionTimeout}
-                      onChange={(e) => updateSettings("security", "sessionTimeout", Number(e.target.value))}
+                      onChange={e =>
+                        updateSettings("security", "sessionTimeout", Number(e.target.value))
+                      }
                       className="mt-2"
                       min="5"
                       max="480"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="password-complexity">Complexidade de Senha</Label>
                     <select
                       id="password-complexity"
                       className="w-full mt-2 p-2 border rounded-md"
                       value={settings.security.passwordComplexity}
-                      onChange={(e) => updateSettings("security", "passwordComplexity", e.target.value)}
+                      onChange={e =>
+                        updateSettings("security", "passwordComplexity", e.target.value)
+                      }
                     >
                       <option value="low">Baixa (8+ caracteres)</option>
                       <option value="medium">Média (8+ chars, números, símbolos)</option>
-                      <option value="high">Alta (12+ chars, maiús, minús, números, símbolos)</option>
+                      <option value="high">
+                        Alta (12+ chars, maiús, minús, números, símbolos)
+                      </option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="login-attempts">Tentativas de Login Permitidas</Label>
                     <Input
                       id="login-attempts"
                       type="number"
                       value={settings.security.loginAttempts}
-                      onChange={(e) => updateSettings("security", "loginAttempts", Number(e.target.value))}
+                      onChange={e =>
+                        updateSettings("security", "loginAttempts", Number(e.target.value))
+                      }
                       className="mt-2"
                       min="1"
                       max="10"
@@ -377,9 +387,7 @@ export default function AdvancedSettingsPage() {
                   <Palette className="w-5 h-5" />
                   Configurações de Aparência
                 </CardTitle>
-                <CardDescription>
-                  Personalize a interface do sistema
-                </CardDescription>
+                <CardDescription>Personalize a interface do sistema</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
@@ -389,35 +397,35 @@ export default function AdvancedSettingsPage() {
                       id="theme"
                       className="w-full mt-2 p-2 border rounded-md"
                       value={settings.appearance.theme}
-                      onChange={(e) => updateSettings("appearance", "theme", e.target.value)}
+                      onChange={e => updateSettings("appearance", "theme", e.target.value)}
                     >
                       <option value="light">Claro</option>
                       <option value="dark">Escuro</option>
                       <option value="auto">Automático</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="language">Idioma</Label>
                     <select
                       id="language"
                       className="w-full mt-2 p-2 border rounded-md"
                       value={settings.appearance.language}
-                      onChange={(e) => updateSettings("appearance", "language", e.target.value)}
+                      onChange={e => updateSettings("appearance", "language", e.target.value)}
                     >
                       <option value="pt-BR">Português (Brasil)</option>
                       <option value="en-US">English (US)</option>
                       <option value="es-ES">Español</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="timezone">Fuso Horário</Label>
                     <select
                       id="timezone"
                       className="w-full mt-2 p-2 border rounded-md"
                       value={settings.appearance.timezone}
-                      onChange={(e) => updateSettings("appearance", "timezone", e.target.value)}
+                      onChange={e => updateSettings("appearance", "timezone", e.target.value)}
                     >
                       <option value="America/Sao_Paulo">Brasília (GMT-3)</option>
                       <option value="America/New_York">Nova York (GMT-5)</option>
@@ -437,9 +445,7 @@ export default function AdvancedSettingsPage() {
                   <Monitor className="w-5 h-5" />
                   Configurações de Performance
                 </CardTitle>
-                <CardDescription>
-                  Otimize o desempenho do sistema
-                </CardDescription>
+                <CardDescription>Otimize o desempenho do sistema</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
@@ -453,12 +459,14 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="cache-enabled"
                       checked={settings.performance.cacheEnabled}
-                      onCheckedChange={(checked) => updateSettings("performance", "cacheEnabled", checked)}
+                      onCheckedChange={checked =>
+                        updateSettings("performance", "cacheEnabled", checked)
+                      }
                     />
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div className="flex items-center justify-between">
                     <div>
                       <Label htmlFor="compression-enabled">Compressão Habilitada</Label>
@@ -469,12 +477,14 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="compression-enabled"
                       checked={settings.performance.compressionEnabled}
-                      onCheckedChange={(checked) => updateSettings("performance", "compressionEnabled", checked)}
+                      onCheckedChange={checked =>
+                        updateSettings("performance", "compressionEnabled", checked)
+                      }
                     />
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div className="flex items-center justify-between">
                     <div>
                       <Label htmlFor="lazy-loading">Carregamento Sob Demanda</Label>
@@ -485,12 +495,14 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="lazy-loading"
                       checked={settings.performance.lazyLoadingEnabled}
-                      onCheckedChange={(checked) => updateSettings("performance", "lazyLoadingEnabled", checked)}
+                      onCheckedChange={checked =>
+                        updateSettings("performance", "lazyLoadingEnabled", checked)
+                      }
                     />
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div className="flex items-center justify-between">
                     <div>
                       <Label htmlFor="analytics-enabled">Analytics Habilitado</Label>
@@ -501,7 +513,9 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="analytics-enabled"
                       checked={settings.performance.analyticsEnabled}
-                      onCheckedChange={(checked) => updateSettings("performance", "analyticsEnabled", checked)}
+                      onCheckedChange={checked =>
+                        updateSettings("performance", "analyticsEnabled", checked)
+                      }
                     />
                   </div>
                 </div>

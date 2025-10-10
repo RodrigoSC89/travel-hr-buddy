@@ -14,21 +14,20 @@ export default function OfflinePage() {
           <div className="mx-auto w-20 h-20 bg-sky-600 rounded-full flex items-center justify-center">
             <WifiOff className="w-10 h-10 text-white" />
           </div>
-          <CardTitle className="text-3xl font-bold text-white">
-            📡 Modo Offline
-          </CardTitle>
+          <CardTitle className="text-3xl font-bold text-white">📡 Modo Offline</CardTitle>
           <CardDescription className="text-slate-300 text-lg">
-            Você está atualmente sem conexão com a internet. Algumas funcionalidades podem estar indisponíveis.
+            Você está atualmente sem conexão com a internet. Algumas funcionalidades podem estar
+            indisponíveis.
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="space-y-6">
           <div className="text-center">
             <p className="text-slate-400 mb-6">
               Por favor, verifique sua conexão com a internet e tente novamente.
             </p>
-            
-            <Button 
+
+            <Button
               onClick={handleReload}
               size="lg"
               className="bg-sky-600 hover:bg-sky-700 text-white"
@@ -43,7 +42,7 @@ export default function OfflinePage() {
               <CheckCircle className="w-5 h-5 text-green-500" />
               Funcionalidades Offline Disponíveis:
             </h3>
-            
+
             <div className="space-y-3">
               <div className="flex items-start gap-3 text-slate-300">
                 <Database className="w-5 h-5 text-sky-500 mt-0.5 flex-shrink-0" />
@@ -54,7 +53,7 @@ export default function OfflinePage() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start gap-3 text-slate-300">
                 <RefreshCcw className="w-5 h-5 text-sky-500 mt-0.5 flex-shrink-0" />
                 <div>
@@ -64,7 +63,7 @@ export default function OfflinePage() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start gap-3 text-slate-300">
                 <CheckCircle className="w-5 h-5 text-sky-500 mt-0.5 flex-shrink-0" />
                 <div>
@@ -79,8 +78,9 @@ export default function OfflinePage() {
 
           <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
             <p className="text-xs text-slate-400 text-center">
-              💡 <strong className="text-slate-300">Dica:</strong> O Nautilus One funciona como um PWA (Progressive Web App).
-              Você pode instalá-lo em seu dispositivo para ter acesso rápido mesmo quando offline.
+              💡 <strong className="text-slate-300">Dica:</strong> O Nautilus One funciona como um
+              PWA (Progressive Web App). Você pode instalá-lo em seu dispositivo para ter acesso
+              rápido mesmo quando offline.
             </p>
           </div>
         </CardContent>

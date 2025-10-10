@@ -4,7 +4,13 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Volume2, Mic, Settings } from "lucide-react";
 
@@ -45,10 +51,7 @@ const VoiceSettings: React.FC<VoiceSettingsProps> = ({ isOpen, onClose }) => {
                   Detectar automaticamente quando você fala
                 </div>
               </div>
-              <Switch 
-                checked={autoListen} 
-                onCheckedChange={setAutoListen}
-              />
+              <Switch checked={autoListen} onCheckedChange={setAutoListen} />
             </div>
 
             <Separator />

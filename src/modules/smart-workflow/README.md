@@ -5,6 +5,7 @@
 The Smart Workflow module provides **intelligent workflow automation and process management** with AI-powered optimization and no-code workflow builder capabilities.
 
 **Key Use Cases:**
+
 - Design and automate business workflows
 - Process orchestration and management
 - Approval workflows

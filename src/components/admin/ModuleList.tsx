@@ -3,48 +3,48 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { 
-  CheckCircle, 
-  AlertCircle, 
-  XCircle,
-  Search,
-  ExternalLink,
-  Layers
-} from "lucide-react";
+import { CheckCircle, AlertCircle, XCircle, Search, ExternalLink, Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 import useModules, { Module } from "@/hooks/useModules";
 
 export const ModuleList: React.FC = () => {
   const { modules, loading } = useModules();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState<"all" | "functional" | "pending" | "disabled">("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "functional" | "pending" | "disabled">(
+    "all"
+  );
 
   const filteredModules = modules.filter(module => {
-    const matchesSearch = module.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         module.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      module.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      module.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === "all" || module.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
 
   const getStatusIcon = (status: Module["status"]) => {
     switch (status) {
-    case "functional":
-      return <CheckCircle className="h-4 w-4 text-success" />;
-    case "pending":
-      return <AlertCircle className="h-4 w-4 text-warning" />;
-    case "disabled":
-      return <XCircle className="h-4 w-4 text-destructive" />;
+      case "functional":
+        return <CheckCircle className="h-4 w-4 text-success" />;
+      case "pending":
+        return <AlertCircle className="h-4 w-4 text-warning" />;
+      case "disabled":
+        return <XCircle className="h-4 w-4 text-destructive" />;
     }
   };
 
   const getStatusBadge = (status: Module["status"]) => {
     switch (status) {
-    case "functional":
-      return <Badge className="bg-success/20 text-success border-success/30">Funcional</Badge>;
-    case "pending":
-      return <Badge className="bg-warning/20 text-warning border-warning/30">Pendente</Badge>;
-    case "disabled":
-      return <Badge className="bg-destructive/20 text-destructive border-destructive/30">Desabilitado</Badge>;
+      case "functional":
+        return <Badge className="bg-success/20 text-success border-success/30">Funcional</Badge>;
+      case "pending":
+        return <Badge className="bg-warning/20 text-warning border-warning/30">Pendente</Badge>;
+      case "disabled":
+        return (
+          <Badge className="bg-destructive/20 text-destructive border-destructive/30">
+            Desabilitado
+          </Badge>
+        );
     }
   };
 
@@ -63,9 +63,7 @@ export const ModuleList: React.FC = () => {
               <Layers className="h-5 w-5 text-primary" />
               Módulos do Sistema (32)
             </CardTitle>
-            <CardDescription>
-              Visão geral de todos os módulos do Nautilus One
-            </CardDescription>
+            <CardDescription>Visão geral de todos os módulos do Nautilus One</CardDescription>
           </div>
         </div>
 
@@ -92,7 +90,7 @@ export const ModuleList: React.FC = () => {
             <Input
               placeholder="Buscar módulos..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="pl-9"
             />
           </div>
@@ -130,7 +128,7 @@ export const ModuleList: React.FC = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {filteredModules.map((module) => (
+              {filteredModules.map(module => (
                 <div
                   key={module.id}
                   className="p-3 border rounded-lg hover:shadow-md transition-all duration-200 bg-card"
@@ -142,11 +140,9 @@ export const ModuleList: React.FC = () => {
                     </div>
                     {getStatusBadge(module.status)}
                   </div>
-                  
-                  <p className="text-xs text-muted-foreground mb-3">
-                    {module.description}
-                  </p>
-                  
+
+                  <p className="text-xs text-muted-foreground mb-3">{module.description}</p>
+
                   {module.status === "functional" && (
                     <Link to={module.path}>
                       <Button variant="ghost" size="sm" className="w-full justify-between">

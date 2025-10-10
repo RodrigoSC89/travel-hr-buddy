@@ -6,14 +6,14 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  TrendingUp, 
-  Users, 
-  DollarSign, 
-  Bell, 
-  AlertTriangle, 
-  CheckCircle, 
+import {
+  LayoutDashboard,
+  TrendingUp,
+  Users,
+  DollarSign,
+  Bell,
+  AlertTriangle,
+  CheckCircle,
   Activity,
   Clock,
   Target,
@@ -27,20 +27,17 @@ import {
   Settings,
   Search,
   Download,
-  Star,
   TrendingDown,
   AlertCircle,
   Award,
   BarChart3,
-  Map
+  Map,
 } from "lucide-react";
-import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart as RechartsPieChart, Pie, Cell, BarChart, Bar } from "recharts";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { MetricCard, AlertItem, ActivityItem, DashboardConfig } from "@/types/dashboard";
 import { DashboardCharts, AIInsightsPanel } from "@/components/dashboard/dashboard-analytics";
-import { DashboardKPIWidget, DashboardExportPanel, DashboardFilters } from "@/components/dashboard/dashboard-widgets";
+import { DashboardExportPanel, DashboardFilters } from "@/components/dashboard/dashboard-widgets";
 
 const StrategicDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -52,7 +49,9 @@ const StrategicDashboard: React.FC = () => {
   const [alerts, setAlerts] = useState<AlertItem[]>([]);
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedProfile, setSelectedProfile] = useState<"admin" | "hr" | "operator" | "auditor">("admin");
+  const [selectedProfile, setSelectedProfile] = useState<"admin" | "hr" | "operator" | "auditor">(
+    "admin"
+  );
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [activeTab, setActiveTab] = useState("overview");
   const [isExporting, setIsExporting] = useState(false);
@@ -61,32 +60,32 @@ const StrategicDashboard: React.FC = () => {
     layout: "grid",
     activeWidgets: ["metrics", "alerts", "activities", "charts"],
     refreshInterval: 30,
-    userRole: "admin"
+    userRole: "admin",
   });
 
   // Helper function to format metric values
   const formatMetricValue = (value: number | string, unit: string = ""): string => {
     if (typeof value === "string") return value;
-    
+
     switch (unit) {
-    case "%":
-      return `${value.toFixed(1)}%`;
-    case "BRL":
-      return new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-      }).format(value);
-    case "USD":
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD"
-      }).format(value);
-    case "K":
-      return `${(value / 1000).toFixed(1)}K`;
-    case "M":
-      return `${(value / 1000000).toFixed(1)}M`;
-    default:
-      return value.toLocaleString("pt-BR");
+      case "%":
+        return `${value.toFixed(1)}%`;
+      case "BRL":
+        return new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(value);
+      case "USD":
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(value);
+      case "K":
+        return `${(value / 1000).toFixed(1)}K`;
+      case "M":
+        return `${(value / 1000000).toFixed(1)}M`;
+      default:
+        return value.toLocaleString("pt-BR");
     }
   };
 
@@ -94,29 +93,179 @@ const StrategicDashboard: React.FC = () => {
   const getProfileMetrics = (profile: string): MetricCard[] => {
     const metricsData = {
       admin: [
-        { id: "system-health", title: "Saúde do Sistema", value: 98.5, change: 2.1, trend: "up" as const, icon: Activity, color: "text-success", subtitle: "Excelente", target: 99, unit: "%" },
-        { id: "active-users", title: "Usuários Ativos", value: 1247, change: 8.3, trend: "up" as const, icon: Users, color: "text-primary", subtitle: "Hoje" },
-        { id: "monthly-revenue", title: "Receita Mensal", value: 125000, change: 12.5, trend: "up" as const, icon: DollarSign, color: "text-success", unit: "BRL" },
-        { id: "critical-alerts", title: "Alertas Críticos", value: 3, change: -25, trend: "down" as const, icon: AlertTriangle, color: "text-destructive", subtitle: "Últimas 24h" }
+        {
+          id: "system-health",
+          title: "Saúde do Sistema",
+          value: 98.5,
+          change: 2.1,
+          trend: "up" as const,
+          icon: Activity,
+          color: "text-success",
+          subtitle: "Excelente",
+          target: 99,
+          unit: "%",
+        },
+        {
+          id: "active-users",
+          title: "Usuários Ativos",
+          value: 1247,
+          change: 8.3,
+          trend: "up" as const,
+          icon: Users,
+          color: "text-primary",
+          subtitle: "Hoje",
+        },
+        {
+          id: "monthly-revenue",
+          title: "Receita Mensal",
+          value: 125000,
+          change: 12.5,
+          trend: "up" as const,
+          icon: DollarSign,
+          color: "text-success",
+          unit: "BRL",
+        },
+        {
+          id: "critical-alerts",
+          title: "Alertas Críticos",
+          value: 3,
+          change: -25,
+          trend: "down" as const,
+          icon: AlertTriangle,
+          color: "text-destructive",
+          subtitle: "Últimas 24h",
+        },
       ],
       hr: [
-        { id: "crew-onboard", title: "Tripulação Embarcada", value: 145, change: 3.2, trend: "up" as const, icon: Users, color: "text-primary", subtitle: "Ativos" },
-        { id: "certificates-expiring", title: "Certificados Vencendo", value: 12, change: -8.1, trend: "down" as const, icon: AlertCircle, color: "text-warning", subtitle: "30 dias" },
-        { id: "training-completion", title: "Treinamentos Concluídos", value: 87.5, change: 15.2, trend: "up" as const, icon: Award, color: "text-success", unit: "%", target: 95 },
-        { id: "hr-requests", title: "Solicitações RH", value: 28, change: 5.7, trend: "up" as const, icon: FileText, color: "text-info", subtitle: "Pendentes" }
+        {
+          id: "crew-onboard",
+          title: "Tripulação Embarcada",
+          value: 145,
+          change: 3.2,
+          trend: "up" as const,
+          icon: Users,
+          color: "text-primary",
+          subtitle: "Ativos",
+        },
+        {
+          id: "certificates-expiring",
+          title: "Certificados Vencendo",
+          value: 12,
+          change: -8.1,
+          trend: "down" as const,
+          icon: AlertCircle,
+          color: "text-warning",
+          subtitle: "30 dias",
+        },
+        {
+          id: "training-completion",
+          title: "Treinamentos Concluídos",
+          value: 87.5,
+          change: 15.2,
+          trend: "up" as const,
+          icon: Award,
+          color: "text-success",
+          unit: "%",
+          target: 95,
+        },
+        {
+          id: "hr-requests",
+          title: "Solicitações RH",
+          value: 28,
+          change: 5.7,
+          trend: "up" as const,
+          icon: FileText,
+          color: "text-info",
+          subtitle: "Pendentes",
+        },
       ],
       operator: [
-        { id: "vessels-operational", title: "Embarcações Operacionais", value: 18, change: 0, trend: "stable" as const, icon: Ship, color: "text-success", subtitle: "De 20 total" },
-        { id: "pending-checklists", title: "Checklists Pendentes", value: 7, change: -12.5, trend: "down" as const, icon: CheckCircle, color: "text-warning", subtitle: "Hoje" },
-        { id: "equipment-status", title: "Equipamentos OK", value: 94.2, change: 1.8, trend: "up" as const, icon: Settings, color: "text-success", unit: "%", target: 98 },
-        { id: "maintenance-due", title: "Manutenções Programadas", value: 5, change: 25, trend: "up" as const, icon: Clock, color: "text-info", subtitle: "Esta semana" }
+        {
+          id: "vessels-operational",
+          title: "Embarcações Operacionais",
+          value: 18,
+          change: 0,
+          trend: "stable" as const,
+          icon: Ship,
+          color: "text-success",
+          subtitle: "De 20 total",
+        },
+        {
+          id: "pending-checklists",
+          title: "Checklists Pendentes",
+          value: 7,
+          change: -12.5,
+          trend: "down" as const,
+          icon: CheckCircle,
+          color: "text-warning",
+          subtitle: "Hoje",
+        },
+        {
+          id: "equipment-status",
+          title: "Equipamentos OK",
+          value: 94.2,
+          change: 1.8,
+          trend: "up" as const,
+          icon: Settings,
+          color: "text-success",
+          unit: "%",
+          target: 98,
+        },
+        {
+          id: "maintenance-due",
+          title: "Manutenções Programadas",
+          value: 5,
+          change: 25,
+          trend: "up" as const,
+          icon: Clock,
+          color: "text-info",
+          subtitle: "Esta semana",
+        },
       ],
       auditor: [
-        { id: "peotram-compliance", title: "Conformidade PEOTRAM", value: 92.8, change: 4.3, trend: "up" as const, icon: Shield, color: "text-success", unit: "%", target: 95 },
-        { id: "non-conformities", title: "Não Conformidades", value: 14, change: -18.2, trend: "down" as const, icon: AlertTriangle, color: "text-warning", subtitle: "Abertas" },
-        { id: "audit-coverage", title: "Cobertura de Auditoria", value: 78.5, change: 8.9, trend: "up" as const, icon: Target, color: "text-primary", unit: "%", target: 85 },
-        { id: "evidence-submitted", title: "Evidências Enviadas", value: 156, change: 12.7, trend: "up" as const, icon: FileText, color: "text-success", subtitle: "Este mês" }
-      ]
+        {
+          id: "peotram-compliance",
+          title: "Conformidade PEOTRAM",
+          value: 92.8,
+          change: 4.3,
+          trend: "up" as const,
+          icon: Shield,
+          color: "text-success",
+          unit: "%",
+          target: 95,
+        },
+        {
+          id: "non-conformities",
+          title: "Não Conformidades",
+          value: 14,
+          change: -18.2,
+          trend: "down" as const,
+          icon: AlertTriangle,
+          color: "text-warning",
+          subtitle: "Abertas",
+        },
+        {
+          id: "audit-coverage",
+          title: "Cobertura de Auditoria",
+          value: 78.5,
+          change: 8.9,
+          trend: "up" as const,
+          icon: Target,
+          color: "text-primary",
+          unit: "%",
+          target: 85,
+        },
+        {
+          id: "evidence-submitted",
+          title: "Evidências Enviadas",
+          value: 156,
+          change: 12.7,
+          trend: "up" as const,
+          icon: FileText,
+          color: "text-success",
+          subtitle: "Este mês",
+        },
+      ],
     };
 
     return metricsData[profile as keyof typeof metricsData] || metricsData.admin;
@@ -126,7 +275,7 @@ const StrategicDashboard: React.FC = () => {
   const loadDashboardData = async () => {
     try {
       setIsLoading(true);
-      
+
       // Get metrics for selected profile
       const profileMetrics = getProfileMetrics(selectedProfile);
       setMetrics(profileMetrics);
@@ -142,7 +291,7 @@ const StrategicDashboard: React.FC = () => {
           module: "RH",
           actionUrl: "/hr/certificates",
           isRead: false,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         },
         {
           id: "2",
@@ -153,7 +302,7 @@ const StrategicDashboard: React.FC = () => {
           module: "PEOTRAM",
           actionUrl: "/peotram/audits",
           isRead: false,
-          createdAt: new Date(Date.now() - 3600000).toISOString()
+          createdAt: new Date(Date.now() - 3600000).toISOString(),
         },
         {
           id: "3",
@@ -164,8 +313,8 @@ const StrategicDashboard: React.FC = () => {
           module: "Checklists",
           actionUrl: "/checklists",
           isRead: true,
-          createdAt: new Date(Date.now() - 7200000).toISOString()
-        }
+          createdAt: new Date(Date.now() - 7200000).toISOString(),
+        },
       ];
 
       setAlerts(sampleAlerts);
@@ -180,7 +329,7 @@ const StrategicDashboard: React.FC = () => {
           userName: "Carlos Mendes",
           module: "PEOTRAM",
           createdAt: new Date(Date.now() - 1800000).toISOString(),
-          metadata: { score: 94.2, vesselId: "mv-atlantic" }
+          metadata: { score: 94.2, vesselId: "mv-atlantic" },
         },
         {
           id: "2",
@@ -190,7 +339,7 @@ const StrategicDashboard: React.FC = () => {
           userName: "Ana Costa",
           module: "Checklists",
           createdAt: new Date(Date.now() - 3600000).toISOString(),
-          metadata: { checklistId: "safety-daily", location: "bridge" }
+          metadata: { checklistId: "safety-daily", location: "bridge" },
         },
         {
           id: "3",
@@ -200,18 +349,17 @@ const StrategicDashboard: React.FC = () => {
           userName: "Maria Silva",
           module: "RH",
           createdAt: new Date(Date.now() - 5400000).toISOString(),
-          metadata: { employeeId: "pedro-santos", certificateType: "STCW" }
-        }
+          metadata: { employeeId: "pedro-santos", certificateType: "STCW" },
+        },
       ];
 
       setActivities(sampleActivities);
       setLastUpdated(new Date());
-
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao carregar dados do dashboard",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -230,7 +378,7 @@ const StrategicDashboard: React.FC = () => {
   // Export dashboard data
   const handleExport = async (format: string, options?: any) => {
     setIsExporting(true);
-    
+
     try {
       const exportData = {
         metrics,
@@ -238,12 +386,12 @@ const StrategicDashboard: React.FC = () => {
         activities,
         profile: selectedProfile,
         timestamp: new Date().toISOString(),
-        filters: dashboardFilters
+        filters: dashboardFilters,
       };
 
       // Simulate export process
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       toast({
         title: "Exportação Concluída",
         description: `Dashboard exportado em formato ${format.toUpperCase()} com sucesso!`,
@@ -252,7 +400,7 @@ const StrategicDashboard: React.FC = () => {
       toast({
         title: "Erro na Exportação",
         description: "Falha ao exportar dados do dashboard",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsExporting(false);
@@ -286,7 +434,7 @@ const StrategicDashboard: React.FC = () => {
       description: "Ativando busca global do sistema (Ctrl+K)...",
     });
     // Focus on search input or open search modal
-    const searchInput = document.querySelector("input[type=\"search\"]") as HTMLInputElement;
+    const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
     if (searchInput) {
       searchInput.focus();
     }
@@ -305,7 +453,7 @@ const StrategicDashboard: React.FC = () => {
   // Initialize dashboard
   useEffect(() => {
     loadDashboardData();
-    
+
     // Set up real-time updates
     const interval = setInterval(() => {
       loadDashboardData();
@@ -315,14 +463,16 @@ const StrategicDashboard: React.FC = () => {
   }, [selectedProfile]);
 
   // Filter alerts and activities based on search
-  const filteredAlerts = alerts.filter(alert => 
-    alert.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    alert.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredAlerts = alerts.filter(
+    alert =>
+      alert.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      alert.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredActivities = activities.filter(activity => 
-    activity.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    activity.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredActivities = activities.filter(
+    activity =>
+      activity.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      activity.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (isLoading) {
@@ -332,7 +482,9 @@ const StrategicDashboard: React.FC = () => {
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="flex flex-col items-center gap-4">
               <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-              <p className="text-lg font-medium text-muted-foreground">Carregando Dashboard Estratégico...</p>
+              <p className="text-lg font-medium text-muted-foreground">
+                Carregando Dashboard Estratégico...
+              </p>
             </div>
           </div>
         </div>
@@ -359,10 +511,13 @@ const StrategicDashboard: React.FC = () => {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-4">
               {/* Profile Selector */}
-              <Tabs value={selectedProfile} onValueChange={(value) => setSelectedProfile(value as any)}>
+              <Tabs
+                value={selectedProfile}
+                onValueChange={value => setSelectedProfile(value as any)}
+              >
                 <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="admin" className="flex items-center gap-2">
                     <Crown className="h-4 w-4" />
@@ -382,19 +537,19 @@ const StrategicDashboard: React.FC = () => {
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
-              
+
               {/* Actions */}
               <Button variant="outline" size="sm" onClick={refreshDashboard}>
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Atualizar
               </Button>
-              
+
               <div className="text-sm text-muted-foreground">
                 Última atualização: {lastUpdated.toLocaleTimeString()}
               </div>
             </div>
           </div>
-          
+
           {/* Search Bar */}
           <div className="mt-4 flex items-center gap-4">
             <div className="relative flex-1 max-w-md">
@@ -402,11 +557,11 @@ const StrategicDashboard: React.FC = () => {
               <Input
                 placeholder="Buscar métricas, alertas, atividades..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
-            
+
             <Badge variant="outline" className="flex items-center gap-2">
               <Activity className="h-3 w-3" />
               {alerts.filter(a => !a.isRead).length} novos alertas
@@ -429,9 +584,9 @@ const StrategicDashboard: React.FC = () => {
           <TabsContent value="overview" className="space-y-6">
             {/* Metrics Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {metrics.map((metric) => (
-                <Card 
-                  key={metric.id} 
+              {metrics.map(metric => (
+                <Card
+                  key={metric.id}
                   className="hover:shadow-lg transition-all duration-300 cursor-pointer group border-l-4 border-l-transparent hover:border-l-primary"
                   onClick={metric.onClick}
                 >
@@ -439,21 +594,34 @@ const StrategicDashboard: React.FC = () => {
                     <CardTitle className="text-sm font-medium text-muted-foreground">
                       {metric.title}
                     </CardTitle>
-                    <metric.icon className={`h-5 w-5 ${metric.color} group-hover:scale-110 transition-transform`} />
+                    <metric.icon
+                      className={`h-5 w-5 ${metric.color} group-hover:scale-110 transition-transform`}
+                    />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold mb-2">{formatMetricValue(metric.value, metric.unit)}</div>
+                    <div className="text-2xl font-bold mb-2">
+                      {formatMetricValue(metric.value, metric.unit)}
+                    </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1 text-sm">
                         {metric.trend === "up" && <TrendingUp className="h-3 w-3 text-success" />}
-                        {metric.trend === "down" && <TrendingDown className="h-3 w-3 text-destructive" />}
-                        {metric.trend === "stable" && <Activity className="h-3 w-3 text-muted-foreground" />}
-                        <span className={`font-medium ${
-                          metric.trend === "up" ? "text-success" : 
-                            metric.trend === "down" ? "text-destructive" : 
-                              "text-muted-foreground"
-                        }`}>
-                          {metric.change > 0 ? "+" : ""}{metric.change.toFixed(1)}%
+                        {metric.trend === "down" && (
+                          <TrendingDown className="h-3 w-3 text-destructive" />
+                        )}
+                        {metric.trend === "stable" && (
+                          <Activity className="h-3 w-3 text-muted-foreground" />
+                        )}
+                        <span
+                          className={`font-medium ${
+                            metric.trend === "up"
+                              ? "text-success"
+                              : metric.trend === "down"
+                                ? "text-destructive"
+                                : "text-muted-foreground"
+                          }`}
+                        >
+                          {metric.change > 0 ? "+" : ""}
+                          {metric.change.toFixed(1)}%
                         </span>
                       </div>
                       {metric.subtitle && (
@@ -468,8 +636,12 @@ const StrategicDashboard: React.FC = () => {
                           <span>Meta</span>
                           <span>{formatMetricValue(metric.target, metric.unit || "")}</span>
                         </div>
-                        <Progress 
-                          value={((parseFloat(metric.value.toString().replace(/[^\d.]/g, "")) || 0) / metric.target) * 100} 
+                        <Progress
+                          value={
+                            ((parseFloat(metric.value.toString().replace(/[^\d.]/g, "")) || 0) /
+                              metric.target) *
+                            100
+                          }
                           className="h-2"
                         />
                       </div>
@@ -486,15 +658,15 @@ const StrategicDashboard: React.FC = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Bell className="h-5 w-5 text-warning" />
-                Alertas Prioritários
+                    Alertas Prioritários
                   </CardTitle>
                   <CardDescription>
                     {filteredAlerts.filter(a => !a.isRead).length} alertas não lidos
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 max-h-96 overflow-y-auto">
-                  {filteredAlerts.slice(0, 5).map((alert) => (
-                    <div 
+                  {filteredAlerts.slice(0, 5).map(alert => (
+                    <div
                       key={alert.id}
                       className={`p-3 rounded-lg border cursor-pointer hover:shadow-md transition-all ${
                         !alert.isRead ? "bg-muted/50" : ""
@@ -502,12 +674,17 @@ const StrategicDashboard: React.FC = () => {
                       onClick={() => alert.actionUrl && navigate(alert.actionUrl)}
                     >
                       <div className="flex items-start gap-3">
-                        <div className={`p-1 rounded-full ${
-                          alert.type === "error" ? "bg-destructive/20 text-destructive" :
-                            alert.type === "warning" ? "bg-warning/20 text-warning" :
-                              alert.type === "info" ? "bg-info/20 text-info" :
-                                "bg-success/20 text-success"
-                        }`}>
+                        <div
+                          className={`p-1 rounded-full ${
+                            alert.type === "error"
+                              ? "bg-destructive/20 text-destructive"
+                              : alert.type === "warning"
+                                ? "bg-warning/20 text-warning"
+                                : alert.type === "info"
+                                  ? "bg-info/20 text-info"
+                                  : "bg-success/20 text-success"
+                          }`}
+                        >
                           {alert.type === "error" && <AlertTriangle className="h-3 w-3" />}
                           {alert.type === "warning" && <AlertCircle className="h-3 w-3" />}
                           {alert.type === "info" && <Bell className="h-3 w-3" />}
@@ -517,12 +694,14 @@ const StrategicDashboard: React.FC = () => {
                           <p className="font-medium text-sm truncate">{alert.title}</p>
                           <p className="text-xs text-muted-foreground mt-1">{alert.description}</p>
                           <div className="flex items-center gap-2 mt-2">
-                            <Badge 
-                              variant="outline" 
+                            <Badge
+                              variant="outline"
                               className={`text-xs ${
-                                alert.priority === "critical" ? "border-destructive text-destructive" :
-                                  alert.priority === "high" ? "border-warning text-warning" :
-                                    "border-muted text-muted-foreground"
+                                alert.priority === "critical"
+                                  ? "border-destructive text-destructive"
+                                  : alert.priority === "high"
+                                    ? "border-warning text-warning"
+                                    : "border-muted text-muted-foreground"
                               }`}
                             >
                               {alert.priority}
@@ -547,28 +726,32 @@ const StrategicDashboard: React.FC = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Activity className="h-5 w-5 text-primary" />
-                Atividades Recentes
+                    Atividades Recentes
                   </CardTitle>
-                  <CardDescription>
-                Últimas atividades do sistema
-                  </CardDescription>
+                  <CardDescription>Últimas atividades do sistema</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 max-h-96 overflow-y-auto">
-                  {filteredActivities.slice(0, 10).map((activity) => (
-                    <div 
+                  {filteredActivities.slice(0, 10).map(activity => (
+                    <div
                       key={activity.id}
                       className="flex items-start gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors"
                     >
                       <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                         {activity.type === "audit" && <Shield className="h-4 w-4 text-primary" />}
-                        {activity.type === "checklist" && <CheckCircle className="h-4 w-4 text-success" />}
+                        {activity.type === "checklist" && (
+                          <CheckCircle className="h-4 w-4 text-success" />
+                        )}
                         {activity.type === "travel" && <Map className="h-4 w-4 text-info" />}
-                        {activity.type === "document" && <FileText className="h-4 w-4 text-warning" />}
+                        {activity.type === "document" && (
+                          <FileText className="h-4 w-4 text-warning" />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
                           <p className="font-medium text-sm">{activity.title}</p>
-                          <Badge variant="outline" className="text-xs">{activity.module}</Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {activity.module}
+                          </Badge>
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">{activity.description}</p>
                         <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
@@ -594,25 +777,38 @@ const StrategicDashboard: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-primary" />
-              Navegação Rápida
+                  Navegação Rápida
                 </CardTitle>
-                <CardDescription>
-              Acesso direto aos módulos mais importantes
-                </CardDescription>
+                <CardDescription>Acesso direto aos módulos mais importantes</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                   {[
                     { title: "PEOTRAM", icon: Shield, route: "/peotram", color: "text-success" },
-                    { title: "Frota", icon: Ship, route: "/fleet-management", color: "text-azure-600" },
+                    {
+                      title: "Frota",
+                      icon: Ship,
+                      route: "/fleet-management",
+                      color: "text-azure-600",
+                    },
                     { title: "RH", icon: Users, route: "/hr", color: "text-info" },
                     { title: "Viagens", icon: Map, route: "/travel", color: "text-warning" },
-                    { title: "Relatórios", icon: BarChart3, route: "/reports", color: "text-primary" },
-                    { title: "Configurações", icon: Settings, route: "/settings", color: "text-muted-foreground" }
-                  ].map((item) => (
-                    <Button 
+                    {
+                      title: "Relatórios",
+                      icon: BarChart3,
+                      route: "/reports",
+                      color: "text-primary",
+                    },
+                    {
+                      title: "Configurações",
+                      icon: Settings,
+                      route: "/settings",
+                      color: "text-muted-foreground",
+                    },
+                  ].map(item => (
+                    <Button
                       key={item.title}
-                      variant="outline" 
+                      variant="outline"
                       className="h-20 flex flex-col items-center gap-2 hover:shadow-md transition-all"
                       onClick={() => navigate(item.route)}
                     >
@@ -635,7 +831,7 @@ const StrategicDashboard: React.FC = () => {
                 <AIInsightsPanel profile={selectedProfile} />
               </div>
               <div>
-                <DashboardFilters 
+                <DashboardFilters
                   onFilterChange={setDashboardFilters}
                   currentFilters={dashboardFilters}
                 />
@@ -644,10 +840,7 @@ const StrategicDashboard: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="export" className="space-y-6">
-            <DashboardExportPanel 
-              onExport={handleExport}
-              isExporting={isExporting}
-            />
+            <DashboardExportPanel onExport={handleExport} isExporting={isExporting} />
           </TabsContent>
         </Tabs>
       </div>
@@ -663,29 +856,29 @@ const StrategicDashboard: React.FC = () => {
             label: "Atualizar Dados",
             icon: <RefreshCw className="h-4 w-4" />,
             action: refreshDashboard,
-            variant: "default"
+            variant: "default",
           },
           {
             id: "export",
             label: "Exportar Dashboard",
             icon: <Download className="h-4 w-4" />,
             action: () => handleExport("pdf"),
-            variant: "outline"
+            variant: "outline",
           },
           {
             id: "customize",
             label: "Personalizar",
             icon: <Settings className="h-4 w-4" />,
             action: handleCustomizeDashboard,
-            variant: "outline"
+            variant: "outline",
           },
           {
             id: "alerts",
             label: "Central de Alertas",
             icon: <Bell className="h-4 w-4" />,
             action: handleAlertsCenter,
-            variant: "outline"
-          }
+            variant: "outline",
+          },
         ]}
         quickActions={[
           {
@@ -693,14 +886,14 @@ const StrategicDashboard: React.FC = () => {
             label: "Busca Global",
             icon: <Search className="h-3 w-3" />,
             action: handleGlobalSearch,
-            shortcut: "Ctrl+K"
+            shortcut: "Ctrl+K",
           },
           {
             id: "ai-insights",
             label: "IA Insights",
             icon: <Brain className="h-3 w-3" />,
-            action: handleAIInsights
-          }
+            action: handleAIInsights,
+          },
         ]}
       />
     </div>

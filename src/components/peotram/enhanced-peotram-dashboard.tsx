@@ -1,37 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { 
-  FileCheck, 
-  TrendingUp, 
-  AlertTriangle, 
+import {
+  FileCheck,
+  TrendingUp,
+  AlertTriangle,
   CheckCircle,
   Ship,
-  Building,
   Award,
   Clock,
   Users,
   Target,
   BarChart3,
   Download,
-  Upload,
   Eye,
   Edit,
   Calendar,
-  MapPin,
   Shield,
   Zap,
   Leaf,
   Settings,
   HelpCircle,
   Search,
-  Filter
+  Filter,
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
-import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from "recharts";
+import {
+  Tooltip as UITooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface PeotramMetrics {
   totalAudits: number;
@@ -74,14 +86,14 @@ const PEOTRAM_ELEMENTS = [
   { id: "ELEMENTO_07", name: "Gestão de Emergências e Contingências", icon: AlertTriangle },
   { id: "ELEMENTO_08", name: "Segurança Operacional", icon: Shield },
   { id: "ELEMENTO_09", name: "Meio Ambiente", icon: Leaf },
-  { id: "ELEMENTO_10", name: "Monitoramento e Análise Crítica", icon: BarChart3 }
+  { id: "ELEMENTO_10", name: "Monitoramento e Análise Crítica", icon: BarChart3 },
 ];
 
 const COMPLIANCE_COLORS = {
   excellent: "hsl(var(--success))",
   good: "hsl(var(--info))",
   fair: "hsl(var(--warning))",
-  poor: "hsl(var(--destructive))"
+  poor: "hsl(var(--destructive))",
 };
 
 export const EnhancedPeotramDashboard: React.FC = () => {
@@ -102,17 +114,19 @@ export const EnhancedPeotramDashboard: React.FC = () => {
     idembScore: 88.7,
     innovationScore: 75.2,
     certificationStatus: "Válida",
-    supplierPerformance: 89.1
+    supplierPerformance: 89.1,
   };
 
   const auditProgress: AuditProgress[] = PEOTRAM_ELEMENTS.map((element, index) => ({
     elementId: element.id,
     elementName: element.name,
     progress: Math.floor(Math.random() * 100),
-    status: ["completed", "in-progress", "pending", "overdue"][Math.floor(Math.random() * 4)] as any,
-    dueDate: `2024-${String(12 - index % 12).padStart(2, "0")}-15`,
+    status: ["completed", "in-progress", "pending", "overdue"][
+      Math.floor(Math.random() * 4)
+    ] as any,
+    dueDate: `2024-${String(12 - (index % 12)).padStart(2, "0")}-15`,
     assignedTo: `Auditor ${index + 1}`,
-    lastUpdate: `2024-12-${String(Math.floor(Math.random() * 28) + 1).padStart(2, "0")}`
+    lastUpdate: `2024-12-${String(Math.floor(Math.random() * 28) + 1).padStart(2, "0")}`,
   }));
 
   const complianceTrend: ComplianceTrend[] = [
@@ -127,26 +141,36 @@ export const EnhancedPeotramDashboard: React.FC = () => {
     { period: "Set 2024", score: 89.8, nonConformities: 8, target: 90 },
     { period: "Out 2024", score: 91.1, nonConformities: 6, target: 90 },
     { period: "Nov 2024", score: 88.9, nonConformities: 9, target: 90 },
-    { period: "Dez 2024", score: 87.5, nonConformities: 12, target: 90 }
+    { period: "Dez 2024", score: 87.5, nonConformities: 12, target: 90 },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "hsl(var(--success))";
-    case "in-progress": return "hsl(var(--info))";
-    case "pending": return "hsl(var(--warning))";
-    case "overdue": return "hsl(var(--destructive))";
-    default: return "hsl(var(--muted))";
+      case "completed":
+        return "hsl(var(--success))";
+      case "in-progress":
+        return "hsl(var(--info))";
+      case "pending":
+        return "hsl(var(--warning))";
+      case "overdue":
+        return "hsl(var(--destructive))";
+      default:
+        return "hsl(var(--muted))";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "completed": return CheckCircle;
-    case "in-progress": return Clock;
-    case "pending": return Target;
-    case "overdue": return AlertTriangle;
-    default: return Clock;
+      case "completed":
+        return CheckCircle;
+      case "in-progress":
+        return Clock;
+      case "pending":
+        return Target;
+      case "overdue":
+        return AlertTriangle;
+      default:
+        return Clock;
     }
   };
 
@@ -168,7 +192,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
               Programa de Excelência Operacional no Transporte Aéreo e Marítimo
             </p>
           </div>
-          
+
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)}>
               <Filter className="w-4 h-4 mr-2" />
@@ -191,9 +215,9 @@ export const EnhancedPeotramDashboard: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="text-sm font-medium">Período</label>
-                <select 
-                  value={selectedPeriod} 
-                  onChange={(e) => setSelectedPeriod(e.target.value)}
+                <select
+                  value={selectedPeriod}
+                  onChange={e => setSelectedPeriod(e.target.value)}
                   className="w-full mt-1 p-2 border rounded-md bg-background"
                 >
                   <option value="2024">2024</option>
@@ -201,12 +225,12 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                   <option value="2022">2022</option>
                 </select>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium">Tipo de Auditoria</label>
-                <select 
-                  value={auditType} 
-                  onChange={(e) => setAuditType(e.target.value as any)}
+                <select
+                  value={auditType}
+                  onChange={e => setAuditType(e.target.value as any)}
                   className="w-full mt-1 p-2 border rounded-md bg-background"
                 >
                   <option value="all">Todas</option>
@@ -214,7 +238,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                   <option value="shore">Base Terrestre</option>
                 </select>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium">Pesquisar</label>
                 <div className="relative mt-1">
@@ -223,12 +247,12 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                     type="text"
                     placeholder="Buscar auditorias..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={e => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 border rounded-md bg-background"
                   />
                 </div>
               </div>
-              
+
               <div className="flex items-end">
                 <Button variant="outline" className="w-full">
                   Aplicar Filtros
@@ -247,7 +271,13 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                   <p className="text-sm font-medium text-muted-foreground">Score de Conformidade</p>
                   <p className="text-3xl font-bold text-foreground">{metrics.complianceScore}%</p>
                   <div className="flex items-center gap-2 mt-2">
-                    <Badge variant="outline" style={{ backgroundColor: getComplianceLevel(metrics.complianceScore).color + "20", color: getComplianceLevel(metrics.complianceScore).color }}>
+                    <Badge
+                      variant="outline"
+                      style={{
+                        backgroundColor: getComplianceLevel(metrics.complianceScore).color + "20",
+                        color: getComplianceLevel(metrics.complianceScore).color,
+                      }}
+                    >
                       {getComplianceLevel(metrics.complianceScore).level}
                     </Badge>
                   </div>
@@ -273,7 +303,10 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Indicador que mede a taxa de acidentes de segurança operacional por horas trabalhadas</p>
+                      <p>
+                        Indicador que mede a taxa de acidentes de segurança operacional por horas
+                        trabalhadas
+                      </p>
                     </TooltipContent>
                   </UITooltip>
                 </div>
@@ -288,7 +321,9 @@ export const EnhancedPeotramDashboard: React.FC = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">IDEMB (Disponibilidade)</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    IDEMB (Disponibilidade)
+                  </p>
                   <p className="text-3xl font-bold text-foreground">{metrics.idembScore}</p>
                   <UITooltip>
                     <TooltipTrigger>
@@ -358,24 +393,24 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis dataKey="period" stroke="hsl(var(--muted-foreground))" />
                       <YAxis stroke="hsl(var(--muted-foreground))" />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: "hsl(var(--card))", 
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
                           border: "1px solid hsl(var(--border))",
-                          borderRadius: "8px"
-                        }} 
+                          borderRadius: "8px",
+                        }}
                       />
-                      <Line 
-                        type="monotone" 
-                        dataKey="score" 
-                        stroke="hsl(var(--primary))" 
+                      <Line
+                        type="monotone"
+                        dataKey="score"
+                        stroke="hsl(var(--primary))"
                         strokeWidth={2}
                         dot={{ fill: "hsl(var(--primary))" }}
                       />
-                      <Line 
-                        type="monotone" 
-                        dataKey="target" 
-                        stroke="hsl(var(--success))" 
+                      <Line
+                        type="monotone"
+                        dataKey="target"
+                        stroke="hsl(var(--success))"
                         strokeWidth={2}
                         strokeDasharray="5 5"
                         dot={{ fill: "hsl(var(--success))" }}
@@ -392,20 +427,18 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                     <BarChart3 className="w-5 h-5" />
                     Progresso por Elemento
                   </CardTitle>
-                  <CardDescription>
-                    Status de auditoria dos 10 elementos PEOTRAM
-                  </CardDescription>
+                  <CardDescription>Status de auditoria dos 10 elementos PEOTRAM</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="max-h-80 overflow-y-auto space-y-3">
-                    {auditProgress.slice(0, 6).map((element) => {
+                    {auditProgress.slice(0, 6).map(element => {
                       const StatusIcon = getStatusIcon(element.status);
                       return (
                         <div key={element.elementId} className="space-y-2">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <StatusIcon 
-                                className="w-4 h-4" 
+                              <StatusIcon
+                                className="w-4 h-4"
                                 style={{ color: getStatusColor(element.status) }}
                               />
                               <span className="text-sm font-medium truncate max-w-48">
@@ -416,23 +449,23 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                               <span className="text-sm text-muted-foreground">
                                 {element.progress}%
                               </span>
-                              <Badge 
-                                variant="outline" 
+                              <Badge
+                                variant="outline"
                                 className="text-xs"
-                                style={{ 
+                                style={{
                                   borderColor: getStatusColor(element.status),
-                                  color: getStatusColor(element.status)
+                                  color: getStatusColor(element.status),
                                 }}
                               >
                                 {element.status}
                               </Badge>
                             </div>
                           </div>
-                          <Progress 
-                            value={element.progress} 
+                          <Progress
+                            value={element.progress}
                             className="h-2"
-                            style={{ 
-                              background: getStatusColor(element.status) + "20"
+                            style={{
+                              background: getStatusColor(element.status) + "20",
                             }}
                           />
                         </div>
@@ -459,7 +492,10 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-2xl font-bold">{metrics.innovationScore}</span>
-                      <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
+                      <Badge
+                        variant="outline"
+                        className="bg-warning/10 text-warning border-warning/30"
+                      >
                         Em Desenvolvimento
                       </Badge>
                     </div>
@@ -482,13 +518,14 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-lg font-bold">{metrics.certificationStatus}</span>
-                      <Badge variant="outline" className="bg-success/10 text-success border-success/30">
+                      <Badge
+                        variant="outline"
+                        className="bg-success/10 text-success border-success/30"
+                      >
                         Ativa
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      Válida até: 31/12/2024
-                    </p>
+                    <p className="text-sm text-muted-foreground">Válida até: 31/12/2024</p>
                     <Button variant="outline" size="sm" className="w-full">
                       <Eye className="w-4 h-4 mr-2" />
                       Ver Certificado
@@ -533,13 +570,16 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {auditProgress.map((audit) => {
+                    {auditProgress.map(audit => {
                       const StatusIcon = getStatusIcon(audit.status);
                       return (
-                        <div key={audit.elementId} className="flex items-center justify-between p-4 border rounded-lg bg-card/50">
+                        <div
+                          key={audit.elementId}
+                          className="flex items-center justify-between p-4 border rounded-lg bg-card/50"
+                        >
                           <div className="flex items-center gap-4">
-                            <StatusIcon 
-                              className="w-5 h-5" 
+                            <StatusIcon
+                              className="w-5 h-5"
                               style={{ color: getStatusColor(audit.status) }}
                             />
                             <div>
@@ -591,12 +631,12 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis dataKey="period" stroke="hsl(var(--muted-foreground))" />
                       <YAxis stroke="hsl(var(--muted-foreground))" />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: "hsl(var(--card))", 
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
                           border: "1px solid hsl(var(--border))",
-                          borderRadius: "8px"
-                        }} 
+                          borderRadius: "8px",
+                        }}
                       />
                       <Bar dataKey="nonConformities" fill="hsl(var(--destructive))" />
                     </BarChart>
@@ -623,12 +663,12 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-medium">{score.toFixed(1)}%</span>
-                            <Badge 
-                              variant="outline" 
-                              style={{ 
+                            <Badge
+                              variant="outline"
+                              style={{
                                 backgroundColor: compliance.color + "20",
                                 color: compliance.color,
-                                borderColor: compliance.color + "40"
+                                borderColor: compliance.color + "40",
                               }}
                             >
                               {compliance.level}
@@ -653,7 +693,9 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                   <CardContent>
                     <div className="space-y-2">
                       <div className="text-2xl font-bold">-12.3%</div>
-                      <p className="text-sm text-muted-foreground">Redução no consumo de combustível</p>
+                      <p className="text-sm text-muted-foreground">
+                        Redução no consumo de combustível
+                      </p>
                       <Progress value={87.7} className="h-2" />
                     </div>
                   </CardContent>
@@ -702,10 +744,12 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                     <FileCheck className="w-8 h-8 text-primary" />
                     <div className="text-center">
                       <div className="font-medium">Relatório de Auditoria</div>
-                      <div className="text-sm text-muted-foreground">Relatório completo PEOTRAM</div>
+                      <div className="text-sm text-muted-foreground">
+                        Relatório completo PEOTRAM
+                      </div>
                     </div>
                   </Button>
-                  
+
                   <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
                     <BarChart3 className="w-8 h-8 text-info" />
                     <div className="text-center">
@@ -713,7 +757,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                       <div className="text-sm text-muted-foreground">KPIs e indicadores</div>
                     </div>
                   </Button>
-                  
+
                   <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
                     <AlertTriangle className="w-8 h-8 text-warning" />
                     <div className="text-center">

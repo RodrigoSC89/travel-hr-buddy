@@ -7,11 +7,17 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import {
   Settings,
   Zap,
   Shield,
@@ -21,17 +27,14 @@ import {
   AlertTriangle,
   CheckCircle,
   RefreshCw,
-  Code,
   Database,
   Globe,
   Lock,
-  Webhook,
   Timer,
   BarChart3,
   Brain,
   Target,
-  Filter,
-  Layers
+  Layers,
 } from "lucide-react";
 
 interface AutomationRule {
@@ -87,7 +90,7 @@ export const IntegrationAutomation: React.FC = () => {
     rateLimit: { enabled: true, requestsPerMinute: 60, burstLimit: 10 },
     retry: { enabled: true, maxAttempts: 3, backoffMultiplier: 2 },
     caching: { enabled: false, ttlSeconds: 300 },
-    monitoring: { healthCheck: true, alerting: true, logging: true }
+    monitoring: { healthCheck: true, alerting: true, logging: true },
   });
 
   const { toast } = useToast();
@@ -103,7 +106,7 @@ export const IntegrationAutomation: React.FC = () => {
       isActive: true,
       priority: "high",
       lastTriggered: "2024-01-20T15:30:00Z",
-      successRate: 85.2
+      successRate: 85.2,
     },
     {
       id: "2",
@@ -115,7 +118,7 @@ export const IntegrationAutomation: React.FC = () => {
       isActive: true,
       priority: "critical",
       lastTriggered: "2024-01-20T14:15:00Z",
-      successRate: 98.7
+      successRate: 98.7,
     },
     {
       id: "3",
@@ -127,7 +130,7 @@ export const IntegrationAutomation: React.FC = () => {
       isActive: true,
       priority: "medium",
       lastTriggered: "2024-01-19T09:00:00Z",
-      successRate: 94.1
+      successRate: 94.1,
     },
     {
       id: "4",
@@ -138,7 +141,7 @@ export const IntegrationAutomation: React.FC = () => {
       action: "enable_caching",
       isActive: false,
       priority: "low",
-      successRate: 76.3
+      successRate: 76.3,
     },
     {
       id: "5",
@@ -150,8 +153,8 @@ export const IntegrationAutomation: React.FC = () => {
       isActive: true,
       priority: "high",
       lastTriggered: "2024-01-20T16:45:00Z",
-      successRate: 91.8
-    }
+      successRate: 91.8,
+    },
   ]);
 
   const triggerTypes = [
@@ -161,7 +164,7 @@ export const IntegrationAutomation: React.FC = () => {
     { value: "response_pattern", label: "Padrão de Resposta", icon: Brain },
     { value: "high_latency", label: "Alta Latência", icon: Timer },
     { value: "resource_usage", label: "Uso de Recursos", icon: Cpu },
-    { value: "scheduled", label: "Agendado", icon: RefreshCw }
+    { value: "scheduled", label: "Agendado", icon: RefreshCw },
   ];
 
   const actionTypes = [
@@ -171,15 +174,19 @@ export const IntegrationAutomation: React.FC = () => {
     { value: "enable_caching", label: "Ativar Cache", icon: Database },
     { value: "load_balance", label: "Balancear Carga", icon: Layers },
     { value: "scale_resources", label: "Escalar Recursos", icon: Cpu },
-    { value: "circuit_breaker", label: "Circuit Breaker", icon: Shield }
+    { value: "circuit_breaker", label: "Circuit Breaker", icon: Shield },
   ];
 
   const getPriorityColor = (priority: AutomationRule["priority"]) => {
     switch (priority) {
-    case "critical": return "bg-destructive/20 text-destructive border-destructive/30";
-    case "high": return "bg-warning/20 text-warning border-warning/30";
-    case "medium": return "bg-primary/20 text-primary border-primary/30";
-    case "low": return "bg-muted text-muted-foreground border-border";
+      case "critical":
+        return "bg-destructive/20 text-destructive border-destructive/30";
+      case "high":
+        return "bg-warning/20 text-warning border-warning/30";
+      case "medium":
+        return "bg-primary/20 text-primary border-primary/30";
+      case "low":
+        return "bg-muted text-muted-foreground border-border";
     }
   };
 
@@ -207,9 +214,7 @@ export const IntegrationAutomation: React.FC = () => {
               <Zap className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-2xl text-foreground">
-                Automação Inteligente
-              </CardTitle>
+              <CardTitle className="text-2xl text-foreground">Automação Inteligente</CardTitle>
               <CardDescription>
                 Configure regras automáticas e otimize suas integrações
               </CardDescription>
@@ -231,16 +236,21 @@ export const IntegrationAutomation: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-foreground">Regras de Automação</h3>
-              <p className="text-sm text-muted-foreground">Configure ações automáticas baseadas em eventos</p>
+              <p className="text-sm text-muted-foreground">
+                Configure ações automáticas baseadas em eventos
+              </p>
             </div>
-            <Button onClick={() => setIsCreatingRule(true)} className="bg-primary hover:bg-primary/90">
+            <Button
+              onClick={() => setIsCreatingRule(true)}
+              className="bg-primary hover:bg-primary/90"
+            >
               <Zap className="w-4 h-4 mr-2" />
               Nova Regra
             </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {automationRules.map((rule) => (
+            {automationRules.map(rule => (
               <Card key={rule.id} className="border border-border/50">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -253,23 +263,21 @@ export const IntegrationAutomation: React.FC = () => {
                         <p className="text-xs text-muted-foreground">{rule.description}</p>
                       </div>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={rule.isActive}
                       onCheckedChange={() => handleToggleRule(rule.id)}
                     />
                   </div>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <Badge className={getPriorityColor(rule.priority)}>
-                      {rule.priority}
-                    </Badge>
+                    <Badge className={getPriorityColor(rule.priority)}>{rule.priority}</Badge>
                     <Badge variant="outline" className="text-xs">
                       {rule.successRate}% sucesso
                     </Badge>
                   </div>
-                  
+
                   <div className="space-y-2 text-xs">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Trigger:</span>
@@ -284,13 +292,13 @@ export const IntegrationAutomation: React.FC = () => {
                       <code className="text-success">{rule.action}</code>
                     </div>
                   </div>
-                  
+
                   {rule.lastTriggered && (
                     <div className="text-xs text-muted-foreground">
                       Última execução: {new Date(rule.lastTriggered).toLocaleString("pt-BR")}
                     </div>
                   )}
-                  
+
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" className="flex-1">
                       <Settings className="w-3 h-3 mr-1" />
@@ -323,16 +331,16 @@ export const IntegrationAutomation: React.FC = () => {
                   <Input
                     id="endpoint"
                     value={config.endpoint || ""}
-                    onChange={(e) => setConfig({...config, endpoint: e.target.value})}
+                    onChange={e => setConfig({ ...config, endpoint: e.target.value })}
                     placeholder="https://api.exemplo.com/v1"
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="method">Método HTTP</Label>
-                  <Select 
-                    value={config.method} 
-                    onValueChange={(value: any) => setConfig({...config, method: value})}
+                  <Select
+                    value={config.method}
+                    onValueChange={(value: any) => setConfig({ ...config, method: value })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -346,7 +354,7 @@ export const IntegrationAutomation: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="headers">Headers (JSON)</Label>
                   <Textarea
@@ -369,12 +377,14 @@ export const IntegrationAutomation: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label>Tipo de Autenticação</Label>
-                  <Select 
-                    value={config.authentication?.type} 
-                    onValueChange={(value: any) => setConfig({
-                      ...config, 
-                      authentication: {...config.authentication, type: value}
-                    })}
+                  <Select
+                    value={config.authentication?.type}
+                    onValueChange={(value: any) =>
+                      setConfig({
+                        ...config,
+                        authentication: { ...config.authentication, type: value },
+                      })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -388,7 +398,7 @@ export const IntegrationAutomation: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 {config.authentication?.type !== "none" && (
                   <div className="space-y-2">
                     <Label htmlFor="token">Token/Chave</Label>
@@ -412,41 +422,47 @@ export const IntegrationAutomation: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="rate-limit-enabled">Ativar Rate Limiting</Label>
-                  <Switch 
+                  <Switch
                     id="rate-limit-enabled"
                     checked={config.rateLimit?.enabled}
-                    onCheckedChange={(checked) => setConfig({
-                      ...config,
-                      rateLimit: {...config.rateLimit, enabled: checked}
-                    })}
+                    onCheckedChange={checked =>
+                      setConfig({
+                        ...config,
+                        rateLimit: { ...config.rateLimit, enabled: checked },
+                      })
+                    }
                   />
                 </div>
-                
+
                 {config.rateLimit?.enabled && (
                   <>
                     <div className="space-y-2">
                       <Label>Requisições por Minuto: {config.rateLimit?.requestsPerMinute}</Label>
                       <Slider
                         value={[config.rateLimit?.requestsPerMinute || 60]}
-                        onValueChange={([value]) => setConfig({
-                          ...config,
-                          rateLimit: {...config.rateLimit, requestsPerMinute: value}
-                        })}
+                        onValueChange={([value]) =>
+                          setConfig({
+                            ...config,
+                            rateLimit: { ...config.rateLimit, requestsPerMinute: value },
+                          })
+                        }
                         max={1000}
                         min={1}
                         step={10}
                         className="w-full"
                       />
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label>Limite de Burst: {config.rateLimit?.burstLimit}</Label>
                       <Slider
                         value={[config.rateLimit?.burstLimit || 10]}
-                        onValueChange={([value]) => setConfig({
-                          ...config,
-                          rateLimit: {...config.rateLimit, burstLimit: value}
-                        })}
+                        onValueChange={([value]) =>
+                          setConfig({
+                            ...config,
+                            rateLimit: { ...config.rateLimit, burstLimit: value },
+                          })
+                        }
                         max={100}
                         min={1}
                         step={1}
@@ -468,35 +484,41 @@ export const IntegrationAutomation: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label>Retry Automático</Label>
-                  <Switch 
+                  <Switch
                     checked={config.retry?.enabled}
-                    onCheckedChange={(checked) => setConfig({
-                      ...config,
-                      retry: {...config.retry, enabled: checked}
-                    })}
+                    onCheckedChange={checked =>
+                      setConfig({
+                        ...config,
+                        retry: { ...config.retry, enabled: checked },
+                      })
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Cache de Resposta</Label>
-                  <Switch 
+                  <Switch
                     checked={config.caching?.enabled}
-                    onCheckedChange={(checked) => setConfig({
-                      ...config,
-                      caching: {...config.caching, enabled: checked}
-                    })}
+                    onCheckedChange={checked =>
+                      setConfig({
+                        ...config,
+                        caching: { ...config.caching, enabled: checked },
+                      })
+                    }
                   />
                 </div>
-                
+
                 {config.caching?.enabled && (
                   <div className="space-y-2">
                     <Label>TTL do Cache (segundos): {config.caching?.ttlSeconds}</Label>
                     <Slider
                       value={[config.caching?.ttlSeconds || 300]}
-                      onValueChange={([value]) => setConfig({
-                        ...config,
-                        caching: {...config.caching, ttlSeconds: value}
-                      })}
+                      onValueChange={([value]) =>
+                        setConfig({
+                          ...config,
+                          caching: { ...config.caching, ttlSeconds: value },
+                        })
+                      }
                       max={3600}
                       min={60}
                       step={60}
@@ -507,7 +529,7 @@ export const IntegrationAutomation: React.FC = () => {
               </CardContent>
             </Card>
           </div>
-          
+
           <div className="flex justify-end">
             <Button onClick={handleSaveConfig} className="bg-primary hover:bg-primary/90">
               <CheckCircle className="w-4 h-4 mr-2" />
@@ -531,20 +553,20 @@ export const IntegrationAutomation: React.FC = () => {
                   <div className="text-3xl font-bold text-success mb-2">94%</div>
                   <p className="text-sm text-muted-foreground">Eficiência Geral</p>
                 </div>
-                
+
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Cache Hit Rate</span>
                     <span className="text-foreground">87%</span>
                   </div>
                   <Progress value={87} className="h-2" />
-                  
+
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Compressão</span>
                     <span className="text-foreground">76%</span>
                   </div>
                   <Progress value={76} className="h-2" />
-                  
+
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Connection Pool</span>
                     <span className="text-foreground">92%</span>
@@ -571,7 +593,7 @@ export const IntegrationAutomation: React.FC = () => {
                     Cache pode ser ativado no endpoint /users para reduzir 40% da latência
                   </p>
                 </div>
-                
+
                 <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg">
                   <div className="flex items-center gap-2 mb-1">
                     <AlertTriangle className="w-4 h-4 text-warning" />
@@ -581,7 +603,7 @@ export const IntegrationAutomation: React.FC = () => {
                     Rate limit será atingido em ~2h no ritmo atual de requisições
                   </p>
                 </div>
-                
+
                 <div className="p-3 bg-primary/10 border border-primary/20 rounded-lg">
                   <div className="flex items-center gap-2 mb-1">
                     <Brain className="w-4 h-4 text-primary" />
@@ -638,34 +660,40 @@ export const IntegrationAutomation: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label>Health Check Automático</Label>
-                  <Switch 
+                  <Switch
                     checked={config.monitoring?.healthCheck}
-                    onCheckedChange={(checked) => setConfig({
-                      ...config,
-                      monitoring: {...config.monitoring, healthCheck: checked}
-                    })}
+                    onCheckedChange={checked =>
+                      setConfig({
+                        ...config,
+                        monitoring: { ...config.monitoring, healthCheck: checked },
+                      })
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Alertas por Email</Label>
-                  <Switch 
+                  <Switch
                     checked={config.monitoring?.alerting}
-                    onCheckedChange={(checked) => setConfig({
-                      ...config,
-                      monitoring: {...config.monitoring, alerting: checked}
-                    })}
+                    onCheckedChange={checked =>
+                      setConfig({
+                        ...config,
+                        monitoring: { ...config.monitoring, alerting: checked },
+                      })
+                    }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Logging Detalhado</Label>
-                  <Switch 
+                  <Switch
                     checked={config.monitoring?.logging}
-                    onCheckedChange={(checked) => setConfig({
-                      ...config,
-                      monitoring: {...config.monitoring, logging: checked}
-                    })}
+                    onCheckedChange={checked =>
+                      setConfig({
+                        ...config,
+                        monitoring: { ...config.monitoring, logging: checked },
+                      })
+                    }
                   />
                 </div>
               </CardContent>

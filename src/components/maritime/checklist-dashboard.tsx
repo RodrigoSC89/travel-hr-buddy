@@ -1,21 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  CheckCircle, 
-  Clock, 
-  AlertTriangle, 
-  TrendingUp, 
-  Users, 
-  Ship,
-  FileText,
-  BarChart3
-} from "lucide-react";
+import { CheckCircle, Clock, AlertTriangle, TrendingUp, FileText, BarChart3 } from "lucide-react";
 import { useMaritimeChecklists } from "@/hooks/use-maritime-checklists";
-import { supabase } from "@/integrations/supabase/client";
 
 interface DashboardMetrics {
   totalChecklists: number;
@@ -34,7 +22,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
     pendingChecklists: 0,
     overdueChecklists: 0,
     complianceScore: 0,
-    avgCompletionTime: 0
+    avgCompletionTime: 0,
   });
 
   useEffect(() => {
@@ -62,7 +50,8 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
 
     const completedChecklists = checklists.filter(c => c.status === "completed");
     const totalCompleted = completedChecklists.length;
-    const complianceScore = checklists.length > 0 ? Math.round((totalCompleted / checklists.length) * 100) : 0;
+    const complianceScore =
+      checklists.length > 0 ? Math.round((totalCompleted / checklists.length) * 100) : 0;
 
     setMetrics({
       totalChecklists: checklists.length,
@@ -70,7 +59,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
       pendingChecklists,
       overdueChecklists,
       complianceScore,
-      avgCompletionTime: 45 // Mock data - would calculate from actual completion times
+      avgCompletionTime: 45, // Mock data - would calculate from actual completion times
     });
   };
 
@@ -78,24 +67,33 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className={`h-4 w-4 ${
-          variant === "success" ? "text-green-600" :
-            variant === "warning" ? "text-yellow-600" :
-              variant === "danger" ? "text-red-600" :
-                "text-muted-foreground"
-        }`} />
+        <Icon
+          className={`h-4 w-4 ${
+            variant === "success"
+              ? "text-green-600"
+              : variant === "warning"
+                ? "text-yellow-600"
+                : variant === "danger"
+                  ? "text-red-600"
+                  : "text-muted-foreground"
+          }`}
+        />
       </CardHeader>
       <CardContent>
-        <div className={`text-2xl font-bold ${
-          variant === "success" ? "text-green-600" :
-            variant === "warning" ? "text-yellow-600" :
-              variant === "danger" ? "text-red-600" : ""
-        }`}>
+        <div
+          className={`text-2xl font-bold ${
+            variant === "success"
+              ? "text-green-600"
+              : variant === "warning"
+                ? "text-yellow-600"
+                : variant === "danger"
+                  ? "text-red-600"
+                  : ""
+          }`}
+        >
           {value}
         </div>
-        {subtitle && (
-          <p className="text-xs text-muted-foreground">{subtitle}</p>
-        )}
+        {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
       </CardContent>
     </Card>
   );
@@ -168,9 +166,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
               <TrendingUp className="h-5 w-5" />
               Score de Conformidade
             </CardTitle>
-            <CardDescription>
-              Taxa geral de conclusão dos checklists
-            </CardDescription>
+            <CardDescription>Taxa geral de conclusão dos checklists</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -196,15 +192,15 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
               <BarChart3 className="h-5 w-5" />
               Performance
             </CardTitle>
-            <CardDescription>
-              Métricas de execução dos checklists
-            </CardDescription>
+            <CardDescription>Métricas de execução dos checklists</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Tempo Médio</span>
-                <span className="text-sm text-muted-foreground">{metrics.avgCompletionTime} min</span>
+                <span className="text-sm text-muted-foreground">
+                  {metrics.avgCompletionTime} min
+                </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Taxa de Conclusão</span>
@@ -223,20 +219,25 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
       <Card>
         <CardHeader>
           <CardTitle>Atividade Recente</CardTitle>
-          <CardDescription>
-            Últimos checklists criados e concluídos
-          </CardDescription>
+          <CardDescription>Últimos checklists criados e concluídos</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {checklists.slice(0, 5).map((checklist) => (
-              <div key={checklist.id} className="flex items-center justify-between p-3 border rounded-lg">
+            {checklists.slice(0, 5).map(checklist => (
+              <div
+                key={checklist.id}
+                className="flex items-center justify-between p-3 border rounded-lg"
+              >
                 <div className="flex items-center space-x-3">
-                  <div className={`w-2 h-2 rounded-full ${
-                    checklist.status === "completed" ? "bg-green-500" :
-                      checklist.status === "in_progress" ? "bg-yellow-500" :
-                        "bg-gray-400"
-                  }`} />
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      checklist.status === "completed"
+                        ? "bg-green-500"
+                        : checklist.status === "in_progress"
+                          ? "bg-yellow-500"
+                          : "bg-gray-400"
+                    }`}
+                  />
                   <div>
                     <p className="font-medium">{checklist.title}</p>
                     <p className="text-sm text-muted-foreground">
@@ -244,14 +245,20 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
                     </p>
                   </div>
                 </div>
-                <Badge variant={
-                  checklist.status === "completed" ? "default" :
-                    checklist.status === "in_progress" ? "secondary" :
-                      "outline"
-                }>
-                  {checklist.status === "completed" ? "Concluído" :
-                    checklist.status === "in_progress" ? "Em Andamento" :
-                      "Rascunho"}
+                <Badge
+                  variant={
+                    checklist.status === "completed"
+                      ? "default"
+                      : checklist.status === "in_progress"
+                        ? "secondary"
+                        : "outline"
+                  }
+                >
+                  {checklist.status === "completed"
+                    ? "Concluído"
+                    : checklist.status === "in_progress"
+                      ? "Em Andamento"
+                      : "Rascunho"}
                 </Badge>
               </div>
             ))}

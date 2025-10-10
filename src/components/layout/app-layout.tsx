@@ -32,20 +32,17 @@ export const AppLayout: React.FC = () => {
                 <Outlet />
               </main>
             </div>
-            
+
             {/* Enhanced Global Features */}
-            <GlobalSearch 
-              isOpen={isSearchOpen} 
-              onOpenChange={setIsSearchOpen} 
-            />
-            <EnhancedNotifications 
+            <GlobalSearch isOpen={isSearchOpen} onOpenChange={setIsSearchOpen} />
+            <EnhancedNotifications
               isOpen={isNotificationsOpen}
               onClose={() => setIsNotificationsOpen(false)}
             />
-            
+
             {/* Floating Action Button */}
             <FloatingActionButton />
-            
+
             {/* Toast Notifications */}
             <Toaster />
           </div>

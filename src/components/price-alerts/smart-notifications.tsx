@@ -5,28 +5,29 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
-import { 
-  Bell, 
-  BellRing, 
-  Mail, 
-  Smartphone, 
+import {
+  Bell,
+  BellRing,
+  Mail,
+  Smartphone,
   MessageSquare,
-  Settings, 
-  Clock, 
-  Volume2,
-  VolumeX,
+  Settings,
+  Clock,
   Zap,
   CheckCircle,
   AlertTriangle,
   Info,
   Target,
-  Calendar,
-  User,
-  TrendingDown
+  TrendingDown,
 } from "lucide-react";
 
 interface NotificationSettings {
@@ -70,7 +71,7 @@ export const SmartNotifications: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [testNotification, setTestNotification] = useState({
     type: "email" as "email" | "push" | "sms",
-    message: "Teste de notificação do sistema de alertas"
+    message: "Teste de notificação do sistema de alertas",
   });
 
   const { toast } = useToast();
@@ -101,23 +102,24 @@ export const SmartNotifications: React.FC = () => {
           quiet_hours: {
             enabled: false,
             start: "22:00",
-            end: "08:00"
+            end: "08:00",
           },
           categories: {
             price_drops: true,
             target_reached: true,
             trend_alerts: true,
-            ai_recommendations: true
+            ai_recommendations: true,
           },
           thresholds: {
             min_discount_percentage: 10,
-            min_savings_amount: 50
-          }
+            min_savings_amount: 50,
+          },
         };
         setSettings(defaultSettings);
       }
     } catch (error) {
-  } finally {
+      console.warn("[EMPTY CATCH]", error);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -131,7 +133,7 @@ export const SmartNotifications: React.FC = () => {
         title: "Meta de preço atingida!",
         message: "Passagem SP-RJ agora custa R$ 450,00 (meta: R$ 500,00)",
         sent_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        status: "delivered"
+        status: "delivered",
       },
       {
         id: "2",
@@ -139,7 +141,7 @@ export const SmartNotifications: React.FC = () => {
         title: "IA Recomenda: Aguardar compra",
         message: "Preços tendem a cair 15% nas próximas 2 semanas",
         sent_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-        status: "delivered"
+        status: "delivered",
       },
       {
         id: "3",
@@ -147,8 +149,8 @@ export const SmartNotifications: React.FC = () => {
         title: "Queda significativa detectada",
         message: "Hotel Copacabana: R$ 220,00 (-25% vs. semana passada)",
         sent_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-        status: "delivered"
-      }
+        status: "delivered",
+      },
     ];
     setHistory(mockHistory);
   };
@@ -160,7 +162,7 @@ export const SmartNotifications: React.FC = () => {
     try {
       // Store in localStorage for demo
       localStorage.setItem(`notification_settings_${user?.id}`, JSON.stringify(settings));
-      
+
       toast({
         title: "Configurações salvas!",
         description: "Suas preferências de notificação foram atualizadas.",
@@ -169,7 +171,7 @@ export const SmartNotifications: React.FC = () => {
       toast({
         title: "Erro",
         description: "Não foi possível salvar as configurações",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsSaving(false);
@@ -180,18 +182,18 @@ export const SmartNotifications: React.FC = () => {
     try {
       // Simulate sending test notification
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       const newNotification: NotificationHistory = {
         id: Date.now().toString(),
         type: testNotification.type,
         title: "Teste de Notificação",
         message: testNotification.message,
         sent_at: new Date().toISOString(),
-        status: "sent"
+        status: "sent",
       };
-      
+
       setHistory(prev => [newNotification, ...prev]);
-      
+
       toast({
         title: "Notificação de teste enviada!",
         description: `Teste enviado via ${testNotification.type}`,
@@ -200,32 +202,32 @@ export const SmartNotifications: React.FC = () => {
       toast({
         title: "Erro",
         description: "Não foi possível enviar a notificação de teste",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "delivered":
-      return <CheckCircle className="w-4 h-4 text-success" />;
-    case "failed":
-      return <AlertTriangle className="w-4 h-4 text-destructive" />;
-    default:
-      return <Clock className="w-4 h-4 text-warning" />;
+      case "delivered":
+        return <CheckCircle className="w-4 h-4 text-success" />;
+      case "failed":
+        return <AlertTriangle className="w-4 h-4 text-destructive" />;
+      default:
+        return <Clock className="w-4 h-4 text-warning" />;
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "email":
-      return <Mail className="w-4 h-4 text-primary" />;
-    case "push":
-      return <Smartphone className="w-4 h-4 text-primary" />;
-    case "sms":
-      return <MessageSquare className="w-4 h-4 text-primary" />;
-    default:
-      return <Bell className="w-4 h-4 text-primary" />;
+      case "email":
+        return <Mail className="w-4 h-4 text-primary" />;
+      case "push":
+        return <Smartphone className="w-4 h-4 text-primary" />;
+      case "sms":
+        return <MessageSquare className="w-4 h-4 text-primary" />;
+      default:
+        return <Bell className="w-4 h-4 text-primary" />;
     }
   };
 
@@ -280,8 +282,8 @@ export const SmartNotifications: React.FC = () => {
                 </div>
                 <Switch
                   checked={settings.email_enabled}
-                  onCheckedChange={(checked) => 
-                    setSettings(prev => prev ? { ...prev, email_enabled: checked } : null)
+                  onCheckedChange={checked =>
+                    setSettings(prev => (prev ? { ...prev, email_enabled: checked } : null))
                   }
                 />
               </div>
@@ -296,8 +298,8 @@ export const SmartNotifications: React.FC = () => {
                 </div>
                 <Switch
                   checked={settings.push_enabled}
-                  onCheckedChange={(checked) => 
-                    setSettings(prev => prev ? { ...prev, push_enabled: checked } : null)
+                  onCheckedChange={checked =>
+                    setSettings(prev => (prev ? { ...prev, push_enabled: checked } : null))
                   }
                 />
               </div>
@@ -312,8 +314,8 @@ export const SmartNotifications: React.FC = () => {
                 </div>
                 <Switch
                   checked={settings.sms_enabled}
-                  onCheckedChange={(checked) => 
-                    setSettings(prev => prev ? { ...prev, sms_enabled: checked } : null)
+                  onCheckedChange={checked =>
+                    setSettings(prev => (prev ? { ...prev, sms_enabled: checked } : null))
                   }
                 />
               </div>
@@ -338,11 +340,15 @@ export const SmartNotifications: React.FC = () => {
                 </div>
                 <Switch
                   checked={settings.categories.target_reached}
-                  onCheckedChange={(checked) => 
-                    setSettings(prev => prev ? { 
-                      ...prev, 
-                      categories: { ...prev.categories, target_reached: checked } 
-                    } : null)
+                  onCheckedChange={checked =>
+                    setSettings(prev =>
+                      prev
+                        ? {
+                            ...prev,
+                            categories: { ...prev.categories, target_reached: checked },
+                          }
+                        : null
+                    )
                   }
                 />
               </div>
@@ -354,11 +360,15 @@ export const SmartNotifications: React.FC = () => {
                 </div>
                 <Switch
                   checked={settings.categories.price_drops}
-                  onCheckedChange={(checked) => 
-                    setSettings(prev => prev ? { 
-                      ...prev, 
-                      categories: { ...prev.categories, price_drops: checked } 
-                    } : null)
+                  onCheckedChange={checked =>
+                    setSettings(prev =>
+                      prev
+                        ? {
+                            ...prev,
+                            categories: { ...prev.categories, price_drops: checked },
+                          }
+                        : null
+                    )
                   }
                 />
               </div>
@@ -370,11 +380,15 @@ export const SmartNotifications: React.FC = () => {
                 </div>
                 <Switch
                   checked={settings.categories.trend_alerts}
-                  onCheckedChange={(checked) => 
-                    setSettings(prev => prev ? { 
-                      ...prev, 
-                      categories: { ...prev.categories, trend_alerts: checked } 
-                    } : null)
+                  onCheckedChange={checked =>
+                    setSettings(prev =>
+                      prev
+                        ? {
+                            ...prev,
+                            categories: { ...prev.categories, trend_alerts: checked },
+                          }
+                        : null
+                    )
                   }
                 />
               </div>
@@ -386,11 +400,15 @@ export const SmartNotifications: React.FC = () => {
                 </div>
                 <Switch
                   checked={settings.categories.ai_recommendations}
-                  onCheckedChange={(checked) => 
-                    setSettings(prev => prev ? { 
-                      ...prev, 
-                      categories: { ...prev.categories, ai_recommendations: checked } 
-                    } : null)
+                  onCheckedChange={checked =>
+                    setSettings(prev =>
+                      prev
+                        ? {
+                            ...prev,
+                            categories: { ...prev.categories, ai_recommendations: checked },
+                          }
+                        : null
+                    )
                   }
                 />
               </div>
@@ -410,10 +428,10 @@ export const SmartNotifications: React.FC = () => {
             <div className="space-y-3">
               <div>
                 <Label className="text-sm font-medium">Frequência de Notificações</Label>
-                <Select 
-                  value={settings.frequency} 
-                  onValueChange={(value: "immediate" | "daily" | "weekly") => 
-                    setSettings(prev => prev ? { ...prev, frequency: value } : null)
+                <Select
+                  value={settings.frequency}
+                  onValueChange={(value: "immediate" | "daily" | "weekly") =>
+                    setSettings(prev => (prev ? { ...prev, frequency: value } : null))
                   }
                 >
                   <SelectTrigger className="border-primary/20">
@@ -432,15 +450,19 @@ export const SmartNotifications: React.FC = () => {
                   <Label className="text-sm font-medium">Horário Silencioso</Label>
                   <Switch
                     checked={settings.quiet_hours.enabled}
-                    onCheckedChange={(checked) => 
-                      setSettings(prev => prev ? { 
-                        ...prev, 
-                        quiet_hours: { ...prev.quiet_hours, enabled: checked } 
-                      } : null)
+                    onCheckedChange={checked =>
+                      setSettings(prev =>
+                        prev
+                          ? {
+                              ...prev,
+                              quiet_hours: { ...prev.quiet_hours, enabled: checked },
+                            }
+                          : null
+                      )
                     }
                   />
                 </div>
-                
+
                 {settings.quiet_hours.enabled && (
                   <div className="grid grid-cols-2 gap-2">
                     <div>
@@ -448,11 +470,15 @@ export const SmartNotifications: React.FC = () => {
                       <Input
                         type="time"
                         value={settings.quiet_hours.start}
-                        onChange={(e) => 
-                          setSettings(prev => prev ? { 
-                            ...prev, 
-                            quiet_hours: { ...prev.quiet_hours, start: e.target.value } 
-                          } : null)
+                        onChange={e =>
+                          setSettings(prev =>
+                            prev
+                              ? {
+                                  ...prev,
+                                  quiet_hours: { ...prev.quiet_hours, start: e.target.value },
+                                }
+                              : null
+                          )
                         }
                         className="text-sm border-primary/20"
                       />
@@ -462,11 +488,15 @@ export const SmartNotifications: React.FC = () => {
                       <Input
                         type="time"
                         value={settings.quiet_hours.end}
-                        onChange={(e) => 
-                          setSettings(prev => prev ? { 
-                            ...prev, 
-                            quiet_hours: { ...prev.quiet_hours, end: e.target.value } 
-                          } : null)
+                        onChange={e =>
+                          setSettings(prev =>
+                            prev
+                              ? {
+                                  ...prev,
+                                  quiet_hours: { ...prev.quiet_hours, end: e.target.value },
+                                }
+                              : null
+                          )
                         }
                         className="text-sm border-primary/20"
                       />
@@ -493,14 +523,18 @@ export const SmartNotifications: React.FC = () => {
                 <Input
                   type="number"
                   value={settings.thresholds.min_discount_percentage}
-                  onChange={(e) => 
-                    setSettings(prev => prev ? { 
-                      ...prev, 
-                      thresholds: { 
-                        ...prev.thresholds, 
-                        min_discount_percentage: parseInt(e.target.value) || 0 
-                      } 
-                    } : null)
+                  onChange={e =>
+                    setSettings(prev =>
+                      prev
+                        ? {
+                            ...prev,
+                            thresholds: {
+                              ...prev.thresholds,
+                              min_discount_percentage: parseInt(e.target.value) || 0,
+                            },
+                          }
+                        : null
+                    )
                   }
                   className="border-primary/20"
                   placeholder="10"
@@ -515,14 +549,18 @@ export const SmartNotifications: React.FC = () => {
                 <Input
                   type="number"
                   value={settings.thresholds.min_savings_amount}
-                  onChange={(e) => 
-                    setSettings(prev => prev ? { 
-                      ...prev, 
-                      thresholds: { 
-                        ...prev.thresholds, 
-                        min_savings_amount: parseInt(e.target.value) || 0 
-                      } 
-                    } : null)
+                  onChange={e =>
+                    setSettings(prev =>
+                      prev
+                        ? {
+                            ...prev,
+                            thresholds: {
+                              ...prev.thresholds,
+                              min_savings_amount: parseInt(e.target.value) || 0,
+                            },
+                          }
+                        : null
+                    )
                   }
                   className="border-primary/20"
                   placeholder="50"
@@ -546,9 +584,9 @@ export const SmartNotifications: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-4">
-            <Select 
-              value={testNotification.type} 
-              onValueChange={(value: "email" | "push" | "sms") => 
+            <Select
+              value={testNotification.type}
+              onValueChange={(value: "email" | "push" | "sms") =>
                 setTestNotification(prev => ({ ...prev, type: value }))
               }
             >
@@ -561,16 +599,14 @@ export const SmartNotifications: React.FC = () => {
                 <SelectItem value="sms">💬 SMS</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Input
               value={testNotification.message}
-              onChange={(e) => 
-                setTestNotification(prev => ({ ...prev, message: e.target.value }))
-              }
+              onChange={e => setTestNotification(prev => ({ ...prev, message: e.target.value }))}
               placeholder="Mensagem de teste"
               className="flex-1 border-primary/20"
             />
-            
+
             <Button onClick={sendTestNotification} className="bg-primary hover:bg-primary/90">
               <Bell className="w-4 h-4 mr-2" />
               Enviar Teste
@@ -589,8 +625,11 @@ export const SmartNotifications: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {history.slice(0, 10).map((notification) => (
-              <div key={notification.id} className="flex items-start gap-3 p-3 rounded-lg border border-primary/10 bg-primary/5">
+            {history.slice(0, 10).map(notification => (
+              <div
+                key={notification.id}
+                className="flex items-start gap-3 p-3 rounded-lg border border-primary/10 bg-primary/5"
+              >
                 <div className="flex items-center gap-2">
                   {getTypeIcon(notification.type)}
                   {getStatusIcon(notification.status)}
@@ -615,8 +654,8 @@ export const SmartNotifications: React.FC = () => {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button 
-          onClick={saveSettings} 
+        <Button
+          onClick={saveSettings}
           disabled={isSaving}
           className="bg-primary hover:bg-primary/90"
         >

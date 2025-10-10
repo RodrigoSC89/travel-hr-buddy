@@ -4,7 +4,6 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { CompleteSecurity } from "@/components/security/complete-security";
 import { Shield } from "lucide-react";
 
-
 const Security = () => {
   return (
     <SidebarProvider>
@@ -17,14 +16,11 @@ const Security = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold">Centro de Segurança</h1>
-              <p className="text-muted-foreground">
-                Proteção avançada e monitoramento
-              </p>
+              <p className="text-muted-foreground">Proteção avançada e monitoramento</p>
             </div>
           </div>
           <CompleteSecurity />
         </main>
-        
       </div>
     </SidebarProvider>
   );

@@ -3,20 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Mic, 
-  MicOff, 
-  Volume2, 
-  VolumeX, 
-  Settings, 
-  Play, 
-  Pause,
-  MessageSquare,
-  Navigation,
-  Zap,
-  Anchor,
-  Compass
-} from "lucide-react";
+import { Mic, MicOff, Volume2, VolumeX, Settings, Navigation, Zap, Compass } from "lucide-react";
 
 // Declarações de tipos para Web Speech API
 interface SpeechRecognitionAlternative {
@@ -44,14 +31,17 @@ interface SpeechRecognitionErrorEvent extends Event {
   error: string;
 }
 
-
 interface VoiceTestingProps {
   onNavigate?: (module: string) => void;
   isVisible?: boolean;
   onClose?: () => void;
 }
 
-const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible = false, onClose }) => {
+const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({
+  onNavigate,
+  isVisible = false,
+  onClose,
+}) => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -71,44 +61,45 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
     { text: "relatórios", module: "reports", description: "Relatórios" },
     { text: "comunicação", module: "communication", description: "Chat e mensagens" },
     { text: "configurações", module: "settings", description: "Configurações" },
-    { text: "estratégico", module: "strategic", description: "Central estratégica" }
+    { text: "estratégico", module: "strategic", description: "Central estratégica" },
   ];
 
   useEffect(() => {
     // Inicializar reconhecimento de voz
     if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const SpeechRecognition =
+        (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       const recognitionInstance = new SpeechRecognition();
-      
+
       recognitionInstance.continuous = true;
       recognitionInstance.interimResults = true;
       recognitionInstance.lang = "pt-BR";
-      
+
       recognitionInstance.onstart = () => {
         setIsListening(true);
       };
-      
+
       recognitionInstance.onend = () => {
         setIsListening(false);
       };
-      
-      recognitionInstance.onresult = (event) => {
+
+      recognitionInstance.onresult = event => {
         let finalTranscript = "";
-        
+
         for (let i = event.resultIndex; i < event.results.length; i++) {
           if (event.results[i].isFinal) {
             finalTranscript += event.results[i][0].transcript;
           }
         }
-        
+
         if (finalTranscript) {
           setTranscript(finalTranscript);
           setLastCommand(finalTranscript);
           processCommand(finalTranscript);
         }
       };
-      
-      recognitionInstance.onerror = (event) => {
+
+      recognitionInstance.onerror = event => {
         toast({
           title: "Erro no reconhecimento",
           description: `Erro: ${event.error}`,
@@ -116,7 +107,7 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
         });
         setIsListening(false);
       };
-      
+
       setRecognition(recognitionInstance);
     } else {
       toast({
@@ -125,7 +116,7 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
         variant: "destructive",
       });
     }
-    
+
     return () => {
       if (recognition) {
         recognition.stop();
@@ -135,74 +126,73 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
 
   const processCommand = (command: string) => {
     const lowerCommand = command.toLowerCase().trim();
-    
+
     // Mapeamento de comandos
     const commandMap: Record<string, string> = {
-      "dashboard": "dashboard",
-      "painel": "dashboard",
-      "início": "dashboard",
-      "home": "dashboard",
-      
+      dashboard: "dashboard",
+      painel: "dashboard",
+      início: "dashboard",
+      home: "dashboard",
+
       "recursos humanos": "hr",
-      "rh": "hr",
-      "funcionários": "hr",
-      "tripulação": "hr",
-      
-      "viagens": "travel",
-      "travel": "travel",
-      "voos": "travel",
-      "hotéis": "travel",
-      "passagens": "travel",
-      
+      rh: "hr",
+      funcionários: "hr",
+      tripulação: "hr",
+
+      viagens: "travel",
+      travel: "travel",
+      voos: "travel",
+      hotéis: "travel",
+      passagens: "travel",
+
       "sistema marítimo": "maritime",
-      "marítimo": "maritime",
-      "frota": "maritime",
-      "navios": "maritime",
-      
-      "alertas": "price-alerts",
-      "preços": "price-alerts",
-      "monitoramento": "price-alerts",
-      
-      "analytics": "analytics",
-      "análises": "analytics",
-      "estatísticas": "analytics",
-      "métricas": "analytics",
-      
-      "relatórios": "reports",
-      "reports": "reports",
-      
-      "comunicação": "communication",
-      "mensagens": "communication",
-      "chat": "communication",
-      
-      "configurações": "settings",
-      "settings": "settings",
-      "preferências": "settings",
-      
-      "estratégico": "strategic",
-      "strategic": "strategic",
-      "estratégia": "strategic"
+      marítimo: "maritime",
+      frota: "maritime",
+      navios: "maritime",
+
+      alertas: "price-alerts",
+      preços: "price-alerts",
+      monitoramento: "price-alerts",
+
+      analytics: "analytics",
+      análises: "analytics",
+      estatísticas: "analytics",
+      métricas: "analytics",
+
+      relatórios: "reports",
+      reports: "reports",
+
+      comunicação: "communication",
+      mensagens: "communication",
+      chat: "communication",
+
+      configurações: "settings",
+      settings: "settings",
+      preferências: "settings",
+
+      estratégico: "strategic",
+      strategic: "strategic",
+      estratégia: "strategic",
     };
-    
+
     // Procurar correspondência
     for (const [cmd, module] of Object.entries(commandMap)) {
       if (lowerCommand.includes(cmd)) {
-        
         if (onNavigate) {
           onNavigate(module);
         }
-        
+
         speak(`Navegando para ${cmd}`);
-        
+
         toast({
           title: "Comando executado",
           description: `Navegando para: ${cmd}`,
         });
-        
+
         return;
       }
     }
-    
+
     // Comando não reconhecido
     speak("Comando não reconhecido. Tente novamente.");
     toast({
@@ -214,27 +204,27 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
 
   const speak = (text: string) => {
     if (!synthesis) return;
-    
+
     setIsSpeaking(true);
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "pt-BR";
     utterance.rate = 0.9;
     utterance.pitch = 1;
-    
+
     utterance.onend = () => {
       setIsSpeaking(false);
     };
-    
+
     utterance.onerror = () => {
       setIsSpeaking(false);
     };
-    
+
     synthesis.speak(utterance);
   };
 
   const toggleListening = () => {
     if (!recognition) return;
-    
+
     if (isListening) {
       recognition.stop();
     } else {
@@ -245,13 +235,13 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
   const testCommand = (command: string, module: string) => {
     setLastCommand(command);
     setTranscript(command);
-    
+
     if (onNavigate) {
       onNavigate(module);
     }
-    
+
     speak(`Testando comando: ${command}`);
-    
+
     toast({
       title: "Comando de teste",
       description: `Executando: ${command}`,
@@ -278,9 +268,9 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
               {isListening ? "Ouvindo" : "Inativo"}
             </Badge>
             {onClose && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={onClose}
                 className="h-6 w-6 p-0 hover:bg-destructive/10"
               >
@@ -289,7 +279,7 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
             )}
           </CardTitle>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {/* Controles principais */}
           <div className="flex gap-2">
@@ -311,17 +301,9 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
                 </>
               )}
             </Button>
-            
-            <Button
-              onClick={stopSpeaking}
-              variant="outline"
-              disabled={!isSpeaking}
-            >
-              {isSpeaking ? (
-                <VolumeX className="w-4 h-4" />
-              ) : (
-                <Volume2 className="w-4 h-4" />
-              )}
+
+            <Button onClick={stopSpeaking} variant="outline" disabled={!isSpeaking}>
+              {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
             </Button>
           </div>
 
@@ -335,7 +317,7 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
                 </div>
               </div>
             )}
-            
+
             {isSpeaking && (
               <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                 <div className="flex items-center gap-2 text-green-600">
@@ -344,7 +326,7 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
                 </div>
               </div>
             )}
-            
+
             {transcript && (
               <div className="p-3 bg-muted rounded-lg">
                 <div className="text-sm font-medium mb-1">Último comando:</div>

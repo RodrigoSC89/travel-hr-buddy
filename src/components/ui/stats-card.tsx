@@ -4,7 +4,7 @@
  */
 
 // Re-export from the new unified MetricCard component
-export { 
+export {
   MetricCard as StatsCard,
-  type MetricCardProps as StatsCardProps
+  type MetricCardProps as StatsCardProps,
 } from "@/components/ui/MetricCard";

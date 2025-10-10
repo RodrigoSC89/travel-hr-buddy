@@ -5,25 +5,33 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  DollarSign, 
-  Receipt, 
-  Plus, 
+import {
+  DollarSign,
+  Receipt,
+  Plus,
   Eye,
-  Edit,
-  Upload,
   Download,
-  Camera,
   FileText,
   CreditCard,
   Plane,
   Building,
-  Car,
   Utensils,
   ShoppingBag,
   Fuel,
@@ -35,7 +43,7 @@ import {
   AlertTriangle,
   BarChart3,
   TrendingUp,
-  Target
+  Target,
 } from "lucide-react";
 
 interface Expense {
@@ -78,7 +86,7 @@ export const TravelExpenseSystem: React.FC = () => {
     category: "transport",
     currency: "BRL",
     reimbursable: true,
-    status: "draft"
+    status: "draft",
   });
   const [isAddingExpense, setIsAddingExpense] = useState(false);
 
@@ -90,7 +98,7 @@ export const TravelExpenseSystem: React.FC = () => {
       tripTitle: "Inspeção Técnica - Santos",
       category: "transport",
       subcategory: "Voo",
-      amount: 850.00,
+      amount: 850.0,
       currency: "BRL",
       description: "Passagem aérea São Paulo - Santos",
       date: new Date("2024-03-15"),
@@ -103,14 +111,14 @@ export const TravelExpenseSystem: React.FC = () => {
       tags: ["voo", "urgente"],
       location: "Santos, SP",
       reimbursable: true,
-      businessPurpose: "Inspeção obrigatória de embarcação"
+      businessPurpose: "Inspeção obrigatória de embarcação",
     },
     {
       id: "2",
       tripId: "trip-001",
       tripTitle: "Inspeção Técnica - Santos",
       category: "accommodation",
-      amount: 320.00,
+      amount: 320.0,
       currency: "BRL",
       description: "Hotel Ibis Santos - 2 diárias",
       date: new Date("2024-03-15"),
@@ -121,14 +129,14 @@ export const TravelExpenseSystem: React.FC = () => {
       approvedAt: new Date("2024-03-17"),
       location: "Santos, SP",
       reimbursable: true,
-      businessPurpose: "Hospedagem durante inspeção"
+      businessPurpose: "Hospedagem durante inspeção",
     },
     {
       id: "3",
       tripId: "trip-001",
       tripTitle: "Inspeção Técnica - Santos",
       category: "meals",
-      amount: 85.50,
+      amount: 85.5,
       currency: "BRL",
       description: "Almoço de negócios com cliente",
       date: new Date("2024-03-16"),
@@ -137,7 +145,7 @@ export const TravelExpenseSystem: React.FC = () => {
       submittedAt: new Date("2024-03-17"),
       location: "Santos, SP",
       reimbursable: true,
-      businessPurpose: "Reunião com cliente durante inspeção"
+      businessPurpose: "Reunião com cliente durante inspeção",
     },
     {
       id: "4",
@@ -145,7 +153,7 @@ export const TravelExpenseSystem: React.FC = () => {
       tripTitle: "Conferência Marítima - Hamburg",
       category: "transport",
       subcategory: "Voo Internacional",
-      amount: 4500.00,
+      amount: 4500.0,
       currency: "BRL",
       description: "Passagem São Paulo - Hamburg (ida e volta)",
       date: new Date("2024-04-20"),
@@ -153,8 +161,8 @@ export const TravelExpenseSystem: React.FC = () => {
       status: "draft",
       location: "Hamburg, Alemanha",
       reimbursable: true,
-      businessPurpose: "Participação em conferência técnica"
-    }
+      businessPurpose: "Participação em conferência técnica",
+    },
   ];
 
   const mockBudgets: ExpenseBudget[] = [
@@ -162,7 +170,7 @@ export const TravelExpenseSystem: React.FC = () => {
     { category: "Hospedagem", allocated: 8000, spent: 3200, remaining: 4800, percentage: 40 },
     { category: "Alimentação", allocated: 3000, spent: 985, remaining: 2015, percentage: 33 },
     { category: "Combustível", allocated: 2000, spent: 450, remaining: 1550, percentage: 23 },
-    { category: "Outros", allocated: 2000, spent: 320, remaining: 1680, percentage: 16 }
+    { category: "Outros", allocated: 2000, spent: 320, remaining: 1680, percentage: 16 },
   ];
 
   useEffect(() => {
@@ -179,7 +187,7 @@ export const TravelExpenseSystem: React.FC = () => {
       toast({
         title: "Erro",
         description: "Erro ao carregar despesas",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -191,7 +199,7 @@ export const TravelExpenseSystem: React.FC = () => {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -211,7 +219,7 @@ export const TravelExpenseSystem: React.FC = () => {
         reimbursable: newExpense.reimbursable || true,
         businessPurpose: newExpense.businessPurpose || "",
         location: newExpense.location,
-        notes: newExpense.notes
+        notes: newExpense.notes,
       };
 
       setExpenses(prev => [...prev, expense]);
@@ -219,7 +227,7 @@ export const TravelExpenseSystem: React.FC = () => {
         category: "transport",
         currency: "BRL",
         reimbursable: true,
-        status: "draft"
+        status: "draft",
       });
       setIsAddingExpense(false);
 
@@ -231,51 +239,71 @@ export const TravelExpenseSystem: React.FC = () => {
       toast({
         title: "Erro",
         description: "Erro ao adicionar despesa",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "transport": return <Plane className="h-4 w-4" />;
-    case "accommodation": return <Building className="h-4 w-4" />;
-    case "meals": return <Utensils className="h-4 w-4" />;
-    case "fuel": return <Fuel className="h-4 w-4" />;
-    case "other": return <ShoppingBag className="h-4 w-4" />;
-    default: return <Receipt className="h-4 w-4" />;
+      case "transport":
+        return <Plane className="h-4 w-4" />;
+      case "accommodation":
+        return <Building className="h-4 w-4" />;
+      case "meals":
+        return <Utensils className="h-4 w-4" />;
+      case "fuel":
+        return <Fuel className="h-4 w-4" />;
+      case "other":
+        return <ShoppingBag className="h-4 w-4" />;
+      default:
+        return <Receipt className="h-4 w-4" />;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "approved": return <CheckCircle className="h-4 w-4 text-green-600" />;
-    case "rejected": return <AlertTriangle className="h-4 w-4 text-red-600" />;
-    case "submitted": return <Clock className="h-4 w-4 text-blue-600" />;
-    case "paid": return <CreditCard className="h-4 w-4 text-purple-600" />;
-    default: return <FileText className="h-4 w-4 text-muted-foreground" />;
+      case "approved":
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
+      case "rejected":
+        return <AlertTriangle className="h-4 w-4 text-red-600" />;
+      case "submitted":
+        return <Clock className="h-4 w-4 text-blue-600" />;
+      case "paid":
+        return <CreditCard className="h-4 w-4 text-purple-600" />;
+      default:
+        return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "approved": return "bg-green-100 text-green-800 border-green-300";
-    case "rejected": return "bg-red-100 text-red-800 border-red-300";
-    case "submitted": return "bg-blue-100 text-blue-800 border-blue-300";
-    case "paid": return "bg-purple-100 text-purple-800 border-purple-300";
-    default: return "bg-secondary text-secondary-foreground border-border";
+      case "approved":
+        return "bg-green-100 text-green-800 border-green-300";
+      case "rejected":
+        return "bg-red-100 text-red-800 border-red-300";
+      case "submitted":
+        return "bg-blue-100 text-blue-800 border-blue-300";
+      case "paid":
+        return "bg-purple-100 text-purple-800 border-purple-300";
+      default:
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
-  const formatCurrency = (value: number) => 
-    new Intl.NumberFormat("pt-BR", { 
-      style: "currency", 
-      currency: "BRL" 
+  const formatCurrency = (value: number) =>
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
     }).format(value);
 
   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
-  const approvedExpenses = expenses.filter(exp => exp.status === "approved").reduce((sum, exp) => sum + exp.amount, 0);
-  const pendingExpenses = expenses.filter(exp => exp.status === "submitted").reduce((sum, exp) => sum + exp.amount, 0);
+  const approvedExpenses = expenses
+    .filter(exp => exp.status === "approved")
+    .reduce((sum, exp) => sum + exp.amount, 0);
+  const pendingExpenses = expenses
+    .filter(exp => exp.status === "submitted")
+    .reduce((sum, exp) => sum + exp.amount, 0);
 
   if (isLoading) {
     return (
@@ -319,7 +347,9 @@ export const TravelExpenseSystem: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Aprovadas</p>
-                <p className="text-3xl font-bold text-success">{formatCurrency(approvedExpenses)}</p>
+                <p className="text-3xl font-bold text-success">
+                  {formatCurrency(approvedExpenses)}
+                </p>
                 <p className="text-xs text-success flex items-center gap-1 mt-1">
                   <CheckCircle className="h-3 w-3" />
                   {expenses.filter(e => e.status === "approved").length} itens
@@ -352,7 +382,13 @@ export const TravelExpenseSystem: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Taxa de Aprovação</p>
                 <p className="text-3xl font-bold text-info">
-                  {expenses.length > 0 ? Math.round((expenses.filter(e => e.status === "approved").length / expenses.length) * 100) : 0}%
+                  {expenses.length > 0
+                    ? Math.round(
+                        (expenses.filter(e => e.status === "approved").length / expenses.length) *
+                          100
+                      )
+                    : 0}
+                  %
                 </p>
                 <p className="text-xs text-info flex items-center gap-1 mt-1">
                   <Target className="h-3 w-3" />
@@ -398,11 +434,11 @@ export const TravelExpenseSystem: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {["transport", "accommodation", "meals", "fuel", "other"].map((category) => {
+                  {["transport", "accommodation", "meals", "fuel", "other"].map(category => {
                     const categoryExpenses = expenses.filter(e => e.category === category);
                     const total = categoryExpenses.reduce((sum, e) => sum + e.amount, 0);
                     const percentage = totalExpenses > 0 ? (total / totalExpenses) * 100 : 0;
-                    
+
                     return (
                       <div key={category} className="space-y-2">
                         <div className="flex justify-between items-center">
@@ -445,7 +481,9 @@ export const TravelExpenseSystem: React.FC = () => {
                       <Progress value={budget.percentage} className="h-2" />
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Restante: {formatCurrency(budget.remaining)}</span>
-                        <span className={budget.percentage > 80 ? "text-red-600" : "text-green-600"}>
+                        <span
+                          className={budget.percentage > 80 ? "text-red-600" : "text-green-600"}
+                        >
                           {budget.percentage}%
                         </span>
                       </div>
@@ -475,7 +513,15 @@ export const TravelExpenseSystem: React.FC = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="category">Categoria</Label>
-                      <Select value={newExpense.category} onValueChange={(value) => setNewExpense(prev => ({ ...prev, category: value as Expense["category"] }))}>
+                      <Select
+                        value={newExpense.category}
+                        onValueChange={value =>
+                          setNewExpense(prev => ({
+                            ...prev,
+                            category: value as Expense["category"],
+                          }))
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -496,7 +542,9 @@ export const TravelExpenseSystem: React.FC = () => {
                         step="0.01"
                         placeholder="0,00"
                         value={newExpense.amount || ""}
-                        onChange={(e) => setNewExpense(prev => ({ ...prev, amount: parseFloat(e.target.value) }))}
+                        onChange={e =>
+                          setNewExpense(prev => ({ ...prev, amount: parseFloat(e.target.value) }))
+                        }
                       />
                     </div>
                   </div>
@@ -507,7 +555,9 @@ export const TravelExpenseSystem: React.FC = () => {
                       id="description"
                       placeholder="Descrição da despesa"
                       value={newExpense.description || ""}
-                      onChange={(e) => setNewExpense(prev => ({ ...prev, description: e.target.value }))}
+                      onChange={e =>
+                        setNewExpense(prev => ({ ...prev, description: e.target.value }))
+                      }
                     />
                   </div>
 
@@ -518,7 +568,9 @@ export const TravelExpenseSystem: React.FC = () => {
                         id="merchant"
                         placeholder="Nome do fornecedor"
                         value={newExpense.merchant || ""}
-                        onChange={(e) => setNewExpense(prev => ({ ...prev, merchant: e.target.value }))}
+                        onChange={e =>
+                          setNewExpense(prev => ({ ...prev, merchant: e.target.value }))
+                        }
                       />
                     </div>
                     <div>
@@ -527,7 +579,9 @@ export const TravelExpenseSystem: React.FC = () => {
                         id="location"
                         placeholder="Cidade, Estado"
                         value={newExpense.location || ""}
-                        onChange={(e) => setNewExpense(prev => ({ ...prev, location: e.target.value }))}
+                        onChange={e =>
+                          setNewExpense(prev => ({ ...prev, location: e.target.value }))
+                        }
                       />
                     </div>
                   </div>
@@ -538,7 +592,9 @@ export const TravelExpenseSystem: React.FC = () => {
                       id="businessPurpose"
                       placeholder="Descreva a finalidade comercial da despesa"
                       value={newExpense.businessPurpose || ""}
-                      onChange={(e) => setNewExpense(prev => ({ ...prev, businessPurpose: e.target.value }))}
+                      onChange={e =>
+                        setNewExpense(prev => ({ ...prev, businessPurpose: e.target.value }))
+                      }
                     />
                   </div>
 
@@ -557,8 +613,11 @@ export const TravelExpenseSystem: React.FC = () => {
           </div>
 
           <div className="grid gap-4">
-            {expenses.map((expense) => (
-              <Card key={expense.id} className="travel-card hover:shadow-lg transition-all duration-300">
+            {expenses.map(expense => (
+              <Card
+                key={expense.id}
+                className="travel-card hover:shadow-lg transition-all duration-300"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-2">
@@ -624,9 +683,7 @@ export const TravelExpenseSystem: React.FC = () => {
                 <Target className="h-5 w-5 text-primary" />
                 Controle de Orçamentos
               </CardTitle>
-              <CardDescription>
-                Acompanhe o uso dos orçamentos por categoria
-              </CardDescription>
+              <CardDescription>Acompanhe o uso dos orçamentos por categoria</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -636,15 +693,21 @@ export const TravelExpenseSystem: React.FC = () => {
                       <h4 className="font-semibold text-lg">{budget.category}</h4>
                       <div className="text-right">
                         <p className="text-2xl font-bold">{formatCurrency(budget.spent)}</p>
-                        <p className="text-sm text-muted-foreground">de {formatCurrency(budget.allocated)}</p>
+                        <p className="text-sm text-muted-foreground">
+                          de {formatCurrency(budget.allocated)}
+                        </p>
                       </div>
                     </div>
-                    
+
                     <Progress value={budget.percentage} className="h-3 mb-2" />
-                    
+
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Restante: {formatCurrency(budget.remaining)}</span>
-                      <span className={`font-medium ${budget.percentage > 80 ? "text-red-600" : budget.percentage > 60 ? "text-yellow-600" : "text-green-600"}`}>
+                      <span className="text-muted-foreground">
+                        Restante: {formatCurrency(budget.remaining)}
+                      </span>
+                      <span
+                        className={`font-medium ${budget.percentage > 80 ? "text-red-600" : budget.percentage > 60 ? "text-yellow-600" : "text-green-600"}`}
+                      >
                         {budget.percentage}% utilizado
                       </span>
                     </div>
@@ -672,7 +735,7 @@ export const TravelExpenseSystem: React.FC = () => {
                     <p className="text-sm text-muted-foreground">Despesas do mês atual</p>
                   </div>
                 </Button>
-                
+
                 <Button variant="outline" className="btn-travel p-6 h-auto">
                   <div className="text-center">
                     <BarChart3 className="h-8 w-8 mx-auto mb-2" />
@@ -680,7 +743,7 @@ export const TravelExpenseSystem: React.FC = () => {
                     <p className="text-sm text-muted-foreground">Comparativo trimestral</p>
                   </div>
                 </Button>
-                
+
                 <Button variant="outline" className="btn-travel p-6 h-auto">
                   <div className="text-center">
                     <Target className="h-8 w-8 mx-auto mb-2" />
@@ -688,7 +751,7 @@ export const TravelExpenseSystem: React.FC = () => {
                     <p className="text-sm text-muted-foreground">Status dos orçamentos</p>
                   </div>
                 </Button>
-                
+
                 <Button variant="outline" className="btn-travel p-6 h-auto">
                   <div className="text-center">
                     <User className="h-8 w-8 mx-auto mb-2" />

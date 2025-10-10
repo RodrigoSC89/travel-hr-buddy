@@ -83,8 +83,9 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
       <Avatar className="h-7 w-7">
         <AvatarImage src={profile?.avatar_url || ""} />
         <AvatarFallback className="text-xs">
-          {profile?.full_name?.charAt(0)?.toUpperCase() || 
-           profile?.email?.charAt(0)?.toUpperCase() || "U"}
+          {profile?.full_name?.charAt(0)?.toUpperCase() ||
+            profile?.email?.charAt(0)?.toUpperCase() ||
+            "U"}
         </AvatarFallback>
       </Avatar>
     </Button>
@@ -92,18 +93,14 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        {trigger || defaultTrigger}
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger || defaultTrigger}</DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
             Perfil do Usuário
           </DialogTitle>
-          <DialogDescription>
-            Gerencie suas informações pessoais e preferências
-          </DialogDescription>
+          <DialogDescription>Gerencie suas informações pessoais e preferências</DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="profile" className="w-full">
@@ -117,9 +114,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Informações Pessoais</CardTitle>
-                <CardDescription>
-                  Atualize suas informações básicas
-                </CardDescription>
+                <CardDescription>Atualize suas informações básicas</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Avatar */}
@@ -165,7 +160,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                     <Input
                       id="full_name"
                       value={formData.full_name}
-                      onChange={(e) => setFormData(prev => ({ ...prev, full_name: e.target.value }))}
+                      onChange={e => setFormData(prev => ({ ...prev, full_name: e.target.value }))}
                       placeholder="Seu nome completo"
                     />
                   </div>
@@ -174,7 +169,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                     <Input
                       id="phone"
                       value={formData.phone}
-                      onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                      onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                       placeholder="(11) 99999-9999"
                     />
                   </div>
@@ -183,7 +178,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                     <Input
                       id="department"
                       value={formData.department}
-                      onChange={(e) => setFormData(prev => ({ ...prev, department: e.target.value }))}
+                      onChange={e => setFormData(prev => ({ ...prev, department: e.target.value }))}
                       placeholder="Ex: Tecnologia"
                     />
                   </div>
@@ -192,7 +187,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                     <Input
                       id="position"
                       value={formData.position}
-                      onChange={(e) => setFormData(prev => ({ ...prev, position: e.target.value }))}
+                      onChange={e => setFormData(prev => ({ ...prev, position: e.target.value }))}
                       placeholder="Ex: Desenvolvedor Full Stack"
                     />
                   </div>
@@ -208,9 +203,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                   <Settings className="h-5 w-5" />
                   Preferências do Sistema
                 </CardTitle>
-                <CardDescription>
-                  Configure como você interage com o sistema
-                </CardDescription>
+                <CardDescription>Configure como você interage com o sistema</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
@@ -223,9 +216,11 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                     </div>
                     <Select
                       value={profile?.preferences?.theme || "system"}
-                      onValueChange={(value) => updateProfile({
-                        preferences: { ...profile?.preferences, theme: value as any }
-                      })}
+                      onValueChange={value =>
+                        updateProfile({
+                          preferences: { ...profile?.preferences, theme: value as any },
+                        })
+                      }
                     >
                       <SelectTrigger className="w-32">
                         <SelectValue />
@@ -250,9 +245,11 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                     </div>
                     <Switch
                       checked={profile?.preferences?.notifications || false}
-                      onCheckedChange={(checked) => updateProfile({
-                        preferences: { ...profile?.preferences, notifications: checked }
-                      })}
+                      onCheckedChange={checked =>
+                        updateProfile({
+                          preferences: { ...profile?.preferences, notifications: checked },
+                        })
+                      }
                     />
                   </div>
 
@@ -268,9 +265,11 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                     </div>
                     <Select
                       value={profile?.preferences?.language || "pt"}
-                      onValueChange={(value) => updateProfile({
-                        preferences: { ...profile?.preferences, language: value as any }
-                      })}
+                      onValueChange={value =>
+                        updateProfile({
+                          preferences: { ...profile?.preferences, language: value as any },
+                        })
+                      }
                     >
                       <SelectTrigger className="w-32">
                         <SelectValue />
@@ -291,9 +290,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Segurança</CardTitle>
-                <CardDescription>
-                  Gerencie sua conta e sair do sistema
-                </CardDescription>
+                <CardDescription>Gerencie sua conta e sair do sistema</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="p-4 border border-border rounded-lg bg-muted/30">
@@ -306,11 +303,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                 </div>
 
                 <div className="pt-4 border-t border-border">
-                  <Button 
-                    variant="destructive" 
-                    onClick={handleSignOut}
-                    className="w-full"
-                  >
+                  <Button variant="destructive" onClick={handleSignOut} className="w-full">
                     <LogOut className="h-4 w-4 mr-2" />
                     Sair do Sistema
                   </Button>

@@ -17,13 +17,15 @@ export const PerformanceMonitor: React.FC = () => {
     memoryUsage: 0,
     networkLatency: 0,
     renderTime: 0,
-    score: 0
+    score: 0,
   });
 
   useEffect(() => {
     const measurePerformance = () => {
       // Measure load time
-      const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType(
+        "navigation"
+      )[0] as PerformanceNavigationTiming;
       const loadTime = navigation.loadEventEnd - navigation.fetchStart;
 
       // Measure memory (if available)
@@ -37,14 +39,14 @@ export const PerformanceMonitor: React.FC = () => {
       const networkLatency = navigation.responseEnd - navigation.requestStart;
 
       // Calculate performance score
-      const score = Math.max(0, Math.min(100, 100 - (loadTime / 50)));
+      const score = Math.max(0, Math.min(100, 100 - loadTime / 50));
 
       setMetrics({
         loadTime: Math.round(loadTime),
         memoryUsage: Math.round(memoryUsage),
         networkLatency: Math.round(networkLatency),
         renderTime: Math.round(renderTime),
-        score: Math.round(score)
+        score: Math.round(score),
       });
     };
 
@@ -61,7 +63,7 @@ export const PerformanceMonitor: React.FC = () => {
       if (memory) {
         setMetrics(prev => ({
           ...prev,
-          memoryUsage: Math.round((memory.usedJSHeapSize / memory.totalJSHeapSize) * 100)
+          memoryUsage: Math.round((memory.usedJSHeapSize / memory.totalJSHeapSize) * 100),
         }));
       }
     }, 5000);
@@ -108,9 +110,7 @@ export const PerformanceMonitor: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{metrics.loadTime}ms</div>
-          <p className="text-xs text-muted-foreground">
-            Inicial da página
-          </p>
+          <p className="text-xs text-muted-foreground">Inicial da página</p>
         </CardContent>
       </Card>
 
@@ -121,9 +121,7 @@ export const PerformanceMonitor: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{metrics.memoryUsage}%</div>
-          <p className="text-xs text-muted-foreground">
-            Heap JavaScript
-          </p>
+          <p className="text-xs text-muted-foreground">Heap JavaScript</p>
         </CardContent>
       </Card>
 
@@ -134,9 +132,7 @@ export const PerformanceMonitor: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{metrics.networkLatency}ms</div>
-          <p className="text-xs text-muted-foreground">
-            Resposta do servidor
-          </p>
+          <p className="text-xs text-muted-foreground">Resposta do servidor</p>
         </CardContent>
       </Card>
     </div>

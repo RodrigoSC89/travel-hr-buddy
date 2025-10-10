@@ -5,6 +5,7 @@
 The IA & Inovação (AI & Innovation) module is the **central hub for artificial intelligence features and innovation**. It powers AI-driven insights, intelligent automation, and cutting-edge features across the entire Nautilus One platform.
 
 **Key Use Cases:**
+
 - Access AI-powered assistants and chatbots
 - Generate intelligent insights from system data
 - Automate routine tasks with AI workflows

@@ -4,17 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  Upload, 
-  FileText, 
-  CheckCircle, 
-  AlertTriangle, 
-  X, 
+import {
+  Upload,
+  FileText,
+  CheckCircle,
+  AlertTriangle,
+  X,
   Eye,
   Download,
   Loader2,
   Camera,
-  Scan
+  Scan,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,7 +35,7 @@ interface DocumentValidatorProps {
 
 export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
   crewMemberId,
-  onValidationComplete
+  onValidationComplete,
 }) => {
   const { toast } = useToast();
   const [isDragOver, setIsDragOver] = useState(false);
@@ -48,7 +48,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     const files = Array.from(e.dataTransfer.files);
     if (files.length > 0) {
       validateDocument(files[0]);
@@ -85,7 +85,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
 
       // Converter arquivo para base64
       const base64 = await fileToBase64(file);
-      
+
       // Enviar para validação de IA
       const { data, error } = await supabase.functions.invoke("crew-ai-insights", {
         body: {
@@ -93,8 +93,8 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           file: base64,
           fileName: file.name,
           fileType: file.type,
-          crewMemberId
-        }
+          crewMemberId,
+        },
       });
 
       clearInterval(progressInterval);
@@ -108,7 +108,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
         issues: data.issues || [],
         suggestions: data.suggestions || [],
         documentType: data.documentType || "unknown",
-        extractedData: data.extractedData || {}
+        extractedData: data.extractedData || {},
       };
 
       setValidationResults(prev => [...prev, result]);
@@ -116,29 +116,30 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
 
       // Save validation result to database
       if (crewMemberId) {
-        await supabase.from("crew_dossier_documents").insert([{
-          crew_member_id: crewMemberId,
-          document_name: file.name,
-          document_category: result.documentType,
-          file_url: `temp/${file.name}`, // Temporary URL
-          file_type: file.type,
-          file_size: file.size,
-          verification_status: result.isValid ? "verified" : "needs_review",
-          notes: `Validação automática: ${result.confidence}% de confiança. ${result.issues.join(", ")}`
-        }]);
+        await supabase.from("crew_dossier_documents").insert([
+          {
+            crew_member_id: crewMemberId,
+            document_name: file.name,
+            document_category: result.documentType,
+            file_url: `temp/${file.name}`, // Temporary URL
+            file_type: file.type,
+            file_size: file.size,
+            verification_status: result.isValid ? "verified" : "needs_review",
+            notes: `Validação automática: ${result.confidence}% de confiança. ${result.issues.join(", ")}`,
+          },
+        ]);
       }
 
       toast({
         title: result.isValid ? "Documento válido" : "Documento precisa de revisão",
         description: `Confiança: ${result.confidence}%`,
-        variant: result.isValid ? "default" : "destructive"
+        variant: result.isValid ? "default" : "destructive",
       });
-
     } catch (error) {
       toast({
         title: "Erro na validação",
         description: "Não foi possível validar o documento",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsValidating(false);
@@ -181,19 +182,15 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             <Scan className="h-5 w-5" />
             Validação Inteligente de Documentos
           </CardTitle>
-          <CardDescription>
-            Valide automaticamente seus documentos com OCR e IA
-          </CardDescription>
+          <CardDescription>Valide automaticamente seus documentos com OCR e IA</CardDescription>
         </CardHeader>
         <CardContent>
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-              isDragOver 
-                ? "border-primary bg-primary/5" 
-                : "border-muted-foreground/25"
+              isDragOver ? "border-primary bg-primary/5" : "border-muted-foreground/25"
             }`}
             onDrop={handleDrop}
-            onDragOver={(e) => {
+            onDragOver={e => {
               e.preventDefault();
               setIsDragOver(true);
             }}
@@ -208,7 +205,9 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                   <p className="text-sm text-muted-foreground mt-2">
                     {validationProgress < 30 && "Lendo documento..."}
                     {validationProgress >= 30 && validationProgress < 60 && "Extraindo dados..."}
-                    {validationProgress >= 60 && validationProgress < 90 && "Validando informações..."}
+                    {validationProgress >= 60 &&
+                      validationProgress < 90 &&
+                      "Validando informações..."}
                     {validationProgress >= 90 && "Finalizando..."}
                   </p>
                 </div>
@@ -217,9 +216,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               <>
                 <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium mb-2">Enviar Documento para Validação</h3>
-                <p className="text-muted-foreground mb-4">
-                  Suporta: PDF, JPG, PNG, DOC, DOCX
-                </p>
+                <p className="text-muted-foreground mb-4">Suporta: PDF, JPG, PNG, DOC, DOCX</p>
                 <input
                   type="file"
                   id="doc-upload"
@@ -227,7 +224,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                   accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
                   onChange={handleFileSelect}
                 />
-                <Button 
+                <Button
                   onClick={() => document.getElementById("doc-upload")?.click()}
                   disabled={isValidating}
                 >
@@ -254,9 +251,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                 Limpar
               </Button>
             </div>
-            <CardDescription>
-              Análise automática dos documentos enviados
-            </CardDescription>
+            <CardDescription>Análise automática dos documentos enviados</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {validationResults.map((result, index) => (
@@ -291,7 +286,9 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                       <strong>Problemas encontrados:</strong>
                       <ul className="list-disc list-inside mt-2 space-y-1">
                         {result.issues.map((issue, i) => (
-                          <li key={i} className="text-sm">{issue}</li>
+                          <li key={i} className="text-sm">
+                            {issue}
+                          </li>
                         ))}
                       </ul>
                     </AlertDescription>
@@ -304,7 +301,9 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                     <p className="font-medium text-blue-900 mb-2">Sugestões de melhoria:</p>
                     <ul className="list-disc list-inside space-y-1">
                       {result.suggestions.map((suggestion, i) => (
-                        <li key={i} className="text-sm text-blue-800">{suggestion}</li>
+                        <li key={i} className="text-sm text-blue-800">
+                          {suggestion}
+                        </li>
                       ))}
                     </ul>
                   </div>

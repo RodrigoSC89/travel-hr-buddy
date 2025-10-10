@@ -5,12 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Bot, 
-  Send, 
-  Mic, 
-  MicOff, 
-  Settings, 
+import {
+  Bot,
+  Send,
+  Mic,
+  MicOff,
+  Settings,
   Download,
   Zap,
   Brain,
@@ -19,7 +19,7 @@ import {
   TrendingUp,
   BarChart3,
   Users,
-  DollarSign
+  DollarSign,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
@@ -58,13 +58,14 @@ const IntegratedAIAssistant = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      content: "Olá! Sou seu assistente IA empresarial. Posso ajudar com análises, relatórios, automações e muito mais. Como posso ajudá-lo hoje?",
+      content:
+        "Olá! Sou seu assistente IA empresarial. Posso ajudar com análises, relatórios, automações e muito mais. Como posso ajudá-lo hoje?",
       role: "assistant",
       timestamp: new Date(),
-      metadata: { confidence: 95 }
-    }
+      metadata: { confidence: 95 },
+    },
   ]);
-  
+
   const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
@@ -74,17 +75,17 @@ const IntegratedAIAssistant = () => {
       title: "Análise de Performance Q4",
       lastMessage: "Relatório gerado com sucesso",
       timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      messageCount: 15
+      messageCount: 15,
     },
     {
       id: "2",
       title: "Automação de Workflows",
       lastMessage: "Configuração de aprovações",
       timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-      messageCount: 8
-    }
+      messageCount: 8,
+    },
   ]);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -94,8 +95,9 @@ const IntegratedAIAssistant = () => {
       title: "Análise de Vendas",
       description: "Gerar relatório de vendas do período",
       icon: <TrendingUp className="w-4 h-4" />,
-      prompt: "Analise as vendas dos últimos 30 dias e forneça insights sobre tendências e oportunidades",
-      category: "Analytics"
+      prompt:
+        "Analise as vendas dos últimos 30 dias e forneça insights sobre tendências e oportunidades",
+      category: "Analytics",
     },
     {
       id: "2",
@@ -103,7 +105,7 @@ const IntegratedAIAssistant = () => {
       description: "Criar relatório financeiro detalhado",
       icon: <DollarSign className="w-4 h-4" />,
       prompt: "Crie um relatório financeiro completo incluindo receitas, despesas e projeções",
-      category: "Financeiro"
+      category: "Financeiro",
     },
     {
       id: "3",
@@ -111,7 +113,7 @@ const IntegratedAIAssistant = () => {
       description: "Avaliar performance da equipe",
       icon: <Users className="w-4 h-4" />,
       prompt: "Analise a performance da equipe e sugira melhorias de produtividade",
-      category: "RH"
+      category: "RH",
     },
     {
       id: "4",
@@ -119,7 +121,7 @@ const IntegratedAIAssistant = () => {
       description: "Criar dashboard de indicadores",
       icon: <BarChart3 className="w-4 h-4" />,
       prompt: "Crie um dashboard com os principais KPIs da empresa e métricas de performance",
-      category: "Business Intelligence"
+      category: "Business Intelligence",
     },
     {
       id: "5",
@@ -127,7 +129,7 @@ const IntegratedAIAssistant = () => {
       description: "Configurar automação de workflow",
       icon: <Zap className="w-4 h-4" />,
       prompt: "Ajude-me a configurar uma automação para o processo de aprovação de documentos",
-      category: "Automação"
+      category: "Automação",
     },
     {
       id: "6",
@@ -135,8 +137,8 @@ const IntegratedAIAssistant = () => {
       description: "Análise preditiva de vendas",
       icon: <Brain className="w-4 h-4" />,
       prompt: "Use machine learning para prever a demanda dos próximos 3 meses",
-      category: "Predictive Analytics"
-    }
+      category: "Predictive Analytics",
+    },
   ];
 
   useEffect(() => {
@@ -154,7 +156,7 @@ const IntegratedAIAssistant = () => {
       id: Date.now().toString(),
       content: currentMessage,
       role: "user",
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -164,9 +166,9 @@ const IntegratedAIAssistant = () => {
     try {
       // Simulate AI response with more sophisticated logic
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       const aiResponse = await generateAIResponse(currentMessage);
-      
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: aiResponse.content,
@@ -175,22 +177,21 @@ const IntegratedAIAssistant = () => {
         metadata: {
           confidence: aiResponse.confidence,
           function_calls: aiResponse.functionCalls,
-          sources: aiResponse.sources
-        }
+          sources: aiResponse.sources,
+        },
       };
 
       setMessages(prev => [...prev, assistantMessage]);
-      
+
       // Save to database if user is authenticated
       if (user) {
         await saveConversation();
       }
-      
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao processar mensagem. Tente novamente.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -200,7 +201,7 @@ const IntegratedAIAssistant = () => {
   const generateAIResponse = async (prompt: string) => {
     // Simulate different types of responses based on keywords
     const lowerPrompt = prompt.toLowerCase();
-    
+
     if (lowerPrompt.includes("vendas") || lowerPrompt.includes("receita")) {
       return {
         content: `📊 **Análise de Vendas Concluída**
@@ -226,11 +227,15 @@ Com base nos dados disponíveis, identifiquei os seguintes insights:
 Deseja que eu gere um relatório detalhado ou configure alertas automáticos?`,
         confidence: 94,
         functionCalls: ["analytics_query", "sales_analysis"],
-        sources: ["price_alerts", "user_statistics"]
+        sources: ["price_alerts", "user_statistics"],
       };
     }
 
-    if (lowerPrompt.includes("equipe") || lowerPrompt.includes("rh") || lowerPrompt.includes("funcionário")) {
+    if (
+      lowerPrompt.includes("equipe") ||
+      lowerPrompt.includes("rh") ||
+      lowerPrompt.includes("funcionário")
+    ) {
       return {
         content: `👥 **Análise de Equipe - Relatório Executivo**
 
@@ -259,11 +264,15 @@ Deseja que eu gere um relatório detalhado ou configure alertas automáticos?`,
 Posso detalhar algum departamento específico ou criar um plano de ação?`,
         confidence: 92,
         functionCalls: ["hr_analysis", "performance_metrics"],
-        sources: ["employee_certificates", "performance_metrics"]
+        sources: ["employee_certificates", "performance_metrics"],
       };
     }
 
-    if (lowerPrompt.includes("automatizar") || lowerPrompt.includes("workflow") || lowerPrompt.includes("processo")) {
+    if (
+      lowerPrompt.includes("automatizar") ||
+      lowerPrompt.includes("workflow") ||
+      lowerPrompt.includes("processo")
+    ) {
       return {
         content: `⚙️ **Sistema de Automação Configurado**
 
@@ -300,11 +309,15 @@ Identifiquei oportunidades de automação nos seus processos:
 Deseja ativar alguma automação específica ou configurar novos triggers?`,
         confidence: 96,
         functionCalls: ["workflow_setup", "automation_config"],
-        sources: ["optimization_actions", "intelligent_notifications"]
+        sources: ["optimization_actions", "intelligent_notifications"],
       };
     }
 
-    if (lowerPrompt.includes("dashboard") || lowerPrompt.includes("kpi") || lowerPrompt.includes("métricas")) {
+    if (
+      lowerPrompt.includes("dashboard") ||
+      lowerPrompt.includes("kpi") ||
+      lowerPrompt.includes("métricas")
+    ) {
       return {
         content: `📈 **Dashboard de KPIs Criado**
 
@@ -337,7 +350,7 @@ Configurei um dashboard personalizado com suas métricas principais:
 O dashboard está disponível em tempo real. Posso configurar alertas adicionais ou criar visualizações específicas?`,
         confidence: 98,
         functionCalls: ["dashboard_creation", "kpi_analysis"],
-        sources: ["system_metrics", "performance_metrics", "ux_metrics"]
+        sources: ["system_metrics", "performance_metrics", "ux_metrics"],
       };
     }
 
@@ -373,7 +386,7 @@ Para começar, você pode:
 Como posso ajudá-lo especificamente hoje?`,
       confidence: 85,
       functionCalls: ["general_help"],
-      sources: []
+      sources: [],
     };
   };
 
@@ -398,21 +411,21 @@ Como posso ajudá-lo especificamente hoje?`,
       // Start voice recognition
       toast({
         title: "Reconhecimento de voz ativo",
-        description: "Fale agora..."
+        description: "Fale agora...",
       });
     } else {
       toast({
         title: "Reconhecimento de voz desativado",
-        description: "Voltando ao modo texto"
+        description: "Voltando ao modo texto",
       });
     }
   };
 
   const exportConversation = () => {
-    const conversation = messages.map(msg => 
-      `[${msg.timestamp.toLocaleTimeString()}] ${msg.role}: ${msg.content}`
-    ).join("\n\n");
-    
+    const conversation = messages
+      .map(msg => `[${msg.timestamp.toLocaleTimeString()}] ${msg.role}: ${msg.content}`)
+      .join("\n\n");
+
     const blob = new Blob([conversation], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -422,17 +435,17 @@ Como posso ajudá-lo especificamente hoje?`,
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     toast({
       title: "Conversa exportada",
-      description: "Arquivo baixado com sucesso"
+      description: "Arquivo baixado com sucesso",
     });
   };
 
   const handleSettingsClick = () => {
     toast({
       title: "⚙️ Configurações do Assistente",
-      description: "Ajuste preferências de idioma, modelo de IA e comportamento"
+      description: "Ajuste preferências de idioma, modelo de IA e comportamento",
     });
     // TODO: Implement settings dialog with model selection, temperature, etc.
   };
@@ -446,9 +459,7 @@ Como posso ajudá-lo especificamente hoje?`,
             <Bot className="w-5 h-5 text-primary" />
             Assistente IA
           </h2>
-          <p className="text-sm text-muted-foreground">
-            Seu copiloto empresarial inteligente
-          </p>
+          <p className="text-sm text-muted-foreground">Seu copiloto empresarial inteligente</p>
         </div>
 
         <Tabs defaultValue="quick-actions" className="flex-1 flex flex-col">
@@ -460,9 +471,9 @@ Como posso ajudá-lo especificamente hoje?`,
           <TabsContent value="quick-actions" className="flex-1 overflow-hidden m-0">
             <ScrollArea className="h-full p-4">
               <div className="space-y-3">
-                {quickActions.map((action) => (
-                  <Card 
-                    key={action.id} 
+                {quickActions.map(action => (
+                  <Card
+                    key={action.id}
                     className="cursor-pointer hover:bg-accent/50 transition-colors"
                     onClick={() => handleQuickAction(action)}
                   >
@@ -491,8 +502,11 @@ Como posso ajudá-lo especificamente hoje?`,
           <TabsContent value="history" className="flex-1 overflow-hidden m-0">
             <ScrollArea className="h-full p-4">
               <div className="space-y-2">
-                {conversations.map((conv) => (
-                  <Card key={conv.id} className="cursor-pointer hover:bg-accent/50 transition-colors">
+                {conversations.map(conv => (
+                  <Card
+                    key={conv.id}
+                    className="cursor-pointer hover:bg-accent/50 transition-colors"
+                  >
                     <CardContent className="p-3">
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
@@ -501,9 +515,7 @@ Como posso ajudá-lo especificamente hoje?`,
                             {conv.messageCount}
                           </Badge>
                         </div>
-                        <p className="text-xs text-muted-foreground truncate">
-                          {conv.lastMessage}
-                        </p>
+                        <p className="text-xs text-muted-foreground truncate">{conv.lastMessage}</p>
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="w-3 h-3" />
                           {conv.timestamp.toLocaleDateString()}
@@ -549,7 +561,7 @@ Como posso ajudá-lo especificamente hoje?`,
         {/* Messages Area */}
         <ScrollArea className="flex-1 p-4">
           <div className="space-y-4 max-w-4xl mx-auto">
-            {messages.map((message) => (
+            {messages.map(message => (
               <div
                 key={message.id}
                 className={`flex gap-3 ${
@@ -561,12 +573,10 @@ Como posso ajudá-lo especificamente hoje?`,
                     <Bot className="w-4 h-4 text-primary" />
                   </div>
                 )}
-                
+
                 <div
                   className={`max-w-[80%] rounded-lg p-4 ${
-                    message.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
+                    message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
                   }`}
                 >
                   <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -577,13 +587,13 @@ Como posso ajudá-lo especificamente hoje?`,
                       </div>
                     ))}
                   </div>
-                  
+
                   <div className="flex items-center justify-between mt-3 pt-2 border-t border-border/50">
                     <div className="flex items-center gap-2 text-xs opacity-70">
                       <Clock className="w-3 h-3" />
                       {message.timestamp.toLocaleTimeString()}
                     </div>
-                    
+
                     {message.metadata?.confidence && (
                       <Badge variant="outline" className="text-xs">
                         {message.metadata.confidence}% confiança
@@ -599,7 +609,7 @@ Como posso ajudá-lo especificamente hoje?`,
                 )}
               </div>
             ))}
-            
+
             {isLoading && (
               <div className="flex gap-3 justify-start">
                 <div className="p-2 bg-primary/10 rounded-lg">
@@ -615,7 +625,7 @@ Como posso ajudá-lo especificamente hoje?`,
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
@@ -628,28 +638,29 @@ Como posso ajudá-lo especificamente hoje?`,
                 <Input
                   ref={inputRef}
                   value={currentMessage}
-                  onChange={(e) => setCurrentMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                  onChange={e => setCurrentMessage(e.target.value)}
+                  onKeyPress={e => e.key === "Enter" && handleSendMessage()}
                   placeholder="Digite sua mensagem ou escolha uma ação rápida..."
                   className="pr-12"
                   disabled={isLoading}
                 />
-                
+
                 <Button
                   variant="ghost"
                   size="sm"
                   className="absolute right-1 top-1/2 transform -translate-y-1/2"
                   onClick={toggleListening}
                 >
-                  {isListening ? 
-                    <MicOff className="w-4 h-4 text-red-500" /> : 
+                  {isListening ? (
+                    <MicOff className="w-4 h-4 text-red-500" />
+                  ) : (
                     <Mic className="w-4 h-4" />
-                  }
+                  )}
                 </Button>
               </div>
-              
-              <Button 
-                onClick={handleSendMessage} 
+
+              <Button
+                onClick={handleSendMessage}
                 disabled={!currentMessage.trim() || isLoading}
                 className="gap-2"
               >
@@ -657,14 +668,10 @@ Como posso ajudá-lo especificamente hoje?`,
                 Enviar
               </Button>
             </div>
-            
+
             <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
-              <span>
-                Pressione Enter para enviar • Use o microfone para voz
-              </span>
-              <span>
-                {currentMessage.length}/2000 caracteres
-              </span>
+              <span>Pressione Enter para enviar • Use o microfone para voz</span>
+              <span>{currentMessage.length}/2000 caracteres</span>
             </div>
           </div>
         </div>

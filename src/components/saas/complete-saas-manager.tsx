@@ -1,27 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Building2, 
-  Users, 
-  Crown, 
-  Settings, 
+import {
+  Building2,
+  Users,
+  Crown,
+  Settings,
   BarChart,
   DollarSign,
-  Globe,
-  Shield,
   Zap,
   Database,
-  Clock,
   AlertTriangle,
   CheckCircle,
   UserPlus,
-  Trash2
 } from "lucide-react";
 
 interface Tenant {
@@ -51,12 +46,12 @@ export const CompleteSaaSManager: React.FC = () => {
       created: "2024-01-15",
       revenue: 15999,
       storage: 850,
-      maxStorage: 1000
+      maxStorage: 1000,
     },
     {
       id: "2",
       name: "Porto do Mar",
-      domain: "portomar.nautilus.app", 
+      domain: "portomar.nautilus.app",
       plan: "professional",
       users: 89,
       maxUsers: 100,
@@ -64,7 +59,7 @@ export const CompleteSaaSManager: React.FC = () => {
       created: "2024-02-20",
       revenue: 2999,
       storage: 340,
-      maxStorage: 500
+      maxStorage: 500,
     },
     {
       id: "3",
@@ -77,8 +72,8 @@ export const CompleteSaaSManager: React.FC = () => {
       created: "2024-03-10",
       revenue: 0,
       storage: 85,
-      maxStorage: 100
-    }
+      maxStorage: 100,
+    },
   ]);
 
   const [systemMetrics] = useState({
@@ -87,24 +82,32 @@ export const CompleteSaaSManager: React.FC = () => {
     totalUsers: 5847,
     monthlyRevenue: 245890,
     storageUsed: 67.5,
-    avgResponseTime: 245
+    avgResponseTime: 245,
   });
 
   const getPlanColor = (plan: string) => {
     switch (plan) {
-    case "starter": return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
-    case "professional": return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300";
-    case "enterprise": return "bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+      case "starter":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300";
+      case "professional":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300";
+      case "enterprise":
+        return "bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
-    case "trial": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
-    case "suspended": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
-    default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
+      case "active":
+        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
+      case "trial":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+      case "suspended":
+        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
   };
 
@@ -165,7 +168,9 @@ export const CompleteSaaSManager: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Receita Mensal</p>
-                <p className="text-2xl font-bold">R${systemMetrics.monthlyRevenue.toLocaleString()}</p>
+                <p className="text-2xl font-bold">
+                  R${systemMetrics.monthlyRevenue.toLocaleString()}
+                </p>
               </div>
               <DollarSign className="h-8 w-8 text-yellow-500" />
             </div>
@@ -217,7 +222,7 @@ export const CompleteSaaSManager: React.FC = () => {
             </div>
 
             <div className="grid gap-4">
-              {tenants.map((tenant) => (
+              {tenants.map(tenant => (
                 <Card key={tenant.id}>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
@@ -225,13 +230,18 @@ export const CompleteSaaSManager: React.FC = () => {
                         <Avatar className="h-12 w-12">
                           <AvatarImage src={`/api/placeholder/avatar/${tenant.id}`} />
                           <AvatarFallback>
-                            {tenant.name.split(" ").map(n => n[0]).join("")}
+                            {tenant.name
+                              .split(" ")
+                              .map(n => n[0])
+                              .join("")}
                           </AvatarFallback>
                         </Avatar>
                         <div>
                           <h4 className="font-semibold text-lg">{tenant.name}</h4>
                           <p className="text-muted-foreground">{tenant.domain}</p>
-                          <p className="text-sm text-muted-foreground">Criado em {tenant.created}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Criado em {tenant.created}
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -248,15 +258,25 @@ export const CompleteSaaSManager: React.FC = () => {
                       <div>
                         <p className="text-sm text-muted-foreground">Usuários</p>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold">{tenant.users}/{tenant.maxUsers}</span>
-                          <Progress value={(tenant.users / tenant.maxUsers) * 100} className="flex-1" />
+                          <span className="font-semibold">
+                            {tenant.users}/{tenant.maxUsers}
+                          </span>
+                          <Progress
+                            value={(tenant.users / tenant.maxUsers) * 100}
+                            className="flex-1"
+                          />
                         </div>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Armazenamento</p>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold">{tenant.storage}/{tenant.maxStorage}GB</span>
-                          <Progress value={(tenant.storage / tenant.maxStorage) * 100} className="flex-1" />
+                          <span className="font-semibold">
+                            {tenant.storage}/{tenant.maxStorage}GB
+                          </span>
+                          <Progress
+                            value={(tenant.storage / tenant.maxStorage) * 100}
+                            className="flex-1"
+                          />
                         </div>
                       </div>
                       <div>
@@ -422,7 +442,9 @@ export const CompleteSaaSManager: React.FC = () => {
                   <div className="flex items-center justify-between p-3 border rounded-lg bg-yellow-50 dark:bg-yellow-900/20">
                     <div>
                       <p className="font-medium">Alto uso de CPU</p>
-                      <p className="text-sm text-muted-foreground">Servidor principal acima de 80%</p>
+                      <p className="text-sm text-muted-foreground">
+                        Servidor principal acima de 80%
+                      </p>
                     </div>
                     <Badge variant="secondary">Moderado</Badge>
                   </div>

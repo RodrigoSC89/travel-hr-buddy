@@ -1,33 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Brain, 
-  Send, 
-  Bot, 
-  User, 
-  FileText, 
-  Globe, 
+import {
+  Brain,
+  Send,
+  Bot,
+  User,
+  FileText,
   Ship,
   BookOpen,
-  Mic,
   Upload,
   Download,
-  CheckCircle,
-  AlertTriangle,
-  Info,
   Sparkles,
   Languages,
   Anchor,
   Shield,
   Compass,
-  MessageCircle
+  MessageCircle,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
@@ -68,7 +61,7 @@ export const MaritimeGPT3: React.FC = () => {
       description: "International Maritime Organization standards",
       coverage: 100,
       lastUpdated: new Date("2025-01-15"),
-      regulations: ["SOLAS", "MARPOL", "STCW", "ISM Code", "ISPS Code"]
+      regulations: ["SOLAS", "MARPOL", "STCW", "ISM Code", "ISPS Code"],
     },
     {
       id: "solas",
@@ -76,7 +69,7 @@ export const MaritimeGPT3: React.FC = () => {
       description: "Safety of Life at Sea",
       coverage: 100,
       lastUpdated: new Date("2025-01-10"),
-      regulations: ["Chapter I-XIV", "Amendments 2024"]
+      regulations: ["Chapter I-XIV", "Amendments 2024"],
     },
     {
       id: "stcw",
@@ -84,7 +77,7 @@ export const MaritimeGPT3: React.FC = () => {
       description: "Standards of Training, Certification and Watchkeeping",
       coverage: 100,
       lastUpdated: new Date("2024-12-20"),
-      regulations: ["Manila Amendments", "Competency Standards"]
+      regulations: ["Manila Amendments", "Competency Standards"],
     },
     {
       id: "marpol",
@@ -92,7 +85,7 @@ export const MaritimeGPT3: React.FC = () => {
       description: "Prevention of Pollution from Ships",
       coverage: 100,
       lastUpdated: new Date("2025-01-05"),
-      regulations: ["Annex I-VI", "Environmental Protection"]
+      regulations: ["Annex I-VI", "Environmental Protection"],
     },
     {
       id: "colreg",
@@ -100,8 +93,8 @@ export const MaritimeGPT3: React.FC = () => {
       description: "International Regulations for Preventing Collisions at Sea",
       coverage: 100,
       lastUpdated: new Date("2024-11-15"),
-      regulations: ["Rules 1-38", "Steering and Sailing Rules"]
-    }
+      regulations: ["Rules 1-38", "Steering and Sailing Rules"],
+    },
   ];
 
   const languages = [
@@ -114,7 +107,7 @@ export const MaritimeGPT3: React.FC = () => {
     { code: "ja", name: "日本語", flag: "🇯🇵" },
     { code: "zh", name: "中文", flag: "🇨🇳" },
     { code: "ko", name: "한국어", flag: "🇰🇷" },
-    { code: "ar", name: "العربية", flag: "🇸🇦" }
+    { code: "ar", name: "العربية", flag: "🇸🇦" },
   ];
 
   useEffect(() => {
@@ -143,8 +136,8 @@ Como posso ajudá-lo hoje?`,
         timestamp: new Date(),
         category: "general",
         confidence: 100,
-        language: selectedLanguage
-      }
+        language: selectedLanguage,
+      },
     ]);
   }, []);
 
@@ -161,7 +154,7 @@ Como posso ajudá-lo hoje?`,
       content: message,
       timestamp: new Date(),
       category: "general",
-      language: selectedLanguage
+      language: selectedLanguage,
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -178,7 +171,7 @@ Como posso ajudá-lo hoje?`,
 
   const generateMaritimeResponse = (query: string): Message => {
     const lowerQuery = query.toLowerCase();
-    
+
     // Detect query type and generate appropriate response
     let content = "";
     let category: Message["category"] = "general";
@@ -213,7 +206,11 @@ Precisa de mais detalhes sobre algum capítulo específico?`;
       category = "regulation";
       sources = ["SOLAS Convention 2024", "IMO Regulations", "Flag State Requirements"];
       confidence = 98;
-    } else if (lowerQuery.includes("marpol") || lowerQuery.includes("pollution") || lowerQuery.includes("environment")) {
+    } else if (
+      lowerQuery.includes("marpol") ||
+      lowerQuery.includes("pollution") ||
+      lowerQuery.includes("environment")
+    ) {
       content = `🌊 **Consulta MARPOL - Prevenção de Poluição**
 
 Regulamentação MARPOL Anexos I-VI:
@@ -248,7 +245,12 @@ Regulamentação MARPOL Anexos I-VI:
       category = "regulation";
       sources = ["MARPOL Convention", "IMO Environmental Standards", "Port State Control"];
       confidence = 97;
-    } else if (lowerQuery.includes("stcw") || lowerQuery.includes("crew") || lowerQuery.includes("certificate") || lowerQuery.includes("training")) {
+    } else if (
+      lowerQuery.includes("stcw") ||
+      lowerQuery.includes("crew") ||
+      lowerQuery.includes("certificate") ||
+      lowerQuery.includes("training")
+    ) {
       content = `👨‍✈️ **Consulta STCW - Certificação e Treinamento**
 
 Requisitos STCW para tripulação:
@@ -286,7 +288,11 @@ Deseja verificar certificações específicas?`;
       category = "regulation";
       sources = ["STCW Convention 2010", "Manila Amendments", "Flag State Requirements"];
       confidence = 99;
-    } else if (lowerQuery.includes("colreg") || lowerQuery.includes("navigation") || lowerQuery.includes("collision")) {
+    } else if (
+      lowerQuery.includes("colreg") ||
+      lowerQuery.includes("navigation") ||
+      lowerQuery.includes("collision")
+    ) {
       content = `🧭 **Consulta COLREG - Regras de Navegação**
 
 Regulamentos Internacionais para Prevenção de Colisões:
@@ -330,7 +336,10 @@ Precisa de orientação para uma situação específica?`;
 Sistema ativo para tradução especializada em 50+ idiomas.
 
 **Idiomas Principais:**
-${languages.slice(0, 10).map(lang => `${lang.flag} ${lang.name}`).join("\n")}
+${languages
+  .slice(0, 10)
+  .map(lang => `${lang.flag} ${lang.name}`)
+  .join("\n")}
 
 **Especialidades:**
 - Documentação técnica marítima
@@ -391,7 +400,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
       category,
       confidence,
       sources,
-      language: selectedLanguage
+      language: selectedLanguage,
     };
   };
 
@@ -405,7 +414,9 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
   const generateReport = () => {
     toast({
       title: "📊 Gerando Relatório",
-      description: "Relatório especializado sendo gerado em " + languages.find(l => l.code === selectedLanguage)?.name,
+      description:
+        "Relatório especializado sendo gerado em " +
+        languages.find(l => l.code === selectedLanguage)?.name,
     });
   };
 
@@ -428,7 +439,8 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                   </Badge>
                 </CardTitle>
                 <CardDescription className="text-white/90">
-                  Superinteligência Marítima - Base de Conhecimento Completa IMO/SOLAS/STCW/MARPOL/COLREG
+                  Superinteligência Marítima - Base de Conhecimento Completa
+                  IMO/SOLAS/STCW/MARPOL/COLREG
                 </CardDescription>
               </div>
             </div>
@@ -436,11 +448,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button 
-                      variant="secondary" 
-                      size="icon"
-                      onClick={handleFileUpload}
-                    >
+                    <Button variant="secondary" size="icon" onClick={handleFileUpload}>
                       <Upload className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -449,15 +457,11 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-              
+
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button 
-                      variant="secondary" 
-                      size="icon"
-                      onClick={generateReport}
-                    >
+                    <Button variant="secondary" size="icon" onClick={generateReport}>
                       <Download className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -481,8 +485,11 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {knowledgeBases.map((kb) => (
-              <div key={kb.id} className="p-3 border rounded-lg space-y-2 hover:bg-accent transition-colors">
+            {knowledgeBases.map(kb => (
+              <div
+                key={kb.id}
+                className="p-3 border rounded-lg space-y-2 hover:bg-accent transition-colors"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Ship className="h-4 w-4 text-primary" />
@@ -518,10 +525,10 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                 <Languages className="h-4 w-4 text-muted-foreground" />
                 <select
                   value={selectedLanguage}
-                  onChange={(e) => setSelectedLanguage(e.target.value)}
+                  onChange={e => setSelectedLanguage(e.target.value)}
                   className="text-sm border rounded px-2 py-1"
                 >
-                  {languages.map((lang) => (
+                  {languages.map(lang => (
                     <option key={lang.code} value={lang.code}>
                       {lang.flag} {lang.name}
                     </option>
@@ -533,7 +540,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
           <CardContent className="space-y-4">
             <ScrollArea className="h-[500px] pr-4">
               <div className="space-y-4">
-                {messages.map((message) => (
+                {messages.map(message => (
                   <div
                     key={message.id}
                     className={`flex gap-3 ${message.type === "user" ? "justify-end" : "justify-start"}`}
@@ -610,8 +617,8 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Textarea
                 placeholder="Digite sua consulta marítima... (ex: 'Requisitos SOLAS para embarcações', 'Compliance MARPOL', 'Certificações STCW')"
                 value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyDown={(e) => {
+                onChange={e => setInputMessage(e.target.value)}
+                onKeyDown={e => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     processMessage(inputMessage);
@@ -635,7 +642,9 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setInputMessage("Quais são os requisitos SOLAS para equipamentos salva-vidas?")}
+                onClick={() =>
+                  setInputMessage("Quais são os requisitos SOLAS para equipamentos salva-vidas?")
+                }
               >
                 <Shield className="h-3 w-3 mr-1" />
                 SOLAS
@@ -651,7 +660,9 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setInputMessage("Quais certificações STCW são necessárias para oficiais?")}
+                onClick={() =>
+                  setInputMessage("Quais certificações STCW são necessárias para oficiais?")
+                }
               >
                 <FileText className="h-3 w-3 mr-1" />
                 STCW

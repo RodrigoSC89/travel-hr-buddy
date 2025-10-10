@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Trophy, 
-  Target, 
-  Star, 
-  Flame, 
-  Award, 
+import {
+  Trophy,
+  Target,
+  Star,
+  Flame,
+  Award,
   TrendingUp,
   Users,
-  Calendar,
-  CheckCircle,
   Zap,
   Crown,
   Medal,
   Gift,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -65,7 +63,7 @@ export const Gamification = () => {
     achievements: 23,
     completedTasks: 156,
     collaborationScore: 87,
-    innovationIndex: 92
+    innovationIndex: 92,
   });
 
   const [achievements, setAchievements] = useState<Achievement[]>([
@@ -78,7 +76,7 @@ export const Gamification = () => {
       unlocked: true,
       progress: 50,
       maxProgress: 50,
-      category: "collaboration"
+      category: "collaboration",
     },
     {
       id: 2,
@@ -89,7 +87,7 @@ export const Gamification = () => {
       unlocked: true,
       progress: 12,
       maxProgress: 10,
-      category: "innovation"
+      category: "innovation",
     },
     {
       id: 3,
@@ -100,7 +98,7 @@ export const Gamification = () => {
       unlocked: false,
       progress: 18,
       maxProgress: 25,
-      category: "productivity"
+      category: "productivity",
     },
     {
       id: 4,
@@ -111,7 +109,7 @@ export const Gamification = () => {
       unlocked: false,
       progress: 73,
       maxProgress: 100,
-      category: "leadership"
+      category: "leadership",
     },
     {
       id: 5,
@@ -122,7 +120,7 @@ export const Gamification = () => {
       unlocked: true,
       progress: 30,
       maxProgress: 30,
-      category: "collaboration"
+      category: "collaboration",
     },
     {
       id: 6,
@@ -133,8 +131,8 @@ export const Gamification = () => {
       unlocked: false,
       progress: 67,
       maxProgress: 100,
-      category: "innovation"
-    }
+      category: "innovation",
+    },
   ]);
 
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([
@@ -145,7 +143,7 @@ export const Gamification = () => {
       level: 12,
       avatar: "",
       badges: ["🚀", "💡", "🤝"],
-      trend: "stable"
+      trend: "stable",
     },
     {
       rank: 2,
@@ -154,7 +152,7 @@ export const Gamification = () => {
       level: 11,
       avatar: "",
       badges: ["⚡", "📊", "🔥"],
-      trend: "up"
+      trend: "up",
     },
     {
       rank: 3,
@@ -163,7 +161,7 @@ export const Gamification = () => {
       level: 10,
       avatar: "",
       badges: ["🤝", "🎯", "💡"],
-      trend: "down"
+      trend: "down",
     },
     {
       rank: 4,
@@ -172,7 +170,7 @@ export const Gamification = () => {
       level: 9,
       avatar: "",
       badges: ["📊", "🚀"],
-      trend: "up"
+      trend: "up",
     },
     {
       rank: 5,
@@ -181,8 +179,8 @@ export const Gamification = () => {
       level: 8,
       avatar: "",
       badges: ["⚡", "🔥"],
-      trend: "stable"
-    }
+      trend: "stable",
+    },
   ]);
 
   const { toast } = useToast();
@@ -199,29 +197,42 @@ export const Gamification = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-    case "productivity": return <Zap className="w-4 h-4" />;
-    case "collaboration": return <Users className="w-4 h-4" />;
-    case "innovation": return <Sparkles className="w-4 h-4" />;
-    case "leadership": return <Crown className="w-4 h-4" />;
-    default: return <Star className="w-4 h-4" />;
+      case "productivity":
+        return <Zap className="w-4 h-4" />;
+      case "collaboration":
+        return <Users className="w-4 h-4" />;
+      case "innovation":
+        return <Sparkles className="w-4 h-4" />;
+      case "leadership":
+        return <Crown className="w-4 h-4" />;
+      default:
+        return <Star className="w-4 h-4" />;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-    case "productivity": return "bg-blue-100 text-blue-700 border-blue-200";
-    case "collaboration": return "bg-green-100 text-green-700 border-green-200";
-    case "innovation": return "bg-purple-100 text-purple-700 border-purple-200";
-    case "leadership": return "bg-orange-100 text-orange-700 border-orange-200";
-    default: return "bg-secondary text-secondary-foreground border-border";
+      case "productivity":
+        return "bg-blue-100 text-blue-700 border-blue-200";
+      case "collaboration":
+        return "bg-green-100 text-green-700 border-green-200";
+      case "innovation":
+        return "bg-purple-100 text-purple-700 border-purple-200";
+      case "leadership":
+        return "bg-orange-100 text-orange-700 border-orange-200";
+      default:
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "up": return <TrendingUp className="w-4 h-4 text-green-500" />;
-    case "down": return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
-    default: return <TrendingUp className="w-4 h-4 text-muted-foreground rotate-90" />;
+      case "up":
+        return <TrendingUp className="w-4 h-4 text-green-500" />;
+      case "down":
+        return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
+      default:
+        return <TrendingUp className="w-4 h-4 text-muted-foreground rotate-90" />;
     }
   };
 
@@ -298,44 +309,54 @@ export const Gamification = () => {
               <Medal className="w-5 h-5 text-primary" />
               Conquistas & Badges
             </CardTitle>
-            <CardDescription>
-              Seus marcos e realizações no sistema
-            </CardDescription>
+            <CardDescription>Seus marcos e realizações no sistema</CardDescription>
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-80">
               <div className="space-y-4">
-                {achievements.map((achievement) => (
-                  <div key={achievement.id} className={`p-4 rounded-lg border ${achievement.unlocked ? "bg-card" : "bg-muted/50"}`}>
+                {achievements.map(achievement => (
+                  <div
+                    key={achievement.id}
+                    className={`p-4 rounded-lg border ${achievement.unlocked ? "bg-card" : "bg-muted/50"}`}
+                  >
                     <div className="flex items-start gap-3">
-                      <div className={`text-2xl ${achievement.unlocked ? "" : "grayscale opacity-50"}`}>
+                      <div
+                        className={`text-2xl ${achievement.unlocked ? "" : "grayscale opacity-50"}`}
+                      >
                         {achievement.icon}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <h4 className={`font-medium ${achievement.unlocked ? "" : "text-muted-foreground"}`}>
+                          <h4
+                            className={`font-medium ${achievement.unlocked ? "" : "text-muted-foreground"}`}
+                          >
                             {achievement.title}
                           </h4>
-                          <Badge variant="outline" className={getCategoryColor(achievement.category)}>
+                          <Badge
+                            variant="outline"
+                            className={getCategoryColor(achievement.category)}
+                          >
                             {getCategoryIcon(achievement.category)}
                           </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-2">{achievement.description}</p>
-                        
+                        <p className="text-sm text-muted-foreground mb-2">
+                          {achievement.description}
+                        </p>
+
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <Progress 
-                              value={(achievement.progress / achievement.maxProgress) * 100} 
+                            <Progress
+                              value={(achievement.progress / achievement.maxProgress) * 100}
                               className="w-24 h-2"
                             />
                             <span className="text-xs text-muted-foreground">
                               {achievement.progress}/{achievement.maxProgress}
                             </span>
                           </div>
-                          
+
                           {achievement.unlocked ? (
-                            <Button 
-                              size="sm" 
+                            <Button
+                              size="sm"
                               onClick={() => claimReward(achievement.id)}
                               className="h-6 text-xs"
                             >
@@ -364,28 +385,39 @@ export const Gamification = () => {
               <Trophy className="w-5 h-5 text-primary" />
               Ranking Corporativo
             </CardTitle>
-            <CardDescription>
-              Top performers da organização
-            </CardDescription>
+            <CardDescription>Top performers da organização</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {leaderboard.map((entry) => (
-                <div key={entry.rank} className={`p-4 rounded-lg border ${entry.rank === 1 ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200" : "bg-card"}`}>
+              {leaderboard.map(entry => (
+                <div
+                  key={entry.rank}
+                  className={`p-4 rounded-lg border ${entry.rank === 1 ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200" : "bg-card"}`}
+                >
                   <div className="flex items-center gap-3">
-                    <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${
-                      entry.rank === 1 ? "bg-yellow-500 text-azure-50" :
-                        entry.rank === 2 ? "bg-gray-400 text-azure-50" :
-                          entry.rank === 3 ? "bg-orange-600 text-azure-50" :
-                            "bg-muted text-muted-foreground"
-                    }`}>
+                    <div
+                      className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${
+                        entry.rank === 1
+                          ? "bg-yellow-500 text-azure-50"
+                          : entry.rank === 2
+                            ? "bg-gray-400 text-azure-50"
+                            : entry.rank === 3
+                              ? "bg-orange-600 text-azure-50"
+                              : "bg-muted text-muted-foreground"
+                      }`}
+                    >
                       {entry.rank}
                     </div>
-                    
+
                     <Avatar className="w-10 h-10">
-                      <AvatarFallback>{entry.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
+                      <AvatarFallback>
+                        {entry.name
+                          .split(" ")
+                          .map(n => n[0])
+                          .join("")}
+                      </AvatarFallback>
                     </Avatar>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <h4 className="font-medium truncate">{entry.name}</h4>
@@ -398,14 +430,14 @@ export const Gamification = () => {
                       </div>
                       <div className="flex gap-1 mt-1">
                         {entry.badges.map((badge, index) => (
-                          <span key={index} className="text-sm">{badge}</span>
+                          <span key={index} className="text-sm">
+                            {badge}
+                          </span>
                         ))}
                       </div>
                     </div>
-                    
-                    <div className="flex items-center gap-2">
-                      {getTrendIcon(entry.trend)}
-                    </div>
+
+                    <div className="flex items-center gap-2">{getTrendIcon(entry.trend)}</div>
                   </div>
                 </div>
               ))}
@@ -421,19 +453,21 @@ export const Gamification = () => {
             <Target className="w-5 h-5 text-primary" />
             Métricas de Performance
           </CardTitle>
-          <CardDescription>
-            Seus indicadores de produtividade e engajamento
-          </CardDescription>
+          <CardDescription>Seus indicadores de produtividade e engajamento</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium">Score de Colaboração</span>
-                <span className="text-sm text-muted-foreground">{userStats.collaborationScore}%</span>
+                <span className="text-sm text-muted-foreground">
+                  {userStats.collaborationScore}%
+                </span>
               </div>
               <Progress value={userStats.collaborationScore} className="h-3" />
-              <p className="text-xs text-muted-foreground">Baseado em interações e trabalho em equipe</p>
+              <p className="text-xs text-muted-foreground">
+                Baseado em interações e trabalho em equipe
+              </p>
             </div>
 
             <div className="space-y-3">

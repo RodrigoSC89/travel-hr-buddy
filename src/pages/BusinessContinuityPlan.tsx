@@ -8,7 +8,6 @@ import { ComplianceAuditCenter } from "@/components/bcp/compliance-audit-center"
 import { ContinuousTestingMonitoring } from "@/components/bcp/continuous-testing-monitoring";
 import { Shield } from "lucide-react";
 
-
 const BusinessContinuityPlan = () => {
   return (
     <SidebarProvider>
@@ -26,7 +25,7 @@ const BusinessContinuityPlan = () => {
               </p>
             </div>
           </div>
-          
+
           <Tabs defaultValue="risks" className="space-y-4">
             <div className="w-full overflow-x-auto pb-2">
               <TabsList className="grid w-full grid-cols-2 sm:grid-cols-2 md:grid-cols-4 min-w-fit">
@@ -66,7 +65,6 @@ const BusinessContinuityPlan = () => {
             </TabsContent>
           </Tabs>
         </main>
-        
       </div>
     </SidebarProvider>
   );

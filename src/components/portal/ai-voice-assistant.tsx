@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,17 +11,14 @@ interface VoiceAssistantProps {
   onResponse?: (response: string) => void;
 }
 
-export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({ 
-  crewMemberId, 
-  onResponse 
-}) => {
+export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({ crewMemberId, onResponse }) => {
   const { toast } = useToast();
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [audioPermission, setAudioPermission] = useState<boolean | null>(null);
-  
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const speechSynthRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -38,7 +35,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       toast({
         title: "Permissão negada",
         description: "Precisamos da permissão do microfone para o assistente por voz",
-        variant: "destructive"
+        variant: "destructive",
       });
       return false;
     }
@@ -56,7 +53,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       mediaRecorderRef.current = new MediaRecorder(stream);
       audioChunksRef.current = [];
 
-      mediaRecorderRef.current.ondataavailable = (event) => {
+      mediaRecorderRef.current.ondataavailable = event => {
         audioChunksRef.current.push(event.data);
       };
 
@@ -73,7 +70,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       toast({
         title: "Erro",
         description: "Não foi possível iniciar a gravação",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -95,7 +92,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       const reader = new FileReader();
       reader.onloadend = async () => {
         const base64Audio = reader.result?.toString().split(",")[1];
-        
+
         if (!base64Audio) {
           throw new Error("Erro ao converter áudio");
         }
@@ -105,8 +102,8 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
           body: {
             type: "speech_to_text",
             audio: base64Audio,
-            crewMemberId
-          }
+            crewMemberId,
+          },
         });
 
         if (error) throw error;
@@ -115,14 +112,17 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         setTranscript(transcription);
 
         // Processar resposta com IA
-        const { data: aiResponse, error: aiError } = await supabase.functions.invoke("crew-ai-insights", {
-          body: {
-            type: "voice_chat",
-            message: transcription,
-            crewMemberId,
-            responseFormat: "voice"
+        const { data: aiResponse, error: aiError } = await supabase.functions.invoke(
+          "crew-ai-insights",
+          {
+            body: {
+              type: "voice_chat",
+              message: transcription,
+              crewMemberId,
+              responseFormat: "voice",
+            },
           }
-        });
+        );
 
         if (aiError) throw aiError;
 
@@ -131,16 +131,14 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
 
         // Converter resposta para fala
         await textToSpeech(response);
-
       };
       reader.readAsDataURL(audioBlob);
-
     } catch (error) {
       setTranscript("Erro no processamento");
       toast({
         title: "Erro",
         description: "Não foi possível processar o áudio",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsProcessing(false);
@@ -157,8 +155,8 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
           type: "text_to_speech",
           text,
           voiceId: "Sarah", // Voz padrão
-          crewMemberId
-        }
+          crewMemberId,
+        },
       });
 
       if (error) throw error;
@@ -167,10 +165,9 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       const audio = new Audio(`data:audio/mp3;base64,${data.audio}`);
       audio.onended = () => setIsSpeaking(false);
       await audio.play();
-
     } catch (error) {
       setIsSpeaking(false);
-      
+
       // Fallback para síntese nativa do navegador
       fallbackTextToSpeech(text);
     }
@@ -183,10 +180,10 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       speechSynthRef.current.lang = "pt-BR";
       speechSynthRef.current.rate = 0.9;
       speechSynthRef.current.pitch = 1;
-      
+
       speechSynthRef.current.onend = () => setIsSpeaking(false);
       speechSynthRef.current.onerror = () => setIsSpeaking(false);
-      
+
       window.speechSynthesis.speak(speechSynthRef.current);
       setIsSpeaking(true);
     } else {
@@ -194,7 +191,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       toast({
         title: "Síntese de fala não disponível",
         description: "Seu navegador não suporta síntese de fala",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -269,11 +266,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
           </Button>
 
           {isSpeaking && (
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={stopSpeaking}
-            >
+            <Button variant="outline" size="lg" onClick={stopSpeaking}>
               <VolumeX className="h-4 w-4" />
             </Button>
           )}
@@ -281,14 +274,8 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
 
         {audioPermission === false && (
           <div className="text-center">
-            <p className="text-sm text-muted-foreground mb-2">
-              Permissão de microfone negada
-            </p>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={requestMicrophonePermission}
-            >
+            <p className="text-sm text-muted-foreground mb-2">Permissão de microfone negada</p>
+            <Button variant="outline" size="sm" onClick={requestMicrophonePermission}>
               Tentar Novamente
             </Button>
           </div>

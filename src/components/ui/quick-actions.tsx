@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { ExternalLink, Download, FileText, Printer } from "lucide-react";
+import { Download, FileText, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSystemActions } from "@/hooks/use-system-actions";
 
@@ -19,7 +18,7 @@ export const QuickActions: React.FC = () => {
         <Download className="h-4 w-4" />
         Export PDF
       </Button>
-      
+
       <Button
         variant="outline"
         size="sm"
@@ -29,7 +28,7 @@ export const QuickActions: React.FC = () => {
         <Printer className="h-4 w-4" />
         Imprimir
       </Button>
-      
+
       <Button
         variant="outline"
         size="sm"
