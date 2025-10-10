@@ -10,8 +10,20 @@ export default defineConfig(({ mode }) => ({
   test: {
     globals: true,
     environment: "jsdom",
-    setupFiles: "./src/tests/setup.ts",
-    css: true,
+    setupFiles: ["./src/test/setup.ts"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json", "html"],
+      exclude: [
+        "node_modules/",
+        "dist/",
+        "**/*.config.*",
+        "**/*.d.ts",
+        "**/mockData/**",
+        "**/*.test.*",
+        "**/*.spec.*",
+      ],
+    },
   },
   base: "/",
   server: {
