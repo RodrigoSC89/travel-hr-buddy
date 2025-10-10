@@ -4,7 +4,7 @@ import { usePermissions } from "@/hooks/use-permissions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { User, Mail, Building, Calendar } from "lucide-react";
+import { Mail, Building, Calendar } from "lucide-react";
 
 interface UserProfileBadgeProps {
   showDetails?: boolean;

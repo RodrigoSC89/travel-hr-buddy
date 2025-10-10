@@ -1,7 +1,7 @@
 import React from "react";
 import { usePermissions, UserRole } from "@/hooks/use-permissions";
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, AlertTriangle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 interface RoleBasedAccessProps {
   roles?: UserRole[];
