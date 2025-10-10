@@ -183,7 +183,7 @@ const IntegratedAIAssistant = () => {
       
       // Save to database if user is authenticated
       if (user) {
-        await saveConversation(userMessage, assistantMessage);
+        await saveConversation();
       }
       
     } catch (error) {

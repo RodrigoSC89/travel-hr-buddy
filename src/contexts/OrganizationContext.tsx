@@ -125,9 +125,9 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
             default_currency: "BRL",
             timezone: "America/Sao_Paulo",
             custom_fields: {},
-            business_rules: {},
-            enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"],
-            module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
+          business_rules: {} as any,
+          enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as any,
+          module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as any
           };
           
           setCurrentBranding(demoBranding);
@@ -148,9 +148,9 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
           default_currency: "BRL",
           timezone: "America/Sao_Paulo",
           custom_fields: {},
-          business_rules: {},
-          enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"],
-          module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
+          business_rules: {} as any,
+          enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as any,
+          module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as any
         };
         
         setCurrentBranding(demoBranding);
@@ -191,9 +191,17 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     if (!currentOrganization) return;
 
     try {
+      const updateData: any = {
+        ...brandingUpdate,
+        business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules as any : undefined,
+        enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules as any : undefined,
+        custom_fields: brandingUpdate.custom_fields ? brandingUpdate.custom_fields as any : undefined,
+        module_settings: brandingUpdate.module_settings ? brandingUpdate.module_settings as any : undefined
+      };
+
       const { data, error } = await supabase
         .from("organization_branding")
-        .update(brandingUpdate)
+        .update(updateData)
         .eq("organization_id", currentOrganization.id)
         .select()
         .single();

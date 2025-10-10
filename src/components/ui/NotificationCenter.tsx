@@ -147,16 +147,16 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         type: n.type as any,
         title: n.title,
         message: n.message,
-        description: n.description || n.message,
+        description: n.message,
         priority: n.priority as any,
         isRead: n.is_read,
         is_read: n.is_read,
         createdAt: new Date(n.created_at),
         timestamp: n.created_at,
         actionData: n.action_data,
-        action_url: n.action_url,
-        auto_dismiss: n.auto_dismiss,
-        metadata: n.metadata
+        metadata: typeof n.metadata === "object" && n.metadata !== null && !Array.isArray(n.metadata)
+          ? n.metadata as Record<string, any>
+          : {}
       })) || [];
 
       setNotifications(formattedNotifications);

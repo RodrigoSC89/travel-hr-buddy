@@ -31,9 +31,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   if (variant === "compact") {
     return (
       <div className={cn("flex flex-col items-center justify-center p-8 text-center", className)}>
-        {icon && (
+        {Icon && (
           <div className="mb-4 p-3 rounded-full bg-muted">
-            {Icon ? <Icon className="w-8 h-8 text-muted-foreground" /> : icon}
+            <Icon className="w-8 h-8 text-muted-foreground" />
           </div>
         )}
         <h3 className="text-lg font-semibold mb-2">{title}</h3>
@@ -57,9 +57,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 
   return (
     <div className={cn("text-center py-12", className)}>
-      <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-6 shadow-soft">
-        {Icon ? <Icon className="w-12 h-12 text-muted-foreground" /> : icon}
-      </div>
+      {Icon && (
+        <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-6 shadow-soft">
+          <Icon className="w-12 h-12 text-muted-foreground" />
+        </div>
+      )}
       <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
       <p className="text-muted-foreground mb-6 max-w-md mx-auto">{description}</p>
       {actionLabel && onAction && (

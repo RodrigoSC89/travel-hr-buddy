@@ -148,6 +148,7 @@ const ChecklistsInteligentes = () => {
             id: "export",
             label: "Exportar",
             icon: <Download className="h-3 w-3" />,
+            action: () => console.log("Export checklists")
           }
         ]}
       />

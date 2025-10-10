@@ -85,7 +85,11 @@ export const OrganizationCustomization: React.FC = () => {
 
     try {
       setIsLoading(true);
-      await updateBranding(customization);
+      await updateBranding({
+        ...customization,
+        enabled_modules: customization.enabled_modules as any,
+        business_rules: customization.business_rules as any
+      });
       
       toast({
         title: "Sucesso",

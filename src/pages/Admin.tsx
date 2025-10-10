@@ -8,12 +8,12 @@ import { Shield, Users, Settings, Lock } from "lucide-react";
 const Admin = () => {
   return (
     <MultiTenantWrapper>
-      <ModulePageWrapper gradient="red">
+      <ModulePageWrapper gradient="purple">
         <ModuleHeader
           icon={Shield}
           title="Painel Administrativo"
           description="Gerenciamento completo de usuários, permissões e configurações do sistema"
-          gradient="red"
+          gradient="purple"
           badges={[
             { icon: Users, label: "Gestão de Usuários" },
             { icon: Lock, label: "Segurança" },

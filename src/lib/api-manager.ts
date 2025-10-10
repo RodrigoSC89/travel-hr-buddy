@@ -44,11 +44,17 @@ export class APIManager {
       const response = await fetch(url, { ...options, headers });
 
       if (!response.ok) {
+        let errorData: Record<string, unknown> = {};
         const errorBody = await response.text();
+        try {
+          errorData = JSON.parse(errorBody);
+        } catch {
+          errorData = { message: errorBody };
+        }
         throw new APIError(
           `Request failed: ${response.statusText}`,
           response.status,
-          errorBody
+          errorData
         );
       }
 

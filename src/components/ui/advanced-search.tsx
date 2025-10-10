@@ -31,7 +31,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>("all");
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [recentSearches, setRecentSearches] = useState<SearchResult[]>([]);
   const [favorites, setFavorites] = useState<SearchResult[]>([]);
   const navigate = useNavigate();
   const { saveToCache, getFromCache } = useOfflineStorage();
@@ -113,9 +113,10 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
     // Load recent searches and favorites from cache
     const loadCachedData = async () => {
       const cached = await getFromCache("search_data");
-      if (cached) {
-        setRecentSearches(cached.recent || []);
-        setFavorites(cached.favorites || []);
+      if (cached && typeof cached === "object") {
+        const cachedObj = cached as { recent?: SearchResult[]; favorites?: SearchResult[] };
+        setRecentSearches(cachedObj.recent || []);
+        setFavorites(cachedObj.favorites || []);
       }
     };
     
@@ -149,7 +150,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
   const handleResultClick = (result: SearchResult) => {
     if (result.route) {
       // Add to recent searches
-      const newRecent = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
+      const newRecent = [result, ...recentSearches.filter(s => s.id !== result.id)].slice(0, 5);
       setRecentSearches(newRecent);
       
       // Save to cache
@@ -307,14 +308,14 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
             <TabsContent value="recent" className="mt-4">
               {recentSearches.length > 0 ? (
                 <div className="space-y-2">
-                  {recentSearches.map((search, index) => (
+                  {recentSearches.map((search) => (
                     <div
-                      key={index}
+                      key={search.id}
                       className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer transition-colors"
-                      onClick={() => handleRecentSearch(search)}
+                      onClick={() => handleResultClick(search)}
                     >
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{search}</span>
+                      {search.icon}
+                      <span className="text-sm ml-2">{search.title}</span>
                     </div>
                   ))}
                 </div>

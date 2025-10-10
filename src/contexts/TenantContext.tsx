@@ -465,15 +465,21 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (!currentTenant) return;
 
     try {
+      const updateData: any = {
+        ...settings,
+        features: settings.features ? settings.features as any : undefined,
+        metadata: settings.metadata ? settings.metadata as any : undefined
+      };
+
       const { data, error } = await supabase
         .from("saas_tenants")
-        .update(settings)
+        .update(updateData)
         .eq("id", currentTenant.id)
         .select()
         .single();
 
       if (error) throw error;
-      setCurrentTenant(data);
+      setCurrentTenant(data as any);
 
     } catch (err) {
       throw err;

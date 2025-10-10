@@ -82,17 +82,6 @@ export const AdvancedFleetAnalytics = () => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  useEffect(() => {
-    loadAnalyticsData();
-    
-    // Set up real-time updates
-    const interval = setInterval(() => {
-      loadAnalyticsData();
-    }, 60000); // Update every minute
-
-    return () => clearInterval(interval);
-  }, [timeRange, loadAnalyticsData]);
-
   const loadAnalyticsData = useCallback(async () => {
     try {
       setLoading(true);
@@ -201,6 +190,23 @@ export const AdvancedFleetAnalytics = () => {
     default: return "bg-muted";
     }
   };
+
+  // Função para carregar dados de analytics
+  useEffect(() => {
+    loadAnalyticsData();
+    
+    // Set up real-time updates
+    const subscription = supabase
+      .channel("fleet-analytics")
+      .on("postgres_changes", { event: "*", schema: "public", table: "vessels" }, () => {
+        loadAnalyticsData();
+      })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const getStatusText = (status: VesselPerformance["status"]) => {
     switch (status) {

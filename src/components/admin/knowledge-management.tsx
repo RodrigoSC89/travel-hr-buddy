@@ -114,7 +114,9 @@ export const KnowledgeManagement: React.FC = () => {
         rating: item.rating || 0,
         helpful_votes: item.helpful_votes || 0,
         steps: Array.isArray(item.steps) ? item.steps : [],
-        metadata: typeof item.metadata === "object" ? item.metadata : {}
+        metadata: typeof item.metadata === "object" && item.metadata !== null && !Array.isArray(item.metadata) 
+          ? item.metadata as Record<string, unknown>
+          : {}
       })) || [];
 
       setKnowledgeItems(formattedData);
@@ -209,11 +211,11 @@ export const KnowledgeManagement: React.FC = () => {
             content: editingItem.content,
             type: editingItem.type,
             module: editingItem.module,
-            tags: editingItem.tags,
+            tags: editingItem.tags as any,
             difficulty: editingItem.difficulty,
             status: editingItem.status,
-            steps: editingItem.steps || [],
-            metadata: editingItem.metadata || {},
+            steps: (editingItem.steps || []) as any,
+            metadata: (editingItem.metadata || {}) as any,
             updated_at: new Date().toISOString()
           })
           .eq("id", editingItem.id);
@@ -233,12 +235,12 @@ export const KnowledgeManagement: React.FC = () => {
             content: editingItem.content,
             type: editingItem.type,
             module: editingItem.module,
-            tags: editingItem.tags,
+            tags: editingItem.tags as any,
             difficulty: editingItem.difficulty,
             status: editingItem.status,
-            author_id: null, // Seria auth.uid() se autenticado
-            steps: editingItem.steps || [],
-            metadata: editingItem.metadata || {}
+            author_id: null,
+            steps: (editingItem.steps || []) as any,
+            metadata: (editingItem.metadata || {}) as any
           });
 
         if (error) throw error;

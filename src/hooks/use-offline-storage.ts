@@ -67,11 +67,9 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         data,
         timestamp: Date.now()
       });
-      
-      updateCacheSize();
     } catch (error) {
     }
-  }, [initDB, updateCacheSize]);
+  }, [initDB]);
 
   // Get data from cache
   const getFromCache = useCallback(async (key: string) => {
@@ -161,6 +159,27 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
     }
   }, [isOnline, getPendingChanges, initDB]);
 
+  // Update cache size
+  const updateCacheSize = useCallback(async () => {
+    try {
+      const db = await initDB();
+      const transaction = db.transaction([CACHE_STORE, OFFLINE_STORE], "readonly");
+      
+      const cacheCount = await new Promise<number>((resolve) => {
+        const request = transaction.objectStore(CACHE_STORE).count();
+        request.onsuccess = () => resolve(request.result);
+      });
+      
+      const offlineCount = await new Promise<number>((resolve) => {
+        const request = transaction.objectStore(OFFLINE_STORE).count();
+        request.onsuccess = () => resolve(request.result);
+      });
+      
+      setCacheSize(cacheCount + offlineCount);
+    } catch (error) {
+    }
+  }, [initDB]);
+
   // Clear cache
   const clearCache = useCallback(async () => {
     try {
@@ -189,26 +208,6 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
     }
   }, [initDB, updateCacheSize]);
 
-  // Update cache size
-  const updateCacheSize = useCallback(async () => {
-    try {
-      const db = await initDB();
-      const transaction = db.transaction([CACHE_STORE, OFFLINE_STORE], "readonly");
-      
-      const cacheCount = await new Promise<number>((resolve) => {
-        const request = transaction.objectStore(CACHE_STORE).count();
-        request.onsuccess = () => resolve(request.result);
-      });
-      
-      const offlineCount = await new Promise<number>((resolve) => {
-        const request = transaction.objectStore(OFFLINE_STORE).count();
-        request.onsuccess = () => resolve(request.result);
-      });
-      
-      setCacheSize(cacheCount + offlineCount);
-    } catch (error) {
-    }
-  }, [initDB]);
 
   // Listen for online/offline events
   useEffect(() => {
