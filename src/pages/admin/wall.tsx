@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle, XCircle, Clock, GitBranch, Volume2, VolumeX, WifiOff } from "lucide-react";
+import { CheckCircle, XCircle, Clock, GitBranch, Volume2, VolumeX, WifiOff, Activity } from "lucide-react";
 import { format } from "date-fns";
 
 interface TestResult {
@@ -26,15 +29,8 @@ const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID || "";
 export default function AdminWallPage() {
   const [data, setData] = useState<TestResult[]>([]);
   const [offline, setOffline] = useState(false);
-  const [dark, setDark] = useState(false);
   const [muted, setMuted] = useState(false);
   const [lastAlert, setLastAlert] = useState<string>("");
-
-  // Set dark mode based on time
-  useEffect(() => {
-    const hour = new Date().getHours();
-    setDark(hour < 6 || hour > 18);
-  }, []);
 
   // Fetch initial data and setup realtime subscription
   useEffect(() => {
@@ -165,125 +161,144 @@ export default function AdminWallPage() {
   };
 
   return (
-    <div className={`min-h-screen p-6 ${dark ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-4xl font-bold mb-2">🖥️ CI/CD TV Wall</h1>
-          <p className={`text-lg ${dark ? "text-gray-400" : "text-gray-600"}`}>
-            Monitoramento em tempo real de builds e testes
-          </p>
-        </div>
-        <div className="flex gap-4 items-center">
-          {offline && (
-            <Badge variant="destructive" className="text-lg px-4 py-2">
-              <WifiOff className="mr-2" size={20} />
-              📴 Modo Offline (dados de cache)
-            </Badge>
-          )}
-          <Button
-            onClick={() => setMuted(!muted)}
-            variant={muted ? "destructive" : "default"}
-            size="lg"
-          >
-            {muted ? <VolumeX size={24} /> : <Volume2 size={24} />}
-          </Button>
-        </div>
-      </div>
+    <MultiTenantWrapper>
+      <ModulePageWrapper gradient="purple">
+        <ModuleHeader
+          icon={Activity}
+          title="CI/CD TV Wall"
+          description="Monitoramento em tempo real de builds e testes"
+          gradient="purple"
+          badges={[
+            { icon: CheckCircle, label: `${data.filter((d) => d.status === "success").length} Sucesso` },
+            { icon: XCircle, label: `${data.filter((d) => d.status === "failure").length} Falhas` },
+            { icon: Clock, label: `${data.filter((d) => d.status === "in_progress").length} Em Progresso` }
+          ]}
+        />
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card className={dark ? "bg-gray-800 border-gray-700" : ""}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle className="text-green-500" />
-              Sucesso
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold text-green-500">
-              {data.filter((d) => d.status === "success").length}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className={dark ? "bg-gray-800 border-gray-700" : ""}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <XCircle className="text-red-500" />
-              Falhas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold text-red-500">
-              {data.filter((d) => d.status === "failure").length}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className={dark ? "bg-gray-800 border-gray-700" : ""}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="text-yellow-500" />
-              Em Progresso
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold text-yellow-500">
-              {data.filter((d) => d.status === "in_progress").length}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recent Builds */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.slice(0, 12).map((result) => (
-          <Card
-            key={result.id}
-            className={`${getStatusColor(result.status)} border-2 ${
-              dark ? "text-white" : ""
-            } transition-all hover:shadow-lg`}
-          >
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                {getStatusIcon(result.status)}
-                <Badge variant="outline" className="text-xs">
-                  {result.workflow_name || "Build"}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <GitBranch size={16} />
-                  <span className="font-semibold truncate">{result.branch}</span>
-                </div>
-                <div className="text-sm font-mono truncate">
-                  {result.commit_hash.slice(0, 7)}
-                </div>
-                <div className="text-xs opacity-75">
-                  {format(new Date(result.created_at), "dd/MM/yyyy HH:mm:ss")}
-                </div>
-                {result.coverage_percent !== null && (
-                  <div className="text-sm">
-                    📊 Cobertura: <span className="font-bold">{result.coverage_percent}%</span>
-                  </div>
+        <div className="space-y-6">
+          {/* Controls */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex gap-4 items-center justify-between">
+                {offline && (
+                  <Badge variant="destructive" className="text-lg px-4 py-2">
+                    <WifiOff className="mr-2" size={20} />
+                    📴 Modo Offline (dados de cache)
+                  </Badge>
                 )}
-                <div className="text-xs">
-                  Disparado por: <span className="font-semibold">{result.triggered_by}</span>
-                </div>
+                <Button
+                  onClick={() => setMuted(!muted)}
+                  variant={muted ? "destructive" : "default"}
+                  size="lg"
+                  className="ml-auto"
+                >
+                  {muted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+                  <span className="ml-2">{muted ? "Alertas Desativados" : "Alertas Ativos"}</span>
+                </Button>
               </div>
             </CardContent>
           </Card>
-        ))}
-      </div>
 
-      {data.length === 0 && (
-        <div className="text-center py-20">
-          <p className="text-2xl opacity-50">Nenhum resultado de teste disponível</p>
+          {/* Stats Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/30">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle className="text-green-500" />
+                  Sucesso
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-4xl font-bold text-green-500">
+                  {data.filter((d) => d.status === "success").length}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-danger/10 to-danger/5 border-danger/30">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <XCircle className="text-red-500" />
+                  Falhas
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-4xl font-bold text-red-500">
+                  {data.filter((d) => d.status === "failure").length}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/30">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Clock className="text-yellow-500" />
+                  Em Progresso
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-4xl font-bold text-yellow-500">
+                  {data.filter((d) => d.status === "in_progress").length}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recent Builds */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Builds Recentes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {data.slice(0, 12).map((result) => (
+                  <Card
+                    key={result.id}
+                    className={`${getStatusColor(result.status)} border-2 transition-all hover:shadow-lg`}
+                  >
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        {getStatusIcon(result.status)}
+                        <Badge variant="outline" className="text-xs">
+                          {result.workflow_name || "Build"}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <GitBranch size={16} />
+                          <span className="font-semibold truncate">{result.branch}</span>
+                        </div>
+                        <div className="text-sm font-mono truncate">
+                          {result.commit_hash.slice(0, 7)}
+                        </div>
+                        <div className="text-xs opacity-75">
+                          {format(new Date(result.created_at), "dd/MM/yyyy HH:mm:ss")}
+                        </div>
+                        {result.coverage_percent !== null && (
+                          <div className="text-sm">
+                            📊 Cobertura: <span className="font-bold">{result.coverage_percent}%</span>
+                          </div>
+                        )}
+                        <div className="text-xs">
+                          Disparado por: <span className="font-semibold">{result.triggered_by}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {data.length === 0 && (
+                <div className="text-center py-20">
+                  <p className="text-2xl opacity-50">Nenhum resultado de teste disponível</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
-      )}
-    </div>
+      </ModulePageWrapper>
+    </MultiTenantWrapper>
   );
 }
