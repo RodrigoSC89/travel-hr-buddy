@@ -43,13 +43,13 @@ interface TenantBranding {
   default_currency: string;
   timezone: string;
   date_format: string;
-  header_style: any;
-  sidebar_style: any;
-  button_style: any;
-  enabled_modules: any;
-  module_settings: any;
-  custom_fields: any;
-  business_rules: any;
+  header_style: Record<string, unknown>;
+  sidebar_style: Record<string, unknown>;
+  button_style: Record<string, unknown>;
+  enabled_modules: Record<string, unknown>;
+  module_settings: Record<string, unknown>;
+  custom_fields: Record<string, unknown>;
+  business_rules: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
@@ -64,11 +64,11 @@ interface TenantUser {
   avatar_url?: string;
   job_title?: string;
   department?: string;
-  permissions: any;
+  permissions: Record<string, unknown>;
   invited_at?: string;
   joined_at: string;
   last_active_at: string;
-  metadata: any;
+  metadata: Record<string, unknown>;
 }
 
 interface SaasPlan {
@@ -82,7 +82,7 @@ interface SaasPlan {
   max_vessels: number;
   max_storage_gb: number;
   max_api_calls_per_month: number;
-  features: any;
+  features: Record<string, unknown>;
   is_active: boolean;
   is_popular: boolean;
 }
@@ -100,7 +100,7 @@ interface TenantUsage {
   vessels_managed: number;
   documents_processed: number;
   reports_generated: number;
-  metadata: any;
+  metadata: Record<string, unknown>;
 }
 
 interface TenantContextType {
@@ -134,7 +134,7 @@ interface TenantContextType {
   
   // Funções de planos
   upgradePlan: (planId: string) => Promise<void>;
-  downgradeplan: (planId: string) => Promise<void>;
+  downgradePlan: (planId: string) => Promise<void>;
   
   // Utilidades
   formatCurrency: (amount: number) => string;
@@ -311,10 +311,11 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         const { data: userTenants, error: tenantsError } = await Promise.race([
           fetchPromise,
           timeoutPromise
-        ]).catch(() => ({ data: null, error: null })) as any;
+        ]).catch(() => ({ data: null, error: null })) as { data: unknown; error: unknown };
 
         if (!tenantsError && userTenants) {
-          const tenants = userTenants?.map((ut: any) => ut.saas_tenants).filter(Boolean) || [];
+          const tenantsArray = userTenants as Array<{ saas_tenants: SaasTenant }>;
+          const tenants = tenantsArray?.map((ut) => ut.saas_tenants).filter(Boolean) || [];
           if (tenants.length > 0) {
             setAvailableTenants(tenants as SaasTenant[]);
             
@@ -356,7 +357,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const { data: branding, error } = await Promise.race([
         fetchPromise,
         timeoutPromise
-      ]).catch(() => ({ data: null, error: null })) as any;
+      ]).catch(() => ({ data: null, error: null })) as { data: TenantBranding | null; error: unknown };
 
       if (error && error.code !== "PGRST116") {
         console.warn("Error loading tenant branding:", error);
@@ -389,7 +390,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const { data: tenantUser, error } = await Promise.race([
         fetchPromise,
         timeoutPromise
-      ]).catch(() => ({ data: null, error: null })) as any;
+      ]).catch(() => ({ data: null, error: null })) as { data: TenantUser | null; error: unknown };
 
       if (error && error.code !== "PGRST116") {
         console.warn("Error loading tenant user:", error);
@@ -442,7 +443,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const { data: usage, error } = await Promise.race([
         fetchPromise,
         timeoutPromise
-      ]).catch(() => ({ data: null, error: null })) as any;
+      ]).catch(() => ({ data: null, error: null })) as { data: TenantUsage | null; error: unknown };
 
       if (error && error.code !== "PGRST116") {
         console.warn("Error loading tenant usage:", error);
@@ -472,7 +473,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const { data: plans, error } = await Promise.race([
         fetchPromise,
         timeoutPromise
-      ]).catch(() => ({ data: null, error: null })) as any;
+      ]).catch(() => ({ data: null, error: null })) as { data: SaasPlan[] | null; error: unknown };
 
       if (error) {
         console.warn("Error loading plans:", error);
@@ -535,59 +536,49 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const updateBranding = async (brandingUpdate: Partial<TenantBranding>) => {
     if (!currentTenant) return;
 
-    try {
-      const { data, error } = await supabase
-        .from("tenant_branding")
-        .update(brandingUpdate)
-        .eq("tenant_id", currentTenant.id)
-        .select()
-        .single();
+    const { data, error } = await supabase
+      .from("tenant_branding")
+      .update(brandingUpdate)
+      .eq("tenant_id", currentTenant.id)
+      .select()
+      .single();
 
-      if (error) throw error;
+    if (error) throw error;
 
-      setCurrentBranding(data);
-      applyBrandingTheme(data);
-
-    } catch (err) {
-      throw err;
-    }
+    setCurrentBranding(data);
+    applyBrandingTheme(data);
   };
 
   const updateTenantSettings = async (settings: Partial<SaasTenant>) => {
     if (!currentTenant) return;
 
-    try {
-      const updateData: any = {
-        ...settings,
-        features: settings.features ? settings.features as any : undefined,
-        metadata: settings.metadata ? settings.metadata as any : undefined
-      };
+    const updateData: Record<string, unknown> = {
+      ...settings,
+      features: settings.features ? settings.features as Record<string, unknown> : undefined,
+      metadata: settings.metadata ? settings.metadata as Record<string, unknown> : undefined
+    };
 
-      const { data, error } = await supabase
-        .from("saas_tenants")
-        .update(updateData)
-        .eq("id", currentTenant.id)
-        .select()
-        .single();
+    const { data, error } = await supabase
+      .from("saas_tenants")
+      .update(updateData)
+      .eq("id", currentTenant.id)
+      .select()
+      .single();
 
-      if (error) throw error;
-      setCurrentTenant(data as any);
-
-    } catch (err) {
-      throw err;
-    }
+    if (error) throw error;
+    setCurrentTenant(data as SaasTenant);
   };
 
-  const inviteTenantUser = async (email: string, role: string) => {
+  const inviteTenantUser = async (_email: string, _role: string) => {
     if (!currentTenant) throw new Error("Nenhum tenant selecionado");
     // Invite functionality to be implemented
   };
 
-  const updateUserRole = async (userId: string, role: string) => {
+  const updateUserRole = async (_userId: string, _role: string) => {
     if (!currentTenant) return;
   };
 
-  const removeTenantUser = async (userId: string) => {
+  const removeTenantUser = async (_userId: string) => {
     if (!currentTenant) return;
   };
 
@@ -654,7 +645,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const upgradePlan = async (planId: string) => {
   };
 
-  const downgradeplan = async (planId: string) => {
+  const downgradePlan = async (planId: string) => {
   };
 
   const formatCurrency = (amount: number): string => {
@@ -700,7 +691,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     checkFeatureAccess,
     checkUsageLimits,
     upgradePlan,
-    downgradeplan,
+    downgradePlan,
     formatCurrency,
     formatDate,
     getSubdomain
