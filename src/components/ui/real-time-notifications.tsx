@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Bell, 
-  X, 
-  Clock, 
-  AlertTriangle, 
-  CheckCircle, 
+import {
+  Bell,
+  X,
+  Clock,
+  AlertTriangle,
+  CheckCircle,
   Info,
   TrendingUp,
   Users,
@@ -17,7 +17,7 @@ import {
   Shield,
   Zap,
   Target,
-  Settings
+  Settings,
 } from "lucide-react";
 
 interface Notification {
@@ -45,8 +45,8 @@ const mockNotifications: Notification[] = [
     isRead: false,
     action: {
       label: "Ver Detalhes",
-      callback: () => {} // console.log("View details")
-    }
+      callback: () => {}, // console.log("View details")
+    },
   },
   {
     id: "2",
@@ -55,7 +55,7 @@ const mockNotifications: Notification[] = [
     message: "Otimização automática economizou R$ 15.000 em rotações",
     timestamp: new Date(Date.now() - 15 * 60 * 1000),
     module: "analytics",
-    isRead: false
+    isRead: false,
   },
   {
     id: "3",
@@ -64,7 +64,7 @@ const mockNotifications: Notification[] = [
     message: "MV Ocean Pioneer foi registrada no sistema",
     timestamp: new Date(Date.now() - 30 * 60 * 1000),
     module: "maritime",
-    isRead: true
+    isRead: true,
   },
   {
     id: "4",
@@ -76,8 +76,8 @@ const mockNotifications: Notification[] = [
     isRead: false,
     action: {
       label: "Verificar",
-      callback: () => {} // console.log("Verify")
-    }
+      callback: () => {}, // console.log("Verify")
+    },
   },
   {
     id: "5",
@@ -86,8 +86,8 @@ const mockNotifications: Notification[] = [
     message: "Documento de manifesto foi certificado com sucesso",
     timestamp: new Date(Date.now() - 60 * 60 * 1000),
     module: "blockchain",
-    isRead: true
-  }
+    isRead: true,
+  },
 ];
 
 export const NotificationCenter: React.FC = () => {
@@ -98,38 +98,40 @@ export const NotificationCenter: React.FC = () => {
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
-  const filteredNotifications = notifications.filter(n => 
-    filter === "all" || !n.isRead
-  );
+  const filteredNotifications = notifications.filter(n => filter === "all" || !n.isRead);
 
   const getIcon = (type: string) => {
     switch (type) {
-    case "warning": return AlertTriangle;
-    case "success": return CheckCircle;
-    case "error": return AlertTriangle;
-    default: return Info;
+      case "warning":
+        return AlertTriangle;
+      case "success":
+        return CheckCircle;
+      case "error":
+        return AlertTriangle;
+      default:
+        return Info;
     }
   };
 
   const getIconColor = (type: string) => {
     switch (type) {
-    case "warning": return "text-yellow-500";
-    case "success": return "text-green-500";
-    case "error": return "text-red-500";
-    default: return "text-blue-500";
+      case "warning":
+        return "text-yellow-500";
+      case "success":
+        return "text-green-500";
+      case "error":
+        return "text-red-500";
+      default:
+        return "text-blue-500";
     }
   };
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, isRead: true } : n)
-    );
+    setNotifications(prev => prev.map(n => (n.id === id ? { ...n, isRead: true } : n)));
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(n => ({ ...n, isRead: true }))
-    );
+    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
   };
 
   const removeNotification = (id: string) => {
@@ -139,13 +141,13 @@ export const NotificationCenter: React.FC = () => {
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
+
     if (diffInMinutes < 1) return "Agora";
     if (diffInMinutes < 60) return `${diffInMinutes}m atrás`;
-    
+
     const diffInHours = Math.floor(diffInMinutes / 60);
     if (diffInHours < 24) return `${diffInHours}h atrás`;
-    
+
     const diffInDays = Math.floor(diffInHours / 24);
     return `${diffInDays}d atrás`;
   };
@@ -154,7 +156,7 @@ export const NotificationCenter: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const shouldShowNotification = Math.random() < 0.1; // 10% de chance a cada 30s
-      
+
       if (shouldShowNotification) {
         const newNotification: Notification = {
           id: Date.now().toString(),
@@ -163,11 +165,11 @@ export const NotificationCenter: React.FC = () => {
           message: "Dados atualizados em tempo real",
           timestamp: new Date(),
           module: "system",
-          isRead: false
+          isRead: false,
         };
 
         setNotifications(prev => [newNotification, ...prev.slice(0, 9)]);
-        
+
         toast({
           title: newNotification.title,
           description: newNotification.message,
@@ -181,16 +183,11 @@ export const NotificationCenter: React.FC = () => {
   return (
     <div className="relative">
       {/* Notification Bell */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative"
-      >
+      <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} className="relative">
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
-          <Badge 
-            variant="destructive" 
+          <Badge
+            variant="destructive"
             className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
           >
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -212,23 +209,14 @@ export const NotificationCenter: React.FC = () => {
                 >
                   {filter === "all" ? "Não lidas" : "Todas"}
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsOpen(false)}
-                >
+                <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
             </div>
-            
+
             {unreadCount > 0 && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={markAllAsRead}
-                className="w-full mt-2"
-              >
+              <Button variant="outline" size="sm" onClick={markAllAsRead} className="w-full mt-2">
                 Marcar todas como lidas
               </Button>
             )}
@@ -243,7 +231,7 @@ export const NotificationCenter: React.FC = () => {
                     <p>Nenhuma notificação</p>
                   </div>
                 ) : (
-                  filteredNotifications.map((notification) => {
+                  filteredNotifications.map(notification => {
                     const Icon = getIcon(notification.type);
                     return (
                       <div
@@ -255,14 +243,14 @@ export const NotificationCenter: React.FC = () => {
                       >
                         <div className="flex items-start gap-3">
                           <Icon className={`h-4 w-4 mt-1 ${getIconColor(notification.type)}`} />
-                          
+
                           <div className="flex-1 space-y-1">
                             <div className="flex items-center justify-between">
                               <h4 className="text-sm font-medium">{notification.title}</h4>
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={(e) => {
+                                onClick={e => {
                                   e.stopPropagation();
                                   removeNotification(notification.id);
                                 }}
@@ -271,9 +259,9 @@ export const NotificationCenter: React.FC = () => {
                                 <X className="h-3 w-3" />
                               </Button>
                             </div>
-                            
+
                             <p className="text-sm text-muted-foreground">{notification.message}</p>
-                            
+
                             <div className="flex items-center justify-between mt-2">
                               <div className="flex items-center gap-2">
                                 <Badge variant="outline" className="text-xs">
@@ -284,12 +272,12 @@ export const NotificationCenter: React.FC = () => {
                                   {formatTimeAgo(notification.timestamp)}
                                 </span>
                               </div>
-                              
+
                               {notification.action && (
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  onClick={(e) => {
+                                  onClick={e => {
                                     e.stopPropagation();
                                     notification.action?.callback();
                                   }}

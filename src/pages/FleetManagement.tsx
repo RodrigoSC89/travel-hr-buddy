@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { 
-  Ship, 
-  Anchor, 
-  MapPin, 
-  Calendar, 
-  Users, 
-  Settings, 
+import {
+  Ship,
+  Anchor,
+  MapPin,
+  Calendar,
+  Users,
+  Settings,
   Activity,
   AlertTriangle,
   CheckCircle,
@@ -28,7 +28,7 @@ import {
   TrendingUp,
   TrendingDown,
   Fuel,
-  Gauge
+  Gauge,
 } from "lucide-react";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { useToast } from "@/hooks/use-toast";
@@ -56,7 +56,7 @@ const MaritimeFleetManagement = () => {
     activeVessels: 0,
     maintenanceVessels: 0,
     criticalAlerts: 0,
-    efficiency: 0
+    efficiency: 0,
   });
 
   useEffect(() => {
@@ -66,12 +66,10 @@ const MaritimeFleetManagement = () => {
   const loadFleetStats = async () => {
     try {
       setIsLoading(true);
-      
+
       // Try to load from database, fallback to mock data
-      const { data: vessels, error } = await supabase
-        .from("vessels")
-        .select("*");
-      
+      const { data: vessels, error } = await supabase.from("vessels").select("*");
+
       if (error) {
         // Mock data fallback
         setFleetStats({
@@ -79,20 +77,20 @@ const MaritimeFleetManagement = () => {
           activeVessels: 15,
           maintenanceVessels: 3,
           criticalAlerts: 2,
-          efficiency: 87.5
+          efficiency: 87.5,
         });
       } else {
         // Calculate stats from real data
         const total = vessels?.length || 0;
         const active = vessels?.filter(v => v.status === "active").length || 0;
         const maintenance = vessels?.filter(v => v.status === "maintenance").length || 0;
-        
+
         setFleetStats({
           totalVessels: total,
           activeVessels: active,
           maintenanceVessels: maintenance,
           criticalAlerts: 2,
-          efficiency: 87.5
+          efficiency: 87.5,
         });
       }
     } catch (error) {
@@ -108,7 +106,7 @@ const MaritimeFleetManagement = () => {
         title: "Exportando dados da frota",
         description: "O relatório será gerado em breve...",
       });
-      
+
       // Simulate export process
       setTimeout(() => {
         toast({
@@ -120,7 +118,7 @@ const MaritimeFleetManagement = () => {
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar os dados da frota",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -144,13 +142,13 @@ const MaritimeFleetManagement = () => {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <Button variant="outline" size="sm" onClick={exportFleetData}>
                 <Download className="h-4 w-4 mr-2" />
                 Exportar Dados
               </Button>
-              
+
               <div className="text-sm text-muted-foreground">
                 Última atualização: {new Date().toLocaleTimeString("pt-BR")}
               </div>
@@ -324,29 +322,29 @@ const MaritimeFleetManagement = () => {
             label: "Nova Embarcação",
             icon: <Plus className="h-4 w-4" />,
             action: () => setActiveTab("vessels"),
-            variant: "default"
+            variant: "default",
           },
           {
             id: "maintenance-schedule",
             label: "Agendar Manutenção",
             icon: <Calendar className="h-4 w-4" />,
             action: () => setActiveTab("maintenance"),
-            variant: "outline"
+            variant: "outline",
           },
           {
             id: "fleet-report",
             label: "Relatório da Frota",
             icon: <FileText className="h-4 w-4" />,
             action: exportFleetData,
-            variant: "outline"
+            variant: "outline",
           },
           {
             id: "emergency-alert",
             label: "Alerta de Emergência",
             icon: <AlertTriangle className="h-4 w-4" />,
             action: () => {}, // console.log("Alerta de emergência ativado")
-            variant: "outline"
-          }
+            variant: "outline",
+          },
         ]}
         quickActions={[
           {
@@ -354,14 +352,14 @@ const MaritimeFleetManagement = () => {
             label: "Buscar Embarcação",
             icon: <Search className="h-3 w-3" />,
             action: () => {}, // console.log("Busca de embarcação")
-            shortcut: "Ctrl+F"
+            shortcut: "Ctrl+F",
           },
           {
             id: "live-tracking",
             label: "Rastreamento em Tempo Real",
             icon: <MapPin className="h-3 w-3" />,
-            action: () => {} // console.log("Open live tracking")
-          }
+            action: () => {}, // console.log("Open live tracking")
+          },
         ]}
       />
     </div>
