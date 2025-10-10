@@ -340,6 +340,7 @@ const navigationItems = [
     title: "Administração",
     items: [
       { title: "Painel Admin", url: "/admin", icon: Settings },
+      { title: "Checklists", url: "/admin/checklists", icon: CheckCircle },
       { title: "Backup & Auditoria", url: "/backup-audit", icon: Database },
       { title: "Segurança", url: "/security", icon: Shield },
       { title: "Usuários", url: "/users", icon: Users },
