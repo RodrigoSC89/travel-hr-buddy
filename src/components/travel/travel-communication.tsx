@@ -10,6 +10,13 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import {
   Send,
   Phone,
   Video,
@@ -421,9 +428,32 @@ export const TravelCommunication = () => {
               <Button size="sm" variant="ghost">
                 <Video className="h-4 w-4" />
               </Button>
-              <Button size="sm" variant="ghost">
-                <MoreVertical className="h-4 w-4" />
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="sm" variant="ghost">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>
+                    <Search className="h-4 w-4 mr-2" />
+                    Buscar mensagens
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <MapPin className="h-4 w-4 mr-2" />
+                    Compartilhar localização
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Paperclip className="h-4 w-4 mr-2" />
+                    Ver anexos
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Settings className="h-4 w-4 mr-2" />
+                    Configurações
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
