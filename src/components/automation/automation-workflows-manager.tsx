@@ -27,13 +27,26 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+interface TriggerConfig {
+  schedule?: string; // cron expression
+  event?: string; // event name
+  condition?: string; // condition expression
+  [key: string]: unknown; // additional config properties
+}
+
+interface WorkflowAction {
+  type: string;
+  config: Record<string, unknown>;
+  order: number;
+}
+
 interface AutomationWorkflow {
   id: string;
   name: string;
   description: string;
   trigger_type: "schedule" | "event" | "condition";
-  trigger_config: any;
-  actions: any[];
+  trigger_config: TriggerConfig;
+  actions: WorkflowAction[];
   is_active: boolean;
   last_executed_at?: string;
   execution_count: number;
@@ -334,7 +347,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
                   <Label htmlFor="trigger">Tipo de Trigger</Label>
                   <Select 
                     value={formData.trigger_type} 
-                    onValueChange={(value: any) => setFormData(prev => ({ ...prev, trigger_type: value }))}
+                    onValueChange={(value: string) => setFormData(prev => ({ ...prev, trigger_type: value as "schedule" | "event" | "condition" }))}
                   >
                     <SelectTrigger>
                       <SelectValue />

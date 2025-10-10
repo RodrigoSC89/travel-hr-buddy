@@ -10,22 +10,40 @@ import { CheckCircle, Ship, Users, BarChart3, Calendar, ArrowRight, Sparkles } f
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+interface CompanyProfile {
+  company_type: string;
+  fleet_size: string;
+  primary_operations: string[];
+  key_challenges: string[];
+}
+
+interface UserPreferences {
+  modules?: string[];
+  notifications?: boolean;
+  theme?: string;
+}
+
+interface OnboardingStepProps {
+  data?: OnboardingData;
+  onNext: (data: Partial<OnboardingData>) => void;
+}
+
 interface OnboardingStep {
   id: string;
   title: string;
   description: string;
-  component: React.ComponentType<any>;
+  component: React.ComponentType<OnboardingStepProps>;
   requiredFor: string[];
 }
 
 interface OnboardingData {
   user_type: string;
-  company_profile: any;
-  preferences: any;
+  company_profile: CompanyProfile;
+  preferences: UserPreferences;
   completed_steps: string[];
 }
 
-const WelcomeStep: React.FC<{ onNext: (data: any) => void }> = ({ onNext }) => {
+const WelcomeStep: React.FC<OnboardingStepProps> = ({ onNext }) => {
   const [userType, setUserType] = useState("");
 
   return (
@@ -103,7 +121,7 @@ const WelcomeStep: React.FC<{ onNext: (data: any) => void }> = ({ onNext }) => {
   );
 };
 
-const CompanyProfileStep: React.FC<{ data: any; onNext: (data: any) => void }> = ({ data, onNext }) => {
+const CompanyProfileStep: React.FC<OnboardingStepProps> = ({ data, onNext }) => {
   const [profile, setProfile] = useState({
     company_type: "",
     fleet_size: "",
@@ -215,7 +233,7 @@ const CompanyProfileStep: React.FC<{ data: any; onNext: (data: any) => void }> =
   );
 };
 
-const ModuleRecommendationStep: React.FC<{ data: any; onNext: (data: any) => void }> = ({ data, onNext }) => {
+const ModuleRecommendationStep: React.FC<OnboardingStepProps> = ({ data, onNext }) => {
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
 
   const getRecommendedModules = () => {

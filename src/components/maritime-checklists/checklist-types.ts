@@ -6,7 +6,7 @@ export interface ChecklistItem {
   required: boolean;
   category: string;
   order: number;
-  value?: any;
+  value?: unknown; // justified: can be string, number, boolean, or array depending on item type
   options?: string[];
   unit?: string;
   minValue?: number;
@@ -22,12 +22,12 @@ export interface ChecklistItem {
   dependencies?: string[]; // IDs of items that must be completed first
   qrCode?: string;
   iotSensorId?: string;
-  autoValue?: any; // Value from IoT sensor or previous data
+  autoValue?: unknown; // justified: value from IoT sensor, type varies by sensor
 }
 
 export interface ValidationRule {
   type: "range" | "regex" | "custom" | "ai_validation";
-  value: any;
+  value: string | number | RegExp; // range: number, regex: RegExp, custom: string
   message: string;
   severity: "error" | "warning" | "info";
 }
@@ -39,14 +39,14 @@ export interface Evidence {
   filename: string;
   uploadedAt: string;
   size: number;
-  metadata?: any;
+  metadata?: Record<string, unknown>; // justified: flexible metadata object
   ocrText?: string;
   aiAnalysis?: string;
   verified: boolean;
 }
 
 export interface HistoricalDataPoint {
-  value: any;
+  value: unknown; // justified: type matches parent ChecklistItem type
   timestamp: string;
   vessel: string;
   inspector: string;
@@ -212,7 +212,7 @@ export interface QRCodeMapping {
   description: string;
   location: string;
   vesselId: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>; // justified: flexible QR code metadata
   createdAt: string;
   updatedAt: string;
 }
@@ -243,7 +243,7 @@ export interface ChecklistReport {
   title: string;
   type: "vessel_summary" | "compliance_report" | "anomaly_report" | "trend_analysis" | "comparative_analysis";
   filters: ReportFilters;
-  data: any;
+  data: Record<string, unknown>; // justified: report data structure varies by type
   generatedAt: string;
   generatedBy: string;
   format: "pdf" | "excel" | "json";
