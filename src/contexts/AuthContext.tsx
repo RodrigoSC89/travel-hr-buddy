@@ -41,39 +41,64 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser(session?.user ?? null);
         setIsLoading(false);
         
-        if (event === "SIGNED_IN") {
-          toast({
-            title: "Bem-vindo!",
-            description: "Login realizado com sucesso.",
-          });
-        } else if (event === "SIGNED_OUT") {
-          toast({
-            title: "Desconectado",
-            description: "Você foi desconectado com sucesso.",
-          });
-        } else if (event === "TOKEN_REFRESHED") {
-          // Token refreshed successfully
-        } else if (event === "USER_UPDATED") {
-          // User data updated
+        try {
+          if (event === "SIGNED_IN") {
+            toast({
+              title: "Bem-vindo!",
+              description: "Login realizado com sucesso.",
+            });
+          } else if (event === "SIGNED_OUT") {
+            toast({
+              title: "Desconectado",
+              description: "Você foi desconectado com sucesso.",
+            });
+          } else if (event === "TOKEN_REFRESHED") {
+            // Token refreshed successfully
+          } else if (event === "USER_UPDATED") {
+            // User data updated
+          }
+        } catch (err) {
+          // Ignorar erros de toast
+          console.warn("Toast error:", err);
         }
       }
     );
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error) {
-        toast({
-          title: "Erro de Sessão",
-          description: "Não foi possível recuperar a sessão. Por favor, faça login novamente.",
-          variant: "destructive",
-        });
+    // THEN check for existing session with timeout
+    const loadSession = async () => {
+      try {
+        const timeoutPromise = new Promise<null>((_, reject) => 
+          setTimeout(() => reject(new Error("Timeout")), 5000)
+        );
+        
+        const sessionPromise = supabase.auth.getSession();
+
+        const { data: { session }, error } = await Promise.race([
+          sessionPromise,
+          timeoutPromise
+        ]).catch(() => ({ data: { session: null }, error: null })) as any;
+
+        if (error) {
+          try {
+            toast({
+              title: "Erro de Sessão",
+              description: "Não foi possível recuperar a sessão. Por favor, faça login novamente.",
+              variant: "destructive",
+            });
+          } catch (err) {
+            console.warn("Toast error:", err);
+          }
+        }
+        setSession(session);
+        setUser(session?.user ?? null);
+      } catch (error) {
+        console.warn("Error loading session:", error);
+      } finally {
+        setIsLoading(false);
       }
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
-    }).catch((error) => {
-      setIsLoading(false);
-    });
+    };
+
+    loadSession();
 
     return () => subscription.unsubscribe();
   }, [toast]);

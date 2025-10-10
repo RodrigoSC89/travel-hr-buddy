@@ -171,69 +171,170 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       loadTenantData();
       loadPlans();
     } else {
-      // Se não há usuário, parar o loading
-      setIsLoading(false);
+      // Se não há usuário, usar dados demo e parar o loading
+      loadDemoTenant();
     }
   }, [user]);
+
+  const loadDemoTenant = async () => {
+    const defaultTenant = {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      slug: "nautilus-demo",
+      name: "Nautilus Demo Corporation",
+      description: "Empresa demonstrativa do sistema Nautilus One",
+      status: "active",
+      plan_type: "enterprise",
+      max_users: 100,
+      max_vessels: 50,
+      max_storage_gb: 100,
+      max_api_calls_per_month: 50000,
+      billing_cycle: "monthly",
+      subdomain: "demo",
+      metadata: {},
+      features: {
+        peotram: true,
+        fleet_management: true,
+        advanced_analytics: true,
+        ai_analysis: true,
+        white_label: true
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    setCurrentTenant(defaultTenant as SaasTenant);
+    
+    // Carregar branding demo
+    const defaultBranding: TenantBranding = {
+      id: "demo-branding",
+      tenant_id: defaultTenant.id,
+      company_name: "Nautilus One Demo",
+      logo_url: "",
+      favicon_url: "",
+      primary_color: "#2563eb",
+      secondary_color: "#64748b",
+      accent_color: "#7c3aed",
+      background_color: "#ffffff",
+      text_color: "#000000",
+      theme_mode: "light",
+      default_language: "pt-BR",
+      default_currency: "BRL",
+      timezone: "America/Sao_Paulo",
+      date_format: "DD/MM/YYYY",
+      header_style: {},
+      sidebar_style: {},
+      button_style: {},
+      enabled_modules: {
+        peotram: true,
+        fleet_management: true,
+        analytics: true,
+        hr: true,
+        ai_analysis: true
+      },
+      module_settings: {
+        peotram: {
+          templates_enabled: true,
+          ai_analysis: true,
+          permissions_matrix: true
+        },
+        fleet: {
+          real_time_tracking: true
+        },
+        analytics: {
+          advanced_reports: true
+        }
+      },
+      custom_fields: {},
+      business_rules: {
+        max_reservations_per_user: 10,
+        alert_frequency: "daily",
+        auto_backup: true
+      },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    
+    setCurrentBranding(defaultBranding);
+    applyBrandingTheme(defaultBranding);
+    
+    // Carregar usage demo
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+    
+    const defaultUsage: TenantUsage = {
+      id: "demo-usage",
+      tenant_id: defaultTenant.id,
+      period_start: startOfMonth.toISOString(),
+      period_end: new Date().toISOString(),
+      active_users: 12,
+      total_logins: 345,
+      storage_used_gb: 2.3,
+      api_calls_made: 1250,
+      peotram_audits_created: 15,
+      vessels_managed: 8,
+      documents_processed: 42,
+      reports_generated: 23,
+      metadata: {}
+    };
+    
+    setTenantUsage(defaultUsage);
+    setIsLoading(false);
+  };
 
   const loadTenantData = async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      // 1. Carregar tenants do usuário
-      const { data: userTenants, error: tenantsError } = await supabase
-        .from("tenant_users")
-        .select(`
-          *,
-          saas_tenants!inner(*)
-        `)
-        .eq("user_id", user?.id)
-        .eq("status", "active");
+      // Primeiro carregar dados demo
+      await loadDemoTenant();
 
-      if (tenantsError) throw tenantsError;
+      // Timeout para operações do Supabase
+      const timeout = 3000;
+      
+      // 1. Tentar carregar tenants do usuário com timeout
+      try {
+        const timeoutPromise = new Promise<null>((_, reject) => 
+          setTimeout(() => reject(new Error("Timeout")), timeout)
+        );
+        
+        const fetchPromise = supabase
+          .from("tenant_users")
+          .select(`
+            *,
+            saas_tenants!inner(*)
+          `)
+          .eq("user_id", user?.id)
+          .eq("status", "active");
 
-      const tenants = userTenants?.map(ut => ut.saas_tenants).filter(Boolean) || [];
-      setAvailableTenants(tenants as SaasTenant[]);
+        const { data: userTenants, error: tenantsError } = await Promise.race([
+          fetchPromise,
+          timeoutPromise
+        ]).catch(() => ({ data: null, error: null })) as any;
 
-      // 2. Usar primeiro tenant como padrão ou tenant demo
-      const defaultTenant = tenants[0] || {
-        id: "550e8400-e29b-41d4-a716-446655440000",
-        slug: "nautilus-demo",
-        name: "Nautilus Demo Corporation",
-        description: "Empresa demonstrativa do sistema Nautilus One",
-        status: "active",
-        plan_type: "enterprise",
-        max_users: 100,
-        max_vessels: 50,
-        max_storage_gb: 100,
-        max_api_calls_per_month: 50000,
-        billing_cycle: "monthly",
-        subdomain: "demo",
-        metadata: {},
-        features: {
-          peotram: true,
-          fleet_management: true,
-          advanced_analytics: true,
-          ai_analysis: true,
-          white_label: true
-        },
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-
-      setCurrentTenant(defaultTenant as SaasTenant);
-
-      // 3. Carregar branding do tenant
-      await loadTenantBranding(defaultTenant.id);
-
-      // 4. Carregar dados do usuário no tenant
-      await loadCurrentTenantUser(defaultTenant.id);
-
-      // 5. Carregar usage do tenant
-      await loadTenantUsage(defaultTenant.id);
-
+        if (!tenantsError && userTenants) {
+          const tenants = userTenants?.map((ut: any) => ut.saas_tenants).filter(Boolean) || [];
+          if (tenants.length > 0) {
+            setAvailableTenants(tenants as SaasTenant[]);
+            
+            // Usar primeiro tenant real se disponível
+            const firstTenant = tenants[0];
+            setCurrentTenant(firstTenant as SaasTenant);
+            
+            // Tentar carregar branding, usuário e usage do tenant real
+            await Promise.all([
+              loadTenantBranding(firstTenant.id).catch(() => {}),
+              loadCurrentTenantUser(firstTenant.id).catch(() => {}),
+              loadTenantUsage(firstTenant.id).catch(() => {})
+            ]);
+          }
+        }
+      } catch (err) {
+        console.warn("Could not load tenant data from database, using demo data", err);
+      }
     } catch (err) {
+      console.error("Error loading tenant data:", err);
       setError("Erro ao carregar dados da empresa");
     } finally {
       setIsLoading(false);
@@ -242,74 +343,42 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const loadTenantBranding = async (tenantId: string) => {
     try {
-      const { data: branding, error } = await supabase
+      const timeoutPromise = new Promise<null>((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout")), 3000)
+      );
+      
+      const fetchPromise = supabase
         .from("tenant_branding")
         .select("*")
         .eq("tenant_id", tenantId)
         .maybeSingle();
 
-      if (error && error.code !== "PGRST116") throw error;
+      const { data: branding, error } = await Promise.race([
+        fetchPromise,
+        timeoutPromise
+      ]).catch(() => ({ data: null, error: null })) as any;
 
-      const defaultBranding: TenantBranding = {
-        id: "demo-branding",
-        tenant_id: tenantId,
-        company_name: "Nautilus One Demo",
-        logo_url: "",
-        favicon_url: "",
-        primary_color: "#2563eb",
-        secondary_color: "#64748b",
-        accent_color: "#7c3aed",
-        background_color: "#ffffff",
-        text_color: "#000000",
-        theme_mode: "light",
-        default_language: "pt-BR",
-        default_currency: "BRL",
-        timezone: "America/Sao_Paulo",
-        date_format: "DD/MM/YYYY",
-        header_style: {},
-        sidebar_style: {},
-        button_style: {},
-        enabled_modules: {
-          peotram: true,
-          fleet_management: true,
-          analytics: true,
-          hr: true,
-          ai_analysis: true
-        },
-        module_settings: {
-          peotram: {
-            templates_enabled: true,
-            ai_analysis: true,
-            permissions_matrix: true
-          },
-          fleet: {
-            real_time_tracking: true
-          },
-          analytics: {
-            advanced_reports: true
-          }
-        },
-        custom_fields: {},
-        business_rules: {
-          max_reservations_per_user: 10,
-          alert_frequency: "daily",
-          auto_backup: true
-        },
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
+      if (error && error.code !== "PGRST116") {
+        console.warn("Error loading tenant branding:", error);
+      }
 
-      const finalBranding = branding || defaultBranding;
-      setCurrentBranding(finalBranding);
-      applyBrandingTheme(finalBranding);
-
+      if (branding) {
+        setCurrentBranding(branding);
+        applyBrandingTheme(branding);
+      }
+      // Se não houver branding no banco, o demo já está configurado
     } catch (err) {
+      console.warn("Could not load tenant branding:", err);
     }
   };
 
   const loadCurrentTenantUser = async (tenantId: string) => {
     try {
-      const { data: tenantUser, error } = await supabase
+      const timeoutPromise = new Promise<null>((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout")), 3000)
+      );
+      
+      const fetchPromise = supabase
         .from("tenant_users")
         .select("*")
         .eq("tenant_id", tenantId)
@@ -317,26 +386,37 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         .eq("status", "active")
         .maybeSingle();
 
-      if (error && error.code !== "PGRST116") throw error;
+      const { data: tenantUser, error } = await Promise.race([
+        fetchPromise,
+        timeoutPromise
+      ]).catch(() => ({ data: null, error: null })) as any;
 
-      const defaultUser: TenantUser = {
-        id: "demo-user",
-        tenant_id: tenantId,
-        user_id: user?.id || "",
-        role: "admin",
-        status: "active",
-        display_name: user?.user_metadata?.full_name || user?.email || "Usuário Demo",
-        job_title: "Administrador",
-        department: "TI",
-        permissions: {},
-        joined_at: new Date().toISOString(),
-        last_active_at: new Date().toISOString(),
-        metadata: {}
-      };
+      if (error && error.code !== "PGRST116") {
+        console.warn("Error loading tenant user:", error);
+      }
 
-      setCurrentUser(tenantUser || defaultUser);
-
+      if (tenantUser) {
+        setCurrentUser(tenantUser);
+      } else {
+        // Usar usuário demo se não encontrar no banco
+        const defaultUser: TenantUser = {
+          id: "demo-user",
+          tenant_id: tenantId,
+          user_id: user?.id || "",
+          role: "admin",
+          status: "active",
+          display_name: user?.user_metadata?.full_name || user?.email || "Usuário Demo",
+          job_title: "Administrador",
+          department: "TI",
+          permissions: {},
+          joined_at: new Date().toISOString(),
+          last_active_at: new Date().toISOString(),
+          metadata: {}
+        };
+        setCurrentUser(defaultUser);
+      }
     } catch (err) {
+      console.warn("Could not load tenant user:", err);
     }
   };
 
@@ -346,7 +426,11 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       startOfMonth.setDate(1);
       startOfMonth.setHours(0, 0, 0, 0);
 
-      const { data: usage, error } = await supabase
+      const timeoutPromise = new Promise<null>((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout")), 3000)
+      );
+      
+      const fetchPromise = supabase
         .from("tenant_usage")
         .select("*")
         .eq("tenant_id", tenantId)
@@ -355,42 +439,50 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         .limit(1)
         .maybeSingle();
 
-      if (error && error.code !== "PGRST116") throw error;
+      const { data: usage, error } = await Promise.race([
+        fetchPromise,
+        timeoutPromise
+      ]).catch(() => ({ data: null, error: null })) as any;
 
-      const defaultUsage: TenantUsage = {
-        id: "demo-usage",
-        tenant_id: tenantId,
-        period_start: startOfMonth.toISOString(),
-        period_end: new Date().toISOString(),
-        active_users: 12,
-        total_logins: 345,
-        storage_used_gb: 2.3,
-        api_calls_made: 1250,
-        peotram_audits_created: 15,
-        vessels_managed: 8,
-        documents_processed: 42,
-        reports_generated: 23,
-        metadata: {}
-      };
+      if (error && error.code !== "PGRST116") {
+        console.warn("Error loading tenant usage:", error);
+      }
 
-      setTenantUsage(usage || defaultUsage);
-
+      if (usage) {
+        setTenantUsage(usage);
+      }
+      // Se não houver usage no banco, o demo já está configurado
     } catch (err) {
+      console.warn("Could not load tenant usage:", err);
     }
   };
 
   const loadPlans = async () => {
     try {
-      const { data: plans, error } = await supabase
+      const timeoutPromise = new Promise<null>((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout")), 3000)
+      );
+      
+      const fetchPromise = supabase
         .from("saas_plans")
         .select("*")
         .eq("is_active", true)
         .order("price_monthly", { ascending: true });
 
-      if (error) throw error;
-      setTenantPlans(plans || []);
+      const { data: plans, error } = await Promise.race([
+        fetchPromise,
+        timeoutPromise
+      ]).catch(() => ({ data: null, error: null })) as any;
 
+      if (error) {
+        console.warn("Error loading plans:", error);
+      }
+      
+      if (plans) {
+        setTenantPlans(plans);
+      }
     } catch (err) {
+      console.warn("Could not load plans:", err);
     }
   };
 
