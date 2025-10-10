@@ -99,64 +99,55 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setCurrentOrganization(demoOrg);
       setUserRole("admin");
       
-      // Carregar branding da organização
+      // Definir branding padrão antes de tentar carregar do Supabase
+      const demoBranding: OrganizationBranding = {
+        id: "demo-branding",
+        organization_id: "550e8400-e29b-41d4-a716-446655440000",
+        company_name: "Nautilus Demo",
+        logo_url: null,
+        primary_color: "#2563eb",
+        secondary_color: "#64748b",
+        accent_color: "#7c3aed",
+        theme_mode: "light",
+        default_language: "pt-BR",
+        default_currency: "BRL",
+        timezone: "America/Sao_Paulo",
+        custom_fields: {},
+        business_rules: {} as any,
+        enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as any,
+        module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as any
+      };
+      
+      setCurrentBranding(demoBranding);
+      applyBrandingTheme(demoBranding);
+      
+      // Tentar carregar branding real do Supabase (com timeout)
       try {
-        const { data: branding, error: brandingError } = await supabase
+        const timeoutPromise = new Promise<null>((_, reject) => 
+          setTimeout(() => reject(new Error("Timeout")), 3000)
+        );
+        
+        const fetchPromise = supabase
           .from("organization_branding")
           .select("*")
           .eq("organization_id", "550e8400-e29b-41d4-a716-446655440000")
           .maybeSingle();
 
+        const { data: branding, error: brandingError } = await Promise.race([
+          fetchPromise,
+          timeoutPromise
+        ]).catch(() => ({ data: null, error: null })) as any;
+
         if (!brandingError && branding) {
           setCurrentBranding(branding as any);
           applyBrandingTheme(branding as any);
-        } else {
-          // Usar branding demo
-          const demoBranding: OrganizationBranding = {
-            id: "demo-branding",
-            organization_id: "550e8400-e29b-41d4-a716-446655440000",
-            company_name: "Nautilus Demo",
-            logo_url: null,
-            primary_color: "#2563eb",
-            secondary_color: "#64748b",
-            accent_color: "#7c3aed",
-            theme_mode: "light",
-            default_language: "pt-BR",
-            default_currency: "BRL",
-            timezone: "America/Sao_Paulo",
-            custom_fields: {},
-            business_rules: {} as any,
-            enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as any,
-            module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as any
-          };
-          
-          setCurrentBranding(demoBranding);
-          applyBrandingTheme(demoBranding);
         }
       } catch (err) {
-        // Usar branding demo em caso de erro
-        const demoBranding: OrganizationBranding = {
-          id: "demo-branding",
-          organization_id: "550e8400-e29b-41d4-a716-446655440000",
-          company_name: "Nautilus Demo",
-          logo_url: null,
-          primary_color: "#2563eb",
-          secondary_color: "#64748b",
-          accent_color: "#7c3aed",
-          theme_mode: "light",
-          default_language: "pt-BR",
-          default_currency: "BRL",
-          timezone: "America/Sao_Paulo",
-          custom_fields: {},
-          business_rules: {} as any,
-          enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as any,
-          module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as any
-        };
-        
-        setCurrentBranding(demoBranding);
-        applyBrandingTheme(demoBranding);
+        // Ignorar erros - já temos o branding demo configurado
+        console.warn("Could not load organization branding from database, using demo data");
       }
     } catch (err) {
+      console.error("Error loading organization:", err);
       setError("Erro ao carregar dados da organização");
     } finally {
       setIsLoading(false);
