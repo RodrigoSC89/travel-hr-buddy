@@ -16,6 +16,7 @@ dist-ssr
 .next
 build
 *.local
+coverage
 
 # Environment files
 .env
