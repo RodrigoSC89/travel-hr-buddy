@@ -43,6 +43,7 @@ const ControlPanel = React.lazy(() => import("./pages/admin/control-panel"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
+const Modules = React.lazy(() => import("./pages/Modules"));
 
 // Create QueryClient
 const queryClient = new QueryClient();
@@ -63,6 +64,7 @@ const SimpleNavigation = () => {
 
   const navItems = [
     { path: "/", label: "Início" },
+    { path: "/modules", label: "📦 Módulos" },
     { path: "/dashboard", label: "Dashboard" },
     { path: "/peotram", label: "PEOTRAM" },
     { path: "/peo-dp", label: "PEO-DP" },
@@ -144,6 +146,7 @@ function App() {
                         <Route path="/admin/control-panel" element={<ControlPanel />} />
                         <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                         <Route path="/health" element={<Health />} />
+                        <Route path="/modules" element={<Modules />} />
                         <Route path="/_offline" element={<Offline />} />
                       </Routes>
                     </React.Suspense>
