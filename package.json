@@ -19,6 +19,8 @@
     "clean:logs": "node scripts/clean-console-logs.cjs",
     "validate:api-keys": "node scripts/validate-api-keys.cjs",
     "demo:api-validation": "node scripts/demo-api-validation.cjs",
+    "alert:low-coverage": "node scripts/low-coverage-alert.js",
+    "test:coverage-alert": "node scripts/test-low-coverage-alert.cjs",
     "weekly-report": "node scripts/weekly-report-cron.js",
     "deploy:vercel": "vercel --prod",
     "deploy:netlify": "netlify deploy --prod --dir=dist"
