@@ -32,7 +32,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
   const [verificationCode, setVerificationCode] = useState("");
   const [copied, setCopied] = useState(false);
   const [factorId, setFactorId] = useState<string>("");
-  const [factors, setFactors] = useState<any[]>([]);
+  const [factors, setFactors] = useState<Array<{ id: string; status: string; factor_type: string }>>([]);
 
   useEffect(() => {
     checkExistingFactors();
@@ -51,6 +51,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         }
       }
     } catch (error) {
+      console.error("Error checking existing factors:", error);
     }
   };
 
@@ -72,10 +73,10 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         title: "2FA Configurado",
         description: "Escaneie o QR Code com seu app autenticador",
       });
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Erro",
-        description: error.message || "Falha ao configurar 2FA",
+        description: error instanceof Error ? error.message : "Falha ao configurar 2FA",
         variant: "destructive"
       });
     } finally {
@@ -110,10 +111,10 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         title: "2FA Ativado",
         description: "Autenticação de dois fatores foi ativada com sucesso!",
       });
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Código Incorreto",
-        description: "Verifique o código e tente novamente",
+        description: error instanceof Error ? error.message : "Verifique o código e tente novamente",
         variant: "destructive"
       });
     } finally {
@@ -134,10 +135,10 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         title: "2FA Desativado",
         description: "Autenticação de dois fatores foi desativada",
       });
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Erro",
-        description: error.message || "Falha ao desativar 2FA",
+        description: error instanceof Error ? error.message : "Falha ao desativar 2FA",
         variant: "destructive"
       });
     } finally {

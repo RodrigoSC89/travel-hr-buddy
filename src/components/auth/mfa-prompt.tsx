@@ -1,21 +1,20 @@
 import React, { useState, useCallback } from "react";
 import { 
   Shield, 
-  Key, 
-  Lock, 
-  AlertTriangle,
-  Smartphone,
-  Clock,
-  CheckCircle
+  Smartphone
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+
+interface MFAChallenge {
+  id: string;
+  [key: string]: unknown;
+}
 
 interface MFAPromptProps {
   onSuccess: () => void;
@@ -26,7 +25,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
   const { toast } = useToast();
   const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [challenge, setChallenge] = useState<any>(null);
+  const [challenge, setChallenge] = useState<MFAChallenge | null>(null);
   const [factorId, setFactorId] = useState<string>("");
 
   const initiateMFAChallenge = useCallback(async () => {
@@ -55,10 +54,10 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
 
       setChallenge(challengeData);
       setFactorId(verifiedFactor.id);
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Erro",
-        description: error.message || "Falha ao iniciar verificação 2FA",
+        description: error instanceof Error ? error.message : "Falha ao iniciar verificação 2FA",
         variant: "destructive"
       });
       onCancel();
@@ -95,10 +94,10 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
       });
 
       onSuccess();
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Código Incorreto",
-        description: "Verifique o código e tente novamente",
+        description: error instanceof Error ? error.message : "Verifique o código e tente novamente",
         variant: "destructive"
       });
       setCode("");
