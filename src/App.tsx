@@ -45,6 +45,7 @@ const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
 const Modules = React.lazy(() => import("./pages/Modules"));
+const NotFound = React.lazy(() => import("./pages/NotFound"));
 
 // Create QueryClient
 const queryClient = new QueryClient();
@@ -150,6 +151,7 @@ function App() {
                         <Route path="/health" element={<Health />} />
                         <Route path="/modules" element={<Modules />} />
                         <Route path="/_offline" element={<Offline />} />
+                        <Route path="*" element={<NotFound />} />
                       </Routes>
                     </React.Suspense>
                   </main>

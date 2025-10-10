@@ -33,7 +33,7 @@ export interface ActivityItem {
   userAvatar?: string;
   module: string;
   createdAt: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export interface DashboardConfig {

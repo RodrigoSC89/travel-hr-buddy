@@ -87,8 +87,8 @@ export const OrganizationCustomization: React.FC = () => {
       setIsLoading(true);
       await updateBranding({
         ...customization,
-        enabled_modules: customization.enabled_modules as any,
-        business_rules: customization.business_rules as any
+        enabled_modules: customization.enabled_modules as Record<string, boolean>,
+        business_rules: customization.business_rules as Record<string, unknown>
       });
       
       toast({

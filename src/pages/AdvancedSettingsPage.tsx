@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/hooks/use-toast';
-import { OrganizationLayout } from '@/components/layout/organization-layout';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { OrganizationLayout } from "@/components/layout/organization-layout";
 import { 
   Settings, 
   Bell, 
@@ -23,24 +23,24 @@ import {
   Download,
   Upload,
   AlertTriangle
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SystemSettings {
   notifications: {
     emailEnabled: boolean;
     pushEnabled: boolean;
     smsEnabled: boolean;
-    frequency: 'immediate' | 'hourly' | 'daily';
+    frequency: "immediate" | "hourly" | "daily";
   };
   security: {
     twoFactorRequired: boolean;
     sessionTimeout: number;
-    passwordComplexity: 'low' | 'medium' | 'high';
+    passwordComplexity: "low" | "medium" | "high";
     loginAttempts: number;
   };
   appearance: {
-    theme: 'light' | 'dark' | 'auto';
-    language: 'pt-BR' | 'en-US' | 'es-ES';
+    theme: "light" | "dark" | "auto";
+    language: "pt-BR" | "en-US" | "es-ES";
     timezone: string;
   };
   performance: {
@@ -57,18 +57,18 @@ export default function AdvancedSettingsPage() {
       emailEnabled: true,
       pushEnabled: true,
       smsEnabled: false,
-      frequency: 'immediate'
+      frequency: "immediate"
     },
     security: {
       twoFactorRequired: false,
       sessionTimeout: 30,
-      passwordComplexity: 'medium',
+      passwordComplexity: "medium",
       loginAttempts: 3
     },
     appearance: {
-      theme: 'dark',
-      language: 'pt-BR',
-      timezone: 'America/Sao_Paulo'
+      theme: "dark",
+      language: "pt-BR",
+      timezone: "America/Sao_Paulo"
     },
     performance: {
       cacheEnabled: true,
@@ -120,18 +120,18 @@ export default function AdvancedSettingsPage() {
         emailEnabled: true,
         pushEnabled: true,
         smsEnabled: false,
-        frequency: 'immediate'
+        frequency: "immediate"
       },
       security: {
         twoFactorRequired: false,
         sessionTimeout: 30,
-        passwordComplexity: 'medium',
+        passwordComplexity: "medium",
         loginAttempts: 3
       },
       appearance: {
-        theme: 'dark',
-        language: 'pt-BR',
-        timezone: 'America/Sao_Paulo'
+        theme: "dark",
+        language: "pt-BR",
+        timezone: "America/Sao_Paulo"
       },
       performance: {
         cacheEnabled: true,
@@ -149,11 +149,11 @@ export default function AdvancedSettingsPage() {
 
   const exportSettings = () => {
     const dataStr = JSON.stringify(settings, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'nautilus-settings.json';
+    link.download = "nautilus-settings.json";
     link.click();
     
     toast({
@@ -188,7 +188,7 @@ export default function AdvancedSettingsPage() {
                 </Button>
                 <Button onClick={saveSettings} disabled={isLoading}>
                   <Save className="w-4 h-4 mr-2" />
-                  {isLoading ? 'Salvando...' : 'Salvar Tudo'}
+                  {isLoading ? "Salvando..." : "Salvar Tudo"}
                 </Button>
               </div>
             </div>
@@ -241,7 +241,7 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="email-notifications"
                       checked={settings.notifications.emailEnabled}
-                      onCheckedChange={(checked) => updateSettings('notifications', 'emailEnabled', checked)}
+                      onCheckedChange={(checked) => updateSettings("notifications", "emailEnabled", checked)}
                     />
                   </div>
                   
@@ -257,7 +257,7 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="push-notifications"
                       checked={settings.notifications.pushEnabled}
-                      onCheckedChange={(checked) => updateSettings('notifications', 'pushEnabled', checked)}
+                      onCheckedChange={(checked) => updateSettings("notifications", "pushEnabled", checked)}
                     />
                   </div>
                   
@@ -273,7 +273,7 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="sms-notifications"
                       checked={settings.notifications.smsEnabled}
-                      onCheckedChange={(checked) => updateSettings('notifications', 'smsEnabled', checked)}
+                      onCheckedChange={(checked) => updateSettings("notifications", "smsEnabled", checked)}
                     />
                   </div>
                   
@@ -285,7 +285,7 @@ export default function AdvancedSettingsPage() {
                       id="notification-frequency"
                       className="w-full mt-2 p-2 border rounded-md"
                       value={settings.notifications.frequency}
-                      onChange={(e) => updateSettings('notifications', 'frequency', e.target.value)}
+                      onChange={(e) => updateSettings("notifications", "frequency", e.target.value)}
                     >
                       <option value="immediate">Imediata</option>
                       <option value="hourly">A cada hora</option>
@@ -320,7 +320,7 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="two-factor"
                       checked={settings.security.twoFactorRequired}
-                      onCheckedChange={(checked) => updateSettings('security', 'twoFactorRequired', checked)}
+                      onCheckedChange={(checked) => updateSettings("security", "twoFactorRequired", checked)}
                     />
                   </div>
                   
@@ -332,7 +332,7 @@ export default function AdvancedSettingsPage() {
                       id="session-timeout"
                       type="number"
                       value={settings.security.sessionTimeout}
-                      onChange={(e) => updateSettings('security', 'sessionTimeout', Number(e.target.value))}
+                      onChange={(e) => updateSettings("security", "sessionTimeout", Number(e.target.value))}
                       className="mt-2"
                       min="5"
                       max="480"
@@ -345,7 +345,7 @@ export default function AdvancedSettingsPage() {
                       id="password-complexity"
                       className="w-full mt-2 p-2 border rounded-md"
                       value={settings.security.passwordComplexity}
-                      onChange={(e) => updateSettings('security', 'passwordComplexity', e.target.value)}
+                      onChange={(e) => updateSettings("security", "passwordComplexity", e.target.value)}
                     >
                       <option value="low">Baixa (8+ caracteres)</option>
                       <option value="medium">Média (8+ chars, números, símbolos)</option>
@@ -359,7 +359,7 @@ export default function AdvancedSettingsPage() {
                       id="login-attempts"
                       type="number"
                       value={settings.security.loginAttempts}
-                      onChange={(e) => updateSettings('security', 'loginAttempts', Number(e.target.value))}
+                      onChange={(e) => updateSettings("security", "loginAttempts", Number(e.target.value))}
                       className="mt-2"
                       min="1"
                       max="10"
@@ -389,7 +389,7 @@ export default function AdvancedSettingsPage() {
                       id="theme"
                       className="w-full mt-2 p-2 border rounded-md"
                       value={settings.appearance.theme}
-                      onChange={(e) => updateSettings('appearance', 'theme', e.target.value)}
+                      onChange={(e) => updateSettings("appearance", "theme", e.target.value)}
                     >
                       <option value="light">Claro</option>
                       <option value="dark">Escuro</option>
@@ -403,7 +403,7 @@ export default function AdvancedSettingsPage() {
                       id="language"
                       className="w-full mt-2 p-2 border rounded-md"
                       value={settings.appearance.language}
-                      onChange={(e) => updateSettings('appearance', 'language', e.target.value)}
+                      onChange={(e) => updateSettings("appearance", "language", e.target.value)}
                     >
                       <option value="pt-BR">Português (Brasil)</option>
                       <option value="en-US">English (US)</option>
@@ -417,7 +417,7 @@ export default function AdvancedSettingsPage() {
                       id="timezone"
                       className="w-full mt-2 p-2 border rounded-md"
                       value={settings.appearance.timezone}
-                      onChange={(e) => updateSettings('appearance', 'timezone', e.target.value)}
+                      onChange={(e) => updateSettings("appearance", "timezone", e.target.value)}
                     >
                       <option value="America/Sao_Paulo">Brasília (GMT-3)</option>
                       <option value="America/New_York">Nova York (GMT-5)</option>
@@ -453,7 +453,7 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="cache-enabled"
                       checked={settings.performance.cacheEnabled}
-                      onCheckedChange={(checked) => updateSettings('performance', 'cacheEnabled', checked)}
+                      onCheckedChange={(checked) => updateSettings("performance", "cacheEnabled", checked)}
                     />
                   </div>
                   
@@ -469,7 +469,7 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="compression-enabled"
                       checked={settings.performance.compressionEnabled}
-                      onCheckedChange={(checked) => updateSettings('performance', 'compressionEnabled', checked)}
+                      onCheckedChange={(checked) => updateSettings("performance", "compressionEnabled", checked)}
                     />
                   </div>
                   
@@ -485,7 +485,7 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="lazy-loading"
                       checked={settings.performance.lazyLoadingEnabled}
-                      onCheckedChange={(checked) => updateSettings('performance', 'lazyLoadingEnabled', checked)}
+                      onCheckedChange={(checked) => updateSettings("performance", "lazyLoadingEnabled", checked)}
                     />
                   </div>
                   
@@ -501,7 +501,7 @@ export default function AdvancedSettingsPage() {
                     <Switch
                       id="analytics-enabled"
                       checked={settings.performance.analyticsEnabled}
-                      onCheckedChange={(checked) => updateSettings('performance', 'analyticsEnabled', checked)}
+                      onCheckedChange={(checked) => updateSettings("performance", "analyticsEnabled", checked)}
                     />
                   </div>
                 </div>
@@ -521,7 +521,7 @@ export default function AdvancedSettingsPage() {
                 </span>
               </div>
               <Badge variant="secondary">
-                Última atualização: {new Date().toLocaleString('pt-BR')}
+                Última atualização: {new Date().toLocaleString("pt-BR")}
               </Badge>
             </div>
           </CardContent>

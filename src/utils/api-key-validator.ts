@@ -27,7 +27,7 @@ export interface APIKeyStatus {
   responseTime?: number;
   message: string;
   error?: string;
-  data?: any;
+  data?: Record<string, unknown>;
   recommendation?: string;
 }
 
@@ -44,7 +44,7 @@ export interface APIValidationReport {
 /**
  * Determine status from test result
  */
-function determineStatus(result: any): APIKeyStatus["status"] {
+function determineStatus(result: { success: boolean; error?: string; message?: string; status?: string }): APIKeyStatus["status"] {
   if (!result.success) {
     const errorLower = (result.error || result.message || "").toLowerCase();
     

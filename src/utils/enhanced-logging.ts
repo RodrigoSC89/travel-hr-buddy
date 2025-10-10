@@ -8,7 +8,7 @@ import { logger } from "./logger";
 export interface LogEntry {
   timestamp: string;
   action: string;
-  details?: any;
+  details?: Record<string, unknown>;
   userAgent: string;
   url: string;
 }
@@ -18,7 +18,7 @@ export interface LogEntry {
  * @param action - The action being performed
  * @param details - Optional additional details
  */
-export const logUserAction = (action: string, details?: any): void => {
+export const logUserAction = (action: string, details?: Record<string, unknown>): void => {
   const timestamp = new Date().toISOString();
   const logEntry: LogEntry = {
     timestamp,
