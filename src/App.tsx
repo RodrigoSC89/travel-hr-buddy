@@ -40,6 +40,7 @@ const Admin = React.lazy(() => import("./pages/Admin"));
 const APITester = React.lazy(() => import("./pages/admin/api-tester"));
 const APIStatus = React.lazy(() => import("./pages/admin/api-status"));
 const ControlPanel = React.lazy(() => import("./pages/admin/control-panel"));
+const TestDashboard = React.lazy(() => import("./pages/admin/tests"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
@@ -144,6 +145,7 @@ function App() {
                         <Route path="/admin/api-tester" element={<APITester />} />
                         <Route path="/admin/api-status" element={<APIStatus />} />
                         <Route path="/admin/control-panel" element={<ControlPanel />} />
+                        <Route path="/admin/tests" element={<TestDashboard />} />
                         <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                         <Route path="/health" element={<Health />} />
                         <Route path="/modules" element={<Modules />} />
