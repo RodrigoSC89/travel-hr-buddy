@@ -99,7 +99,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
       setContacts(formattedContacts);
     } catch (error) {
-      console.error('Failed to load contacts:', error);
+      console.error("Failed to load contacts:", error);
     }
   };
 
@@ -129,7 +129,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       // Mark messages as read
       await markMessagesAsRead(contactId);
     } catch (error) {
-      console.error('Failed to load messages:', error);
+      console.error("Failed to load messages:", error);
     } finally {
       setIsLoading(false);
     }
@@ -147,7 +147,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         .eq("recipient_id", currentUserId)
         .eq("is_read", false);
     } catch (error) {
-      console.error('Failed to mark messages as read:', error);
+      console.error("Failed to mark messages as read:", error);
     }
   };
 

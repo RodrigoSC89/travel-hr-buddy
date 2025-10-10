@@ -245,7 +245,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         description: "Mensagem marcada como lida"
       });
     } catch (error) {
-      console.error('Failed to mark message as read:', error);
+      console.error("Failed to mark message as read:", error);
       toast({
         title: "Erro",
         description: "Não foi possível marcar a mensagem como lida",
@@ -269,7 +269,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         description: "Mensagem arquivada"
       });
     } catch (error) {
-      console.error('Failed to archive message:', error);
+      console.error("Failed to archive message:", error);
       toast({
         title: "Erro",
         description: "Não foi possível arquivar a mensagem",

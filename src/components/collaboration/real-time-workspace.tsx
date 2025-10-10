@@ -292,7 +292,7 @@ const RealTimeWorkspace: React.FC = () => {
         }
       });
     } catch (error) {
-      console.error('Failed to send reaction:', error);
+      console.error("Failed to send reaction:", error);
     }
   };
 
@@ -313,7 +313,7 @@ const RealTimeWorkspace: React.FC = () => {
         current_page: window.location.pathname
       });
     } catch (error) {
-      console.error('Failed to change status:', error);
+      console.error("Failed to change status:", error);
     }
   };
 

@@ -164,6 +164,7 @@ export const MaritimeCertificationManager = () => {
 
       setAlerts(mockAlerts);
     } catch (error) {
+      console.error("Failed to load certification alerts:", error);
     }
   };
 

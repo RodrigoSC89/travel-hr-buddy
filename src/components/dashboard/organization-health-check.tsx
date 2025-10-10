@@ -176,7 +176,7 @@ export const OrganizationHealthCheck: React.FC = () => {
 
       setHealthChecks(checks);
     } catch (error) {
-      console.error('Failed to run health checks:', error);
+      console.error("Failed to run health checks:", error);
     } finally {
       setIsLoading(false);
     }

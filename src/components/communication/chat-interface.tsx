@@ -105,7 +105,7 @@ export const ChatInterface = () => {
       if (error) throw error;
       setAllUsers(data || []);
     } catch (error) {
-      console.error('Failed to fetch users:', error);
+      console.error("Failed to fetch users:", error);
     }
   }, [currentUser?.id]);
 
@@ -219,7 +219,7 @@ export const ChatInterface = () => {
       // Marcar mensagens como lidas
       await markMessagesAsRead(conversationId);
     } catch (error) {
-      console.error('Failed to load messages:', error);
+      console.error("Failed to load messages:", error);
     }
   }, [currentUser?.id]);
 
@@ -268,7 +268,7 @@ export const ChatInterface = () => {
           .insert(readStatuses);
       }
     } catch (error) {
-      console.error('Failed to mark messages as read:', error);
+      console.error("Failed to mark messages as read:", error);
     }
   };
 

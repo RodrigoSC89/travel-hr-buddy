@@ -286,7 +286,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         description: "Você entrou no canal"
       });
     } catch (error) {
-      console.error('Failed to join channel:', error);
+      console.error("Failed to join channel:", error);
       toast({
         title: "Erro",
         description: "Não foi possível entrar no canal",

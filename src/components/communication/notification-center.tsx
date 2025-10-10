@@ -193,7 +193,7 @@ export const NotificationCenter = () => {
       // Mock settings loading - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-      console.error('Failed to load settings:', error);
+      console.error("Failed to load settings:", error);
     }
   };
 
@@ -271,7 +271,7 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
-      console.error('Failed to mark notification as read:', error);
+      console.error("Failed to mark notification as read:", error);
     }
   };
 
@@ -286,7 +286,7 @@ export const NotificationCenter = () => {
         description: "Todas as notificações foram marcadas como lidas"
       });
     } catch (error) {
-      console.error('Failed to mark all as read:', error);
+      console.error("Failed to mark all as read:", error);
     }
   };
 
@@ -300,7 +300,7 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
-      console.error('Failed to toggle important:', error);
+      console.error("Failed to toggle important:", error);
     }
   };
 
@@ -313,7 +313,7 @@ export const NotificationCenter = () => {
         description: "Notificação removida"
       });
     } catch (error) {
-      console.error('Failed to delete notification:', error);
+      console.error("Failed to delete notification:", error);
     }
   };
 
@@ -326,7 +326,7 @@ export const NotificationCenter = () => {
         description: "Configurações atualizadas"
       });
     } catch (error) {
-      console.error('Failed to update settings:', error);
+      console.error("Failed to update settings:", error);
     }
   };
 
