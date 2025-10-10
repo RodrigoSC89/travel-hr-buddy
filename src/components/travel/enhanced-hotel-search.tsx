@@ -280,7 +280,7 @@ export const EnhancedHotelSearch: React.FC = () => {
       ];
       setAiSuggestions(suggestions);
     } catch (error) {
-    }
+  }
   };
 
   const handleSearch = async () => {

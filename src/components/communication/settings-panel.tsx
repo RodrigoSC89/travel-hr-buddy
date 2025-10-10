@@ -126,7 +126,7 @@ export const SettingsPanel = () => {
       // Mock loading settings - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-    }
+  }
   };
 
   const updateSettings = (section: keyof UserSettings, updates: any) => {

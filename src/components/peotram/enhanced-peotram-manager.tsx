@@ -121,7 +121,7 @@ export const EnhancedPeotramManager: React.FC = () => {
       setNonConformities(getDemoNonConformities());
       setTemplates(getDemoTemplates());
     } catch (error) {
-    } finally {
+  } finally {
       setIsLoading(false);
     }
   };

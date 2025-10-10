@@ -56,7 +56,7 @@ export const OfflineSyncManager: React.FC = () => {
       const pending = await getPendingChanges();
       setSyncItems(pending);
     } catch (error) {
-    }
+  }
   };
 
   // Sincronização manual
@@ -98,7 +98,7 @@ export const OfflineSyncManager: React.FC = () => {
           await simulateSyncAction(item);
           
         } catch (error) {
-        }
+  }
       }
 
       // Executar sync real

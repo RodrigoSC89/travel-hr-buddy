@@ -331,10 +331,8 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           }
         }
       } catch (err) {
-        console.warn("Could not load tenant data from database, using demo data", err);
       }
     } catch (err) {
-      console.error("Error loading tenant data:", err);
       setError("Erro ao carregar dados da empresa");
     } finally {
       setIsLoading(false);
@@ -359,7 +357,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       ]).catch(() => ({ data: null, error: null })) as { data: TenantBranding | null; error: { code?: string } | null };
 
       if (error && error.code !== "PGRST116") {
-        console.warn("Error loading tenant branding:", error);
       }
 
       if (branding) {
@@ -368,7 +365,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
       // Se não houver branding no banco, o demo já está configurado
     } catch (err) {
-      console.warn("Could not load tenant branding:", err);
     }
   };
 
@@ -392,7 +388,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       ]).catch(() => ({ data: null, error: null })) as { data: TenantUser | null; error: { code?: string } | null };
 
       if (error && error.code !== "PGRST116") {
-        console.warn("Error loading tenant user:", error);
       }
 
       if (tenantUser) {
@@ -416,7 +411,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setCurrentUser(defaultUser);
       }
     } catch (err) {
-      console.warn("Could not load tenant user:", err);
     }
   };
 
@@ -445,7 +439,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       ]).catch(() => ({ data: null, error: null })) as { data: TenantUsage | null; error: { code?: string } | null };
 
       if (error && error.code !== "PGRST116") {
-        console.warn("Error loading tenant usage:", error);
       }
 
       if (usage) {
@@ -453,7 +446,6 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
       // Se não houver usage no banco, o demo já está configurado
     } catch (err) {
-      console.warn("Could not load tenant usage:", err);
     }
   };
 
@@ -475,14 +467,12 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       ]).catch(() => ({ data: null, error: null })) as { data: SaasPlan[] | null; error: unknown };
 
       if (error) {
-        console.warn("Error loading plans:", error);
       }
       
       if (plans) {
         setTenantPlans(plans);
       }
     } catch (err) {
-      console.warn("Could not load plans:", err);
     }
   };
 

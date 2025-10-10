@@ -69,7 +69,7 @@ export const PriceHistoryChart = () => {
         }
       }
     } catch (error) {
-    } finally {
+  } finally {
       setLoading(false);
     }
   };
@@ -109,7 +109,7 @@ export const PriceHistoryChart = () => {
         setChartData(formattedData);
       }
     } catch (error) {
-    }
+  }
   };
 
   const getCurrentAlert = () => alerts.find(a => a.id === selectedAlert);

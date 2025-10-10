@@ -80,7 +80,7 @@ export const NotificationSettings = () => {
         });
       }
     } catch (error) {
-    } finally {
+  } finally {
       setLoading(false);
     }
   };
@@ -135,7 +135,7 @@ export const NotificationSettings = () => {
         });
       }
     } catch (error) {
-    }
+  }
   };
 
   const testPushNotification = () => {

@@ -96,7 +96,7 @@ const MaritimeFleetManagement = () => {
         });
       }
     } catch (error) {
-    } finally {
+  } finally {
       setIsLoading(false);
     }
   };
@@ -359,7 +359,6 @@ const MaritimeFleetManagement = () => {
             id: "live-tracking",
             label: "Rastreamento em Tempo Real",
             icon: <MapPin className="h-3 w-3" />,
-            action: () => console.log("Open live tracking")
           }
         ]}
       />

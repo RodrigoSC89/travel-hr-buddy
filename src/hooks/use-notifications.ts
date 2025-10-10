@@ -45,7 +45,7 @@ export const useNotifications = () => {
         });
       }
     } catch (error) {
-    }
+  }
   };
 
   const scheduleNotification = async (options: {
@@ -76,14 +76,14 @@ export const useNotifications = () => {
 
       await LocalNotifications.schedule(notificationOptions);
     } catch (error) {
-    }
+  }
   };
 
   const cancelNotification = async (id: number) => {
     try {
       await LocalNotifications.cancel({ notifications: [{ id }] });
     } catch (error) {
-    }
+  }
   };
 
   return {

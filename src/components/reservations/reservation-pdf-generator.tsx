@@ -49,7 +49,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
         printWindow.print();
       };
     } catch (error) {
-    } finally {
+  } finally {
       setGenerating(false);
     }
   };

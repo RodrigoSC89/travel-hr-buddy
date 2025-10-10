@@ -547,7 +547,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       await onSave(checklist);
       setLastSaved(new Date());
     } catch (error) {
-    }
+  }
   };
 
   const progress = getCompletionProgress();

@@ -59,7 +59,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         } catch (err) {
           // Ignorar erros de toast
-          console.warn("Toast error:", err);
         }
       }
     );
@@ -86,13 +85,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               variant: "destructive",
             });
           } catch (err) {
-            console.warn("Toast error:", err);
           }
         }
         setSession(session);
         setUser(session?.user ?? null);
       } catch (error) {
-        console.warn("Error loading session:", error);
       } finally {
         setIsLoading(false);
       }

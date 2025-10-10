@@ -173,7 +173,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
       if (error) throw error;
       setHistory(data || []);
     } catch (error) {
-    }
+  }
   };
 
   const loadAIInsights = async () => {

@@ -86,7 +86,7 @@ export const PeotramComplianceChecker: React.FC = () => {
       setComplianceItems(getMockComplianceItems());
       setComplianceReport(getMockComplianceReport());
     } catch (error) {
-    } finally {
+  } finally {
       setIsLoading(false);
     }
   };

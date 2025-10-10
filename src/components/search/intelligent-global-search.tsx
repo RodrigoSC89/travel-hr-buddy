@@ -222,7 +222,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       try {
         setRecentSearches(JSON.parse(saved));
       } catch (error) {
-      }
+  }
     }
   }, []);
 
@@ -256,7 +256,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
       setResults(allResults);
     } catch (error) {
-    } finally {
+  } finally {
       setIsLoading(false);
     }
   };
@@ -338,7 +338,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       }
 
     } catch (error) {
-    }
+  }
   };
 
   const saveRecentSearch = (searchTerm: string) => {

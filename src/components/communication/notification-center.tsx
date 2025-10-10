@@ -193,7 +193,7 @@ export const NotificationCenter = () => {
       // Mock settings loading - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-    }
+  }
   };
 
   const setupRealTimeSubscription = () => {
@@ -270,7 +270,7 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
-    }
+  }
   };
 
   const markAllAsRead = async () => {
@@ -284,7 +284,7 @@ export const NotificationCenter = () => {
         description: "Todas as notificações foram marcadas como lidas"
       });
     } catch (error) {
-    }
+  }
   };
 
   const toggleImportant = async (notificationId: string) => {
@@ -297,7 +297,7 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
-    }
+  }
   };
 
   const deleteNotification = async (notificationId: string) => {
@@ -309,7 +309,7 @@ export const NotificationCenter = () => {
         description: "Notificação removida"
       });
     } catch (error) {
-    }
+  }
   };
 
   const updateSettings = async (newSettings: Partial<NotificationSettings>) => {
@@ -321,7 +321,7 @@ export const NotificationCenter = () => {
         description: "Configurações atualizadas"
       });
     } catch (error) {
-    }
+  }
   };
 
   const getNotificationIcon = (type: string) => {

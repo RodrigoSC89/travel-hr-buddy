@@ -40,7 +40,6 @@ export default function AdminWallPage() {
         const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
         if (!supabaseUrl || !supabaseKey) {
-          console.error("Supabase credentials not configured");
           const cached = localStorage.getItem("ci-wall-data");
           if (cached) {
             setData(JSON.parse(cached));
@@ -65,7 +64,6 @@ export default function AdminWallPage() {
         localStorage.setItem("ci-wall-data", JSON.stringify(results));
         setOffline(false);
       } catch (err) {
-        console.error("Failed to fetch data:", err);
         const cached = localStorage.getItem("ci-wall-data");
         if (cached) {
           setData(JSON.parse(cached));

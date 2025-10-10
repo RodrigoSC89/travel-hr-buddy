@@ -99,7 +99,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
       setContacts(formattedContacts);
     } catch (error) {
-    }
+  }
   };
 
   const loadMessages = async (contactId: string) => {
@@ -128,7 +128,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       // Mark messages as read
       await markMessagesAsRead(contactId);
     } catch (error) {
-    } finally {
+  } finally {
       setIsLoading(false);
     }
   };
@@ -145,7 +145,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         .eq("recipient_id", currentUserId)
         .eq("is_read", false);
     } catch (error) {
-    }
+  }
   };
 
   const sendMessage = async () => {

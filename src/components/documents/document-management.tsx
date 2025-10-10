@@ -175,7 +175,7 @@ export const DocumentManagement: React.FC = () => {
       
       setCategories(mockCategories);
     } catch (error) {
-    }
+  }
   };
 
   const handleAddDocument = async () => {

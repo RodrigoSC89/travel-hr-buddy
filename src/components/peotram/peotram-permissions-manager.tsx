@@ -89,7 +89,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       if (error) throw error;
       setUsers(data || []);
     } catch (error) {
-    }
+  }
   };
 
   const fetchPermissions = async () => {
@@ -115,7 +115,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       
       setPermissions(mappedPermissions);
     } catch (error) {
-    }
+  }
   };
 
   const fetchVessels = async () => {
@@ -128,7 +128,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       if (error) throw error;
       setVessels(data || []);
     } catch (error) {
-    }
+  }
   };
 
   const createPermission = async () => {

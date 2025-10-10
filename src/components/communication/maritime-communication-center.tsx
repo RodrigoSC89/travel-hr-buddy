@@ -199,7 +199,7 @@ export const MaritimeCommunicationCenter = () => {
 
       setChannels(mockChannels);
     } catch (error) {
-    }
+  }
   };
 
   const setupRealTimeUpdates = () => {

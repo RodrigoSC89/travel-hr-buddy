@@ -121,7 +121,7 @@ export const SharedAlerts = () => {
         setSharedAlerts(data || []);
       }
     } catch (error) {
-    } finally {
+  } finally {
       setLoading(false);
     }
   };
@@ -140,7 +140,7 @@ export const SharedAlerts = () => {
 
       setUserAlerts(data || []);
     } catch (error) {
-    }
+  }
   };
 
   const handleVote = async (sharedAlertId: string, voteType: "upvote" | "downvote") => {

@@ -402,7 +402,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
       setAIRecommendations(aiData || []);
     } catch (error) {
-    }
+  }
   };
 
   const getPriorityColor = (priority: string) => {

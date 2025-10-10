@@ -537,7 +537,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         });
       }
     } catch (error) {
-    }
+  }
   };
 
   const logSettingsChange = async (action: string, data: any) => {

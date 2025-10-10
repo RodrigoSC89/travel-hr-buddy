@@ -245,7 +245,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         description: "Mensagem marcada como lida"
       });
     } catch (error) {
-    }
+  }
   };
 
   const archiveMessage = async (messageId: string) => {
@@ -263,7 +263,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         description: "Mensagem arquivada"
       });
     } catch (error) {
-    }
+  }
   };
 
   const getPriorityColor = (priority: string) => {

@@ -72,7 +72,7 @@ export const BusinessIntelligence = () => {
       if (error) throw error;
       setAiReports(data || []);
     } catch (error) {
-    }
+  }
   };
 
   const generateReport = async (type: string) => {

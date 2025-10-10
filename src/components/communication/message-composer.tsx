@@ -132,7 +132,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       setRecipients(mockRecipients);
     } catch (error) {
-    }
+  }
   };
 
   const loadTemplates = async () => {
@@ -171,7 +171,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       setTemplates(mockTemplates);
     } catch (error) {
-    }
+  }
   };
 
   const handleRecipientToggle = (recipientId: string) => {

@@ -286,7 +286,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         description: "Você entrou no canal"
       });
     } catch (error) {
-    }
+  }
   };
 
   const getChannelIcon = (type: string) => {

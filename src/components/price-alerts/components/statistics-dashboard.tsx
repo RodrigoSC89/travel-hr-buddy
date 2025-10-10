@@ -62,7 +62,7 @@ export const StatisticsDashboard = () => {
         setStatistics(data);
       }
     } catch (error) {
-    }
+  }
   };
 
   const loadMetrics = async () => {
@@ -109,7 +109,7 @@ export const StatisticsDashboard = () => {
         });
       }
     } catch (error) {
-    } finally {
+  } finally {
       setLoading(false);
     }
   };

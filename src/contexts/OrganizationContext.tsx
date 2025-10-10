@@ -144,10 +144,8 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         }
       } catch (err) {
         // Ignorar erros - já temos o branding demo configurado
-        console.warn("Could not load organization branding from database, using demo data");
       }
     } catch (err) {
-      console.error("Error loading organization:", err);
       setError("Erro ao carregar dados da organização");
     } finally {
       setIsLoading(false);

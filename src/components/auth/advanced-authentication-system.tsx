@@ -89,7 +89,6 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
         setIsBiometricEnabled(!isBiometricEnabled);
       } catch (error) {
         // Biometric authentication not supported or failed
-        console.error("Biometric authentication failed:", error);
       }
     }
   };

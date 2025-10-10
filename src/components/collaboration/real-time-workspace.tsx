@@ -292,7 +292,7 @@ const RealTimeWorkspace: React.FC = () => {
         }
       });
     } catch (error) {
-    }
+  }
   };
 
   // Alterar status
@@ -312,7 +312,7 @@ const RealTimeWorkspace: React.FC = () => {
         current_page: window.location.pathname
       });
     } catch (error) {
-    }
+  }
   };
 
   // Obter cor do status

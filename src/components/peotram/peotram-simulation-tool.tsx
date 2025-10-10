@@ -180,7 +180,7 @@ export const PeotramSimulationTool: React.FC = () => {
       
       setCurrentScenario(scenario);
     } catch (error) {
-    } finally {
+  } finally {
       setIsRunning(false);
     }
   };

@@ -176,7 +176,7 @@ export const OrganizationHealthCheck: React.FC = () => {
 
       setHealthChecks(checks);
     } catch (error) {
-    } finally {
+  } finally {
       setIsLoading(false);
     }
   };

@@ -83,7 +83,7 @@ export const RealTimeCollaboration = () => {
       fetchMessages(conversationId);
       fetchActiveUsers();
     } catch (error) {
-    }
+  }
   };
 
   const fetchMessages = async (conversationId: string) => {
@@ -110,7 +110,7 @@ export const RealTimeCollaboration = () => {
       
       setRealtimeMessages(formattedMessages);
     } catch (error) {
-    }
+  }
   };
 
   const fetchActiveUsers = async () => {
@@ -132,7 +132,7 @@ export const RealTimeCollaboration = () => {
       
       setActiveUsers(formattedUsers);
     } catch (error) {
-    }
+  }
   };
 
   const setupRealtimeSubscriptions = () => {

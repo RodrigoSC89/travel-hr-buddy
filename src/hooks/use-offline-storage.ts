@@ -68,7 +68,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         timestamp: Date.now()
       });
     } catch (error) {
-    }
+  }
   }, [initDB]);
 
   // Get data from cache
@@ -108,7 +108,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       await store.add(offlineData);
     } catch (error) {
-    }
+  }
   }, [initDB]);
 
   // Get pending changes
@@ -152,11 +152,11 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
           // await syncToAPI(change.action, change.data);
           
         } catch (error) {
-        }
+  }
       }
       
     } catch (error) {
-    }
+  }
   }, [isOnline, getPendingChanges, initDB]);
 
   // Update cache size
@@ -177,7 +177,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       setCacheSize(cacheCount + offlineCount);
     } catch (error) {
-    }
+  }
   }, [initDB]);
 
   // Clear cache
@@ -205,7 +205,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       updateCacheSize();
     } catch (error) {
-    }
+  }
   }, [initDB, updateCacheSize]);
 
 

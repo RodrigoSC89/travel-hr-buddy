@@ -211,7 +211,7 @@ export const IoTSensorDashboard = () => {
       }
       
     } catch (error) {
-    }
+  }
   };
 
   const getSensorIcon = (type: string) => {

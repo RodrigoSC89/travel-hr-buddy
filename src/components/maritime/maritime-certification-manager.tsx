@@ -164,7 +164,7 @@ export const MaritimeCertificationManager = () => {
 
       setAlerts(mockAlerts);
     } catch (error) {
-    }
+  }
   };
 
   const getStatusColor = (status: MaritimeCertificate["status"]) => {

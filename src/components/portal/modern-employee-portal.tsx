@@ -169,7 +169,7 @@ export const ModernEmployeePortal: React.FC = () => {
         setUserProfile(profile);
       }
     } catch (error) {
-    }
+  }
   };
 
   const loadDashboardStats = async () => {
@@ -209,7 +209,7 @@ export const ModernEmployeePortal: React.FC = () => {
         nextEmbarkation: null
       });
     } catch (error) {
-    }
+  }
   };
 
   const loadPersonalCalendar = async () => {
@@ -240,7 +240,7 @@ export const ModernEmployeePortal: React.FC = () => {
         medicalExams: [] // Implementar quando houver tabela
       });
     } catch (error) {
-    }
+  }
   };
 
   const loadAIInsights = async () => {
@@ -276,7 +276,7 @@ export const ModernEmployeePortal: React.FC = () => {
 
       setAIInsights(formattedInsights);
     } catch (error) {
-    }
+  }
   };
 
   const loadDocuments = async () => {
@@ -292,7 +292,7 @@ export const ModernEmployeePortal: React.FC = () => {
       if (error) throw error;
       setDocuments(docs || []);
     } catch (error) {
-    }
+  }
   };
 
   const handleAIChat = async (message: string) => {

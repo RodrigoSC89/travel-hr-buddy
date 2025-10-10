@@ -128,7 +128,6 @@ export default function AnalyticsPage() {
       pdf.addImage(imgData, "PNG", 0, 0, width, height);
       pdf.save("ci-analytics.pdf");
     } catch (error) {
-      console.error("Error generating PDF:", error);
     }
   };
 

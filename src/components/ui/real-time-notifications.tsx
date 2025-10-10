@@ -45,7 +45,6 @@ const mockNotifications: Notification[] = [
     isRead: false,
     action: {
       label: "Ver Detalhes",
-      callback: () => console.log("View details")
     }
   },
   {
@@ -76,7 +75,6 @@ const mockNotifications: Notification[] = [
     isRead: false,
     action: {
       label: "Verificar",
-      callback: () => console.log("Verify")
     }
   },
   {

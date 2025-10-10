@@ -105,7 +105,7 @@ export const ChatInterface = () => {
       if (error) throw error;
       setAllUsers(data || []);
     } catch (error) {
-    }
+  }
   }, [currentUser?.id]);
 
   const loadConversations = useCallback(async () => {
@@ -218,7 +218,7 @@ export const ChatInterface = () => {
       // Marcar mensagens como lidas
       await markMessagesAsRead(conversationId);
     } catch (error) {
-    }
+  }
   }, [currentUser?.id]);
 
   useEffect(() => {
@@ -266,7 +266,7 @@ export const ChatInterface = () => {
           .insert(readStatuses);
       }
     } catch (error) {
-    }
+  }
   };
 
   const setupMessageRealtime = (conversationId: string) => {
