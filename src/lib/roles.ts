@@ -1,6 +1,6 @@
 // ✅ lib/roles.ts — controle de acesso por perfil
 
-export type Role = "admin" | "operador" | "visitante";
+export type Role = "admin" | "hr_manager" | "manager" | "member";
 
 export type ModuleAccess = {
   slug: string;
@@ -8,18 +8,18 @@ export type ModuleAccess = {
 };
 
 export const modulePermissions: ModuleAccess[] = [
-  { slug: "dashboard", roles: ["admin", "operador", "visitante"] },
-  { slug: "sistema-maritimo", roles: ["admin", "operador"] },
+  { slug: "dashboard", roles: ["admin", "hr_manager", "manager", "member"] },
+  { slug: "sistema-maritimo", roles: ["admin", "hr_manager", "manager"] },
   { slug: "ia-inovacao", roles: ["admin"] },
-  { slug: "portal-funcionario", roles: ["admin", "operador"] },
-  { slug: "viagens", roles: ["admin", "operador"] },
-  { slug: "alertas-precos", roles: ["admin"] },
+  { slug: "portal-funcionario", roles: ["admin", "hr_manager", "manager", "member"] },
+  { slug: "viagens", roles: ["admin", "hr_manager", "manager"] },
+  { slug: "alertas-precos", roles: ["admin", "hr_manager"] },
   { slug: "hub-integracoes", roles: ["admin"] },
-  { slug: "reservas", roles: ["admin", "operador"] },
-  { slug: "comunicacao", roles: ["admin", "operador"] },
+  { slug: "reservas", roles: ["admin", "hr_manager", "manager"] },
+  { slug: "comunicacao", roles: ["admin", "hr_manager", "manager", "member"] },
   { slug: "configuracoes", roles: ["admin"] },
-  { slug: "ajuda", roles: ["admin", "operador", "visitante"] },
-  { slug: "visao-geral", roles: ["admin", "operador", "visitante"] },
+  { slug: "ajuda", roles: ["admin", "hr_manager", "manager", "member"] },
+  { slug: "visao-geral", roles: ["admin", "hr_manager", "manager", "member"] },
 ];
 
 export function canAccess(slug: string, role: Role): boolean {
