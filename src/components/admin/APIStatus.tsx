@@ -99,12 +99,35 @@ export const APIStatus: React.FC = () => {
     // Simulate refresh
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    setServices(prev => prev.map(service => ({
+    const updatedServices = services.map(service => ({
       ...service,
       lastTest: new Date(),
       status: (Math.random() > 0.2 ? "connected" : "disconnected") as "connected" | "disconnected",
       responseTime: Math.floor(Math.random() * 1500) + 100
-    })));
+    }));
+    
+    setServices(updatedServices);
+    
+    // Log API status to endpoint
+    try {
+      await fetch("/api/log-api-status", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          updatedServices.map(service => ({
+            id: service.id,
+            name: service.name,
+            status: service.status,
+            responseTime: service.responseTime,
+            lastTest: service.lastTest.toISOString(),
+          }))
+        ),
+      });
+    } catch (error) {
+      console.error("Failed to log API status:", error);
+    }
     
     setIsRefreshing(false);
   };
