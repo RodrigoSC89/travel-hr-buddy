@@ -49,6 +49,7 @@ const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
 const Modules = React.lazy(() => import("./pages/Modules"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
+const SmartLayoutDemo = React.lazy(() => import("./pages/SmartLayoutDemo"));
 
 // Create QueryClient
 const queryClient = new QueryClient();
@@ -156,6 +157,7 @@ function App() {
                         <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                         <Route path="/health" element={<Health />} />
                         <Route path="/modules" element={<Modules />} />
+                        <Route path="/smart-layout-demo" element={<SmartLayoutDemo />} />
                         <Route path="/_offline" element={<Offline />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
