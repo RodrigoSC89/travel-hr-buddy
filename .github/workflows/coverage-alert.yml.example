@@ -1,0 +1,63 @@
+name: Coverage Alert
+
+# This workflow runs the low-coverage-alert script to monitor test coverage
+# and send email alerts when coverage falls below the threshold
+
+on:
+  # Run daily at 9 AM UTC
+  schedule:
+    - cron: '0 9 * * *'
+  
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+  
+  # Optionally run after test workflow completes
+  # workflow_run:
+  #   workflows: ["Run Tests"]
+  #   types:
+  #     - completed
+
+jobs:
+  check-coverage:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🚨 Run coverage alert check
+        env:
+          # Supabase Configuration (store as GitHub secrets)
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          
+          # Coverage Configuration
+          COVERAGE_THRESHOLD: 80
+          
+          # SMTP Email Configuration (store as GitHub secrets)
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_SECURE: false
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          
+          # Email addresses (can be hardcoded or use secrets)
+          EMAIL_FROM: alertas@yourdomain.com
+          EMAIL_TO: devops@yourdomain.com
+        run: npm run alert:low-coverage
+        continue-on-error: true  # Don't fail the workflow if coverage is low
+
+      - name: 📊 Summary
+        if: always()
+        run: |
+          echo "Coverage alert check completed"
+          echo "Check the logs above for details"
