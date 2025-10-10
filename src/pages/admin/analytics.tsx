@@ -24,11 +24,26 @@ import jsPDF from "jspdf";
 
 const colors = ["#10b981", "#ef4444", "#3b82f6", "#f59e0b"];
 
+interface TestResult {
+  created_at: string;
+  branch: string;
+  status: string;
+  coverage_percent?: number;
+}
+
+interface BranchCount {
+  [key: string]: number;
+}
+
+interface StatusCount {
+  [key: string]: number;
+}
+
 export default function AnalyticsDashboard() {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<TestResult[]>([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [filtered, setFiltered] = useState<any[]>([]);
+  const [filtered, setFiltered] = useState<TestResult[]>([]);
 
   useEffect(() => {
     fetch("https://your-project.supabase.co/rest/v1/test_results", {
@@ -52,12 +67,12 @@ export default function AnalyticsDashboard() {
     setFiltered(f);
   }, [data, startDate, endDate]);
 
-  const branchCount = filtered.reduce((acc: any, r) => {
+  const branchCount: BranchCount = filtered.reduce((acc: BranchCount, r) => {
     acc[r.branch] = (acc[r.branch] || 0) + 1;
     return acc;
   }, {});
 
-  const statusCount = filtered.reduce((acc: any, r) => {
+  const statusCount: StatusCount = filtered.reduce((acc: StatusCount, r) => {
     acc[r.status] = (acc[r.status] || 0) + 1;
     return acc;
   }, {});
