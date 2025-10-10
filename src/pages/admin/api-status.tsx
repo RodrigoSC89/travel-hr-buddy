@@ -6,7 +6,10 @@ import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { CheckCircle, XCircle, Clock, Download, RefreshCw } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { testOpenAIConnection } from "@/services/openai";
+import { testMapboxConnection } from "@/services/mapbox";
+import { testAmadeusConnection } from "@/services/amadeus";
+import { testSupabaseConnection } from "@/services/supabase";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -36,12 +39,12 @@ interface Service {
   name: string;
   envKey: string;
   endpoint: string;
-  validate: () => Promise<boolean>;
+  validate: () => Promise<{ success: boolean; message: string; responseTime?: number; error?: string }>;
 }
 
 interface HistorySnapshot {
   timestamp: string;
-  [key: string]: string | Status;
+  [key: string]: string | Status | number;
 }
 
 const services: Service[] = [
@@ -49,74 +52,25 @@ const services: Service[] = [
     name: "OpenAI",
     envKey: "VITE_OPENAI_API_KEY",
     endpoint: "https://api.openai.com/v1/chat/completions",
-    validate: async () => {
-      const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      if (!apiKey) return false;
-      try {
-        const res = await fetch("https://api.openai.com/v1/models", {
-          headers: { Authorization: `Bearer ${apiKey}` },
-        });
-        return res.ok;
-      } catch {
-        return false;
-      }
-    },
+    validate: testOpenAIConnection,
   },
   {
     name: "Mapbox",
     envKey: "VITE_MAPBOX_ACCESS_TOKEN",
     endpoint: "https://api.mapbox.com/geocoding/v5",
-    validate: async () => {
-      const apiKey = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_MAPBOX_TOKEN;
-      if (!apiKey) return false;
-      try {
-        const res = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/test.json?access_token=${apiKey}&limit=1`
-        );
-        return res.ok;
-      } catch {
-        return false;
-      }
-    },
+    validate: testMapboxConnection,
   },
   {
     name: "Amadeus",
     envKey: "VITE_AMADEUS_API_KEY",
     endpoint: "https://test.api.amadeus.com/v1/security/oauth2/token",
-    validate: async () => {
-      const clientId = import.meta.env.VITE_AMADEUS_API_KEY;
-      const clientSecret = import.meta.env.VITE_AMADEUS_API_SECRET;
-      if (!clientId || !clientSecret) return false;
-      try {
-        const res = await fetch("https://test.api.amadeus.com/v1/security/oauth2/token", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({
-            grant_type: "client_credentials",
-            client_id: clientId,
-            client_secret: clientSecret,
-          }),
-        });
-        const json = await res.json();
-        return !!json.access_token;
-      } catch {
-        return false;
-      }
-    },
+    validate: testAmadeusConnection,
   },
   {
     name: "Supabase",
     envKey: "VITE_SUPABASE_URL",
     endpoint: "supabase.auth.getSession()",
-    validate: async () => {
-      try {
-        const { data, error } = await supabase.auth.getSession();
-        if (error) return false;
-        return !!data.session;
-      } catch {
-        return false;
-      }
-    },
+    validate: testSupabaseConnection,
   },
 ];
 
@@ -124,18 +78,26 @@ export default function ApiStatusPage() {
   const [status, setStatus] = useState<Record<string, Status>>({});
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<HistorySnapshot[]>([]);
+  const [responseData, setResponseData] = useState<Record<string, { message?: string; responseTime?: number; error?: string }>>({});
 
   const checkAll = async () => {
     setLoading(true);
     const results: Record<string, Status> = {};
+    const dataResults: Record<string, { message?: string; responseTime?: number; error?: string }> = {};
     
     for (const service of services) {
       results[service.name] = "checking";
       setStatus({ ...results });
       
-      const ok = await service.validate();
-      results[service.name] = ok ? "valid" : "invalid";
+      const result = await service.validate();
+      results[service.name] = result.success ? "valid" : "invalid";
+      dataResults[service.name] = {
+        message: result.message,
+        responseTime: result.responseTime,
+        error: result.error,
+      };
       setStatus({ ...results });
+      setResponseData({ ...dataResults });
     }
     
     // Add to history
@@ -273,10 +235,26 @@ export default function ApiStatusPage() {
                       <div className="flex items-center gap-3 mb-1">
                         <strong className="text-lg">{s.name}</strong>
                         {renderStatus(status[s.name])}
+                        {responseData[s.name]?.responseTime && (
+                          <span className="text-sm text-muted-foreground flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {responseData[s.name].responseTime}ms
+                          </span>
+                        )}
                       </div>
                       <div className="text-sm text-muted-foreground">
                         <div>Environment: {s.envKey}</div>
                         <div>Endpoint: {s.endpoint}</div>
+                        {responseData[s.name]?.message && (
+                          <div className="mt-1 font-medium">
+                            Status: {responseData[s.name].message}
+                          </div>
+                        )}
+                        {responseData[s.name]?.error && (
+                          <div className="mt-1 text-red-600">
+                            Error: {responseData[s.name].error}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </li>
