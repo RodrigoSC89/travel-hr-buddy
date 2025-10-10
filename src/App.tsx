@@ -43,6 +43,7 @@ const ControlPanel = React.lazy(() => import("./pages/admin/control-panel"));
 const TestDashboard = React.lazy(() => import("./pages/admin/tests"));
 const CIHistory = React.lazy(() => import("./pages/admin/ci-history"));
 const AdminAnalytics = React.lazy(() => import("./pages/admin/analytics"));
+const AdminWall = React.lazy(() => import("./pages/admin/wall"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
@@ -151,6 +152,7 @@ function App() {
                         <Route path="/admin/tests" element={<TestDashboard />} />
                         <Route path="/admin/ci-history" element={<CIHistory />} />
                         <Route path="/admin/analytics" element={<AdminAnalytics />} />
+                        <Route path="/admin/wall" element={<AdminWall />} />
                         <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                         <Route path="/health" element={<Health />} />
                         <Route path="/modules" element={<Modules />} />
