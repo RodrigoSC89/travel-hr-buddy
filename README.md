@@ -51,9 +51,47 @@ After starting the dev server, visit `http://localhost:8080/health` to verify yo
   "lint:fix": "eslint . --fix",
   "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
   "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-  "clean:logs": "node scripts/clean-console-logs.cjs"
+  "clean:logs": "node scripts/clean-console-logs.cjs",
+  "weekly-report": "node scripts/weekly-report-cron.js"
 }
 ```
+
+---
+
+## 📧 Email Alert Cron System
+
+Automated weekly CI/CD analytics reports sent via email with professional PDF attachments.
+
+### Features
+- 📊 **Automated Reports**: Weekly PDF reports with test statistics
+- 📧 **Email Delivery**: Supports Gmail, Outlook, SendGrid, Amazon SES
+- 🎨 **Professional Design**: Beautiful HTML emails with styled PDFs
+- 📈 **Analytics**: Success/failure rates, coverage metrics, build history
+
+### Quick Start
+
+1. **Configure Environment Variables**
+```bash
+# Add to .env
+EMAIL_USER=seu@gmail.com
+EMAIL_PASS=your_app_password
+EMAIL_TO=destinatario@example.com
+SUPABASE_KEY=your_supabase_key
+```
+
+2. **Run Manually**
+```bash
+npm run weekly-report
+```
+
+3. **Automate (GitHub Actions)**
+   - Configure GitHub Secrets (see [WEEKLY_REPORT_SETUP.md](./WEEKLY_REPORT_SETUP.md))
+   - Workflow runs every Monday at 9:00 UTC automatically
+
+### Documentation
+- 📘 [Quick Start Guide](./EMAIL_ALERT_QUICKSTART.md) - Get started in 5 minutes
+- 📗 [Complete Setup Guide](./WEEKLY_REPORT_SETUP.md) - Full configuration details
+- 📔 [Implementation Details](./EMAIL_ALERT_IMPLEMENTATION.md) - Technical documentation
 
 ---
 
@@ -178,6 +216,21 @@ VITE_SKYSCANNER_API_KEY=...
 # Marine Traffic - Vessel tracking
 MARINE_TRAFFIC_API_KEY=...
 VESSEL_FINDER_API_KEY=...
+```
+
+### Email Alert Cron
+
+```env
+# Email configuration for weekly reports
+EMAIL_USER=seu@gmail.com
+EMAIL_PASS=your_app_password
+EMAIL_HOST=smtp.gmail.com  # Optional, defaults to Gmail
+EMAIL_PORT=587  # Optional, defaults to 587
+EMAIL_FROM=relatorios@yourdomain.com
+EMAIL_TO=destinatario@example.com
+
+# Supabase key for cron script
+SUPABASE_KEY=${VITE_SUPABASE_PUBLISHABLE_KEY}
 ```
 
 See `.env.example` for the complete list of all available configuration options.
