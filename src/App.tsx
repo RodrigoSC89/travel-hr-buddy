@@ -25,6 +25,7 @@ const Communication = React.lazy(() => import("./pages/Communication"));
 const Intelligence = React.lazy(() => import("./pages/Intelligence"));
 const Maritime = React.lazy(() => import("./pages/Maritime"));
 const MaritimeSupremo = React.lazy(() => import("./pages/MaritimeSupremo"));
+const NautilusOne = React.lazy(() => import("./pages/NautilusOne"));
 const Innovation = React.lazy(() => import("./pages/Innovation"));
 const Optimization = React.lazy(() => import("./pages/Optimization"));
 const Collaboration = React.lazy(() => import("./pages/Collaboration"));
@@ -125,6 +126,7 @@ function App() {
                         <Route path="/intelligence" element={<Intelligence />} />
                         <Route path="/maritime" element={<Maritime />} />
                         <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
+                        <Route path="/nautilus-one" element={<NautilusOne />} />
                         <Route path="/innovation" element={<Innovation />} />
                         <Route path="/optimization" element={<Optimization />} />
                         <Route path="/collaboration" element={<Collaboration />} />
