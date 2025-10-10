@@ -72,6 +72,7 @@ export const BusinessIntelligence = () => {
       if (error) throw error;
       setAiReports(data || []);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

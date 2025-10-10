@@ -199,6 +199,7 @@ export const MaritimeCommunicationCenter = () => {
 
       setChannels(mockChannels);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

@@ -56,6 +56,7 @@ export const OfflineSyncManager: React.FC = () => {
       const pending = await getPendingChanges();
       setSyncItems(pending);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -98,7 +99,8 @@ export const OfflineSyncManager: React.FC = () => {
           await simulateSyncAction(item);
           
         } catch (error) {
-        }
+      console.warn("[EMPTY CATCH]", error);
+    }
       }
 
       // Executar sync real

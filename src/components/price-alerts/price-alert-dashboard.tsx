@@ -107,6 +107,7 @@ export const PriceAlertDashboardLegacy = () => {
       if (error) throw error;
       setNotifications(data || []);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

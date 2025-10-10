@@ -178,7 +178,7 @@ const AdvancedDocumentsPage = () => {
                     <h3 className="text-lg font-semibold mb-3">Certificados Marítimos</h3>
                     <DocumentValidator 
                       documentType="certificate" 
-                      onValidationComplete={(result) => console.log("Certificado validado:", result)}
+                      onValidationComplete={(result) => {}} // console.log("Certificado validado:", result)
                     />
                   </div>
                   
@@ -186,7 +186,7 @@ const AdvancedDocumentsPage = () => {
                     <h3 className="text-lg font-semibold mb-3">Licenças e Permissões</h3>
                     <DocumentValidator 
                       documentType="license"
-                      onValidationComplete={(result) => console.log("Licença validada:", result)}
+                      onValidationComplete={(result) => {}} // console.log("Licença validada:", result)
                     />
                   </div>
                 </div>

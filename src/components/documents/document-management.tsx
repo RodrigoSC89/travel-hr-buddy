@@ -175,6 +175,7 @@ export const DocumentManagement: React.FC = () => {
       
       setCategories(mockCategories);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

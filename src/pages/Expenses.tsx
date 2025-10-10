@@ -23,6 +23,7 @@ const Expenses = () => {
       await createExpense(data);
       setShowForm(false);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     } finally {
       setIsCreating(false);
     }

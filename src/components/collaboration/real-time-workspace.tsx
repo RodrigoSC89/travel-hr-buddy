@@ -292,6 +292,7 @@ const RealTimeWorkspace: React.FC = () => {
         }
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -312,6 +313,7 @@ const RealTimeWorkspace: React.FC = () => {
         current_page: window.location.pathname
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

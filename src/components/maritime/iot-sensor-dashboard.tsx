@@ -211,6 +211,7 @@ export const IoTSensorDashboard = () => {
       }
       
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

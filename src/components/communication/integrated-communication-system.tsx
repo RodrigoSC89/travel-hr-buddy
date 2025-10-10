@@ -99,6 +99,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
       setContacts(formattedContacts);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -128,6 +129,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       // Mark messages as read
       await markMessagesAsRead(contactId);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     } finally {
       setIsLoading(false);
     }
@@ -145,6 +147,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         .eq("recipient_id", currentUserId)
         .eq("is_read", false);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

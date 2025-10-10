@@ -304,6 +304,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       applyBrandingTheme(finalBranding);
 
     } catch (err) {
+      console.warn("[EMPTY CATCH]", err);
     }
   };
 
@@ -337,6 +338,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setCurrentUser(tenantUser || defaultUser);
 
     } catch (err) {
+      console.warn("[EMPTY CATCH]", err);
     }
   };
 
@@ -376,6 +378,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setTenantUsage(usage || defaultUsage);
 
     } catch (err) {
+      console.warn("[EMPTY CATCH]", err);
     }
   };
 
@@ -391,6 +394,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setTenantPlans(plans || []);
 
     } catch (err) {
+      console.warn("[EMPTY CATCH]", err);
     }
   };
 

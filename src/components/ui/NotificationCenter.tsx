@@ -243,6 +243,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -269,6 +270,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         description: `${unreadIds.length} notificações foram marcadas como lidas`,
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -288,6 +290,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         setUnreadCount(prev => Math.max(0, prev - 1));
       }
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

@@ -98,6 +98,7 @@ export const RealTimeFleetMonitor = () => {
       setVessels(transformedVessels);
       
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     } finally {
       setLoading(false);
     }
@@ -137,6 +138,7 @@ export const RealTimeFleetMonitor = () => {
 
       setWeatherData(data.weather);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

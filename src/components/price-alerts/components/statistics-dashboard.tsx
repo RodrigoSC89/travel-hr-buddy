@@ -62,6 +62,7 @@ export const StatisticsDashboard = () => {
         setStatistics(data);
       }
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -109,6 +110,7 @@ export const StatisticsDashboard = () => {
         });
       }
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     } finally {
       setLoading(false);
     }

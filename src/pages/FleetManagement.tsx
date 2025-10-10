@@ -96,6 +96,7 @@ const MaritimeFleetManagement = () => {
         });
       }
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     } finally {
       setIsLoading(false);
     }
@@ -343,7 +344,7 @@ const MaritimeFleetManagement = () => {
             id: "emergency-alert",
             label: "Alerta de Emergência",
             icon: <AlertTriangle className="h-4 w-4" />,
-            action: () => console.log("Alerta de emergência ativado"),
+            action: () => {}, // console.log("Alerta de emergência ativado")
             variant: "outline"
           }
         ]}
@@ -352,14 +353,14 @@ const MaritimeFleetManagement = () => {
             id: "vessel-search",
             label: "Buscar Embarcação",
             icon: <Search className="h-3 w-3" />,
-            action: () => console.log("Busca de embarcação"),
+            action: () => {}, // console.log("Busca de embarcação")
             shortcut: "Ctrl+F"
           },
           {
             id: "live-tracking",
             label: "Rastreamento em Tempo Real",
             icon: <MapPin className="h-3 w-3" />,
-            action: () => console.log("Open live tracking")
+            action: () => {} // console.log("Open live tracking")
           }
         ]}
       />

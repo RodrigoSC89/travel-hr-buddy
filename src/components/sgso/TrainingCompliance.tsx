@@ -355,21 +355,21 @@ export const TrainingCompliance: React.FC = () => {
             </Button>
             <Button 
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log("Relatório compliance")}
+              onClick={() => {}} // console.log("Relatório compliance")
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button 
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log("Certificados expirados")}
+              onClick={() => {}} // console.log("Certificados expirados")}
             >
               <AlertTriangle className="h-6 w-6" />
               <span className="font-semibold">Expirados</span>
             </Button>
             <Button 
               className="bg-purple-600 hover:bg-purple-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => console.log("Matriz competências")}
+              onClick={() => {}} // console.log("Matriz competências")}
             >
               <Users className="h-6 w-6" />
               <span className="font-semibold">Matriz</span>

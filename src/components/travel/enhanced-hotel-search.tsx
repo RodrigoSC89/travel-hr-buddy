@@ -280,6 +280,7 @@ export const EnhancedHotelSearch: React.FC = () => {
       ];
       setAiSuggestions(suggestions);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

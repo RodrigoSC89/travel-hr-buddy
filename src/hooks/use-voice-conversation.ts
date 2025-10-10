@@ -145,7 +145,6 @@ export const useTextToSpeech = () => {
   const speak = async (text: string, voice: string = "alloy"): Promise<void> => {
     try {
       setIsSpeaking(true);
-      console.log("Generating speech for:", text.substring(0, 50) + "...");
 
       const { data, error } = await supabase.functions.invoke("text-to-speech", {
         body: { 

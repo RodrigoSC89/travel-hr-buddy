@@ -111,28 +111,28 @@ const ChecklistsInteligentes = () => {
             id: "new-checklist",
             label: "Novo Checklist",
             icon: <Plus className="h-4 w-4" />,
-            action: () => console.log("Novo checklist"),
+            action: () => {}, // console.log("Novo checklist")
             variant: "default"
           },
           {
             id: "templates",
             label: "Templates",
             icon: <FileText className="h-4 w-4" />,
-            action: () => console.log("Templates"),
+            action: () => {} // console.log("Templates"),
             variant: "outline"
           },
           {
             id: "reports",
             label: "Relatórios",
             icon: <BarChart3 className="h-4 w-4" />,
-            action: () => console.log("Relatórios"),
+            action: () => {} // console.log("Relatórios"),
             variant: "outline"
           },
           {
             id: "ai-assist",
             label: "IA Assistente",
             icon: <Brain className="h-4 w-4" />,
-            action: () => console.log("IA Assistente"),
+            action: () => {} // console.log("IA Assistente"),
             variant: "outline"
           }
         ]}
@@ -148,7 +148,7 @@ const ChecklistsInteligentes = () => {
             id: "export",
             label: "Exportar",
             icon: <Download className="h-3 w-3" />,
-            action: () => console.log("Export checklists")
+            action: () => {} // console.log("Export checklists")
           }
         ]}
       />

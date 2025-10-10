@@ -537,6 +537,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         });
       }
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

@@ -245,6 +245,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         description: "Mensagem marcada como lida"
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -263,6 +264,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         description: "Mensagem arquivada"
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

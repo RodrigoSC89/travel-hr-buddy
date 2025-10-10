@@ -169,6 +169,7 @@ export const ModernEmployeePortal: React.FC = () => {
         setUserProfile(profile);
       }
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -209,6 +210,7 @@ export const ModernEmployeePortal: React.FC = () => {
         nextEmbarkation: null
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -240,6 +242,7 @@ export const ModernEmployeePortal: React.FC = () => {
         medicalExams: [] // Implementar quando houver tabela
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -276,6 +279,7 @@ export const ModernEmployeePortal: React.FC = () => {
 
       setAIInsights(formattedInsights);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -292,6 +296,7 @@ export const ModernEmployeePortal: React.FC = () => {
       if (error) throw error;
       setDocuments(docs || []);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

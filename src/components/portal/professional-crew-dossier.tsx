@@ -402,6 +402,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
       setAIRecommendations(aiData || []);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

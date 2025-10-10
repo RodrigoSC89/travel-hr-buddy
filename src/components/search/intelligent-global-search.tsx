@@ -222,7 +222,8 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       try {
         setRecentSearches(JSON.parse(saved));
       } catch (error) {
-      }
+      console.warn("[EMPTY CATCH]", error);
+    }
     }
   }, []);
 
@@ -256,6 +257,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
 
       setResults(allResults);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     } finally {
       setIsLoading(false);
     }
@@ -338,6 +340,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       }
 
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

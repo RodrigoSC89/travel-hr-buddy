@@ -107,6 +107,7 @@ export const PredictiveTravelDashboard: React.FC = () => {
       if (error) throw error;
       setRecommendations(data.data || []);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -125,6 +126,7 @@ export const PredictiveTravelDashboard: React.FC = () => {
       if (error) throw error;
       setAlerts(data || []);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

@@ -117,6 +117,7 @@ export const SmartNotifications: React.FC = () => {
         setSettings(defaultSettings);
       }
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     } finally {
       setIsLoading(false);
     }

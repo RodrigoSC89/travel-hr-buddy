@@ -176,6 +176,7 @@ export const OrganizationHealthCheck: React.FC = () => {
 
       setHealthChecks(checks);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     } finally {
       setIsLoading(false);
     }

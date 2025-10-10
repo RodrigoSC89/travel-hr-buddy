@@ -164,6 +164,7 @@ export const MaritimeCertificationManager = () => {
 
       setAlerts(mockAlerts);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

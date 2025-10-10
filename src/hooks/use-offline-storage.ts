@@ -68,6 +68,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         timestamp: Date.now()
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   }, [initDB]);
 
@@ -108,6 +109,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       await store.add(offlineData);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   }, [initDB]);
 
@@ -152,10 +154,12 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
           // await syncToAPI(change.action, change.data);
           
         } catch (error) {
-        }
+      console.warn("[EMPTY CATCH]", error);
+    }
       }
       
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   }, [isOnline, getPendingChanges, initDB]);
 
@@ -177,6 +181,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       setCacheSize(cacheCount + offlineCount);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   }, [initDB]);
 
@@ -205,6 +210,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       updateCacheSize();
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   }, [initDB, updateCacheSize]);
 

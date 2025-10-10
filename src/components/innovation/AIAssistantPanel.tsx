@@ -145,6 +145,7 @@ export const AIAssistantPanel = () => {
       if (error) throw error;
       setAiInsights(data || []);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     } finally {
       setIsLoading(false);
     }

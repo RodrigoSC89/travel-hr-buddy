@@ -98,6 +98,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
       setIsEditDialogOpen(false);
       setSelectedNC(null);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

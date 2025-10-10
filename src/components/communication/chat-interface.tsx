@@ -105,6 +105,7 @@ export const ChatInterface = () => {
       if (error) throw error;
       setAllUsers(data || []);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   }, [currentUser?.id]);
 
@@ -218,6 +219,7 @@ export const ChatInterface = () => {
       // Marcar mensagens como lidas
       await markMessagesAsRead(conversationId);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   }, [currentUser?.id]);
 
@@ -266,6 +268,7 @@ export const ChatInterface = () => {
           .insert(readStatuses);
       }
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

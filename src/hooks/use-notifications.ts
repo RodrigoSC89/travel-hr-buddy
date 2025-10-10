@@ -37,14 +37,15 @@ export const useNotifications = () => {
         });
 
         PushNotifications.addListener("pushNotificationReceived", (notification) => {
-          console.log("Push received: " + JSON.stringify(notification));
+
         });
 
         PushNotifications.addListener("pushNotificationActionPerformed", (notification) => {
-          console.log("Push action performed: " + JSON.stringify(notification));
+
         });
       }
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -76,6 +77,7 @@ export const useNotifications = () => {
 
       await LocalNotifications.schedule(notificationOptions);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -83,6 +85,7 @@ export const useNotifications = () => {
     try {
       await LocalNotifications.cancel({ notifications: [{ id }] });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

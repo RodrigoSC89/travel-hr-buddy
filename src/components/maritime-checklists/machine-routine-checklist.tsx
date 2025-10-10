@@ -547,6 +547,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       await onSave(checklist);
       setLastSaved(new Date());
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

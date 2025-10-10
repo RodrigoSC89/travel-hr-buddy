@@ -33,7 +33,7 @@ export class OCRService {
     }
 
     this.worker = await Tesseract.createWorker(language, 1, {
-      logger: (m) => console.log("OCR:", m),
+      logger: (m) => {} // console.log("OCR:", m)
     });
   }
 

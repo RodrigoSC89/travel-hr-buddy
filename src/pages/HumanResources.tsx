@@ -225,28 +225,28 @@ const HumanResources = () => {
               id: "new-employee",
               label: "Novo Funcionário",
               icon: <Plus className="h-4 w-4" />,
-              action: () => console.log("Novo funcionário"),
+              action: () => {}, // console.log("Novo funcionário")
               variant: "default"
             },
             {
               id: "reports",
               label: "Relatórios",
               icon: <BarChart3 className="h-4 w-4" />,
-              action: () => console.log("Relatórios RH"),
+              action: () => {}, // console.log("Relatórios RH")
               variant: "outline"
             },
             {
               id: "payroll",
               label: "Folha de Pagamento",
               icon: <DollarSign className="h-4 w-4" />,
-              action: () => console.log("Folha de pagamento"),
+              action: () => {} // console.log("Folha de pagamento"),
               variant: "outline"
             },
             {
               id: "training",
               label: "Treinamentos",
               icon: <Brain className="h-4 w-4" />,
-              action: () => console.log("Treinamentos"),
+              action: () => {} // console.log("Treinamentos"),
               variant: "outline"
             }
           ]}
@@ -262,7 +262,7 @@ const HumanResources = () => {
               id: "export",
               label: "Exportar",
               icon: <Download className="h-3 w-3" />,
-              action: () => console.log("Export HR data")
+              action: () => {} // console.log("Export HR data")
             }
           ]}
         />

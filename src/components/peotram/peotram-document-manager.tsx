@@ -211,6 +211,7 @@ export const PeotramDocumentManager: React.FC = () => {
       setDocuments(mockDocuments);
       updateCategoryCompletion(mockDocuments);
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 

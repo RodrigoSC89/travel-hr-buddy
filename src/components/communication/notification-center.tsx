@@ -193,6 +193,7 @@ export const NotificationCenter = () => {
       // Mock settings loading - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -270,6 +271,7 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -284,6 +286,7 @@ export const NotificationCenter = () => {
         description: "Todas as notificações foram marcadas como lidas"
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -297,6 +300,7 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -309,6 +313,7 @@ export const NotificationCenter = () => {
         description: "Notificação removida"
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
@@ -321,6 +326,7 @@ export const NotificationCenter = () => {
         description: "Configurações atualizadas"
       });
     } catch (error) {
+      console.warn("[EMPTY CATCH]", error);
     }
   };
 
