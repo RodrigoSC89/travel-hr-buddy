@@ -264,65 +264,65 @@ export default function ApiStatusPage() {
 
 function renderStatusIcon(state: Status) {
   switch (state) {
-    case "valid":
-      return <CheckCircle className="h-5 w-5 text-green-600" />;
-    case "invalid":
-      return <XCircle className="h-5 w-5 text-red-600" />;
-    case "missing":
-      return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
-    case "checking":
-      return <Loader2 className="h-5 w-5 animate-spin text-blue-600" />;
-    default:
-      return <Clock className="h-5 w-5 text-gray-400" />;
+  case "valid":
+    return <CheckCircle className="h-5 w-5 text-green-600" />;
+  case "invalid":
+    return <XCircle className="h-5 w-5 text-red-600" />;
+  case "missing":
+    return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
+  case "checking":
+    return <Loader2 className="h-5 w-5 animate-spin text-blue-600" />;
+  default:
+    return <Clock className="h-5 w-5 text-gray-400" />;
   }
 }
 
 function renderStatusText(state: Status) {
   switch (state) {
-    case "valid":
-      return "✅ Valid - Service is responding correctly";
-    case "invalid":
-      return "❌ Invalid - Service is not responding or has errors";
-    case "missing":
-      return "⚠️ Missing Key - API key not configured";
-    case "checking":
-      return "⏳ Checking... - Testing connection";
-    default:
-      return "- Not tested yet";
+  case "valid":
+    return "✅ Valid - Service is responding correctly";
+  case "invalid":
+    return "❌ Invalid - Service is not responding or has errors";
+  case "missing":
+    return "⚠️ Missing Key - API key not configured";
+  case "checking":
+    return "⏳ Checking... - Testing connection";
+  default:
+    return "- Not tested yet";
   }
 }
 
 function renderStatusBadge(state: Status) {
   switch (state) {
-    case "valid":
-      return (
-        <Badge className="bg-green-600 text-white">
-          ✅ Valid
-        </Badge>
-      );
-    case "invalid":
-      return (
-        <Badge variant="destructive">
-          ❌ Invalid
-        </Badge>
-      );
-    case "missing":
-      return (
-        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
-          ⚠️ Missing Key
-        </Badge>
-      );
-    case "checking":
-      return (
-        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
-          ⏳ Checking...
-        </Badge>
-      );
-    default:
-      return (
-        <Badge variant="outline" className="bg-gray-50 text-gray-600">
-          - Not Tested
-        </Badge>
-      );
+  case "valid":
+    return (
+      <Badge className="bg-green-600 text-white">
+        ✅ Valid
+      </Badge>
+    );
+  case "invalid":
+    return (
+      <Badge variant="destructive">
+        ❌ Invalid
+      </Badge>
+    );
+  case "missing":
+    return (
+      <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
+        ⚠️ Missing Key
+      </Badge>
+    );
+  case "checking":
+    return (
+      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
+        ⏳ Checking...
+      </Badge>
+    );
+  default:
+    return (
+      <Badge variant="outline" className="bg-gray-50 text-gray-600">
+        - Not Tested
+      </Badge>
+    );
   }
 }
