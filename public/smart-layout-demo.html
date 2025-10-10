@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Layout Demo - Nautilus One</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    </style>
+</head>
+<body class="bg-zinc-50 dark:bg-zinc-900">
+    <div class="flex h-screen w-full overflow-hidden">
+        <!-- Smart Sidebar -->
+        <aside class="w-64 bg-zinc-900 text-white h-screen overflow-y-auto shadow-lg">
+            <div class="p-4 border-b border-zinc-800">
+                <h1 class="font-bold text-xl flex items-center gap-2">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                    </svg>
+                    🧭 Nautilus One
+                </h1>
+                <p class="text-xs text-zinc-400 mt-1">Sistema Corporativo</p>
+            </div>
+
+            <nav class="space-y-1 p-2">
+                <!-- Dashboard & Visão Geral -->
+                <div>
+                    <button class="flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md hover:bg-zinc-800 bg-zinc-800">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z"></path>
+                            </svg>
+                            <span>Dashboard & Visão Geral</span>
+                        </div>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="ml-4 mt-1 space-y-0.5 border-l border-zinc-700 pl-2">
+                        <a href="#" class="block px-3 py-2 text-sm rounded-md bg-blue-600 text-white font-medium">Dashboard Principal</a>
+                        <a href="#" class="block px-3 py-2 text-sm rounded-md text-zinc-300 hover:bg-zinc-800 hover:text-white">Visão Geral</a>
+                    </div>
+                </div>
+
+                <!-- Sistema Marítimo -->
+                <div>
+                    <button class="flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md hover:bg-zinc-800">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                            </svg>
+                            <span>Sistema Marítimo</span>
+                        </div>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Colaboração & IA -->
+                <div>
+                    <button class="flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md hover:bg-zinc-800">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                            <span>Colaboração & IA</span>
+                        </div>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Comunicação & Alertas -->
+                <div>
+                    <button class="flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md hover:bg-zinc-800">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                            <span>Comunicação & Alertas</span>
+                        </div>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Gestão e Analytics -->
+                <div>
+                    <button class="flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md hover:bg-zinc-800">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            <span>Gestão e Analytics</span>
+                        </div>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Outros Módulos -->
+                <div>
+                    <button class="flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md hover:bg-zinc-800">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                            </svg>
+                            <span>Outros Módulos</span>
+                        </div>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-zinc-800 mt-4 text-xs text-zinc-400 text-center">
+                <p>Versão 2.1.0</p>
+                <p class="mt-1">© 2024 Nautilus</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Smart Header -->
+            <header class="flex items-center justify-between px-6 py-3 bg-zinc-800 text-white shadow-md border-b border-zinc-700">
+                <h1 class="text-xl font-semibold flex items-center gap-2">
+                    <span>🚀 Nautilus One</span>
+                </h1>
+
+                <div class="flex-1 max-w-md mx-auto">
+                    <input type="text" placeholder="Buscar..." class="w-full px-4 py-2 rounded-md bg-zinc-700 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <!-- Theme Toggle -->
+                    <button class="p-2 rounded-full hover:bg-zinc-700 transition-colors" title="Alternar Tema">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Notifications -->
+                    <button class="relative p-2 rounded-full hover:bg-zinc-700 transition-colors" title="Notificações">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">3</span>
+                    </button>
+
+                    <!-- AI Assistant -->
+                    <button class="p-2 rounded-full hover:bg-zinc-700 transition-colors" title="Assistente IA">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- User Menu -->
+                    <div class="ml-2 w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
+                        U
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="flex-1 overflow-y-auto p-6 bg-zinc-50">
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <h1 class="text-4xl font-bold text-gray-900 flex items-center gap-2">
+                            <span class="text-5xl">✨</span>
+                            Smart Layout Demo
+                        </h1>
+                        <p class="text-lg text-gray-600">
+                            Nova experiência de navegação com sidebar inteligente e design moderno
+                        </p>
+                    </div>
+
+                    <div class="grid gap-6 md:grid-cols-2">
+                        <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+                            <div class="flex items-center gap-2 mb-4">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h3 class="text-xl font-bold text-gray-900">Recursos Implementados</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Todas as melhorias do sistema Nautilus One</p>
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="font-medium text-gray-900">Smart Sidebar</p>
+                                        <p class="text-sm text-gray-600">32 módulos organizados em 6 categorias temáticas</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="font-medium text-gray-900">Colapsável e Expansível</p>
+                                        <p class="text-sm text-gray-600">Cada categoria pode ser aberta/fechada com clique</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-green-500 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="font-medium text-gray-900">Tema Escuro/Claro</p>
+                                        <p class="text-sm text-gray-600">Toggle no header para alternar entre temas</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="text-2xl">⚡</span>
+                                <h3 class="text-xl font-bold text-gray-900">Funcionalidades do Header</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Barra superior inteligente</p>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-1 bg-gray-100 rounded text-sm">🌙 / ☀️</span>
+                                    <span class="text-sm text-gray-900">Alternador de Tema</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-1 bg-gray-100 rounded text-sm">🔔</span>
+                                    <span class="text-sm text-gray-900">Central de Notificações</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-1 bg-gray-100 rounded text-sm">🤖</span>
+                                    <span class="text-sm text-gray-900">Assistente IA</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-1 bg-gray-100 rounded text-sm">🔍</span>
+                                    <span class="text-sm text-gray-900">Busca Global</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">
+                        <h3 class="font-semibold text-lg mb-3 flex items-center gap-2">
+                            <span class="text-2xl">✨</span>
+                            Próximos Passos
+                        </h3>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-500">✓</span>
+                                <span>Sistema de Design unificado implementado</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-500">✓</span>
+                                <span>Smart Sidebar com 6 categorias e 32 módulos organizados</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-blue-500">✓</span>
+                                <span>Header inteligente com tema, notificações e IA</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-gray-400">→</span>
+                                <span>Adicionar microanimações com Framer Motion</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-gray-400">→</span>
+                                <span>Implementar onboarding interativo para novos usuários</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
