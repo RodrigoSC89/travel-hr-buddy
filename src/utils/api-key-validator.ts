@@ -77,13 +77,13 @@ function getRecommendation(status: APIKeyStatus["status"], apiName: string): str
   case "not_configured":
     return `Configure ${apiName} API key in environment variables`;
   case "unauthorized":
-    return `Invalid API key - verify credentials and rotate if necessary`;
+    return "Invalid API key - verify credentials and rotate if necessary";
   case "expired":
-    return `API key has expired - rotate immediately`;
+    return "API key has expired - rotate immediately";
   case "rate_limited":
-    return `Rate limit reached - consider upgrading plan or reducing usage`;
+    return "Rate limit reached - consider upgrading plan or reducing usage";
   case "invalid":
-    return `API connection failed - check credentials and network connectivity`;
+    return "API connection failed - check credentials and network connectivity";
   default:
     return "Unknown status - manual inspection required";
   }
