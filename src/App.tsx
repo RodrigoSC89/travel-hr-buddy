@@ -37,6 +37,7 @@ const Gamification = React.lazy(() => import("./pages/Gamification"));
 const PredictiveAnalytics = React.lazy(() => import("./pages/PredictiveAnalytics"));
 const Admin = React.lazy(() => import("./pages/Admin"));
 const APITester = React.lazy(() => import("./pages/admin/api-tester"));
+const APIStatus = React.lazy(() => import("./pages/admin/api-status"));
 const ControlPanel = React.lazy(() => import("./pages/admin/control-panel"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
@@ -136,6 +137,7 @@ function App() {
                         <Route path="/predictive" element={<PredictiveAnalytics />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/admin/api-tester" element={<APITester />} />
+                        <Route path="/admin/api-status" element={<APIStatus />} />
                         <Route path="/admin/control-panel" element={<ControlPanel />} />
                         <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                         <Route path="/health" element={<Health />} />
