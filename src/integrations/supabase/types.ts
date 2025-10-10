@@ -2989,6 +2989,36 @@ export type Database = {
           },
         ]
       }
+      modules: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          name: string
+          path: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          name: string
+          path: string
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          path?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       nautilus_messages: {
         Row: {
           content: string
