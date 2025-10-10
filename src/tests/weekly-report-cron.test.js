@@ -62,14 +62,9 @@ describe("Weekly Report Cron Script", () => {
         });
 
         let stderr = "";
-        let stdout = "";
 
         child.stderr.on("data", (data) => {
           stderr += data.toString();
-        });
-
-        child.stdout.on("data", (data) => {
-          stdout += data.toString();
         });
 
         child.on("exit", (code) => {
@@ -105,14 +100,9 @@ describe("Weekly Report Cron Script", () => {
         });
 
         let stderr = "";
-        let stdout = "";
 
         child.stderr.on("data", (data) => {
           stderr += data.toString();
-        });
-
-        child.stdout.on("data", (data) => {
-          stdout += data.toString();
         });
 
         child.on("exit", (code) => {
