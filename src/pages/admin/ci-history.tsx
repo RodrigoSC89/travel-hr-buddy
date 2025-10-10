@@ -145,7 +145,7 @@ const mockWorkflowRuns: WorkflowRun[] = [
 
 export default function CIHistoryPage() {
   const [branch, setBranch] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("all");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [page, setPage] = useState(0);
@@ -163,7 +163,7 @@ export default function CIHistoryPage() {
     }
 
     // Filter by status
-    if (status) {
+    if (status && status !== "all") {
       result = result.filter(run => run.status === status);
     }
 
@@ -248,12 +248,12 @@ export default function CIHistoryPage() {
               value={branch} 
               onChange={(e) => setBranch(e.target.value)} 
             />
-            <Select value={status} onValueChange={setStatus}>
+            <Select value={status || "all"} onValueChange={(val) => setStatus(val === "all" ? "" : val)}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos</SelectItem>
+                <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="success">✅ Sucesso</SelectItem>
                 <SelectItem value="failure">❌ Falha</SelectItem>
               </SelectContent>
