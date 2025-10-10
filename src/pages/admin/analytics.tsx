@@ -58,6 +58,23 @@ const mockCoverageTrend = [
   { date: "15/10", coverage: 92 },
 ];
 
+// Mock data for branch coverage (for calculating average coverage per branch)
+const mockBranchCoverageData = [
+  { branch: "main", coverage: 92 },
+  { branch: "main", coverage: 90 },
+  { branch: "main", coverage: 91 },
+  { branch: "develop", coverage: 85 },
+  { branch: "develop", coverage: 87 },
+  { branch: "develop", coverage: 86 },
+  { branch: "feature/ui", coverage: 78 },
+  { branch: "feature/ui", coverage: 80 },
+  { branch: "feature/ui", coverage: 79 },
+  { branch: "hotfix/bug", coverage: 88 },
+  { branch: "hotfix/bug", coverage: 89 },
+  { branch: "release/v2", coverage: 93 },
+  { branch: "release/v2", coverage: 94 },
+];
+
 const colors = ["#3b82f6", "#ef4444", "#eab308"];
 
 export default function AnalyticsPage() {
@@ -76,6 +93,26 @@ export default function AnalyticsPage() {
 
   const coverageTrend = useMemo(() => {
     return mockCoverageTrend;
+  }, [startDate, endDate]);
+
+  // Calculate average coverage by branch
+  const branchCoverageChart = useMemo(() => {
+    const branchCoverageMap = mockBranchCoverageData.reduce(
+      (acc, { branch, coverage }) => {
+        if (!acc[branch]) {
+          acc[branch] = { total: 0, count: 0 };
+        }
+        acc[branch].total += coverage;
+        acc[branch].count += 1;
+        return acc;
+      },
+      {} as Record<string, { total: number; count: number }>
+    );
+
+    return Object.entries(branchCoverageMap).map(([branch, { total, count }]) => ({
+      branch,
+      avgCoverage: Math.round(total / count),
+    }));
   }, [startDate, endDate]);
 
   const exportPDF = async () => {
@@ -173,6 +210,20 @@ export default function AnalyticsPage() {
                     <Tooltip />
                     <Line type="monotone" dataKey="coverage" stroke="#10b981" strokeWidth={2} />
                   </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            <Card className="col-span-1 md:col-span-2">
+              <CardContent className="p-4">
+                <h2 className="text-lg font-semibold mb-2">📊 Cobertura Média por Branch</h2>
+                <ResponsiveContainer width="100%" height={240}>
+                  <BarChart data={branchCoverageChart}>
+                    <XAxis dataKey="branch" />
+                    <YAxis domain={[0, 100]} />
+                    <Tooltip />
+                    <Bar dataKey="avgCoverage" fill="#10b981" />
+                  </BarChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
