@@ -150,6 +150,7 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
 
       setAnalyticsData(mockData);
     } catch (error) {
+      console.error('Failed to fetch analytics data:', error);
     } finally {
       setLoading(false);
     }

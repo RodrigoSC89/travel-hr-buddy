@@ -199,6 +199,7 @@ export const MaritimeCommunicationCenter = () => {
 
       setChannels(mockChannels);
     } catch (error) {
+      console.error('Failed to load channels:', error);
     }
   };
 
