@@ -384,6 +384,13 @@ export const SmartOnboardingWizard: React.FC = () => {
           is_completed: currentStep === steps.length - 1
         });
     } catch (error) {
+      // Failed to save onboarding progress
+      console.error("Failed to save onboarding progress:", error);
+      toast({
+        title: "Aviso",
+        description: "Progresso salvo localmente. Será sincronizado em breve.",
+        variant: "default"
+      });
     }
 
     if (currentStep < steps.length - 1) {
@@ -439,6 +446,13 @@ export const SmartOnboardingWizard: React.FC = () => {
       }
 
     } catch (error) {
+      // Failed to create default automations
+      console.error("Failed to create default automations:", error);
+      toast({
+        title: "Aviso",
+        description: "Automações padrão não foram criadas. Você pode configurá-las manualmente depois.",
+        variant: "default"
+      });
     } finally {
       setIsLoading(false);
     }
