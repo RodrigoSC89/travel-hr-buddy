@@ -83,6 +83,7 @@ export const RealTimeCollaboration = () => {
       fetchMessages(conversationId);
       fetchActiveUsers();
     } catch (error) {
+      console.error('Failed to create conversation:', error);
     }
   };
 
@@ -110,6 +111,7 @@ export const RealTimeCollaboration = () => {
       
       setRealtimeMessages(formattedMessages);
     } catch (error) {
+      console.error('Failed to fetch messages:', error);
     }
   };
 
@@ -132,6 +134,7 @@ export const RealTimeCollaboration = () => {
       
       setActiveUsers(formattedUsers);
     } catch (error) {
+      console.error('Failed to fetch active users:', error);
     }
   };
 

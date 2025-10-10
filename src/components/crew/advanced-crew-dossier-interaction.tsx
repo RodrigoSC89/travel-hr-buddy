@@ -110,6 +110,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       const response = `Processando comando: "${text}". Esta funcionalidade será expandida em breve.`;
       await speak(response);
     } catch (error) {
+      console.error('Failed to process voice command:', error);
     }
   };
 
@@ -154,6 +155,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       if (error) throw error;
       setAiInsights(data || []);
     } catch (error) {
+      console.error('Failed to generate AI insights:', error);
     }
   };
 
@@ -170,6 +172,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       if (error) throw error;
       setGamificationProfile(data.profile);
     } catch (error) {
+      console.error('Failed to load gamification profile:', error);
     } finally {
       setIsLoadingGamification(false);
     }
@@ -187,6 +190,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       if (error) throw error;
       setGoals(data.result?.goals || []);
     } catch (error) {
+      console.error('Failed to load personal goals:', error);
     }
   };
 
@@ -206,6 +210,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         description: "Novas metas personalizadas foram sugeridas para você!",
       });
     } catch (error) {
+      console.error('Failed to create new goal:', error);
     }
   };
 

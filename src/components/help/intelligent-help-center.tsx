@@ -206,6 +206,7 @@ export const IntelligentHelpCenter: React.FC = () => {
           user_id: null // Seria auth.uid() se autenticado
         });
     } catch (error) {
+      console.error('Failed to track user action:', error);
     }
   };
 

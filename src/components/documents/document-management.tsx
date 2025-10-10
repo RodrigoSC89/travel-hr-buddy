@@ -175,6 +175,7 @@ export const DocumentManagement: React.FC = () => {
       
       setCategories(mockCategories);
     } catch (error) {
+      console.error('Failed to load categories:', error);
     }
   };
 
