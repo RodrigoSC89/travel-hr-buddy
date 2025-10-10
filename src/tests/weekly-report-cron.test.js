@@ -31,15 +31,14 @@ describe("Weekly Report Cron Script", () => {
   });
 
   it("should have valid JavaScript syntax", async () => {
-    await new Promise((resolve, reject) => {
-      const child = spawn("node", ["--check", scriptPath]);
+    const child = spawn("node", ["--check", scriptPath]);
 
+    await new Promise((resolve, reject) => {
       child.on("exit", (code) => {
-        try {
-          expect(code).toBe(0);
+        if (code === 0) {
           resolve();
-        } catch (err) {
-          reject(err);
+        } else {
+          reject(new Error(`Syntax check failed with code ${code}`));
         }
       });
 
@@ -50,78 +49,78 @@ describe("Weekly Report Cron Script", () => {
   });
 
   it("should fail gracefully when SUPABASE_KEY is missing", async () => {
-    try {
-      await new Promise((resolve, reject) => {
-        const child = spawn("node", [scriptPath], {
-          env: {
-            ...process.env,
-            VITE_SUPABASE_URL: "https://test.supabase.co",
-            SUPABASE_KEY: undefined,
-            VITE_SUPABASE_PUBLISHABLE_KEY: undefined,
-          },
-        });
-
-        let stderr = "";
-
-        child.stderr.on("data", (data) => {
-          stderr += data.toString();
-        });
-
-        child.on("exit", (code) => {
-          try {
-            expect(code).toBe(1); // Should exit with error code
-            expect(stderr).toContain("SUPABASE_KEY");
-            resolve();
-          } catch (err) {
-            reject(err);
-          }
-        });
-
-        child.on("error", (err) => {
-          reject(err);
-        });
+    await new Promise((resolve, reject) => {
+      const child = spawn("node", [scriptPath], {
+        env: {
+          ...process.env,
+          VITE_SUPABASE_URL: "https://test.supabase.co",
+          SUPABASE_KEY: undefined,
+          VITE_SUPABASE_PUBLISHABLE_KEY: undefined,
+        },
       });
-    } finally {
-      // No cleanup needed for this test
-    }
+
+      let stdout = "";
+      let stderr = "";
+
+      child.stdout.on("data", (data) => {
+        stdout += data.toString();
+      });
+
+      child.stderr.on("data", (data) => {
+        stderr += data.toString();
+      });
+
+      child.on("exit", (code) => {
+        const output = stdout + stderr;
+        if (code === 1 && output.includes("SUPABASE_KEY")) {
+          resolve();
+        } else {
+          reject(new Error(`Expected exit code 1 with SUPABASE_KEY error, got code ${code}, output: ${output}`));
+        }
+      });
+
+      child.on("error", (err) => {
+        reject(err);
+      });
+    });
   }, 10000);
 
   it("should fail gracefully when EMAIL credentials are missing", async () => {
-    try {
-      await new Promise((resolve, reject) => {
-        const child = spawn("node", [scriptPath], {
-          env: {
-            ...process.env,
-            VITE_SUPABASE_URL: "https://test.supabase.co",
-            SUPABASE_KEY: "test-key",
-            EMAIL_USER: undefined,
-            EMAIL_PASS: undefined,
-          },
-        });
-
-        let stderr = "";
-
-        child.stderr.on("data", (data) => {
-          stderr += data.toString();
-        });
-
-        child.on("exit", (code) => {
-          try {
-            expect(code).toBe(1); // Should exit with error code
-            expect(stderr).toContain("EMAIL_USER");
-            resolve();
-          } catch (err) {
-            reject(err);
-          }
-        });
-
-        child.on("error", (err) => {
-          reject(err);
-        });
+    await new Promise((resolve, reject) => {
+      const child = spawn("node", [scriptPath], {
+        env: {
+          ...process.env,
+          VITE_SUPABASE_URL: "https://test.supabase.co",
+          SUPABASE_KEY: "test-key",
+          EMAIL_USER: undefined,
+          EMAIL_PASS: undefined,
+        },
       });
-    } finally {
-      // No cleanup needed for this test
-    }
+
+      let stdout = "";
+      let stderr = "";
+
+      child.stdout.on("data", (data) => {
+        stdout += data.toString();
+      });
+
+      child.stderr.on("data", (data) => {
+        stderr += data.toString();
+      });
+
+      child.on("exit", (code) => {
+        const output = stdout + stderr;
+        if (code === 1 && output.includes("EMAIL_USER")) {
+          resolve();
+        } else {
+          reject(new Error(`Expected exit code 1 with EMAIL_USER error, got code ${code}, output: ${output}`));
+        }
+      });
+
+      child.on("error", (err) => {
+        reject(err);
+      });
+    });
   }, 10000);
 
   it("should have proper shebang for executable", () => {
