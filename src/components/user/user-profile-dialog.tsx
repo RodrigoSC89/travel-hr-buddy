@@ -63,11 +63,12 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
   const getRoleDisplay = (role: string) => {
     const roles = {
       admin: { label: "Administrador", variant: "destructive" as const },
+      user: { label: "Usuário", variant: "outline" as const },
       hr_manager: { label: "Gerente RH", variant: "default" as const },
       department_manager: { label: "Gerente", variant: "secondary" as const },
       employee: { label: "Funcionário", variant: "outline" as const },
     };
-    return roles[role as keyof typeof roles] || roles.employee;
+    return roles[role as keyof typeof roles] || roles.user;
   };
 
   if (isLoading) {
@@ -147,8 +148,8 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                       onChange={handleAvatarChange}
                     />
                     <div className="flex items-center gap-2">
-                      <Badge variant={getRoleDisplay(profile?.role || "employee").variant}>
-                        {getRoleDisplay(profile?.role || "employee").label}
+                      <Badge variant={getRoleDisplay(profile?.role || "user").variant}>
+                        {getRoleDisplay(profile?.role || "user").label}
                       </Badge>
                     </div>
                   </div>
@@ -301,7 +302,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                   <div className="text-sm text-muted-foreground space-y-1">
                     <p>Email: {profile?.email}</p>
                     <p>ID: {profile?.id}</p>
-                    <p>Função: {getRoleDisplay(profile?.role || "employee").label}</p>
+                    <p>Função: {getRoleDisplay(profile?.role || "user").label}</p>
                   </div>
                 </div>
 

@@ -10,6 +10,7 @@ interface Profile {
   department: string | null;
   position: string | null;
   phone: string | null;
+  role: string | null;
 }
 
 export const useProfile = () => {
@@ -42,6 +43,7 @@ export const useProfile = () => {
             department: null,
             position: null,
             phone: null,
+            role: "user",
           });
         } else {
           setProfile(data);
