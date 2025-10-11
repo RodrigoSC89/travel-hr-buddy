@@ -18,6 +18,8 @@ const PEOTRAM = React.lazy(() => import("./pages/PEOTRAM"));
 const PEODP = React.lazy(() => import("./pages/PEODP"));
 const SGSO = React.lazy(() => import("./pages/SGSO"));
 const Settings = React.lazy(() => import("./pages/Settings"));
+const Documents = React.lazy(() => import("./pages/Documents"));
+const IntelligentDocuments = React.lazy(() => import("./pages/IntelligentDocuments"));
 const Travel = React.lazy(() => import("./pages/Travel"));
 const Analytics = React.lazy(() => import("./pages/Analytics"));
 const HumanResources = React.lazy(() => import("./pages/HumanResources"));
@@ -93,6 +95,8 @@ function App() {
                       <Route path="/peo-dp" element={<PEODP />} />
                       <Route path="/sgso" element={<SGSO />} />
                       <Route path="/settings" element={<Settings />} />
+                      <Route path="/documents" element={<Documents />} />
+                      <Route path="/intelligent-documents" element={<IntelligentDocuments />} />
                       <Route path="/travel" element={<Travel />} />
                       <Route path="/analytics" element={<Analytics />} />
                       <Route path="/hr" element={<HumanResources />} />
