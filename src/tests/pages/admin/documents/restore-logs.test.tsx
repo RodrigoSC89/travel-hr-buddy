@@ -3,6 +3,20 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreLogsPage from "@/pages/admin/documents/restore-logs";
 
+// Mock ResizeObserver for Recharts
+global.ResizeObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
+
+// Mock toast hook
+vi.mock("@/hooks/use-toast", () => ({
+  useToast: () => ({
+    toast: vi.fn(),
+  }),
+}));
+
 // Mock supabase client
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
