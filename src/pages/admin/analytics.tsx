@@ -6,6 +6,8 @@ import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { BarChart3 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import {
   BarChart,
   Bar,
@@ -80,6 +82,7 @@ const colors = ["#3b82f6", "#ef4444", "#eab308"];
 export default function AnalyticsPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   // Filter data based on date range (simplified for demonstration)
   const branchChart = useMemo(() => {
@@ -132,6 +135,62 @@ export default function AnalyticsPage() {
     }
   };
 
+  const sendEmailWithChart = async () => {
+    const node = document.getElementById("analytics-pdf");
+    if (!node) {
+      toast.error("Não foi possível encontrar o gráfico");
+      return;
+    }
+
+    setIsSendingEmail(true);
+    try {
+      // Capture chart as image
+      const canvas = await html2canvas(node);
+      const imageBase64 = canvas.toDataURL("image/png");
+
+      // Get Supabase URL from environment
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      if (!supabaseUrl) {
+        throw new Error("VITE_SUPABASE_URL não configurado");
+      }
+
+      // Get current session for auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Usuário não autenticado");
+      }
+
+      // Send to backend edge function
+      const response = await fetch(
+        `${supabaseUrl}/functions/v1/send-chart-report`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            imageBase64,
+            chartType: "CI Analytics",
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        toast.success("📩 Gráfico enviado por e-mail com sucesso!");
+      } else {
+        toast.error(`Erro ao enviar e-mail: ${result.error || "Erro desconhecido"}`);
+      }
+    } catch (error) {
+      console.error("Error sending chart:", error);
+      toast.error(`Erro ao enviar gráfico: ${error instanceof Error ? error.message : "Erro desconhecido"}`);
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
   return (
     <MultiTenantWrapper>
       <ModulePageWrapper gradient="blue">
@@ -158,6 +217,13 @@ export default function AnalyticsPage() {
               placeholder="Data final"
             />
             <Button onClick={exportPDF}>📄 Exportar PDF</Button>
+            <Button 
+              onClick={sendEmailWithChart} 
+              disabled={isSendingEmail}
+              variant="secondary"
+            >
+              {isSendingEmail ? "📤 Enviando..." : "📩 Enviar por E-mail"}
+            </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
