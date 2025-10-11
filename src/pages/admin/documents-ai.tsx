@@ -5,10 +5,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Loader2, FileText, Save, Download, Brain, RefreshCw } from "lucide-react";
+import { Sparkles, Loader2, FileText, Save, Download, Brain, RefreshCw, List } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
+import { Link } from "react-router-dom";
 
 export default function DocumentsAIPage() {
   const [prompt, setPrompt] = useState("");
@@ -236,7 +237,15 @@ export default function DocumentsAIPage() {
 
   return (
     <div className="space-y-6 p-8">
-      <h1 className="text-2xl font-bold">📄 Documentos com IA</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">📄 Documentos com IA</h1>
+        <Link to="/admin/documents/list">
+          <Button variant="outline" size="sm">
+            <List className="w-4 h-4 mr-2" />
+            Meus Documentos
+          </Button>
+        </Link>
+      </div>
 
       <Card>
         <CardContent className="space-y-4 p-4">
