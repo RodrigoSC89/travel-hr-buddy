@@ -51,6 +51,18 @@ vi.mock("@/hooks/use-toast", () => ({
   toast: mockToast,
 }));
 
+// Mock usePermissions
+vi.mock("@/hooks/use-permissions", () => ({
+  usePermissions: vi.fn(() => ({
+    userRole: "admin",
+    permissions: [],
+    isLoading: false,
+    hasPermission: vi.fn(),
+    canAccessModule: vi.fn(),
+    getRoleDisplayName: vi.fn(),
+  })),
+}));
+
 describe("DocumentViewPage - Version Restoration", () => {
   // Dynamically import the component after mocks are set up
   let DocumentViewPage: any;
