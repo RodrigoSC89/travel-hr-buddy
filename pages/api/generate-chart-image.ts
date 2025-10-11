@@ -28,7 +28,7 @@ export default async function handler(
   try {
     // Option 1: Return the embed page URL for external screenshot
     // This is the simplest approach for serverless environments
-    const embedUrl = `${process.env.VITE_APP_URL || 'http://localhost:5173'}/embed-restore-chart.html`;
+    const embedUrl = `${process.env.VITE_APP_URL || "http://localhost:5173"}/embed-restore-chart.html`;
     
     return res.status(200).json({
       success: true,

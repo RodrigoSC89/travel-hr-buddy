@@ -81,7 +81,7 @@ export default async function handler(
 /**
  * Generate default email HTML if not provided
  */
-function generateDefaultEmailHtml(summary?: EmailRequest['summary']): string {
+function generateDefaultEmailHtml(summary?: EmailRequest["summary"]): string {
   return `
     <html>
       <head>
@@ -98,7 +98,7 @@ function generateDefaultEmailHtml(summary?: EmailRequest['summary']): string {
         <div class="header">
           <h1>📊 Relatório Diário de Restauração</h1>
           <p>Nautilus One - Travel HR Buddy</p>
-          <p>${new Date().toLocaleDateString('pt-BR')}</p>
+          <p>${new Date().toLocaleDateString("pt-BR")}</p>
         </div>
         <div class="content">
           <p>Olá,</p>
@@ -110,7 +110,7 @@ function generateDefaultEmailHtml(summary?: EmailRequest['summary']): string {
               <div class="summary-item"><strong>Documentos Únicos:</strong> ${summary.unique_docs || 0}</div>
               <div class="summary-item"><strong>Média Diária:</strong> ${summary.avg_per_day ? summary.avg_per_day.toFixed(2) : 0}</div>
             </div>
-          ` : ''}
+          ` : ""}
           <p>Para mais detalhes, acesse o dashboard completo do sistema.</p>
         </div>
         <div class="footer">
