@@ -11,11 +11,13 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Loader2, ArrowLeft, History, RotateCcw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { usePermissions } from "@/hooks/use-permissions";
 
 interface Document {
   title: string;
   content: string;
   created_at: string;
+  generated_by_email?: string | null;
 }
 
 interface DocumentVersion {
@@ -29,6 +31,7 @@ interface DocumentVersion {
 export default function DocumentViewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { userRole } = usePermissions();
   const [doc, setDoc] = useState<Document | null>(null);
   const [versions, setVersions] = useState<DocumentVersion[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,13 +48,27 @@ export default function DocumentViewPage() {
     try {
       const { data, error } = await supabase
         .from("ai_generated_documents")
-        .select("title, content, created_at")
+        .select(`
+          title, 
+          content, 
+          created_at,
+          generated_by,
+          profiles:generated_by(email)
+        `)
         .eq("id", id)
         .single();
 
       if (error) throw error;
 
-      setDoc(data);
+      // Extract email from nested profiles object
+      const documentWithEmail = {
+        title: data.title,
+        content: data.content,
+        created_at: data.created_at,
+        generated_by_email: data.profiles?.email || null
+      };
+
+      setDoc(documentWithEmail);
     } catch (error) {
       console.error("Error loading document:", error);
       toast({
@@ -193,11 +210,18 @@ export default function DocumentViewPage() {
 
         <div className="space-y-4">
           <h1 className="text-3xl font-bold">📄 {doc.title}</h1>
-          <p className="text-sm text-muted-foreground">
-            Criado em {format(new Date(doc.created_at), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", {
-              locale: ptBR,
-            })}
-          </p>
+          <div className="space-y-1">
+            <p className="text-sm text-muted-foreground">
+              Criado em {format(new Date(doc.created_at), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", {
+                locale: ptBR,
+              })}
+            </p>
+            {userRole === "admin" && doc.generated_by_email && (
+              <p className="text-sm text-muted-foreground">
+                Autor: <span className="font-medium">{doc.generated_by_email}</span>
+              </p>
+            )}
+          </div>
 
           <Card>
             <CardHeader>
