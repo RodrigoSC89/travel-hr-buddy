@@ -3,6 +3,10 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreLogsPage from "@/pages/admin/documents/restore-logs";
 
+// Mock URL.createObjectURL and URL.revokeObjectURL
+global.URL.createObjectURL = vi.fn(() => "mock-url");
+global.URL.revokeObjectURL = vi.fn();
+
 // Mock supabase client
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
@@ -123,6 +127,29 @@ describe("RestoreLogsPage Component", () => {
       expect(screen.getAllByText("Versão Restaurada:").length).toBeGreaterThan(0);
       expect(screen.getAllByText("Restaurado por:").length).toBeGreaterThan(0);
       expect(screen.getAllByText("Data:").length).toBeGreaterThan(0);
+    });
+  });
+
+  it("should render CSV export button", () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    expect(screen.getByText(/📤 Exportar CSV/i)).toBeInTheDocument();
+  });
+
+  it("should render document links to view page", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      const links = screen.getAllByRole("link");
+      expect(links.length).toBeGreaterThan(0);
     });
   });
 });
