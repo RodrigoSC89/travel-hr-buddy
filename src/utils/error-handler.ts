@@ -38,14 +38,14 @@ export class ErrorHandler {
 
   private static getSeverityTitle(severity: AppError["severity"]): string {
     switch (severity) {
-      case "critical":
-        return "Erro Crítico";
-      case "error":
-        return "Erro";
-      case "warning":
-        return "Atenção";
-      case "info":
-        return "Informação";
+    case "critical":
+      return "Erro Crítico";
+    case "error":
+      return "Erro";
+    case "warning":
+      return "Atenção";
+    case "info":
+      return "Informação";
     }
   }
 

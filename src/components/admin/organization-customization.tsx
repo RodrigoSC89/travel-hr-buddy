@@ -79,7 +79,7 @@ export const OrganizationCustomization: React.FC = () => {
         timezone: currentBranding.timezone || "America/Sao_Paulo",
         custom_fields: currentBranding.custom_fields || {},
         business_rules: currentBranding.business_rules || {},
-        enabled_modules: typeof currentBranding.enabled_modules === 'object' && !Array.isArray(currentBranding.enabled_modules)
+        enabled_modules: typeof currentBranding.enabled_modules === "object" && !Array.isArray(currentBranding.enabled_modules)
           ? currentBranding.enabled_modules
           : {},
         module_settings: currentBranding.module_settings || {}

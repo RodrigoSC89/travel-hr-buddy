@@ -87,7 +87,7 @@ export const useSystemActions = () => {
     // Implementar refresh dos dados com timeout
     try {
       const timeout = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout')), 5000)
+        setTimeout(() => reject(new Error("Timeout")), 5000)
       );
       
       await Promise.race([

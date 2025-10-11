@@ -340,62 +340,62 @@ export default function ChecklistsPage() {
           return true;
         })
         .map((checklist) => (
-        <Card key={checklist.id} id={`checklist-${checklist.id}`}>
-          <CardContent className="p-4 space-y-4">
-            <div className="flex justify-between items-center flex-wrap gap-2">
-              <h2 className="text-lg font-semibold">📝 {checklist.title}</h2>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => summarizeChecklist(checklist.id)}
-                  disabled={isSummarizing[checklist.id]}
-                >
-                  📄 {isSummarizing[checklist.id] ? "Gerando..." : "Resumir com IA"}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => exportPDF(checklist.id)}
-                >
-                  📄 Exportar PDF
-                </Button>
-              </div>
-            </div>
-
-            {summary[checklist.id] && (
-              <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
-                <h3 className="text-sm font-semibold mb-2">🧠 Resumo com IA:</h3>
-                <p className="text-sm">{summary[checklist.id]}</p>
-              </div>
-            )}
-            <Progress value={calculateProgress(checklist.items)} />
-
-            {checklist.items.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Nenhum item neste checklist
-              </p>
-            ) : (
-              <ul className="space-y-2">
-                {checklist.items.map((item) => (
-                  <li
-                    key={item.id}
-                    className="flex items-center gap-2 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded"
-                    onClick={() => toggleItem(checklist.id, item.id)}
+          <Card key={checklist.id} id={`checklist-${checklist.id}`}>
+            <CardContent className="p-4 space-y-4">
+              <div className="flex justify-between items-center flex-wrap gap-2">
+                <h2 className="text-lg font-semibold">📝 {checklist.title}</h2>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => summarizeChecklist(checklist.id)}
+                    disabled={isSummarizing[checklist.id]}
                   >
-                    <input type="checkbox" checked={item.completed} readOnly />
-                    <span
-                      className={
-                        item.completed ? "line-through text-muted-foreground" : ""
-                      }
+                  📄 {isSummarizing[checklist.id] ? "Gerando..." : "Resumir com IA"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => exportPDF(checklist.id)}
+                  >
+                  📄 Exportar PDF
+                  </Button>
+                </div>
+              </div>
+
+              {summary[checklist.id] && (
+                <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <h3 className="text-sm font-semibold mb-2">🧠 Resumo com IA:</h3>
+                  <p className="text-sm">{summary[checklist.id]}</p>
+                </div>
+              )}
+              <Progress value={calculateProgress(checklist.items)} />
+
+              {checklist.items.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                Nenhum item neste checklist
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {checklist.items.map((item) => (
+                    <li
+                      key={item.id}
+                      className="flex items-center gap-2 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded"
+                      onClick={() => toggleItem(checklist.id, item.id)}
                     >
-                      {item.title}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
-      ))}
+                      <input type="checkbox" checked={item.completed} readOnly />
+                      <span
+                        className={
+                          item.completed ? "line-through text-muted-foreground" : ""
+                        }
+                      >
+                        {item.title}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+        ))}
     </div>
   );
 }

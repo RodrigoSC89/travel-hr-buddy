@@ -554,13 +554,13 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (data) {
       const typedData: TenantBranding = {
         ...data,
-        header_style: typeof data.header_style === 'object' && !Array.isArray(data.header_style) ? data.header_style as Record<string, unknown> : {},
-        sidebar_style: typeof data.sidebar_style === 'object' && !Array.isArray(data.sidebar_style) ? data.sidebar_style as Record<string, unknown> : {},
-        button_style: typeof data.button_style === 'object' && !Array.isArray(data.button_style) ? data.button_style as Record<string, unknown> : {},
-        enabled_modules: typeof data.enabled_modules === 'object' && !Array.isArray(data.enabled_modules) ? data.enabled_modules as Record<string, unknown> : {},
-        module_settings: typeof data.module_settings === 'object' && !Array.isArray(data.module_settings) ? data.module_settings as Record<string, unknown> : {},
-        custom_fields: typeof data.custom_fields === 'object' && !Array.isArray(data.custom_fields) ? data.custom_fields as Record<string, unknown> : {},
-        business_rules: typeof data.business_rules === 'object' && !Array.isArray(data.business_rules) ? data.business_rules as Record<string, unknown> : {}
+        header_style: typeof data.header_style === "object" && !Array.isArray(data.header_style) ? data.header_style as Record<string, unknown> : {},
+        sidebar_style: typeof data.sidebar_style === "object" && !Array.isArray(data.sidebar_style) ? data.sidebar_style as Record<string, unknown> : {},
+        button_style: typeof data.button_style === "object" && !Array.isArray(data.button_style) ? data.button_style as Record<string, unknown> : {},
+        enabled_modules: typeof data.enabled_modules === "object" && !Array.isArray(data.enabled_modules) ? data.enabled_modules as Record<string, unknown> : {},
+        module_settings: typeof data.module_settings === "object" && !Array.isArray(data.module_settings) ? data.module_settings as Record<string, unknown> : {},
+        custom_fields: typeof data.custom_fields === "object" && !Array.isArray(data.custom_fields) ? data.custom_fields as Record<string, unknown> : {},
+        business_rules: typeof data.business_rules === "object" && !Array.isArray(data.business_rules) ? data.business_rules as Record<string, unknown> : {}
       };
       setCurrentBranding(typedData);
       applyBrandingTheme(typedData);
