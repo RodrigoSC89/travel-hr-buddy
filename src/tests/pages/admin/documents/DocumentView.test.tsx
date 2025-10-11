@@ -27,6 +27,13 @@ vi.mock("@/components/auth/role-based-access", () => ({
   RoleBasedAccess: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
+// Mock DocumentVersionHistory component
+vi.mock("@/components/documents/DocumentVersionHistory", () => ({
+  DocumentVersionHistory: () => (
+    <div data-testid="version-history-component">Version History Component</div>
+  ),
+}));
+
 // Mock useNavigate
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
