@@ -132,6 +132,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       setRecipients(mockRecipients);
     } catch (error) {
+      console.error("Failed to load recipients:", error);
     }
   };
 
@@ -171,6 +172,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       setTemplates(mockTemplates);
     } catch (error) {
+      console.error("Failed to load templates:", error);
     }
   };
 

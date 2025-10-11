@@ -74,6 +74,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
         });
 
       if (dbError) {
+        console.error("Failed to save AI analysis:", dbError);
       }
 
       toast.success("Análise AI concluída com sucesso!");

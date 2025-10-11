@@ -126,6 +126,7 @@ export const SettingsPanel = () => {
       // Mock loading settings - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
+      console.error("Failed to load settings:", error);
     }
   };
 

@@ -145,6 +145,7 @@ export const AIAssistantPanel = () => {
       if (error) throw error;
       setAiInsights(data || []);
     } catch (error) {
+      console.error("Failed to fetch AI insights:", error);
     } finally {
       setIsLoading(false);
     }
