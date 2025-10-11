@@ -4,10 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { PlusCircle, BarChart3 } from "lucide-react";
+import { PlusCircle, BarChart3, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { generateChecklistItems } from "@/services/openai";
+import { toast } from "sonner";
 
 interface ChecklistItem {
   id: string;
@@ -26,6 +28,8 @@ interface Checklist {
 export default function ChecklistsPage() {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [title, setTitle] = useState("");
+  const [filter, setFilter] = useState<"all" | "done" | "pending">("all");
+  const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
     fetchChecklists();
@@ -85,7 +89,7 @@ export default function ChecklistsPage() {
     setChecklists(checklistsWithItems);
   }
 
-  async function createChecklist() {
+  async function createChecklist(items: ChecklistItem[] = []) {
     const { data: userData } = await supabase.auth.getUser();
     const userId = userData?.user?.id || "admin";
 
@@ -103,13 +107,62 @@ export default function ChecklistsPage() {
 
     if (error) {
       console.error("Error creating checklist:", error);
+      toast.error("Erro ao criar checklist");
       return;
+    }
+
+    if (data && items.length > 0) {
+      // Insert checklist items
+      const itemsToInsert = items.map((item, index) => ({
+        checklist_id: data.id,
+        title: item.title,
+        completed: item.completed,
+        order_index: index,
+      }));
+
+      const { error: itemsError } = await supabase
+        .from("checklist_items")
+        .insert(itemsToInsert);
+
+      if (itemsError) {
+        console.error("Error creating items:", itemsError);
+        toast.error("Erro ao criar itens do checklist");
+      }
     }
 
     if (data) {
       setTitle("");
       fetchChecklists();
+      toast.success("Checklist criado com sucesso!");
     }
+  }
+
+  async function generateChecklistWithAI() {
+    if (!title) return;
+    setGenerating(true);
+    
+    try {
+      const result = await generateChecklistItems(title);
+      
+      if (!result.success || !result.items) {
+        toast.error(result.error || "Erro ao gerar checklist com IA");
+        setGenerating(false);
+        return;
+      }
+
+      const generated: ChecklistItem[] = result.items.map((t: string) => ({
+        id: crypto.randomUUID(),
+        title: t,
+        completed: false,
+      }));
+
+      await createChecklist(generated);
+    } catch (err) {
+      console.error("Erro IA:", err);
+      toast.error("Erro ao gerar checklist com IA");
+    }
+    
+    setGenerating(false);
   }
 
   async function toggleItem(checklistId: string, itemId: string) {
@@ -162,58 +215,85 @@ export default function ChecklistsPage() {
         </Link>
       </div>
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-4 items-center flex-wrap">
         <Input
-          placeholder="Novo checklist"
+          placeholder="Descreva seu checklist..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className="min-w-[250px]"
         />
-        <Button onClick={createChecklist} disabled={!title}>
-          <PlusCircle className="w-4 h-4 mr-1" /> Criar
+        <Button onClick={() => createChecklist()} disabled={!title}>
+          <PlusCircle className="w-4 h-4 mr-1" /> Criar Manual
         </Button>
+        <Button 
+          onClick={generateChecklistWithAI} 
+          disabled={!title || generating} 
+          variant="secondary"
+        >
+          <Sparkles className="w-4 h-4 mr-1 text-yellow-400" />
+          {generating ? "Gerando com IA..." : "Gerar com IA"}
+        </Button>
+
+        <select
+          className="border rounded px-3 py-2 bg-background"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value as "all" | "done" | "pending")}
+        >
+          <option value="all">Todos</option>
+          <option value="done">Concluídos</option>
+          <option value="pending">Pendentes</option>
+        </select>
       </div>
 
-      {checklists.map((checklist) => (
-        <Card key={checklist.id} id={`checklist-${checklist.id}`}>
-          <CardContent className="p-4 space-y-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-semibold">📝 {checklist.title}</h2>
-              <Button
-                variant="outline"
-                onClick={() => exportPDF(checklist.id)}
-              >
+      {checklists
+        .filter((checklist) => {
+          if (filter === "all") return true;
+          const progress = calculateProgress(checklist.items);
+          if (filter === "done") return progress === 100;
+          if (filter === "pending") return progress < 100;
+          return true;
+        })
+        .map((checklist) => (
+          <Card key={checklist.id} id={`checklist-${checklist.id}`}>
+            <CardContent className="p-4 space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-semibold">📝 {checklist.title}</h2>
+                <Button
+                  variant="outline"
+                  onClick={() => exportPDF(checklist.id)}
+                >
                 📄 Exportar PDF
-              </Button>
-            </div>
-            <Progress value={calculateProgress(checklist.items)} />
+                </Button>
+              </div>
+              <Progress value={calculateProgress(checklist.items)} />
 
-            {checklist.items.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
+              {checklist.items.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
                 Nenhum item neste checklist
-              </p>
-            ) : (
-              <ul className="space-y-2">
-                {checklist.items.map((item) => (
-                  <li
-                    key={item.id}
-                    className="flex items-center gap-2 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded"
-                    onClick={() => toggleItem(checklist.id, item.id)}
-                  >
-                    <input type="checkbox" checked={item.completed} readOnly />
-                    <span
-                      className={
-                        item.completed ? "line-through text-muted-foreground" : ""
-                      }
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {checklist.items.map((item) => (
+                    <li
+                      key={item.id}
+                      className="flex items-center gap-2 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded"
+                      onClick={() => toggleItem(checklist.id, item.id)}
                     >
-                      {item.title}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
-      ))}
+                      <input type="checkbox" checked={item.completed} readOnly />
+                      <span
+                        className={
+                          item.completed ? "line-through text-muted-foreground" : ""
+                        }
+                      >
+                        {item.title}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+        ))}
     </div>
   );
 }

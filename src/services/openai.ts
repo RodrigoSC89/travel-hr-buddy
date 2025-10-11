@@ -11,6 +11,89 @@ export interface OpenAITestResult {
   error?: string;
 }
 
+export interface GenerateChecklistResult {
+  success: boolean;
+  items?: string[];
+  error?: string;
+}
+
+/**
+ * Generate checklist items using OpenAI based on a prompt
+ */
+export async function generateChecklistItems(prompt: string): Promise<GenerateChecklistResult> {
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+
+  if (!apiKey) {
+    return {
+      success: false,
+      error: "OpenAI API key not configured",
+    };
+  }
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: "You are a helpful assistant that creates detailed checklist items. Generate a list of 5-10 practical, actionable tasks based on the user's description. Return only the task items, one per line, without numbering or bullet points.",
+          },
+          {
+            role: "user",
+            content: `Create a checklist for: ${prompt}`,
+          },
+        ],
+        max_tokens: 500,
+        temperature: 0.7,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        error: errorData.error?.message || `HTTP ${response.status}`,
+      };
+    }
+
+    const data = await response.json();
+
+    if (data.choices && data.choices.length > 0) {
+      const content = data.choices[0].message.content;
+      // Split by newlines and filter out empty lines
+      const items = content
+        .split("\n")
+        .map((line: string) => line.trim())
+        .filter((line: string) => line.length > 0)
+        .map((line: string) => {
+          // Remove common prefixes like "1.", "-", "*", etc.
+          return line.replace(/^[\d\-*.)]+\s*/, "");
+        });
+
+      return {
+        success: true,
+        items,
+      };
+    }
+
+    return {
+      success: false,
+      error: "Invalid response format",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
 /**
  * Test OpenAI API connectivity
  */
