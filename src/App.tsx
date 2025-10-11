@@ -53,6 +53,7 @@ const DocumentList = React.lazy(() => import("./pages/admin/documents/DocumentLi
 const DocumentView = React.lazy(() => import("./pages/admin/documents/DocumentView"));
 const RestoreLogs = React.lazy(() => import("./pages/admin/documents/restore-logs"));
 const RestoreDashboard = React.lazy(() => import("./pages/admin/documents/restore-dashboard"));
+const ExecutionLogs = React.lazy(() => import("./pages/admin/automation/execution-logs"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
@@ -131,6 +132,7 @@ function App() {
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/restore-logs" element={<RestoreLogs />} />
                       <Route path="/admin/documents/restore-dashboard" element={<RestoreDashboard />} />
+                      <Route path="/admin/automation/execution-logs" element={<ExecutionLogs />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
