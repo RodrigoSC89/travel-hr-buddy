@@ -5,31 +5,62 @@ import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
-import { Loader2 } from "lucide-react";
+import { Loader2, Mail } from "lucide-react";
+import { usePermissions } from "@/hooks/use-permissions";
 
 interface Document {
   title: string;
   content: string;
   created_at: string;
+  author_email?: string;
 }
 
 export default function DocumentViewPage() {
   const { id } = useParams();
   const [doc, setDoc] = useState<Document | null>(null);
   const [loading, setLoading] = useState(true);
+  const { userRole } = usePermissions();
 
   useEffect(() => {
     if (!id) return;
-    supabase
-      .from("ai_generated_documents")
-      .select("title, content, created_at")
-      .eq("id", id)
-      .single()
-      .then(({ data }) => {
-        setDoc(data);
+    
+    const fetchDocument = async () => {
+      // Fetch document with author email for admins
+      const { data: docData, error: docError } = await supabase
+        .from("ai_generated_documents")
+        .select("title, content, created_at, generated_by")
+        .eq("id", id)
+        .single();
+
+      if (docError || !docData) {
+        setDoc(null);
         setLoading(false);
+        return;
+      }
+
+      // If user is admin and document has an author, fetch author email
+      let authorEmail: string | undefined;
+      if (userRole === "admin" && docData.generated_by) {
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("email")
+          .eq("id", docData.generated_by)
+          .single();
+        
+        authorEmail = profileData?.email;
+      }
+
+      setDoc({
+        title: docData.title,
+        content: docData.content,
+        created_at: docData.created_at,
+        author_email: authorEmail,
       });
-  }, [id]);
+      setLoading(false);
+    };
+
+    fetchDocument();
+  }, [id, userRole]);
 
   if (loading)
     return (
@@ -44,9 +75,17 @@ export default function DocumentViewPage() {
   return (
     <div className="p-8 space-y-4">
       <h1 className="text-2xl font-bold">📄 {doc.title}</h1>
-      <p className="text-sm text-muted-foreground">
-        Criado em {format(new Date(doc.created_at), "dd/MM/yyyy HH:mm")}
-      </p>
+      <div className="flex flex-col gap-1">
+        <p className="text-sm text-muted-foreground">
+          Criado em {format(new Date(doc.created_at), "dd/MM/yyyy HH:mm")}
+        </p>
+        {doc.author_email && userRole === "admin" && (
+          <p className="text-sm text-muted-foreground flex items-center gap-1">
+            <Mail className="w-3 h-3" />
+            Autor: {doc.author_email}
+          </p>
+        )}
+      </div>
 
       <Card>
         <CardContent className="whitespace-pre-wrap p-4">
