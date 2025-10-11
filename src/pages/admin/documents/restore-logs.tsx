@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
 import { toast } from "@/hooks/use-toast";
+import html2canvas from "html2canvas";
 import { 
   BarChart, 
   Bar, 
@@ -20,7 +21,7 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from "recharts";
-import { TrendingUp, Users, FileText, Calendar, Download, Loader2 } from "lucide-react";
+import { TrendingUp, Users, FileText, Calendar, Download, Loader2, Mail } from "lucide-react";
 
 interface RestoreLog {
   id: string;
@@ -40,6 +41,7 @@ export default function RestoreLogsPage() {
   const [page, setPage] = useState(1);
   const [exportingCsv, setExportingCsv] = useState(false);
   const [exportingPdf, setExportingPdf] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
   const [dateError, setDateError] = useState("");
   const pageSize = 10;
 
@@ -319,8 +321,93 @@ export default function RestoreLogsPage() {
     }
   }
 
+  // Email Export
+  async function sendEmailWithChart() {
+    if (filteredLogs.length === 0) {
+      toast({
+        title: "Nenhum dado para enviar",
+        description: "Não há registros de restauração para enviar por e-mail.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (dateError) {
+      toast({
+        title: "Erro de validação",
+        description: "Por favor, corrija os erros de data antes de enviar.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSendingEmail(true);
+    try {
+      // Capture dashboard as image
+      const dashboardElement = document.getElementById("restore-logs-dashboard");
+      if (!dashboardElement) {
+        throw new Error("Elemento do dashboard não encontrado");
+      }
+
+      const canvas = await html2canvas(dashboardElement, {
+        scale: 2,
+        logging: false,
+        useCORS: true,
+      });
+      const imageBase64 = canvas.toDataURL("image/png");
+
+      // Get Supabase URL from environment
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      if (!supabaseUrl) {
+        throw new Error("VITE_SUPABASE_URL não configurado");
+      }
+
+      // Get current session for auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Usuário não autenticado");
+      }
+
+      // Send to backend edge function
+      const response = await fetch(
+        `${supabaseUrl}/functions/v1/send-chart-report`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            imageBase64,
+            chartType: "Auditoria de Restaurações",
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        toast({
+          title: "E-mail enviado com sucesso",
+          description: `Relatório de restaurações enviado para ${result.recipient || "destinatário configurado"}.`,
+        });
+      } else {
+        throw new Error(result.error || "Erro desconhecido ao enviar e-mail");
+      }
+    } catch (error) {
+      console.error("Error sending chart via email:", error);
+      toast({
+        title: "Erro ao enviar e-mail",
+        description: error instanceof Error ? error.message : "Ocorreu um erro ao tentar enviar o relatório.",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingEmail(false);
+    }
+  }
+
   return (
-    <div className="p-8 space-y-6">
+    <div className="p-8 space-y-6" id="restore-logs-dashboard">
       <h1 className="text-2xl font-bold">📜 Auditoria de Restaurações</h1>
 
       {/* Metrics Cards */}
@@ -466,6 +553,24 @@ export default function RestoreLogsPage() {
               <>
                 <Download className="h-4 w-4 mr-2" />
                 PDF
+              </>
+            )}
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={sendEmailWithChart}
+            disabled={filteredLogs.length === 0 || sendingEmail || !!dateError}
+            className="flex-1"
+          >
+            {sendingEmail ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Enviando...
+              </>
+            ) : (
+              <>
+                <Mail className="h-4 w-4 mr-2" />
+                E-mail
               </>
             )}
           </Button>
