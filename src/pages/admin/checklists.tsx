@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { PlusCircle, BarChart3 } from "lucide-react";
+import { PlusCircle, BarChart3, Sparkles, FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -26,6 +26,9 @@ interface Checklist {
 export default function ChecklistsPage() {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [title, setTitle] = useState("");
+  const [generating, setGenerating] = useState(false);
+  const [summary, setSummary] = useState("");
+  const [filter, setFilter] = useState<"all" | "done" | "pending">("all");
 
   useEffect(() => {
     fetchChecklists();
@@ -112,6 +115,98 @@ export default function ChecklistsPage() {
     }
   }
 
+  async function generateChecklistWithAI() {
+    if (!title) return;
+    setGenerating(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const { data: userData } = await supabase.auth.getUser();
+      const userId = userData?.user?.id || "admin";
+
+      // Call the AI API to generate checklist items
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-checklist`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session?.access_token}`,
+          },
+          body: JSON.stringify({ prompt: title }),
+        }
+      );
+      
+      const { items } = await res.json();
+
+      // Create the checklist
+      const { data: checklistData, error: checklistError } = await supabase
+        .from("operational_checklists")
+        .insert({
+          title,
+          type: "outro",
+          created_by: userId,
+          status: "rascunho",
+          source_type: "manual",
+        })
+        .select()
+        .single();
+
+      if (checklistError || !checklistData) {
+        console.error("Error creating checklist:", checklistError);
+        return;
+      }
+
+      // Create checklist items
+      const itemsToInsert = items.map((itemTitle: string, index: number) => ({
+        checklist_id: checklistData.id,
+        title: itemTitle,
+        completed: false,
+        order_index: index,
+      }));
+
+      const { error: itemsError } = await supabase
+        .from("checklist_items")
+        .insert(itemsToInsert);
+
+      if (itemsError) {
+        console.error("Error creating items:", itemsError);
+      }
+
+      setTitle("");
+      fetchChecklists();
+    } catch (err) {
+      console.error("Erro IA:", err);
+    }
+    setGenerating(false);
+  }
+
+  async function summarizeChecklist(c: Checklist) {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/summarize-checklist`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session?.access_token}`,
+          },
+          body: JSON.stringify({
+            title: c.title,
+            items: c.items,
+            comments: c.items.flatMap((i: any) => i.comments || []),
+          }),
+        }
+      );
+      
+      const { summary: summaryText } = await res.json();
+      setSummary(summaryText);
+    } catch (err) {
+      console.error("Error summarizing checklist:", err);
+    }
+  }
+
   async function toggleItem(checklistId: string, itemId: string) {
     const checklist = checklists.find((c) => c.id === checklistId);
     if (!checklist) return;
@@ -138,6 +233,15 @@ export default function ChecklistsPage() {
     return total === 0 ? 0 : Math.round((completed / total) * 100);
   }
 
+  // Filter checklists based on selected filter
+  const filteredChecklists = checklists.filter((checklist) => {
+    if (filter === "all") return true;
+    const progress = calculateProgress(checklist.items);
+    if (filter === "done") return progress === 100;
+    if (filter === "pending") return progress < 100;
+    return true;
+  });
+
   async function exportPDF(id: string) {
     const el = document.getElementById(`checklist-${id}`);
     if (!el) return;
@@ -162,28 +266,64 @@ export default function ChecklistsPage() {
         </Link>
       </div>
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-4 items-center flex-wrap">
         <Input
-          placeholder="Novo checklist"
+          placeholder="Descreva seu checklist..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className="min-w-[250px]"
         />
         <Button onClick={createChecklist} disabled={!title}>
-          <PlusCircle className="w-4 h-4 mr-1" /> Criar
+          <PlusCircle className="w-4 h-4 mr-1" /> Criar Manual
         </Button>
+        <Button 
+          onClick={generateChecklistWithAI} 
+          disabled={!title || generating} 
+          variant="secondary"
+        >
+          <Sparkles className="w-4 h-4 mr-1 text-yellow-400" />
+          {generating ? "Gerando com IA..." : "Gerar com IA"}
+        </Button>
+        <select
+          className="border rounded px-3 py-2"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value as any)}
+        >
+          <option value="all">Todos</option>
+          <option value="done">Concluídos</option>
+          <option value="pending">Pendentes</option>
+        </select>
       </div>
 
-      {checklists.map((checklist) => (
+      {summary && (
+        <Card className="bg-muted">
+          <CardContent className="p-4 text-sm whitespace-pre-wrap">
+            <strong>🧠 Resumo com IA:</strong>
+            <p>{summary}</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {filteredChecklists.map((checklist) => (
         <Card key={checklist.id} id={`checklist-${checklist.id}`}>
           <CardContent className="p-4 space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-lg font-semibold">📝 {checklist.title}</h2>
-              <Button
-                variant="outline"
-                onClick={() => exportPDF(checklist.id)}
-              >
-                📄 Exportar PDF
-              </Button>
+              <h2 className="text-lg font-semibold">📋 {checklist.title}</h2>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  onClick={() => summarizeChecklist(checklist)}
+                >
+                  <FileText className="w-4 h-4 mr-1" /> Resumir com IA
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => exportPDF(checklist.id)}
+                >
+                  📄 Exportar PDF
+                </Button>
+              </div>
             </div>
             <Progress value={calculateProgress(checklist.items)} />
 
