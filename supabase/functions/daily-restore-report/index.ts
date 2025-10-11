@@ -95,6 +95,13 @@ serve(async (req) => {
 
     console.log("✅ Email sent successfully!");
 
+    // Log successful execution to database
+    await supabase.from("restore_report_logs").insert({
+      status: "success",
+      message: `Relatório enviado com sucesso para ${ADMIN_EMAIL}`,
+      error_details: null
+    });
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -109,6 +116,18 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error("❌ Error in daily-restore-report:", error);
+    
+    // Log error execution to database
+    try {
+      await supabase.from("restore_report_logs").insert({
+        status: "error",
+        message: "Erro ao enviar relatório diário",
+        error_details: error instanceof Error ? error.message : String(error)
+      });
+    } catch (logError) {
+      console.error("Failed to log error to database:", logError);
+    }
+
     return new Response(
       JSON.stringify({
         success: false,
