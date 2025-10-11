@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 const mockDocument = {
@@ -62,18 +62,36 @@ describe("DocumentViewPage - Version Restoration", () => {
     DocumentViewPage = module.default;
   });
 
-  it("should render document with version history button", async () => {
-    mockSupabase.from.mockReturnValue({
-      select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          single: vi.fn(() => 
-            Promise.resolve({
-              data: mockDocument,
-              error: null,
-            })
-          ),
-        })),
-      })),
+  it("should render document with version history component", async () => {
+    mockSupabase.from.mockImplementation((table: string) => {
+      if (table === "ai_generated_documents") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              single: vi.fn(() => 
+                Promise.resolve({
+                  data: mockDocument,
+                  error: null,
+                })
+              ),
+            })),
+          })),
+        };
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              order: vi.fn(() => 
+                Promise.resolve({
+                  data: [],
+                  error: null,
+                })
+              ),
+            })),
+          })),
+        };
+      }
+      return {};
     });
 
     render(
@@ -87,11 +105,11 @@ describe("DocumentViewPage - Version Restoration", () => {
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
       expect(screen.getByText("Test Content")).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /Ver Histórico/i })).toBeInTheDocument();
+      expect(screen.getByText(/Histórico de Versões/i)).toBeInTheDocument();
     });
   });
 
-  it("should load and display version history when button is clicked", async () => {
+  it("should load and display version history automatically", async () => {
     mockSupabase.from.mockImplementation((table: string) => {
       if (table === "ai_generated_documents") {
         return {
@@ -133,12 +151,6 @@ describe("DocumentViewPage - Version Restoration", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-    });
-
-    const historyButton = screen.getByRole("button", { name: /Ver Histórico/i });
-    fireEvent.click(historyButton);
-
-    await waitFor(() => {
       expect(screen.getByText(/Histórico de Versões/i)).toBeInTheDocument();
       expect(screen.getByText(/Old content version 1/i)).toBeInTheDocument();
     });
@@ -186,14 +198,9 @@ describe("DocumentViewPage - Version Restoration", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-    });
-
-    const historyButton = screen.getByRole("button", { name: /Ver Histórico/i });
-    fireEvent.click(historyButton);
-
-    await waitFor(() => {
       const restoreButtons = screen.getAllByRole("button", { name: /Restaurar/i });
-      expect(restoreButtons.length).toBeGreaterThan(0);
+      // Only non-latest versions should have restore buttons (mockVersions has 2 versions, so 1 restore button)
+      expect(restoreButtons.length).toBe(1);
     });
   });
 
@@ -239,12 +246,6 @@ describe("DocumentViewPage - Version Restoration", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-    });
-
-    const historyButton = screen.getByRole("button", { name: /Ver Histórico/i });
-    fireEvent.click(historyButton);
-
-    await waitFor(() => {
       expect(screen.getByText(/Nenhuma versão anterior encontrada/i)).toBeInTheDocument();
     });
   });
