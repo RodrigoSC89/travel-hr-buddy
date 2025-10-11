@@ -207,6 +207,15 @@ const ControlPanel = () => {
                         <ExternalLink className="h-4 w-4" />
                       </Button>
                     </Link>
+                    <Link to="/admin/checklists">
+                      <Button variant="outline" className="w-full justify-between">
+                        <span className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4" />
+                          Checklists Admin
+                        </span>
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    </Link>
                     <Link to="/health-monitor">
                       <Button variant="outline" className="w-full justify-between">
                         <span className="flex items-center gap-2">
@@ -290,6 +299,24 @@ const ControlPanel = () => {
                               <h4 className="font-semibold mb-1">API Tester</h4>
                               <p className="text-sm text-muted-foreground">
                                 Testar todas as integrações de APIs externas
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+
+                    <Link to="/admin/checklists">
+                      <Card className="hover:shadow-lg transition-all cursor-pointer border-2 hover:border-green-500">
+                        <CardContent className="p-4">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 bg-green-500/10 rounded-lg">
+                              <CheckCircle className="h-6 w-6 text-green-500" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold mb-1">Checklists Admin</h4>
+                              <p className="text-sm text-muted-foreground">
+                                Gerenciar checklists inteligentes e operacionais
                               </p>
                             </div>
                           </div>
