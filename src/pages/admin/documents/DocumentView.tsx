@@ -1,15 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, FileText, History, MessageSquare } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { DocumentVersionHistory } from "@/components/documents/version-history";
+import { DocumentComments } from "@/components/documents/comments-section";
 
 interface Document {
   title: string;
@@ -23,12 +26,9 @@ export default function DocumentViewPage() {
   const [doc, setDoc] = useState<Document | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const loadDocument = useCallback(async () => {
     if (!id) return;
-    loadDocument();
-  }, [id]);
-
-  const loadDocument = async () => {
+    
     try {
       const { data, error } = await supabase
         .from("ai_generated_documents")
@@ -49,7 +49,11 @@ export default function DocumentViewPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadDocument();
+  }, [loadDocument]);
 
   if (loading)
     return (
@@ -82,18 +86,50 @@ export default function DocumentViewPage() {
         </div>
 
         <div className="space-y-4">
-          <h1 className="text-3xl font-bold">📄 {doc.title}</h1>
-          <p className="text-sm text-muted-foreground">
-            Criado em {format(new Date(doc.created_at), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", {
-              locale: ptBR,
-            })}
-          </p>
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <FileText className="w-8 h-8" />
+              {doc.title}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-2">
+              Criado em {format(new Date(doc.created_at), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", {
+                locale: ptBR,
+              })}
+            </p>
+          </div>
 
-          <Card>
-            <CardContent className="whitespace-pre-wrap p-6">
-              {doc.content}
-            </CardContent>
-          </Card>
+          <Tabs defaultValue="content" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="content" className="gap-2">
+                <FileText className="w-4 h-4" />
+                Conteúdo
+              </TabsTrigger>
+              <TabsTrigger value="versions" className="gap-2">
+                <History className="w-4 h-4" />
+                Versões
+              </TabsTrigger>
+              <TabsTrigger value="comments" className="gap-2">
+                <MessageSquare className="w-4 h-4" />
+                Comentários
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="content" className="space-y-4">
+              <Card>
+                <CardContent className="whitespace-pre-wrap p-6">
+                  {doc.content}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="versions" className="space-y-4">
+              <DocumentVersionHistory documentId={id} onVersionRestored={loadDocument} />
+            </TabsContent>
+
+            <TabsContent value="comments" className="space-y-4">
+              <DocumentComments documentId={id} />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </RoleBasedAccess>
