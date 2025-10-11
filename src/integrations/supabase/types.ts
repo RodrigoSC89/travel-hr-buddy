@@ -1542,6 +1542,30 @@ export type Database = {
           },
         ]
       }
+      documents: {
+        Row: {
+          author: string | null
+          content: string | null
+          created_at: string
+          id: string
+          title: string | null
+        }
+        Insert: {
+          author?: string | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          title?: string | null
+        }
+        Update: {
+          author?: string | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          title?: string | null
+        }
+        Relationships: []
+      }
       crew_embarkations: {
         Row: {
           completed_operations: number | null
