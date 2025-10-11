@@ -69,7 +69,7 @@ export const useSystemActions = () => {
     }, 3000);
   };
 
-  const handleRefreshData = () => {
+  const handleRefreshData = async () => {
     if (!isOnline) {
       toast({
         title: "Modo Offline",
@@ -84,10 +84,26 @@ export const useSystemActions = () => {
       description: "Carregando dados mais recentes",
     });
     
-    // Implementar refresh dos dados
-    setTimeout(() => {
+    // Implementar refresh dos dados com timeout
+    try {
+      const timeout = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout')), 5000)
+      );
+      
+      await Promise.race([
+        // Aqui você adicionaria a lógica real de refresh
+        new Promise(resolve => setTimeout(resolve, 500)),
+        timeout
+      ]);
+      
       window.location.reload();
-    }, 1000);
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "Não foi possível atualizar os dados",
+        variant: "destructive",
+      });
+    }
   };
 
   const handlePrintReport = () => {
