@@ -115,7 +115,7 @@
                                 │
                                 ▼
                         ╔═══════════════════╗
-                        ║ 📝 LOG: "critical"║
+                        ║ 📝 LOG: "error"   ║
                         ║ Message:          ║
                         ║ "Erro crítico     ║
                         ║  na função"       ║
@@ -172,18 +172,8 @@
 
 ---
 
-### 🔴 Critical (status: "critical")
-**Trigger**: Unhandled exception in main execution  
-**Message**: "Erro crítico na função"  
-**Error Details**: JSON with full error object  
-**Triggered By**: automated  
-
-**When This Happens**:
-- Unexpected JavaScript/TypeScript errors
-- Memory issues
-- Network timeouts
-- Code bugs
-- Missing environment variables
+### ⚪ Pending (status: "pending")
+**Note**: This status is included in the schema but not currently used by the Edge Function. It's reserved for future enhancements like queued or scheduled reports.
 
 ---
 
@@ -193,10 +183,10 @@
 restore_report_logs
 ├── id              (uuid, primary key)
 ├── executed_at     (timestamptz, default: now())
-├── status          (text, not null)
+├── status          (text, not null, check in ('success', 'error', 'pending'))
 │   ├── "success"
 │   ├── "error"
-│   └── "critical"
+│   └── "pending"
 ├── message         (text, nullable)
 ├── error_details   (text, nullable, JSON string)
 └── triggered_by    (text, default: 'automated')
@@ -237,7 +227,6 @@ SELECT
   COUNT(*) as total_runs,
   COUNT(*) FILTER (WHERE status = 'success') as successful,
   COUNT(*) FILTER (WHERE status = 'error') as errors,
-  COUNT(*) FILTER (WHERE status = 'critical') as critical,
   ROUND(100.0 * COUNT(*) FILTER (WHERE status = 'success') / COUNT(*), 2) as success_rate_pct
 FROM restore_report_logs
 WHERE executed_at >= NOW() - INTERVAL '30 days';
@@ -249,7 +238,7 @@ SELECT
   DATE(executed_at) as date,
   COUNT(*) as total,
   COUNT(*) FILTER (WHERE status = 'success') as success,
-  COUNT(*) FILTER (WHERE status IN ('error', 'critical')) as failed,
+  COUNT(*) FILTER (WHERE status = 'error') as failed,
   ROUND(100.0 * COUNT(*) FILTER (WHERE status = 'success') / COUNT(*), 2) as success_pct
 FROM restore_report_logs
 WHERE executed_at >= NOW() - INTERVAL '30 days'
@@ -264,7 +253,7 @@ SELECT
   COUNT(*) as occurrences,
   MAX(executed_at) as last_occurrence
 FROM restore_report_logs
-WHERE status IN ('error', 'critical')
+WHERE status = 'error'
 GROUP BY message
 ORDER BY occurrences DESC;
 ```
@@ -277,7 +266,7 @@ SELECT
   message,
   error_details
 FROM restore_report_logs
-WHERE status IN ('error', 'critical')
+WHERE status = 'error'
 ORDER BY executed_at DESC
 LIMIT 5;
 ```
@@ -337,12 +326,12 @@ LIMIT 5;
 }
 ```
 
-### Critical Error Log
+### Error Log (Critical/Unhandled)
 ```json
 {
   "id": "770e8400-e29b-41d4-a716-446655440002",
   "executed_at": "2025-10-11T20:05:45.789Z",
-  "status": "critical",
+  "status": "error",
   "message": "Erro crítico na função",
   "error_details": "{\"name\":\"TypeError\",\"message\":\"Cannot read property 'length' of undefined\"}",
   "triggered_by": "automated"

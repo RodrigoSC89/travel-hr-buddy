@@ -32,7 +32,8 @@ SELECT * FROM restore_report_logs ORDER BY executed_at DESC LIMIT 5;
 | `success` | Email sent | "Relatório enviado com sucesso." |
 | `error` | Data fetch failed | "Failed to fetch restore data" |
 | `error` | Email failed | "Falha no envio do e-mail" |
-| `critical` | Unhandled error | "Erro crítico na função" |
+| `error` | Unhandled error | "Erro crítico na função" |
+| `pending` | Reserved | Not currently used |
 
 ---
 
@@ -74,7 +75,7 @@ FROM restore_report_logs;
 ```sql
 SELECT executed_at, message, error_details 
 FROM restore_report_logs 
-WHERE status IN ('error', 'critical')
+WHERE status = 'error'
 ORDER BY executed_at DESC;
 ```
 
@@ -96,7 +97,8 @@ ORDER BY date DESC;
 
 1. `supabase/migrations/20251011185116_create_restore_report_logs.sql` - Migration
 2. `supabase/functions/daily-restore-report/index.ts` - Edge Function
-3. `supabase/functions/daily-restore-report/README.md` - Documentation
+3. `src/pages/admin/reports/RestoreReportLogs.tsx` - Admin UI Page
+4. `src/App.tsx` - Route Configuration
 
 ---
 
@@ -112,11 +114,13 @@ ORDER BY date DESC;
 
 - [x] Migration file created
 - [x] Edge Function updated with logging
-- [x] Documentation updated
+- [x] Admin UI page created at /admin/reports/logs
+- [x] Route added to App.tsx
+- [x] Tests created and passing (7 tests)
 - [ ] Migration applied to database
 - [ ] Function deployed to Supabase
 - [ ] First test execution completed
-- [ ] Logs verified in database
+- [ ] Logs verified in database and UI
 
 ---
 
@@ -146,8 +150,9 @@ SELECT * FROM pg_policies WHERE tablename = 'restore_report_logs';
 
 For issues or questions:
 1. Check function logs: `supabase functions logs daily-restore-report`
-2. Query error logs: `SELECT * FROM restore_report_logs WHERE status = 'critical'`
+2. Query error logs: `SELECT * FROM restore_report_logs WHERE status = 'error'`
 3. Review documentation: `/supabase/functions/daily-restore-report/README.md`
+4. Access admin UI: `/admin/reports/logs`
 
 ---
 

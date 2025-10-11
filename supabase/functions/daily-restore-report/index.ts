@@ -137,7 +137,7 @@ serve(async (req) => {
     console.error("❌ Error in daily-restore-report:", error);
     
     // Log critical error
-    await logExecution(supabase, "critical", "Erro crítico na função", error);
+    await logExecution(supabase, "error", "Erro crítico na função", error);
     
     return new Response(
       JSON.stringify({
