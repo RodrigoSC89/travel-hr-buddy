@@ -8,8 +8,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, History } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { DocumentVersionHistory } from "@/components/documents/DocumentVersionHistory";
 
 interface Document {
   title: string;
@@ -22,6 +23,7 @@ export default function DocumentViewPage() {
   const navigate = useNavigate();
   const [doc, setDoc] = useState<Document | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -51,6 +53,15 @@ export default function DocumentViewPage() {
     }
   };
 
+  const handleVersionRestored = () => {
+    // Reload the document after version is restored
+    loadDocument();
+    toast({
+      title: "Documento atualizado",
+      description: "O documento foi atualizado com a versão restaurada.",
+    });
+  };
+
   if (loading)
     return (
       <RoleBasedAccess roles={["admin", "hr_manager"]}>
@@ -70,7 +81,7 @@ export default function DocumentViewPage() {
   return (
     <RoleBasedAccess roles={["admin", "hr_manager"]}>
       <div className="container mx-auto p-6 space-y-6">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between">
           <Button
             variant="outline"
             size="sm"
@@ -78,6 +89,15 @@ export default function DocumentViewPage() {
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowVersionHistory(true)}
+          >
+            <History className="w-4 h-4 mr-2" />
+            Ver Histórico
           </Button>
         </div>
 
@@ -95,6 +115,16 @@ export default function DocumentViewPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Version History Dialog */}
+        {id && (
+          <DocumentVersionHistory
+            documentId={id}
+            open={showVersionHistory}
+            onOpenChange={setShowVersionHistory}
+            onVersionRestored={handleVersionRestored}
+          />
+        )}
       </div>
     </RoleBasedAccess>
   );
