@@ -17,6 +17,9 @@ interface Document {
   title: string;
   content: string;
   created_at: string;
+  generated_by: string | null;
+  author_email?: string;
+  author_name?: string;
 }
 
 interface DocumentVersion {
@@ -46,13 +49,29 @@ export default function DocumentViewPage() {
     try {
       const { data, error } = await supabase
         .from("ai_generated_documents")
-        .select("title, content, created_at")
+        .select(`
+          title, 
+          content, 
+          created_at, 
+          generated_by,
+          profiles:generated_by (
+            email,
+            full_name
+          )
+        `)
         .eq("id", id)
         .single();
 
       if (error) throw error;
 
-      setDoc(data);
+      // Transform the data to flatten the profiles object
+      const transformedData = {
+        ...data,
+        author_email: data.profiles?.email,
+        author_name: data.profiles?.full_name,
+      };
+
+      setDoc(transformedData);
     } catch (error) {
       console.error("Error loading document:", error);
       toast({
@@ -194,11 +213,18 @@ export default function DocumentViewPage() {
 
         <div className="space-y-4">
           <h1 className="text-3xl font-bold">📄 {doc.title}</h1>
-          <p className="text-sm text-muted-foreground">
-            Criado em {format(new Date(doc.created_at), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", {
-              locale: ptBR,
-            })}
-          </p>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm text-muted-foreground">
+              Criado em {format(new Date(doc.created_at), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", {
+                locale: ptBR,
+              })}
+            </p>
+            {(doc.author_name || doc.author_email) && (
+              <p className="text-sm text-muted-foreground">
+                Autor: {doc.author_name || doc.author_email || "Desconhecido"}
+              </p>
+            )}
+          </div>
 
           <Card>
             <CardHeader>
