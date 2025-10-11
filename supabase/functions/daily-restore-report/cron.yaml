@@ -1,0 +1,5 @@
+# ✅ Supabase Cron Job Config — Envio diário do gráfico de restauração
+
+name: daily-restore-report
+schedule: "0 8 * * *"  # Todos os dias às 08:00 da manhã UTC
+endpoint: public       # Torna a função acessível para execução automática
