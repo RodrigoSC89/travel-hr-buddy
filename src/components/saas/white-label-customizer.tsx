@@ -67,7 +67,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
   const handleNestedChange = (parent: string, field: string, value: any) => {
     setFormData(prev => {
       const parentValue = prev[parent as keyof typeof prev];
-      if (typeof parentValue === 'object' && parentValue !== null) {
+      if (typeof parentValue === "object" && parentValue !== null) {
         return {
           ...prev,
           [parent]: {

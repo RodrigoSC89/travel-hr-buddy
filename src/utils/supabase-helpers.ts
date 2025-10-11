@@ -20,7 +20,7 @@ export async function withTimeout<T>(
  * Type guard para verificar se um valor é um objeto (não array)
  */
 export function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 /**
