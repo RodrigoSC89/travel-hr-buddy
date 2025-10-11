@@ -116,7 +116,7 @@ describe("ChecklistsPage Component", () => {
     );
     
     await waitFor(() => {
-      const input = screen.getByPlaceholderText(/Novo checklist/i);
+      const input = screen.getByPlaceholderText(/Descreva seu checklist/i);
       expect(input).toBeInTheDocument();
     });
   });
@@ -131,7 +131,7 @@ describe("ChecklistsPage Component", () => {
     );
     
     await waitFor(() => {
-      const button = screen.getByText(/Criar/i);
+      const button = screen.getByText(/Criar Manual/i);
       expect(button).toBeInTheDocument();
     });
   });
@@ -146,7 +146,7 @@ describe("ChecklistsPage Component", () => {
     );
     
     await waitFor(() => {
-      const button = screen.getByRole("button", { name: /Criar/i });
+      const button = screen.getByRole("button", { name: /Criar Manual/i });
       expect(button).toBeDisabled();
     });
   });
