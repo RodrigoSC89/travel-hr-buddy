@@ -20,6 +20,7 @@ interface RestoreLog {
 
 export default function RestoreLogsPage() {
   const [logs, setLogs] = useState<RestoreLog[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filterEmail, setFilterEmail] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -28,11 +29,24 @@ export default function RestoreLogsPage() {
 
   useEffect(() => {
     async function fetchLogs() {
-      const { data } = await supabase.rpc("get_restore_logs_with_profiles");
-      setLogs(data || []);
+      try {
+        setLoading(true);
+        const { data, error } = await supabase.rpc("get_restore_logs_with_profiles");
+        if (error) throw error;
+        setLogs(data || []);
+      } catch (error) {
+        console.error("Error fetching restore logs:", error);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchLogs();
   }, []);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [filterEmail, startDate, endDate]);
 
   // Apply filters
   const filteredLogs = logs.filter((log) => {
@@ -62,6 +76,10 @@ export default function RestoreLogsPage() {
 
   // CSV Export
   function exportCSV() {
+    if (filteredLogs.length === 0) {
+      return; // Nothing to export
+    }
+
     const headers = ["Documento", "Versão Restaurada", "Restaurado por", "Data"];
     const rows = filteredLogs.map((log) => [
       log.document_id,
@@ -84,10 +102,15 @@ export default function RestoreLogsPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url); // Clean up
   }
 
   // PDF Export
   function exportPDF() {
+    if (filteredLogs.length === 0) {
+      return; // Nothing to export
+    }
+
     const doc = new jsPDF();
     const margin = 20;
     let y = margin;
@@ -153,59 +176,79 @@ export default function RestoreLogsPage() {
           title="Data final"
         />
         <div className="flex gap-2">
-          <Button variant="outline" onClick={exportCSV}>📤 CSV</Button>
-          <Button variant="outline" onClick={exportPDF}>🧾 PDF</Button>
+          <Button 
+            variant="outline" 
+            onClick={exportCSV}
+            disabled={filteredLogs.length === 0}
+          >
+            📤 CSV
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={exportPDF}
+            disabled={filteredLogs.length === 0}
+          >
+            🧾 PDF
+          </Button>
         </div>
       </div>
 
-      {paginatedLogs.length === 0 && (
-        <p className="text-muted-foreground">Nenhuma restauração encontrada.</p>
+      {loading ? (
+        <p className="text-muted-foreground">Carregando...</p>
+      ) : paginatedLogs.length === 0 ? (
+        <p className="text-muted-foreground">
+          {logs.length === 0 
+            ? "Nenhuma restauração encontrada." 
+            : "Nenhuma restauração corresponde aos filtros aplicados."}
+        </p>
+      ) : (
+        <div className="grid gap-4">
+          {paginatedLogs.map((log) => (
+            <Card key={log.id}>
+              <CardContent className="space-y-1 p-4">
+                <p>
+                  <strong>Documento:</strong>{" "}
+                  <Link
+                    to={`/admin/documents/view/${log.document_id}`}
+                    className="underline text-blue-600 hover:text-blue-800"
+                  >
+                    {log.document_id}
+                  </Link>
+                </p>
+                <p>
+                  <strong>Versão Restaurada:</strong> {log.version_id}
+                </p>
+                <p>
+                  <strong>Restaurado por:</strong> {log.email || "-"}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  <strong>Data:</strong> {format(new Date(log.restored_at), "dd/MM/yyyy HH:mm")}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       )}
 
-      <div className="grid gap-4">
-        {paginatedLogs.map((log) => (
-          <Card key={log.id}>
-            <CardContent className="space-y-1 p-4">
-              <p>
-                <strong>Documento:</strong>{" "}
-                <Link
-                  to={`/admin/documents/view/${log.document_id}`}
-                  className="underline text-blue-600 hover:text-blue-800"
-                >
-                  {log.document_id}
-                </Link>
-              </p>
-              <p>
-                <strong>Versão Restaurada:</strong> {log.version_id}
-              </p>
-              <p>
-                <strong>Restaurado por:</strong> {log.email || "-"}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                <strong>Data:</strong> {format(new Date(log.restored_at), "dd/MM/yyyy HH:mm")}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <div className="flex justify-center gap-4 mt-4">
-        <Button
-          variant="ghost"
-          disabled={page === 1}
-          onClick={() => setPage((prev) => prev - 1)}
-        >
-          ⬅️ Anterior
-        </Button>
-        <span className="text-sm text-muted-foreground">Página {page}</span>
-        <Button
-          variant="ghost"
-          disabled={page * pageSize >= filteredLogs.length}
-          onClick={() => setPage((prev) => prev + 1)}
-        >
-          Próxima ➡️
-        </Button>
-      </div>
+      {!loading && filteredLogs.length > pageSize && (
+        <div className="flex justify-center gap-4 mt-4">
+          <Button
+            variant="ghost"
+            disabled={page === 1}
+            onClick={() => setPage((prev) => prev - 1)}
+          >
+            ⬅️ Anterior
+          </Button>
+          <span className="text-sm text-muted-foreground">Página {page}</span>
+          <Button
+            variant="ghost"
+            disabled={page * pageSize >= filteredLogs.length}
+            onClick={() => setPage((prev) => prev + 1)}
+          >
+            Próxima ➡️
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

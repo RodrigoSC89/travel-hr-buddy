@@ -114,7 +114,7 @@ describe("RestoreLogsPage Component", () => {
     });
   });
 
-  it("should display pagination controls", async () => {
+  it("should not display pagination controls when items fit on one page", async () => {
     render(
       <MemoryRouter>
         <RestoreLogsPage />
@@ -122,10 +122,41 @@ describe("RestoreLogsPage Component", () => {
     );
     
     await waitFor(() => {
-      expect(screen.getByText(/⬅️ Anterior/i)).toBeInTheDocument();
-      expect(screen.getByText(/Próxima ➡️/i)).toBeInTheDocument();
-      expect(screen.getByText(/Página/i)).toBeInTheDocument();
+      expect(screen.getByText("doc-123")).toBeInTheDocument();
     });
+    
+    // Pagination should not be visible when there are less than pageSize items
+    expect(screen.queryByText(/⬅️ Anterior/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Próxima ➡️/i)).not.toBeInTheDocument();
+  });
+
+  it("should display loading state", () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    expect(screen.getByText(/Carregando.../i)).toBeInTheDocument();
+  });
+
+  it("should disable export buttons when no data", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.getByText("doc-123")).toBeInTheDocument();
+    });
+    
+    // With data, buttons should be enabled
+    const csvButton = screen.getByText(/📤 CSV/i);
+    const pdfButton = screen.getByText(/🧾 PDF/i);
+    expect(csvButton).not.toBeDisabled();
+    expect(pdfButton).not.toBeDisabled();
   });
 
   it("should show empty state message when no logs are found", async () => {
