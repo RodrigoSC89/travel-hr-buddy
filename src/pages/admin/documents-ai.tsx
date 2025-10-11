@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Loader2, FileText, Save, Download } from "lucide-react";
+import { Sparkles, Loader2, FileText, Save, Download, RefreshCw, Brain } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
@@ -18,12 +18,16 @@ export default function DocumentsAIPage() {
   const [exporting, setExporting] = useState(false);
   const [title, setTitle] = useState("");
   const [savedDocumentId, setSavedDocumentId] = useState<string | null>(null);
+  const [resumido, setResumido] = useState("");
+  const [summarizing, setSummarizing] = useState(false);
+  const [rewriting, setRewriting] = useState(false);
 
   async function generateDocument() {
     if (!prompt) return;
     setLoading(true);
     setGenerated("");
     setSavedDocumentId(null);
+    setResumido("");
     try {
       const { data, error } = await supabase.functions.invoke("generate-document", {
         body: { prompt },
@@ -159,6 +163,78 @@ export default function DocumentsAIPage() {
     }
   }
 
+  async function summarizeDocument() {
+    if (!generated) {
+      toast({
+        title: "Erro ao resumir",
+        description: "Por favor, gere um documento primeiro.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSummarizing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("summarize-document", {
+        body: { content: generated },
+      });
+      if (error) throw error;
+      if (data) {
+        setResumido(data.summary);
+        toast({
+          title: "Resumo gerado com sucesso",
+          description: "O documento foi resumido pela IA.",
+        });
+      }
+    } catch (err) {
+      console.error("Error summarizing document:", err);
+      setResumido("❌ Erro ao resumir documento.");
+      toast({
+        title: "Erro ao resumir documento",
+        description: "Não foi possível resumir o documento.",
+        variant: "destructive",
+      });
+    } finally {
+      setSummarizing(false);
+    }
+  }
+
+  async function rewriteDocument() {
+    if (!generated) {
+      toast({
+        title: "Erro ao reformular",
+        description: "Por favor, gere um documento primeiro.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setRewriting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("rewrite-document", {
+        body: { content: generated },
+      });
+      if (error) throw error;
+      if (data) {
+        setGenerated(data.rewritten);
+        setResumido(""); // Clear summary when document is rewritten
+        toast({
+          title: "Documento reformulado com sucesso",
+          description: "O documento foi reformulado pela IA.",
+        });
+      }
+    } catch (err) {
+      console.error("Error rewriting document:", err);
+      toast({
+        title: "Erro ao reformular documento",
+        description: "Não foi possível reformular o documento.",
+        variant: "destructive",
+      });
+    } finally {
+      setRewriting(false);
+    }
+  }
+
   return (
     <div className="space-y-6 p-8">
       <h1 className="text-2xl font-bold">📄 Documentos com IA</h1>
@@ -191,7 +267,7 @@ export default function DocumentsAIPage() {
       </Card>
 
       {generated && (
-        <Card className="border border-green-600">
+        <Card id="generated-doc" className="border border-green-600">
           <CardContent className="p-4 space-y-4">
             <div>
               <h2 className="text-lg font-semibold mb-2">
@@ -200,7 +276,7 @@ export default function DocumentsAIPage() {
               <div className="whitespace-pre-wrap">{generated}</div>
             </div>
             
-            <div className="flex gap-2 pt-4 border-t">
+            <div className="flex gap-2 pt-4 border-t flex-wrap">
               <Button 
                 onClick={saveDocument} 
                 disabled={saving || !title.trim() || !!savedDocumentId}
@@ -236,7 +312,45 @@ export default function DocumentsAIPage() {
                   </>
                 )}
               </Button>
+
+              <Button 
+                onClick={summarizeDocument} 
+                disabled={summarizing}
+                variant="ghost"
+              >
+                {summarizing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Gerando...
+                  </>
+                ) : (
+                  <>
+                    <Brain className="w-4 h-4 mr-2" /> Resumir com IA
+                  </>
+                )}
+              </Button>
+
+              <Button 
+                onClick={rewriteDocument} 
+                disabled={rewriting}
+                variant="ghost"
+              >
+                {rewriting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Reformulando...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2" /> Reformular IA
+                  </>
+                )}
+              </Button>
             </div>
+
+            {resumido && (
+              <div className="mt-4 text-sm bg-muted p-3 rounded">
+                <strong>🧠 Resumo:</strong> {resumido}
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
