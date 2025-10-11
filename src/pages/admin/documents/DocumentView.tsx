@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Loader2, ArrowLeft, History, RotateCcw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { DocumentVersionHistory } from "@/components/documents/DocumentVersionHistory";
 
 interface Document {
   title: string;
@@ -207,6 +208,12 @@ export default function DocumentViewPage() {
               {doc.content}
             </CardContent>
           </Card>
+
+          {/* Version History Component */}
+          <DocumentVersionHistory 
+            documentId={id!} 
+            onRestore={loadDocument}
+          />
         </div>
 
         {showVersions && (
