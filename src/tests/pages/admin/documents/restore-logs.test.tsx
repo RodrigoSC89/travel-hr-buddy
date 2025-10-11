@@ -3,6 +3,11 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreLogsPage from "@/pages/admin/documents/restore-logs";
 
+// Mock toast hook
+vi.mock("@/hooks/use-toast", () => ({
+  toast: vi.fn(),
+}));
+
 // Mock supabase client
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
@@ -75,8 +80,8 @@ describe("RestoreLogsPage Component", () => {
       </MemoryRouter>
     );
     
-    expect(screen.getByText(/📤 CSV/i)).toBeInTheDocument();
-    expect(screen.getByText(/🧾 PDF/i)).toBeInTheDocument();
+    expect(screen.getByText(/CSV/i)).toBeInTheDocument();
+    expect(screen.getByText(/PDF/i)).toBeInTheDocument();
   });
 
   it("should display restore logs after loading", async () => {
@@ -138,7 +143,7 @@ describe("RestoreLogsPage Component", () => {
       </MemoryRouter>
     );
     
-    expect(screen.getByText(/Carregando.../i)).toBeInTheDocument();
+    expect(screen.getByText(/Carregando registros.../i)).toBeInTheDocument();
   });
 
   it("should disable export buttons when no data", async () => {
@@ -154,8 +159,8 @@ describe("RestoreLogsPage Component", () => {
     });
     
     // With data, buttons should be enabled
-    const csvButton = screen.getByText(/📤 CSV/i);
-    const pdfButton = screen.getByText(/🧾 PDF/i);
+    const csvButton = screen.getByText(/CSV/i).closest("button");
+    const pdfButton = screen.getByText(/PDF/i).closest("button");
     expect(csvButton).not.toBeDisabled();
     expect(pdfButton).not.toBeDisabled();
   });
@@ -249,6 +254,99 @@ describe("RestoreLogsPage Component", () => {
       const totalElement = screen.getByText("Total de Restaurações").closest("div")?.parentElement;
       expect(totalElement).toBeInTheDocument();
       expect(totalElement?.textContent).toContain("2");
+    });
+  });
+
+  it("should validate date range and show error when start date is after end date", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText("doc-123")).toBeInTheDocument();
+    });
+
+    const dateInputs = screen.getAllByTitle(/Data/i);
+    const startDateInput = dateInputs.find((input) => input.getAttribute("title") === "Data inicial");
+    const endDateInput = dateInputs.find((input) => input.getAttribute("title") === "Data final");
+
+    if (startDateInput && endDateInput) {
+      fireEvent.change(startDateInput, { target: { value: "2025-10-15" } });
+      fireEvent.change(endDateInput, { target: { value: "2025-10-10" } });
+
+      await waitFor(() => {
+        expect(screen.getByText(/A data inicial não pode ser posterior à data final/i)).toBeInTheDocument();
+      });
+    }
+  });
+
+  it("should disable export buttons when date validation fails", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText("doc-123")).toBeInTheDocument();
+    });
+
+    const dateInputs = screen.getAllByTitle(/Data/i);
+    const startDateInput = dateInputs.find((input) => input.getAttribute("title") === "Data inicial");
+    const endDateInput = dateInputs.find((input) => input.getAttribute("title") === "Data final");
+
+    if (startDateInput && endDateInput) {
+      fireEvent.change(startDateInput, { target: { value: "2025-10-15" } });
+      fireEvent.change(endDateInput, { target: { value: "2025-10-10" } });
+
+      await waitFor(() => {
+        const csvButton = screen.getByText(/CSV/i).closest("button");
+        const pdfButton = screen.getByText(/PDF/i).closest("button");
+        expect(csvButton).toBeDisabled();
+        expect(pdfButton).toBeDisabled();
+      });
+    }
+  });
+
+  it("should display enhanced empty state message", async () => {
+    // Mock empty data
+    const { supabase } = await import("@/integrations/supabase/client");
+    vi.mocked(supabase.rpc).mockResolvedValueOnce({
+      data: [],
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText(/Nenhuma restauração encontrada/i)).toBeInTheDocument();
+      expect(screen.getByText(/Quando documentos forem restaurados, eles aparecerão aqui./i)).toBeInTheDocument();
+    });
+  });
+
+  it("should show filtered empty state when no results match filters", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText("doc-123")).toBeInTheDocument();
+    });
+
+    const filterInput = screen.getByPlaceholderText(/Filtrar por e-mail/i);
+    fireEvent.change(filterInput, { target: { value: "nonexistent@example.com" } });
+
+    await waitFor(() => {
+      expect(screen.getByText(/Nenhuma restauração corresponde aos filtros aplicados/i)).toBeInTheDocument();
+      expect(screen.getByText(/Tente ajustar os filtros para ver mais resultados./i)).toBeInTheDocument();
     });
   });
 });
