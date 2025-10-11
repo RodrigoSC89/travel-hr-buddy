@@ -65,13 +65,19 @@ export const WhiteLabelCustomizer: React.FC = () => {
   };
 
   const handleNestedChange = (parent: string, field: string, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [parent]: {
-        ...prev[parent as keyof typeof prev],
-        [field]: value
+    setFormData(prev => {
+      const parentValue = prev[parent as keyof typeof prev];
+      if (typeof parentValue === 'object' && parentValue !== null) {
+        return {
+          ...prev,
+          [parent]: {
+            ...(parentValue as Record<string, unknown>),
+            [field]: value
+          }
+        };
       }
-    }));
+      return prev;
+    });
     setHasChanges(true);
   };
 
@@ -460,8 +466,8 @@ export const WhiteLabelCustomizer: React.FC = () => {
                       </p>
                     </div>
                     <Switch
-                      checked={formData.enabled_modules[key] || false}
-                      onCheckedChange={(checked) => 
+                      checked={Boolean(formData.enabled_modules[key])}
+                      onCheckedChange={(checked) =>
                         handleNestedChange("enabled_modules", key, checked)
                       }
                     />

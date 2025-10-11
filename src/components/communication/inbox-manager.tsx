@@ -548,7 +548,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                               <DropdownMenuItem 
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  deleteMessage(message.id);
+                                  archiveMessage(message.id);
                                 }}
                                 className="text-destructive"
                               >

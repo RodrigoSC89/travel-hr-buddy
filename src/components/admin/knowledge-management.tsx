@@ -211,11 +211,11 @@ export const KnowledgeManagement: React.FC = () => {
             content: editingItem.content,
             type: editingItem.type,
             module: editingItem.module,
-            tags: editingItem.tags as string[],
+            tags: editingItem.tags,
             difficulty: editingItem.difficulty,
             status: editingItem.status,
-            steps: (editingItem.steps || []) as Record<string, unknown>[],
-            metadata: (editingItem.metadata || {}) as Record<string, unknown>,
+            steps: JSON.parse(JSON.stringify(editingItem.steps || [])),
+            metadata: JSON.parse(JSON.stringify(editingItem.metadata || {})),
             updated_at: new Date().toISOString()
           })
           .eq("id", editingItem.id);
@@ -230,18 +230,18 @@ export const KnowledgeManagement: React.FC = () => {
         // Criar novo item
         const { error } = await supabase
           .from("knowledge_base")
-          .insert({
+          .insert([{
             title: editingItem.title,
             content: editingItem.content,
             type: editingItem.type,
             module: editingItem.module,
-            tags: editingItem.tags as string[],
+            tags: editingItem.tags,
             difficulty: editingItem.difficulty,
             status: editingItem.status,
             author_id: null,
-            steps: (editingItem.steps || []) as Record<string, unknown>[],
-            metadata: (editingItem.metadata || {}) as Record<string, unknown>
-          });
+            steps: JSON.parse(JSON.stringify(editingItem.steps || [])),
+            metadata: JSON.parse(JSON.stringify(editingItem.metadata || {}))
+          }]);
 
         if (error) throw error;
 

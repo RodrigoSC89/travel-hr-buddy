@@ -18,7 +18,13 @@ export default function useModules() {
   useEffect(() => {
     async function fetchModules() {
       const { data, error } = await supabase.from("modules").select("*");
-      if (!error) setModules(data || []);
+      if (!error && data) {
+        const typedModules: Module[] = data.map(item => ({
+          ...item,
+          status: item.status as "functional" | "pending" | "disabled"
+        }));
+        setModules(typedModules);
+      }
       setLoading(false);
     }
     fetchModules();

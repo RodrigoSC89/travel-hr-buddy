@@ -35,7 +35,21 @@ export const OrganizationCustomization: React.FC = () => {
   const [preview, setPreview] = useState(false);
 
   // Formulário de personalização
-  const [customization, setCustomization] = useState({
+  const [customization, setCustomization] = useState<{
+    company_name: string;
+    logo_url: string;
+    primary_color: string;
+    secondary_color: string;
+    accent_color: string;
+    theme_mode: string;
+    default_language: string;
+    default_currency: string;
+    timezone: string;
+    custom_fields: Record<string, unknown>;
+    business_rules: Record<string, unknown>;
+    enabled_modules: Record<string, unknown>;
+    module_settings: Record<string, unknown>;
+  }>({
     company_name: "",
     logo_url: "",
     primary_color: "#1e40af",
@@ -46,8 +60,8 @@ export const OrganizationCustomization: React.FC = () => {
     default_currency: "BRL",
     timezone: "America/Sao_Paulo",
     custom_fields: {},
-    business_rules: {} as BusinessRules,
-    enabled_modules: ["fleet", "crew", "certificates", "analytics"],
+    business_rules: {},
+    enabled_modules: {},
     module_settings: {}
   });
 
@@ -65,9 +79,9 @@ export const OrganizationCustomization: React.FC = () => {
         timezone: currentBranding.timezone || "America/Sao_Paulo",
         custom_fields: currentBranding.custom_fields || {},
         business_rules: currentBranding.business_rules || {},
-        enabled_modules: Array.isArray(currentBranding.enabled_modules) 
-          ? currentBranding.enabled_modules 
-          : ["fleet", "crew", "certificates", "analytics"],
+        enabled_modules: typeof currentBranding.enabled_modules === 'object' && !Array.isArray(currentBranding.enabled_modules)
+          ? currentBranding.enabled_modules
+          : {},
         module_settings: currentBranding.module_settings || {}
       });
     }
@@ -87,8 +101,8 @@ export const OrganizationCustomization: React.FC = () => {
       setIsLoading(true);
       await updateBranding({
         ...customization,
-        enabled_modules: customization.enabled_modules as Record<string, boolean>,
-        business_rules: customization.business_rules as Record<string, unknown>
+        enabled_modules: customization.enabled_modules,
+        business_rules: customization.business_rules
       });
       
       toast({
@@ -453,23 +467,15 @@ export const OrganizationCustomization: React.FC = () => {
                       <p className="text-sm text-muted-foreground">{module.description}</p>
                     </div>
                     <Switch
-                      checked={Array.isArray(customization.enabled_modules) && customization.enabled_modules.includes(module.id)}
+                      checked={Boolean(customization.enabled_modules[module.id])}
                       onCheckedChange={(checked) => {
-                        const currentModules = Array.isArray(customization.enabled_modules) 
-                          ? customization.enabled_modules 
-                          : [];
-                        
-                        if (checked) {
-                          setCustomization({
-                            ...customization,
-                            enabled_modules: [...currentModules, module.id]
-                          });
-                        } else {
-                          setCustomization({
-                            ...customization,
-                            enabled_modules: currentModules.filter(m => m !== module.id)
-                          });
-                        }
+                        setCustomization({
+                          ...customization,
+                          enabled_modules: {
+                            ...customization.enabled_modules,
+                            [module.id]: checked
+                          }
+                        });
                       }}
                     />
                   </div>
