@@ -11,22 +11,54 @@ interface Document {
   title: string;
   content: string;
   created_at: string;
+  generated_by: string;
+}
+
+interface User {
+  id: string;
+  email?: string;
 }
 
 export default function DocumentViewPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [doc, setDoc] = useState<Document | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [authorEmail, setAuthorEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(async ({ data }) => {
+      const currentUser = data?.user;
+      setUser(currentUser ?? null);
+      if (currentUser) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", currentUser.id)
+          .single();
+        if (profile?.role === "admin") setIsAdmin(true);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (!id) return;
     supabase
       .from("ai_generated_documents")
-      .select("title, content, created_at")
+      .select("title, content, created_at, generated_by")
       .eq("id", id)
       .single()
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         setDoc(data);
+        if (data?.generated_by) {
+          const { data: author } = await supabase
+            .from("profiles")
+            .select("email")
+            .eq("id", data.generated_by)
+            .single();
+          setAuthorEmail(author?.email || null);
+        }
         setLoading(false);
       });
   }, [id]);
@@ -47,6 +79,9 @@ export default function DocumentViewPage() {
       <p className="text-sm text-muted-foreground">
         Criado em {format(new Date(doc.created_at), "dd/MM/yyyy HH:mm")}
       </p>
+      {isAdmin && authorEmail && (
+        <p className="text-sm text-muted-foreground">Autor: {authorEmail}</p>
+      )}
 
       <Card>
         <CardContent className="whitespace-pre-wrap p-4">
