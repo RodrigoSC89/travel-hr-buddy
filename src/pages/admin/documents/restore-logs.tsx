@@ -5,6 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface RestoreLog {
   id: string;
@@ -31,16 +34,66 @@ export default function RestoreLogsPage() {
     filterEmail ? log.email?.toLowerCase().includes(filterEmail.toLowerCase()) : true
   );
 
+  function exportCSV() {
+    const headers = ["Documento", "Versão", "Usuário", "Data"];
+    const rows = filteredLogs.map((log) => [
+      log.document_id,
+      log.version_id,
+      log.email || "-",
+      format(new Date(log.restored_at), "dd/MM/yyyy HH:mm"),
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "restore-logs.csv";
+    link.click();
+  }
+
+  function exportPDF() {
+    const doc = new jsPDF();
+    doc.text("Restore Logs Report", 14, 16);
+
+    autoTable(doc, {
+      startY: 20,
+      head: [["Documento", "Versão", "Usuário", "Data"]],
+      body: filteredLogs.map((log) => [
+        log.document_id,
+        log.version_id,
+        log.email || "-",
+        format(new Date(log.restored_at), "dd/MM/yyyy HH:mm"),
+      ]),
+      styles: { fontSize: 8 },
+    });
+
+    doc.save("restore-logs.pdf");
+  }
+
   return (
     <div className="p-8 space-y-6">
       <h1 className="text-2xl font-bold">📜 Auditoria de Restaurações</h1>
 
-      <div className="mb-4 max-w-sm">
-        <Input
-          placeholder="Filtrar por e-mail do restaurador"
-          value={filterEmail}
-          onChange={(e) => setFilterEmail(e.target.value)}
-        />
+      <div className="flex gap-4 items-end">
+        <div className="flex-1 max-w-sm">
+          <Input
+            placeholder="Filtrar por e-mail do restaurador"
+            value={filterEmail}
+            onChange={(e) => setFilterEmail(e.target.value)}
+          />
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={exportCSV}>
+            📤 Exportar CSV
+          </Button>
+          <Button variant="outline" onClick={exportPDF}>
+            🧾 Exportar PDF
+          </Button>
+        </div>
       </div>
 
       {filteredLogs.length === 0 && (

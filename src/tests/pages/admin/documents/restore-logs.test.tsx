@@ -3,6 +3,25 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreLogsPage from "@/pages/admin/documents/restore-logs";
 
+// Mock jsPDF and autoTable
+vi.mock("jspdf", () => {
+  const mockJsPDF = vi.fn(() => ({
+    text: vi.fn(),
+    save: vi.fn(),
+    internal: {
+      pageSize: {
+        getWidth: vi.fn(() => 210),
+        getHeight: vi.fn(() => 297),
+      },
+    },
+  }));
+  return { default: mockJsPDF };
+});
+
+vi.mock("jspdf-autotable", () => ({
+  default: vi.fn(),
+}));
+
 // Mock supabase client
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
@@ -123,6 +142,30 @@ describe("RestoreLogsPage Component", () => {
       expect(screen.getAllByText("Versão Restaurada:").length).toBeGreaterThan(0);
       expect(screen.getAllByText("Restaurado por:").length).toBeGreaterThan(0);
       expect(screen.getAllByText("Data:").length).toBeGreaterThan(0);
+    });
+  });
+
+  it("should render CSV export button", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText("📤 Exportar CSV")).toBeInTheDocument();
+    });
+  });
+
+  it("should render PDF export button", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText("🧾 Exportar PDF")).toBeInTheDocument();
     });
   });
 });
