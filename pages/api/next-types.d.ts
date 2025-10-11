@@ -13,13 +13,13 @@ export interface NextApiRequest extends IncomingMessage {
   cookies: Partial<{
     [key: string]: string;
   }>;
-  body: any;
-  env: any;
+  body: unknown;
+  env: Record<string, string | undefined>;
   preview?: boolean;
-  previewData?: any;
+  previewData?: Record<string, unknown>;
 }
 
-export type NextApiResponse<T = any> = ServerResponse & {
+export type NextApiResponse<T = unknown> = ServerResponse & {
   status: (statusCode: number) => NextApiResponse<T>;
   json: (body: T) => void;
   send: (body: T) => void;
