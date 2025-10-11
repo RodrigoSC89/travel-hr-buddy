@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "sonner";
 import { ErrorBoundary } from "./components/layout/error-boundary";
 import { AuthProvider } from "./contexts/AuthContext";
 import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
+import { SmartLayout } from "./components/layout/SmartLayout";
 
 // Lazy load all pages
 const Index = React.lazy(() => import("./pages/Index"));
@@ -51,9 +51,6 @@ const Modules = React.lazy(() => import("./pages/Modules"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const SmartLayoutDemo = React.lazy(() => import("./pages/SmartLayoutDemo"));
 
-// Create QueryClient
-const queryClient = new QueryClient();
-
 // Loading component
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -64,46 +61,8 @@ const LoadingSpinner = () => (
   </div>
 );
 
-// Simple Navigation Component (inline)
-const SimpleNavigation = () => {
-  const [currentPath, setCurrentPath] = React.useState(window.location.pathname);
-
-  const navItems = [
-    { path: "/", label: "Início" },
-    { path: "/modules", label: "📦 Módulos" },
-    { path: "/dashboard", label: "Dashboard" },
-    { path: "/peotram", label: "PEOTRAM" },
-    { path: "/peo-dp", label: "PEO-DP" },
-    { path: "/sgso", label: "SGSO" },
-    { path: "/analytics", label: "Analytics" },
-    { path: "/admin", label: "Admin" },
-    { path: "/settings", label: "Configurações" }
-  ];
-
-  return (
-    <nav className="bg-blue-900 text-white p-4">
-      <div className="container mx-auto">
-        <h1 className="text-xl font-bold mb-4">🚢 Nautilus One</h1>
-        <div className="flex flex-wrap gap-2">
-          {navItems.map((item) => (
-            <a
-              key={item.path}
-              href={item.path}
-              className={`px-3 py-2 rounded text-sm ${
-                currentPath === item.path 
-                  ? "bg-blue-700 text-white" 
-                  : "bg-blue-800 hover:bg-blue-700 text-blue-100"
-              }`}
-              onClick={() => setCurrentPath(item.path)}
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-      </div>
-    </nav>
-  );
-};
+// Create QueryClient
+const queryClient = new QueryClient();
 
 function App() {
   return (
@@ -113,58 +72,55 @@ function App() {
           <OrganizationProvider>
             <QueryClientProvider client={queryClient}>
               <Router>
-                <div className="min-h-screen bg-gray-100">
-                  <SimpleNavigation />
-                  <main className="container mx-auto p-6">
-                    <React.Suspense fallback={<LoadingSpinner />}>
-                      <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/price-alerts" element={<PriceAlerts />} />
-                        <Route path="/reports" element={<Reports />} />
-                        <Route path="/reservations" element={<Reservations />} />
-                        <Route path="/checklists" element={<ChecklistsInteligentes />} />
-                        <Route path="/peotram" element={<PEOTRAM />} />
-                        <Route path="/peo-dp" element={<PEODP />} />
-                        <Route path="/sgso" element={<SGSO />} />
-                        <Route path="/settings" element={<Settings />} />
-                        <Route path="/travel" element={<Travel />} />
-                        <Route path="/analytics" element={<Analytics />} />
-                        <Route path="/hr" element={<HumanResources />} />
-                        <Route path="/communication" element={<Communication />} />
-                        <Route path="/intelligence" element={<Intelligence />} />
-                        <Route path="/maritime" element={<Maritime />} />
-                        <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
-                        <Route path="/nautilus-one" element={<NautilusOne />} />
-                        <Route path="/innovation" element={<Innovation />} />
-                        <Route path="/optimization" element={<Optimization />} />
-                        <Route path="/collaboration" element={<Collaboration />} />
-                        <Route path="/voice" element={<Voice />} />
-                        <Route path="/portal" element={<Portal />} />
-                        <Route path="/ar" element={<AR />} />
-                        <Route path="/iot" element={<IoT />} />
-                        <Route path="/blockchain" element={<Blockchain />} />
-                        <Route path="/gamification" element={<Gamification />} />
-                        <Route path="/predictive" element={<PredictiveAnalytics />} />
-                        <Route path="/admin" element={<Admin />} />
-                        <Route path="/admin/api-tester" element={<APITester />} />
-                        <Route path="/admin/api-status" element={<APIStatus />} />
-                        <Route path="/admin/control-panel" element={<ControlPanel />} />
-                        <Route path="/admin/tests" element={<TestDashboard />} />
-                        <Route path="/admin/ci-history" element={<CIHistory />} />
-                        <Route path="/admin/analytics" element={<AdminAnalytics />} />
-                        <Route path="/admin/wall" element={<AdminWall />} />
-                        <Route path="/health-monitor" element={<HealthMonitorDemo />} />
-                        <Route path="/health" element={<Health />} />
-                        <Route path="/modules" element={<Modules />} />
-                        <Route path="/smart-layout-demo" element={<SmartLayoutDemo />} />
-                        <Route path="/_offline" element={<Offline />} />
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
-                    </React.Suspense>
-                  </main>
-                </div>
-                <Toaster position="top-right" />
+                <React.Suspense fallback={<LoadingSpinner />}>
+                  <Routes>
+                    {/* All routes wrapped in SmartLayout */}
+                    <Route element={<SmartLayout />}>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/price-alerts" element={<PriceAlerts />} />
+                      <Route path="/reports" element={<Reports />} />
+                      <Route path="/reservations" element={<Reservations />} />
+                      <Route path="/checklists" element={<ChecklistsInteligentes />} />
+                      <Route path="/peotram" element={<PEOTRAM />} />
+                      <Route path="/peo-dp" element={<PEODP />} />
+                      <Route path="/sgso" element={<SGSO />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/travel" element={<Travel />} />
+                      <Route path="/analytics" element={<Analytics />} />
+                      <Route path="/hr" element={<HumanResources />} />
+                      <Route path="/communication" element={<Communication />} />
+                      <Route path="/intelligence" element={<Intelligence />} />
+                      <Route path="/maritime" element={<Maritime />} />
+                      <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
+                      <Route path="/nautilus-one" element={<NautilusOne />} />
+                      <Route path="/innovation" element={<Innovation />} />
+                      <Route path="/optimization" element={<Optimization />} />
+                      <Route path="/collaboration" element={<Collaboration />} />
+                      <Route path="/voice" element={<Voice />} />
+                      <Route path="/portal" element={<Portal />} />
+                      <Route path="/ar" element={<AR />} />
+                      <Route path="/iot" element={<IoT />} />
+                      <Route path="/blockchain" element={<Blockchain />} />
+                      <Route path="/gamification" element={<Gamification />} />
+                      <Route path="/predictive" element={<PredictiveAnalytics />} />
+                      <Route path="/admin" element={<Admin />} />
+                      <Route path="/admin/api-tester" element={<APITester />} />
+                      <Route path="/admin/api-status" element={<APIStatus />} />
+                      <Route path="/admin/control-panel" element={<ControlPanel />} />
+                      <Route path="/admin/tests" element={<TestDashboard />} />
+                      <Route path="/admin/ci-history" element={<CIHistory />} />
+                      <Route path="/admin/analytics" element={<AdminAnalytics />} />
+                      <Route path="/admin/wall" element={<AdminWall />} />
+                      <Route path="/health-monitor" element={<HealthMonitorDemo />} />
+                      <Route path="/health" element={<Health />} />
+                      <Route path="/modules" element={<Modules />} />
+                      <Route path="/smart-layout-demo" element={<SmartLayoutDemo />} />
+                      <Route path="/_offline" element={<Offline />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Route>
+                  </Routes>
+                </React.Suspense>
               </Router>
             </QueryClientProvider>
           </OrganizationProvider>
