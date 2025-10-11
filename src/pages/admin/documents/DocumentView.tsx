@@ -74,6 +74,25 @@ export default function DocumentViewPage() {
     }
   };
 
+  const fetchUserEmail = async (userId: string | null): Promise<string> => {
+    if (!userId) {
+      return "Usuário desconhecido";
+    }
+    
+    try {
+      const { data: userData } = await supabase
+        .from("profiles")
+        .select("email")
+        .eq("id", userId)
+        .single();
+      
+      return userData?.email || "Usuário desconhecido";
+    } catch (error) {
+      console.error("Error fetching user email:", error);
+      return "Usuário desconhecido";
+    }
+  };
+
   const loadDocument = async () => {
     try {
       const { data, error } = await supabase
@@ -134,24 +153,10 @@ export default function DocumentViewPage() {
 
       // Fetch user emails for comments
       const commentsWithEmails = await Promise.all(
-        (data || []).map(async (comment) => {
-          if (comment.user_id) {
-            const { data: userData } = await supabase
-              .from("profiles")
-              .select("email")
-              .eq("id", comment.user_id)
-              .single();
-            
-            return {
-              ...comment,
-              user_email: userData?.email || "Usuário desconhecido"
-            };
-          }
-          return {
-            ...comment,
-            user_email: "Usuário desconhecido"
-          };
-        })
+        (data || []).map(async (comment) => ({
+          ...comment,
+          user_email: await fetchUserEmail(comment.user_id)
+        }))
       );
 
       setComments(commentsWithEmails);
@@ -189,17 +194,7 @@ export default function DocumentViewPage() {
             const newComment = payload.new as DocumentComment;
             
             // Fetch user email
-            if (newComment.user_id) {
-              const { data: userData } = await supabase
-                .from("profiles")
-                .select("email")
-                .eq("id", newComment.user_id)
-                .single();
-              
-              newComment.user_email = userData?.email || "Usuário desconhecido";
-            } else {
-              newComment.user_email = "Usuário desconhecido";
-            }
+            newComment.user_email = await fetchUserEmail(newComment.user_id);
 
             setComments((prev) => [...prev, newComment]);
           } else if (payload.eventType === "DELETE") {
@@ -208,17 +203,7 @@ export default function DocumentViewPage() {
             const updatedComment = payload.new as DocumentComment;
             
             // Fetch user email
-            if (updatedComment.user_id) {
-              const { data: userData } = await supabase
-                .from("profiles")
-                .select("email")
-                .eq("id", updatedComment.user_id)
-                .single();
-              
-              updatedComment.user_email = userData?.email || "Usuário desconhecido";
-            } else {
-              updatedComment.user_email = "Usuário desconhecido";
-            }
+            updatedComment.user_email = await fetchUserEmail(updatedComment.user_id);
 
             setComments((prev) =>
               prev.map((c) => (c.id === updatedComment.id ? updatedComment : c))
