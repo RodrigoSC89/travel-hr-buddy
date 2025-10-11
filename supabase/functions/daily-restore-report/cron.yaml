@@ -1,0 +1,12 @@
+# Cron schedule for daily-restore-report
+# Runs every day at 08:00 UTC (05:00 Brasília, horário de verão)
+
+# Format: minute hour day-of-month month day-of-week
+# 0 8 * * * = At 08:00 UTC every day
+schedule: "0 8 * * *"
+
+# Alternative schedules (commented out):
+# Every day at 09:00 UTC: "0 9 * * *"
+# Every day at 12:00 UTC: "0 12 * * *"
+# Every Monday at 08:00 UTC: "0 8 * * 1"
+# Every weekday at 08:00 UTC: "0 8 * * 1-5"
