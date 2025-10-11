@@ -25,6 +25,8 @@ export default function DocumentsAIPage() {
   const [title, setTitle] = useState("");
   const [saved, setSaved] = useState(false);
   const [resumido, setResumido] = useState("");
+  const [summarizing, setSummarizing] = useState(false);
+  const [rewriting, setRewriting] = useState(false);
 
   async function generateDocument() {
     if (!prompt) return;
@@ -70,20 +72,39 @@ export default function DocumentsAIPage() {
   }
 
   async function summarizeDocument() {
-    const { data, error } = await supabase.functions.invoke("summarize-document", {
-      body: { content: generated },
-    });
-    if (!error && data) {
-      setResumido(data.summary);
+    setSummarizing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("summarize-document", {
+        body: { content: generated },
+      });
+      if (error) throw error;
+      if (data) {
+        setResumido(data.summary);
+      }
+    } catch (err) {
+      console.error("Error summarizing document:", err);
+      setResumido("❌ Erro ao resumir documento.");
+    } finally {
+      setSummarizing(false);
     }
   }
 
   async function rewriteDocument() {
-    const { data, error } = await supabase.functions.invoke("rewrite-document", {
-      body: { content: generated },
-    });
-    if (!error && data) {
-      setGenerated(data.rewritten);
+    setRewriting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("rewrite-document", {
+        body: { content: generated },
+      });
+      if (error) throw error;
+      if (data) {
+        setGenerated(data.rewritten);
+        setResumido(""); // Clear summary when document is rewritten
+      }
+    } catch (err) {
+      console.error("Error rewriting document:", err);
+      setGenerated("❌ Erro ao reformular documento.");
+    } finally {
+      setRewriting(false);
     }
   }
 
@@ -132,11 +153,11 @@ export default function DocumentsAIPage() {
               <Button onClick={exportPDF} variant="outline">
                 <Download className="w-4 h-4 mr-2" /> Exportar PDF
               </Button>
-              <Button onClick={summarizeDocument} variant="ghost">
-                <Brain className="w-4 h-4 mr-2" /> Resumir com IA
+              <Button onClick={summarizeDocument} variant="ghost" disabled={summarizing}>
+                <Brain className="w-4 h-4 mr-2" /> {summarizing ? "Gerando..." : "Resumir com IA"}
               </Button>
-              <Button onClick={rewriteDocument} variant="ghost">
-                <RefreshCw className="w-4 h-4 mr-2" /> Reformular IA
+              <Button onClick={rewriteDocument} variant="ghost" disabled={rewriting}>
+                <RefreshCw className="w-4 h-4 mr-2" /> {rewriting ? "Reformulando..." : "Reformular IA"}
               </Button>
             </div>
 
