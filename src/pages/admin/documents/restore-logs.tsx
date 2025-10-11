@@ -21,7 +21,8 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from "recharts";
-import { TrendingUp, Users, FileText, Calendar, Download, Loader2 } from "lucide-react";
+import { TrendingUp, Users, FileText, Calendar, Download, Loader2, Mail } from "lucide-react";
+import html2canvas from "html2canvas";
 
 interface RestoreLog {
   id: string;
@@ -41,6 +42,7 @@ export default function RestoreLogsPage() {
   const [page, setPage] = useState(1);
   const [exportingCsv, setExportingCsv] = useState(false);
   const [exportingPdf, setExportingPdf] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
   const [dateError, setDateError] = useState("");
   const pageSize = 10;
 
@@ -195,92 +197,187 @@ export default function RestoreLogsPage() {
     }
   }
 
+  // Email Report
+  async function sendEmailWithChart() {
+    // Validate data exists
+    if (filteredLogs.length === 0) {
+      toast({
+        title: "Nenhum dado para enviar",
+        description: "Não há registros de restauração para enviar.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate date range
+    if (dateError) {
+      toast({
+        title: "Erro de validação",
+        description: "Por favor, corrija os erros de data antes de enviar.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const node = document.getElementById("restore-logs-dashboard");
+    if (!node) {
+      toast({
+        title: "Erro ao capturar dashboard",
+        description: "Não foi possível encontrar o dashboard para captura.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSendingEmail(true);
+    try {
+      // Capture dashboard as image at 2x scale for quality
+      const canvas = await html2canvas(node, { scale: 2 });
+      const imageBase64 = canvas.toDataURL("image/png");
+
+      // Get Supabase URL from environment
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      if (!supabaseUrl) {
+        throw new Error("VITE_SUPABASE_URL não configurado");
+      }
+
+      // Get current session for auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Usuário não autenticado");
+      }
+
+      // Send to backend edge function
+      const response = await fetch(
+        `${supabaseUrl}/functions/v1/send-chart-report`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            imageBase64,
+            chartType: "Restore Logs Audit",
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        toast({
+          title: "E-mail enviado com sucesso",
+          description: "Relatório de auditoria enviado por e-mail.",
+        });
+      } else {
+        toast({
+          title: "Erro ao enviar e-mail",
+          description: result.error || "Erro desconhecido ao enviar e-mail.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error sending email with chart:", error);
+      toast({
+        title: "Erro ao enviar e-mail",
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingEmail(false);
+    }
+  }
+
   return (
     <div className="p-8 space-y-6">
       <h1 className="text-2xl font-bold">📜 Auditoria de Restaurações</h1>
 
-      {/* Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Restaurações</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{metrics.total}</div>
-            <p className="text-xs text-muted-foreground">Todas as restaurações</p>
-          </CardContent>
-        </Card>
+      {/* Dashboard Container for Email Capture */}
+      <div id="restore-logs-dashboard">
+        {/* Metrics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total de Restaurações</CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{metrics.total}</div>
+              <p className="text-xs text-muted-foreground">Todas as restaurações</p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Esta Semana</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{metrics.thisWeek}</div>
-            <p className="text-xs text-muted-foreground">Últimos 7 dias</p>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Esta Semana</CardTitle>
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{metrics.thisWeek}</div>
+              <p className="text-xs text-muted-foreground">Últimos 7 dias</p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Este Mês</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{metrics.thisMonth}</div>
-            <p className="text-xs text-muted-foreground">Mês atual</p>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Este Mês</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{metrics.thisMonth}</div>
+              <p className="text-xs text-muted-foreground">Mês atual</p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Usuário Mais Ativo</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm font-bold truncate">{metrics.mostActiveUser}</div>
-            <p className="text-xs text-muted-foreground">{metrics.mostActiveCount} restaurações</p>
-          </CardContent>
-        </Card>
-      </div>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Usuário Mais Ativo</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-sm font-bold truncate">{metrics.mostActiveUser}</div>
+              <p className="text-xs text-muted-foreground">{metrics.mostActiveCount} restaurações</p>
+            </CardContent>
+          </Card>
+        </div>
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Tendência de Restaurações (Últimos 7 Dias)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={metrics.trendData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="count" stroke="#8884d8" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        {/* Charts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Tendência de Restaurações (Últimos 7 Dias)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={200}>
+                <LineChart data={metrics.trendData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="count" stroke="#8884d8" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Top 5 Usuários</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={metrics.userDistribution}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="count" fill="#82ca9d" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Top 5 Usuários</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={metrics.userDistribution}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#82ca9d" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Filters */}
@@ -342,6 +439,24 @@ export default function RestoreLogsPage() {
               <>
                 <Download className="h-4 w-4 mr-2" />
                 PDF
+              </>
+            )}
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={sendEmailWithChart}
+            disabled={filteredLogs.length === 0 || sendingEmail || !!dateError}
+            className="flex-1"
+          >
+            {sendingEmail ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Enviando...
+              </>
+            ) : (
+              <>
+                <Mail className="h-4 w-4 mr-2" />
+                E-mail
               </>
             )}
           </Button>
