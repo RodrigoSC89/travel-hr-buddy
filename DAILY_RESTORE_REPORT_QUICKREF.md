@@ -1,6 +1,13 @@
 # Daily Restore Report - Quick Reference
 
-Quick commands and configurations for the daily restore report feature.
+Quick commands and configurations for the daily restore report feature with comprehensive internal logging.
+
+## 🎯 Version 2.0 Features
+- ✅ **30+ Logging Points**: Complete visibility in Supabase Dashboard
+- ✅ **SendGrid Integration**: Automatic error alerts via email
+- ✅ **Portuguese Logging**: All logs in Portuguese for clarity
+- ✅ **Performance Metrics**: Timing information for each step
+- ✅ **Error Context**: Detailed error information with stack traces
 
 ## 🚀 Quick Start
 
@@ -26,6 +33,10 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 VITE_APP_URL=https://your-app.vercel.app
 ADMIN_EMAIL=admin@empresa.com
+
+# New in v2.0 - SendGrid for error alerts
+SENDGRID_API_KEY=SG.your_sendgrid_api_key
+EMAIL_FROM=noreply@nautilusone.com
 ```
 
 ### Application (Vercel/Netlify)

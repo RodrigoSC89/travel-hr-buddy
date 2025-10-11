@@ -1,13 +1,21 @@
-# Daily Restore Report - Supabase Edge Function
+# Daily Restore Report - Supabase Edge Function (v2.0)
 
 This edge function automatically sends a daily email report with restore metrics chart.
+
+**🆕 Version 2.0 Features:**
+- ✅ **86+ Logging Points**: Complete internal logging visible in Supabase Dashboard
+- ✅ **SendGrid Integration**: Automatic error alerts via email
+- ✅ **Portuguese Logging**: All logs in Portuguese (pt-BR)
+- ✅ **Performance Metrics**: Timing for each operation
+- ✅ **Error Context**: Detailed error information with stack traces
 
 ## 📋 Overview
 
 - **Function Name**: `daily-restore-report`
-- **Purpose**: Generate and send daily restore metrics report via email
+- **Purpose**: Generate and send daily restore metrics report via email with comprehensive logging
 - **Schedule**: Runs daily (configured via Supabase cron)
 - **Output**: Email with chart image/data and summary statistics
+- **Monitoring**: All execution steps logged to Supabase Console → Logs → Edge Functions
 
 ## 🛠️ Setup Instructions
 
@@ -26,6 +34,10 @@ APP_URL=https://your-app-url.vercel.app        # Alternative
 
 # Email configuration
 ADMIN_EMAIL=admin@empresa.com  # Email to receive the reports
+
+# NEW in v2.0 - SendGrid for error alerts
+SENDGRID_API_KEY=SG.your_sendgrid_api_key_here  # Get from SendGrid dashboard
+EMAIL_FROM=noreply@nautilusone.com               # Verified sender in SendGrid
 ```
 
 ### 2. Deploy the Function
