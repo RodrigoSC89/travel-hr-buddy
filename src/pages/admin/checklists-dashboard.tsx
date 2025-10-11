@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   ResponsiveContainer,
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   Tooltip,
@@ -11,6 +11,7 @@ import {
   Line,
 } from "recharts";
 import { format } from "date-fns";
+import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ChecklistItem {
@@ -102,7 +103,15 @@ export default function ChecklistDashboard() {
 
   return (
     <div className="space-y-6 p-6">
-      <h1 className="text-2xl font-bold">📊 Visão Geral dos Checklists</h1>
+      <div className="flex items-center gap-4">
+        <Link to="/admin/checklists">
+          <Button variant="ghost" size="sm">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar
+          </Button>
+        </Link>
+        <h1 className="text-2xl font-bold">📊 Visão Geral dos Checklists</h1>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>

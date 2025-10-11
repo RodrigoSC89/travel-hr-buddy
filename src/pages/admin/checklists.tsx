@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, BarChart3 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -151,7 +152,15 @@ export default function ChecklistsPage() {
 
   return (
     <div className="space-y-6 p-6">
-      <h1 className="text-2xl font-bold">✅ Checklists Inteligentes</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">✅ Checklists Inteligentes</h1>
+        <Link to="/admin/checklists/dashboard">
+          <Button variant="outline">
+            <BarChart3 className="w-4 h-4 mr-2" />
+            Ver Dashboard
+          </Button>
+        </Link>
+      </div>
 
       <div className="flex gap-4 items-center">
         <Input
