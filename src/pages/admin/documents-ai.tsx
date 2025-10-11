@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Loader2, FileText, Save, Download } from "lucide-react";
+import { Sparkles, Loader2, FileText, Save, Download, Brain, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
@@ -18,6 +18,9 @@ export default function DocumentsAIPage() {
   const [exporting, setExporting] = useState(false);
   const [title, setTitle] = useState("");
   const [savedDocumentId, setSavedDocumentId] = useState<string | null>(null);
+  const [summarizing, setSummarizing] = useState(false);
+  const [rewriting, setRewriting] = useState(false);
+  const [summary, setSummary] = useState("");
 
   async function generateDocument() {
     if (!prompt) return;
@@ -159,6 +162,78 @@ export default function DocumentsAIPage() {
     }
   }
 
+  async function summarizeDocument() {
+    if (!generated) {
+      toast({
+        title: "Erro ao resumir",
+        description: "Não há documento para resumir.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSummarizing(true);
+    setSummary("");
+    try {
+      const { data, error } = await supabase.functions.invoke("summarize-document", {
+        body: { content: generated },
+      });
+
+      if (error) throw error;
+
+      setSummary(data?.summary || "");
+      toast({
+        title: "Resumo gerado com sucesso",
+        description: "O documento foi resumido com IA.",
+      });
+    } catch (err) {
+      console.error("Error summarizing document:", err);
+      toast({
+        title: "Erro ao resumir documento",
+        description: "Não foi possível resumir o documento.",
+        variant: "destructive",
+      });
+    } finally {
+      setSummarizing(false);
+    }
+  }
+
+  async function rewriteDocument() {
+    if (!generated) {
+      toast({
+        title: "Erro ao reformular",
+        description: "Não há documento para reformular.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setRewriting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("rewrite-document", {
+        body: { content: generated },
+      });
+
+      if (error) throw error;
+
+      setGenerated(data?.rewritten || "");
+      setSummary(""); // Clear summary when rewriting
+      toast({
+        title: "Documento reformulado com sucesso",
+        description: "O documento foi reformulado com IA.",
+      });
+    } catch (err) {
+      console.error("Error rewriting document:", err);
+      toast({
+        title: "Erro ao reformular documento",
+        description: "Não foi possível reformular o documento.",
+        variant: "destructive",
+      });
+    } finally {
+      setRewriting(false);
+    }
+  }
+
   return (
     <div className="space-y-6 p-8">
       <h1 className="text-2xl font-bold">📄 Documentos com IA</h1>
@@ -236,7 +311,45 @@ export default function DocumentsAIPage() {
                   </>
                 )}
               </Button>
+
+              <Button 
+                onClick={summarizeDocument} 
+                disabled={summarizing}
+                variant="ghost"
+              >
+                {summarizing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Resumindo...
+                  </>
+                ) : (
+                  <>
+                    <Brain className="w-4 h-4 mr-2" /> Resumir com IA
+                  </>
+                )}
+              </Button>
+
+              <Button 
+                onClick={rewriteDocument} 
+                disabled={rewriting}
+                variant="ghost"
+              >
+                {rewriting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Reformulando...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2" /> Reformular IA
+                  </>
+                )}
+              </Button>
             </div>
+
+            {summary && (
+              <div className="mt-4 text-sm bg-muted p-3 rounded">
+                <strong>🧠 Resumo:</strong> {summary}
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
