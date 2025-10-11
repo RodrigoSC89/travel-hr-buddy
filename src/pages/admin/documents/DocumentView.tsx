@@ -41,9 +41,14 @@ export default function DocumentViewPage() {
   useEffect(() => {
     if (!id || !user) return;
     
-    loadDocument();
-    loadComments();
-    checkAdminStatus();
+    // Load everything in sequence
+    async function init() {
+      await checkAdminStatus();
+      await loadDocument();
+      await loadComments();
+    }
+    
+    init();
     
     // Subscribe to real-time comment updates
     const channel = supabase
@@ -66,6 +71,21 @@ export default function DocumentViewPage() {
       supabase.removeChannel(channel);
     };
   }, [id, user]);
+
+  async function checkAdminStatus() {
+    if (!user) return false;
+
+    const { data } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .eq("role", "admin")
+      .single();
+
+    const adminStatus = !!data;
+    setIsAdmin(adminStatus);
+    return adminStatus;
+  }
 
   async function loadDocument() {
     if (!id) return;
@@ -95,24 +115,16 @@ export default function DocumentViewPage() {
       });
       setNewContent(data.content);
 
-      // Load author email if admin
-      if (data.generated_by) {
-        const { data: userData } = await supabase
+      // Load author email if user is admin
+      if (data.generated_by && isAdmin) {
+        const { data: profileData } = await supabase
           .from("profiles")
           .select("email")
           .eq("id", data.generated_by)
           .single();
 
-        if (!userData) {
-          // Try auth.users if profiles doesn't exist
-          const { data: authData } = await supabase.auth.admin.getUserById(
-            data.generated_by
-          );
-          if (authData?.user) {
-            setAuthorEmail(authData.user.email || null);
-          }
-        } else {
-          setAuthorEmail(userData.email);
+        if (profileData) {
+          setAuthorEmail(profileData.email);
         }
       }
     }
@@ -132,19 +144,6 @@ export default function DocumentViewPage() {
     if (!error && data) {
       setComments(data);
     }
-  }
-
-  async function checkAdminStatus() {
-    if (!user) return;
-
-    const { data } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .eq("role", "admin")
-      .single();
-
-    setIsAdmin(!!data);
   }
 
   async function saveChanges() {
