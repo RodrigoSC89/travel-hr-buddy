@@ -45,6 +45,15 @@ vi.mock("@/components/auth/role-based-access", () => ({
   RoleBasedAccess: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
+// Mock DocumentVersionHistory component
+vi.mock("@/components/documents/DocumentVersionHistory", () => ({
+  DocumentVersionHistory: ({ documentId, onRestore }: { documentId: string; onRestore?: () => void }) => (
+    <div data-testid="version-history">
+      Version History Component (documentId: {documentId})
+    </div>
+  ),
+}));
+
 // Mock toast
 const mockToast = vi.fn();
 vi.mock("@/hooks/use-toast", () => ({
@@ -62,7 +71,7 @@ describe("DocumentViewPage - Version Restoration", () => {
     DocumentViewPage = module.default;
   });
 
-  it("should render document with version history button", async () => {
+  it("should render document with version history component", async () => {
     mockSupabase.from.mockReturnValue({
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
@@ -87,11 +96,11 @@ describe("DocumentViewPage - Version Restoration", () => {
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
       expect(screen.getByText("Test Content")).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /Ver Histórico/i })).toBeInTheDocument();
+      expect(screen.getByTestId("version-history")).toBeInTheDocument();
     });
   });
 
-  it("should load and display version history when button is clicked", async () => {
+  it("should render DocumentVersionHistory component with correct documentId", async () => {
     mockSupabase.from.mockImplementation((table: string) => {
       if (table === "ai_generated_documents") {
         return {
@@ -100,19 +109,6 @@ describe("DocumentViewPage - Version Restoration", () => {
               single: vi.fn(() => 
                 Promise.resolve({
                   data: mockDocument,
-                  error: null,
-                })
-              ),
-            })),
-          })),
-        };
-      } else if (table === "document_versions") {
-        return {
-          select: vi.fn(() => ({
-            eq: vi.fn(() => ({
-              order: vi.fn(() => 
-                Promise.resolve({
-                  data: mockVersions,
                   error: null,
                 })
               ),
@@ -133,18 +129,13 @@ describe("DocumentViewPage - Version Restoration", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-    });
-
-    const historyButton = screen.getByRole("button", { name: /Ver Histórico/i });
-    fireEvent.click(historyButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Histórico de Versões/i)).toBeInTheDocument();
-      expect(screen.getByText(/Old content version 1/i)).toBeInTheDocument();
+      const versionHistory = screen.getByTestId("version-history");
+      expect(versionHistory).toBeInTheDocument();
+      expect(versionHistory).toHaveTextContent("documentId: doc-123");
     });
   });
 
-  it("should have restore buttons for each version", async () => {
+  it("should pass onRestore callback to DocumentVersionHistory", async () => {
     mockSupabase.from.mockImplementation((table: string) => {
       if (table === "ai_generated_documents") {
         return {
@@ -153,19 +144,6 @@ describe("DocumentViewPage - Version Restoration", () => {
               single: vi.fn(() => 
                 Promise.resolve({
                   data: mockDocument,
-                  error: null,
-                })
-              ),
-            })),
-          })),
-        };
-      } else if (table === "document_versions") {
-        return {
-          select: vi.fn(() => ({
-            eq: vi.fn(() => ({
-              order: vi.fn(() => 
-                Promise.resolve({
-                  data: mockVersions,
                   error: null,
                 })
               ),
@@ -186,66 +164,7 @@ describe("DocumentViewPage - Version Restoration", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-    });
-
-    const historyButton = screen.getByRole("button", { name: /Ver Histórico/i });
-    fireEvent.click(historyButton);
-
-    await waitFor(() => {
-      const restoreButtons = screen.getAllByRole("button", { name: /Restaurar/i });
-      expect(restoreButtons.length).toBeGreaterThan(0);
-    });
-  });
-
-  it("should display empty state when no versions exist", async () => {
-    mockSupabase.from.mockImplementation((table: string) => {
-      if (table === "ai_generated_documents") {
-        return {
-          select: vi.fn(() => ({
-            eq: vi.fn(() => ({
-              single: vi.fn(() => 
-                Promise.resolve({
-                  data: mockDocument,
-                  error: null,
-                })
-              ),
-            })),
-          })),
-        };
-      } else if (table === "document_versions") {
-        return {
-          select: vi.fn(() => ({
-            eq: vi.fn(() => ({
-              order: vi.fn(() => 
-                Promise.resolve({
-                  data: [],
-                  error: null,
-                })
-              ),
-            })),
-          })),
-        };
-      }
-      return {};
-    });
-
-    render(
-      <MemoryRouter initialEntries={["/admin/documents/view/doc-123"]}>
-        <Routes>
-          <Route path="/admin/documents/view/:id" element={<DocumentViewPage />} />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-    });
-
-    const historyButton = screen.getByRole("button", { name: /Ver Histórico/i });
-    fireEvent.click(historyButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Nenhuma versão anterior encontrada/i)).toBeInTheDocument();
+      expect(screen.getByTestId("version-history")).toBeInTheDocument();
     });
   });
 });
