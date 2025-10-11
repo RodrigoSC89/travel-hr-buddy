@@ -110,7 +110,7 @@ export default async function handler(
 
       // Set cache headers (5 minutes)
       res.setHeader("Content-Type", "image/png");
-      res.setHeader("Content-Disposition", 'inline; filename="restore-chart.png"');
+      res.setHeader("Content-Disposition", "inline; filename=\"restore-chart.png\"");
       res.setHeader("Cache-Control", "public, max-age=300, s-maxage=300");
 
       return res.send(imageBuffer);

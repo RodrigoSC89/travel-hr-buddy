@@ -171,14 +171,14 @@ export default function RestoreReportLogs() {
   // Status badge helper
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "success":
-        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Sucesso</Badge>;
-      case "error":
-        return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Erro</Badge>;
-      case "pending":
-        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "success":
+      return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Sucesso</Badge>;
+    case "error":
+      return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Erro</Badge>;
+    case "pending":
+      return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
