@@ -12,6 +12,7 @@ import { ptBR } from "date-fns/locale";
 import { Loader2, ArrowLeft, History, RotateCcw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { DocumentVersionHistory } from "@/components/documents/DocumentVersionHistory";
+import { usePermissions } from "@/hooks/use-permissions";
 
 interface Document {
   title: string;
@@ -33,6 +34,7 @@ interface DocumentVersion {
 export default function DocumentViewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { userRole } = usePermissions();
   const [doc, setDoc] = useState<Document | null>(null);
   const [versions, setVersions] = useState<DocumentVersion[]>([]);
   const [loading, setLoading] = useState(true);
@@ -219,7 +221,7 @@ export default function DocumentViewPage() {
                 locale: ptBR,
               })}
             </p>
-            {(doc.author_name || doc.author_email) && (
+            {userRole === "admin" && (doc.author_name || doc.author_email) && (
               <p className="text-sm text-muted-foreground">
                 Autor: {doc.author_name || doc.author_email || "Desconhecido"}
               </p>
