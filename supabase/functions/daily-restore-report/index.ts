@@ -9,18 +9,40 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+/**
+ * Log execution status to restore_report_logs table
+ */
+async function logExecution(
+  supabase: any,
+  status: string,
+  message: string,
+  error: any = null
+) {
+  try {
+    await supabase.from("restore_report_logs").insert({
+      status,
+      message,
+      error_details: error ? JSON.stringify(error) : null,
+      triggered_by: "automated",
+    });
+  } catch (logError) {
+    console.error("Failed to log execution:", logError);
+    // Don't throw - logging failures shouldn't break the main flow
+  }
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+  );
+
   try {
     console.log("🚀 Starting daily restore report generation...");
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
 
     // Get the app URL from environment or use default
     const APP_URL = Deno.env.get("VITE_APP_URL") || Deno.env.get("APP_URL") || "https://your-app-url.vercel.app";
@@ -36,6 +58,7 @@ serve(async (req) => {
 
     if (dataError) {
       console.error("Error fetching restore data:", dataError);
+      await logExecution(supabase, "error", "Failed to fetch restore data", dataError);
       throw new Error(`Failed to fetch restore data: ${dataError.message}`);
     }
 
@@ -91,9 +114,12 @@ serve(async (req) => {
     // 2. Or call your API endpoint that uses nodemailer
     // 3. Or use Supabase's built-in email functionality (if available)
 
-    const emailResult = await sendEmailViaAPI(APP_URL, emailPayload, emailHtml);
+    const emailResult = await sendEmailViaAPI(APP_URL, emailPayload, emailHtml, supabase);
 
     console.log("✅ Email sent successfully!");
+    
+    // Log successful execution
+    await logExecution(supabase, "success", "Relatório enviado com sucesso.");
 
     return new Response(
       JSON.stringify({
@@ -109,6 +135,10 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error("❌ Error in daily-restore-report:", error);
+    
+    // Log critical error
+    await logExecution(supabase, "critical", "Erro crítico na função", error);
+    
     return new Response(
       JSON.stringify({
         success: false,
@@ -179,7 +209,7 @@ function generateEmailHtml(summary: any, data: any[], embedUrl: string): string 
 /**
  * Send email via API endpoint
  */
-async function sendEmailViaAPI(appUrl: string, payload: any, htmlContent: string): Promise<any> {
+async function sendEmailViaAPI(appUrl: string, payload: any, htmlContent: string, supabase: any): Promise<any> {
   try {
     const emailApiUrl = `${appUrl}/api/send-restore-report`;
     
@@ -199,6 +229,7 @@ async function sendEmailViaAPI(appUrl: string, payload: any, htmlContent: string
 
     if (!response.ok) {
       const errorText = await response.text();
+      await logExecution(supabase, "error", "Falha no envio do e-mail", errorText);
       throw new Error(`Email API error: ${response.status} - ${errorText}`);
     }
 
