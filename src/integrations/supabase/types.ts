@@ -154,6 +154,84 @@ export type Database = {
         }
         Relationships: []
       }
+      document_comments: {
+        Row: {
+          content: string
+          created_at: string
+          document_id: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          document_id: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          document_id?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_comments_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "ai_generated_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_versions: {
+        Row: {
+          content: string
+          created_at: string | null
+          document_id: string
+          id: string
+          updated_by: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          document_id: string
+          id?: string
+          updated_by?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          document_id?: string
+          id?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_versions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "ai_generated_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_versions_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_suggestions: {
         Row: {
           action_data: Json | null
