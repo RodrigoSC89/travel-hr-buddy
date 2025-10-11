@@ -7,6 +7,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { 
   Search, 
   Filter, 
@@ -505,9 +512,51 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                           >
                             <Archive className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem onClick={(e) => {
+                                e.stopPropagation();
+                                // Reply action
+                              }}>
+                                <Reply className="h-4 w-4 mr-2" />
+                                Responder
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={(e) => {
+                                e.stopPropagation();
+                                // Forward action
+                              }}>
+                                <Forward className="h-4 w-4 mr-2" />
+                                Encaminhar
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={(e) => {
+                                e.stopPropagation();
+                                // Download action
+                              }}>
+                                <Download className="h-4 w-4 mr-2" />
+                                Baixar
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteMessage(message.id);
+                                }}
+                                className="text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Excluir
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       </div>
                     </div>

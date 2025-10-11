@@ -4,6 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { 
   Send, 
   Paperclip, 
@@ -360,9 +367,28 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                 <Button size="sm" variant="outline">
                   <Video className="h-4 w-4" />
                 </Button>
-                <Button size="sm" variant="outline">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="sm" variant="outline">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <Search className="h-4 w-4 mr-2" />
+                      Buscar mensagens
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Users className="h-4 w-4 mr-2" />
+                      Ver perfil
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Settings className="h-4 w-4 mr-2" />
+                      Configurações do chat
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 

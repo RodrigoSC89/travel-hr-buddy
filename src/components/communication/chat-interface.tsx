@@ -8,6 +8,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { 
   Send, 
   Plus, 
@@ -593,9 +600,28 @@ export const ChatInterface = () => {
                 <Button variant="ghost" size="sm">
                   <Video className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <Search className="h-4 w-4 mr-2" />
+                      Buscar no chat
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Users className="h-4 w-4 mr-2" />
+                      Ver participantes
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Paperclip className="h-4 w-4 mr-2" />
+                      Ver arquivos
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 

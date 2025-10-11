@@ -14,6 +14,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export interface Column<T = any> {
   key: string;
@@ -333,9 +339,31 @@ export function DataTable<T extends Record<string, any>>({
                           </Button>
                         )}
                         {actions.custom && actions.custom.length > 0 && (
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal size={16} />
-                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <MoreHorizontal size={16} />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              {actions.custom.map((customAction, idx) => (
+                                <DropdownMenuItem
+                                  key={idx}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    customAction.action(row);
+                                  }}
+                                >
+                                  {customAction.icon && <customAction.icon className="mr-2 h-4 w-4" />}
+                                  {customAction.label}
+                                </DropdownMenuItem>
+                              ))}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         )}
                       </div>
                     </td>
