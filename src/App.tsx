@@ -59,6 +59,7 @@ const Offline = React.lazy(() => import("./pages/Offline"));
 const Modules = React.lazy(() => import("./pages/Modules"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const SmartLayoutDemo = React.lazy(() => import("./pages/SmartLayoutDemo"));
+const RestoreChartEmbed = React.lazy(() => import("./pages/embed/RestoreChartEmbed"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -137,6 +138,8 @@ function App() {
                       <Route path="/_offline" element={<Offline />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
+                    {/* Embed routes outside SmartLayout for clean rendering */}
+                    <Route path="/embed/restore-chart" element={<RestoreChartEmbed />} />
                   </Routes>
                 </React.Suspense>
               </Router>
