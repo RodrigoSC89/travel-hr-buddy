@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { PlusCircle, Edit, Save, X, MessageCircle } from "lucide-react";
+import { PlusCircle, Edit, Save, X, MessageCircle, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -31,6 +31,7 @@ export default function ChecklistsPage() {
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [editedTitle, setEditedTitle] = useState<string>("");
   const [commentInput, setCommentInput] = useState<{ [key: string]: string }>({});
+  const [newItemTitle, setNewItemTitle] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     fetchChecklists();
@@ -102,6 +103,36 @@ export default function ChecklistsPage() {
     fetchChecklists();
   }
 
+  async function addItem(checklistId: string) {
+    const itemTitle = newItemTitle[checklistId];
+    if (!itemTitle) return;
+    const checklist = checklists.find((c) => c.id === checklistId);
+    if (!checklist) return;
+    const newItem: ChecklistItem = {
+      id: crypto.randomUUID(),
+      title: itemTitle,
+      checked: false,
+      comments: [],
+    };
+    const updatedItems = [...checklist.items, newItem];
+    await supabase.from("checklists").update({ items: updatedItems }).eq("id", checklistId);
+    setNewItemTitle({ ...newItemTitle, [checklistId]: "" });
+    fetchChecklists();
+  }
+
+  async function deleteItem(checklistId: string, itemId: string) {
+    const checklist = checklists.find((c) => c.id === checklistId);
+    if (!checklist) return;
+    const updatedItems = checklist.items.filter((i) => i.id !== itemId);
+    await supabase.from("checklists").update({ items: updatedItems }).eq("id", checklistId);
+    fetchChecklists();
+  }
+
+  async function deleteChecklist(checklistId: string) {
+    await supabase.from("checklists").delete().eq("id", checklistId);
+    fetchChecklists();
+  }
+
   function calculateProgress(items: ChecklistItem[]) {
     const total = items.length;
     const checked = items.filter((i) => i.checked).length;
@@ -121,7 +152,7 @@ export default function ChecklistsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <h1 className="text-2xl font-bold">✅ Checklists Inteligentes</h1>
 
       <div className="flex gap-4 items-center flex-wrap">
@@ -146,11 +177,29 @@ export default function ChecklistsPage() {
           <CardContent className="p-4 space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold">📝 {checklist.title}</h2>
-              <Button variant="outline" onClick={() => exportPDF(checklist.id)}>
-                📄 Exportar PDF
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => exportPDF(checklist.id)}>
+                  📄 Exportar PDF
+                </Button>
+                <Button variant="destructive" onClick={() => deleteChecklist(checklist.id)}>
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
             <Progress value={calculateProgress(checklist.items)} />
+
+            {/* Add new item section */}
+            <div className="flex gap-2 items-center">
+              <Input
+                placeholder="Novo item..."
+                value={newItemTitle[checklist.id] || ""}
+                onChange={(e) => setNewItemTitle({ ...newItemTitle, [checklist.id]: e.target.value })}
+                onKeyDown={(e) => e.key === "Enter" && addItem(checklist.id)}
+              />
+              <Button onClick={() => addItem(checklist.id)} disabled={!newItemTitle[checklist.id]}>
+                <PlusCircle className="w-4 h-4 mr-1" /> Adicionar
+              </Button>
+            </div>
 
             <ul className="space-y-4">
               {checklist.items
@@ -183,9 +232,14 @@ export default function ChecklistsPage() {
                             <Button size="icon" onClick={() => setEditingItemId(null)}><X className="w-4 h-4" /></Button>
                           </>
                         ) : (
-                          <Button size="icon" onClick={() => { setEditingItemId(item.id); setEditedTitle(item.title); }}>
-                            <Edit className="w-4 h-4" />
-                          </Button>
+                          <>
+                            <Button size="icon" onClick={() => { setEditingItemId(item.id); setEditedTitle(item.title); }}>
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button size="icon" variant="destructive" onClick={() => deleteItem(checklist.id, item.id)}>
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </>
                         )}
                       </div>
                     </div>
