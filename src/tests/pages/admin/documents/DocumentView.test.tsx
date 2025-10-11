@@ -24,9 +24,25 @@ vi.mock("@/hooks/use-toast", () => ({
   toast: vi.fn(),
 }));
 
-// Mock RoleBasedAccess to always allow access
-vi.mock("@/components/auth/role-based-access", () => ({
-  RoleBasedAccess: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+// Mock AuthContext
+vi.mock("@/contexts/AuthContext", () => ({
+  useAuth: vi.fn(() => ({
+    user: { id: "test-user-id" },
+    session: null,
+    isLoading: false,
+  })),
+}));
+
+// Mock usePermissions
+vi.mock("@/hooks/use-permissions", () => ({
+  usePermissions: vi.fn(() => ({
+    userRole: "admin",
+    isLoading: false,
+    permissions: [],
+    hasPermission: vi.fn(() => true),
+    canAccessModule: vi.fn(() => true),
+    getRoleDisplayName: vi.fn(() => "Administrador"),
+  })),
 }));
 
 // Mock useNavigate
