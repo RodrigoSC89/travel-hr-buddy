@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
+import { toast } from "@/hooks/use-toast";
 import { 
   BarChart, 
   Bar, 
@@ -19,7 +20,7 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from "recharts";
-import { TrendingUp, Users, FileText, Calendar } from "lucide-react";
+import { TrendingUp, Users, FileText, Calendar, Download, Loader2 } from "lucide-react";
 
 interface RestoreLog {
   id: string;
@@ -37,6 +38,9 @@ export default function RestoreLogsPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [page, setPage] = useState(1);
+  const [exportingCsv, setExportingCsv] = useState(false);
+  const [exportingPdf, setExportingPdf] = useState(false);
+  const [dateError, setDateError] = useState("");
   const pageSize = 10;
 
   useEffect(() => {
@@ -44,7 +48,15 @@ export default function RestoreLogsPage() {
       try {
         setLoading(true);
         const { data, error } = await supabase.rpc("get_restore_logs_with_profiles");
-        if (error) throw error;
+        if (error) {
+          console.error("Error fetching restore logs:", error);
+          toast({
+            title: "Erro ao carregar logs",
+            description: "Não foi possível carregar os registros de restauração.",
+            variant: "destructive",
+          });
+          throw error;
+        }
         setLogs(data || []);
       } catch (error) {
         console.error("Error fetching restore logs:", error);
@@ -59,6 +71,21 @@ export default function RestoreLogsPage() {
   useEffect(() => {
     setPage(1);
   }, [filterEmail, startDate, endDate]);
+
+  // Validate date range
+  useEffect(() => {
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      if (start > end) {
+        setDateError("A data inicial não pode ser posterior à data final");
+      } else {
+        setDateError("");
+      }
+    } else {
+      setDateError("");
+    }
+  }, [startDate, endDate]);
 
   // Apply filters
   const filteredLogs = logs.filter((log) => {
@@ -144,80 +171,152 @@ export default function RestoreLogsPage() {
   // CSV Export
   function exportCSV() {
     if (filteredLogs.length === 0) {
-      return; // Nothing to export
+      toast({
+        title: "Nenhum dado para exportar",
+        description: "Não há registros de restauração para exportar.",
+        variant: "destructive",
+      });
+      return;
     }
 
-    const headers = ["Documento", "Versão Restaurada", "Restaurado por", "Data"];
-    const rows = filteredLogs.map((log) => [
-      log.document_id,
-      log.version_id,
-      log.email || "-",
-      format(new Date(log.restored_at), "dd/MM/yyyy HH:mm"),
-    ]);
+    if (dateError) {
+      toast({
+        title: "Erro de validação",
+        description: "Por favor, corrija os erros de data antes de exportar.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    const csvContent = [
-      headers.join(","),
-      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
-    ].join("\n");
+    try {
+      setExportingCsv(true);
+      
+      const headers = ["Documento", "Versão Restaurada", "Restaurado por", "Data"];
+      const rows = filteredLogs.map((log) => [
+        log.document_id,
+        log.version_id,
+        log.email || "-",
+        format(new Date(log.restored_at), "dd/MM/yyyy HH:mm"),
+      ]);
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", "restore-logs.csv");
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url); // Clean up
+      const csvContent = [
+        headers.join(","),
+        ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+      ].join("\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `restore-logs-${format(new Date(), "yyyy-MM-dd")}.csv`);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "CSV exportado com sucesso",
+        description: `${filteredLogs.length} registros foram exportados.`,
+      });
+    } catch (error) {
+      console.error("Error exporting CSV:", error);
+      toast({
+        title: "Erro ao exportar CSV",
+        description: "Ocorreu um erro ao tentar exportar os dados.",
+        variant: "destructive",
+      });
+    } finally {
+      setExportingCsv(false);
+    }
   }
 
   // PDF Export
   function exportPDF() {
     if (filteredLogs.length === 0) {
-      return; // Nothing to export
+      toast({
+        title: "Nenhum dado para exportar",
+        description: "Não há registros de restauração para exportar.",
+        variant: "destructive",
+      });
+      return;
     }
 
-    const doc = new jsPDF();
-    const margin = 20;
-    let y = margin;
+    if (dateError) {
+      toast({
+        title: "Erro de validação",
+        description: "Por favor, corrija os erros de data antes de exportar.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Title
-    doc.setFontSize(16);
-    doc.setFont("helvetica", "bold");
-    doc.text("Auditoria de Restauracoes", margin, y);
-    y += 10;
+    try {
+      setExportingPdf(true);
+      
+      const doc = new jsPDF();
+      const margin = 20;
+      let y = margin;
 
-    // Table headers
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text("Documento", margin, y);
-    doc.text("Versao", margin + 50, y);
-    doc.text("Email", margin + 80, y);
-    doc.text("Data", margin + 130, y);
-    y += 7;
+      // Title
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text("Auditoria de Restauracoes", margin, y);
+      y += 10;
 
-    // Table rows
-    doc.setFont("helvetica", "normal");
-    filteredLogs.forEach((log) => {
-      if (y > 280) {
-        doc.addPage();
-        y = margin;
-      }
+      // Metadata
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm")}`, margin, y);
+      y += 5;
+      doc.text(`Total de registros: ${filteredLogs.length}`, margin, y);
+      y += 10;
 
-      const docId = log.document_id.substring(0, 8) + "...";
-      const versionId = log.version_id.substring(0, 8) + "...";
-      const email = log.email ? log.email.substring(0, 20) : "-";
-      const date = format(new Date(log.restored_at), "dd/MM/yyyy HH:mm");
-
-      doc.text(docId, margin, y);
-      doc.text(versionId, margin + 50, y);
-      doc.text(email, margin + 80, y);
-      doc.text(date, margin + 130, y);
+      // Table headers
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text("Documento", margin, y);
+      doc.text("Versao", margin + 50, y);
+      doc.text("Email", margin + 80, y);
+      doc.text("Data", margin + 130, y);
       y += 7;
-    });
 
-    doc.save("restore-logs.pdf");
+      // Table rows
+      doc.setFont("helvetica", "normal");
+      filteredLogs.forEach((log) => {
+        if (y > 280) {
+          doc.addPage();
+          y = margin;
+        }
+
+        const docId = log.document_id.substring(0, 8) + "...";
+        const versionId = log.version_id.substring(0, 8) + "...";
+        const email = log.email ? log.email.substring(0, 20) : "-";
+        const date = format(new Date(log.restored_at), "dd/MM/yyyy HH:mm");
+
+        doc.text(docId, margin, y);
+        doc.text(versionId, margin + 50, y);
+        doc.text(email, margin + 80, y);
+        doc.text(date, margin + 130, y);
+        y += 7;
+      });
+
+      doc.save(`restore-logs-${format(new Date(), "yyyy-MM-dd")}.pdf`);
+
+      toast({
+        title: "PDF exportado com sucesso",
+        description: `${filteredLogs.length} registros foram exportados.`,
+      });
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      toast({
+        title: "Erro ao exportar PDF",
+        description: "Ocorreu um erro ao tentar exportar os dados.",
+        variant: "destructive",
+      });
+    } finally {
+      setExportingPdf(false);
+    }
   }
 
   return (
@@ -315,44 +414,92 @@ export default function RestoreLogsPage() {
           value={filterEmail}
           onChange={(e) => setFilterEmail(e.target.value)}
         />
-        <Input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          title="Data inicial"
-        />
-        <Input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          title="Data final"
-        />
+        <div>
+          <Input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            title="Data inicial"
+            className={dateError ? "border-red-500" : ""}
+          />
+        </div>
+        <div>
+          <Input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            title="Data final"
+            className={dateError ? "border-red-500" : ""}
+          />
+        </div>
         <div className="flex gap-2">
           <Button 
             variant="outline" 
             onClick={exportCSV}
-            disabled={filteredLogs.length === 0}
+            disabled={filteredLogs.length === 0 || exportingCsv || !!dateError}
+            className="flex-1"
           >
-            📤 CSV
+            {exportingCsv ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Exportando...
+              </>
+            ) : (
+              <>
+                <Download className="h-4 w-4 mr-2" />
+                CSV
+              </>
+            )}
           </Button>
           <Button 
             variant="outline" 
             onClick={exportPDF}
-            disabled={filteredLogs.length === 0}
+            disabled={filteredLogs.length === 0 || exportingPdf || !!dateError}
+            className="flex-1"
           >
-            🧾 PDF
+            {exportingPdf ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Exportando...
+              </>
+            ) : (
+              <>
+                <Download className="h-4 w-4 mr-2" />
+                PDF
+              </>
+            )}
           </Button>
         </div>
       </div>
+      
+      {/* Date Error Message */}
+      {dateError && (
+        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md text-sm">
+          ⚠️ {dateError}
+        </div>
+      )}
 
       {loading ? (
-        <p className="text-muted-foreground">Carregando...</p>
+        <div className="flex items-center justify-center p-8">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <span className="ml-2 text-muted-foreground">Carregando registros...</span>
+        </div>
       ) : paginatedLogs.length === 0 ? (
-        <p className="text-muted-foreground">
-          {logs.length === 0 
-            ? "Nenhuma restauração encontrada." 
-            : "Nenhuma restauração corresponde aos filtros aplicados."}
-        </p>
+        <Card className="p-8">
+          <div className="text-center space-y-2">
+            <FileText className="h-12 w-12 mx-auto text-muted-foreground" />
+            <p className="text-lg font-semibold text-muted-foreground">
+              {logs.length === 0 
+                ? "Nenhuma restauração encontrada" 
+                : "Nenhuma restauração corresponde aos filtros aplicados"}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {logs.length === 0 
+                ? "Quando documentos forem restaurados, eles aparecerão aqui." 
+                : "Tente ajustar os filtros para ver mais resultados."}
+            </p>
+          </div>
+        </Card>
       ) : (
         <div className="grid gap-4">
           {paginatedLogs.map((log) => (
