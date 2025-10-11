@@ -4,6 +4,26 @@ Quick commands and configurations for the daily restore report feature.
 
 ## 🚀 Quick Start
 
+### Automated Setup (Recommended)
+
+```bash
+# Use the automated setup script
+npm run setup:daily-report
+
+# Or directly
+node scripts/setup-daily-restore-report.js
+```
+
+The script will automatically:
+- ✅ Verify Supabase CLI installation
+- ✅ Check function files exist
+- ✅ Validate environment variables
+- ✅ Deploy the edge function
+- ✅ Configure cron schedule
+- ✅ Run test invocation
+
+### Manual Setup
+
 ```bash
 # 1. Deploy Edge Function
 supabase functions deploy daily-restore-report
@@ -41,14 +61,17 @@ EMAIL_FROM=relatorios@yourdomain.com
 
 ```
 📦 Project Root
+├── 📂 scripts/
+│   └── setup-daily-restore-report.js  # 🆕 Automated setup script
 ├── 📂 supabase/functions/daily-restore-report/
-│   ├── index.ts                    # Edge Function main code
-│   └── README.md                   # Detailed function documentation
+│   ├── index.ts                       # Edge Function (refactored v2.0)
+│   └── README.md                      # Detailed documentation
 ├── 📂 pages/api/
-│   ├── send-restore-report.ts      # Email sending API
-│   └── generate-chart-image.ts     # Chart image generation API
+│   ├── send-restore-report.ts         # Email sending API
+│   └── generate-chart-image.ts        # Chart image generation API
 ├── 📂 public/
-│   └── embed-restore-chart.html    # Standalone chart page
+│   └── embed-restore-chart.html       # Standalone chart page
+├── 📄 DAILY_RESTORE_REPORT_QUICKREF.md    # This file
 └── 📄 DAILY_RESTORE_REPORT_DEPLOYMENT.md  # Full deployment guide
 ```
 
@@ -218,7 +241,29 @@ Before going to production:
 4. Test components individually
 5. Consult [Supabase Docs](https://supabase.com/docs)
 
+## 🆕 What's New in v2.0
+
+### Automated Setup Script
+- ✅ One-command deployment: `npm run setup:daily-report`
+- ✅ Automated validation and configuration
+- ✅ Step-by-step progress tracking
+- ✅ Comprehensive error handling
+
+### Refactored Edge Function
+- ✅ TypeScript interfaces for type safety
+- ✅ Improved error handling and logging
+- ✅ Enhanced email HTML with modern design
+- ✅ Better configuration management
+- ✅ More detailed documentation
+
+### Professional Email Template
+- ✅ Mobile-responsive design
+- ✅ Enhanced visual hierarchy
+- ✅ Grid layout for metrics
+- ✅ Branded color scheme
+- ✅ Actionable call-to-action button
+
 ---
 
-**Last Updated**: 2025-10-11  
-**Status**: ✅ Ready for deployment
+**Last Updated**: 2025-10-11 (v2.0)  
+**Status**: ✅ Ready for deployment with automated setup

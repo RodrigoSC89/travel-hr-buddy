@@ -23,6 +23,7 @@
     "alert:low-coverage": "node scripts/low-coverage-alert.js",
     "test:coverage-alert": "node scripts/test-low-coverage-alert.cjs",
     "weekly-report": "node scripts/weekly-report-cron.js",
+    "setup:daily-report": "node scripts/setup-daily-restore-report.js",
     "deploy:vercel": "vercel --prod",
     "deploy:netlify": "netlify deploy --prod --dir=dist"
   },

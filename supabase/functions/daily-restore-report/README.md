@@ -1,15 +1,40 @@
 # Daily Restore Report - Supabase Edge Function
 
-This edge function automatically sends a daily email report with restore metrics chart.
+Automated daily email report generation with restore metrics and visualizations.
 
 ## 📋 Overview
 
 - **Function Name**: `daily-restore-report`
 - **Purpose**: Generate and send daily restore metrics report via email
-- **Schedule**: Runs daily (configured via Supabase cron)
-- **Output**: Email with chart image/data and summary statistics
+- **Schedule**: Runs daily via Supabase cron (default: 8 AM UTC)
+- **Output**: HTML email with summary statistics and chart link
+- **Version**: 2.0.0
 
-## 🛠️ Setup Instructions
+## 🚀 Quick Start
+
+Use the automated setup script for streamlined deployment:
+
+```bash
+# Run the automated setup script
+npm run setup:daily-report
+
+# Or manually:
+node scripts/setup-daily-restore-report.js
+```
+
+The setup script will:
+1. ✅ Check Supabase CLI installation
+2. ✅ Validate function files
+3. ✅ Verify environment variables
+4. ✅ Deploy the edge function
+5. ✅ Configure cron schedule
+6. ✅ Test the deployment
+
+## 🛠️ Manual Setup Instructions
+
+## 🛠️ Manual Setup Instructions
+
+If you prefer to set up manually or the automated script fails:
 
 ### 1. Configure Environment Variables
 
@@ -79,79 +104,115 @@ supabase functions invoke daily-restore-report
 
 ## 📊 How It Works
 
-1. **Fetch Data**: Queries Supabase RPC functions to get restore metrics
-   - `get_restore_count_by_day_with_email`: Daily restore counts
-   - `get_restore_summary`: Summary statistics
+The edge function follows a streamlined process:
 
-2. **Generate Report**: Creates HTML email with:
-   - Summary statistics (total, unique docs, average per day)
-   - Daily breakdown data
-   - Link to interactive chart
+1. **Load Configuration**: Validates and loads environment variables
+   - Supabase URL and service role key
+   - App URL for chart links
+   - Admin email for reports
 
-3. **Send Email**: 
-   - Currently sends via API endpoint (requires `send-restore-report` API)
-   - Alternative: Use SendGrid, Mailgun, or similar service
+2. **Fetch Data**: Queries Supabase RPC functions
+   - `get_restore_count_by_day_with_email`: Daily restore counts (last 30 days)
+   - `get_restore_summary`: Summary statistics (total, unique docs, average)
 
-## 🔧 Implementation Notes
+3. **Generate Report**: Creates professional HTML email with:
+   - Executive summary with key metrics
+   - Visual data presentation
+   - Interactive chart link
+   - Mobile-responsive design
 
-### Screenshot Generation Options
+4. **Send Email**: Calls the `/api/send-restore-report` endpoint
+   - Uses nodemailer for SMTP delivery
+   - Sends formatted HTML email
+   - Includes error handling and logging
 
-The problem statement mentions using Puppeteer, but Supabase Edge Functions run on Deno, which has limited browser automation support. Here are the recommended approaches:
+## 🔧 Implementation Details
 
-#### Option 1: External Screenshot Service (Recommended)
-Use a screenshot API service:
-- API Flash: https://apiflash.com/
-- URL2PNG: https://www.url2png.com/
-- ScreenshotAPI: https://screenshotapi.net/
+### Architecture
 
-```typescript
-const screenshotUrl = `https://api.apiflash.com/v1/urltoimage?access_key=${API_KEY}&url=${embedUrl}&format=png`;
-const imageRes = await fetch(screenshotUrl);
-const imageBuffer = await imageRes.arrayBuffer();
+```
+┌─────────────────────┐
+│  Supabase Cron Job  │
+│   (Daily 8 AM UTC)  │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────────────────┐
+│  Edge Function                  │
+│  daily-restore-report           │
+│                                 │
+│  1. Load Config                 │
+│  2. Fetch Data from RPC         │
+│  3. Generate HTML Email         │
+│  4. Call Email API              │
+└──────────┬──────────────────────┘
+           │
+           ▼
+┌─────────────────────────────────┐
+│  API Route                      │
+│  /api/send-restore-report       │
+│                                 │
+│  - Uses nodemailer              │
+│  - Sends SMTP email             │
+└──────────┬──────────────────────┘
+           │
+           ▼
+┌─────────────────────────────────┐
+│  Admin Email Inbox              │
+│  - Professional HTML email      │
+│  - Summary statistics           │
+│  - Interactive chart link       │
+└─────────────────────────────────┘
 ```
 
-#### Option 2: Separate Puppeteer Service
-Deploy a separate Node.js service with Puppeteer:
-- Host on Vercel, Railway, or similar
-- Create an API endpoint that takes a URL and returns a screenshot
-- Call this service from the Edge Function
+### Email Service Options
+
+The function supports multiple email delivery methods:
+
+#### Option 1: Nodemailer API (Current Implementation) ✅
+
+Best for: Teams with existing SMTP infrastructure
 
 ```typescript
-const response = await fetch(`https://your-screenshot-service.com/screenshot?url=${embedUrl}`);
-const imageBuffer = await response.arrayBuffer();
+// Uses the /api/send-restore-report endpoint
+// Requires: EMAIL_HOST, EMAIL_USER, EMAIL_PASS env vars
+await sendEmailViaAPI(appUrl, payload, htmlContent);
 ```
 
-#### Option 3: Node.js API Route (Current Implementation)
-Use the `pages/api/generate-chart-image.ts` endpoint:
-- Requires Puppeteer installed in your Node.js environment
-- Only works if your app is deployed on a platform that supports Node.js APIs
-- Uncomment the Puppeteer code in the API file and install dependencies
+#### Option 2: SendGrid API (Recommended for Production)
 
-### Email Sending Options
+Best for: High-volume, reliable email delivery
 
-#### Option 1: Use SendGrid API (Recommended for Edge Functions)
 ```typescript
-const sgMail = require('@sendgrid/mail');
+import { MailService } from '@sendgrid/mail';
+const sgMail = new MailService();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 await sgMail.send({
   to: ADMIN_EMAIL,
   from: 'noreply@yourdomain.com',
-  subject: '📊 Relatório Diário - Gráfico de Restauração',
+  subject: '📊 Daily Restore Report',
   html: emailHtml,
-  attachments: [{
-    content: base64Image,
-    filename: 'restore-chart.png',
-    type: 'image/png',
-    disposition: 'attachment'
-  }]
 });
 ```
 
-#### Option 2: Call Node.js API Endpoint (Current Implementation)
-The `send-restore-report.ts` API endpoint uses nodemailer:
-- Requires EMAIL_HOST, EMAIL_USER, EMAIL_PASS environment variables
-- Works on platforms that support Node.js APIs
+#### Option 3: Mailgun API
+
+Best for: Developer-friendly API with good deliverability
+
+```typescript
+const mailgun = require('mailgun-js')({
+  apiKey: process.env.MAILGUN_API_KEY,
+  domain: process.env.MAILGUN_DOMAIN
+});
+
+await mailgun.messages().send({
+  from: 'noreply@yourdomain.com',
+  to: ADMIN_EMAIL,
+  subject: '📊 Daily Restore Report',
+  html: emailHtml
+});
+```
 
 ## 📧 Email Configuration
 
