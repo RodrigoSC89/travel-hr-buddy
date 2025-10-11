@@ -8,6 +8,42 @@ This edge function automatically sends a daily email report with restore metrics
 - **Purpose**: Generate and send daily restore metrics report via email
 - **Schedule**: Runs daily (configured via Supabase cron)
 - **Output**: Email with chart image/data and summary statistics
+- **Logging**: Execution logs stored in `restore_report_logs` table
+
+## 📊 Execution Logging
+
+All executions are automatically logged to the `restore_report_logs` table:
+
+### Log Statuses
+- **success**: Report sent successfully
+- **error**: Non-critical error (e.g., email sending failure)
+- **critical**: Critical error that prevented execution
+
+### Log Fields
+- `id`: Unique log identifier (UUID)
+- `executed_at`: Timestamp of execution
+- `status`: Execution status (success/error/critical)
+- `message`: Human-readable message
+- `error_details`: JSON with error details (if applicable)
+- `triggered_by`: Trigger source (automated/manual)
+
+### Query Logs
+```sql
+-- View recent executions
+SELECT * FROM restore_report_logs 
+ORDER BY executed_at DESC 
+LIMIT 10;
+
+-- Count by status
+SELECT status, COUNT(*) 
+FROM restore_report_logs 
+GROUP BY status;
+
+-- View errors only
+SELECT * FROM restore_report_logs 
+WHERE status IN ('error', 'critical')
+ORDER BY executed_at DESC;
+```
 
 ## 🛠️ Setup Instructions
 
@@ -218,13 +254,49 @@ supabase functions invoke daily-restore-report --no-verify-jwt
 
 ## 🔍 Monitoring
 
-Check logs:
+### View Function Logs
 ```bash
 # View function logs
 supabase functions logs daily-restore-report
 
 # Follow logs in real-time
 supabase functions logs daily-restore-report --follow
+```
+
+### View Execution History
+Query the `restore_report_logs` table to see execution history:
+
+```sql
+-- Recent executions with status
+SELECT 
+  executed_at,
+  status,
+  message,
+  triggered_by
+FROM restore_report_logs
+ORDER BY executed_at DESC
+LIMIT 20;
+
+-- Success rate over last 30 days
+SELECT 
+  DATE(executed_at) as date,
+  COUNT(*) as total_runs,
+  COUNT(*) FILTER (WHERE status = 'success') as successful,
+  COUNT(*) FILTER (WHERE status IN ('error', 'critical')) as failed
+FROM restore_report_logs
+WHERE executed_at >= NOW() - INTERVAL '30 days'
+GROUP BY DATE(executed_at)
+ORDER BY date DESC;
+
+-- View error details
+SELECT 
+  executed_at,
+  message,
+  error_details
+FROM restore_report_logs
+WHERE status IN ('error', 'critical')
+ORDER BY executed_at DESC
+LIMIT 10;
 ```
 
 ## 🐛 Troubleshooting
