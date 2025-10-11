@@ -3,6 +3,11 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreLogsPage from "@/pages/admin/documents/restore-logs";
 
+// Mock toast hook
+vi.mock("@/hooks/use-toast", () => ({
+  toast: vi.fn(),
+}));
+
 // Mock supabase client
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
@@ -174,6 +179,70 @@ describe("RestoreLogsPage Component", () => {
       expect(links.length).toBeGreaterThan(0);
       // Check if links have correct href format
       expect(links[0]).toHaveAttribute("href", expect.stringContaining("/admin/documents/view/"));
+    });
+  });
+
+  it("should handle CSV export with validation", async () => {
+    const { toast } = await import("@/hooks/use-toast");
+    
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.getByText("doc-123")).toBeInTheDocument();
+    });
+
+    // Filter to get no results
+    const filterInput = screen.getByPlaceholderText(/Filtrar por e-mail/i);
+    fireEvent.change(filterInput, { target: { value: "nonexistent@example.com" } });
+
+    // Try to export with no data
+    const csvButton = screen.getByText(/📤 CSV/i);
+    fireEvent.click(csvButton);
+
+    // Should show validation toast
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: "Nenhum dado para exportar",
+        })
+      );
+    });
+  });
+
+  it("should handle PDF export with validation", async () => {
+    const { toast } = await import("@/hooks/use-toast");
+    
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.getByText("doc-123")).toBeInTheDocument();
+    });
+
+    // Filter to get no results
+    const filterInput = screen.getByPlaceholderText(/Filtrar por e-mail/i);
+    fireEvent.change(filterInput, { target: { value: "nonexistent@example.com" } });
+
+    // Try to export with no data
+    const pdfButton = screen.getByText(/🧾 PDF/i);
+    fireEvent.click(pdfButton);
+
+    // Should show validation toast
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: "Nenhum dado para exportar",
+        })
+      );
     });
   });
 });

@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 
 interface RestoreLog {
@@ -62,72 +63,122 @@ export default function RestoreLogsPage() {
 
   // CSV Export
   function exportCSV() {
-    const headers = ["Documento", "Versão Restaurada", "Restaurado por", "Data"];
-    const rows = filteredLogs.map((log) => [
-      log.document_id,
-      log.version_id,
-      log.email || "-",
-      format(new Date(log.restored_at), "dd/MM/yyyy HH:mm"),
-    ]);
+    // Validate there's data to export
+    if (filteredLogs.length === 0) {
+      toast({
+        title: "Nenhum dado para exportar",
+        description: "Não há logs para exportar com os filtros aplicados.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    const csvContent = [
-      headers.join(","),
-      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
-    ].join("\n");
+    try {
+      const headers = ["Documento", "Versão Restaurada", "Restaurado por", "Data"];
+      const rows = filteredLogs.map((log) => [
+        log.document_id,
+        log.version_id,
+        log.email || "-",
+        format(new Date(log.restored_at), "dd/MM/yyyy HH:mm"),
+      ]);
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", "restore-logs.csv");
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      const csvContent = [
+        headers.join(","),
+        ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+      ].join("\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `restore-logs-${format(new Date(), "yyyy-MM-dd")}.csv`);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast({
+        title: "CSV exportado com sucesso",
+        description: `${filteredLogs.length} registro(s) exportado(s).`,
+      });
+    } catch (error) {
+      console.error("Error exporting CSV:", error);
+      toast({
+        title: "Erro ao exportar CSV",
+        description: "Ocorreu um erro ao tentar exportar o arquivo.",
+        variant: "destructive",
+      });
+    }
   }
 
   // PDF Export
   function exportPDF() {
-    const doc = new jsPDF();
-    const margin = 20;
-    let y = margin;
+    // Validate there's data to export
+    if (filteredLogs.length === 0) {
+      toast({
+        title: "Nenhum dado para exportar",
+        description: "Não há logs para exportar com os filtros aplicados.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Title
-    doc.setFontSize(16);
-    doc.setFont("helvetica", "bold");
-    doc.text("Auditoria de Restauracoes", margin, y);
-    y += 10;
+    try {
+      const doc = new jsPDF();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 20;
+      let y = margin;
 
-    // Table headers
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text("Documento", margin, y);
-    doc.text("Versao", margin + 50, y);
-    doc.text("Email", margin + 80, y);
-    doc.text("Data", margin + 130, y);
-    y += 7;
+      // Title
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text("Auditoria de Restauracoes", margin, y);
+      y += 10;
 
-    // Table rows
-    doc.setFont("helvetica", "normal");
-    filteredLogs.forEach((log) => {
-      if (y > 280) {
-        doc.addPage();
-        y = margin;
-      }
-
-      const docId = log.document_id.substring(0, 8) + "...";
-      const versionId = log.version_id.substring(0, 8) + "...";
-      const email = log.email ? log.email.substring(0, 20) : "-";
-      const date = format(new Date(log.restored_at), "dd/MM/yyyy HH:mm");
-
-      doc.text(docId, margin, y);
-      doc.text(versionId, margin + 50, y);
-      doc.text(email, margin + 80, y);
-      doc.text(date, margin + 130, y);
+      // Table headers
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text("Documento", margin, y);
+      doc.text("Versao", margin + 50, y);
+      doc.text("Email", margin + 80, y);
+      doc.text("Data", margin + 130, y);
       y += 7;
-    });
 
-    doc.save("restore-logs.pdf");
+      // Table rows
+      doc.setFont("helvetica", "normal");
+      filteredLogs.forEach((log) => {
+        // Check if we need a new page
+        if (y > pageHeight - margin) {
+          doc.addPage();
+          y = margin;
+        }
+
+        const docId = log.document_id.substring(0, 8) + "...";
+        const versionId = log.version_id.substring(0, 8) + "...";
+        const email = log.email ? log.email.substring(0, 20) : "-";
+        const date = format(new Date(log.restored_at), "dd/MM/yyyy HH:mm");
+
+        doc.text(docId, margin, y);
+        doc.text(versionId, margin + 50, y);
+        doc.text(email, margin + 80, y);
+        doc.text(date, margin + 130, y);
+        y += 7;
+      });
+
+      doc.save(`restore-logs-${format(new Date(), "yyyy-MM-dd")}.pdf`);
+
+      toast({
+        title: "PDF exportado com sucesso",
+        description: `${filteredLogs.length} registro(s) exportado(s).`,
+      });
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      toast({
+        title: "Erro ao exportar PDF",
+        description: "Ocorreu um erro ao tentar exportar o arquivo.",
+        variant: "destructive",
+      });
+    }
   }
 
   return (
