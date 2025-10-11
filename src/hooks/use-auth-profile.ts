@@ -11,7 +11,7 @@ interface UserProfile {
   department: string | null;
   position: string | null;
   phone: string | null;
-  role: "admin" | "hr_manager" | "department_manager" | "employee";
+  role: "user" | "admin";
   preferences: {
     theme: "light" | "dark" | "system";
     notifications: boolean;
@@ -55,7 +55,7 @@ export const useAuthProfile = () => {
             department: null,
             position: null,
             phone: null,
-            role: "employee" as const,
+            role: "user" as const,
             preferences: {
               theme: "system" as const,
               notifications: true,
@@ -81,7 +81,7 @@ export const useAuthProfile = () => {
               department: newProfile.department,
               position: newProfile.position,
               phone: newProfile.phone,
-              role: "employee",
+              role: (newProfile.role as "user" | "admin") || "user",
               preferences: {
                 theme: "system",
                 notifications: true,
@@ -100,7 +100,7 @@ export const useAuthProfile = () => {
             department: data.department,
             position: data.position,
             phone: data.phone,
-            role: "employee", // Default role
+            role: (data.role as "user" | "admin") || "user",
             preferences: {
               theme: "system",
               notifications: true,
@@ -119,7 +119,7 @@ export const useAuthProfile = () => {
           department: null,
           position: null,
           phone: null,
-          role: "employee",
+          role: "user",
           preferences: {
             theme: "system",
             notifications: true,
@@ -164,7 +164,7 @@ export const useAuthProfile = () => {
         department: data.department,
         position: data.position,
         phone: data.phone,
-        role: profile.role,
+        role: (data.role as "user" | "admin") || profile.role,
         preferences: profile.preferences
       };
       setProfile(mappedProfile);
