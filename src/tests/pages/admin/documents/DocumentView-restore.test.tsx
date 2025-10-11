@@ -60,6 +60,19 @@ vi.mock("@/hooks/use-toast", () => ({
   toast: mockToast,
 }));
 
+// Mock useAuthProfile hook
+vi.mock("@/hooks/use-auth-profile", () => ({
+  useAuthProfile: vi.fn().mockReturnValue({
+    profile: {
+      id: "user-123",
+      email: "current-user@example.com",
+      role: "admin",
+      full_name: "Current User",
+    },
+    isLoading: false,
+  }),
+}));
+
 describe("DocumentViewPage - Version Restoration", () => {
   // Dynamically import the component after mocks are set up
   let DocumentViewPage: any;
