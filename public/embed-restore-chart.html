@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restore Chart</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: white;
+    }
+    #chart-container {
+      width: 800px;
+      height: 500px;
+      margin: 0 auto;
+    }
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div id="chart-container">
+    <canvas id="restoreChart"></canvas>
+  </div>
+
+  <script>
+    // This will be populated dynamically by the API or from URL params
+    async function loadChartData() {
+      try {
+        // Fetch data from Supabase
+        const supabaseUrl = 'https://vnbptmixvwropvanyhdb.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE';
+
+        const response = await fetch(`${supabaseUrl}/rest/v1/rpc/get_restore_count_by_day_with_email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`
+          },
+          body: JSON.stringify({ email_input: '' })
+        });
+
+        const data = await response.json();
+        
+        if (!data || data.length === 0) {
+          console.error('No data received');
+          return;
+        }
+
+        // Format data for chart
+        const labels = data.map(d => {
+          const date = new Date(d.day);
+          return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}`;
+        });
+        
+        const counts = data.map(d => d.count);
+
+        // Create chart
+        const ctx = document.getElementById('restoreChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Restaurações por dia',
+              data: counts,
+              backgroundColor: '#3b82f6',
+              borderColor: '#2563eb',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Métricas de Restauração de Documentos',
+                font: {
+                  size: 18,
+                  weight: 'bold'
+                }
+              },
+              legend: {
+                display: true,
+                position: 'top'
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1
+                }
+              }
+            }
+          }
+        });
+
+        // Signal that chart is ready for screenshot
+        window.chartReady = true;
+      } catch (error) {
+        console.error('Error loading chart data:', error);
+      }
+    }
+
+    // Load chart when page is ready
+    window.addEventListener('DOMContentLoaded', loadChartData);
+  </script>
+</body>
+</html>

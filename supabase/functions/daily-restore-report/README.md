@@ -1,0 +1,281 @@
+# Daily Restore Report - Supabase Edge Function
+
+This edge function automatically sends a daily email report with restore metrics chart.
+
+## 📋 Overview
+
+- **Function Name**: `daily-restore-report`
+- **Purpose**: Generate and send daily restore metrics report via email
+- **Schedule**: Runs daily (configured via Supabase cron)
+- **Output**: Email with chart image/data and summary statistics
+
+## 🛠️ Setup Instructions
+
+### 1. Configure Environment Variables
+
+Set these variables in your Supabase project settings (Settings > Edge Functions > Secrets):
+
+```bash
+# Required
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# App configuration
+VITE_APP_URL=https://your-app-url.vercel.app  # Your deployed app URL
+APP_URL=https://your-app-url.vercel.app        # Alternative
+
+# Email configuration
+ADMIN_EMAIL=admin@empresa.com  # Email to receive the reports
+```
+
+### 2. Deploy the Function
+
+```bash
+# Deploy the function
+supabase functions deploy daily-restore-report
+
+# Verify deployment
+supabase functions list
+```
+
+### 3. Schedule Daily Execution
+
+Schedule the function to run daily at 8:00 AM:
+
+```bash
+# Option 1: Using Supabase CLI (recommended)
+supabase functions schedule daily-restore-report \
+  --cron "0 8 * * *" \
+  --endpoint-type=public
+
+# Option 2: Using pg_cron (if you have database access)
+SELECT cron.schedule(
+  'daily-restore-report',
+  '0 8 * * *',
+  $$
+  SELECT
+    net.http_post(
+      url:='https://your-project.supabase.co/functions/v1/daily-restore-report',
+      headers:='{"Content-Type": "application/json", "Authorization": "Bearer YOUR_ANON_KEY"}'::jsonb
+    ) AS request_id;
+  $$
+);
+```
+
+### 4. Test the Function
+
+Test manually before scheduling:
+
+```bash
+# Using curl
+curl -X POST \
+  https://your-project.supabase.co/functions/v1/daily-restore-report \
+  -H "Authorization: Bearer YOUR_ANON_KEY" \
+  -H "Content-Type: application/json"
+
+# Using Supabase CLI
+supabase functions invoke daily-restore-report
+```
+
+## 📊 How It Works
+
+1. **Fetch Data**: Queries Supabase RPC functions to get restore metrics
+   - `get_restore_count_by_day_with_email`: Daily restore counts
+   - `get_restore_summary`: Summary statistics
+
+2. **Generate Report**: Creates HTML email with:
+   - Summary statistics (total, unique docs, average per day)
+   - Daily breakdown data
+   - Link to interactive chart
+
+3. **Send Email**: 
+   - Currently sends via API endpoint (requires `send-restore-report` API)
+   - Alternative: Use SendGrid, Mailgun, or similar service
+
+## 🔧 Implementation Notes
+
+### Screenshot Generation Options
+
+The problem statement mentions using Puppeteer, but Supabase Edge Functions run on Deno, which has limited browser automation support. Here are the recommended approaches:
+
+#### Option 1: External Screenshot Service (Recommended)
+Use a screenshot API service:
+- API Flash: https://apiflash.com/
+- URL2PNG: https://www.url2png.com/
+- ScreenshotAPI: https://screenshotapi.net/
+
+```typescript
+const screenshotUrl = `https://api.apiflash.com/v1/urltoimage?access_key=${API_KEY}&url=${embedUrl}&format=png`;
+const imageRes = await fetch(screenshotUrl);
+const imageBuffer = await imageRes.arrayBuffer();
+```
+
+#### Option 2: Separate Puppeteer Service
+Deploy a separate Node.js service with Puppeteer:
+- Host on Vercel, Railway, or similar
+- Create an API endpoint that takes a URL and returns a screenshot
+- Call this service from the Edge Function
+
+```typescript
+const response = await fetch(`https://your-screenshot-service.com/screenshot?url=${embedUrl}`);
+const imageBuffer = await response.arrayBuffer();
+```
+
+#### Option 3: Node.js API Route (Current Implementation)
+Use the `pages/api/generate-chart-image.ts` endpoint:
+- Requires Puppeteer installed in your Node.js environment
+- Only works if your app is deployed on a platform that supports Node.js APIs
+- Uncomment the Puppeteer code in the API file and install dependencies
+
+### Email Sending Options
+
+#### Option 1: Use SendGrid API (Recommended for Edge Functions)
+```typescript
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+await sgMail.send({
+  to: ADMIN_EMAIL,
+  from: 'noreply@yourdomain.com',
+  subject: '📊 Relatório Diário - Gráfico de Restauração',
+  html: emailHtml,
+  attachments: [{
+    content: base64Image,
+    filename: 'restore-chart.png',
+    type: 'image/png',
+    disposition: 'attachment'
+  }]
+});
+```
+
+#### Option 2: Call Node.js API Endpoint (Current Implementation)
+The `send-restore-report.ts` API endpoint uses nodemailer:
+- Requires EMAIL_HOST, EMAIL_USER, EMAIL_PASS environment variables
+- Works on platforms that support Node.js APIs
+
+## 📧 Email Configuration
+
+To use the nodemailer-based API endpoint (`send-restore-report.ts`), configure these environment variables:
+
+```bash
+# SMTP Configuration
+EMAIL_HOST=smtp.gmail.com        # SMTP server
+EMAIL_PORT=587                    # SMTP port
+EMAIL_USER=your@email.com        # SMTP username
+EMAIL_PASS=your_password         # SMTP password/app password
+EMAIL_FROM=relatorios@yourdomain.com  # From address
+```
+
+For Gmail:
+1. Enable 2-factor authentication
+2. Generate an App Password: https://myaccount.google.com/apppasswords
+3. Use the app password as EMAIL_PASS
+
+## 🧪 Testing
+
+### Test Data Fetch
+```bash
+# Test that RPC functions are working
+curl -X POST \
+  'https://your-project.supabase.co/rest/v1/rpc/get_restore_count_by_day_with_email' \
+  -H "apikey: YOUR_ANON_KEY" \
+  -H "Authorization: Bearer YOUR_ANON_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"email_input": ""}'
+```
+
+### Test Email Endpoint
+```bash
+curl -X POST \
+  https://your-app-url.vercel.app/api/send-restore-report \
+  -H "Content-Type: application/json" \
+  -d '{
+    "imageBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+    "toEmail": "test@example.com"
+  }'
+```
+
+### Test Edge Function
+```bash
+supabase functions invoke daily-restore-report --no-verify-jwt
+```
+
+## 📅 Cron Schedule Examples
+
+```bash
+# Every day at 8:00 AM
+0 8 * * *
+
+# Every weekday at 9:00 AM
+0 9 * * 1-5
+
+# Every Monday at 7:00 AM
+0 7 * * 1
+
+# Twice a day (8 AM and 8 PM)
+0 8,20 * * *
+```
+
+## 🔍 Monitoring
+
+Check logs:
+```bash
+# View function logs
+supabase functions logs daily-restore-report
+
+# Follow logs in real-time
+supabase functions logs daily-restore-report --follow
+```
+
+## 🐛 Troubleshooting
+
+### Issue: Function times out
+- Increase timeout in function configuration
+- Optimize data fetching queries
+- Use pagination for large datasets
+
+### Issue: Email not sent
+- Verify EMAIL_* environment variables
+- Check SMTP credentials
+- Test with a simple email first
+- Check email service logs
+
+### Issue: Chart not rendering
+- Verify embed page is accessible: `/embed-restore-chart.html`
+- Check Supabase RPC functions return data
+- Test embed page in browser first
+
+### Issue: No data in report
+- Verify RPC functions exist in database:
+  - `get_restore_count_by_day_with_email`
+  - `get_restore_summary`
+- Check that restore_logs table has data
+- Test RPC functions manually
+
+## 📚 Related Files
+
+- `/supabase/functions/daily-restore-report/index.ts` - Edge function code
+- `/pages/api/send-restore-report.ts` - Email sending API
+- `/pages/api/generate-chart-image.ts` - Chart image generation API
+- `/public/embed-restore-chart.html` - Embeddable chart page
+- `/src/pages/admin/documents/restore-dashboard.tsx` - Full dashboard page
+
+## 🔐 Security Considerations
+
+- Never expose SMTP credentials in client code
+- Use environment variables for all sensitive data
+- Limit email recipients to authorized users
+- Use HTTPS for all API calls
+- Implement rate limiting on email endpoints
+- Validate email addresses before sending
+
+## 📈 Future Enhancements
+
+- [ ] Add support for multiple recipients
+- [ ] Include more detailed statistics
+- [ ] Add email preferences/unsubscribe
+- [ ] Support different chart types
+- [ ] Add PDF attachment option
+- [ ] Implement email templates
+- [ ] Add success/failure notifications
+- [ ] Track email delivery status
