@@ -14,6 +14,7 @@ import { ptBR } from "date-fns/locale";
 import { Loader2, ArrowLeft, MessageSquare, Send, Trash2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { DocumentVersionHistory } from "@/components/documents/DocumentVersionHistory";
+import { useAuthProfile } from "@/hooks/use-auth-profile";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
 interface Document {
@@ -37,6 +38,7 @@ interface DocumentComment {
 export default function DocumentViewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { profile } = useAuthProfile();
   const [doc, setDoc] = useState<Document | null>(null);
   const [comments, setComments] = useState<DocumentComment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +49,9 @@ export default function DocumentViewPage() {
   const [deletingCommentId, setDeletingCommentId] = useState<string | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [realtimeChannel, setRealtimeChannel] = useState<RealtimeChannel | null>(null);
+
+  // Check if current user is admin
+  const isAdmin = profile?.role === "admin";
 
   useEffect(() => {
     if (!id) return;
@@ -348,9 +353,15 @@ export default function DocumentViewPage() {
                 locale: ptBR,
               })}
             </p>
-            {(doc.author_name || doc.author_email) && (
+            {/* Author information - name shown to all, email only to admins */}
+            {(doc.author_name || (isAdmin && doc.author_email)) && (
               <p className="text-sm text-muted-foreground">
-                Autor: {doc.author_name || doc.author_email || "Desconhecido"}
+                Autor: {doc.author_name || "Desconhecido"}
+                {isAdmin && doc.author_email && (
+                  <span className="ml-2 text-xs font-mono">
+                    ({doc.author_email})
+                  </span>
+                )}
               </p>
             )}
           </div>
