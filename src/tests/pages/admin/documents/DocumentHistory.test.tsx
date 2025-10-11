@@ -1,11 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import DocumentHistoryPage from "@/pages/admin/documents/DocumentHistory";
 
 // Mock supabase client
-const mockSupabaseSelect = vi.fn();
-const mockSupabaseUpdate = vi.fn();
 
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {

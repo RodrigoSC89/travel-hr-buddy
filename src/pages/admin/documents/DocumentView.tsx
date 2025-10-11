@@ -1,11 +1,10 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { Loader2 } from "lucide-react";
+import { Loader2, History } from "lucide-react";
 
 interface Document {
   title: string;
@@ -43,10 +42,20 @@ export default function DocumentViewPage() {
 
   return (
     <div className="p-8 space-y-4">
-      <h1 className="text-2xl font-bold">📄 {doc.title}</h1>
-      <p className="text-sm text-muted-foreground">
-        Criado em {format(new Date(doc.created_at), "dd/MM/yyyy HH:mm")}
-      </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">📄 {doc.title}</h1>
+          <p className="text-sm text-muted-foreground">
+            Criado em {format(new Date(doc.created_at), "dd/MM/yyyy HH:mm")}
+          </p>
+        </div>
+        <Link to={`/admin/documents/history/${id}`}>
+          <Button variant="outline" size="sm">
+            <History className="w-4 h-4 mr-2" />
+            Ver Histórico
+          </Button>
+        </Link>
+      </div>
 
       <Card>
         <CardContent className="whitespace-pre-wrap p-4">

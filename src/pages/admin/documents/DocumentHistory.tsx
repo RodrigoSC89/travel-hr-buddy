@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 
 interface DocumentVersion {
   content: string;
@@ -62,7 +62,15 @@ export default function DocumentHistoryPage() {
 
   return (
     <div className="p-8 space-y-6">
-      <h1 className="text-2xl font-bold">📜 Histórico de Versões</h1>
+      <div className="flex items-center gap-4">
+        <Link to={`/admin/documents/view/${id}`}>
+          <Button variant="ghost" size="sm">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar
+          </Button>
+        </Link>
+        <h1 className="text-2xl font-bold">📜 Histórico de Versões</h1>
+      </div>
 
       {versions.length === 0 && (
         <p className="text-muted-foreground">Nenhuma versão antiga encontrada.</p>
