@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { PlusCircle, BarChart3, Sparkles } from "lucide-react";
+import { PlusCircle, BarChart3, Sparkles, FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -28,6 +28,9 @@ export default function ChecklistsPage() {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [title, setTitle] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [summary, setSummary] = useState<{ [key: string]: string }>({});
+  const [isSummarizing, setIsSummarizing] = useState<{ [key: string]: boolean }>({});
+  const [filter, setFilter] = useState<"all" | "done" | "pending">("all");
 
   useEffect(() => {
     fetchChecklists();
@@ -249,6 +252,58 @@ export default function ChecklistsPage() {
     pdf.save("checklist.pdf");
   }
 
+  async function summarizeChecklist(id: string) {
+    const checklist = checklists.find((c) => c.id === id);
+    if (!checklist) return;
+
+    setIsSummarizing({ ...isSummarizing, [id]: true });
+
+    try {
+      const { data, error } = await supabase.functions.invoke(
+        "summarize-checklist",
+        {
+          body: {
+            title: checklist.title,
+            items: checklist.items,
+            comments: [],
+          },
+        }
+      );
+
+      if (error) {
+        console.error("Error summarizing checklist:", error);
+        throw new Error("Erro ao gerar resumo");
+      }
+
+      if (!data?.summary) {
+        throw new Error("Nenhum resumo foi gerado");
+      }
+
+      setSummary({ ...summary, [id]: data.summary });
+      toast({
+        title: "Sucesso! 🧠",
+        description: "Resumo gerado com IA",
+      });
+    } catch (error) {
+      console.error("Error in summarizeChecklist:", error);
+      toast({
+        title: "Erro",
+        description: error instanceof Error ? error.message : "Erro ao gerar resumo",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSummarizing({ ...isSummarizing, [id]: false });
+    }
+  }
+
+  const filteredChecklists = checklists.filter((checklist) => {
+    if (filter === "all") return true;
+    const progress = calculateProgress(checklist.items);
+    if (filter === "done") return progress === 100;
+    if (filter === "pending") return progress < 100;
+    return true;
+  });
+
   return (
     <div className="space-y-6 p-6">
       <div className="flex justify-between items-center">
@@ -261,38 +316,69 @@ export default function ChecklistsPage() {
         </Link>
       </div>
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-4 items-center flex-wrap">
         <Input
-          placeholder="Novo checklist"
+          placeholder="Descreva seu checklist..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className="min-w-[250px]"
         />
         <Button onClick={createChecklist} disabled={!title}>
-          <PlusCircle className="w-4 h-4 mr-1" /> Criar
+          <PlusCircle className="w-4 h-4 mr-1" /> Criar Manual
         </Button>
         <Button 
           onClick={createChecklistWithAI} 
           disabled={!title || isGenerating}
           variant="secondary"
         >
-          <Sparkles className="w-4 h-4 mr-1" /> 
+          <Sparkles className="w-4 h-4 mr-1 text-yellow-400" /> 
           {isGenerating ? "Gerando..." : "Gerar com IA"}
         </Button>
+        <select
+          className="border rounded px-3 py-2"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value as "all" | "done" | "pending")}
+        >
+          <option value="all">Todos</option>
+          <option value="done">Concluídos</option>
+          <option value="pending">Pendentes</option>
+        </select>
       </div>
 
-      {checklists.map((checklist) => (
+      {filteredChecklists.map((checklist) => (
         <Card key={checklist.id} id={`checklist-${checklist.id}`}>
           <CardContent className="p-4 space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold">📝 {checklist.title}</h2>
-              <Button
-                variant="outline"
-                onClick={() => exportPDF(checklist.id)}
-              >
-                📄 Exportar PDF
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => summarizeChecklist(checklist.id)}
+                  disabled={isSummarizing[checklist.id]}
+                >
+                  <FileText className="w-4 h-4 mr-1" />
+                  {isSummarizing[checklist.id] ? "Gerando..." : "Resumir com IA"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => exportPDF(checklist.id)}
+                >
+                  📄 Exportar PDF
+                </Button>
+              </div>
             </div>
             <Progress value={calculateProgress(checklist.items)} />
+
+            {summary[checklist.id] && (
+              <Card className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
+                <CardContent className="p-4">
+                  <h3 className="font-semibold mb-2 flex items-center gap-2">
+                    🧠 Resumo com IA:
+                  </h3>
+                  <p className="text-sm whitespace-pre-wrap">{summary[checklist.id]}</p>
+                </CardContent>
+              </Card>
+            )}
 
             {checklist.items.length === 0 ? (
               <p className="text-sm text-muted-foreground">
