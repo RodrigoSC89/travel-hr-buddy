@@ -82,6 +82,7 @@ describe("RestoreLogsPage Component", () => {
     
     expect(screen.getByText(/CSV/i)).toBeInTheDocument();
     expect(screen.getByText(/PDF/i)).toBeInTheDocument();
+    expect(screen.getByText(/E-mail/i)).toBeInTheDocument();
   });
 
   it("should display restore logs after loading", async () => {
@@ -161,8 +162,10 @@ describe("RestoreLogsPage Component", () => {
     // With data, buttons should be enabled
     const csvButton = screen.getByText(/CSV/i).closest("button");
     const pdfButton = screen.getByText(/PDF/i).closest("button");
+    const emailButton = screen.getByText(/E-mail/i).closest("button");
     expect(csvButton).not.toBeDisabled();
     expect(pdfButton).not.toBeDisabled();
+    expect(emailButton).not.toBeDisabled();
   });
 
   it("should show empty state message when no logs are found", async () => {
@@ -304,8 +307,10 @@ describe("RestoreLogsPage Component", () => {
       await waitFor(() => {
         const csvButton = screen.getByText(/CSV/i).closest("button");
         const pdfButton = screen.getByText(/PDF/i).closest("button");
+        const emailButton = screen.getByText(/E-mail/i).closest("button");
         expect(csvButton).toBeDisabled();
         expect(pdfButton).toBeDisabled();
+        expect(emailButton).toBeDisabled();
       });
     }
   });
