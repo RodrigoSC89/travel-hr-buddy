@@ -4,10 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { PlusCircle, BarChart3 } from "lucide-react";
+import { PlusCircle, BarChart3, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { toast } from "@/hooks/use-toast";
 
 interface ChecklistItem {
   id: string;
@@ -26,6 +27,7 @@ interface Checklist {
 export default function ChecklistsPage() {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [title, setTitle] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     fetchChecklists();
@@ -103,12 +105,109 @@ export default function ChecklistsPage() {
 
     if (error) {
       console.error("Error creating checklist:", error);
+      toast({
+        title: "Erro",
+        description: "Erro ao criar checklist",
+        variant: "destructive",
+      });
       return;
     }
 
     if (data) {
       setTitle("");
+      toast({
+        title: "Sucesso",
+        description: "Checklist criado com sucesso",
+      });
       fetchChecklists();
+    }
+  }
+
+  async function createChecklistWithAI() {
+    if (!title) {
+      toast({
+        title: "Atenção",
+        description: "Digite um título para o checklist",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+
+    try {
+      const { data: userData } = await supabase.auth.getUser();
+      const userId = userData?.user?.id || "admin";
+
+      // Call the Supabase Edge Function to generate checklist items
+      const { data: aiData, error: aiError } = await supabase.functions.invoke(
+        "generate-checklist",
+        {
+          body: { prompt: title },
+        }
+      );
+
+      if (aiError) {
+        console.error("Error generating checklist with AI:", aiError);
+        throw new Error("Erro ao gerar checklist com IA");
+      }
+
+      if (!aiData?.items || aiData.items.length === 0) {
+        throw new Error("Nenhum item foi gerado pela IA");
+      }
+
+      // Create the checklist
+      const { data: checklistData, error: checklistError } = await supabase
+        .from("operational_checklists")
+        .insert({
+          title,
+          type: "outro",
+          created_by: userId,
+          status: "rascunho",
+          source_type: "ai_generated",
+        })
+        .select()
+        .single();
+
+      if (checklistError || !checklistData) {
+        console.error("Error creating checklist:", checklistError);
+        throw new Error("Erro ao criar checklist");
+      }
+
+      // Add the generated items to the checklist
+      const itemsToInsert = aiData.items.map((itemTitle: string, index: number) => ({
+        checklist_id: checklistData.id,
+        title: itemTitle,
+        completed: false,
+        order_index: index,
+        criticality: "medium",
+        required: true,
+      }));
+
+      const { error: itemsError } = await supabase
+        .from("checklist_items")
+        .insert(itemsToInsert);
+
+      if (itemsError) {
+        console.error("Error creating checklist items:", itemsError);
+        throw new Error("Erro ao adicionar itens ao checklist");
+      }
+
+      setTitle("");
+      toast({
+        title: "Sucesso! 🎉",
+        description: `Checklist criado com ${aiData.items.length} itens gerados pela IA`,
+      });
+      fetchChecklists();
+    } catch (error) {
+      console.error("Error in createChecklistWithAI:", error);
+      toast({
+        title: "Erro",
+        description: error instanceof Error ? error.message : "Erro ao gerar checklist com IA",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
     }
   }
 
@@ -170,6 +269,14 @@ export default function ChecklistsPage() {
         />
         <Button onClick={createChecklist} disabled={!title}>
           <PlusCircle className="w-4 h-4 mr-1" /> Criar
+        </Button>
+        <Button 
+          onClick={createChecklistWithAI} 
+          disabled={!title || isGenerating}
+          variant="secondary"
+        >
+          <Sparkles className="w-4 h-4 mr-1" /> 
+          {isGenerating ? "Gerando..." : "Gerar com IA"}
         </Button>
       </div>
 
