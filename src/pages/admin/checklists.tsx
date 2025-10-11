@@ -28,6 +28,9 @@ export default function ChecklistsPage() {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [title, setTitle] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [summary, setSummary] = useState<{ [key: string]: string }>({});
+  const [isSummarizing, setIsSummarizing] = useState<{ [key: string]: boolean }>({});
+  const [filter, setFilter] = useState<"all" | "done" | "pending">("all");
 
   useEffect(() => {
     fetchChecklists();
@@ -249,6 +252,44 @@ export default function ChecklistsPage() {
     pdf.save("checklist.pdf");
   }
 
+  async function summarizeChecklist(id: string) {
+    const checklist = checklists.find((c) => c.id === id);
+    if (!checklist) return;
+
+    setIsSummarizing({ ...isSummarizing, [id]: true });
+
+    try {
+      const { data, error } = await supabase.functions.invoke("summarize-checklist", {
+        body: { 
+          title: checklist.title, 
+          items: checklist.items.map(item => ({ title: item.title, completed: item.completed })), 
+          comments: [] 
+        }
+      });
+
+      if (error) {
+        throw new Error("Erro ao gerar resumo");
+      }
+
+      if (data?.summary) {
+        setSummary({ ...summary, [id]: data.summary });
+        toast({ 
+          title: "Sucesso! 🧠", 
+          description: "Resumo gerado com IA" 
+        });
+      }
+    } catch (error) {
+      console.error("Error summarizing checklist:", error);
+      toast({ 
+        title: "Erro", 
+        description: "Erro ao gerar resumo", 
+        variant: "destructive" 
+      });
+    } finally {
+      setIsSummarizing({ ...isSummarizing, [id]: false });
+    }
+  }
+
   return (
     <div className="space-y-6 p-6">
       <div className="flex justify-between items-center">
@@ -261,14 +302,15 @@ export default function ChecklistsPage() {
         </Link>
       </div>
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-4 items-center flex-wrap">
         <Input
-          placeholder="Novo checklist"
+          placeholder="Descreva seu checklist..."
+          className="min-w-[250px]"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <Button onClick={createChecklist} disabled={!title}>
-          <PlusCircle className="w-4 h-4 mr-1" /> Criar
+          <PlusCircle className="w-4 h-4 mr-1" /> Criar Manual
         </Button>
         <Button 
           onClick={createChecklistWithAI} 
@@ -278,20 +320,53 @@ export default function ChecklistsPage() {
           <Sparkles className="w-4 h-4 mr-1" /> 
           {isGenerating ? "Gerando..." : "Gerar com IA"}
         </Button>
+        <select 
+          value={filter} 
+          onChange={(e) => setFilter(e.target.value as "all" | "done" | "pending")}
+          className="px-3 py-2 rounded-md border border-input bg-background"
+        >
+          <option value="all">Todos</option>
+          <option value="done">Concluídos</option>
+          <option value="pending">Pendentes</option>
+        </select>
       </div>
 
-      {checklists.map((checklist) => (
+      {checklists
+        .filter((checklist) => {
+          if (filter === "all") return true;
+          const progress = calculateProgress(checklist.items);
+          if (filter === "done") return progress === 100;
+          if (filter === "pending") return progress < 100;
+          return true;
+        })
+        .map((checklist) => (
         <Card key={checklist.id} id={`checklist-${checklist.id}`}>
           <CardContent className="p-4 space-y-4">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center flex-wrap gap-2">
               <h2 className="text-lg font-semibold">📝 {checklist.title}</h2>
-              <Button
-                variant="outline"
-                onClick={() => exportPDF(checklist.id)}
-              >
-                📄 Exportar PDF
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => summarizeChecklist(checklist.id)}
+                  disabled={isSummarizing[checklist.id]}
+                >
+                  📄 {isSummarizing[checklist.id] ? "Gerando..." : "Resumir com IA"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => exportPDF(checklist.id)}
+                >
+                  📄 Exportar PDF
+                </Button>
+              </div>
             </div>
+
+            {summary[checklist.id] && (
+              <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+                <h3 className="text-sm font-semibold mb-2">🧠 Resumo com IA:</h3>
+                <p className="text-sm">{summary[checklist.id]}</p>
+              </div>
+            )}
             <Progress value={calculateProgress(checklist.items)} />
 
             {checklist.items.length === 0 ? (
