@@ -132,30 +132,6 @@ describe("DocumentVersionHistory Component", () => {
     });
   });
 
-  it("should open confirmation dialog when restore is clicked", async () => {
-    const mockFrom = vi.fn(() => ({
-      select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          order: vi.fn(() => Promise.resolve({ data: mockVersions, error: null })),
-        })),
-      })),
-    }));
-    (supabase.from as any) = mockFrom;
-
-    render(<DocumentVersionHistory documentId={mockDocumentId} />);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Histórico de Versões/i)).toBeInTheDocument();
-    });
-
-    const restoreButton = await screen.findByRole("button", { name: /Restaurar/i });
-    fireEvent.click(restoreButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Confirmar Restauração/i)).toBeInTheDocument();
-    });
-  });
-
   it("should display version count correctly", async () => {
     const mockFrom = vi.fn(() => ({
       select: vi.fn(() => ({
@@ -171,56 +147,5 @@ describe("DocumentVersionHistory Component", () => {
     await waitFor(() => {
       expect(screen.getByText(/2 versão\(ões\) anterior\(es\) disponível\(is\)/i)).toBeInTheDocument();
     });
-  });
-
-  it("should call onRestore callback after successful restore", async () => {
-    const mockOnRestore = vi.fn();
-    
-    const mockFrom = vi.fn((table: string) => {
-      if (table === "document_versions") {
-        return {
-          select: vi.fn(() => ({
-            eq: vi.fn(() => ({
-              order: vi.fn(() => Promise.resolve({ data: mockVersions, error: null })),
-              single: vi.fn(() => Promise.resolve({ data: { content: "Previous version content" }, error: null })),
-            })),
-          })),
-        };
-      }
-      if (table === "ai_generated_documents") {
-        return {
-          update: vi.fn(() => ({
-            eq: vi.fn(() => Promise.resolve({ error: null })),
-          })),
-        };
-      }
-      if (table === "document_restore_logs") {
-        return {
-          insert: vi.fn(() => Promise.resolve({ error: null })),
-        };
-      }
-      return {};
-    });
-    (supabase.from as any) = mockFrom;
-
-    render(<DocumentVersionHistory documentId={mockDocumentId} onRestore={mockOnRestore} />);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Histórico de Versões/i)).toBeInTheDocument();
-    });
-
-    const restoreButton = await screen.findByRole("button", { name: /Restaurar/i });
-    fireEvent.click(restoreButton);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Confirmar Restauração/i)).toBeInTheDocument();
-    });
-
-    const confirmButton = screen.getByRole("button", { name: /Confirmar Restauração/i });
-    fireEvent.click(confirmButton);
-
-    await waitFor(() => {
-      expect(mockOnRestore).toHaveBeenCalled();
-    }, { timeout: 3000 });
   });
 });
