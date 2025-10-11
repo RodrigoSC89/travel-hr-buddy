@@ -55,6 +55,12 @@ vi.mock("@/integrations/supabase/client", () => ({
         error: null,
       })),
     },
+    functions: {
+      invoke: vi.fn(() => ({
+        data: { items: ["Item 1", "Item 2", "Item 3"] },
+        error: null,
+      })),
+    },
   },
 }));
 
@@ -141,6 +147,36 @@ describe("ChecklistsPage Component", () => {
     
     await waitFor(() => {
       const button = screen.getByRole("button", { name: /Criar/i });
+      expect(button).toBeDisabled();
+    });
+  });
+
+  it("should render 'Gerar com IA' button", async () => {
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <ChecklistsPage />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      const button = screen.getByText(/Gerar com IA/i);
+      expect(button).toBeInTheDocument();
+    });
+  });
+
+  it("'Gerar com IA' button should be disabled when input is empty", async () => {
+    render(
+      <MemoryRouter>
+        <OrganizationProvider>
+          <ChecklistsPage />
+        </OrganizationProvider>
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      const button = screen.getByRole("button", { name: /Gerar com IA/i });
       expect(button).toBeDisabled();
     });
   });
