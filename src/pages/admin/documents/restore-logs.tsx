@@ -1,13 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent } from "@/components/ui/card";
-import { format } from "date-fns";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { format, subDays, startOfWeek, startOfMonth } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
+import { 
+  BarChart, 
+  Bar, 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer 
+} from "recharts";
+import { TrendingUp, Users, FileText, Calendar } from "lucide-react";
 
 interface RestoreLog {
   id: string;
@@ -59,6 +71,61 @@ export default function RestoreLogsPage() {
 
   // Apply pagination
   const paginatedLogs = filteredLogs.slice((page - 1) * pageSize, page * pageSize);
+
+  // Calculate metrics
+  const metrics = useMemo(() => {
+    const now = new Date();
+    const weekStart = startOfWeek(now, { weekStartsOn: 1 });
+    const monthStart = startOfMonth(now);
+
+    const thisWeek = filteredLogs.filter(log => new Date(log.restored_at) >= weekStart).length;
+    const thisMonth = filteredLogs.filter(log => new Date(log.restored_at) >= monthStart).length;
+
+    // Count by user
+    const userCounts = filteredLogs.reduce((acc, log) => {
+      const email = log.email || "Unknown";
+      acc[email] = (acc[email] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const mostActiveUser = Object.entries(userCounts).sort((a, b) => b[1] - a[1])[0];
+
+    // Prepare chart data (last 7 days)
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+      const date = subDays(now, 6 - i);
+      return {
+        date: format(date, "dd/MM"),
+        count: 0,
+      };
+    });
+
+    filteredLogs.forEach(log => {
+      const logDate = new Date(log.restored_at);
+      const daysDiff = Math.floor((now.getTime() - logDate.getTime()) / (1000 * 60 * 60 * 24));
+      if (daysDiff >= 0 && daysDiff < 7) {
+        last7Days[6 - daysDiff].count++;
+      }
+    });
+
+    // Prepare user distribution data (top 5 users)
+    const topUsers = Object.entries(userCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([email, count]) => ({
+        name: email.length > 20 ? email.substring(0, 17) + "..." : email,
+        count,
+      }));
+
+    return {
+      total: filteredLogs.length,
+      thisWeek,
+      thisMonth,
+      mostActiveUser: mostActiveUser ? mostActiveUser[0] : "N/A",
+      mostActiveCount: mostActiveUser ? mostActiveUser[1] : 0,
+      trendData: last7Days,
+      userDistribution: topUsers,
+    };
+  }, [filteredLogs]);
 
   // CSV Export
   function exportCSV() {
@@ -134,6 +201,91 @@ export default function RestoreLogsPage() {
     <div className="p-8 space-y-6">
       <h1 className="text-2xl font-bold">📜 Auditoria de Restaurações</h1>
 
+      {/* Metrics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total de Restaurações</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{metrics.total}</div>
+            <p className="text-xs text-muted-foreground">Todas as restaurações</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Esta Semana</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{metrics.thisWeek}</div>
+            <p className="text-xs text-muted-foreground">Últimos 7 dias</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Este Mês</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{metrics.thisMonth}</div>
+            <p className="text-xs text-muted-foreground">Mês atual</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Usuário Mais Ativo</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-sm font-bold truncate">{metrics.mostActiveUser}</div>
+            <p className="text-xs text-muted-foreground">{metrics.mostActiveCount} restaurações</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Tendência de Restaurações (Últimos 7 Dias)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={metrics.trendData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="count" stroke="#8884d8" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Top 5 Usuários</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={metrics.userDistribution}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="count" fill="#82ca9d" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filters */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Input
           placeholder="Filtrar por e-mail"
