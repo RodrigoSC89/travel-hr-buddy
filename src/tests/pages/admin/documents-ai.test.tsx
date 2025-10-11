@@ -118,4 +118,15 @@ describe("DocumentsAIPage Component", () => {
     expect(screen.queryByText(/Salvar no Supabase/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Exportar em PDF/i)).not.toBeInTheDocument();
   });
+
+  it("should not show summarize and rewrite buttons initially", () => {
+    render(
+      <MemoryRouter>
+        <DocumentsAIPage />
+      </MemoryRouter>
+    );
+    
+    expect(screen.queryByText(/Resumir com IA/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Reformular IA/i)).not.toBeInTheDocument();
+  });
 });
