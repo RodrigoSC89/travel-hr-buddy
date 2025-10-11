@@ -176,4 +176,47 @@ describe("RestoreLogsPage Component", () => {
       expect(links[0]).toHaveAttribute("href", expect.stringContaining("/admin/documents/view/"));
     });
   });
+
+  it("should display metrics cards", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText("Total de Restaurações")).toBeInTheDocument();
+      expect(screen.getByText("Esta Semana")).toBeInTheDocument();
+      expect(screen.getByText("Este Mês")).toBeInTheDocument();
+      expect(screen.getByText("Usuário Mais Ativo")).toBeInTheDocument();
+    });
+  });
+
+  it("should display charts", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText("Tendência de Restaurações (Últimos 7 Dias)")).toBeInTheDocument();
+      expect(screen.getByText("Top 5 Usuários")).toBeInTheDocument();
+    });
+  });
+
+  it("should calculate metrics correctly", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      // Should show total count of 2
+      const totalElement = screen.getByText("Total de Restaurações").closest("div")?.parentElement;
+      expect(totalElement).toBeInTheDocument();
+      expect(totalElement?.textContent).toContain("2");
+    });
+  });
 });
