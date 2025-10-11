@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { 
   Server,
   Database,
@@ -22,6 +29,9 @@ import {
 } from "lucide-react";
 
 const SystemStatusDashboard = () => {
+  const [showLogsDialog, setShowLogsDialog] = useState(false);
+  const [showHistoryDialog, setShowHistoryDialog] = useState(false);
+
   const systemMetrics = [
     {
       name: "Performance",
@@ -102,6 +112,47 @@ const SystemStatusDashboard = () => {
     status: "excellent",
     issues: 0,
     warnings: 2
+  };
+
+  // Sample log data
+  const systemLogs = [
+    { id: 1, timestamp: "2025-10-11 18:25:30", level: "INFO", service: "API Gateway", message: "Request processed successfully - 200 OK" },
+    { id: 2, timestamp: "2025-10-11 18:24:15", level: "INFO", service: "Database", message: "Connection pool health check passed" },
+    { id: 3, timestamp: "2025-10-11 18:23:45", level: "WARN", service: "Storage", message: "Storage usage above 80% - consider cleanup" },
+    { id: 4, timestamp: "2025-10-11 18:22:10", level: "INFO", service: "Auth Service", message: "User authentication successful" },
+    { id: 5, timestamp: "2025-10-11 18:20:55", level: "INFO", service: "Backup Service", message: "Automated backup completed successfully" },
+    { id: 6, timestamp: "2025-10-11 18:18:30", level: "WARN", service: "Monitor", message: "CPU usage spike detected - 85%" },
+    { id: 7, timestamp: "2025-10-11 18:15:20", level: "INFO", service: "Load Balancer", message: "Health check passed for all nodes" },
+    { id: 8, timestamp: "2025-10-11 18:12:45", level: "INFO", service: "Cache", message: "Cache hit ratio: 94.2%" },
+  ];
+
+  // Sample history data
+  const systemHistory = [
+    { id: 1, date: "2025-10-11", event: "System Update", status: "Completed", duration: "15 min", details: "Security patches applied successfully" },
+    { id: 2, date: "2025-10-10", event: "Backup", status: "Completed", duration: "8 min", details: "Daily backup completed - 2.3GB" },
+    { id: 3, date: "2025-10-09", event: "Maintenance", status: "Completed", duration: "30 min", details: "Database optimization performed" },
+    { id: 4, date: "2025-10-08", event: "Security Scan", status: "Completed", duration: "12 min", details: "No vulnerabilities detected" },
+    { id: 5, date: "2025-10-07", event: "System Update", status: "Completed", duration: "20 min", details: "Platform version upgraded to 2.1.0" },
+    { id: 6, date: "2025-10-06", event: "Backup", status: "Completed", duration: "9 min", details: "Daily backup completed - 2.1GB" },
+    { id: 7, date: "2025-10-05", event: "Health Check", status: "Completed", duration: "3 min", details: "All services operational" },
+  ];
+
+  const getLogLevelColor = (level: string) => {
+    const colors = {
+      INFO: "text-blue-600 bg-blue-50",
+      WARN: "text-orange-600 bg-orange-50",
+      ERROR: "text-red-600 bg-red-50"
+    };
+    return colors[level as keyof typeof colors] || colors.INFO;
+  };
+
+  const getStatusBadge = (status: string) => {
+    const colors = {
+      Completed: "bg-green-100 text-green-800",
+      Failed: "bg-red-100 text-red-800",
+      "In Progress": "bg-blue-100 text-blue-800"
+    };
+    return colors[status as keyof typeof colors] || colors.Completed;
   };
 
   return (
@@ -208,17 +259,101 @@ const SystemStatusDashboard = () => {
           </div>
           
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => setShowLogsDialog(true)}>
               <Eye className="w-4 h-4 mr-2" />
               Logs Detalhados
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => setShowHistoryDialog(true)}>
               <Activity className="w-4 h-4 mr-2" />
               Histórico
             </Button>
           </div>
         </div>
       </CardContent>
+
+      {/* Logs Dialog */}
+      <Dialog open={showLogsDialog} onOpenChange={setShowLogsDialog}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Eye className="w-5 h-5" />
+              Logs Detalhados do Sistema
+            </DialogTitle>
+            <DialogDescription>
+              Registro detalhado de eventos e atividades do sistema
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-2 mt-4">
+            {systemLogs.map((log) => (
+              <div 
+                key={log.id} 
+                className="p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Badge className={getLogLevelColor(log.level)}>
+                        {log.level}
+                      </Badge>
+                      <span className="text-sm font-medium text-muted-foreground">
+                        {log.service}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {log.timestamp}
+                      </span>
+                    </div>
+                    <p className="text-sm text-foreground">{log.message}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* History Dialog */}
+      <Dialog open={showHistoryDialog} onOpenChange={setShowHistoryDialog}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Activity className="w-5 h-5" />
+              Histórico do Sistema
+            </DialogTitle>
+            <DialogDescription>
+              Histórico de manutenções, atualizações e eventos importantes
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-2 mt-4">
+            {systemHistory.map((item) => (
+              <div 
+                key={item.id} 
+                className="p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm font-semibold text-foreground">
+                        {item.event}
+                      </span>
+                      <Badge className={getStatusBadge(item.status)}>
+                        {item.status}
+                      </Badge>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm text-muted-foreground">
+                        <span className="font-medium">Data:</span> {item.date} • <span className="font-medium">Duração:</span> {item.duration}
+                      </p>
+                      <p className="text-sm text-foreground">{item.details}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
