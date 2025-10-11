@@ -76,11 +76,15 @@ export default function DocumentViewPage() {
       });
       setNewContent(data.content);
 
-      // Load author email if admin
-      if (data.generated_by) {
-        const { data: userData } = await supabase.auth.admin.getUserById(data.generated_by);
-        if (userData?.user?.email) {
-          setAuthorEmail(userData.user.email);
+      // Load author email if admin (from profiles table)
+      if (data.generated_by && isAdmin) {
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("email")
+          .eq("id", data.generated_by)
+          .single();
+        if (profileData?.email) {
+          setAuthorEmail(profileData.email);
         }
       }
     }
