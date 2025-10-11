@@ -13,9 +13,24 @@ vi.mock("@/integrations/supabase/client", () => ({
             data: null,
             error: { message: "Not found" },
           }),
+          order: vi.fn().mockResolvedValue({
+            data: [],
+            error: null,
+          }),
         }),
       }),
     })),
+    auth: {
+      getUser: vi.fn().mockResolvedValue({
+        data: { user: { id: "test-user-id" } },
+        error: null,
+      }),
+    },
+    channel: vi.fn(() => ({
+      on: vi.fn().mockReturnThis(),
+      subscribe: vi.fn().mockReturnValue({ unsubscribe: vi.fn() }),
+    })),
+    removeChannel: vi.fn(),
   },
 }));
 
