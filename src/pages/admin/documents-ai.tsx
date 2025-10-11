@@ -1,16 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Loader2, FileText, Save, Download, Brain, RefreshCw } from "lucide-react";
+import { Sparkles, Loader2, FileText, Save, Download, Brain, RefreshCw, List } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 
 export default function DocumentsAIPage() {
+  const navigate = useNavigate();
   const [prompt, setPrompt] = useState("");
   const [generated, setGenerated] = useState("");
   const [loading, setLoading] = useState(false);
@@ -236,7 +238,13 @@ export default function DocumentsAIPage() {
 
   return (
     <div className="space-y-6 p-8">
-      <h1 className="text-2xl font-bold">📄 Documentos com IA</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">📄 Documentos com IA</h1>
+        <Button variant="outline" onClick={() => navigate("/admin/documents")}>
+          <List className="w-4 h-4 mr-2" />
+          Ver Todos os Documentos
+        </Button>
+      </div>
 
       <Card>
         <CardContent className="space-y-4 p-4">
