@@ -176,4 +176,31 @@ describe("RestoreLogsPage Component", () => {
       expect(links[0]).toHaveAttribute("href", expect.stringContaining("/admin/documents/view/"));
     });
   });
+
+  it("should render chart when logs are present", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText(/📊 Gráfico de Restaurações/i)).toBeInTheDocument();
+    });
+  });
+
+  it("should render chart export buttons", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      const pngButton = screen.getByText(/📷 PNG/i);
+      const pdfButton = screen.getAllByText(/🧾 PDF/i);
+      expect(pngButton).toBeInTheDocument();
+      expect(pdfButton.length).toBeGreaterThan(0); // At least one PDF button (chart + table export)
+    });
+  });
 });
