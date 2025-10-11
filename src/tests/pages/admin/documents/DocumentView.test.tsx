@@ -22,6 +22,19 @@ vi.mock("@/hooks/use-toast", () => ({
   toast: vi.fn(),
 }));
 
+// Mock useAuthProfile hook
+vi.mock("@/hooks/use-auth-profile", () => ({
+  useAuthProfile: vi.fn().mockReturnValue({
+    profile: {
+      id: "test-user",
+      email: "current-user@example.com",
+      role: "admin",
+      full_name: "Current User",
+    },
+    isLoading: false,
+  }),
+}));
+
 // Mock RoleBasedAccess to always allow access
 vi.mock("@/components/auth/role-based-access", () => ({
   RoleBasedAccess: ({ children }: { children: React.ReactNode }) => <>{children}</>,
@@ -120,5 +133,136 @@ describe("DocumentViewPage Component", () => {
     await waitFor(() => {
       expect(screen.getByText(/Autor: Test User/i)).toBeInTheDocument();
     });
+  });
+
+  it("should display author email to admin users", async () => {
+    // Mock useAuthProfile to return admin role
+    const { useAuthProfile } = await import("@/hooks/use-auth-profile");
+    vi.mocked(useAuthProfile).mockReturnValue({
+      profile: {
+        id: "test-admin",
+        email: "admin@example.com",
+        role: "admin",
+        full_name: "Admin User",
+        avatar_url: null,
+        department: null,
+        position: null,
+        phone: null,
+        preferences: {
+          theme: "system",
+          notifications: true,
+          language: "pt",
+        },
+      },
+      isLoading: false,
+      isUpdating: false,
+      updateProfile: vi.fn(),
+      uploadAvatar: vi.fn(),
+    });
+
+    // Mock successful document fetch with author info
+    vi.mocked(supabase.from).mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({
+            data: {
+              title: "Test Document",
+              content: "Test Content",
+              created_at: new Date().toISOString(),
+              generated_by: "user-123",
+              profiles: {
+                email: "author@example.com",
+                full_name: "Document Author",
+              },
+            },
+            error: null,
+          }),
+        }),
+      }),
+    } as any);
+
+    render(
+      <MemoryRouter initialEntries={["/admin/documents/view/123"]}>
+        <Routes>
+          <Route path="/admin/documents/view/:id" element={<DocumentViewPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
+    });
+
+    // Check that author email is displayed for admin
+    await waitFor(() => {
+      expect(screen.getByText(/author@example.com/i)).toBeInTheDocument();
+    });
+  });
+
+  it("should NOT display author email to non-admin users", async () => {
+    // Mock useAuthProfile to return non-admin role (hr_manager)
+    const { useAuthProfile } = await import("@/hooks/use-auth-profile");
+    vi.mocked(useAuthProfile).mockReturnValue({
+      profile: {
+        id: "test-hr-manager",
+        email: "hr@example.com",
+        role: "user", // Non-admin role
+        full_name: "HR Manager",
+        avatar_url: null,
+        department: null,
+        position: null,
+        phone: null,
+        preferences: {
+          theme: "system",
+          notifications: true,
+          language: "pt",
+        },
+      },
+      isLoading: false,
+      isUpdating: false,
+      updateProfile: vi.fn(),
+      uploadAvatar: vi.fn(),
+    });
+
+    // Mock successful document fetch with author info
+    vi.mocked(supabase.from).mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({
+            data: {
+              title: "Test Document",
+              content: "Test Content",
+              created_at: new Date().toISOString(),
+              generated_by: "user-123",
+              profiles: {
+                email: "author@example.com",
+                full_name: "Document Author",
+              },
+            },
+            error: null,
+          }),
+        }),
+      }),
+    } as any);
+
+    render(
+      <MemoryRouter initialEntries={["/admin/documents/view/123"]}>
+        <Routes>
+          <Route path="/admin/documents/view/:id" element={<DocumentViewPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
+    });
+
+    // Check that author name is displayed
+    await waitFor(() => {
+      expect(screen.getByText(/Autor: Document Author/i)).toBeInTheDocument();
+    });
+
+    // Check that author email is NOT displayed for non-admin
+    expect(screen.queryByText(/author@example.com/i)).not.toBeInTheDocument();
   });
 });
