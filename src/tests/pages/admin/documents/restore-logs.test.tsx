@@ -54,7 +54,29 @@ describe("RestoreLogsPage Component", () => {
       </MemoryRouter>
     );
     
-    expect(screen.getByPlaceholderText(/Filtrar por e-mail do restaurador/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Filtrar por e-mail/i)).toBeInTheDocument();
+  });
+
+  it("should render date filter inputs", () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    const dateInputs = screen.getAllByTitle(/Data/i);
+    expect(dateInputs.length).toBeGreaterThanOrEqual(2); // At least start and end date inputs
+  });
+
+  it("should render export buttons", () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    expect(screen.getByText(/📤 CSV/i)).toBeInTheDocument();
+    expect(screen.getByText(/🧾 PDF/i)).toBeInTheDocument();
   });
 
   it("should display restore logs after loading", async () => {
@@ -83,12 +105,26 @@ describe("RestoreLogsPage Component", () => {
       expect(screen.getByText("admin@example.com")).toBeInTheDocument();
     });
 
-    const filterInput = screen.getByPlaceholderText(/Filtrar por e-mail do restaurador/i);
+    const filterInput = screen.getByPlaceholderText(/Filtrar por e-mail/i);
     fireEvent.change(filterInput, { target: { value: "admin" } });
 
     await waitFor(() => {
       expect(screen.queryByText("user@example.com")).not.toBeInTheDocument();
       expect(screen.getByText("admin@example.com")).toBeInTheDocument();
+    });
+  });
+
+  it("should display pagination controls", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      expect(screen.getByText(/⬅️ Anterior/i)).toBeInTheDocument();
+      expect(screen.getByText(/Próxima ➡️/i)).toBeInTheDocument();
+      expect(screen.getByText(/Página/i)).toBeInTheDocument();
     });
   });
 
@@ -123,6 +159,21 @@ describe("RestoreLogsPage Component", () => {
       expect(screen.getAllByText("Versão Restaurada:").length).toBeGreaterThan(0);
       expect(screen.getAllByText("Restaurado por:").length).toBeGreaterThan(0);
       expect(screen.getAllByText("Data:").length).toBeGreaterThan(0);
+    });
+  });
+
+  it("should display clickable links to documents", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreLogsPage />
+      </MemoryRouter>
+    );
+    
+    await waitFor(() => {
+      const links = screen.getAllByRole("link");
+      expect(links.length).toBeGreaterThan(0);
+      // Check if links have correct href format
+      expect(links[0]).toHaveAttribute("href", expect.stringContaining("/admin/documents/view/"));
     });
   });
 });
