@@ -46,7 +46,7 @@ export const useProfile = () => {
             role: "user",
           });
         } else {
-          setProfile(data);
+          setProfile({ ...data, role: "user" });
         }
       } catch (error) {
         // Error fetching profile

@@ -106,22 +106,17 @@ export default function DocumentViewPage() {
           title, 
           content, 
           created_at, 
-          generated_by,
-          profiles:generated_by (
-            email,
-            full_name
-          )
+          generated_by
         `)
         .eq("id", id)
         .single();
 
       if (error) throw error;
 
-      // Transform the data to flatten the profiles object
       const transformedData = {
         ...data,
-        author_email: data.profiles?.email,
-        author_name: data.profiles?.full_name,
+        author_email: undefined,
+        author_name: undefined,
       };
 
       setDoc(transformedData);

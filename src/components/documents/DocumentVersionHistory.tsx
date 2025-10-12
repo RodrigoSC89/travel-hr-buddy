@@ -92,23 +92,7 @@ export function DocumentVersionHistory({ documentId, onRestore }: DocumentVersio
 
       if (updateError) throw updateError;
 
-      // Log the restoration
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (user) {
-        const { error: logError } = await supabase
-          .from("document_restore_logs")
-          .insert({
-            document_id: documentId,
-            version_id: selectedVersion.id,
-            restored_by: user.id,
-          });
-
-        if (logError) {
-          console.error("Error logging restoration:", logError);
-          // Don't fail the operation if logging fails
-        }
-      }
+      // Restoration logged via database trigger
 
       toast({
         title: "Versão restaurada com sucesso",

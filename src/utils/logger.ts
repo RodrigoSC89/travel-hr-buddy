@@ -11,6 +11,7 @@ export const logger = {
    */
   log: (...args: unknown[]) => {
     if (isDevelopment) {
+      // eslint-disable-next-line no-console
       console.log(...args);
     }
   },
@@ -20,6 +21,7 @@ export const logger = {
    */
   info: (...args: unknown[]) => {
     if (isDevelopment) {
+      // eslint-disable-next-line no-console
       console.info(...args);
     }
   },
@@ -28,6 +30,7 @@ export const logger = {
    * Log warnings (always shown)
    */
   warn: (...args: unknown[]) => {
+    // eslint-disable-next-line no-console
     console.warn(...args);
   },
 
@@ -35,6 +38,7 @@ export const logger = {
    * Log errors (always shown)
    */
   error: (...args: unknown[]) => {
+    // eslint-disable-next-line no-console
     console.error(...args);
   },
 
@@ -43,6 +47,7 @@ export const logger = {
    */
   debug: (...args: unknown[]) => {
     if (isDevelopment) {
+      // eslint-disable-next-line no-console
       console.debug(...args);
     }
   },
@@ -52,6 +57,7 @@ export const logger = {
    */
   table: (data: unknown) => {
     if (isDevelopment) {
+      // eslint-disable-next-line no-console
       console.table(data);
     }
   }

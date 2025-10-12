@@ -51,8 +51,6 @@ const AdminChecklistsDashboard = React.lazy(() => import("./pages/admin/checklis
 const DocumentsAI = React.lazy(() => import("./pages/admin/documents-ai"));
 const DocumentList = React.lazy(() => import("./pages/admin/documents/DocumentList"));
 const DocumentView = React.lazy(() => import("./pages/admin/documents/DocumentView"));
-const RestoreLogs = React.lazy(() => import("./pages/admin/documents/restore-logs"));
-const RestoreDashboard = React.lazy(() => import("./pages/admin/documents/restore-dashboard"));
 const ExecutionLogs = React.lazy(() => import("./pages/admin/automation/execution-logs"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
@@ -60,8 +58,6 @@ const Offline = React.lazy(() => import("./pages/Offline"));
 const Modules = React.lazy(() => import("./pages/Modules"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const SmartLayoutDemo = React.lazy(() => import("./pages/SmartLayoutDemo"));
-const RestoreChartEmbed = React.lazy(() => import("./pages/embed/RestoreChartEmbed"));
-const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -131,8 +127,6 @@ function App() {
                       <Route path="/admin/documents" element={<DocumentList />} />
                       <Route path="/admin/documents/ai" element={<DocumentsAI />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
-                      <Route path="/admin/documents/restore-logs" element={<RestoreLogs />} />
-                      <Route path="/admin/documents/restore-dashboard" element={<RestoreDashboard />} />
                       <Route path="/admin/automation/execution-logs" element={<ExecutionLogs />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
@@ -141,10 +135,6 @@ function App() {
                       <Route path="/_offline" element={<Offline />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
-                    {/* Embed routes outside SmartLayout for clean rendering */}
-                    <Route path="/embed/restore-chart" element={<RestoreChartEmbed />} />
-                    {/* TV Wall route outside SmartLayout for fullscreen display */}
-                    <Route path="/tv/logs" element={<TVWallLogs />} />
                   </Routes>
                 </React.Suspense>
               </Router>

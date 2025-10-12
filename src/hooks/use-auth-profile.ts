@@ -81,7 +81,7 @@ export const useAuthProfile = () => {
               department: newProfile.department,
               position: newProfile.position,
               phone: newProfile.phone,
-              role: (newProfile.role as "user" | "admin") || "user",
+              role: "user" as const,
               preferences: {
                 theme: "system",
                 notifications: true,
@@ -100,7 +100,7 @@ export const useAuthProfile = () => {
             department: data.department,
             position: data.position,
             phone: data.phone,
-            role: (data.role as "user" | "admin") || "user",
+            role: "user" as const,
             preferences: {
               theme: "system",
               notifications: true,
@@ -164,7 +164,7 @@ export const useAuthProfile = () => {
         department: data.department,
         position: data.position,
         phone: data.phone,
-        role: (data.role as "user" | "admin") || profile.role,
+        role: profile.role,
         preferences: profile.preferences
       };
       setProfile(mappedProfile);

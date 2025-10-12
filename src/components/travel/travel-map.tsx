@@ -19,15 +19,15 @@ export const TravelMap: React.FC<TravelMapProps> = ({ locations, className = "" 
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    // Get token from Supabase Edge Function
+    // Get token from environment
     const initializeMap = async () => {
       try {
-        const response = await fetch("https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/mapbox-token", {
-          headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE"
-          }
-        });
-        const { token } = await response.json();
+        const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+        
+        if (!token) {
+          console.warn('Mapbox token not configured');
+          return;
+        }
         
         mapboxgl.accessToken = token;
         
