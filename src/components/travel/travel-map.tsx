@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { logger } from "@/lib/logger";
 
 interface TravelMapProps {
   locations: Array<{
@@ -25,7 +26,7 @@ export const TravelMap: React.FC<TravelMapProps> = ({ locations, className = "" 
         const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
         
         if (!token) {
-          console.warn("Mapbox token not configured");
+          logger.warn("Mapbox token not configured");
           return;
         }
         
@@ -73,6 +74,7 @@ export const TravelMap: React.FC<TravelMapProps> = ({ locations, className = "" 
         }
 
       } catch (error) {
+        logger.logCaughtError("Failed to initialize map", error);
         // Fallback without map
       }
     };

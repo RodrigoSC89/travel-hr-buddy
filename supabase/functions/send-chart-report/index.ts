@@ -125,8 +125,14 @@ serve(async (req) => {
   } catch (error) {
     console.error("Error in send-chart-report:", error);
     
-    const errorMessage = error instanceof Error ? error.message : "An error occurred while sending the report";
-    const errorDetails = error instanceof Error ? error.toString() : String(error);
+    // Type guard for Error objects
+    const errorMessage = error instanceof Error 
+      ? error.message 
+      : "An error occurred while sending the report";
+    
+    const errorDetails = error instanceof Error 
+      ? error.toString() 
+      : String(error);
     
     return new Response(
       JSON.stringify({
