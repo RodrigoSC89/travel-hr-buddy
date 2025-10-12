@@ -18,6 +18,10 @@ const mockSupabaseFrom = vi.fn();
 const mockSupabaseSelect = vi.fn();
 const mockSupabaseOrder = vi.fn();
 
+// Create a promise that we can control
+let mockPromiseResolve: (value: { data: unknown[]; error: null }) => void;
+let mockPromise: Promise<{ data: unknown[]; error: null }>;
+
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     from: (...args: unknown[]) => {
@@ -28,7 +32,17 @@ vi.mock("@/integrations/supabase/client", () => ({
           return {
             order: (...orderArgs: unknown[]) => {
               mockSupabaseOrder(...orderArgs);
-              return Promise.resolve({ data: [], error: null });
+              // Create a new promise for each call that can be controlled
+              mockPromise = new Promise((resolve) => {
+                mockPromiseResolve = resolve;
+              });
+              // Also auto-resolve after a short delay to not hang tests
+              setTimeout(() => {
+                if (mockPromiseResolve) {
+                  mockPromiseResolve({ data: [], error: null });
+                }
+              }, 100);
+              return mockPromise;
             },
           };
         },
@@ -77,14 +91,15 @@ describe("AssistantLogsPage Component", () => {
     expect(mockNavigate).toHaveBeenCalledWith("/admin/assistant");
   });
 
-  it("should show loading state initially", async () => {
+  it("should show loading state initially", () => {
     render(
       <MemoryRouter>
         <AssistantLogsPage />
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/Carregando histórico/i)).toBeInTheDocument();
+    // The loading text includes ellipsis
+    expect(screen.getByText(/Carregando histórico\.\.\./i)).toBeInTheDocument();
   });
 
   it("should display export button", async () => {
