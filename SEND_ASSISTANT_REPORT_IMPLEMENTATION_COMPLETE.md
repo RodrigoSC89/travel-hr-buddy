@@ -21,7 +21,8 @@
 - ✅ **Error Handling**: Comprehensive error handling with proper status codes
 - ✅ **Input Validation**: Validates logs array and request structure
 - ✅ **CORS Support**: Handles preflight requests
-- ✅ **Logging**: Detailed console logs for debugging
+- ✅ **Console Logging**: Detailed console logs for debugging
+- ✅ **Database Logging**: Comprehensive tracking of all email report attempts in `assistant_report_logs` table
 
 ### 2. Configuration Updates
 **File**: `.env.example`
@@ -149,7 +150,62 @@ Net Change: +1,201 lines
 
 ## 🎨 Implementation Highlights
 
-### 1. Problem Statement Adaptation
+### 1. Comprehensive Database Logging
+
+**Feature**: All email report sending attempts are tracked in the `assistant_report_logs` database table.
+
+**Logging Points**:
+
+#### ✅ Success Logging
+When a report is successfully sent:
+```typescript
+await supabaseClient.from("assistant_report_logs").insert({
+  user_id: user.id,
+  user_email: recipientEmail,
+  status: "success",
+  message: "Relatório preparado com sucesso",
+  report_type: "email_report",
+  logs_count: logs.length
+});
+```
+
+#### ⚠️ Error Logging - Invalid Data
+When the logs array is empty or invalid:
+```typescript
+await supabaseClient.from("assistant_report_logs").insert({
+  user_id: user.id,
+  user_email: user.email || "unknown",
+  status: "error",
+  message: "Nenhum dado para enviar."
+});
+```
+
+#### ⚠️ Error Logging - Exceptions
+In the exception handler for unexpected failures:
+```typescript
+await supabaseClient.from("assistant_report_logs").insert({
+  user_email: user.email || "unknown",
+  status: "error",
+  message: errorMessage,
+  user_id: user.id,
+  report_type: "email_report"
+});
+```
+
+**Benefits**:
+- 📊 **Observability**: Track success/failure rates and identify patterns
+- 🔍 **Debugging**: Detailed error messages with timestamps and user context
+- 🔐 **Security & Compliance**: Complete audit trail with RLS data privacy
+- ⚡ **Performance**: Indexed for fast queries with minimal overhead
+- 🛡️ **Non-blocking**: Logging failures don't break the main email sending flow
+
+**Database Schema**:
+- Table: `assistant_report_logs`
+- Migration: `20251012190000_create_assistant_report_logs.sql`
+- RLS Policies: 6 policies for secure access control
+- Indexes: 4 indexes for performance (user_email, sent_at, status, user_id)
+
+### 2. Problem Statement Adaptation
 
 **Challenge**: The problem statement showed Next.js code, but the repository uses Vite + Supabase.
 
@@ -159,7 +215,7 @@ Net Change: +1,201 lines
 - jsPDF (Node.js) → CSV generation (Deno-compatible)
 - Buffer → btoa for base64 encoding
 
-### 2. Dual Email Provider Support
+### 3. Dual Email Provider Support
 
 **Why**: Flexibility and reliability
 
@@ -180,7 +236,7 @@ if (RESEND_API_KEY) {
 - Automatic fallback
 - No vendor lock-in
 
-### 3. CSV vs PDF
+### 4. CSV vs PDF
 
 **Decision**: Use CSV instead of PDF
 
@@ -192,7 +248,7 @@ if (RESEND_API_KEY) {
 - ✅ Easy to import into databases
 - ✅ Simpler to generate and maintain
 
-### 4. Security Implementation
+### 5. Security Implementation
 
 **Authentication Flow**:
 ```typescript
