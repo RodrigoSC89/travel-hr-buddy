@@ -50,32 +50,32 @@ describe("Assistant Query Enhancement", () => {
   describe("Enhanced Response Format", () => {
     it("should generate correct HTML link for checklist", () => {
       const baseResponse = "Você pode criar um checklist acessando a página de checklists.";
-      const expectedLink = '\n\n👉 <a href="/admin/checklists/new" class="text-blue-600 underline">Criar Checklist Agora</a>';
+      const expectedLink = "\n\n👉 <a href=\"/admin/checklists/new\" class=\"text-blue-600 underline\">Criar Checklist Agora</a>";
       const enhanced = baseResponse + expectedLink;
 
-      expect(enhanced).toContain('<a href="/admin/checklists/new"');
-      expect(enhanced).toContain('class="text-blue-600 underline"');
-      expect(enhanced).toContain('Criar Checklist Agora</a>');
+      expect(enhanced).toContain("<a href=\"/admin/checklists/new\"");
+      expect(enhanced).toContain("class=\"text-blue-600 underline\"");
+      expect(enhanced).toContain("Criar Checklist Agora</a>");
     });
 
     it("should generate correct HTML link for documents", () => {
       const baseResponse = "Aqui estão os documentos disponíveis.";
-      const expectedLink = '\n\n📄 <a href="/admin/documents" class="text-blue-600 underline">Ver Documentos</a>';
+      const expectedLink = "\n\n📄 <a href=\"/admin/documents\" class=\"text-blue-600 underline\">Ver Documentos</a>";
       const enhanced = baseResponse + expectedLink;
 
-      expect(enhanced).toContain('<a href="/admin/documents"');
-      expect(enhanced).toContain('class="text-blue-600 underline"');
-      expect(enhanced).toContain('Ver Documentos</a>');
+      expect(enhanced).toContain("<a href=\"/admin/documents\"");
+      expect(enhanced).toContain("class=\"text-blue-600 underline\"");
+      expect(enhanced).toContain("Ver Documentos</a>");
     });
 
     it("should generate correct HTML link for alerts", () => {
       const baseResponse = "Os alertas estão disponíveis no sistema.";
-      const expectedLink = '\n\n🚨 <a href="/admin/alerts" class="text-blue-600 underline">Ver Alertas</a>';
+      const expectedLink = "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
       const enhanced = baseResponse + expectedLink;
 
-      expect(enhanced).toContain('<a href="/admin/alerts"');
-      expect(enhanced).toContain('class="text-blue-600 underline"');
-      expect(enhanced).toContain('Ver Alertas</a>');
+      expect(enhanced).toContain("<a href=\"/admin/alerts\"");
+      expect(enhanced).toContain("class=\"text-blue-600 underline\"");
+      expect(enhanced).toContain("Ver Alertas</a>");
     });
   });
 

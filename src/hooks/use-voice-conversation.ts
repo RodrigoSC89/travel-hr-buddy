@@ -7,33 +7,29 @@ export class VoiceRecorder {
   private stream: MediaStream | null = null;
 
   async startRecording(): Promise<void> {
-    try {
-      this.stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          sampleRate: 44100,
-          channelCount: 1,
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true
-        } 
-      });
-      
-      this.mediaRecorder = new MediaRecorder(this.stream, {
-        mimeType: "audio/webm;codecs=opus"
-      });
-      
-      this.audioChunks = [];
-      
-      this.mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          this.audioChunks.push(event.data);
-        }
-      };
-      
-      this.mediaRecorder.start(1000); // Collect data every second
-    } catch (error) {
-      throw error;
-    }
+    this.stream = await navigator.mediaDevices.getUserMedia({ 
+      audio: {
+        sampleRate: 44100,
+        channelCount: 1,
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true
+      } 
+    });
+    
+    this.mediaRecorder = new MediaRecorder(this.stream, {
+      mimeType: "audio/webm;codecs=opus"
+    });
+    
+    this.audioChunks = [];
+    
+    this.mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        this.audioChunks.push(event.data);
+      }
+    };
+    
+    this.mediaRecorder.start(1000); // Collect data every second
   }
 
   async stopRecording(): Promise<string> {
@@ -88,16 +84,12 @@ export const useVoiceRecording = () => {
   const recorderRef = useRef<VoiceRecorder | null>(null);
 
   const startRecording = async () => {
-    try {
-      if (!recorderRef.current) {
-        recorderRef.current = new VoiceRecorder();
-      }
-      
-      await recorderRef.current.startRecording();
-      setIsRecording(true);
-    } catch (error) {
-      throw error;
+    if (!recorderRef.current) {
+      recorderRef.current = new VoiceRecorder();
     }
+    
+    await recorderRef.current.startRecording();
+    setIsRecording(true);
   };
 
   const stopRecording = async (): Promise<string | null> => {
@@ -123,8 +115,6 @@ export const useVoiceRecording = () => {
       }
 
       return data?.text || null;
-    } catch (error) {
-      throw error;
     } finally {
       setIsProcessing(false);
     }
@@ -223,8 +213,6 @@ export const useAIChat = () => {
       }
 
       return data?.reply || "Desculpe, não consegui processar sua solicitação.";
-    } catch (error) {
-      throw error;
     } finally {
       setIsThinking(false);
     }

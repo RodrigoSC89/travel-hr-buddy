@@ -187,7 +187,7 @@ const MobileAppPage = () => {
                   </li>
                   <li className="flex gap-3">
                     <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">3</span>
-                    <span>Selecione "Adicionar à Tela de Início"</span>
+                    <span>Selecione &quot;Adicionar à Tela de Início&quot;</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">4</span>
@@ -211,11 +211,11 @@ const MobileAppPage = () => {
                   </li>
                   <li className="flex gap-3">
                     <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">2</span>
-                    <span>Toque no banner "Instalar App"</span>
+                    <span>Toque no banner &quot;Instalar App&quot;</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">3</span>
-                    <span>Ou use menu &gt; "Instalar app"</span>
+                    <span>Ou use menu &gt; &quot;Instalar app&quot;</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-medium">4</span>

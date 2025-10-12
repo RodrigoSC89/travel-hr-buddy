@@ -366,7 +366,7 @@ describe("RestoreReportLogsPage Component", () => {
     );
 
     // Get date inputs by their type attribute
-    const dateInputs = container.querySelectorAll('input[type="date"]');
+    const dateInputs = container.querySelectorAll("input[type=\"date\"]");
     const startDateInput = dateInputs[0] as HTMLInputElement;
     const endDateInput = dateInputs[1] as HTMLInputElement;
 

@@ -155,7 +155,7 @@ const VoiceHistory: React.FC<VoiceHistoryProps> = ({ conversationId }) => {
         <div className="border-t pt-4">
           <div className="text-xs text-muted-foreground">
             <strong>Dica:</strong> Clique no ícone de cópia para copiar uma mensagem. 
-            Use "Exportar" para salvar toda a conversa.
+            Use &quot;Exportar&quot; para salvar toda a conversa.
           </div>
         </div>
       )}

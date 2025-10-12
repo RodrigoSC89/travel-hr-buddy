@@ -181,29 +181,25 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const updateBranding = async (brandingUpdate: Partial<OrganizationBranding>) => {
     if (!currentOrganization) return;
 
-    try {
-      const updateData: any = {
-        ...brandingUpdate,
-        business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules as any : undefined,
-        enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules as any : undefined,
-        custom_fields: brandingUpdate.custom_fields ? brandingUpdate.custom_fields as any : undefined,
-        module_settings: brandingUpdate.module_settings ? brandingUpdate.module_settings as any : undefined
-      };
+    const updateData: any = {
+      ...brandingUpdate,
+      business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules as any : undefined,
+      enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules as any : undefined,
+      custom_fields: brandingUpdate.custom_fields ? brandingUpdate.custom_fields as any : undefined,
+      module_settings: brandingUpdate.module_settings ? brandingUpdate.module_settings as any : undefined
+    };
 
-      const { data, error } = await supabase
-        .from("organization_branding")
-        .update(updateData)
-        .eq("organization_id", currentOrganization.id)
-        .select()
-        .single();
+    const { data, error } = await supabase
+      .from("organization_branding")
+      .update(updateData)
+      .eq("organization_id", currentOrganization.id)
+      .select()
+      .single();
 
-      if (error) throw error;
+    if (error) throw error;
 
-      setCurrentBranding(data as any);
-      applyBrandingTheme(data as any);
-    } catch (err) {
-      throw err;
-    }
+    setCurrentBranding(data as any);
+    applyBrandingTheme(data as any);
   };
 
   const checkPermission = (permission: string): boolean => {

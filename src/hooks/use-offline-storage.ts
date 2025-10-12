@@ -68,6 +68,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         timestamp: Date.now()
       });
     } catch (error) {
+      console.error("Failed to save to cache:", error);
     }
   }, [initDB]);
 
@@ -108,6 +109,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       await store.add(offlineData);
     } catch (error) {
+      console.error("Failed to save offline action:", error);
     }
   }, [initDB]);
 
@@ -152,10 +154,12 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
           // await syncToAPI(change.action, change.data);
           
         } catch (error) {
+          console.error("Failed to sync change:", error);
         }
       }
       
     } catch (error) {
+      console.error("Failed to sync pending changes:", error);
     }
   }, [isOnline, getPendingChanges, initDB]);
 
@@ -177,6 +181,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       setCacheSize(cacheCount + offlineCount);
     } catch (error) {
+      console.error("Failed to update cache size:", error);
     }
   }, [initDB]);
 
@@ -205,6 +210,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       updateCacheSize();
     } catch (error) {
+      console.error("Failed to clear cache:", error);
     }
   }, [initDB, updateCacheSize]);
 

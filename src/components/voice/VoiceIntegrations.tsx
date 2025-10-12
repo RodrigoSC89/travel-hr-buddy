@@ -166,7 +166,7 @@ const VoiceIntegrations: React.FC<VoiceIntegrationsProps> = ({
                   <div className="flex flex-wrap gap-1">
                     {integration.actions.map((action, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
-                        "{action}"
+                        &quot;{action}&quot;
                       </Badge>
                     ))}
                   </div>
@@ -202,10 +202,10 @@ const VoiceIntegrations: React.FC<VoiceIntegrationsProps> = ({
               Como usar integrações por voz:
             </h4>
             <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-              <p>• "Abrir recursos humanos" - Navega para o módulo de RH</p>
-              <p>• "Buscar voos para São Paulo" - Abre busca de viagens</p>
-              <p>• "Criar alerta de preço" - Configura monitoramento</p>
-              <p>• "Mostrar dashboard" - Retorna à página principal</p>
+              <p>• &quot;Abrir recursos humanos&quot; - Navega para o módulo de RH</p>
+              <p>• &quot;Buscar voos para São Paulo&quot; - Abre busca de viagens</p>
+              <p>• &quot;Criar alerta de preço&quot; - Configura monitoramento</p>
+              <p>• &quot;Mostrar dashboard&quot; - Retorna à página principal</p>
             </div>
           </div>
         </div>

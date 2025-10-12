@@ -23,6 +23,7 @@ const Expenses = () => {
       await createExpense(data);
       setShowForm(false);
     } catch (error) {
+      console.error("Failed to create expense:", error);
     } finally {
       setIsCreating(false);
     }

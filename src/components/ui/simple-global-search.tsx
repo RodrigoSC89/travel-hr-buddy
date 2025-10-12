@@ -166,7 +166,7 @@ export const SimpleGlobalSearch: React.FC = () => {
             <div className="text-center py-6">
               <Search className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
               <p className="text-sm text-muted-foreground">
-                Nenhum resultado encontrado para "{search}"
+                Nenhum resultado encontrado para &quot;{search}&quot;
               </p>
             </div>
           </CommandEmpty>

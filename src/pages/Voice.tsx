@@ -463,7 +463,7 @@ export default function Voice() {
               <div className="space-y-0.5">
                 <label className="text-sm font-medium">Palavra de Ativação</label>
                 <div className="text-sm text-muted-foreground">
-                  Ativar com "Olá Nautilus"
+                  Ativar com &quot;Olá Nautilus&quot;
                 </div>
               </div>
               <Switch 

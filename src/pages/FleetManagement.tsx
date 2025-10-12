@@ -96,6 +96,7 @@ const MaritimeFleetManagement = () => {
         });
       }
     } catch (error) {
+      console.error("Failed to fetch vessel data:", error);
     } finally {
       setIsLoading(false);
     }
