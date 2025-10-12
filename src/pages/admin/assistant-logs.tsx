@@ -14,8 +14,12 @@ import {
   Filter, 
   Bot, 
   User,
-  X
+  X,
+  FileText,
+  Mail
 } from "lucide-react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 
@@ -138,6 +142,108 @@ export default function AssistantLogsPage() {
     URL.revokeObjectURL(url);
   }
 
+  function exportToPDF() {
+    if (filteredLogs.length === 0) {
+      alert("Não há dados para exportar");
+      return;
+    }
+
+    const doc = new jsPDF();
+    
+    // Add title
+    doc.setFontSize(16);
+    doc.text("📜 Histórico de Interações com IA", 14, 16);
+    
+    // Add metadata
+    doc.setFontSize(10);
+    doc.text(`Total de interações: ${filteredLogs.length}`, 14, 24);
+    doc.text(`Data de geração: ${format(new Date(), "dd/MM/yyyy HH:mm:ss")}`, 14, 30);
+    
+    // Prepare table data
+    const tableData = filteredLogs.map((log) => [
+      format(new Date(log.created_at), "dd/MM/yyyy HH:mm"),
+      log.question,
+      log.answer.replace(/<[^>]*>/g, ""), // Remove HTML tags
+    ]);
+    
+    // Add table
+    autoTable(doc, {
+      startY: 36,
+      head: [["Data/Hora", "Pergunta", "Resposta"]],
+      body: tableData,
+      styles: { 
+        fontSize: 8, 
+        cellPadding: 3,
+        overflow: "linebreak",
+      },
+      columnStyles: {
+        0: { cellWidth: 35 },
+        1: { cellWidth: 70 },
+        2: { cellWidth: 75 },
+      },
+      headStyles: {
+        fillColor: [79, 70, 229], // Indigo color
+        textColor: 255,
+        fontStyle: "bold",
+      },
+    });
+    
+    // Save the PDF
+    doc.save(`assistant-logs-${format(new Date(), "yyyy-MM-dd-HHmmss")}.pdf`);
+  }
+
+  async function sendReportByEmail() {
+    if (filteredLogs.length === 0) {
+      alert("Não há dados para enviar");
+      return;
+    }
+
+    try {
+      // Get Supabase session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        alert("❌ Você precisa estar autenticado para enviar relatórios");
+        return;
+      }
+
+      // Show loading state
+      const confirmed = confirm(`Deseja enviar relatório com ${filteredLogs.length} interações por e-mail?`);
+      if (!confirmed) return;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-assistant-report`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ 
+            logs: filteredLogs.map(log => ({
+              id: log.id,
+              question: log.question,
+              answer: log.answer,
+              created_at: log.created_at,
+              user_email: "Usuário", // You may want to add user email to the log data
+            }))
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("✅ " + (result.message || "Relatório enviado por e-mail com sucesso!"));
+      } else {
+        alert("❌ Falha ao enviar relatório: " + (result.error || "Erro desconhecido"));
+      }
+    } catch (error) {
+      console.error("Error sending report:", error);
+      alert("❌ Erro ao enviar relatório por e-mail");
+    }
+  }
+
   // Pagination
   const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -168,10 +274,20 @@ export default function AssistantLogsPage() {
               </p>
             </div>
           </div>
-          <Button onClick={exportToCSV} disabled={filteredLogs.length === 0}>
-            <Download className="w-4 h-4 mr-2" />
-            Exportar CSV
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={exportToCSV} disabled={filteredLogs.length === 0} variant="outline">
+              <Download className="w-4 h-4 mr-2" />
+              CSV
+            </Button>
+            <Button onClick={exportToPDF} disabled={filteredLogs.length === 0} variant="outline">
+              <FileText className="w-4 h-4 mr-2" />
+              PDF
+            </Button>
+            <Button onClick={sendReportByEmail} disabled={filteredLogs.length === 0}>
+              <Mail className="w-4 h-4 mr-2" />
+              Enviar E-mail
+            </Button>
+          </div>
         </div>
 
         {/* Filters */}
