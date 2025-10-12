@@ -48,6 +48,7 @@ const AdminAnalytics = React.lazy(() => import("./pages/admin/analytics"));
 const AdminWall = React.lazy(() => import("./pages/admin/wall"));
 const AdminChecklists = React.lazy(() => import("./pages/admin/checklists"));
 const AdminChecklistsDashboard = React.lazy(() => import("./pages/admin/checklists-dashboard"));
+const ChecklistView = React.lazy(() => import("./pages/admin/checklist-view"));
 const DocumentsAI = React.lazy(() => import("./pages/admin/documents-ai"));
 const Assistant = React.lazy(() => import("./pages/admin/assistant"));
 const DocumentList = React.lazy(() => import("./pages/admin/documents/DocumentList"));
@@ -134,6 +135,7 @@ function App() {
                       <Route path="/admin/wall" element={<AdminWall />} />
                       <Route path="/admin/checklists" element={<AdminChecklists />} />
                       <Route path="/admin/checklists/dashboard" element={<AdminChecklistsDashboard />} />
+                      <Route path="/admin/checklists/view/:id" element={<ChecklistView />} />
                       <Route path="/admin/assistant" element={<Assistant />} />
                       <Route path="/admin/documents" element={<DocumentList />} />
                       <Route path="/admin/documents/ai" element={<DocumentsAI />} />

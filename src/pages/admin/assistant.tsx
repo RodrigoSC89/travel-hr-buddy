@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -13,10 +14,52 @@ interface Message {
   content: string;
 }
 
+// Function to render message content with markdown links
+function renderMessageContent(content: string, navigate: (path: string) => void) {
+  // Match markdown links: [text](url)
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = linkRegex.exec(content)) !== null) {
+    // Add text before the link
+    if (match.index > lastIndex) {
+      parts.push(
+        <span key={`text-${lastIndex}`}>{content.substring(lastIndex, match.index)}</span>
+      );
+    }
+
+    // Add the link
+    const linkText = match[1];
+    const linkUrl = match[2];
+    parts.push(
+      <Button
+        key={`link-${match.index}`}
+        variant="link"
+        className="p-0 h-auto font-normal underline text-blue-600 dark:text-blue-400"
+        onClick={() => navigate(linkUrl)}
+      >
+        {linkText}
+      </Button>
+    );
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add remaining text
+  if (lastIndex < content.length) {
+    parts.push(<span key={`text-${lastIndex}`}>{content.substring(lastIndex)}</span>);
+  }
+
+  return parts.length > 0 ? parts : content;
+}
+
 export default function AssistantPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   async function sendMessage() {
     if (!input.trim()) return;
@@ -82,7 +125,7 @@ export default function AssistantPage() {
                   <Bot className="w-12 h-12 mx-auto mb-2 opacity-50" />
                   <p>Olá! Como posso ajudar você hoje?</p>
                   <p className="text-xs mt-2">
-                    Experimente: "Criar checklist", "Resumir documento", "Mostrar alertas"
+                    Experimente: "Criar checklist para auditoria", "Resumir documento", "Mostrar alertas"
                   </p>
                 </div>
               )}
@@ -116,7 +159,11 @@ export default function AssistantPage() {
                           : "bg-gray-100 text-gray-900"
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                      <div className="text-sm whitespace-pre-wrap">
+                        {msg.role === "assistant"
+                          ? renderMessageContent(msg.content, navigate)
+                          : msg.content}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -144,7 +191,7 @@ export default function AssistantPage() {
           <div className="border-t p-4">
             <div className="flex gap-2">
               <Input
-                placeholder="Pergunte algo... (ex: 'criar checklist', 'resumir documento')"
+                placeholder="Pergunte algo... (ex: 'criar checklist para auditoria')"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && !loading && sendMessage()}

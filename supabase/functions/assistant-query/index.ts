@@ -7,19 +7,53 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Initialize Supabase client
+function getSupabaseClient(req: Request) {
+  return createClient(
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+    {
+      global: {
+        headers: { Authorization: req.headers.get("Authorization")! },
+      },
+    }
+  );
+}
+
 interface CommandAction {
-  type: "navigation" | "action" | "query" | "info";
+  type: "navigation" | "action" | "query" | "info" | "checklist_creation";
   target?: string;
   message: string;
+  createChecklist?: boolean;
+  checklistTitle?: string;
 }
 
 // Command mapping for the assistant
 const commandPatterns: Record<string, CommandAction> = {
-  // Navigation commands
+  // Checklist creation commands
+  "criar checklist para auditoria": {
+    type: "checklist_creation",
+    message: "✅ Criando checklist de auditoria...",
+    createChecklist: true,
+    checklistTitle: "Checklist de Auditoria",
+  },
   "criar checklist": {
+    type: "checklist_creation",
+    message: "✅ Criando checklist...",
+    createChecklist: true,
+    checklistTitle: "Novo Checklist",
+  },
+  "gerar checklist": {
+    type: "checklist_creation",
+    message: "✅ Gerando checklist...",
+    createChecklist: true,
+    checklistTitle: "Novo Checklist",
+  },
+  // Navigation commands
+  "ver checklist": {
     type: "navigation",
     target: "/admin/checklists",
-    message: "✅ Navegando para a página de criação de checklists...",
+    message: "✅ Navegando para a página de checklists...",
   },
   "checklist": {
     type: "navigation",
@@ -134,11 +168,72 @@ function findCommand(question: string): CommandAction | null {
   return null;
 }
 
+// Function to create a checklist
+async function createChecklist(
+  supabaseClient: any,
+  userId: string,
+  title: string
+): Promise<{ id: string; error?: string }> {
+  try {
+    const { data, error } = await supabaseClient
+      .from("operational_checklists")
+      .insert({
+        title,
+        type: "outro",
+        created_by: userId,
+        status: "rascunho",
+        source_type: "assistant",
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error creating checklist:", error);
+      return { id: "", error: error.message };
+    }
+
+    return { id: data.id };
+  } catch (err) {
+    console.error("Exception creating checklist:", err);
+    return { id: "", error: err instanceof Error ? err.message : "Unknown error" };
+  }
+}
+
+// Function to log assistant interaction
+async function logInteraction(
+  supabaseClient: any,
+  userId: string,
+  question: string,
+  answer: string,
+  actionType: string,
+  actionTarget: string | undefined,
+  executionTimeMs: number,
+  error?: string
+): Promise<void> {
+  try {
+    await supabaseClient.from("assistant_logs").insert({
+      user_id: userId,
+      question,
+      answer,
+      origin: "assistant",
+      action_type: actionType,
+      action_target: actionTarget,
+      execution_time_ms: executionTimeMs,
+      error,
+    });
+  } catch (err) {
+    console.error("Error logging interaction:", err);
+    // Don't throw, as we don't want logging failures to break the main flow
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const startTime = Date.now();
 
   try {
     const { question } = await req.json();
@@ -149,16 +244,64 @@ serve(async (req) => {
 
     console.log("Processing assistant query:", question);
 
+    // Initialize Supabase client
+    const supabaseClient = getSupabaseClient(req);
+    
+    // Get user ID
+    const {
+      data: { user },
+      error: userError,
+    } = await supabaseClient.auth.getUser();
+    
+    if (userError || !user) {
+      console.error("Error getting user:", userError);
+      throw new Error("User not authenticated");
+    }
+
+    const userId = user.id;
+
     // Try to match with predefined commands
     const commandAction = findCommand(question);
     
     if (commandAction) {
       console.log("Command matched:", commandAction);
+      let responseMessage = commandAction.message;
+      let actionTarget = commandAction.target;
+
+      // Handle checklist creation
+      if (commandAction.createChecklist && commandAction.checklistTitle) {
+        const { id, error } = await createChecklist(
+          supabaseClient,
+          userId,
+          commandAction.checklistTitle
+        );
+
+        if (error) {
+          responseMessage = `❌ Erro ao criar checklist: ${error}`;
+        } else {
+          actionTarget = `/admin/checklists/view/${id}`;
+          responseMessage = `✅ Checklist criado com sucesso!\n[📝 Abrir Checklist](${actionTarget})`;
+        }
+      }
+
+      const executionTime = Date.now() - startTime;
+
+      // Log the interaction
+      await logInteraction(
+        supabaseClient,
+        userId,
+        question,
+        responseMessage,
+        commandAction.type,
+        actionTarget,
+        executionTime
+      );
+
       return new Response(
         JSON.stringify({
-          answer: commandAction.message,
+          answer: responseMessage,
           action: commandAction.type,
-          target: commandAction.target,
+          target: actionTarget,
           timestamp: new Date().toISOString(),
         }),
         {
@@ -172,9 +315,31 @@ serve(async (req) => {
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
       // Fallback response if no OpenAI key
+      const fallbackAnswer = `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver tarefas pendentes\n• Status do sistema`;
+      
+      const executionTime = Date.now() - startTime;
+      
+      // Get supabase client for logging
+      const supabaseClient = getSupabaseClient(req);
+      const {
+        data: { user },
+      } = await supabaseClient.auth.getUser();
+      
+      if (user) {
+        await logInteraction(
+          supabaseClient,
+          user.id,
+          question,
+          fallbackAnswer,
+          "info",
+          undefined,
+          executionTime
+        );
+      }
+
       return new Response(
         JSON.stringify({
-          answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver tarefas pendentes\n• Status do sistema`,
+          answer: fallbackAnswer,
           action: "info",
           timestamp: new Date().toISOString(),
         }),
@@ -228,6 +393,26 @@ Seja conciso, útil e profissional. Use emojis apropriados. Responda em portugu�
     const data = await response.json();
     const answer = data.choices[0].message.content;
 
+    const executionTime = Date.now() - startTime;
+
+    // Get supabase client for logging
+    const supabaseClient = getSupabaseClient(req);
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser();
+    
+    if (user) {
+      await logInteraction(
+        supabaseClient,
+        user.id,
+        question,
+        answer,
+        "info",
+        undefined,
+        executionTime
+      );
+    }
+
     return new Response(
       JSON.stringify({
         answer,
@@ -243,10 +428,37 @@ Seja conciso, útil e profissional. Use emojis apropriados. Responda em portugu�
   } catch (error) {
     console.error("Error processing assistant query:", error);
     
+    const executionTime = Date.now() - startTime;
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const answerMessage = "❌ Desculpe, ocorreu um erro ao processar sua solicitação. Tente novamente.";
+    
+    // Try to log the error
+    try {
+      const supabaseClient = getSupabaseClient(req);
+      const {
+        data: { user },
+      } = await supabaseClient.auth.getUser();
+      
+      if (user) {
+        await logInteraction(
+          supabaseClient,
+          user.id,
+          "", // question might not be available if error occurred early
+          answerMessage,
+          "info",
+          undefined,
+          executionTime,
+          errorMessage
+        );
+      }
+    } catch (logError) {
+      console.error("Failed to log error:", logError);
+    }
+    
     return new Response(
       JSON.stringify({
-        error: error instanceof Error ? error.message : "Unknown error",
-        answer: "❌ Desculpe, ocorreu um erro ao processar sua solicitação. Tente novamente.",
+        error: errorMessage,
+        answer: answerMessage,
         timestamp: new Date().toISOString(),
       }),
       {
