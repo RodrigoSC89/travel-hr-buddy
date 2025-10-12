@@ -9,8 +9,18 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+interface EmailLog {
+  id: string;
+  sent_at: string;
+  status: string;
+  message: string;
+  recipient_email?: string;
+  error_details?: string;
+  report_type?: string;
+}
+
 export default function EmailReportLogsPage() {
-  const [logs, setLogs] = useState<any[]>([]);
+  const [logs, setLogs] = useState<EmailLog[]>([]);
   const [statusFilter, setStatusFilter] = useState("");
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
@@ -61,8 +71,8 @@ export default function EmailReportLogsPage() {
                   log.status === "success"
                     ? "success"
                     : log.status === "error"
-                    ? "destructive"
-                    : "outline"
+                      ? "destructive"
+                      : "outline"
                 }
               >
                 {log.status.toUpperCase()}
