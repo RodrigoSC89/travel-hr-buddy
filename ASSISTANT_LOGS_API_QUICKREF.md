@@ -4,9 +4,9 @@
 
 A secure API endpoint to retrieve AI Assistant conversation logs with role-based access control.
 
-## 🎯 API Endpoint
+## 🎯 API Endpoints
 
-### Supabase Edge Function (Primary)
+### 1. Supabase Edge Function (Primary - Active)
 ```
 GET /functions/v1/assistant-logs
 ```
@@ -17,6 +17,18 @@ Authorization: Bearer <user-session-token>
 Content-Type: application/json
 ```
 
+### 2. Next.js App Router (NEW - Reference Implementation)
+```
+GET /api/assistant/logs
+```
+
+**Query Parameters:**
+- `start` (optional): Start date (YYYY-MM-DD)
+- `end` (optional): End date (YYYY-MM-DD)
+- `email` (optional, admin only): Filter by user email
+
+**Authentication:** Via cookies (automatic with @supabase/ssr)
+
 **Response:**
 ```json
 [
@@ -26,7 +38,10 @@ Content-Type: application/json
     "answer": "📋 Você tem 3 tarefas pendentes.",
     "created_at": "2025-10-12T05:30:00Z",
     "user_id": "uuid",
-    "user_email": "user@example.com"
+    "user_email": "user@example.com",
+    "profiles": {
+      "email": "user@example.com"
+    }
   }
 ]
 ```
@@ -36,17 +51,47 @@ Content-Type: application/json
 | File | Purpose |
 |------|---------|
 | `supabase/migrations/20251012055318_create_assistant_logs.sql` | Database table and RLS policies |
-| `supabase/functions/assistant-logs/index.ts` | Primary API implementation |
-| `pages/api/assistant/logs/index.ts` | Reference implementation (Next.js style) |
+| `supabase/functions/assistant-logs/index.ts` | Primary API implementation (Edge Function) |
+| `pages/api/assistant/logs/index.ts` | Reference implementation (Next.js Pages Router) |
+| `app/api/assistant/logs/route.ts` | **NEW**: Next.js App Router implementation |
+| `app/api/assistant/logs/README.md` | **NEW**: Complete App Router documentation |
+| `src/tests/assistant-logs-route.test.ts` | **NEW**: Test suite for App Router implementation |
 | `.gitignore` | Updated to allow logs directories in code |
 | `ASSISTANT_LOGS_API_IMPLEMENTATION.md` | Full documentation |
+| `ASSISTANT_LOGS_ROUTE_VISUAL_SUMMARY.md` | **NEW**: Visual guide for App Router implementation |
 
 ## 🔐 Security
 
-✅ **Authentication**: Required via Authorization header  
+✅ **Authentication**: Required via Authorization header (Edge Function) or cookies (Next.js)
 ✅ **RLS Policies**: Users see only their logs, admins see all  
 ✅ **Role-Based Access**: Uses `profiles.role = 'admin'`  
-✅ **Data Privacy**: Email addresses filtered by role  
+✅ **Data Privacy**: Email addresses filtered by role
+
+## 🆕 New Features in App Router Implementation
+
+### Advanced Filtering
+- **Date Range**: Filter logs by start and end dates
+- **Email Search**: Admins can filter by user email (partial matching)
+- **Combined Filters**: Use multiple filters together
+
+### Examples
+```typescript
+// Filter by date range
+fetch('/api/assistant/logs?start=2025-10-01&end=2025-10-12')
+
+// Filter by email (admin only)
+fetch('/api/assistant/logs?email=john@example.com')
+
+// Combined filters
+fetch('/api/assistant/logs?start=2025-10-01&email=admin')
+```
+
+### Modern Stack
+- ✅ Next.js 13+ App Router
+- ✅ @supabase/ssr (modern auth)
+- ✅ Server Components compatible
+- ✅ TypeScript with full type safety
+- ✅ Comprehensive test suite (6 tests)  
 
 ## 🧪 Testing
 
