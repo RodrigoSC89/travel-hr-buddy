@@ -1,5 +1,15 @@
 # Next.js API Route for Document Generation
 
+⚠️ **IMPORTANT: REFERENCE IMPLEMENTATION ONLY**
+
+**This directory contains Next.js API routes that are NOT used in this Vite/React project.**
+These files are kept as reference implementations for potential future migration to Next.js.
+
+**Current Project Stack:**
+- Build Tool: Vite (not Next.js)
+- Backend: Supabase Edge Functions (Deno runtime)
+- All active API endpoints are in: `supabase/functions/`
+
 This directory contains a Next.js-compatible API route implementation for document generation using OpenAI's GPT-4 model.
 
 ## Purpose
