@@ -114,8 +114,8 @@ export default function AssistantLogsPage() {
     const rows = filteredLogs.map((log) => {
       const date = format(new Date(log.created_at), "dd/MM/yyyy HH:mm:ss");
       // Escape quotes and wrap in quotes for CSV
-      const question = `"${log.question.replace(/"/g, '""')}"`;
-      const answer = `"${log.answer.replace(/"/g, '""').replace(/<[^>]*>/g, '')}"`;
+      const question = `"${log.question.replace(/"/g, "\"\"")}"`;
+      const answer = `"${log.answer.replace(/"/g, "\"\"").replace(/<[^>]*>/g, "")}"`;
       const origin = `"${log.origin}"`;
       return [date, question, answer, origin].join(",");
     });
@@ -284,7 +284,7 @@ export default function AssistantLogsPage() {
                             <div 
                               className="text-sm text-gray-700"
                               dangerouslySetInnerHTML={{ 
-                                __html: log.answer.replace(/<a /g, '<a target="_blank" rel="noopener noreferrer" ') 
+                                __html: log.answer.replace(/<a /g, "<a target=\"_blank\" rel=\"noopener noreferrer\" ") 
                               }}
                             />
                           </div>
