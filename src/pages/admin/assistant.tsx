@@ -24,16 +24,29 @@ export default function AssistantPage() {
     const userMessage: Message = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
+    const question = input;
     setInput("");
 
     try {
+      // Try Supabase function first
       const { data, error } = await supabase.functions.invoke("assistant-query", {
-        body: { question: input },
+        body: { question },
       });
 
-      if (error) throw error;
-
-      setMessages((prev) => [...prev, { role: "assistant", content: data?.answer || "" }]);
+      if (error) {
+        console.warn("Supabase function error, falling back to API route:", error);
+        // Fall back to Next.js API route
+        const res = await fetch("/api/assistant-query", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question }),
+        });
+        const apiData = await res.json();
+        if (!res.ok) throw new Error(apiData.error);
+        setMessages((prev) => [...prev, { role: "assistant", content: apiData.answer || "" }]);
+      } else {
+        setMessages((prev) => [...prev, { role: "assistant", content: data?.answer || "" }]);
+      }
     } catch (error) {
       console.error("Error sending message:", error);
       setMessages((prev) => [
