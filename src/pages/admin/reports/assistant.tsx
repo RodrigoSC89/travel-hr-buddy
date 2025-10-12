@@ -1,16 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowLeft, Download, FileText } from "lucide-react";
+import { ArrowLeft, Download, FileText, BarChart3 } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "@/hooks/use-toast";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ChartOptions,
+} from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface AssistantReportLog {
   id: string;
@@ -20,6 +41,7 @@ interface AssistantReportLog {
   sent_at: string;
   user_id: string | null;
   report_type: string | null;
+  logs_count?: number | null;
 }
 
 export default function AssistantReportLogsPage() {
@@ -33,6 +55,63 @@ export default function AssistantReportLogsPage() {
   useEffect(() => {
     fetchLogs();
   }, []);
+
+  // Prepare chart data from logs
+  const chartData = useMemo(() => {
+    if (logs.length === 0) return null;
+
+    // Group logs by date
+    const dateGroups = logs.reduce((acc, log) => {
+      const date = new Date(log.sent_at).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+      });
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Sort dates and prepare chart data
+    const sortedDates = Object.keys(dateGroups).sort((a, b) => {
+      const [dayA, monthA] = a.split('/');
+      const [dayB, monthB] = b.split('/');
+      return new Date(`2024-${monthA}-${dayA}`).getTime() - new Date(`2024-${monthB}-${dayB}`).getTime();
+    });
+
+    return {
+      labels: sortedDates,
+      datasets: [
+        {
+          label: 'Relatórios Enviados',
+          data: sortedDates.map((date) => dateGroups[date]),
+          backgroundColor: 'rgba(99, 102, 241, 0.5)',
+          borderColor: 'rgb(99, 102, 241)',
+          borderWidth: 1,
+        },
+      ],
+    };
+  }, [logs]);
+
+  const chartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Volume de Relatórios Enviados por Dia',
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+        },
+      },
+    },
+  };
 
   async function fetchLogs() {
     setLoading(true);
@@ -96,12 +175,13 @@ export default function AssistantReportLogsPage() {
     doc.text("📬 Logs de Envio de Relatórios do Assistente IA", 14, 16);
     autoTable(doc, {
       startY: 24,
-      head: [["Data", "Usuário", "Status", "Mensagem"]],
+      head: [["Data", "Usuário", "Status", "Mensagem", "Interações"]],
       body: logs.map((log) => [
         new Date(log.sent_at).toLocaleString(),
         log.user_email,
         log.status,
-        log.message || "-"
+        log.message || "-",
+        log.logs_count?.toString() || "-"
       ]),
       styles: { fontSize: 8 },
     });
@@ -123,17 +203,21 @@ export default function AssistantReportLogsPage() {
       return;
     }
 
+    // Include logs_count in export
     const csv = [
-      ["Data", "Usuário", "Status", "Mensagem"],
+      ["Data", "Usuário", "Status", "Mensagem", "Interações"],
       ...logs.map((log) => [
         new Date(log.sent_at).toLocaleString(),
         log.user_email,
         log.status,
-        log.message || "-"
+        log.message || "-",
+        log.logs_count?.toString() || "-"
       ])
     ].map((row) => row.map((cell) => `"${cell}"`).join(",")).join("\n");
 
-    const blob = new Blob([csv], { type: "text/csv" });
+    // Add UTF-8 BOM for Excel compatibility
+    const BOM = "\uFEFF";
+    const blob = new Blob([BOM + csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -195,6 +279,23 @@ export default function AssistantReportLogsPage() {
         </Button>
       </div>
 
+      {/* Chart Section */}
+      {chartData && logs.length > 0 && (
+        <Card className="mb-4">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="w-5 h-5" />
+              Análise de Volume
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div style={{ height: '300px' }}>
+              <Bar data={chartData} options={chartOptions} />
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <ScrollArea className="max-h-[70vh] border rounded-md p-4 bg-white">
         {loading ? (
           <div className="flex items-center justify-center p-8">
@@ -227,6 +328,11 @@ export default function AssistantReportLogsPage() {
                   </span>
                 </p>
                 <p><strong>💬 Mensagem:</strong> {log.message || "-"}</p>
+                {log.logs_count && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    📊 Interações: {log.logs_count}
+                  </p>
+                )}
                 {log.report_type && (
                   <p className="text-xs text-muted-foreground mt-1">
                     Tipo: {log.report_type}

@@ -262,6 +262,36 @@ serve(async (req) => {
 
     console.log("✅ Email sent successfully!");
 
+    // Log the report send to database
+    try {
+      // Create a service role client for logging (bypass RLS)
+      const supabaseServiceClient = createClient(
+        Deno.env.get("SUPABASE_URL") ?? "",
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      );
+
+      const { error: logError } = await supabaseServiceClient
+        .from("assistant_report_logs")
+        .insert({
+          user_email: recipientEmail,
+          status: "success",
+          message: "Relatório preparado com sucesso",
+          user_id: user.id,
+          report_type: "email_report",
+          logs_count: logs.length,
+        });
+
+      if (logError) {
+        console.error("Error logging report send:", logError);
+        // Don't fail the request if logging fails
+      } else {
+        console.log("✅ Report send logged to database");
+      }
+    } catch (logErr) {
+      console.error("Error logging report send:", logErr);
+      // Don't fail the request if logging fails
+    }
+
     return new Response(
       JSON.stringify({ 
         status: "ok",
@@ -279,6 +309,44 @@ serve(async (req) => {
     console.error("❌ Error in send-assistant-report:", error);
     
     const errorMessage = error instanceof Error ? error.message : "An error occurred while sending the report";
+    
+    // Log the error to database
+    try {
+      // Get auth header for user identification
+      const authHeader = req.headers.get("Authorization");
+      if (authHeader) {
+        const supabaseClient = createClient(
+          Deno.env.get("SUPABASE_URL") ?? "",
+          Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+          {
+            global: {
+              headers: { Authorization: authHeader },
+            },
+          }
+        );
+        
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        
+        if (user) {
+          const supabaseServiceClient = createClient(
+            Deno.env.get("SUPABASE_URL") ?? "",
+            Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+          );
+          
+          await supabaseServiceClient
+            .from("assistant_report_logs")
+            .insert({
+              user_email: user.email || "unknown",
+              status: "error",
+              message: errorMessage,
+              user_id: user.id,
+              report_type: "email_report",
+            });
+        }
+      }
+    } catch (logErr) {
+      console.error("Error logging error:", logErr);
+    }
     
     return new Response(
       JSON.stringify({
