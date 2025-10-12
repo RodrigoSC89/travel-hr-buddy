@@ -1,51 +1,20 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import {
+  corsHeaders,
+  callOpenAIWithRetry,
+  logAIInteraction,
+  extractTokenUsage,
+  validateOpenAIResponse,
+} from "../_shared/ai-utils.ts";
+import { createSupabaseClient, getAuthenticatedUser } from "../_shared/supabase-client.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-// Retry configuration
-const MAX_RETRIES = 3;
-const INITIAL_RETRY_DELAY = 1000; // 1 second
-const MAX_RETRY_DELAY = 10000; // 10 seconds
-const REQUEST_TIMEOUT = 30000; // 30 seconds
-
-// Exponential backoff with jitter
-const getRetryDelay = (attempt: number): number => {
-  const exponentialDelay = Math.min(INITIAL_RETRY_DELAY * Math.pow(2, attempt), MAX_RETRY_DELAY);
-  const jitter = Math.random() * 0.3 * exponentialDelay; // 0-30% jitter
-  return exponentialDelay + jitter;
-};
-
-// Check if error is retryable
-const isRetryableError = (status?: number, error?: Error): boolean => {
-  if (!status && error) {
-    // Network errors are retryable
-    return error.message.includes("fetch") || error.message.includes("network");
-  }
-  // Retry on 429 (rate limit), 500s (server errors), and 503 (service unavailable)
-  return status === 429 || (status !== undefined && status >= 500 && status < 600);
-};
-
-// Timeout wrapper for fetch
-const fetchWithTimeout = async (url: string, options: RequestInit, timeoutMs: number): Promise<Response> => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  
-  try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-    return response;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    throw error;
-  }
-};
+interface AIChatRequest {
+  message: string;
+  context?: string;
+  module?: string;
+  conversation_history?: Array<{ role: string; content: string }>;
+}
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -53,10 +22,31 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const startTime = Date.now();
+  let supabaseClient: any = null;
+  let userId: string | undefined = undefined;
+  let requestData: AIChatRequest | null = null;
+
   try {
-    const { message, context } = await req.json();
-    
+    // Initialize Supabase client
+    supabaseClient = createSupabaseClient(req);
+    const user = await getAuthenticatedUser(supabaseClient);
+    userId = user?.id;
+
+    requestData = await req.json();
+    const { message, context, module, conversation_history } = requestData;
+
     if (!message) {
+      await logAIInteraction(supabaseClient, {
+        user_id: userId,
+        interaction_type: "chat",
+        prompt: "",
+        success: false,
+        error_message: "Message is required",
+        duration_ms: Date.now() - startTime,
+        metadata: { context, module },
+      });
+
       throw new Error("Message is required");
     }
 
@@ -87,97 +77,90 @@ serve(async (req) => {
 
     ${context ? `Contexto adicional: ${context}` : ""}`;
 
+    // Build messages array with conversation history
+    const messages = [{ role: "system", content: systemPrompt }];
+
+    // Add conversation history if provided (last 5 messages)
+    if (conversation_history && conversation_history.length > 0) {
+      messages.push(...conversation_history.slice(-5));
+    }
+
+    // Add current message
+    messages.push({ role: "user", content: message });
+
     const requestBody = {
       model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: message }
-      ],
+      messages,
       temperature: 0.7,
       max_tokens: 1000,
     };
 
-    // Retry logic with exponential backoff
-    let lastError: Error | null = null;
-    let response: Response | null = null;
+    // Call OpenAI with retry logic
+    const { response: data, duration } = await callOpenAIWithRetry(OPENAI_API_KEY, requestBody);
 
-    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-      try {
-        console.log(`API request attempt ${attempt + 1}/${MAX_RETRIES + 1}`);
-        
-        response = await fetchWithTimeout("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${OPENAI_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        }, REQUEST_TIMEOUT);
-
-        if (response.ok) {
-          break; // Success, exit retry loop
-        }
-
-        // Check if we should retry
-        if (!isRetryableError(response.status)) {
-          const errorText = await response.text();
-          console.error("OpenAI API non-retryable error:", errorText);
-          throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
-        }
-
-        lastError = new Error(`HTTP ${response.status}`);
-        
-        // Wait before retrying (except on last attempt)
-        if (attempt < MAX_RETRIES) {
-          const delay = getRetryDelay(attempt);
-          console.log(`Retrying after ${delay}ms...`);
-          await new Promise(resolve => setTimeout(resolve, delay));
-        }
-      } catch (error) {
-        lastError = error as Error;
-        console.error(`Attempt ${attempt + 1} failed:`, error);
-        
-        // Don't retry on timeout or network errors on last attempt
-        if (attempt === MAX_RETRIES) {
-          throw new Error(`OpenAI API failed after ${MAX_RETRIES + 1} attempts: ${lastError.message}`);
-        }
-        
-        // Wait before retrying
-        const delay = getRetryDelay(attempt);
-        console.log(`Retrying after ${delay}ms...`);
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-    }
-
-    if (!response || !response.ok) {
-      throw new Error(`OpenAI API failed: ${lastError?.message || "Unknown error"}`);
-    }
-
-    const data = await response.json();
-    
-    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    // Validate response format
+    if (!validateOpenAIResponse(data)) {
       throw new Error("Invalid response format from OpenAI API");
     }
-    
-    const reply = data.choices[0].message.content;
+
+    const reply = (data as any).choices[0].message.content;
 
     console.log("Generated response:", reply.substring(0, 100) + "...");
 
-    return new Response(JSON.stringify({ 
-      reply,
-      timestamp: new Date().toISOString()
-    }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    // Log successful interaction
+    await logAIInteraction(supabaseClient, {
+      user_id: userId,
+      interaction_type: "chat",
+      prompt: message,
+      response: reply,
+      model_used: "gpt-4o-mini",
+      tokens_used: extractTokenUsage(data),
+      duration_ms: duration,
+      success: true,
+      metadata: {
+        context,
+        module,
+        conversation_length: conversation_history?.length || 0,
+      },
     });
 
+    return new Response(
+      JSON.stringify({
+        reply,
+        timestamp: new Date().toISOString(),
+      }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }
+    );
   } catch (error) {
     console.error("Error in ai-chat function:", error);
-    return new Response(JSON.stringify({ 
-      error: error instanceof Error ? error.message : "Unknown error occurred",
-      timestamp: new Date().toISOString()
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+
+    // Log failed interaction
+    if (supabaseClient && requestData) {
+      await logAIInteraction(supabaseClient, {
+        user_id: userId,
+        interaction_type: "chat",
+        prompt: requestData?.message || "",
+        success: false,
+        error_message: error instanceof Error ? error.message : "Unknown error",
+        duration_ms: Date.now() - startTime,
+        metadata: {
+          context: requestData?.context,
+          module: requestData?.module,
+        },
+      });
+    }
+
+    return new Response(
+      JSON.stringify({
+        error: error instanceof Error ? error.message : "Unknown error occurred",
+        timestamp: new Date().toISOString(),
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }
+    );
   }
 });

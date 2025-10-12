@@ -154,6 +154,59 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_interactions: {
+        Row: {
+          id: string
+          user_id: string | null
+          interaction_type: string
+          prompt: string
+          response: string | null
+          model_used: string | null
+          tokens_used: number | null
+          duration_ms: number | null
+          success: boolean
+          error_message: string | null
+          metadata: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          interaction_type: string
+          prompt: string
+          response?: string | null
+          model_used?: string | null
+          tokens_used?: number | null
+          duration_ms?: number | null
+          success?: boolean
+          error_message?: string | null
+          metadata?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          interaction_type?: string
+          prompt?: string
+          response?: string | null
+          model_used?: string | null
+          tokens_used?: number | null
+          duration_ms?: number | null
+          success?: boolean
+          error_message?: string | null
+          metadata?: Json | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_interactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_comments: {
         Row: {
           content: string
