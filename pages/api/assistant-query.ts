@@ -1,7 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "./next-types";
 import { OpenAI } from "openai";
+import { createClient } from "@supabase/supabase-js";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// Initialize Supabase client for logging
+const supabaseUrl = process.env.VITE_SUPABASE_URL || "";
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const supabase = supabaseUrl && supabaseServiceKey 
+  ? createClient(supabaseUrl, supabaseServiceKey)
+  : null;
 
 interface CommandAction {
   type: "navigation" | "action" | "query" | "info";
@@ -74,12 +82,66 @@ function findCommand(question: string): CommandAction | null {
   return null;
 }
 
+// Helper function to extract user ID from JWT token
+function getUserIdFromToken(authHeader: string | undefined): string | null {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) return null;
+  
+  try {
+    const token = authHeader.substring(7);
+    // Decode JWT token (basic decode, not verifying signature)
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    const payload = JSON.parse(jsonPayload);
+    return payload.sub || null;
+  } catch (error) {
+    console.error("Error decoding JWT:", error);
+    return null;
+  }
+}
+
+// Helper function to log interaction to database
+async function logInteraction(
+  userId: string | null,
+  question: string,
+  answer: string,
+  origin: string = "assistant"
+): Promise<void> {
+  if (!supabase || !userId) {
+    console.log("Skipping log: Supabase not configured or no user ID");
+    return;
+  }
+
+  try {
+    const { error } = await supabase.from("assistant_logs").insert({
+      user_id: userId,
+      question,
+      answer,
+      origin,
+    });
+
+    if (error) {
+      console.error("Error logging assistant interaction:", error);
+    }
+  } catch (err) {
+    console.error("Exception while logging interaction:", err);
+  }
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") return res.status(405).end();
 
   const { question } = req.body;
   if (!question || typeof question !== "string")
     return res.status(400).json({ error: "Pergunta inválida" });
+
+  // Extract user ID from authorization header
+  const userId = getUserIdFromToken(req.headers.authorization);
 
   try {
     // Note: This Next.js API route is a fallback. The main implementation uses Supabase Edge Functions
@@ -90,6 +152,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const commandAction = findCommand(question);
     
     if (commandAction) {
+      // Log the interaction
+      await logInteraction(userId, question, commandAction.message);
+      
       return res.status(200).json({
         answer: commandAction.message,
         action: commandAction.type,
@@ -141,12 +206,20 @@ Seja claro, direto e útil.
         enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
       }
 
+      // Log the interaction
+      await logInteraction(userId, question, enhanced);
+
       return res.status(200).json({ answer: enhanced, action: "info" });
     }
 
     // Fallback if no OpenAI key
+    const fallbackMessage = `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem (requer Supabase)\n• Listar documentos recentes (requer Supabase)`;
+    
+    // Log the interaction
+    await logInteraction(userId, question, fallbackMessage);
+    
     return res.status(200).json({
-      answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem (requer Supabase)\n• Listar documentos recentes (requer Supabase)`,
+      answer: fallbackMessage,
       action: "info",
     });
 
