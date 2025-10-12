@@ -42,6 +42,29 @@ async function logExecution(
 }
 
 /**
+ * Log execution to cron_execution_logs table for monitoring
+ */
+async function logCronExecution(
+  supabase: any,
+  functionName: string,
+  status: 'success' | 'error' | 'warning',
+  message: string,
+  error: any = null
+) {
+  try {
+    await supabase.from("cron_execution_logs").insert({
+      function_name: functionName,
+      status,
+      message,
+      error_details: error ? { error: error.message || String(error), stack: error.stack } : null,
+    });
+  } catch (logError) {
+    console.error("Failed to log cron execution:", logError);
+    // Don't throw - logging failures shouldn't break the main flow
+  }
+}
+
+/**
  * Generate CSV content from assistant logs
  */
 function generateCSV(logs: AssistantLog[], profiles: any): string {
@@ -220,6 +243,7 @@ serve(async (req) => {
     if (logsError) {
       console.error("Error fetching logs:", logsError);
       await logExecution(supabase, "error", "Failed to fetch assistant logs", 0, logsError);
+      await logCronExecution(supabase, "send-assistant-report-daily", "error", "Failed to fetch assistant logs", logsError);
       throw new Error(`Failed to fetch logs: ${logsError.message}`);
     }
 
@@ -258,6 +282,7 @@ serve(async (req) => {
     } catch (emailError) {
       console.error("❌ Error sending email:", emailError);
       await logExecution(supabase, "error", "Failed to send email", logs?.length || 0, emailError);
+      await logCronExecution(supabase, "send-assistant-report-daily", "error", "Failed to send email", emailError);
       throw emailError;
     }
 
@@ -269,6 +294,12 @@ serve(async (req) => {
       "success", 
       `Report sent successfully to ${ADMIN_EMAIL}`,
       logs?.length || 0
+    );
+    await logCronExecution(
+      supabase,
+      "send-assistant-report-daily",
+      "success",
+      `Report sent successfully to ${ADMIN_EMAIL} with ${logs?.length || 0} logs`
     );
 
     return new Response(
@@ -288,6 +319,7 @@ serve(async (req) => {
     
     // Log critical error
     await logExecution(supabase, "critical", "Critical error in function", 0, error);
+    await logCronExecution(supabase, "send-assistant-report-daily", "error", "Critical error in function", error);
     
     return new Response(
       JSON.stringify({
