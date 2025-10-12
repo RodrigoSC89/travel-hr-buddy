@@ -116,6 +116,31 @@ function findCommand(question: string): CommandAction | null {
   return null;
 }
 
+// Helper function to log assistant query
+async function logQuery(
+  supabase: any,
+  userId: string | null,
+  userEmail: string | null,
+  question: string,
+  answer: string,
+  action?: string,
+  target?: string
+) {
+  try {
+    await supabase.from("assistant_logs").insert({
+      user_id: userId,
+      user_email: userEmail,
+      question,
+      answer,
+      action: action || null,
+      target: target || null,
+    });
+  } catch (error) {
+    console.error("Failed to log query:", error);
+    // Don't throw - logging failure shouldn't break the assistant
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -141,6 +166,19 @@ serve(async (req) => {
       },
     });
 
+    // Get user information for logging
+    let userId: string | null = null;
+    let userEmail: string | null = null;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        userId = user.id;
+        userEmail = user.email || null;
+      }
+    } catch (error) {
+      console.warn("Could not fetch user info:", error);
+    }
+
     const lower = question.toLowerCase();
 
     // 👉 Real database queries for pending tasks
@@ -152,9 +190,11 @@ serve(async (req) => {
 
       if (error) {
         console.error("Error querying tasks:", error);
+        const errorAnswer = "⚠️ Erro ao consultar tarefas pendentes.";
+        await logQuery(supabase, userId, userEmail, question, errorAnswer, "query");
         return new Response(
           JSON.stringify({
-            answer: "⚠️ Erro ao consultar tarefas pendentes.",
+            answer: errorAnswer,
             action: "query",
             timestamp: new Date().toISOString(),
           }),
@@ -165,9 +205,11 @@ serve(async (req) => {
         );
       }
 
+      const answer = `📋 Você tem ${count || 0} tarefas pendentes.`;
+      await logQuery(supabase, userId, userEmail, question, answer, "query");
       return new Response(
         JSON.stringify({
-          answer: `📋 Você tem ${count || 0} tarefas pendentes.`,
+          answer,
           action: "query",
           timestamp: new Date().toISOString(),
         }),
@@ -188,9 +230,11 @@ serve(async (req) => {
 
       if (error || !data) {
         console.error("Error querying documents:", error);
+        const errorAnswer = "⚠️ Não foi possível buscar os documentos.";
+        await logQuery(supabase, userId, userEmail, question, errorAnswer, "query");
         return new Response(
           JSON.stringify({
-            answer: "⚠️ Não foi possível buscar os documentos.",
+            answer: errorAnswer,
             action: "query",
             timestamp: new Date().toISOString(),
           }),
@@ -202,9 +246,11 @@ serve(async (req) => {
       }
 
       if (data.length === 0) {
+        const noDocsAnswer = "📑 Não há documentos cadastrados ainda.";
+        await logQuery(supabase, userId, userEmail, question, noDocsAnswer, "query");
         return new Response(
           JSON.stringify({
-            answer: "📑 Não há documentos cadastrados ainda.",
+            answer: noDocsAnswer,
             action: "query",
             timestamp: new Date().toISOString(),
           }),
@@ -219,9 +265,11 @@ serve(async (req) => {
         .map((doc) => `📄 ${doc.title} — ${new Date(doc.created_at).toLocaleDateString("pt-BR")}`)
         .join("\n");
 
+      const answer = `📑 Últimos documentos:\n${list}`;
+      await logQuery(supabase, userId, userEmail, question, answer, "query");
       return new Response(
         JSON.stringify({
-          answer: `📑 Últimos documentos:\n${list}`,
+          answer,
           action: "query",
           timestamp: new Date().toISOString(),
         }),
@@ -237,6 +285,15 @@ serve(async (req) => {
     
     if (commandAction) {
       console.log("Command matched:", commandAction);
+      await logQuery(
+        supabase,
+        userId,
+        userEmail,
+        question,
+        commandAction.message,
+        commandAction.type,
+        commandAction.target
+      );
       return new Response(
         JSON.stringify({
           answer: commandAction.message,
@@ -255,9 +312,11 @@ serve(async (req) => {
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
       // Fallback response if no OpenAI key
+      const fallbackAnswer = `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem\n• Listar documentos recentes`;
+      await logQuery(supabase, userId, userEmail, question, fallbackAnswer, "info");
       return new Response(
         JSON.stringify({
-          answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem\n• Listar documentos recentes`,
+          answer: fallbackAnswer,
           action: "info",
           timestamp: new Date().toISOString(),
         }),
@@ -334,6 +393,7 @@ Seja claro, direto e útil.
       enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
     }
 
+    await logQuery(supabase, userId, userEmail, question, enhanced, "info");
     return new Response(
       JSON.stringify({
         answer: enhanced,
@@ -349,10 +409,35 @@ Seja claro, direto e útil.
   } catch (error) {
     console.error("Error processing assistant query:", error);
     
+    const errorAnswer = "❌ Desculpe, ocorreu um erro ao processar sua solicitação. Tente novamente.";
+    // Try to log the error - get question from the request if possible
+    try {
+      const authHeader = req.headers.get("Authorization");
+      const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+      const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
+      const supabase = createClient(supabaseUrl, supabaseKey, {
+        global: {
+          headers: authHeader ? { Authorization: authHeader } : {},
+        },
+      });
+      
+      const { data: { user } } = await supabase.auth.getUser();
+      await logQuery(
+        supabase,
+        user?.id || null,
+        user?.email || null,
+        "Error processing request",
+        errorAnswer,
+        "error"
+      );
+    } catch (logError) {
+      console.error("Failed to log error:", logError);
+    }
+    
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "Unknown error",
-        answer: "❌ Desculpe, ocorreu um erro ao processar sua solicitação. Tente novamente.",
+        answer: errorAnswer,
         timestamp: new Date().toISOString(),
       }),
       {
