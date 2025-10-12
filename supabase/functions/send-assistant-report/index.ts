@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -26,7 +27,24 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Initialize Supabase client
+  const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+  const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+  let userEmail = "unknown";
+  
   try {
+    // Get user email from authorization token
+    const authHeader = req.headers.get("authorization");
+    if (authHeader) {
+      const token = authHeader.replace("Bearer ", "");
+      const { data: { user } } = await supabase.auth.getUser(token);
+      if (user?.email) {
+        userEmail = user.email;
+      }
+    }
+
     const { logs, toEmail, subject }: EmailRequest = await req.json();
     
     if (!logs || !Array.isArray(logs)) {
@@ -127,6 +145,21 @@ serve(async (req) => {
     console.log(`Recipient: ${recipientEmail}`);
     console.log(`Number of logs: ${logs.length}`);
 
+    // Log the email send attempt to database
+    const logResult = await supabase
+      .from("assistant_report_logs")
+      .insert({
+        status: "success",
+        message: "Relatório preparado com sucesso",
+        user_email: userEmail,
+        logs_count: logs.length,
+        recipient_email: recipientEmail,
+      });
+
+    if (logResult.error) {
+      console.error("Error logging report send:", logResult.error);
+    }
+
     // Note: In a real implementation, you would integrate with an email service here
     // For now, we return a success response
     // To implement actual email sending, integrate with SendGrid, Mailgun, AWS SES, etc.
@@ -151,6 +184,24 @@ serve(async (req) => {
     
     const errorMessage = error instanceof Error ? error.message : "An error occurred while sending the report";
     const errorDetails = error instanceof Error ? error.toString() : String(error);
+    
+    // Log the error to database
+    try {
+      const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+      const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+      const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+      await supabase
+        .from("assistant_report_logs")
+        .insert({
+          status: "error",
+          message: errorMessage,
+          user_email: userEmail,
+          logs_count: 0,
+        });
+    } catch (logError) {
+      console.error("Error logging error:", logError);
+    }
     
     return new Response(
       JSON.stringify({
