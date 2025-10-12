@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import jsPDF from "jspdf";
 import { toast } from "@/hooks/use-toast";
+import { logger } from "@/utils/logger";
 import { 
   BarChart, 
   Bar, 
@@ -43,8 +44,17 @@ interface AutomationExecution {
   duration_ms: number | null;
   error_message: string | null;
   triggered_by: string | null;
-  trigger_data: any;
-  execution_log: any;
+  trigger_data: Record<string, unknown> | null;
+  execution_log: Record<string, unknown> | null;
+}
+
+interface AutomationWorkflow {
+  name: string;
+}
+
+interface ExecutionWithWorkflow extends AutomationExecution {
+  automation_workflows?: AutomationWorkflow;
+  workflow_name?: string;
 }
 
 export default function ExecutionLogsPage() {
@@ -73,7 +83,7 @@ export default function ExecutionLogsPage() {
           .order("name");
 
         if (workflowError) {
-          console.error("Error fetching workflows:", workflowError);
+          logger.error("Error fetching workflows", workflowError);
         } else {
           setWorkflows(workflowData || []);
         }
@@ -90,7 +100,7 @@ export default function ExecutionLogsPage() {
           .order("started_at", { ascending: false });
 
         if (executionError) {
-          console.error("Error fetching executions:", executionError);
+          logger.error("Error fetching executions", executionError);
           toast({
             title: "Erro ao carregar logs",
             description: "Não foi possível carregar os registros de execução.",
@@ -100,14 +110,14 @@ export default function ExecutionLogsPage() {
         }
 
         // Transform data to include workflow name
-        const transformedData = (executionData || []).map((execution: any) => ({
+        const transformedData = (executionData || []).map((execution: ExecutionWithWorkflow) => ({
           ...execution,
           workflow_name: execution.automation_workflows?.name || "Workflow Desconhecido"
         }));
 
         setExecutions(transformedData);
       } catch (error) {
-        console.error("Error fetching execution logs:", error);
+        logger.error("Error fetching execution logs", error instanceof Error ? error : undefined);
       } finally {
         setLoading(false);
       }
@@ -299,7 +309,7 @@ export default function ExecutionLogsPage() {
         description: `${filteredExecutions.length} registros foram exportados.`,
       });
     } catch (error) {
-      console.error("Error exporting CSV:", error);
+      logger.error("Error exporting CSV", error instanceof Error ? error : undefined);
       toast({
         title: "Erro ao exportar CSV",
         description: "Ocorreu um erro ao tentar exportar os dados.",
@@ -389,7 +399,7 @@ export default function ExecutionLogsPage() {
         description: `${filteredExecutions.length} registros foram exportados.`,
       });
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF", error instanceof Error ? error : undefined);
       toast({
         title: "Erro ao exportar PDF",
         description: "Ocorreu um erro ao tentar exportar os dados.",

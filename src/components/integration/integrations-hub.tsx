@@ -32,11 +32,11 @@ interface Integration {
   id: string;
   name: string;
   description: string;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
   category: string;
   status: "connected" | "disconnected" | "error";
   lastSync?: Date;
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
 }
 
 const IntegrationsHub = () => {
