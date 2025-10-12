@@ -100,6 +100,7 @@ export default function DocumentViewPage() {
 
   const loadDocument = async () => {
     try {
+      // Use explicit foreign key relationship for better type safety and clarity
       const { data, error } = await supabase
         .from("ai_generated_documents")
         .select(`
@@ -107,17 +108,23 @@ export default function DocumentViewPage() {
           content, 
           created_at, 
           generated_by,
-          profiles:generated_by(email, full_name)
+          profiles!ai_generated_documents_generated_by_fkey(email, full_name)
         `)
         .eq("id", id)
         .single();
 
       if (error) throw error;
 
-      const transformedData = {
-        ...data,
-        author_email: data.profiles?.email,
-        author_name: data.profiles?.full_name,
+      // Type-safe data extraction with proper type casting
+      const profiles = data.profiles as { email: string; full_name: string } | null;
+      
+      const transformedData: Document = {
+        title: data.title,
+        content: data.content,
+        created_at: data.created_at,
+        generated_by: data.generated_by,
+        author_email: profiles?.email,
+        author_name: profiles?.full_name,
       };
 
       setDoc(transformedData);
