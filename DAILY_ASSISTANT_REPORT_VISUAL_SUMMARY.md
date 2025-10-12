@@ -2,7 +2,7 @@
 
 ## 🎯 What Was Implemented
 
-Based on the problem statement, this implementation provides **automated daily email reports** for AI Assistant logs with **PDF generation** using Resend email service.
+Based on the problem statement, this implementation provides **automated daily email reports** for AI Assistant interactions with **CSV generation** using Resend or SendGrid email services.
 
 ## 📊 Architecture Diagram
 
@@ -13,68 +13,94 @@ Based on the problem statement, this implementation provides **automated daily e
 └───────────────────┬─────────────────────────────────────────┘
                     │
                     ├─► 1. Query Database
-                    │   └─► assistant_report_logs (last 24h)
+                    │   ├─► assistant_logs (last 24h interactions)
+                    │   └─► profiles (user emails)
                     │
-                    ├─► 2. Generate PDF
-                    │   ├─► jsPDF library
-                    │   └─► jspdf-autotable for tables
+                    ├─► 2. Generate CSV
+                    │   ├─► Data/Hora, Usuário, Pergunta, Resposta
+                    │   ├─► Proper CSV escaping
+                    │   └─► UTF-8 encoding
                     │
                     ├─► 3. Send Email
-                    │   ├─► Resend API
-                    │   ├─► To: admin@nautilus.ai
-                    │   └─► Attachment: relatorio-assistente.pdf
+                    │   ├─► Resend API (primary)
+                    │   ├─► SendGrid API (fallback)
+                    │   ├─► To: ADMIN_EMAIL
+                    │   └─► Attachment: relatorio-assistente-YYYY-MM-DD.csv
                     │
                     └─► 4. Log Execution
                         └─► assistant_report_logs table
 ```
 
-## 📦 Files Created
+## 📦 Database Tables
 
-### 1. Database Migration
-**File:** `supabase/migrations/20251012194000_create_assistant_report_logs.sql`
+### 1. Source Data: `assistant_logs`
+**Purpose:** Stores all AI Assistant interactions
+
+```sql
+CREATE TABLE assistant_logs (
+  id UUID PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id),
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  origin VARCHAR(50) DEFAULT 'assistant',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+### 2. Execution Tracking: `assistant_report_logs`
+**Purpose:** Tracks all automated report executions
 
 ```sql
 CREATE TABLE assistant_report_logs (
   id UUID PRIMARY KEY,
-  sent_at TIMESTAMP WITH TIME ZONE,
+  sent_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   user_email TEXT,
-  status TEXT CHECK (status IN ('success', 'error', 'pending')),
+  status TEXT CHECK (status IN ('success', 'error', 'pending', 'critical')),
   message TEXT,
   error_details TEXT,
-  logs_count INTEGER,
+  logs_count INTEGER DEFAULT 0,
   triggered_by TEXT DEFAULT 'automated'
 );
 ```
 
-**Purpose:** Tracks all automated report executions
+## 📄 Key Files
 
-### 2. Edge Function
+### 1. Edge Function
 **File:** `supabase/functions/send-daily-assistant-report/index.ts`
 
 **Key Features:**
-- ✅ Fetches logs from last 24 hours
-- ✅ Generates PDF with formatted table
-- ✅ Sends via Resend API
-- ✅ Logs execution status
-- ✅ Error handling and recovery
+- ✅ Fetches assistant interactions from last 24 hours
+- ✅ Fetches user profiles to get email addresses
+- ✅ Generates CSV with proper escaping and UTF-8 encoding
+- ✅ Sends via Resend API (primary) or SendGrid API (fallback)
+- ✅ Logs execution status to tracking table
+- ✅ Comprehensive error handling and recovery
+- ✅ Professional HTML email template
+
+**Dependencies:**
+- `@supabase/supabase-js` - Database client
+- Deno standard library HTTP server
+- Native fetch API for email services
+
+### 2. Configuration
+**File:** `supabase/config.toml`
+
+```toml
+[functions.send-daily-assistant-report]
+verify_jwt = false
+
+[[edge_runtime.cron]]
+name = "daily-assistant-report"
+function_name = "send-daily-assistant-report"
+schedule = "0 8 * * *"  # Every day at 8:00 AM UTC
+description = "Send daily assistant report via email with CSV attachment"
+```
 
 ### 3. Documentation
 **Files:**
 - `DAILY_ASSISTANT_REPORT_GUIDE.md` - Complete setup guide
 - `DAILY_ASSISTANT_REPORT_QUICKREF.md` - Quick reference
 - `DAILY_ASSISTANT_REPORT_VISUAL_SUMMARY.md` - This file
-
-### 4. Tests
-**File:** `src/tests/daily-assistant-report.test.ts`
-
-**Coverage:**
-- Report log structure validation
-- Time window calculations
-- Email configuration
-- PDF data formatting
-- Error handling
-- CORS headers
-- Environment variables
 
 ## 🔧 Configuration
 
@@ -84,112 +110,124 @@ CREATE TABLE assistant_report_logs (
 |----------|----------|---------|-------------|
 | `SUPABASE_URL` | ✅ Yes | - | Supabase project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | ✅ Yes | - | Service role key |
-| `RESEND_API_KEY` | ✅ Yes | - | Resend API key |
-| `ADMIN_EMAIL` | ⚠️ No | admin@nautilus.ai | Report recipient |
-| `EMAIL_FROM` | ⚠️ No | nao-responda@nautilus.ai | Sender email |
+| `RESEND_API_KEY` | ⚠️ One | - | Resend API key (recommended) |
+| `SENDGRID_API_KEY` | ⚠️ One | - | SendGrid API key (fallback) |
+| `ADMIN_EMAIL` | ⚠️ No | admin@nautilusone.com | Report recipient |
+| `EMAIL_FROM` | ⚠️ No | noreply@nautilusone.com | Sender email |
+
+⚠️ Note: At least one of `RESEND_API_KEY` or `SENDGRID_API_KEY` must be configured.
 
 ### Scheduled Execution
 
-**Cron Schedule:** Daily at 7:00 AM UTC
+**Cron Schedule:** Daily at 8:00 AM UTC
 
-```sql
-SELECT cron.schedule(
-  'daily-assistant-report',
-  '0 7 * * *',  -- Every day at 7 AM
-  $$ ... $$
-);
-```
+Configured in `supabase/config.toml` - no manual cron setup needed!
 
 ## 📧 Email Report Format
 
 ### Email Structure
 ```
-From: nao-responda@nautilus.ai
-To: admin@nautilus.ai
-Subject: 📬 Relatório Diário do Assistente IA
+From: noreply@nautilusone.com
+To: admin@yourdomain.com
+Subject: 📬 Relatório Diário - Assistente IA [12/10/2025]
 
-Body:
-Olá! Segue o relatório com os envios de hoje do Assistente IA.
+Body: Professional HTML template with summary
 
-Attachment: relatorio-assistente.pdf
+Attachment: relatorio-assistente-2025-10-12.csv
 ```
 
-### PDF Contents
+### CSV Contents
 
-**Title:** 📬 Envio diário de relatórios do Assistente IA
+**Filename:** `relatorio-assistente-YYYY-MM-DD.csv`
 
-**Table:**
-| Data | Usuário | Status | Mensagem |
-|------|---------|--------|----------|
-| 12/10/2025 14:30 | user@example.com | success | Relatório enviado |
-| 12/10/2025 08:15 | admin@nautilus.ai | success | Envio OK |
-| ... | ... | ... | ... |
+**Columns:**
+```csv
+Data/Hora,Usuário,Pergunta,Resposta
+"12/10/2025 18:30:15","user@example.com","Como criar um documento?","Para criar um documento, você deve..."
+"12/10/2025 19:45:22","admin@example.com","Qual é o status do projeto?","O projeto está em andamento..."
+```
+
+**Features:**
+- ✅ Proper CSV escaping (double quotes)
+- ✅ UTF-8 encoding
+- ✅ Portuguese date format (pt-BR)
+- ✅ HTML stripped from answers
+- ✅ Truncated long text (question: 500 chars, answer: 1000 chars)
 
 ## 🔄 Execution Flow
 
 ```
-1. Cron Trigger (7 AM UTC)
+1. Cron Trigger (8:00 AM UTC)
    ↓
 2. Edge Function Invoked
    ↓
 3. Query Database
-   SELECT * FROM assistant_report_logs
-   WHERE sent_at >= NOW() - INTERVAL '24 hours'
+   a) SELECT * FROM assistant_logs
+      WHERE created_at >= NOW() - INTERVAL '24 hours'
+   b) SELECT id, email FROM profiles
+      WHERE id IN (user_ids from logs)
    ↓
-4. Generate PDF
-   - Create jsPDF instance
-   - Add title and table
-   - Export as ArrayBuffer
+4. Generate CSV
+   - Create CSV headers
+   - Map logs with user emails
+   - Escape special characters
+   - Join rows with newlines
    ↓
 5. Send Email
-   - Call Resend API
-   - Attach PDF
-   - Send to admin
+   - Try Resend API (if RESEND_API_KEY set)
+   - Fallback to SendGrid (if SENDGRID_API_KEY set)
+   - Attach CSV (base64 encoded)
+   - Send to ADMIN_EMAIL
    ↓
 6. Log Result
    INSERT INTO assistant_report_logs
    (status, message, logs_count, ...)
    ↓
 7. Return Response
-   { success: true, logsCount: 42 }
+   { success: true, logsCount: 42, emailSent: true }
 ```
 
 ## 🎨 Code Highlights
 
-### PDF Generation
+### CSV Generation
 ```typescript
-const doc = new jsPDF();
-doc.text('📬 Envio diário de relatórios do Assistente IA', 14, 16);
+function generateCSV(logs: AssistantLog[], profiles: any): string {
+  const headers = ["Data/Hora", "Usuário", "Pergunta", "Resposta"];
+  
+  const rows = logs.map((log) => {
+    const profile = profiles.find((p: any) => p.id === log.user_id);
+    const userEmail = profile?.email || "Anônimo";
+    
+    return [
+      new Date(log.created_at).toLocaleString("pt-BR"),
+      userEmail,
+      log.question.replace(/[\r\n]+/g, " ").substring(0, 500),
+      log.answer.replace(/<[^>]*>/g, "").replace(/[\r\n]+/g, " ").substring(0, 1000),
+    ];
+  });
 
-autoTable(doc, {
-  startY: 24,
-  head: [['Data', 'Usuário', 'Status', 'Mensagem']],
-  body: logs.map((log) => [
-    new Date(log.sent_at).toLocaleString(),
-    log.user_email || '-',
-    log.status,
-    log.message || '-'
-  ]),
-  styles: { fontSize: 8 },
-});
+  const csvContent = [
+    headers.join(","),
+    ...rows.map((row) => 
+      row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+    ),
+  ].join("\n");
 
-const pdfBuffer = doc.output('arraybuffer');
+  return csvContent;
+}
 ```
 
-### Email Sending
+### Email Sending (Dual Provider Support)
 ```typescript
-const { error } = await resend.emails.send({
-  from: 'nao-responda@nautilus.ai',
-  to: 'admin@nautilus.ai',
-  subject: '📬 Relatório Diário do Assistente IA',
-  html: `<p>Olá! Segue o relatório...</p>`,
-  attachments: [
-    {
-      filename: 'relatorio-assistente.pdf',
-      content: Buffer.from(pdfBuffer),
-    }
-  ]
-});
+if (RESEND_API_KEY) {
+  // Primary: Resend
+  await sendEmailViaResend(ADMIN_EMAIL, subject, htmlContent, csvContent, RESEND_API_KEY);
+} else if (SENDGRID_API_KEY) {
+  // Fallback: SendGrid
+  await sendEmailViaSendGrid(ADMIN_EMAIL, subject, emailHtml, csvContent, SENDGRID_API_KEY);
+} else {
+  throw new Error("No email service configured");
+}
 ```
 
 ### Error Logging
@@ -218,10 +256,16 @@ async function logExecution(
 # 1. Deploy function
 supabase functions deploy send-daily-assistant-report
 
-# 2. Set secrets
+# 2. Set secrets (choose one email service)
+# Option A: Resend (recommended)
 supabase secrets set RESEND_API_KEY=re_your_key
-supabase secrets set ADMIN_EMAIL=admin@nautilus.ai
-supabase secrets set EMAIL_FROM=nao-responda@nautilus.ai
+
+# Option B: SendGrid (alternative)
+supabase secrets set SENDGRID_API_KEY=SG.your_key
+
+# 3. Set email config
+supabase secrets set ADMIN_EMAIL=admin@yourdomain.com
+supabase secrets set EMAIL_FROM=noreply@yourdomain.com
 
 # 3. Test
 supabase functions invoke send-daily-assistant-report
