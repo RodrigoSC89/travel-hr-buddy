@@ -7,6 +7,13 @@ URL: /admin/assistant
 
 ## Quick Commands
 
+### 🧠 Database-Powered Commands (NEW!)
+- `tarefas pendentes` → Count real pending tasks from DB
+- `quantas tarefas` → Same as above
+- `documentos recentes` → List last 5 documents from DB
+- `últimos documentos` → Same as above
+- `resuma o documento [ID]` → GPT-4 summary of specific document
+
 ### Navigation
 - `dashboard` → Main dashboard
 - `criar checklist` → Checklist creation
@@ -17,7 +24,6 @@ URL: /admin/assistant
 
 ### Information
 - `ajuda` → Show all commands
-- `tarefas pendentes` → View pending tasks
 - `status do sistema` → System status
 
 ## Architecture
@@ -53,6 +59,25 @@ OpenAI GPT-4 (Optional)
 5. **Documentation**
    - `AI_ASSISTANT_GUIDE.md`
    - `AI_ASSISTANT_QUICKREF.md`
+   - `AI_ASSISTANT_ENHANCED_FEATURES.md` (NEW!)
+
+## Latest Updates (Oct 12, 2025)
+
+### ✨ Enhanced Features
+1. **Real Database Integration**
+   - Queries `checklist_items` for pending tasks
+   - Queries `ai_generated_documents` for recent documents
+   - Always shows current state, not mock data
+
+2. **GPT-4 Document Summarization**
+   - Fetch document by ID from database
+   - Generate intelligent summaries with GPT-4
+   - Support for both numeric and UUID IDs
+
+3. **Improved Response Format**
+   - Markdown support with clickable links
+   - Better structured responses
+   - Context-aware navigation
 
 ## Environment Setup
 
@@ -69,6 +94,9 @@ supabase secrets set OPENAI_API_KEY=sk-...
 ✅ Chat-style interface  
 ✅ Natural language understanding  
 ✅ Command pattern matching  
+✅ **Real-time database queries** (NEW!)  
+✅ **GPT-4 document summarization** (NEW!)  
+✅ **Markdown links support** (NEW!)  
 ✅ OpenAI integration  
 ✅ Error handling  
 ✅ Loading states  
