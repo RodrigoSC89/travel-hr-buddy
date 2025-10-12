@@ -51,9 +51,15 @@ export default function AssistantReportLogsPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [email, setEmail] = useState("");
+  const [healthStatus, setHealthStatus] = useState<{
+    isHealthy: boolean;
+    lastExecutionHoursAgo: number | null;
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
     fetchLogs();
+    checkHealthStatus();
   }, []);
 
   // Prepare chart data from logs
@@ -161,6 +167,46 @@ export default function AssistantReportLogsPage() {
     }
   }
 
+  async function checkHealthStatus() {
+    try {
+      // Check last successful automated execution (within last 36 hours)
+      const { data: recentLogs, error } = await supabase
+        .from('assistant_report_logs')
+        .select('sent_at')
+        .eq('status', 'success')
+        .eq('triggered_by', 'automated')
+        .order('sent_at', { ascending: false })
+        .limit(1);
+
+      if (error) {
+        console.error("Error checking health status:", error);
+        return;
+      }
+
+      if (!recentLogs || recentLogs.length === 0) {
+        setHealthStatus({
+          isHealthy: false,
+          lastExecutionHoursAgo: null,
+          message: "Nenhum relatório automatizado foi enviado ainda",
+        });
+        return;
+      }
+
+      const lastExecution = new Date(recentLogs[0].sent_at);
+      const hoursAgo = Math.floor((Date.now() - lastExecution.getTime()) / (1000 * 60 * 60));
+      
+      setHealthStatus({
+        isHealthy: hoursAgo <= 36,
+        lastExecutionHoursAgo: hoursAgo,
+        message: hoursAgo <= 36 
+          ? `Último envio há ${hoursAgo}h` 
+          : `⚠️ Último envio detectado há ${hoursAgo}h — revisar logs`,
+      });
+    } catch (error) {
+      console.error("Error checking health status:", error);
+    }
+  }
+
   function exportPDF() {
     if (logs.length === 0) {
       toast({
@@ -245,6 +291,27 @@ export default function AssistantReportLogsPage() {
           </Button>
         </div>
         <h1 className="text-xl font-bold mb-4">📬 Logs de Envio de Relatórios — Assistente IA</h1>
+        
+        {/* Health Status Alert */}
+        {healthStatus && (
+          <div className={`p-4 rounded-lg mb-4 ${
+            healthStatus.isHealthy 
+              ? 'bg-green-50 border border-green-200' 
+              : 'bg-yellow-50 border border-yellow-200'
+          }`}>
+            <p className={`text-sm font-medium ${
+              healthStatus.isHealthy ? 'text-green-700' : 'text-yellow-700'
+            }`}>
+              {healthStatus.isHealthy ? '✅ ' : '⚠️ '}
+              {healthStatus.message}
+            </p>
+            {!healthStatus.isHealthy && healthStatus.lastExecutionHoursAgo && healthStatus.lastExecutionHoursAgo > 36 && (
+              <p className="text-xs text-yellow-600 mt-2">
+                O sistema esperava um envio nas últimas 36 horas. Verifique os logs e a configuração do cron.
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
