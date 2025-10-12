@@ -91,14 +91,14 @@ export default function TVWallLogsPage() {
       const byDay: RestoreCountByDay[] = (byDayData || [])
         .slice(0, 15)
         .reverse()
-        .map((row: any) => ({
+        .map((row: { day: string; count: number }) => ({
           day: format(new Date(row.day), "MMM d", { locale: ptBR }),
           count: row.count,
         }));
 
       // Group by status and count
       const statusCounts: Record<string, number> = {};
-      statusData?.forEach((row: any) => {
+      statusData?.forEach((row: { status: string }) => {
         const status = row.status || "info";
         statusCounts[status] = (statusCounts[status] || 0) + 1;
       });
