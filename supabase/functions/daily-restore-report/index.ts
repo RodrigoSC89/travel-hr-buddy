@@ -17,6 +17,10 @@ interface ReportConfig {
   supabaseKey: string;
   appUrl: string;
   adminEmail: string;
+  sendgridApiKey: string;
+  fromEmail: string;
+  fromName: string;
+  errorAlertEmail: string;
 }
 
 interface RestoreSummary {
@@ -32,6 +36,30 @@ interface RestoreDataPoint {
   user_email?: string;
 }
 
+interface SendGridEmailRequest {
+  personalizations: Array<{
+    to: Array<{ email: string }>;
+    subject: string;
+  }>;
+  from: {
+    email: string;
+    name?: string;
+  };
+  content: Array<{
+    type: string;
+    value: string;
+  }>;
+}
+
+interface EmailParams {
+  apiKey: string;
+  fromEmail: string;
+  fromName: string;
+  toEmail: string;
+  subject: string;
+  htmlContent: string;
+}
+
 // ========== Configuration Management ==========
 
 /**
@@ -43,6 +71,10 @@ function loadConfig(): ReportConfig {
   const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   const appUrl = Deno.env.get("VITE_APP_URL") || Deno.env.get("APP_URL");
   const adminEmail = Deno.env.get("ADMIN_EMAIL");
+  const sendgridApiKey = Deno.env.get("SENDGRID_API_KEY");
+  const fromEmail = Deno.env.get("FROM_EMAIL");
+  const fromName = Deno.env.get("FROM_NAME") || "Travel HR Buddy";
+  const errorAlertEmail = Deno.env.get("ERROR_ALERT_EMAIL") || adminEmail;
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error("Missing required environment variables: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
@@ -56,11 +88,23 @@ function loadConfig(): ReportConfig {
     throw new Error("Missing required environment variable: ADMIN_EMAIL");
   }
 
+  if (!sendgridApiKey) {
+    throw new Error("SENDGRID_API_KEY environment variable is not set");
+  }
+
+  if (!fromEmail) {
+    throw new Error("FROM_EMAIL environment variable is not set");
+  }
+
   return {
     supabaseUrl,
     supabaseKey,
     appUrl,
     adminEmail,
+    sendgridApiKey,
+    fromEmail,
+    fromName,
+    errorAlertEmail: errorAlertEmail || adminEmail,
   };
 }
 
@@ -329,7 +373,239 @@ function generateEmailHtml(summary: RestoreSummary, data: RestoreDataPoint[], em
 }
 
 /**
+ * Send email via SendGrid API with enhanced error handling
+ */
+async function sendEmailViaSendGrid(params: EmailParams): Promise<void> {
+  const { apiKey, fromEmail, fromName, toEmail, subject, htmlContent } = params;
+
+  const emailRequest: SendGridEmailRequest = {
+    personalizations: [
+      {
+        to: [{ email: toEmail }],
+        subject: subject,
+      },
+    ],
+    from: {
+      email: fromEmail,
+      name: fromName,
+    },
+    content: [
+      {
+        type: "text/html",
+        value: htmlContent,
+      },
+    ],
+  };
+
+  console.log(`📧 Sending email via SendGrid to ${toEmail}...`);
+
+  const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(emailRequest),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`SendGrid API error: ${response.status} - ${errorText}`);
+  }
+
+  console.log("✅ Email sent successfully via SendGrid");
+}
+
+/**
+ * Send error alert email with detailed diagnostics
+ */
+async function sendErrorAlert(
+  error: any,
+  executionTime: number,
+  config: ReportConfig,
+  supabase: any
+): Promise<void> {
+  try {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const stackTrace = error instanceof Error ? error.stack : "No stack trace available";
+
+    const errorEmailHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            body { 
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              line-height: 1.6; 
+              color: #333;
+              margin: 0;
+              padding: 0;
+              background-color: #f5f5f5;
+            }
+            .container {
+              max-width: 600px;
+              margin: 20px auto;
+              background: white;
+              border-radius: 12px;
+              overflow: hidden;
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .header { 
+              background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+              color: white; 
+              padding: 40px 30px; 
+              text-align: center;
+            }
+            .header h1 {
+              margin: 0 0 10px 0;
+              font-size: 28px;
+              font-weight: 600;
+            }
+            .content { 
+              padding: 30px;
+            }
+            .error-box { 
+              background: #fee;
+              padding: 20px; 
+              border-radius: 8px; 
+              margin: 20px 0; 
+              border-left: 4px solid #dc2626;
+            }
+            .error-box h2 {
+              margin: 0 0 10px 0;
+              font-size: 18px;
+              color: #dc2626;
+            }
+            .error-box pre {
+              background: #fafafa;
+              padding: 15px;
+              border-radius: 4px;
+              overflow-x: auto;
+              font-size: 12px;
+              line-height: 1.4;
+            }
+            .info-box {
+              background: #f8f9fa;
+              padding: 20px;
+              border-radius: 8px;
+              margin: 20px 0;
+            }
+            .info-box h3 {
+              margin: 0 0 10px 0;
+              font-size: 16px;
+              color: #333;
+            }
+            .info-item {
+              margin: 8px 0;
+              font-size: 14px;
+            }
+            .info-label {
+              font-weight: 600;
+              color: #666;
+            }
+            .recommendations {
+              background: #fff3cd;
+              padding: 20px;
+              border-radius: 8px;
+              margin: 20px 0;
+              border-left: 4px solid #ffc107;
+            }
+            .recommendations h3 {
+              margin: 0 0 15px 0;
+              font-size: 16px;
+              color: #856404;
+            }
+            .recommendations ul {
+              margin: 0;
+              padding-left: 20px;
+            }
+            .recommendations li {
+              margin: 8px 0;
+              color: #856404;
+            }
+            .footer { 
+              text-align: center; 
+              padding: 20px; 
+              color: #999; 
+              font-size: 13px;
+              background: #f8f9fa;
+              border-top: 1px solid #e0e0e0;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>❌ Daily Restore Report Error</h1>
+              <p>Execution Failed</p>
+              <p style="font-size: 14px; margin-top: 10px;">${new Date().toLocaleString('pt-BR')}</p>
+            </div>
+            <div class="content">
+              <div class="error-box">
+                <h2>Error Message</h2>
+                <p>${errorMessage}</p>
+                <h2 style="margin-top: 20px;">Stack Trace</h2>
+                <pre>${stackTrace}</pre>
+              </div>
+              
+              <div class="info-box">
+                <h3>Execution Details</h3>
+                <div class="info-item">
+                  <span class="info-label">Function:</span> daily-restore-report v2.0
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Execution Time:</span> ${executionTime}ms
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Timestamp:</span> ${new Date().toISOString()}
+                </div>
+              </div>
+
+              <div class="recommendations">
+                <h3>🔧 Troubleshooting Recommendations</h3>
+                <ul>
+                  <li>Check Supabase Edge Function logs for detailed error information</li>
+                  <li>Verify all required environment variables are set correctly</li>
+                  <li>Ensure SendGrid API key is valid and has send permissions</li>
+                  <li>Verify FROM_EMAIL is verified in SendGrid sender authentication</li>
+                  <li>Check that Supabase RPC functions are accessible</li>
+                  <li>Review the restore_report_logs table for execution history</li>
+                </ul>
+              </div>
+            </div>
+            <div class="footer">
+              <p>This is an automated error alert from the Daily Restore Report function.</p>
+              <p>&copy; ${new Date().getFullYear()} Travel HR Buddy</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    await sendEmailViaSendGrid({
+      apiKey: config.sendgridApiKey,
+      fromEmail: config.fromEmail,
+      fromName: config.fromName,
+      toEmail: config.errorAlertEmail,
+      subject: "🚨 Daily Restore Report Failed",
+      htmlContent: errorEmailHtml,
+    });
+
+    console.log("✅ Error alert sent successfully");
+
+    // Log the error alert to database
+    await logExecution(supabase, "error_alert_sent", `Error alert sent: ${errorMessage}`);
+  } catch (alertError) {
+    console.error("❌ Failed to send error alert:", alertError);
+    // Don't throw - error alert failures shouldn't cascade
+  }
+}
+
+/**
  * Send email via API endpoint with enhanced error handling
+ * @deprecated Use sendEmailViaSendGrid instead
  */
 async function sendEmailViaAPI(appUrl: string, payload: any, htmlContent: string, supabase: any): Promise<any> {
   try {
@@ -373,6 +649,7 @@ serve(async (req) => {
   }
 
   let supabase: any;
+  const startTime = Date.now();
 
   try {
     console.log("🚀 Starting daily restore report generation v2.0...");
@@ -397,23 +674,24 @@ serve(async (req) => {
     // Generate professional email HTML
     const emailHtml = generateEmailHtml(summary, restoreData, embedUrl);
 
-    console.log("📧 Sending email report...");
+    console.log("📧 Sending email report via SendGrid...");
 
-    // Prepare email payload
-    const emailPayload = {
-      embedUrl,
+    // Send email via SendGrid
+    await sendEmailViaSendGrid({
+      apiKey: config.sendgridApiKey,
+      fromEmail: config.fromEmail,
+      fromName: config.fromName,
       toEmail: config.adminEmail,
-      summary,
-      data: restoreData
-    };
-
-    // Send email via API
-    await sendEmailViaAPI(config.appUrl, emailPayload, emailHtml, supabase);
+      subject: `📊 Relatório Diário - Restauração de Documentos - ${new Date().toLocaleDateString('pt-BR')}`,
+      htmlContent: emailHtml,
+    });
 
     console.log("✅ Email sent successfully!");
     
+    const executionTime = Date.now() - startTime;
+    
     // Log successful execution
-    await logExecution(supabase, "success", "Relatório enviado com sucesso.");
+    await logExecution(supabase, "success", `Relatório enviado com sucesso em ${executionTime}ms`);
 
     return new Response(
       JSON.stringify({
@@ -422,6 +700,7 @@ serve(async (req) => {
         summary,
         dataPoints: restoreData?.length || 0,
         emailSent: true,
+        executionTimeMs: executionTime,
         version: "2.0"
       }),
       {
@@ -431,15 +710,28 @@ serve(async (req) => {
   } catch (error) {
     console.error("❌ Error in daily-restore-report:", error);
     
+    const executionTime = Date.now() - startTime;
+    
     // Log critical error if supabase client is available
     if (supabase) {
       await logExecution(supabase, "critical", "Erro crítico na função", error);
+    }
+    
+    // Try to load config for error alerting
+    try {
+      const config = loadConfig();
+      if (supabase) {
+        await sendErrorAlert(error, executionTime, config, supabase);
+      }
+    } catch (alertError) {
+      console.error("❌ Could not send error alert:", alertError);
     }
     
     return new Response(
       JSON.stringify({
         success: false,
         error: error instanceof Error ? error.message : "Unknown error occurred",
+        executionTimeMs: executionTime,
         version: "2.0"
       }),
       {
