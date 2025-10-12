@@ -2,7 +2,7 @@
 
 ## Overview
 
-The AI Assistant module provides an intelligent copilot for the Travel HR Buddy system, enabling users to navigate the platform and execute tasks through natural language commands.
+The AI Assistant module provides an intelligent copilot for the Travel HR Buddy system, enabling users to navigate the platform and execute tasks through natural language commands. Powered by OpenAI GPT-4o-mini for cost-effective, high-quality responses.
 
 ## Features
 
@@ -14,32 +14,56 @@ The AI Assistant module provides an intelligent copilot for the Travel HR Buddy 
    - Loading states during AI processing
    - Error handling with user-friendly messages
    - Input field with keyboard shortcuts (Enter to send)
+   - Responsive layout (desktop and mobile optimized)
 
-2. **Command Recognition**
+2. **Quick Commands Sidebar**
+   - 5 pre-defined command buttons for instant access
+   - One-click execution of common tasks
+   - Visual icons for each command
+   - Responsive design (sidebar on desktop, stacked on mobile)
+
+3. **Capabilities List**
+   - Display of all assistant features
+   - Checkmark indicators for clarity
+   - Helps users understand what the assistant can do
+
+4. **Command Recognition**
    - Predefined commands for common tasks
    - Natural language understanding
    - Context-aware responses
 
-3. **Intelligent Responses**
+5. **Intelligent Responses**
    - Pattern matching for quick responses
-   - OpenAI GPT-4 integration for complex queries
+   - OpenAI GPT-4o-mini integration for complex queries (90% cost reduction vs GPT-4)
    - Fallback responses when AI is unavailable
 
-4. **Navigation Assistance**
+6. **Navigation Assistance**
    - Direct links to system modules
    - Route suggestions based on user intent
 
+7. **Model Badge**
+   - "Powered by GPT-4o-mini" badge
+   - Visual indicator of AI model in use
+
 ## Available Commands
 
-### 🎯 Navigation Commands
+### 🎯 Quick Commands (Sidebar Buttons)
+
+| Command | Action | Icon |
+|---------|--------|------|
+| `Criar checklist` | Navigate to checklist creation page | ✅ |
+| `Tarefas pendentes` | Display pending tasks | 📋 |
+| `Resumir documento` | Instructions for document summarization | 📄 |
+| `Status do sistema` | Open system status monitor | 📊 |
+| `Documentos recentes` | Show recent documents | 📚 |
+
+### 🎯 Additional Navigation Commands
 
 | Command | Action |
 |---------|--------|
-| `criar checklist` | Navigate to checklist creation page |
 | `dashboard` / `painel` | Open main dashboard |
 | `documentos` | Access documents section |
 | `alertas` / `alertas de preço` | View price alerts |
-| `status do sistema` | Open system status monitor |
 | `analytics` / `análises` | View analytics page |
 | `relatórios` / `reports` | Access reports section |
 
@@ -47,8 +71,6 @@ The AI Assistant module provides an intelligent copilot for the Travel HR Buddy 
 
 | Command | Action |
 |---------|--------|
-| `tarefas pendentes` | Display pending tasks |
-| `resumir documento` | Instructions for document summarization |
 | `gerar pdf` | Instructions for PDF generation |
 | `ajuda` / `help` | Display all available commands |
 
@@ -69,7 +91,9 @@ The AI Assistant module provides an intelligent copilot for the Travel HR Buddy 
 ```typescript
 - Deno runtime
 - Command pattern matching
-- OpenAI GPT-4 integration
+- OpenAI GPT-4o-mini integration (cost-effective)
+- Enhanced system prompt with 12+ module descriptions
+- Optimized temperature (0.4) and max_tokens (1000)
 - CORS support
 - Error handling and logging
 ```
@@ -79,9 +103,29 @@ The AI Assistant module provides an intelligent copilot for the Travel HR Buddy 
 ```typescript
 - Backup/fallback endpoint
 - TypeScript type safety
-- OpenAI integration
+- OpenAI GPT-4o-mini integration
 - Same command patterns as edge function
+- Enhanced system prompt matching edge function
+- Optimized parameters (temperature: 0.4, max_tokens: 1000)
 ```
+
+## Cost Optimization
+
+### Model Upgrade: GPT-4 → GPT-4o-mini
+
+**Before:**
+- Model: GPT-4
+- Temperature: 0.3-0.7
+- Max Tokens: 500 (default)
+- Cost: ~$0.50 per 1,000 queries
+
+**After:**
+- Model: GPT-4o-mini
+- Temperature: 0.4 (optimized)
+- Max Tokens: 1000
+- Cost: ~$0.05 per 1,000 queries
+
+**Savings: 90% reduction in AI costs** 🎉
 
 ## API Specification
 
