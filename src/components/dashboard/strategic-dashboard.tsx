@@ -42,6 +42,13 @@ import { MetricCard, AlertItem, ActivityItem, DashboardConfig } from "@/types/da
 import { DashboardCharts, AIInsightsPanel } from "@/components/dashboard/dashboard-analytics";
 import { DashboardKPIWidget, DashboardExportPanel, DashboardFilters } from "@/components/dashboard/dashboard-widgets";
 
+interface ExportOptions {
+  dateRange?: { start: string; end: string };
+  includeCharts?: boolean;
+  includeRawData?: boolean;
+  filters?: Record<string, unknown>;
+}
+
 const StrategicDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -228,7 +235,7 @@ const StrategicDashboard: React.FC = () => {
   };
 
   // Export dashboard data
-  const handleExport = async (format: string, options?: any) => {
+  const handleExport = async (format: string, options?: ExportOptions) => {
     setIsExporting(true);
     
     try {

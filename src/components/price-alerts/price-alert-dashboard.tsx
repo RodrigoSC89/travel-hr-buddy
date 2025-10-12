@@ -9,10 +9,8 @@ import { AlertCircle, Plus, TrendingDown, TrendingUp, Bell, Loader2, RefreshCw, 
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase as supabaseClient } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-const supabase: any = supabaseClient;
-
 
 interface PriceAlert {
   id: string;

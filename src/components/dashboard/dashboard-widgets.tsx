@@ -40,6 +40,14 @@ interface ExportOption {
   description: string;
 }
 
+interface ExportOptions {
+  dateRange?: { start: string; end: string };
+  includeCharts?: boolean;
+  includeRawData?: boolean;
+  filters?: Record<string, unknown>;
+}
+
+
 const DashboardKPIWidget: React.FC<{ 
   kpi: KPIWidget; 
   onExport?: (kpiId: string, format: string) => void;
@@ -143,7 +151,7 @@ const DashboardKPIWidget: React.FC<{
 };
 
 const DashboardExportPanel: React.FC<{
-  onExport: (format: string, options?: any) => void;
+  onExport: (format: string, options?: ExportOptions) => void;
   isExporting?: boolean;
 }> = ({ onExport, isExporting }) => {
   const exportOptions: ExportOption[] = [
@@ -216,9 +224,16 @@ const DashboardExportPanel: React.FC<{
   );
 };
 
+interface DashboardFilters {
+  dateRange?: { start: string; end: string };
+  status?: string[];
+  priority?: string[];
+  department?: string[];
+}
+
 const DashboardFilters: React.FC<{
-  onFilterChange: (filters: any) => void;
-  currentFilters: any;
+  onFilterChange: (filters: DashboardFilters) => void;
+  currentFilters: DashboardFilters;
 }> = ({ onFilterChange, currentFilters }) => {
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
