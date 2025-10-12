@@ -65,6 +65,11 @@ const MaritimeIdentitySystem: React.FC = () => {
   });
   
   const [previewMode, setPreviewMode] = useState(false);
+  const [originalTheme, setOriginalTheme] = useState<{
+    primary: string;
+    secondary: string;
+    accent: string;
+  } | null>(null);
   const [activeSection, setActiveSection] = useState<"branding" | "colors" | "layout" | "terminology">("branding");
   const { toast } = useToast();
 
@@ -204,6 +209,17 @@ const MaritimeIdentitySystem: React.FC = () => {
     });
   };
 
+  const saveOriginalTheme = () => {
+    const root = document.documentElement;
+    const computedStyle = getComputedStyle(root);
+    
+    setOriginalTheme({
+      primary: computedStyle.getPropertyValue("--primary").trim() || "222.2 47.4% 11.2%",
+      secondary: computedStyle.getPropertyValue("--secondary").trim() || "210 40% 96.1%",
+      accent: computedStyle.getPropertyValue("--accent").trim() || "210 40% 96.1%"
+    });
+  };
+
   const applyThemePreview = () => {
     const root = document.documentElement;
     
@@ -216,6 +232,35 @@ const MaritimeIdentitySystem: React.FC = () => {
       title: "Preview Aplicado",
       description: "Visualização em tempo real ativada",
     });
+  };
+
+  const resetThemePreview = () => {
+    if (!originalTheme) return;
+    
+    const root = document.documentElement;
+    root.style.setProperty("--primary", originalTheme.primary);
+    root.style.setProperty("--secondary", originalTheme.secondary);
+    root.style.setProperty("--accent", originalTheme.accent);
+    
+    toast({
+      title: "Preview Desativado",
+      description: "Tema original restaurado",
+    });
+  };
+
+  const togglePreviewMode = () => {
+    if (!previewMode) {
+      // Ativando preview - salvar tema original primeiro
+      saveOriginalTheme();
+      setPreviewMode(true);
+      // Usar setTimeout para garantir que o estado foi atualizado
+      setTimeout(() => applyThemePreview(), 0);
+    } else {
+      // Desativando preview - restaurar tema original
+      resetThemePreview();
+      setPreviewMode(false);
+      setOriginalTheme(null);
+    }
   };
 
   const hexToHsl = (hex: string): string => {
@@ -283,10 +328,7 @@ const MaritimeIdentitySystem: React.FC = () => {
             <div className="flex gap-3">
               <Button
                 variant={previewMode ? "default" : "outline"}
-                onClick={() => {
-                  setPreviewMode(!previewMode);
-                  if (!previewMode) applyThemePreview();
-                }}
+                onClick={togglePreviewMode}
               >
                 <Eye className="w-4 h-4 mr-2" />
                 {previewMode ? "Preview Ativo" : "Ativar Preview"}
