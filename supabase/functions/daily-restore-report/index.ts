@@ -433,7 +433,7 @@ serve(async (req) => {
     
     // Log critical error if supabase client is available
     if (supabase) {
-      await logExecution(supabase, "critical", "Erro crítico na função", error);
+      await logExecution(supabase, "error", "Erro crítico na função", error);
     }
     
     return new Response(
