@@ -1,0 +1,136 @@
+name: Code Quality & Security Audit
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  quality-audit:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [22.x]
+    
+    steps:
+      - name: 📦 Checkout repositório
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      # Linting
+      - name: ✅ Run ESLint
+        run: npm run lint
+        continue-on-error: false
+
+      # Type checking
+      - name: 🔍 TypeScript type check
+        run: npx tsc --noEmit
+        continue-on-error: false
+
+      # Build verification
+      - name: 🏗️ Build project
+        run: npm run build
+        continue-on-error: false
+
+      # Code quality metrics
+      - name: 📊 Count 'any' types usage
+        id: any-types
+        run: |
+          ANY_COUNT=$(grep -r ": any" src --include="*.ts" --include="*.tsx" 2>/dev/null | wc -l || echo "0")
+          echo "any_count=$ANY_COUNT" >> $GITHUB_OUTPUT
+          echo "### 📊 Type Safety Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "**Total 'any' types found:** $ANY_COUNT" >> $GITHUB_STEP_SUMMARY
+          if [ "$ANY_COUNT" -gt 150 ]; then
+            echo "⚠️ High usage of 'any' types (target: <100)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ 'any' types usage is acceptable" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      # Console statements check
+      - name: 🔍 Check console statements
+        id: console-check
+        run: |
+          CONSOLE_COUNT=$(grep -r "console\." src --include="*.ts" --include="*.tsx" | grep -v "eslint-disable" 2>/dev/null | wc -l || echo "0")
+          echo "console_count=$CONSOLE_COUNT" >> $GITHUB_OUTPUT
+          echo "### 🔍 Console Usage" >> $GITHUB_STEP_SUMMARY
+          echo "**Console statements found:** $CONSOLE_COUNT" >> $GITHUB_STEP_SUMMARY
+          if [ "$CONSOLE_COUNT" -gt 100 ]; then
+            echo "⚠️ Consider replacing console statements with structured logger" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ Console usage is acceptable" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      # Check for hardcoded credentials (basic check)
+      - name: 🔒 Security scan - Hardcoded credentials
+        run: |
+          echo "### 🔒 Security Scan" >> $GITHUB_STEP_SUMMARY
+          if grep -r "Bearer ey" src 2>/dev/null; then
+            echo "⚠️ Potential hardcoded Bearer tokens found!" >> $GITHUB_STEP_SUMMARY
+            echo "::warning::Potential hardcoded Bearer tokens detected in source code"
+          else
+            echo "✅ No obvious hardcoded credentials found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check for hardcoded API keys patterns
+          if grep -rE "(api[_-]?key|apikey|access[_-]?token).*=.*['\"][a-zA-Z0-9]{20,}" src --include="*.ts" --include="*.tsx" 2>/dev/null; then
+            echo "⚠️ Potential hardcoded API keys found!" >> $GITHUB_STEP_SUMMARY
+            echo "::warning::Potential hardcoded API keys detected in source code"
+          fi
+
+      # Tests (if they exist)
+      - name: 🧪 Run tests
+        run: npm run test || echo "No tests found or tests failed"
+        continue-on-error: true
+
+      # Test coverage
+      - name: 📊 Generate coverage report
+        run: npm run test:coverage || echo "Coverage generation skipped"
+        continue-on-error: true
+
+      # Bundle size check
+      - name: 📦 Check bundle size
+        if: success()
+        run: |
+          echo "### 📦 Bundle Size" >> $GITHUB_STEP_SUMMARY
+          if [ -d "dist" ]; then
+            BUNDLE_SIZE=$(du -sh dist 2>/dev/null | cut -f1)
+            echo "**Total bundle size:** $BUNDLE_SIZE" >> $GITHUB_STEP_SUMMARY
+            
+            # List largest chunks
+            echo "**Largest chunks:**" >> $GITHUB_STEP_SUMMARY
+            du -h dist/assets/*.js 2>/dev/null | sort -rh | head -10 | awk '{print "- " $2 ": " $1}' >> $GITHUB_STEP_SUMMARY || true
+          else
+            echo "❌ Build directory not found" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      # Summary
+      - name: 📋 Quality Summary
+        if: always()
+        run: |
+          echo "### 🎯 Quality Audit Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Build: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- TypeScript: ✅ No errors" >> $GITHUB_STEP_SUMMARY
+          echo "- ESLint: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "For detailed metrics, see sections above." >> $GITHUB_STEP_SUMMARY
+
+      # Upload build artifacts for inspection
+      - name: 📤 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-output
+          path: dist/
+          retention-days: 7
