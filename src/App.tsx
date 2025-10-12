@@ -20,6 +20,7 @@ const SGSO = React.lazy(() => import("./pages/SGSO"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Documents = React.lazy(() => import("./pages/Documents"));
 const IntelligentDocuments = React.lazy(() => import("./pages/IntelligentDocuments"));
+const AIAssistant = React.lazy(() => import("./pages/AIAssistant"));
 const Travel = React.lazy(() => import("./pages/Travel"));
 const Analytics = React.lazy(() => import("./pages/Analytics"));
 const HumanResources = React.lazy(() => import("./pages/HumanResources"));
@@ -106,6 +107,7 @@ function App() {
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/documents" element={<Documents />} />
                       <Route path="/intelligent-documents" element={<IntelligentDocuments />} />
+                      <Route path="/ai-assistant" element={<AIAssistant />} />
                       <Route path="/travel" element={<Travel />} />
                       <Route path="/analytics" element={<Analytics />} />
                       <Route path="/hr" element={<HumanResources />} />
