@@ -1,0 +1,97 @@
+name: Code Quality Check
+
+on:
+  push:
+    branches: [ main, develop, "copilot/**" ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  quality-check:
+    name: Code Quality & Security
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linter
+        run: npm run lint
+        continue-on-error: true
+      
+      - name: Check for TypeScript errors
+        run: npx tsc --noEmit
+        continue-on-error: true
+      
+      - name: Run tests
+        run: npm run test
+      
+      - name: Build project
+        run: npm run build
+        env:
+          NODE_ENV: production
+      
+      - name: Run security scan
+        run: |
+          echo "🔍 Scanning for hardcoded secrets..."
+          
+          # Check for hardcoded tokens
+          if grep -r "Bearer [A-Za-z0-9_-]\{20,\}" src/ --exclude-dir=node_modules --exclude-dir=dist 2>/dev/null; then
+            echo "❌ Found hardcoded Bearer tokens"
+            exit 1
+          fi
+          
+          # Check for hardcoded Supabase URLs
+          if grep -r "https://[a-z0-9]\{20,\}\.supabase\.co" src/ --exclude-dir=node_modules --exclude-dir=dist 2>/dev/null; then
+            echo "❌ Found hardcoded Supabase URLs"
+            exit 1
+          fi
+          
+          # Check for .env files in src
+          if find src/ -name ".env*" -type f 2>/dev/null | grep -q .; then
+            echo "❌ Found .env files in src directory"
+            exit 1
+          fi
+          
+          echo "✅ Security scan passed"
+        continue-on-error: true
+      
+      - name: Code quality metrics
+        run: |
+          echo "📊 Code Quality Metrics"
+          echo "======================="
+          
+          # Count 'any' usage
+          ANY_COUNT=$(npm run lint 2>&1 | grep -c "Unexpected any" || echo "0")
+          echo "TypeScript 'any' usage: $ANY_COUNT"
+          
+          # Count console statements
+          CONSOLE_COUNT=$(grep -r "console\." src/ --include="*.tsx" --include="*.ts" 2>/dev/null | grep -v "// eslint-disable" | wc -l || echo "0")
+          echo "Console statements: $CONSOLE_COUNT"
+          
+          # Test coverage (if available)
+          if npm run test:coverage 2>&1 | grep -q "Coverage"; then
+            npm run test:coverage | tail -20
+          fi
+        continue-on-error: true
+      
+      - name: Upload coverage artifacts
+        if: matrix.node-version == '22.x'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+        continue-on-error: true

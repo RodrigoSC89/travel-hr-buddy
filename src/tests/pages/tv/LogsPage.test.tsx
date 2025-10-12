@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import TVWallLogsPage from "@/pages/tv/LogsPage";
@@ -12,17 +12,21 @@ vi.mock("@/integrations/supabase/client", () => ({
 }));
 
 // Mock recharts
+interface RechartsContainerProps {
+  children: React.ReactNode;
+}
+
 vi.mock("recharts", () => ({
-  BarChart: ({ children }: any) => <div data-testid="bar-chart">{children}</div>,
+  BarChart: ({ children }: RechartsContainerProps) => <div data-testid="bar-chart">{children}</div>,
   Bar: () => <div data-testid="bar" />,
   XAxis: () => <div data-testid="x-axis" />,
   YAxis: () => <div data-testid="y-axis" />,
   CartesianGrid: () => <div data-testid="cartesian-grid" />,
   Tooltip: () => <div data-testid="tooltip" />,
-  ResponsiveContainer: ({ children }: any) => (
+  ResponsiveContainer: ({ children }: RechartsContainerProps) => (
     <div data-testid="responsive-container">{children}</div>
   ),
-  PieChart: ({ children }: any) => <div data-testid="pie-chart">{children}</div>,
+  PieChart: ({ children }: RechartsContainerProps) => <div data-testid="pie-chart">{children}</div>,
   Pie: () => <div data-testid="pie" />,
   Cell: () => <div data-testid="cell" />,
   Legend: () => <div data-testid="legend" />,
@@ -39,14 +43,14 @@ describe("TVWallLogsPage Component", () => {
       const { supabase } = await import("@/integrations/supabase/client");
 
       // Setup mocks that never resolve
-      vi.mocked(supabase.rpc).mockReturnValue(new Promise(() => {}) as any);
+      vi.mocked(supabase.rpc).mockReturnValue(new Promise(() => {}) as unknown as ReturnType<typeof supabase.rpc>);
       vi.mocked(supabase.from).mockReturnValue({
         select: vi.fn().mockReturnValue({
           order: vi.fn().mockReturnValue({
             limit: vi.fn().mockReturnValue(new Promise(() => {})),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       render(
         <MemoryRouter>
@@ -76,7 +80,7 @@ describe("TVWallLogsPage Component", () => {
               },
             ],
             error: null,
-          }) as any;
+          }) as unknown as ReturnType<typeof supabase.rpc>;
         }
         if (funcName === "get_restore_count_by_day_with_email") {
           return Promise.resolve({
@@ -86,9 +90,9 @@ describe("TVWallLogsPage Component", () => {
               { day: "2024-01-03", count: 12 },
             ],
             error: null,
-          }) as any;
+          }) as unknown as ReturnType<typeof supabase.rpc>;
         }
-        return Promise.resolve({ data: null, error: null }) as any;
+        return Promise.resolve({ data: null, error: null }) as unknown as ReturnType<typeof supabase.rpc>;
       });
 
       // Mock status data
@@ -105,7 +109,7 @@ describe("TVWallLogsPage Component", () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       render(
         <MemoryRouter>
@@ -144,15 +148,15 @@ describe("TVWallLogsPage Component", () => {
           return Promise.resolve({
             data: [{ total: 100, unique_docs: 50, avg_per_day: 5.0 }],
             error: null,
-          }) as any;
+          }) as unknown as ReturnType<typeof supabase.rpc>;
         }
         if (funcName === "get_restore_count_by_day_with_email") {
           return Promise.resolve({
             data: [{ day: "2024-01-01", count: 10 }],
             error: null,
-          }) as any;
+          }) as unknown as ReturnType<typeof supabase.rpc>;
         }
-        return Promise.resolve({ data: null, error: null }) as any;
+        return Promise.resolve({ data: null, error: null }) as unknown as ReturnType<typeof supabase.rpc>;
       });
 
       vi.mocked(supabase.from).mockReturnValue({
@@ -164,7 +168,7 @@ describe("TVWallLogsPage Component", () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       render(
         <MemoryRouter>
@@ -195,12 +199,12 @@ describe("TVWallLogsPage Component", () => {
           return Promise.resolve({
             data: [{ total: 0, unique_docs: 0, avg_per_day: 0 }],
             error: null,
-          }) as any;
+          }) as unknown as ReturnType<typeof supabase.rpc>;
         }
         if (funcName === "get_restore_count_by_day_with_email") {
-          return Promise.resolve({ data: [], error: null }) as any;
+          return Promise.resolve({ data: [], error: null }) as unknown as ReturnType<typeof supabase.rpc>;
         }
-        return Promise.resolve({ data: null, error: null }) as any;
+        return Promise.resolve({ data: null, error: null }) as unknown as ReturnType<typeof supabase.rpc>;
       });
 
       vi.mocked(supabase.from).mockReturnValue({
@@ -212,7 +216,7 @@ describe("TVWallLogsPage Component", () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       render(
         <MemoryRouter>
@@ -247,7 +251,7 @@ describe("TVWallLogsPage Component", () => {
         return Promise.resolve({
           data: null,
           error: { message: "Database error" },
-        }) as any;
+        }) as unknown as ReturnType<typeof supabase.rpc>;
       });
 
       render(
@@ -276,15 +280,15 @@ describe("TVWallLogsPage Component", () => {
           return Promise.resolve({
             data: [{ total: 100, unique_docs: 50, avg_per_day: 5.0 }],
             error: null,
-          }) as any;
+          }) as unknown as ReturnType<typeof supabase.rpc>;
         }
         if (funcName === "get_restore_count_by_day_with_email") {
           return Promise.resolve({
             data: [{ day: "2024-01-01", count: 10 }],
             error: null,
-          }) as any;
+          }) as unknown as ReturnType<typeof supabase.rpc>;
         }
-        return Promise.resolve({ data: null, error: null }) as any;
+        return Promise.resolve({ data: null, error: null }) as unknown as ReturnType<typeof supabase.rpc>;
       });
 
       vi.mocked(supabase.rpc).mockImplementation(mockRpc);
@@ -298,7 +302,7 @@ describe("TVWallLogsPage Component", () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       render(
         <MemoryRouter>
@@ -330,15 +334,15 @@ describe("TVWallLogsPage Component", () => {
           return Promise.resolve({
             data: [{ total: 100, unique_docs: 50, avg_per_day: 5.0 }],
             error: null,
-          }) as any;
+          }) as unknown as ReturnType<typeof supabase.rpc>;
         }
         if (funcName === "get_restore_count_by_day_with_email") {
           return Promise.resolve({
             data: [{ day: "2024-01-01", count: 10 }],
             error: null,
-          }) as any;
+          }) as unknown as ReturnType<typeof supabase.rpc>;
         }
-        return Promise.resolve({ data: null, error: null }) as any;
+        return Promise.resolve({ data: null, error: null }) as unknown as ReturnType<typeof supabase.rpc>;
       });
 
       vi.mocked(supabase.from).mockReturnValue({
@@ -350,7 +354,7 @@ describe("TVWallLogsPage Component", () => {
             }),
           }),
         }),
-      } as any);
+      } as unknown as ReturnType<typeof supabase.from>);
 
       render(
         <MemoryRouter>
