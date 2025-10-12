@@ -65,7 +65,7 @@ describe("RestoreChartEmbed Component", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Carregando...")).toBeInTheDocument();
+    expect(screen.getByText("Carregando dados...")).toBeInTheDocument();
   });
 
   it("should display chart and statistics when data is loaded", async () => {
@@ -200,6 +200,52 @@ describe("RestoreChartEmbed Component", () => {
     await waitFor(() => {
       expect((window as any).chartReady).toBe(true);
     });
+  });
+
+  it("should display error message when data fetching fails", async () => {
+    const { supabase } = await import("@/integrations/supabase/client");
+    
+    vi.mocked(supabase.rpc).mockImplementation(() =>
+      Promise.resolve({ 
+        data: null, 
+        error: { message: "Database error", code: "500" } 
+      }) as any
+    );
+
+    render(
+      <MemoryRouter>
+        <RestoreChartEmbed />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Erro ao Carregar Dados")).toBeInTheDocument();
+      expect(screen.getByText(/Erro ao carregar dados do gráfico/)).toBeInTheDocument();
+    });
+  });
+
+  it("should show improved loading state with spinner", async () => {
+    const { supabase } = await import("@/integrations/supabase/client");
+    
+    // Setup mocks that never resolve to keep loading state
+    vi.mocked(supabase.rpc).mockReturnValue(new Promise(() => {}) as any);
+    vi.mocked(supabase.from).mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        order: vi.fn().mockReturnValue({
+          limit: vi.fn().mockReturnValue({
+            single: vi.fn().mockReturnValue(new Promise(() => {})),
+          }),
+        }),
+      }),
+    } as any);
+
+    render(
+      <MemoryRouter>
+        <RestoreChartEmbed />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("Carregando dados...")).toBeInTheDocument();
   });
 });
 

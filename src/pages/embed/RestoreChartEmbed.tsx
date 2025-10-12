@@ -41,6 +41,7 @@ export default function RestoreChartEmbed() {
   const email = searchParams.get("email") || "";
 
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [summary, setSummary] = useState<RestoreSummary | null>(null);
 
@@ -56,9 +57,13 @@ export default function RestoreChartEmbed() {
 
   // Fetch chart data and summary
   useEffect(() => {
+    const abortController = new AbortController();
+    let isMounted = true;
+
     async function fetchData() {
       try {
         setLoading(true);
+        setError(null);
 
         // Fetch chart data
         const { data: chartResponse, error: chartError } = await supabase
@@ -68,7 +73,7 @@ export default function RestoreChartEmbed() {
 
         if (chartError) {
           console.error("Error fetching restore chart data:", chartError);
-          throw chartError;
+          throw new Error("Erro ao carregar dados do gráfico");
         }
 
         // Fetch summary statistics
@@ -79,7 +84,12 @@ export default function RestoreChartEmbed() {
 
         if (summaryError) {
           console.error("Error fetching restore summary:", summaryError);
-          throw summaryError;
+          throw new Error("Erro ao carregar estatísticas");
+        }
+
+        // Check if component is still mounted
+        if (!isMounted || abortController.signal.aborted) {
+          return;
         }
 
         // Process chart data
@@ -94,15 +104,20 @@ export default function RestoreChartEmbed() {
         setChartData(processedData.reverse());
 
         // Get last execution from the most recent restore
-        const { data: lastRestore } = await supabase
+        const { data: lastRestore, error: lastRestoreError } = await supabase
           .from("document_restore_logs")
           .select("restored_at")
           .order("restored_at", { ascending: false })
           .limit(1)
           .single();
 
+        if (lastRestoreError && lastRestoreError.code !== "PGRST116") {
+          // PGRST116 is "no rows returned" which is acceptable
+          console.error("Error fetching last restore:", lastRestoreError);
+        }
+
         // Set summary with last execution
-        if (summaryResponse && summaryResponse.length > 0) {
+        if (summaryResponse && summaryResponse.length > 0 && isMounted) {
           setSummary({
             total: summaryResponse[0].total || 0,
             unique_docs: summaryResponse[0].unique_docs || 0,
@@ -114,15 +129,32 @@ export default function RestoreChartEmbed() {
         }
 
         // Signal that chart is ready for screenshot
-        (window as any).chartReady = true;
+        if (isMounted) {
+          (window as any).chartReady = true;
+        }
       } catch (error) {
         console.error("Error in RestoreChartEmbed:", error);
+        if (isMounted) {
+          setError(
+            error instanceof Error
+              ? error.message
+              : "Erro ao carregar dados. Por favor, tente novamente."
+          );
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
 
     fetchData();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, [email]);
 
   if (loading) {
@@ -137,7 +169,81 @@ export default function RestoreChartEmbed() {
           backgroundColor: "white",
         }}
       >
-        <p style={{ color: "#666", fontSize: "14px" }}>Carregando...</p>
+        <div style={{ textAlign: "center" }}>
+          <div
+            style={{
+              display: "inline-block",
+              width: "32px",
+              height: "32px",
+              border: "3px solid #e5e7eb",
+              borderTopColor: "#3b82f6",
+              borderRadius: "50%",
+              animation: "spin 1s linear infinite",
+              marginBottom: "12px",
+            }}
+          />
+          <p style={{ color: "#666", fontSize: "14px", margin: 0 }}>
+            Carregando dados...
+          </p>
+        </div>
+        <style>
+          {`
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          `}
+        </style>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        style={{
+          width: "600px",
+          height: "450px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "white",
+          padding: "20px",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            maxWidth: "400px",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "48px",
+              marginBottom: "16px",
+            }}
+          >
+            ⚠️
+          </div>
+          <h3
+            style={{
+              fontSize: "16px",
+              fontWeight: "600",
+              color: "#dc2626",
+              marginBottom: "8px",
+            }}
+          >
+            Erro ao Carregar Dados
+          </h3>
+          <p
+            style={{
+              fontSize: "14px",
+              color: "#666",
+              margin: 0,
+            }}
+          >
+            {error}
+          </p>
+        </div>
       </div>
     );
   }
