@@ -165,6 +165,18 @@ serve(async (req) => {
     const { logs, toEmail, subject }: EmailRequest = await req.json();
     
     if (!logs || !Array.isArray(logs) || logs.length === 0) {
+      // Log error - no data to send
+      try {
+        await supabaseClient.from("assistant_report_logs").insert({
+          user_id: user.id,
+          user_email: user.email || "unknown",
+          status: "error",
+          message: "Nenhum dado para enviar.",
+        });
+      } catch (logError) {
+        console.error("Failed to log error:", logError);
+      }
+
       return new Response(
         JSON.stringify({ error: "Nenhum dado para enviar." }),
         {
@@ -262,6 +274,18 @@ serve(async (req) => {
 
     console.log("✅ Email sent successfully!");
 
+    // Log success
+    try {
+      await supabaseClient.from("assistant_report_logs").insert({
+        user_id: user.id,
+        user_email: recipientEmail,
+        status: "success",
+        message: "Enviado com sucesso",
+      });
+    } catch (logError) {
+      console.error("Failed to log success:", logError);
+    }
+
     return new Response(
       JSON.stringify({ 
         status: "ok",
@@ -279,6 +303,23 @@ serve(async (req) => {
     console.error("❌ Error in send-assistant-report:", error);
     
     const errorMessage = error instanceof Error ? error.message : "An error occurred while sending the report";
+    
+    // Log error - unexpected failure
+    try {
+      // Create a basic supabase client for logging errors
+      const supabaseClient = createClient(
+        Deno.env.get("SUPABASE_URL") ?? "",
+        Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+      );
+      
+      await supabaseClient.from("assistant_report_logs").insert({
+        user_email: "system",
+        status: "error",
+        message: errorMessage,
+      });
+    } catch (logError) {
+      console.error("Failed to log error:", logError);
+    }
     
     return new Response(
       JSON.stringify({

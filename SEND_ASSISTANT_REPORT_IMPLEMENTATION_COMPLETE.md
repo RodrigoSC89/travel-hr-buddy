@@ -22,6 +22,10 @@
 - ✅ **Input Validation**: Validates logs array and request structure
 - ✅ **CORS Support**: Handles preflight requests
 - ✅ **Logging**: Detailed console logs for debugging
+- ✅ **Audit Logging**: Tracks all report sends in `assistant_report_logs` table
+  - Success: When report is sent successfully (status: 'success', message: 'Enviado com sucesso')
+  - Error: When logs array is empty/invalid (status: 'error', message: 'Nenhum dado para enviar.')
+  - Error: In exception handler for unexpected failures (status: 'error', message: actual error)
 
 ### 2. Configuration Updates
 **File**: `.env.example`
