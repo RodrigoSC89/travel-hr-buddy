@@ -26,6 +26,7 @@ describe("LogsPage Component", () => {
           limit: vi.fn().mockResolvedValue({ data: [], error: null }),
         }),
       }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     render(
@@ -72,6 +73,7 @@ describe("LogsPage Component", () => {
           }),
         }),
       }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     render(
@@ -117,6 +119,7 @@ describe("LogsPage Component", () => {
           limit: vi.fn().mockResolvedValue({ data: [], error: null }),
         }),
       }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     render(
@@ -152,6 +155,7 @@ describe("LogsPage Component", () => {
           }),
         }),
       }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     render(
@@ -188,6 +192,7 @@ describe("LogsPage Component", () => {
           limit: vi.fn().mockResolvedValue({ data: [], error: null }),
         }),
       }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     render(
@@ -216,6 +221,7 @@ describe("LogsPage Component", () => {
           limit: vi.fn().mockResolvedValue({ data: [], error: null }),
         }),
       }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
     render(
