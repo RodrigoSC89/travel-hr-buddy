@@ -1,1 +1,16 @@
 project_id = "vnbptmixvwropvanyhdb"
+
+# Edge Functions Configuration
+[functions.send_daily_restore_report]
+verify_jwt = false
+
+# Cron Jobs - Scheduled Functions
+# Documentation: https://supabase.com/docs/guides/functions/schedule-functions
+# Format: cron expression (minute hour day month day_of_week)
+# Example: "0 7 * * *" = Every day at 7:00 AM UTC
+
+[[edge_runtime.cron]]
+name = "daily-restore-report"
+function_name = "send_daily_restore_report"
+schedule = "0 7 * * *"  # Every day at 7:00 AM UTC
+description = "Send daily restore report via email with CSV attachment"

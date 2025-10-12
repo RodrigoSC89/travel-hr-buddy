@@ -61,6 +61,7 @@ const Modules = React.lazy(() => import("./pages/Modules"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const SmartLayoutDemo = React.lazy(() => import("./pages/SmartLayoutDemo"));
 const RestoreChartEmbed = React.lazy(() => import("./pages/embed/RestoreChartEmbed"));
+const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -142,6 +143,8 @@ function App() {
                     </Route>
                     {/* Embed routes outside SmartLayout for clean rendering */}
                     <Route path="/embed/restore-chart" element={<RestoreChartEmbed />} />
+                    {/* TV Wall route outside SmartLayout for fullscreen display */}
+                    <Route path="/tv/logs" element={<TVWallLogs />} />
                   </Routes>
                 </React.Suspense>
               </Router>
