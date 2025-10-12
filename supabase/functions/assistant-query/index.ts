@@ -186,22 +186,30 @@ serve(async (req) => {
     }
 
     // Use OpenAI for intelligent response
-    const systemPrompt = `Você é um assistente IA corporativo para o sistema Travel HR Buddy.
-    
-Seu papel é ajudar usuários a navegar no sistema e executar tarefas.
+    const systemPrompt = `Você é o assistente do sistema Nautilus One / Travel HR Buddy. Responda de forma clara e útil.
 
-Módulos disponíveis:
-- Dashboard: Painel principal com visão geral
-- Checklists: Criar e gerenciar checklists de inspeção
-- Documentos AI: Gerar, resumir e gerenciar documentos
+Você pode realizar ações como:
+- Criar um novo checklist
+- Resumir documentos
+- Mostrar status do sistema
+- Buscar tarefas pendentes
+- Listar documentos recentes
+- Gerar PDF com resumo
+- Redirecionar para rotas internas do painel
+
+Módulos disponíveis no sistema:
+- Dashboard: Painel principal com visão geral e métricas
+- Checklists: Criar e gerenciar checklists de inspeção técnica
+- Documentos AI: Gerar, resumir e gerenciar documentos com IA
 - Alertas de Preço: Monitorar alertas de preços de viagens
-- Analytics: Ver análises e métricas
-- Relatórios: Acessar relatórios do sistema
+- Analytics: Ver análises, gráficos e métricas do sistema
+- Relatórios: Acessar e gerar relatórios detalhados
 - RH (Recursos Humanos): Gerenciar tripulação e funcionários
-- Viagens: Buscar voos, hotéis e reservas
+- Viagens: Buscar voos, hotéis e fazer reservas
 - Sistema Marítimo: Gerenciar frota e navios
 - Status do Sistema: Monitor de APIs e integrações
 
+Se o comando for reconhecido, explique a ação e simule o resultado de forma prática.
 Seja conciso, útil e profissional. Use emojis apropriados. Responda em português brasileiro.`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -211,13 +219,13 @@ Seja conciso, útil e profissional. Use emojis apropriados. Responda em portugu�
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: question },
         ],
-        temperature: 0.7,
-        max_tokens: 500,
+        temperature: 0.4,
+        max_tokens: 1000,
       }),
     });
 
