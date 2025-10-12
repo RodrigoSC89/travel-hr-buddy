@@ -104,7 +104,7 @@ describe("AssistantLogsPage Component", () => {
     expect(screen.getByText(/Carregando histórico\.\.\./i)).toBeInTheDocument();
   });
 
-  it("should display export button", async () => {
+  it("should display export buttons", async () => {
     render(
       <MemoryRouter>
         <AssistantLogsPage />
@@ -112,7 +112,9 @@ describe("AssistantLogsPage Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/Exportar CSV/i)).toBeInTheDocument();
+      expect(screen.getByText(/CSV/i)).toBeInTheDocument();
+      expect(screen.getByText(/PDF/i)).toBeInTheDocument();
+      expect(screen.getByText(/Enviar E-mail/i)).toBeInTheDocument();
     });
   });
 
