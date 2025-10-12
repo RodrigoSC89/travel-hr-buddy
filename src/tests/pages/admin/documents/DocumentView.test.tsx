@@ -53,17 +53,33 @@ vi.mock("react-router-dom", async () => {
 describe("DocumentViewPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Default mock for document not found
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: null,
-            error: { message: "Not found" },
+    // Default mock for document not found and version history
+    vi.mocked(supabase.from).mockImplementation((table: string) => {
+      if (table === "ai_generated_documents") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: null,
+                error: { message: "Not found" },
+              }),
+            }),
           }),
-        }),
-      }),
-    } as any);
+        } as any;
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              order: vi.fn().mockResolvedValue({
+                data: [],
+                error: null,
+              }),
+            }),
+          }),
+        } as any;
+      }
+      return {} as any;
+    });
   });
 
   it("should display document not found message", async () => {
@@ -96,26 +112,42 @@ describe("DocumentViewPage Component", () => {
   });
 
   it("should display author information when available", async () => {
-    // Mock successful document fetch with author info
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: {
-              title: "Test Document",
-              content: "Test Content",
-              created_at: new Date().toISOString(),
-              generated_by: "user-123",
-              profiles: {
-                email: "test@example.com",
-                full_name: "Test User",
-              },
-            },
-            error: null,
+    // Mock successful document fetch with author info and version history
+    vi.mocked(supabase.from).mockImplementation((table: string) => {
+      if (table === "ai_generated_documents") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: {
+                  title: "Test Document",
+                  content: "Test Content",
+                  created_at: new Date().toISOString(),
+                  generated_by: "user-123",
+                  profiles: {
+                    email: "test@example.com",
+                    full_name: "Test User",
+                  },
+                },
+                error: null,
+              }),
+            }),
           }),
-        }),
-      }),
-    } as any);
+        } as any;
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              order: vi.fn().mockResolvedValue({
+                data: [],
+                error: null,
+              }),
+            }),
+          }),
+        } as any;
+      }
+      return {} as any;
+    });
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/view/123"]}>
@@ -160,26 +192,42 @@ describe("DocumentViewPage Component", () => {
       uploadAvatar: vi.fn(),
     });
 
-    // Mock successful document fetch with author info
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: {
-              title: "Test Document",
-              content: "Test Content",
-              created_at: new Date().toISOString(),
-              generated_by: "user-123",
-              profiles: {
-                email: "author@example.com",
-                full_name: "Document Author",
-              },
-            },
-            error: null,
+    // Mock successful document fetch with author info and version history
+    vi.mocked(supabase.from).mockImplementation((table: string) => {
+      if (table === "ai_generated_documents") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: {
+                  title: "Test Document",
+                  content: "Test Content",
+                  created_at: new Date().toISOString(),
+                  generated_by: "user-123",
+                  profiles: {
+                    email: "author@example.com",
+                    full_name: "Document Author",
+                  },
+                },
+                error: null,
+              }),
+            }),
           }),
-        }),
-      }),
-    } as any);
+        } as any;
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              order: vi.fn().mockResolvedValue({
+                data: [],
+                error: null,
+              }),
+            }),
+          }),
+        } as any;
+      }
+      return {} as any;
+    });
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/view/123"]}>
@@ -224,26 +272,42 @@ describe("DocumentViewPage Component", () => {
       uploadAvatar: vi.fn(),
     });
 
-    // Mock successful document fetch with author info
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: {
-              title: "Test Document",
-              content: "Test Content",
-              created_at: new Date().toISOString(),
-              generated_by: "user-123",
-              profiles: {
-                email: "author@example.com",
-                full_name: "Document Author",
-              },
-            },
-            error: null,
+    // Mock successful document fetch with author info and version history
+    vi.mocked(supabase.from).mockImplementation((table: string) => {
+      if (table === "ai_generated_documents") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: {
+                  title: "Test Document",
+                  content: "Test Content",
+                  created_at: new Date().toISOString(),
+                  generated_by: "user-123",
+                  profiles: {
+                    email: "author@example.com",
+                    full_name: "Document Author",
+                  },
+                },
+                error: null,
+              }),
+            }),
           }),
-        }),
-      }),
-    } as any);
+        } as any;
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              order: vi.fn().mockResolvedValue({
+                data: [],
+                error: null,
+              }),
+            }),
+          }),
+        } as any;
+      }
+      return {} as any;
+    });
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/view/123"]}>
