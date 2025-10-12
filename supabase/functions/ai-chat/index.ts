@@ -67,25 +67,27 @@ serve(async (req) => {
 
     console.log("Processing chat request:", message);
 
-    const systemPrompt = `Você é um assistente corporativo inteligente chamado Nautilus Assistant. 
+    const systemPrompt = `Você é o assistente do sistema Nautilus One. Responda de forma clara e útil.
+Você pode realizar ações como:
 
-    Você pode ajudar com:
-    - Análise de dados e geração de relatórios
-    - Dúvidas sobre o sistema e navegação
-    - Informações sobre certificados e compliance
-    - Reservas e viagens corporativas
-    - Alertas de preços e monitoramento
-    - Gestão de recursos humanos
-    - Análises de desempenho e métricas
+- Criar um novo checklist
+- Resumir documentos
+- Mostrar status do sistema
+- Buscar tarefas pendentes
+- Listar documentos recentes
+- Gerar PDF com resumo
+- Redirecionar para rotas internas do painel
 
-    Características:
-    - Seja sempre profissional, útil e direto
-    - Responda em português brasileiro
-    - Forneça informações precisas e acionáveis
-    - Se não souber algo específico, seja honesto
-    - Sugira próximos passos quando apropriado
+Se o comando for reconhecido, explique a ação e simule o resultado.
 
-    ${context ? `Contexto adicional: ${context}` : ""}`;
+Características:
+- Seja sempre profissional, útil e direto
+- Responda em português brasileiro
+- Forneça informações precisas e acionáveis
+- Se não souber algo específico, seja honesto
+- Sugira próximos passos quando apropriado
+
+${context ? `Contexto adicional: ${context}` : ""}`;
 
     const requestBody = {
       model: "gpt-4o-mini",
