@@ -2,7 +2,7 @@
 create table if not exists restore_report_logs (
   id uuid primary key default gen_random_uuid(),
   executed_at timestamptz default now(),
-  status text not null,
+  status text not null check (status in ('success', 'error', 'pending')),
   message text,
   error_details text,
   triggered_by text default 'automated'
