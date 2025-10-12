@@ -16,8 +16,7 @@ import {
   CheckCircle, 
   XCircle, 
   Download, 
-  Loader2,
-  AlertTriangle 
+  Loader2
 } from "lucide-react";
 
 interface RestoreReportLog {
@@ -261,8 +260,8 @@ export default function RestoreReportLogsPage() {
         return <Badge className="bg-green-600 hover:bg-green-700">Sucesso</Badge>;
       case "error":
         return <Badge variant="destructive">Erro</Badge>;
-      case "critical":
-        return <Badge className="bg-red-700 hover:bg-red-800">Crítico</Badge>;
+      case "pending":
+        return <Badge variant="secondary">Pendente</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -274,8 +273,8 @@ export default function RestoreReportLogsPage() {
         return <CheckCircle className="h-5 w-5 text-green-600" />;
       case "error":
         return <XCircle className="h-5 w-5 text-red-600" />;
-      case "critical":
-        return <AlertTriangle className="h-5 w-5 text-red-700" />;
+      case "pending":
+        return <Clock className="h-5 w-5 text-gray-600" />;
       default:
         return <Activity className="h-5 w-5 text-gray-600" />;
     }
@@ -303,7 +302,7 @@ export default function RestoreReportLogsPage() {
             <div>
               <label className="text-sm font-medium mb-2 block">Status</label>
               <Input
-                placeholder="Filtrar por status (ex: success, error)"
+                placeholder="Filtrar por status (ex: success, error, pending)"
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
               />
@@ -399,7 +398,7 @@ export default function RestoreReportLogsPage() {
               <div>
                 <p className="text-sm text-muted-foreground">Erros</p>
                 <p className="text-2xl font-bold text-red-600">
-                  {filteredLogs.filter(l => ["error", "critical"].includes(l.status.toLowerCase())).length}
+                  {filteredLogs.filter(l => l.status.toLowerCase() === "error").length}
                 </p>
               </div>
               <XCircle className="h-8 w-8 text-red-600" />
