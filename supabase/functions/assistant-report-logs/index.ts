@@ -86,7 +86,7 @@ serve(async (req) => {
     // Build base query
     let query = supabase
       .from("assistant_report_logs")
-      .select("id, user_email, status, message, sent_at, user_id, report_type")
+      .select("id, user_email, status, message, sent_at, user_id, report_type, logs_count")
       .order("sent_at", { ascending: false })
       .limit(1000);
 
