@@ -67,6 +67,14 @@ serve(async (req) => {
     if (error) {
       console.error('Erro ao buscar logs:', error);
       await logExecution(supabase, 'error', 'Erro ao buscar logs', 0, error);
+      
+      // Log to cron_execution_logs
+      await supabase.from('cron_execution_logs').insert({
+        function_name: 'send-assistant-report-daily',
+        status: 'error',
+        message: 'Erro ao buscar logs'
+      });
+      
       return new Response('Erro ao buscar logs', { 
         status: 500,
         headers: corsHeaders 
@@ -112,6 +120,14 @@ serve(async (req) => {
     if (sendErr) {
       console.error('Erro ao enviar e-mail:', sendErr);
       await logExecution(supabase, 'error', 'Erro ao enviar e-mail', logs?.length || 0, sendErr);
+      
+      // Log to cron_execution_logs
+      await supabase.from('cron_execution_logs').insert({
+        function_name: 'send-assistant-report-daily',
+        status: 'error',
+        message: 'Erro ao enviar e-mail'
+      });
+      
       return new Response('Erro ao enviar e-mail', { 
         status: 500,
         headers: corsHeaders 
@@ -128,6 +144,13 @@ serve(async (req) => {
       logs?.length || 0
     );
 
+    // Log to cron_execution_logs
+    await supabase.from('cron_execution_logs').insert({
+      function_name: 'send-assistant-report-daily',
+      status: 'success',
+      message: 'Enviado com sucesso'
+    });
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -143,6 +166,13 @@ serve(async (req) => {
     
     // Log critical error
     await logExecution(supabase, 'critical', 'Erro crítico na função', 0, error);
+    
+    // Log to cron_execution_logs
+    await supabase.from('cron_execution_logs').insert({
+      function_name: 'send-assistant-report-daily',
+      status: 'error',
+      message: error instanceof Error ? error.message : 'Unknown error occurred'
+    });
     
     return new Response(
       JSON.stringify({
