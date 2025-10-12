@@ -235,7 +235,7 @@ serve(async (req) => {
 
     // Command: "resuma o documento X" - Fetch and summarize document with GPT-4
     if (lower.includes("resuma o documento") || lower.includes("resumir documento")) {
-      const idMatch = lower.match(/documento\s+(\d+|[a-f0-9-]{36})/i);
+      const idMatch = lower.match(/documento\s+([a-f0-9-]+|\d+)/i);
       const docId = idMatch?.[1];
 
       if (!docId) {
