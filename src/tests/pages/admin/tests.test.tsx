@@ -44,10 +44,7 @@ describe("TestDashboard Component", () => {
     );
     
     await waitFor(() => {
-      const title = screen.getByText((content, element) => {
-        return element?.tagName.toLowerCase() === "h1" && 
-               content.includes("Painel de Testes Automatizados");
-      });
+      const title = screen.getByRole('heading', { name: /Painel de Testes Automatizados/i });
       expect(title).toBeInTheDocument();
     });
   });
