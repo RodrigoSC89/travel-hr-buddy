@@ -1,7 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "./next-types";
 import { OpenAI } from "openai";
+import { createClient } from "@supabase/supabase-js";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// Initialize Supabase client for logging
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL || "",
+  process.env.VITE_SUPABASE_ANON_KEY || ""
+);
 
 interface CommandAction {
   type: "navigation" | "action" | "query" | "info";
@@ -83,6 +90,20 @@ function findCommand(question: string): CommandAction | null {
   return null;
 }
 
+async function logInteraction(userId: string | null, question: string, answer: string) {
+  try {
+    await supabase.from("assistant_logs").insert({
+      user_id: userId,
+      question,
+      answer,
+      origin: "assistant",
+    });
+  } catch (error) {
+    console.error("Error logging assistant interaction:", error);
+    // Don't throw - logging should not break the main functionality
+  }
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") return res.status(405).end();
 
@@ -90,13 +111,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!question || typeof question !== "string")
     return res.status(400).json({ error: "Pergunta inválida" });
 
+  // Try to get user ID from authorization header
+  const authHeader = req.headers.authorization;
+  let userId: string | null = null;
+  
+  if (authHeader) {
+    try {
+      const token = authHeader.replace("Bearer ", "");
+      const { data: { user } } = await supabase.auth.getUser(token);
+      userId = user?.id || null;
+    } catch (error) {
+      console.warn("Could not extract user from token:", error);
+    }
+  }
+
   try {
     // Try to match with predefined commands first
     const commandAction = findCommand(question);
     
     if (commandAction) {
+      const answer = commandAction.message;
+      
+      // Log the interaction
+      await logInteraction(userId, question, answer);
+      
       return res.status(200).json({
-        answer: commandAction.message,
+        answer,
         action: commandAction.type,
         target: commandAction.target,
       });
@@ -133,12 +173,21 @@ Seja conciso, útil e profissional. Use emojis apropriados. Responda em portugu�
       });
 
       const answer = response.choices[0].message.content || "";
+      
+      // Log the interaction
+      await logInteraction(userId, question, answer);
+      
       return res.status(200).json({ answer, action: "info" });
     }
 
     // Fallback if no OpenAI key
+    const answer = `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver tarefas pendentes`;
+    
+    // Log the interaction
+    await logInteraction(userId, question, answer);
+    
     return res.status(200).json({
-      answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver tarefas pendentes`,
+      answer,
       action: "info",
     });
 
