@@ -117,10 +117,10 @@ export default function ChecklistViewPage() {
       prevItems.map((item) =>
         item.id === itemId
           ? {
-              ...item,
-              completed: !currentStatus,
-              completed_at: !currentStatus ? new Date().toISOString() : null,
-            }
+            ...item,
+            completed: !currentStatus,
+            completed_at: !currentStatus ? new Date().toISOString() : null,
+          }
           : item
       )
     );
@@ -274,10 +274,10 @@ export default function ChecklistViewPage() {
                           item.criticality === "critica"
                             ? "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300"
                             : item.criticality === "alta"
-                            ? "bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300"
-                            : item.criticality === "media"
-                            ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
-                            : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+                              ? "bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300"
+                              : item.criticality === "media"
+                                ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
+                                : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
                         }`}
                       >
                         {item.criticality === "critica" && "🔴 Crítica"}

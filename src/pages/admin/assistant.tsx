@@ -125,7 +125,7 @@ export default function AssistantPage() {
                   <Bot className="w-12 h-12 mx-auto mb-2 opacity-50" />
                   <p>Olá! Como posso ajudar você hoje?</p>
                   <p className="text-xs mt-2">
-                    Experimente: "Criar checklist para auditoria", "Resumir documento", "Mostrar alertas"
+                    Experimente: &quot;Criar checklist para auditoria&quot;, &quot;Resumir documento&quot;, &quot;Mostrar alertas&quot;
                   </p>
                 </div>
               )}
