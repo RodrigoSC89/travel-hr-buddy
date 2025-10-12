@@ -106,7 +106,11 @@ export default function DocumentViewPage() {
           title, 
           content, 
           created_at, 
-          generated_by
+          generated_by,
+          profiles:generated_by (
+            email,
+            full_name
+          )
         `)
         .eq("id", id)
         .single();
@@ -115,8 +119,8 @@ export default function DocumentViewPage() {
 
       const transformedData = {
         ...data,
-        author_email: undefined,
-        author_name: undefined,
+        author_email: data.profiles?.email,
+        author_name: data.profiles?.full_name,
       };
 
       setDoc(transformedData);
