@@ -4,6 +4,9 @@ project_id = "vnbptmixvwropvanyhdb"
 [functions.send_daily_restore_report]
 verify_jwt = false
 
+[functions.send-daily-assistant-report]
+verify_jwt = false
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)
@@ -14,3 +17,9 @@ name = "daily-restore-report"
 function_name = "send_daily_restore_report"
 schedule = "0 7 * * *"  # Every day at 7:00 AM UTC
 description = "Send daily restore report via email with CSV attachment"
+
+[[edge_runtime.cron]]
+name = "daily-assistant-report"
+function_name = "send-daily-assistant-report"
+schedule = "0 8 * * *"  # Every day at 8:00 AM UTC
+description = "Send daily assistant report via email with CSV attachment"

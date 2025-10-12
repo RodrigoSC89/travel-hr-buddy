@@ -1,0 +1,254 @@
+// ✅ Edge Function: send-daily-assistant-report
+// Scheduled function that sends daily assistant report via email (CSV format)
+
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+interface AssistantLog {
+  id: string;
+  question: string;
+  answer: string;
+  created_at: string;
+  user_email: string;
+  user_id?: string;
+}
+
+/**
+ * Generate CSV content from assistant logs
+ */
+function generateCSV(logs: AssistantLog[]): string {
+  const headers = ["Data/Hora", "Usuário", "Pergunta", "Resposta"];
+  const rows = logs.map((log) => [
+    new Date(log.created_at).toLocaleString("pt-BR"),
+    log.user_email || "Anônimo",
+    log.question.replace(/[\r\n]+/g, ' ').substring(0, 200),
+    log.answer.replace(/<[^>]*>/g, '').replace(/[\r\n]+/g, ' ').substring(0, 300),
+  ]);
+
+  const csvContent = [
+    headers.join(","),
+    ...rows.map((row) => 
+      row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+    ),
+  ].join("\n");
+
+  return csvContent;
+}
+
+/**
+ * Generate HTML email content
+ */
+function generateEmailHtml(logsCount: number, csvAttached: boolean): string {
+  return `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px; }
+          .content { padding: 20px; background: #f9f9f9; }
+          .summary-box { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+          .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>📊 Relatório Diário - Assistente IA</h1>
+          <p>Nautilus One - Travel HR Buddy</p>
+          <p>${new Date().toLocaleDateString('pt-BR')}</p>
+        </div>
+        <div class="content">
+          <div class="summary-box">
+            <h2>📈 Resumo do Relatório</h2>
+            <p><strong>Total de Interações (últimas 24h):</strong> ${logsCount}</p>
+            <p><strong>Arquivo Anexo:</strong> ${csvAttached ? "✅ CSV incluído" : "❌ Nenhum dado disponível"}</p>
+          </div>
+          <p>O relatório em formato CSV está anexado a este email com as interações do Assistente IA das últimas 24 horas.</p>
+          <p>Colunas do relatório:</p>
+          <ul>
+            <li><strong>Data/Hora:</strong> Data e hora da interação</li>
+            <li><strong>Usuário:</strong> Email do usuário que fez a pergunta</li>
+            <li><strong>Pergunta:</strong> Pergunta feita ao assistente</li>
+            <li><strong>Resposta:</strong> Resposta fornecida pelo assistente</li>
+          </ul>
+        </div>
+        <div class="footer">
+          <p>Este é um email automático gerado diariamente às 8:00 AM UTC.</p>
+          <p>&copy; ${new Date().getFullYear()} Nautilus One - Travel HR Buddy</p>
+        </div>
+      </body>
+    </html>
+  `;
+}
+
+/**
+ * Send email via Resend API
+ */
+async function sendEmailViaResend(
+  toEmail: string,
+  subject: string,
+  htmlContent: string,
+  csvContent: string,
+  apiKey: string
+): Promise<void> {
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: Deno.env.get("EMAIL_FROM") || "relatorios@nautilus.ai",
+      to: toEmail,
+      subject: subject,
+      html: htmlContent,
+      attachments: csvContent ? [{
+        filename: `relatorio-assistente-${new Date().toISOString().split('T')[0]}.csv`,
+        content: btoa(csvContent),
+      }] : [],
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Resend API error: ${response.status} - ${errorText}`);
+  }
+}
+
+/**
+ * Send email via SendGrid API
+ */
+async function sendEmailViaSendGrid(
+  toEmail: string,
+  subject: string,
+  htmlContent: string,
+  csvContent: string,
+  apiKey: string
+): Promise<void> {
+  const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      personalizations: [{ to: [{ email: toEmail }] }],
+      from: { 
+        email: Deno.env.get("EMAIL_FROM") || "relatorios@nautilus.ai",
+        name: "Nautilus One Reports"
+      },
+      subject: subject,
+      content: [{ type: "text/html", value: htmlContent }],
+      attachments: csvContent ? [{
+        content: btoa(csvContent),
+        filename: `relatorio-assistente-${new Date().toISOString().split('T')[0]}.csv`,
+        type: "text/csv",
+        disposition: "attachment",
+      }] : [],
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`SendGrid API error: ${response.status} - ${errorText}`);
+  }
+}
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+  );
+
+  try {
+    console.log("🚀 Starting daily assistant report generation...");
+
+    const ADMIN_EMAIL = Deno.env.get("ADMIN_EMAIL") || Deno.env.get("EMAIL_TO") || "admin@example.com";
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
+
+    if (!RESEND_API_KEY && !SENDGRID_API_KEY) {
+      throw new Error("RESEND_API_KEY or SENDGRID_API_KEY must be configured");
+    }
+
+    console.log("📊 Fetching assistant logs from last 24h...");
+
+    // Fetch logs from last 24 hours
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { data: logs, error: logsError } = await supabase
+      .from("assistant_logs")
+      .select("id, question, answer, created_at, user_email, user_id")
+      .gte("created_at", yesterday)
+      .order("created_at", { ascending: false });
+
+    if (logsError) {
+      console.error("Error fetching logs:", logsError);
+      throw new Error(`Failed to fetch logs: ${logsError.message}`);
+    }
+
+    console.log(`✅ Fetched ${logs?.length || 0} logs from last 24h`);
+
+    // Generate CSV
+    const csvContent = logs && logs.length > 0 ? generateCSV(logs) : "";
+    const emailHtml = generateEmailHtml(logs?.length || 0, csvContent.length > 0);
+
+    console.log("📧 Sending email report...");
+
+    // Send email via Resend or SendGrid
+    const subject = `📊 Relatório Diário - Assistente IA ${new Date().toLocaleDateString('pt-BR')}`;
+    
+    try {
+      if (RESEND_API_KEY) {
+        console.log("Using Resend API...");
+        await sendEmailViaResend(ADMIN_EMAIL, subject, emailHtml, csvContent, RESEND_API_KEY);
+      } else if (SENDGRID_API_KEY) {
+        console.log("Using SendGrid API...");
+        await sendEmailViaSendGrid(ADMIN_EMAIL, subject, emailHtml, csvContent, SENDGRID_API_KEY);
+      }
+    } catch (emailError) {
+      console.error("❌ Error sending email:", emailError);
+      throw emailError;
+    }
+
+    console.log("✅ Email sent successfully!");
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "Daily assistant report sent successfully",
+        logsCount: logs?.length || 0,
+        recipient: ADMIN_EMAIL,
+        emailSent: true
+      }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      }
+    );
+
+  } catch (error) {
+    console.error("❌ Error in send-daily-assistant-report:", error);
+    
+    const errorMessage = error instanceof Error ? error.message : "An error occurred while sending the report";
+    
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: errorMessage
+      }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+      }
+    );
+  }
+});
