@@ -26,6 +26,7 @@ interface AssistantLog {
   answer: string;
   origin: string;
   created_at: string;
+  user_email?: string;
 }
 
 export default function AssistantLogsPage() {
@@ -34,6 +35,7 @@ export default function AssistantLogsPage() {
   const [filteredLogs, setFilteredLogs] = useState<AssistantLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [emailFilter, setEmailFilter] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,15 +47,12 @@ export default function AssistantLogsPage() {
 
   useEffect(() => {
     applyFilters();
-  }, [logs, searchKeyword, startDate, endDate]);
+  }, [logs, searchKeyword, emailFilter, startDate, endDate]);
 
   async function fetchLogs() {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("assistant_logs")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase.functions.invoke("assistant-logs");
 
       if (error) throw error;
       setLogs(data || []);
@@ -77,6 +76,14 @@ export default function AssistantLogsPage() {
       );
     }
 
+    // Email filter
+    if (emailFilter.trim()) {
+      const email = emailFilter.toLowerCase();
+      filtered = filtered.filter(
+        (log) => log.user_email?.toLowerCase().includes(email)
+      );
+    }
+
     // Date range filter
     if (startDate) {
       filtered = filtered.filter(
@@ -97,6 +104,7 @@ export default function AssistantLogsPage() {
 
   function clearFilters() {
     setSearchKeyword("");
+    setEmailFilter("");
     setStartDate("");
     setEndDate("");
   }
@@ -108,16 +116,17 @@ export default function AssistantLogsPage() {
     }
 
     // CSV headers
-    const headers = ["Data/Hora", "Pergunta", "Resposta", "Origem"];
+    const headers = ["Data/Hora", "Usuário", "Pergunta", "Resposta", "Origem"];
     
     // CSV rows
     const rows = filteredLogs.map((log) => {
       const date = format(new Date(log.created_at), "dd/MM/yyyy HH:mm:ss");
+      const userEmail = `"${log.user_email || "Anônimo"}"`;
       // Escape quotes and wrap in quotes for CSV
       const question = `"${log.question.replace(/"/g, "\"\"")}"`;
       const answer = `"${log.answer.replace(/"/g, "\"\"").replace(/<[^>]*>/g, "")}"`;
       const origin = `"${log.origin}"`;
-      return [date, question, answer, origin].join(",");
+      return [date, userEmail, question, answer, origin].join(",");
     });
 
     // Combine headers and rows
@@ -144,7 +153,7 @@ export default function AssistantLogsPage() {
   const endIndex = startIndex + itemsPerPage;
   const currentLogs = filteredLogs.slice(startIndex, endIndex);
 
-  const hasFilters = searchKeyword || startDate || endDate;
+  const hasFilters = searchKeyword || emailFilter || startDate || endDate;
 
   return (
     <div className="min-h-screen p-6 bg-gray-50">
@@ -218,6 +227,22 @@ export default function AssistantLogsPage() {
                 />
               </div>
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <User className="w-4 h-4" />
+                  E-mail do Usuário
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">
+                    NEW!
+                  </span>
+                </label>
+                <Input
+                  placeholder="Filtrar por e-mail..."
+                  value={emailFilter}
+                  onChange={(e) => setEmailFilter(e.target.value)}
+                />
+              </div>
+            </div>
             {hasFilters && (
               <Button variant="outline" size="sm" onClick={clearFilters}>
                 <X className="w-4 h-4 mr-2" />
@@ -255,8 +280,11 @@ export default function AssistantLogsPage() {
                     <Card key={log.id} className="border-l-4 border-l-blue-500">
                       <CardContent className="p-4 space-y-3">
                         <div className="flex items-start justify-between">
-                          <div className="text-xs text-muted-foreground">
-                            {format(new Date(log.created_at), "dd/MM/yyyy 'às' HH:mm:ss")}
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <User className="w-3 h-3" />
+                            <span className="font-medium">{log.user_email || "Anônimo"}</span>
+                            <span>—</span>
+                            <span>{format(new Date(log.created_at), "dd/MM/yyyy 'às' HH:mm:ss")}</span>
                           </div>
                           <div className="text-xs px-2 py-1 bg-gray-100 rounded">
                             {log.origin}
