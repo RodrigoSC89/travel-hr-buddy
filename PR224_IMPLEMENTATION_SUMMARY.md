@@ -47,14 +47,14 @@ After a document is generated, users now see four action buttons:
    - Generates a concise summary of the document
    - Shows loading state: "Resumindo..."
    - Displays summary in a muted box below the buttons
-   - Uses GPT-4o-mini with temperature 0.5
+   - Uses GPT-4 with temperature 0.5
 
 2. **Reformular IA (RefreshCw Icon 🔄)**
    - Rewrites the document to improve quality
    - Shows loading state: "Reformulando..."
    - Replaces the current document content
    - Clears any existing summary
-   - Uses GPT-4o-mini with temperature 0.7
+   - Uses GPT-4 with temperature 0.7
 
 ---
 
@@ -79,7 +79,7 @@ After a document is generated, users now see four action buttons:
    - Request: `{ "content": "document text" }`
    - Response: `{ "summary": "...", "timestamp": "..." }`
    - Features:
-     - Model: GPT-4o-mini
+     - Model: GPT-4
      - Temperature: 0.5 (consistent results)
      - Max tokens: 1000
      - Retry logic: 3 attempts with exponential backoff
@@ -90,7 +90,7 @@ After a document is generated, users now see four action buttons:
    - Request: `{ "content": "document text" }`
    - Response: `{ "rewritten": "...", "timestamp": "..." }`
    - Features:
-     - Model: GPT-4o-mini
+     - Model: GPT-4
      - Temperature: 0.7 (creative reformulation)
      - Max tokens: 2000
      - Retry logic: 3 attempts with exponential backoff
@@ -254,14 +254,14 @@ Potential improvements for future PRs:
 - **Comprehensive Docs**: Detailed README for each edge function
 - **Consistent Patterns**: Follows existing codebase conventions
 - **Production Ready**: Includes retry logic, timeouts, and error handling
-- **Cost Optimized**: Uses GPT-4o-mini for affordability
+- **Quality Optimized**: Uses GPT-4 for highest quality results
 - **User Friendly**: Clear loading states and toast notifications
 
 ---
 
 ## 📌 Notes
 
-- Both functions use GPT-4o-mini for cost efficiency
+- Both functions use GPT-4 for maximum quality
 - Summarize uses lower temperature (0.5) for consistency
 - Rewrite uses higher temperature (0.7) for creativity
 - Summary is automatically cleared when document is rewritten

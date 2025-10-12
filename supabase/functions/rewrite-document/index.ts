@@ -76,7 +76,7 @@ serve(async (req) => {
     - Não adicione nem remova informações substanciais`;
 
     const requestBody = {
-      model: "gpt-4o-mini",
+      model: "gpt-4",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: `Reformule o seguinte documento, melhorando a redação mas mantendo todas as informações:\n\n${content}` }

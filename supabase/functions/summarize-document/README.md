@@ -50,7 +50,7 @@ Esta função aceita requisições públicas (não requer autenticação), mas u
 
 ## Características
 
-- **Modelo**: GPT-4o-mini para custo-efetividade
+- **Modelo**: GPT-4 para máxima qualidade
 - **Temperature**: 0.5 para respostas mais consistentes
 - **Max Tokens**: 1000 tokens
 - **Retry Logic**: 3 tentativas com exponential backoff

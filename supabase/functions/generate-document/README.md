@@ -53,7 +53,7 @@ Esta função aceita requisições públicas (não requer autenticação), mas u
 - **Retry Logic**: Implementa retry automático com exponential backoff para lidar com falhas temporárias da API
 - **Timeout**: Timeout de 30 segundos por requisição
 - **CORS**: Suporta requisições de qualquer origem
-- **Modelo**: Utiliza `gpt-4o-mini` para geração de conteúdo
+- **Modelo**: Utiliza `gpt-4` para geração de conteúdo de alta qualidade
 - **Sistema de Prompts**: Configurado para gerar documentos profissionais e corporativos
 
 ## Variáveis de Ambiente Necessárias

@@ -74,7 +74,7 @@ serve(async (req) => {
     - Não adicione informações que não estão no documento original`;
 
     const requestBody = {
-      model: "gpt-4o-mini",
+      model: "gpt-4",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: `Resuma o seguinte documento:\n\n${content}` }

@@ -80,7 +80,7 @@ serve(async (req) => {
     - Informações práticas e úteis`;
 
     const requestBody = {
-      model: "gpt-4o-mini",
+      model: "gpt-4",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: prompt }

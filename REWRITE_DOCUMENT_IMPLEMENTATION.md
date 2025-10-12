@@ -8,12 +8,12 @@ This PR implements document summarization and rewriting features for the Travel 
 ### 1. New Supabase Edge Functions
 
 #### `supabase/functions/summarize-document`
-- **Purpose**: Generate concise summaries of documents using OpenAI's GPT-4o-mini
+- **Purpose**: Generate concise summaries of documents using OpenAI's GPT-4
 - **Endpoint**: `POST /functions/v1/summarize-document`
 - **Request Body**: `{ "content": "document text" }`
 - **Response**: `{ "summary": "generated summary", "timestamp": "ISO timestamp" }`
 - **Features**:
-  - Model: GPT-4o-mini for cost-effectiveness
+  - Model: GPT-4 for maximum quality
   - Temperature: 0.5 for consistent results
   - Max Tokens: 1000
   - Retry logic with exponential backoff (3 attempts)
@@ -26,7 +26,7 @@ This PR implements document summarization and rewriting features for the Travel 
 - **Request Body**: `{ "content": "document text" }`
 - **Response**: `{ "rewritten": "improved document", "timestamp": "ISO timestamp" }`
 - **Features**:
-  - Model: GPT-4o-mini for cost-effectiveness
+  - Model: GPT-4 for maximum quality
   - Temperature: 0.7 for creative reformulation
   - Max Tokens: 2000
   - Retry logic with exponential backoff (3 attempts)
@@ -146,7 +146,7 @@ Both new functions follow the established pattern from existing functions:
 5. Rewrite replaces document content with improved version
 
 ## Notes
-- Both functions use GPT-4o-mini for cost efficiency
+- Both functions use GPT-4 for maximum quality
 - Summarize uses temperature 0.5 for consistency
 - Rewrite uses temperature 0.7 for creativity
 - Summary is cleared when document is rewritten
