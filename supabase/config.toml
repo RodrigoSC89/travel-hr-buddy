@@ -1,1 +1,5 @@
 project_id = "vnbptmixvwropvanyhdb"
+
+# Edge Function Cron Jobs
+[functions.send_daily_restore_report]
+  schedule = "0 7 * * *"  # Daily at 7:00 AM UTC
