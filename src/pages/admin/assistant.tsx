@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Send, Loader2, Bot, User, CheckCircle2, Zap } from "lucide-react";
+import { Sparkles, Send, Loader2, Bot, User, CheckCircle2, Zap, History } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
@@ -36,6 +37,7 @@ const capabilities = [
 ];
 
 export default function AssistantPage() {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -85,14 +87,23 @@ export default function AssistantPage() {
 
   return (
     <div className="h-[calc(100vh-4rem)] p-6 flex flex-col">
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Sparkles className="w-6 h-6 text-yellow-500" />
-          🤖 Assistente IA
-        </h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Seu copiloto inteligente para navegação e tarefas do sistema
-        </p>
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <Sparkles className="w-6 h-6 text-yellow-500" />
+            🤖 Assistente IA
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Seu copiloto inteligente para navegação e tarefas do sistema
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => navigate("/admin/assistant/logs")}
+        >
+          <History className="w-4 h-4 mr-2" />
+          Ver Histórico
+        </Button>
       </div>
 
       <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">

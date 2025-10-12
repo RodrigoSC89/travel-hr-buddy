@@ -1,7 +1,49 @@
 import type { NextApiRequest, NextApiResponse } from "./next-types";
 import { OpenAI } from "openai";
+import { createClient } from "@supabase/supabase-js";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// Initialize Supabase client for logging
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL || "",
+  process.env.VITE_SUPABASE_ANON_KEY || ""
+);
+
+// Helper function to log assistant interactions
+async function logAssistantInteraction(
+  userId: string | null,
+  question: string,
+  answer: string,
+  origin: string = "assistant"
+) {
+  if (!userId || !process.env.VITE_SUPABASE_URL) return;
+  
+  try {
+    await supabase.from("assistant_logs").insert({
+      user_id: userId,
+      question,
+      answer,
+      origin,
+    });
+  } catch (error) {
+    console.error("Failed to log assistant interaction:", error);
+    // Don't throw - logging failures shouldn't break the main functionality
+  }
+}
+
+// Helper function to extract user ID from JWT token
+function extractUserId(authHeader: string | undefined): string | null {
+  if (!authHeader?.startsWith("Bearer ")) return null;
+  
+  try {
+    const token = authHeader.substring(7);
+    const payload = JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+    return payload.sub || null;
+  } catch {
+    return null;
+  }
+}
 
 interface CommandAction {
   type: "navigation" | "action" | "query" | "info";
@@ -81,6 +123,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!question || typeof question !== "string")
     return res.status(400).json({ error: "Pergunta inválida" });
 
+  // Extract user ID for logging
+  const userId = extractUserId(req.headers.authorization);
+
   try {
     // Note: This Next.js API route is a fallback. The main implementation uses Supabase Edge Functions
     // which have direct database access. This route would need Supabase client setup for real queries.
@@ -90,8 +135,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const commandAction = findCommand(question);
     
     if (commandAction) {
+      const answer = commandAction.message;
+      
+      // Log the interaction
+      await logAssistantInteraction(userId, question, answer);
+      
       return res.status(200).json({
-        answer: commandAction.message,
+        answer,
         action: commandAction.type,
         target: commandAction.target,
       });
@@ -158,17 +208,30 @@ Seja claro, direto e útil.
         enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
       }
 
+      // Log the interaction
+      await logAssistantInteraction(userId, question, enhanced);
+
       return res.status(200).json({ answer: enhanced, action: "info" });
     }
 
     // Fallback if no OpenAI key
+    const fallbackAnswer = `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem (requer Supabase)\n• Listar documentos recentes (requer Supabase)`;
+    
+    // Log the interaction
+    await logAssistantInteraction(userId, question, fallbackAnswer);
+    
     return res.status(200).json({
-      answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem (requer Supabase)\n• Listar documentos recentes (requer Supabase)`,
+      answer: fallbackAnswer,
       action: "info",
     });
 
   } catch (err) {
     console.error("Erro ao processar pergunta:", err);
-    return res.status(500).json({ error: "Erro ao processar pergunta" });
+    const errorAnswer = "Erro ao processar pergunta";
+    
+    // Try to log the error too
+    await logAssistantInteraction(userId, question, errorAnswer);
+    
+    return res.status(500).json({ error: errorAnswer });
   }
 }
