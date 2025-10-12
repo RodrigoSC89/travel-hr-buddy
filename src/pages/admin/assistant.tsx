@@ -45,7 +45,17 @@ export default function AssistantPage() {
         if (!res.ok) throw new Error(apiData.error);
         setMessages((prev) => [...prev, { role: "assistant", content: apiData.answer || "" }]);
       } else {
-        setMessages((prev) => [...prev, { role: "assistant", content: data?.answer || "" }]);
+        let assistantMessage = data?.answer || "";
+        
+        // Handle checklist creation action - convert markdown links to HTML
+        if (data?.action === "checklist_creation" && data?.target) {
+          assistantMessage = assistantMessage.replace(
+            /\[([^\]]+)\]\(([^\)]+)\)/g,
+            '<a href="$2" class="text-blue-600 hover:text-blue-800 underline font-medium">$1</a>'
+          );
+        }
+        
+        setMessages((prev) => [...prev, { role: "assistant", content: assistantMessage }]);
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -82,7 +92,7 @@ export default function AssistantPage() {
                   <Bot className="w-12 h-12 mx-auto mb-2 opacity-50" />
                   <p>Olá! Como posso ajudar você hoje?</p>
                   <p className="text-xs mt-2">
-                    Experimente: &quot;Criar checklist&quot;, &quot;Resumir documento&quot;, &quot;Mostrar alertas&quot;
+                    Experimente: &quot;Criar checklist para auditoria&quot;, &quot;Resumir documento&quot;, &quot;Mostrar alertas&quot;
                   </p>
                 </div>
               )}
@@ -151,7 +161,7 @@ export default function AssistantPage() {
           <div className="border-t p-4">
             <div className="flex gap-2">
               <Input
-                placeholder="Pergunte algo... (ex: 'criar checklist', 'resumir documento')"
+                placeholder="Pergunte algo... (ex: 'criar checklist para auditoria', 'resumir documento')"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && !loading && sendMessage()}
