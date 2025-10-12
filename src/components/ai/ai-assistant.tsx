@@ -181,14 +181,19 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
     setIsLoading(true);
 
     try {
+      // Build conversation history for context
+      const conversationHistory = messages.slice(-5).map(msg => ({
+        role: msg.type === "user" ? "user" : "assistant",
+        content: msg.content
+      }));
+
       // Call the AI chat edge function
       const { data, error } = await supabase.functions.invoke("ai-chat", {
         body: {
           message: userMessage.content,
           context,
           module,
-          user_id: user?.id,
-          conversation_history: messages.slice(-5) // Last 5 messages for context
+          conversation_history: conversationHistory
         }
       });
 
@@ -197,7 +202,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: "assistant",
-        content: data.response,
+        content: data.reply || data.response, // Support both old and new format
         timestamp: new Date(),
         metadata: data.metadata
       };
@@ -214,6 +219,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       }
 
     } catch (error) {
+      console.error("AI Assistant error:", error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: "system",
@@ -224,7 +230,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       
       toast({
         title: "Erro no assistente",
-        description: "Não foi possível processar sua mensagem",
+        description: error instanceof Error ? error.message : "Não foi possível processar sua mensagem",
         variant: "destructive"
       });
     } finally {
