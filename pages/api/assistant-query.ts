@@ -24,7 +24,7 @@ const commandPatterns: Record<string, CommandAction> = {
   },
   "resumir documento": {
     type: "action",
-    message: "📄 Para resumir um documento, vá para Documentos AI e use a função 'Resumir com IA'.",
+    message: "📄 Para resumir um documento, use: 'resumir documento [ID]'\n\nExemplo: 'resumir documento 550e8400-e29b-41d4-a716-446655440000'\n\nPara ver seus documentos recentes, digite: 'documentos recentes'\n\n⚠️ Nota: Esta funcionalidade requer Supabase Edge Function para acesso ao banco de dados.",
   },
   "documento": {
     type: "navigation",
@@ -58,7 +58,7 @@ const commandPatterns: Record<string, CommandAction> = {
   },
   "ajuda": {
     type: "info",
-    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA",
+    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas (requer Supabase)\n• 'documentos recentes' - Listar últimos 5 documentos (requer Supabase)\n• 'resumir documento [ID]' - Gerar resumo com GPT-4 (requer Supabase)\n• 'status do sistema' - Monitorar sistema",
   },
 };
 
@@ -146,7 +146,7 @@ Seja claro, direto e útil.
 
     // Fallback if no OpenAI key
     return res.status(200).json({
-      answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem (requer Supabase)\n• Listar documentos recentes (requer Supabase)`,
+      answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem (requer Supabase)\n• Listar documentos recentes (requer Supabase)\n• Resumir documentos com IA (requer Supabase)`,
       action: "info",
     });
 

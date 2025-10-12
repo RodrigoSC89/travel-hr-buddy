@@ -28,7 +28,7 @@ const commandPatterns: Record<string, CommandAction> = {
   },
   "resumir documento": {
     type: "action",
-    message: "📄 Para resumir um documento, vá para Documentos AI e use a função 'Resumir com IA'.",
+    message: "📄 Para resumir um documento, use: 'resumir documento [ID]'\n\nExemplo: 'resumir documento 550e8400-e29b-41d4-a716-446655440000'\n\nPara ver seus documentos recentes, digite: 'documentos recentes'",
   },
   "resumo": {
     type: "action",
@@ -95,7 +95,7 @@ const commandPatterns: Record<string, CommandAction> = {
   },
   "ajuda": {
     type: "info",
-    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
+    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'resumir documento [ID]' - Gerar resumo com GPT-4 (ex: 'resumir documento 123')\n• 'status do sistema' - Monitorar sistema\n• 'gerar pdf' - Exportar documentos",
   },
   "help": {
     type: "info",
@@ -232,6 +232,106 @@ serve(async (req) => {
       );
     }
 
+    // 👉 GPT-4 Document Summarization
+    // Pattern: "resumir documento [id]" where id can be numeric or full UUID
+    const resumeMatch = lower.match(/resumir\s+documento\s+([a-f0-9-]+|\d+)/i);
+    if (resumeMatch) {
+      const docId = resumeMatch[1];
+      console.log("Document summarization requested for ID:", docId);
+
+      // Fetch document from ai_generated_documents table
+      const { data: doc, error: docError } = await supabase
+        .from("ai_generated_documents")
+        .select("id, title, content")
+        .eq("id", docId)
+        .single();
+
+      if (docError || !doc) {
+        console.error("Error fetching document:", docError);
+        return new Response(
+          JSON.stringify({
+            answer: `❌ Documento não encontrado (ID: ${docId}). Verifique se o ID está correto e se você tem permissão para acessá-lo.`,
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      // Generate summary with GPT-4
+      const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+      if (!OPENAI_API_KEY) {
+        return new Response(
+          JSON.stringify({
+            answer: "⚠️ OpenAI API key não configurada. Não é possível gerar resumos no momento.",
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      try {
+        const summaryResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "gpt-4",
+            messages: [
+              { 
+                role: "system", 
+                content: "Resuma o conteúdo abaixo de forma clara e concisa, destacando os pontos principais. O resumo deve ter no máximo 3-4 parágrafos." 
+              },
+              { role: "user", content: doc.content }
+            ],
+            temperature: 0.3,
+            max_tokens: 500,
+          }),
+        });
+
+        if (!summaryResponse.ok) {
+          throw new Error(`OpenAI API error: ${summaryResponse.status}`);
+        }
+
+        const summaryData = await summaryResponse.json();
+        const summary = summaryData.choices[0].message.content || "Não foi possível gerar o resumo.";
+
+        return new Response(
+          JSON.stringify({
+            answer: `📝 **Resumo: ${doc.title}**\n\n${summary}`,
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      } catch (error) {
+        console.error("Error generating summary:", error);
+        return new Response(
+          JSON.stringify({
+            answer: "❌ Erro ao gerar resumo. Tente novamente mais tarde.",
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+    }
+
     // Try to match with predefined commands
     const commandAction = findCommand(question);
     
@@ -257,7 +357,7 @@ serve(async (req) => {
       // Fallback response if no OpenAI key
       return new Response(
         JSON.stringify({
-          answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem\n• Listar documentos recentes`,
+          answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem\n• Listar documentos recentes\n• Resumir documentos com IA (ex: 'resumir documento 123')`,
           action: "info",
           timestamp: new Date().toISOString(),
         }),
