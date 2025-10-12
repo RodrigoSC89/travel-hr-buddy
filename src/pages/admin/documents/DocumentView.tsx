@@ -107,10 +107,7 @@ export default function DocumentViewPage() {
           content, 
           created_at, 
           generated_by,
-          profiles (
-            email,
-            full_name
-          )
+          profiles:generated_by(email, full_name)
         `)
         .eq("id", id)
         .single();
