@@ -14,39 +14,29 @@ vi.mock("react-router-dom", async () => {
 });
 
 // Mock Supabase client
-const mockSupabaseFrom = vi.fn();
-const mockSupabaseSelect = vi.fn();
-const mockSupabaseOrder = vi.fn();
-
-// Create a promise that we can control
-let mockPromiseResolve: (value: { data: unknown[]; error: null }) => void;
-let mockPromise: Promise<{ data: unknown[]; error: null }>;
+const mockSupabaseFunctions = vi.fn();
 
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
-    from: (...args: unknown[]) => {
-      mockSupabaseFrom(...args);
-      return {
-        select: (...selectArgs: unknown[]) => {
-          mockSupabaseSelect(...selectArgs);
-          return {
-            order: (...orderArgs: unknown[]) => {
-              mockSupabaseOrder(...orderArgs);
-              // Create a new promise for each call that can be controlled
-              mockPromise = new Promise((resolve) => {
-                mockPromiseResolve = resolve;
-              });
-              // Also auto-resolve after a short delay to not hang tests
-              setTimeout(() => {
-                if (mockPromiseResolve) {
-                  mockPromiseResolve({ data: [], error: null });
-                }
-              }, 100);
-              return mockPromise;
+    functions: {
+      invoke: (...args: unknown[]) => {
+        mockSupabaseFunctions(...args);
+        // Return mock data with user_email
+        return Promise.resolve({
+          data: [
+            {
+              id: "1",
+              user_id: "user1",
+              question: "Test question",
+              answer: "Test answer",
+              origin: "assistant",
+              created_at: new Date().toISOString(),
+              user_email: "test@example.com",
             },
-          };
-        },
-      };
+          ],
+          error: null,
+        });
+      },
     },
   },
 }));
@@ -75,6 +65,18 @@ describe("AssistantLogsPage Component", () => {
 
     expect(screen.getByText(/Filtros/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Buscar em perguntas ou respostas/i)).toBeInTheDocument();
+  });
+
+  it("should render email filter input", async () => {
+    render(
+      <MemoryRouter>
+        <AssistantLogsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Filtrar por e-mail/i)).toBeInTheDocument();
+    });
   });
 
   it("should navigate back when back button is clicked", async () => {
@@ -122,9 +124,7 @@ describe("AssistantLogsPage Component", () => {
     );
 
     await waitFor(() => {
-      expect(mockSupabaseFrom).toHaveBeenCalledWith("assistant_logs");
-      expect(mockSupabaseSelect).toHaveBeenCalledWith("*");
-      expect(mockSupabaseOrder).toHaveBeenCalledWith("created_at", { ascending: false });
+      expect(mockSupabaseFunctions).toHaveBeenCalledWith("assistant-logs");
     });
   });
 });
