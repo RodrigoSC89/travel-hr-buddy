@@ -165,6 +165,16 @@ serve(async (req) => {
     const { logs, toEmail, subject }: EmailRequest = await req.json();
     
     if (!logs || !Array.isArray(logs) || logs.length === 0) {
+      // Log error when no data to send
+      await supabaseClient
+        .from('assistant_report_logs')
+        .insert({
+          user_id: user.id,
+          user_email: user.email || 'unknown',
+          status: 'error',
+          message: 'Nenhum dado para enviar.'
+        });
+
       return new Response(
         JSON.stringify({ error: "Nenhum dado para enviar." }),
         {
@@ -262,6 +272,16 @@ serve(async (req) => {
 
     console.log("✅ Email sent successfully!");
 
+    // Log success
+    await supabaseClient
+      .from('assistant_report_logs')
+      .insert({
+        user_id: user.id,
+        user_email: user.email || 'unknown',
+        status: 'success',
+        message: 'Enviado com sucesso'
+      });
+
     return new Response(
       JSON.stringify({ 
         status: "ok",
@@ -279,6 +299,37 @@ serve(async (req) => {
     console.error("❌ Error in send-assistant-report:", error);
     
     const errorMessage = error instanceof Error ? error.message : "An error occurred while sending the report";
+    
+    // Try to log error (but don't fail if logging fails)
+    try {
+      const authHeader = req.headers.get("Authorization");
+      if (authHeader) {
+        const supabaseClient = createClient(
+          Deno.env.get("SUPABASE_URL") ?? "",
+          Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+          {
+            global: {
+              headers: { Authorization: authHeader },
+            },
+          }
+        );
+        
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        
+        if (user) {
+          await supabaseClient
+            .from('assistant_report_logs')
+            .insert({
+              user_id: user.id,
+              user_email: user.email || 'unknown',
+              status: 'error',
+              message: errorMessage
+            });
+        }
+      }
+    } catch (logError) {
+      console.error("Failed to log error:", logError);
+    }
     
     return new Response(
       JSON.stringify({
