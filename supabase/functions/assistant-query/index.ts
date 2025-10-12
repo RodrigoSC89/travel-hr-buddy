@@ -7,6 +7,10 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Initialize Supabase client for database queries
+const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
 interface CommandAction {
   type: "navigation" | "action" | "query" | "info";
   target?: string;
@@ -26,10 +30,6 @@ const commandPatterns: Record<string, CommandAction> = {
     target: "/admin/checklists",
     message: "✅ Abrindo checklists...",
   },
-  "resumir documento": {
-    type: "action",
-    message: "📄 Para resumir um documento, vá para Documentos AI e use a função 'Resumir com IA'.",
-  },
   "resumo": {
     type: "action",
     message: "📄 Para criar resumos, acesse a seção de Documentos AI.",
@@ -38,10 +38,6 @@ const commandPatterns: Record<string, CommandAction> = {
     type: "navigation",
     target: "/admin/documents/ai",
     message: "📄 Abrindo Documentos AI...",
-  },
-  "tarefas pendentes": {
-    type: "query",
-    message: "📋 Consultando tarefas pendentes...\n\nVocê tem 3 tarefas pendentes hoje:\n1. Revisar checklist de segurança\n2. Aprovar relatório de viagem\n3. Atualizar documentos da tripulação",
   },
   "tarefas": {
     type: "query",
@@ -66,16 +62,6 @@ const commandPatterns: Record<string, CommandAction> = {
     type: "navigation",
     target: "/admin/control-panel",
     message: "⚙️ Abrindo painel de controle do sistema...",
-  },
-  "documentos recentes": {
-    type: "navigation",
-    target: "/admin/documents",
-    message: "📚 Mostrando documentos recentes...",
-  },
-  "últimos documentos": {
-    type: "navigation",
-    target: "/admin/documents",
-    message: "📚 Abrindo lista de documentos...",
   },
   "gerar pdf": {
     type: "action",
@@ -113,7 +99,7 @@ const commandPatterns: Record<string, CommandAction> = {
   },
   "ajuda": {
     type: "info",
-    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Ações:**\n• 'tarefas pendentes' - Ver suas tarefas\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
+    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Ações Inteligentes:**\n• 'tarefas pendentes' - Ver suas tarefas (consulta banco de dados)\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'resuma o documento [ID]' - Resumir documento com IA\n• 'status do sistema' - Monitorar sistema\n• 'gerar pdf' - Exportar documentos",
   },
   "help": {
     type: "info",
@@ -148,6 +134,218 @@ serve(async (req) => {
     }
 
     console.log("Processing assistant query:", question);
+
+    // Initialize Supabase client for this request
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const lower = question.toLowerCase();
+
+    // 🧠 Advanced commands with real database logic
+    
+    // Command: "tarefas pendentes" - Query real database for unchecked items
+    if (lower.includes("tarefas pendentes") || lower.includes("quantas tarefas")) {
+      const { count, error } = await supabase
+        .from("checklist_items")
+        .select("*", { count: "exact", head: true })
+        .eq("completed", false);
+
+      if (error) {
+        console.error("Error querying tasks:", error);
+        return new Response(
+          JSON.stringify({
+            answer: "⚠️ Erro ao consultar tarefas pendentes.",
+            action: "info",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      return new Response(
+        JSON.stringify({
+          answer: `📋 Você tem **${count || 0}** tarefas pendentes.\n\n[🔍 Ver Tarefas](/admin/checklists)`,
+          action: "info",
+          timestamp: new Date().toISOString(),
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        }
+      );
+    }
+
+    // Command: "documentos recentes" / "últimos documentos" - Query last 5 documents
+    if (lower.includes("últimos documentos") || lower.includes("documentos recentes")) {
+      const { data, error } = await supabase
+        .from("ai_generated_documents")
+        .select("id, title, created_at")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      if (error || !data) {
+        console.error("Error querying documents:", error);
+        return new Response(
+          JSON.stringify({
+            answer: "⚠️ Erro ao buscar documentos.",
+            action: "info",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      if (data.length === 0) {
+        return new Response(
+          JSON.stringify({
+            answer: "📑 Nenhum documento encontrado.\n\n[➕ Criar Documento](/admin/documents/ai)",
+            action: "info",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      const list = data
+        .map((doc) => {
+          const date = new Date(doc.created_at).toLocaleDateString("pt-BR");
+          return `📄 [${doc.title}](/admin/documents/view/${doc.id}) — ${date}`;
+        })
+        .join("\n");
+
+      return new Response(
+        JSON.stringify({
+          answer: `📑 **Últimos documentos:**\n\n${list}`,
+          action: "info",
+          timestamp: new Date().toISOString(),
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        }
+      );
+    }
+
+    // Command: "resuma o documento X" - Fetch and summarize document with GPT-4
+    if (lower.includes("resuma o documento") || lower.includes("resumir documento")) {
+      const idMatch = lower.match(/documento\s+(\d+|[a-f0-9-]{36})/i);
+      const docId = idMatch?.[1];
+
+      if (!docId) {
+        return new Response(
+          JSON.stringify({
+            answer: "❌ Por favor, especifique o ID do documento.\n\nExemplo: 'resuma o documento 123'",
+            action: "info",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      const { data: doc, error: docError } = await supabase
+        .from("ai_generated_documents")
+        .select("id, title, content")
+        .eq("id", docId)
+        .single();
+
+      if (docError || !doc) {
+        console.error("Error fetching document:", docError);
+        return new Response(
+          JSON.stringify({
+            answer: `❌ Documento não encontrado.\n\n[📚 Ver Documentos](/admin/documents)`,
+            action: "info",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      // Use OpenAI to summarize the document
+      const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+      if (!OPENAI_API_KEY) {
+        return new Response(
+          JSON.stringify({
+            answer: `❌ Serviço de resumo indisponível no momento.`,
+            action: "info",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      try {
+        const summaryResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "gpt-4",
+            messages: [
+              {
+                role: "system",
+                content: "Resuma o conteúdo abaixo de forma clara e objetiva em português brasileiro. Destaque os pontos principais.",
+              },
+              {
+                role: "user",
+                content: doc.content,
+              },
+            ],
+            temperature: 0.4,
+            max_tokens: 500,
+          }),
+        });
+
+        if (!summaryResponse.ok) {
+          throw new Error(`OpenAI API error: ${summaryResponse.status}`);
+        }
+
+        const summaryData = await summaryResponse.json();
+        const summary = summaryData.choices[0].message.content;
+
+        return new Response(
+          JSON.stringify({
+            answer: `📝 **Resumo do documento "${doc.title}":**\n\n${summary}\n\n[📄 Ver Documento Completo](/admin/documents/view/${doc.id})`,
+            action: "info",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      } catch (summaryError) {
+        console.error("Error generating summary:", summaryError);
+        return new Response(
+          JSON.stringify({
+            answer: `⚠️ Erro ao gerar resumo. Por favor, tente novamente.`,
+            action: "info",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+    }
 
     // Try to match with predefined commands
     const commandAction = findCommand(question);
@@ -186,9 +384,14 @@ serve(async (req) => {
     }
 
     // Use OpenAI for intelligent response
-    const systemPrompt = `Você é um assistente IA corporativo para o sistema Travel HR Buddy.
-    
-Seu papel é ajudar usuários a navegar no sistema e executar tarefas.
+    const systemPrompt = `Você é o assistente IA do sistema Nautilus One (Travel HR Buddy).
+
+Você pode executar ações poderosas como:
+- Consultar tarefas pendentes no banco de dados
+- Listar documentos recentes do sistema
+- Resumir documentos específicos com IA
+- Criar checklists e gerenciar tarefas
+- Navegar entre diferentes módulos
 
 Módulos disponíveis:
 - Dashboard: Painel principal com visão geral
@@ -202,6 +405,7 @@ Módulos disponíveis:
 - Sistema Marítimo: Gerenciar frota e navios
 - Status do Sistema: Monitor de APIs e integrações
 
+Use markdown para formatar respostas. Você pode criar links clicáveis assim: [Texto do Link](/caminho/url)
 Seja conciso, útil e profissional. Use emojis apropriados. Responda em português brasileiro.`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
