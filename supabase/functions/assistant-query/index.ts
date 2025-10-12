@@ -116,6 +116,30 @@ function findCommand(question: string): CommandAction | null {
   return null;
 }
 
+// Helper function to log assistant queries
+async function logQuery(
+  supabase: any,
+  userId: string | null,
+  userEmail: string | null,
+  question: string,
+  answer: string,
+  action?: string,
+  target?: string
+) {
+  try {
+    await supabase.from("assistant_logs").insert({
+      user_id: userId,
+      user_email: userEmail,
+      question,
+      answer,
+      action: action || "info",
+      target: target || null,
+    });
+  } catch (error) {
+    console.error("Error logging query:", error);
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -141,6 +165,19 @@ serve(async (req) => {
       },
     });
 
+    // Get user info for logging
+    let userId: string | null = null;
+    let userEmail: string | null = null;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        userId = user.id;
+        userEmail = user.email || null;
+      }
+    } catch (err) {
+      console.warn("Could not get user for logging:", err);
+    }
+
     const lower = question.toLowerCase();
 
     // 👉 Real database queries for pending tasks
@@ -150,24 +187,20 @@ serve(async (req) => {
         .select("*", { count: "exact", head: true })
         .eq("completed", false);
 
+      const answer = error
+        ? "⚠️ Erro ao consultar tarefas pendentes."
+        : `📋 Você tem ${count || 0} tarefas pendentes.`;
+
+      // Log the query
+      await logQuery(supabase, userId, userEmail, question, answer, "query");
+
       if (error) {
         console.error("Error querying tasks:", error);
-        return new Response(
-          JSON.stringify({
-            answer: "⚠️ Erro ao consultar tarefas pendentes.",
-            action: "query",
-            timestamp: new Date().toISOString(),
-          }),
-          {
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-            status: 200,
-          }
-        );
       }
 
       return new Response(
         JSON.stringify({
-          answer: `📋 Você tem ${count || 0} tarefas pendentes.`,
+          answer,
           action: "query",
           timestamp: new Date().toISOString(),
         }),
@@ -186,42 +219,25 @@ serve(async (req) => {
         .order("created_at", { ascending: false })
         .limit(5);
 
+      let answer: string;
       if (error || !data) {
         console.error("Error querying documents:", error);
-        return new Response(
-          JSON.stringify({
-            answer: "⚠️ Não foi possível buscar os documentos.",
-            action: "query",
-            timestamp: new Date().toISOString(),
-          }),
-          {
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-            status: 200,
-          }
-        );
+        answer = "⚠️ Não foi possível buscar os documentos.";
+      } else if (data.length === 0) {
+        answer = "📑 Não há documentos cadastrados ainda.";
+      } else {
+        const list = data
+          .map((doc) => `📄 ${doc.title} — ${new Date(doc.created_at).toLocaleDateString("pt-BR")}`)
+          .join("\n");
+        answer = `📑 Últimos documentos:\n${list}`;
       }
 
-      if (data.length === 0) {
-        return new Response(
-          JSON.stringify({
-            answer: "📑 Não há documentos cadastrados ainda.",
-            action: "query",
-            timestamp: new Date().toISOString(),
-          }),
-          {
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-            status: 200,
-          }
-        );
-      }
-
-      const list = data
-        .map((doc) => `📄 ${doc.title} — ${new Date(doc.created_at).toLocaleDateString("pt-BR")}`)
-        .join("\n");
+      // Log the query
+      await logQuery(supabase, userId, userEmail, question, answer, "query");
 
       return new Response(
         JSON.stringify({
-          answer: `📑 Últimos documentos:\n${list}`,
+          answer,
           action: "query",
           timestamp: new Date().toISOString(),
         }),
@@ -237,6 +253,18 @@ serve(async (req) => {
     
     if (commandAction) {
       console.log("Command matched:", commandAction);
+      
+      // Log the query
+      await logQuery(
+        supabase,
+        userId,
+        userEmail,
+        question,
+        commandAction.message,
+        commandAction.type,
+        commandAction.target
+      );
+
       return new Response(
         JSON.stringify({
           answer: commandAction.message,
@@ -255,9 +283,14 @@ serve(async (req) => {
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
       // Fallback response if no OpenAI key
+      const answer = `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem\n• Listar documentos recentes`;
+      
+      // Log the query
+      await logQuery(supabase, userId, userEmail, question, answer, "info");
+
       return new Response(
         JSON.stringify({
-          answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem\n• Listar documentos recentes`,
+          answer,
           action: "info",
           timestamp: new Date().toISOString(),
         }),
@@ -316,6 +349,9 @@ Seja claro, direto e útil.
     } else if (/alertas?/i.test(question)) {
       enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
     }
+
+    // Log the query
+    await logQuery(supabase, userId, userEmail, question, enhanced, "info");
 
     return new Response(
       JSON.stringify({
