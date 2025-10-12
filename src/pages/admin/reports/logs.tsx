@@ -144,7 +144,7 @@ export default function RestoreReportLogsPage() {
 
       const csvContent = [
         headers.join(","),
-        ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+        ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, "\"\"")}"`).join(","))
       ].join("\n");
 
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -256,27 +256,27 @@ export default function RestoreReportLogsPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
-      case "success":
-        return <Badge className="bg-green-600 hover:bg-green-700">Sucesso</Badge>;
-      case "error":
-        return <Badge variant="destructive">Erro</Badge>;
-      case "pending":
-        return <Badge variant="secondary">Pendente</Badge>;
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
+    case "success":
+      return <Badge className="bg-green-600 hover:bg-green-700">Sucesso</Badge>;
+    case "error":
+      return <Badge variant="destructive">Erro</Badge>;
+    case "pending":
+      return <Badge variant="secondary">Pendente</Badge>;
+    default:
+      return <Badge variant="secondary">{status}</Badge>;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status.toLowerCase()) {
-      case "success":
-        return <CheckCircle className="h-5 w-5 text-green-600" />;
-      case "error":
-        return <XCircle className="h-5 w-5 text-red-600" />;
-      case "pending":
-        return <Clock className="h-5 w-5 text-gray-600" />;
-      default:
-        return <Activity className="h-5 w-5 text-gray-600" />;
+    case "success":
+      return <CheckCircle className="h-5 w-5 text-green-600" />;
+    case "error":
+      return <XCircle className="h-5 w-5 text-red-600" />;
+    case "pending":
+      return <Clock className="h-5 w-5 text-gray-600" />;
+    default:
+      return <Activity className="h-5 w-5 text-gray-600" />;
     }
   };
 
