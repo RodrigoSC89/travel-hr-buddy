@@ -85,17 +85,35 @@ describe("DocumentViewPage - Version Restoration", () => {
   });
 
   it("should render document with version history component", async () => {
-    mockSupabase.from.mockReturnValue({
-      select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          single: vi.fn(() => 
-            Promise.resolve({
-              data: mockDocument,
-              error: null,
-            })
-          ),
-        })),
-      })),
+    mockSupabase.from.mockImplementation((table: string) => {
+      if (table === "ai_generated_documents") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              single: vi.fn(() => 
+                Promise.resolve({
+                  data: mockDocument,
+                  error: null,
+                })
+              ),
+            })),
+          })),
+        };
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              order: vi.fn(() =>
+                Promise.resolve({
+                  data: [],
+                  error: null,
+                })
+              ),
+            })),
+          })),
+        };
+      }
+      return {};
     });
 
     render(
@@ -122,6 +140,19 @@ describe("DocumentViewPage - Version Restoration", () => {
               single: vi.fn(() => 
                 Promise.resolve({
                   data: mockDocument,
+                  error: null,
+                })
+              ),
+            })),
+          })),
+        };
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              order: vi.fn(() =>
+                Promise.resolve({
+                  data: [],
                   error: null,
                 })
               ),
@@ -157,6 +188,19 @@ describe("DocumentViewPage - Version Restoration", () => {
               single: vi.fn(() => 
                 Promise.resolve({
                   data: mockDocument,
+                  error: null,
+                })
+              ),
+            })),
+          })),
+        };
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              order: vi.fn(() =>
+                Promise.resolve({
+                  data: [],
                   error: null,
                 })
               ),
