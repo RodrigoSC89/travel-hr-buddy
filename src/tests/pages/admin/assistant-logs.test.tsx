@@ -14,25 +14,14 @@ vi.mock("react-router-dom", async () => {
 });
 
 // Mock Supabase client
-const mockSupabaseFrom = vi.fn();
-const mockSupabaseSelect = vi.fn();
-const mockSupabaseOrder = vi.fn();
+const mockSupabaseFunctionsInvoke = vi.fn();
 
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
-    from: (...args: unknown[]) => {
-      mockSupabaseFrom(...args);
-      return {
-        select: (...selectArgs: unknown[]) => {
-          mockSupabaseSelect(...selectArgs);
-          return {
-            order: (...orderArgs: unknown[]) => {
-              mockSupabaseOrder(...orderArgs);
-              return Promise.resolve({ data: [], error: null });
-            },
-          };
-        },
-      };
+    functions: {
+      invoke: (...args: unknown[]) => {
+        return mockSupabaseFunctionsInvoke(...args);
+      },
     },
   },
 }));
@@ -40,6 +29,11 @@ vi.mock("@/integrations/supabase/client", () => ({
 describe("AssistantLogsPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mock successful response
+    mockSupabaseFunctionsInvoke.mockResolvedValue({ 
+      data: [], 
+      error: null 
+    });
   });
 
   it("should render the page title", async () => {
@@ -107,9 +101,17 @@ describe("AssistantLogsPage Component", () => {
     );
 
     await waitFor(() => {
-      expect(mockSupabaseFrom).toHaveBeenCalledWith("assistant_logs");
-      expect(mockSupabaseSelect).toHaveBeenCalledWith("*");
-      expect(mockSupabaseOrder).toHaveBeenCalledWith("created_at", { ascending: false });
+      expect(mockSupabaseFunctionsInvoke).toHaveBeenCalledWith("assistant-logs");
     });
+  });
+
+  it("should render email filter input", async () => {
+    render(
+      <MemoryRouter>
+        <AssistantLogsPage />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByPlaceholderText(/Filtrar por e-mail do usuário/i)).toBeInTheDocument();
   });
 });
