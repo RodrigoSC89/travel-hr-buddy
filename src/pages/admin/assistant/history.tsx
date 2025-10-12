@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 
 interface AssistantLog {
   id: string;
@@ -25,6 +26,7 @@ export default function AssistantHistoryPage() {
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchLogs() {
@@ -72,7 +74,18 @@ export default function AssistantHistoryPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">📜 Histórico do Assistente IA</h1>
+      <div className="mb-4 flex items-center gap-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/admin/assistant")}
+          className="flex items-center gap-2"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Voltar
+        </Button>
+        <h1 className="text-2xl font-bold">📜 Histórico do Assistente IA</h1>
+      </div>
 
       <div className="mb-4 flex gap-2">
         <Input

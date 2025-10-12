@@ -124,6 +124,47 @@ export type Database = {
         }
         Relationships: []
       }
+      assistant_logs: {
+        Row: {
+          id: string
+          user_id: string | null
+          user_email: string | null
+          question: string
+          answer: string | null
+          action: string | null
+          target: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          user_email?: string | null
+          question: string
+          answer?: string | null
+          action?: string | null
+          target?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          user_email?: string | null
+          question?: string
+          answer?: string | null
+          action?: string | null
+          target?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assistant_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_generated_documents: {
         Row: {
           id: string
