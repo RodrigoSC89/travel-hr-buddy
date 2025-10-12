@@ -200,6 +200,8 @@ serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
   );
 
+  const startTime = Date.now();
+
   try {
     console.log("🚀 Starting daily assistant report generation...");
 
@@ -220,6 +222,14 @@ serve(async (req) => {
     if (logsError) {
       console.error("Error fetching logs:", logsError);
       await logExecution(supabase, "error", "Failed to fetch assistant logs", 0, logsError);
+      // Log to cron_execution_logs
+      await supabase.from("cron_execution_logs").insert({
+        function_name: "send-daily-assistant-report",
+        status: "error",
+        message: "Failed to fetch assistant logs",
+        error_details: { error: logsError },
+        execution_duration_ms: Date.now() - startTime
+      });
       throw new Error(`Failed to fetch logs: ${logsError.message}`);
     }
 
@@ -258,10 +268,21 @@ serve(async (req) => {
     } catch (emailError) {
       console.error("❌ Error sending email:", emailError);
       await logExecution(supabase, "error", "Failed to send email", logs?.length || 0, emailError);
+      // Log to cron_execution_logs
+      await supabase.from("cron_execution_logs").insert({
+        function_name: "send-daily-assistant-report",
+        status: "error",
+        message: "Failed to send email",
+        error_details: { error: emailError },
+        execution_duration_ms: Date.now() - startTime,
+        metadata: { logs_count: logs?.length || 0 }
+      });
       throw emailError;
     }
 
     console.log("✅ Email sent successfully!");
+    
+    const executionDuration = Date.now() - startTime;
     
     // Log successful execution
     await logExecution(
@@ -270,6 +291,19 @@ serve(async (req) => {
       `Report sent successfully to ${ADMIN_EMAIL}`,
       logs?.length || 0
     );
+
+    // Log to cron_execution_logs
+    await supabase.from("cron_execution_logs").insert({
+      function_name: "send-daily-assistant-report",
+      status: "success",
+      message: `Report sent successfully to ${ADMIN_EMAIL}`,
+      execution_duration_ms: executionDuration,
+      metadata: { 
+        logs_count: logs?.length || 0,
+        recipient: ADMIN_EMAIL,
+        email_service: RESEND_API_KEY ? "resend" : "sendgrid"
+      }
+    });
 
     return new Response(
       JSON.stringify({
@@ -286,8 +320,22 @@ serve(async (req) => {
   } catch (error) {
     console.error("❌ Error in send-daily-assistant-report:", error);
     
+    const executionDuration = Date.now() - startTime;
+    
     // Log critical error
     await logExecution(supabase, "critical", "Critical error in function", 0, error);
+    
+    // Log to cron_execution_logs
+    await supabase.from("cron_execution_logs").insert({
+      function_name: "send-daily-assistant-report",
+      status: "error",
+      message: "Critical error in function",
+      error_details: { 
+        error: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined
+      },
+      execution_duration_ms: executionDuration
+    });
     
     return new Response(
       JSON.stringify({
