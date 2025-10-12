@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -27,10 +28,55 @@ serve(async (req) => {
   }
 
   try {
+    // Create Supabase client
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Get user from auth header
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: "Não autenticado" }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 401,
+        }
+      );
+    }
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser(
+      authHeader.replace("Bearer ", "")
+    );
+
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Não autenticado" }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 401,
+        }
+      );
+    }
+
     const { logs, toEmail, subject }: EmailRequest = await req.json();
     
-    if (!logs || !Array.isArray(logs)) {
-      throw new Error("logs array is required");
+    if (!logs || !Array.isArray(logs) || logs.length === 0) {
+      // Log error attempt
+      await supabase.from("assistant_report_logs").insert({
+        user_id: user.id,
+        user_email: user.email || "unknown",
+        status: "error",
+        message: "Nenhum dado para enviar.",
+      });
+
+      return new Response(
+        JSON.stringify({ error: "Nenhum dado para enviar." }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        }
+      );
     }
 
     // Get email configuration from environment
@@ -127,6 +173,14 @@ serve(async (req) => {
     console.log(`Recipient: ${recipientEmail}`);
     console.log(`Number of logs: ${logs.length}`);
 
+    // Log successful execution to database
+    await supabase.from("assistant_report_logs").insert({
+      user_id: user.id,
+      user_email: user.email || "unknown",
+      status: "success",
+      message: "Enviado com sucesso",
+    });
+
     // Note: In a real implementation, you would integrate with an email service here
     // For now, we return a success response
     // To implement actual email sending, integrate with SendGrid, Mailgun, AWS SES, etc.
@@ -151,6 +205,32 @@ serve(async (req) => {
     
     const errorMessage = error instanceof Error ? error.message : "An error occurred while sending the report";
     const errorDetails = error instanceof Error ? error.toString() : String(error);
+    
+    // Try to log error to database
+    try {
+      const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+      const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      
+      const authHeader = req.headers.get("authorization");
+      if (authHeader) {
+        const { data: { user } } = await supabase.auth.getUser(
+          authHeader.replace("Bearer ", "")
+        );
+        
+        if (user) {
+          await supabase.from("assistant_report_logs").insert({
+            user_id: user.id,
+            user_email: user.email || "unknown",
+            status: "error",
+            message: errorMessage,
+          });
+        }
+      }
+    } catch (logError) {
+      console.error("Failed to log error:", logError);
+      // Don't throw - logging failures shouldn't break error response
+    }
     
     return new Response(
       JSON.stringify({
