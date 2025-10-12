@@ -53,6 +53,8 @@ const DocumentList = React.lazy(() => import("./pages/admin/documents/DocumentLi
 const DocumentView = React.lazy(() => import("./pages/admin/documents/DocumentView"));
 const ExecutionLogs = React.lazy(() => import("./pages/admin/automation/execution-logs"));
 const RestoreReportLogs = React.lazy(() => import("./pages/admin/reports/logs"));
+const RestoreChart = React.lazy(() => import("./pages/embed/RestoreChart"));
+const Unauthorized = React.lazy(() => import("./pages/Unauthorized"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
@@ -137,6 +139,9 @@ function App() {
                       <Route path="/_offline" element={<Offline />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
+                    {/* Routes without SmartLayout */}
+                    <Route path="/embed/restore-chart" element={<RestoreChart />} />
+                    <Route path="/unauthorized" element={<Unauthorized />} />
                   </Routes>
                 </React.Suspense>
               </Router>
