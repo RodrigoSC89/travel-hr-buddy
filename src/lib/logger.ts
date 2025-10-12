@@ -1,6 +1,9 @@
 /**
  * Centralized logging utility for the application
  * Provides structured logging with different levels and optional Sentry integration
+ * 
+ * Note: This extends the existing logger in src/utils/logger.ts
+ * Use this for new code with structured logging support
  */
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
@@ -23,21 +26,26 @@ class Logger {
    */
   debug(message: string, context?: LogContext): void {
     if (this.isDevelopment) {
+      // eslint-disable-next-line no-console
       console.debug(this.formatMessage('debug', message, context));
     }
   }
 
   /**
-   * Log informational messages
+   * Log informational messages (only in development)
    */
   info(message: string, context?: LogContext): void {
-    console.info(this.formatMessage('info', message, context));
+    if (this.isDevelopment) {
+      // eslint-disable-next-line no-console
+      console.info(this.formatMessage('info', message, context));
+    }
   }
 
   /**
-   * Log warning messages
+   * Log warning messages (always shown)
    */
   warn(message: string, context?: LogContext): void {
+    // eslint-disable-next-line no-console
     console.warn(this.formatMessage('warn', message, context));
   }
 
@@ -46,6 +54,7 @@ class Logger {
    */
   error(message: string, error?: Error | unknown, context?: LogContext): void {
     const errorMessage = this.formatMessage('error', message, context);
+    // eslint-disable-next-line no-console
     console.error(errorMessage, error);
 
     // In production, you can add Sentry integration here
