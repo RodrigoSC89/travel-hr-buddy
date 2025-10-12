@@ -16,11 +16,6 @@ interface CommandAction {
 // Command mapping for the assistant
 const commandPatterns: Record<string, CommandAction> = {
   // Navigation commands
-  "criar checklist": {
-    type: "navigation",
-    target: "/admin/checklists",
-    message: "✅ Navegando para a página de criação de checklists...",
-  },
   "checklist": {
     type: "navigation",
     target: "/admin/checklists",
@@ -95,7 +90,7 @@ const commandPatterns: Record<string, CommandAction> = {
   },
   "ajuda": {
     type: "info",
-    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
+    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist [título]' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
   },
   "help": {
     type: "info",
@@ -141,7 +136,122 @@ serve(async (req) => {
       },
     });
 
+    // Get current user for logging
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const userId = user?.id;
+
     const lower = question.toLowerCase();
+
+    // Helper function to log interaction
+    async function logInteraction(answer: string, actionType: string, targetUrl?: string, metadata = {}) {
+      if (userId) {
+        try {
+          await supabase.from("assistant_logs").insert({
+            user_id: userId,
+            question,
+            answer,
+            origin: "assistant",
+            action_type: actionType,
+            target_url: targetUrl,
+            metadata,
+          });
+        } catch (logError) {
+          console.error("Error logging interaction:", logError);
+          // Don't fail the request if logging fails
+        }
+      }
+    }
+
+    // 👉 Checklist creation command
+    if (lower.includes("criar checklist") || lower.includes("cria checklist") || lower.includes("crie checklist")) {
+      try {
+        // Extract checklist title from question
+        let checklistTitle = question;
+        // Try to extract a more specific title
+        const patterns = [
+          /criar checklist (?:para |de )?(.+)/i,
+          /cria checklist (?:para |de )?(.+)/i,
+          /crie checklist (?:para |de )?(.+)/i,
+          /crie um checklist (?:para |de )?(.+)/i,
+        ];
+        
+        for (const pattern of patterns) {
+          const match = question.match(pattern);
+          if (match && match[1]) {
+            checklistTitle = match[1].trim();
+            break;
+          }
+        }
+
+        // Create the checklist
+        const { data: checklistData, error: checklistError } = await supabase
+          .from("operational_checklists")
+          .insert({
+            title: checklistTitle,
+            type: "outro",
+            created_by: userId || "anonymous",
+            status: "rascunho",
+            source_type: "manual",
+          })
+          .select()
+          .single();
+
+        if (checklistError || !checklistData) {
+          console.error("Error creating checklist:", checklistError);
+          const errorMessage = "❌ Erro ao criar checklist. Tente novamente.";
+          await logInteraction(errorMessage, "checklist_creation");
+          return new Response(
+            JSON.stringify({
+              answer: errorMessage,
+              action: "action",
+              timestamp: new Date().toISOString(),
+            }),
+            {
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+              status: 200,
+            }
+          );
+        }
+
+        const successMessage = `✅ Checklist criado com sucesso!\n\n📝 [Abrir Checklist](/admin/checklists)`;
+        await logInteraction(successMessage, "checklist_creation", "/admin/checklists", {
+          checklist_id: checklistData.id,
+          checklist_title: checklistTitle,
+        });
+
+        return new Response(
+          JSON.stringify({
+            answer: successMessage,
+            action: "checklist_creation",
+            target: "/admin/checklists",
+            metadata: {
+              checklist_id: checklistData.id,
+              checklist_title: checklistTitle,
+            },
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      } catch (error) {
+        console.error("Error in checklist creation:", error);
+        const errorMessage = "❌ Erro ao criar checklist. Tente novamente.";
+        await logInteraction(errorMessage, "checklist_creation");
+        return new Response(
+          JSON.stringify({
+            answer: errorMessage,
+            action: "action",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+    }
 
     // 👉 Real database queries for pending tasks
     if (lower.includes("quantas tarefas") || lower.includes("tarefas pendentes")) {
@@ -152,9 +262,11 @@ serve(async (req) => {
 
       if (error) {
         console.error("Error querying tasks:", error);
+        const errorMessage = "⚠️ Erro ao consultar tarefas pendentes.";
+        await logInteraction(errorMessage, "query");
         return new Response(
           JSON.stringify({
-            answer: "⚠️ Erro ao consultar tarefas pendentes.",
+            answer: errorMessage,
             action: "query",
             timestamp: new Date().toISOString(),
           }),
@@ -165,9 +277,11 @@ serve(async (req) => {
         );
       }
 
+      const successMessage = `📋 Você tem ${count || 0} tarefas pendentes.`;
+      await logInteraction(successMessage, "query");
       return new Response(
         JSON.stringify({
-          answer: `📋 Você tem ${count || 0} tarefas pendentes.`,
+          answer: successMessage,
           action: "query",
           timestamp: new Date().toISOString(),
         }),
@@ -188,9 +302,11 @@ serve(async (req) => {
 
       if (error || !data) {
         console.error("Error querying documents:", error);
+        const errorMessage = "⚠️ Não foi possível buscar os documentos.";
+        await logInteraction(errorMessage, "query");
         return new Response(
           JSON.stringify({
-            answer: "⚠️ Não foi possível buscar os documentos.",
+            answer: errorMessage,
             action: "query",
             timestamp: new Date().toISOString(),
           }),
@@ -202,9 +318,11 @@ serve(async (req) => {
       }
 
       if (data.length === 0) {
+        const noDocsMessage = "📑 Não há documentos cadastrados ainda.";
+        await logInteraction(noDocsMessage, "query");
         return new Response(
           JSON.stringify({
-            answer: "📑 Não há documentos cadastrados ainda.",
+            answer: noDocsMessage,
             action: "query",
             timestamp: new Date().toISOString(),
           }),
@@ -219,9 +337,11 @@ serve(async (req) => {
         .map((doc) => `📄 ${doc.title} — ${new Date(doc.created_at).toLocaleDateString("pt-BR")}`)
         .join("\n");
 
+      const listMessage = `📑 Últimos documentos:\n${list}`;
+      await logInteraction(listMessage, "query");
       return new Response(
         JSON.stringify({
-          answer: `📑 Últimos documentos:\n${list}`,
+          answer: listMessage,
           action: "query",
           timestamp: new Date().toISOString(),
         }),
@@ -237,6 +357,7 @@ serve(async (req) => {
     
     if (commandAction) {
       console.log("Command matched:", commandAction);
+      await logInteraction(commandAction.message, commandAction.type, commandAction.target);
       return new Response(
         JSON.stringify({
           answer: commandAction.message,
@@ -255,9 +376,11 @@ serve(async (req) => {
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
       // Fallback response if no OpenAI key
+      const fallbackMessage = `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem\n• Listar documentos recentes`;
+      await logInteraction(fallbackMessage, "info");
       return new Response(
         JSON.stringify({
-          answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem\n• Listar documentos recentes`,
+          answer: fallbackMessage,
           action: "info",
           timestamp: new Date().toISOString(),
         }),
@@ -317,6 +440,7 @@ Seja claro, direto e útil.
       enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
     }
 
+    await logInteraction(enhanced, "info");
     return new Response(
       JSON.stringify({
         answer: enhanced,
