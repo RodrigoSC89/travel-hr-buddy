@@ -159,7 +159,7 @@ export const LiveSearch = ({
                 <div className="px-3 py-2">
                   <p className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                     <Search size={14} />
-                    Resultados para "{value}"
+                    Resultados para &quot;{value}&quot;
                   </p>
                 </div>
                 {suggestions.map((suggestion) => (

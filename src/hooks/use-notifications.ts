@@ -45,6 +45,7 @@ export const useNotifications = () => {
         });
       }
     } catch (error) {
+      console.error("Failed to initialize notifications:", error);
     }
   };
 
@@ -76,6 +77,7 @@ export const useNotifications = () => {
 
       await LocalNotifications.schedule(notificationOptions);
     } catch (error) {
+      console.error("Failed to schedule notification:", error);
     }
   };
 
@@ -83,6 +85,7 @@ export const useNotifications = () => {
     try {
       await LocalNotifications.cancel({ notifications: [{ id }] });
     } catch (error) {
+      console.error("Failed to cancel notification:", error);
     }
   };
 

@@ -75,7 +75,7 @@ describe("TestDashboard Component", () => {
     );
     
     await waitFor(() => {
-      const title = screen.getByRole('heading', { name: /Painel de Testes Automatizados/i });
+      const title = screen.getByRole("heading", { name: /Painel de Testes Automatizados/i });
       expect(title).toBeInTheDocument();
     });
   });

@@ -382,10 +382,10 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
               <Compass className="w-3 h-3" />
               Diga comandos como:
             </div>
-            <div>• "Dashboard" ou "Painel"</div>
-            <div>• "Recursos Humanos" ou "RH"</div>
-            <div>• "Viagens" ou "Travel"</div>
-            <div>• "Sistema Marítimo"</div>
+            <div>• &quot;Dashboard&quot; ou &quot;Painel&quot;</div>
+            <div>• &quot;Recursos Humanos&quot; ou &quot;RH&quot;</div>
+            <div>• &quot;Viagens&quot; ou &quot;Travel&quot;</div>
+            <div>• &quot;Sistema Marítimo&quot;</div>
           </div>
         </CardContent>
       </Card>
