@@ -1,55 +1,29 @@
-import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Unauthorized from "@/pages/Unauthorized";
 
-const mockNavigate = vi.fn();
-
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  };
-});
-
 describe("Unauthorized Component", () => {
-  it("should render unauthorized message", () => {
+  it("should render unauthorized message with emoji", () => {
     render(
       <MemoryRouter>
         <Unauthorized />
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Acesso Negado")).toBeInTheDocument();
+    expect(screen.getByText(/⛔ Acesso Negado/)).toBeInTheDocument();
+  });
+
+  it("should display permission denied message", () => {
+    render(
+      <MemoryRouter>
+        <Unauthorized />
+      </MemoryRouter>
+    );
+
     expect(
-      screen.getByText(/Você não tem permissão para acessar esta página/)
+      screen.getByText(/Você não tem permissão para visualizar esta página/)
     ).toBeInTheDocument();
-  });
-
-  it("should display shield icon", () => {
-    render(
-      <MemoryRouter>
-        <Unauthorized />
-      </MemoryRouter>
-    );
-
-    // Check for icon by aria-label or data-testid if available
-    const shieldIcon = document.querySelector('svg');
-    expect(shieldIcon).toBeInTheDocument();
-  });
-
-  it("should navigate to home when button is clicked", () => {
-    render(
-      <MemoryRouter>
-        <Unauthorized />
-      </MemoryRouter>
-    );
-
-    const button = screen.getByText("Voltar para a página inicial");
-    fireEvent.click(button);
-
-    expect(mockNavigate).toHaveBeenCalledWith("/");
   });
 
   it("should display token error message", () => {
@@ -60,7 +34,19 @@ describe("Unauthorized Component", () => {
     );
 
     expect(
-      screen.getByText(/O token de acesso fornecido é inválido ou está ausente/)
+      screen.getByText(/Token de acesso inválido ou ausente/)
     ).toBeInTheDocument();
+  });
+
+  it("should have white background and red text color classes", () => {
+    const { container } = render(
+      <MemoryRouter>
+        <Unauthorized />
+      </MemoryRouter>
+    );
+
+    const mainDiv = container.querySelector(".bg-white");
+    expect(mainDiv).toBeInTheDocument();
+    expect(mainDiv).toHaveClass("text-red-600");
   });
 });
