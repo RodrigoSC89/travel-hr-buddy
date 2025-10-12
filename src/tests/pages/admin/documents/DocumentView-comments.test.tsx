@@ -145,6 +145,19 @@ describe("DocumentViewPage - Comments Feature", () => {
             })),
           })),
         };
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              order: vi.fn(() =>
+                Promise.resolve({
+                  data: [],
+                  error: null,
+                })
+              ),
+            })),
+          })),
+        };
       }
       return {};
     });
@@ -186,6 +199,19 @@ describe("DocumentViewPage - Comments Feature", () => {
           })),
         };
       } else if (table === "document_comments") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              order: vi.fn(() =>
+                Promise.resolve({
+                  data: [],
+                  error: null,
+                })
+              ),
+            })),
+          })),
+        };
+      } else if (table === "document_versions") {
         return {
           select: vi.fn(() => ({
             eq: vi.fn(() => ({
@@ -260,6 +286,19 @@ describe("DocumentViewPage - Comments Feature", () => {
               error: null,
             });
           }),
+        };
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              order: vi.fn(() =>
+                Promise.resolve({
+                  data: [],
+                  error: null,
+                })
+              ),
+            })),
+          })),
         };
       }
       return {};
@@ -351,6 +390,19 @@ describe("DocumentViewPage - Comments Feature", () => {
             })),
           })),
         };
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              order: vi.fn(() =>
+                Promise.resolve({
+                  data: [],
+                  error: null,
+                })
+              ),
+            })),
+          })),
+        };
       }
       return {};
     });
@@ -418,6 +470,19 @@ describe("DocumentViewPage - Comments Feature", () => {
                 Promise.resolve({
                   data: null,
                   error: { message: "Database error" },
+                })
+              ),
+            })),
+          })),
+        };
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              order: vi.fn(() =>
+                Promise.resolve({
+                  data: [],
+                  error: null,
                 })
               ),
             })),
