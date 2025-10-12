@@ -14,6 +14,10 @@ The AI Assistant module provides an intelligent copilot for the Travel HR Buddy 
    - Loading states during AI processing
    - Error handling with user-friendly messages
    - Input field with keyboard shortcuts (Enter to send)
+   - **Quick Commands Sidebar** with 5 pre-defined buttons
+   - **Capabilities list** showing all assistant features
+   - **Responsive layout** for desktop and mobile
+   - "Powered by GPT-4o-mini" badge
 
 2. **Command Recognition**
    - Predefined commands for common tasks
@@ -22,8 +26,10 @@ The AI Assistant module provides an intelligent copilot for the Travel HR Buddy 
 
 3. **Intelligent Responses**
    - Pattern matching for quick responses
-   - OpenAI GPT-4 integration for complex queries
+   - OpenAI GPT-4o-mini integration for complex queries
    - Fallback responses when AI is unavailable
+   - Temperature: 0.4 for balanced responses
+   - Max tokens: 1000 for comprehensive answers
 
 4. **Navigation Assistance**
    - Direct links to system modules
