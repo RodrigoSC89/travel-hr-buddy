@@ -26,8 +26,13 @@ vi.mock("@/integrations/supabase/client", () => ({
 }));
 
 // Mock Chart.js
+interface ChartData {
+  labels: string[];
+  datasets: Array<{ data: number[] }>;
+}
+
 vi.mock("react-chartjs-2", () => ({
-  Bar: ({ data }: any) => (
+  Bar: ({ data }: { data: ChartData }) => (
     <div data-testid="chart">
       {data.labels.map((label: string, i: number) => (
         <div key={i} data-testid={`chart-item-${i}`}>
@@ -48,7 +53,7 @@ describe("RestoreChartEmbed Component", () => {
     const { supabase } = await import("@/integrations/supabase/client");
     
     // Setup mocks that never resolve
-    vi.mocked(supabase.rpc).mockReturnValue(new Promise(() => {}) as any);
+    vi.mocked(supabase.rpc).mockReturnValue(new Promise(() => {}) as unknown as ReturnType<typeof supabase.rpc>);
     vi.mocked(supabase.from).mockReturnValue({
       select: vi.fn().mockReturnValue({
         order: vi.fn().mockReturnValue({
@@ -57,7 +62,7 @@ describe("RestoreChartEmbed Component", () => {
           }),
         }),
       }),
-    } as any);
+    } as unknown as ReturnType<typeof supabase.from>);
 
     render(
       <MemoryRouter>
@@ -80,7 +85,7 @@ describe("RestoreChartEmbed Component", () => {
             { day: "2024-01-02", count: 3 },
           ],
           error: null,
-        }) as any;
+        }) as unknown as ReturnType<typeof supabase.rpc>;
       }
       if (funcName === "get_restore_summary") {
         return Promise.resolve({
@@ -92,9 +97,9 @@ describe("RestoreChartEmbed Component", () => {
             },
           ],
           error: null,
-        }) as any;
+        }) as unknown as ReturnType<typeof supabase.rpc>;
       }
-      return Promise.resolve({ data: null, error: null }) as any;
+      return Promise.resolve({ data: null, error: null }) as unknown as ReturnType<typeof supabase.rpc>;
     });
 
     // Mock last restore
@@ -109,7 +114,7 @@ describe("RestoreChartEmbed Component", () => {
           }),
         }),
       }),
-    } as any);
+    } as unknown as ReturnType<typeof supabase.from>);
 
     render(
       <MemoryRouter>
@@ -139,12 +144,12 @@ describe("RestoreChartEmbed Component", () => {
     
     vi.mocked(supabase.rpc).mockImplementation((funcName: string) => {
       if (funcName === "get_restore_count_by_day_with_email") {
-        return Promise.resolve({ data: [], error: null }) as any;
+        return Promise.resolve({ data: [], error: null }) as unknown as ReturnType<typeof supabase.rpc>;
       }
       if (funcName === "get_restore_summary") {
-        return Promise.resolve({ data: [], error: null }) as any;
+        return Promise.resolve({ data: [], error: null }) as unknown as ReturnType<typeof supabase.rpc>;
       }
-      return Promise.resolve({ data: null, error: null }) as any;
+      return Promise.resolve({ data: null, error: null }) as unknown as ReturnType<typeof supabase.rpc>;
     });
 
     vi.mocked(supabase.from).mockReturnValue({
@@ -158,7 +163,7 @@ describe("RestoreChartEmbed Component", () => {
           }),
         }),
       }),
-    } as any);
+    } as unknown as ReturnType<typeof supabase.from>);
 
     render(
       <MemoryRouter>
@@ -175,7 +180,7 @@ describe("RestoreChartEmbed Component", () => {
     const { supabase } = await import("@/integrations/supabase/client");
     
     vi.mocked(supabase.rpc).mockImplementation(() =>
-      Promise.resolve({ data: [], error: null }) as any
+      Promise.resolve({ data: [], error: null }) as unknown as ReturnType<typeof supabase.rpc>
     );
 
     vi.mocked(supabase.from).mockReturnValue({
@@ -189,7 +194,7 @@ describe("RestoreChartEmbed Component", () => {
           }),
         }),
       }),
-    } as any);
+    } as unknown as ReturnType<typeof supabase.from>);
 
     render(
       <MemoryRouter>
@@ -198,7 +203,7 @@ describe("RestoreChartEmbed Component", () => {
     );
 
     await waitFor(() => {
-      expect((window as any).chartReady).toBe(true);
+      expect((window as unknown as { chartReady: boolean }).chartReady).toBe(true);
     });
   });
 
@@ -209,7 +214,7 @@ describe("RestoreChartEmbed Component", () => {
       Promise.resolve({ 
         data: null, 
         error: { message: "Database error", code: "500" } 
-      }) as any
+      }) as unknown as ReturnType<typeof supabase.rpc>
     );
 
     render(
@@ -228,7 +233,7 @@ describe("RestoreChartEmbed Component", () => {
     const { supabase } = await import("@/integrations/supabase/client");
     
     // Setup mocks that never resolve to keep loading state
-    vi.mocked(supabase.rpc).mockReturnValue(new Promise(() => {}) as any);
+    vi.mocked(supabase.rpc).mockReturnValue(new Promise(() => {}) as unknown as ReturnType<typeof supabase.rpc>);
     vi.mocked(supabase.from).mockReturnValue({
       select: vi.fn().mockReturnValue({
         order: vi.fn().mockReturnValue({
@@ -237,7 +242,7 @@ describe("RestoreChartEmbed Component", () => {
           }),
         }),
       }),
-    } as any);
+    } as unknown as ReturnType<typeof supabase.from>);
 
     render(
       <MemoryRouter>
@@ -254,7 +259,7 @@ describe("RestoreChartEmbed Token Protection", () => {
     const { supabase } = await import("@/integrations/supabase/client");
     
     vi.mocked(supabase.rpc).mockImplementation(() =>
-      Promise.resolve({ data: [], error: null }) as any
+      Promise.resolve({ data: [], error: null }) as unknown as ReturnType<typeof supabase.rpc>
     );
 
     vi.mocked(supabase.from).mockReturnValue({
@@ -268,7 +273,7 @@ describe("RestoreChartEmbed Token Protection", () => {
           }),
         }),
       }),
-    } as any);
+    } as unknown as ReturnType<typeof supabase.from>);
 
     render(
       <MemoryRouter>
