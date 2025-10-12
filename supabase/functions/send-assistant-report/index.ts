@@ -165,6 +165,26 @@ serve(async (req) => {
     const { logs, toEmail, subject }: EmailRequest = await req.json();
     
     if (!logs || !Array.isArray(logs) || logs.length === 0) {
+      // Log the invalid data error to database
+      try {
+        const supabaseServiceClient = createClient(
+          Deno.env.get("SUPABASE_URL") ?? "",
+          Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+        );
+        
+        await supabaseServiceClient
+          .from("assistant_report_logs")
+          .insert({
+            user_id: user.id,
+            user_email: user.email || "unknown",
+            status: "error",
+            message: "Nenhum dado para enviar."
+          });
+      } catch (logErr) {
+        console.error("Error logging invalid data:", logErr);
+        // Don't fail the request if logging fails
+      }
+      
       return new Response(
         JSON.stringify({ error: "Nenhum dado para enviar." }),
         {
