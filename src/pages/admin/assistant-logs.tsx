@@ -50,10 +50,9 @@ export default function AssistantLogsPage() {
   async function fetchLogs() {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("assistant_logs")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase.functions.invoke("assistant-logs", {
+        method: "GET",
+      });
 
       if (error) throw error;
       setLogs(data || []);

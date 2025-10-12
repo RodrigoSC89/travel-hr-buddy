@@ -40,5 +40,29 @@ CREATE POLICY "Users can insert their own assistant logs"
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+-- Policy: Admins can update all logs
+CREATE POLICY "Admins can update all assistant logs"
+  ON assistant_logs
+  FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
+    )
+  );
+
+-- Policy: Admins can delete all logs
+CREATE POLICY "Admins can delete all assistant logs"
+  ON assistant_logs
+  FOR DELETE
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
+    )
+  );
+
 -- Add comment to table
 COMMENT ON TABLE assistant_logs IS 'Tracks all AI Assistant interactions for audit and analysis';

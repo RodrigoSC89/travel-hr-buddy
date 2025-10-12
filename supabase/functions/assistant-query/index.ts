@@ -116,6 +116,38 @@ function findCommand(question: string): CommandAction | null {
   return null;
 }
 
+// Helper function to log interactions (non-blocking)
+async function logInteraction(
+  supabase: any,
+  userId: string | undefined,
+  question: string,
+  answer: string,
+  origin: string = "assistant"
+) {
+  try {
+    if (!userId) {
+      console.log("Skipping log: No user ID available");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("assistant_logs")
+      .insert({
+        user_id: userId,
+        question,
+        answer,
+        origin,
+      });
+
+    if (error) {
+      console.error("Error logging interaction:", error);
+    }
+  } catch (error) {
+    // Don't let logging errors affect the user experience
+    console.error("Unexpected error logging interaction:", error);
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -141,6 +173,15 @@ serve(async (req) => {
       },
     });
 
+    // Get current user for logging
+    let userId: string | undefined;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      userId = user?.id;
+    } catch (error) {
+      console.log("Could not get user for logging:", error);
+    }
+
     const lower = question.toLowerCase();
 
     // 👉 Real database queries for pending tasks
@@ -152,9 +193,14 @@ serve(async (req) => {
 
       if (error) {
         console.error("Error querying tasks:", error);
+        const errorAnswer = "⚠️ Erro ao consultar tarefas pendentes.";
+        
+        // Log the interaction
+        await logInteraction(supabase, userId, question, errorAnswer, "assistant");
+        
         return new Response(
           JSON.stringify({
-            answer: "⚠️ Erro ao consultar tarefas pendentes.",
+            answer: errorAnswer,
             action: "query",
             timestamp: new Date().toISOString(),
           }),
@@ -165,9 +211,14 @@ serve(async (req) => {
         );
       }
 
+      const answer = `📋 Você tem ${count || 0} tarefas pendentes.`;
+      
+      // Log the interaction
+      await logInteraction(supabase, userId, question, answer, "assistant");
+
       return new Response(
         JSON.stringify({
-          answer: `📋 Você tem ${count || 0} tarefas pendentes.`,
+          answer,
           action: "query",
           timestamp: new Date().toISOString(),
         }),
@@ -188,9 +239,14 @@ serve(async (req) => {
 
       if (error || !data) {
         console.error("Error querying documents:", error);
+        const errorAnswer = "⚠️ Não foi possível buscar os documentos.";
+        
+        // Log the interaction
+        await logInteraction(supabase, userId, question, errorAnswer, "assistant");
+        
         return new Response(
           JSON.stringify({
-            answer: "⚠️ Não foi possível buscar os documentos.",
+            answer: errorAnswer,
             action: "query",
             timestamp: new Date().toISOString(),
           }),
@@ -202,9 +258,14 @@ serve(async (req) => {
       }
 
       if (data.length === 0) {
+        const answer = "📑 Não há documentos cadastrados ainda.";
+        
+        // Log the interaction
+        await logInteraction(supabase, userId, question, answer, "assistant");
+        
         return new Response(
           JSON.stringify({
-            answer: "📑 Não há documentos cadastrados ainda.",
+            answer,
             action: "query",
             timestamp: new Date().toISOString(),
           }),
@@ -219,9 +280,14 @@ serve(async (req) => {
         .map((doc) => `📄 ${doc.title} — ${new Date(doc.created_at).toLocaleDateString("pt-BR")}`)
         .join("\n");
 
+      const answer = `📑 Últimos documentos:\n${list}`;
+      
+      // Log the interaction
+      await logInteraction(supabase, userId, question, answer, "assistant");
+
       return new Response(
         JSON.stringify({
-          answer: `📑 Últimos documentos:\n${list}`,
+          answer,
           action: "query",
           timestamp: new Date().toISOString(),
         }),
@@ -237,6 +303,10 @@ serve(async (req) => {
     
     if (commandAction) {
       console.log("Command matched:", commandAction);
+      
+      // Log the interaction
+      await logInteraction(supabase, userId, question, commandAction.message, "assistant");
+      
       return new Response(
         JSON.stringify({
           answer: commandAction.message,
@@ -255,9 +325,14 @@ serve(async (req) => {
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
       // Fallback response if no OpenAI key
+      const fallbackAnswer = `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem\n• Listar documentos recentes`;
+      
+      // Log the interaction
+      await logInteraction(supabase, userId, question, fallbackAnswer, "assistant");
+      
       return new Response(
         JSON.stringify({
-          answer: `Entendi sua pergunta: "${question}"\n\n💡 Para ver os comandos disponíveis, digite "ajuda".\n\nAlguns exemplos do que posso fazer:\n• Criar checklist\n• Mostrar alertas\n• Abrir documentos\n• Ver quantas tarefas pendentes você tem\n• Listar documentos recentes`,
+          answer: fallbackAnswer,
           action: "info",
           timestamp: new Date().toISOString(),
         }),
@@ -334,6 +409,9 @@ Seja claro, direto e útil.
       enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
     }
 
+    // Log the interaction
+    await logInteraction(supabase, userId, question, enhanced, "assistant");
+
     return new Response(
       JSON.stringify({
         answer: enhanced,
@@ -349,10 +427,12 @@ Seja claro, direto e útil.
   } catch (error) {
     console.error("Error processing assistant query:", error);
     
+    const errorMessage = "❌ Desculpe, ocorreu um erro ao processar sua solicitação. Tente novamente.";
+    
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "Unknown error",
-        answer: "❌ Desculpe, ocorreu um erro ao processar sua solicitação. Tente novamente.",
+        answer: errorMessage,
         timestamp: new Date().toISOString(),
       }),
       {

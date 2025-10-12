@@ -80,7 +80,7 @@ serve(async (req) => {
     // Fetch logs with user profile information
     const { data, error } = await supabase
       .from("assistant_logs")
-      .select("id, question, answer, created_at, user_id, profiles(email)")
+      .select("id, question, answer, created_at, user_id, origin, profiles(email)")
       .order("created_at", { ascending: false })
       .limit(1000);
 
