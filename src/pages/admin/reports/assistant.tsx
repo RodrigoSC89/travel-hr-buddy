@@ -95,7 +95,7 @@ export default function AssistantReportsPage() {
     const csv = [
       headers.join(","),
       ...rows.map((row) =>
-        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+        row.map((cell) => `"${String(cell).replace(/"/g, "\"\"")}`).join(",")
       ),
     ].join("\n");
 
@@ -304,8 +304,8 @@ export default function AssistantReportsPage() {
                             log.status === "success"
                               ? "text-green-600"
                               : log.status === "error"
-                              ? "text-red-600"
-                              : "text-yellow-600"
+                                ? "text-red-600"
+                                : "text-yellow-600"
                           }
                         >
                           {log.status}

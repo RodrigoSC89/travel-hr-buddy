@@ -296,6 +296,10 @@ export default function AssistantLogsPage() {
               <Mail className="w-4 h-4 mr-2" />
               Enviar E-mail
             </Button>
+            <Button onClick={() => navigate("/admin/reports/assistant")} variant="outline">
+              <Mail className="w-4 h-4 mr-2" />
+              Logs de Envio
+            </Button>
           </div>
         </div>
 
