@@ -57,6 +57,7 @@ const DocumentView = React.lazy(() => import("./pages/admin/documents/DocumentVi
 const ExecutionLogs = React.lazy(() => import("./pages/admin/automation/execution-logs"));
 const RestoreReportLogs = React.lazy(() => import("./pages/admin/reports/logs"));
 const AssistantReportLogs = React.lazy(() => import("./pages/admin/reports/assistant"));
+const AdminDashboard = React.lazy(() => import("./pages/admin/dashboard"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
@@ -129,6 +130,7 @@ function App() {
                       <Route path="/gamification" element={<Gamification />} />
                       <Route path="/predictive" element={<PredictiveAnalytics />} />
                       <Route path="/admin" element={<Admin />} />
+                      <Route path="/admin/dashboard" element={<AdminDashboard />} />
                       <Route path="/admin/api-tester" element={<APITester />} />
                       <Route path="/admin/api-status" element={<APIStatus />} />
                       <Route path="/admin/control-panel" element={<ControlPanel />} />
