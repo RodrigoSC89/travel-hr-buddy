@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { logger } from "@/lib/logger";
 
 interface OfflineData {
   id: string;
@@ -56,7 +57,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   }, []);
 
   // Save data to cache
-  const saveToCache = useCallback(async (key: string, data: any) => {
+  const saveToCache = useCallback(async (key: string, data: unknown) => {
     try {
       const db = await initDB();
       const transaction = db.transaction([CACHE_STORE], "readwrite");
@@ -68,7 +69,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         timestamp: Date.now()
       });
     } catch (error) {
-      console.error("Failed to save to cache:", error);
+      logger.logCaughtError("Failed to save to cache", error, { key });
     }
   }, [initDB]);
 
@@ -93,7 +94,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   }, [initDB]);
 
   // Add pending change for offline sync
-  const addPendingChange = useCallback(async (action: string, data: any) => {
+  const addPendingChange = useCallback(async (action: string, data: Record<string, unknown>) => {
     try {
       const db = await initDB();
       const transaction = db.transaction([OFFLINE_STORE], "readwrite");
@@ -109,7 +110,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       await store.add(offlineData);
     } catch (error) {
-      console.error("Failed to save offline action:", error);
+      logger.logCaughtError("Failed to save offline action", error, { action });
     }
   }, [initDB]);
 
@@ -154,12 +155,15 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
           // await syncToAPI(change.action, change.data);
           
         } catch (error) {
-          console.error("Failed to sync change:", error);
+          logger.logCaughtError("Failed to sync change", error, { 
+            changeId: change.id, 
+            action: change.action 
+          });
         }
       }
       
     } catch (error) {
-      console.error("Failed to sync pending changes:", error);
+      logger.logCaughtError("Failed to sync pending changes", error);
     }
   }, [isOnline, getPendingChanges, initDB]);
 
@@ -181,7 +185,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       setCacheSize(cacheCount + offlineCount);
     } catch (error) {
-      console.error("Failed to update cache size:", error);
+      logger.logCaughtError("Failed to update cache size", error);
     }
   }, [initDB]);
 
@@ -210,7 +214,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       
       updateCacheSize();
     } catch (error) {
-      console.error("Failed to clear cache:", error);
+      logger.logCaughtError("Failed to clear cache", error);
     }
   }, [initDB, updateCacheSize]);
 

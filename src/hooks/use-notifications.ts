@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { LocalNotifications, ScheduleOptions } from "@capacitor/local-notifications";
 import { PushNotifications } from "@capacitor/push-notifications";
 import { Capacitor } from "@capacitor/core";
+import { logger } from "@/lib/logger";
 
 export const useNotifications = () => {
   const [permissionGranted, setPermissionGranted] = useState(false);
@@ -30,22 +31,28 @@ export const useNotifications = () => {
         
         // Add listeners
         PushNotifications.addListener("registration", (token) => {
+          logger.debug("Push notification registered", { token: token.value });
         });
 
         PushNotifications.addListener("registrationError", (error) => {
-          console.error("Error on registration: " + JSON.stringify(error));
+          logger.error("Error on push notification registration", error);
         });
 
         PushNotifications.addListener("pushNotificationReceived", (notification) => {
-          console.log("Push received: " + JSON.stringify(notification));
+          logger.info("Push notification received", { 
+            title: notification.title,
+            body: notification.body 
+          });
         });
 
         PushNotifications.addListener("pushNotificationActionPerformed", (notification) => {
-          console.log("Push action performed: " + JSON.stringify(notification));
+          logger.info("Push notification action performed", {
+            actionId: notification.actionId
+          });
         });
       }
     } catch (error) {
-      console.error("Failed to initialize notifications:", error);
+      logger.logCaughtError("Failed to initialize notifications", error);
     }
   };
 
@@ -77,7 +84,10 @@ export const useNotifications = () => {
 
       await LocalNotifications.schedule(notificationOptions);
     } catch (error) {
-      console.error("Failed to schedule notification:", error);
+      logger.logCaughtError("Failed to schedule notification", error, {
+        title: options.title,
+        id: options.id
+      });
     }
   };
 
@@ -85,7 +95,7 @@ export const useNotifications = () => {
     try {
       await LocalNotifications.cancel({ notifications: [{ id }] });
     } catch (error) {
-      console.error("Failed to cancel notification:", error);
+      logger.logCaughtError("Failed to cancel notification", error, { id });
     }
   };
 
