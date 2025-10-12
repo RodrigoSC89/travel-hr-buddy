@@ -54,16 +54,32 @@ describe("DocumentViewPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Default mock for document not found
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({
-            data: null,
-            error: { message: "Not found" },
+    vi.mocked(supabase.from).mockImplementation((table: string) => {
+      if (table === "ai_generated_documents") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: null,
+                error: { message: "Not found" },
+              }),
+            }),
           }),
-        }),
-      }),
-    } as any);
+        } as any;
+      } else if (table === "document_versions") {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              order: vi.fn().mockResolvedValue({
+                data: [],
+                error: null,
+              }),
+            }),
+          }),
+        } as any;
+      }
+      return {} as any;
+    });
   });
 
   it("should display document not found message", async () => {
