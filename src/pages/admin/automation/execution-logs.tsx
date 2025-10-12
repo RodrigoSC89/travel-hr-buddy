@@ -188,9 +188,9 @@ export default function ExecutionLogsPage() {
     );
     const avgDuration = completedWithDuration.length > 0
       ? Math.round(
-          completedWithDuration.reduce((sum, exec) => sum + (exec.duration_ms || 0), 0) / 
+        completedWithDuration.reduce((sum, exec) => sum + (exec.duration_ms || 0), 0) / 
           completedWithDuration.length / 1000
-        )
+      )
       : 0;
 
     // Prepare chart data (last 7 days)
@@ -403,16 +403,16 @@ export default function ExecutionLogsPage() {
   // Status badge helper
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "completed":
-        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Sucesso</Badge>;
-      case "failed":
-        return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Falha</Badge>;
-      case "running":
-        return <Badge className="bg-blue-500"><Loader2 className="h-3 w-3 mr-1 animate-spin" />Em Execução</Badge>;
-      case "pending":
-        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "completed":
+      return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Sucesso</Badge>;
+    case "failed":
+      return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Falha</Badge>;
+    case "running":
+      return <Badge className="bg-blue-500"><Loader2 className="h-3 w-3 mr-1 animate-spin" />Em Execução</Badge>;
+    case "pending":
+      return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 

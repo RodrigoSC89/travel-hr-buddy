@@ -25,7 +25,7 @@ export const TravelMap: React.FC<TravelMapProps> = ({ locations, className = "" 
         const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
         
         if (!token) {
-          console.warn('Mapbox token not configured');
+          console.warn("Mapbox token not configured");
           return;
         }
         

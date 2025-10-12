@@ -107,7 +107,7 @@ export default function DocumentViewPage() {
           content, 
           created_at, 
           generated_by,
-          profiles (
+          profiles!ai_generated_documents_generated_by_fkey (
             email,
             full_name
           )
@@ -117,10 +117,13 @@ export default function DocumentViewPage() {
 
       if (error) throw error;
 
+      // Type-safely extract the author data from the relation
+      const profiles = data?.profiles as { email?: string; full_name?: string } | null;
+
       const transformedData = {
         ...data,
-        author_email: data.profiles?.email,
-        author_name: data.profiles?.full_name,
+        author_email: profiles?.email,
+        author_name: profiles?.full_name,
       };
 
       setDoc(transformedData);

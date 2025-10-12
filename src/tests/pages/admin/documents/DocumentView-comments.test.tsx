@@ -377,8 +377,8 @@ describe("DocumentViewPage - Comments Feature", () => {
     // Find and click the delete button (trash icon)
     const deleteButtons = screen.getAllByRole("button");
     const deleteButton = deleteButtons.find((btn) => {
-      const svg = btn.querySelector('svg');
-      return svg && svg.classList.contains('lucide-trash-2');
+      const svg = btn.querySelector("svg");
+      return svg && svg.classList.contains("lucide-trash-2");
     });
 
     if (deleteButton) {

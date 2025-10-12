@@ -35,7 +35,7 @@ describe("Unauthorized Component", () => {
     );
 
     // Check for icon by aria-label or data-testid if available
-    const shieldIcon = document.querySelector('svg');
+    const shieldIcon = document.querySelector("svg");
     expect(shieldIcon).toBeInTheDocument();
   });
 
