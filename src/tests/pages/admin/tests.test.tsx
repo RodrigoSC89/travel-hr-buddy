@@ -18,6 +18,37 @@ vi.mock("@/contexts/AuthContext", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
+// Mock OrganizationContext
+vi.mock("@/contexts/OrganizationContext", () => ({
+  useOrganization: () => ({
+    currentOrganization: {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      name: "Nautilus Demo",
+      slug: "nautilus-demo",
+      status: "active",
+      plan_type: "enterprise",
+    },
+    currentBranding: {
+      id: "demo-branding",
+      company_name: "Nautilus Demo",
+      primary_color: "#2563eb",
+      secondary_color: "#64748b",
+      accent_color: "#7c3aed",
+    },
+    userRole: "admin",
+    isLoading: false,
+    error: null,
+    switchOrganization: vi.fn(),
+    updateBranding: vi.fn(),
+    checkPermission: vi.fn(() => true),
+    getCurrentOrganizationUsers: vi.fn(() => Promise.resolve([])),
+    inviteUser: vi.fn(),
+    removeUser: vi.fn(),
+    updateUserRole: vi.fn(),
+  }),
+  OrganizationProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 // Mock toast
 vi.mock("@/hooks/use-toast", () => ({
   useToast: () => ({
@@ -44,10 +75,7 @@ describe("TestDashboard Component", () => {
     );
     
     await waitFor(() => {
-      const title = screen.getByText((content, element) => {
-        return element?.tagName.toLowerCase() === "h1" && 
-               content.includes("Painel de Testes Automatizados");
-      });
+      const title = screen.getByRole('heading', { name: /Painel de Testes Automatizados/i });
       expect(title).toBeInTheDocument();
     });
   });
