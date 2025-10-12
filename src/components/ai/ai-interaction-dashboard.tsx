@@ -127,10 +127,10 @@ export const AIInteractionDashboard = () => {
                     {type === "chat"
                       ? "Chat"
                       : type === "checklist_generation"
-                      ? "Geração de Checklist"
-                      : type === "document_summary"
-                      ? "Resumo de Documento"
-                      : "Outro"}
+                        ? "Geração de Checklist"
+                        : type === "document_summary"
+                          ? "Resumo de Documento"
+                          : "Outro"}
                   </Badge>
                 </div>
                 <span className="text-sm font-medium">{count}</span>
@@ -170,10 +170,10 @@ export const AIInteractionDashboard = () => {
                         {interaction.interaction_type === "chat"
                           ? "Chat"
                           : interaction.interaction_type === "checklist_generation"
-                          ? "Checklist"
-                          : interaction.interaction_type === "document_summary"
-                          ? "Resumo"
-                          : "Outro"}
+                            ? "Checklist"
+                            : interaction.interaction_type === "document_summary"
+                              ? "Resumo"
+                              : "Outro"}
                       </Badge>
                     </div>
                     <span className="text-xs text-muted-foreground">
