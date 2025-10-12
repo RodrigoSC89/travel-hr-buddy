@@ -29,17 +29,27 @@ travel-hr-buddy/
 │  ├─ supabase/migrations/
 │  │  ├─ 20251012190000_create_assistant_report_logs.sql
 │  │  │  └─ Creates table, indexes, RLS policies
-│  │  └─ 20251012190001_insert_sample_assistant_report_logs.sql
-│  │     └─ Sample data for testing (10 logs)
+│  │  ├─ 20251012190001_insert_sample_assistant_report_logs.sql
+│  │  │  └─ Sample data for testing (10 logs)
+│  │  └─ 20251012213000_create_check_daily_cron_function.sql
+│  │     └─ SQL function to check cron health (for monitoring)
 │  │
 │  └─ Database Schema:
-│     └─ assistant_report_logs (id, user_email, status, message, sent_at, user_id, report_type, metadata)
+│     ├─ assistant_report_logs (id, user_email, status, message, sent_at, user_id, report_type, metadata)
+│     └─ check_daily_cron_execution() - SQL function for monitoring
 │
 ├─ 📁 API Layer
 │  ├─ supabase/functions/assistant-report-logs/
 │  │  └─ index.ts
 │  │     └─ Edge Function (Active Implementation)
 │  │     └─ GET /functions/v1/assistant-report-logs
+│  │
+│  ├─ supabase/functions/monitor-cron-health/
+│  │  ├─ index.ts
+│  │  │  └─ Health monitoring Edge Function
+│  │  │  └─ POST /functions/v1/monitor-cron-health
+│  │  └─ README.md
+│  │     └─ Monitoring documentation
 │  │
 │  └─ app/api/report/assistant-logs/
 │     ├─ route.ts
@@ -143,6 +153,7 @@ This feature provides a comprehensive logging system for AI Assistant report sen
 - **Records** error messages
 - **Allows** filtering by date and email
 - **Enables** export to CSV and PDF
+- **🔔 Alerts** when daily cron hasn't executed (NEW)
 
 ### Who Can Use It
 
@@ -162,6 +173,7 @@ This feature provides a comprehensive logging system for AI Assistant report sen
 | Status Badges | Color-coded status indicators | ✅ |
 | RLS Security | Role-based access control | ✅ |
 | Sample Data | Testing data included | ✅ |
+| Cron Health Monitor | Alert when cron hasn't run | ✅ |
 
 ---
 
@@ -229,6 +241,28 @@ This feature provides a comprehensive logging system for AI Assistant report sen
 - Shadcn UI
 - jsPDF
 - jspdf-autotable
+
+### Monitoring
+
+**Edge Function:** `monitor-cron-health`
+
+**Purpose:** Monitors health of `send-daily-assistant-report` cron job
+
+**How it works:**
+1. Calls SQL function `check_daily_cron_execution()`
+2. Checks if cron executed successfully in last 36 hours
+3. Sends email alert if cron hasn't run
+
+**Scheduling:** Should be scheduled to run daily (e.g., 9 AM via pg_cron or Supabase cron)
+
+**Environment Variables:**
+- `RESEND_API_KEY` - Resend API key for sending alerts
+- `ADMIN_EMAIL` - Email address to receive alerts
+- `EMAIL_FROM` - Sender email address
+
+**Alert Trigger:** Last successful execution >36 hours ago
+
+**Documentation:** `supabase/functions/monitor-cron-health/README.md`
 
 ---
 
