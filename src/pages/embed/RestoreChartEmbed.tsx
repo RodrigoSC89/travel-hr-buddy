@@ -83,7 +83,7 @@ export default function RestoreChartEmbed() {
         }
 
         // Process chart data
-        const processedData = (chartResponse || []).map((item: any) => ({
+        const processedData = (chartResponse || []).map((item: { day: string; count: number }) => ({
           day: new Date(item.day).toLocaleDateString("pt-BR", {
             day: "2-digit",
             month: "2-digit",
@@ -114,7 +114,7 @@ export default function RestoreChartEmbed() {
         }
 
         // Signal that chart is ready for screenshot
-        (window as any).chartReady = true;
+        (window as Window & { chartReady?: boolean }).chartReady = true;
       } catch (error) {
         console.error("Error in RestoreChartEmbed:", error);
       } finally {

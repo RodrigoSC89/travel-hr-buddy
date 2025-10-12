@@ -1,8 +1,9 @@
 // ✅ Edge Function: send_daily_restore_report
-// Scheduled function that sends daily restore report via email (CSV format)
+// Scheduled function that sends daily restore report via email (PDF format with Puppeteer)
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
+import puppeteer from "https://deno.land/x/puppeteer@16.2.0/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,6 +15,17 @@ interface RestoreLog {
   status: string;
   message: string;
   error_details: string | null;
+}
+
+interface ChartData {
+  day: string;
+  count: number;
+}
+
+interface RestoreSummary {
+  total: number;
+  unique_docs: number;
+  avg_per_day: number;
 }
 
 /**
@@ -39,67 +51,185 @@ async function logExecution(
 }
 
 /**
- * Generate CSV content from restore report logs
+ * Generate PDF from chart using Puppeteer
  */
-function generateCSV(logs: RestoreLog[]): string {
-  const headers = ["Date", "Status", "Message", "Error"];
-  const rows = logs.map((log) => [
-    new Date(log.executed_at).toLocaleString("pt-BR"),
-    log.status,
-    log.message || "-",
-    log.error_details || "-",
-  ]);
+async function generateChartPDF(appUrl: string, embedToken: string): Promise<Uint8Array> {
+  console.log("🚀 Launching Puppeteer browser...");
+  
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--disable-gpu",
+    ],
+  });
 
-  const csvContent = [
-    headers.join(","),
-    ...rows.map((row) => 
-      row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
-    ),
-  ].join("\n");
-
-  return csvContent;
+  try {
+    const page = await browser.newPage();
+    
+    // Set viewport for consistent rendering
+    await page.setViewport({ width: 800, height: 600 });
+    
+    // Navigate to embed chart with token
+    const chartUrl = `${appUrl}/embed/restore-chart?token=${embedToken}`;
+    console.log(`📊 Navigating to chart: ${chartUrl}`);
+    
+    await page.goto(chartUrl, { 
+      waitUntil: "networkidle0",
+      timeout: 30000 
+    });
+    
+    // Wait for chart to be ready
+    console.log("⏳ Waiting for chart to load...");
+    await page.waitForFunction(
+      "window.chartReady === true", 
+      { timeout: 15000 }
+    );
+    
+    console.log("✅ Chart loaded successfully");
+    
+    // Generate PDF
+    console.log("📄 Generating PDF...");
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+      margin: {
+        top: "20px",
+        right: "20px",
+        bottom: "20px",
+        left: "20px",
+      },
+    });
+    
+    console.log("✅ PDF generated successfully");
+    
+    return pdfBuffer;
+  } finally {
+    await browser.close();
+    console.log("🔒 Browser closed");
+  }
 }
 
 /**
- * Generate HTML email content
+ * Generate HTML email content for PDF report
  */
-function generateEmailHtml(logsCount: number, csvAttached: boolean): string {
+function generateEmailHtml(reportDate: string): string {
   return `
     <!DOCTYPE html>
     <html>
       <head>
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px; }
-          .content { padding: 20px; background: #f9f9f9; }
-          .summary-box { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-          .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; 
+            line-height: 1.6; 
+            color: #333; 
+            margin: 0;
+            padding: 0;
+          }
+          .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            padding: 40px 20px; 
+            text-align: center; 
+          }
+          .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: 600;
+          }
+          .header p {
+            margin: 5px 0;
+            font-size: 16px;
+            opacity: 0.95;
+          }
+          .content { 
+            padding: 30px 20px; 
+            background: #f8f9fa;
+            max-width: 600px;
+            margin: 0 auto;
+          }
+          .info-box { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 8px; 
+            margin: 20px 0; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          }
+          .info-box h2 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            color: #667eea;
+          }
+          .info-box p {
+            margin: 10px 0;
+            font-size: 14px;
+          }
+          .footer { 
+            text-align: center; 
+            padding: 25px 20px; 
+            color: #666; 
+            font-size: 12px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+          }
+          .footer p {
+            margin: 5px 0;
+          }
+          .attachment-note {
+            background: #e7f3ff;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+          }
+          .attachment-note strong {
+            color: #1976d2;
+          }
         </style>
       </head>
       <body>
         <div class="header">
-          <h1>📊 Relatório Diário - Logs de Restauração</h1>
+          <h1>📊 Relatório Diário de Restaurações</h1>
           <p>Nautilus One - Travel HR Buddy</p>
-          <p>${new Date().toLocaleDateString('pt-BR')}</p>
+          <p>📅 ${reportDate}</p>
         </div>
         <div class="content">
-          <div class="summary-box">
-            <h2>📈 Resumo do Relatório</h2>
-            <p><strong>Total de Logs (últimas 24h):</strong> ${logsCount}</p>
-            <p><strong>Arquivo Anexo:</strong> ${csvAttached ? "✅ CSV incluído" : "❌ Nenhum dado disponível"}</p>
+          <div class="info-box">
+            <h2>📈 Sobre este Relatório</h2>
+            <p>Este relatório contém as métricas de restauração de documentos das últimas 24 horas, incluindo:</p>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+              <li><strong>Total de restaurações:</strong> Número total de operações realizadas</li>
+              <li><strong>Documentos únicos:</strong> Quantidade de documentos distintos restaurados</li>
+              <li><strong>Média por dia:</strong> Taxa média de restaurações</li>
+              <li><strong>Última execução:</strong> Timestamp da última operação</li>
+            </ul>
           </div>
-          <p>O relatório em formato CSV está anexado a este email com os logs de execução das últimas 24 horas.</p>
-          <p>Colunas do relatório:</p>
-          <ul>
-            <li><strong>Date:</strong> Data e hora da execução</li>
-            <li><strong>Status:</strong> Status da execução (success, error, critical)</li>
-            <li><strong>Message:</strong> Mensagem descritiva</li>
-            <li><strong>Error:</strong> Detalhes do erro (se houver)</li>
-          </ul>
+          
+          <div class="attachment-note">
+            <strong>📎 Anexo:</strong> O gráfico detalhado com as métricas está incluído como PDF anexo a este email.
+          </div>
+          
+          <div class="info-box">
+            <h2>🔍 Como usar este relatório</h2>
+            <p>O PDF anexo contém visualizações gráficas dos dados de restauração. Use-o para:</p>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+              <li>Monitorar tendências de uso do sistema</li>
+              <li>Identificar picos de atividade</li>
+              <li>Planejar capacidade e recursos</li>
+              <li>Análise de padrões de comportamento</li>
+            </ul>
+          </div>
         </div>
         <div class="footer">
-          <p>Este é um email automático gerado diariamente às 7:00 AM.</p>
+          <p><strong>🤖 Relatório Automático</strong></p>
+          <p>Este email é gerado automaticamente todos os dias às 8:00 AM UTC.</p>
           <p>&copy; ${new Date().getFullYear()} Nautilus One - Travel HR Buddy</p>
+          <p style="margin-top: 10px; font-size: 11px; color: #999;">
+            Para alterar as configurações de notificação, entre em contato com o administrador do sistema.
+          </p>
         </div>
       </body>
     </html>
@@ -107,15 +237,20 @@ function generateEmailHtml(logsCount: number, csvAttached: boolean): string {
 }
 
 /**
- * Send email via SendGrid API
+ * Send email via SendGrid API with PDF attachment
  */
 async function sendEmailViaSendGrid(
   toEmail: string,
   subject: string,
   htmlContent: string,
-  csvContent: string,
+  pdfBuffer: Uint8Array,
   apiKey: string
 ): Promise<void> {
+  // Convert Uint8Array to base64
+  const base64Pdf = btoa(String.fromCharCode(...pdfBuffer));
+  
+  const reportDate = new Date().toISOString().split('T')[0];
+  
   const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
     method: "POST",
     headers: {
@@ -130,51 +265,18 @@ async function sendEmailViaSendGrid(
       },
       subject: subject,
       content: [{ type: "text/html", value: htmlContent }],
-      attachments: csvContent ? [{
-        content: btoa(csvContent),
-        filename: `restore-logs-${new Date().toISOString().split('T')[0]}.csv`,
-        type: "text/csv",
+      attachments: [{
+        content: base64Pdf,
+        filename: `restore_report_${reportDate}.pdf`,
+        type: "application/pdf",
         disposition: "attachment",
-      }] : [],
+      }],
     }),
   });
 
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`SendGrid API error: ${response.status} - ${errorText}`);
-  }
-}
-
-/**
- * Send email via SMTP (fallback method)
- */
-async function sendEmailViaSMTP(
-  toEmail: string,
-  subject: string,
-  htmlContent: string,
-  csvContent: string
-): Promise<void> {
-  // Note: This requires a Node.js API endpoint with nodemailer
-  // For edge functions, SendGrid is recommended
-  const appUrl = Deno.env.get("VITE_APP_URL") || Deno.env.get("APP_URL");
-  if (!appUrl) {
-    throw new Error("APP_URL not configured for SMTP fallback");
-  }
-
-  const response = await fetch(`${appUrl}/api/send-restore-report-csv`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      toEmail,
-      subject,
-      html: htmlContent,
-      csvContent,
-    }),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`SMTP API error: ${response.status} - ${errorText}`);
   }
 }
 
@@ -189,63 +291,70 @@ serve(async (req) => {
   );
 
   try {
-    console.log("🚀 Starting daily restore report generation...");
+    console.log("🚀 Starting daily restore report generation with Puppeteer...");
 
-    const ADMIN_EMAIL = Deno.env.get("ADMIN_EMAIL") || "admin@example.com";
+    // Get required environment variables
+    const ADMIN_EMAIL = Deno.env.get("ADMIN_EMAIL");
     const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
+    const APP_URL = Deno.env.get("VITE_APP_URL") || Deno.env.get("APP_URL");
+    const EMBED_TOKEN = Deno.env.get("VITE_EMBED_ACCESS_TOKEN");
 
-    console.log("📊 Fetching restore report logs from last 24h...");
-
-    // Fetch logs from last 24 hours
-    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-    const { data: logs, error: logsError } = await supabase
-      .from("restore_report_logs")
-      .select("executed_at, status, message, error_details")
-      .gte("executed_at", yesterday)
-      .order("executed_at", { ascending: false });
-
-    if (logsError) {
-      console.error("Error fetching logs:", logsError);
-      await logExecution(supabase, "error", "Failed to fetch restore report logs", logsError);
-      throw new Error(`Failed to fetch logs: ${logsError.message}`);
+    // Validate required environment variables
+    if (!ADMIN_EMAIL) {
+      throw new Error("ADMIN_EMAIL environment variable is required");
+    }
+    if (!SENDGRID_API_KEY) {
+      throw new Error("SENDGRID_API_KEY environment variable is required");
+    }
+    if (!APP_URL) {
+      throw new Error("VITE_APP_URL or APP_URL environment variable is required");
+    }
+    if (!EMBED_TOKEN) {
+      throw new Error("VITE_EMBED_ACCESS_TOKEN environment variable is required");
     }
 
-    console.log(`✅ Fetched ${logs?.length || 0} logs from last 24h`);
+    console.log(`📧 Target email: ${ADMIN_EMAIL}`);
+    console.log(`🌐 App URL: ${APP_URL}`);
 
-    // Generate CSV
-    const csvContent = logs && logs.length > 0 ? generateCSV(logs) : "";
-    const emailHtml = generateEmailHtml(logs?.length || 0, csvContent.length > 0);
+    // Generate PDF from chart using Puppeteer
+    console.log("📊 Generating chart PDF with Puppeteer...");
+    const pdfBuffer = await generateChartPDF(APP_URL, EMBED_TOKEN);
+    console.log(`✅ PDF generated successfully (${pdfBuffer.length} bytes)`);
 
+    // Generate email content
+    const reportDate = new Date().toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+    const emailHtml = generateEmailHtml(reportDate);
+    const subject = `📊 Relatório Diário de Restaurações - ${reportDate}`;
+
+    // Send email via SendGrid with PDF attachment
     console.log("📧 Sending email report...");
-
-    // Send email via SendGrid or SMTP
-    const subject = `📊 Relatório Diário - Restore Logs ${new Date().toLocaleDateString('pt-BR')}`;
-    
-    try {
-      if (SENDGRID_API_KEY) {
-        console.log("Using SendGrid API...");
-        await sendEmailViaSendGrid(ADMIN_EMAIL, subject, emailHtml, csvContent, SENDGRID_API_KEY);
-      } else {
-        console.log("Using SMTP fallback...");
-        await sendEmailViaSMTP(ADMIN_EMAIL, subject, emailHtml, csvContent);
-      }
-    } catch (emailError) {
-      console.error("❌ Error sending email:", emailError);
-      await logExecution(supabase, "error", "Falha no envio do e-mail", emailError);
-      throw emailError;
-    }
+    await sendEmailViaSendGrid(
+      ADMIN_EMAIL, 
+      subject, 
+      emailHtml, 
+      pdfBuffer, 
+      SENDGRID_API_KEY
+    );
 
     console.log("✅ Email sent successfully!");
     
     // Log successful execution
-    await logExecution(supabase, "success", `Relatório enviado com sucesso para ${ADMIN_EMAIL}`);
+    await logExecution(
+      supabase, 
+      "success", 
+      `Relatório PDF enviado com sucesso para ${ADMIN_EMAIL} (${(pdfBuffer.length / 1024).toFixed(2)} KB)`
+    );
 
     return new Response(
       JSON.stringify({
         success: true,
         message: "Daily restore report sent successfully",
-        logsCount: logs?.length || 0,
         recipient: ADMIN_EMAIL,
+        pdfSize: pdfBuffer.length,
         emailSent: true
       }),
       {
