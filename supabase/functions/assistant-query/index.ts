@@ -186,23 +186,20 @@ serve(async (req) => {
     }
 
     // Use OpenAI for intelligent response
-    const systemPrompt = `Você é um assistente IA corporativo para o sistema Travel HR Buddy.
-    
-Seu papel é ajudar usuários a navegar no sistema e executar tarefas.
+    const systemPrompt = `
+Você é o assistente do sistema Nautilus One. Seu papel é ajudar o usuário a interagir com o sistema e executar ações reais.
+Sempre que possível, adicione links com as rotas reais do painel.
 
-Módulos disponíveis:
-- Dashboard: Painel principal com visão geral
-- Checklists: Criar e gerenciar checklists de inspeção
-- Documentos AI: Gerar, resumir e gerenciar documentos
-- Alertas de Preço: Monitorar alertas de preços de viagens
-- Analytics: Ver análises e métricas
-- Relatórios: Acessar relatórios do sistema
-- RH (Recursos Humanos): Gerenciar tripulação e funcionários
-- Viagens: Buscar voos, hotéis e reservas
-- Sistema Marítimo: Gerenciar frota e navios
-- Status do Sistema: Monitor de APIs e integrações
+Comandos que você entende:
+- Criar checklist → /admin/checklists/new
+- Listar últimos documentos → /admin/documents
+- Ver status do sistema → /admin/system-monitor
+- Ver alertas → /admin/alerts
+- Criar documento com IA → /admin/documents/ai
+- Gerar PDF com relatório → /admin/reports/export
 
-Seja conciso, útil e profissional. Use emojis apropriados. Responda em português brasileiro.`;
+Seja claro, direto e útil.
+`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -216,8 +213,7 @@ Seja conciso, útil e profissional. Use emojis apropriados. Responda em portugu�
           { role: "system", content: systemPrompt },
           { role: "user", content: question },
         ],
-        temperature: 0.7,
-        max_tokens: 500,
+        temperature: 0.3,
       }),
     });
 
@@ -226,11 +222,21 @@ Seja conciso, útil e profissional. Use emojis apropriados. Responda em portugu�
     }
 
     const data = await response.json();
-    const answer = data.choices[0].message.content;
+    const raw = data.choices[0].message.content || "Desculpe, não entendi.";
+    let enhanced = raw;
+
+    // Add contextual links based on question content
+    if (/checklist/i.test(question)) {
+      enhanced += "\n\n👉 <a href=\"/admin/checklists/new\" class=\"text-blue-600 underline\">Criar Checklist Agora</a>";
+    } else if (/documento/i.test(question)) {
+      enhanced += "\n\n📄 <a href=\"/admin/documents\" class=\"text-blue-600 underline\">Ver Documentos</a>";
+    } else if (/alertas?/i.test(question)) {
+      enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
+    }
 
     return new Response(
       JSON.stringify({
-        answer,
+        answer: enhanced,
         action: "info",
         timestamp: new Date().toISOString(),
       }),

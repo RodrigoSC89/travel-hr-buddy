@@ -104,36 +104,49 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // If no command matched and OpenAI is available, use it
     if (process.env.OPENAI_API_KEY) {
+      const systemPrompt = `
+Você é o assistente do sistema Nautilus One. Seu papel é ajudar o usuário a interagir com o sistema e executar ações reais.
+Sempre que possível, adicione links com as rotas reais do painel.
+
+Comandos que você entende:
+- Criar checklist → /admin/checklists/new
+- Listar últimos documentos → /admin/documents
+- Ver status do sistema → /admin/system-monitor
+- Ver alertas → /admin/alerts
+- Criar documento com IA → /admin/documents/ai
+- Gerar PDF com relatório → /admin/reports/export
+
+Seja claro, direto e útil.
+`;
+
       const response = await openai.chat.completions.create({
         model: "gpt-4",
+        temperature: 0.3,
         messages: [
           {
             role: "system",
-            content: `Você é um assistente IA corporativo para o sistema Travel HR Buddy.
-            
-Seu papel é ajudar usuários a navegar no sistema e executar tarefas.
-
-Módulos disponíveis:
-- Dashboard: Painel principal com visão geral
-- Checklists: Criar e gerenciar checklists de inspeção
-- Documentos AI: Gerar, resumir e gerenciar documentos
-- Alertas de Preço: Monitorar alertas de preços de viagens
-- Analytics: Ver análises e métricas
-- Relatórios: Acessar relatórios do sistema
-
-Seja conciso, útil e profissional. Use emojis apropriados. Responda em português brasileiro.`,
+            content: systemPrompt,
           },
           {
             role: "user",
             content: question,
           },
         ],
-        temperature: 0.7,
-        max_tokens: 500,
       });
 
-      const answer = response.choices[0].message.content || "";
-      return res.status(200).json({ answer, action: "info" });
+      const raw = response.choices[0].message.content || "Desculpe, não entendi.";
+      let enhanced = raw;
+
+      // Add contextual links based on question content
+      if (/checklist/i.test(question)) {
+        enhanced += "\n\n👉 <a href=\"/admin/checklists/new\" class=\"text-blue-600 underline\">Criar Checklist Agora</a>";
+      } else if (/documento/i.test(question)) {
+        enhanced += "\n\n📄 <a href=\"/admin/documents\" class=\"text-blue-600 underline\">Ver Documentos</a>";
+      } else if (/alertas?/i.test(question)) {
+        enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
+      }
+
+      return res.status(200).json({ answer: enhanced, action: "info" });
     }
 
     // Fallback if no OpenAI key

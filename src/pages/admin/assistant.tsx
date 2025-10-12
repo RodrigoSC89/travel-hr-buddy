@@ -82,7 +82,7 @@ export default function AssistantPage() {
                   <Bot className="w-12 h-12 mx-auto mb-2 opacity-50" />
                   <p>Olá! Como posso ajudar você hoje?</p>
                   <p className="text-xs mt-2">
-                    Experimente: "Criar checklist", "Resumir documento", "Mostrar alertas"
+                    Experimente: &quot;Criar checklist&quot;, &quot;Resumir documento&quot;, &quot;Mostrar alertas&quot;
                   </p>
                 </div>
               )}
@@ -116,7 +116,14 @@ export default function AssistantPage() {
                           : "bg-gray-100 text-gray-900"
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                      {msg.role === "assistant" ? (
+                        <div 
+                          className="text-sm whitespace-pre-wrap"
+                          dangerouslySetInnerHTML={{ __html: msg.content }}
+                        />
+                      ) : (
+                        <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                      )}
                     </div>
                   </div>
                 </div>
