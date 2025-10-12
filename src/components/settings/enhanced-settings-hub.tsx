@@ -564,12 +564,13 @@ export const EnhancedSettingsHub: React.FC = () => {
   };
 
   const togglePreviewMode = () => {
-    setPreviewMode(!previewMode);
+    const newPreviewMode = !previewMode;
+    setPreviewMode(newPreviewMode);
     toast({
-      title: previewMode ? "💾 Modo Normal" : "👁️ Modo Prévia",
-      description: previewMode 
-        ? "Voltando ao modo normal."
-        : "Modo prévia ativado. Veja como as alterações afetarão o sistema.",
+      title: newPreviewMode ? "👁️ Modo Prévia" : "💾 Modo Normal",
+      description: newPreviewMode
+        ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
+        : "Voltando ao modo normal.",
     });
   };
 

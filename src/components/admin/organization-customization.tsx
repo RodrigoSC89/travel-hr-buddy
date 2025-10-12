@@ -33,6 +33,11 @@ export const OrganizationCustomization: React.FC = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(false);
+  const [originalTheme, setOriginalTheme] = useState<{
+    primary: string;
+    secondary: string;
+    accent: string;
+  } | null>(null);
 
   // Formulário de personalização
   const [customization, setCustomization] = useState<{
@@ -86,6 +91,86 @@ export const OrganizationCustomization: React.FC = () => {
       });
     }
   }, [currentBranding]);
+
+  const hexToHsl = (hex: string): string => {
+    // Simplified conversion - in production would use proper color conversion
+    const r = parseInt(hex.slice(1, 3), 16) / 255;
+    const g = parseInt(hex.slice(3, 5), 16) / 255;
+    const b = parseInt(hex.slice(5, 7), 16) / 255;
+    
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h = 0;
+    let s = 0;
+    const l = (max + min) / 2;
+
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+
+    return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
+  };
+
+  const applyPreviewTheme = () => {
+    const root = document.documentElement;
+    
+    // Salvar tema original se ainda não foi salvo
+    if (!originalTheme) {
+      const computedStyle = getComputedStyle(root);
+      setOriginalTheme({
+        primary: computedStyle.getPropertyValue("--primary").trim() || "222.2 47.4% 11.2%",
+        secondary: computedStyle.getPropertyValue("--secondary").trim() || "210 40% 96.1%",
+        accent: computedStyle.getPropertyValue("--accent").trim() || "210 40% 96.1%"
+      });
+    }
+    
+    // Aplicar cores do preview
+    root.style.setProperty("--primary", hexToHsl(customization.primary_color));
+    root.style.setProperty("--secondary", hexToHsl(customization.secondary_color));
+    root.style.setProperty("--accent", hexToHsl(customization.accent_color));
+  };
+
+  const resetPreviewTheme = () => {
+    if (!originalTheme) return;
+    
+    const root = document.documentElement;
+    root.style.setProperty("--primary", originalTheme.primary);
+    root.style.setProperty("--secondary", originalTheme.secondary);
+    root.style.setProperty("--accent", originalTheme.accent);
+    setOriginalTheme(null);
+  };
+
+  const togglePreview = () => {
+    if (!preview) {
+      applyPreviewTheme();
+      setPreview(true);
+      toast({
+        title: "Pré-visualização Ativada",
+        description: "As alterações de cor estão sendo aplicadas temporariamente",
+      });
+    } else {
+      resetPreviewTheme();
+      setPreview(false);
+      toast({
+        title: "Pré-visualização Desativada",
+        description: "Tema original restaurado",
+      });
+    }
+  };
+
+  // Aplicar preview quando as cores mudam e o preview está ativo
+  useEffect(() => {
+    if (preview) {
+      applyPreviewTheme();
+    }
+  }, [customization.primary_color, customization.secondary_color, customization.accent_color, preview]);
 
   const handleSave = async () => {
     if (!checkPermission("manage_settings")) {
@@ -176,7 +261,7 @@ export const OrganizationCustomization: React.FC = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setPreview(!preview)}>
+          <Button variant="outline" onClick={togglePreview}>
             <Eye className="w-4 h-4 mr-2" />
             {preview ? "Sair da Pré-visualização" : "Pré-visualizar"}
           </Button>
