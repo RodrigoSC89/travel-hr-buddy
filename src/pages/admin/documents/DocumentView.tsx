@@ -22,8 +22,10 @@ interface Document {
   content: string;
   created_at: string;
   generated_by: string | null;
-  author_email?: string;
-  author_name?: string;
+  profiles?: {
+    full_name: string | null;
+    email: string | null;
+  } | null;
 }
 
 interface DocumentComment {
@@ -106,20 +108,18 @@ export default function DocumentViewPage() {
           title, 
           content, 
           created_at, 
-          generated_by
+          generated_by,
+          profiles:generated_by (
+            full_name,
+            email
+          )
         `)
         .eq("id", id)
         .single();
 
       if (error) throw error;
 
-      const transformedData = {
-        ...data,
-        author_email: undefined,
-        author_name: undefined,
-      };
-
-      setDoc(transformedData);
+      setDoc(data);
     } catch (error) {
       console.error("Error loading document:", error);
       toast({
@@ -334,15 +334,15 @@ export default function DocumentViewPage() {
               })}
             </p>
             {/* Author information - name shown to all, email only to admins */}
-            {(doc.author_name || (isAdmin && doc.author_email)) && (
-              <p className="text-sm text-muted-foreground">
-                Autor: {doc.author_name || "Desconhecido"}
-                {isAdmin && doc.author_email && (
-                  <span className="ml-2 text-xs font-mono">
-                    ({doc.author_email})
-                  </span>
-                )}
-              </p>
+            {doc.profiles?.full_name && (
+              <div className="text-sm text-muted-foreground">
+                Autor: {doc.profiles.full_name}
+              </div>
+            )}
+            {isAdmin && doc.profiles?.email && (
+              <div className="text-sm text-muted-foreground">
+                {doc.profiles.email}
+              </div>
             )}
           </div>
 
