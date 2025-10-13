@@ -321,6 +321,14 @@ export default function DocumentViewPage() {
           <Button
             variant="outline"
             size="sm"
+            onClick={() => navigate(`/admin/documents/history/${id}`)}
+          >
+            📜 Ver Histórico Completo
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
             onClick={loadComments}
             disabled={loadingComments}
           >
