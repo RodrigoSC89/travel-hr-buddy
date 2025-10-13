@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,9 +31,13 @@ interface RestoreReportLog {
  */
 export default function RestoreReportLogsPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [logs, setLogs] = useState<RestoreReportLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Check if public view mode is enabled
+  const isPublic = new URLSearchParams(location.search).get('public') === '1';
 
   useEffect(() => {
     fetchLogs();
@@ -94,14 +98,16 @@ export default function RestoreReportLogsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate("/admin")}
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar
-            </Button>
+            {!isPublic && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/admin")}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar
+              </Button>
+            )}
             <div>
               <h1 className="text-2xl font-bold">🧠 Auditoria de Relatórios Enviados</h1>
               <p className="text-sm text-muted-foreground">
@@ -109,9 +115,11 @@ export default function RestoreReportLogsPage() {
               </p>
             </div>
           </div>
-          <Button onClick={fetchLogs} variant="outline">
-            Atualizar
-          </Button>
+          {!isPublic && (
+            <Button onClick={fetchLogs} variant="outline">
+              Atualizar
+            </Button>
+          )}
         </div>
 
         {/* Summary Cards */}
@@ -237,6 +245,13 @@ export default function RestoreReportLogsPage() {
             )}
           </CardContent>
         </Card>
+        
+        {/* Public View Notice */}
+        {isPublic && (
+          <p className="text-muted-foreground text-xs text-center mt-4">
+            🔒 Visualização pública apenas para leitura.
+          </p>
+        )}
       </div>
     </div>
   );

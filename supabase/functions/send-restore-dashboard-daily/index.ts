@@ -204,13 +204,57 @@ serve(async (req) => {
   } catch (error) {
     console.error("❌ Error in send-restore-dashboard-daily:", error);
     
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    
+    // ✅ Send notification to administrator on failure
+    try {
+      const adminEmail = Deno.env.get("REPORT_ADMIN_EMAIL") || Deno.env.get("ADMIN_EMAIL") || "admin@example.com";
+      const resendApiKey = Deno.env.get("RESEND_API_KEY");
+      
+      if (resendApiKey) {
+        console.log("📧 Sending failure notification email...");
+        
+        const response = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: Deno.env.get("EMAIL_FROM") || "alerta@empresa.com",
+            to: adminEmail,
+            subject: "🚨 Falha no Envio de Relatório Diário",
+            text: `Erro: ${errorMessage}`,
+            html: `
+              <div style="font-family: Arial, sans-serif; padding: 20px;">
+                <h2 style="color: #dc2626;">🚨 Falha no Envio de Relatório Diário</h2>
+                <p><strong>Erro:</strong> ${errorMessage}</p>
+                <p><strong>Data/Hora:</strong> ${new Date().toLocaleString('pt-BR')}</p>
+                <hr style="margin: 20px 0; border: 1px solid #e5e7eb;">
+                <p style="color: #666; font-size: 12px;">Este é um alerta automático do sistema de relatórios.</p>
+              </div>
+            `,
+          }),
+        });
+        
+        if (response.ok) {
+          console.log("✅ Failure notification email sent successfully");
+        } else {
+          console.error("❌ Failed to send notification email:", await response.text());
+        }
+      }
+    } catch (emailError) {
+      console.error("❌ Error sending notification email:", emailError);
+      // Don't throw - email failure shouldn't break error response
+    }
+    
     // Log critical error
-    await logExecution(supabase, "critical", "Critical error in function", error);
+    await logExecution(supabase, "error", "Falha ao enviar o relatório automático.", error);
     
     return new Response(
       JSON.stringify({
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error occurred"
+        error: errorMessage
       }),
       {
         status: 500,
