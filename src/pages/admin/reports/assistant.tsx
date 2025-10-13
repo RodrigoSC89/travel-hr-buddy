@@ -7,10 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowLeft, Download, FileText, BarChart3 } from "lucide-react";
+import { ArrowLeft, Download, FileText, BarChart3, CheckCircle, AlertTriangle } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -51,12 +52,15 @@ export default function AssistantReportLogsPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [email, setEmail] = useState("");
-  const [cronStatus, setCronStatus] = useState<"ok" | "warning" | null>(null);
-  const [cronMessage, setCronMessage] = useState<string>("");
+  const [healthStatus, setHealthStatus] = useState<{
+    isHealthy: boolean;
+    lastExecutionHoursAgo: number | null;
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
     fetchLogs();
-    fetchCronStatus();
+    checkHealthStatus();
   }, []);
 
   // Prepare chart data from logs
@@ -75,8 +79,8 @@ export default function AssistantReportLogsPage() {
 
     // Sort dates and prepare chart data
     const sortedDates = Object.keys(dateGroups).sort((a, b) => {
-      const [dayA, monthA] = a.split('/');
-      const [dayB, monthB] = b.split('/');
+      const [dayA, monthA] = a.split("/");
+      const [dayB, monthB] = b.split("/");
       return new Date(`2024-${monthA}-${dayA}`).getTime() - new Date(`2024-${monthB}-${dayB}`).getTime();
     });
 
@@ -164,35 +168,47 @@ export default function AssistantReportLogsPage() {
     }
   }
 
-  async function fetchCronStatus() {
+  async function checkHealthStatus() {
     try {
-      // Get session for authorization
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
+      // Query the database directly for the last automated successful execution
+      const { data, error } = await supabase
+        .from("assistant_report_logs")
+        .select("sent_at, status")
+        .eq("status", "success")
+        .order("sent_at", { ascending: false })
+        .limit(1);
+
+      if (error) {
+        console.error("Error checking health status:", error);
         return;
       }
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cron-status`,
-        {
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        console.error("Failed to fetch cron status");
+      if (!data || data.length === 0) {
+        setHealthStatus({
+          isHealthy: false,
+          lastExecutionHoursAgo: null,
+          message: "Nenhum envio de relatório registrado ainda."
+        });
         return;
       }
 
-      const data = await response.json();
-      setCronStatus(data.status);
-      setCronMessage(data.message);
+      const lastExecution = new Date(data[0].sent_at);
+      const now = new Date();
+      const hoursAgo = (now.getTime() - lastExecution.getTime()) / (1000 * 60 * 60);
+      const roundedHours = Math.round(hoursAgo);
+
+      const isHealthy = hoursAgo <= 36;
+
+      setHealthStatus({
+        isHealthy,
+        lastExecutionHoursAgo: roundedHours,
+        message: isHealthy
+          ? `Sistema operando normalmente. Último envio há ${roundedHours}h.`
+          : `Atenção necessária! Último envio detectado há ${roundedHours}h — o sistema esperava um envio nas últimas 36 horas. Verifique os logs e a configuração do cron.`
+      });
     } catch (error) {
-      console.error("Error fetching cron status:", error);
-      // Don't show toast for cron status errors - it's supplementary info
+      console.error("Error in checkHealthStatus:", error);
+      // Don't show toast for health status errors - it's supplementary info
     }
   }
 
@@ -282,16 +298,40 @@ export default function AssistantReportLogsPage() {
         <h1 className="text-xl font-bold mb-4">📬 Logs de Envio de Relatórios — Assistente IA</h1>
       </div>
 
-      {cronStatus && (
-        <div 
-          className={`mb-4 p-3 rounded-md text-sm font-medium ${
-            cronStatus === "ok" 
-              ? "bg-green-100 text-green-800" 
-              : "bg-yellow-100 text-yellow-800"
+      {healthStatus && (
+        <Alert
+          className={`mb-4 ${
+            healthStatus.isHealthy
+              ? "bg-green-50 border-green-200"
+              : "bg-yellow-50 border-yellow-200"
           }`}
         >
-          {cronStatus === "ok" ? "✅ " : "⚠️ "}{cronMessage}
-        </div>
+          <div className="flex items-start gap-2">
+            {healthStatus.isHealthy ? (
+              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+            ) : (
+              <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+            )}
+            <div className="flex-1">
+              <AlertTitle
+                className={
+                  healthStatus.isHealthy ? "text-green-800" : "text-yellow-800"
+                }
+              >
+                {healthStatus.isHealthy
+                  ? "✅ Sistema Operando Normalmente"
+                  : "⚠️ Atenção Necessária"}
+              </AlertTitle>
+              <AlertDescription
+                className={
+                  healthStatus.isHealthy ? "text-green-700" : "text-yellow-700"
+                }
+              >
+                {healthStatus.message}
+              </AlertDescription>
+            </div>
+          </div>
+        </Alert>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
@@ -336,7 +376,7 @@ export default function AssistantReportLogsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div style={{ height: '300px' }}>
+            <div style={{ height: "300px" }}>
               <Bar data={chartData} options={chartOptions} />
             </div>
           </CardContent>
@@ -367,8 +407,8 @@ export default function AssistantReportLogsPage() {
                       log.status === "success" 
                         ? "bg-green-100 text-green-800" 
                         : log.status === "error"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-yellow-100 text-yellow-800"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
                     {log.status}

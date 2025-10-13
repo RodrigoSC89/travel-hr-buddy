@@ -15,12 +15,19 @@ vi.mock("react-router-dom", async () => {
 
 // Mock Supabase client
 const mockGetSession = vi.fn();
+const mockSelect = vi.fn();
+const mockEq = vi.fn();
+const mockOrder = vi.fn();
+const mockLimit = vi.fn();
 
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     auth: {
       getSession: () => mockGetSession(),
     },
+    from: vi.fn(() => ({
+      select: mockSelect,
+    })),
   },
 }));
 
@@ -43,10 +50,16 @@ describe("AssistantReportLogsPage - Cron Status", () => {
         },
       },
     });
+    
+    // Reset all mock functions
+    mockSelect.mockClear();
+    mockEq.mockClear();
+    mockOrder.mockClear();
+    mockLimit.mockClear();
   });
 
   it("should display cron status badge when status is ok", async () => {
-    // Mock successful fetch responses
+    // Mock successful fetch for logs
     (global.fetch as any).mockImplementation((url: string) => {
       if (url.includes("assistant-report-logs")) {
         return Promise.resolve({
@@ -54,17 +67,28 @@ describe("AssistantReportLogsPage - Cron Status", () => {
           json: () => Promise.resolve([]),
         });
       }
-      if (url.includes("cron-status")) {
-        return Promise.resolve({
-          ok: true,
-          json: () =>
-            Promise.resolve({
-              status: "ok",
-              message: "✅ Cron executado há 2 hora(s) - Status: success",
-            }),
-        });
-      }
       return Promise.reject(new Error("Unknown URL"));
+    });
+
+    // Mock Supabase query for health check - recent execution
+    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
+    mockSelect.mockReturnValue({
+      eq: mockEq,
+    });
+    mockEq.mockReturnValue({
+      order: mockOrder,
+    });
+    mockOrder.mockReturnValue({
+      limit: mockLimit,
+    });
+    mockLimit.mockResolvedValue({
+      data: [
+        {
+          sent_at: twoHoursAgo.toISOString(),
+          status: "success",
+        },
+      ],
+      error: null,
     });
 
     render(
@@ -73,19 +97,19 @@ describe("AssistantReportLogsPage - Cron Status", () => {
       </MemoryRouter>
     );
 
-    // Wait for the cron status to be fetched and displayed
+    // Wait for the health status to be displayed
     await waitFor(() => {
-      const statusBadge = screen.getByText(/Cron executado há 2 hora/i);
-      expect(statusBadge).toBeDefined();
+      const statusMessage = screen.getByText(/Sistema operando normalmente/i);
+      expect(statusMessage).toBeDefined();
     });
 
-    // Check that the status badge contains the success emoji
-    const statusBadge = screen.getByText(/Cron executado há 2 hora/i);
-    expect(statusBadge.textContent).toContain("✅");
+    // Check that the status contains the success emoji
+    const statusMessage = screen.getByText(/Sistema operando normalmente/i);
+    expect(statusMessage.textContent).toContain("✅");
   });
 
   it("should display warning badge when cron has not run recently", async () => {
-    // Mock fetch responses with warning status
+    // Mock fetch for logs
     (global.fetch as any).mockImplementation((url: string) => {
       if (url.includes("assistant-report-logs")) {
         return Promise.resolve({
@@ -93,17 +117,28 @@ describe("AssistantReportLogsPage - Cron Status", () => {
           json: () => Promise.resolve([]),
         });
       }
-      if (url.includes("cron-status")) {
-        return Promise.resolve({
-          ok: true,
-          json: () =>
-            Promise.resolve({
-              status: "warning",
-              message: "⚠️ Última execução há 48 horas (mais de 36h atrás)",
-            }),
-        });
-      }
       return Promise.reject(new Error("Unknown URL"));
+    });
+
+    // Mock Supabase query for health check - old execution (38 hours ago)
+    const thirtyEightHoursAgo = new Date(Date.now() - 38 * 60 * 60 * 1000);
+    mockSelect.mockReturnValue({
+      eq: mockEq,
+    });
+    mockEq.mockReturnValue({
+      order: mockOrder,
+    });
+    mockOrder.mockReturnValue({
+      limit: mockLimit,
+    });
+    mockLimit.mockResolvedValue({
+      data: [
+        {
+          sent_at: thirtyEightHoursAgo.toISOString(),
+          status: "success",
+        },
+      ],
+      error: null,
     });
 
     render(
@@ -112,19 +147,19 @@ describe("AssistantReportLogsPage - Cron Status", () => {
       </MemoryRouter>
     );
 
-    // Wait for the cron status to be fetched and displayed
+    // Wait for the health status to be displayed
     await waitFor(() => {
-      const statusBadge = screen.getByText(/Última execução há 48 horas/i);
-      expect(statusBadge).toBeDefined();
+      const statusMessage = screen.getByText(/Atenção necessária/i);
+      expect(statusMessage).toBeDefined();
     });
 
-    // Check that the status badge contains the warning emoji
-    const statusBadge = screen.getByText(/Última execução há 48 horas/i);
-    expect(statusBadge.textContent).toContain("⚠️");
+    // Check that the status contains the warning emoji
+    const statusMessage = screen.getByText(/Atenção necessária/i);
+    expect(statusMessage.textContent).toContain("⚠️");
   });
 
   it("should not display status badge if cron-status API fails", async () => {
-    // Mock fetch responses where cron-status fails
+    // Mock fetch for logs
     (global.fetch as any).mockImplementation((url: string) => {
       if (url.includes("assistant-report-logs")) {
         return Promise.resolve({
@@ -132,12 +167,22 @@ describe("AssistantReportLogsPage - Cron Status", () => {
           json: () => Promise.resolve([]),
         });
       }
-      if (url.includes("cron-status")) {
-        return Promise.resolve({
-          ok: false,
-        });
-      }
       return Promise.reject(new Error("Unknown URL"));
+    });
+
+    // Mock Supabase query for health check - error case
+    mockSelect.mockReturnValue({
+      eq: mockEq,
+    });
+    mockEq.mockReturnValue({
+      order: mockOrder,
+    });
+    mockOrder.mockReturnValue({
+      limit: mockLimit,
+    });
+    mockLimit.mockResolvedValue({
+      data: null,
+      error: { message: "Database error" },
     });
 
     render(
@@ -152,13 +197,13 @@ describe("AssistantReportLogsPage - Cron Status", () => {
       expect(heading).toBeDefined();
     });
 
-    // Check that no cron status badge is displayed
-    expect(screen.queryByText(/Cron executado/i)).toBeNull();
-    expect(screen.queryByText(/Última execução/i)).toBeNull();
+    // Check that no health status is displayed
+    expect(screen.queryByText(/Sistema operando/i)).toBeNull();
+    expect(screen.queryByText(/Atenção necessária/i)).toBeNull();
   });
 
   it("should render page title and filters", async () => {
-    // Mock successful fetch responses
+    // Mock successful fetch for logs
     (global.fetch as any).mockImplementation((url: string) => {
       if (url.includes("assistant-report-logs")) {
         return Promise.resolve({
@@ -166,17 +211,28 @@ describe("AssistantReportLogsPage - Cron Status", () => {
           json: () => Promise.resolve([]),
         });
       }
-      if (url.includes("cron-status")) {
-        return Promise.resolve({
-          ok: true,
-          json: () =>
-            Promise.resolve({
-              status: "ok",
-              message: "✅ Cron executado há 2 hora(s) - Status: success",
-            }),
-        });
-      }
       return Promise.reject(new Error("Unknown URL"));
+    });
+
+    // Mock Supabase query for health check
+    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
+    mockSelect.mockReturnValue({
+      eq: mockEq,
+    });
+    mockEq.mockReturnValue({
+      order: mockOrder,
+    });
+    mockOrder.mockReturnValue({
+      limit: mockLimit,
+    });
+    mockLimit.mockResolvedValue({
+      data: [
+        {
+          sent_at: twoHoursAgo.toISOString(),
+          status: "success",
+        },
+      ],
+      error: null,
     });
 
     render(

@@ -1,0 +1,16 @@
+# Supabase Cron Job Configuration
+# Automated scheduling for daily assistant reports and health monitoring
+
+cron:
+  # Daily Report - Sends automated assistant report at 08:00 UTC
+  - name: send_assistant_report_daily
+    schedule: '0 8 * * *'
+    path: /functions/v1/send-daily-assistant-report
+    method: POST
+
+  # Health Monitor - Checks execution status at 10:00 UTC (2 hours after daily report)
+  # Alerts administrators if the daily report hasn't run in the last 36 hours
+  - name: monitor_cron_health
+    schedule: '0 10 * * *'
+    path: /functions/v1/monitor-cron-health
+    method: POST
