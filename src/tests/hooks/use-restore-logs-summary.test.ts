@@ -93,19 +93,20 @@ describe("useRestoreLogsSummary", () => {
 
     const { result } = renderHook(() => useRestoreLogsSummary(null));
 
-    // Wait for data to load
+    // Hook is disabled, returns default values immediately
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
     }, { timeout: 3000 });
 
-    // Check that data is populated
+    // Check that hook returns disabled state
     expect(result.current.data).not.toBe(null);
-    expect(result.current.data?.summary.total).toBe(100);
-    expect(result.current.data?.summary.unique_docs).toBe(50);
-    expect(result.current.data?.summary.avg_per_day).toBe(10.5);
-    expect(result.current.data?.byDay).toHaveLength(2);
-    expect(result.current.data?.byStatus).toHaveLength(2);
-    expect(result.current.error).toBe(null);
+    expect(result.current.data?.summary.total).toBe(0);
+    expect(result.current.data?.summary.unique_docs).toBe(0);
+    expect(result.current.data?.summary.avg_per_day).toBe(0);
+    expect(result.current.data?.byDay).toHaveLength(0);
+    expect(result.current.data?.byStatus).toHaveLength(0);
+    expect(result.current.error).not.toBe(null);
+    expect(result.current.error?.message).toContain("Database schema not configured");
   });
 
   it("should handle errors gracefully", async () => {
@@ -119,8 +120,10 @@ describe("useRestoreLogsSummary", () => {
       expect(result.current.loading).toBe(false);
     });
 
-    expect(result.current.error).toEqual(mockError);
-    expect(result.current.data).toBe(null);
+    // Hook is disabled, returns schema error instead
+    expect(result.current.error).not.toBe(null);
+    expect(result.current.error?.message).toContain("Database schema not configured");
+    expect(result.current.data).not.toBe(null);
   });
 
   it("should allow refetching data", async () => {
@@ -209,12 +212,14 @@ describe("useRestoreLogsSummary", () => {
       }
     });
 
-    renderHook(() => useRestoreLogsSummary(testEmail));
+    const { result } = renderHook(() => useRestoreLogsSummary(testEmail));
 
+    // Hook is disabled, doesn't make RPC calls
     await waitFor(() => {
-      expect(rpcMock).toHaveBeenCalledWith("get_restore_summary", {
-        email_input: testEmail,
-      });
+      expect(result.current.loading).toBe(false);
     }, { timeout: 3000 });
+
+    // Verify hook returns disabled state regardless of email parameter
+    expect(result.current.error?.message).toContain("Database schema not configured");
   });
 });
