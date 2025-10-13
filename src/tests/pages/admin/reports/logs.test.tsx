@@ -1,23 +1,62 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreReportLogsPage from "@/pages/admin/reports/logs";
 
 /**
  * RestoreReportLogsPage Tests
  * 
- * Tests the disabled state of the Restore Report Logs page.
- * Component is disabled because the required database table doesn't exist yet.
+ * Tests the Restore Report Logs audit page functionality.
  */
+
+// Mock Supabase client
+vi.mock("@/integrations/supabase/client", () => ({
+  supabase: {
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        order: vi.fn(() => ({
+          limit: vi.fn(() => 
+            Promise.resolve({
+              data: [
+                {
+                  id: "1",
+                  executed_at: "2025-10-13T10:00:00Z",
+                  status: "success",
+                  message: "Relatório enviado com sucesso.",
+                  error_details: null,
+                  triggered_by: "automated"
+                },
+                {
+                  id: "2",
+                  executed_at: "2025-10-12T10:00:00Z",
+                  status: "error",
+                  message: "Falha ao enviar o relatório automático.",
+                  error_details: "Connection timeout",
+                  triggered_by: "automated"
+                }
+              ],
+              error: null
+            })
+          )
+        }))
+      }))
+    }))
+  }
+}));
+
 describe("RestoreReportLogsPage Component", () => {
-  it("should render the page title", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should render the page title", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Logs de Relatórios")).toBeInTheDocument();
+    expect(screen.getByText("🧠 Auditoria de Relatórios Enviados")).toBeInTheDocument();
   });
 
   it("should render back button", () => {
@@ -27,44 +66,47 @@ describe("RestoreReportLogsPage Component", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText("← Voltar")).toBeInTheDocument();
+    expect(screen.getByText("Voltar")).toBeInTheDocument();
   });
 
-  it("should display database configuration warning", () => {
+  it("should display loading state initially", () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    // Component shows a configuration warning instead of loading data
-    expect(screen.getByText((content) =>
-      content.includes("Esta funcionalidade requer configuração de banco de dados adicional")
-    )).toBeInTheDocument();
+    expect(screen.getByText("Carregando logs...")).toBeInTheDocument();
   });
 
-  it("should render alert with specific table message", () => {
+  it("should display logs after loading", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    // Check that the alert mentions the specific table name
-    expect(screen.getByText((content) =>
-      content.includes("restore_report_logs")
-    )).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Histórico de Execuções")).toBeInTheDocument();
+    });
+
+    // Check for success log
+    await waitFor(() => {
+      expect(screen.getByText("Relatório enviado com sucesso.")).toBeInTheDocument();
+    });
   });
 
-  it("should render alert icon", () => {
+  it("should display summary cards", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    // Verify alert component is rendered
-    const alert = screen.getByRole("alert");
-    expect(alert).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Total de Execuções")).toBeInTheDocument();
+      expect(screen.getByText("Sucessos")).toBeInTheDocument();
+      expect(screen.getByText("Erros")).toBeInTheDocument();
+    });
   });
 });

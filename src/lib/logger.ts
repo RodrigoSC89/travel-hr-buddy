@@ -29,10 +29,10 @@ function getErrorMessage(error: unknown): string {
   if (isError(error)) {
     return error.message;
   }
-  if (typeof error === 'string') {
+  if (typeof error === "string") {
     return error;
   }
-  return 'An unknown error occurred';
+  return "An unknown error occurred";
 }
 
 /**
@@ -80,7 +80,7 @@ export const logger = {
    * Log error messages (always logged and sent to monitoring in production)
    */
   error: (message: string, error?: unknown, context?: LogContext) => {
-    const errorMessage = error ? getErrorMessage(error) : '';
+    const errorMessage = error ? getErrorMessage(error) : "";
     const fullContext = {
       ...context,
       ...(error && isError(error) ? { stack: error.stack } : {}),
@@ -88,14 +88,14 @@ export const logger = {
 
     if (Object.keys(fullContext).length > 0) {
       // eslint-disable-next-line no-console
-      console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ''}`, fullContext);
+      console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ""}`, fullContext);
     } else {
       // eslint-disable-next-line no-console
-      console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ''}`);
+      console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ""}`);
     }
 
     // Send to Sentry in production
-    if (isProduction && isError(error) && typeof window !== 'undefined') {
+    if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
         // @ts-expect-error Sentry is loaded globally
         if (window.Sentry) {
@@ -127,7 +127,7 @@ export const logger = {
     }
 
     // Send to Sentry in production
-    if (isProduction && isError(error) && typeof window !== 'undefined') {
+    if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
         // @ts-expect-error Sentry is loaded globally
         if (window.Sentry) {

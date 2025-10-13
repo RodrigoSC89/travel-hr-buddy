@@ -75,8 +75,8 @@ export default function AssistantReportLogsPage() {
 
     // Sort dates and prepare chart data
     const sortedDates = Object.keys(dateGroups).sort((a, b) => {
-      const [dayA, monthA] = a.split('/');
-      const [dayB, monthB] = b.split('/');
+      const [dayA, monthA] = a.split("/");
+      const [dayB, monthB] = b.split("/");
       return new Date(`2024-${monthA}-${dayA}`).getTime() - new Date(`2024-${monthB}-${dayB}`).getTime();
     });
 
@@ -336,7 +336,7 @@ export default function AssistantReportLogsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div style={{ height: '300px' }}>
+            <div style={{ height: "300px" }}>
               <Bar data={chartData} options={chartOptions} />
             </div>
           </CardContent>
@@ -367,8 +367,8 @@ export default function AssistantReportLogsPage() {
                       log.status === "success" 
                         ? "bg-green-100 text-green-800" 
                         : log.status === "error"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-yellow-100 text-yellow-800"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
                     {log.status}
