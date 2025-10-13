@@ -15,10 +15,23 @@ export function generateAuditToken(email: string): string {
 export function verifyAuditToken(token: string): string | null {
   try {
     const decoded = atob(token);
-    const [email, timestamp] = decoded.split(":");
+    // The format is "email:timestamp" but timestamp contains colons
+    // So we split only on the first colon
+    const colonIndex = decoded.indexOf(":");
+    if (colonIndex === -1) {
+      return null;
+    }
+    
+    const email = decoded.substring(0, colonIndex);
+    const timestamp = decoded.substring(colonIndex + 1);
+    
+    // Check if timestamp is a valid date
+    const tokenDate = new Date(timestamp);
+    if (isNaN(tokenDate.getTime())) {
+      return null;
+    }
     
     // Check if token is expired (e.g., 7 days)
-    const tokenDate = new Date(timestamp);
     const now = new Date();
     const daysDiff = (now.getTime() - tokenDate.getTime()) / (1000 * 3600 * 24);
     
