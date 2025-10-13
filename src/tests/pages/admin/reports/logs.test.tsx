@@ -203,5 +203,70 @@ describe("RestoreReportLogsPage Component", () => {
       expect(mockSelect).toHaveBeenCalled();
     });
   });
+
+  it("should hide filters and export buttons in public mode", async () => {
+    render(
+      <MemoryRouter initialEntries={["/admin/reports/logs?public=1"]}>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("🧠 Auditoria de Relatórios Enviados")).toBeInTheDocument();
+    });
+
+    // Export buttons should not be present
+    expect(screen.queryByText("CSV")).not.toBeInTheDocument();
+    expect(screen.queryByText("PDF")).not.toBeInTheDocument();
+
+    // Filter controls should not be present
+    expect(screen.queryByText("Status")).not.toBeInTheDocument();
+    expect(screen.queryByText("Data Inicial")).not.toBeInTheDocument();
+    expect(screen.queryByText("Data Final")).not.toBeInTheDocument();
+    expect(screen.queryByText("Buscar")).not.toBeInTheDocument();
+    expect(screen.queryByText("Limpar")).not.toBeInTheDocument();
+  });
+
+  it("should display public mode notice when public=1 parameter is present", async () => {
+    render(
+      <MemoryRouter initialEntries={["/admin/reports/logs?public=1"]}>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("🔒 Visualização pública apenas para leitura.")).toBeInTheDocument();
+    });
+  });
+
+  it("should not display public mode notice in normal mode", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("🧠 Auditoria de Relatórios Enviados")).toBeInTheDocument();
+    });
+
+    // Public notice should not be present
+    expect(screen.queryByText("🔒 Visualização pública apenas para leitura.")).not.toBeInTheDocument();
+  });
+
+  it("should show filters and export buttons in normal mode", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("CSV")).toBeInTheDocument();
+      expect(screen.getByText("PDF")).toBeInTheDocument();
+      expect(screen.getByText("Status")).toBeInTheDocument();
+      expect(screen.getByText("Buscar")).toBeInTheDocument();
+    });
+  });
 });
 
