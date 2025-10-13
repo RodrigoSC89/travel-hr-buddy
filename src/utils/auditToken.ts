@@ -15,7 +15,7 @@ export function generateAuditToken(email: string): string {
 export function verifyAuditToken(token: string): string | null {
   try {
     const decoded = atob(token);
-    const [email, timestamp] = decoded.split(':');
+    const [email, timestamp] = decoded.split(":");
     
     // Check if token is expired (e.g., 7 days)
     const tokenDate = new Date(timestamp);
@@ -28,7 +28,7 @@ export function verifyAuditToken(token: string): string | null {
     
     return email;
   } catch (error) {
-    console.error('Invalid token:', error);
+    console.error("Invalid token:", error);
     return null;
   }
 }
