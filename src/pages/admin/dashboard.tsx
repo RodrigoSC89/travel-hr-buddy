@@ -1,9 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
+import { useSearchParams } from "react-router-dom";
+import { Card, CardContent } from "@/components/ui/card";
+import { RoleBasedAccess } from "@/components/auth/role-based-access";
+import { Eye } from "lucide-react";
 
 export default function AdminDashboard() {
+  const [searchParams] = useSearchParams();
+  const isPublicView = searchParams.get("public") === "1";
+  
   const [cronStatus, setCronStatus] = useState<"ok" | "warning" | null>(null);
   const [cronMessage, setCronMessage] = useState("");
 
@@ -34,7 +40,10 @@ export default function AdminDashboard() {
 
   return (
     <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">🚀 Painel Administrativo — Nautilus One</h1>
+      <h1 className="text-2xl font-bold">
+        {isPublicView && <Eye className="inline w-6 h-6 mr-2" />}
+        🚀 Painel Administrativo — Nautilus One
+      </h1>
 
       {/* Badge de Status do Cron */}
       {cronStatus && (
@@ -43,12 +52,46 @@ export default function AdminDashboard() {
         </Card>
       )}
 
-      {/* Aqui virão os widgets do dashboard */}
+      {/* Dashboard Cards with Role-Based Access */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-4">📄 Últimos Documentos</Card>
-        <Card className="p-4">📋 Tarefas Pendentes</Card>
-        <Card className="p-4">💬 Últimas Interações com IA</Card>
+        {/* Checklists - Admin and Gestor */}
+        <RoleBasedAccess roles={["admin", "hr_manager", "manager"]} showFallback={false}>
+          <Card className="p-4">📋 Checklists</Card>
+        </RoleBasedAccess>
+
+        {/* IA Assistant - Admin and Gestor */}
+        <RoleBasedAccess roles={["admin", "hr_manager", "manager"]} showFallback={false}>
+          <Card className="p-4">💬 Assistente IA</Card>
+        </RoleBasedAccess>
+
+        {/* Personal Restorations - All users */}
+        <Card className="p-4">🔄 Restaurações Pessoais</Card>
+
+        {/* Admin-only cards */}
+        <RoleBasedAccess roles={["admin"]} showFallback={false}>
+          <Card className="p-4">📊 Analytics</Card>
+        </RoleBasedAccess>
+
+        <RoleBasedAccess roles={["admin"]} showFallback={false}>
+          <Card className="p-4">⚙️ System Settings</Card>
+        </RoleBasedAccess>
+
+        <RoleBasedAccess roles={["admin"]} showFallback={false}>
+          <Card className="p-4">👥 User Management</Card>
+        </RoleBasedAccess>
       </div>
+
+      {/* Public view indicator */}
+      {isPublicView && (
+        <Card className="border-blue-200 bg-blue-50 dark:bg-blue-900/10 dark:border-blue-800">
+          <CardContent className="pt-6">
+            <p className="text-sm text-blue-800 dark:text-blue-200 text-center flex items-center justify-center gap-2">
+              <Eye className="w-4 h-4" />
+              🔒 Modo público somente leitura
+            </p>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

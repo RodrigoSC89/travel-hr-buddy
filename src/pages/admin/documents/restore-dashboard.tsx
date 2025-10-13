@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, RefreshCw, Download, Mail, BarChart3, FileText, Users } from "lucide-react";
+import { ArrowLeft, RefreshCw, Download, Mail, BarChart3, FileText, Users, Eye } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Bar } from "react-chartjs-2";
 import { format } from "date-fns";
@@ -364,6 +364,7 @@ export default function RestoreDashboard() {
       {/* Title */}
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
+          {isPublicView && <Eye className="w-8 h-8" />}
           <BarChart3 className="w-8 h-8" />
           Restore Audit Dashboard
         </h1>
@@ -514,10 +515,11 @@ export default function RestoreDashboard() {
 
       {/* Public view indicator */}
       {isPublicView && (
-        <Card className="border-yellow-200 bg-yellow-50 dark:bg-yellow-900/10 dark:border-yellow-800">
+        <Card className="border-blue-200 bg-blue-50 dark:bg-blue-900/10 dark:border-blue-800">
           <CardContent className="pt-6">
-            <p className="text-sm text-yellow-800 dark:text-yellow-200 text-center">
-              📺 Modo de Visualização Pública - Atualização automática a cada 10 segundos
+            <p className="text-sm text-blue-800 dark:text-blue-200 text-center flex items-center justify-center gap-2">
+              <Eye className="w-4 h-4" />
+              🔒 Modo público somente leitura
             </p>
           </CardContent>
         </Card>
