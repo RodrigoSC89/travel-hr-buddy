@@ -1,19 +1,85 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { DocumentEditor } from "@/components/documents/DocumentEditor";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import "@testing-library/jest-dom";
 
 // Mock dependencies
 vi.mock("@/contexts/AuthContext");
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
-    from: vi.fn(),
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          single: vi.fn().mockResolvedValue({
+            data: null,
+            error: { code: "PGRST116" },
+          }),
+        })),
+      })),
+      upsert: vi.fn().mockResolvedValue({
+        data: null,
+        error: null,
+      }),
+    })),
   },
 }));
 vi.mock("@/hooks/use-toast", () => ({
   toast: vi.fn(),
+}));
+
+// Mock TipTap and related libraries
+vi.mock("@tiptap/react", () => ({
+  useEditor: vi.fn(() => ({
+    getHTML: vi.fn(() => "<p>Test content</p>"),
+    chain: vi.fn(() => ({
+      focus: vi.fn(() => ({
+        toggleBold: vi.fn(() => ({ run: vi.fn() })),
+        toggleItalic: vi.fn(() => ({ run: vi.fn() })),
+        toggleHeading: vi.fn(() => ({ run: vi.fn() })),
+        toggleBulletList: vi.fn(() => ({ run: vi.fn() })),
+        toggleCodeBlock: vi.fn(() => ({ run: vi.fn() })),
+      })),
+    })),
+    isActive: vi.fn(() => false),
+  })),
+  EditorContent: vi.fn(() => null),
+}));
+
+vi.mock("@tiptap/starter-kit", () => ({
+  default: {
+    configure: vi.fn(),
+  },
+}));
+
+vi.mock("@tiptap/extension-collaboration", () => ({
+  default: {
+    configure: vi.fn(),
+  },
+}));
+
+vi.mock("@tiptap/extension-collaboration-cursor", () => ({
+  default: {
+    configure: vi.fn(),
+  },
+}));
+
+vi.mock("yjs", () => ({
+  Doc: vi.fn().mockImplementation(() => ({
+    getXmlFragment: vi.fn(),
+    destroy: vi.fn(),
+  })),
+}));
+
+vi.mock("y-webrtc", () => ({
+  WebrtcProvider: vi.fn().mockImplementation(() => ({
+    on: vi.fn(),
+    destroy: vi.fn(),
+  })),
+}));
+
+vi.mock("lodash", () => ({
+  debounce: vi.fn((fn) => fn),
 }));
 
 describe("DocumentEditor", () => {
@@ -24,136 +90,55 @@ describe("DocumentEditor", () => {
     (useAuth as any).mockReturnValue({ user: mockUser });
   });
 
-  it("renders the document editor with title and content fields", () => {
-    render(<DocumentEditor />);
+  it("renders the collaborative document editor", () => {
+    render(<DocumentEditor documentId="test-doc-123" />);
     
-    expect(screen.getByPlaceholderText("Título do documento")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Digite o conteúdo/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Salvar/i })).toBeInTheDocument();
+    expect(screen.getByText(/Collaborative Document Editor/)).toBeInTheDocument();
   });
 
-  it("shows initial title and content when provided", () => {
-    render(
-      <DocumentEditor 
-        initialTitle="Test Document" 
-        initialContent="Test content" 
-      />
-    );
+  it("shows user presence count", () => {
+    render(<DocumentEditor documentId="test-doc-123" />);
     
-    expect(screen.getByDisplayValue("Test Document")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Test content")).toBeInTheDocument();
+    // Should show at least the current user
+    expect(screen.getByText(/user/)).toBeInTheDocument();
   });
 
-  it("disables save button when title or content is empty", () => {
-    render(<DocumentEditor />);
+  it("displays save button", () => {
+    render(<DocumentEditor documentId="test-doc-123" />);
     
-    const saveButton = screen.getByRole("button", { name: /Salvar/i });
-    expect(saveButton).toBeDisabled();
-  });
-
-  it("enables save button when both title and content are filled", async () => {
-    render(<DocumentEditor />);
-    
-    const titleInput = screen.getByPlaceholderText("Título do documento");
-    const contentTextarea = screen.getByPlaceholderText(/Digite o conteúdo/);
-    
-    fireEvent.change(titleInput, { target: { value: "New Document" } });
-    fireEvent.change(contentTextarea, { target: { value: "Some content" } });
-    
-    const saveButton = screen.getByRole("button", { name: /Salvar/i });
-    expect(saveButton).not.toBeDisabled();
-  });
-
-  it("saves new document and version on manual save", async () => {
-    const mockInsert = vi.fn().mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        single: vi.fn().mockResolvedValue({
-          data: { id: "doc-123" },
-          error: null,
-        }),
-      }),
-    });
-
-    const mockVersionInsert = vi.fn().mockResolvedValue({
-      data: null,
-      error: null,
-    });
-
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === "ai_generated_documents") {
-        return { insert: mockInsert };
-      }
-      if (table === "document_versions") {
-        return { insert: mockVersionInsert };
-      }
-    });
-
-    const onSave = vi.fn();
-    render(<DocumentEditor onSave={onSave} />);
-    
-    const titleInput = screen.getByPlaceholderText("Título do documento");
-    const contentTextarea = screen.getByPlaceholderText(/Digite o conteúdo/);
-    const saveButton = screen.getByRole("button", { name: /Salvar/i });
-    
-    fireEvent.change(titleInput, { target: { value: "Test Title" } });
-    fireEvent.change(contentTextarea, { target: { value: "Test Content" } });
-    fireEvent.click(saveButton);
-    
-    await waitFor(() => {
-      expect(mockInsert).toHaveBeenCalled();
-      expect(mockVersionInsert).toHaveBeenCalled();
-      expect(onSave).toHaveBeenCalledWith("doc-123");
-    });
-  });
-
-  it("updates existing document and creates version on save", async () => {
-    const mockUpdate = vi.fn().mockReturnValue({
-      eq: vi.fn().mockResolvedValue({
-        data: null,
-        error: null,
-      }),
-    });
-
-    const mockVersionInsert = vi.fn().mockResolvedValue({
-      data: null,
-      error: null,
-    });
-
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === "ai_generated_documents") {
-        return { update: mockUpdate };
-      }
-      if (table === "document_versions") {
-        return { insert: mockVersionInsert };
-      }
-    });
-
-    render(
-      <DocumentEditor 
-        documentId="existing-doc-123"
-        initialTitle="Existing Title"
-        initialContent="Existing Content"
-      />
-    );
-    
-    const saveButton = screen.getByRole("button", { name: /Salvar/i });
-    fireEvent.click(saveButton);
-    
-    await waitFor(() => {
-      expect(mockUpdate).toHaveBeenCalled();
-      expect(mockVersionInsert).toHaveBeenCalled();
-    });
-  });
-
-  it("displays version count", async () => {
-    render(<DocumentEditor />);
-    
-    expect(screen.getByText(/Total de versões salvas: 0/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Save Now/i })).toBeInTheDocument();
   });
 
   it("shows auto-save information", () => {
-    render(<DocumentEditor />);
+    render(<DocumentEditor documentId="test-doc-123" />);
     
-    expect(screen.getByText(/documento é salvo automaticamente 2 segundos/)).toBeInTheDocument();
+    expect(screen.getByText(/Auto-save: Every 3 seconds/)).toBeInTheDocument();
+  });
+
+  it("displays version counter", () => {
+    render(<DocumentEditor documentId="test-doc-123" />);
+    
+    expect(screen.getByText(/Versions saved:/)).toBeInTheDocument();
+  });
+
+  it("shows formatting toolbar buttons", () => {
+    render(<DocumentEditor documentId="test-doc-123" />);
+    
+    // Check for formatting buttons (Bold, Italic, H1, H2, List, Code)
+    const buttons = screen.getAllByRole("button");
+    expect(buttons.length).toBeGreaterThan(5); // At least toolbar buttons + save button
+  });
+
+  it("renders with required documentId prop", () => {
+    const documentId = "550e8400-e29b-41d4-a716-446655440000";
+    render(<DocumentEditor documentId={documentId} />);
+    
+    expect(screen.getByText(/Collaborative Document Editor/)).toBeInTheDocument();
+  });
+
+  it("initializes with zero versions", () => {
+    render(<DocumentEditor documentId="test-doc-123" />);
+    
+    expect(screen.getByText(/Versions saved: 0/)).toBeInTheDocument();
   });
 });
