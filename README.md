@@ -214,9 +214,18 @@ npm run test
 
 ## 🚀 Deployment
 
-* Auto-deployed via **Vercel** on push to `main`
-* Build errors are linted and tested in CI before deployment
-* Environment variables must be configured in Vercel dashboard
+### Quick Deploy to Vercel
+
+The fastest way to deploy:
+
+1. Connect your GitHub repository to Vercel
+2. Add required environment variables (see [VERCEL_QUICKSTART.md](./VERCEL_QUICKSTART.md))
+3. Deploy!
+
+**📚 Deployment Guides:**
+- [VERCEL_QUICKSTART.md](./VERCEL_QUICKSTART.md) - 5-minute deployment guide
+- [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) - Complete deployment documentation
+- [API_KEYS_SETUP_GUIDE.md](./API_KEYS_SETUP_GUIDE.md) - How to obtain API keys
 
 ### Manual Deployment
 
@@ -230,6 +239,10 @@ npm run preview
 # Deploy to Vercel (requires Vercel CLI)
 npm run deploy:vercel
 ```
+
+### Verify Deployment
+
+After deployment, visit `https://your-project.vercel.app/health` to verify all environment variables are configured correctly.
 
 ---
 
