@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreReportLogsPage from "@/pages/admin/reports/logs";
 import { supabase } from "@/integrations/supabase/client";
@@ -352,7 +352,7 @@ describe("RestoreReportLogsPage Component", () => {
       }),
     } as any);
 
-    const { container } = render(
+    render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
