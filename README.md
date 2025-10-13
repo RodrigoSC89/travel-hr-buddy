@@ -214,9 +214,20 @@ npm run test
 
 ## 🚀 Deployment
 
-* Auto-deployed via **Vercel** on push to `main`
-* Build errors are linted and tested in CI before deployment
-* Environment variables must be configured in Vercel dashboard
+### Vercel (Recommended)
+
+The application is optimized for **Vercel** deployment with automatic CI/CD:
+
+* Auto-deployed on push to `main` branch
+* Build and test verification via GitHub Actions
+* Environment variables configured in Vercel dashboard
+* Health check endpoint: `/health`
+
+**Configuration**: The `vercel.json` file is pre-configured with:
+- ✅ Vite framework detection
+- ✅ Security headers (CSP, X-Frame-Options, etc.)
+- ✅ Optimized caching for assets and images
+- ✅ SPA routing support
 
 ### Manual Deployment
 
@@ -229,7 +240,23 @@ npm run preview
 
 # Deploy to Vercel (requires Vercel CLI)
 npm run deploy:vercel
+
+# Deploy to Netlify (alternative)
+npm run deploy:netlify
 ```
+
+### Environment Variables Setup
+
+In Vercel Dashboard:
+1. Go to Project Settings → Environment Variables
+2. Add required variables from `.env.example`
+3. Redeploy for changes to take effect
+
+**Required Variables:**
+- `VITE_SUPABASE_URL` - Your Supabase project URL
+- `VITE_SUPABASE_ANON_KEY` - Your Supabase anonymous key
+
+See [API_KEYS_SETUP_GUIDE.md](./API_KEYS_SETUP_GUIDE.md) for complete configuration details.
 
 ---
 
