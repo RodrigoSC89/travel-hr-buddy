@@ -51,9 +51,12 @@ export default function AssistantReportLogsPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [email, setEmail] = useState("");
+  const [cronStatus, setCronStatus] = useState<"ok" | "warning" | null>(null);
+  const [cronMessage, setCronMessage] = useState<string>("");
 
   useEffect(() => {
     fetchLogs();
+    fetchCronStatus();
   }, []);
 
   // Prepare chart data from logs
@@ -62,9 +65,9 @@ export default function AssistantReportLogsPage() {
 
     // Group logs by date
     const dateGroups = logs.reduce((acc, log) => {
-      const date = new Date(log.sent_at).toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
+      const date = new Date(log.sent_at).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
       });
       acc[date] = (acc[date] || 0) + 1;
       return acc;
@@ -81,26 +84,26 @@ export default function AssistantReportLogsPage() {
       labels: sortedDates,
       datasets: [
         {
-          label: 'Relatórios Enviados',
+          label: "Relatórios Enviados",
           data: sortedDates.map((date) => dateGroups[date]),
-          backgroundColor: 'rgba(99, 102, 241, 0.5)',
-          borderColor: 'rgb(99, 102, 241)',
+          backgroundColor: "rgba(99, 102, 241, 0.5)",
+          borderColor: "rgb(99, 102, 241)",
           borderWidth: 1,
         },
       ],
     };
   }, [logs]);
 
-  const chartOptions: ChartOptions<'bar'> = {
+  const chartOptions: ChartOptions<"bar"> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: "top" as const,
       },
       title: {
         display: true,
-        text: 'Volume de Relatórios Enviados por Dia',
+        text: "Volume de Relatórios Enviados por Dia",
       },
     },
     scales: {
@@ -158,6 +161,38 @@ export default function AssistantReportLogsPage() {
       });
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function fetchCronStatus() {
+    try {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        return;
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cron-status`,
+        {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Failed to fetch cron status");
+        return;
+      }
+
+      const data = await response.json();
+      setCronStatus(data.status);
+      setCronMessage(data.message);
+    } catch (error) {
+      console.error("Error fetching cron status:", error);
+      // Don't show toast for cron status errors - it's supplementary info
     }
   }
 
@@ -246,6 +281,18 @@ export default function AssistantReportLogsPage() {
         </div>
         <h1 className="text-xl font-bold mb-4">📬 Logs de Envio de Relatórios — Assistente IA</h1>
       </div>
+
+      {cronStatus && (
+        <div 
+          className={`mb-4 p-3 rounded-md text-sm font-medium ${
+            cronStatus === "ok" 
+              ? "bg-green-100 text-green-800" 
+              : "bg-yellow-100 text-yellow-800"
+          }`}
+        >
+          {cronStatus === "ok" ? "✅ " : "⚠️ "}{cronMessage}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
         <Input 
