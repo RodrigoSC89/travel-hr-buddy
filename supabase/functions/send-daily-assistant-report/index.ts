@@ -18,7 +18,30 @@ interface AssistantLog {
 }
 
 /**
- * Log execution status to assistant_report_logs table
+ * Log cron execution to cron_execution_logs table for monitoring
+ */
+async function logCronExecution(
+  supabase: any,
+  status: 'success' | 'error' | 'warning' | 'critical',
+  message: string,
+  error: any = null
+) {
+  try {
+    await supabase.from("cron_execution_logs").insert({
+      function_name: "send-daily-assistant-report",
+      status,
+      message,
+      error_details: error ? JSON.stringify(error) : null,
+      executed_at: new Date().toISOString(),
+    });
+  } catch (logError) {
+    console.error("Failed to log cron execution:", logError);
+    // Don't throw - logging failures shouldn't break the main flow
+  }
+}
+
+/**
+ * Log execution status to assistant_report_logs table (legacy)
  */
 async function logExecution(
   supabase: any,
@@ -219,6 +242,9 @@ serve(async (req) => {
 
     if (logsError) {
       console.error("Error fetching logs:", logsError);
+      // Log to cron monitoring system
+      await logCronExecution(supabase, "error", "Failed to fetch assistant logs", logsError);
+      // Log to assistant report logs (legacy)
       await logExecution(supabase, "error", "Failed to fetch assistant logs", 0, logsError);
       throw new Error(`Failed to fetch logs: ${logsError.message}`);
     }
@@ -257,13 +283,23 @@ serve(async (req) => {
       }
     } catch (emailError) {
       console.error("❌ Error sending email:", emailError);
+      // Log to cron monitoring system
+      await logCronExecution(supabase, "error", "Failed to send email", emailError);
+      // Log to assistant report logs (legacy)
       await logExecution(supabase, "error", "Failed to send email", logs?.length || 0, emailError);
       throw emailError;
     }
 
     console.log("✅ Email sent successfully!");
     
-    // Log successful execution
+    // Log successful execution to cron monitoring system
+    await logCronExecution(
+      supabase, 
+      "success", 
+      `Report sent successfully to ${ADMIN_EMAIL}`
+    );
+    
+    // Log to assistant report logs (legacy)
     await logExecution(
       supabase, 
       "success", 
@@ -286,7 +322,10 @@ serve(async (req) => {
   } catch (error) {
     console.error("❌ Error in send-daily-assistant-report:", error);
     
-    // Log critical error
+    // Log critical error to cron monitoring system
+    await logCronExecution(supabase, "critical", "Critical error in function", error);
+    
+    // Log to assistant report logs (legacy)
     await logExecution(supabase, "critical", "Critical error in function", 0, error);
     
     return new Response(
