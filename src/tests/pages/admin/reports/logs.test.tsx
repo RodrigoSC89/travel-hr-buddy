@@ -270,7 +270,7 @@ describe("RestoreReportLogsPage Component", () => {
         const title = screen.getByText("🧠 Auditoria de Relatórios Enviados");
         expect(title).toBeInTheDocument();
         // Eye icon should be inline with the title
-        const eyeIcon = container.querySelector('.lucide-eye');
+        const eyeIcon = container.querySelector(".lucide-eye");
         expect(eyeIcon).toBeInTheDocument();
       });
     });
