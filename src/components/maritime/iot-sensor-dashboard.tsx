@@ -18,6 +18,7 @@ import {
   Settings
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface SensorReading {
   id: string;
@@ -211,7 +212,7 @@ export const IoTSensorDashboard = () => {
       }
       
     } catch (error) {
-      console.error("Failed to process sensor reading:", error);
+      logger.error("Failed to process sensor reading:", error);
     }
   };
 

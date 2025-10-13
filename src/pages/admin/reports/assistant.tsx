@@ -12,6 +12,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "@/hooks/use-toast";
 import { Bar } from "react-chartjs-2";
+import { logger } from "@/lib/logger";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -153,7 +154,7 @@ export default function AssistantReportLogsPage() {
       const data = await response.json();
       setLogs(data);
     } catch (error) {
-      console.error("Error fetching logs:", error);
+      logger.error("Error fetching logs:", error);
       toast({
         title: "Erro ao carregar logs",
         description: "Não foi possível carregar os logs de envio de relatórios.",
@@ -183,7 +184,7 @@ export default function AssistantReportLogsPage() {
       );
 
       if (!response.ok) {
-        console.error("Failed to fetch cron status");
+        logger.error("Failed to fetch cron status");
         return;
       }
 
@@ -191,7 +192,7 @@ export default function AssistantReportLogsPage() {
       setCronStatus(data.status);
       setCronMessage(data.message);
     } catch (error) {
-      console.error("Error fetching cron status:", error);
+      logger.error("Error fetching cron status:", error);
       // Don't show toast for cron status errors - it's supplementary info
     }
   }

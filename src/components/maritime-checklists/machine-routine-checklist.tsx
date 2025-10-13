@@ -41,6 +41,7 @@ import {
   Shield
 } from "lucide-react";
 import type { Checklist, ChecklistItem } from "./checklist-types";
+import { logger } from "@/lib/logger";
 
 interface MachineRoutineChecklistProps {
   checklist: Checklist;
@@ -547,7 +548,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       await onSave(checklist);
       setLastSaved(new Date());
     } catch (error) {
-      console.error("Failed to auto-save checklist:", error);
+      logger.error("Failed to auto-save checklist:", error);
     }
   };
 

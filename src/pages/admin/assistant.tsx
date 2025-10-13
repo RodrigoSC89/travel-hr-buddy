@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Send, Loader2, Bot, User, CheckCircle2, Zap, History } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface Message {
   role: "user" | "assistant";
@@ -62,7 +63,7 @@ export default function AssistantPage() {
       
       setMessages((prev) => [...prev, { role: "assistant", content: data?.answer || "" }]);
     } catch (error) {
-      console.error("Error sending message:", error);
+      logger.error("Error sending message to assistant", error);
       setMessages((prev) => [
         ...prev,
         {

@@ -13,6 +13,7 @@ import {
 import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface ChecklistItem {
   id: string;
@@ -42,7 +43,7 @@ export default function ChecklistDashboard() {
       .order("created_at", { ascending: false });
 
     if (checklistsError) {
-      console.error("Error fetching checklists:", checklistsError);
+      logger.error("Error fetching checklists:", checklistsError);
       return;
     }
 
@@ -61,7 +62,7 @@ export default function ChecklistDashboard() {
           .order("order_index", { ascending: true });
 
         if (itemsError) {
-          console.error("Error fetching items:", itemsError);
+          logger.error("Error fetching items:", itemsError);
           return {
             id: checklist.id,
             title: checklist.title,

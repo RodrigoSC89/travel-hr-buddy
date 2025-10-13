@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import type { Checklist, ChecklistItem, ChecklistAIAnalysis, Anomaly } from "./checklist-types";
+import { logger } from "@/lib/logger";
 
 interface AIAnalysisProps {
   checklist: Checklist;
@@ -74,7 +75,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
         });
 
       if (dbError) {
-        console.error("Failed to save AI analysis:", dbError);
+        logger.error("Failed to save AI analysis:", dbError);
       }
 
       toast.success("Análise AI concluída com sucesso!");

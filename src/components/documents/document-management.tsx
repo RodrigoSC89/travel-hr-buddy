@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { 
   FileText, 
   Plus, 
@@ -175,7 +176,7 @@ export const DocumentManagement: React.FC = () => {
       
       setCategories(mockCategories);
     } catch (error) {
-      console.error("Failed to load categories:", error);
+      logger.error("Failed to load categories:", error);
     }
   };
 

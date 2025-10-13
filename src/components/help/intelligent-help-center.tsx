@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface Tutorial {
   id: string;
@@ -206,7 +207,7 @@ export const IntelligentHelpCenter: React.FC = () => {
           user_id: null // Seria auth.uid() se autenticado
         });
     } catch (error) {
-      console.error("Failed to track user action:", error);
+      logger.error("Failed to track user action:", error);
     }
   };
 

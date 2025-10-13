@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { logger } from "@/lib/logger";
 
 interface TwoFactorSettingsProps {
   onClose?: () => void;
@@ -51,7 +52,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         }
       }
     } catch (error) {
-      console.error("Error checking existing factors:", error);
+      logger.error("Error checking existing factors:", error);
     }
   };
 

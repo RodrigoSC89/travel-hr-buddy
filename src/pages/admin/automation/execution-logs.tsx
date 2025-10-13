@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import jsPDF from "jspdf";
 import { toast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 import { 
   BarChart, 
   Bar, 
@@ -73,7 +74,7 @@ export default function ExecutionLogsPage() {
           .order("name");
 
         if (workflowError) {
-          console.error("Error fetching workflows:", workflowError);
+          logger.error("Error fetching workflows:", workflowError);
         } else {
           setWorkflows(workflowData || []);
         }
@@ -90,7 +91,7 @@ export default function ExecutionLogsPage() {
           .order("started_at", { ascending: false });
 
         if (executionError) {
-          console.error("Error fetching executions:", executionError);
+          logger.error("Error fetching executions:", executionError);
           toast({
             title: "Erro ao carregar logs",
             description: "Não foi possível carregar os registros de execução.",
@@ -107,7 +108,7 @@ export default function ExecutionLogsPage() {
 
         setExecutions(transformedData);
       } catch (error) {
-        console.error("Error fetching execution logs:", error);
+        logger.error("Error fetching execution logs:", error);
       } finally {
         setLoading(false);
       }
@@ -299,7 +300,7 @@ export default function ExecutionLogsPage() {
         description: `${filteredExecutions.length} registros foram exportados.`,
       });
     } catch (error) {
-      console.error("Error exporting CSV:", error);
+      logger.error("Error exporting CSV:", error);
       toast({
         title: "Erro ao exportar CSV",
         description: "Ocorreu um erro ao tentar exportar os dados.",
@@ -389,7 +390,7 @@ export default function ExecutionLogsPage() {
         description: `${filteredExecutions.length} registros foram exportados.`,
       });
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Ocorreu um erro ao tentar exportar os dados.",

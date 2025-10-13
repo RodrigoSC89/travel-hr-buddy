@@ -64,7 +64,7 @@ export class APIManager {
         // Retry on 5xx errors or network errors
         if (error.status >= 500 || !error.status) {
           const delay = this.retryDelay * Math.pow(2, retryCount);
-          console.warn(
+          logger.warn(
             `API request failed, retrying in ${delay}ms (attempt ${retryCount + 1}/${this.maxRetries})`,
             error
           );

@@ -10,6 +10,7 @@ import { Sparkles, Loader2, FileText, Save, Download, Brain, RefreshCw, List } f
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
+import { logger } from "@/lib/logger";
 
 export default function DocumentsAIPage() {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function DocumentsAIPage() {
         description: "Você pode agora salvar ou exportar o documento.",
       });
     } catch (err) {
-      console.error("Error generating document:", err);
+      logger.error("Error generating document:", err);
       setGenerated("❌ Erro ao gerar documento.");
       toast({
         title: "Erro ao gerar documento",
@@ -95,7 +96,7 @@ export default function DocumentsAIPage() {
         description: "O documento foi salvo no Supabase.",
       });
     } catch (err) {
-      console.error("Error saving document:", err);
+      logger.error("Error saving document:", err);
       toast({
         title: "Erro ao salvar documento",
         description: "Não foi possível salvar o documento.",
@@ -153,7 +154,7 @@ export default function DocumentsAIPage() {
         description: "O documento foi exportado como PDF.",
       });
     } catch (err) {
-      console.error("Error exporting PDF:", err);
+      logger.error("Error exporting PDF:", err);
       toast({
         title: "Erro ao exportar PDF",
         description: "Não foi possível exportar o documento.",
@@ -189,7 +190,7 @@ export default function DocumentsAIPage() {
         description: "O documento foi resumido com IA.",
       });
     } catch (err) {
-      console.error("Error summarizing document:", err);
+      logger.error("Error summarizing document:", err);
       toast({
         title: "Erro ao resumir documento",
         description: "Não foi possível resumir o documento.",
@@ -225,7 +226,7 @@ export default function DocumentsAIPage() {
         description: "O documento foi reformulado com IA.",
       });
     } catch (err) {
-      console.error("Error rewriting document:", err);
+      logger.error("Error rewriting document:", err);
       toast({
         title: "Erro ao reformular documento",
         description: "Não foi possível reformular o documento.",

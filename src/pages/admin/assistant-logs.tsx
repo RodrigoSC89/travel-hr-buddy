@@ -22,6 +22,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+import { logger } from "@/lib/logger";
 
 interface AssistantLog {
   id: string;
@@ -61,7 +62,7 @@ export default function AssistantLogsPage() {
       if (error) throw error;
       setLogs(data || []);
     } catch (error) {
-      console.error("Error fetching logs:", error);
+      logger.error("Error fetching logs:", error);
     } finally {
       setLoading(false);
     }
@@ -248,7 +249,7 @@ export default function AssistantLogsPage() {
         alert("❌ Falha ao enviar relatório: " + (result.error || "Erro desconhecido"));
       }
     } catch (error) {
-      console.error("Error sending report:", error);
+      logger.error("Error sending report:", error);
       alert("❌ Erro ao enviar relatório por e-mail");
     }
   }

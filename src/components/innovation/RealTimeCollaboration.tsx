@@ -20,6 +20,7 @@ import {
   Plus
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 export const RealTimeCollaboration = () => {
   const [activeUsers, setActiveUsers] = useState([]);
@@ -83,7 +84,7 @@ export const RealTimeCollaboration = () => {
       fetchMessages(conversationId);
       fetchActiveUsers();
     } catch (error) {
-      console.error("Failed to create conversation:", error);
+      logger.error("Failed to create conversation:", error);
     }
   };
 
@@ -111,7 +112,7 @@ export const RealTimeCollaboration = () => {
       
       setRealtimeMessages(formattedMessages);
     } catch (error) {
-      console.error("Failed to fetch messages:", error);
+      logger.error("Failed to fetch messages:", error);
     }
   };
 
@@ -134,7 +135,7 @@ export const RealTimeCollaboration = () => {
       
       setActiveUsers(formattedUsers);
     } catch (error) {
-      console.error("Failed to fetch active users:", error);
+      logger.error("Failed to fetch active users:", error);
     }
   };
 

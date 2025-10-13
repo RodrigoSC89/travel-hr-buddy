@@ -46,7 +46,7 @@ export async function summarizeChecklist(
       timestamp: data.timestamp
     };
   } catch (error) {
-    console.error("Error summarizing checklist:", error);
+    logger.error("Error summarizing checklist:", error);
     throw error;
   }
 }
@@ -119,6 +119,7 @@ import { useSummarizeChecklist } from "@/utils/checklist-summary-helper";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 
 function ChecklistComponent() {
   const { summarize, summary, isLoading } = useSummarizeChecklist();
@@ -176,11 +177,11 @@ async function generateChecklistSummary() {
   });
 
   if (error) {
-    console.error("Error:", error);
+    logger.error("Error:", error);
     return;
   }
 
-  console.log("Summary:", data.summary);
+  logger.info("Summary:", data.summary);
   // Expected output:
   // "📊 1 de 2 tarefas concluídas. ⚠️ Checklist parcialmente completo.
   //  💡 Sugestões: 

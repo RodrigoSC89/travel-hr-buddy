@@ -27,6 +27,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { logger } from "@/lib/logger";
 
 interface UserPresence {
   user_id: string;
@@ -292,7 +293,7 @@ const RealTimeWorkspace: React.FC = () => {
         }
       });
     } catch (error) {
-      console.error("Failed to send reaction:", error);
+      logger.error("Failed to send reaction:", error);
     }
   };
 
@@ -313,7 +314,7 @@ const RealTimeWorkspace: React.FC = () => {
         current_page: window.location.pathname
       });
     } catch (error) {
-      console.error("Failed to change status:", error);
+      logger.error("Failed to change status:", error);
     }
   };
 

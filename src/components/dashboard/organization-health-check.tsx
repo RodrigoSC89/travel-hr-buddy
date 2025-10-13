@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useOrganization } from "@/contexts/OrganizationContext";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { 
   AlertTriangle, 
   CheckCircle, 
@@ -176,7 +177,7 @@ export const OrganizationHealthCheck: React.FC = () => {
 
       setHealthChecks(checks);
     } catch (error) {
-      console.error("Failed to run health checks:", error);
+      logger.error("Failed to run health checks:", error);
     } finally {
       setIsLoading(false);
     }

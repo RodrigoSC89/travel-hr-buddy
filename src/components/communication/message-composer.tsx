@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 import {
   Send,
   Paperclip,
@@ -132,7 +133,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       setRecipients(mockRecipients);
     } catch (error) {
-      console.error("Failed to load recipients:", error);
+      logger.error("Failed to load recipients:", error);
     }
   };
 
@@ -172,7 +173,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       setTemplates(mockTemplates);
     } catch (error) {
-      console.error("Failed to load templates:", error);
+      logger.error("Failed to load templates:", error);
     }
   };
 

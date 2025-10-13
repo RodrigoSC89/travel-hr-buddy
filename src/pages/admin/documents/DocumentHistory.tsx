@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Loader2, ArrowLeft, RotateCcw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface DocumentVersion {
   id: string;
@@ -67,7 +68,7 @@ export default function DocumentHistoryPage() {
 
       setVersions(transformedData);
     } catch (error) {
-      console.error("Error loading versions:", error);
+      logger.error("Error loading versions:", error);
       toast({
         title: "Erro ao carregar histórico",
         description: "Não foi possível carregar o histórico de versões.",
@@ -99,7 +100,7 @@ export default function DocumentHistoryPage() {
       // Navigate back to document view
       navigate(`/admin/documents/view/${id}`);
     } catch (error) {
-      console.error("Error restoring version:", error);
+      logger.error("Error restoring version:", error);
       toast({
         title: "Erro ao restaurar versão",
         description: "Não foi possível restaurar esta versão do documento.",

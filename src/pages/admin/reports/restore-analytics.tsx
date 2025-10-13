@@ -23,6 +23,7 @@ import {
 } from "chart.js";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { logger } from "@/lib/logger";
 
 // Register Chart.js components
 ChartJS.register(
@@ -98,7 +99,7 @@ export default function RestoreAnalyticsPage() {
       setSummary(data.summary);
       setDailyData(data.dailyData);
     } catch (error) {
-      console.error("Error fetching analytics:", error);
+      logger.error("Error fetching analytics:", error);
       toast({
         title: "Erro ao carregar estatísticas",
         description: "Não foi possível carregar as estatísticas de restauração.",
@@ -149,7 +150,7 @@ export default function RestoreAnalyticsPage() {
         description: "O arquivo CSV foi baixado com sucesso.",
       });
     } catch (error) {
-      console.error("Error exporting CSV:", error);
+      logger.error("Error exporting CSV:", error);
       toast({
         title: "Erro ao exportar CSV",
         description: "Não foi possível exportar o arquivo CSV.",
@@ -212,7 +213,7 @@ export default function RestoreAnalyticsPage() {
         description: "O arquivo PDF foi baixado com sucesso.",
       });
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Não foi possível exportar o arquivo PDF.",

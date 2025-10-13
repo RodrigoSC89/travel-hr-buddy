@@ -24,6 +24,7 @@ import {
 } from "recharts";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { logger } from "@/lib/logger";
 
 // Mock data for builds by branch
 const mockBuildsByBranch = [
@@ -131,7 +132,7 @@ export default function AnalyticsPage() {
       pdf.addImage(imgData, "PNG", 0, 0, width, height);
       pdf.save("ci-analytics.pdf");
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      logger.error("Error generating PDF:", error);
     }
   };
 
@@ -184,7 +185,7 @@ export default function AnalyticsPage() {
         toast.error(`Erro ao enviar e-mail: ${result.error || "Erro desconhecido"}`);
       }
     } catch (error) {
-      console.error("Error sending chart:", error);
+      logger.error("Error sending chart:", error);
       toast.error(`Erro ao enviar gráfico: ${error instanceof Error ? error.message : "Erro desconhecido"}`);
     } finally {
       setIsSendingEmail(false);

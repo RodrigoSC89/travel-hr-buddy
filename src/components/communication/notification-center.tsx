@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 import {
   Bell,
   BellOff,
@@ -193,7 +194,7 @@ export const NotificationCenter = () => {
       // Mock settings loading - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-      console.error("Failed to load settings:", error);
+      logger.error("Failed to load settings:", error);
     }
   };
 
@@ -271,7 +272,7 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
-      console.error("Failed to mark notification as read:", error);
+      logger.error("Failed to mark notification as read:", error);
     }
   };
 
@@ -286,7 +287,7 @@ export const NotificationCenter = () => {
         description: "Todas as notificações foram marcadas como lidas"
       });
     } catch (error) {
-      console.error("Failed to mark all as read:", error);
+      logger.error("Failed to mark all as read:", error);
     }
   };
 
@@ -300,7 +301,7 @@ export const NotificationCenter = () => {
         )
       );
     } catch (error) {
-      console.error("Failed to toggle important:", error);
+      logger.error("Failed to toggle important:", error);
     }
   };
 
@@ -313,7 +314,7 @@ export const NotificationCenter = () => {
         description: "Notificação removida"
       });
     } catch (error) {
-      console.error("Failed to delete notification:", error);
+      logger.error("Failed to delete notification:", error);
     }
   };
 
@@ -326,7 +327,7 @@ export const NotificationCenter = () => {
         description: "Configurações atualizadas"
       });
     } catch (error) {
-      console.error("Failed to update settings:", error);
+      logger.error("Failed to update settings:", error);
     }
   };
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export default function AdminDashboard() {
   const [cronStatus, setCronStatus] = useState<"ok" | "warning" | null>(null);
@@ -14,7 +15,7 @@ export default function AdminDashboard() {
         const { data, error } = await supabase.functions.invoke("cron-status");
         
         if (error) {
-          console.error("Error fetching cron status:", error);
+          logger.error("Error fetching cron status", error);
           setCronStatus("warning");
           setCronMessage("Erro ao carregar status do cron");
           return;
@@ -23,7 +24,7 @@ export default function AdminDashboard() {
         setCronStatus(data.status);
         setCronMessage(data.message);
       } catch (error) {
-        console.error("Error fetching cron status:", error);
+        logger.error("Error fetching cron status", error);
         setCronStatus("warning");
         setCronMessage("Erro ao carregar status do cron");
       }

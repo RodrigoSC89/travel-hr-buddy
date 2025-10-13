@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { logger } from "@/lib/logger";
 import { 
   Shield, 
   Key, 
@@ -89,7 +90,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
         setIsBiometricEnabled(!isBiometricEnabled);
       } catch (error) {
         // Biometric authentication not supported or failed
-        console.error("Biometric authentication failed:", error);
+        logger.error("Biometric authentication failed:", error);
       }
     }
   };

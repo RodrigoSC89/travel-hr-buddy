@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { logger } from "@/lib/logger";
 
 /**
  * Enhanced Supabase Manager with retry logic and error handling
@@ -30,7 +31,7 @@ export class SupabaseManager {
       if (retryCount < this.maxRetries) {
         // Exponential backoff
         const delay = this.retryDelay * Math.pow(2, retryCount);
-        console.warn(
+        logger.warn(
           `Supabase operation failed, retrying in ${delay}ms (attempt ${retryCount + 1}/${this.maxRetries})`,
           error
         );

@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from "@/lib/logger";
 
 interface Message {
   id: string;
@@ -112,7 +113,7 @@ export const ChatInterface = () => {
       if (error) throw error;
       setAllUsers(data || []);
     } catch (error) {
-      console.error("Failed to fetch users:", error);
+      logger.error("Failed to fetch users:", error);
     }
   }, [currentUser?.id]);
 
@@ -226,7 +227,7 @@ export const ChatInterface = () => {
       // Marcar mensagens como lidas
       await markMessagesAsRead(conversationId);
     } catch (error) {
-      console.error("Failed to load messages:", error);
+      logger.error("Failed to load messages:", error);
     }
   }, [currentUser?.id]);
 
@@ -275,7 +276,7 @@ export const ChatInterface = () => {
           .insert(readStatuses);
       }
     } catch (error) {
-      console.error("Failed to mark messages as read:", error);
+      logger.error("Failed to mark messages as read:", error);
     }
   };
 

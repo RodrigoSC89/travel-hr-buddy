@@ -10,6 +10,7 @@ import { AlertMessage } from "@/components/ui/alert-message";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Plus, Receipt, Calendar, Tag, TrendingUp, Filter } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 const Expenses = () => {
   const { expenses, loading, error, createExpense } = useExpenses();
@@ -23,7 +24,7 @@ const Expenses = () => {
       await createExpense(data);
       setShowForm(false);
     } catch (error) {
-      console.error("Failed to create expense:", error);
+      logger.error("Failed to create expense:", error);
     } finally {
       setIsCreating(false);
     }

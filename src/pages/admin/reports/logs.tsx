@@ -21,6 +21,7 @@ import { format } from "date-fns";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { logger } from "@/lib/logger";
 
 interface RestoreReportLog {
   id: string;
@@ -81,7 +82,7 @@ export default function RestoreReportLogsPage() {
       if (fetchError) throw fetchError;
       setLogs(data || []);
     } catch (err) {
-      console.error("Error fetching logs:", err);
+      logger.error("Error fetching logs:", err);
       setError(err instanceof Error ? err.message : "Erro ao carregar logs");
     } finally {
       setLoading(false);

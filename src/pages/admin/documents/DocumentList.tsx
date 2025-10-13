@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Loader2, FileText, Search, Eye, Calendar } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface Document {
   id: string;
@@ -49,7 +50,7 @@ export default function DocumentListPage() {
       setDocuments(data || []);
       setFilteredDocuments(data || []);
     } catch (error) {
-      console.error("Error loading documents:", error);
+      logger.error("Error loading documents:", error);
       toast({
         title: "Erro ao carregar documentos",
         description: "Não foi possível carregar a lista de documentos.",
