@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -31,32 +32,53 @@ interface RestoreReportLog {
   triggered_by: string;
 }
 
+const ITEMS_PER_PAGE = 20;
+
 /**
  * Restore Report Logs Page
- * Displays audit logs of automated restore report executions
+ * Displays audit logs of automated restore report executions with infinite scroll
  */
 export default function RestoreReportLogsPage() {
   const navigate = useNavigate();
   const [logs, setLogs] = useState<RestoreReportLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
   
   // Filter states
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
-  useEffect(() => {
-    fetchLogs();
-  }, []);
+  // Ref for intersection observer
+  const observerTarget = useRef<HTMLDivElement>(null);
 
-  async function fetchLogs() {
-    setLoading(true);
+  // Fetch logs with pagination
+  const fetchLogs = useCallback(async (reset = false) => {
+    if (!reset && !hasMore) return;
+    
+    const isInitialLoad = reset || currentPage === 0;
+    if (isInitialLoad) {
+      setLoading(true);
+    } else {
+      setLoadingMore(true);
+    }
+    
     setError(null);
+    
     try {
+      const page = reset ? 0 : currentPage;
+      const from = page * ITEMS_PER_PAGE;
+      const to = from + ITEMS_PER_PAGE - 1;
+
       let query = supabase
         .from("restore_report_logs")
-        .select("*");
+        .select("*", { count: "exact" })
+        .order("executed_at", { ascending: false })
+        .range(from, to);
 
       // Apply status filter
       if (statusFilter && statusFilter !== "all") {
@@ -68,29 +90,67 @@ export default function RestoreReportLogsPage() {
         query = query.gte("executed_at", new Date(startDate).toISOString());
       }
       if (endDate) {
-        // Add one day to include the entire end date
         const endDateTime = new Date(endDate);
         endDateTime.setHours(23, 59, 59, 999);
         query = query.lte("executed_at", endDateTime.toISOString());
       }
 
-      const { data, error: fetchError } = await query
-        .order("executed_at", { ascending: false })
-        .limit(100);
+      const { data, error: fetchError, count } = await query;
 
       if (fetchError) throw fetchError;
-      setLogs(data || []);
+      
+      const newLogs = data || [];
+      setLogs(reset ? newLogs : (prev) => [...prev, ...newLogs]);
+      setTotalCount(count || 0);
+      setHasMore(newLogs.length === ITEMS_PER_PAGE);
+      
+      if (!reset) {
+        setCurrentPage(page + 1);
+      } else {
+        setCurrentPage(1);
+      }
     } catch (err) {
       console.error("Error fetching logs:", err);
       setError(err instanceof Error ? err.message : "Erro ao carregar logs");
+      toast({
+        title: "Erro",
+        description: "Erro ao carregar logs. Tente novamente.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
-  }
+  }, [statusFilter, startDate, endDate, currentPage, hasMore]);
 
-  function handleApplyFilters() {
-    fetchLogs();
-  }
+  // Auto-fetch logs when filters change
+  useEffect(() => {
+    setCurrentPage(0);
+    setHasMore(true);
+    fetchLogs(true);
+  }, [statusFilter, startDate, endDate]);
+
+  // Intersection observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading && !loadingMore && hasMore) {
+          fetchLogs(false);
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [fetchLogs, loading, loadingMore, hasMore]);
 
   function handleClearFilters() {
     setStatusFilter("all");
@@ -99,69 +159,110 @@ export default function RestoreReportLogsPage() {
   }
 
   function exportToCSV() {
-    if (logs.length === 0) return;
+    if (logs.length === 0) {
+      toast({
+        title: "Aviso",
+        description: "Não há logs para exportar.",
+        variant: "default",
+      });
+      return;
+    }
 
-    const headers = ["Data", "Status", "Mensagem", "Erro"];
+    const headers = ["Data/Hora", "Status", "Mensagem", "Detalhes do Erro", "Executado Por"];
     const rows = logs.map((log) => [
-      format(new Date(log.executed_at), "yyyy-MM-dd HH:mm:ss"),
-      log.status,
-      log.message || "",
-      log.error_details || "",
+      format(new Date(log.executed_at), "dd/MM/yyyy HH:mm:ss"),
+      log.status === "success" ? "Sucesso" : log.status === "error" ? "Erro" : "Pendente",
+      log.message || "-",
+      log.error_details || "-",
+      log.triggered_by || "-",
     ]);
 
     const csvContent = [
       headers.join(","),
-      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+      ...rows.map((row) => row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(",")),
     ].join("\n");
 
     const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
+    const timestamp = format(new Date(), "yyyy-MM-dd-HHmmss");
     link.setAttribute("href", url);
-    link.setAttribute("download", `restore-logs-${format(new Date(), "yyyy-MM-dd")}.csv`);
+    link.setAttribute("download", `restore-logs-${timestamp}.csv`);
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    toast({
+      title: "Sucesso",
+      description: "CSV exportado com sucesso!",
+    });
   }
 
   function exportToPDF() {
-    if (logs.length === 0) return;
+    if (logs.length === 0) {
+      toast({
+        title: "Aviso",
+        description: "Não há logs para exportar.",
+        variant: "default",
+      });
+      return;
+    }
 
     const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 14;
     
     // Add title
     doc.setFontSize(16);
-    doc.text("Auditoria de Relatórios Enviados", 14, 20);
+    doc.setFont("helvetica", "bold");
+    doc.text("Auditoria de Relatórios Enviados", margin, 20);
     
-    // Add generation date
+    // Add metadata
     doc.setFontSize(10);
-    doc.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm")}`, 14, 28);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm")}`, margin, 28);
+    doc.text(`Total de registros: ${totalCount}`, margin, 34);
     
     // Prepare table data
     const tableData = logs.map((log) => [
       format(new Date(log.executed_at), "dd/MM/yyyy HH:mm"),
       log.status === "success" ? "Sucesso" : log.status === "error" ? "Erro" : "Pendente",
-      log.message || "",
-      log.error_details || "",
+      log.message || "-",
+      log.error_details || "-",
+      log.triggered_by || "-",
     ]);
 
     // Add table
     autoTable(doc, {
-      head: [["Data", "Status", "Mensagem", "Erro"]],
+      head: [["Data/Hora", "Status", "Mensagem", "Erro", "Executado Por"]],
       body: tableData,
-      startY: 35,
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [59, 130, 246] },
-      columnStyles: {
-        0: { cellWidth: 35 },
-        1: { cellWidth: 25 },
-        2: { cellWidth: 60 },
-        3: { cellWidth: 60 },
+      startY: 40,
+      styles: { 
+        fontSize: 8,
+        cellPadding: 2,
       },
+      headStyles: { 
+        fillColor: [79, 70, 229], // Indigo
+        fontStyle: "bold",
+      },
+      columnStyles: {
+        0: { cellWidth: 30 },
+        1: { cellWidth: 20 },
+        2: { cellWidth: 50 },
+        3: { cellWidth: 40 },
+        4: { cellWidth: 30 },
+      },
+      margin: { left: margin, right: margin },
     });
 
-    doc.save(`restore-logs-${format(new Date(), "yyyy-MM-dd")}.pdf`);
+    const timestamp = format(new Date(), "yyyy-MM-dd-HHmmss");
+    doc.save(`restore-logs-${timestamp}.pdf`);
+    
+    toast({
+      title: "Sucesso",
+      description: "PDF exportado com sucesso!",
+    });
   }
 
   function getStatusIcon(status: string) {
@@ -210,7 +311,7 @@ export default function RestoreReportLogsPage() {
             <div>
               <h1 className="text-2xl font-bold">🧠 Auditoria de Relatórios Enviados</h1>
               <p className="text-sm text-muted-foreground">
-                Logs de execução automática dos relatórios de restauração
+                Logs de execução automática dos relatórios de restauração {totalCount > 0 && `(${totalCount} total)`}
               </p>
             </div>
           </div>
@@ -274,18 +375,13 @@ export default function RestoreReportLogsPage() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium invisible">Actions</label>
-                <div className="flex gap-2">
-                  <Button onClick={handleApplyFilters} className="flex-1">
-                    Buscar
-                  </Button>
-                  <Button 
-                    onClick={handleClearFilters} 
-                    variant="outline"
-                    className="flex-1"
-                  >
-                    Limpar
-                  </Button>
-                </div>
+                <Button 
+                  onClick={handleClearFilters} 
+                  variant="outline"
+                  className="w-full"
+                >
+                  Limpar Filtros
+                </Button>
               </div>
             </div>
           </CardContent>
@@ -409,6 +505,21 @@ export default function RestoreReportLogsPage() {
                       </CardContent>
                     </Card>
                   ))}
+                  
+                  {/* Infinite scroll trigger */}
+                  <div ref={observerTarget} className="flex justify-center py-4">
+                    {loadingMore && (
+                      <div className="text-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+                        <p className="mt-2 text-sm text-muted-foreground">Carregando mais...</p>
+                      </div>
+                    )}
+                    {!hasMore && logs.length > 0 && (
+                      <p className="text-sm text-muted-foreground">
+                        Todos os logs foram carregados
+                      </p>
+                    )}
+                  </div>
                 </div>
               </ScrollArea>
             )}

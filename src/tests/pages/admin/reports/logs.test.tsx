@@ -1,21 +1,29 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreReportLogsPage from "@/pages/admin/reports/logs";
 
 /**
  * RestoreReportLogsPage Tests
  * 
- * Tests the Restore Report Logs audit page functionality with filters and export.
+ * Tests the Restore Report Logs audit page functionality with filters, infinite scroll, and export.
  */
 
-// Mock Supabase client
-const mockSelect = vi.fn();
+// Mock toast
+vi.mock("@/hooks/use-toast", () => ({
+  toast: vi.fn(),
+  useToast: () => ({
+    toast: vi.fn(),
+  }),
+}));
+
+// Mock Supabase client with proper chain
+const mockRange = vi.fn();
 const mockOrder = vi.fn();
-const mockLimit = vi.fn();
 const mockEq = vi.fn();
 const mockGte = vi.fn();
 const mockLte = vi.fn();
+const mockSelect = vi.fn();
 
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
@@ -25,53 +33,73 @@ vi.mock("@/integrations/supabase/client", () => ({
   }
 }));
 
+// Mock IntersectionObserver
+global.IntersectionObserver = class IntersectionObserver {
+  constructor() {}
+  disconnect() {}
+  observe() {}
+  unobserve() {}
+  takeRecords() {
+    return [];
+  }
+} as any;
+
 describe("RestoreReportLogsPage Component", () => {
+  const mockLogs = [
+    {
+      id: "1",
+      executed_at: "2025-10-13T10:00:00Z",
+      status: "success",
+      message: "Relatório enviado com sucesso.",
+      error_details: null,
+      triggered_by: "automated"
+    },
+    {
+      id: "2",
+      executed_at: "2025-10-12T10:00:00Z",
+      status: "error",
+      message: "Falha ao enviar o relatório automático.",
+      error_details: "Connection timeout",
+      triggered_by: "automated"
+    }
+  ];
+
   beforeEach(() => {
     vi.clearAllMocks();
     
-    // Setup default mock chain
+    // Setup mock chain for successful data fetch
+    mockRange.mockResolvedValue({
+      data: mockLogs,
+      error: null,
+      count: 2
+    });
+    
+    mockOrder.mockReturnValue({
+      range: mockRange
+    });
+    
     mockLte.mockReturnValue({
       order: mockOrder
     });
+    
     mockGte.mockReturnValue({
       lte: mockLte,
       order: mockOrder
     });
+    
     mockEq.mockReturnValue({
       eq: mockEq,
       gte: mockGte,
       lte: mockLte,
       order: mockOrder
     });
-    mockOrder.mockReturnValue({
-      limit: mockLimit
-    });
-    mockLimit.mockResolvedValue({
-      data: [
-        {
-          id: "1",
-          executed_at: "2025-10-13T10:00:00Z",
-          status: "success",
-          message: "Relatório enviado com sucesso.",
-          error_details: null,
-          triggered_by: "automated"
-        },
-        {
-          id: "2",
-          executed_at: "2025-10-12T10:00:00Z",
-          status: "error",
-          message: "Falha ao enviar o relatório automático.",
-          error_details: "Connection timeout",
-          triggered_by: "automated"
-        }
-      ],
-      error: null
-    });
+    
     mockSelect.mockReturnValue({
       eq: mockEq,
       gte: mockGte,
       lte: mockLte,
-      order: mockOrder
+      order: mockOrder,
+      range: mockRange
     });
   });
 
@@ -122,6 +150,18 @@ describe("RestoreReportLogsPage Component", () => {
     });
   });
 
+  it("should display total count in header", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/\(2 total\)/)).toBeInTheDocument();
+    });
+  });
+
   it("should display summary cards", async () => {
     render(
       <MemoryRouter>
@@ -147,8 +187,7 @@ describe("RestoreReportLogsPage Component", () => {
       expect(screen.getByText("Status")).toBeInTheDocument();
       expect(screen.getByText("Data Inicial")).toBeInTheDocument();
       expect(screen.getByText("Data Final")).toBeInTheDocument();
-      expect(screen.getByText("Buscar")).toBeInTheDocument();
-      expect(screen.getByText("Limpar")).toBeInTheDocument();
+      expect(screen.getByText("Limpar Filtros")).toBeInTheDocument();
     });
   });
 
@@ -166,9 +205,10 @@ describe("RestoreReportLogsPage Component", () => {
   });
 
   it("should disable export buttons when no logs", async () => {
-    mockLimit.mockResolvedValueOnce({
+    mockRange.mockResolvedValueOnce({
       data: [],
-      error: null
+      error: null,
+      count: 0
     });
 
     render(
@@ -185,7 +225,7 @@ describe("RestoreReportLogsPage Component", () => {
     });
   });
 
-  it("should apply filters when Buscar is clicked", async () => {
+  it("should use infinite scroll with range query", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
@@ -193,14 +233,19 @@ describe("RestoreReportLogsPage Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Buscar")).toBeInTheDocument();
+      expect(mockRange).toHaveBeenCalledWith(0, 19); // First page: 0-19
     });
+  });
 
-    const buscarButton = screen.getByText("Buscar");
-    fireEvent.click(buscarButton);
+  it("should fetch logs with exact count", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
 
     await waitFor(() => {
-      expect(mockSelect).toHaveBeenCalled();
+      expect(mockSelect).toHaveBeenCalledWith("*", { count: "exact" });
     });
   });
 });
