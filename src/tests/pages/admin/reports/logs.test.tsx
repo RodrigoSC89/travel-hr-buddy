@@ -1,70 +1,119 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreReportLogsPage from "@/pages/admin/reports/logs";
+
+// Mock IntersectionObserver
+global.IntersectionObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  disconnect: vi.fn(),
+  unobserve: vi.fn(),
+}));
+
+// Mock supabase
+vi.mock("@/integrations/supabase/client", () => ({
+  supabase: {
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(function (this: any) {
+          return this;
+        }),
+        gte: vi.fn(function (this: any) {
+          return this;
+        }),
+        lte: vi.fn(function (this: any) {
+          return this;
+        }),
+        order: vi.fn(() => ({
+          range: vi.fn(() => Promise.resolve({
+            data: [],
+            count: 0,
+            error: null,
+          })),
+        })),
+      })),
+    })),
+  },
+}));
+
+// Mock toast
+vi.mock("@/hooks/use-toast", () => ({
+  toast: vi.fn(),
+  useToast: () => ({
+    toast: vi.fn(),
+  }),
+}));
 
 /**
  * RestoreReportLogsPage Tests
  * 
- * Tests the disabled state of the Restore Report Logs page.
- * Component is disabled because the required database table doesn't exist yet.
+ * Tests the Restore Report Logs page functionality.
  */
 describe("RestoreReportLogsPage Component", () => {
-  it("should render the page title", () => {
-    render(
-      <MemoryRouter>
-        <RestoreReportLogsPage />
-      </MemoryRouter>
-    );
-
-    expect(screen.getByText("Logs de Relatórios")).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it("should render back button", () => {
+  it("should render the page title", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    expect(screen.getByText("← Voltar")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("🧠 Auditoria de Relatórios Enviados")).toBeInTheDocument();
+    });
   });
 
-  it("should display database configuration warning", () => {
+  it("should render total count display", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    // Component shows a configuration warning instead of loading data
-    expect(screen.getByText((content) =>
-      content.includes("Esta funcionalidade requer configuração de banco de dados adicional")
-    )).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/Total de registros encontrados:/)).toBeInTheDocument();
+    });
   });
 
-  it("should render alert with specific table message", () => {
+  it("should render filter inputs", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    // Check that the alert mentions the specific table name
-    expect(screen.getByText((content) =>
-      content.includes("restore_report_logs")
-    )).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText("Status (success/error)")).toBeInTheDocument();
+      const dateInputs = screen.getAllByDisplayValue("");
+      expect(dateInputs.length).toBeGreaterThan(0);
+    });
   });
 
-  it("should render alert icon", () => {
+  it("should render search button", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    // Verify alert component is rendered
-    const alert = screen.getByRole("alert");
-    expect(alert).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("🔍 Buscar")).toBeInTheDocument();
+    });
+  });
+
+  it("should render export buttons", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("📤 Exportar CSV")).toBeInTheDocument();
+      expect(screen.getByText("📄 Exportar PDF")).toBeInTheDocument();
+    });
   });
 });
