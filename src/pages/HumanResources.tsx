@@ -11,7 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { BackToDashboard } from "@/components/ui/back-to-dashboard";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Users, 
   Award, 
   AlertTriangle, 
@@ -225,28 +226,28 @@ const HumanResources = () => {
               id: "new-employee",
               label: "Novo Funcionário",
               icon: <Plus className="h-4 w-4" />,
-              action: () => console.log("Novo funcionário"),
+              action: () => logger.info("Novo funcionário"),
               variant: "default"
             },
             {
               id: "reports",
               label: "Relatórios",
               icon: <BarChart3 className="h-4 w-4" />,
-              action: () => console.log("Relatórios RH"),
+              action: () => logger.info("Relatórios RH"),
               variant: "outline"
             },
             {
               id: "payroll",
               label: "Folha de Pagamento",
               icon: <DollarSign className="h-4 w-4" />,
-              action: () => console.log("Folha de pagamento"),
+              action: () => logger.info("Folha de pagamento"),
               variant: "outline"
             },
             {
               id: "training",
               label: "Treinamentos",
               icon: <Brain className="h-4 w-4" />,
-              action: () => console.log("Treinamentos"),
+              action: () => logger.info("Treinamentos"),
               variant: "outline"
             }
           ]}
@@ -262,7 +263,7 @@ const HumanResources = () => {
               id: "export",
               label: "Exportar",
               icon: <Download className="h-3 w-3" />,
-              action: () => console.log("Export HR data")
+              action: () => logger.info("Export HR data")
             }
           ]}
         />

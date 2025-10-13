@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { toast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface ChecklistItem {
   id: string;
@@ -43,7 +44,7 @@ export default function ChecklistsPage() {
       .order("created_at", { ascending: false });
 
     if (checklistsError) {
-      console.error("Error fetching checklists:", checklistsError);
+      logger.error("Error fetching checklists:", checklistsError);
       return;
     }
 
@@ -62,7 +63,7 @@ export default function ChecklistsPage() {
           .order("order_index", { ascending: true });
 
         if (itemsError) {
-          console.error("Error fetching items:", itemsError);
+          logger.error("Error fetching items:", itemsError);
           return {
             id: checklist.id,
             title: checklist.title,
@@ -107,7 +108,7 @@ export default function ChecklistsPage() {
       .single();
 
     if (error) {
-      console.error("Error creating checklist:", error);
+      logger.error("Error creating checklist:", error);
       toast({
         title: "Erro",
         description: "Erro ao criar checklist",
@@ -151,7 +152,7 @@ export default function ChecklistsPage() {
       );
 
       if (aiError) {
-        console.error("Error generating checklist with AI:", aiError);
+        logger.error("Error generating checklist with AI:", aiError);
         throw new Error("Erro ao gerar checklist com IA");
       }
 
@@ -173,7 +174,7 @@ export default function ChecklistsPage() {
         .single();
 
       if (checklistError || !checklistData) {
-        console.error("Error creating checklist:", checklistError);
+        logger.error("Error creating checklist:", checklistError);
         throw new Error("Erro ao criar checklist");
       }
 
@@ -192,7 +193,7 @@ export default function ChecklistsPage() {
         .insert(itemsToInsert);
 
       if (itemsError) {
-        console.error("Error creating checklist items:", itemsError);
+        logger.error("Error creating checklist items:", itemsError);
         throw new Error("Erro ao adicionar itens ao checklist");
       }
 
@@ -203,7 +204,7 @@ export default function ChecklistsPage() {
       });
       fetchChecklists();
     } catch (error) {
-      console.error("Error in createChecklistWithAI:", error);
+      logger.error("Error in createChecklistWithAI:", error);
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Erro ao gerar checklist com IA",
@@ -227,7 +228,7 @@ export default function ChecklistsPage() {
       .eq("id", itemId);
 
     if (error) {
-      console.error("Error updating item:", error);
+      logger.error("Error updating item:", error);
       return;
     }
 
@@ -279,7 +280,7 @@ export default function ChecklistsPage() {
         });
       }
     } catch (error) {
-      console.error("Error summarizing checklist:", error);
+      logger.error("Error summarizing checklist:", error);
       toast({ 
         title: "Erro", 
         description: "Erro ao gerar resumo", 

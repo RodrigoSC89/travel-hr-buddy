@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
 import "../sentry.client.config";
+import { logger } from "@/lib/logger";
 
 // Register service worker for PWA
 if ("serviceWorker" in navigator) {
@@ -11,10 +12,10 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker
       .register("/sw.js", { scope: "/" })
       .then((registration) => {
-        console.log("✅ PWA Service Worker registered:", registration);
+        logger.info("✅ PWA Service Worker registered:", registration);
       })
       .catch((error) => {
-        console.error("❌ Service Worker registration failed:", error);
+        logger.error("❌ Service Worker registration failed:", error);
       });
   });
 }

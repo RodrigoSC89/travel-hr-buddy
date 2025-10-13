@@ -1,10 +1,11 @@
 import React from "react";
 import { DocumentEditor } from "@/components/documents/DocumentEditor";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
+import { logger } from "@/lib/logger";
 
 export default function DocumentEditorPage() {
   const handleSave = (documentId: string) => {
-    console.log("Document saved with ID:", documentId);
+    logger.info("Document saved with ID:", documentId);
   };
 
   return (

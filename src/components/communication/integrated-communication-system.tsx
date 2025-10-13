@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { logger } from "@/lib/logger";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -106,7 +107,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
       setContacts(formattedContacts);
     } catch (error) {
-      console.error("Failed to load contacts:", error);
+      logger.error("Failed to load contacts:", error);
     }
   };
 
@@ -136,7 +137,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       // Mark messages as read
       await markMessagesAsRead(contactId);
     } catch (error) {
-      console.error("Failed to load messages:", error);
+      logger.error("Failed to load messages:", error);
     } finally {
       setIsLoading(false);
     }
@@ -154,7 +155,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         .eq("recipient_id", currentUserId)
         .eq("is_read", false);
     } catch (error) {
-      console.error("Failed to mark messages as read:", error);
+      logger.error("Failed to mark messages as read:", error);
     }
   };
 

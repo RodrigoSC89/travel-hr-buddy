@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { LocalNotifications, ScheduleOptions } from "@capacitor/local-notifications";
 import { PushNotifications } from "@capacitor/push-notifications";
 import { Capacitor } from "@capacitor/core";
+import { logger } from "@/lib/logger";
 
 export const useNotifications = () => {
   const [permissionGranted, setPermissionGranted] = useState(false);
@@ -33,19 +34,19 @@ export const useNotifications = () => {
         });
 
         PushNotifications.addListener("registrationError", (error) => {
-          console.error("Error on registration: " + JSON.stringify(error));
+          logger.error("Error on registration: " + JSON.stringify(error));
         });
 
         PushNotifications.addListener("pushNotificationReceived", (notification) => {
-          console.log("Push received: " + JSON.stringify(notification));
+          logger.info("Push received: " + JSON.stringify(notification));
         });
 
         PushNotifications.addListener("pushNotificationActionPerformed", (notification) => {
-          console.log("Push action performed: " + JSON.stringify(notification));
+          logger.info("Push action performed: " + JSON.stringify(notification));
         });
       }
     } catch (error) {
-      console.error("Failed to initialize notifications:", error);
+      logger.error("Failed to initialize notifications:", error);
     }
   };
 
@@ -77,7 +78,7 @@ export const useNotifications = () => {
 
       await LocalNotifications.schedule(notificationOptions);
     } catch (error) {
-      console.error("Failed to schedule notification:", error);
+      logger.error("Failed to schedule notification:", error);
     }
   };
 
@@ -85,7 +86,7 @@ export const useNotifications = () => {
     try {
       await LocalNotifications.cancel({ notifications: [{ id }] });
     } catch (error) {
-      console.error("Failed to cancel notification:", error);
+      logger.error("Failed to cancel notification:", error);
     }
   };
 

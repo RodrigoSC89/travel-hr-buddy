@@ -5,7 +5,8 @@ import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
+import { logger } from "@/lib/logger";
+import {
   ClipboardCheck,
   Brain,
   Shield,
@@ -111,28 +112,28 @@ const ChecklistsInteligentes = () => {
             id: "new-checklist",
             label: "Novo Checklist",
             icon: <Plus className="h-4 w-4" />,
-            action: () => console.log("Novo checklist"),
+            action: () => logger.info("Novo checklist"),
             variant: "default"
           },
           {
             id: "templates",
             label: "Templates",
             icon: <FileText className="h-4 w-4" />,
-            action: () => console.log("Templates"),
+            action: () => logger.info("Templates"),
             variant: "outline"
           },
           {
             id: "reports",
             label: "Relatórios",
             icon: <BarChart3 className="h-4 w-4" />,
-            action: () => console.log("Relatórios"),
+            action: () => logger.info("Relatórios"),
             variant: "outline"
           },
           {
             id: "ai-assist",
             label: "IA Assistente",
             icon: <Brain className="h-4 w-4" />,
-            action: () => console.log("IA Assistente"),
+            action: () => logger.info("IA Assistente"),
             variant: "outline"
           }
         ]}
@@ -148,7 +149,7 @@ const ChecklistsInteligentes = () => {
             id: "export",
             label: "Exportar",
             icon: <Download className="h-3 w-3" />,
-            action: () => console.log("Export checklists")
+            action: () => logger.info("Export checklists")
           }
         ]}
       />

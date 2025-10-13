@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
+import { logger } from "@/lib/logger";
+import {
   ArrowLeft, 
   Download, 
   Search, 
@@ -61,7 +62,7 @@ export default function AssistantLogsPage() {
       if (error) throw error;
       setLogs(data || []);
     } catch (error) {
-      console.error("Error fetching logs:", error);
+      logger.error("Error fetching logs:", error);
     } finally {
       setLoading(false);
     }
@@ -248,7 +249,7 @@ export default function AssistantLogsPage() {
         alert("❌ Falha ao enviar relatório: " + (result.error || "Erro desconhecido"));
       }
     } catch (error) {
-      console.error("Error sending report:", error);
+      logger.error("Error sending report:", error);
       alert("❌ Erro ao enviar relatório por e-mail");
     }
   }

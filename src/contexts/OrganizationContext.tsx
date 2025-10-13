@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
+import { logger } from "@/lib/logger";
 
 interface Organization {
   id: string;
@@ -144,10 +145,10 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         }
       } catch (err) {
         // Ignorar erros - já temos o branding demo configurado
-        console.warn("Could not load organization branding from database, using demo data");
+        logger.warn("Could not load organization branding from database, using demo data");
       }
     } catch (err) {
-      console.error("Error loading organization:", err);
+      logger.error("Error loading organization:", err);
       setError("Erro ao carregar dados da organização");
     } finally {
       setIsLoading(false);

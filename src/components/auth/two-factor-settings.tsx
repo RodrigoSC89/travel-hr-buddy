@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Shield, 
   Smartphone, 
   KeyRound, 
@@ -51,7 +52,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         }
       }
     } catch (error) {
-      console.error("Error checking existing factors:", error);
+      logger.error("Error checking existing factors:", error);
     }
   };
 

@@ -5,7 +5,8 @@ import { AdvancedDocumentCenter } from "@/components/documents/advanced-document
 import IntelligentDocumentManager from "@/components/documents/intelligent-document-manager";
 import { DocumentValidator } from "@/components/ui/document-validator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
+import { logger } from "@/lib/logger";
+import {
   FileText, 
   Scan, 
   Brain, 
@@ -178,7 +179,7 @@ const AdvancedDocumentsPage = () => {
                     <h3 className="text-lg font-semibold mb-3">Certificados Marítimos</h3>
                     <DocumentValidator 
                       documentType="certificate" 
-                      onValidationComplete={(result) => console.log("Certificado validado:", result)}
+                      onValidationComplete={(result) => logger.info("Certificado validado:", result)}
                     />
                   </div>
                   
@@ -186,7 +187,7 @@ const AdvancedDocumentsPage = () => {
                     <h3 className="text-lg font-semibold mb-3">Licenças e Permissões</h3>
                     <DocumentValidator 
                       documentType="license"
-                      onValidationComplete={(result) => console.log("Licença validada:", result)}
+                      onValidationComplete={(result) => logger.info("Licença validada:", result)}
                     />
                   </div>
                 </div>

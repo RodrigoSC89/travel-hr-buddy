@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 /**
  * Wrapper para queries do Supabase com timeout automático
@@ -67,7 +68,7 @@ export async function executeQuery<T>(
     const result = await withTimeout(queryFn(), timeout, errorMessage);
     return result;
   } catch (error) {
-    console.error("Query error:", error);
+    logger.error("Query error:", error);
     return { data: fallback, error };
   }
 }

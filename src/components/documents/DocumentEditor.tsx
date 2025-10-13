@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Save, FileText } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { logger } from "@/lib/logger";
 
 interface DocumentEditorProps {
   documentId?: string;
@@ -98,7 +99,7 @@ export function DocumentEditor({
         description: "Documento salvo automaticamente",
       });
     } catch (error) {
-      console.error("Error saving document:", error);
+      logger.error("Error saving document:", error);
       toast({
         title: "Erro ao salvar",
         description: "Não foi possível salvar o documento",
@@ -188,7 +189,7 @@ export function DocumentEditor({
         onSave(currentDocId);
       }
     } catch (error) {
-      console.error("Error saving document:", error);
+      logger.error("Error saving document:", error);
       toast({
         title: "Erro ao salvar",
         description: "Não foi possível salvar o documento",

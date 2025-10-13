@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
+import { logger } from "@/lib/logger";
+import {
   ArrowLeft, 
   CheckCircle2, 
   XCircle, 
@@ -92,7 +93,7 @@ export default function RestoreReportLogsPage() {
       if (fetchError) throw fetchError;
       setLogs(data || []);
     } catch (err) {
-      console.error("Error fetching logs:", err);
+      logger.error("Error fetching logs:", err);
       setError(err instanceof Error ? err.message : "Erro ao carregar logs");
     } finally {
       setLoading(false);

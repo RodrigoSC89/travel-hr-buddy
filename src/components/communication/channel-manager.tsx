@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -293,7 +294,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         description: "Você entrou no canal"
       });
     } catch (error) {
-      console.error("Failed to join channel:", error);
+      logger.error("Failed to join channel:", error);
       toast({
         title: "Erro",
         description: "Não foi possível entrar no canal",

@@ -14,6 +14,7 @@ import { ArrowLeft, RefreshCw, Download, Mail, BarChart3, FileText, Users } from
 import { toast } from "@/hooks/use-toast";
 import { Bar } from "react-chartjs-2";
 import { format } from "date-fns";
+import { logger } from "@/lib/logger";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -95,7 +96,7 @@ export default function RestoreDashboard() {
       setDailyData(dailyDataResult || []);
       setLastUpdate(new Date());
     } catch (error) {
-      console.error("Error fetching stats:", error);
+      logger.error("Error fetching stats:", error);
       if (!isAutoRefresh) {
         toast({
           title: "Erro ao carregar estatísticas",
@@ -149,7 +150,7 @@ export default function RestoreDashboard() {
         description: "O arquivo CSV foi baixado com sucesso.",
       });
     } catch (error) {
-      console.error("Error exporting CSV:", error);
+      logger.error("Error exporting CSV:", error);
       toast({
         title: "Erro ao exportar CSV",
         description: "Não foi possível exportar o arquivo CSV.",
@@ -231,7 +232,7 @@ export default function RestoreDashboard() {
         description: `Arquivo ${filename} foi baixado com sucesso.`,
       });
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Não foi possível exportar o arquivo PDF.",
@@ -289,7 +290,7 @@ export default function RestoreDashboard() {
         description: "O relatório foi enviado por email com sucesso.",
       });
     } catch (error) {
-      console.error("Error sending email:", error);
+      logger.error("Error sending email:", error);
       toast({
         title: "Erro ao enviar email",
         description: "Não foi possível enviar o relatório por email.",

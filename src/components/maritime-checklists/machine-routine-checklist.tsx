@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Settings, 
   Cog, 
   Wrench, 
@@ -547,7 +548,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       await onSave(checklist);
       setLastSaved(new Date());
     } catch (error) {
-      console.error("Failed to auto-save checklist:", error);
+      logger.error("Failed to auto-save checklist:", error);
     }
   };
 

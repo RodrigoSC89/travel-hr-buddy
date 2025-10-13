@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Award, 
   AlertTriangle, 
   Calendar, 
@@ -164,7 +165,7 @@ export const MaritimeCertificationManager = () => {
 
       setAlerts(mockAlerts);
     } catch (error) {
-      console.error("Failed to load certification alerts:", error);
+      logger.error("Failed to load certification alerts:", error);
     }
   };
 

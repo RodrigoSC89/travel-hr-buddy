@@ -15,6 +15,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { FileText, Users, Save } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface CollaborativeDocumentEditorProps {
   documentId: string;
@@ -56,7 +57,7 @@ export function CollaborativeDocumentEditor({
       setSaveCount(prev => prev + 1);
       setLastSaved(new Date());
     } catch (error) {
-      console.error('Error saving document:', error);
+      logger.error('Error saving document:', error);
       toast({
         title: "Error saving document",
         description: "Failed to save document to database",

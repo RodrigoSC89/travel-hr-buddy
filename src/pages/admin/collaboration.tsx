@@ -9,6 +9,7 @@ import { ArrowLeft, RefreshCw, Send } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from "@/lib/logger";
 
 interface Reply {
   id: string;
@@ -55,7 +56,7 @@ export default function CollaborationPage() {
         schema: "public",
         table: "colab_comments"
       }, (payload) => {
-        console.log("Real-time comment update received:", payload);
+        logger.info("Real-time comment update received:", payload);
         fetchComments(); // Auto-refresh when changes detected
       })
       .subscribe();
@@ -68,7 +69,7 @@ export default function CollaborationPage() {
         schema: "public",
         table: "colab_replies"
       }, (payload) => {
-        console.log("Real-time reply update received:", payload);
+        logger.info("Real-time reply update received:", payload);
         // Refresh replies for the affected comment
         if (payload.new && "comment_id" in payload.new) {
           fetchReplies(payload.new.comment_id as string);
@@ -126,7 +127,7 @@ export default function CollaborationPage() {
 
       setComments(commentsWithEmails);
     } catch (error) {
-      console.error("Error fetching comments:", error);
+      logger.error("Error fetching comments:", error);
       toast({
         title: "Erro ao carregar comentários",
         description: "Não foi possível carregar os comentários.",
@@ -180,7 +181,7 @@ export default function CollaborationPage() {
         description: "Comentário enviado com sucesso!",
       });
     } catch (error) {
-      console.error("Error submitting comment:", error);
+      logger.error("Error submitting comment:", error);
       toast({
         title: "Erro ao enviar comentário",
         description: "Não foi possível enviar o comentário.",
@@ -225,7 +226,7 @@ export default function CollaborationPage() {
 
       setReplies((prev) => ({ ...prev, [commentId]: repliesWithEmails }));
     } catch (error) {
-      console.error("Error fetching replies:", error);
+      logger.error("Error fetching replies:", error);
     }
   };
 
@@ -256,7 +257,7 @@ export default function CollaborationPage() {
         )
       );
     } catch (error) {
-      console.error("Error adding reaction:", error);
+      logger.error("Error adding reaction:", error);
       toast({
         title: "Erro ao adicionar reação",
         description: "Não foi possível adicionar a reação.",
@@ -301,7 +302,7 @@ export default function CollaborationPage() {
         description: "Resposta enviada com sucesso!",
       });
     } catch (error) {
-      console.error("Error submitting reply:", error);
+      logger.error("Error submitting reply:", error);
       toast({
         title: "Erro ao enviar resposta",
         description: "Não foi possível enviar a resposta.",

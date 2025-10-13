@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Ship, Users, BarChart3, Calendar, ArrowRight, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface OnboardingStep {
   id: string;
@@ -385,7 +386,7 @@ export const SmartOnboardingWizard: React.FC = () => {
         });
     } catch (error) {
       // Failed to save onboarding progress
-      console.error("Failed to save onboarding progress:", error);
+      logger.error("Failed to save onboarding progress:", error);
       toast({
         title: "Aviso",
         description: "Progresso salvo localmente. Será sincronizado em breve.",
@@ -447,7 +448,7 @@ export const SmartOnboardingWizard: React.FC = () => {
 
     } catch (error) {
       // Failed to create default automations
-      console.error("Failed to create default automations:", error);
+      logger.error("Failed to create default automations:", error);
       toast({
         title: "Aviso",
         description: "Automações padrão não foram criadas. Você pode configurá-las manualmente depois.",

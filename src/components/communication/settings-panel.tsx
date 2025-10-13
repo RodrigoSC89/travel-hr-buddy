@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 import {
   Settings,
   User,
@@ -126,7 +127,7 @@ export const SettingsPanel = () => {
       // Mock loading settings - replace with real Supabase query
       // Settings are already initialized in state
     } catch (error) {
-      console.error("Failed to load settings:", error);
+      logger.error("Failed to load settings:", error);
     }
   };
 

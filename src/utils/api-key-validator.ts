@@ -18,6 +18,7 @@ import { testSkyscannerConnection } from "@/services/skyscanner";
 import { testBookingConnection } from "@/services/booking";
 import { testMarineTrafficConnection } from "@/services/marinetraffic";
 import { testWhisperConnection } from "@/services/whisper";
+import { logger } from "@/lib/logger";
 
 export interface APIKeyStatus {
   name: string;
@@ -102,10 +103,10 @@ function isConfigured(...keys: (string | undefined)[]): boolean {
 export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   const results: APIKeyStatus[] = [];
   
-  console.log("🔍 Starting API Key Validation...\n");
+  logger.info("🔍 Starting API Key Validation...\n");
 
   // 1. OpenAI
-  console.log("Testing OpenAI API...");
+  logger.info("Testing OpenAI API...");
   const openAIResult = await testOpenAIConnection();
   const openAIStatus = determineStatus(openAIResult);
   results.push({
@@ -121,7 +122,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   });
 
   // 2. Mapbox
-  console.log("Testing Mapbox API...");
+  logger.info("Testing Mapbox API...");
   const mapboxResult = await testMapboxConnection();
   const mapboxStatus = determineStatus(mapboxResult);
   results.push({
@@ -140,7 +141,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   });
 
   // 3. Amadeus
-  console.log("Testing Amadeus API...");
+  logger.info("Testing Amadeus API...");
   const amadeusResult = await testAmadeusConnection();
   const amadeusStatus = determineStatus(amadeusResult);
   results.push({
@@ -159,7 +160,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   });
 
   // 4. Supabase
-  console.log("Testing Supabase connection...");
+  logger.info("Testing Supabase connection...");
   const supabaseResult = await testSupabaseConnection();
   const supabaseStatus = determineStatus(supabaseResult);
   results.push({
@@ -178,7 +179,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   });
 
   // 5. Windy / OpenWeather
-  console.log("Testing Weather API (Windy/OpenWeather)...");
+  logger.info("Testing Weather API (Windy/OpenWeather)...");
   const windyResult = await testWindyConnection();
   const windyStatus = determineStatus(windyResult);
   results.push({
@@ -197,7 +198,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   });
 
   // 6. Skyscanner
-  console.log("Testing Skyscanner API...");
+  logger.info("Testing Skyscanner API...");
   const skyscannerResult = await testSkyscannerConnection();
   const skyscannerStatus = determineStatus(skyscannerResult);
   results.push({
@@ -216,7 +217,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   });
 
   // 7. Booking.com
-  console.log("Testing Booking.com API...");
+  logger.info("Testing Booking.com API...");
   const bookingResult = await testBookingConnection();
   const bookingStatus = determineStatus(bookingResult);
   results.push({
@@ -235,7 +236,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   });
 
   // 8. MarineTraffic
-  console.log("Testing MarineTraffic API...");
+  logger.info("Testing MarineTraffic API...");
   const marineTrafficResult = await testMarineTrafficConnection();
   const marineTrafficStatus = determineStatus(marineTrafficResult);
   results.push({
@@ -251,7 +252,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
   });
 
   // 9. Whisper (OpenAI)
-  console.log("Testing Whisper API...");
+  logger.info("Testing Whisper API...");
   const whisperResult = await testWhisperConnection();
   const whisperStatus = determineStatus(whisperResult);
   results.push({
@@ -278,7 +279,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
 
   const summary = generateSummary(results, validCount, invalidCount, notConfiguredCount);
 
-  console.log("\n✅ API Key Validation Complete!\n");
+  logger.info("\n✅ API Key Validation Complete!\n");
 
   return {
     timestamp: new Date(),
@@ -370,7 +371,7 @@ function generateSummary(
  * Print the validation report to console
  */
 export function printValidationReport(report: APIValidationReport): void {
-  console.log(report.summary);
+  logger.info(report.summary);
 }
 
 /**
