@@ -99,23 +99,31 @@ export default function RestoreReportLogsPage() {
           placeholder="Status (success/error)"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
+          className="w-48"
         />
         <Input
           type="date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
+          className="w-48"
         />
         <Input
           type="date"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
+          className="w-48"
         />
         <Button onClick={fetchLogs}>🔍 Buscar</Button>
-        <Button onClick={exportCSV}>📤 CSV</Button>
-        <Button onClick={exportPDF}>📄 PDF</Button>
+        <Button onClick={exportCSV} disabled={logs.length === 0}>📤 CSV</Button>
+        <Button onClick={exportPDF} disabled={logs.length === 0}>📄 PDF</Button>
       </div>
 
-      {logs.map((log) => (
+      {logs.length === 0 ? (
+        <Card className="p-8 text-center text-muted-foreground">
+          <p>Nenhum log encontrado</p>
+        </Card>
+      ) : (
+        logs.map((log) => (
         <Card key={log.id} className="p-4 border border-gray-300">
           <CardContent className="space-y-2 p-0">
             <div>
@@ -134,7 +142,8 @@ export default function RestoreReportLogsPage() {
             )}
           </CardContent>
         </Card>
-      ))}
+        ))
+      )}
     </div>
   );
 }
