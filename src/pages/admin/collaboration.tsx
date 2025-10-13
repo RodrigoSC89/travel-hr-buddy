@@ -10,12 +10,22 @@ import { toast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+interface Reply {
+  id: string;
+  comment_id: string;
+  author_id: string;
+  text: string;
+  created_at: string;
+  author_email?: string;
+}
+
 interface Comment {
   id: string;
   author_id: string;
   text: string;
   created_at: string;
   author_email?: string;
+  reactions: Record<string, number>;
 }
 
 /**
@@ -31,27 +41,50 @@ export default function CollaborationPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [replies, setReplies] = useState<Record<string, Reply[]>>({});
+  const [replyTexts, setReplyTexts] = useState<Record<string, string>>({});
 
   useEffect(() => {
     fetchComments();
 
-    // Set up real-time subscription
-    const channel = supabase
+    // Set up real-time subscription for comments
+    const commentsChannel = supabase
       .channel("colab-comments-changes")
       .on("postgres_changes", {
         event: "*",
         schema: "public",
         table: "colab_comments"
       }, (payload) => {
-        console.log("Real-time update received:", payload);
+        console.log("Real-time comment update received:", payload);
         fetchComments(); // Auto-refresh when changes detected
       })
       .subscribe();
 
-    // Cleanup subscription on unmount
+    // Set up real-time subscription for replies
+    const repliesChannel = supabase
+      .channel("colab-replies-changes")
+      .on("postgres_changes", {
+        event: "*",
+        schema: "public",
+        table: "colab_replies"
+      }, (payload) => {
+        console.log("Real-time reply update received:", payload);
+        // Refresh replies for the affected comment
+        if (payload.new && "comment_id" in payload.new) {
+          fetchReplies(payload.new.comment_id as string);
+        } else if (payload.old && "comment_id" in payload.old) {
+          fetchReplies(payload.old.comment_id as string);
+        }
+      })
+      .subscribe();
+
+    // Cleanup subscriptions on unmount
     return () => {
-      if (channel) {
-        supabase.removeChannel(channel);
+      if (commentsChannel) {
+        supabase.removeChannel(commentsChannel);
+      }
+      if (repliesChannel) {
+        supabase.removeChannel(repliesChannel);
       }
     };
   }, []);
@@ -64,7 +97,8 @@ export default function CollaborationPage() {
           id,
           author_id,
           text,
-          created_at
+          created_at,
+          reactions
         `)
         .order("created_at", { ascending: false });
 
@@ -79,9 +113,13 @@ export default function CollaborationPage() {
             .eq("id", comment.author_id)
             .single();
 
+          // Fetch replies for each comment
+          await fetchReplies(comment.id);
+
           return {
             ...comment,
-            author_email: profile?.email || "Usuário desconhecido"
+            author_email: profile?.email || "Usuário desconhecido",
+            reactions: comment.reactions || {}
           };
         })
       );
@@ -153,6 +191,125 @@ export default function CollaborationPage() {
     }
   };
 
+  const fetchReplies = async (commentId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("colab_replies")
+        .select(`
+          id,
+          comment_id,
+          author_id,
+          text,
+          created_at
+        `)
+        .eq("comment_id", commentId)
+        .order("created_at", { ascending: true });
+
+      if (error) throw error;
+
+      // Fetch author emails for replies
+      const repliesWithEmails = await Promise.all(
+        (data || []).map(async (reply) => {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("email")
+            .eq("id", reply.author_id)
+            .single();
+
+          return {
+            ...reply,
+            author_email: profile?.email || "Usuário desconhecido"
+          };
+        })
+      );
+
+      setReplies((prev) => ({ ...prev, [commentId]: repliesWithEmails }));
+    } catch (error) {
+      console.error("Error fetching replies:", error);
+    }
+  };
+
+  const addReaction = async (commentId: string, emoji: string) => {
+    try {
+      // Find the current comment
+      const comment = comments.find((c) => c.id === commentId);
+      if (!comment) return;
+
+      // Update reaction count
+      const currentReactions = comment.reactions || {};
+      const newReactions = {
+        ...currentReactions,
+        [emoji]: (currentReactions[emoji] || 0) + 1
+      };
+
+      const { error } = await supabase
+        .from("colab_comments")
+        .update({ reactions: newReactions })
+        .eq("id", commentId);
+
+      if (error) throw error;
+
+      // Optimistically update local state
+      setComments((prev) =>
+        prev.map((c) =>
+          c.id === commentId ? { ...c, reactions: newReactions } : c
+        )
+      );
+    } catch (error) {
+      console.error("Error adding reaction:", error);
+      toast({
+        title: "Erro ao adicionar reação",
+        description: "Não foi possível adicionar a reação.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const submitReply = async (commentId: string) => {
+    const replyText = replyTexts[commentId];
+    if (!replyText?.trim()) {
+      toast({
+        title: "Erro",
+        description: "Por favor, escreva uma resposta.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error("Usuário não autenticado");
+      }
+
+      const { error } = await supabase
+        .from("colab_replies")
+        .insert({
+          comment_id: commentId,
+          author_id: user.id,
+          text: replyText.trim(),
+        });
+
+      if (error) throw error;
+
+      // Clear the reply text
+      setReplyTexts((prev) => ({ ...prev, [commentId]: "" }));
+
+      toast({
+        title: "Sucesso",
+        description: "Resposta enviada com sucesso!",
+      });
+    } catch (error) {
+      console.error("Error submitting reply:", error);
+      toast({
+        title: "Erro ao enviar resposta",
+        description: "Não foi possível enviar a resposta.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -219,12 +376,76 @@ export default function CollaborationPage() {
                   {comments.map((comment) => (
                     <Card key={comment.id}>
                       <CardContent className="pt-4">
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                           <div className="flex items-center justify-between text-sm text-muted-foreground">
                             <span>👤 {comment.author_email}</span>
                             <span>🕒 {format(new Date(comment.created_at), "dd/MM/yyyy, HH:mm", { locale: ptBR })}</span>
                           </div>
                           <p className="text-sm">{comment.text}</p>
+                          
+                          {/* Emoji Reactions */}
+                          <div className="flex gap-2 items-center">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => addReaction(comment.id, "👍")}
+                              className="h-8 px-3"
+                            >
+                              👍 {comment.reactions?.["👍"] || 0}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => addReaction(comment.id, "❤️")}
+                              className="h-8 px-3"
+                            >
+                              ❤️ {comment.reactions?.["❤️"] || 0}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => addReaction(comment.id, "👏")}
+                              className="h-8 px-3"
+                            >
+                              👏 {comment.reactions?.["👏"] || 0}
+                            </Button>
+                          </div>
+
+                          {/* Replies Section */}
+                          <div className="space-y-3 mt-4">
+                            <h4 className="text-sm font-semibold">💬 Respostas:</h4>
+                            {replies[comment.id] && replies[comment.id].length > 0 && (
+                              <div className="space-y-2 border-l-2 border-gray-200 pl-4">
+                                {replies[comment.id].map((reply) => (
+                                  <div key={reply.id} className="bg-gray-50 p-3 rounded">
+                                    <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+                                      <span>👤 {reply.author_email}</span>
+                                      <span>🕒 {format(new Date(reply.created_at), "dd/MM/yyyy, HH:mm", { locale: ptBR })}</span>
+                                    </div>
+                                    <p className="text-sm">{reply.text}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            
+                            {/* Reply Input */}
+                            <div className="space-y-2">
+                              <Textarea
+                                placeholder="Escreva uma resposta..."
+                                value={replyTexts[comment.id] || ""}
+                                onChange={(e) => setReplyTexts((prev) => ({ ...prev, [comment.id]: e.target.value }))}
+                                rows={2}
+                                className="text-sm"
+                              />
+                              <Button
+                                size="sm"
+                                onClick={() => submitReply(comment.id)}
+                                disabled={!replyTexts[comment.id]?.trim()}
+                              >
+                                ➕ Responder
+                              </Button>
+                            </div>
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
