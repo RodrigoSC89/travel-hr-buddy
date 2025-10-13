@@ -49,241 +49,81 @@ describe("RestoreChartEmbed Component", () => {
     mockNavigate.mockClear();
   });
 
-  it("should render loading state initially", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
-    
-    // Setup mocks that never resolve
-    vi.mocked(supabase.rpc).mockReturnValue(new Promise(() => {}) as unknown as ReturnType<typeof supabase.rpc>);
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        order: vi.fn().mockReturnValue({
-          limit: vi.fn().mockReturnValue({
-            single: vi.fn().mockReturnValue(new Promise(() => {})),
-          }),
-        }),
-      }),
-    } as unknown as ReturnType<typeof supabase.from>);
-
+  it("should render disabled state message", async () => {
     render(
       <MemoryRouter>
         <RestoreChartEmbed />
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Carregando dados...")).toBeInTheDocument();
+    expect(screen.getByText(/Esta funcionalidade requer configuração de banco de dados adicional/i)).toBeInTheDocument();
   });
 
-  it("should display chart and statistics when data is loaded", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
-    
-    // Mock chart data
-    vi.mocked(supabase.rpc).mockImplementation((funcName: string) => {
-      if (funcName === "get_restore_count_by_day_with_email") {
-        return Promise.resolve({
-          data: [
-            { day: "2024-01-01", count: 5 },
-            { day: "2024-01-02", count: 3 },
-          ],
-          error: null,
-        }) as unknown as ReturnType<typeof supabase.rpc>;
-      }
-      if (funcName === "get_restore_summary") {
-        return Promise.resolve({
-          data: [
-            {
-              total: 100,
-              unique_docs: 50,
-              avg_per_day: 5.5,
-            },
-          ],
-          error: null,
-        }) as unknown as ReturnType<typeof supabase.rpc>;
-      }
-      return Promise.resolve({ data: null, error: null }) as unknown as ReturnType<typeof supabase.rpc>;
-    });
-
-    // Mock last restore
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        order: vi.fn().mockReturnValue({
-          limit: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({
-              data: { restored_at: "2024-01-02T10:00:00Z" },
-              error: null,
-            }),
-          }),
-        }),
-      }),
-    } as unknown as ReturnType<typeof supabase.from>);
-
+  it("should display alert icon", async () => {
     render(
       <MemoryRouter>
         <RestoreChartEmbed />
       </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText("Restaurações de Documentos")).toBeInTheDocument();
-    });
-
-    // Check statistics are displayed
-    expect(screen.getByText(/Total:/)).toBeInTheDocument();
-    expect(screen.getAllByText(/100/)[0]).toBeInTheDocument();
-    expect(screen.getByText(/Documentos únicos:/)).toBeInTheDocument();
-    expect(screen.getAllByText(/50/)[0]).toBeInTheDocument();
-    expect(screen.getByText(/Média\/dia:/)).toBeInTheDocument();
-    expect(screen.getAllByText(/5\.50/)[0]).toBeInTheDocument();
-    expect(screen.getByText(/Última execução:/)).toBeInTheDocument();
-
-    // Check chart is rendered
-    expect(screen.getByTestId("chart")).toBeInTheDocument();
+    // Check that the alert is displayed
+    const alert = screen.getByRole("alert");
+    expect(alert).toBeInTheDocument();
   });
 
-  it("should handle empty data gracefully", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
-    
-    vi.mocked(supabase.rpc).mockImplementation((funcName: string) => {
-      if (funcName === "get_restore_count_by_day_with_email") {
-        return Promise.resolve({ data: [], error: null }) as unknown as ReturnType<typeof supabase.rpc>;
-      }
-      if (funcName === "get_restore_summary") {
-        return Promise.resolve({ data: [], error: null }) as unknown as ReturnType<typeof supabase.rpc>;
-      }
-      return Promise.resolve({ data: null, error: null }) as unknown as ReturnType<typeof supabase.rpc>;
-    });
-
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        order: vi.fn().mockReturnValue({
-          limit: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({
-              data: null,
-              error: null,
-            }),
-          }),
-        }),
-      }),
-    } as unknown as ReturnType<typeof supabase.from>);
-
+  it("should display contact admin message", async () => {
     render(
       <MemoryRouter>
         <RestoreChartEmbed />
       </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText("Nenhum dado disponível")).toBeInTheDocument();
-    });
+    expect(screen.getByText(/Entre em contato com o administrador do sistema/i)).toBeInTheDocument();
   });
 
-  it("should set window.chartReady flag when data is loaded", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
-    
-    vi.mocked(supabase.rpc).mockImplementation(() =>
-      Promise.resolve({ data: [], error: null }) as unknown as ReturnType<typeof supabase.rpc>
-    );
-
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        order: vi.fn().mockReturnValue({
-          limit: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({
-              data: null,
-              error: null,
-            }),
-          }),
-        }),
-      }),
-    } as unknown as ReturnType<typeof supabase.from>);
-
-    render(
+  it("should render in centered layout", async () => {
+    const { container } = render(
       <MemoryRouter>
         <RestoreChartEmbed />
       </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect((window as unknown as { chartReady: boolean }).chartReady).toBe(true);
-    });
+    const mainDiv = container.querySelector('.flex.items-center.justify-center.min-h-screen');
+    expect(mainDiv).toBeInTheDocument();
   });
 
-  it("should display error message when data fetching fails", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
-    
-    vi.mocked(supabase.rpc).mockImplementation(() =>
-      Promise.resolve({ 
-        data: null, 
-        error: { message: "Database error", code: "500" } 
-      }) as unknown as ReturnType<typeof supabase.rpc>
-    );
-
-    render(
+  it("should show AlertCircle icon", async () => {
+    const { container } = render(
       <MemoryRouter>
         <RestoreChartEmbed />
       </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText("Erro ao Carregar Dados")).toBeInTheDocument();
-      expect(screen.getByText(/Erro ao carregar dados do gráfico/)).toBeInTheDocument();
-    });
+    const svgElement = container.querySelector('.lucide-circle-alert');
+    expect(svgElement).toBeInTheDocument();
   });
 
-  it("should show improved loading state with spinner", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
-    
-    // Setup mocks that never resolve to keep loading state
-    vi.mocked(supabase.rpc).mockReturnValue(new Promise(() => {}) as unknown as ReturnType<typeof supabase.rpc>);
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        order: vi.fn().mockReturnValue({
-          limit: vi.fn().mockReturnValue({
-            single: vi.fn().mockReturnValue(new Promise(() => {})),
-          }),
-        }),
-      }),
-    } as unknown as ReturnType<typeof supabase.from>);
-
-    render(
+  it("should render max-width alert container", async () => {
+    const { container } = render(
       <MemoryRouter>
         <RestoreChartEmbed />
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Carregando dados...")).toBeInTheDocument();
+    const alertContainer = container.querySelector('.max-w-md');
+    expect(alertContainer).toBeInTheDocument();
   });
 });
 
-describe("RestoreChartEmbed Token Protection", () => {
-  it("should check for token on mount", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
-    
-    vi.mocked(supabase.rpc).mockImplementation(() =>
-      Promise.resolve({ data: [], error: null }) as unknown as ReturnType<typeof supabase.rpc>
-    );
-
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        order: vi.fn().mockReturnValue({
-          limit: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({
-              data: null,
-              error: null,
-            }),
-          }),
-        }),
-      }),
-    } as unknown as ReturnType<typeof supabase.from>);
-
+describe("RestoreChartEmbed Component - Disabled State", () => {
+  it("should render disabled message consistently", async () => {
     render(
       <MemoryRouter>
         <RestoreChartEmbed />
       </MemoryRouter>
     );
 
-    // The component should render if token matches
-    await waitFor(() => {
-      expect(screen.getByText("Restaurações de Documentos")).toBeInTheDocument();
-    });
+    // Component should always show disabled state
+    expect(screen.getByText(/Esta funcionalidade requer configuração de banco de dados adicional/i)).toBeInTheDocument();
   });
 });
