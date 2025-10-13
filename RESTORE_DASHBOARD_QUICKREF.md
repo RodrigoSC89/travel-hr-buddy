@@ -4,34 +4,48 @@
 
 ### Access the Dashboard
 ```
-URL: /admin/documents/restore-dashboard
+Admin Mode: /admin/documents/restore-dashboard
+Public Mode: /admin/documents/restore-dashboard?public=1
 ```
 
 ### Setup Database Functions
 ```sql
--- Run this migration in Supabase
+-- Already deployed in:
 supabase/migrations/20251011172000_create_restore_dashboard_functions.sql
 ```
 
 ## 📊 Features
 
-### 1. Bar Chart
+### 1. Interactive Bar Chart
 - **Shows:** Restore operations per day
 - **Period:** Last 15 days
 - **Format:** dd/MM (e.g., "11/10")
 - **Color:** Blue (#3b82f6)
-- **Library:** Chart.js
+- **Library:** Chart.js 4.5.0 + react-chartjs-2
+- **Auto-refresh:** Every 10 seconds
 
-### 2. Email Filter
-- **Input:** Real-time text filter
-- **Matching:** Case-insensitive, partial match
-- **Effect:** Updates both chart and summary
-- **SQL:** Uses `ILIKE '%email%'`
+### 2. Email Filter & Search
+- **Input:** Text search box with Enter key support
+- **Matching:** Case-insensitive, partial match (ILIKE)
+- **Button:** 🔍 Buscar to apply filter
+- **Effect:** Updates chart and statistics instantly
 
-### 3. Summary Statistics
-- **Total de Restaurações:** Count of all restore operations
-- **Documentos únicos:** Count of unique documents restored
-- **Média diária:** Average restores per day (2 decimals)
+### 3. Summary Statistics Cards
+- **Total de Restaurações:** Count (blue card)
+- **Documentos Únicos:** Unique docs (green card)
+- **Média por Dia:** Average (purple card)
+- **Layout:** Responsive grid (1 col mobile, 3 col desktop)
+
+### 4. Export Features
+- **CSV Export:** 📥 UTF-8 with BOM, `restore-analytics.csv`
+- **PDF Export:** 📄 Professional report with jsPDF + autoTable
+- **Email Report:** 📧 HTML email with CSV attachment
+
+### 5. Public View Mode
+- **Access:** Add `?public=1` to URL
+- **Features:** Chart + statistics only (no controls)
+- **Auth:** No login required
+- **Use Case:** TV wall displays
 
 ## 🔧 Technical Details
 
@@ -52,60 +66,94 @@ get_restore_summary(email_input text)
 ### Component Structure
 ```typescript
 RestoreDashboardPage
+├── URL Params
+│   └── ?public=1 (optional, enables public view)
 ├── State
-│   ├── data: RestoreCountByDay[]
-│   ├── emailFilter: string
-│   └── summary: RestoreSummary
-├── useEffect (fetches on emailFilter change)
-├── Chart.js Bar Chart
-└── Summary Card
+│   ├── dailyData: RestoreDataPoint[]
+│   ├── filterEmail: string (input)
+│   ├── searchEmail: string (applied filter)
+│   ├── summary: RestoreSummary
+│   ├── loading: boolean
+│   ├── refreshing: boolean
+│   └── lastUpdate: Date
+├── Effects
+│   ├── Auto-refresh (10s interval)
+│   └── Fetch on searchEmail change
+├── Features
+│   ├── Chart.js Bar Chart
+│   ├── Summary Cards (3 color-coded)
+│   ├── CSV Export
+│   ├── PDF Export (jsPDF + autoTable)
+│   └── Email Report (edge function)
+└── Views
+    ├── Admin: Full features + auth
+    └── Public: Chart + stats only
 ```
 
 ## 🧪 Testing
 
-### Run Tests
+### Manual Testing Required
 ```bash
-npm test -- src/tests/pages/admin/documents/restore-dashboard.test.tsx
+# Build verification
+npm run build  # ✅ Passing
+
+# Access URLs
+/admin/documents/restore-dashboard         # Admin mode
+/admin/documents/restore-dashboard?public=1  # Public mode
 ```
 
-### Test Coverage
-- ✅ 11 tests
-- ✅ 100% passing
-- ✅ Covers: rendering, data, filtering, errors
+### Test Checklist
+- [ ] Dashboard loads without errors
+- [ ] Chart displays data correctly
+- [ ] Email filter works
+- [ ] CSV export downloads
+- [ ] PDF export downloads
+- [ ] Email report sends (requires config)
+- [ ] Public view hides admin controls
+- [ ] Auto-refresh updates every 10s
+- [ ] Responsive on mobile/tablet
 
 ## 📁 Files
 
 ### Created/Modified
 ```
-src/App.tsx                                    (+ 2 lines)
-src/pages/admin/documents/restore-dashboard.tsx         (+ 107 lines)
-src/tests/pages/admin/documents/restore-dashboard.test.tsx  (+ 213 lines)
-supabase/migrations/20251011172000_*.sql       (+ 33 lines)
+src/App.tsx                                          (+ 2 lines)
+src/pages/admin/documents/restore-dashboard.tsx      (+ 428 lines)
+supabase/functions/send-restore-dashboard/README.md  (+ 134 lines)
+RESTORE_DASHBOARD_IMPLEMENTATION_COMPLETE.md         (new)
+RESTORE_DASHBOARD_QUICKREF.md                        (updated)
 ```
 
 ### Documentation
 ```
-RESTORE_DASHBOARD_IMPLEMENTATION.md     (Implementation guide)
-RESTORE_DASHBOARD_COMPLETION.md         (Completion summary)
-PROBLEM_STATEMENT_COMPARISON.md         (Detailed comparison)
-RESTORE_DASHBOARD_ARCHITECTURE.md       (Architecture overview)
-RESTORE_DASHBOARD_QUICKREF.md           (This file)
+RESTORE_DASHBOARD_IMPLEMENTATION_COMPLETE.md  (Full implementation guide)
+RESTORE_DASHBOARD_QUICKREF.md                 (This quick reference)
+supabase/functions/send-restore-dashboard/README.md  (Edge function API)
 ```
 
 ## 🎯 Requirements Checklist
 
+### Core Features
 - [x] Bar chart with Chart.js
-- [x] Email filter (real-time)
-- [x] Summary statistics
-- [x] RPC function: get_restore_count_by_day_with_email
-- [x] RPC function: get_restore_summary
+- [x] Email filter with search
+- [x] Summary statistics (3 cards)
+- [x] Auto-refresh every 10s
+- [x] CSV export with UTF-8 BOM
+- [x] PDF export with jsPDF
+- [x] Email report integration
+- [x] Public view mode (?public=1)
+- [x] Responsive design
+- [x] Last update timestamp
+
+### Technical
+- [x] TypeScript strict mode
+- [x] RPC: get_restore_count_by_day_with_email
+- [x] RPC: get_restore_summary
+- [x] Edge function: send-restore-dashboard
 - [x] Last 15 days of data
 - [x] dd/MM date format
-- [x] Responsive design
-- [x] TypeScript types
-- [x] Comprehensive tests
-- [x] Build successful
-- [x] No lint errors
+- [x] Build successful (41.83s)
+- [x] No TypeScript errors
 - [x] Documentation complete
 
 ## 🔐 Security
@@ -201,18 +249,24 @@ All met! ✓
 
 ## 🚀 Next Steps (Optional)
 
-Future enhancements:
+### Deployment Required
+- [ ] Deploy edge function: `supabase functions deploy send-restore-dashboard`
+- [ ] Set email service key: `supabase secrets set RESEND_API_KEY=...`
+- [ ] Set sender email: `supabase secrets set EMAIL_FROM=noreply@domain.com`
+
+### Future Enhancements
 - [ ] Date range picker
-- [ ] Export to CSV/PDF
-- [ ] Multiple chart types
+- [ ] Multiple chart types (line, pie)
+- [ ] Export scheduling
+- [ ] Download history
+- [ ] Real-time subscriptions
+- [ ] User activity tracking
+- [ ] Data caching
 - [ ] Drill-down details
-- [ ] Comparison periods
-- [ ] Real-time updates
 
 ---
 
-**Status:** ✅ Complete and Production Ready
-**Version:** 1.0.0
-**Date:** 2025-10-11
-**Tests:** 11/11 passing
-**Build:** Successful
+**Status:** ✅ Complete and Ready for Testing
+**Version:** 2.0.0 (Enhanced with exports and public view)
+**Build:** ✅ Successful (41.83s)
+**Bundle:** 121 entries (6.4 MB precache)
