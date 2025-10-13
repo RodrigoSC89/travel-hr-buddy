@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Loader2, ArrowLeft, RotateCcw } from "lucide-react";
+import { Loader2, ArrowLeft, RotateCcw, Search, Calendar, X } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface DocumentVersion {
@@ -27,6 +29,8 @@ export default function DocumentHistoryPage() {
   const [versions, setVersions] = useState<DocumentVersion[]>([]);
   const [loading, setLoading] = useState(true);
   const [restoring, setRestoring] = useState<string | null>(null);
+  const [emailFilter, setEmailFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
 
   useEffect(() => {
     if (!id) return;
@@ -110,6 +114,27 @@ export default function DocumentHistoryPage() {
     }
   };
 
+  // Client-side filtering with memoization for performance
+  const filteredVersions = useMemo(() => {
+    return versions.filter((version) => {
+      // Email filter: case-insensitive partial matching
+      const matchesEmail = emailFilter.trim() === "" ||
+        version.author_email?.toLowerCase().includes(emailFilter.toLowerCase());
+
+      // Date filter: show versions created on or after the selected date
+      const matchesDate = dateFilter === "" ||
+        new Date(version.created_at) >= new Date(dateFilter);
+
+      // Both filters must match (AND logic)
+      return matchesEmail && matchesDate;
+    });
+  }, [versions, emailFilter, dateFilter]);
+
+  const clearFilters = () => {
+    setEmailFilter("");
+    setDateFilter("");
+  };
+
   if (loading) {
     return (
       <RoleBasedAccess roles={["admin", "hr_manager"]}>
@@ -138,75 +163,145 @@ export default function DocumentHistoryPage() {
           <h1 className="text-2xl font-bold">📜 Histórico Completo do Documento</h1>
         </div>
 
+        {/* Advanced Filtering Section */}
         <Card>
           <CardHeader>
-            <CardTitle>
-              {versions.length === 0
-                ? "Nenhuma versão encontrada"
-                : `${versions.length} versão(ões) disponível(is)`}
+            <CardTitle className="flex items-center gap-2">
+              <Search className="w-5 h-5" />
+              🔍 Filtros Avançados
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {versions.length === 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Email Filter */}
+              <div className="space-y-2">
+                <Label htmlFor="email-filter" className="flex items-center gap-2">
+                  📧 Filtrar por Email do Autor
+                </Label>
+                <Input
+                  id="email-filter"
+                  type="text"
+                  placeholder="Digite o email do autor..."
+                  value={emailFilter}
+                  onChange={(e) => setEmailFilter(e.target.value)}
+                />
+              </div>
+
+              {/* Date Filter */}
+              <div className="space-y-2">
+                <Label htmlFor="date-filter" className="flex items-center gap-2">
+                  📅 Filtrar por Data (a partir de)
+                </Label>
+                <Input
+                  id="date-filter"
+                  type="date"
+                  value={dateFilter}
+                  onChange={(e) => setDateFilter(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Filter Status and Clear Button */}
+            {(emailFilter || dateFilter) && (
+              <div className="mt-4 flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">
+                  {filteredVersions.length === versions.length
+                    ? `Mostrando todas as ${versions.length} versão(ões)`
+                    : `Mostrando ${filteredVersions.length} de ${versions.length} versão(ões)`}
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearFilters}
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  Limpar Filtros
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              {filteredVersions.length === 0
+                ? "Nenhuma versão encontrada"
+                : `${filteredVersions.length} versão(ões) disponível(is)`}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {filteredVersions.length === 0 ? (
               <div className="text-center text-muted-foreground p-8">
-                <p>Este documento ainda não possui versões anteriores.</p>
+                <p>
+                  {versions.length === 0
+                    ? "Este documento ainda não possui versões anteriores."
+                    : "Nenhuma versão corresponde aos filtros aplicados."}
+                </p>
               </div>
             ) : (
-              <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
-                {versions.map((version, index) => (
-                  <Card key={version.id} className="border">
-                    <CardContent className="p-4">
-                      <div className="space-y-3">
-                        <div className="flex items-start justify-between">
-                          <div className="space-y-2 flex-1">
-                            <div className="flex items-center gap-2">
-                              <Badge variant={index === 0 ? "default" : "secondary"}>
-                                {index === 0 ? "Mais recente" : `Versão ${versions.length - index}`}
-                              </Badge>
-                              <span className="text-sm text-muted-foreground">
-                                {format(
-                                  new Date(version.created_at),
-                                  "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
-                                  { locale: ptBR }
-                                )}
-                              </span>
-                            </div>
-                            <p className="text-sm text-muted-foreground">
-                              <strong>Autor:</strong> {version.author_email}
-                            </p>
-                            <div className="border rounded-lg p-3 bg-muted/50">
+              <div className="space-y-4 max-h-[65vh] overflow-y-auto pr-2">
+                {filteredVersions.map((version, index) => {
+                  // Find original index for proper version numbering
+                  const originalIndex = versions.findIndex(v => v.id === version.id);
+                  return (
+                    <Card key={version.id} className="border">
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex items-start justify-between">
+                            <div className="space-y-2 flex-1">
+                              <div className="flex items-center gap-2">
+                                <Badge variant={originalIndex === 0 ? "default" : "secondary"}>
+                                  {originalIndex === 0 ? "⭐ Mais recente" : `Versão ${versions.length - originalIndex}`}
+                                </Badge>
+                                <span className="text-sm text-muted-foreground">
+                                  {format(
+                                    new Date(version.created_at),
+                                    "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
+                                    { locale: ptBR }
+                                  )}
+                                </span>
+                              </div>
                               <p className="text-sm text-muted-foreground">
-                                {version.content.substring(0, 200)}
-                                {version.content.length > 200 ? "..." : ""}
+                                <strong>📧 Autor:</strong> {version.author_email}
                               </p>
+                              <div className="border rounded-lg p-3 bg-muted/50">
+                                <p className="text-sm text-muted-foreground">
+                                  {version.content.substring(0, 200)}
+                                  {version.content.length > 200 ? "..." : ""}
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-2">
+                                  {version.content.length} caracteres
+                                </p>
+                              </div>
                             </div>
+                            {originalIndex !== 0 && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleRestore(version.id, version.content)}
+                                disabled={restoring !== null}
+                                className="ml-4 shrink-0"
+                              >
+                                {restoring === version.id ? (
+                                  <>
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                    Restaurando...
+                                  </>
+                                ) : (
+                                  <>
+                                    <RotateCcw className="w-4 h-4 mr-2" />
+                                    ♻️ Restaurar
+                                  </>
+                                )}
+                              </Button>
+                            )}
                           </div>
-                          {index !== 0 && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleRestore(version.id, version.content)}
-                              disabled={restoring !== null}
-                              className="ml-4 shrink-0"
-                            >
-                              {restoring === version.id ? (
-                                <>
-                                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                  Restaurando...
-                                </>
-                              ) : (
-                                <>
-                                  <RotateCcw className="w-4 h-4 mr-2" />
-                                  ♻️ Restaurar esta versão
-                                </>
-                              )}
-                            </Button>
-                          )}
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             )}
           </CardContent>
