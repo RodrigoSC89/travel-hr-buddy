@@ -42,6 +42,41 @@ async function logExecution(
 }
 
 /**
+ * Log execution to cron_execution_logs table (comprehensive monitoring)
+ */
+async function logCronExecution(
+  supabase: any,
+  status: 'success' | 'error' | 'warning' | 'critical',
+  message: string,
+  metadata: any = {},
+  error: any = null,
+  startTime?: number
+) {
+  try {
+    const executionData: any = {
+      function_name: 'send-daily-assistant-report',
+      status,
+      message,
+      metadata,
+      error_details: error ? { 
+        message: error.message, 
+        stack: error.stack,
+        details: error 
+      } : null,
+    };
+
+    if (startTime) {
+      executionData.execution_duration_ms = Date.now() - startTime;
+    }
+
+    await supabase.from("cron_execution_logs").insert(executionData);
+  } catch (logError) {
+    console.error("Failed to log to cron_execution_logs:", logError);
+    // Don't throw - logging failures shouldn't break the main flow
+  }
+}
+
+/**
  * Generate CSV content from assistant logs
  */
 function generateCSV(logs: AssistantLog[], profiles: any): string {
@@ -200,6 +235,8 @@ serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
   );
 
+  const startTime = Date.now();
+
   try {
     console.log("🚀 Starting daily assistant report generation...");
 
@@ -220,6 +257,9 @@ serve(async (req) => {
     if (logsError) {
       console.error("Error fetching logs:", logsError);
       await logExecution(supabase, "error", "Failed to fetch assistant logs", 0, logsError);
+      // ✅ Log Fetch Error to cron_execution_logs
+      await logCronExecution(supabase, "error", "Failed to fetch assistant logs", 
+        { step: "fetch_logs" }, logsError, startTime);
       throw new Error(`Failed to fetch logs: ${logsError.message}`);
     }
 
@@ -258,6 +298,10 @@ serve(async (req) => {
     } catch (emailError) {
       console.error("❌ Error sending email:", emailError);
       await logExecution(supabase, "error", "Failed to send email", logs?.length || 0, emailError);
+      // ✅ Email Send Error to cron_execution_logs
+      await logCronExecution(supabase, "error", "Failed to send email", 
+        { step: "send_email", logs_count: logs?.length || 0, recipient: ADMIN_EMAIL }, 
+        emailError, startTime);
       throw emailError;
     }
 
@@ -269,6 +313,18 @@ serve(async (req) => {
       "success", 
       `Report sent successfully to ${ADMIN_EMAIL}`,
       logs?.length || 0
+    );
+
+    // ✅ Success to cron_execution_logs
+    await logCronExecution(supabase, "success", 
+      `Report sent successfully to ${ADMIN_EMAIL}`,
+      { 
+        logs_count: logs?.length || 0, 
+        recipient: ADMIN_EMAIL,
+        email_service: RESEND_API_KEY ? 'resend' : 'sendgrid'
+      },
+      null,
+      startTime
     );
 
     return new Response(
@@ -288,6 +344,10 @@ serve(async (req) => {
     
     // Log critical error
     await logExecution(supabase, "critical", "Critical error in function", 0, error);
+    
+    // ✅ Critical Error to cron_execution_logs
+    await logCronExecution(supabase, "critical", "Critical error in function",
+      { step: "general_exception" }, error, startTime);
     
     return new Response(
       JSON.stringify({

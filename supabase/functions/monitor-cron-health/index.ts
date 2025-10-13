@@ -47,7 +47,7 @@ serve(async (req) => {
       });
     }
 
-    // Status is 'error' - send alert email
+    // Status is 'warning' - send alert email
     console.log('⚠️ Cron failure detected, sending alert email...');
 
     const adminEmail = Deno.env.get('ADMIN_EMAIL') || 'admin@nautilus.ai';
