@@ -39,7 +39,7 @@ vi.mock("@/integrations/supabase/client", () => {
       eq: vi.fn().mockReturnThis(),
       gte: vi.fn().mockReturnThis(),
       lte: vi.fn().mockResolvedValue(mockData),
-      then: (onResolve: any) => Promise.resolve(mockData).then(onResolve),
+      then: (onResolve: (value: typeof mockData) => typeof mockData) => Promise.resolve(mockData).then(onResolve),
     };
     // Make it thenable so it can be awaited directly
     Object.assign(chain, Promise.resolve(mockData));
