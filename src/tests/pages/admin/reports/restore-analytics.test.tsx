@@ -109,4 +109,37 @@ describe("RestoreAnalyticsPage", () => {
       expect(screen.getByText(/Média por dia: 10/i)).toBeInTheDocument();
     });
   });
+
+  it("renders CSV export button", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreAnalyticsPage />
+      </MemoryRouter>
+    );
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /CSV/i })).toBeInTheDocument();
+    });
+  });
+
+  it("renders PDF export button", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreAnalyticsPage />
+      </MemoryRouter>
+    );
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /PDF/i })).toBeInTheDocument();
+    });
+  });
+
+  it("renders the chart section", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreAnalyticsPage />
+      </MemoryRouter>
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId("bar-chart")).toBeInTheDocument();
+    });
+  });
 });
