@@ -1,34 +1,15 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreReportLogsPage from "@/pages/admin/reports/logs";
 
-// Mock supabase
-vi.mock("@/integrations/supabase/client", () => ({
-  supabase: {
-    from: vi.fn(() => ({
-      select: vi.fn(() => ({
-        order: vi.fn(() => ({
-          then: vi.fn(),
-        })),
-      })),
-    })),
-  },
-}));
-
-// Mock toast
-vi.mock("@/hooks/use-toast", () => ({
-  toast: vi.fn(),
-  useToast: () => ({
-    toast: vi.fn(),
-  }),
-}));
-
+/**
+ * RestoreReportLogsPage Tests
+ * 
+ * Tests the disabled state of the Restore Report Logs page.
+ * Component is disabled because the required database table doesn't exist yet.
+ */
 describe("RestoreReportLogsPage Component", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render the page title", () => {
     render(
       <MemoryRouter>
@@ -73,5 +54,17 @@ describe("RestoreReportLogsPage Component", () => {
     expect(screen.getByText((content) =>
       content.includes("restore_report_logs")
     )).toBeInTheDocument();
+  });
+
+  it("should render alert icon", () => {
+    render(
+      <MemoryRouter>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
+
+    // Verify alert component is rendered
+    const alert = screen.getByRole("alert");
+    expect(alert).toBeInTheDocument();
   });
 });
