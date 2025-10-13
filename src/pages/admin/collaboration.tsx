@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Comment {
@@ -27,6 +27,7 @@ export default function CollaborationPage() {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   async function fetchComments() {
     try {
@@ -47,12 +48,37 @@ export default function CollaborationPage() {
       });
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }
 
   useEffect(() => {
     fetchComments();
+
+    // Set up real-time subscription
+    const channel = supabase
+      .channel("colab-comments-changes")
+      .on("postgres_changes", {
+        event: "*",
+        schema: "public",
+        table: "colab_comments"
+      }, (payload) => {
+        console.log("Real-time update received:", payload);
+        // Refetch comments when any change occurs
+        fetchComments();
+      })
+      .subscribe();
+
+    // Cleanup subscription on unmount
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchComments();
+  };
 
   async function submitComment() {
     if (!comment.trim()) return;
@@ -130,7 +156,19 @@ export default function CollaborationPage() {
       {/* Comments List */}
       <Card>
         <CardHeader>
-          <CardTitle>Comentários da Equipe</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Comentários da Equipe</CardTitle>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefresh}
+              disabled={refreshing || loading}
+              className="gap-2"
+            >
+              <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+              Atualizar
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[60vh]">
