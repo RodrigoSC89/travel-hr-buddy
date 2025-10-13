@@ -16,12 +16,16 @@ import {
   User,
   X,
   FileText,
-  Mail
+  Mail,
+  Link,
+  QrCode
 } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+import { QRCodeSVG } from "qrcode.react";
+import { generateAuditToken } from "@/utils/auditToken";
 
 interface AssistantLog {
   id: string;
@@ -44,6 +48,10 @@ export default function AssistantLogsPage() {
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  
+  // Public link generator state
+  const [publicUrl, setPublicUrl] = useState("");
+  const [showQRCode, setShowQRCode] = useState(false);
 
   useEffect(() => {
     fetchLogs();
@@ -253,6 +261,26 @@ export default function AssistantLogsPage() {
     }
   }
 
+  async function handleGeneratePublicLink() {
+    try {
+      // Get current user email from Supabase session
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.user?.email) {
+        alert("❌ Você precisa estar autenticado para gerar links públicos");
+        return;
+      }
+
+      const token = generateAuditToken(session.user.email);
+      const fullUrl = `${window.location.origin}/admin/reports/logs?public=1&token=${token}`;
+      setPublicUrl(fullUrl);
+      setShowQRCode(true);
+    } catch (error) {
+      console.error("Error generating public link:", error);
+      alert("❌ Erro ao gerar link público");
+    }
+  }
+
   // Pagination
   const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -371,6 +399,75 @@ export default function AssistantLogsPage() {
                 Limpar Filtros
               </Button>
             )}
+          </CardContent>
+        </Card>
+
+        {/* Public Link Generator with QR Code */}
+        <Card className="border-2 border-blue-200 bg-blue-50/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Link className="w-5 h-5 text-blue-600" />
+              Link Público com QR Code
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-4">
+              <Button 
+                onClick={handleGeneratePublicLink} 
+                variant="default"
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                <QrCode className="w-4 h-4 mr-2" />
+                Gerar Link Público
+              </Button>
+              {publicUrl && (
+                <Button
+                  onClick={() => setShowQRCode(!showQRCode)}
+                  variant="outline"
+                >
+                  {showQRCode ? "Ocultar QR Code" : "Mostrar QR Code"}
+                </Button>
+              )}
+            </div>
+            
+            {publicUrl && (
+              <div className="space-y-4 bg-white p-4 rounded-lg border">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">URL Gerado:</label>
+                  <div className="flex gap-2">
+                    <Input 
+                      value={publicUrl} 
+                      readOnly 
+                      className="font-mono text-xs"
+                    />
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        navigator.clipboard.writeText(publicUrl);
+                        alert("✅ Link copiado para a área de transferência!");
+                      }}
+                    >
+                      Copiar
+                    </Button>
+                  </div>
+                </div>
+                
+                {showQRCode && (
+                  <div className="flex flex-col items-center gap-2 pt-4">
+                    <QRCodeSVG value={publicUrl} size={200} level="H" />
+                    <p className="text-xs text-muted-foreground text-center">
+                      Escaneie este QR Code para acessar o relatório
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+            
+            <p className="text-xs text-muted-foreground">
+              💡 <strong>Dica:</strong> Use este link público para compartilhar o relatório de logs 
+              com monitores, TVs ou acesso externo. O token expira em 7 dias.
+            </p>
           </CardContent>
         </Card>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,12 +15,14 @@ import {
   Clock, 
   AlertCircle,
   Download,
-  FileDown 
+  FileDown,
+  Eye
 } from "lucide-react";
 import { format } from "date-fns";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { verifyAuditToken } from "@/utils/auditToken";
 
 interface RestoreReportLog {
   id: string;
@@ -37,9 +39,12 @@ interface RestoreReportLog {
  */
 export default function RestoreReportLogsPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [logs, setLogs] = useState<RestoreReportLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isPublicView, setIsPublicView] = useState(false);
+  const [authorizedEmail, setAuthorizedEmail] = useState<string | null>(null);
   
   // Filter states
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -47,8 +52,23 @@ export default function RestoreReportLogsPage() {
   const [endDate, setEndDate] = useState<string>("");
 
   useEffect(() => {
+    // Check if this is a public view with token
+    const publicParam = searchParams.get("public");
+    const token = searchParams.get("token");
+    
+    if (publicParam === "1" && token) {
+      const email = verifyAuditToken(token);
+      if (email) {
+        setIsPublicView(true);
+        setAuthorizedEmail(email);
+      } else {
+        setError("Token inválido ou expirado");
+        return;
+      }
+    }
+    
     fetchLogs();
-  }, []);
+  }, [searchParams]);
 
   async function fetchLogs() {
     setLoading(true);
@@ -196,17 +216,29 @@ export default function RestoreReportLogsPage() {
   return (
     <div className="min-h-screen p-6 bg-gray-50">
       <div className="max-w-6xl mx-auto space-y-4">
+        {/* Public View Badge */}
+        {isPublicView && authorizedEmail && (
+          <Alert className="border-blue-200 bg-blue-50">
+            <Eye className="h-4 w-4 text-blue-600" />
+            <AlertDescription>
+              <strong>Modo de Visualização Pública</strong> • Acesso autorizado para {authorizedEmail}
+            </AlertDescription>
+          </Alert>
+        )}
+        
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate("/admin")}
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar
-            </Button>
+            {!isPublicView && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/admin")}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar
+              </Button>
+            )}
             <div>
               <h1 className="text-2xl font-bold">🧠 Auditoria de Relatórios Enviados</h1>
               <p className="text-sm text-muted-foreground">
