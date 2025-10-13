@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,9 +37,16 @@ interface RestoreReportLog {
  */
 export default function RestoreReportLogsPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [logs, setLogs] = useState<RestoreReportLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Check if in public mode
+  const isPublic = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get("public") === "1";
+  }, [location.search]);
   
   // Filter states
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -215,81 +222,87 @@ export default function RestoreReportLogsPage() {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button 
-              onClick={exportToCSV} 
-              variant="outline" 
-              size="sm"
-              disabled={logs.length === 0}
-            >
-              <Download className="w-4 h-4 mr-2" />
-              CSV
-            </Button>
-            <Button 
-              onClick={exportToPDF} 
-              variant="outline" 
-              size="sm"
-              disabled={logs.length === 0}
-            >
-              <FileDown className="w-4 h-4 mr-2" />
-              PDF
-            </Button>
+            {!isPublic && (
+              <>
+                <Button 
+                  onClick={exportToCSV} 
+                  variant="outline" 
+                  size="sm"
+                  disabled={logs.length === 0}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  CSV
+                </Button>
+                <Button 
+                  onClick={exportToPDF} 
+                  variant="outline" 
+                  size="sm"
+                  disabled={logs.length === 0}
+                >
+                  <FileDown className="w-4 h-4 mr-2" />
+                  PDF
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
         {/* Filters */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Status</label>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Todos" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="success">Sucesso</SelectItem>
-                    <SelectItem value="error">Erro</SelectItem>
-                    <SelectItem value="pending">Pendente</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Data Inicial</label>
-                <Input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  placeholder="Selecione"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Data Final</label>
-                <Input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  placeholder="Selecione"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium invisible">Actions</label>
-                <div className="flex gap-2">
-                  <Button onClick={handleApplyFilters} className="flex-1">
-                    Buscar
-                  </Button>
-                  <Button 
-                    onClick={handleClearFilters} 
-                    variant="outline"
-                    className="flex-1"
-                  >
-                    Limpar
-                  </Button>
+        {!isPublic && (
+          <Card>
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Status</label>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Todos" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos</SelectItem>
+                      <SelectItem value="success">Sucesso</SelectItem>
+                      <SelectItem value="error">Erro</SelectItem>
+                      <SelectItem value="pending">Pendente</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Data Inicial</label>
+                  <Input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    placeholder="Selecione"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Data Final</label>
+                  <Input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    placeholder="Selecione"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium invisible">Actions</label>
+                  <div className="flex gap-2">
+                    <Button onClick={handleApplyFilters} className="flex-1">
+                      Buscar
+                    </Button>
+                    <Button 
+                      onClick={handleClearFilters} 
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      Limpar
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -414,6 +427,13 @@ export default function RestoreReportLogsPage() {
             )}
           </CardContent>
         </Card>
+
+        {/* Public Mode Notice */}
+        {isPublic && (
+          <p className="text-muted-foreground text-xs text-center mt-4">
+            🔒 Visualização pública apenas para leitura.
+          </p>
+        )}
       </div>
     </div>
   );

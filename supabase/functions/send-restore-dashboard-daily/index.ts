@@ -204,8 +204,43 @@ serve(async (req) => {
   } catch (error) {
     console.error("❌ Error in send-restore-dashboard-daily:", error);
     
+    const status = 'error';
+    const message = 'Falha ao enviar o relatório automático.';
+    const errorDetails = error instanceof Error ? error.message : 'Erro desconhecido';
+    
+    // ✅ Send notification to administrator
+    try {
+      const resendApiKey = Deno.env.get("RESEND_API_KEY");
+      const adminEmail = Deno.env.get("REPORT_ADMIN_EMAIL") || Deno.env.get("ADMIN_EMAIL");
+      
+      if (resendApiKey && adminEmail) {
+        const response = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: Deno.env.get("EMAIL_FROM") || "alerta@empresa.com",
+            to: adminEmail,
+            subject: '🚨 Falha no Envio de Relatório Diário',
+            text: `Erro: ${errorDetails}`,
+          }),
+        });
+        
+        if (response.ok) {
+          console.log("✅ Error notification email sent to admin");
+        } else {
+          console.error("Failed to send error notification email:", await response.text());
+        }
+      }
+    } catch (emailError) {
+      console.error("Failed to send error notification:", emailError);
+      // Don't fail the function if email notification fails
+    }
+    
     // Log critical error
-    await logExecution(supabase, "critical", "Critical error in function", error);
+    await logExecution(supabase, status, message, errorDetails);
     
     return new Response(
       JSON.stringify({
