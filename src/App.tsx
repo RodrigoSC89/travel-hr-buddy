@@ -62,6 +62,7 @@ const ExecutionLogs = React.lazy(() => import("./pages/admin/automation/executio
 const RestoreReportLogs = React.lazy(() => import("./pages/admin/reports/logs"));
 const AssistantReportLogs = React.lazy(() => import("./pages/admin/reports/assistant"));
 const RestoreAnalytics = React.lazy(() => import("./pages/admin/reports/restore-analytics"));
+const RestoreDashboard = React.lazy(() => import("./pages/admin/documents/restore-dashboard"));
 const AdminDashboard = React.lazy(() => import("./pages/admin/dashboard"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
@@ -150,6 +151,7 @@ function App() {
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
                       <Route path="/admin/documents" element={<DocumentList />} />
                       <Route path="/admin/documents/ai" element={<DocumentsAI />} />
+                      <Route path="/admin/documents/restore-dashboard" element={<RestoreDashboard />} />
                       <Route path="/admin/documents/editor" element={<DocumentEditorPage />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
