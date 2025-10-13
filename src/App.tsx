@@ -65,6 +65,8 @@ const RestoreReportLogs = React.lazy(() => import("./pages/admin/reports/logs"))
 const AssistantReportLogs = React.lazy(() => import("./pages/admin/reports/assistant"));
 const RestoreAnalytics = React.lazy(() => import("./pages/admin/reports/restore-analytics"));
 const AdminDashboard = React.lazy(() => import("./pages/admin/dashboard"));
+const PersonalRestoreDashboard = React.lazy(() => import("./pages/admin/restore/personal"));
+const AssistantHistory = React.lazy(() => import("./pages/admin/assistant/history"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
@@ -149,6 +151,7 @@ function App() {
                       <Route path="/admin/checklists/dashboard" element={<AdminChecklistsDashboard />} />
                       <Route path="/admin/assistant" element={<Assistant />} />
                       <Route path="/admin/assistant/logs" element={<AssistantLogs />} />
+                      <Route path="/admin/assistant/history" element={<AssistantHistory />} />
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
                       <Route path="/admin/documents" element={<DocumentList />} />
                       <Route path="/admin/documents/ai" element={<DocumentsAI />} />
@@ -158,6 +161,7 @@ function App() {
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />
                       <Route path="/admin/documents/restore-dashboard" element={<RestoreDashboard />} />
+                      <Route path="/admin/restore/personal" element={<PersonalRestoreDashboard />} />
                       <Route path="/admin/automation/execution-logs" element={<ExecutionLogs />} />
                       <Route path="/admin/reports/logs" element={<RestoreReportLogs />} />
                       <Route path="/admin/reports/assistant" element={<AssistantReportLogs />} />
