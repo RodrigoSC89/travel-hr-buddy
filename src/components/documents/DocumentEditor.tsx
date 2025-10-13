@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
@@ -16,6 +16,7 @@ export function DocumentEditor({ documentId }: DocumentEditorProps) {
   const { profile } = useAuthProfile();
   const ydoc = useRef<YDoc>(new YDoc());
   const provider = useRef<WebrtcProvider | null>(null);
+  const [providerReady, setProviderReady] = useState(false);
 
   useEffect(() => {
     // Initialize WebRTC provider for peer-to-peer sync
@@ -24,8 +25,12 @@ export function DocumentEditor({ documentId }: DocumentEditorProps) {
       signaling: ["wss://signaling.yjs.dev"],
     });
 
+    // Wait for provider to be ready
+    setProviderReady(true);
+
     return () => {
       provider.current?.destroy();
+      setProviderReady(false);
     };
   }, [documentId]);
 
@@ -37,16 +42,18 @@ export function DocumentEditor({ documentId }: DocumentEditorProps) {
       Collaboration.configure({
         document: ydoc.current,
       }),
-      CollaborationCursor.configure({
-        provider: provider.current,
-        user: {
-          name: profile?.email || "Anonymous User",
-          color: `#${Math.floor(Math.random() * 16777215).toString(16)}`, // Random color
-        },
-      }),
+      ...(providerReady && provider.current ? [
+        CollaborationCursor.configure({
+          provider: provider.current,
+          user: {
+            name: profile?.email || "Anonymous User",
+            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`, // Random color
+          },
+        })
+      ] : []),
     ],
     content: "",
-  });
+  }, [providerReady]);
 
   const clearContent = () => {
     editor?.commands.clearContent();
