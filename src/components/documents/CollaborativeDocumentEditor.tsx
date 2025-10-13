@@ -1,17 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import { Doc as YDoc } from "yjs";
 import { WebrtcProvider } from "y-webrtc";
+import { debounce } from "lodash";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
-import { FileText, Users } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
+import { FileText, Users, Save } from "lucide-react";
 
 interface CollaborativeDocumentEditorProps {
   documentId: string;
@@ -25,6 +28,8 @@ export function CollaborativeDocumentEditor({
   const { user } = useAuth();
   const [title, setTitle] = useState(initialTitle);
   const [connectedUsers, setConnectedUsers] = useState(0);
+  const [saveCount, setSaveCount] = useState(0);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const ydoc = useRef<YDoc | null>(null);
   const provider = useRef<WebrtcProvider | null>(null);
 
@@ -32,6 +37,40 @@ export function CollaborativeDocumentEditor({
   const randomColor = useRef(
     `#${Math.floor(Math.random() * 16777215).toString(16)}`
   );
+
+  // Save content to database
+  const saveToDatabase = useCallback(async (content: string) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('documents')
+        .upsert({
+          id: documentId,
+          content,
+          updated_by: user.id,
+        });
+
+      if (error) throw error;
+
+      setSaveCount(prev => prev + 1);
+      setLastSaved(new Date());
+    } catch (error) {
+      console.error('Error saving document:', error);
+      toast({
+        title: "Error saving document",
+        description: "Failed to save document to database",
+        variant: "destructive",
+      });
+    }
+  }, [documentId, user]);
+
+  // Debounced save function - 3 seconds delay
+  const debouncedSave = useRef(
+    debounce((content: string) => {
+      saveToDatabase(content);
+    }, 3000)
+  ).current;
 
   const editor = useEditor({
     extensions: [
@@ -48,6 +87,11 @@ export function CollaborativeDocumentEditor({
       }),
     ],
     content: "<p>Start typing to collaborate in real-time...</p>",
+    onUpdate: ({ editor }) => {
+      // Trigger debounced save on content change
+      const content = editor.getHTML();
+      debouncedSave(content);
+    },
   });
 
   useEffect(() => {
@@ -80,6 +124,9 @@ export function CollaborativeDocumentEditor({
 
     // Cleanup
     return () => {
+      // Cancel any pending debounced saves
+      debouncedSave.cancel();
+      
       if (provider.current) {
         provider.current.destroy();
       }
@@ -87,7 +134,7 @@ export function CollaborativeDocumentEditor({
         ydoc.current.destroy();
       }
     };
-  }, [documentId]);
+  }, [documentId, debouncedSave]);
 
   const handleClear = () => {
     if (editor) {
@@ -108,9 +155,17 @@ export function CollaborativeDocumentEditor({
               placeholder="Document Title"
             />
           </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Users className="h-4 w-4" />
-            <span>{connectedUsers + 1} online</span>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              <span>{connectedUsers + 1} online</span>
+            </div>
+            {lastSaved && (
+              <div className="flex items-center gap-2">
+                <Save className="h-4 w-4" />
+                <span>Saved {lastSaved.toLocaleTimeString()}</span>
+              </div>
+            )}
           </div>
         </CardTitle>
       </CardHeader>
@@ -129,6 +184,7 @@ export function CollaborativeDocumentEditor({
           <p>💡 This is a real-time collaborative editor</p>
           <p>👥 Share the document ID with others to collaborate</p>
           <p>🔄 Changes sync automatically across all connected users</p>
+          <p>💾 Auto-save: {saveCount} saves | Last saved: {lastSaved ? lastSaved.toLocaleTimeString() : 'Not saved yet'}</p>
         </div>
       </CardContent>
     </Card>
