@@ -203,5 +203,116 @@ describe("RestoreReportLogsPage Component", () => {
       expect(mockSelect).toHaveBeenCalled();
     });
   });
+
+  describe("Public Mode Functionality", () => {
+    it("should hide back button in public mode", async () => {
+      render(
+        <MemoryRouter initialEntries={["/admin/reports/logs?public=1"]}>
+          <RestoreReportLogsPage />
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByText("Voltar")).not.toBeInTheDocument();
+      });
+    });
+
+    it("should hide export buttons in public mode", async () => {
+      render(
+        <MemoryRouter initialEntries={["/admin/reports/logs?public=1"]}>
+          <RestoreReportLogsPage />
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByText("CSV")).not.toBeInTheDocument();
+        expect(screen.queryByText("PDF")).not.toBeInTheDocument();
+        expect(screen.queryByText("Atualizar")).not.toBeInTheDocument();
+      });
+    });
+
+    it("should hide filter controls in public mode", async () => {
+      render(
+        <MemoryRouter initialEntries={["/admin/reports/logs?public=1"]}>
+          <RestoreReportLogsPage />
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByText("Status")).not.toBeInTheDocument();
+        expect(screen.queryByText("Data Inicial")).not.toBeInTheDocument();
+        expect(screen.queryByText("Data Final")).not.toBeInTheDocument();
+        expect(screen.queryByText("Buscar")).not.toBeInTheDocument();
+        expect(screen.queryByText("Limpar")).not.toBeInTheDocument();
+      });
+    });
+
+    it("should display public mode indicator in public mode", async () => {
+      render(
+        <MemoryRouter initialEntries={["/admin/reports/logs?public=1"]}>
+          <RestoreReportLogsPage />
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText("Modo Somente Leitura (Visualização Pública)")).toBeInTheDocument();
+      });
+    });
+
+    it("should show Eye icon in title when in public mode", async () => {
+      const { container } = render(
+        <MemoryRouter initialEntries={["/admin/reports/logs?public=1"]}>
+          <RestoreReportLogsPage />
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        const title = screen.getByText("🧠 Auditoria de Relatórios Enviados");
+        expect(title).toBeInTheDocument();
+        // Eye icon should be inline with the title
+        const eyeIcon = container.querySelector(".lucide-eye");
+        expect(eyeIcon).toBeInTheDocument();
+      });
+    });
+
+    it("should still display summary cards in public mode", async () => {
+      render(
+        <MemoryRouter initialEntries={["/admin/reports/logs?public=1"]}>
+          <RestoreReportLogsPage />
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText("Total de Execuções")).toBeInTheDocument();
+        expect(screen.getByText("Sucessos")).toBeInTheDocument();
+        expect(screen.getByText("Erros")).toBeInTheDocument();
+      });
+    });
+
+    it("should still display logs in public mode", async () => {
+      render(
+        <MemoryRouter initialEntries={["/admin/reports/logs?public=1"]}>
+          <RestoreReportLogsPage />
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText("Histórico de Execuções")).toBeInTheDocument();
+        expect(screen.getByText("Relatório enviado com sucesso.")).toBeInTheDocument();
+      });
+    });
+
+    it("should not display public mode indicator in normal mode", async () => {
+      render(
+        <MemoryRouter initialEntries={["/admin/reports/logs"]}>
+          <RestoreReportLogsPage />
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByText("Modo Somente Leitura (Visualização Pública)")).not.toBeInTheDocument();
+      });
+    });
+  });
 });
 
