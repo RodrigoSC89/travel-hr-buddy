@@ -10,6 +10,9 @@ verify_jwt = false
 [functions.monitor-cron-health]
 verify_jwt = false
 
+[functions.send-restore-dashboard-daily]
+verify_jwt = false
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)
@@ -32,3 +35,9 @@ name = "monitor-cron-health"
 function_name = "monitor-cron-health"
 schedule = "0 */12 * * *"  # Every 12 hours
 description = "Monitor cron job execution health and send alerts if failures detected"
+
+[[edge_runtime.cron]]
+name = "send-restore-dashboard-daily"
+function_name = "send-restore-dashboard-daily"
+schedule = "0 8 * * *"  # Every day at 08:00 UTC (5h BRT)
+description = "Send daily restore dashboard report via email with PDF attachment"
