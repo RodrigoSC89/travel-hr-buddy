@@ -21,6 +21,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 // Register Chart.js components
 ChartJS.register(
@@ -50,9 +52,15 @@ export default function RestoreAnalyticsPage() {
   const [summary, setSummary] = useState<RestoreSummary | null>(null);
   const [dailyData, setDailyData] = useState<RestoreDataPoint[]>([]);
 
+  // Auto-refresh every 10 seconds for TV Wall mode
   useEffect(() => {
     fetchStats();
-  }, []);
+    const interval = setInterval(() => {
+      fetchStats();
+    }, 10000); // 10 seconds
+
+    return () => clearInterval(interval);
+  }, [filterEmail]);
 
   async function fetchStats() {
     setLoading(true);
@@ -101,6 +109,118 @@ export default function RestoreAnalyticsPage() {
     }
   }
 
+  function exportToCSV() {
+    if (dailyData.length === 0) {
+      toast({
+        title: "Sem dados",
+        description: "Não há dados para exportar.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Create CSV header
+      const csvHeader = "Data,Restaurações\n";
+      
+      // Create CSV rows
+      const csvRows = dailyData
+        .map((d) => `${format(new Date(d.day), "dd/MM/yyyy")},${d.count}`)
+        .join("\n");
+      
+      const csvContent = csvHeader + csvRows;
+      
+      // Create blob with UTF-8 BOM for proper encoding
+      const BOM = "\uFEFF";
+      const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
+      
+      // Download file
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `restauracoes_${format(new Date(), "yyyy-MM-dd")}.csv`);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast({
+        title: "CSV exportado",
+        description: "O arquivo CSV foi baixado com sucesso.",
+      });
+    } catch (error) {
+      console.error("Error exporting CSV:", error);
+      toast({
+        title: "Erro ao exportar CSV",
+        description: "Não foi possível exportar o arquivo CSV.",
+        variant: "destructive",
+      });
+    }
+  }
+
+  function exportToPDF() {
+    if (dailyData.length === 0) {
+      toast({
+        title: "Sem dados",
+        description: "Não há dados para exportar.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const doc = new jsPDF();
+      
+      // Add title
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text("Relatório de Restaurações", 14, 15);
+      
+      // Add summary statistics
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      let yPosition = 25;
+      
+      if (summary) {
+        doc.text(`Total de restaurações: ${summary.total}`, 14, yPosition);
+        yPosition += 7;
+        doc.text(`Documentos únicos restaurados: ${summary.unique_docs}`, 14, yPosition);
+        yPosition += 7;
+        doc.text(`Média por dia: ${summary.avg_per_day.toFixed(2)}`, 14, yPosition);
+        yPosition += 10;
+      }
+      
+      // Add table with daily data
+      const tableData = dailyData.map((d) => [
+        format(new Date(d.day), "dd/MM/yyyy"),
+        d.count.toString(),
+      ]);
+      
+      autoTable(doc, {
+        startY: yPosition,
+        head: [["Data", "Restaurações"]],
+        body: tableData,
+        theme: "grid",
+        headStyles: { fillColor: [59, 130, 246] },
+      });
+      
+      // Save PDF
+      doc.save(`restauracoes_${format(new Date(), "yyyy-MM-dd")}.pdf`);
+      
+      toast({
+        title: "PDF exportado",
+        description: "O arquivo PDF foi baixado com sucesso.",
+      });
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      toast({
+        title: "Erro ao exportar PDF",
+        description: "Não foi possível exportar o arquivo PDF.",
+        variant: "destructive",
+      });
+    }
+  }
+
   const chartData = {
     labels: dailyData.map((d) => format(new Date(d.day), "dd/MM")),
     datasets: [
@@ -135,6 +255,12 @@ export default function RestoreAnalyticsPage() {
         />
         <Button onClick={fetchStats} disabled={loading}>
           🔍 Buscar
+        </Button>
+        <Button onClick={exportToCSV} disabled={loading || dailyData.length === 0} variant="outline">
+          📤 CSV
+        </Button>
+        <Button onClick={exportToPDF} disabled={loading || dailyData.length === 0} variant="outline">
+          📄 PDF
         </Button>
       </div>
 
