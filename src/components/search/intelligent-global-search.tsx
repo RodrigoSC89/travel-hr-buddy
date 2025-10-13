@@ -222,8 +222,8 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
       try {
         setRecentSearches(JSON.parse(saved));
       } catch (error) {
-      console.error("Error in intelligent-global-search.tsx:", error);
-    }
+        console.error("Error in intelligent-global-search.tsx:", error);
+      }
     }
   }, []);
 

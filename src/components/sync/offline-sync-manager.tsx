@@ -99,8 +99,8 @@ export const OfflineSyncManager: React.FC = () => {
           await simulateSyncAction(item);
           
         } catch (error) {
-      console.error("Error in offline-sync-manager.tsx:", error);
-    }
+          console.error("Error in offline-sync-manager.tsx:", error);
+        }
       }
 
       // Executar sync real
