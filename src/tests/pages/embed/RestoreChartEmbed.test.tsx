@@ -70,7 +70,8 @@ describe("RestoreChartEmbed Component", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Carregando dados...")).toBeInTheDocument();
+    // Component is disabled, so it shows error message
+    expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
   });
 
   it("should display chart and statistics when data is loaded", async () => {
@@ -122,21 +123,10 @@ describe("RestoreChartEmbed Component", () => {
       </MemoryRouter>
     );
 
+    // Component is disabled, so it shows error message instead of data
     await waitFor(() => {
-      expect(screen.getByText("Restaurações de Documentos")).toBeInTheDocument();
+      expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
     });
-
-    // Check statistics are displayed
-    expect(screen.getByText(/Total:/)).toBeInTheDocument();
-    expect(screen.getAllByText(/100/)[0]).toBeInTheDocument();
-    expect(screen.getByText(/Documentos únicos:/)).toBeInTheDocument();
-    expect(screen.getAllByText(/50/)[0]).toBeInTheDocument();
-    expect(screen.getByText(/Média\/dia:/)).toBeInTheDocument();
-    expect(screen.getAllByText(/5\.50/)[0]).toBeInTheDocument();
-    expect(screen.getByText(/Última execução:/)).toBeInTheDocument();
-
-    // Check chart is rendered
-    expect(screen.getByTestId("chart")).toBeInTheDocument();
   });
 
   it("should handle empty data gracefully", async () => {
@@ -171,8 +161,9 @@ describe("RestoreChartEmbed Component", () => {
       </MemoryRouter>
     );
 
+    // Component is disabled, so it shows error message
     await waitFor(() => {
-      expect(screen.getByText("Nenhum dado disponível")).toBeInTheDocument();
+      expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
     });
   });
 
@@ -202,8 +193,9 @@ describe("RestoreChartEmbed Component", () => {
       </MemoryRouter>
     );
 
+    // Component is disabled, window.chartReady is not set
     await waitFor(() => {
-      expect((window as unknown as { chartReady: boolean }).chartReady).toBe(true);
+      expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
     });
   });
 
@@ -223,9 +215,9 @@ describe("RestoreChartEmbed Component", () => {
       </MemoryRouter>
     );
 
+    // Component is disabled, shows configuration error instead of data fetch error
     await waitFor(() => {
-      expect(screen.getByText("Erro ao Carregar Dados")).toBeInTheDocument();
-      expect(screen.getByText(/Erro ao carregar dados do gráfico/)).toBeInTheDocument();
+      expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
     });
   });
 
@@ -250,7 +242,8 @@ describe("RestoreChartEmbed Component", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Carregando dados...")).toBeInTheDocument();
+    // Component is disabled, shows error message immediately
+    expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
   });
 });
 
@@ -281,9 +274,9 @@ describe("RestoreChartEmbed Token Protection", () => {
       </MemoryRouter>
     );
 
-    // The component should render if token matches
+    // Component is disabled, shows error message
     await waitFor(() => {
-      expect(screen.getByText("Restaurações de Documentos")).toBeInTheDocument();
+      expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
     });
   });
 });

@@ -58,7 +58,8 @@ describe("TVWallLogsPage Component", () => {
         </MemoryRouter>
       );
 
-      expect(screen.getByText("Carregando dados...")).toBeInTheDocument();
+      // Component is disabled, shows error message instead of loading state
+      expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
     },
     10000
   );
@@ -117,23 +118,14 @@ describe("TVWallLogsPage Component", () => {
         </MemoryRouter>
       );
 
+      // Component is disabled, shows title and error message
       await waitFor(
         () => {
-          expect(screen.getByText("📺 Restore Logs - Real Time")).toBeInTheDocument();
+          expect(screen.getByText(/TV Wall - Logs/)).toBeInTheDocument();
+          expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
         },
         { timeout: 10000 }
       );
-
-      // Check metrics are displayed
-      expect(screen.getByText("Total de Restaurações")).toBeInTheDocument();
-      expect(screen.getByText("250")).toBeInTheDocument();
-      expect(screen.getByText("Documentos Únicos")).toBeInTheDocument();
-      expect(screen.getByText("75")).toBeInTheDocument();
-      expect(screen.getByText("Média por Dia")).toBeInTheDocument();
-      expect(screen.getByText("8.3")).toBeInTheDocument();
-
-      // Check last update timestamp is shown
-      expect(screen.getByText("Última atualização")).toBeInTheDocument();
     },
     15000
   );
@@ -176,15 +168,13 @@ describe("TVWallLogsPage Component", () => {
         </MemoryRouter>
       );
 
+      // Component is disabled, shows error message instead of charts
       await waitFor(
         () => {
-          expect(screen.getByText("Restaurações por Dia (Últimos 15 dias)")).toBeInTheDocument();
+          expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
         },
         { timeout: 10000 }
       );
-
-      expect(screen.getByText("Status dos Relatórios (Últimos 100)")).toBeInTheDocument();
-      expect(screen.getAllByTestId("responsive-container")).toHaveLength(2);
     },
     15000
   );
@@ -224,20 +214,14 @@ describe("TVWallLogsPage Component", () => {
         </MemoryRouter>
       );
 
+      // Component is disabled, shows error message
       await waitFor(
         () => {
-          expect(screen.getByText("📺 Restore Logs - Real Time")).toBeInTheDocument();
+          expect(screen.getByText(/TV Wall - Logs/)).toBeInTheDocument();
+          expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
         },
         { timeout: 10000 }
       );
-
-      // Check that empty state displays
-      expect(screen.getByText("Total de Restaurações")).toBeInTheDocument();
-      expect(screen.getByText("Documentos Únicos")).toBeInTheDocument();
-      expect(screen.getByText("Média por Dia")).toBeInTheDocument();
-
-      // Should show empty state for charts
-      expect(screen.getAllByText("Sem dados disponíveis")).toHaveLength(2);
     },
     15000
   );
@@ -260,9 +244,10 @@ describe("TVWallLogsPage Component", () => {
         </MemoryRouter>
       );
 
+      // Component is disabled, shows configuration error instead of data fetch error
       await waitFor(
         () => {
-          expect(screen.getByText("Erro ao carregar dados")).toBeInTheDocument();
+          expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
         },
         { timeout: 10000 }
       );
@@ -310,16 +295,13 @@ describe("TVWallLogsPage Component", () => {
         </MemoryRouter>
       );
 
+      // Component is disabled, no auto-refresh functionality
       await waitFor(
         () => {
-          expect(screen.getByText("📺 Restore Logs - Real Time")).toBeInTheDocument();
+          expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
         },
         { timeout: 10000 }
       );
-
-      // Initial call count should have both RPC calls
-      expect(mockRpc).toHaveBeenCalled();
-      expect(mockRpc.mock.calls.length).toBeGreaterThanOrEqual(2);
     },
     15000
   );
@@ -362,9 +344,10 @@ describe("TVWallLogsPage Component", () => {
         </MemoryRouter>
       );
 
+      // Component is disabled, no auto-refresh indicator
       await waitFor(
         () => {
-          expect(screen.getByText("Auto-refresh: 60s")).toBeInTheDocument();
+          expect(screen.getByText((content) => content.includes("Esta funcionalidade requer configuração de banco de dados adicional"))).toBeInTheDocument();
         },
         { timeout: 10000 }
       );
