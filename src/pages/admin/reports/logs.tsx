@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,12 +17,14 @@ import {
   Download,
   FileDown,
   Eye,
-  RefreshCw
+  RefreshCw,
+  Loader2
 } from "lucide-react";
 import { format } from "date-fns";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { toast } from "sonner";
 
 interface RestoreReportLog {
   id: string;
@@ -35,7 +37,13 @@ interface RestoreReportLog {
 
 /**
  * Restore Report Logs Page
- * Displays audit logs of automated restore report executions
+ * Displays audit logs of automated restore report executions with infinite scroll
+ * 
+ * Features:
+ * - Infinite scroll pagination (20 records per page)
+ * - Auto-applying filters
+ * - Real-time total count display
+ * - Enhanced CSV/PDF export with notifications
  * 
  * Supports public view mode via ?public=1 query parameter
  * - Public mode hides navigation and action buttons
@@ -48,6 +56,10 @@ export default function RestoreReportLogsPage() {
   const [logs, setLogs] = useState<RestoreReportLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
   
   // Check if in public view mode
   const isPublic = searchParams.get("public") === "1";
@@ -57,17 +69,30 @@ export default function RestoreReportLogsPage() {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
-  useEffect(() => {
-    fetchLogs();
-  }, []);
+  // Intersection observer ref for infinite scroll
+  const observerTarget = useRef<HTMLDivElement>(null);
 
-  async function fetchLogs() {
-    setLoading(true);
+  // Fetch logs with pagination
+  const fetchLogs = useCallback(async (reset = false) => {
+    if (reset) {
+      setLoading(true);
+      setLogs([]);
+      setCurrentPage(0);
+      setHasMore(true);
+    } else {
+      setLoadingMore(true);
+    }
+    
     setError(null);
+    
     try {
+      const pageToFetch = reset ? 0 : currentPage;
+      const from = pageToFetch * 20;
+      const to = from + 19;
+
       let query = supabase
         .from("restore_report_logs")
-        .select("*");
+        .select("*", { count: "exact" });
 
       // Apply status filter
       if (statusFilter && statusFilter !== "all") {
@@ -85,23 +110,63 @@ export default function RestoreReportLogsPage() {
         query = query.lte("executed_at", endDateTime.toISOString());
       }
 
-      const { data, error: fetchError } = await query
+      const { data, error: fetchError, count } = await query
         .order("executed_at", { ascending: false })
-        .limit(100);
+        .range(from, to);
 
       if (fetchError) throw fetchError;
-      setLogs(data || []);
+      
+      const newLogs = data || [];
+      
+      if (reset) {
+        setLogs(newLogs);
+      } else {
+        setLogs((prev) => [...prev, ...newLogs]);
+      }
+      
+      setTotalCount(count || 0);
+      setHasMore(newLogs.length === 20);
+      
+      if (!reset) {
+        setCurrentPage((prev) => prev + 1);
+      }
     } catch (err) {
       console.error("Error fetching logs:", err);
       setError(err instanceof Error ? err.message : "Erro ao carregar logs");
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
-  }
+  }, [statusFilter, startDate, endDate, currentPage]);
 
-  function handleApplyFilters() {
-    fetchLogs();
-  }
+  // Auto-apply filters when they change
+  useEffect(() => {
+    setCurrentPage(0);
+    setHasMore(true);
+    fetchLogs(true);
+  }, [statusFilter, startDate, endDate]);
+
+  // Intersection observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore && !loading) {
+          fetchLogs(false);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [hasMore, loadingMore, loading, fetchLogs]);
 
   function handleClearFilters() {
     setStatusFilter("all");
@@ -122,18 +187,23 @@ export default function RestoreReportLogsPage() {
 
     const csvContent = [
       headers.join(","),
-      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+      ...rows.map((row) => row.map((cell) => `"${cell.replace(/"/g, "\"\"")}"`).join(",")),
     ].join("\n");
 
     const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
+    const timestamp = format(new Date(), "yyyy-MM-dd-HHmmss");
     link.setAttribute("href", url);
-    link.setAttribute("download", `restore-logs-${format(new Date(), "yyyy-MM-dd")}.csv`);
+    link.setAttribute("download", `restore-logs-${timestamp}.csv`);
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    toast.success("CSV exportado com sucesso!", {
+      description: `${logs.length} registros exportados`
+    });
   }
 
   function exportToPDF() {
@@ -141,13 +211,16 @@ export default function RestoreReportLogsPage() {
 
     const doc = new jsPDF();
     
-    // Add title
-    doc.setFontSize(16);
+    // Add title with branded color
+    doc.setFontSize(18);
+    doc.setTextColor(79, 70, 229); // Indigo
     doc.text("Auditoria de Relatórios Enviados", 14, 20);
     
-    // Add generation date
+    // Add metadata
     doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
     doc.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm")}`, 14, 28);
+    doc.text(`Total de registros: ${totalCount}`, 14, 34);
     
     // Prepare table data
     const tableData = logs.map((log) => [
@@ -161,9 +234,16 @@ export default function RestoreReportLogsPage() {
     autoTable(doc, {
       head: [["Data", "Status", "Mensagem", "Erro"]],
       body: tableData,
-      startY: 35,
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [59, 130, 246] },
+      startY: 40,
+      styles: { 
+        fontSize: 8,
+        cellPadding: 2,
+        overflow: "linebreak"
+      },
+      headStyles: { 
+        fillColor: [79, 70, 229],
+        textColor: [255, 255, 255]
+      },
       columnStyles: {
         0: { cellWidth: 35 },
         1: { cellWidth: 25 },
@@ -172,7 +252,12 @@ export default function RestoreReportLogsPage() {
       },
     });
 
-    doc.save(`restore-logs-${format(new Date(), "yyyy-MM-dd")}.pdf`);
+    const timestamp = format(new Date(), "yyyy-MM-dd-HHmmss");
+    doc.save(`restore-logs-${timestamp}.pdf`);
+    
+    toast.success("PDF exportado com sucesso!", {
+      description: `${logs.length} registros exportados`
+    });
   }
 
   function getStatusIcon(status: string) {
@@ -224,6 +309,11 @@ export default function RestoreReportLogsPage() {
               <h1 className="text-2xl font-bold">
                 {isPublic && <Eye className="inline w-6 h-6 mr-2" />}
                 🧠 Auditoria de Relatórios Enviados
+                {totalCount > 0 && (
+                  <span className="ml-2 text-lg text-muted-foreground">
+                    ({totalCount} total)
+                  </span>
+                )}
               </h1>
               <p className="text-sm text-muted-foreground">
                 Logs de execução automática dos relatórios de restauração
@@ -251,7 +341,7 @@ export default function RestoreReportLogsPage() {
                 PDF
               </Button>
               <Button 
-                onClick={fetchLogs} 
+                onClick={() => fetchLogs(true)} 
                 variant="outline" 
                 size="sm"
               >
@@ -301,18 +391,13 @@ export default function RestoreReportLogsPage() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium invisible">Actions</label>
-                  <div className="flex gap-2">
-                    <Button onClick={handleApplyFilters} className="flex-1">
-                      Buscar
-                    </Button>
-                    <Button 
-                      onClick={handleClearFilters} 
-                      variant="outline"
-                      className="flex-1"
-                    >
-                      Limpar
-                    </Button>
-                  </div>
+                  <Button 
+                    onClick={handleClearFilters} 
+                    variant="outline"
+                    className="w-full"
+                  >
+                    Limpar Filtros
+                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -437,6 +522,21 @@ export default function RestoreReportLogsPage() {
                       </CardContent>
                     </Card>
                   ))}
+                  
+                  {/* Infinite scroll trigger */}
+                  <div ref={observerTarget} className="flex items-center justify-center py-4">
+                    {loadingMore && (
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span className="text-sm">Carregando mais...</span>
+                      </div>
+                    )}
+                    {!loadingMore && !hasMore && logs.length > 0 && (
+                      <div className="text-sm text-muted-foreground">
+                        ✓ Todos os logs foram carregados
+                      </div>
+                    )}
+                  </div>
                 </div>
               </ScrollArea>
             )}
