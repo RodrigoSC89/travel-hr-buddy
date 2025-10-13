@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Loader2, ArrowLeft, MessageSquare, Send, Trash2 } from "lucide-react";
+import { Loader2, ArrowLeft, MessageSquare, Send, Trash2, History } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { DocumentVersionHistory } from "@/components/documents/DocumentVersionHistory";
 import { useAuthProfile } from "@/hooks/use-auth-profile";
@@ -330,6 +330,15 @@ export default function DocumentViewPage() {
               <MessageSquare className="w-4 h-4 mr-2" />
             )}
             {showComments ? "Atualizar Comentários" : "Ver Comentários"}
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate(`/admin/documents/history/${id}`)}
+          >
+            <History className="w-4 h-4 mr-2" />
+            Ver Histórico Completo
           </Button>
         </div>
 

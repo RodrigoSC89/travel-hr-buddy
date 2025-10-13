@@ -55,6 +55,7 @@ const AssistantLogs = React.lazy(() => import("./pages/admin/assistant-logs"));
 const AdminCollaboration = React.lazy(() => import("./pages/admin/collaboration"));
 const DocumentList = React.lazy(() => import("./pages/admin/documents/DocumentList"));
 const DocumentView = React.lazy(() => import("./pages/admin/documents/DocumentView"));
+const DocumentHistory = React.lazy(() => import("./pages/admin/documents/DocumentHistory"));
 const ExecutionLogs = React.lazy(() => import("./pages/admin/automation/execution-logs"));
 const RestoreReportLogs = React.lazy(() => import("./pages/admin/reports/logs"));
 const AssistantReportLogs = React.lazy(() => import("./pages/admin/reports/assistant"));
@@ -147,6 +148,7 @@ function App() {
                       <Route path="/admin/documents" element={<DocumentList />} />
                       <Route path="/admin/documents/ai" element={<DocumentsAI />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
+                      <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />
                       <Route path="/admin/automation/execution-logs" element={<ExecutionLogs />} />
                       <Route path="/admin/reports/logs" element={<RestoreReportLogs />} />
                       <Route path="/admin/reports/assistant" element={<AssistantReportLogs />} />
