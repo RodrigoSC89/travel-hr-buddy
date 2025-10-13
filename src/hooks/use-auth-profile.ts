@@ -81,7 +81,7 @@ export const useAuthProfile = () => {
               department: newProfile.department,
               position: newProfile.position,
               phone: newProfile.phone,
-              role: "user" as const,
+              role: (newProfile.role === "admin" ? "admin" : "user") as "user" | "admin",
               preferences: {
                 theme: "system",
                 notifications: true,
@@ -100,7 +100,7 @@ export const useAuthProfile = () => {
             department: data.department,
             position: data.position,
             phone: data.phone,
-            role: "user" as const,
+            role: (data.role === "admin" ? "admin" : "user") as "user" | "admin",
             preferences: {
               theme: "system",
               notifications: true,
