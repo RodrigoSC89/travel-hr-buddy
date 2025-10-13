@@ -124,24 +124,24 @@ export default function RestoreReportLogsPage() {
         </Card>
       ) : (
         logs.map((log) => (
-        <Card key={log.id} className="p-4 border border-gray-300">
-          <CardContent className="space-y-2 p-0">
-            <div>
-              <strong>Status:</strong> {log.status}
-            </div>
-            <div>
-              <strong>Mensagem:</strong> {log.message || "-"}
-            </div>
-            <div>
-              <strong>Data:</strong> {new Date(log.executed_at).toLocaleString()}
-            </div>
-            {log.error_details && (
-              <div className="text-red-600">
-                <strong>Erro:</strong> {log.error_details}
+          <Card key={log.id} className="p-4 border border-gray-300">
+            <CardContent className="space-y-2 p-0">
+              <div>
+                <strong>Status:</strong> {log.status}
               </div>
-            )}
-          </CardContent>
-        </Card>
+              <div>
+                <strong>Mensagem:</strong> {log.message || "-"}
+              </div>
+              <div>
+                <strong>Data:</strong> {new Date(log.executed_at).toLocaleString()}
+              </div>
+              {log.error_details && (
+                <div className="text-red-600">
+                  <strong>Erro:</strong> {log.error_details}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         ))
       )}
     </div>
