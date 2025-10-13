@@ -218,6 +218,18 @@ npm run test
 * Build errors are linted and tested in CI before deployment
 * Environment variables must be configured in Vercel dashboard
 
+### Quick Start
+
+For new deployments, see [VERCEL_QUICKSTART.md](./VERCEL_QUICKSTART.md) - deploy in under 5 minutes!
+
+### Troubleshooting
+
+Having deployment issues? Check [VERCEL_TROUBLESHOOTING.md](./VERCEL_TROUBLESHOOTING.md) for:
+- Common error fixes
+- Environment variable setup
+- Security best practices
+- Deployment checklist
+
 ### Manual Deployment
 
 ```bash
@@ -230,6 +242,14 @@ npm run preview
 # Deploy to Vercel (requires Vercel CLI)
 npm run deploy:vercel
 ```
+
+### Health Check
+
+After deployment, verify configuration at:
+- **Local**: `http://localhost:8080/health`
+- **Production**: `https://your-deployment.vercel.app/health`
+
+The health endpoint validates all environment variables and system status.
 
 ---
 
