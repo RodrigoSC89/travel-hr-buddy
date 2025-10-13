@@ -1,70 +1,103 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreReportLogsPage from "@/pages/admin/reports/logs";
+import { supabase } from "@/integrations/supabase/client";
+
+// Mock supabase client
+vi.mock("@/integrations/supabase/client", () => ({
+  supabase: {
+    from: vi.fn(),
+  },
+}));
 
 /**
  * RestoreReportLogsPage Tests
  * 
- * Tests the disabled state of the Restore Report Logs page.
- * Component is disabled because the required database table doesn't exist yet.
+ * Tests the audit page for restore report logs with filters and export functionality.
  */
 describe("RestoreReportLogsPage Component", () => {
-  it("should render the page title", () => {
-    render(
-      <MemoryRouter>
-        <RestoreReportLogsPage />
-      </MemoryRouter>
-    );
-
-    expect(screen.getByText("Logs de Relatórios")).toBeInTheDocument();
+  beforeEach(() => {
+    // Reset mocks before each test
+    vi.clearAllMocks();
+    
+    // Setup default mock response
+    const mockQuery = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      gte: vi.fn().mockReturnThis(),
+      lte: vi.fn().mockReturnThis(),
+      order: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockResolvedValue({ data: [], error: null }),
+    };
+    
+    (supabase.from as any).mockReturnValue(mockQuery);
   });
 
-  it("should render back button", () => {
+  it("should render the page title", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    expect(screen.getByText("← Voltar")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("🧠 Auditoria de Relatórios Enviados")).toBeInTheDocument();
+    });
   });
 
-  it("should display database configuration warning", () => {
+  it("should render back button", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    // Component shows a configuration warning instead of loading data
-    expect(screen.getByText((content) =>
-      content.includes("Esta funcionalidade requer configuração de banco de dados adicional")
-    )).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Voltar")).toBeInTheDocument();
+    });
   });
 
-  it("should render alert with specific table message", () => {
+  it("should render filter inputs", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    // Check that the alert mentions the specific table name
-    expect(screen.getByText((content) =>
-      content.includes("restore_report_logs")
-    )).toBeInTheDocument();
+    await waitFor(() => {
+      // Check for status filter
+      expect(screen.getByPlaceholderText("Status (success/error)")).toBeInTheDocument();
+      
+      // Check for date filters
+      const dateInputs = screen.getAllByDisplayValue("");
+      expect(dateInputs.length).toBeGreaterThan(0);
+    });
   });
 
-  it("should render alert icon", () => {
+  it("should render action buttons", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    // Verify alert component is rendered
-    const alert = screen.getByRole("alert");
-    expect(alert).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("🔍 Buscar")).toBeInTheDocument();
+      expect(screen.getByText("📤 CSV")).toBeInTheDocument();
+      expect(screen.getByText("📄 PDF")).toBeInTheDocument();
+    });
+  });
+
+  it("should fetch logs on mount", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(supabase.from).toHaveBeenCalledWith("restore_report_logs");
+    });
   });
 });
