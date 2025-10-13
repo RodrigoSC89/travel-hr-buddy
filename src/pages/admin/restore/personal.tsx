@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, RefreshCw, Download, Mail, BarChart3, FileText, TrendingUp } from "lucide-react";
+import { ArrowLeft, RefreshCw, Mail, BarChart3, FileText, TrendingUp } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Bar } from "react-chartjs-2";
 import { format } from "date-fns";
@@ -182,7 +182,7 @@ export default function PersonalRestoreDashboard() {
         // Add trend indicator
         const trendEmoji = trendDirection === "up" ? "📈" : trendDirection === "down" ? "📉" : "➡️";
         const trendText = trendDirection === "up" ? "Tendência de Alta" : 
-                         trendDirection === "down" ? "Tendência de Baixa" : "Tendência Estável";
+          trendDirection === "down" ? "Tendência de Baixa" : "Tendência Estável";
         doc.text(`${trendEmoji} ${trendText}`, 14, yPosition);
         yPosition += 12;
       }

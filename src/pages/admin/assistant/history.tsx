@@ -143,8 +143,8 @@ export default function AssistantHistoryPage() {
         .map((log) => {
           const date = format(new Date(log.created_at), "dd/MM/yyyy HH:mm:ss");
           const email = log.user_email || "N/A";
-          const question = `"${log.question.replace(/"/g, '""')}"`;
-          const answer = `"${log.answer.replace(/<[^>]*>/g, "").replace(/"/g, '""')}"`;
+          const question = `"${log.question.replace(/"/g, "\"\"")}"`;
+          const answer = `"${log.answer.replace(/<[^>]*>/g, "").replace(/"/g, "\"\"")}"`;
           const origin = log.origin || "N/A";
           return `${date},${email},${question},${answer},${origin}`;
         })
