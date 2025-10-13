@@ -17,12 +17,14 @@ import {
   Download,
   FileDown,
   Eye,
-  RefreshCw
+  RefreshCw,
+  Shield
 } from "lucide-react";
 import { format } from "date-fns";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { verifyAuditToken, getDaysUntilExpiry } from "@/utils/auditToken";
 
 interface RestoreReportLog {
   id: string;
@@ -51,6 +53,12 @@ export default function RestoreReportLogsPage() {
   
   // Check if in public view mode
   const isPublic = searchParams.get("public") === "1";
+  const token = searchParams.get("token") || "";
+  
+  // Verify token if in public mode
+  const tokenPayload = isPublic ? verifyAuditToken(token) : null;
+  const isTokenValid = isPublic ? tokenPayload !== null : true;
+  const daysUntilExpiry = isPublic && token ? getDaysUntilExpiry(token) : -1;
   
   // Filter states
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -207,250 +215,277 @@ export default function RestoreReportLogsPage() {
   return (
     <div className="min-h-screen p-6 bg-gray-50">
       <div className="max-w-6xl mx-auto space-y-4">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            {!isPublic && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate("/admin")}
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Voltar
-              </Button>
-            )}
-            <div>
-              <h1 className="text-2xl font-bold">
-                {isPublic && <Eye className="inline w-6 h-6 mr-2" />}
-                🧠 Auditoria de Relatórios Enviados
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Logs de execução automática dos relatórios de restauração
-              </p>
-            </div>
-          </div>
-          {!isPublic && (
-            <div className="flex gap-2">
-              <Button 
-                onClick={exportToCSV} 
-                variant="outline" 
-                size="sm"
-                disabled={logs.length === 0}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                CSV
-              </Button>
-              <Button 
-                onClick={exportToPDF} 
-                variant="outline" 
-                size="sm"
-                disabled={logs.length === 0}
-              >
-                <FileDown className="w-4 h-4 mr-2" />
-                PDF
-              </Button>
-              <Button 
-                onClick={fetchLogs} 
-                variant="outline" 
-                size="sm"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Atualizar
-              </Button>
-            </div>
-          )}
-        </div>
-
-        {/* Filters */}
-        {!isPublic && (
-          <Card>
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Status</label>
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Todos" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos</SelectItem>
-                      <SelectItem value="success">Sucesso</SelectItem>
-                      <SelectItem value="error">Erro</SelectItem>
-                      <SelectItem value="pending">Pendente</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Data Inicial</label>
-                  <Input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    placeholder="Selecione"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Data Final</label>
-                  <Input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    placeholder="Selecione"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium invisible">Actions</label>
-                  <div className="flex gap-2">
-                    <Button onClick={handleApplyFilters} className="flex-1">
-                      Buscar
-                    </Button>
-                    <Button 
-                      onClick={handleClearFilters} 
-                      variant="outline"
-                      className="flex-1"
-                    >
-                      Limpar
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Total de Execuções</p>
-                  <p className="text-2xl font-bold">{logs.length}</p>
-                </div>
-                <Clock className="w-8 h-8 text-blue-600 opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Sucessos</p>
-                  <p className="text-2xl font-bold text-green-600">{successCount}</p>
-                </div>
-                <CheckCircle2 className="w-8 h-8 text-green-600 opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Erros</p>
-                  <p className="text-2xl font-bold text-red-600">{errorCount}</p>
-                </div>
-                <XCircle className="w-8 h-8 text-red-600 opacity-50" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Error Alert */}
-        {error && (
+        {/* Token Validation Alert */}
+        {isPublic && !isTokenValid && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription>
+              ⚠️ Link público inválido ou expirado. Por favor, solicite um novo link de acesso.
+            </AlertDescription>
           </Alert>
         )}
 
-        {/* Logs List */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Histórico de Execuções</CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            {loading ? (
-              <div className="flex items-center justify-center p-12">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                  <p className="mt-4 text-muted-foreground">Carregando logs...</p>
-                </div>
-              </div>
-            ) : logs.length === 0 ? (
-              <div className="flex items-center justify-center p-12">
-                <div className="text-center">
-                  <Clock className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p className="text-muted-foreground">
-                    Nenhum log de execução registrado ainda
+        {/* Public Access Badge */}
+        {isPublic && isTokenValid && (
+          <Alert className="border-blue-200 bg-blue-50">
+            <Shield className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-900">
+              🔓 <strong>Acesso Público Autorizado</strong>
+              {tokenPayload && ` • Compartilhado por: ${tokenPayload.email}`}
+              {daysUntilExpiry >= 0 && ` • Expira em: ${daysUntilExpiry} dia${daysUntilExpiry !== 1 ? "s" : ""}`}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {/* Only render content if not public or token is valid */}
+        {(!isPublic || isTokenValid) && (
+          <>
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                {!isPublic && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigate("/admin")}
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar
+                  </Button>
+                )}
+                <div>
+                  <h1 className="text-2xl font-bold">
+                    {isPublic && <Eye className="inline w-6 h-6 mr-2" />}
+                🧠 Auditoria de Relatórios Enviados
+                  </h1>
+                  <p className="text-sm text-muted-foreground">
+                Logs de execução automática dos relatórios de restauração
                   </p>
                 </div>
               </div>
-            ) : (
-              <ScrollArea className="h-[600px]">
-                <div className="p-4 space-y-4">
-                  {logs.map((log) => (
-                    <Card 
-                      key={log.id} 
-                      className={`border-l-4 ${getStatusColor(log.status)}`}
-                    >
-                      <CardContent className="p-4 space-y-3">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-center gap-3">
-                            {getStatusIcon(log.status)}
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-semibold capitalize">
-                                  {log.status === "success" ? "Sucesso" : 
-                                    log.status === "error" ? "Erro" : 
-                                      log.status === "pending" ? "Pendente" : log.status}
-                                </span>
-                                <span className="text-xs text-muted-foreground">
-                                  • {log.triggered_by}
-                                </span>
-                              </div>
-                              <p className="text-xs text-muted-foreground">
-                                {format(new Date(log.executed_at), "dd/MM/yyyy 'às' HH:mm:ss")}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {log.message && (
-                          <div className="pl-8">
-                            <p className="text-sm text-gray-700">{log.message}</p>
-                          </div>
-                        )}
-
-                        {log.error_details && (
-                          <div className="pl-8">
-                            <details className="text-sm">
-                              <summary className="cursor-pointer text-red-600 font-medium">
-                                Detalhes do Erro
-                              </summary>
-                              <pre className="mt-2 p-3 bg-red-50 rounded text-xs overflow-x-auto">
-                                {log.error_details}
-                              </pre>
-                            </details>
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
+              {!isPublic && (
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={exportToCSV} 
+                    variant="outline" 
+                    size="sm"
+                    disabled={logs.length === 0}
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                CSV
+                  </Button>
+                  <Button 
+                    onClick={exportToPDF} 
+                    variant="outline" 
+                    size="sm"
+                    disabled={logs.length === 0}
+                  >
+                    <FileDown className="w-4 h-4 mr-2" />
+                PDF
+                  </Button>
+                  <Button 
+                    onClick={fetchLogs} 
+                    variant="outline" 
+                    size="sm"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                Atualizar
+                  </Button>
                 </div>
-              </ScrollArea>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Public View Indicator */}
-        {isPublic && (
-          <div className="text-center py-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full text-sm text-blue-700">
-              <Eye className="w-4 h-4" />
-              <span className="font-medium">Modo Somente Leitura (Visualização Pública)</span>
+              )}
             </div>
-          </div>
+
+            {/* Filters */}
+            {!isPublic && (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Status</label>
+                      <Select value={statusFilter} onValueChange={setStatusFilter}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Todos" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">Todos</SelectItem>
+                          <SelectItem value="success">Sucesso</SelectItem>
+                          <SelectItem value="error">Erro</SelectItem>
+                          <SelectItem value="pending">Pendente</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Data Inicial</label>
+                      <Input
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        placeholder="Selecione"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Data Final</label>
+                      <Input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        placeholder="Selecione"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium invisible">Actions</label>
+                      <div className="flex gap-2">
+                        <Button onClick={handleApplyFilters} className="flex-1">
+                      Buscar
+                        </Button>
+                        <Button 
+                          onClick={handleClearFilters} 
+                          variant="outline"
+                          className="flex-1"
+                        >
+                      Limpar
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total de Execuções</p>
+                      <p className="text-2xl font-bold">{logs.length}</p>
+                    </div>
+                    <Clock className="w-8 h-8 text-blue-600 opacity-50" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Sucessos</p>
+                      <p className="text-2xl font-bold text-green-600">{successCount}</p>
+                    </div>
+                    <CheckCircle2 className="w-8 h-8 text-green-600 opacity-50" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Erros</p>
+                      <p className="text-2xl font-bold text-red-600">{errorCount}</p>
+                    </div>
+                    <XCircle className="w-8 h-8 text-red-600 opacity-50" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Error Alert */}
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            {/* Logs List */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Histórico de Execuções</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                {loading ? (
+                  <div className="flex items-center justify-center p-12">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                      <p className="mt-4 text-muted-foreground">Carregando logs...</p>
+                    </div>
+                  </div>
+                ) : logs.length === 0 ? (
+                  <div className="flex items-center justify-center p-12">
+                    <div className="text-center">
+                      <Clock className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                      <p className="text-muted-foreground">
+                    Nenhum log de execução registrado ainda
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <ScrollArea className="h-[600px]">
+                    <div className="p-4 space-y-4">
+                      {logs.map((log) => (
+                        <Card 
+                          key={log.id} 
+                          className={`border-l-4 ${getStatusColor(log.status)}`}
+                        >
+                          <CardContent className="p-4 space-y-3">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-center gap-3">
+                                {getStatusIcon(log.status)}
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-semibold capitalize">
+                                      {log.status === "success" ? "Sucesso" : 
+                                        log.status === "error" ? "Erro" : 
+                                          log.status === "pending" ? "Pendente" : log.status}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                  • {log.triggered_by}
+                                    </span>
+                                  </div>
+                                  <p className="text-xs text-muted-foreground">
+                                    {format(new Date(log.executed_at), "dd/MM/yyyy 'às' HH:mm:ss")}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                        
+                            {log.message && (
+                              <div className="pl-8">
+                                <p className="text-sm text-gray-700">{log.message}</p>
+                              </div>
+                            )}
+
+                            {log.error_details && (
+                              <div className="pl-8">
+                                <details className="text-sm">
+                                  <summary className="cursor-pointer text-red-600 font-medium">
+                                Detalhes do Erro
+                                  </summary>
+                                  <pre className="mt-2 p-3 bg-red-50 rounded text-xs overflow-x-auto">
+                                    {log.error_details}
+                                  </pre>
+                                </details>
+                              </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Public View Indicator */}
+            {isPublic && (
+              <div className="text-center py-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full text-sm text-blue-700">
+                  <Eye className="w-4 h-4" />
+                  <span className="font-medium">Modo Somente Leitura (Visualização Pública)</span>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

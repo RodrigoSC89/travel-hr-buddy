@@ -44,7 +44,7 @@ export function CollaborativeDocumentEditor({
 
     try {
       const { error } = await supabase
-        .from('documents')
+        .from("documents")
         .upsert({
           id: documentId,
           content,
@@ -56,7 +56,7 @@ export function CollaborativeDocumentEditor({
       setSaveCount(prev => prev + 1);
       setLastSaved(new Date());
     } catch (error) {
-      console.error('Error saving document:', error);
+      console.error("Error saving document:", error);
       toast({
         title: "Error saving document",
         description: "Failed to save document to database",
@@ -184,7 +184,7 @@ export function CollaborativeDocumentEditor({
           <p>💡 This is a real-time collaborative editor</p>
           <p>👥 Share the document ID with others to collaborate</p>
           <p>🔄 Changes sync automatically across all connected users</p>
-          <p>💾 Auto-save: {saveCount} saves | Last saved: {lastSaved ? lastSaved.toLocaleTimeString() : 'Not saved yet'}</p>
+          <p>💾 Auto-save: {saveCount} saves | Last saved: {lastSaved ? lastSaved.toLocaleTimeString() : "Not saved yet"}</p>
         </div>
       </CardContent>
     </Card>

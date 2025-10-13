@@ -6,6 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { 
   ArrowLeft, 
   Download, 
@@ -16,12 +23,18 @@ import {
   User,
   X,
   FileText,
-  Mail
+  Mail,
+  QrCode,
+  Copy,
+  Link as LinkIcon
 } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+import { QRCodeSVG } from "qrcode.react";
+import { generateAuditToken } from "@/utils/auditToken";
+import { useToast } from "@/hooks/use-toast";
 
 interface AssistantLog {
   id: string;
@@ -35,6 +48,7 @@ interface AssistantLog {
 
 export default function AssistantLogsPage() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [logs, setLogs] = useState<AssistantLog[]>([]);
   const [filteredLogs, setFilteredLogs] = useState<AssistantLog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,6 +57,8 @@ export default function AssistantLogsPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [publicUrl, setPublicUrl] = useState("");
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -253,6 +269,53 @@ export default function AssistantLogsPage() {
     }
   }
 
+  async function generatePublicLink() {
+    try {
+      // Get current user session
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.user?.email) {
+        toast({
+          title: "Erro",
+          description: "Você precisa estar autenticado para gerar links públicos",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Generate token with user's email
+      const token = generateAuditToken(session.user.email);
+      
+      // Create public URL for the logs page
+      const url = `${window.location.origin}/admin/reports/logs?public=1&token=${token}`;
+      
+      setPublicUrl(url);
+      setShowQRModal(true);
+      
+      toast({
+        title: "Link Público Gerado",
+        description: "Link válido por 7 dias. Use o QR Code ou copie o link.",
+      });
+    } catch (error) {
+      console.error("Error generating public link:", error);
+      toast({
+        title: "Erro",
+        description: "Falha ao gerar link público",
+        variant: "destructive",
+      });
+    }
+  }
+
+  function copyPublicLink() {
+    if (publicUrl) {
+      navigator.clipboard.writeText(publicUrl);
+      toast({
+        title: "Link Copiado",
+        description: "Link público copiado para a área de transferência",
+      });
+    }
+  }
+
   // Pagination
   const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -284,6 +347,10 @@ export default function AssistantLogsPage() {
             </div>
           </div>
           <div className="flex gap-2">
+            <Button onClick={generatePublicLink} variant="outline">
+              <QrCode className="w-4 h-4 mr-2" />
+              Link Público + QR
+            </Button>
             <Button onClick={exportToCSV} disabled={filteredLogs.length === 0} variant="outline">
               <Download className="w-4 h-4 mr-2" />
               CSV
@@ -473,6 +540,80 @@ export default function AssistantLogsPage() {
           </div>
         )}
       </div>
+
+      {/* QR Code Modal */}
+      <Dialog open={showQRModal} onOpenChange={setShowQRModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <QrCode className="w-5 h-5" />
+              Link Público com QR Code
+            </DialogTitle>
+            <DialogDescription>
+              Compartilhe este link ou QR code para acesso público aos logs (válido por 7 dias)
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {/* QR Code Display */}
+            <div className="flex justify-center p-6 bg-white rounded-lg border">
+              {publicUrl && (
+                <QRCodeSVG
+                  value={publicUrl}
+                  size={200}
+                  level="H"
+                  includeMargin={true}
+                />
+              )}
+            </div>
+            
+            {/* URL Display and Copy */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">URL Pública</label>
+              <div className="flex gap-2">
+                <Input
+                  value={publicUrl}
+                  readOnly
+                  className="flex-1 font-mono text-xs"
+                />
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={copyPublicLink}
+                >
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Info Alert */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm">
+              <div className="flex items-start gap-2">
+                <LinkIcon className="w-4 h-4 text-blue-600 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="font-medium text-blue-900">Informações do Link</p>
+                  <ul className="text-blue-700 space-y-1 text-xs">
+                    <li>• Acesso somente leitura aos logs</li>
+                    <li>• Válido por 7 dias a partir de agora</li>
+                    <li>• Ideal para TVs, monitores e auditores externos</li>
+                    <li>• Sem necessidade de autenticação</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowQRModal(false)}>
+                Fechar
+              </Button>
+              <Button onClick={copyPublicLink}>
+                <Copy className="w-4 h-4 mr-2" />
+                Copiar Link
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
