@@ -116,7 +116,7 @@ export default function DocumentViewPage() {
       if (error) throw error;
 
       // Type-safe data extraction with proper type casting
-      const profiles = data.profiles as { email: string; full_name: string } | null;
+      const profiles = data.profiles as unknown as { email: string; full_name: string } | null;
       
       const transformedData: Document = {
         title: data.title,

@@ -1,5 +1,13 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+/**
+ * Hook to fetch restore logs summary data
+ * 
+ * DISABLED: Requires database tables that don't exist yet:
+ * - document_restore_logs table
+ * - get_restore_summary RPC function
+ * - get_restore_count_by_day_with_email RPC function
+ * 
+ * TODO: Create proper database schema before enabling this hook
+ */
 
 interface RestoreSummary {
   total: number;
@@ -32,95 +40,24 @@ interface UseRestoreLogsSummaryResult {
 }
 
 /**
- * Hook to fetch restore logs summary data
- * Mimics the behavior of /api/restore-logs/summary endpoint
- * 
- * @param emailInput - Optional email filter
- * @returns Object with data, loading state, error, and refetch function
+ * Temporary mock implementation until database schema is created
  */
-export function useRestoreLogsSummary(emailInput: string | null = null): UseRestoreLogsSummaryResult {
-  const [data, setData] = useState<RestoreLogsSummaryData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      // Fetch summary and byDay data in parallel
-      const [summaryRes, byDayRes] = await Promise.all([
-        supabase.rpc("get_restore_summary", { email_input: emailInput }),
-        supabase.rpc("get_restore_count_by_day_with_email", { email_input: emailInput }),
-      ]);
-
-      if (summaryRes.error) throw summaryRes.error;
-      if (byDayRes.error) throw byDayRes.error;
-
-      // Fetch all statuses to group manually
-      const { data: statusData, error: statusError } = await supabase
-        .from("document_restore_logs")
-        .select("status");
-
-      if (statusError) throw statusError;
-
-      // Process summary data
-      const summary: RestoreSummary = summaryRes.data?.[0] || {
+export function useRestoreLogsSummary(_emailInput: string | null = null): UseRestoreLogsSummaryResult {
+  return {
+    data: {
+      summary: {
         total: 0,
         unique_docs: 0,
         avg_per_day: 0,
         last_execution: null,
-      };
-
-      // Process byDay data
-      const byDay: RestoreCountByDay[] = (byDayRes.data || []).map((row: any) => ({
-        day: row.day,
-        count: row.count,
-      }));
-
-      // Group by status and count
-      const statusCounts: Record<string, number> = {};
-      statusData?.forEach((row: any) => {
-        const status = row.status || "unknown";
-        statusCounts[status] = (statusCounts[status] || 0) + 1;
-      });
-
-      const byStatus: RestoreCountByStatus[] = Object.entries(statusCounts).map(([status, count]) => ({
-        name: status,
-        value: count,
-      }));
-
-      // Fetch last execution timestamp
-      const { data: lastExecution } = await supabase
-        .from("document_restore_logs")
-        .select("restored_at")
-        .order("restored_at", { ascending: false })
-        .limit(1)
-        .single();
-
-      summary.last_execution = lastExecution?.restored_at || null;
-
-      setData({
-        summary,
-        byDay,
-        byStatus,
-      });
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error("Unknown error occurred"));
-      console.error("Error fetching restore logs summary:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [emailInput]);
-
-  return {
-    data,
-    loading,
-    error,
-    refetch: fetchData,
+      },
+      byDay: [],
+      byStatus: [],
+    },
+    loading: false,
+    error: new Error("Database schema not configured. Please create document_restore_logs table."),
+    refetch: async () => {
+      // No-op until schema is created
+    },
   };
 }

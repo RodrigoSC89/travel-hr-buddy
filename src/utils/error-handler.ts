@@ -1,4 +1,5 @@
 import { toast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 export interface AppError {
   message: string;
@@ -12,15 +13,12 @@ export interface AppError {
  */
 export class ErrorHandler {
   private static logError(error: AppError) {
-    const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] [${error.severity.toUpperCase()}] ${error.message}`;
-    
     if (error.severity === "error" || error.severity === "critical") {
-      console.error(logMessage, error.details);
+      logger.error(error.message, error.details);
     } else if (error.severity === "warning") {
-      console.warn(logMessage, error.details);
+      logger.warn(error.message, { details: error.details });
     } else {
-      console.info(logMessage, error.details);
+      logger.info(error.message, { details: error.details });
     }
   }
 

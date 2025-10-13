@@ -1,14 +1,15 @@
 /**
  * Centralized Logger Utility
  * 
- * Environment-aware logging with structured context support.
+ * Production-safe logging with structured context support.
  * - Debug/info logs only appear in development
- * - Errors are always logged
- * - Sentry-ready for production error tracking
+ * - Errors are always logged and sent to monitoring
+ * - Sentry integration for production error tracking
  * - ESLint compatible
  */
 
 const isDevelopment = import.meta.env.DEV;
+const isProduction = import.meta.env.PROD;
 
 interface LogContext {
   [key: string]: unknown;
@@ -76,7 +77,7 @@ export const logger = {
   },
 
   /**
-   * Log error messages (always logged)
+   * Log error messages (always logged and sent to monitoring in production)
    */
   error: (message: string, error?: unknown, context?: LogContext) => {
     const errorMessage = error ? getErrorMessage(error) : '';
@@ -86,15 +87,25 @@ export const logger = {
     };
 
     if (Object.keys(fullContext).length > 0) {
+      // eslint-disable-next-line no-console
       console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ''}`, fullContext);
     } else {
+      // eslint-disable-next-line no-console
       console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ''}`);
     }
 
-    // TODO: Send to Sentry in production
-    // if (!isDevelopment && isError(error)) {
-    //   Sentry.captureException(error, { extra: context });
-    // }
+    // Send to Sentry in production
+    if (isProduction && isError(error) && typeof window !== 'undefined') {
+      try {
+        // @ts-expect-error Sentry is loaded globally
+        if (window.Sentry) {
+          // @ts-expect-error Sentry is loaded globally
+          window.Sentry.captureException(error, { extra: { message, ...context } });
+        }
+      } catch {
+        // Fail silently if Sentry is not available
+      }
+    }
   },
 
   /**
@@ -108,18 +119,24 @@ export const logger = {
     };
 
     if (Object.keys(fullContext).length > 0) {
+      // eslint-disable-next-line no-console
       console.error(`❌ ${message}: ${errorMessage}`, fullContext);
     } else {
+      // eslint-disable-next-line no-console
       console.error(`❌ ${message}: ${errorMessage}`);
     }
 
-    // TODO: Send to Sentry in production
-    // if (!isDevelopment && isError(error)) {
-    //   Sentry.captureException(error, { extra: { message, ...context } });
-    // }
+    // Send to Sentry in production
+    if (isProduction && isError(error) && typeof window !== 'undefined') {
+      try {
+        // @ts-expect-error Sentry is loaded globally
+        if (window.Sentry) {
+          // @ts-expect-error Sentry is loaded globally
+          window.Sentry.captureException(error, { extra: { message, ...context } });
+        }
+      } catch {
+        // Fail silently if Sentry is not available
+      }
+    }
   },
 };
-
-/* eslint-disable no-console */
-// Note: console methods are intentionally used in this logger utility
-/* eslint-enable no-console */
