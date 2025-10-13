@@ -9,10 +9,17 @@ import RestoreReportLogsPage from "@/pages/admin/reports/logs";
  * Tests the Restore Report Logs audit page functionality with filters and export.
  */
 
+// Mock IntersectionObserver
+global.IntersectionObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
+
 // Mock Supabase client
 const mockSelect = vi.fn();
 const mockOrder = vi.fn();
-const mockLimit = vi.fn();
+const mockRange = vi.fn();
 const mockEq = vi.fn();
 const mockGte = vi.fn();
 const mockLte = vi.fn();
@@ -25,28 +32,20 @@ vi.mock("@/integrations/supabase/client", () => ({
   }
 }));
 
+// Mock sonner toast
+vi.mock("sonner", () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  }
+}));
+
 describe("RestoreReportLogsPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     
-    // Setup default mock chain
-    mockLte.mockReturnValue({
-      order: mockOrder
-    });
-    mockGte.mockReturnValue({
-      lte: mockLte,
-      order: mockOrder
-    });
-    mockEq.mockReturnValue({
-      eq: mockEq,
-      gte: mockGte,
-      lte: mockLte,
-      order: mockOrder
-    });
-    mockOrder.mockReturnValue({
-      limit: mockLimit
-    });
-    mockLimit.mockResolvedValue({
+    // Setup default mock chain for infinite scroll
+    mockRange.mockResolvedValue({
       data: [
         {
           id: "1",
@@ -65,7 +64,25 @@ describe("RestoreReportLogsPage Component", () => {
           triggered_by: "automated"
         }
       ],
-      error: null
+      error: null,
+      count: 2
+    });
+    
+    mockLte.mockReturnValue({
+      order: mockOrder
+    });
+    mockGte.mockReturnValue({
+      lte: mockLte,
+      order: mockOrder
+    });
+    mockEq.mockReturnValue({
+      eq: mockEq,
+      gte: mockGte,
+      lte: mockLte,
+      order: mockOrder
+    });
+    mockOrder.mockReturnValue({
+      range: mockRange
     });
     mockSelect.mockReturnValue({
       eq: mockEq,
@@ -147,8 +164,7 @@ describe("RestoreReportLogsPage Component", () => {
       expect(screen.getByText("Status")).toBeInTheDocument();
       expect(screen.getByText("Data Inicial")).toBeInTheDocument();
       expect(screen.getByText("Data Final")).toBeInTheDocument();
-      expect(screen.getByText("Buscar")).toBeInTheDocument();
-      expect(screen.getByText("Limpar")).toBeInTheDocument();
+      expect(screen.getByText("Limpar Filtros")).toBeInTheDocument();
     });
   });
 
@@ -166,9 +182,10 @@ describe("RestoreReportLogsPage Component", () => {
   });
 
   it("should disable export buttons when no logs", async () => {
-    mockLimit.mockResolvedValueOnce({
+    mockRange.mockResolvedValueOnce({
       data: [],
-      error: null
+      error: null,
+      count: 0
     });
 
     render(
@@ -185,7 +202,7 @@ describe("RestoreReportLogsPage Component", () => {
     });
   });
 
-  it("should apply filters when Buscar is clicked", async () => {
+  it("should display total count in header", async () => {
     render(
       <MemoryRouter>
         <RestoreReportLogsPage />
@@ -193,11 +210,42 @@ describe("RestoreReportLogsPage Component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Buscar")).toBeInTheDocument();
+      expect(screen.getByText("(2 total)")).toBeInTheDocument();
+    });
+  });
+
+  it("should auto-apply filters when changed", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(mockSelect).toHaveBeenCalled();
     });
 
-    const buscarButton = screen.getByText("Buscar");
-    fireEvent.click(buscarButton);
+    const statusSelect = screen.getByRole("combobox");
+    fireEvent.click(statusSelect);
+
+    await waitFor(() => {
+      expect(mockSelect).toHaveBeenCalled();
+    });
+  });
+
+  it("should clear filters when Limpar Filtros is clicked", async () => {
+    render(
+      <MemoryRouter>
+        <RestoreReportLogsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Limpar Filtros")).toBeInTheDocument();
+    });
+
+    const clearButton = screen.getByText("Limpar Filtros");
+    fireEvent.click(clearButton);
 
     await waitFor(() => {
       expect(mockSelect).toHaveBeenCalled();

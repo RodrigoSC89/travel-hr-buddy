@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,8 +21,11 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { toast } from "sonner";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+
+const ITEMS_PER_PAGE = 20;
 
 interface RestoreReportLog {
   id: string;
@@ -47,7 +50,12 @@ export default function RestoreReportLogsPage() {
   const [searchParams] = useSearchParams();
   const [logs, setLogs] = useState<RestoreReportLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const observerTarget = useRef<HTMLDivElement>(null);
   
   // Check if in public view mode
   const isPublic = searchParams.get("public") === "1";
@@ -57,17 +65,30 @@ export default function RestoreReportLogsPage() {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
+  // Auto-apply filters when they change
   useEffect(() => {
-    fetchLogs();
-  }, []);
+    setCurrentPage(0);
+    setHasMore(true);
+    fetchLogs(true);
+  }, [statusFilter, startDate, endDate]);
 
-  async function fetchLogs() {
-    setLoading(true);
+  const fetchLogs = useCallback(async (reset = false) => {
+    const isInitialLoad = reset;
+    if (isInitialLoad) {
+      setLoading(true);
+    } else {
+      setLoadingMore(true);
+    }
     setError(null);
+    
     try {
+      const page = reset ? 0 : currentPage;
+      const from = page * ITEMS_PER_PAGE;
+      const to = from + ITEMS_PER_PAGE - 1;
+
       let query = supabase
         .from("restore_report_logs")
-        .select("*");
+        .select("*", { count: "exact" });
 
       // Apply status filter
       if (statusFilter && statusFilter !== "all") {
@@ -85,23 +106,56 @@ export default function RestoreReportLogsPage() {
         query = query.lte("executed_at", endDateTime.toISOString());
       }
 
-      const { data, error: fetchError } = await query
+      const { data, error: fetchError, count } = await query
         .order("executed_at", { ascending: false })
-        .limit(100);
+        .range(from, to);
 
       if (fetchError) throw fetchError;
-      setLogs(data || []);
+      
+      // Update logs - append if loading more, replace if reset
+      if (reset) {
+        setLogs(data || []);
+      } else {
+        setLogs(prev => [...prev, ...(data || [])]);
+      }
+      
+      setTotalCount(count || 0);
+      setHasMore((data || []).length === ITEMS_PER_PAGE);
+      
+      if (!reset) {
+        setCurrentPage(page + 1);
+      }
     } catch (err) {
       console.error("Error fetching logs:", err);
       setError(err instanceof Error ? err.message : "Erro ao carregar logs");
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
-  }
+  }, [statusFilter, startDate, endDate, currentPage, hasMore]);
 
-  function handleApplyFilters() {
-    fetchLogs();
-  }
+  // Infinite scroll observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading && !loadingMore) {
+          fetchLogs(false);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [hasMore, loading, loadingMore, fetchLogs]);
 
   function handleClearFilters() {
     setStatusFilter("all");
@@ -122,18 +176,21 @@ export default function RestoreReportLogsPage() {
 
     const csvContent = [
       headers.join(","),
-      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+      ...rows.map((row) => row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(",")),
     ].join("\n");
 
     const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
+    const timestamp = format(new Date(), "yyyy-MM-dd-HHmmss");
     link.setAttribute("href", url);
-    link.setAttribute("download", `restore-logs-${format(new Date(), "yyyy-MM-dd")}.csv`);
+    link.setAttribute("download", `restore-logs-${timestamp}.csv`);
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    toast.success("CSV exportado com sucesso!");
   }
 
   function exportToPDF() {
@@ -141,13 +198,16 @@ export default function RestoreReportLogsPage() {
 
     const doc = new jsPDF();
     
-    // Add title
+    // Add title with indigo color
     doc.setFontSize(16);
+    doc.setTextColor(79, 70, 229); // Indigo #4F46E5
     doc.text("Auditoria de Relatórios Enviados", 14, 20);
     
-    // Add generation date
+    // Add metadata
     doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
     doc.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm")}`, 14, 28);
+    doc.text(`Total de registros: ${totalCount}`, 14, 34);
     
     // Prepare table data
     const tableData = logs.map((log) => [
@@ -161,18 +221,21 @@ export default function RestoreReportLogsPage() {
     autoTable(doc, {
       head: [["Data", "Status", "Mensagem", "Erro"]],
       body: tableData,
-      startY: 35,
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [59, 130, 246] },
+      startY: 40,
+      styles: { fontSize: 8, cellPadding: 2 },
+      headStyles: { fillColor: [79, 70, 229] }, // Indigo
       columnStyles: {
         0: { cellWidth: 35 },
         1: { cellWidth: 25 },
-        2: { cellWidth: 60 },
-        3: { cellWidth: 60 },
+        2: { cellWidth: 60, cellPadding: 2 },
+        3: { cellWidth: 60, cellPadding: 2 },
       },
     });
 
-    doc.save(`restore-logs-${format(new Date(), "yyyy-MM-dd")}.pdf`);
+    const timestamp = format(new Date(), "yyyy-MM-dd-HHmmss");
+    doc.save(`restore-logs-${timestamp}.pdf`);
+    
+    toast.success("PDF exportado com sucesso!");
   }
 
   function getStatusIcon(status: string) {
@@ -224,6 +287,11 @@ export default function RestoreReportLogsPage() {
               <h1 className="text-2xl font-bold">
                 {isPublic && <Eye className="inline w-6 h-6 mr-2" />}
                 🧠 Auditoria de Relatórios Enviados
+                {totalCount > 0 && (
+                  <span className="text-lg font-normal text-muted-foreground ml-2">
+                    ({totalCount} total)
+                  </span>
+                )}
               </h1>
               <p className="text-sm text-muted-foreground">
                 Logs de execução automática dos relatórios de restauração
@@ -251,7 +319,11 @@ export default function RestoreReportLogsPage() {
                 PDF
               </Button>
               <Button 
-                onClick={fetchLogs} 
+                onClick={() => {
+                  setCurrentPage(0);
+                  setHasMore(true);
+                  fetchLogs(true);
+                }} 
                 variant="outline" 
                 size="sm"
               >
@@ -301,18 +373,13 @@ export default function RestoreReportLogsPage() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium invisible">Actions</label>
-                  <div className="flex gap-2">
-                    <Button onClick={handleApplyFilters} className="flex-1">
-                      Buscar
-                    </Button>
-                    <Button 
-                      onClick={handleClearFilters} 
-                      variant="outline"
-                      className="flex-1"
-                    >
-                      Limpar
-                    </Button>
-                  </div>
+                  <Button 
+                    onClick={handleClearFilters} 
+                    variant="outline"
+                    className="w-full"
+                  >
+                    Limpar Filtros
+                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -437,6 +504,21 @@ export default function RestoreReportLogsPage() {
                       </CardContent>
                     </Card>
                   ))}
+                  
+                  {/* Infinite scroll trigger */}
+                  <div ref={observerTarget} className="py-4">
+                    {loadingMore && (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                        <p className="ml-3 text-sm text-muted-foreground">Carregando mais...</p>
+                      </div>
+                    )}
+                    {!hasMore && logs.length > 0 && (
+                      <p className="text-center text-sm text-muted-foreground">
+                        Todos os logs foram carregados
+                      </p>
+                    )}
+                  </div>
                 </div>
               </ScrollArea>
             )}
