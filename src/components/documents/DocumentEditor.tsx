@@ -64,7 +64,7 @@ export function DocumentEditor({
     try {
       // Save to main documents table
       const { error: docError } = await supabase
-        .from('ai_generated_documents')
+        .from("ai_generated_documents")
         .upsert({
           id: documentId,
           content,
@@ -76,7 +76,7 @@ export function DocumentEditor({
 
       // Save to version history
       const { error: versionError } = await supabase
-        .from('document_versions')
+        .from("document_versions")
         .insert({
           document_id: documentId,
           content,
@@ -135,7 +135,7 @@ export function DocumentEditor({
       if (!currentDocId) {
         // Create new document
         const { data, error } = await supabase
-          .from('ai_generated_documents')
+          .from("ai_generated_documents")
           .insert({
             title: title.trim(),
             content,
@@ -149,20 +149,20 @@ export function DocumentEditor({
       } else {
         // Update existing document
         const { error: docError } = await supabase
-          .from('ai_generated_documents')
+          .from("ai_generated_documents")
           .update({
             title: title.trim(),
             content,
             updated_by: user.id,
           })
-          .eq('id', currentDocId);
+          .eq("id", currentDocId);
 
         if (docError) throw docError;
       }
 
       // Save to version history
       const { error: versionError } = await supabase
-        .from('document_versions')
+        .from("document_versions")
         .insert({
           document_id: currentDocId,
           content,
