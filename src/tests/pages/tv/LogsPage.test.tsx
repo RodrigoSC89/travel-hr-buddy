@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import TVWallLogsPage from "@/pages/tv/LogsPage";
 
@@ -65,7 +65,7 @@ describe("TVWallLogsPage Component", () => {
       </MemoryRouter>
     );
 
-    const alertIcon = container.querySelector('svg.lucide-circle-alert');
+    const alertIcon = container.querySelector("svg.lucide-circle-alert");
     expect(alertIcon).toBeInTheDocument();
   });
 
@@ -76,7 +76,7 @@ describe("TVWallLogsPage Component", () => {
       </MemoryRouter>
     );
 
-    const mainDiv = container.querySelector('.min-h-screen.bg-background.p-6');
+    const mainDiv = container.querySelector(".min-h-screen.bg-background.p-6");
     expect(mainDiv).toBeInTheDocument();
   });
 
@@ -87,7 +87,7 @@ describe("TVWallLogsPage Component", () => {
       </MemoryRouter>
     );
 
-    const card = container.querySelector('.rounded-lg.border');
+    const card = container.querySelector(".rounded-lg.border");
     expect(card).toBeInTheDocument();
   });
 });

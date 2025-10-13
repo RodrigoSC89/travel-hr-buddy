@@ -1,21 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreReportLogsPage from "@/pages/admin/reports/logs";
-import { supabase } from "@/integrations/supabase/client";
-
-// Mock supabase
-vi.mock("@/integrations/supabase/client", () => ({
-  supabase: {
-    from: vi.fn(() => ({
-      select: vi.fn(() => ({
-        order: vi.fn(() => ({
-          then: vi.fn(),
-        })),
-      })),
-    })),
-  },
-}));
 
 // Mock toast
 vi.mock("@/hooks/use-toast", () => ({
@@ -68,18 +54,18 @@ describe("RestoreReportLogsPage Component", () => {
       </MemoryRouter>
     );
 
-    const alertIcon = container.querySelector('svg.lucide-circle-alert');
+    const alertIcon = container.querySelector("svg.lucide-circle-alert");
     expect(alertIcon).toBeInTheDocument();
   });
 
   it("should navigate back when back button is clicked", () => {
-    const { container } = render(
+    render(
       <MemoryRouter>
         <RestoreReportLogsPage />
       </MemoryRouter>
     );
 
-    const backButton = screen.getByText(/Voltar/i).closest('button');
+    const backButton = screen.getByText(/Voltar/i).closest("button");
     expect(backButton).toBeInTheDocument();
   });
 });

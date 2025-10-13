@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreChartEmbed from "@/pages/embed/RestoreChartEmbed";
 
@@ -67,7 +67,7 @@ describe("RestoreChartEmbed Component", () => {
       </MemoryRouter>
     );
 
-    const alertIcon = container.querySelector('svg.lucide-circle-alert');
+    const alertIcon = container.querySelector("svg.lucide-circle-alert");
     expect(alertIcon).toBeInTheDocument();
   });
 
@@ -78,7 +78,7 @@ describe("RestoreChartEmbed Component", () => {
       </MemoryRouter>
     );
 
-    const centerDiv = container.querySelector('.flex.items-center.justify-center.min-h-screen');
+    const centerDiv = container.querySelector(".flex.items-center.justify-center.min-h-screen");
     expect(centerDiv).toBeInTheDocument();
   });
 
@@ -89,7 +89,7 @@ describe("RestoreChartEmbed Component", () => {
       </MemoryRouter>
     );
 
-    const alert = container.querySelector('.max-w-md');
+    const alert = container.querySelector(".max-w-md");
     expect(alert).toBeInTheDocument();
   });
 });
