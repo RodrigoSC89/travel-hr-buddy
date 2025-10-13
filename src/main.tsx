@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
+import { logger } from "@/lib/logger";
 import "./index.css";
 import "../sentry.client.config";
 
@@ -11,7 +12,7 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker
       .register("/sw.js", { scope: "/" })
       .then((registration) => {
-        console.log("✅ PWA Service Worker registered:", registration);
+        logger.info("✅ PWA Service Worker registered:", registration);
       })
       .catch((error) => {
         console.error("❌ Service Worker registration failed:", error);

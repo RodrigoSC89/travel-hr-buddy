@@ -280,6 +280,7 @@ export const EnhancedHotelSearch: React.FC = () => {
       ];
       setAiSuggestions(suggestions);
     } catch (error) {
+      console.error("Error in enhanced-hotel-search.tsx:", error);
     }
   };
 

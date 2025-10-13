@@ -80,6 +80,7 @@ export const NotificationSettings = () => {
         });
       }
     } catch (error) {
+      console.error("Error in notification-settings.tsx:", error);
     } finally {
       setLoading(false);
     }
@@ -135,6 +136,7 @@ export const NotificationSettings = () => {
         });
       }
     } catch (error) {
+      console.error("Error in notification-settings.tsx:", error);
     }
   };
 

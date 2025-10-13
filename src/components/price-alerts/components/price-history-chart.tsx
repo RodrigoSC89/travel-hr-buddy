@@ -69,6 +69,7 @@ export const PriceHistoryChart = () => {
         }
       }
     } catch (error) {
+      console.error("Error in price-history-chart.tsx:", error);
     } finally {
       setLoading(false);
     }
@@ -109,6 +110,7 @@ export const PriceHistoryChart = () => {
         setChartData(formattedData);
       }
     } catch (error) {
+      console.error("Error in price-history-chart.tsx:", error);
     }
   };
 

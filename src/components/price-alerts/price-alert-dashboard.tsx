@@ -107,6 +107,7 @@ export const PriceAlertDashboardLegacy = () => {
       if (error) throw error;
       setNotifications(data || []);
     } catch (error) {
+      console.error("Error in price-alert-dashboard.tsx:", error);
     }
   };
 

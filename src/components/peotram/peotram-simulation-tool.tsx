@@ -180,6 +180,7 @@ export const PeotramSimulationTool: React.FC = () => {
       
       setCurrentScenario(scenario);
     } catch (error) {
+      console.error("Error in peotram-simulation-tool.tsx:", error);
     } finally {
       setIsRunning(false);
     }

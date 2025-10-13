@@ -131,7 +131,8 @@ export const EnhancedMobileSupport: React.FC = () => {
           info.batteryLevel = Math.round(battery.level * 100);
           info.isCharging = battery.charging;
         } catch (error) {
-        }
+      console.error("Error in enhanced-mobile-support.tsx:", error);
+    }
       }
 
       // Connection API (se disponível)
@@ -142,6 +143,7 @@ export const EnhancedMobileSupport: React.FC = () => {
 
       setDeviceInfo(info);
     } catch (error) {
+      console.error("Error in enhanced-mobile-support.tsx:", error);
     } finally {
       setIsLoading(false);
     }

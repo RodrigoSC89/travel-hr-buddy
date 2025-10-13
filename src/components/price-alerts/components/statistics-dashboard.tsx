@@ -62,6 +62,7 @@ export const StatisticsDashboard = () => {
         setStatistics(data);
       }
     } catch (error) {
+      console.error("Error in statistics-dashboard.tsx:", error);
     }
   };
 
@@ -109,6 +110,7 @@ export const StatisticsDashboard = () => {
         });
       }
     } catch (error) {
+      console.error("Error in statistics-dashboard.tsx:", error);
     } finally {
       setLoading(false);
     }

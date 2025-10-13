@@ -117,6 +117,7 @@ export const SmartNotifications: React.FC = () => {
         setSettings(defaultSettings);
       }
     } catch (error) {
+      console.error("Error in smart-notifications.tsx:", error);
     } finally {
       setIsLoading(false);
     }

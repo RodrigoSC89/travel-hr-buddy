@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { apiHealthMonitor } from "@/utils/api-health-monitor";
-import { logger } from "@/utils/logger";
+import { logger } from "@/lib/logger";
 
 export class AudioRecorder {
   private stream: MediaStream | null = null;

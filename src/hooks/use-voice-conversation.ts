@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export class VoiceRecorder {
   private mediaRecorder: MediaRecorder | null = null;
@@ -135,7 +136,7 @@ export const useTextToSpeech = () => {
   const speak = async (text: string, voice: string = "alloy"): Promise<void> => {
     try {
       setIsSpeaking(true);
-      console.log("Generating speech for:", text.substring(0, 50) + "...");
+      logger.info("Generating speech for:", text.substring(0, 50) + "...");
 
       const { data, error } = await supabase.functions.invoke("text-to-speech", {
         body: { 

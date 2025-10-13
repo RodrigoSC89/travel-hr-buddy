@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { LocalNotifications, ScheduleOptions } from "@capacitor/local-notifications";
 import { PushNotifications } from "@capacitor/push-notifications";
 import { Capacitor } from "@capacitor/core";
+import { logger } from "@/lib/logger";
 
 export const useNotifications = () => {
   const [permissionGranted, setPermissionGranted] = useState(false);
@@ -37,11 +38,11 @@ export const useNotifications = () => {
         });
 
         PushNotifications.addListener("pushNotificationReceived", (notification) => {
-          console.log("Push received: " + JSON.stringify(notification));
+          logger.info("Push received: " + JSON.stringify(notification));
         });
 
         PushNotifications.addListener("pushNotificationActionPerformed", (notification) => {
-          console.log("Push action performed: " + JSON.stringify(notification));
+          logger.info("Push action performed: " + JSON.stringify(notification));
         });
       }
     } catch (error) {

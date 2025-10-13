@@ -89,6 +89,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       if (error) throw error;
       setUsers(data || []);
     } catch (error) {
+      console.error("Error in peotram-permissions-manager.tsx:", error);
     }
   };
 
@@ -115,6 +116,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       
       setPermissions(mappedPermissions);
     } catch (error) {
+      console.error("Error in peotram-permissions-manager.tsx:", error);
     }
   };
 
@@ -128,6 +130,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       if (error) throw error;
       setVessels(data || []);
     } catch (error) {
+      console.error("Error in peotram-permissions-manager.tsx:", error);
     }
   };
 

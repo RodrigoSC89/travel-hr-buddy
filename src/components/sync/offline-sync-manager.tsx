@@ -56,6 +56,7 @@ export const OfflineSyncManager: React.FC = () => {
       const pending = await getPendingChanges();
       setSyncItems(pending);
     } catch (error) {
+      console.error("Error in offline-sync-manager.tsx:", error);
     }
   };
 
@@ -98,7 +99,8 @@ export const OfflineSyncManager: React.FC = () => {
           await simulateSyncAction(item);
           
         } catch (error) {
-        }
+      console.error("Error in offline-sync-manager.tsx:", error);
+    }
       }
 
       // Executar sync real

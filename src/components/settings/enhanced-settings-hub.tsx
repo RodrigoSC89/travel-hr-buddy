@@ -537,6 +537,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         });
       }
     } catch (error) {
+      console.error("Error in enhanced-settings-hub.tsx:", error);
     }
   };
 

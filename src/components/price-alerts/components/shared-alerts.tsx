@@ -121,6 +121,7 @@ export const SharedAlerts = () => {
         setSharedAlerts(data || []);
       }
     } catch (error) {
+      console.error("Error in shared-alerts.tsx:", error);
     } finally {
       setLoading(false);
     }
@@ -140,6 +141,7 @@ export const SharedAlerts = () => {
 
       setUserAlerts(data || []);
     } catch (error) {
+      console.error("Error in shared-alerts.tsx:", error);
     }
   };
 

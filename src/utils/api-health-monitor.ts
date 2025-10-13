@@ -3,7 +3,7 @@
  * Monitors the health of external API connections and implements circuit breaker pattern
  */
 
-import { logger } from "./logger";
+import { logger } from "@/lib/logger";
 
 interface APIHealthStatus {
   name: string;

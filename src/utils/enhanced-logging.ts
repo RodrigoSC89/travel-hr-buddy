@@ -3,7 +3,7 @@
  * Provides comprehensive logging and debugging capabilities
  */
 
-import { logger } from "./logger";
+import { logger } from "@/lib/logger";
 
 export interface LogEntry {
   timestamp: string;

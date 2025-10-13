@@ -107,6 +107,12 @@ export const PredictiveTravelDashboard: React.FC = () => {
       if (error) throw error;
       setRecommendations(data.data || []);
     } catch (error) {
+      console.error("Error loading recommendations:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load travel recommendations. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -125,6 +131,12 @@ export const PredictiveTravelDashboard: React.FC = () => {
       if (error) throw error;
       setAlerts(data || []);
     } catch (error) {
+      console.error("Error loading price alerts:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load price alerts. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 

@@ -226,6 +226,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       
       await onSave?.(auditResult);
     } catch (error) {
+      console.error("Error in peotram-audit-wizard.tsx:", error);
     } finally {
       setIsSaving(false);
     }
@@ -249,6 +250,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       
       await onComplete?.(auditResult);
     } catch (error) {
+      console.error("Error in peotram-audit-wizard.tsx:", error);
     } finally {
       setIsSaving(false);
     }

@@ -98,6 +98,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
       setIsEditDialogOpen(false);
       setSelectedNC(null);
     } catch (error) {
+      console.error("Error in peotram-non-conformities.tsx:", error);
     }
   };
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { BackToDashboard } from "@/components/ui/back-to-dashboard";
+import { logger } from "@/lib/logger";
 import { 
   Plane, 
   Building, 
@@ -335,28 +336,28 @@ const Travel = () => {
             id: "new-trip",
             label: "Nova Viagem",
             icon: <Plus className="h-4 w-4" />,
-            action: () => console.log("Nova viagem"),
+            action: () => logger.info("Nova viagem"),
             variant: "default"
           },
           {
             id: "bookings",
             label: "Reservas",
             icon: <Calendar className="h-4 w-4" />,
-            action: () => console.log("Reservas"),
+            action: () => logger.info("Reservas"),
             variant: "outline"
           },
           {
             id: "expenses",
             label: "Despesas",
             icon: <DollarSign className="h-4 w-4" />,
-            action: () => console.log("Despesas"),
+            action: () => logger.info("Despesas"),
             variant: "outline"
           },
           {
             id: "reports",
             label: "Relatórios",
             icon: <BarChart3 className="h-4 w-4" />,
-            action: () => console.log("Relatórios"),
+            action: () => logger.info("Relatórios"),
             variant: "outline"
           }
         ]}
@@ -372,7 +373,7 @@ const Travel = () => {
             id: "export",
             label: "Exportar",
             icon: <Download className="h-3 w-3" />,
-            action: () => console.log("Export travel data")
+            action: () => logger.info("Export travel data")
           }
         ]}
       />

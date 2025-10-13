@@ -1,4 +1,5 @@
 import Tesseract from "tesseract.js";
+import { logger } from "@/lib/logger";
 
 export interface OCRResult {
   text: string;
@@ -33,7 +34,7 @@ export class OCRService {
     }
 
     this.worker = await Tesseract.createWorker(language, 1, {
-      logger: (m) => console.log("OCR:", m),
+      logger: (m) => logger.info("OCR:", m),
     });
   }
 

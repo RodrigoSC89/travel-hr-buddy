@@ -86,6 +86,7 @@ export const PeotramComplianceChecker: React.FC = () => {
       setComplianceItems(getMockComplianceItems());
       setComplianceReport(getMockComplianceReport());
     } catch (error) {
+      console.error("Error in peotram-compliance-checker.tsx:", error);
     } finally {
       setIsLoading(false);
     }

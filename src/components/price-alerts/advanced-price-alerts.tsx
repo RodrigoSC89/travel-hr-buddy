@@ -173,6 +173,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
       if (error) throw error;
       setHistory(data || []);
     } catch (error) {
+      console.error("Error in advanced-price-alerts.tsx:", error);
     }
   };
 

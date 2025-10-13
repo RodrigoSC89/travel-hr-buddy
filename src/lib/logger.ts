@@ -58,9 +58,9 @@ export const logger = {
   debug: (message: string, context?: LogContext) => {
     if (isDevelopment) {
       if (context) {
-        console.debug(`🐛 ${message}`, context);
+        logger.debug(`🐛 ${message}`, context);
       } else {
-        console.debug(`🐛 ${message}`);
+        logger.debug(`🐛 ${message}`);
       }
     }
   },

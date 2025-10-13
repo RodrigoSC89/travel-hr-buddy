@@ -402,6 +402,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
 
       setAIRecommendations(aiData || []);
     } catch (error) {
+      console.error("Error in professional-crew-dossier.tsx:", error);
     }
   };
 
