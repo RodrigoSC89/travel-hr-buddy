@@ -1,106 +1,45 @@
-# Next.js API Route for Document Generation
+# ⚠️ DEPRECATED: Next.js API Routes
 
-This directory contains a Next.js-compatible API route implementation for document generation using OpenAI's GPT-4 model.
+**This directory contains deprecated Next.js API route implementations.**
 
-## Purpose
+## Status: Reference Only
 
-This is a **reference implementation** showing how the document generation feature could be implemented in a Next.js environment. The current project uses Vite with Supabase Edge Functions for backend functionality.
+These API routes are **NOT ACTIVE** in the current Vite-based application. They are kept for reference purposes only.
 
 ## Active Implementation
 
-The currently active implementation for document generation is located at:
-- **Backend**: `supabase/functions/generate-document/index.ts` (Supabase Edge Function)
-- **Frontend**: `src/pages/admin/documents-ai.tsx` (React component)
+The currently active backend implementation uses **Supabase Edge Functions**:
+- Location: `supabase/functions/`
+- Runtime: Deno
+- All API functionality has been migrated to Supabase Edge Functions
 
-## File: `generate-document.ts`
+## Migration Complete
 
-### API Endpoint
-```
-POST /api/generate-document
-```
+The frontend has been updated to use Supabase Edge Functions instead of these Next.js routes:
+- ✅ `assistant-query` → `supabase/functions/assistant-query`
+- ✅ `cron-status` → `supabase/functions/cron-status`
+- ✅ `generate-document` → `supabase/functions/generate-document`
+- ✅ `generate-chart-image` → Handled client-side or via Supabase functions
 
-### Request Body
-```json
-{
-  "prompt": "string - Description of the document to generate"
-}
-```
+## If Migrating to Next.js
 
-### Response
-```json
-{
-  "content": "string - Generated document content"
-}
-```
-
-### Error Response
-```json
-{
-  "error": "string - Error message"
-}
-```
-
-## Key Differences from Supabase Implementation
-
-| Feature | Next.js API Route | Supabase Edge Function |
-|---------|------------------|------------------------|
-| **Runtime** | Node.js | Deno |
-| **OpenAI SDK** | `openai` npm package | Direct fetch calls |
-| **Model** | gpt-4 | gpt-4o-mini |
-| **Temperature** | 0.5 | 0.7 |
-| **Retry Logic** | None | Exponential backoff with 3 retries |
-| **Max Tokens** | Not specified | 2000 |
-| **System Prompt** | Simpler, focused on writing | More detailed, professional documents |
-
-## Usage in Next.js
-
-To use this API route in a Next.js application:
-
-1. Ensure Next.js is installed and configured
-2. Install the OpenAI package: `npm install openai`
-3. Set the `OPENAI_API_KEY` environment variable
-4. Call the endpoint from your frontend:
-
-```typescript
-const response = await fetch('/api/generate-document', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    prompt: 'Your document description here',
-  }),
-});
-
-const data = await response.json();
-console.log(data.content);
-```
-
-## Migration Notes
-
-If migrating this Vite project to Next.js:
+If you decide to migrate this project from Vite to Next.js in the future, these routes can serve as a starting point. However, you will need to:
 
 1. Install Next.js and its dependencies
-2. Migrate React components to Next.js pages structure
-3. Replace Supabase Edge Functions with Next.js API routes
-4. Update environment variables for Next.js conventions
-5. Test all API endpoints thoroughly
+2. Update imports and exports to Next.js conventions
+3. Migrate Supabase Edge Functions to Next.js API routes
+4. Update environment variable handling
+5. Test all endpoints thoroughly
 
-## Environment Variables
+## Current Architecture
 
-Required environment variables:
-- `OPENAI_API_KEY`: Your OpenAI API key for GPT-4 access
+This is a **Vite + React + Supabase** application:
+- **Frontend**: Vite with React (SPA)
+- **Backend**: Supabase Edge Functions (Deno runtime)
+- **Database**: Supabase PostgreSQL
+- **Auth**: Supabase Auth
+- **Storage**: Supabase Storage
 
-## Security Considerations
+## Removal Recommendation
 
-- API key should never be exposed to the client
-- Consider implementing rate limiting
-- Add authentication/authorization as needed
-- Validate and sanitize all user inputs
-- Implement proper error handling and logging
-
-## Related Documentation
-
-- [OpenAI API Documentation](https://platform.openai.com/docs/api-reference)
-- [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction)
-- [Supabase Edge Functions](https://supabase.com/docs/guides/functions)
+These files can be safely removed if you want to clean up the repository. They are not used by the application.
