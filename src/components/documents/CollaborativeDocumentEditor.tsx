@@ -68,11 +68,11 @@ export function CollaborativeDocumentEditor({
     if (editor && !editor.isDestroyed) {
       editor.extensionManager.extensions.forEach((ext) => {
         if (ext.name === "collaboration") {
-          // @ts-ignore
+          // @ts-expect-error - TipTap extension options are not fully typed
           ext.options.document = ydoc.current;
         }
         if (ext.name === "collaborationCursor") {
-          // @ts-ignore
+          // @ts-expect-error - TipTap extension options are not fully typed
           ext.options.provider = provider.current;
         }
       });
