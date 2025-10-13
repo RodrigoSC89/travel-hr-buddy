@@ -2,34 +2,34 @@
 
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function AdminDashboard() {
   const [cronStatus, setCronStatus] = useState<"ok" | "warning" | null>(null);
   const [cronMessage, setCronMessage] = useState("");
 
   useEffect(() => {
-    fetch("/api/cron-status")
-      .then(async res => {
-        const contentType = res.headers.get("content-type");
-        // If we get HTML instead of JSON, we're in dev mode without backend
-        if (contentType && contentType.includes("text/html")) {
-          // Use mock data for development
-          return {
-            status: "ok",
-            message: "Cron diário executado com sucesso nas últimas 24h (Dev Mode)"
-          };
+    const fetchCronStatus = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke("cron-status");
+        
+        if (error) {
+          console.error("Error fetching cron status:", error);
+          setCronStatus("warning");
+          setCronMessage("Erro ao carregar status do cron");
+          return;
         }
-        return res.json();
-      })
-      .then(data => {
+        
         setCronStatus(data.status);
         setCronMessage(data.message);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error("Error fetching cron status:", error);
         setCronStatus("warning");
         setCronMessage("Erro ao carregar status do cron");
-      });
+      }
+    };
+    
+    fetchCronStatus();
   }, []);
 
   return (

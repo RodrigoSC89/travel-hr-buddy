@@ -9,6 +9,17 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "framework": "vite",
+  "env": {
+    "VITE_SUPABASE_URL": "@supabase_url",
+    "VITE_SUPABASE_PUBLISHABLE_KEY": "@supabase_anon_key",
+    "VITE_SUPABASE_PROJECT_ID": "@supabase_project_id",
+    "VITE_SENTRY_DSN": "@sentry_dsn",
+    "VITE_OPENAI_API_KEY": "@openai_api_key",
+    "VITE_MAPBOX_ACCESS_TOKEN": "@mapbox_token",
+    "VITE_MAPBOX_TOKEN": "@mapbox_token",
+    "VITE_APP_URL": "@app_url",
+    "VITE_EMBED_ACCESS_TOKEN": "@embed_access_token"
+  },
   "headers": [
     {
       "source": "/(.*)",
@@ -24,6 +35,10 @@
         {
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         }
       ]
     },

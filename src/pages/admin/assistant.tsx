@@ -52,25 +52,15 @@ export default function AssistantPage() {
     if (!commandText) setInput("");
 
     try {
-      // Try Supabase function first
       const { data, error } = await supabase.functions.invoke("assistant-query", {
         body: { question },
       });
 
       if (error) {
-        console.warn("Supabase function error, falling back to API route:", error);
-        // Fall back to Next.js API route
-        const res = await fetch("/api/assistant-query", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question }),
-        });
-        const apiData = await res.json();
-        if (!res.ok) throw new Error(apiData.error);
-        setMessages((prev) => [...prev, { role: "assistant", content: apiData.answer || "" }]);
-      } else {
-        setMessages((prev) => [...prev, { role: "assistant", content: data?.answer || "" }]);
+        throw error;
       }
+      
+      setMessages((prev) => [...prev, { role: "assistant", content: data?.answer || "" }]);
     } catch (error) {
       console.error("Error sending message:", error);
       setMessages((prev) => [
