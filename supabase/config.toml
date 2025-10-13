@@ -7,6 +7,9 @@ verify_jwt = false
 [functions.send-daily-assistant-report]
 verify_jwt = false
 
+[functions.monitor-cron-health]
+verify_jwt = false
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)
@@ -23,3 +26,9 @@ name = "daily-assistant-report"
 function_name = "send-daily-assistant-report"
 schedule = "0 8 * * *"  # Every day at 8:00 AM UTC
 description = "Send daily assistant report via email with CSV attachment"
+
+[[edge_runtime.cron]]
+name = "monitor-cron-health"
+function_name = "monitor-cron-health"
+schedule = "0 */12 * * *"  # Every 12 hours
+description = "Monitor cron job execution health and send alerts if failures detected"
