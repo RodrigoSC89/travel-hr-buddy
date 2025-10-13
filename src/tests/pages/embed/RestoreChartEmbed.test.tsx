@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import RestoreChartEmbed from "@/pages/embed/RestoreChartEmbed";
 
@@ -57,7 +57,7 @@ describe("RestoreChartEmbed Component", () => {
     );
 
     // Component now shows a configuration warning instead of loading data
-    expect(screen.getByText((content, element) => 
+    expect(screen.getByText((content) => 
       content.includes("Esta funcionalidade requer configuração de banco de dados adicional")
     )).toBeInTheDocument();
   });
