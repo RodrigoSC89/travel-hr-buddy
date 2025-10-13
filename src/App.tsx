@@ -59,6 +59,7 @@ const DocumentEditorPage = React.lazy(() => import("./pages/admin/documents/Docu
 const ExecutionLogs = React.lazy(() => import("./pages/admin/automation/execution-logs"));
 const RestoreReportLogs = React.lazy(() => import("./pages/admin/reports/logs"));
 const AssistantReportLogs = React.lazy(() => import("./pages/admin/reports/assistant"));
+const RestoreAnalytics = React.lazy(() => import("./pages/admin/reports/restore-analytics"));
 const AdminDashboard = React.lazy(() => import("./pages/admin/dashboard"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
@@ -152,6 +153,7 @@ function App() {
                       <Route path="/admin/automation/execution-logs" element={<ExecutionLogs />} />
                       <Route path="/admin/reports/logs" element={<RestoreReportLogs />} />
                       <Route path="/admin/reports/assistant" element={<AssistantReportLogs />} />
+                      <Route path="/admin/reports/restore-analytics" element={<RestoreAnalytics />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
