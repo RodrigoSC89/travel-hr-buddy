@@ -344,14 +344,21 @@ See [REPOSITORY_REVIEW_SUMMARY.md](./REPOSITORY_REVIEW_SUMMARY.md) for detailed 
 
 ## 📚 Additional Documentation
 
-For more detailed information, see:
+### Getting Started
+- **[QUICKSTART.md](./QUICKSTART.md)** - Quick start guide for developers
+- **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Complete deployment guide for all platforms
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - How to contribute to the project
 
+### Implementation Details
 - **[NAUTILUS_ONE_IMPLEMENTATION.md](./NAUTILUS_ONE_IMPLEMENTATION.md)** - Complete implementation details
 - **[NAUTILUS_ONE_README.md](./NAUTILUS_ONE_README.md)** - Nautilus One quick start guide
 - **[VERCEL_QUICK_START.md](./VERCEL_QUICK_START.md)** - 5-minute visual setup guide
 - **[QUICK_DEPLOY.md](./QUICK_DEPLOY.md)** - Quick deployment guide for all platforms
 - **[DEPLOYMENT_CONFIG_REPORT.md](./DEPLOYMENT_CONFIG_REPORT.md)** - Detailed configuration report
+
+### Configuration & Setup
 - **[API_KEYS_SETUP_GUIDE.md](./API_KEYS_SETUP_GUIDE.md)** - API keys setup guide
+- **[HEALTH_CHECK_GUIDE.md](./HEALTH_CHECK_GUIDE.md)** - System health check documentation
 
 ---
 
