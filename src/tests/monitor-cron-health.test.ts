@@ -9,8 +9,8 @@ describe("Monitor Cron Health System", () => {
         message: "Cron executado normalmente. Última execução há 2.5 horas"
       };
 
-      const mockErrorResponse = {
-        status: "error",
+      const mockWarningResponse = {
+        status: "warning",
         message: "Última execução há 48.0 horas. Última execução: 10/10/2025 08:00:00"
       };
 
@@ -19,17 +19,17 @@ describe("Monitor Cron Health System", () => {
       expect(mockOkResponse.message).toBeDefined();
       expect(mockOkResponse.message).toContain("Cron executado normalmente");
 
-      // Verify Error response
-      expect(mockErrorResponse.status).toBe("error");
-      expect(mockErrorResponse.message).toBeDefined();
-      expect(mockErrorResponse.message).toContain("Última execução há");
+      // Verify Warning response
+      expect(mockWarningResponse.status).toBe("warning");
+      expect(mockWarningResponse.message).toBeDefined();
+      expect(mockWarningResponse.message).toContain("Última execução há");
     });
 
     it("should validate status enum values", () => {
-      const validStatuses = ["ok", "error"];
+      const validStatuses = ["ok", "warning"];
       
       expect(validStatuses).toContain("ok");
-      expect(validStatuses).toContain("error");
+      expect(validStatuses).toContain("warning");
       expect(validStatuses).toHaveLength(2);
     });
 
@@ -108,21 +108,21 @@ describe("Monitor Cron Health System", () => {
   });
 
   describe("Integration Logic", () => {
-    it("should query assistant_report_logs table correctly", () => {
-      // Mock query to get last execution
+    it("should query cron_execution_logs table correctly", () => {
+      // Mock query to get last execution from new cron_execution_logs table
       const mockQuery = {
-        table: "assistant_report_logs",
+        table: "cron_execution_logs",
         filter: {
-          triggered_by: "automated",
+          function_name: "send-daily-assistant-report",
           status: "success",
         },
-        orderBy: "sent_at",
+        orderBy: "executed_at",
         order: "DESC",
         limit: 1,
       };
 
-      expect(mockQuery.table).toBe("assistant_report_logs");
-      expect(mockQuery.filter.triggered_by).toBe("automated");
+      expect(mockQuery.table).toBe("cron_execution_logs");
+      expect(mockQuery.filter.function_name).toBe("send-daily-assistant-report");
       expect(mockQuery.filter.status).toBe("success");
     });
 
@@ -140,15 +140,15 @@ describe("Monitor Cron Health System", () => {
     it("should handle case with no executions in history", () => {
       const mockEmptyResponse = null;
       
-      // When no executions found, should return error
+      // When no executions found, should return warning
       if (mockEmptyResponse === null) {
-        const errorResponse = {
-          status: "error",
+        const warningResponse = {
+          status: "warning",
           message: "Nenhuma execução do cron encontrada no histórico"
         };
         
-        expect(errorResponse.status).toBe("error");
-        expect(errorResponse.message).toContain("Nenhuma execução");
+        expect(warningResponse.status).toBe("warning");
+        expect(warningResponse.message).toContain("Nenhuma execução");
       }
     });
   });
