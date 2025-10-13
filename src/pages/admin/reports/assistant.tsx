@@ -7,7 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowLeft, Download, FileText, BarChart3 } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ArrowLeft, Download, FileText, BarChart3, CheckCircle, AlertTriangle } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "@/hooks/use-toast";
@@ -42,6 +43,13 @@ interface AssistantReportLog {
   user_id: string | null;
   report_type: string | null;
   logs_count?: number | null;
+  triggered_by?: string | null;
+}
+
+interface HealthStatus {
+  isHealthy: boolean;
+  lastExecutionHoursAgo: number | null;
+  message: string;
 }
 
 export default function AssistantReportLogsPage() {
@@ -51,9 +59,11 @@ export default function AssistantReportLogsPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [email, setEmail] = useState("");
+  const [healthStatus, setHealthStatus] = useState<HealthStatus | null>(null);
 
   useEffect(() => {
     fetchLogs();
+    checkHealthStatus();
   }, []);
 
   // Prepare chart data from logs
@@ -62,9 +72,9 @@ export default function AssistantReportLogsPage() {
 
     // Group logs by date
     const dateGroups = logs.reduce((acc, log) => {
-      const date = new Date(log.sent_at).toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
+      const date = new Date(log.sent_at).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
       });
       acc[date] = (acc[date] || 0) + 1;
       return acc;
@@ -72,8 +82,8 @@ export default function AssistantReportLogsPage() {
 
     // Sort dates and prepare chart data
     const sortedDates = Object.keys(dateGroups).sort((a, b) => {
-      const [dayA, monthA] = a.split('/');
-      const [dayB, monthB] = b.split('/');
+      const [dayA, monthA] = a.split("/");
+      const [dayB, monthB] = b.split("/");
       return new Date(`2024-${monthA}-${dayA}`).getTime() - new Date(`2024-${monthB}-${dayB}`).getTime();
     });
 
@@ -81,26 +91,26 @@ export default function AssistantReportLogsPage() {
       labels: sortedDates,
       datasets: [
         {
-          label: 'Relatórios Enviados',
+          label: "Relatórios Enviados",
           data: sortedDates.map((date) => dateGroups[date]),
-          backgroundColor: 'rgba(99, 102, 241, 0.5)',
-          borderColor: 'rgb(99, 102, 241)',
+          backgroundColor: "rgba(99, 102, 241, 0.5)",
+          borderColor: "rgb(99, 102, 241)",
           borderWidth: 1,
         },
       ],
     };
   }, [logs]);
 
-  const chartOptions: ChartOptions<'bar'> = {
+  const chartOptions: ChartOptions<"bar"> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: "top" as const,
       },
       title: {
         display: true,
-        text: 'Volume de Relatórios Enviados por Dia',
+        text: "Volume de Relatórios Enviados por Dia",
       },
     },
     scales: {
@@ -158,6 +168,49 @@ export default function AssistantReportLogsPage() {
       });
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function checkHealthStatus() {
+    try {
+      // Query for the most recent automated execution
+      const { data, error } = await supabase
+        .from("assistant_report_logs")
+        .select("sent_at, status")
+        .eq("triggered_by", "automated")
+        .eq("status", "success")
+        .order("sent_at", { ascending: false })
+        .limit(1);
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        setHealthStatus({
+          isHealthy: false,
+          lastExecutionHoursAgo: null,
+          message: "Nenhuma execução automática encontrada no histórico"
+        });
+        return;
+      }
+
+      const lastExecution = new Date(data[0].sent_at);
+      const now = new Date();
+      const hoursAgo = (now.getTime() - lastExecution.getTime()) / (1000 * 60 * 60);
+
+      setHealthStatus({
+        isHealthy: hoursAgo <= 36,
+        lastExecutionHoursAgo: Math.round(hoursAgo),
+        message: hoursAgo <= 36
+          ? `Último envio há ${Math.round(hoursAgo)}h`
+          : `Último envio detectado há ${Math.round(hoursAgo)}h — revisar logs`
+      });
+    } catch (error) {
+      console.error("Error checking health status:", error);
+      setHealthStatus({
+        isHealthy: false,
+        lastExecutionHoursAgo: null,
+        message: "Erro ao verificar status do sistema"
+      });
     }
   }
 
@@ -245,6 +298,31 @@ export default function AssistantReportLogsPage() {
           </Button>
         </div>
         <h1 className="text-xl font-bold mb-4">📬 Logs de Envio de Relatórios — Assistente IA</h1>
+        
+        {/* Health Status Indicator */}
+        {healthStatus && (
+          <Alert 
+            variant={healthStatus.isHealthy ? "default" : "destructive"}
+            className={`mb-4 ${healthStatus.isHealthy ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200"}`}
+          >
+            {healthStatus.isHealthy ? (
+              <CheckCircle className="h-4 w-4 text-green-600" />
+            ) : (
+              <AlertTriangle className="h-4 w-4 text-yellow-600" />
+            )}
+            <AlertTitle className={healthStatus.isHealthy ? "text-green-900" : "text-yellow-900"}>
+              {healthStatus.isHealthy ? "✅ Sistema Operando Normalmente" : "⚠️ Atenção Necessária"}
+            </AlertTitle>
+            <AlertDescription className={healthStatus.isHealthy ? "text-green-800" : "text-yellow-800"}>
+              <p>{healthStatus.message}</p>
+              {!healthStatus.isHealthy && healthStatus.lastExecutionHoursAgo && healthStatus.lastExecutionHoursAgo > 36 && (
+                <p className="mt-2 text-sm">
+                  O sistema esperava um envio nas últimas 36 horas. Verifique os logs e a configuração do cron.
+                </p>
+              )}
+            </AlertDescription>
+          </Alert>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
@@ -289,7 +367,7 @@ export default function AssistantReportLogsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div style={{ height: '300px' }}>
+            <div style={{ height: "300px" }}>
               <Bar data={chartData} options={chartOptions} />
             </div>
           </CardContent>
@@ -320,8 +398,8 @@ export default function AssistantReportLogsPage() {
                       log.status === "success" 
                         ? "bg-green-100 text-green-800" 
                         : log.status === "error"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-yellow-100 text-yellow-800"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
                     {log.status}

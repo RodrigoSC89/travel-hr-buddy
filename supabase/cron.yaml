@@ -1,0 +1,15 @@
+# Supabase Cron Jobs Configuration
+# Define scheduled tasks for automated operations
+
+cron:
+  # Daily Assistant Report - Sends automated report at 08:00 UTC
+  - name: send_assistant_report_daily
+    schedule: '0 8 * * *'
+    path: /functions/v1/send-daily-assistant-report
+    method: POST
+
+  # Cron Health Monitor - Checks if daily report was sent in last 36 hours (runs at 10:00 UTC)
+  - name: monitor_cron_health
+    schedule: '0 10 * * *'
+    path: /functions/v1/monitor-cron-health
+    method: POST
