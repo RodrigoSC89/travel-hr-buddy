@@ -16,7 +16,8 @@ export default defineConfig(({ mode }) => ({
   base: "/",
   server: {
     host: true,
-    port: 8080,
+    port: 3000,
+    strictPort: true,
   },
   plugins: [
     react(), 
@@ -113,10 +114,10 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: "dist",
-    sourcemap: true, // Enable source maps for Sentry
+    sourcemap: false,
     minify: "esbuild",
-    target: "es2020", // Atualizado para suportar big integers
-    chunkSizeWarningLimit: 1700, // Increased to accommodate mapbox-gl (1.6MB) - other chunks remain well below 600kB
+    target: "es2020",
+    chunkSizeWarningLimit: 1700,
     rollupOptions: {
       output: {
         manualChunks: (id) => {
@@ -199,6 +200,9 @@ export default defineConfig(({ mode }) => ({
     esbuild: mode === "production" ? {
       drop: ["debugger"],
     } : undefined,
+  },
+  define: {
+    'process.env': 'process.env'
   },
   preview: {
     host: true,
