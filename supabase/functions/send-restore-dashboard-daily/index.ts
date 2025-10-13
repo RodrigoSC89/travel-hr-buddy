@@ -205,7 +205,64 @@ serve(async (req) => {
     console.error("❌ Error in send-restore-dashboard-daily:", error);
     
     // Log critical error
-    await logExecution(supabase, "critical", "Critical error in function", error);
+    await logExecution(supabase, "error", "Falha ao enviar o relatório automático.", error);
+    
+    // Send email notification about the failure
+    try {
+      const adminEmail = Deno.env.get("REPORT_ADMIN_EMAIL") || Deno.env.get("ADMIN_EMAIL") || "admin@example.com";
+      const resendApiKey = Deno.env.get("RESEND_API_KEY");
+      
+      if (resendApiKey) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+        const timestamp = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+        
+        const failureEmailHtml = `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .header { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 30px; text-align: center; border-radius: 10px; }
+                .content { padding: 20px; background: #f9f9f9; }
+                .error-box { background: #fee2e2; border-left: 4px solid #ef4444; padding: 20px; border-radius: 8px; margin: 20px 0; }
+                .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <h1>🚨 Falha no Envio de Relatório Diário</h1>
+                <p>Nautilus One - Travel HR Buddy</p>
+              </div>
+              <div class="content">
+                <div class="error-box">
+                  <h2>❌ Detalhes do Erro</h2>
+                  <p><strong>Erro:</strong> ${errorMessage}</p>
+                  <p><strong>Data/Hora:</strong> ${timestamp}</p>
+                </div>
+                <p>O relatório diário de restaurações falhou ao ser enviado. Por favor, verifique os logs do sistema para mais detalhes.</p>
+              </div>
+              <div class="footer">
+                <p>Este é um email automático de notificação de erro.</p>
+                <p>&copy; ${new Date().getFullYear()} Nautilus One - Travel HR Buddy</p>
+              </div>
+            </body>
+          </html>
+        `;
+        
+        await sendEmailViaResend(
+          adminEmail, 
+          "🚨 Falha no Envio de Relatório Diário", 
+          failureEmailHtml, 
+          "", 
+          resendApiKey
+        );
+        
+        console.log("📧 Failure notification email sent to:", adminEmail);
+      }
+    } catch (emailError) {
+      // Email notification failure should not break the error response
+      console.error("Failed to send error notification email:", emailError);
+    }
     
     return new Response(
       JSON.stringify({

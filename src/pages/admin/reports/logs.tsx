@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,9 @@ import {
   Clock, 
   AlertCircle,
   Download,
-  FileDown 
+  FileDown,
+  Eye,
+  RefreshCw
 } from "lucide-react";
 import { format } from "date-fns";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -34,12 +36,21 @@ interface RestoreReportLog {
 /**
  * Restore Report Logs Page
  * Displays audit logs of automated restore report executions
+ * 
+ * Supports public view mode via ?public=1 query parameter
+ * - Public mode hides navigation and action buttons
+ * - Shows read-only indicator at bottom
+ * - Perfect for TV monitors and public displays
  */
 export default function RestoreReportLogsPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [logs, setLogs] = useState<RestoreReportLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Check if in public view mode
+  const isPublic = searchParams.get("public") === "1";
   
   // Filter states
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -199,97 +210,114 @@ export default function RestoreReportLogsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate("/admin")}
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar
-            </Button>
+            {!isPublic && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/admin")}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar
+              </Button>
+            )}
             <div>
-              <h1 className="text-2xl font-bold">🧠 Auditoria de Relatórios Enviados</h1>
+              <h1 className="text-2xl font-bold">
+                {isPublic && <Eye className="inline w-6 h-6 mr-2" />}
+                🧠 Auditoria de Relatórios Enviados
+              </h1>
               <p className="text-sm text-muted-foreground">
                 Logs de execução automática dos relatórios de restauração
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button 
-              onClick={exportToCSV} 
-              variant="outline" 
-              size="sm"
-              disabled={logs.length === 0}
-            >
-              <Download className="w-4 h-4 mr-2" />
-              CSV
-            </Button>
-            <Button 
-              onClick={exportToPDF} 
-              variant="outline" 
-              size="sm"
-              disabled={logs.length === 0}
-            >
-              <FileDown className="w-4 h-4 mr-2" />
-              PDF
-            </Button>
-          </div>
+          {!isPublic && (
+            <div className="flex gap-2">
+              <Button 
+                onClick={exportToCSV} 
+                variant="outline" 
+                size="sm"
+                disabled={logs.length === 0}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                CSV
+              </Button>
+              <Button 
+                onClick={exportToPDF} 
+                variant="outline" 
+                size="sm"
+                disabled={logs.length === 0}
+              >
+                <FileDown className="w-4 h-4 mr-2" />
+                PDF
+              </Button>
+              <Button 
+                onClick={fetchLogs} 
+                variant="outline" 
+                size="sm"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Atualizar
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Filters */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Status</label>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Todos" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="success">Sucesso</SelectItem>
-                    <SelectItem value="error">Erro</SelectItem>
-                    <SelectItem value="pending">Pendente</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Data Inicial</label>
-                <Input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  placeholder="Selecione"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Data Final</label>
-                <Input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  placeholder="Selecione"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium invisible">Actions</label>
-                <div className="flex gap-2">
-                  <Button onClick={handleApplyFilters} className="flex-1">
-                    Buscar
-                  </Button>
-                  <Button 
-                    onClick={handleClearFilters} 
-                    variant="outline"
-                    className="flex-1"
-                  >
-                    Limpar
-                  </Button>
+        {!isPublic && (
+          <Card>
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Status</label>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Todos" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos</SelectItem>
+                      <SelectItem value="success">Sucesso</SelectItem>
+                      <SelectItem value="error">Erro</SelectItem>
+                      <SelectItem value="pending">Pendente</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Data Inicial</label>
+                  <Input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    placeholder="Selecione"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Data Final</label>
+                  <Input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    placeholder="Selecione"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium invisible">Actions</label>
+                  <div className="flex gap-2">
+                    <Button onClick={handleApplyFilters} className="flex-1">
+                      Buscar
+                    </Button>
+                    <Button 
+                      onClick={handleClearFilters} 
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      Limpar
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -414,6 +442,16 @@ export default function RestoreReportLogsPage() {
             )}
           </CardContent>
         </Card>
+
+        {/* Public View Indicator */}
+        {isPublic && (
+          <div className="text-center py-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full text-sm text-blue-700">
+              <Eye className="w-4 h-4" />
+              <span className="font-medium">Modo Somente Leitura (Visualização Pública)</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
