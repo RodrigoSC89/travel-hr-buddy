@@ -41,7 +41,7 @@ describe("AdminDashboard Component", () => {
     vi.clearAllMocks();
     
     // Default mock for cron status
-    (global.fetch as any).mockResolvedValue({
+    (global.fetch as typeof fetch).mockResolvedValue({
       headers: {
         get: () => "application/json"
       },
@@ -49,7 +49,7 @@ describe("AdminDashboard Component", () => {
         status: "ok",
         message: "Cron diário executado com sucesso nas últimas 24h"
       })
-    });
+    } as Response);
 
     // Default auth mock
     mockUseAuth.mockReturnValue({
