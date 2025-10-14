@@ -7,11 +7,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus, AlertCircle } from "lucide-react";
+import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus, AlertCircle, Edit2, Trash2, GripVertical } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 interface SmartWorkflow {
   id: string
@@ -23,6 +28,11 @@ interface SmartWorkflow {
   created_by?: string
   category?: string
   tags?: string[]
+}
+
+interface Profile {
+  id: string
+  full_name: string
 }
 
 interface WorkflowStep {
@@ -45,6 +55,15 @@ interface WorkflowStep {
   }
 }
 
+interface TaskFormData {
+  title: string
+  description: string
+  status: WorkflowStep["status"]
+  assigned_to: string
+  due_date: string
+  priority: string
+}
+
 const STATUS_COLUMNS: Array<{ value: WorkflowStep["status"]; label: string; color: string }> = [
   { value: "pendente", label: "Pendente", color: "bg-yellow-50 border-yellow-200" },
   { value: "em_progresso", label: "Em Progresso", color: "bg-blue-50 border-blue-200" },
@@ -55,9 +74,22 @@ export default function WorkflowDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [workflow, setWorkflow] = useState<SmartWorkflow | null>(null);
   const [steps, setSteps] = useState<WorkflowStep[]>([]);
+  const [profiles, setProfiles] = useState<Profile[]>([]);
   const [newTitle, setNewTitle] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
+  const [draggedStep, setDraggedStep] = useState<WorkflowStep | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingStep, setEditingStep] = useState<WorkflowStep | null>(null);
+  const [deleteStepId, setDeleteStepId] = useState<string | null>(null);
+  const [taskForm, setTaskForm] = useState<TaskFormData>({
+    title: "",
+    description: "",
+    status: "pendente",
+    assigned_to: "",
+    due_date: "",
+    priority: "medium"
+  });
   const { toast } = useToast();
 
   async function fetchWorkflow() {
@@ -82,6 +114,20 @@ export default function WorkflowDetailPage() {
       });
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function fetchProfiles() {
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, full_name")
+        .order("full_name", { ascending: true });
+      
+      if (error) throw error;
+      setProfiles(data || []);
+    } catch (error) {
+      console.error("Error fetching profiles:", error);
     }
   }
 
@@ -145,6 +191,129 @@ export default function WorkflowDetailPage() {
     }
   }
 
+  async function saveTask() {
+    if (!taskForm.title.trim() || !id) return;
+    
+    try {
+      setIsCreating(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (editingStep) {
+        // Update existing step
+        const { error } = await supabase
+          .from("smart_workflow_steps")
+          .update({
+            title: taskForm.title,
+            description: taskForm.description,
+            status: taskForm.status,
+            assigned_to: taskForm.assigned_to || user?.id,
+            due_date: taskForm.due_date || null,
+            priority: taskForm.priority
+          })
+          .eq("id", editingStep.id);
+        
+        if (error) throw error;
+        
+        toast({
+          title: "Sucesso",
+          description: "Tarefa atualizada com sucesso!"
+        });
+      } else {
+        // Create new step
+        const { error } = await supabase
+          .from("smart_workflow_steps")
+          .insert({
+            workflow_id: id,
+            title: taskForm.title,
+            description: taskForm.description,
+            status: taskForm.status,
+            position: steps.length,
+            assigned_to: taskForm.assigned_to || user?.id,
+            due_date: taskForm.due_date || null,
+            priority: taskForm.priority,
+            created_by: user?.id
+          });
+        
+        if (error) throw error;
+        
+        toast({
+          title: "Sucesso",
+          description: "Tarefa criada com sucesso!"
+        });
+      }
+      
+      setIsDialogOpen(false);
+      setEditingStep(null);
+      resetTaskForm();
+      fetchSteps();
+    } catch (error) {
+      console.error("Error saving step:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível salvar a tarefa",
+        variant: "destructive"
+      });
+    } finally {
+      setIsCreating(false);
+    }
+  }
+
+  async function deleteStep(stepId: string) {
+    try {
+      const { error } = await supabase
+        .from("smart_workflow_steps")
+        .delete()
+        .eq("id", stepId);
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Sucesso",
+        description: "Tarefa excluída com sucesso!"
+      });
+      fetchSteps();
+    } catch (error) {
+      console.error("Error deleting step:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível excluir a tarefa",
+        variant: "destructive"
+      });
+    } finally {
+      setDeleteStepId(null);
+    }
+  }
+
+  function resetTaskForm() {
+    setTaskForm({
+      title: "",
+      description: "",
+      status: "pendente",
+      assigned_to: "",
+      due_date: "",
+      priority: "medium"
+    });
+  }
+
+  function openCreateDialog() {
+    resetTaskForm();
+    setEditingStep(null);
+    setIsDialogOpen(true);
+  }
+
+  function openEditDialog(step: WorkflowStep) {
+    setTaskForm({
+      title: step.title,
+      description: step.description || "",
+      status: step.status,
+      assigned_to: step.assigned_to || "",
+      due_date: step.due_date || "",
+      priority: step.priority || "medium"
+    });
+    setEditingStep(step);
+    setIsDialogOpen(true);
+  }
+
   async function updateStepStatus(stepId: string, newStatus: WorkflowStep["status"]) {
     try {
       const { error } = await supabase
@@ -166,6 +335,49 @@ export default function WorkflowDetailPage() {
         description: "Não foi possível atualizar o status",
         variant: "destructive"
       });
+    }
+  }
+
+  function handleDragStart(e: React.DragEvent, step: WorkflowStep) {
+    setDraggedStep(step);
+    e.dataTransfer.effectAllowed = "move";
+  }
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  }
+
+  async function handleDrop(e: React.DragEvent, targetStatus: WorkflowStep["status"]) {
+    e.preventDefault();
+    
+    if (!draggedStep || draggedStep.status === targetStatus) {
+      setDraggedStep(null);
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("smart_workflow_steps")
+        .update({ status: targetStatus })
+        .eq("id", draggedStep.id);
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Sucesso",
+        description: `Tarefa movida para ${targetStatus.replace('_', ' ')}!`
+      });
+      fetchSteps();
+    } catch (error) {
+      console.error("Error updating step status:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível mover a tarefa",
+        variant: "destructive"
+      });
+    } finally {
+      setDraggedStep(null);
     }
   }
 
@@ -203,6 +415,7 @@ export default function WorkflowDetailPage() {
   useEffect(() => {
     fetchWorkflow();
     fetchSteps();
+    fetchProfiles();
   }, [id]);
 
   if (isLoading) {
@@ -262,9 +475,123 @@ export default function WorkflowDetailPage() {
                 Voltar
               </Link>
             </Button>
+            
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button onClick={openCreateDialog}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Nova Tarefa
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[550px]">
+                <DialogHeader>
+                  <DialogTitle>
+                    {editingStep ? "Editar Tarefa" : "Nova Tarefa"}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="title">Título *</Label>
+                    <Input
+                      id="title"
+                      value={taskForm.title}
+                      onChange={(e) => setTaskForm({ ...taskForm, title: e.target.value })}
+                      placeholder="Digite o título da tarefa"
+                    />
+                  </div>
+                  
+                  <div className="grid gap-2">
+                    <Label htmlFor="description">Descrição</Label>
+                    <Textarea
+                      id="description"
+                      value={taskForm.description}
+                      onChange={(e) => setTaskForm({ ...taskForm, description: e.target.value })}
+                      placeholder="Adicione detalhes sobre a tarefa"
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="status">Status</Label>
+                      <Select 
+                        value={taskForm.status} 
+                        onValueChange={(value: WorkflowStep["status"]) => setTaskForm({ ...taskForm, status: value })}
+                      >
+                        <SelectTrigger id="status">
+                          <SelectValue placeholder="Selecione o status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pendente">Pendente</SelectItem>
+                          <SelectItem value="em_progresso">Em Progresso</SelectItem>
+                          <SelectItem value="concluido">Concluído</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="grid gap-2">
+                      <Label htmlFor="priority">Prioridade</Label>
+                      <Select 
+                        value={taskForm.priority} 
+                        onValueChange={(value) => setTaskForm({ ...taskForm, priority: value })}
+                      >
+                        <SelectTrigger id="priority">
+                          <SelectValue placeholder="Selecione a prioridade" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="low">Baixa</SelectItem>
+                          <SelectItem value="medium">Média</SelectItem>
+                          <SelectItem value="high">Alta</SelectItem>
+                          <SelectItem value="urgent">Urgente</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="assigned_to">Atribuído a</Label>
+                      <Select 
+                        value={taskForm.assigned_to} 
+                        onValueChange={(value) => setTaskForm({ ...taskForm, assigned_to: value })}
+                      >
+                        <SelectTrigger id="assigned_to">
+                          <SelectValue placeholder="Selecione um usuário" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {profiles.map((profile) => (
+                            <SelectItem key={profile.id} value={profile.id}>
+                              {profile.full_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="grid gap-2">
+                      <Label htmlFor="due_date">Data de Vencimento</Label>
+                      <Input
+                        id="due_date"
+                        type="date"
+                        value={taskForm.due_date}
+                        onChange={(e) => setTaskForm({ ...taskForm, due_date: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Cancelar
+                  </Button>
+                  <Button onClick={saveTask} disabled={isCreating || !taskForm.title.trim()}>
+                    {isCreating ? "Salvando..." : editingStep ? "Atualizar" : "Criar"}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
 
-          {/* Add Step Form */}
+          {/* Quick Add Form */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -276,7 +603,7 @@ export default function WorkflowDetailPage() {
               <div className="flex gap-2 items-end mb-6">
                 <div className="flex-1">
                   <Input
-                    placeholder="Nova tarefa ou etapa"
+                    placeholder="Adicionar tarefa rápida (pressione Enter)"
                     value={newTitle}
                     onChange={e => setNewTitle(e.target.value)}
                     onKeyPress={handleKeyPress}
@@ -292,10 +619,15 @@ export default function WorkflowDetailPage() {
                 </Button>
               </div>
 
-              {/* Kanban Board */}
+              {/* Kanban Board with Drag & Drop */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                 {STATUS_COLUMNS.map((statusColumn) => (
-                  <Card key={statusColumn.value} className={`p-4 ${statusColumn.color}`}>
+                  <Card 
+                    key={statusColumn.value} 
+                    className={`p-4 ${statusColumn.color}`}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, statusColumn.value)}
+                  >
                     <h3 className="text-md font-semibold capitalize mb-3 flex items-center gap-2">
                       {statusColumn.value === "pendente" && "🟡"}
                       {statusColumn.value === "em_progresso" && "🔵"}
@@ -310,101 +642,118 @@ export default function WorkflowDetailPage() {
                       {steps
                         .filter(s => s.status === statusColumn.value)
                         .map((step) => (
-                          <Card key={step.id} className="p-3 bg-white hover:shadow-md transition">
-                            {/* Inline Editable Title */}
-                            <Input
-                              value={step.title}
-                              onChange={(e) => {
-                                const newSteps = steps.map(s => 
-                                  s.id === step.id ? { ...s, title: e.target.value } : s
-                                );
-                                setSteps(newSteps);
-                              }}
-                              onBlur={() => updateStepTitle(step.id, step.title)}
-                              className="font-medium mb-2 border-none p-0 h-auto focus-visible:ring-0"
-                            />
-                            
-                            {step.description && (
-                              <p className="text-sm text-muted-foreground mb-2">
-                                {step.description}
-                              </p>
-                            )}
-                            
-                            {/* Metadata badges */}
-                            <div className="flex flex-wrap gap-1 mb-2">
-                              {step.profiles?.full_name && (
-                                <Badge variant="outline" className="text-xs flex items-center gap-1">
-                                  <User className="w-3 h-3" />
-                                  {step.profiles.full_name}
-                                </Badge>
-                              )}
-                              
-                              {step.due_date && (
-                                <Badge variant="outline" className="text-xs flex items-center gap-1">
-                                  <Calendar className="w-3 h-3" />
-                                  {new Date(step.due_date).toLocaleDateString("pt-BR")}
-                                </Badge>
-                              )}
-                              
-                              {step.priority && step.priority !== "medium" && (
-                                <Badge 
-                                  variant={
-                                    step.priority === "high" || step.priority === "urgent" 
-                                      ? "destructive" 
-                                      : "secondary"
-                                  }
-                                  className="text-xs flex items-center gap-1"
-                                >
-                                  <AlertCircle className="w-3 h-3" />
-                                  {step.priority}
-                                </Badge>
-                              )}
-                            </div>
-                            
-                            {/* Status transition buttons */}
-                            <div className="mt-2 flex gap-2 flex-wrap">
-                              {statusColumn.value === "pendente" && (
-                                <Button
-                                  size="sm"
-                                  variant="default"
-                                  onClick={() => updateStepStatus(step.id, "em_progresso")}
-                                  className="text-xs"
-                                >
-                                  Iniciar
-                                </Button>
-                              )}
-                              
-                              {statusColumn.value === "em_progresso" && (
-                                <>
+                          <Card 
+                            key={step.id} 
+                            className="p-3 bg-white hover:shadow-md transition cursor-move"
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, step)}
+                          >
+                            <div className="flex items-start gap-2 mb-2">
+                              <GripVertical className="w-4 h-4 text-muted-foreground mt-1 flex-shrink-0" />
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-sm mb-1 break-words">{step.title}</h4>
+                                
+                                {step.description && (
+                                  <p className="text-xs text-muted-foreground mb-2 break-words">
+                                    {step.description}
+                                  </p>
+                                )}
+                                
+                                {/* Metadata badges */}
+                                <div className="flex flex-wrap gap-1 mb-2">
+                                  {step.profiles?.full_name && (
+                                    <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                      <User className="w-3 h-3" />
+                                      {step.profiles.full_name}
+                                    </Badge>
+                                  )}
+                                  
+                                  {step.due_date && (
+                                    <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                      <Calendar className="w-3 h-3" />
+                                      {new Date(step.due_date).toLocaleDateString("pt-BR")}
+                                    </Badge>
+                                  )}
+                                  
+                                  {step.priority && step.priority !== "medium" && (
+                                    <Badge 
+                                      variant={
+                                        step.priority === "high" || step.priority === "urgent" 
+                                          ? "destructive" 
+                                          : "secondary"
+                                      }
+                                      className="text-xs flex items-center gap-1"
+                                    >
+                                      <AlertCircle className="w-3 h-3" />
+                                      {step.priority}
+                                    </Badge>
+                                  )}
+                                </div>
+                                
+                                {/* Action buttons */}
+                                <div className="flex gap-1 flex-wrap">
+                                  {statusColumn.value === "pendente" && (
+                                    <Button
+                                      size="sm"
+                                      variant="default"
+                                      onClick={() => updateStepStatus(step.id, "em_progresso")}
+                                      className="text-xs h-7"
+                                    >
+                                      Iniciar
+                                    </Button>
+                                  )}
+                                  
+                                  {statusColumn.value === "em_progresso" && (
+                                    <>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => updateStepStatus(step.id, "pendente")}
+                                        className="text-xs h-7"
+                                      >
+                                        Voltar
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="default"
+                                        onClick={() => updateStepStatus(step.id, "concluido")}
+                                        className="text-xs h-7"
+                                      >
+                                        Concluir
+                                      </Button>
+                                    </>
+                                  )}
+                                  
+                                  {statusColumn.value === "concluido" && (
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => updateStepStatus(step.id, "em_progresso")}
+                                      className="text-xs h-7"
+                                    >
+                                      Reabrir
+                                    </Button>
+                                  )}
+                                  
                                   <Button
                                     size="sm"
-                                    variant="outline"
-                                    onClick={() => updateStepStatus(step.id, "pendente")}
-                                    className="text-xs"
+                                    variant="ghost"
+                                    onClick={() => openEditDialog(step)}
+                                    className="text-xs h-7 ml-auto"
                                   >
-                                    Voltar
+                                    <Edit2 className="w-3 h-3" />
                                   </Button>
+                                  
                                   <Button
                                     size="sm"
-                                    variant="default"
-                                    onClick={() => updateStepStatus(step.id, "concluido")}
-                                    className="text-xs"
+                                    variant="ghost"
+                                    onClick={() => setDeleteStepId(step.id)}
+                                    className="text-xs h-7 text-destructive hover:text-destructive"
                                   >
-                                    Concluir
+                                    <Trash2 className="w-3 h-3" />
                                   </Button>
-                                </>
-                              )}
-                              
-                              {statusColumn.value === "concluido" && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => updateStepStatus(step.id, "em_progresso")}
-                                  className="text-xs"
-                                >
-                                  Reabrir
-                                </Button>
-                              )}
+                                </div>
+                              </div>
                             </div>
                           </Card>
                         ))}
@@ -412,6 +761,9 @@ export default function WorkflowDetailPage() {
                       {steps.filter(s => s.status === statusColumn.value).length === 0 && (
                         <div className="text-center py-8 text-sm text-muted-foreground">
                           Nenhuma tarefa
+                          <div className="text-xs mt-1">
+                            Arraste tarefas aqui ou crie uma nova
+                          </div>
                         </div>
                       )}
                     </div>
@@ -420,6 +772,27 @@ export default function WorkflowDetailPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Delete Confirmation Dialog */}
+          <AlertDialog open={!!deleteStepId} onOpenChange={() => setDeleteStepId(null)}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Confirmar Exclusão</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Tem certeza que deseja excluir esta tarefa? Esta ação não pode ser desfeita.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={() => deleteStepId && deleteStep(deleteStepId)}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Excluir
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
           {workflow.description && (
             <Card>
