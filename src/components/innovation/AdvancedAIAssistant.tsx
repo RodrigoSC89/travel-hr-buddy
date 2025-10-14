@@ -32,8 +32,8 @@ interface AIContext {
   userId: string;
   currentModule: string;
   recentActions: string[];
-  preferences: Record<string, any>;
-  workPatterns: Record<string, any>;
+  preferences: Record<string, string>;
+  workPatterns: Record<string, string | string[]>;
 }
 
 interface AIResponse {
@@ -63,6 +63,13 @@ interface ConversationMessage {
   }>;
 }
 
+interface QuickAction {
+  id: number;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  prompt: string;
+}
+
 export const AdvancedAIAssistant = () => {
   const [conversation, setConversation] = useState<ConversationMessage[]>([
     {
@@ -83,7 +90,7 @@ export const AdvancedAIAssistant = () => {
     workPatterns: { peakHours: "9-11", preferredTasks: ["analysis", "reports"] }
   });
 
-  const [quickActions] = useState([
+  const [quickActions] = useState<QuickAction[]>([
     { id: 1, label: "Análise de Performance", icon: BarChart3, prompt: "Faça uma análise detalhada da performance da equipe nos últimos 30 dias" },
     { id: 2, label: "Otimizar Processos", icon: Zap, prompt: "Identifique oportunidades de otimização nos nossos processos atuais" },
     { id: 3, label: "Relatório Executivo", icon: FileText, prompt: "Gere um relatório executivo completo com insights estratégicos" },
@@ -197,7 +204,7 @@ export const AdvancedAIAssistant = () => {
     }
   };
 
-  const handleQuickAction = (action: any) => {
+  const handleQuickAction = (action: QuickAction) => {
     setInputMessage(action.prompt);
   };
 

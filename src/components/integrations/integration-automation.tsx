@@ -332,7 +332,7 @@ export const IntegrationAutomation: React.FC = () => {
                   <Label htmlFor="method">Método HTTP</Label>
                   <Select 
                     value={config.method} 
-                    onValueChange={(value: any) => setConfig({...config, method: value})}
+                    onValueChange={(value: IntegrationConfig["method"]) => setConfig({...config, method: value})}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -371,7 +371,7 @@ export const IntegrationAutomation: React.FC = () => {
                   <Label>Tipo de Autenticação</Label>
                   <Select 
                     value={config.authentication?.type} 
-                    onValueChange={(value: any) => setConfig({
+                    onValueChange={(value: IntegrationConfig["authentication"]["type"]) => setConfig({
                       ...config, 
                       authentication: {
                         type: value,
