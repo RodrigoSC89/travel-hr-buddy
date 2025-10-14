@@ -6,7 +6,7 @@ export interface ChecklistItem {
   required: boolean;
   category: string;
   order: number;
-  value?: any;
+  value?: string | number | boolean | string[];
   options?: string[];
   unit?: string;
   minValue?: number;
@@ -22,14 +22,22 @@ export interface ChecklistItem {
   dependencies?: string[]; // IDs of items that must be completed first
   qrCode?: string;
   iotSensorId?: string;
-  autoValue?: any; // Value from IoT sensor or previous data
+  autoValue?: string | number | boolean; // Value from IoT sensor or previous data
 }
 
 export interface ValidationRule {
   type: "range" | "regex" | "custom" | "ai_validation";
-  value: any;
+  value: string | number | boolean | [number, number];
   message: string;
   severity: "error" | "warning" | "info";
+}
+
+export interface EvidenceMetadata {
+  location?: Location;
+  inspector?: string;
+  timestamp?: string;
+  equipmentId?: string;
+  [key: string]: string | number | boolean | Location | undefined;
 }
 
 export interface Evidence {
@@ -39,14 +47,14 @@ export interface Evidence {
   filename: string;
   uploadedAt: string;
   size: number;
-  metadata?: any;
+  metadata?: EvidenceMetadata;
   ocrText?: string;
   aiAnalysis?: string;
   verified: boolean;
 }
 
 export interface HistoricalDataPoint {
-  value: any;
+  value: string | number | boolean;
   timestamp: string;
   vessel: string;
   inspector: string;
@@ -203,6 +211,13 @@ export interface ReminderSettings {
   smsNotification: boolean;
 }
 
+export interface QRCodeMetadata {
+  equipmentModel?: string;
+  installDate?: string;
+  lastMaintenance?: string;
+  [key: string]: string | number | boolean | undefined;
+}
+
 export interface QRCodeMapping {
   id: string;
   code: string;
@@ -212,7 +227,7 @@ export interface QRCodeMapping {
   description: string;
   location: string;
   vesselId: string;
-  metadata?: any;
+  metadata?: QRCodeMetadata;
   createdAt: string;
   updatedAt: string;
 }
@@ -238,12 +253,19 @@ export interface IoTSensor {
   };
 }
 
+export interface ChecklistReportData {
+  summary?: Record<string, number | string>;
+  items?: Array<Record<string, unknown>>;
+  charts?: Array<Record<string, unknown>>;
+  [key: string]: Record<string, number | string> | Array<Record<string, unknown>> | string | number | boolean | undefined;
+}
+
 export interface ChecklistReport {
   id: string;
   title: string;
   type: "vessel_summary" | "compliance_report" | "anomaly_report" | "trend_analysis" | "comparative_analysis";
   filters: ReportFilters;
-  data: any;
+  data: ChecklistReportData;
   generatedAt: string;
   generatedBy: string;
   format: "pdf" | "excel" | "json";
