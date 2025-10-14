@@ -4,13 +4,17 @@ import StarterKit from '@tiptap/starter-kit';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import html2pdf from 'html2pdf.js';
 import { supabase } from '@/integrations/supabase/client';
-import { Sparkles, Save, FileDown, Loader2 } from 'lucide-react';
+import { Sparkles, Save, FileDown, Loader2, Star, Lock } from 'lucide-react';
 
 export default function TemplateEditor() {
   const [title, setTitle] = useState('');
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -53,8 +57,8 @@ export default function TemplateEditor() {
         {
           title: title.trim(),
           content: editor.getHTML(),
-          is_favorite: false,
-          is_private: false,
+          is_favorite: isFavorite,
+          is_private: isPrivate,
           created_by: user.id,
         },
       ]).select();
@@ -68,6 +72,8 @@ export default function TemplateEditor() {
 
       // Reset form after successful save
       setTitle('');
+      setIsFavorite(false);
+      setIsPrivate(false);
       editor.commands.setContent('<p>Comece seu template aqui...</p>');
     } catch (error) {
       console.error('Error saving template:', error);
@@ -176,6 +182,37 @@ export default function TemplateEditor() {
           />
         </div>
 
+        <div className="flex gap-4">
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="favorite"
+              checked={isFavorite}
+              onCheckedChange={(checked) => setIsFavorite(checked as boolean)}
+            />
+            <Label
+              htmlFor="favorite"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-1 cursor-pointer"
+            >
+              <Star className="w-4 h-4" />
+              Favorito
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="private"
+              checked={isPrivate}
+              onCheckedChange={(checked) => setIsPrivate(checked as boolean)}
+            />
+            <Label
+              htmlFor="private"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-1 cursor-pointer"
+            >
+              <Lock className="w-4 h-4" />
+              Privado
+            </Label>
+          </div>
+        </div>
+
         <div className="border rounded-lg bg-white">
           <EditorContent editor={editor} />
         </div>
@@ -239,7 +276,7 @@ export default function TemplateEditor() {
         <div className="text-xs text-muted-foreground space-y-1">
           <p>💡 <strong>Dica:</strong> Clique em "Gerar com IA" para criar um template automaticamente baseado no título.</p>
           <p>📝 Você pode editar o conteúdo gerado antes de salvar.</p>
-          <p>🔒 Templates são salvos como públicos por padrão. Você pode editá-los posteriormente para torná-los privados.</p>
+          <p>⭐ Marque como favorito para acesso rápido ou 🔒 privado para restringir visualização.</p>
         </div>
       </CardContent>
     </Card>
