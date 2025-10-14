@@ -83,6 +83,7 @@ const Unauthorized = React.lazy(() => import("./pages/Unauthorized"));
 const RestoreChartEmbed = React.lazy(() => import("./pages/embed/RestoreChartEmbed"));
 const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
 const TemplateEditorPage = React.lazy(() => import("./pages/admin/templates/editor"));
+const MMIJobsPanel = React.lazy(() => import("./pages/MMIJobsPanel"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -167,6 +168,7 @@ function App() {
                       <Route path="/maritime" element={<Maritime />} />
                       <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
                       <Route path="/nautilus-one" element={<NautilusOne />} />
+                      <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/innovation" element={<Innovation />} />
                       <Route path="/optimization" element={<Optimization />} />
                       <Route path="/collaboration" element={<Collaboration />} />
