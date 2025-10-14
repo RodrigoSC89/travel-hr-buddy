@@ -355,7 +355,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
                   <Label htmlFor="trigger">Tipo de Trigger</Label>
                   <Select 
                     value={formData.trigger_type} 
-                    onValueChange={(value: any) => setFormData(prev => ({ ...prev, trigger_type: value }))}
+                    onValueChange={(value: string) => setFormData(prev => ({ ...prev, trigger_type: value as "schedule" | "event" | "condition" }))}
                   >
                     <SelectTrigger>
                       <SelectValue />

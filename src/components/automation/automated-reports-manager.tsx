@@ -418,7 +418,7 @@ export const AutomatedReportsManager: React.FC = () => {
                   <Label htmlFor="format">Formato</Label>
                   <Select 
                     value={formData.format} 
-                    onValueChange={(value: any) => setFormData(prev => ({ ...prev, format: value }))}
+                    onValueChange={(value: string) => setFormData(prev => ({ ...prev, format: value as "pdf" | "excel" | "html" }))}
                   >
                     <SelectTrigger>
                       <SelectValue />
