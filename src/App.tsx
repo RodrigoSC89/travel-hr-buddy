@@ -69,6 +69,7 @@ const PersonalRestoreDashboard = React.lazy(() => import("./pages/admin/restore/
 const AdminDashboard = React.lazy(() => import("./pages/admin/dashboard"));
 const SmartWorkflows = React.lazy(() => import("./pages/admin/workflows"));
 const WorkflowDetail = React.lazy(() => import("./pages/admin/workflows/detail"));
+const Templates = React.lazy(() => import("./pages/admin/templates"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
@@ -192,6 +193,7 @@ function App() {
                       <Route path="/admin/documents" element={<DocumentList />} />
                       <Route path="/admin/documents/ai" element={<DocumentsAI />} />
                       <Route path="/admin/documents/editor" element={<DocumentEditorPage />} />
+                      <Route path="/admin/templates" element={<Templates />} />
                       <Route path="/admin/documents/demo" element={<DocumentEditorDemo />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />

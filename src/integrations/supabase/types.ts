@@ -6459,6 +6459,47 @@ export type Database = {
           },
         ]
       }
+      templates: {
+        Row: {
+          id: string
+          title: string
+          content: string
+          created_by: string
+          created_at: string
+          updated_at: string
+          is_favorite: boolean
+          is_private: boolean
+        }
+        Insert: {
+          id?: string
+          title: string
+          content: string
+          created_by: string
+          created_at?: string
+          updated_at?: string
+          is_favorite?: boolean
+          is_private?: boolean
+        }
+        Update: {
+          id?: string
+          title?: string
+          content?: string
+          created_by?: string
+          created_at?: string
+          updated_at?: string
+          is_favorite?: boolean
+          is_private?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "templates_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

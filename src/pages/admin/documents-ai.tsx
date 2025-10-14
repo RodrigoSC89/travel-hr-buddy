@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,25 @@ export default function DocumentsAIPage() {
   const [summarizing, setSummarizing] = useState(false);
   const [rewriting, setRewriting] = useState(false);
   const [summary, setSummary] = useState("");
+
+  // Load applied template from sessionStorage
+  useEffect(() => {
+    const appliedTemplate = sessionStorage.getItem("appliedTemplate");
+    if (appliedTemplate) {
+      try {
+        const templateData = JSON.parse(appliedTemplate);
+        setTitle(templateData.title || "");
+        setGenerated(templateData.content || "");
+        sessionStorage.removeItem("appliedTemplate");
+        toast({
+          title: "Template aplicado",
+          description: "O template foi carregado com sucesso.",
+        });
+      } catch (err) {
+        logger.error("Error loading applied template:", err);
+      }
+    }
+  }, []);
 
   async function generateDocument() {
     if (!prompt) return;
