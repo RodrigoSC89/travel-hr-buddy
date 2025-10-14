@@ -16,15 +16,23 @@ import {
   ArrowRight,
   Clock,
   Eye,
+  Download,
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePermissions } from "@/hooks/use-permissions";
 import { supabase } from "@/integrations/supabase/client";
+import jsPDF from "jspdf";
+import { useToast } from "@/hooks/use-toast";
 
 interface TrendDataPoint {
   day: string;
+  count: number;
+}
+
+interface MonthlySummaryDataPoint {
+  department: string;
   count: number;
 }
 
@@ -37,6 +45,10 @@ export default function AdminDashboard() {
   const [cronMessage, setCronMessage] = useState("");
   const [trendData, setTrendData] = useState<TrendDataPoint[]>([]);
   const [loadingTrend, setLoadingTrend] = useState(false);
+  const [monthlySummary, setMonthlySummary] = useState<MonthlySummaryDataPoint[]>([]);
+  const [loadingMonthlySummary, setLoadingMonthlySummary] = useState(false);
+  const [exportingPDF, setExportingPDF] = useState(false);
+  const { toast } = useToast();
 
   // Check if in public view mode
   const isPublic = searchParams.get("public") === "1";
@@ -103,6 +115,29 @@ export default function AdminDashboard() {
     }
   }, [user]);
 
+  // Fetch monthly summary by department
+  useEffect(() => {
+    const fetchMonthlySummary = async () => {
+      setLoadingMonthlySummary(true);
+      try {
+        const { data, error } = await supabase
+          .rpc("get_monthly_restore_summary_by_department");
+
+        if (error) {
+          logger.error("Error fetching monthly summary:", error);
+        } else if (data) {
+          setMonthlySummary(data || []);
+        }
+      } catch (error) {
+        logger.error("Error fetching monthly summary:", error);
+      } finally {
+        setLoadingMonthlySummary(false);
+      }
+    };
+
+    fetchMonthlySummary();
+  }, []);
+
   // Navigation cards with role-based visibility
   const dashboardCards = [
     {
@@ -161,6 +196,103 @@ export default function AdminDashboard() {
         !roleLoading && userRole && card.roles.includes(userRole)
       );
 
+  // Export dashboard as PDF
+  const exportPDF = async () => {
+    setExportingPDF(true);
+    try {
+      const pdf = new jsPDF();
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 20;
+      let yPosition = margin;
+
+      // Title
+      pdf.setFontSize(18);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("📊 Painel Resumo Mensal", margin, yPosition);
+      yPosition += 10;
+
+      // Date
+      pdf.setFontSize(10);
+      pdf.setFont("helvetica", "normal");
+      const currentDate = new Date().toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+      pdf.text(currentDate, margin, yPosition);
+      yPosition += 15;
+
+      // Monthly Summary Section
+      if (monthlySummary.length > 0) {
+        pdf.setFontSize(14);
+        pdf.setFont("helvetica", "bold");
+        pdf.text("📆 Comparativo por Departamento", margin, yPosition);
+        yPosition += 8;
+
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "normal");
+        
+        monthlySummary.forEach((item) => {
+          if (yPosition > pageHeight - margin) {
+            pdf.addPage();
+            yPosition = margin;
+          }
+          
+          const barWidth = (item.count / Math.max(...monthlySummary.map(d => d.count))) * 80;
+          pdf.text(`${item.department}: ${item.count}`, margin, yPosition);
+          pdf.setFillColor(34, 197, 94); // Green color
+          pdf.rect(margin + 60, yPosition - 3, barWidth, 4, "F");
+          yPosition += 7;
+        });
+        
+        yPosition += 10;
+      }
+
+      // Trend Data Section
+      if (trendData.length > 0) {
+        if (yPosition > pageHeight - 60) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+
+        pdf.setFontSize(14);
+        pdf.setFont("helvetica", "bold");
+        pdf.text("📈 Atividade de Restauração (Últimos 15 dias)", margin, yPosition);
+        yPosition += 8;
+
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "normal");
+        
+        trendData.forEach((item) => {
+          if (yPosition > pageHeight - margin) {
+            pdf.addPage();
+            yPosition = margin;
+          }
+          pdf.text(`${item.day}: ${item.count} restaurações`, margin, yPosition);
+          yPosition += 6;
+        });
+      }
+
+      // Save PDF
+      pdf.save(`dashboard-summary-${new Date().toISOString().split('T')[0]}.pdf`);
+      
+      toast({
+        title: "PDF exportado com sucesso",
+        description: "O relatório foi baixado para o seu dispositivo",
+      });
+    } catch (error) {
+      logger.error("Error exporting PDF:", error);
+      toast({
+        title: "Erro ao exportar PDF",
+        description: "Ocorreu um erro ao gerar o relatório",
+        variant: "destructive",
+      });
+    } finally {
+      setExportingPDF(false);
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <div>
@@ -195,6 +327,63 @@ export default function AdminDashboard() {
           {cronStatus === "ok" ? "✅ " : "⚠️ "}
           {cronMessage}
         </Badge>
+      )}
+
+      {/* Monthly Department Summary Chart */}
+      {monthlySummary.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>📆 Comparativo Mensal por Departamento</CardTitle>
+            <CardDescription>
+              Restaurações agrupadas por departamento no mês atual
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {loadingMonthlySummary ? (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-muted-foreground">Carregando dados...</p>
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={monthlySummary} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" />
+                  <YAxis dataKey="department" type="category" width={150} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="rgba(34, 197, 94, 0.8)" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* PDF Export Button - Only shown in authenticated mode */}
+      {!isPublic && (
+        <Card>
+          <CardHeader>
+            <CardTitle>📤 Exportação PDF</CardTitle>
+            <CardDescription>
+              Baixe um relatório em PDF com o resumo do dashboard
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button
+              onClick={exportPDF}
+              disabled={exportingPDF}
+              className="w-full sm:w-auto"
+            >
+              {exportingPDF ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Gerando PDF...
+                </>
+              ) : (
+                "Baixar relatório em PDF"
+              )}
+            </Button>
+          </CardContent>
+        </Card>
       )}
 
       {/* Main Dashboard Cards */}
