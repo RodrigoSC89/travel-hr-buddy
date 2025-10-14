@@ -1,63 +1,68 @@
-'use client'
+"use client";
 
-import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { supabase } from '@/integrations/supabase/client'
-import { Card } from '@/components/ui/card'
-import { QRCodeSVG } from 'qrcode.react'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Card } from "@/components/ui/card";
+import { QRCodeSVG } from "qrcode.react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+
+interface TrendDataPoint {
+  day: string;
+  count: number;
+}
 
 export default function UnifiedDashboard() {
-  const [role, setRole] = useState('')
-  const [isPublic, setIsPublic] = useState(false)
-  const [publicUrl, setPublicUrl] = useState('')
-  const [trend, setTrend] = useState<any[]>([])
+  const [role, setRole] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
+  const [publicUrl, setPublicUrl] = useState("");
+  const [trend, setTrend] = useState<TrendDataPoint[]>([]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const publicMode = window.location.search.includes('public=1')
-      setIsPublic(publicMode)
-      setPublicUrl(`${window.location.origin}/admin/dashboard?public=1`)
+    if (typeof window !== "undefined") {
+      const publicMode = window.location.search.includes("public=1");
+      setIsPublic(publicMode);
+      setPublicUrl(`${window.location.origin}/admin/dashboard?public=1`);
 
       if (!publicMode) {
         supabase.auth.getUser().then(({ data }) => {
-          const roleClaim = data?.user?.user_metadata?.role || 'user'
-          setRole(roleClaim)
-        })
+          const roleClaim = data?.user?.user_metadata?.role || "user";
+          setRole(roleClaim);
+        });
       }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     async function fetchTrend() {
-      const { data } = await supabase.rpc('get_restore_count_by_day_with_email', {
+      const { data } = await supabase.rpc("get_restore_count_by_day_with_email", {
         email_input: null,
-      })
-      setTrend(data || [])
+      });
+      setTrend(data || []);
     }
-    fetchTrend()
-  }, [])
+    fetchTrend();
+  }, []);
 
   const cards = [
     {
-      href: '/admin/checklists/dashboard',
-      title: '✅ Checklists',
-      description: 'Progresso e status por equipe',
-      roles: ['admin', 'gestor'],
+      href: "/admin/checklists/dashboard",
+      title: "✅ Checklists",
+      description: "Progresso e status por equipe",
+      roles: ["admin", "gestor"],
     },
     {
-      href: '/admin/restore/personal',
-      title: '📦 Restaurações Pessoais',
-      description: 'Seu painel diário com gráfico',
-      roles: ['admin', 'user', 'gestor'],
+      href: "/admin/restore/personal",
+      title: "📦 Restaurações Pessoais",
+      description: "Seu painel diário com gráfico",
+      roles: ["admin", "user", "gestor"],
     },
     {
-      href: '/admin/assistant/logs',
-      title: '🤖 Histórico de IA',
-      description: 'Consultas recentes e exportações',
-      roles: ['admin', 'gestor'],
+      href: "/admin/assistant/logs",
+      title: "🤖 Histórico de IA",
+      description: "Consultas recentes e exportações",
+      roles: ["admin", "gestor"],
     },
-  ]
+  ];
 
   return (
     <div className="p-6 space-y-8">
@@ -66,14 +71,14 @@ export default function UnifiedDashboard() {
           if (isPublic || card.roles.includes(role)) {
             return (
               <Card key={i} className="hover:shadow-lg">
-                <Link to={card.href + (isPublic ? '?public=1' : '')} className="block p-4">
+                <Link to={card.href + (isPublic ? "?public=1" : "")} className="block p-4">
                   <h3 className="text-xl font-semibold">{card.title}</h3>
                   <p className="text-sm text-muted-foreground">{card.description}</p>
                 </Link>
               </Card>
-            )
+            );
           }
-          return null
+          return null;
         })}
       </div>
 
@@ -106,5 +111,5 @@ export default function UnifiedDashboard() {
         </Card>
       )}
     </div>
-  )
+  );
 }
