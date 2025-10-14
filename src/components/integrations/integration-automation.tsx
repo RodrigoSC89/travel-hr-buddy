@@ -422,8 +422,8 @@ export const IntegrationAutomation: React.FC = () => {
                       ...config,
                       rateLimit: {
                         enabled: checked,
-                        requestsPerMinute: config.rateLimit?.requestsPerMinute || 60,
-                        burstLimit: config.rateLimit?.burstLimit || 10
+                        requestsPerMinute: config.rateLimit?.requestsPerMinute ?? 60,
+                        burstLimit: config.rateLimit?.burstLimit ?? 10
                       }
                     })}
                   />
@@ -434,13 +434,13 @@ export const IntegrationAutomation: React.FC = () => {
                     <div className="space-y-2">
                       <Label>Requisições por Minuto: {config.rateLimit?.requestsPerMinute}</Label>
                       <Slider
-                        value={[config.rateLimit?.requestsPerMinute || 60]}
+                        value={[config.rateLimit?.requestsPerMinute ?? 60]}
                         onValueChange={([value]) => setConfig({
                           ...config,
                           rateLimit: {
                             enabled: config.rateLimit?.enabled ?? true,
                             requestsPerMinute: value,
-                            burstLimit: config.rateLimit?.burstLimit || 10
+                            burstLimit: config.rateLimit?.burstLimit ?? 10
                           }
                         })}
                         max={1000}
@@ -453,12 +453,12 @@ export const IntegrationAutomation: React.FC = () => {
                     <div className="space-y-2">
                       <Label>Limite de Burst: {config.rateLimit?.burstLimit}</Label>
                       <Slider
-                        value={[config.rateLimit?.burstLimit || 10]}
+                        value={[config.rateLimit?.burstLimit ?? 10]}
                         onValueChange={([value]) => setConfig({
                           ...config,
                           rateLimit: {
                             enabled: config.rateLimit?.enabled ?? true,
-                            requestsPerMinute: config.rateLimit?.requestsPerMinute || 60,
+                            requestsPerMinute: config.rateLimit?.requestsPerMinute ?? 60,
                             burstLimit: value
                           }
                         })}
@@ -489,8 +489,8 @@ export const IntegrationAutomation: React.FC = () => {
                       ...config,
                       retry: {
                         enabled: checked,
-                        maxAttempts: config.retry?.maxAttempts || 3,
-                        backoffMultiplier: config.retry?.backoffMultiplier || 2
+                        maxAttempts: config.retry?.maxAttempts ?? 3,
+                        backoffMultiplier: config.retry?.backoffMultiplier ?? 2
                       }
                     })}
                   />
@@ -504,7 +504,7 @@ export const IntegrationAutomation: React.FC = () => {
                       ...config,
                       caching: {
                         enabled: checked,
-                        ttlSeconds: config.caching?.ttlSeconds || 300
+                        ttlSeconds: config.caching?.ttlSeconds ?? 300
                       }
                     })}
                   />
@@ -514,7 +514,7 @@ export const IntegrationAutomation: React.FC = () => {
                   <div className="space-y-2">
                     <Label>TTL do Cache (segundos): {config.caching?.ttlSeconds}</Label>
                     <Slider
-                      value={[config.caching?.ttlSeconds || 300]}
+                      value={[config.caching?.ttlSeconds ?? 300]}
                       onValueChange={([value]) => setConfig({
                         ...config,
                         caching: {
