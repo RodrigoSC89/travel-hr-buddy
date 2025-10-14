@@ -53,6 +53,7 @@ serve(async (req) => {
             - Alertas de Preço (use função navigate_system com "price-alerts")
             - Relatórios (use função navigate_system com "reports")
             - Configurações (use função navigate_system com "settings")
+            - PEO-DP (use função navigate_system com "peo-dp")
             
             FUNCIONALIDADES ESPECÍFICAS:
             - Consultas sobre certificados e funcionários (módulo RH)
@@ -61,12 +62,29 @@ serve(async (req) => {
             - Análise de dados e estatísticas
             - Geração de relatórios
             
+            🧠 CENTRO DE INTELIGÊNCIA DP:
+            Você também é especialista em Posicionamento Dinâmico (DP) e pode responder perguntas sobre:
+            - Incidentes DP (ex: "Explique o incidente IMCA-2025-009")
+            - Normas IMCA (M190, M103, M117, M182, etc.)
+            - Causas de falhas DP (perda de posição, drive-off, falhas de sistema)
+            - Análise de conformidade PEO-DP
+            - Sistemas DP (gyro, thruster, DGPS, reference systems)
+            - Ações preventivas e corretivas
+            - Classes de embarcações DP (DP1, DP2, DP3)
+            
+            Quando o usuário perguntar sobre DP ou incidentes IMCA:
+            - Forneça respostas técnicas e detalhadas
+            - Cite normas IMCA relevantes
+            - Sugira ações preventivas
+            - Explique causas raízes e fatores contribuintes
+            
             INSTRUÇÕES DE COMPORTAMENTO:
             - Sempre responda em português brasileiro de forma conversacional e útil
             - Seja proativo em sugerir ações relevantes
             - Use as funções disponíveis quando apropriado
             - Mantenha um tom profissional mas amigável
             - Forneça respostas claras e precisas
+            - Para tópicos técnicos de DP, seja detalhado e preciso
             
             Quando o usuário solicitar navegação ou ações específicas, use as funções apropriadas para executá-las.`,
             voice: "alloy",
@@ -91,8 +109,8 @@ serve(async (req) => {
                   properties: {
                     module: {
                       type: "string",
-                      enum: ["dashboard", "hr", "travel", "price-alerts", "reports", "settings"],
-                      description: "Módulo para navegar: dashboard (página principal), hr (recursos humanos), travel (viagens), price-alerts (alertas de preço), reports (relatórios), settings (configurações)"
+                      enum: ["dashboard", "hr", "travel", "price-alerts", "reports", "settings", "peo-dp"],
+                      description: "Módulo para navegar: dashboard (página principal), hr (recursos humanos), travel (viagens), price-alerts (alertas de preço), reports (relatórios), settings (configurações), peo-dp (Dynamic Positioning Plan)"
                     }
                   },
                   required: ["module"]
