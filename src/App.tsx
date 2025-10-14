@@ -79,6 +79,7 @@ const SmartLayoutDemo = React.lazy(() => import("./pages/SmartLayoutDemo"));
 const Unauthorized = React.lazy(() => import("./pages/Unauthorized"));
 const RestoreChartEmbed = React.lazy(() => import("./pages/embed/RestoreChartEmbed"));
 const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
+const TemplateEditorPage = React.lazy(() => import("./pages/admin/templates/editor"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -195,6 +196,7 @@ function App() {
                       <Route path="/admin/documents/editor" element={<DocumentEditorPage />} />
                       <Route path="/admin/templates" element={<Templates />} />
                       <Route path="/admin/documents/demo" element={<DocumentEditorDemo />} />
+                      <Route path="/admin/templates/editor" element={<TemplateEditorPage />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />
