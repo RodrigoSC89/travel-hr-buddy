@@ -100,16 +100,20 @@ const RedirectHandler = () => {
       // Check if there's a stored redirect path from 404.html
       const redirectPath = sessionStorage.getItem("redirectPath");
       
-      // Only redirect if:
-      // 1. There is a stored path
-      // 2. The stored path is not the home page
-      // 3. We are currently on the home page (to prevent redirect loops)
-      if (redirectPath && redirectPath !== "/" && location.pathname === "/") {
-        // Clear the stored path to prevent future redirects
+      if (redirectPath) {
+        // Clear the stored path immediately to prevent redirect loops
         sessionStorage.removeItem("redirectPath");
         
-        // Navigate to the stored path with replace to avoid adding to history
-        navigate(redirectPath, { replace: true });
+        // Only redirect if:
+        // 1. The stored path is not the home page or index.html
+        // 2. We are currently on the home page or index.html (just loaded from 404)
+        const isHomePage = location.pathname === "/" || location.pathname === "/index.html";
+        const isStoredHome = redirectPath === "/" || redirectPath === "/index.html";
+        
+        if (!isStoredHome && isHomePage) {
+          // Navigate to the stored path with replace to avoid adding to history
+          navigate(redirectPath, { replace: true });
+        }
       }
     } catch (error) {
       // Handle cases where sessionStorage is not available

@@ -58,8 +58,9 @@
       const path = window.location.pathname + window.location.search + window.location.hash;
       sessionStorage.setItem('redirectPath', path);
       
-      // Redirect to index.html to load the React app
-      window.location.replace('/index.html');
+      // Redirect to root to load the React app
+      // Using / instead of /index.html to ensure consistent pathname in React Router
+      window.location.replace('/');
     } catch (error) {
       // Fallback if sessionStorage is not available (private browsing, etc.)
       console.warn('SessionStorage not available, redirecting to home');

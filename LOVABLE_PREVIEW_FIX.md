@@ -81,7 +81,7 @@ Esta solução é compatível com:
 
 ## Testes Realizados
 
-- ✅ Build completo sem erros (48.35s)
+- ✅ Build completo sem erros (44.38s)
 - ✅ 262 testes passando (100%)
 - ✅ Linting verificado
 - ✅ Arquivo 404.html presente no dist após build (2.2KB)
@@ -89,6 +89,8 @@ Esta solução é compatível com:
 - ✅ Tratamento de erro adicionado (try-catch)
 - ✅ Fallback para JavaScript desabilitado (<noscript>)
 - ✅ Performance otimizada (window.location.replace)
+- ✅ **Atualização**: Redirect para `/` em vez de `/index.html` (mais robusto)
+- ✅ **Atualização**: RedirectHandler com lógica melhorada de limpeza do sessionStorage
 
 ## Próximos Passos
 
@@ -105,3 +107,20 @@ Esta solução é compatível com:
 - A solução não afeta o desempenho da aplicação
 - O redirecionamento é instantâneo (não há delay visível)
 - A solução é transparente para o usuário final
+- **Atualização 2025-10-14**: Redirect agora usa `/` em vez de `/index.html` para maior consistência
+- **Atualização 2025-10-14**: RedirectHandler limpa sessionStorage antes de verificar condições para evitar loops
+- **Atualização 2025-10-14**: Verificação robusta de home page (tanto `/` quanto `/index.html`)
+
+## Histórico de Atualizações
+
+### 2025-10-14 - Melhorias no Redirecionamento
+- Alterado redirect de `/index.html` para `/` no 404.html
+- Melhorada lógica do RedirectHandler para limpar sessionStorage antes de verificar condições
+- Adicionada verificação dupla de home page (`/` e `/index.html`)
+- Documentação atualizada com detalhes técnicos
+- Ver [LOVABLE_PREVIEW_FIX_UPDATE.md](./LOVABLE_PREVIEW_FIX_UPDATE.md) para detalhes completos
+
+### 2025-10-13 - Implementação Inicial
+- Criado arquivo 404.html com redirecionamento automático
+- Implementado RedirectHandler no App.tsx
+- Testes completos e documentação inicial
