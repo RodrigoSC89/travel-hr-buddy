@@ -44,10 +44,10 @@ serve(async (req) => {
   }
 
   try {
-    const { title, purpose } = await req.json();
+    const { content } = await req.json();
     
-    if (!title) {
-      throw new Error("Title is required");
+    if (!content) {
+      throw new Error("Content is required");
     }
 
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
@@ -55,46 +55,40 @@ serve(async (req) => {
       throw new Error("OPENAI_API_KEY is not set");
     }
 
-    console.log("Processing template generation request:", title);
+    console.log("Processing template enhancement request");
 
-    const systemPrompt = `Você é um assistente especializado em criar templates profissionais para documentos técnicos e marítimos.
+    const systemPrompt = `Você é um assistente especializado em melhorar templates de documentos técnicos e marítimos.
 
-Suas habilidades incluem:
-- Criar templates estruturados para documentos técnicos e operacionais
-- Incluir campos variáveis no formato [NOME_VARIAVEL] para reusabilidade
-- Estruturar templates de forma profissional e adaptável
-- Adaptar o formato ao contexto marítimo/técnico quando apropriado
+Suas responsabilidades incluem:
+- Melhorar a clareza e profissionalismo do texto
+- Corrigir erros gramaticais e de formatação
+- Aprimorar a estrutura e organização do conteúdo
+- Manter o contexto técnico/marítimo apropriado
 
-Campos variáveis comuns para incluir (quando relevante):
-- [NOME_TECNICO] - Nome do técnico responsável
-- [DATA] - Data do documento/inspeção
-- [EMBARCACAO] ou [NOME_EMBARCACAO] - Nome da embarcação
-- [EMPRESA] - Nome da empresa
-- [CLIENTE] - Nome do cliente
-- [PROJETO] - Nome do projeto
-- [OBSERVACOES] - Observações gerais
-- [RESPONSAVEL] - Responsável pela atividade
-- [LOCAL] - Local da atividade
-- [EQUIPAMENTO] - Equipamento inspecionado
+REGRAS CRÍTICAS - NUNCA VIOLAR:
+1. PRESERVE TODOS os campos variáveis no formato [NOME_VARIAVEL]
+2. NUNCA remova, altere ou modifique campos como [NOME_TECNICO], [DATA], [EMBARCACAO], [EMPRESA], etc.
+3. MANTENHA a estrutura de seções existente
+4. PRESERVE numeração e hierarquia de títulos
+5. Apenas melhore o texto ENTRE os campos variáveis
 
-Características dos seus templates:
+Características do trabalho esperado:
 - Linguagem profissional e técnica
-- Bem estruturados com seções numeradas
-- Campos variáveis no formato [VARIAVEL_NOME]
-- Em português brasileiro
-- Contexto marítimo/técnico quando apropriado
-- Formatação clara e profissional
+- Gramática e ortografia corretas em português brasileiro
+- Formatação clara e consistente
+- Estrutura organizada e lógica
+- Preservação completa de todos os campos variáveis [VARIAVEL]
 
-Ao gerar um template, crie um documento base com:
-- Estrutura clara com seções numeradas
-- Campos variáveis apropriados no formato [VARIAVEL]
-- Formatação profissional
-- Conteúdo descritivo que pode ser adaptado
-- Instruções claras quando necessário`;
+Ao melhorar um template, você deve:
+- Manter TODOS os placeholders [VARIAVEL_NOME] exatamente como estão
+- Melhorar descrições e instruções
+- Corrigir erros de português
+- Aprimorar clareza sem mudar significado
+- Manter estrutura e seções organizadas`;
 
-    const userPrompt = purpose 
-      ? `Crie um template profissional para: ${title}\n\nPropósito/contexto adicional: ${purpose}`
-      : `Crie um template profissional para: ${title}`;
+    const userPrompt = `Melhore este template, preservando TODOS os campos variáveis [VARIAVEL]:
+
+${content}`;
 
     const requestBody = {
       model: "gpt-4o-mini",
@@ -102,8 +96,8 @@ Ao gerar um template, crie um documento base com:
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt }
       ],
-      temperature: 0.7,
-      max_tokens: 1500,
+      temperature: 0.3,
+      max_tokens: 2000,
     };
 
     let lastError: Error | null = null;
@@ -162,12 +156,12 @@ Ao gerar um template, crie um documento base com:
       throw new Error("Invalid response format from OpenAI API");
     }
     
-    const content = data.choices[0].message.content;
+    const enhanced = data.choices[0].message.content;
 
-    console.log("Generated template content:", content.substring(0, 100) + "...");
+    console.log("Enhanced template content:", enhanced.substring(0, 100) + "...");
 
     return new Response(JSON.stringify({ 
-      content,
+      content: enhanced,
       timestamp: new Date().toISOString()
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -175,10 +169,10 @@ Ao gerar um template, crie um documento base com:
     });
 
   } catch (error) {
-    console.error("[GENERATE_TEMPLATE_ERROR]", error);
+    console.error("[ENHANCE_TEMPLATE_ERROR]", error);
     
     return new Response(JSON.stringify({ 
-      error: error instanceof Error ? error.message : "Erro ao gerar template",
+      error: error instanceof Error ? error.message : "Erro ao melhorar template",
       timestamp: new Date().toISOString()
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

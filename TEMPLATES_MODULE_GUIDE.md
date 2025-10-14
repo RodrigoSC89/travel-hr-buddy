@@ -60,16 +60,21 @@ The Templates module provides a complete template management system with AI inte
 ### 4. AI Features
 
 #### Generate Content
-- Uses the `generate-document` edge function
-- Takes the title and optional prompt
-- Generates complete template content with GPT-4
+- Uses the **specialized** `generate-template` edge function
+- Takes the title and optional purpose/context
+- Generates complete template content optimized for reusability with GPT-4o-mini
+- Automatically includes variable fields in `[VARIABLE_NAME]` format
+- Maritime/technical context awareness
+- Includes common fields: `[NOME_TECNICO]`, `[DATA]`, `[EMBARCACAO]`, `[EMPRESA]`, etc.
 - Automatically populates the content field
 
-#### Rewrite Content
-- Uses the `rewrite-document` edge function
+#### Enhance Content (formerly "Rewrite")
+- Uses the **specialized** `enhance-template` edge function
 - Takes existing content
-- Reformulates it with better structure and clarity
-- Updates the content field with the rewritten version
+- Improves clarity, grammar, and professionalism
+- **CRITICAL**: Preserves ALL variable fields `[VARIABLE_NAME]`
+- Maintains template structure and organization
+- Updates the content field with the enhanced version
 
 #### Suggest Title
 - Uses the `generate-document` edge function

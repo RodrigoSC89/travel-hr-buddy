@@ -21,7 +21,6 @@ import {
   Unlock,
   Plus,
   Search,
-  Filter,
   Trash2,
   Edit,
   Copy,
@@ -90,7 +89,7 @@ export default function TemplatesPage() {
         return;
       }
 
-      let query = supabase
+      const query = supabase
         .from("templates")
         .select("*")
         .order("created_at", { ascending: false });
@@ -129,10 +128,11 @@ export default function TemplatesPage() {
 
     setGenerating(true);
     try {
-      const aiPrompt = prompt || `Crie um template de documento com o título: ${title}`;
-      
-      const { data, error } = await supabase.functions.invoke("generate-document", {
-        body: { prompt: aiPrompt },
+      const { data, error } = await supabase.functions.invoke("generate-template", {
+        body: { 
+          title,
+          purpose: prompt || undefined
+        },
       });
 
       if (error) throw error;
@@ -140,7 +140,7 @@ export default function TemplatesPage() {
       setContent(data?.content || "");
       toast({
         title: "Conteúdo gerado com sucesso",
-        description: "O template foi gerado com IA.",
+        description: "Template gerado com campos variáveis para reusabilidade.",
       });
     } catch (err) {
       logger.error("Error generating content:", err);
@@ -158,7 +158,7 @@ export default function TemplatesPage() {
   const rewriteContent = async () => {
     if (!content) {
       toast({
-        title: "Nenhum conteúdo para reformular",
+        title: "Nenhum conteúdo para melhorar",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
       });
@@ -167,22 +167,22 @@ export default function TemplatesPage() {
 
     setRewriting(true);
     try {
-      const { data, error } = await supabase.functions.invoke("rewrite-document", {
+      const { data, error } = await supabase.functions.invoke("enhance-template", {
         body: { content },
       });
 
       if (error) throw error;
 
-      setContent(data?.rewritten || "");
+      setContent(data?.content || "");
       toast({
-        title: "Conteúdo reformulado com sucesso",
-        description: "O template foi reformulado com IA.",
+        title: "Template melhorado com sucesso",
+        description: "O template foi aprimorado preservando campos variáveis.",
       });
     } catch (err) {
-      logger.error("Error rewriting content:", err);
+      logger.error("Error enhancing content:", err);
       toast({
-        title: "Erro ao reformular conteúdo",
-        description: "Não foi possível reformular o conteúdo.",
+        title: "Erro ao melhorar conteúdo",
+        description: "Não foi possível melhorar o conteúdo.",
         variant: "destructive",
       });
     } finally {
@@ -558,11 +558,11 @@ export default function TemplatesPage() {
                   >
                     {rewriting ? (
                       <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Reformulando...
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Melhorando...
                       </>
                     ) : (
                       <>
-                        <RefreshCw className="w-4 h-4 mr-2" /> Reformular
+                        <RefreshCw className="w-4 h-4 mr-2" /> Melhorar com IA
                       </>
                     )}
                   </Button>

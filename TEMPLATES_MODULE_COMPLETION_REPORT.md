@@ -130,9 +130,12 @@ CREATE TABLE templates (
 - Seamless user experience
 
 ### With Edge Functions
-- `generate-document`: Content generation
-- `rewrite-document`: Content reformulation
-- Existing functions reused successfully
+- **Specialized Functions**:
+  - `generate-template`: Template generation with variable fields
+  - `enhance-template`: Template enhancement with structure preservation
+- Maritime/technical domain optimization
+- Retry logic and timeout protection
+- Comprehensive error handling
 
 ### With Supabase
 - Full CRUD operations

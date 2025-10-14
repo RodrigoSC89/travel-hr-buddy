@@ -27,8 +27,8 @@ Access: Authenticated users only
 | Implement RLS policies | ✅ | 4 policies for security |
 | List templates | ✅ | With search and filters |
 | Create/edit functionality | ✅ | Full CRUD operations |
-| AI generation | ✅ | Via generate-document function |
-| AI rewrite | ✅ | Via rewrite-document function |
+| AI generation | ✅ | Via **generate-template** function with variable fields |
+| AI enhancement | ✅ | Via **enhance-template** function preserving structure |
 | AI suggestions | ✅ | Title suggestion from content |
 | Apply to documents-ai | ✅ | With sessionStorage integration |
 | Export PDF | ✅ | Using jsPDF |
@@ -160,10 +160,12 @@ Build Status:               ✅ PASSING
 - User can further refine with AI
 
 ### Supabase Edge Functions
-- `generate-document`: Content generation
-- `rewrite-document`: Content reformulation
-- Reuses existing functions
-- No new functions required
+- **New Specialized Functions**:
+  - `generate-template`: Template generation with `[VARIABLE]` fields
+  - `enhance-template`: Enhancement preserving structure and variables
+- Maritime/technical domain optimization
+- Retry logic with exponential backoff
+- Comprehensive error handling and timeout protection
 
 ### Database
 - `templates` table
