@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -328,20 +328,20 @@ export default function DPIntelligenceCenter() {
                 </Badge>
               </div>
               <CardTitle className="text-lg line-clamp-2">{incident.title}</CardTitle>
-              <CardDescription className="space-y-1 mt-2">
-                <div className="flex items-center text-sm">
+              <div className="space-y-1 mt-2 text-sm text-muted-foreground">
+                <div className="flex items-center">
                   <Ship className="h-3 w-3 mr-1" />
                   {incident.vessel} - {incident.class_dp}
                 </div>
-                <div className="flex items-center text-sm">
+                <div className="flex items-center">
                   <MapPin className="h-3 w-3 mr-1" />
                   {incident.location}
                 </div>
-                <div className="flex items-center text-sm">
+                <div className="flex items-center">
                   <Calendar className="h-3 w-3 mr-1" />
                   {new Date(incident.date).toLocaleDateString("pt-BR")}
                 </div>
-              </CardDescription>
+              </div>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600 line-clamp-3 mb-4">{incident.summary}</p>
