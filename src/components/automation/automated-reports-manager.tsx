@@ -27,6 +27,17 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+interface ReportFilters {
+  date_range?: {
+    start: string;
+    end: string;
+  };
+  vessel_ids?: string[];
+  crew_ids?: string[];
+  categories?: string[];
+  [key: string]: unknown;
+}
+
 interface AutomatedReport {
   id: string;
   name: string;
@@ -34,7 +45,7 @@ interface AutomatedReport {
   report_type: string;
   schedule_cron: string;
   recipients: string[];
-  filters: any;
+  filters: ReportFilters;
   format: "pdf" | "excel" | "html";
   is_active: boolean;
   last_generated_at?: string;
@@ -103,7 +114,7 @@ export const AutomatedReportsManager: React.FC = () => {
     schedule_cron: "0 9 * * *",
     recipients: [""],
     format: "pdf" as const,
-    filters: {}
+    filters: {} as ReportFilters
   });
 
   const loadReports = useCallback(async () => {

@@ -30,11 +30,18 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+interface VoiceMessage {
+  id: string;
+  content: string;
+  timestamp: Date;
+  type: "user" | "assistant";
+}
+
 export default function Voice() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<VoiceMessage[]>([]);
   const [audioPermission, setAudioPermission] = useState<"granted" | "denied" | "prompt">("prompt");
   const [voiceSettings, setVoiceSettings] = useState({
     autoListen: true,
