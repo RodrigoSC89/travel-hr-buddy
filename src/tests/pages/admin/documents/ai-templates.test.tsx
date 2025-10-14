@@ -230,11 +230,11 @@ describe("AITemplatesPage", () => {
       </MemoryRouter>
     );
 
-    const createButton = screen.getByText("Novo Template");
-    fireEvent.click(createButton);
+    const createButtons = screen.getAllByText("Novo Template");
+    // Click the first one (the button in header, not the dialog title)
+    fireEvent.click(createButtons[0]);
 
     await waitFor(() => {
-      expect(screen.getByText("Novo Template")).toBeInTheDocument();
       expect(screen.getByLabelText("Título *")).toBeInTheDocument();
     });
   });
