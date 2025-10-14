@@ -11,6 +11,12 @@
 const isDevelopment = import.meta.env.DEV;
 const isProduction = import.meta.env.PROD;
 
+// Type-safe environment variable
+const getSentryDsn = (): string | undefined => {
+  const dsn = import.meta.env.VITE_SENTRY_DSN;
+  return typeof dsn === 'string' ? dsn : undefined;
+};
+
 interface LogContext {
   [key: string]: unknown;
 }
@@ -97,13 +103,18 @@ export const logger = {
     // Send to Sentry in production
     if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
-        // @ts-expect-error Sentry is loaded globally
-        if (window.Sentry) {
-          // @ts-expect-error Sentry is loaded globally
-          window.Sentry.captureException(error, { extra: { message, ...context } });
+        const Sentry = (window as any).Sentry;
+        if (Sentry && getSentryDsn()) {
+          Sentry.captureException(error, { 
+            extra: { message, ...context },
+            tags: { source: 'logger' }
+          });
         }
-      } catch {
+      } catch (sentryError) {
         // Fail silently if Sentry is not available
+        if (isDevelopment) {
+          console.warn('Failed to send error to Sentry:', sentryError);
+        }
       }
     }
   },
@@ -129,14 +140,28 @@ export const logger = {
     // Send to Sentry in production
     if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
-        // @ts-expect-error Sentry is loaded globally
-        if (window.Sentry) {
-          // @ts-expect-error Sentry is loaded globally
-          window.Sentry.captureException(error, { extra: { message, ...context } });
+        const Sentry = (window as any).Sentry;
+        if (Sentry && getSentryDsn()) {
+          Sentry.captureException(error, { 
+            extra: { message, ...context },
+            tags: { source: 'logger' }
+          });
         }
-      } catch {
+      } catch (sentryError) {
         // Fail silently if Sentry is not available
+        if (isDevelopment) {
+          console.warn('Failed to send error to Sentry:', sentryError);
+        }
       }
+    }
+  },
+
+  /**
+   * Log table (development only)
+   */
+  table: (data: unknown) => {
+    if (isDevelopment) {
+      console.table(data);
     }
   },
 };

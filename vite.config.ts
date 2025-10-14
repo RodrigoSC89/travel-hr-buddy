@@ -114,7 +114,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: "dist",
-    sourcemap: false,
+    sourcemap: mode === "production",
     minify: "esbuild",
     target: "es2020",
     chunkSizeWarningLimit: 1700,
@@ -137,18 +137,16 @@ export default defineConfig(({ mode }) => ({
             if (id.includes("@supabase/supabase-js")) {
               return "supabase";
             }
-            // Mapbox is very large, give it its own chunk
             if (id.includes("mapbox-gl")) {
               return "mapbox";
             }
           }
-          // SGSO module chunking for better performance
+          // SGSO module chunking
           if (id.includes("src/components/sgso/")) {
             return "sgso";
           }
-          // Travel module chunking - split large travel components into separate chunks
+          // Travel module chunking
           if (id.includes("src/components/travel/")) {
-            // Large components get their own chunks
             if (id.includes("enhanced-hotel-search") || id.includes("responsive-hotel-search")) {
               return "travel-hotel";
             }
@@ -185,20 +183,17 @@ export default defineConfig(({ mode }) => ({
             if (id.includes("travel-notification")) {
               return "travel-notifications";
             }
-            // Travel map goes with other small components
             if (id.includes("travel-map")) {
               return "travel-map";
             }
-            // Rest of travel components (should be minimal now)
             return "travel-misc";
           }
         }
       }
     },
-    // Use our custom logger in production instead of dropping all console
-    // This allows logger.error and logger.warn to work in production
     esbuild: mode === "production" ? {
       drop: ["debugger"],
+      pure: mode === "production" ? ["console.log", "console.debug"] : [],
     } : undefined,
   },
   define: {
