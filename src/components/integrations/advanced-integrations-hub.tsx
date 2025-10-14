@@ -80,7 +80,7 @@ interface LogEntry {
   message: string;
   statusCode?: number;
   duration?: number;
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 interface AIInsight {

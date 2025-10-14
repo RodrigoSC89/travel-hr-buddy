@@ -15,6 +15,12 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+interface TutorialStep {
+  step: number;
+  title: string;
+  description: string;
+}
+
 interface Tutorial {
   id: string;
   title: string;
@@ -24,7 +30,7 @@ interface Tutorial {
   duration: string;
   difficulty: "beginner" | "intermediate" | "advanced";
   tags: string[];
-  content: any[];
+  content: TutorialStep[];
   views: number;
   rating: number;
 }
@@ -57,7 +63,7 @@ export const IntelligentHelpCenter: React.FC = () => {
   const [tutorials, setTutorials] = useState<Tutorial[]>([]);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [trainingPaths, setTrainingPaths] = useState<TrainingPath[]>([]);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<Array<Tutorial | FAQ>>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const modules = [
@@ -196,7 +202,7 @@ export const IntelligentHelpCenter: React.FC = () => {
     }
   };
 
-  const trackAnalytics = async (action: string, itemId?: string, data?: any) => {
+  const trackAnalytics = async (action: string, itemId?: string, data?: Record<string, unknown>) => {
     try {
       await supabase
         .from("help_center_analytics")
@@ -211,7 +217,7 @@ export const IntelligentHelpCenter: React.FC = () => {
     }
   };
 
-  const handleExportMaterial = async (type: "pdf" | "video" | "image", content: any) => {
+  const handleExportMaterial = async (type: "pdf" | "video" | "image", content: Tutorial | FAQ) => {
     toast({
       title: "Exportando material",
       description: `Preparando ${type.toUpperCase()} para download...`,
@@ -226,7 +232,7 @@ export const IntelligentHelpCenter: React.FC = () => {
     }, 2000);
   };
 
-  const filteredContent = (content: any[]) => {
+  const filteredContent = <T extends { module: string }>(content: T[]): T[] => {
     if (activeModule === "all") return content;
     return content.filter(item => item.module === activeModule);
   };
