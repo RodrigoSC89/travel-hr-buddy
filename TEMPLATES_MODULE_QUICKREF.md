@@ -108,8 +108,8 @@ Table: templates
 - Ready for AI enhancement
 
 ### Edge Functions Used
-- `generate-document`: Content generation
-- `rewrite-document`: Content reformulation
+- `generate-template`: Specialized template generation with variable fields
+- `enhance-template`: Template enhancement preserving structure and variables
 
 ## 🎭 User Roles
 
