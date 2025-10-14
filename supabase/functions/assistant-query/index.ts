@@ -95,11 +95,48 @@ const commandPatterns: Record<string, CommandAction> = {
   },
   "ajuda": {
     type: "info",
-    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
+    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n• 'manutenção' - Módulo de Manutenção Inteligente (MMI)\n• 'jobs' - Ver jobs de manutenção\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n\n🔧 **Manutenção (MMI):**\n• 'criar job' - Criar job de manutenção via IA\n• 'postergar' - Avaliar risco de postergação\n• 'os' / 'ordem de serviço' - Gerenciar OS\n• 'equipamentos' - Ver ativos e equipamentos\n\n📄 **Documentos:**\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
   },
   "help": {
     type: "info",
     message: "💡 Digite 'ajuda' para ver a lista de comandos disponíveis.",
+  },
+  // MMI (Maintenance) commands
+  "manutenção": {
+    type: "navigation",
+    target: "/mmi",
+    message: "🔧 Abrindo Módulo de Manutenção Inteligente...",
+  },
+  "manutencao": {
+    type: "navigation",
+    target: "/mmi",
+    message: "🔧 Navegando para Manutenção...",
+  },
+  "jobs": {
+    type: "navigation",
+    target: "/mmi/jobs",
+    message: "📋 Abrindo lista de jobs de manutenção...",
+  },
+  "criar job": {
+    type: "action",
+    message: "🔧 Para criar um job de manutenção, use o Copilot de Manutenção e descreva a necessidade (ex: 'Criar job de troca de óleo no gerador BB').",
+  },
+  "os": {
+    type: "action",
+    message: "📄 Para gerenciar Ordens de Serviço, acesse o módulo MMI e use os comandos de criação ou listagem de OS.",
+  },
+  "ordem de serviço": {
+    type: "action",
+    message: "📄 Use o Copilot de Manutenção para criar ou gerenciar Ordens de Serviço (OS).",
+  },
+  "postergar": {
+    type: "action",
+    message: "⏰ Para avaliar postergação de um job, use o comando 'Postergar job #[número]' no Copilot de Manutenção. A IA analisará o risco.",
+  },
+  "equipamentos": {
+    type: "navigation",
+    target: "/mmi",
+    message: "⚙️ Navegando para gestão de ativos e equipamentos...",
   },
 };
 
@@ -273,6 +310,10 @@ serve(async (req) => {
 Você é o assistente do sistema Nautilus One / Travel HR Buddy.
 Responda de forma clara e útil.
 
+Você tem acesso ao Módulo de Manutenção Inteligente (MMI). 
+Quando o usuário mencionar equipamentos, falhas, jobs, OS (Ordens de Serviço) ou manutenção preditiva, 
+consulte o Supabase via APIs MMI e responda com estrutura clara, técnica e orientada à ação.
+
 Você pode realizar ações como:
 - Criar um novo checklist
 - Resumir documentos
@@ -281,6 +322,11 @@ Você pode realizar ações como:
 - Listar documentos recentes
 - Gerar PDF com resumo
 - Redirecionar para rotas internas do painel
+- Criar jobs de manutenção
+- Avaliar risco de postergação de jobs
+- Gerar Ordens de Serviço (OS)
+- Consultar histórico de manutenções
+- Monitorar status de ativos e equipamentos
 
 Módulos disponíveis no sistema:
 1. **Dashboard** (/dashboard) - Visão geral do sistema
@@ -295,6 +341,20 @@ Módulos disponíveis no sistema:
 10. **Tripulação** (/crew) - Gestão de tripulação
 11. **Reservas** (/reservations) - Sistema de reservas
 12. **Comunicação** (/communication) - Centro de comunicação
+13. **Manutenção Inteligente (MMI)** (/mmi) - Gestão de manutenção de ativos
+    - Jobs de manutenção preventiva e corretiva
+    - Ordens de Serviço (OS)
+    - Análise preditiva com IA
+    - Horímetros e histórico técnico
+    - Avaliação de risco de postergação
+    - Gestão de ativos e componentes
+
+Para manutenção, seja técnico, preciso e oriente com ações claras:
+- Use terminologia técnica apropriada
+- Forneça análises de risco quando relevante
+- Sugira ações preventivas baseadas em dados
+- Priorize segurança operacional
+- Inclua impactos financeiros quando aplicável
 
 Sempre forneça respostas práticas e direcionadas. Quando relevante, sugira a rota específica do módulo.
 Seja claro, direto e útil.
