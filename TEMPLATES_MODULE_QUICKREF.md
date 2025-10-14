@@ -19,8 +19,8 @@ Navigate to: `/admin/templates`
 ## 🎯 Key Features
 
 ### AI Assistance
-- **Generate**: Creates content from title/prompt
-- **Rewrite**: Reformulates existing content
+- **Generate**: Creates template content with variable fields from title/purpose
+- **Enhance**: Improves template while preserving structure and [VARIABLE_FIELDS]
 - **Suggest Title**: Generates title from content
 
 ### Template Management
@@ -108,8 +108,8 @@ Table: templates
 - Ready for AI enhancement
 
 ### Edge Functions Used
-- `generate-document`: Content generation
-- `rewrite-document`: Content reformulation
+- `generate-template`: Specialized template generation with variable fields
+- `enhance-template`: Template enhancement preserving structure and variables
 
 ## 🎭 User Roles
 
@@ -190,8 +190,8 @@ For issues or questions:
 ---
 
 **Quick Stats:**
-- Lines of Code: ~890
-- AI Functions: 3
+- Lines of Code: ~800 (frontend) + 400 (edge functions)
+- AI Functions: 3 (2 specialized for templates)
 - Database Tables: 1
 - RLS Policies: 4
 - UI Components: 15+

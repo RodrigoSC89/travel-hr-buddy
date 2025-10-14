@@ -21,7 +21,6 @@ import {
   Unlock,
   Plus,
   Search,
-  Filter,
   Trash2,
   Edit,
   Copy,
@@ -90,7 +89,7 @@ export default function TemplatesPage() {
         return;
       }
 
-      let query = supabase
+      const query = supabase
         .from("templates")
         .select("*")
         .order("created_at", { ascending: false });
