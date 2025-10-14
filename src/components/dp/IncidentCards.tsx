@@ -24,7 +24,60 @@ export default function IncidentCards() {
     fetch("/api/dp/intel/feed")
       .then(res => res.json())
       .then(data => setIncidents(data.incidents))
-      .catch(err => console.error("Erro ao carregar incidentes DP", err));
+      .catch(err => {
+        console.error("Erro ao carregar incidentes DP", err);
+        // Demo data for testing when API is not available
+        setIncidents([
+          {
+            id: "1",
+            title: "Perda de posição durante operação de perfuração",
+            date: "2024-09-15",
+            vessel: "Drillship Alpha",
+            location: "Golfo do México",
+            class_dp: "DP3",
+            rootCause: "Falha no sistema de propulsão",
+            tags: ["Propulsion", "Critical", "Weather"],
+            summary: "Embarcação perdeu posicionamento durante operação crítica devido a falha no sistema de propulsão principal combinado com condições meteorológicas adversas.",
+            link: "https://www.imca-int.com/incident-reports"
+          },
+          {
+            id: "2",
+            title: "Falha de redundância em sistema DP2",
+            date: "2024-08-22",
+            vessel: "Platform Support Vessel Beta",
+            location: "Mar do Norte",
+            class_dp: "DP2",
+            rootCause: "Erro de configuração",
+            tags: ["Configuration", "Redundancy", "High"],
+            summary: "Sistema de redundância não operou conforme esperado durante teste anual, revelando erro de configuração não detectado anteriormente.",
+            link: "https://www.imca-int.com/incident-reports"
+          },
+          {
+            id: "3",
+            title: "Perda temporária de referência de posição",
+            date: "2024-07-10",
+            vessel: "Construction Vessel Gamma",
+            location: "Bacia de Campos",
+            class_dp: "DP2",
+            rootCause: "Interferência eletromagnética",
+            tags: ["Sensors", "Medium", "EMI"],
+            summary: "Sistema perdeu referência de posição por 45 segundos devido a interferência eletromagnética de equipamento de soldagem submarino.",
+            link: "https://www.imca-int.com/incident-reports"
+          },
+          {
+            id: "4",
+            title: "Falha em teste de FMEA",
+            date: "2024-06-05",
+            vessel: "Anchor Handling Vessel Delta",
+            location: "Mar Cáspio",
+            class_dp: "DP1",
+            rootCause: "Procedimento inadequado",
+            tags: ["Testing", "FMEA", "Low"],
+            summary: "Teste de análise de modos de falha revelou lacunas em procedimentos operacionais e necessidade de treinamento adicional.",
+            link: "https://www.imca-int.com/incident-reports"
+          }
+        ]);
+      });
   }, []);
 
   return (
