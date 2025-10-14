@@ -50,6 +50,8 @@ const AdminWall = React.lazy(() => import("./pages/admin/wall"));
 const AdminChecklists = React.lazy(() => import("./pages/admin/checklists"));
 const AdminChecklistsDashboard = React.lazy(() => import("./pages/admin/checklists-dashboard"));
 const DocumentsAI = React.lazy(() => import("./pages/admin/documents-ai"));
+const TemplatesList = React.lazy(() => import("./pages/admin/templates/index"));
+const TemplateEditor = React.lazy(() => import("./pages/admin/templates/editor"));
 const Assistant = React.lazy(() => import("./pages/admin/assistant"));
 const AssistantLogs = React.lazy(() => import("./pages/admin/assistant-logs"));
 const AdminCollaboration = React.lazy(() => import("./pages/admin/collaboration"));
@@ -197,6 +199,9 @@ function App() {
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />
                       <Route path="/admin/documents/restore-dashboard" element={<RestoreDashboard />} />
+                      <Route path="/admin/templates" element={<TemplatesList />} />
+                      <Route path="/admin/templates/editor" element={<TemplateEditor />} />
+                      <Route path="/admin/templates/editor/:id" element={<TemplateEditor />} />
                       <Route path="/admin/restore/personal" element={<PersonalRestoreDashboard />} />
                       <Route path="/admin/automation/execution-logs" element={<ExecutionLogs />} />
                       <Route path="/admin/reports/logs" element={<RestoreReportLogs />} />
