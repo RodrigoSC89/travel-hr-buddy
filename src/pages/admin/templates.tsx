@@ -129,24 +129,25 @@ export default function TemplatesPage() {
 
     setGenerating(true);
     try {
-      const aiPrompt = prompt || `Crie um template de documento com o título: ${title}`;
-      
-      const { data, error } = await supabase.functions.invoke("generate-document", {
-        body: { prompt: aiPrompt },
+      const { data, error } = await supabase.functions.invoke("generate-template", {
+        body: { 
+          title,
+          purpose: prompt || undefined
+        },
       });
 
       if (error) throw error;
 
       setContent(data?.content || "");
       toast({
-        title: "Conteúdo gerado com sucesso",
-        description: "O template foi gerado com IA.",
+        title: "Template gerado com sucesso",
+        description: "O template foi gerado com IA especializada.",
       });
     } catch (err) {
-      logger.error("Error generating content:", err);
+      logger.error("Error generating template:", err);
       toast({
-        title: "Erro ao gerar conteúdo",
-        description: "Não foi possível gerar o conteúdo com IA.",
+        title: "Erro ao gerar template",
+        description: "Não foi possível gerar o template com IA.",
         variant: "destructive",
       });
     } finally {
@@ -154,11 +155,11 @@ export default function TemplatesPage() {
     }
   };
 
-  // Rewrite content with AI
+  // Enhance content with AI
   const rewriteContent = async () => {
     if (!content) {
       toast({
-        title: "Nenhum conteúdo para reformular",
+        title: "Nenhum conteúdo para melhorar",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
       });
@@ -167,22 +168,22 @@ export default function TemplatesPage() {
 
     setRewriting(true);
     try {
-      const { data, error } = await supabase.functions.invoke("rewrite-document", {
+      const { data, error } = await supabase.functions.invoke("enhance-template", {
         body: { content },
       });
 
       if (error) throw error;
 
-      setContent(data?.rewritten || "");
+      setContent(data?.content || "");
       toast({
-        title: "Conteúdo reformulado com sucesso",
-        description: "O template foi reformulado com IA.",
+        title: "Template melhorado com sucesso",
+        description: "O template foi aprimorado com IA especializada.",
       });
     } catch (err) {
-      logger.error("Error rewriting content:", err);
+      logger.error("Error enhancing template:", err);
       toast({
-        title: "Erro ao reformular conteúdo",
-        description: "Não foi possível reformular o conteúdo.",
+        title: "Erro ao melhorar template",
+        description: "Não foi possível melhorar o template.",
         variant: "destructive",
       });
     } finally {
@@ -500,7 +501,7 @@ export default function TemplatesPage() {
             <CardHeader>
               <CardTitle>{isEditing ? "Editar Template" : "Criar Novo Template"}</CardTitle>
               <CardDescription>
-                Use IA para gerar e reformular conteúdo de forma inteligente
+                Use IA especializada para gerar e melhorar templates de documentos
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -527,7 +528,7 @@ export default function TemplatesPage() {
               <div className="space-y-2">
                 <Textarea
                   rows={3}
-                  placeholder="Descreva o que você quer gerar... (opcional)"
+                  placeholder="Descreva o propósito do template... (opcional - ex: Relatório técnico de inspeção de sistema de propulsão)"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                 />
@@ -558,11 +559,11 @@ export default function TemplatesPage() {
                   >
                     {rewriting ? (
                       <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Reformulando...
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Melhorando...
                       </>
                     ) : (
                       <>
-                        <RefreshCw className="w-4 h-4 mr-2" /> Reformular
+                        <RefreshCw className="w-4 h-4 mr-2" /> Melhorar com IA
                       </>
                     )}
                   </Button>
