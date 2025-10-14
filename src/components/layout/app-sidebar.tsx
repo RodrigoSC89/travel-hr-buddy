@@ -68,6 +68,17 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
+// Navigation item interface
+interface NavigationItem {
+  title: string;
+  url?: string;
+  icon: React.ComponentType<{ className?: string }>;
+  alwaysVisible?: boolean;
+  requiresRole?: readonly string[];
+  permission?: string;
+  items?: NavigationItem[];
+}
+
 // Navigation items with improved structure
 const navigationItems = [
   {
@@ -457,7 +468,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
     return activeItem === moduleKey;
   };
 
-  const canAccessItem = (item: any) => {
+  const canAccessItem = (item: NavigationItem) => {
     if (item.alwaysVisible) return true;
     
     // Verificar se requer role específico

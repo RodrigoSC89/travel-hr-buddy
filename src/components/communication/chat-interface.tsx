@@ -34,6 +34,14 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+interface UserProfile {
+  id: string;
+  full_name: string;
+  email: string;
+  avatar_url?: string;
+  status?: string;
+}
+
 interface Message {
   id: string;
   content: string;
@@ -70,8 +78,8 @@ export const ChatInterface = () => {
   const [newMessage, setNewMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState<any>(null);
-  const [allUsers, setAllUsers] = useState<any[]>([]);
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
+  const [allUsers, setAllUsers] = useState<UserProfile[]>([]);
   const [showNewChat, setShowNewChat] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -140,7 +148,7 @@ export const ChatInterface = () => {
       if (error) throw error;
 
       const conversationsWithDetails = await Promise.all(
-        (data || []).map(async (conv: any) => {
+        (data || []).map(async (conv: { id: string; type: "direct" | "group"; title?: string; last_message_at: string; conversation_participants: Array<{ user_id: string; profiles: UserProfile }> }) => {
           // Carregar última mensagem
           const { data: lastMessage } = await supabase
             .from("messages")
@@ -173,7 +181,7 @@ export const ChatInterface = () => {
 
           return {
             ...conv,
-            participants: conv.conversation_participants.map((p: any) => ({
+            participants: conv.conversation_participants.map((p: { user_id: string; profiles: UserProfile }) => ({
               user_id: p.user_id,
               user: p.profiles
             })),
@@ -217,7 +225,7 @@ export const ChatInterface = () => {
 
       if (error) throw error;
 
-      const messagesWithSender = (data || []).map((msg: any) => ({
+      const messagesWithSender = (data || []).map((msg: { id: string; content: string; sender_id: string; created_at: string; profiles?: UserProfile; is_read?: boolean }) => ({
         ...msg,
         sender: msg.profiles
       }));
@@ -315,8 +323,8 @@ export const ChatInterface = () => {
               sender_id: newMessage.sender_id,
               created_at: newMessage.created_at,
               sender: {
-                full_name: (newMessage as any).profiles?.full_name || "",
-                email: (newMessage as any).profiles?.email || ""
+                full_name: (newMessage as { profiles?: UserProfile }).profiles?.full_name || "",
+                email: (newMessage as { profiles?: UserProfile }).profiles?.email || ""
               }
             };
             setMessages(prev => [...prev, messageWithSender]);

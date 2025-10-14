@@ -42,6 +42,15 @@ interface ChecklistItem {
   criticality: "baixa" | "media" | "alta" | "critica";
 }
 
+interface AIAnalysis {
+  overall_score: number;
+  issues_found: number;
+  critical_issues: number;
+  recommendations: string[];
+  missing_fields: string[];
+  inconsistencies: string[];
+}
+
 interface Checklist {
   id: string;
   title: string;
@@ -51,17 +60,8 @@ interface Checklist {
   created_at: string;
   status: "rascunho" | "em_andamento" | "concluido" | "auditado";
   compliance_score?: number;
-  ai_analysis?: any;
+  ai_analysis?: AIAnalysis;
   items: ChecklistItem[];
-}
-
-interface AIAnalysis {
-  overall_score: number;
-  issues_found: number;
-  critical_issues: number;
-  recommendations: string[];
-  missing_fields: string[];
-  inconsistencies: string[];
 }
 
 export const IntelligentChecklistManager: React.FC = () => {
@@ -240,7 +240,7 @@ export const IntelligentChecklistManager: React.FC = () => {
               </DialogHeader>
               
               <div className="space-y-4">
-                <Select value={uploadType} onValueChange={(value: any) => setUploadType(value)}>
+                <Select value={uploadType} onValueChange={(value: "pdf" | "image" | "manual") => setUploadType(value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Tipo de entrada" />
                   </SelectTrigger>

@@ -53,6 +53,13 @@ interface TimeSeriesData {
   category?: string;
 }
 
+interface AIInsightMetadata {
+  source?: string;
+  category?: string;
+  relatedItems?: string[];
+  [key: string]: string | string[] | number | boolean | undefined;
+}
+
 interface AIInsight {
   id: string;
   type: "prediction" | "recommendation" | "alert" | "optimization";
@@ -61,7 +68,7 @@ interface AIInsight {
   confidence: number;
   impact: "high" | "medium" | "low";
   actionable: boolean;
-  metadata?: any;
+  metadata?: AIInsightMetadata;
 }
 
 const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {

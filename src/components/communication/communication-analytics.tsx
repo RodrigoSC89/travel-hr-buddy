@@ -38,8 +38,15 @@ import {
   Eye
 } from "lucide-react";
 
+interface CommunicationStats {
+  total_messages?: number;
+  active_conversations?: number;
+  avg_response_time?: number;
+  [key: string]: number | string | undefined;
+}
+
 interface CommunicationAnalyticsProps {
-  stats: any;
+  stats: CommunicationStats;
 }
 
 interface AnalyticsData {

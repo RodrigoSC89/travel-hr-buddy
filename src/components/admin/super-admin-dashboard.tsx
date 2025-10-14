@@ -32,6 +32,12 @@ interface Vessel {
   id: string;
 }
 
+interface OrganizationBranding {
+  company_name: string;
+  primary_color: string;
+  theme_mode: string;
+}
+
 interface Organization {
   id: string;
   name: string;
@@ -48,11 +54,7 @@ interface Organization {
   vessel_count?: number;
   organization_users?: OrganizationUser[];
   vessels?: Vessel[];
-  branding?: {
-    company_name: string;
-    primary_color: string;
-    theme_mode: string;
-  };
+  branding?: OrganizationBranding;
 }
 
 export const SuperAdminDashboard: React.FC = () => {
@@ -88,17 +90,17 @@ export const SuperAdminDashboard: React.FC = () => {
       if (error) throw error;
 
       // Processar dados das organizações
-      const processedOrgs = orgs?.map((org: any) => ({
+      const processedOrgs = orgs?.map((org: Partial<Organization> & { organization_branding?: OrganizationBranding[] }) => ({
         ...org,
         max_users: org.max_users ?? 0,
         max_vessels: org.max_vessels ?? 0,
         max_storage_gb: org.max_storage_gb ?? 0,
-        user_count: org.organization_users?.filter((u: any) => u.status === "active").length || 0,
+        user_count: org.organization_users?.filter((u: OrganizationUser) => u.status === "active").length || 0,
         vessel_count: org.vessels?.length || 0,
-        branding: (org.organization_branding as any[])?.[0] ?? null
+        branding: org.organization_branding?.[0] ?? undefined
       })) || [];
 
-      setOrganizations(processedOrgs as any);
+      setOrganizations(processedOrgs as Organization[]);
     } catch (error) {
       toast({
         title: "Erro",
