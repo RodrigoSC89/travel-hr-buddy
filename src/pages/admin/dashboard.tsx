@@ -193,8 +193,8 @@ export default function AdminDashboard() {
   const visibleCards = isPublic 
     ? dashboardCards 
     : dashboardCards.filter(card => 
-        !roleLoading && userRole && card.roles.includes(userRole)
-      );
+      !roleLoading && userRole && card.roles.includes(userRole)
+    );
 
   // Export dashboard as PDF
   const exportPDF = async () => {
@@ -275,7 +275,7 @@ export default function AdminDashboard() {
       }
 
       // Save PDF
-      pdf.save(`dashboard-summary-${new Date().toISOString().split('T')[0]}.pdf`);
+      pdf.save(`dashboard-summary-${new Date().toISOString().split("T")[0]}.pdf`);
       
       toast({
         title: "PDF exportado com sucesso",
@@ -399,8 +399,8 @@ export default function AdminDashboard() {
                 card.color === "blue"
                   ? "border-l-blue-500"
                   : card.color === "purple"
-                  ? "border-l-purple-500"
-                  : "border-l-indigo-500"
+                    ? "border-l-purple-500"
+                    : "border-l-indigo-500"
               }`}
               onClick={() => navigate(cardPath)}
             >
@@ -411,8 +411,8 @@ export default function AdminDashboard() {
                       card.color === "blue"
                         ? "text-blue-500"
                         : card.color === "purple"
-                        ? "text-purple-500"
-                        : "text-indigo-500"
+                          ? "text-purple-500"
+                          : "text-indigo-500"
                     }`}
                   />
                   <ArrowRight className="w-5 h-5 text-muted-foreground" />
@@ -468,7 +468,7 @@ export default function AdminDashboard() {
             <div className="text-center">
               <p className="text-sm text-muted-foreground mb-2">URL Pública:</p>
               <Link 
-                to={`/admin/dashboard?public=1`}
+                to={"/admin/dashboard?public=1"}
                 className="text-sm text-blue-600 hover:underline break-all"
               >
                 {publicUrl}

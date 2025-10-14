@@ -98,7 +98,7 @@ describe("Send Restore Dashboard Daily Edge Function", () => {
     const csvContent = [
       headers.join(","),
       ...rows.map((row) => 
-        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+        row.map((cell) => `"${String(cell).replace(/"/g, "\"\"")}"`).join(",")
       ),
     ].join("\n");
 
