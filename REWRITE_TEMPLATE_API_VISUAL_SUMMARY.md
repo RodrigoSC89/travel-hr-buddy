@@ -21,7 +21,7 @@ Max Tokens: 2000
 ```
 Purpose:   Improve TEXT SNIPPETS
 Model:     GPT-4 (highest quality)
-Temp:      0.5 (more consistent)
+Temp:      0.4 (more consistent)
 Use Case:  Template text selection
 Max Tokens: Default (shorter)
 ```
@@ -74,7 +74,7 @@ travel-hr-buddy/
 │  rewrite-template function                     │
 │  • System Prompt: Maritime technical assistant│
 │  • Model: GPT-4                                │
-│  • Temperature: 0.5                            │
+│  • Temperature: 0.4                            │
 └──────────────────┬─────────────────────────────┘
                    │
                    │ OpenAI API Call
@@ -232,7 +232,7 @@ identificação de qualquer irregularidade ou situação atípica.
     { role: "system", content: systemPrompt },
     { role: "user", content: userPrompt }
   ],
-  temperature: 0.5
+  temperature: 0.4
 }
 ```
 
@@ -330,7 +330,7 @@ curl -X POST \
 ## 📝 Summary
 
 ✅ **Function Created:** `rewrite-template`  
-✅ **Model:** GPT-4 with temperature 0.5  
+✅ **Model:** GPT-4 with temperature 0.4  
 ✅ **Purpose:** Rewrite selected template snippets  
 ✅ **Tests:** 5 new tests (all passing)  
 ✅ **Documentation:** Complete with examples  

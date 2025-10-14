@@ -51,7 +51,7 @@ Esta função aceita requisições públicas (não requer autenticação), mas u
 ## Características
 
 - **Modelo**: GPT-4 para máxima qualidade
-- **Temperature**: 0.5 para equilíbrio entre consistência e criatividade
+- **Temperature**: 0.4 para resultados formais, consistentes e profissionais
 - **Retry Logic**: 3 tentativas com exponential backoff
 - **Timeout**: 30 segundos por requisição
 - **CORS**: Habilitado para todas as origens
@@ -125,7 +125,7 @@ A função implementa tratamento robusto de erros:
 
 ## Diferença entre Rewrite Template e Rewrite Document
 
-- **Rewrite Template**: Reescreve **trechos selecionados** com foco em clareza técnica e tom formal marítimo. Usa GPT-4 e temperatura 0.5.
+- **Rewrite Template**: Reescreve **trechos selecionados** com foco em clareza técnica e tom formal marítimo. Usa GPT-4 e temperatura 0.4.
 - **Rewrite Document**: Reescreve **documentos completos** mantendo todas as informações. Usa GPT-4o-mini e temperatura 0.7.
 
 ## Integração com Templates
