@@ -6,7 +6,11 @@ import { supabase } from '@/integrations/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus } from 'lucide-react'
+import { Textarea } from '@/components/ui/textarea'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
+import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus, Pencil, Trash2, GripVertical } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper'
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper'
@@ -41,6 +45,13 @@ interface WorkflowStep {
   metadata?: Record<string, any>
 }
 
+interface Profile {
+  id: string
+  full_name: string | null
+  email: string
+  avatar_url: string | null
+}
+
 const STATUS_COLUMNS: Array<{ value: WorkflowStep['status']; label: string; color: string }> = [
   { value: 'pendente', label: 'Pendente', color: 'bg-yellow-50 border-yellow-200' },
   { value: 'em_progresso', label: 'Em Progresso', color: 'bg-blue-50 border-blue-200' },
@@ -51,9 +62,24 @@ export default function WorkflowDetailPage() {
   const { id } = useParams<{ id: string }>()
   const [workflow, setWorkflow] = useState<SmartWorkflow | null>(null)
   const [steps, setSteps] = useState<WorkflowStep[]>([])
+  const [profiles, setProfiles] = useState<Profile[]>([])
   const [newTitle, setNewTitle] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [isCreating, setIsCreating] = useState(false)
+  const [draggedStep, setDraggedStep] = useState<WorkflowStep | null>(null)
+  
+  // Dialog states
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [editingStep, setEditingStep] = useState<WorkflowStep | null>(null)
+  
+  // Form states
+  const [formTitle, setFormTitle] = useState('')
+  const [formDescription, setFormDescription] = useState('')
+  const [formStatus, setFormStatus] = useState<WorkflowStep['status']>('pendente')
+  const [formAssignedTo, setFormAssignedTo] = useState<string>('')
+  const [formDueDate, setFormDueDate] = useState('')
+  
   const { toast } = useToast()
 
   async function fetchWorkflow() {
@@ -103,6 +129,20 @@ export default function WorkflowDetailPage() {
     }
   }
 
+  async function fetchProfiles() {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, full_name, email, avatar_url')
+        .order('full_name', { ascending: true })
+      
+      if (error) throw error
+      setProfiles(data || [])
+    } catch (error) {
+      console.error('Error fetching profiles:', error)
+    }
+  }
+
   async function addStep() {
     if (!newTitle.trim() || !id) return
     
@@ -140,6 +180,111 @@ export default function WorkflowDetailPage() {
     }
   }
 
+  async function createStepWithDialog() {
+    if (!formTitle.trim() || !id) return
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      
+      const { error } = await supabase
+        .from('smart_workflow_steps')
+        .insert({
+          workflow_id: id,
+          title: formTitle,
+          description: formDescription || null,
+          status: formStatus,
+          assigned_to: formAssignedTo || null,
+          due_date: formDueDate || null,
+          position: steps.length,
+          created_by: user?.id
+        })
+      
+      if (error) throw error
+      
+      // Reset form
+      setFormTitle('')
+      setFormDescription('')
+      setFormStatus('pendente')
+      setFormAssignedTo('')
+      setFormDueDate('')
+      setIsCreateDialogOpen(false)
+      
+      toast({
+        title: 'Sucesso',
+        description: 'Tarefa criada com sucesso!'
+      })
+      fetchSteps()
+    } catch (error) {
+      console.error('Error creating step:', error)
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível criar a tarefa',
+        variant: 'destructive'
+      })
+    }
+  }
+
+  async function updateStep() {
+    if (!editingStep || !formTitle.trim()) return
+    
+    try {
+      const { error } = await supabase
+        .from('smart_workflow_steps')
+        .update({
+          title: formTitle,
+          description: formDescription || null,
+          status: formStatus,
+          assigned_to: formAssignedTo || null,
+          due_date: formDueDate || null
+        })
+        .eq('id', editingStep.id)
+      
+      if (error) throw error
+      
+      setIsEditDialogOpen(false)
+      setEditingStep(null)
+      
+      toast({
+        title: 'Sucesso',
+        description: 'Tarefa atualizada com sucesso!'
+      })
+      fetchSteps()
+    } catch (error) {
+      console.error('Error updating step:', error)
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível atualizar a tarefa',
+        variant: 'destructive'
+      })
+    }
+  }
+
+  async function deleteStep(stepId: string) {
+    if (!confirm('Tem certeza que deseja excluir esta tarefa?')) return
+    
+    try {
+      const { error } = await supabase
+        .from('smart_workflow_steps')
+        .delete()
+        .eq('id', stepId)
+      
+      if (error) throw error
+      
+      toast({
+        title: 'Sucesso',
+        description: 'Tarefa excluída com sucesso!'
+      })
+      fetchSteps()
+    } catch (error) {
+      console.error('Error deleting step:', error)
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível excluir a tarefa',
+        variant: 'destructive'
+      })
+    }
+  }
+
   async function updateStepStatus(stepId: string, newStatus: WorkflowStep['status']) {
     try {
       const { error } = await supabase
@@ -164,6 +309,48 @@ export default function WorkflowDetailPage() {
     }
   }
 
+  // Drag and drop handlers
+  const handleDragStart = (e: React.DragEvent, step: WorkflowStep) => {
+    setDraggedStep(step)
+    e.dataTransfer.effectAllowed = 'move'
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }
+
+  const handleDrop = async (e: React.DragEvent, targetStatus: WorkflowStep['status']) => {
+    e.preventDefault()
+    
+    if (!draggedStep || draggedStep.status === targetStatus) {
+      setDraggedStep(null)
+      return
+    }
+    
+    await updateStepStatus(draggedStep.id, targetStatus)
+    setDraggedStep(null)
+  }
+
+  const openEditDialog = (step: WorkflowStep) => {
+    setEditingStep(step)
+    setFormTitle(step.title)
+    setFormDescription(step.description || '')
+    setFormStatus(step.status)
+    setFormAssignedTo(step.assigned_to || '')
+    setFormDueDate(step.due_date || '')
+    setIsEditDialogOpen(true)
+  }
+
+  const openCreateDialog = () => {
+    setFormTitle('')
+    setFormDescription('')
+    setFormStatus('pendente')
+    setFormAssignedTo('')
+    setFormDueDate('')
+    setIsCreateDialogOpen(true)
+  }
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       addStep()
@@ -173,6 +360,7 @@ export default function WorkflowDetailPage() {
   useEffect(() => {
     fetchWorkflow()
     fetchSteps()
+    fetchProfiles()
   }, [id])
 
   if (isLoading) {
@@ -232,84 +420,267 @@ export default function WorkflowDetailPage() {
                 Voltar
               </Link>
             </Button>
+            
+            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+              <DialogTrigger asChild>
+                <Button onClick={openCreateDialog}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Nova Tarefa
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                  <DialogTitle>Criar Nova Tarefa</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="title">Título *</Label>
+                    <Input
+                      id="title"
+                      value={formTitle}
+                      onChange={(e) => setFormTitle(e.target.value)}
+                      placeholder="Digite o título da tarefa"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="description">Descrição</Label>
+                    <Textarea
+                      id="description"
+                      value={formDescription}
+                      onChange={(e) => setFormDescription(e.target.value)}
+                      placeholder="Digite a descrição da tarefa"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="status">Status</Label>
+                    <Select value={formStatus} onValueChange={(value) => setFormStatus(value as WorkflowStep['status'])}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pendente">Pendente</SelectItem>
+                        <SelectItem value="em_progresso">Em Progresso</SelectItem>
+                        <SelectItem value="concluido">Concluído</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="assigned_to">Atribuir para</Label>
+                    <Select value={formAssignedTo} onValueChange={setFormAssignedTo}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione um usuário" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">Nenhum</SelectItem>
+                        {profiles.map((profile) => (
+                          <SelectItem key={profile.id} value={profile.id}>
+                            {profile.full_name || profile.email}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="due_date">Data de Vencimento</Label>
+                    <Input
+                      id="due_date"
+                      type="date"
+                      value={formDueDate}
+                      onChange={(e) => setFormDueDate(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                    Cancelar
+                  </Button>
+                  <Button onClick={createStepWithDialog} disabled={!formTitle.trim()}>
+                    Criar Tarefa
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
 
-          {/* Add Step Form */}
+          {/* Kanban Board */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CheckSquare className="w-5 h-5" />
-                🧱 Etapas do Workflow
+                🧱 Quadro Kanban
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex gap-2 items-end mb-6">
-                <div className="flex-1">
-                  <Input
-                    placeholder="Nova tarefa ou etapa"
-                    value={newTitle}
-                    onChange={e => setNewTitle(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    disabled={isCreating}
-                  />
-                </div>
-                <Button 
-                  onClick={addStep}
-                  disabled={isCreating || !newTitle.trim()}
-                >
-                  <Plus className="w-4 h-4 mr-1" />
-                  {isCreating ? 'Adicionando...' : 'Adicionar'}
-                </Button>
-              </div>
-
-              {/* Kanban Board */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {STATUS_COLUMNS.map((statusColumn) => (
-                  <Card key={statusColumn.value} className={`p-4 ${statusColumn.color}`}>
-                    <h3 className="text-md font-semibold capitalize mb-3">
-                      {statusColumn.label}
-                    </h3>
-
-                    <div className="space-y-2">
-                      {steps
-                        .filter(s => s.status === statusColumn.value)
-                        .map((step) => (
-                          <Card key={step.id} className="p-3 bg-white hover:shadow-md transition">
-                            <p className="font-medium mb-2">{step.title}</p>
-                            {step.description && (
-                              <p className="text-sm text-muted-foreground mb-2">
-                                {step.description}
-                              </p>
-                            )}
-                            <div className="mt-2 flex gap-2 flex-wrap">
-                              {STATUS_COLUMNS
-                                .filter(st => st.value !== statusColumn.value)
-                                .map((targetStatus) => (
-                                  <Button
-                                    key={targetStatus.value}
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => updateStepStatus(step.id, targetStatus.value)}
-                                    className="text-xs"
-                                  >
-                                    Mover para {targetStatus.label}
-                                  </Button>
-                                ))}
-                            </div>
-                          </Card>
-                        ))}
+                  <div 
+                    key={statusColumn.value}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, statusColumn.value)}
+                    className="space-y-3"
+                  >
+                    <Card className={`p-4 ${statusColumn.color}`}>
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-md font-semibold capitalize">
+                          {statusColumn.label}
+                        </h3>
+                        <span className="text-sm text-muted-foreground">
+                          {steps.filter(s => s.status === statusColumn.value).length} tarefas
+                        </span>
+                      </div>
                       
-                      {steps.filter(s => s.status === statusColumn.value).length === 0 && (
-                        <div className="text-center py-8 text-sm text-muted-foreground">
-                          Nenhuma tarefa
-                        </div>
-                      )}
-                    </div>
-                  </Card>
+                      <div className="space-y-2 min-h-[200px]">
+                        {steps
+                          .filter(s => s.status === statusColumn.value)
+                          .map((step) => {
+                            const assignedProfile = profiles.find(p => p.id === step.assigned_to)
+                            return (
+                              <Card
+                                key={step.id}
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, step)}
+                                className={`p-3 bg-white hover:shadow-lg transition-all cursor-move ${
+                                  draggedStep?.id === step.id ? 'opacity-50' : ''
+                                }`}
+                              >
+                                <div className="flex items-start justify-between mb-2">
+                                  <div className="flex items-center gap-2 flex-1">
+                                    <GripVertical className="w-4 h-4 text-muted-foreground" />
+                                    <p className="font-medium text-sm">{step.title}</p>
+                                  </div>
+                                  <div className="flex gap-1">
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => openEditDialog(step)}
+                                      className="h-6 w-6 p-0"
+                                    >
+                                      <Pencil className="w-3 h-3" />
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => deleteStep(step.id)}
+                                      className="h-6 w-6 p-0 text-destructive hover:text-destructive"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </Button>
+                                  </div>
+                                </div>
+                                
+                                {step.description && (
+                                  <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
+                                    {step.description}
+                                  </p>
+                                )}
+                                
+                                <div className="flex items-center gap-2 flex-wrap mt-2 text-xs text-muted-foreground">
+                                  {assignedProfile && (
+                                    <div className="flex items-center gap-1">
+                                      <User className="w-3 h-3" />
+                                      <span>{assignedProfile.full_name || assignedProfile.email}</span>
+                                    </div>
+                                  )}
+                                  {step.due_date && (
+                                    <div className="flex items-center gap-1">
+                                      <Calendar className="w-3 h-3" />
+                                      <span>{new Date(step.due_date).toLocaleDateString('pt-BR')}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </Card>
+                            )
+                          })}
+                        
+                        {steps.filter(s => s.status === statusColumn.value).length === 0 && (
+                          <div className="text-center py-12 text-sm text-muted-foreground">
+                            Arraste tarefas aqui
+                          </div>
+                        )}
+                      </div>
+                    </Card>
+                  </div>
                 ))}
               </div>
             </CardContent>
           </Card>
+
+          {/* Edit Dialog */}
+          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <DialogContent className="sm:max-w-[500px]">
+              <DialogHeader>
+                <DialogTitle>Editar Tarefa</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-title">Título *</Label>
+                  <Input
+                    id="edit-title"
+                    value={formTitle}
+                    onChange={(e) => setFormTitle(e.target.value)}
+                    placeholder="Digite o título da tarefa"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-description">Descrição</Label>
+                  <Textarea
+                    id="edit-description"
+                    value={formDescription}
+                    onChange={(e) => setFormDescription(e.target.value)}
+                    placeholder="Digite a descrição da tarefa"
+                    rows={3}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-status">Status</Label>
+                  <Select value={formStatus} onValueChange={(value) => setFormStatus(value as WorkflowStep['status'])}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pendente">Pendente</SelectItem>
+                      <SelectItem value="em_progresso">Em Progresso</SelectItem>
+                      <SelectItem value="concluido">Concluído</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-assigned_to">Atribuir para</Label>
+                  <Select value={formAssignedTo} onValueChange={setFormAssignedTo}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione um usuário" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">Nenhum</SelectItem>
+                      {profiles.map((profile) => (
+                        <SelectItem key={profile.id} value={profile.id}>
+                          {profile.full_name || profile.email}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-due_date">Data de Vencimento</Label>
+                  <Input
+                    id="edit-due_date"
+                    type="date"
+                    value={formDueDate}
+                    onChange={(e) => setFormDueDate(e.target.value)}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button onClick={updateStep} disabled={!formTitle.trim()}>
+                  Salvar Alterações
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
           {workflow.description && (
             <Card>
