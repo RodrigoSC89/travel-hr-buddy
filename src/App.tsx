@@ -16,6 +16,7 @@ const Reservations = React.lazy(() => import("./pages/Reservations"));
 const ChecklistsInteligentes = React.lazy(() => import("./pages/ChecklistsInteligentes"));
 const PEOTRAM = React.lazy(() => import("./pages/PEOTRAM"));
 const PEODP = React.lazy(() => import("./pages/PEODP"));
+const DPIntelligence = React.lazy(() => import("./pages/DPIntelligence"));
 const SGSO = React.lazy(() => import("./pages/SGSO"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Documents = React.lazy(() => import("./pages/Documents"));
@@ -151,6 +152,7 @@ function App() {
                       <Route path="/checklists" element={<ChecklistsInteligentes />} />
                       <Route path="/peotram" element={<PEOTRAM />} />
                       <Route path="/peo-dp" element={<PEODP />} />
+                      <Route path="/dp-intelligence" element={<DPIntelligence />} />
                       <Route path="/sgso" element={<SGSO />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/documents" element={<Documents />} />
