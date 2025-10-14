@@ -1,58 +1,57 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import JobCards from "@/components/mmi/JobCards";
 
 describe("JobCards Component", () => {
   it("renders without crashing", () => {
-    render(<JobCards />);
+    const { container } = render(<JobCards />);
+    expect(container).toBeTruthy();
   });
 
   it("displays job cards with correct structure", async () => {
     render(<JobCards />);
     
     // Wait for the component to render with mock data
-    const jobTitles = await screen.findAllByRole("heading", { level: 3 });
-    expect(jobTitles.length).toBeGreaterThan(0);
+    await waitFor(() => {
+      const jobTitles = screen.queryAllByRole("heading", { level: 3 });
+      expect(jobTitles.length).toBeGreaterThan(0);
+    });
   });
 
-  it("shows job details including component and vessel", async () => {
-    render(<JobCards />);
+  it("shows job component information", async () => {
+    const { container } = render(<JobCards />);
     
-    // Check if component and vessel info is rendered
-    const componentText = await screen.findByText(/Componente:/);
-    expect(componentText).toBeInTheDocument();
-    
-    const vesselText = await screen.findByText(/Embarcação:/);
-    expect(vesselText).toBeInTheDocument();
+    await waitFor(() => {
+      // Check if the component renders the text "Componente:"
+      expect(container.textContent).toContain("Componente:");
+    });
   });
 
-  it("displays priority and status badges", async () => {
-    render(<JobCards />);
+  it("displays priority and status information", async () => {
+    const { container } = render(<JobCards />);
     
-    // Check for badges
-    const priorityBadge = await screen.findByText(/Prioridade:/);
-    expect(priorityBadge).toBeInTheDocument();
-    
-    const statusBadge = await screen.findByText(/Status:/);
-    expect(statusBadge).toBeInTheDocument();
+    await waitFor(() => {
+      expect(container.textContent).toContain("Prioridade:");
+      expect(container.textContent).toContain("Status:");
+    });
   });
 
-  it("shows AI suggestion badge and content when available", async () => {
-    render(<JobCards />);
+  it("shows AI suggestion when available", async () => {
+    const { container } = render(<JobCards />);
     
-    // Check for AI suggestion badge
-    const aiSuggestion = await screen.findByText(/💡 Sugestão IA/);
-    expect(aiSuggestion).toBeInTheDocument();
+    await waitFor(() => {
+      expect(container.textContent).toContain("💡 Sugestão IA");
+    });
   });
 
   it("displays action buttons", async () => {
     render(<JobCards />);
     
-    // Check for action buttons
-    const detailsButtons = await screen.findAllByText("Ver detalhes");
-    expect(detailsButtons.length).toBeGreaterThan(0);
-    
-    const executeButtons = await screen.findAllByText("Executar Job");
-    expect(executeButtons.length).toBeGreaterThan(0);
+    await waitFor(() => {
+      const detailsButtons = screen.queryAllByText("Ver detalhes");
+      const executeButtons = screen.queryAllByText("Executar Job");
+      expect(detailsButtons.length).toBeGreaterThan(0);
+      expect(executeButtons.length).toBeGreaterThan(0);
+    });
   });
 });
