@@ -135,6 +135,7 @@ serve(async (req) => {
     const authHeader = req.headers.get("Authorization");
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     const supabase = createClient(supabaseUrl, supabaseKey, {
       global: {
         headers: authHeader ? { Authorization: authHeader } : {},
@@ -142,6 +143,103 @@ serve(async (req) => {
     });
 
     const lower = question.toLowerCase();
+
+    // 👉 DP Intelligence queries - Check if question is about DP incidents or IMCA
+    const dpKeywords = ["dp", "incidente", "imca", "posicionamento dinâmico", "drive off", "drive-off", 
+                        "perda de posição", "thruster", "gyro", "dgps", "peo-dp", "peo dp"];
+    const isDPQuery = dpKeywords.some(keyword => lower.includes(keyword));
+    
+    if (isDPQuery) {
+      console.log("DP Intelligence query detected");
+      
+      // Check if asking for specific incident
+      const incidentMatch = question.match(/(?:IMCA|INC)[-\s]?(\d{4}[-\s]?\d{3})/i);
+      const incidentId = incidentMatch ? incidentMatch[0].replace(/\s+/g, "-") : null;
+      
+      try {
+        let dpContext = "";
+        
+        if (incidentId) {
+          // Fetch specific incident
+          const { data: incident, error: incidentError } = await supabase
+            .from("dp_incidents")
+            .select("*")
+            .eq("incident_id", incidentId)
+            .single();
+            
+          if (!incidentError && incident) {
+            dpContext = `
+**Incidente encontrado na base de dados:**
+- ID: ${incident.incident_id}
+- Título: ${incident.title}
+- Classe: ${incident.vessel_class}
+- Tipo: ${incident.incident_type}
+- Severidade: ${incident.severity}
+- Causa: ${incident.root_cause || "Em investigação"}
+- Normas IMCA: ${incident.imca_standards?.join(", ") || "N/A"}
+`;
+          }
+        } else {
+          // Search for related incidents
+          const searchTerm = question.replace(/[^\w\s]/gi, ' ').trim();
+          const { data: incidents, error: searchError } = await supabase
+            .from("dp_incidents")
+            .select("incident_id, title, severity, vessel_class")
+            .or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`)
+            .limit(5);
+            
+          if (!searchError && incidents && incidents.length > 0) {
+            dpContext = `\n**Incidentes relacionados encontrados:**\n` +
+              incidents.map(i => `- ${i.incident_id}: ${i.title} (${i.severity})`).join("\n");
+          }
+        }
+        
+        // Call OpenAI with DP context
+        const dpSystemPrompt = `Você é um especialista em Posicionamento Dinâmico e normas IMCA.
+Responda perguntas sobre incidentes DP, causas de falhas, normas IMCA e PEO-DP.
+${dpContext}
+
+Forneça respostas técnicas, práticas e orientadas à ação.`;
+
+        const dpResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [
+              { role: "system", content: dpSystemPrompt },
+              { role: "user", content: question },
+            ],
+            temperature: 0.3,
+            max_tokens: 1000,
+          }),
+        });
+
+        if (dpResponse.ok) {
+          const dpData = await dpResponse.json();
+          const dpAnswer = dpData.choices[0].message.content;
+          
+          return new Response(
+            JSON.stringify({
+              answer: dpAnswer + "\n\n🔗 <a href=\"/peo-dp\" class=\"text-blue-600 underline\">Ver módulo PEO-DP completo</a>",
+              action: "dp_intelligence",
+              context: "dp_incidents",
+              timestamp: new Date().toISOString(),
+            }),
+            {
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+              status: 200,
+            }
+          );
+        }
+      } catch (dpError) {
+        console.error("DP Intelligence error:", dpError);
+        // Continue to normal flow if DP query fails
+      }
+    }
 
     // 👉 Real database queries for pending tasks
     if (lower.includes("quantas tarefas") || lower.includes("tarefas pendentes")) {
@@ -252,7 +350,6 @@ serve(async (req) => {
     }
 
     // If no command matched, use OpenAI for general assistance
-    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
       // Fallback response if no OpenAI key
       return new Response(
@@ -295,6 +392,32 @@ Módulos disponíveis no sistema:
 10. **Tripulação** (/crew) - Gestão de tripulação
 11. **Reservas** (/reservations) - Sistema de reservas
 12. **Comunicação** (/communication) - Centro de comunicação
+13. **PEO-DP** (/peo-dp) - Dynamic Positioning Operations Plan
+14. **Centro de Inteligência DP** - Análise de incidentes e normas IMCA
+
+🧠 **CENTRO DE INTELIGÊNCIA DP - CAPACIDADES ESPECIAIS**:
+Você tem acesso ao Centro de Inteligência DP, que permite:
+- Consultar incidentes DP da base de dados (dp_incidents)
+- Analisar incidentes com IA (via /api/dp/intel/analyze)
+- Buscar informações sobre normas IMCA (M190, M103, M117, M182, etc.)
+- Explicar causas de falhas DP e ações preventivas
+- Comparar incidentes similares
+- Gerar planos de ação baseados em PEO-DP
+
+Quando o usuário fizer perguntas sobre:
+- Incidentes DP (ex: "Explique o incidente IMCA-2025-009")
+- Normas IMCA (ex: "O que diz a norma M190 sobre Drive Off?")
+- Eventos DP (ex: "Quais as causas de perda de posição?")
+- Conformidade PEO-DP
+- Análise de falhas DP
+- Comparações de incidentes
+
+VOCÊ DEVE identificar como tema "DP Intelligence" e fornecer resposta técnica orientada à ação, incluindo:
+✅ Resumo técnico
+📚 Normas IMCA relacionadas
+📌 Causas potenciais
+🧠 Recomendações baseadas em IA
+📄 Ações corretivas e preventivas
 
 Sempre forneça respostas práticas e direcionadas. Quando relevante, sugira a rota específica do módulo.
 Seja claro, direto e útil.
