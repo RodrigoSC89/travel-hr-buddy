@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "./components/layout/error-boundary";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -89,6 +89,26 @@ const LoadingSpinner = () => (
 // Create QueryClient
 const queryClient = new QueryClient();
 
+// Component to handle redirect from 404.html
+const RedirectHandler = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Check if there's a stored redirect path
+    const redirectPath = sessionStorage.getItem("redirectPath");
+    if (redirectPath && redirectPath !== "/" && location.pathname === "/") {
+      // Clear the stored path
+      sessionStorage.removeItem("redirectPath");
+      
+      // Navigate to the stored path
+      navigate(redirectPath, { replace: true });
+    }
+  }, [navigate, location]);
+
+  return null;
+};
+
 function App() {
   return (
     <ErrorBoundary>
@@ -97,6 +117,7 @@ function App() {
           <OrganizationProvider>
             <QueryClientProvider client={queryClient}>
               <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                <RedirectHandler />
                 <React.Suspense fallback={<LoadingSpinner />}>
                   <Routes>
                     {/* Routes outside SmartLayout (no auth, no navigation) */}
