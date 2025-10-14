@@ -287,12 +287,13 @@ Módulos disponíveis no sistema:
 2. **Checklists** (/admin/checklists) - Gestão de checklists de inspeção
 3. **Documentos** (/admin/documents) - Gestão de documentos
 4. **Documentos AI** (/admin/documents/ai) - Geração e análise com IA
-5. **Analytics** (/analytics) - Análises e métricas
-6. **Relatórios** (/reports) - Relatórios do sistema
-7. **Alertas de Preço** (/price-alerts) - Monitoramento de preços
-8. **Status da API** (/admin/api-status) - Monitoramento de APIs
-9. **Painel de Controle** (/admin/control-panel) - Configurações do sistema
-10. **Tripulação** (/crew) - Gestão de tripulação
+5. **Templates** (/admin/templates) - Templates com IA para documentos
+6. **Analytics** (/analytics) - Análises e métricas
+7. **Relatórios** (/reports) - Relatórios do sistema
+8. **Alertas de Preço** (/price-alerts) - Monitoramento de preços
+9. **Status da API** (/admin/api-status) - Monitoramento de APIs
+10. **Painel de Controle** (/admin/control-panel) - Configurações do sistema
+11. **Tripulação** (/crew) - Gestão de tripulação
 11. **Reservas** (/reservations) - Sistema de reservas
 12. **Comunicação** (/communication) - Centro de comunicação
 

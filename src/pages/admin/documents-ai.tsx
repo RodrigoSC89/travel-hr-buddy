@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { logger } from "@/lib/logger";
 
 export default function DocumentsAIPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [prompt, setPrompt] = useState("");
   const [generated, setGenerated] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,6 +25,20 @@ export default function DocumentsAIPage() {
   const [summarizing, setSummarizing] = useState(false);
   const [rewriting, setRewriting] = useState(false);
   const [summary, setSummary] = useState("");
+
+  // Check if template was passed from templates page
+  useEffect(() => {
+    if (location.state?.templateTitle && location.state?.templateContent) {
+      setTitle(location.state.templateTitle);
+      setGenerated(location.state.templateContent);
+      toast({
+        title: "Template aplicado",
+        description: "O template foi carregado. Você pode editá-lo e gerar o documento.",
+      });
+      // Clear the state so it doesn't persist on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   async function generateDocument() {
     if (!prompt) return;
