@@ -5,7 +5,8 @@ import { useParams, Link } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Workflow, Calendar, User, CheckSquare } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper'
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper'
@@ -23,10 +24,36 @@ interface SmartWorkflow {
   tags?: string[]
 }
 
+interface WorkflowStep {
+  id: string
+  workflow_id: string
+  title: string
+  description?: string
+  status: 'pendente' | 'em_progresso' | 'concluido'
+  position: number
+  assigned_to?: string
+  due_date?: string
+  priority?: string
+  created_at: string
+  updated_at: string
+  created_by?: string
+  tags?: string[]
+  metadata?: Record<string, any>
+}
+
+const STATUS_COLUMNS: Array<{ value: WorkflowStep['status']; label: string; color: string }> = [
+  { value: 'pendente', label: 'Pendente', color: 'bg-yellow-50 border-yellow-200' },
+  { value: 'em_progresso', label: 'Em Progresso', color: 'bg-blue-50 border-blue-200' },
+  { value: 'concluido', label: 'Concluído', color: 'bg-green-50 border-green-200' },
+]
+
 export default function WorkflowDetailPage() {
   const { id } = useParams<{ id: string }>()
   const [workflow, setWorkflow] = useState<SmartWorkflow | null>(null)
+  const [steps, setSteps] = useState<WorkflowStep[]>([])
+  const [newTitle, setNewTitle] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [isCreating, setIsCreating] = useState(false)
   const { toast } = useToast()
 
   async function fetchWorkflow() {
@@ -54,8 +81,98 @@ export default function WorkflowDetailPage() {
     }
   }
 
+  async function fetchSteps() {
+    if (!id) return
+    
+    try {
+      const { data, error } = await supabase
+        .from('smart_workflow_steps')
+        .select('*')
+        .eq('workflow_id', id)
+        .order('position', { ascending: true })
+      
+      if (error) throw error
+      setSteps(data || [])
+    } catch (error) {
+      console.error('Error fetching steps:', error)
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível carregar as etapas',
+        variant: 'destructive'
+      })
+    }
+  }
+
+  async function addStep() {
+    if (!newTitle.trim() || !id) return
+    
+    try {
+      setIsCreating(true)
+      const { data: { user } } = await supabase.auth.getUser()
+      
+      const { error } = await supabase
+        .from('smart_workflow_steps')
+        .insert({
+          workflow_id: id,
+          title: newTitle,
+          status: 'pendente',
+          position: steps.length,
+          created_by: user?.id
+        })
+      
+      if (error) throw error
+      
+      setNewTitle('')
+      toast({
+        title: 'Sucesso',
+        description: 'Tarefa adicionada com sucesso!'
+      })
+      fetchSteps()
+    } catch (error) {
+      console.error('Error adding step:', error)
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível adicionar a tarefa',
+        variant: 'destructive'
+      })
+    } finally {
+      setIsCreating(false)
+    }
+  }
+
+  async function updateStepStatus(stepId: string, newStatus: WorkflowStep['status']) {
+    try {
+      const { error } = await supabase
+        .from('smart_workflow_steps')
+        .update({ status: newStatus })
+        .eq('id', stepId)
+      
+      if (error) throw error
+      
+      toast({
+        title: 'Sucesso',
+        description: 'Status atualizado com sucesso!'
+      })
+      fetchSteps()
+    } catch (error) {
+      console.error('Error updating step status:', error)
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível atualizar o status',
+        variant: 'destructive'
+      })
+    }
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      addStep()
+    }
+  }
+
   useEffect(() => {
     fetchWorkflow()
+    fetchSteps()
   }, [id])
 
   if (isLoading) {
@@ -117,38 +234,79 @@ export default function WorkflowDetailPage() {
             </Button>
           </div>
 
+          {/* Add Step Form */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CheckSquare className="w-5 h-5" />
-                Etapas do Workflow
+                🧱 Etapas do Workflow
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-12">
-                <Workflow className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">
-                  Visualização Kanban em Desenvolvimento
-                </h3>
-                <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                  Em breve você poderá criar e mover tarefas entre etapas, 
-                  definir responsáveis, datas e acompanhar o progresso em 
-                  um quadro Kanban interativo.
-                </p>
-                <div className="flex gap-4 justify-center flex-wrap">
-                  <div className="text-left">
-                    <h4 className="font-semibold mb-2">🎯 Próximas funcionalidades:</h4>
-                    <ul className="text-sm text-muted-foreground space-y-1">
-                      <li>✓ Criar etapas personalizadas</li>
-                      <li>✓ Adicionar tarefas em cada etapa</li>
-                      <li>✓ Arrastar tarefas entre etapas (Kanban)</li>
-                      <li>✓ Atribuir responsáveis</li>
-                      <li>✓ Definir prazos e prioridades</li>
-                      <li>✓ Filtros e exportações</li>
-                      <li>✓ Sugestões de IA</li>
-                    </ul>
-                  </div>
+              <div className="flex gap-2 items-end mb-6">
+                <div className="flex-1">
+                  <Input
+                    placeholder="Nova tarefa ou etapa"
+                    value={newTitle}
+                    onChange={e => setNewTitle(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    disabled={isCreating}
+                  />
                 </div>
+                <Button 
+                  onClick={addStep}
+                  disabled={isCreating || !newTitle.trim()}
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  {isCreating ? 'Adicionando...' : 'Adicionar'}
+                </Button>
+              </div>
+
+              {/* Kanban Board */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                {STATUS_COLUMNS.map((statusColumn) => (
+                  <Card key={statusColumn.value} className={`p-4 ${statusColumn.color}`}>
+                    <h3 className="text-md font-semibold capitalize mb-3">
+                      {statusColumn.label}
+                    </h3>
+
+                    <div className="space-y-2">
+                      {steps
+                        .filter(s => s.status === statusColumn.value)
+                        .map((step) => (
+                          <Card key={step.id} className="p-3 bg-white hover:shadow-md transition">
+                            <p className="font-medium mb-2">{step.title}</p>
+                            {step.description && (
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {step.description}
+                              </p>
+                            )}
+                            <div className="mt-2 flex gap-2 flex-wrap">
+                              {STATUS_COLUMNS
+                                .filter(st => st.value !== statusColumn.value)
+                                .map((targetStatus) => (
+                                  <Button
+                                    key={targetStatus.value}
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => updateStepStatus(step.id, targetStatus.value)}
+                                    className="text-xs"
+                                  >
+                                    Mover para {targetStatus.label}
+                                  </Button>
+                                ))}
+                            </div>
+                          </Card>
+                        ))}
+                      
+                      {steps.filter(s => s.status === statusColumn.value).length === 0 && (
+                        <div className="text-center py-8 text-sm text-muted-foreground">
+                          Nenhuma tarefa
+                        </div>
+                      )}
+                    </div>
+                  </Card>
+                ))}
               </div>
             </CardContent>
           </Card>
