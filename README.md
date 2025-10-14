@@ -218,6 +218,49 @@ npm run test
 * Build errors are linted and tested in CI before deployment
 * Environment variables must be configured in Vercel dashboard
 
+### Vercel Configuration
+
+The project includes an optimized `vercel.json` configuration with:
+
+**Security Headers:**
+- `X-Content-Type-Options: nosniff` - Prevents MIME type sniffing
+- `X-Frame-Options: DENY` - Prevents clickjacking attacks
+- `X-XSS-Protection: 1; mode=block` - Enables XSS filtering
+- `Referrer-Policy: strict-origin-when-cross-origin` - Controls referrer information
+- `Permissions-Policy` - Restricts camera, microphone, and geolocation access
+
+**Caching Strategy:**
+- Static assets (`/assets/*`): 1 year cache with immutable flag
+- Images (jpg, png, gif, webp, svg, ico): 24-hour cache with revalidation
+- Optimized for performance and bandwidth reduction
+
+**Framework Detection:**
+- Vercel auto-detects build commands from `package.json`
+- Framework: Vite
+- Output directory: `dist`
+
+### Health Check Endpoint
+
+Visit `/health` to verify your deployment:
+- **Production**: `https://your-project.vercel.app/health`
+- Shows environment variable configuration status
+- Validates API connectivity
+
+### Environment Variables Setup
+
+Configure in Vercel Dashboard (Settings → Environment Variables):
+
+```env
+# Required
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+
+# Monitoring (Optional)
+VITE_SENTRY_DSN=https://your-sentry-dsn@sentry.io
+```
+
+See [VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md) for complete setup instructions.
+
 ### Manual Deployment
 
 ```bash
