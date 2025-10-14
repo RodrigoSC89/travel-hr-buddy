@@ -253,17 +253,44 @@ serve(async (req) => {
         if (response.ok) {
           sentCount++;
           console.log(`✅ Email sent to ${profile.email}`);
+          
+          // Log success to database
+          await supabase
+            .from("dashboard_report_logs")
+            .insert({
+              status: "success",
+              email: profile.email,
+              message: "Dashboard report sent successfully"
+            });
         } else {
           const errorData = await response.text();
           failedCount++;
           errors.push(`${profile.email}: ${errorData}`);
           console.error(`❌ Failed to send to ${profile.email}: ${errorData}`);
+          
+          // Log error to database
+          await supabase
+            .from("dashboard_report_logs")
+            .insert({
+              status: "error",
+              email: profile.email,
+              message: `Failed to send email: ${errorData}`
+            });
         }
       } catch (error) {
         failedCount++;
         const errorMsg = error instanceof Error ? error.message : String(error);
         errors.push(`${profile.email}: ${errorMsg}`);
         console.error(`❌ Error sending to ${profile.email}:`, error);
+        
+        // Log error to database
+        await supabase
+          .from("dashboard_report_logs")
+          .insert({
+            status: "error",
+            email: profile.email,
+            message: `Error sending email: ${errorMsg}`
+          });
       }
     }
 
