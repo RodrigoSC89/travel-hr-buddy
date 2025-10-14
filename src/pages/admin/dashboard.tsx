@@ -30,9 +30,9 @@ export default function AdminDashboard() {
   const [trend, setTrend] = useState<RestoreDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const publicUrl = typeof window !== 'undefined' 
+  const publicUrl = typeof window !== "undefined" 
     ? `${window.location.origin}${window.location.pathname}?public=1`
-    : '';
+    : "";
 
   useEffect(() => {
     // Fetch cron status
@@ -131,7 +131,7 @@ export default function AdminDashboard() {
             <BarChart data={trend.reverse()}>
               <XAxis dataKey="day" stroke="#ccc" />
               <YAxis stroke="#ccc" />
-              <Tooltip contentStyle={{ backgroundColor: '#1f1f1f', borderColor: '#333' }} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f1f1f", borderColor: "#333" }} />
               <Bar dataKey="count" fill="#4f46e5" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
