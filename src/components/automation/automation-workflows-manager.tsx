@@ -27,13 +27,34 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+interface ScheduleTriggerConfig {
+  cron: string;
+  timezone: string;
+}
+
+interface EventTriggerConfig {
+  event_type: string;
+  conditions?: Record<string, unknown>;
+}
+
+interface ConditionTriggerConfig {
+  conditions: Record<string, unknown>;
+}
+
+type TriggerConfig = ScheduleTriggerConfig | EventTriggerConfig | ConditionTriggerConfig;
+
+interface WorkflowAction {
+  type: string;
+  config: Record<string, unknown>;
+}
+
 interface AutomationWorkflow {
   id: string;
   name: string;
   description: string;
   trigger_type: "schedule" | "event" | "condition";
-  trigger_config: any;
-  actions: any[];
+  trigger_config: TriggerConfig;
+  actions: WorkflowAction[];
   is_active: boolean;
   last_executed_at?: string;
   execution_count: number;
@@ -91,8 +112,8 @@ export const AutomationWorkflowsManager: React.FC = () => {
     name: "",
     description: "",
     trigger_type: "schedule" as const,
-    trigger_config: { cron: "0 9 * * *", timezone: "America/Sao_Paulo" },
-    actions: [] as any[]
+    trigger_config: { cron: "0 9 * * *", timezone: "America/Sao_Paulo" } as ScheduleTriggerConfig,
+    actions: [] as WorkflowAction[]
   });
 
   const loadWorkflows = useCallback(async () => {
@@ -334,7 +355,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
                   <Label htmlFor="trigger">Tipo de Trigger</Label>
                   <Select 
                     value={formData.trigger_type} 
-                    onValueChange={(value: any) => setFormData(prev => ({ ...prev, trigger_type: value }))}
+                    onValueChange={(value: string) => setFormData(prev => ({ ...prev, trigger_type: value as "schedule" | "event" | "condition" }))}
                   >
                     <SelectTrigger>
                       <SelectValue />

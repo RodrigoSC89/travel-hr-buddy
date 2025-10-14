@@ -19,13 +19,20 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+interface ActionData {
+  route?: string;
+  action?: string;
+  params?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
 interface AISuggestion {
   id: string;
   type: "action" | "insight" | "reminder" | "optimization";
   title: string;
   description: string;
   priority: number;
-  action_data: any;
+  action_data: ActionData;
   is_read: boolean;
   is_dismissed: boolean;
   is_acted_upon: boolean;

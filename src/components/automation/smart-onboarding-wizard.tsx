@@ -11,22 +11,39 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
+interface CompanyProfile {
+  company_type: string;
+  fleet_size: string;
+  primary_operations: string[];
+  key_challenges: string[];
+}
+
+interface UserPreferences {
+  enabled_modules: string[];
+}
+
+interface StepData {
+  user_type?: string;
+  company_profile?: CompanyProfile;
+  preferences?: UserPreferences;
+}
+
 interface OnboardingStep {
   id: string;
   title: string;
   description: string;
-  component: React.ComponentType<any>;
+  component: React.ComponentType<{ data: OnboardingData; onNext: (data: StepData) => void }>;
   requiredFor: string[];
 }
 
 interface OnboardingData {
   user_type: string;
-  company_profile: any;
-  preferences: any;
+  company_profile: CompanyProfile | Record<string, never>;
+  preferences: UserPreferences | Record<string, never>;
   completed_steps: string[];
 }
 
-const WelcomeStep: React.FC<{ onNext: (data: any) => void }> = ({ onNext }) => {
+const WelcomeStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => void }> = ({ onNext }) => {
   const [userType, setUserType] = useState("");
 
   return (
@@ -104,7 +121,7 @@ const WelcomeStep: React.FC<{ onNext: (data: any) => void }> = ({ onNext }) => {
   );
 };
 
-const CompanyProfileStep: React.FC<{ data: any; onNext: (data: any) => void }> = ({ data, onNext }) => {
+const CompanyProfileStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => void }> = ({ data, onNext }) => {
   const [profile, setProfile] = useState<{
     company_type: string;
     fleet_size: string;
@@ -221,7 +238,7 @@ const CompanyProfileStep: React.FC<{ data: any; onNext: (data: any) => void }> =
   );
 };
 
-const ModuleRecommendationStep: React.FC<{ data: any; onNext: (data: any) => void }> = ({ data, onNext }) => {
+const ModuleRecommendationStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => void }> = ({ data, onNext }) => {
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
 
   const getRecommendedModules = () => {
@@ -369,7 +386,7 @@ export const SmartOnboardingWizard: React.FC = () => {
     }
   ];
 
-  const handleStepComplete = async (stepData: any) => {
+  const handleStepComplete = async (stepData: StepData) => {
     const updatedData = { ...onboardingData, ...stepData };
     setOnboardingData(updatedData);
 
