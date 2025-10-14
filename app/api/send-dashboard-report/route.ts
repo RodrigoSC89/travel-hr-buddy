@@ -1,16 +1,16 @@
 // /app/api/send-dashboard-report/route.ts
 // Next.js API Route for sending automated dashboard reports with PDF attachment
 
-import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
-import { createClient } from '@supabase/supabase-js'
-import puppeteer from 'puppeteer'
+import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import { createClient } from "@supabase/supabase-js";
+import puppeteer from "puppeteer";
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY);
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+);
 
 /**
  * GET /api/send-dashboard-report
@@ -32,84 +32,84 @@ const supabase = createClient(
  */
 export async function GET() {
   try {
-    console.log('📊 Starting dashboard report generation...')
+    console.log("📊 Starting dashboard report generation...");
 
     // Buscar admin user email
     const { data: userData, error: userError } = await supabase
-      .from('profiles')
-      .select('email')
-      .eq('role', 'admin')
+      .from("profiles")
+      .select("email")
+      .eq("role", "admin")
       .limit(1)
-      .single()
+      .single();
 
     if (userError || !userData?.email) {
-      throw new Error('Admin email not found.')
+      throw new Error("Admin email not found.");
     }
 
-    console.log(`✅ Admin email found: ${userData.email}`)
+    console.log(`✅ Admin email found: ${userData.email}`);
 
     // Gerar PDF da versão pública do painel usando Puppeteer
-    console.log('🖨️  Launching Puppeteer to generate PDF...')
+    console.log("🖨️  Launching Puppeteer to generate PDF...");
     
     const browser = await puppeteer.launch({ 
-      headless: 'new',
+      headless: "new",
       args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--no-zygote',
-        '--disable-gpu'
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu"
       ]
-    })
+    });
     
-    const page = await browser.newPage()
+    const page = await browser.newPage();
     
     // Set viewport for consistent rendering
     await page.setViewport({
       width: 1920,
       height: 1080,
       deviceScaleFactor: 1,
-    })
+    });
 
-    const dashboardUrl = `${process.env.BASE_URL}/admin/dashboard?public=1`
-    console.log(`📍 Navigating to: ${dashboardUrl}`)
+    const dashboardUrl = `${process.env.BASE_URL}/admin/dashboard?public=1`;
+    console.log(`📍 Navigating to: ${dashboardUrl}`);
     
     await page.goto(dashboardUrl, {
-      waitUntil: 'networkidle0',
+      waitUntil: "networkidle0",
       timeout: 60000, // 60 seconds timeout
-    })
+    });
 
     // Wait a bit more for any charts/animations to load
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(2000);
 
-    console.log('📄 Generating PDF...')
+    console.log("📄 Generating PDF...");
     const pdfBuffer = await page.pdf({
-      format: 'A4',
+      format: "A4",
       printBackground: true,
       margin: {
-        top: '20px',
-        right: '20px',
-        bottom: '20px',
-        left: '20px',
+        top: "20px",
+        right: "20px",
+        bottom: "20px",
+        left: "20px",
       },
-    })
+    });
     
-    await browser.close()
-    console.log('✅ PDF generated successfully')
+    await browser.close();
+    console.log("✅ PDF generated successfully");
 
     // Enviar via Resend
-    const currentDate = new Date().toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    })
+    const currentDate = new Date().toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
 
-    console.log('📧 Sending email via Resend...')
+    console.log("📧 Sending email via Resend...");
     
     const emailResult = await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'dashboard@empresa.com',
+      from: process.env.EMAIL_FROM || "dashboard@empresa.com",
       to: userData.email,
       subject: `📊 Dashboard Mensal - Painel Automatizado - ${currentDate}`,
       html: `
@@ -186,30 +186,31 @@ export async function GET() {
       `.trim(),
       attachments: [
         {
-          filename: `dashboard-${new Date().toISOString().split('T')[0]}.pdf`,
-          content: Buffer.from(pdfBuffer).toString('base64'),
+          filename: `dashboard-${new Date().toISOString().split("T")[0]}.pdf`,
+          content: Buffer.from(pdfBuffer).toString("base64"),
         },
       ],
-    })
+    });
 
-    console.log('✅ Email sent successfully:', emailResult)
+    console.log("✅ Email sent successfully:", emailResult);
 
     return NextResponse.json({ 
       success: true, 
       sent: true,
       emailId: emailResult.data?.id,
       recipient: userData.email,
-      message: 'Dashboard report sent successfully'
-    })
-  } catch (err: any) {
-    console.error('[SEND_DASHBOARD_REPORT]', err)
+      message: "Dashboard report sent successfully"
+    });
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error("[SEND_DASHBOARD_REPORT]", error);
     return NextResponse.json(
       { 
         success: false, 
-        error: err.message,
-        details: err.stack 
+        error: error.message,
+        details: error.stack 
       }, 
       { status: 500 }
-    )
+    );
   }
 }

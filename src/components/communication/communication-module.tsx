@@ -168,13 +168,13 @@ export const CommunicationModule = () => {
                     <div className="flex items-center gap-2">
                       <TrendingUp className={`w-4 h-4 ${stat.trend === "up" ? "text-green-500" : "text-red-500"} group-hover:scale-110 transition-transform`} />
                       <span className={`text-sm font-medium ${stat.trend === "up" ? "text-green-600" : "text-red-600"}`}>
-                      {stat.change}
-                    </span>
+                        {stat.change}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className={"p-4 rounded-2xl bg-opacity-10 backdrop-blur-sm group-hover:scale-105 transition-all duration-300"}>
-                  <Icon className={`w-8 h-8 ${textColorClass}`} />
-                </div>
+                  <div className={"p-4 rounded-2xl bg-opacity-10 backdrop-blur-sm group-hover:scale-105 transition-all duration-300"}>
+                    <Icon className={`w-8 h-8 ${textColorClass}`} />
+                  </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-3 opacity-70 group-hover:opacity-100 transition-opacity">
                   {stat.description}
