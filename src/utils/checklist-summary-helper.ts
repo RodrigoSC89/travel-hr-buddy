@@ -8,6 +8,7 @@
 import React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface ChecklistItem {
   title: string;
@@ -46,7 +47,7 @@ export async function summarizeChecklist(
       timestamp: data.timestamp
     };
   } catch (error) {
-    console.error("Error summarizing checklist:", error);
+    logger.error("Error summarizing checklist:", error);
     throw error;
   }
 }
@@ -176,11 +177,11 @@ async function generateChecklistSummary() {
   });
 
   if (error) {
-    console.error("Error:", error);
+    logger.error("Error:", error);
     return;
   }
 
-  console.log("Summary:", data.summary);
+  logger.info("Summary:", data.summary);
   // Expected output:
   // "📊 1 de 2 tarefas concluídas. ⚠️ Checklist parcialmente completo.
   //  💡 Sugestões: 

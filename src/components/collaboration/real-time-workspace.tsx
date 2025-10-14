@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Users, 
   MessageSquare, 
   Send, 
@@ -292,7 +293,7 @@ const RealTimeWorkspace: React.FC = () => {
         }
       });
     } catch (error) {
-      console.error("Failed to send reaction:", error);
+      logger.error("Failed to send reaction:", error);
     }
   };
 
@@ -313,7 +314,7 @@ const RealTimeWorkspace: React.FC = () => {
         current_page: window.location.pathname
       });
     } catch (error) {
-      console.error("Failed to change status:", error);
+      logger.error("Failed to change status:", error);
     }
   };
 

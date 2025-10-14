@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Brain, 
   TrendingUp, 
   AlertTriangle, 
@@ -74,7 +75,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
         });
 
       if (dbError) {
-        console.error("Failed to save AI analysis:", dbError);
+        logger.error("Failed to save AI analysis:", dbError);
       }
 
       toast.success("Análise AI concluída com sucesso!");

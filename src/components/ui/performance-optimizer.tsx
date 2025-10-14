@@ -1,5 +1,6 @@
 import React, { Suspense, memo } from "react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { logger } from "@/lib/logger";
 
 interface LazyComponentProps {
   loader: () => Promise<{ default: React.ComponentType<any> }>;
@@ -46,7 +47,7 @@ export const usePerformanceMonitor = (componentName: string) => {
       const loadTime = endTime - startTime;
       
       if (loadTime > 1000) {
-        console.warn(`${componentName} demorou ${loadTime.toFixed(2)}ms para carregar`);
+        logger.warn(`${componentName} demorou ${loadTime.toFixed(2)}ms para carregar`);
       }
     };
   }, [componentName]);

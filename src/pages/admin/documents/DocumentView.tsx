@@ -16,6 +16,7 @@ import { toast } from "@/hooks/use-toast";
 import { DocumentVersionHistory } from "@/components/documents/DocumentVersionHistory";
 import { useAuthProfile } from "@/hooks/use-auth-profile";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import { logger } from "@/lib/logger";
 
 interface Document {
   title: string;
@@ -75,7 +76,7 @@ export default function DocumentViewPage() {
         setCurrentUserId(user.id);
       }
     } catch (error) {
-      console.error("Error loading current user:", error);
+      logger.error("Error loading current user:", error);
     }
   };
 
@@ -93,7 +94,7 @@ export default function DocumentViewPage() {
       
       return userData?.email || "Usuário desconhecido";
     } catch (error) {
-      console.error("Error fetching user email:", error);
+      logger.error("Error fetching user email:", error);
       return "Usuário desconhecido";
     }
   };
@@ -129,7 +130,7 @@ export default function DocumentViewPage() {
 
       setDoc(transformedData);
     } catch (error) {
-      console.error("Error loading document:", error);
+      logger.error("Error loading document:", error);
       toast({
         title: "Erro ao carregar documento",
         description: "Não foi possível carregar o documento.",
@@ -173,7 +174,7 @@ export default function DocumentViewPage() {
       // Subscribe to real-time updates
       subscribeToComments();
     } catch (error) {
-      console.error("Error loading comments:", error);
+      logger.error("Error loading comments:", error);
       toast({
         title: "Erro ao carregar comentários",
         description: "Não foi possível carregar os comentários.",
@@ -252,7 +253,7 @@ export default function DocumentViewPage() {
         description: "Seu comentário foi adicionado com sucesso.",
       });
     } catch (error) {
-      console.error("Error adding comment:", error);
+      logger.error("Error adding comment:", error);
       toast({
         title: "Erro ao adicionar comentário",
         description: "Não foi possível adicionar o comentário.",
@@ -278,7 +279,7 @@ export default function DocumentViewPage() {
         description: "O comentário foi excluído com sucesso.",
       });
     } catch (error) {
-      console.error("Error deleting comment:", error);
+      logger.error("Error deleting comment:", error);
       toast({
         title: "Erro ao excluir comentário",
         description: "Não foi possível excluir o comentário.",

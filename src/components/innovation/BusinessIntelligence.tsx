@@ -6,7 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import { logger } from "@/lib/logger";
+import {
   BarChart3, 
   TrendingUp, 
   DollarSign, 
@@ -72,7 +73,7 @@ export const BusinessIntelligence = () => {
       if (error) throw error;
       setAiReports(data || []);
     } catch (error) {
-      console.error("Failed to load AI reports:", error);
+      logger.error("Failed to load AI reports:", error);
     }
   };
 

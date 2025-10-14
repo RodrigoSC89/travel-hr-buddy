@@ -8,6 +8,7 @@ import { ModuleHeader } from "@/components/ui/module-header";
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle, XCircle, Clock, GitBranch, Volume2, VolumeX, WifiOff, Activity } from "lucide-react";
 import { format } from "date-fns";
+import { logger } from "@/lib/logger";
 
 interface TestResult {
   id: string;
@@ -40,7 +41,7 @@ export default function AdminWallPage() {
         const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
         if (!supabaseUrl || !supabaseKey) {
-          console.error("Supabase credentials not configured");
+          logger.error("Supabase credentials not configured");
           const cached = localStorage.getItem("ci-wall-data");
           if (cached) {
             setData(JSON.parse(cached));
@@ -65,7 +66,7 @@ export default function AdminWallPage() {
         localStorage.setItem("ci-wall-data", JSON.stringify(results));
         setOffline(false);
       } catch (err) {
-        console.error("Failed to fetch data:", err);
+        logger.error("Failed to fetch data:", err);
         const cached = localStorage.getItem("ci-wall-data");
         if (cached) {
           setData(JSON.parse(cached));
@@ -98,7 +99,7 @@ export default function AdminWallPage() {
           if (newEntry.status === "failure" && newEntry.commit_hash !== lastAlert) {
             if (!muted) {
               const audio = new Audio("/alert.mp3");
-              audio.play().catch((err) => console.error("Failed to play alert:", err));
+              audio.play().catch((err) => logger.error("Failed to play alert:", err));
             }
             setLastAlert(newEntry.commit_hash);
 
@@ -110,7 +111,7 @@ export default function AdminWallPage() {
                 body: JSON.stringify({
                   text: `⚠️ Build Failed\nBranch: ${newEntry.branch}\nStatus: ${newEntry.status}\nCommit: ${newEntry.commit_hash}`,
                 }),
-              }).catch((err) => console.error("Failed to send Slack notification:", err));
+              }).catch((err) => logger.error("Failed to send Slack notification:", err));
             }
 
             // Send Telegram notification
@@ -122,7 +123,7 @@ export default function AdminWallPage() {
                   chat_id: TELEGRAM_CHAT_ID,
                   text: `⚠️ Build Failed\nBranch: ${newEntry.branch}\nStatus: ${newEntry.status}\nCommit: ${newEntry.commit_hash}`,
                 }),
-              }).catch((err) => console.error("Failed to send Telegram notification:", err));
+              }).catch((err) => logger.error("Failed to send Telegram notification:", err));
             }
           }
         }

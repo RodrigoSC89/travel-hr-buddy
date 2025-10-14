@@ -96,7 +96,7 @@ function App() {
         <TenantProvider>
           <OrganizationProvider>
             <QueryClientProvider client={queryClient}>
-              <Router>
+              <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                 <React.Suspense fallback={<LoadingSpinner />}>
                   <Routes>
                     {/* Routes outside SmartLayout (no auth, no navigation) */}

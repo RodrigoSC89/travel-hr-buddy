@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Thermometer, 
   Zap, 
   Fuel, 
@@ -211,7 +212,7 @@ export const IoTSensorDashboard = () => {
       }
       
     } catch (error) {
-      console.error("Failed to process sensor reading:", error);
+      logger.error("Failed to process sensor reading:", error);
     }
   };
 

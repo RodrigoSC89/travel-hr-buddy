@@ -1,3 +1,5 @@
+import { logger } from "@/lib/logger";
+
 /**
  * Production-Safe Logger Utility
  * Conditionally logs based on environment to avoid console pollution in production
@@ -12,7 +14,7 @@ export const logger = {
   log: (...args: unknown[]) => {
     if (isDevelopment) {
       // eslint-disable-next-line no-console
-      console.log(...args);
+      logger.info(...args);
     }
   },
 
@@ -22,7 +24,7 @@ export const logger = {
   info: (...args: unknown[]) => {
     if (isDevelopment) {
       // eslint-disable-next-line no-console
-      console.info(...args);
+      logger.info(...args);
     }
   },
 
@@ -31,7 +33,7 @@ export const logger = {
    */
   warn: (...args: unknown[]) => {
     // eslint-disable-next-line no-console
-    console.warn(...args);
+    logger.warn(...args);
   },
 
   /**
@@ -39,7 +41,7 @@ export const logger = {
    */
   error: (...args: unknown[]) => {
     // eslint-disable-next-line no-console
-    console.error(...args);
+    logger.error(...args);
   },
 
   /**
@@ -48,7 +50,7 @@ export const logger = {
   debug: (...args: unknown[]) => {
     if (isDevelopment) {
       // eslint-disable-next-line no-console
-      console.debug(...args);
+      logger.debug(...args);
     }
   },
 

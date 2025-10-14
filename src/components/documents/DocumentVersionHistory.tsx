@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { logger } from "@/lib/logger";
 import {
   Dialog,
   DialogContent,
@@ -52,7 +53,7 @@ export function DocumentVersionHistory({ documentId, onRestore }: DocumentVersio
       if (error) throw error;
       setVersions(data || []);
     } catch (error) {
-      console.error("Error loading versions:", error);
+      logger.error("Error loading versions:", error);
       toast({
         title: "Erro ao carregar histórico",
         description: "Não foi possível carregar o histórico de versões.",
@@ -110,7 +111,7 @@ export function DocumentVersionHistory({ documentId, onRestore }: DocumentVersio
         onRestore();
       }
     } catch (error) {
-      console.error("Error restoring version:", error);
+      logger.error("Error restoring version:", error);
       toast({
         title: "Erro ao restaurar versão",
         description: "Não foi possível restaurar esta versão do documento.",

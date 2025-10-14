@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Bell, 
   X, 
   Clock, 
@@ -45,7 +46,7 @@ const mockNotifications: Notification[] = [
     isRead: false,
     action: {
       label: "Ver Detalhes",
-      callback: () => console.log("View details")
+      callback: () => logger.info("View details")
     }
   },
   {
@@ -76,7 +77,7 @@ const mockNotifications: Notification[] = [
     isRead: false,
     action: {
       label: "Verificar",
-      callback: () => console.log("Verify")
+      callback: () => logger.info("Verify")
     }
   },
   {

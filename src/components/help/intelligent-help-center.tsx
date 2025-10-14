@@ -6,7 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Search, BookOpen, Video, FileText, Download, 
   Play, CheckCircle, Clock, Users, Anchor,
   Bot, Lightbulb, ArrowRight, Star, Filter
@@ -206,7 +207,7 @@ export const IntelligentHelpCenter: React.FC = () => {
           user_id: null // Seria auth.uid() se autenticado
         });
     } catch (error) {
-      console.error("Failed to track user action:", error);
+      logger.error("Failed to track user action:", error);
     }
   };
 

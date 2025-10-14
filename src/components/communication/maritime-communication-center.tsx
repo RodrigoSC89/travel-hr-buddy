@@ -11,7 +11,8 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Radio, 
   Send, 
   AlertTriangle, 
@@ -199,7 +200,7 @@ export const MaritimeCommunicationCenter = () => {
 
       setChannels(mockChannels);
     } catch (error) {
-      console.error("Failed to load channels:", error);
+      logger.error("Failed to load channels:", error);
     }
   };
 

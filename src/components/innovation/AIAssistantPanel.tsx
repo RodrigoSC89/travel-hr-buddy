@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import { logger } from "@/lib/logger";
+import {
   Brain, 
   MessageSquare, 
   TrendingUp, 
@@ -145,7 +146,7 @@ export const AIAssistantPanel = () => {
       if (error) throw error;
       setAiInsights(data || []);
     } catch (error) {
-      console.error("Failed to fetch AI insights:", error);
+      logger.error("Failed to fetch AI insights:", error);
     } finally {
       setIsLoading(false);
     }

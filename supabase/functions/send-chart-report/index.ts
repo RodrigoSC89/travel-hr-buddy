@@ -122,7 +122,7 @@ serve(async (req) => {
       }
     );
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error in send-chart-report:", error);
     
     const errorMessage = error instanceof Error ? error.message : "An error occurred while sending the report";
