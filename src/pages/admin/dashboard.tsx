@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { RoleBasedAccess } from "@/components/auth/role-based-access";
 import { logger } from "@/lib/logger";
 import {
   CheckSquare,
@@ -15,10 +16,15 @@ import {
   Tv,
   ArrowRight,
   Clock,
+  Eye,
+  Settings,
+  Users,
 } from "lucide-react";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isPublic = searchParams.get("public") === "1";
   const [cronStatus, setCronStatus] = useState<"ok" | "warning" | null>(null);
   const [cronMessage, setCronMessage] = useState("");
 
@@ -54,6 +60,15 @@ export default function AdminDashboard() {
       icon: CheckSquare,
       color: "blue",
       path: "/admin/checklists/dashboard",
+      roles: ["admin", "hr_manager", "manager"] as const,
+    },
+    {
+      title: "Assistente IA",
+      description: "Consultas recentes e exportações",
+      icon: Bot,
+      color: "indigo",
+      path: "/admin/assistant/history",
+      roles: ["admin", "hr_manager", "manager"] as const,
     },
     {
       title: "Restaurações Pessoais",
@@ -61,13 +76,31 @@ export default function AdminDashboard() {
       icon: Package,
       color: "purple",
       path: "/admin/restore/personal",
+      roles: ["admin", "hr_manager", "manager", "employee"] as const,
     },
     {
-      title: "Histórico de IA",
-      description: "Consultas recentes e exportações",
-      icon: Bot,
-      color: "indigo",
-      path: "/admin/assistant/history",
+      title: "Analytics",
+      description: "Análise completa de dados e métricas",
+      icon: BarChart3,
+      color: "green",
+      path: "/admin/analytics",
+      roles: ["admin"] as const,
+    },
+    {
+      title: "Configurações",
+      description: "Painel de controle do sistema",
+      icon: Settings,
+      color: "orange",
+      path: "/admin/control-panel",
+      roles: ["admin"] as const,
+    },
+    {
+      title: "Gestão de Usuários",
+      description: "Gerenciar usuários e permissões",
+      icon: Users,
+      color: "teal",
+      path: "/admin",
+      roles: ["admin"] as const,
     },
   ];
 
@@ -97,7 +130,10 @@ export default function AdminDashboard() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">🚀 Painel Administrativo</h1>
+        <h1 className="text-3xl font-bold">
+          {isPublic && <Eye className="inline w-8 h-8 mr-2" />}
+          🚀 Painel Administrativo
+        </h1>
         <p className="text-muted-foreground mt-2">
           Central de controle e monitoramento — Nautilus One
         </p>
@@ -123,35 +159,32 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {dashboardCards.map((card) => {
           const Icon = card.icon;
+          const colorClasses = {
+            blue: { border: "border-l-blue-500", text: "text-blue-500" },
+            purple: { border: "border-l-purple-500", text: "text-purple-500" },
+            indigo: { border: "border-l-indigo-500", text: "text-indigo-500" },
+            green: { border: "border-l-green-500", text: "text-green-500" },
+            orange: { border: "border-l-orange-500", text: "text-orange-500" },
+            teal: { border: "border-l-teal-500", text: "text-teal-500" },
+          };
+          const colors = colorClasses[card.color as keyof typeof colorClasses];
+
           return (
-            <Card
-              key={card.path}
-              className={`cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1 border-l-4 ${
-                card.color === "blue"
-                  ? "border-l-blue-500"
-                  : card.color === "purple"
-                  ? "border-l-purple-500"
-                  : "border-l-indigo-500"
-              }`}
-              onClick={() => navigate(card.path)}
-            >
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <Icon
-                    className={`w-8 h-8 ${
-                      card.color === "blue"
-                        ? "text-blue-500"
-                        : card.color === "purple"
-                        ? "text-purple-500"
-                        : "text-indigo-500"
-                    }`}
-                  />
-                  <ArrowRight className="w-5 h-5 text-muted-foreground" />
-                </div>
-                <CardTitle className="mt-4">{card.title}</CardTitle>
-                <CardDescription>{card.description}</CardDescription>
-              </CardHeader>
-            </Card>
+            <RoleBasedAccess key={card.path} roles={card.roles} showFallback={false}>
+              <Card
+                className={`cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1 border-l-4 ${colors.border}`}
+                onClick={() => navigate(card.path)}
+              >
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <Icon className={`w-8 h-8 ${colors.text}`} />
+                    <ArrowRight className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                  <CardTitle className="mt-4">{card.title}</CardTitle>
+                  <CardDescription>{card.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            </RoleBasedAccess>
           );
         })}
       </div>
@@ -183,6 +216,16 @@ export default function AdminDashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Public View Indicator */}
+      {isPublic && (
+        <div className="text-center py-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full text-sm text-blue-700">
+            <Eye className="w-4 h-4" />
+            <span className="font-medium">🔒 Modo público somente leitura</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
