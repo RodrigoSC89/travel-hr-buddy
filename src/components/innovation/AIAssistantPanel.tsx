@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
 import {
   Brain, 
   MessageSquare, 
@@ -20,6 +21,18 @@ import {
   Zap
 } from "lucide-react";
 
+type AIInsight = Database["public"]["Tables"]["ai_insights"]["Row"];
+
+interface MockInsight {
+  id: string;
+  type: "optimization" | "risk" | "opportunity";
+  title: string;
+  description: string;
+  confidence: number;
+  impact: "high" | "medium" | "low";
+  actionable: boolean;
+}
+
 interface AITask {
   id: string;
   title: string;
@@ -30,20 +43,10 @@ interface AITask {
   estimatedTime?: string;
 }
 
-interface AIInsight {
-  id: string;
-  type: "optimization" | "risk" | "opportunity";
-  title: string;
-  description: string;
-  confidence: number;
-  impact: "high" | "medium" | "low";
-  actionable: boolean;
-}
-
 export const AIAssistantPanel = () => {
   const [query, setQuery] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [aiInsights, setAiInsights] = useState([]);
+  const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
@@ -74,7 +77,7 @@ export const AIAssistantPanel = () => {
     }
   ];
 
-  const insights: AIInsight[] = [
+  const insights: MockInsight[] = [
     {
       id: "1",
       type: "optimization",
