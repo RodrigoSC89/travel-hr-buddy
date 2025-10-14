@@ -50,6 +50,8 @@ const AdminWall = React.lazy(() => import("./pages/admin/wall"));
 const AdminChecklists = React.lazy(() => import("./pages/admin/checklists"));
 const AdminChecklistsDashboard = React.lazy(() => import("./pages/admin/checklists-dashboard"));
 const DocumentsAI = React.lazy(() => import("./pages/admin/documents-ai"));
+const DocumentAIEditor = React.lazy(() => import("./pages/admin/documents/ai-editor"));
+const AITemplates = React.lazy(() => import("./pages/admin/documents/ai-templates"));
 const Assistant = React.lazy(() => import("./pages/admin/assistant"));
 const AssistantLogs = React.lazy(() => import("./pages/admin/assistant-logs"));
 const AdminCollaboration = React.lazy(() => import("./pages/admin/collaboration"));
@@ -190,7 +192,8 @@ function App() {
                       <Route path="/admin/workflows" element={<SmartWorkflows />} />
                       <Route path="/admin/workflows/:id" element={<WorkflowDetail />} />
                       <Route path="/admin/documents" element={<DocumentList />} />
-                      <Route path="/admin/documents/ai" element={<DocumentsAI />} />
+                      <Route path="/admin/documents/ai" element={<DocumentAIEditor />} />
+                      <Route path="/admin/documents/ai/templates" element={<AITemplates />} />
                       <Route path="/admin/documents/editor" element={<DocumentEditorPage />} />
                       <Route path="/admin/documents/demo" element={<DocumentEditorDemo />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
