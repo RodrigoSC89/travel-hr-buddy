@@ -1,10 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { logger } from "@/lib/logger";
+import {
+  CheckSquare,
+  Package,
+  Bot,
+  BarChart3,
+  FileText,
+  Tv,
+  ArrowRight,
+  Clock,
+} from "lucide-react";
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const [cronStatus, setCronStatus] = useState<"ok" | "warning" | null>(null);
   const [cronMessage, setCronMessage] = useState("");
 
@@ -33,23 +47,142 @@ export default function AdminDashboard() {
       });
   }, []);
 
-  return (
-    <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">🚀 Painel Administrativo — Nautilus One</h1>
+  const dashboardCards = [
+    {
+      title: "Checklists",
+      description: "Progresso e status por equipe",
+      icon: CheckSquare,
+      color: "blue",
+      path: "/admin/checklists/dashboard",
+    },
+    {
+      title: "Restaurações Pessoais",
+      description: "Painel diário pessoal com gráficos",
+      icon: Package,
+      color: "purple",
+      path: "/admin/restore/personal",
+    },
+    {
+      title: "Histórico de IA",
+      description: "Consultas recentes e exportações",
+      icon: Bot,
+      color: "indigo",
+      path: "/admin/assistant/history",
+    },
+  ];
 
-      {/* Badge de Status do Cron */}
+  const quickLinks = [
+    {
+      title: "Dashboard de Restaurações Completo",
+      path: "/admin/documents/restore-dashboard",
+      icon: BarChart3,
+    },
+    {
+      title: "Logs Detalhados de IA",
+      path: "/admin/assistant/logs",
+      icon: FileText,
+    },
+    {
+      title: "Relatórios e Analytics",
+      path: "/admin/reports/restore-analytics",
+      icon: BarChart3,
+    },
+    {
+      title: "Visualização TV Panel",
+      path: "/tv/logs",
+      icon: Tv,
+    },
+  ];
+
+  return (
+    <div className="p-6 space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">🚀 Painel Administrativo</h1>
+        <p className="text-muted-foreground mt-2">
+          Central de controle e monitoramento — Nautilus One
+        </p>
+      </div>
+
+      {/* Cron Status Badge */}
       {cronStatus && (
-        <Card className={`p-4 text-sm font-medium ${cronStatus === "ok" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}>
-          {cronStatus === "ok" ? "✅ " : "⚠️ "}{cronMessage}
-        </Card>
+        <Badge
+          variant={cronStatus === "ok" ? "default" : "secondary"}
+          className={`px-4 py-2 text-sm ${
+            cronStatus === "ok"
+              ? "bg-green-100 text-green-800 hover:bg-green-200"
+              : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+          }`}
+        >
+          <Clock className="w-4 h-4 mr-2" />
+          {cronStatus === "ok" ? "✅ " : "⚠️ "}
+          {cronMessage}
+        </Badge>
       )}
 
-      {/* Aqui virão os widgets do dashboard */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-4">📄 Últimos Documentos</Card>
-        <Card className="p-4">📋 Tarefas Pendentes</Card>
-        <Card className="p-4">💬 Últimas Interações com IA</Card>
+      {/* Main Dashboard Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {dashboardCards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <Card
+              key={card.path}
+              className={`cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1 border-l-4 ${
+                card.color === "blue"
+                  ? "border-l-blue-500"
+                  : card.color === "purple"
+                  ? "border-l-purple-500"
+                  : "border-l-indigo-500"
+              }`}
+              onClick={() => navigate(card.path)}
+            >
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Icon
+                    className={`w-8 h-8 ${
+                      card.color === "blue"
+                        ? "text-blue-500"
+                        : card.color === "purple"
+                        ? "text-purple-500"
+                        : "text-indigo-500"
+                    }`}
+                  />
+                  <ArrowRight className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <CardTitle className="mt-4">{card.title}</CardTitle>
+                <CardDescription>{card.description}</CardDescription>
+              </CardHeader>
+            </Card>
+          );
+        })}
       </div>
+
+      {/* Quick Links Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>⚡ Atalhos Rápidos</CardTitle>
+          <CardDescription>
+            Acesso direto às funcionalidades mais usadas
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {quickLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <Button
+                  key={link.path}
+                  variant="outline"
+                  className="justify-start h-auto py-4"
+                  onClick={() => navigate(link.path)}
+                >
+                  <Icon className="w-5 h-5 mr-3 text-muted-foreground" />
+                  <span className="text-left">{link.title}</span>
+                </Button>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
