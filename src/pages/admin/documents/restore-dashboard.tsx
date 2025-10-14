@@ -26,6 +26,7 @@ import {
 } from "chart.js";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { QRCodeSVG } from "qrcode.react";
 
 // Register Chart.js components
 ChartJS.register(
@@ -48,6 +49,11 @@ interface RestoreDataPoint {
   count: number;
 }
 
+interface DepartmentSummary {
+  department: string;
+  count: number;
+}
+
 export default function RestoreDashboard() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -58,8 +64,14 @@ export default function RestoreDashboard() {
   const [filterEmail, setFilterEmail] = useState("");
   const [summary, setSummary] = useState<RestoreSummary | null>(null);
   const [dailyData, setDailyData] = useState<RestoreDataPoint[]>([]);
+  const [departmentSummary, setDepartmentSummary] = useState<DepartmentSummary[]>([]);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [emailSending, setEmailSending] = useState(false);
+
+  // Generate public URL
+  const publicUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}/admin/documents/restore-dashboard?public=1`
+    : '';
 
   // Auto-refresh every 10 seconds
   useEffect(() => {
@@ -94,6 +106,15 @@ export default function RestoreDashboard() {
       if (dailyError) throw dailyError;
 
       setDailyData(dailyDataResult || []);
+
+      // Get monthly department summary
+      const { data: deptData, error: deptError } = await supabase
+        .rpc("get_monthly_restore_summary_by_department");
+
+      if (!deptError && deptData) {
+        setDepartmentSummary(deptData);
+      }
+
       setLastUpdate(new Date());
     } catch (error) {
       logger.error("Error fetching stats:", error);
@@ -513,12 +534,98 @@ export default function RestoreDashboard() {
         </CardContent>
       </Card>
 
+      {/* Monthly Department Summary Chart */}
+      {departmentSummary.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="w-5 h-5" />
+              📆 Comparativo Mensal por Departamento
+            </CardTitle>
+            <CardDescription>
+              Restaurações do mês atual agrupadas por departamento
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-80">
+              <Bar
+                data={{
+                  labels: departmentSummary.map(d => d.department),
+                  datasets: [
+                    {
+                      label: 'Restaurações',
+                      data: departmentSummary.map(d => d.count),
+                      backgroundColor: 'rgba(34, 197, 94, 0.8)',
+                      borderColor: 'rgba(34, 197, 94, 1)',
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                options={{
+                  indexAxis: 'y' as const,
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    title: {
+                      display: false,
+                    },
+                  },
+                  scales: {
+                    x: {
+                      beginAtZero: true,
+                      ticks: {
+                        stepSize: 1,
+                      },
+                    },
+                  },
+                }}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* QR Code for Public Access - Hidden in public view */}
+      {!isPublicView && publicUrl && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              🔗 Link Público com QR Code
+            </CardTitle>
+            <CardDescription>
+              Compartilhe este painel com acesso de leitura em TV Walls ou monitores
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <p className="text-sm text-muted-foreground mb-2">
+                Link de acesso público (somente leitura):
+              </p>
+              <p className="text-sm text-blue-600 font-mono bg-blue-50 dark:bg-blue-950 p-3 rounded-md break-all">
+                {publicUrl}
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <div className="bg-white p-4 rounded-lg shadow-sm">
+                <QRCodeSVG value={publicUrl} size={128} level="H" />
+              </div>
+            </div>
+            <p className="text-xs text-center text-muted-foreground">
+              🖥️ TV Wall Ready - Escaneie o QR Code ou use o link para visualização pública
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Public view indicator */}
       {isPublicView && (
         <Card className="border-yellow-200 bg-yellow-50 dark:bg-yellow-900/10 dark:border-yellow-800">
           <CardContent className="pt-6">
-            <p className="text-sm text-yellow-800 dark:text-yellow-200 text-center">
-              📺 Modo de Visualização Pública - Atualização automática a cada 10 segundos
+            <p className="text-sm text-yellow-800 dark:text-yellow-200 text-center font-medium">
+              🔒 Modo público somente leitura (TV Wall Ativado) - Atualização automática a cada 10 segundos
             </p>
           </CardContent>
         </Card>
