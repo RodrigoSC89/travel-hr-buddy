@@ -105,7 +105,12 @@ const WelcomeStep: React.FC<{ onNext: (data: any) => void }> = ({ onNext }) => {
 };
 
 const CompanyProfileStep: React.FC<{ data: any; onNext: (data: any) => void }> = ({ data, onNext }) => {
-  const [profile, setProfile] = useState({
+  const [profile, setProfile] = useState<{
+    company_type: string;
+    fleet_size: string;
+    primary_operations: string[];
+    key_challenges: string[];
+  }>({
     company_type: "",
     fleet_size: "",
     primary_operations: [],

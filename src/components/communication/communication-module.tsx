@@ -143,20 +143,23 @@ export const CommunicationModule = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {communicationStats.map((stat, index) => {
           const Icon = stat.icon;
-          const colorClasses = {
+          const colorClasses: Record<string, string> = {
             blue: "from-blue-500/20 via-blue-400/10 to-cyan-500/20 border-blue-200/50 text-blue-600",
             green: "from-green-500/20 via-green-400/10 to-emerald-500/20 border-green-200/50 text-green-600",
             purple: "from-purple-500/20 via-purple-400/10 to-violet-500/20 border-purple-200/50 text-purple-600",
             orange: "from-orange-500/20 via-orange-400/10 to-red-500/20 border-orange-200/50 text-orange-600"
           };
 
+          const colorClass = colorClasses[stat.color] || colorClasses.blue;
+          const textColorClass = colorClass.split(" ")[5] || "text-blue-600";
+
           return (
-            <Card key={index} className={`relative overflow-hidden bg-gradient-to-br ${colorClasses[stat.color]} hover:shadow-lg group cursor-pointer border backdrop-blur-sm transition-all duration-300`}>
+            <Card key={index} className={`relative overflow-hidden bg-gradient-to-br ${colorClass} hover:shadow-lg group cursor-pointer border backdrop-blur-sm transition-all duration-300`}>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
-                      <Icon className={`w-5 h-5 ${colorClasses[stat.color].split(" ")[5]}`} />
+                      <Icon className={`w-5 h-5 ${textColorClass}`} />
                       <span className="text-sm font-medium text-muted-foreground">{stat.title}</span>
                     </div>
                     <div className="text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
@@ -165,13 +168,13 @@ export const CommunicationModule = () => {
                     <div className="flex items-center gap-2">
                       <TrendingUp className={`w-4 h-4 ${stat.trend === "up" ? "text-green-500" : "text-red-500"} group-hover:scale-110 transition-transform`} />
                       <span className={`text-sm font-medium ${stat.trend === "up" ? "text-green-600" : "text-red-600"}`}>
-                        {stat.change}
-                      </span>
-                    </div>
+                      {stat.change}
+                    </span>
                   </div>
-                  <div className={"p-4 rounded-2xl bg-opacity-10 backdrop-blur-sm group-hover:scale-105 transition-all duration-300"}>
-                    <Icon className={`w-8 h-8 ${colorClasses[stat.color].split(" ")[5]}`} />
-                  </div>
+                </div>
+                <div className={"p-4 rounded-2xl bg-opacity-10 backdrop-blur-sm group-hover:scale-105 transition-all duration-300"}>
+                  <Icon className={`w-8 h-8 ${textColorClass}`} />
+                </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-3 opacity-70 group-hover:opacity-100 transition-opacity">
                   {stat.description}
@@ -235,16 +238,18 @@ export const CommunicationModule = () => {
             <div className="space-y-4">
               {recentActivities.map((activity, index) => {
                 const Icon = activity.icon;
-                const priorityColors = {
+                const priorityColors: Record<string, string> = {
                   high: "border-l-red-500 bg-red-50 dark:bg-red-900/10",
                   medium: "border-l-blue-500 bg-blue-50 dark:bg-blue-900/10",
                   low: "border-l-green-500 bg-green-50 dark:bg-green-900/10"
                 };
 
+                const priorityClass = priorityColors[activity.priority] || priorityColors.low;
+
                 return (
                   <div
                     key={index}
-                    className={`p-4 border-l-4 rounded-lg ${priorityColors[activity.priority]} hover:scale-[1.02] transition-all duration-300`}
+                    className={`p-4 border-l-4 rounded-lg ${priorityClass} hover:scale-[1.02] transition-all duration-300`}
                   >
                     <div className="flex items-start gap-3">
                       <div className="p-2 rounded-lg bg-azure-100 dark:bg-azure-800">

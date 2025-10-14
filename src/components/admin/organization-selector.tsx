@@ -34,13 +34,19 @@ export const OrganizationSelector: React.FC = () => {
   const loadUserOrganizations = useCallback(async () => {
     try {
       setIsLoading(true);
+      
+      if (!user?.id) {
+        setIsLoading(false);
+        return;
+      }
+      
       const { data, error } = await supabase
         .from("organization_users")
         .select(`
           role,
           organization:organizations(id, name)
         `)
-        .eq("user_id", user?.id)
+        .eq("user_id", user.id)
         .eq("status", "active");
 
       if (error) throw error;

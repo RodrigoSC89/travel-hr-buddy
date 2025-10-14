@@ -516,7 +516,7 @@ export const IntelligentChecklistManager: React.FC = () => {
                     
                     <div className="space-y-2">
                       <h4 className="font-medium">Recomendações:</h4>
-                      {selectedChecklist.ai_analysis.recommendations.map((rec, index) => (
+                      {selectedChecklist.ai_analysis.recommendations.map((rec: string, index: number) => (
                         <p key={index} className="text-sm text-muted-foreground flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-blue-500 mt-0.5" />
                           {rec}

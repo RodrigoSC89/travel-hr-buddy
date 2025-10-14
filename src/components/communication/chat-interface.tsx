@@ -530,7 +530,7 @@ export const ChatInterface = () => {
                       {getConversationTitle(conversation)}
                     </p>
                     <div className="flex items-center gap-1">
-                      {conversation.unread_count > 0 && (
+                      {(conversation.unread_count ?? 0) > 0 && (
                         <Badge variant="default" className="text-xs">
                           {conversation.unread_count}
                         </Badge>

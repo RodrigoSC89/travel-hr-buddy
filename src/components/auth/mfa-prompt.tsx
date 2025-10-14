@@ -81,6 +81,10 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
 
     setIsLoading(true);
     try {
+      if (!challenge) {
+        throw new Error("No challenge available");
+      }
+      
       const { error } = await supabase.auth.mfa.verify({
         factorId,
         challengeId: challenge.id,
