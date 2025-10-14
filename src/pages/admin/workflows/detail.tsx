@@ -1,18 +1,18 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { supabase } from '@/integrations/supabase/client'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { ArrowLeft, Plus, X, Edit2, Save, Trash2, Calendar, User as UserIcon } from 'lucide-react'
-import { useToast } from '@/hooks/use-toast'
-import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper'
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper'
-import { ModuleHeader } from '@/components/ui/module-header'
+import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { ArrowLeft, Plus, Edit2, Save, Trash2, Calendar, User as UserIcon } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
 import {
   Dialog,
   DialogContent,
@@ -20,14 +20,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 interface SmartWorkflow {
   id: string
@@ -46,7 +46,7 @@ interface WorkflowStep {
   workflow_id: string
   title: string
   description?: string
-  status: 'pendente' | 'em_progresso' | 'concluido'
+  status: "pendente" | "em_progresso" | "concluido"
   assigned_to?: string
   due_date?: string
   position: number
@@ -60,225 +60,225 @@ interface User {
 }
 
 export default function WorkflowDetailPage() {
-  const { id } = useParams<{ id: string }>()
-  const [workflow, setWorkflow] = useState<SmartWorkflow | null>(null)
-  const [steps, setSteps] = useState<WorkflowStep[]>([])
-  const [users, setUsers] = useState<User[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [draggedStep, setDraggedStep] = useState<string | null>(null)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editingStep, setEditingStep] = useState<WorkflowStep | null>(null)
+  const { id } = useParams<{ id: string }>();
+  const [workflow, setWorkflow] = useState<SmartWorkflow | null>(null);
+  const [steps, setSteps] = useState<WorkflowStep[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [draggedStep, setDraggedStep] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingStep, setEditingStep] = useState<WorkflowStep | null>(null);
   const [newStep, setNewStep] = useState({
-    title: '',
-    description: '',
-    assigned_to: '',
-    due_date: ''
-  })
-  const { toast } = useToast()
+    title: "",
+    description: "",
+    assigned_to: "",
+    due_date: ""
+  });
+  const { toast } = useToast();
 
-  const statusColumns: { status: WorkflowStep['status']; label: string; color: string }[] = [
-    { status: 'pendente', label: 'Pendente', color: 'bg-gray-100 border-gray-300' },
-    { status: 'em_progresso', label: 'Em Progresso', color: 'bg-blue-100 border-blue-300' },
-    { status: 'concluido', label: 'Concluído', color: 'bg-green-100 border-green-300' }
-  ]
+  const statusColumns: { status: WorkflowStep["status"]; label: string; color: string }[] = [
+    { status: "pendente", label: "Pendente", color: "bg-gray-100 border-gray-300" },
+    { status: "em_progresso", label: "Em Progresso", color: "bg-blue-100 border-blue-300" },
+    { status: "concluido", label: "Concluído", color: "bg-green-100 border-green-300" }
+  ];
 
   async function fetchWorkflow() {
-    if (!id) return
+    if (!id) return;
     
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const { data, error } = await supabase
-        .from('smart_workflows')
-        .select('*')
-        .eq('id', id)
-        .single()
+        .from("smart_workflows")
+        .select("*")
+        .eq("id", id)
+        .single();
       
-      if (error) throw error
-      setWorkflow(data)
+      if (error) throw error;
+      setWorkflow(data);
     } catch (error) {
-      console.error('Error fetching workflow:', error)
+      console.error("Error fetching workflow:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível carregar o fluxo de trabalho',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível carregar o fluxo de trabalho",
+        variant: "destructive"
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   async function fetchSteps() {
-    if (!id) return
+    if (!id) return;
     
     try {
       const { data, error } = await supabase
-        .from('smart_workflow_steps')
-        .select('*')
-        .eq('workflow_id', id)
-        .order('position', { ascending: true })
+        .from("smart_workflow_steps")
+        .select("*")
+        .eq("workflow_id", id)
+        .order("position", { ascending: true });
       
-      if (error) throw error
-      setSteps(data || [])
+      if (error) throw error;
+      setSteps(data || []);
     } catch (error) {
-      console.error('Error fetching steps:', error)
+      console.error("Error fetching steps:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível carregar as etapas',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível carregar as etapas",
+        variant: "destructive"
+      });
     }
   }
 
   async function fetchUsers() {
     try {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('id, email, full_name')
-        .order('full_name', { ascending: true })
+        .from("profiles")
+        .select("id, email, full_name")
+        .order("full_name", { ascending: true });
       
-      if (error) throw error
-      setUsers(data || [])
+      if (error) throw error;
+      setUsers(data || []);
     } catch (error) {
-      console.error('Error fetching users:', error)
+      console.error("Error fetching users:", error);
     }
   }
 
   async function createStep() {
     if (!id || !newStep.title.trim()) {
       toast({
-        title: 'Erro',
-        description: 'Por favor, insira um título para a etapa',
-        variant: 'destructive'
-      })
-      return
+        title: "Erro",
+        description: "Por favor, insira um título para a etapa",
+        variant: "destructive"
+      });
+      return;
     }
 
     try {
-      const maxPosition = Math.max(...steps.map(s => s.position), -1)
+      const maxPosition = Math.max(...steps.map(s => s.position), -1);
       const { error } = await supabase
-        .from('smart_workflow_steps')
+        .from("smart_workflow_steps")
         .insert({
           workflow_id: id,
           title: newStep.title,
           description: newStep.description || null,
           assigned_to: newStep.assigned_to || null,
           due_date: newStep.due_date || null,
-          status: 'pendente',
+          status: "pendente",
           position: maxPosition + 1
-        })
+        });
       
-      if (error) throw error
+      if (error) throw error;
       
-      setNewStep({ title: '', description: '', assigned_to: '', due_date: '' })
-      setIsDialogOpen(false)
+      setNewStep({ title: "", description: "", assigned_to: "", due_date: "" });
+      setIsDialogOpen(false);
       toast({
-        title: 'Sucesso',
-        description: 'Etapa criada com sucesso!'
-      })
-      fetchSteps()
+        title: "Sucesso",
+        description: "Etapa criada com sucesso!"
+      });
+      fetchSteps();
     } catch (error) {
-      console.error('Error creating step:', error)
+      console.error("Error creating step:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível criar a etapa',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível criar a etapa",
+        variant: "destructive"
+      });
     }
   }
 
   async function updateStep(stepId: string, updates: Partial<WorkflowStep>) {
     try {
       const { error } = await supabase
-        .from('smart_workflow_steps')
+        .from("smart_workflow_steps")
         .update(updates)
-        .eq('id', stepId)
+        .eq("id", stepId);
       
-      if (error) throw error
+      if (error) throw error;
       
       toast({
-        title: 'Sucesso',
-        description: 'Etapa atualizada com sucesso!'
-      })
-      fetchSteps()
-      setEditingStep(null)
+        title: "Sucesso",
+        description: "Etapa atualizada com sucesso!"
+      });
+      fetchSteps();
+      setEditingStep(null);
     } catch (error) {
-      console.error('Error updating step:', error)
+      console.error("Error updating step:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível atualizar a etapa',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível atualizar a etapa",
+        variant: "destructive"
+      });
     }
   }
 
   async function deleteStep(stepId: string) {
     try {
       const { error } = await supabase
-        .from('smart_workflow_steps')
+        .from("smart_workflow_steps")
         .delete()
-        .eq('id', stepId)
+        .eq("id", stepId);
       
-      if (error) throw error
+      if (error) throw error;
       
       toast({
-        title: 'Sucesso',
-        description: 'Etapa removida com sucesso!'
-      })
-      fetchSteps()
+        title: "Sucesso",
+        description: "Etapa removida com sucesso!"
+      });
+      fetchSteps();
     } catch (error) {
-      console.error('Error deleting step:', error)
+      console.error("Error deleting step:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível remover a etapa',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível remover a etapa",
+        variant: "destructive"
+      });
     }
   }
 
   const handleDragStart = (stepId: string) => {
-    setDraggedStep(stepId)
-  }
+    setDraggedStep(stepId);
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
-  const handleDrop = async (targetStatus: WorkflowStep['status']) => {
-    if (!draggedStep) return
+  const handleDrop = async (targetStatus: WorkflowStep["status"]) => {
+    if (!draggedStep) return;
 
-    const step = steps.find(s => s.id === draggedStep)
+    const step = steps.find(s => s.id === draggedStep);
     if (!step || step.status === targetStatus) {
-      setDraggedStep(null)
-      return
+      setDraggedStep(null);
+      return;
     }
 
     // Get all steps in the target status
-    const targetSteps = steps.filter(s => s.status === targetStatus)
-    const maxPosition = Math.max(...targetSteps.map(s => s.position), -1)
+    const targetSteps = steps.filter(s => s.status === targetStatus);
+    const maxPosition = Math.max(...targetSteps.map(s => s.position), -1);
 
     await updateStep(draggedStep, {
       status: targetStatus,
       position: maxPosition + 1
-    })
+    });
 
-    setDraggedStep(null)
-  }
+    setDraggedStep(null);
+  };
 
-  const getStepsByStatus = (status: WorkflowStep['status']) => {
-    return steps.filter(s => s.status === status).sort((a, b) => a.position - b.position)
-  }
+  const getStepsByStatus = (status: WorkflowStep["status"]) => {
+    return steps.filter(s => s.status === status).sort((a, b) => a.position - b.position);
+  };
 
   const getUserName = (userId?: string) => {
-    if (!userId) return 'Não atribuído'
-    const user = users.find(u => u.id === userId)
-    return user?.full_name || user?.email || 'Usuário'
-  }
+    if (!userId) return "Não atribuído";
+    const user = users.find(u => u.id === userId);
+    return user?.full_name || user?.email || "Usuário";
+  };
 
   useEffect(() => {
-    fetchWorkflow()
-    fetchSteps()
-    fetchUsers()
-  }, [id])
+    fetchWorkflow();
+    fetchSteps();
+    fetchUsers();
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -290,7 +290,7 @@ export default function WorkflowDetailPage() {
           </div>
         </ModulePageWrapper>
       </MultiTenantWrapper>
-    )
+    );
   }
 
   if (!workflow) {
@@ -308,7 +308,7 @@ export default function WorkflowDetailPage() {
           </div>
         </ModulePageWrapper>
       </MultiTenantWrapper>
-    )
+    );
   }
 
   return (
@@ -325,7 +325,7 @@ export default function WorkflowDetailPage() {
 
         <ModuleHeader
           title={workflow.title}
-          description={workflow.description || 'Quadro Kanban de tarefas'}
+          description={workflow.description || "Quadro Kanban de tarefas"}
           gradient="blue"
         />
 
@@ -443,8 +443,8 @@ export default function WorkflowDetailPage() {
                             size="icon"
                             className="h-6 w-6"
                             onClick={() => {
-                              if (confirm('Tem certeza que deseja remover esta tarefa?')) {
-                                deleteStep(step.id)
+                              if (confirm("Tem certeza que deseja remover esta tarefa?")) {
+                                deleteStep(step.id);
                               }
                             }}
                           >
@@ -467,7 +467,7 @@ export default function WorkflowDetailPage() {
                         {step.due_date && (
                           <div className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
-                            <span>{new Date(step.due_date).toLocaleDateString('pt-BR')}</span>
+                            <span>{new Date(step.due_date).toLocaleDateString("pt-BR")}</span>
                           </div>
                         )}
                       </div>
@@ -502,14 +502,14 @@ export default function WorkflowDetailPage() {
                   <Label htmlFor="edit-description">Descrição</Label>
                   <Textarea
                     id="edit-description"
-                    value={editingStep.description || ''}
+                    value={editingStep.description || ""}
                     onChange={(e) => setEditingStep({ ...editingStep, description: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="edit-assigned">Responsável</Label>
                   <Select
-                    value={editingStep.assigned_to || ''}
+                    value={editingStep.assigned_to || ""}
                     onValueChange={(value) => setEditingStep({ ...editingStep, assigned_to: value })}
                   >
                     <SelectTrigger>
@@ -529,7 +529,7 @@ export default function WorkflowDetailPage() {
                   <Input
                     id="edit-due-date"
                     type="date"
-                    value={editingStep.due_date || ''}
+                    value={editingStep.due_date || ""}
                     onChange={(e) => setEditingStep({ ...editingStep, due_date: e.target.value })}
                   />
                 </div>
@@ -548,5 +548,5 @@ export default function WorkflowDetailPage() {
         </Dialog>
       </ModulePageWrapper>
     </MultiTenantWrapper>
-  )
+  );
 }
