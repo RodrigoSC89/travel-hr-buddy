@@ -1,16 +1,17 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { supabase } from '@/integrations/supabase/client'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus } from 'lucide-react'
-import { useToast } from '@/hooks/use-toast'
-import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper'
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper'
-import { ModuleHeader } from '@/components/ui/module-header'
+import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus, AlertCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
 
 interface SmartWorkflow {
   id: string
@@ -29,7 +30,7 @@ interface WorkflowStep {
   workflow_id: string
   title: string
   description?: string
-  status: 'pendente' | 'em_progresso' | 'concluido'
+  status: "pendente" | "em_progresso" | "concluido"
   position: number
   assigned_to?: string
   due_date?: string
@@ -38,142 +39,171 @@ interface WorkflowStep {
   updated_at: string
   created_by?: string
   tags?: string[]
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
+  profiles?: {
+    full_name: string
+  }
 }
 
-const STATUS_COLUMNS: Array<{ value: WorkflowStep['status']; label: string; color: string }> = [
-  { value: 'pendente', label: 'Pendente', color: 'bg-yellow-50 border-yellow-200' },
-  { value: 'em_progresso', label: 'Em Progresso', color: 'bg-blue-50 border-blue-200' },
-  { value: 'concluido', label: 'Concluído', color: 'bg-green-50 border-green-200' },
-]
+const STATUS_COLUMNS: Array<{ value: WorkflowStep["status"]; label: string; color: string }> = [
+  { value: "pendente", label: "Pendente", color: "bg-yellow-50 border-yellow-200" },
+  { value: "em_progresso", label: "Em Progresso", color: "bg-blue-50 border-blue-200" },
+  { value: "concluido", label: "Concluído", color: "bg-green-50 border-green-200" },
+];
 
 export default function WorkflowDetailPage() {
-  const { id } = useParams<{ id: string }>()
-  const [workflow, setWorkflow] = useState<SmartWorkflow | null>(null)
-  const [steps, setSteps] = useState<WorkflowStep[]>([])
-  const [newTitle, setNewTitle] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [isCreating, setIsCreating] = useState(false)
-  const { toast } = useToast()
+  const { id } = useParams<{ id: string }>();
+  const [workflow, setWorkflow] = useState<SmartWorkflow | null>(null);
+  const [steps, setSteps] = useState<WorkflowStep[]>([]);
+  const [newTitle, setNewTitle] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
+  const { toast } = useToast();
 
   async function fetchWorkflow() {
-    if (!id) return
+    if (!id) return;
     
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const { data, error } = await supabase
-        .from('smart_workflows')
-        .select('*')
-        .eq('id', id)
-        .single()
+        .from("smart_workflows")
+        .select("*")
+        .eq("id", id)
+        .single();
       
-      if (error) throw error
-      setWorkflow(data)
+      if (error) throw error;
+      setWorkflow(data);
     } catch (error) {
-      console.error('Error fetching workflow:', error)
+      console.error("Error fetching workflow:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível carregar o fluxo de trabalho',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível carregar o fluxo de trabalho",
+        variant: "destructive"
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   async function fetchSteps() {
-    if (!id) return
+    if (!id) return;
     
     try {
       const { data, error } = await supabase
-        .from('smart_workflow_steps')
-        .select('*')
-        .eq('workflow_id', id)
-        .order('position', { ascending: true })
+        .from("smart_workflow_steps")
+        .select("*, profiles:assigned_to (full_name)")
+        .eq("workflow_id", id)
+        .order("position", { ascending: true });
       
-      if (error) throw error
-      setSteps(data || [])
+      if (error) throw error;
+      setSteps(data || []);
     } catch (error) {
-      console.error('Error fetching steps:', error)
+      console.error("Error fetching steps:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível carregar as etapas',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível carregar as etapas",
+        variant: "destructive"
+      });
     }
   }
 
   async function addStep() {
-    if (!newTitle.trim() || !id) return
+    if (!newTitle.trim() || !id) return;
     
     try {
-      setIsCreating(true)
-      const { data: { user } } = await supabase.auth.getUser()
+      setIsCreating(true);
+      const { data: { user } } = await supabase.auth.getUser();
       
       const { error } = await supabase
-        .from('smart_workflow_steps')
+        .from("smart_workflow_steps")
         .insert({
           workflow_id: id,
           title: newTitle,
-          status: 'pendente',
+          status: "pendente",
           position: steps.length,
+          assigned_to: user?.id,
           created_by: user?.id
-        })
+        });
       
-      if (error) throw error
+      if (error) throw error;
       
-      setNewTitle('')
+      setNewTitle("");
       toast({
-        title: 'Sucesso',
-        description: 'Tarefa adicionada com sucesso!'
-      })
-      fetchSteps()
+        title: "Sucesso",
+        description: "Tarefa adicionada com sucesso!"
+      });
+      fetchSteps();
     } catch (error) {
-      console.error('Error adding step:', error)
+      console.error("Error adding step:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível adicionar a tarefa',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível adicionar a tarefa",
+        variant: "destructive"
+      });
     } finally {
-      setIsCreating(false)
+      setIsCreating(false);
     }
   }
 
-  async function updateStepStatus(stepId: string, newStatus: WorkflowStep['status']) {
+  async function updateStepStatus(stepId: string, newStatus: WorkflowStep["status"]) {
     try {
       const { error } = await supabase
-        .from('smart_workflow_steps')
+        .from("smart_workflow_steps")
         .update({ status: newStatus })
-        .eq('id', stepId)
+        .eq("id", stepId);
       
-      if (error) throw error
+      if (error) throw error;
       
       toast({
-        title: 'Sucesso',
-        description: 'Status atualizado com sucesso!'
-      })
-      fetchSteps()
+        title: "Sucesso",
+        description: "Status atualizado com sucesso!"
+      });
+      fetchSteps();
     } catch (error) {
-      console.error('Error updating step status:', error)
+      console.error("Error updating step status:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível atualizar o status',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível atualizar o status",
+        variant: "destructive"
+      });
+    }
+  }
+
+  async function updateStepTitle(stepId: string, newTitle: string) {
+    if (!newTitle.trim()) return;
+    
+    try {
+      const { error } = await supabase
+        .from("smart_workflow_steps")
+        .update({ title: newTitle })
+        .eq("id", stepId);
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Sucesso",
+        description: "Título atualizado com sucesso!"
+      });
+    } catch (error) {
+      console.error("Error updating step title:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível atualizar o título",
+        variant: "destructive"
+      });
     }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      addStep()
+    if (e.key === "Enter") {
+      addStep();
     }
-  }
+  };
 
   useEffect(() => {
-    fetchWorkflow()
-    fetchSteps()
-  }, [id])
+    fetchWorkflow();
+    fetchSteps();
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -184,7 +214,7 @@ export default function WorkflowDetailPage() {
           </div>
         </ModulePageWrapper>
       </MultiTenantWrapper>
-    )
+    );
   }
 
   if (!workflow) {
@@ -207,7 +237,7 @@ export default function WorkflowDetailPage() {
           </div>
         </ModulePageWrapper>
       </MultiTenantWrapper>
-    )
+    );
   }
 
   return (
@@ -219,8 +249,8 @@ export default function WorkflowDetailPage() {
           description="Gerencie as etapas e tarefas deste fluxo de trabalho"
           gradient="blue"
           badges={[
-            { icon: Workflow, label: workflow.status === 'active' ? 'Ativo' : 'Rascunho' },
-            { icon: Calendar, label: new Date(workflow.created_at).toLocaleDateString('pt-BR') }
+            { icon: Workflow, label: workflow.status === "active" ? "Ativo" : "Rascunho" },
+            { icon: Calendar, label: new Date(workflow.created_at).toLocaleDateString("pt-BR") }
           ]}
         />
 
@@ -258,7 +288,7 @@ export default function WorkflowDetailPage() {
                   disabled={isCreating || !newTitle.trim()}
                 >
                   <Plus className="w-4 h-4 mr-1" />
-                  {isCreating ? 'Adicionando...' : 'Adicionar'}
+                  {isCreating ? "Adicionando..." : "Adicionar"}
                 </Button>
               </div>
 
@@ -266,8 +296,14 @@ export default function WorkflowDetailPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                 {STATUS_COLUMNS.map((statusColumn) => (
                   <Card key={statusColumn.value} className={`p-4 ${statusColumn.color}`}>
-                    <h3 className="text-md font-semibold capitalize mb-3">
+                    <h3 className="text-md font-semibold capitalize mb-3 flex items-center gap-2">
+                      {statusColumn.value === "pendente" && "🟡"}
+                      {statusColumn.value === "em_progresso" && "🔵"}
+                      {statusColumn.value === "concluido" && "🟢"}
                       {statusColumn.label}
+                      <Badge variant="secondary" className="ml-auto">
+                        {steps.filter(s => s.status === statusColumn.value).length}
+                      </Badge>
                     </h3>
 
                     <div className="space-y-2">
@@ -275,26 +311,100 @@ export default function WorkflowDetailPage() {
                         .filter(s => s.status === statusColumn.value)
                         .map((step) => (
                           <Card key={step.id} className="p-3 bg-white hover:shadow-md transition">
-                            <p className="font-medium mb-2">{step.title}</p>
+                            {/* Inline Editable Title */}
+                            <Input
+                              value={step.title}
+                              onChange={(e) => {
+                                const newSteps = steps.map(s => 
+                                  s.id === step.id ? { ...s, title: e.target.value } : s
+                                );
+                                setSteps(newSteps);
+                              }}
+                              onBlur={() => updateStepTitle(step.id, step.title)}
+                              className="font-medium mb-2 border-none p-0 h-auto focus-visible:ring-0"
+                            />
+                            
                             {step.description && (
                               <p className="text-sm text-muted-foreground mb-2">
                                 {step.description}
                               </p>
                             )}
+                            
+                            {/* Metadata badges */}
+                            <div className="flex flex-wrap gap-1 mb-2">
+                              {step.profiles?.full_name && (
+                                <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                  <User className="w-3 h-3" />
+                                  {step.profiles.full_name}
+                                </Badge>
+                              )}
+                              
+                              {step.due_date && (
+                                <Badge variant="outline" className="text-xs flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  {new Date(step.due_date).toLocaleDateString("pt-BR")}
+                                </Badge>
+                              )}
+                              
+                              {step.priority && step.priority !== "medium" && (
+                                <Badge 
+                                  variant={
+                                    step.priority === "high" || step.priority === "urgent" 
+                                      ? "destructive" 
+                                      : "secondary"
+                                  }
+                                  className="text-xs flex items-center gap-1"
+                                >
+                                  <AlertCircle className="w-3 h-3" />
+                                  {step.priority}
+                                </Badge>
+                              )}
+                            </div>
+                            
+                            {/* Status transition buttons */}
                             <div className="mt-2 flex gap-2 flex-wrap">
-                              {STATUS_COLUMNS
-                                .filter(st => st.value !== statusColumn.value)
-                                .map((targetStatus) => (
+                              {statusColumn.value === "pendente" && (
+                                <Button
+                                  size="sm"
+                                  variant="default"
+                                  onClick={() => updateStepStatus(step.id, "em_progresso")}
+                                  className="text-xs"
+                                >
+                                  Iniciar
+                                </Button>
+                              )}
+                              
+                              {statusColumn.value === "em_progresso" && (
+                                <>
                                   <Button
-                                    key={targetStatus.value}
                                     size="sm"
                                     variant="outline"
-                                    onClick={() => updateStepStatus(step.id, targetStatus.value)}
+                                    onClick={() => updateStepStatus(step.id, "pendente")}
                                     className="text-xs"
                                   >
-                                    Mover para {targetStatus.label}
+                                    Voltar
                                   </Button>
-                                ))}
+                                  <Button
+                                    size="sm"
+                                    variant="default"
+                                    onClick={() => updateStepStatus(step.id, "concluido")}
+                                    className="text-xs"
+                                  >
+                                    Concluir
+                                  </Button>
+                                </>
+                              )}
+                              
+                              {statusColumn.value === "concluido" && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => updateStepStatus(step.id, "em_progresso")}
+                                  className="text-xs"
+                                >
+                                  Reabrir
+                                </Button>
+                              )}
                             </div>
                           </Card>
                         ))}
@@ -330,23 +440,23 @@ export default function WorkflowDetailPage() {
               <div className="flex items-center justify-between py-2 border-b">
                 <span className="text-sm text-muted-foreground">Status</span>
                 <span className={`text-sm px-2 py-1 rounded ${
-                  workflow.status === 'active' 
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-gray-100 text-gray-800'
+                  workflow.status === "active" 
+                    ? "bg-green-100 text-green-800"
+                    : "bg-gray-100 text-gray-800"
                 }`}>
-                  {workflow.status === 'active' ? 'Ativo' : 'Rascunho'}
+                  {workflow.status === "active" ? "Ativo" : "Rascunho"}
                 </span>
               </div>
               <div className="flex items-center justify-between py-2 border-b">
                 <span className="text-sm text-muted-foreground">Data de Criação</span>
                 <span className="text-sm">
-                  {new Date(workflow.created_at).toLocaleString('pt-BR')}
+                  {new Date(workflow.created_at).toLocaleString("pt-BR")}
                 </span>
               </div>
               <div className="flex items-center justify-between py-2">
                 <span className="text-sm text-muted-foreground">Última Atualização</span>
                 <span className="text-sm">
-                  {new Date(workflow.updated_at).toLocaleString('pt-BR')}
+                  {new Date(workflow.updated_at).toLocaleString("pt-BR")}
                 </span>
               </div>
             </CardContent>
@@ -354,5 +464,5 @@ export default function WorkflowDetailPage() {
         </div>
       </ModulePageWrapper>
     </MultiTenantWrapper>
-  )
+  );
 }
