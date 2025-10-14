@@ -41,6 +41,14 @@ import {
   EyeOff
 } from "lucide-react";
 
+interface ChannelSettings {
+  notifications_enabled?: boolean;
+  auto_archive_days?: number;
+  max_members?: number;
+  allow_guest_access?: boolean;
+  [key: string]: string | number | boolean | undefined;
+}
+
 interface Channel {
   id: string;
   name: string;
@@ -51,7 +59,7 @@ interface Channel {
   created_by: string;
   member_count: number;
   last_message_at?: string;
-  settings: any;
+  settings: ChannelSettings;
   created_at: string;
 }
 
@@ -64,9 +72,17 @@ interface ChannelMember {
   last_read_at?: string;
 }
 
+interface ChannelStats {
+  total_channels: number;
+  active_channels: number;
+  total_members: number;
+  total_messages: number;
+  [key: string]: number | string | undefined;
+}
+
 interface ChannelManagerProps {
   activeChannels: number;
-  onStatsUpdate: (stats: any) => void;
+  onStatsUpdate: (stats: ChannelStats) => void;
 }
 
 export const ChannelManager: React.FC<ChannelManagerProps> = ({
@@ -393,7 +409,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                   </div>
                   <div>
                     <Label>Tipo do Canal</Label>
-                    <Select value={newChannel.type} onValueChange={(value: any) => setNewChannel(prev => ({ ...prev, type: value }))}>
+                    <Select value={newChannel.type} onValueChange={(value: Channel["type"]) => setNewChannel(prev => ({ ...prev, type: value }))}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>

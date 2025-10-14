@@ -36,6 +36,14 @@ import {
   Globe
 } from "lucide-react";
 
+interface NotificationMetadata {
+  link?: string;
+  user_id?: string;
+  conversation_id?: string;
+  document_id?: string;
+  [key: string]: string | number | boolean | undefined;
+}
+
 interface Notification {
   id: string;
   title: string;
@@ -48,7 +56,7 @@ interface Notification {
   is_important: boolean;
   created_at: string;
   action_required: boolean;
-  metadata?: any;
+  metadata?: NotificationMetadata;
 }
 
 interface NotificationSettings {
