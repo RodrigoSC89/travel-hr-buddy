@@ -50,12 +50,16 @@ import {
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
+interface WorkflowStepConfig {
+  [key: string]: string | number | boolean | string[] | number[] | boolean[] | undefined;
+}
+
 interface WorkflowStep {
   id: string;
   type: "trigger" | "condition" | "action" | "delay";
   title: string;
   description: string;
-  config: Record<string, any>;
+  config: WorkflowStepConfig;
   position: { x: number; y: number };
   connections: string[];
 }
@@ -75,6 +79,12 @@ interface Workflow {
   tags: string[];
 }
 
+interface WorkflowExecutionStep {
+  stepId: string;
+  status: "pending" | "running" | "completed" | "failed";
+  result?: string | number | boolean | Record<string, unknown>;
+}
+
 interface WorkflowExecution {
   id: string;
   workflowId: string;
@@ -82,11 +92,7 @@ interface WorkflowExecution {
   startedAt: Date;
   completedAt?: Date;
   duration?: number;
-  steps: Array<{
-    stepId: string;
-    status: "pending" | "running" | "completed" | "failed";
-    result?: any;
-  }>;
+  steps: WorkflowExecutionStep[];
 }
 
 const SmartWorkflowAutomation = () => {

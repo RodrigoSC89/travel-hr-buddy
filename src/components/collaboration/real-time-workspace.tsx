@@ -40,6 +40,14 @@ interface UserPresence {
   vessel_id?: string;
 }
 
+interface ChatMessageMetadata {
+  fileUrl?: string;
+  fileName?: string;
+  fileSize?: number;
+  coordinates?: { lat: number; lng: number };
+  [key: string]: string | number | { lat: number; lng: number } | undefined;
+}
+
 interface ChatMessage {
   id: string;
   user_id: string;
@@ -47,7 +55,11 @@ interface ChatMessage {
   message: string;
   timestamp: string;
   type: "text" | "system" | "file" | "location";
-  metadata?: any;
+  metadata?: ChatMessageMetadata;
+}
+
+interface WorkspaceUpdateData {
+  [key: string]: string | number | boolean | undefined;
 }
 
 interface WorkspaceUpdate {
@@ -59,7 +71,7 @@ interface WorkspaceUpdate {
   timestamp: string;
   priority: "low" | "medium" | "high";
   vessel_id?: string;
-  related_data?: any;
+  related_data?: WorkspaceUpdateData;
 }
 
 const RealTimeWorkspace: React.FC = () => {
@@ -73,7 +85,7 @@ const RealTimeWorkspace: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const channelRef = useRef<any>(null);
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   // Scroll para última mensagem
   const scrollToBottom = () => {
@@ -112,7 +124,7 @@ const RealTimeWorkspace: React.FC = () => {
             Object.keys(presenceState).forEach(userId => {
               const presences = presenceState[userId];
               if (presences && presences.length > 0) {
-                const presence = presences[0] as any;
+                const presence = presences[0] as { name?: string; email?: string; avatar_url?: string; status?: string; last_seen?: string };
                 users.push({
                   user_id: userId,
                   name: presence.name || "Usuário",
