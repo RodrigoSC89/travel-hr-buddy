@@ -8,6 +8,11 @@ Authenticated: /admin/dashboard
 Public Mode:   /admin/dashboard?public=1
 ```
 
+### New Features (October 2025)
+- 📆 **Monthly Department Summary Chart** - Horizontal bar chart
+- 📤 **PDF Export** - Download dashboard reports
+- 📧 **Automated Email Reports** - Scheduled via cron
+
 ## 📋 Features Checklist
 
 - [x] Role-based navigation cards
@@ -16,8 +21,20 @@ Public Mode:   /admin/dashboard?public=1
 - [x] Restore activity trend chart
 - [x] Cron status monitoring
 - [x] Quick links navigation
+- [x] **Monthly department summary chart** (NEW)
+- [x] **PDF export functionality** (NEW)
+- [x] **Automated email reports** (NEW)
 
 ## 🎯 Key Components
+
+### Main Sections (7)
+1. **📊 Monthly Department Summary** - Horizontal bar chart (NEW)
+2. **📤 PDF Export** - Download reports (NEW, authenticated only)
+3. **Navigation Cards (3)** - Role-based access
+4. **📈 Trend Chart** - 15-day activity
+5. **📱 QR Code** - Public access (authenticated only)
+6. **⚡ Quick Links (4)** - Fast navigation
+7. **✅ Cron Status** - Job monitoring
 
 ### Navigation Cards (3)
 1. **✅ Checklists** - Admin/HR Manager only
@@ -39,6 +56,8 @@ Public Mode:   /admin/dashboard?public=1
 | Histórico IA | ✅ | ✅ | ❌ |
 | QR Code | ✅ | ✅ | ✅ |
 | Trend Chart | ✅ | ✅ | ✅ |
+| **Monthly Summary** | ✅ | ✅ | ✅ |
+| **PDF Export** | ✅ | ✅ | ✅ |
 
 ## 📱 Public Mode
 
@@ -48,19 +67,67 @@ Public Mode:   /admin/dashboard?public=1
 - ✅ Quick links
 - ✅ Public mode badge
 - ✅ Eye icon in title
+- ✅ **Monthly department summary** (NEW)
 
 ### What's Hidden
 - ❌ QR code section
 - ❌ User-specific features
+- ❌ **PDF export button** (NEW)
 
-## 📊 Trend Chart
+## 📊 Charts & Data
 
-### Configuration
+### Monthly Department Summary (NEW)
+- **Data Source**: `get_monthly_restore_summary_by_department`
+- **Period**: Current month only
+- **Type**: Horizontal bar chart
+- **Color**: Green (rgba(34, 197, 94, 0.8))
+- **Height**: 300px
+- **Library**: Recharts
+- **Sorting**: By count (descending)
+
+### Trend Chart
 - **Data Source**: `get_restore_count_by_day_with_email`
 - **Period**: Last 15 days
 - **Type**: Bar chart
 - **Height**: 300px
 - **Library**: Recharts
+
+## 📤 PDF Export (NEW)
+
+### Features
+- Click button to download PDF
+- Includes department summary with visual bars
+- Includes 15-day trend data
+- Auto-downloads with timestamped filename
+- Only available in authenticated mode
+
+### Usage
+1. Navigate to `/admin/dashboard`
+2. Scroll to "📤 Exportação PDF" section
+3. Click "Baixar relatório em PDF"
+4. File downloads as `dashboard-summary-YYYY-MM-DD.pdf`
+
+## 📧 Email Reports (NEW)
+
+### Manual Trigger
+```bash
+curl -X POST https://YOUR_PROJECT.supabase.co/functions/v1/send-dashboard-report \
+  -H "Authorization: Bearer YOUR_SERVICE_ROLE_KEY" \
+  -d '{}'
+```
+
+### Automated (Cron)
+```sql
+SELECT cron.schedule(
+  'send-daily-dashboard-report',
+  '0 9 * * *',  -- 9 AM daily
+  $$SELECT net.http_post(
+    url := 'https://YOUR_PROJECT.supabase.co/functions/v1/send-dashboard-report',
+    headers := '{"Authorization":"Bearer YOUR_SERVICE_ROLE_KEY"}',
+    body := '{}'
+  );$$
+);
+```
 
 ## 🔧 Technical Details
 
@@ -68,8 +135,10 @@ Public Mode:   /admin/dashboard?public=1
 ```json
 {
   "qrcode.react": "^4.2.0",
-  "@types/qrcode.react": "latest",
-  "recharts": "^2.15.4"
+  "@types/qrcode.react": "^1.0.5",
+  "recharts": "^2.15.4",
+  "jspdf": "^3.0.3"
+}
 }
 ```
 
