@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,19 @@ export default function DocumentsAIPage() {
   const [summarizing, setSummarizing] = useState(false);
   const [rewriting, setRewriting] = useState(false);
   const [summary, setSummary] = useState("");
+
+  // Check for applied template from localStorage
+  useEffect(() => {
+    const appliedTemplate = localStorage.getItem("applied_template");
+    if (appliedTemplate) {
+      setGenerated(appliedTemplate);
+      localStorage.removeItem("applied_template");
+      toast({
+        title: "Template aplicado",
+        description: "O template foi carregado. Você pode editar e salvar.",
+      });
+    }
+  }, []);
 
   async function generateDocument() {
     if (!prompt) return;
