@@ -454,7 +454,7 @@ export const IntelligentHelpCenter: React.FC = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-1">
-                      {tutorial.tags.slice(0, 3).map((tag) => (
+                      {tutorial.tags.slice(0, 3).map((tag: string) => (
                         <Badge key={tag} variant="outline" className="text-xs">
                           {tag}
                         </Badge>
@@ -496,7 +496,7 @@ export const IntelligentHelpCenter: React.FC = () => {
                       
                       <div className="flex items-center justify-between">
                         <div className="flex flex-wrap gap-1">
-                          {faq.tags.map((tag) => (
+                          {faq.tags.map((tag: string) => (
                             <Badge key={tag} variant="secondary" className="text-xs">
                               {tag}
                             </Badge>

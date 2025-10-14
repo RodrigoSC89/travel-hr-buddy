@@ -373,7 +373,10 @@ export const IntegrationAutomation: React.FC = () => {
                     value={config.authentication?.type} 
                     onValueChange={(value: any) => setConfig({
                       ...config, 
-                      authentication: {...config.authentication, type: value}
+                      authentication: {
+                        type: value,
+                        credentials: config.authentication?.credentials || {}
+                      }
                     })}
                   >
                     <SelectTrigger>
@@ -417,7 +420,11 @@ export const IntegrationAutomation: React.FC = () => {
                     checked={config.rateLimit?.enabled}
                     onCheckedChange={(checked) => setConfig({
                       ...config,
-                      rateLimit: {...config.rateLimit, enabled: checked}
+                      rateLimit: {
+                        enabled: checked,
+                        requestsPerMinute: config.rateLimit?.requestsPerMinute || 60,
+                        burstLimit: config.rateLimit?.burstLimit || 10
+                      }
                     })}
                   />
                 </div>
@@ -430,7 +437,11 @@ export const IntegrationAutomation: React.FC = () => {
                         value={[config.rateLimit?.requestsPerMinute || 60]}
                         onValueChange={([value]) => setConfig({
                           ...config,
-                          rateLimit: {...config.rateLimit, requestsPerMinute: value}
+                          rateLimit: {
+                            enabled: config.rateLimit?.enabled ?? true,
+                            requestsPerMinute: value,
+                            burstLimit: config.rateLimit?.burstLimit || 10
+                          }
                         })}
                         max={1000}
                         min={1}
@@ -445,7 +456,11 @@ export const IntegrationAutomation: React.FC = () => {
                         value={[config.rateLimit?.burstLimit || 10]}
                         onValueChange={([value]) => setConfig({
                           ...config,
-                          rateLimit: {...config.rateLimit, burstLimit: value}
+                          rateLimit: {
+                            enabled: config.rateLimit?.enabled ?? true,
+                            requestsPerMinute: config.rateLimit?.requestsPerMinute || 60,
+                            burstLimit: value
+                          }
                         })}
                         max={100}
                         min={1}
@@ -472,7 +487,11 @@ export const IntegrationAutomation: React.FC = () => {
                     checked={config.retry?.enabled}
                     onCheckedChange={(checked) => setConfig({
                       ...config,
-                      retry: {...config.retry, enabled: checked}
+                      retry: {
+                        enabled: checked,
+                        maxAttempts: config.retry?.maxAttempts || 3,
+                        backoffMultiplier: config.retry?.backoffMultiplier || 2
+                      }
                     })}
                   />
                 </div>
@@ -483,7 +502,10 @@ export const IntegrationAutomation: React.FC = () => {
                     checked={config.caching?.enabled}
                     onCheckedChange={(checked) => setConfig({
                       ...config,
-                      caching: {...config.caching, enabled: checked}
+                      caching: {
+                        enabled: checked,
+                        ttlSeconds: config.caching?.ttlSeconds || 300
+                      }
                     })}
                   />
                 </div>
@@ -495,7 +517,10 @@ export const IntegrationAutomation: React.FC = () => {
                       value={[config.caching?.ttlSeconds || 300]}
                       onValueChange={([value]) => setConfig({
                         ...config,
-                        caching: {...config.caching, ttlSeconds: value}
+                        caching: {
+                          enabled: config.caching?.enabled ?? false,
+                          ttlSeconds: value
+                        }
                       })}
                       max={3600}
                       min={60}
@@ -642,7 +667,11 @@ export const IntegrationAutomation: React.FC = () => {
                     checked={config.monitoring?.healthCheck}
                     onCheckedChange={(checked) => setConfig({
                       ...config,
-                      monitoring: {...config.monitoring, healthCheck: checked}
+                      monitoring: {
+                        healthCheck: checked,
+                        alerting: config.monitoring?.alerting ?? true,
+                        logging: config.monitoring?.logging ?? true
+                      }
                     })}
                   />
                 </div>
@@ -653,7 +682,11 @@ export const IntegrationAutomation: React.FC = () => {
                     checked={config.monitoring?.alerting}
                     onCheckedChange={(checked) => setConfig({
                       ...config,
-                      monitoring: {...config.monitoring, alerting: checked}
+                      monitoring: {
+                        healthCheck: config.monitoring?.healthCheck ?? true,
+                        alerting: checked,
+                        logging: config.monitoring?.logging ?? true
+                      }
                     })}
                   />
                 </div>
@@ -664,7 +697,11 @@ export const IntegrationAutomation: React.FC = () => {
                     checked={config.monitoring?.logging}
                     onCheckedChange={(checked) => setConfig({
                       ...config,
-                      monitoring: {...config.monitoring, logging: checked}
+                      monitoring: {
+                        healthCheck: config.monitoring?.healthCheck ?? true,
+                        alerting: config.monitoring?.alerting ?? true,
+                        logging: checked
+                      }
                     })}
                   />
                 </div>

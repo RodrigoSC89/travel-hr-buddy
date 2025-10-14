@@ -43,126 +43,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format, differenceInDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import type { Database } from "@/integrations/supabase/types";
 
-interface CrewMember {
-  id: string;
-  full_name: string;
-  employee_id: string;
-  position: string;
-  rank: string;
-  status: string;
-  experience_years: number;
-  nationality: string;
-  email: string;
-  phone: string;
-  join_date: string;
-  contract_start: string;
-  contract_end: string;
-  organization_id: string;
-}
-
-interface CrewDossier {
-  id: string;
-  crew_member_id: string;
-  internal_registration: string;
-  cat_number: string;
-  cir_number: string;
-  cir_expiry_date: string;
-  employee_registration?: string;
-  previous_position?: string;
-  profile_photo_url?: string;
-  status: string;
-  notes?: string;
-}
-
-interface CrewEmbarkation {
-  id: string;
-  vessel_name: string;
-  vessel_type: string;
-  vessel_class: string;
-  dp_class: string;
-  dp_operation_modes: string[];
-  equipment_operated: string[];
-  embark_date: string;
-  disembark_date: string;
-  embark_location: string;
-  disembark_location: string;
-  embark_location_details: any;
-  disembark_location_details: any;
-  function_role: string;
-  hours_worked: number;
-  operation_notes: string;
-  performance_rating: number;
-  completed_operations: number;
-}
-
-interface CrewCertification {
-  id: string;
-  certification_name: string;
-  certification_type: string;
-  certificate_number: string;
-  issuing_authority: string;
-  course_provider: string;
-  course_location: string;
-  issue_date: string;
-  expiry_date: string;
-  renewal_date: string;
-  status: string;
-  grade: number;
-  certificate_file_url: string;
-  is_internal_course: boolean;
-  completion_percentage: number;
-  notes: string;
-}
-
-interface PerformanceReview {
-  id: string;
-  review_period: string;
-  review_date: string;
-  reviewer_name: string;
-  reviewer_position: string;
-  technical_score: number;
-  behavioral_score: number;
-  leadership_score: number;
-  safety_score: number;
-  overall_score: number;
-  strengths: string;
-  improvement_areas: string;
-  positive_feedback: string;
-  incidents: string;
-  recommendations: string;
-  career_progression_notes: string;
-  review_status: string;
-}
-
-interface AIRecommendation {
-  id: string;
-  recommendation_type: string;
-  title: string;
-  description: string;
-  priority: string;
-  category: string;
-  suggested_action: string;
-  deadline: string;
-  status: string;
-  confidence_score: number;
-}
-
-interface DossierDocument {
-  id: string;
-  document_category: string;
-  document_name: string;
-  file_url: string;
-  file_type: string;
-  file_size: number;
-  upload_date: string;
-  verification_status: string;
-  verified_at: string;
-  expiry_date: string;
-  is_confidential: boolean;
-  tags: string[];
-  notes: string;
-}
+type CrewMember = Database["public"]["Tables"]["crew_members"]["Row"];
+type CrewDossier = Database["public"]["Tables"]["crew_dossier"]["Row"];
+type CrewEmbarkation = Database["public"]["Tables"]["crew_embarkations"]["Row"];
+type CrewCertification = Database["public"]["Tables"]["crew_certifications"]["Row"];
+type PerformanceReview = Database["public"]["Tables"]["crew_performance_reviews"]["Row"];
+type AIRecommendation = Database["public"]["Tables"]["crew_ai_recommendations"]["Row"];
+type DossierDocument = Database["public"]["Tables"]["crew_dossier_documents"]["Row"];
 
 export const ProfessionalCrewDossier: React.FC = () => {
   const { user } = useAuth();
@@ -841,7 +730,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                           <div className="mt-4">
                             <label className="text-xs font-medium text-muted-foreground">Modos DP Operados</label>
                             <div className="flex flex-wrap gap-1 mt-1">
-                              {embark.dp_operation_modes.map((mode, index) => (
+                              {embark.dp_operation_modes.map((mode: string, index: number) => (
                                 <Badge key={index} variant="secondary" className="text-xs">
                                   {mode}
                                 </Badge>
@@ -854,7 +743,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                           <div className="mt-4">
                             <label className="text-xs font-medium text-muted-foreground">Equipamentos Operados</label>
                             <div className="flex flex-wrap gap-1 mt-1">
-                              {embark.equipment_operated.map((equipment, index) => (
+                              {embark.equipment_operated.map((equipment: string, index: number) => (
                                 <Badge key={index} variant="outline" className="text-xs">
                                   {equipment}
                                 </Badge>
@@ -1045,7 +934,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                         </p>
                         {doc.tags.length > 0 && (
                           <div className="flex gap-1 mt-1">
-                            {doc.tags.map((tag, index) => (
+                            {doc.tags.map((tag: string, index: number) => (
                               <Badge key={index} variant="secondary" className="text-xs">
                                 {tag}
                               </Badge>

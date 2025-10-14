@@ -35,6 +35,14 @@ interface Integration {
   lastSync?: Date;
 }
 
+interface Webhook {
+  id: string;
+  url: string;
+  events: string[];
+  active: boolean;
+  lastTrigger?: Date;
+}
+
 interface APIKey {
   id: string;
   name: string;
@@ -111,7 +119,7 @@ export const APIIntegrationsHub: React.FC = () => {
     }
   ]);
 
-  const [webhooks, setWebhooks] = useState([
+  const [webhooks, setWebhooks] = useState<Webhook[]>([
     {
       id: "1",
       url: "https://api.nautilus.com/webhooks/stripe",

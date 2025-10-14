@@ -22,11 +22,27 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+interface ActiveUser {
+  id: string;
+  name: string;
+  avatar: string;
+  status: string;
+  activity: string;
+}
+
+interface RealtimeMessage {
+  id: string;
+  user: string;
+  message: string;
+  time: string;
+  type: string;
+}
+
 export const RealTimeCollaboration = () => {
-  const [activeUsers, setActiveUsers] = useState([]);
-  const [realtimeMessages, setRealtimeMessages] = useState([]);
+  const [activeUsers, setActiveUsers] = useState<ActiveUser[]>([]);
+  const [realtimeMessages, setRealtimeMessages] = useState<RealtimeMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [currentConversation, setCurrentConversation] = useState(null);
+  const [currentConversation, setCurrentConversation] = useState<string | null>(null);
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -42,6 +58,8 @@ export const RealTimeCollaboration = () => {
   }, [user]);
 
   const initializeCollaboration = async () => {
+    if (!user) return;
+    
     try {
       // Get or create a general conversation
       const { data: conversations, error: convError } = await supabase
@@ -147,7 +165,9 @@ export const RealTimeCollaboration = () => {
         { event: "INSERT", schema: "public", table: "messages" },
         (payload) => {
           // Handle new message
-          fetchMessages(currentConversation);
+          if (currentConversation) {
+            fetchMessages(currentConversation);
+          }
         }
       )
       .subscribe();
@@ -225,7 +245,7 @@ export const RealTimeCollaboration = () => {
                 <div className="relative">
                   <Avatar className="w-10 h-10">
                     <AvatarImage src={user.avatar} />
-                    <AvatarFallback>{user.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
+                    <AvatarFallback>{user.name.split(" ").map((n: string) => n[0]).join("")}</AvatarFallback>
                   </Avatar>
                   <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(user.status)}`} />
                 </div>

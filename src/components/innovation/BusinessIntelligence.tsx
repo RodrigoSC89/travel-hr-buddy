@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
 import {
   BarChart3, 
   TrendingUp, 
@@ -21,6 +22,8 @@ import {
   Clock,
   AlertCircle
 } from "lucide-react";
+
+type AIReport = Database["public"]["Tables"]["ai_reports"]["Row"];
 
 interface KPIMetric {
   id: string;
@@ -55,7 +58,7 @@ interface Benchmark {
 export const BusinessIntelligence = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("monthly");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
-  const [aiReports, setAiReports] = useState([]);
+  const [aiReports, setAiReports] = useState<AIReport[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
 
