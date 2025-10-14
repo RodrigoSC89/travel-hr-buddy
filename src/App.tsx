@@ -78,6 +78,7 @@ const SmartLayoutDemo = React.lazy(() => import("./pages/SmartLayoutDemo"));
 const Unauthorized = React.lazy(() => import("./pages/Unauthorized"));
 const RestoreChartEmbed = React.lazy(() => import("./pages/embed/RestoreChartEmbed"));
 const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
+const TemplateEditorPage = React.lazy(() => import("./pages/templates/TemplateEditorPage"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -203,6 +204,7 @@ function App() {
                       <Route path="/admin/reports/assistant" element={<AssistantReportLogs />} />
                       <Route path="/admin/reports/dashboard-logs" element={<DashboardLogs />} />
                       <Route path="/admin/reports/restore-analytics" element={<RestoreAnalytics />} />
+                      <Route path="/templates/editor" element={<TemplateEditorPage />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />

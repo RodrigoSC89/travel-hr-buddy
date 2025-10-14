@@ -5919,6 +5919,39 @@ export type Database = {
         }
         Relationships: []
       }
+      templates: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_favorite: boolean | null
+          is_private: boolean | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          is_private?: boolean | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          is_private?: boolean | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ux_metrics: {
         Row: {
           category: string
