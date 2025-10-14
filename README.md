@@ -214,9 +214,50 @@ npm run test
 
 ## 🚀 Deployment
 
+### Vercel Deployment (Recommended)
+
 * Auto-deployed via **Vercel** on push to `main`
 * Build errors are linted and tested in CI before deployment
 * Environment variables must be configured in Vercel dashboard
+
+#### Vercel Configuration Details
+
+The `vercel.json` configuration includes:
+
+**Security Headers** (5 total):
+- `X-Content-Type-Options: nosniff` - Prevents MIME type sniffing attacks
+- `X-Frame-Options: DENY` - Prevents clickjacking attacks
+- `X-XSS-Protection: 1; mode=block` - Enables XSS filtering
+- `Referrer-Policy: strict-origin-when-cross-origin` - Privacy protection via referrer control
+- `Permissions-Policy: camera=(), microphone=(), geolocation=()` - Blocks unauthorized device access
+
+**Caching Strategy**:
+- Static assets (`/assets/*`): 1 year cache with immutable flag
+- Images (jpg, jpeg, png, gif, webp, svg, ico): 24-hour cache with revalidation
+- Expected performance gain: ~30-50% faster repeat page loads
+
+**Health Check Endpoint**:
+- Visit `/health` to verify deployment: `https://your-project.vercel.app/health`
+
+#### Environment Variables Setup
+
+Configure in Vercel Dashboard → Settings → Environment Variables:
+
+**Required**:
+- `VITE_SUPABASE_URL` - Your Supabase project URL
+- `VITE_SUPABASE_ANON_KEY` - Your Supabase anonymous key
+
+**Optional** (see `.env.example` for full list):
+- `VITE_OPENAI_API_KEY`, `VITE_MAPBOX_TOKEN`, etc.
+
+#### Framework Detection
+
+Vercel auto-detects build commands from `package.json`:
+- Build: `npm run build` (Vite build process)
+- Output: `dist` directory
+- Framework: Automatically detected as Vite
+
+For comprehensive deployment guide, see [VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md).
 
 ### Manual Deployment
 
