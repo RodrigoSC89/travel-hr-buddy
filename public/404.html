@@ -53,10 +53,25 @@
 
   <script>
     // Store the current path to preserve it after redirect
-    sessionStorage.setItem('redirectPath', window.location.pathname + window.location.search + window.location.hash);
-    
-    // Redirect to index.html
-    window.location.href = '/index.html';
+    // This handles direct URL access or page refresh on any route
+    try {
+      const path = window.location.pathname + window.location.search + window.location.hash;
+      sessionStorage.setItem('redirectPath', path);
+      
+      // Redirect to index.html to load the React app
+      window.location.replace('/index.html');
+    } catch (error) {
+      // Fallback if sessionStorage is not available (private browsing, etc.)
+      console.warn('SessionStorage not available, redirecting to home');
+      window.location.replace('/');
+    }
   </script>
+  <noscript>
+    <p style="color: #f87171; margin-top: 20px;">
+      JavaScript é necessário para carregar o Nautilus One.
+      <br>
+      <a href="/" style="color: #0369a1; text-decoration: underline;">Clique aqui para voltar à página inicial</a>
+    </p>
+  </noscript>
 </body>
 </html>

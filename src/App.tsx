@@ -90,18 +90,30 @@ const LoadingSpinner = () => (
 const queryClient = new QueryClient();
 
 // Component to handle redirect from 404.html
+// This component restores the original route when the app loads after a 404 redirect
 const RedirectHandler = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    // Check if there's a stored redirect path
-    const redirectPath = sessionStorage.getItem("redirectPath");
-    if (redirectPath && redirectPath !== "/" && location.pathname === "/") {
-      // Clear the stored path
-      sessionStorage.removeItem("redirectPath");
-      // Navigate to the stored path
-      navigate(redirectPath, { replace: true });
+    try {
+      // Check if there's a stored redirect path from 404.html
+      const redirectPath = sessionStorage.getItem("redirectPath");
+      
+      // Only redirect if:
+      // 1. There is a stored path
+      // 2. The stored path is not the home page
+      // 3. We are currently on the home page (to prevent redirect loops)
+      if (redirectPath && redirectPath !== "/" && location.pathname === "/") {
+        // Clear the stored path to prevent future redirects
+        sessionStorage.removeItem("redirectPath");
+        
+        // Navigate to the stored path with replace to avoid adding to history
+        navigate(redirectPath, { replace: true });
+      }
+    } catch (error) {
+      // Handle cases where sessionStorage is not available
+      console.warn("Failed to restore navigation path:", error);
     }
   }, [navigate, location]);
 
