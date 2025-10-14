@@ -89,10 +89,16 @@ FLUXO DE FUNCIONAMENTO:
 
 COMPATIBILIDADE:
 ───────────────────────────────────────────────────────────────────────────
-✓ Lovable (alvo principal)        ✓ Netlify
-✓ Vercel                          ✓ GitHub Pages
+✓ Lovable (alvo principal)        ✓ Netlify (via _redirects + 404.html)
+✓ Vercel (via vercel.json)        ✓ GitHub Pages (via 404.html)
 ✓ Firebase Hosting                ✓ AWS S3 + CloudFront
 ✓ Azure Static Web Apps           ✓ Render
+
+CONFIGURAÇÕES EXISTENTES:
+───────────────────────────────────────────────────────────────────────────
+• public/_redirects    - Configuração Netlify (/*  /index.html  200)
+• vercel.json          - Configuração Vercel (rewrites para /index.html)
+• public/404.html      - Solução universal para todas as plataformas
 
 BENEFÍCIOS DA SOLUÇÃO:
 ───────────────────────────────────────────────────────────────────────────

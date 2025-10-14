@@ -59,11 +59,13 @@ Usuário vê a página Dashboard normalmente
 ## Compatibilidade
 
 Esta solução é compatível com:
-- ✅ Lovable
-- ✅ Netlify
-- ✅ Vercel (já configurado via vercel.json)
-- ✅ GitHub Pages
+- ✅ Lovable (usa 404.html)
+- ✅ Netlify (usa _redirects ou 404.html como fallback)
+- ✅ Vercel (usa vercel.json rewrites ou 404.html como fallback)
+- ✅ GitHub Pages (usa 404.html)
 - ✅ Outras plataformas de hospedagem estática
+
+**Nota**: O projeto já possui configurações específicas para Netlify (`_redirects`) e Vercel (`vercel.json`), mas o 404.html serve como solução universal para qualquer plataforma de hospedagem estática, incluindo o Lovable.
 
 ## Arquivos Modificados
 
