@@ -78,6 +78,7 @@ const Offline = React.lazy(() => import("./pages/Offline"));
 const Modules = React.lazy(() => import("./pages/Modules"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const SmartLayoutDemo = React.lazy(() => import("./pages/SmartLayoutDemo"));
+const TemplateEditorDemo = React.lazy(() => import("./pages/TemplateEditorDemo"));
 const Unauthorized = React.lazy(() => import("./pages/Unauthorized"));
 const RestoreChartEmbed = React.lazy(() => import("./pages/embed/RestoreChartEmbed"));
 const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
@@ -214,6 +215,7 @@ function App() {
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
                       <Route path="/smart-layout-demo" element={<SmartLayoutDemo />} />
+                      <Route path="/template-editor-demo" element={<TemplateEditorDemo />} />
                       <Route path="/_offline" element={<Offline />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
