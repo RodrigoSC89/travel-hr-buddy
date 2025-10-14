@@ -27,8 +27,8 @@ Access: Authenticated users only
 | Implement RLS policies | ✅ | 4 policies for security |
 | List templates | ✅ | With search and filters |
 | Create/edit functionality | ✅ | Full CRUD operations |
-| AI generation | ✅ | Via generate-document function |
-| AI rewrite | ✅ | Via rewrite-document function |
+| AI generation | ✅ | Via specialized generate-template function |
+| AI enhancement | ✅ | Via specialized enhance-template function |
 | AI suggestions | ✅ | Title suggestion from content |
 | Apply to documents-ai | ✅ | With sessionStorage integration |
 | Export PDF | ✅ | Using jsPDF |
@@ -45,6 +45,10 @@ Beyond the requirements:
 - ✅ Delete with confirmation
 - ✅ Real-time search
 - ✅ Multiple filters (favorites + private)
+- ✅ Specialized edge functions for templates
+- ✅ Variable field generation [VARIABLE_NAME]
+- ✅ Maritime/technical documentation optimization
+- ✅ Structure preservation during enhancement
 - ✅ Comprehensive documentation
 - ✅ TypeScript types
 - ✅ Loading states
@@ -53,9 +57,9 @@ Beyond the requirements:
 ## 📊 Code Statistics
 
 ```
-Files Created/Modified:     8
-Total Lines of Code:        806 (main page)
-Functions:                  14
+Files Created/Modified:     10
+Total Lines of Code:        806 (main page) + 400 (edge functions)
+Functions:                  14 (frontend) + 2 (edge functions)
 Database Tables:            1
 RLS Policies:               4
 Database Indexes:           5

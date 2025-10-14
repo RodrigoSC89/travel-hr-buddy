@@ -59,17 +59,21 @@ The Templates module provides a complete template management system with AI inte
 
 ### 4. AI Features
 
-#### Generate Content
-- Uses the `generate-document` edge function
-- Takes the title and optional prompt
-- Generates complete template content with GPT-4
-- Automatically populates the content field
+#### Generate Template Content
+- Uses the specialized `generate-template` edge function
+- Takes the title and optional purpose description
+- Generates template content optimized for reusability
+- Includes variable fields in [VARIABLE_NAME] format (e.g., [NOME_TECNICO], [DATA], [EMBARCACAO])
+- Specialized for maritime and technical documentation
+- Automatically populates the content field with structured template
 
-#### Rewrite Content
-- Uses the `rewrite-document` edge function
-- Takes existing content
-- Reformulates it with better structure and clarity
-- Updates the content field with the rewritten version
+#### Enhance Template
+- Uses the specialized `enhance-template` edge function
+- Takes existing template content
+- Improves clarity, grammar, and professionalism
+- Preserves ALL variable fields [EXAMPLE]
+- Maintains template structure and sections
+- Updates the content field with enhanced version
 
 #### Suggest Title
 - Uses the `generate-document` edge function
@@ -160,11 +164,23 @@ This allows users to quickly use templates as starting points for AI-generated d
    - Indexes for performance
    - Auto-update trigger for updated_at
 
-2. `src/pages/admin/templates.tsx`
+2. `supabase/functions/generate-template/index.ts`
+   - Specialized edge function for generating templates
+   - Includes variable fields [VARIABLE_NAME]
+   - Optimized for maritime/technical documentation
+   - Retry logic and timeout protection
+
+3. `supabase/functions/enhance-template/index.ts`
+   - Specialized edge function for enhancing templates
+   - Preserves variable fields and structure
+   - Improves clarity and professionalism
+   - Context-aware enhancements
+
+4. `src/pages/admin/templates.tsx`
    - Main templates management page
-   - 890+ lines of TypeScript/React code
+   - 800+ lines of TypeScript/React code
    - Complete CRUD operations
-   - AI integration
+   - AI integration with specialized functions
    - PDF export
    - Template application
 
