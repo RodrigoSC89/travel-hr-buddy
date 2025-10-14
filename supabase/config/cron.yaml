@@ -1,0 +1,27 @@
+# Supabase Cron Job Configuration
+# This file configures scheduled tasks for Supabase Edge Functions
+
+cron:
+  # Send Dashboard Report - Automated daily dashboard report with PDF
+  # Executes every day at 8:00 AM UTC
+  # Can be adjusted using standard cron syntax
+  - name: send-dashboard-report
+    schedule: "0 8 * * *"  # Every day at 8:00 AM UTC (5:00 AM BRT / 3:00 AM BRT during DST)
+    endpoint: "/api/send-dashboard-report"
+    description: "Automated daily dashboard report generation and email delivery"
+    
+  # Alternative schedules (commented out):
+  # - "0 9 * * *"     # Every day at 9:00 AM UTC
+  # - "0 8 * * 1"     # Every Monday at 8:00 AM UTC  
+  # - "0 8 1 * *"     # First day of every month at 8:00 AM UTC
+  # - "0 8 1,15 * *"  # 1st and 15th of every month at 8:00 AM UTC
+  # - "*/30 * * * *"  # Every 30 minutes (for testing)
+
+# Notes:
+# - Cron syntax: "minute hour day month weekday"
+# - All times are in UTC
+# - Endpoint can point to either:
+#   * Supabase Edge Function: /functions/v1/send-dashboard-report
+#   * Next.js API Route: /api/send-dashboard-report (if using Next.js)
+# - Requires proper environment variables to be set in Supabase Dashboard
+# - Monitor execution in Supabase Dashboard > Edge Functions > Logs
