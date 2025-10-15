@@ -2,6 +2,10 @@
 
 ## 🚀 Quick Start
 
+### Live Demo
+Visit `/copilot/job-form` in your application to see the component in action.
+
+### Code Usage
 ```tsx
 import { JobFormWithExamples } from '@/components/copilot';
 
