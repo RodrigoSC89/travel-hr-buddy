@@ -110,6 +110,7 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@/lib": path.resolve(__dirname, "./lib"),
     },
   },
   build: {
@@ -197,8 +198,8 @@ export default defineConfig(({ mode }) => ({
     } : undefined,
   },
   define: {
-    'process.env': {},
-    'process': { env: {} }
+    "process.env": {},
+    "process": { env: {} }
   },
   preview: {
     host: true,
