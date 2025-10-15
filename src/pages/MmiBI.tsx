@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import JobsTrendChart from "@/components/bi/JobsTrendChart";
 
 const data = [
   { sistema: "Gerador", ia_efetiva: 6, total: 10 },
@@ -14,6 +15,8 @@ export default function MmiBI() {
   return (
     <div className="grid grid-cols-1 gap-4 p-4">
       <h1 className="text-2xl font-bold">🔍 BI - Efetividade da IA na Manutenção</h1>
+
+      <JobsTrendChart />
 
       <Card>
         <CardContent>
