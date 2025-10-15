@@ -56,6 +56,7 @@ const DocumentAIEditor = React.lazy(() => import("./pages/admin/documents/ai-edi
 const AITemplates = React.lazy(() => import("./pages/admin/documents/ai-templates"));
 const Assistant = React.lazy(() => import("./pages/admin/assistant"));
 const AssistantLogs = React.lazy(() => import("./pages/admin/assistant-logs"));
+const AdminBI = React.lazy(() => import("./pages/admin/bi"));
 const AdminCollaboration = React.lazy(() => import("./pages/admin/collaboration"));
 const DocumentList = React.lazy(() => import("./pages/admin/documents/DocumentList"));
 const DocumentView = React.lazy(() => import("./pages/admin/documents/DocumentView"));
@@ -190,6 +191,7 @@ function App() {
                       <Route path="/predictive" element={<PredictiveAnalytics />} />
                       <Route path="/admin" element={<Admin />} />
                       <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                      <Route path="/admin/bi" element={<AdminBI />} />
                       <Route path="/admin/api-tester" element={<APITester />} />
                       <Route path="/admin/api-status" element={<APIStatus />} />
                       <Route path="/admin/control-panel" element={<ControlPanel />} />
