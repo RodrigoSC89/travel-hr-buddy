@@ -14,9 +14,16 @@ export interface Job {
   status: string;
   priority: string;
   due_date: string;
-  component_name: string;
-  asset_name: string;
-  vessel: string;
+  component_name?: string; // Flat format
+  asset_name?: string; // Flat format
+  vessel?: string; // Flat format
+  component?: { // Nested format (from jobsApi)
+    name: string;
+    asset: {
+      name: string;
+      vessel: string;
+    };
+  };
   suggestion_ia?: string;
   can_postpone?: boolean;
 }
@@ -40,13 +47,18 @@ export interface AIRecommendation {
  */
 export async function getAIRecommendation(job: Job): Promise<AIRecommendation> {
   try {
+    // Extract component details from either flat or nested format
+    const componentName = job.component_name || job.component?.name || '';
+    const assetName = job.asset_name || job.component?.asset.name || '';
+    const vessel = job.vessel || job.component?.asset.vessel || '';
+
     // Generate embedding for the job
     const jobText = formatJobForEmbedding({
       title: job.title,
       description: job.description,
-      component_name: job.component_name,
-      asset_name: job.asset_name,
-      vessel: job.vessel,
+      component_name: componentName,
+      asset_name: assetName,
+      vessel: vessel,
       priority: job.priority,
     });
     
@@ -84,9 +96,9 @@ export async function getAIRecommendation(job: Job): Promise<AIRecommendation> {
 Job Atual:
 - Título: ${job.title}
 - Descrição: ${job.description || 'N/A'}
-- Componente: ${job.component_name}
-- Equipamento: ${job.asset_name}
-- Embarcação: ${job.vessel}
+- Componente: ${componentName}
+- Equipamento: ${assetName}
+- Embarcação: ${vessel}
 - Prioridade: ${job.priority}
 - Status: ${job.status}
 - Prazo: ${job.due_date}
@@ -152,12 +164,13 @@ Responda APENAS com o JSON válido, sem markdown ou texto adicional.`;
 function generateMockRecommendation(job: Job, similarHistory: any[]): AIRecommendation {
   const isCritical = job.priority === 'Crítica';
   const hasHistory = similarHistory.length > 0;
+  const componentName = job.component_name || job.component?.name || 'Componente';
 
   return {
     technical_action: isCritical
-      ? `Realizar inspeção imediata de ${job.component_name}. Verificar todos os componentes relacionados e preparar para substituição se necessário.`
-      : `Agendar manutenção preventiva de ${job.component_name} durante a próxima janela de manutenção programada.`,
-    component: job.component_name,
+      ? `Realizar inspeção imediata de ${componentName}. Verificar todos os componentes relacionados e preparar para substituição se necessário.`
+      : `Agendar manutenção preventiva de ${componentName} durante a próxima janela de manutenção programada.`,
+    component: componentName,
     deadline: job.due_date,
     requires_work_order: isCritical || job.priority === 'Alta',
     reasoning: hasHistory
