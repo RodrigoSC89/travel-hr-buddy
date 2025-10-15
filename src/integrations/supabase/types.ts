@@ -3097,6 +3097,118 @@ export type Database = {
           },
         ]
       }
+      mmi_jobs: {
+        Row: {
+          asset_name: string | null
+          can_postpone: boolean | null
+          component_name: string | null
+          created_at: string
+          created_by: string | null
+          due_date: string | null
+          id: string
+          job_id: string
+          priority: string | null
+          status: string | null
+          suggestion_ia: string | null
+          title: string
+          updated_at: string
+          vessel_name: string | null
+        }
+        Insert: {
+          asset_name?: string | null
+          can_postpone?: boolean | null
+          component_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          due_date?: string | null
+          id?: string
+          job_id: string
+          priority?: string | null
+          status?: string | null
+          suggestion_ia?: string | null
+          title: string
+          updated_at?: string
+          vessel_name?: string | null
+        }
+        Update: {
+          asset_name?: string | null
+          can_postpone?: boolean | null
+          component_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          due_date?: string | null
+          id?: string
+          job_id?: string
+          priority?: string | null
+          status?: string | null
+          suggestion_ia?: string | null
+          title?: string
+          updated_at?: string
+          vessel_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mmi_jobs_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mmi_os_resolvidas: {
+        Row: {
+          acao_realizada: string | null
+          causa_confirmada: string | null
+          componente: string | null
+          created_at: string | null
+          descricao_tecnica: string | null
+          duracao_execucao: string | null
+          efetiva: boolean | null
+          evidencia_url: string | null
+          id: string
+          job_id: string | null
+          os_id: string
+          resolvido_em: string | null
+        }
+        Insert: {
+          acao_realizada?: string | null
+          causa_confirmada?: string | null
+          componente?: string | null
+          created_at?: string | null
+          descricao_tecnica?: string | null
+          duracao_execucao?: string | null
+          efetiva?: boolean | null
+          evidencia_url?: string | null
+          id?: string
+          job_id?: string | null
+          os_id: string
+          resolvido_em?: string | null
+        }
+        Update: {
+          acao_realizada?: string | null
+          causa_confirmada?: string | null
+          componente?: string | null
+          created_at?: string | null
+          descricao_tecnica?: string | null
+          duracao_execucao?: string | null
+          efetiva?: boolean | null
+          evidencia_url?: string | null
+          id?: string
+          job_id?: string | null
+          os_id?: string
+          resolvido_em?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mmi_os_resolvidas_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "mmi_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       modules: {
         Row: {
           created_at: string
@@ -6502,7 +6614,19 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      mmi_os_ia_feed: {
+        Row: {
+          acao_realizada: string | null
+          causa_confirmada: string | null
+          componente: string | null
+          descricao_tecnica: string | null
+          duracao_execucao: string | null
+          efetiva: boolean | null
+          job_id: string | null
+          resolvido_em: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       calculate_checklist_compliance_score: {
