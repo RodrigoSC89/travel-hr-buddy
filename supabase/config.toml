@@ -13,6 +13,9 @@ verify_jwt = false
 [functions.send-restore-dashboard-daily]
 verify_jwt = false
 
+[functions.send-alerts]
+verify_jwt = false
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)
@@ -41,3 +44,9 @@ name = "send-restore-dashboard-daily"
 function_name = "send-restore-dashboard-daily"
 schedule = "0 8 * * *"  # Every day at 08:00 UTC (5h BRT)
 description = "Send daily restore dashboard report via email with PDF attachment"
+
+[[edge_runtime.cron]]
+name = "send-alerts"
+function_name = "send-alerts"
+schedule = "0 7 * * *"  # Every day at 7:00 AM UTC
+description = "Send alerts for critical/high priority MMI maintenance jobs with 3-day deadline"
