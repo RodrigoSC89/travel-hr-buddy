@@ -3100,61 +3100,47 @@ export type Database = {
       mmi_jobs: {
         Row: {
           asset_name: string | null
-          can_postpone: boolean | null
-          component_name: string | null
+          component: string | null
           created_at: string
-          created_by: string | null
+          description: string | null
           due_date: string | null
+          embedding: string | null
           id: string
-          job_id: string
           priority: string | null
           status: string | null
-          suggestion_ia: string | null
           title: string
           updated_at: string
-          vessel_name: string | null
+          vessel: string | null
         }
         Insert: {
           asset_name?: string | null
-          can_postpone?: boolean | null
-          component_name?: string | null
+          component?: string | null
           created_at?: string
-          created_by?: string | null
+          description?: string | null
           due_date?: string | null
+          embedding?: string | null
           id?: string
-          job_id: string
           priority?: string | null
           status?: string | null
-          suggestion_ia?: string | null
           title: string
           updated_at?: string
-          vessel_name?: string | null
+          vessel?: string | null
         }
         Update: {
           asset_name?: string | null
-          can_postpone?: boolean | null
-          component_name?: string | null
+          component?: string | null
           created_at?: string
-          created_by?: string | null
+          description?: string | null
           due_date?: string | null
+          embedding?: string | null
           id?: string
-          job_id?: string
           priority?: string | null
           status?: string | null
-          suggestion_ia?: string | null
           title?: string
           updated_at?: string
-          vessel_name?: string | null
+          vessel?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "mmi_jobs_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       mmi_os_resolvidas: {
         Row: {
