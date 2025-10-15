@@ -26,19 +26,20 @@ BEGIN
 END $$;
 
 -- Create the jobs_by_component_stats RPC function
-CREATE OR REPLACE FUNCTION jobs_by_component_stats()
+CREATE OR REPLACE FUNCTION public.jobs_by_component_stats()
 RETURNS TABLE (
   component_id text,
   count int,
   avg_duration numeric
 )
 LANGUAGE sql
+STABLE
 AS $$
   SELECT
     component_id::text,
     count(*)::int as count,
     avg(extract(epoch from completed_at - created_at)/3600) as avg_duration
-  FROM mmi_jobs
+  FROM public.mmi_jobs
   WHERE status = 'completed' 
     AND completed_at IS NOT NULL
     AND created_at IS NOT NULL
@@ -46,7 +47,7 @@ AS $$
 $$;
 
 -- Add comment to the function
-COMMENT ON FUNCTION jobs_by_component_stats IS 'Returns statistics about completed jobs by component: component_id, count of completed jobs, and average duration in hours';
+COMMENT ON FUNCTION public.jobs_by_component_stats IS 'Returns statistics about completed jobs by component: component_id, count of completed jobs, and average duration in hours';
 
 -- Grant execute permission to authenticated users
-GRANT EXECUTE ON FUNCTION jobs_by_component_stats TO authenticated, anon;
+GRANT EXECUTE ON FUNCTION public.jobs_by_component_stats TO authenticated, anon;
