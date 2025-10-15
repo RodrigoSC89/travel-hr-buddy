@@ -7,14 +7,17 @@ import { supabase } from "@/integrations/supabase/client";
 interface TrendData {
   date?: string;
   jobs?: number;
+  month?: string;
+  total_jobs?: number;
   [key: string]: unknown;
 }
 
 interface JobsForecastReportProps {
   trend: TrendData[];
+  onForecastUpdate?: (forecast: string) => void;
 }
 
-export default function JobsForecastReport({ trend }: JobsForecastReportProps) {
+export default function JobsForecastReport({ trend, onForecastUpdate }: JobsForecastReportProps) {
   const [forecast, setForecast] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -27,15 +30,22 @@ export default function JobsForecastReport({ trend }: JobsForecastReportProps) {
 
       if (error) {
         console.error("Error fetching forecast:", error);
-        setForecast("Erro ao buscar previsão. Tente novamente.");
+        const errorMsg = "Erro ao buscar previsão. Tente novamente.";
+        setForecast(errorMsg);
+        onForecastUpdate?.(errorMsg);
       } else if (data?.forecast) {
         setForecast(data.forecast);
+        onForecastUpdate?.(data.forecast);
       } else {
-        setForecast("Nenhuma previsão disponível.");
+        const noDataMsg = "Nenhuma previsão disponível.";
+        setForecast(noDataMsg);
+        onForecastUpdate?.(noDataMsg);
       }
     } catch (error) {
       console.error("Error invoking forecast function:", error);
-      setForecast("Erro ao buscar previsão. Tente novamente.");
+      const errorMsg = "Erro ao buscar previsão. Tente novamente.";
+      setForecast(errorMsg);
+      onForecastUpdate?.(errorMsg);
     } finally {
       setLoading(false);
     }
