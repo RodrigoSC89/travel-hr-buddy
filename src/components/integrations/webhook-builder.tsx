@@ -448,7 +448,7 @@ export const WebhookBuilder: React.FC = () => {
                     value={webhookConfig.authentication?.type} 
                     onValueChange={(value: WebhookConfig["authentication"]["type"]) => setWebhookConfig({
                       ...webhookConfig, 
-                      authentication: {...webhookConfig.authentication, type: value}
+                      authentication: {type: value, value: webhookConfig.authentication?.value || ""}
                     })}
                   >
                     <SelectTrigger>
@@ -468,11 +468,11 @@ export const WebhookBuilder: React.FC = () => {
                     <Label>Valor da Autenticação</Label>
                     <Input
                       type="password"
-                      value={webhookConfig.authentication?.value}
+                      value={webhookConfig.authentication?.value || ""}
                       onChange={(e) => setWebhookConfig({
                         ...webhookConfig,
                         authentication: {
-                          ...webhookConfig.authentication,
+                          type: webhookConfig.authentication?.type || "none",
                           value: e.target.value
                         }
                       })}

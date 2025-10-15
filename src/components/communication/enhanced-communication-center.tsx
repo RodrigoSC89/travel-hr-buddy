@@ -270,7 +270,13 @@ export const EnhancedCommunicationCenter = () => {
         <TabsContent value="channels" className="mt-6">
           <ChannelManager 
             activeChannels={stats.activeChannels}
-            onStatsUpdate={setStats}
+            onStatsUpdate={(channelStats) => {
+              // Convert ChannelStats to CommunicationStats
+              setStats(prevStats => ({
+                ...prevStats,
+                activeChannels: channelStats.active_channels
+              }));
+            }}
           />
         </TabsContent>
 
@@ -291,7 +297,11 @@ export const EnhancedCommunicationCenter = () => {
         </TabsContent>
 
         <TabsContent value="analytics" className="mt-6">
-          <CommunicationAnalytics stats={stats} />
+          <CommunicationAnalytics stats={{
+            total_messages: stats.totalMessages,
+            active_conversations: stats.activeChannels,
+            avg_response_time: stats.responseRate
+          }} />
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6">

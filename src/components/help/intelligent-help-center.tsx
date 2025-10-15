@@ -26,7 +26,8 @@ interface Tutorial {
   title: string;
   description: string;
   module: string;
-  type: "video" | "step-by-step" | "guide";
+  type: "tutorial";
+  videoType?: "video" | "step-by-step" | "guide";
   duration: string;
   difficulty: "beginner" | "intermediate" | "advanced";
   tags: string[];
@@ -40,6 +41,7 @@ interface FAQ {
   question: string;
   answer: string;
   module: string;
+  type: "faq";
   tags: string[];
   helpful: number;
 }
@@ -82,7 +84,8 @@ export const IntelligentHelpCenter: React.FC = () => {
       title: "Como criar uma escala de tripulação",
       description: "Tutorial completo para criação e gestão de escalas",
       module: "maritime",
-      type: "step-by-step",
+      type: "tutorial",
+      videoType: "step-by-step",
       duration: "15 min",
       difficulty: "beginner",
       tags: ["escala", "tripulação", "gestão"],
@@ -99,7 +102,8 @@ export const IntelligentHelpCenter: React.FC = () => {
       title: "Configurando alertas de preço",
       description: "Como monitorar preços e receber notificações",
       module: "price-alerts",
-      type: "video",
+      type: "tutorial",
+      videoType: "video",
       duration: "8 min",
       difficulty: "beginner",
       tags: ["preços", "alertas", "notificações"],
@@ -115,6 +119,7 @@ export const IntelligentHelpCenter: React.FC = () => {
       question: "Como alterar o status de uma reserva?",
       answer: "Para alterar o status de uma reserva, vá até o módulo Reservas, localize a reserva desejada e clique no menu de ações (três pontos). Selecione \"Alterar Status\" e escolha o novo status.",
       module: "reservations",
+      type: "faq",
       tags: ["reserva", "status", "alteração"],
       helpful: 45
     },
@@ -123,6 +128,7 @@ export const IntelligentHelpCenter: React.FC = () => {
       question: "Posso exportar relatórios de viagens?",
       answer: "Sim! No módulo Viagens, clique em \"Relatórios\" e selecione o período desejado. Você pode exportar em PDF, Excel ou CSV.",
       module: "travel",
+      type: "faq",
       tags: ["relatórios", "exportar", "viagens"],
       helpful: 32
     }
@@ -184,7 +190,8 @@ export const IntelligentHelpCenter: React.FC = () => {
         }
       });
 
-      setSearchResults(searchResults || []);
+      // Cast results to proper types - in production this would be properly mapped
+      setSearchResults((searchResults || []) as unknown as (Tutorial | FAQ)[]);
       
       toast({
         title: "Busca realizada",
@@ -209,7 +216,7 @@ export const IntelligentHelpCenter: React.FC = () => {
         .insert({
           knowledge_item_id: itemId || null,
           action_type: action,
-          session_data: data || {},
+          session_data: data ? (data as any) : {},
           user_id: null // Seria auth.uid() se autenticado
         });
     } catch (error) {
@@ -436,8 +443,8 @@ export const IntelligentHelpCenter: React.FC = () => {
                 <Card key={tutorial.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
-                      <Badge variant={tutorial.type === "video" ? "default" : "secondary"}>
-                        {tutorial.type === "video" ? "🎥 Vídeo" : "📋 Passo a passo"}
+                      <Badge variant={tutorial.videoType === "video" ? "default" : "secondary"}>
+                        {tutorial.videoType === "video" ? "🎥 Vídeo" : "📋 Passo a passo"}
                       </Badge>
                       <Badge variant="outline">{tutorial.difficulty}</Badge>
                     </div>
