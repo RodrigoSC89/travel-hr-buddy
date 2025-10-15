@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { fetchJobs, postponeJob, createWorkOrder, type Job } from '@/services/mmi/jobsApi';
-import { generateJobReport } from '@/services/mmi/reportGenerator';
-import { Loader2, Wrench, Clock, FileText } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { fetchJobs, postponeJob, createWorkOrder, type Job } from "@/services/mmi/jobsApi";
+import { generateJobReport } from "@/services/mmi/reportGenerator";
+import { Loader2, Wrench, Clock, FileText } from "lucide-react";
 
 export default function JobCards() {
   const [jobs, setJobs] = useState<Job[]>([]);

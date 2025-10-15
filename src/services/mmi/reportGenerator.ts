@@ -3,8 +3,8 @@
  * Generates comprehensive PDF reports with job details and AI recommendations
  */
 
-import jsPDF from 'jspdf';
-import type { Job } from './jobsApi';
+import jsPDF from "jspdf";
+import type { Job } from "./jobsApi";
 
 export interface ReportOptions {
   includeAISuggestion?: boolean;
@@ -33,9 +33,9 @@ export const generateJobReport = async (
   const addText = (text: string, fontSize = 12, isBold = false) => {
     doc.setFontSize(fontSize);
     if (isBold) {
-      doc.setFont('helvetica', 'bold');
+      doc.setFont("helvetica", "bold");
     } else {
-      doc.setFont('helvetica', 'normal');
+      doc.setFont("helvetica", "normal");
     }
     
     const lines = doc.splitTextToSize(text, pageWidth - 2 * margin);
@@ -44,7 +44,7 @@ export const generateJobReport = async (
   };
 
   // Title
-  addText('Relatório de Job MMI', 18, true);
+  addText("Relatório de Job MMI", 18, true);
   yPosition += 5;
 
   // Job ID and Title
@@ -53,14 +53,14 @@ export const generateJobReport = async (
   yPosition += 5;
 
   // Job Details Section
-  addText('Detalhes do Job', 14, true);
+  addText("Detalhes do Job", 14, true);
   addText(`Status: ${job.status}`, 11);
   addText(`Prioridade: ${job.priority}`, 11);
   addText(`Data de Vencimento: ${job.due_date}`, 11);
   yPosition += 5;
 
   // Component Information
-  addText('Informações do Componente', 14, true);
+  addText("Informações do Componente", 14, true);
   addText(`Componente: ${job.component.name}`, 11);
   addText(`Ativo: ${job.component.asset.name}`, 11);
   addText(`Embarcação: ${job.component.asset.vessel}`, 11);
@@ -68,13 +68,13 @@ export const generateJobReport = async (
 
   // AI Suggestion Section
   if (includeAISuggestion && job.suggestion_ia) {
-    addText('💡 Sugestão IA baseada em histórico:', 14, true);
+    addText("💡 Sugestão IA baseada em histórico:", 14, true);
     yPosition += 2;
     
     // Add suggestion in a box-like format
     doc.setFillColor(240, 240, 240);
     const suggestionHeight = doc.splitTextToSize(job.suggestion_ia, pageWidth - 2 * margin - 10).length * 6 + 10;
-    doc.rect(margin, yPosition - 5, pageWidth - 2 * margin, suggestionHeight, 'F');
+    doc.rect(margin, yPosition - 5, pageWidth - 2 * margin, suggestionHeight, "F");
     
     addText(job.suggestion_ia, 10);
     yPosition += 5;
@@ -82,9 +82,9 @@ export const generateJobReport = async (
 
   // Metadata Section
   if (includeMetadata) {
-    addText('Informações do Relatório', 14, true);
-    addText(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 10);
-    addText('Sistema: MMI Copilot - Travel HR Buddy', 10);
+    addText("Informações do Relatório", 14, true);
+    addText(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, 10);
+    addText("Sistema: MMI Copilot - Travel HR Buddy", 10);
   }
 
   // Footer
@@ -92,17 +92,17 @@ export const generateJobReport = async (
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
     doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     doc.text(
       `Página ${i} de ${totalPages}`,
       pageWidth / 2,
       doc.internal.pageSize.getHeight() - 10,
-      { align: 'center' }
+      { align: "center" }
     );
   }
 
   // Save the PDF
-  const fileName = `Job_${job.id}_${new Date().toISOString().split('T')[0]}.pdf`;
+  const fileName = `Job_${job.id}_${new Date().toISOString().split("T")[0]}.pdf`;
   doc.save(fileName);
 };
 
@@ -135,9 +135,9 @@ export const generateBatchReport = async (
   const addText = (text: string, fontSize = 12, isBold = false) => {
     doc.setFontSize(fontSize);
     if (isBold) {
-      doc.setFont('helvetica', 'bold');
+      doc.setFont("helvetica", "bold");
     } else {
-      doc.setFont('helvetica', 'normal');
+      doc.setFont("helvetica", "normal");
     }
     
     const lines = doc.splitTextToSize(text, pageWidth - 2 * margin);
@@ -147,9 +147,9 @@ export const generateBatchReport = async (
   };
 
   // Title
-  addText('Relatório Consolidado de Jobs MMI', 18, true);
+  addText("Relatório Consolidado de Jobs MMI", 18, true);
   addText(`Total de Jobs: ${jobs.length}`, 12);
-  addText(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 10);
+  addText(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, 10);
   yPosition += 10;
 
   // Process each job
@@ -168,7 +168,7 @@ export const generateBatchReport = async (
     
     if (includeAISuggestion && job.suggestion_ia) {
       yPosition += 2;
-      addText('💡 Sugestão IA:', 11, true);
+      addText("💡 Sugestão IA:", 11, true);
       addText(job.suggestion_ia, 9);
     }
     
@@ -180,16 +180,16 @@ export const generateBatchReport = async (
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
     doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     doc.text(
       `Relatório MMI Copilot - Página ${i} de ${totalPages}`,
       pageWidth / 2,
       pageHeight - 10,
-      { align: 'center' }
+      { align: "center" }
     );
   }
 
   // Save the PDF
-  const fileName = `Jobs_Consolidado_${new Date().toISOString().split('T')[0]}.pdf`;
+  const fileName = `Jobs_Consolidado_${new Date().toISOString().split("T")[0]}.pdf`;
   doc.save(fileName);
 };
