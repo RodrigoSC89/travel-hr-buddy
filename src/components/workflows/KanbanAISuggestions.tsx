@@ -5,14 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
-interface Suggestion {
-  etapa: string;
-  tipo_sugestao: string;
-  conteudo: string;
-  criticidade: string;
-  responsavel_sugerido: string;
-}
+import { Suggestion } from "./index";
 
 export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[] }) {
   const [accepted, setAccepted] = useState<string[]>([]);
