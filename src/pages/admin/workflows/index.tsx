@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper'
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper'
 import { ModuleHeader } from '@/components/ui/module-header'
+import { seedSuggestionsForWorkflow } from '@/lib/workflows/seedSuggestions'
 
 interface SmartWorkflow {
   id: string
@@ -67,14 +68,21 @@ export default function SmartWorkflowPage() {
       setIsCreating(true)
       const { data: { user } } = await supabase.auth.getUser()
       
-      const { error } = await supabase
+      const { data: newWorkflow, error } = await supabase
         .from('smart_workflows')
         .insert({ 
           title: newTitle,
           created_by: user?.id 
         })
+        .select()
+        .single()
       
       if (error) throw error
+      
+      // Seed automatic suggestions for the new workflow
+      if (newWorkflow?.id) {
+        await seedSuggestionsForWorkflow(newWorkflow.id)
+      }
       
       setNewTitle('')
       toast({

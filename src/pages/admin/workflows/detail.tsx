@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus, AlertCircle, Edit2, Trash2, GripVertical } from "lucide-react";
+import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus, AlertCircle, Edit2, Trash2, GripVertical, Lightbulb, AlertTriangle, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
@@ -64,6 +64,19 @@ interface TaskFormData {
   priority: string
 }
 
+interface WorkflowAISuggestion {
+  id: string
+  workflow_id: string
+  etapa: string
+  tipo_sugestao: string
+  conteudo: string
+  gerada_em: string
+  gerada_por: string
+  criticidade: string
+  responsavel_sugerido: string
+  origem: string
+}
+
 const STATUS_COLUMNS: Array<{ value: WorkflowStep["status"]; label: string; color: string }> = [
   { value: "pendente", label: "Pendente", color: "bg-yellow-50 border-yellow-200" },
   { value: "em_progresso", label: "Em Progresso", color: "bg-blue-50 border-blue-200" },
@@ -75,6 +88,7 @@ export default function WorkflowDetailPage() {
   const [workflow, setWorkflow] = useState<SmartWorkflow | null>(null);
   const [steps, setSteps] = useState<WorkflowStep[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [suggestions, setSuggestions] = useState<WorkflowAISuggestion[]>([]);
   const [newTitle, setNewTitle] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
@@ -150,6 +164,24 @@ export default function WorkflowDetailPage() {
         description: "Não foi possível carregar as etapas",
         variant: "destructive"
       });
+    }
+  }
+
+  async function fetchSuggestions() {
+    if (!id) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from("workflow_ai_suggestions")
+        .select("*")
+        .eq("workflow_id", id)
+        .order("gerada_em", { ascending: false });
+      
+      if (error) throw error;
+      setSuggestions(data || []);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      // Don't show error toast for suggestions - it's not critical
     }
   }
 
@@ -416,6 +448,7 @@ export default function WorkflowDetailPage() {
     fetchWorkflow();
     fetchSteps();
     fetchProfiles();
+    fetchSuggestions();
   }, [id]);
 
   if (isLoading) {
@@ -801,6 +834,78 @@ export default function WorkflowDetailPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">{workflow.description}</p>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* AI Suggestions Panel */}
+          {suggestions.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lightbulb className="w-5 h-5 text-yellow-500" />
+                  💡 Sugestões da IA
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {suggestions.map((suggestion) => (
+                    <Card 
+                      key={suggestion.id} 
+                      className={`p-4 border-l-4 ${
+                        suggestion.criticidade === 'alta' 
+                          ? 'border-l-red-500 bg-red-50' 
+                          : suggestion.criticidade === 'média'
+                          ? 'border-l-yellow-500 bg-yellow-50'
+                          : 'border-l-blue-500 bg-blue-50'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0 mt-1">
+                          {suggestion.criticidade === 'alta' ? (
+                            <AlertTriangle className="w-5 h-5 text-red-600" />
+                          ) : suggestion.criticidade === 'média' ? (
+                            <AlertCircle className="w-5 h-5 text-yellow-600" />
+                          ) : (
+                            <Info className="w-5 h-5 text-blue-600" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-2 mb-2">
+                            <div>
+                              <h4 className="font-semibold text-sm mb-1">{suggestion.etapa}</h4>
+                              <div className="flex flex-wrap gap-1 mb-2">
+                                <Badge variant="outline" className="text-xs">
+                                  {suggestion.tipo_sugestao}
+                                </Badge>
+                                <Badge 
+                                  variant={
+                                    suggestion.criticidade === 'alta' ? 'destructive' : 'secondary'
+                                  }
+                                  className="text-xs"
+                                >
+                                  {suggestion.criticidade}
+                                </Badge>
+                                <Badge variant="outline" className="text-xs">
+                                  {suggestion.origem}
+                                </Badge>
+                              </div>
+                            </div>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-2">
+                            {suggestion.conteudo}
+                          </p>
+                          {suggestion.responsavel_sugerido && (
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                              <User className="w-3 h-3" />
+                              <span>Sugerido para: {suggestion.responsavel_sugerido}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           )}
