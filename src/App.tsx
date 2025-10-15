@@ -87,6 +87,7 @@ const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
 const TemplateEditorPage = React.lazy(() => import("./pages/admin/templates/editor"));
 const MMIJobsPanel = React.lazy(() => import("./pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("./pages/MmiBI"));
+const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAnalysis"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -193,6 +194,7 @@ function App() {
                       <Route path="/admin/tests" element={<TestDashboard />} />
                       <Route path="/admin/ci-history" element={<CIHistory />} />
                       <Route path="/admin/analytics" element={<AdminAnalytics />} />
+                      <Route path="/admin/performance-analysis" element={<PerformanceAnalysis />} />
                       <Route path="/admin/wall" element={<AdminWall />} />
                       <Route path="/admin/checklists" element={<AdminChecklists />} />
                       <Route path="/admin/checklists/dashboard" element={<AdminChecklistsDashboard />} />
