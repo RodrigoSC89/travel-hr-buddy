@@ -15,11 +15,33 @@ Stores DP incident data from IMCA and other sources.
 - `class_dp`: DP Class (2 or 3)
 - `root_cause`: Root cause analysis
 - `tags`: Searchable keywords array
+- `severity`: Incident severity (Critical/High/Medium/Low)
+- `status`: Analysis status (analyzed/pending)
+- `ai_analysis`: JSONB field for AI analysis results
 
-### 2. API Endpoint: `dp-intel-feed`
-**Function:** `supabase/functions/dp-intel-feed/index.ts`
+### 2. AI Analysis Function: `dp-intel-analyze`
+**Function:** `supabase/functions/dp-intel-analyze/index.ts`
 
-Mock API with 5 sample IMCA incidents (2024-2025).
+OpenAI GPT-4 powered analysis generating structured incident analysis with:
+- Technical Summary
+- Related Standards (IMCA/IMO/PEO-DP)
+- Additional Root Causes
+- Preventive Recommendations
+- Corrective Actions
+
+### 3. Frontend Components
+
+**Main Component:** `src/components/dp-intelligence/dp-intelligence-center.tsx`
+- Statistics Dashboard (Total, Critical, Analyzed, Pending)
+- Advanced Filtering (DP class, status, search)
+- Incident Cards with severity badges
+- AI Analysis Modal with tabbed interface
+- Real-time updates after analysis
+
+**Page Component:** `src/pages/DPIntelligence.tsx`
+- Integrated with ModulePageWrapper
+- Route: `/dp-intelligence`
+- Full-featured interface for incident management and AI analysis
 
 ## 🚀 Quick Start
 
