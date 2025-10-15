@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { toast } from '@/hooks/use-toast';
-import html2pdf from 'html2pdf.js';
-import { supabase } from '@/integrations/supabase/client';
-import { Sparkles, Save, FileDown, Loader2 } from 'lucide-react';
+import React, { useState } from "react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "@/hooks/use-toast";
+import html2pdf from "html2pdf.js";
+import { supabase } from "@/integrations/supabase/client";
+import { Sparkles, Save, FileDown, Loader2 } from "lucide-react";
 
 export default function TemplateEditor() {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
   const editor = useEditor({
     extensions: [StarterKit],
-    content: '<p>Comece seu template aqui...</p>',
+    content: "<p>Comece seu template aqui...</p>",
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[300px] p-4',
+        class: "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[300px] p-4",
       },
     },
   });
@@ -28,9 +28,9 @@ export default function TemplateEditor() {
   const handleSave = async () => {
     if (!editor || !title.trim()) {
       toast({
-        title: 'Erro ao salvar',
-        description: 'Por favor, preencha o título do template.',
-        variant: 'destructive',
+        title: "Erro ao salvar",
+        description: "Por favor, preencha o título do template.",
+        variant: "destructive",
       });
       return;
     }
@@ -42,14 +42,14 @@ export default function TemplateEditor() {
       
       if (!user) {
         toast({
-          title: 'Erro de autenticação',
-          description: 'Você precisa estar logado para salvar templates.',
-          variant: 'destructive',
+          title: "Erro de autenticação",
+          description: "Você precisa estar logado para salvar templates.",
+          variant: "destructive",
         });
         return;
       }
 
-      const { data, error } = await supabase.from('templates').insert([
+      const { data, error } = await supabase.from("templates").insert([
         {
           title: title.trim(),
           content: editor.getHTML(),
@@ -62,19 +62,19 @@ export default function TemplateEditor() {
       if (error) throw error;
 
       toast({
-        title: 'Template salvo com sucesso!',
-        description: 'O template foi salvo e está disponível para uso.',
+        title: "Template salvo com sucesso!",
+        description: "O template foi salvo e está disponível para uso.",
       });
 
       // Reset form after successful save
-      setTitle('');
-      editor.commands.setContent('<p>Comece seu template aqui...</p>');
+      setTitle("");
+      editor.commands.setContent("<p>Comece seu template aqui...</p>");
     } catch (error) {
-      console.error('Error saving template:', error);
+      console.error("Error saving template:", error);
       toast({
-        title: 'Erro ao salvar template',
-        description: error instanceof Error ? error.message : 'Erro desconhecido',
-        variant: 'destructive',
+        title: "Erro ao salvar template",
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+        variant: "destructive",
       });
     } finally {
       setIsSaving(false);
@@ -87,29 +87,29 @@ export default function TemplateEditor() {
     setIsExporting(true);
 
     try {
-      const element = document.createElement('div');
+      const element = document.createElement("div");
       element.innerHTML = editor.getHTML();
       
       const opt = {
         margin: 1,
-        filename: `${title || 'template'}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        filename: `${title || "template"}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
       };
 
       html2pdf().from(element).set(opt).save();
 
       toast({
-        title: 'PDF exportado com sucesso!',
-        description: 'O arquivo foi baixado para o seu dispositivo.',
+        title: "PDF exportado com sucesso!",
+        description: "O arquivo foi baixado para o seu dispositivo.",
       });
     } catch (error) {
-      console.error('Error exporting PDF:', error);
+      console.error("Error exporting PDF:", error);
       toast({
-        title: 'Erro ao exportar PDF',
-        description: 'Tente novamente mais tarde.',
-        variant: 'destructive',
+        title: "Erro ao exportar PDF",
+        description: "Tente novamente mais tarde.",
+        variant: "destructive",
       });
     } finally {
       setIsExporting(false);
@@ -119,9 +119,9 @@ export default function TemplateEditor() {
   const handleGenerateWithAI = async () => {
     if (!title.trim()) {
       toast({
-        title: 'Título necessário',
-        description: 'Por favor, preencha o título do template antes de gerar com IA.',
-        variant: 'destructive',
+        title: "Título necessário",
+        description: "Por favor, preencha o título do template antes de gerar com IA.",
+        variant: "destructive",
       });
       return;
     }
@@ -129,7 +129,7 @@ export default function TemplateEditor() {
     setIsGenerating(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('generate-template', {
+      const { data, error } = await supabase.functions.invoke("generate-template", {
         body: { title: title.trim() },
       });
 
@@ -138,18 +138,18 @@ export default function TemplateEditor() {
       if (data?.content) {
         editor?.commands.setContent(data.content);
         toast({
-          title: 'Conteúdo gerado com sucesso!',
-          description: 'O template foi gerado pela IA. Você pode editá-lo conforme necessário.',
+          title: "Conteúdo gerado com sucesso!",
+          description: "O template foi gerado pela IA. Você pode editá-lo conforme necessário.",
         });
       } else {
-        throw new Error('Nenhum conteúdo foi gerado');
+        throw new Error("Nenhum conteúdo foi gerado");
       }
     } catch (error) {
-      console.error('Error generating with AI:', error);
+      console.error("Error generating with AI:", error);
       toast({
-        title: 'Erro ao gerar com IA',
-        description: error instanceof Error ? error.message : 'Erro desconhecido',
-        variant: 'destructive',
+        title: "Erro ao gerar com IA",
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+        variant: "destructive",
       });
     } finally {
       setIsGenerating(false);

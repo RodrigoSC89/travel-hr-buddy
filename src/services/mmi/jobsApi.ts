@@ -142,6 +142,6 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
   
   return {
     os_id: osId,
-    message: `Ordem de Serviço criada com sucesso! 📋`,
+    message: "Ordem de Serviço criada com sucesso! 📋",
   };
 };

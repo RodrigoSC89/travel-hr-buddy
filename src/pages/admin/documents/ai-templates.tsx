@@ -459,7 +459,7 @@ export default function AITemplatesPage() {
                         onClick={() => handleToggleFavorite(template)}
                       >
                         <Star 
-                          className={`w-4 h-4 ${template.is_favorite ? 'fill-yellow-500 text-yellow-500' : ''}`} 
+                          className={`w-4 h-4 ${template.is_favorite ? "fill-yellow-500 text-yellow-500" : ""}`} 
                         />
                       </Button>
                       
@@ -543,7 +543,7 @@ export default function AITemplatesPage() {
                   placeholder="Adicionar tag..."
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
+                  onKeyPress={(e) => e.key === "Enter" && handleAddTag()}
                 />
                 <Button type="button" onClick={handleAddTag} variant="outline">
                   Adicionar
