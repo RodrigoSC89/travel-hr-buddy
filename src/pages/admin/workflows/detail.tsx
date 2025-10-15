@@ -366,7 +366,7 @@ export default function WorkflowDetailPage() {
       
       toast({
         title: "Sucesso",
-        description: `Tarefa movida para ${targetStatus.replace('_', ' ')}!`
+        description: `Tarefa movida para ${targetStatus.replace("_", " ")}!`
       });
       fetchSteps();
     } catch (error) {

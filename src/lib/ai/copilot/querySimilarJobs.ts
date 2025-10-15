@@ -3,8 +3,8 @@
  * Provides semantic search for similar historical jobs using vector embeddings
  */
 
-import { createClient } from "../../supabase/client";
-import { createEmbedding } from "../openai/createEmbedding";
+import { supabase } from "@/integrations/supabase/client";
+import { createEmbedding } from "@/lib/ai/openai/createEmbedding";
 
 /**
  * Query similar jobs using RAG (Retrieval-Augmented Generation)
@@ -20,8 +20,6 @@ import { createEmbedding } from "../openai/createEmbedding";
  * @throws Error if embedding creation or database query fails
  */
 export async function querySimilarJobs(userInput: string, limit = 5) {
-  const supabase = createClient();
-
   // Create embedding from user input
   const queryEmbedding = await createEmbedding(userInput);
 
