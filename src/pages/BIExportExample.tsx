@@ -1,4 +1,4 @@
-import { ExportBIReport } from "@/components/bi";
+import { ExportBIReport, TestForecastMockButton } from "@/components/bi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function BIExportExample() {
@@ -56,6 +56,19 @@ export default function BIExportExample() {
           <pre className="whitespace-pre-wrap bg-slate-100 dark:bg-slate-800 p-4 rounded-lg">
             {aiForecast}
           </pre>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>🧪 Testar IA com Dados Mock</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            Esta funcionalidade permite testar a API de previsão da IA com dados simulados,
+            sem necessidade de dados reais do banco de dados.
+          </p>
+          <TestForecastMockButton />
         </CardContent>
       </Card>
 
