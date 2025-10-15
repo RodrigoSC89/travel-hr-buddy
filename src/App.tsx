@@ -88,6 +88,7 @@ const TemplateEditorPage = React.lazy(() => import("./pages/admin/templates/edit
 const MMIJobsPanel = React.lazy(() => import("./pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("./pages/MmiBI"));
 const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAnalysis"));
+const CopilotJobForm = React.lazy(() => import("./pages/admin/copilot-job-form"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -195,6 +196,7 @@ function App() {
                       <Route path="/admin/ci-history" element={<CIHistory />} />
                       <Route path="/admin/analytics" element={<AdminAnalytics />} />
                       <Route path="/admin/performance-analysis" element={<PerformanceAnalysis />} />
+                      <Route path="/admin/copilot-job-form" element={<CopilotJobForm />} />
                       <Route path="/admin/wall" element={<AdminWall />} />
                       <Route path="/admin/checklists" element={<AdminChecklists />} />
                       <Route path="/admin/checklists/dashboard" element={<AdminChecklistsDashboard />} />
