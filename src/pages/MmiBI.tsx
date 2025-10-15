@@ -1,9 +1,10 @@
-"use client";
+import DashboardJobs from '@/components/bi/DashboardJobs';
+import JobsTrendChart from '@/components/bi/JobsTrendChart';
+import JobsForecastReport from '@/components/bi/JobsForecastReport';
+import { ExportBIReport } from '@/components/bi/ExportPDF';
+import { useState } from 'react';
 
-import { Card, CardContent } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
-
-const data = [
+const initialTrendData = [
   { sistema: "Gerador", ia_efetiva: 6, total: 10 },
   { sistema: "Hidráulico", ia_efetiva: 8, total: 12 },
   { sistema: "Propulsão", ia_efetiva: 4, total: 9 },
@@ -11,25 +12,16 @@ const data = [
 ];
 
 export default function MmiBI() {
-  return (
-    <div className="grid grid-cols-1 gap-4 p-4">
-      <h1 className="text-2xl font-bold">🔍 BI - Efetividade da IA na Manutenção</h1>
+  const [trendData] = useState<any[]>(initialTrendData);
+  const [forecastText, setForecastText] = useState('');
 
-      <Card>
-        <CardContent>
-          <h2 className="text-lg font-semibold mb-2">📊 Efetividade das Sugestões da IA</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data}>
-              <XAxis dataKey="sistema" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="total" fill="#d1d5db" name="Total de Jobs" />
-              <Bar dataKey="ia_efetiva" fill="#4ade80" name="IA foi eficaz" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+  return (
+    <div className="grid gap-6 p-6">
+      <h1 className="text-2xl font-bold">🔍 BI - Efetividade da IA na Manutenção</h1>
+      <DashboardJobs />
+      <JobsTrendChart />
+      <JobsForecastReport trend={trendData} />
+      <ExportBIReport trend={trendData} forecast={forecastText} />
     </div>
   );
 }
