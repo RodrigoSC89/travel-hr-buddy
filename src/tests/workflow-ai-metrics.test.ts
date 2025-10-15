@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { getWorkflowAISummary } from "@/../lib/analytics/workflowAIMetrics";
+import { getWorkflowAISummary } from "@/lib/analytics/workflowAIMetrics";
 import { supabase } from "@/integrations/supabase/client";
 
 // Mock the supabase client
@@ -83,7 +83,7 @@ describe("Workflow AI Metrics", () => {
       expect(result).toBeDefined();
       expect(result.total).toBe(0);
       expect(result.aceitas).toBe(0);
-      expect(result.taxa).toBe(0);
+      expect(result.taxa).toBe("0.0");
     });
 
     it("should handle database errors gracefully", async () => {
@@ -110,7 +110,7 @@ describe("Workflow AI Metrics", () => {
       expect(result).toBeDefined();
       expect(result.total).toBe(0);
       expect(result.aceitas).toBe(0);
-      expect(result.taxa).toBe(0);
+      expect(result.taxa).toBe("0.0");
     });
 
     it("should calculate 100% adoption rate correctly", async () => {
@@ -173,7 +173,7 @@ describe("Workflow AI Metrics", () => {
       expect(result).toHaveProperty("taxa");
       expect(typeof result.total).toBe("number");
       expect(typeof result.aceitas).toBe("number");
-      expect(["string", "number"]).toContain(typeof result.taxa);
+      expect(typeof result.taxa).toBe("string");
     });
   });
 });
