@@ -3,6 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import DashboardJobs from "@/components/bi/DashboardJobs";
+import { ForecastHistoryList } from "@/components/bi/ForecastHistoryList";
 
 const data = [
   { sistema: "Gerador", ia_efetiva: 6, total: 10 },
@@ -34,6 +35,13 @@ export default function MmiBI() {
 
       {/* New DashboardJobs Component - Shows job distribution by component */}
       <DashboardJobs />
+
+      {/* ForecastHistoryList Component - Shows forecast history */}
+      <Card>
+        <CardContent className="pt-6">
+          <ForecastHistoryList />
+        </CardContent>
+      </Card>
     </div>
   );
 }
