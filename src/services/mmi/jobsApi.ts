@@ -23,8 +23,8 @@ export interface Job {
 }
 
 // Detect test environment
-const isTestEnvironment = typeof process !== 'undefined' && process.env.NODE_ENV === 'test' || 
-                          typeof import.meta.env !== 'undefined' && import.meta.env.MODE === 'test';
+const isTestEnvironment = typeof process !== "undefined" && process.env.NODE_ENV === "test" || 
+                          typeof import.meta.env !== "undefined" && import.meta.env.MODE === "test";
 
 // Mock data for jobs
 const mockJobs: Job[] = [
@@ -106,33 +106,33 @@ export const fetchJobs = async (): Promise<{ jobs: Job[] }> => {
   try {
     // Try to fetch from Supabase database
     const { data, error } = await supabase
-      .from('mmi_jobs')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("mmi_jobs")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.warn('Failed to fetch jobs from Supabase, using mock data:', error);
+      console.warn("Failed to fetch jobs from Supabase, using mock data:", error);
       // Fallback to mock data
       return { jobs: mockJobs };
     }
 
     // Transform database jobs to match Job interface
     if (data && data.length > 0) {
-      const transformedJobs: Job[] = data.map((job: any) => ({
-        id: job.id,
-        title: job.title,
-        status: job.status || 'Pendente',
-        priority: job.priority || 'Média',
-        due_date: job.due_date,
+      const transformedJobs: Job[] = data.map((job: Record<string, unknown>) => ({
+        id: job.id as string,
+        title: job.title as string,
+        status: (job.status as string) || "Pendente",
+        priority: (job.priority as string) || "Média",
+        due_date: job.due_date as string,
         component: {
-          name: job.component || 'Sistema desconhecido',
+          name: (job.component as string) || "Sistema desconhecido",
           asset: {
-            name: job.asset_name || 'Componente',
-            vessel: job.vessel || 'Embarcação',
+            name: (job.asset_name as string) || "Componente",
+            vessel: (job.vessel as string) || "Embarcação",
           },
         },
-        suggestion_ia: job.suggestion_ia,
-        can_postpone: job.can_postpone ?? true,
+        suggestion_ia: job.suggestion_ia as string | undefined,
+        can_postpone: job.can_postpone !== undefined ? (job.can_postpone as boolean) : true,
       }));
       return { jobs: transformedJobs };
     }
@@ -140,7 +140,7 @@ export const fetchJobs = async (): Promise<{ jobs: Job[] }> => {
     // If no data, return mock data as fallback
     return { jobs: mockJobs };
   } catch (error) {
-    console.warn('Error fetching jobs, using mock data:', error);
+    console.warn("Error fetching jobs, using mock data:", error);
     return { jobs: mockJobs };
   }
 };
@@ -178,11 +178,11 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
   try {
     // Call Supabase edge function
     const { data, error } = await supabase.functions.invoke(`mmi-job-postpone/${jobId}/postpone`, {
-      method: 'POST',
+      method: "POST",
     });
 
     if (error) {
-      console.warn('Failed to call edge function, using mock implementation:', error);
+      console.warn("Failed to call edge function, using mock implementation:", error);
       // Fallback to mock implementation
       const job = mockJobs.find((j) => j.id === jobId);
       if (!job) {
@@ -210,7 +210,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
       new_date: data.new_date,
     };
   } catch (error) {
-    console.error('Error postponing job:', error);
+    console.error("Error postponing job:", error);
     throw new Error("Erro ao postergar job");
   }
 };
@@ -233,18 +233,18 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
     
     return {
       os_id: osId,
-      message: `Ordem de Serviço criada com sucesso! 📋`,
+      message: "Ordem de Serviço criada com sucesso! 📋",
     };
   }
 
   try {
     // Call Supabase edge function
-    const { data, error } = await supabase.functions.invoke('mmi-os-create', {
+    const { data, error } = await supabase.functions.invoke("mmi-os-create", {
       body: { jobId },
     });
 
     if (error) {
-      console.warn('Failed to call edge function, using mock implementation:', error);
+      console.warn("Failed to call edge function, using mock implementation:", error);
       // Fallback to mock implementation
       const job = mockJobs.find((j) => j.id === jobId);
       if (!job) {
@@ -255,16 +255,16 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
       
       return {
         os_id: osId,
-        message: `Ordem de Serviço criada com sucesso! 📋`,
+        message: "Ordem de Serviço criada com sucesso! 📋",
       };
     }
 
     return {
       os_id: data.os_id,
-      message: data.message || `Ordem de Serviço criada com sucesso! 📋`,
+      message: data.message || "Ordem de Serviço criada com sucesso! 📋",
     };
   } catch (error) {
-    console.error('Error creating work order:', error);
+    console.error("Error creating work order:", error);
     throw new Error("Erro ao criar ordem de serviço");
   }
 };
