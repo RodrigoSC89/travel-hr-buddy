@@ -16,6 +16,9 @@ verify_jwt = false
 [functions.mmi-jobs-similar]
 verify_jwt = false
 
+[functions.jobs-by-component]
+verify_jwt = false
+
 [functions.simulate-hours]
 verify_jwt = false
 
