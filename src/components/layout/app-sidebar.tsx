@@ -391,6 +391,11 @@ const navigationItems = [
     icon: Anchor
   },
   {
+    title: "Centro de Inteligência DP",
+    url: "/dp-intelligence",
+    icon: Brain
+  },
+  {
     title: "SGSO",
     url: "/sgso",
     icon: Shield
