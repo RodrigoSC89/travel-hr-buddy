@@ -1,19 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wrench, TrendingUp, CheckCircle, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Wrench, TrendingUp, CheckCircle, Clock, FileDown, Brain } from "lucide-react";
 import JobCards from "@/components/mmi/JobCards";
+import { useToast } from "@/hooks/use-toast";
+import { fetchJobs } from "@/services/mmi/jobsApi";
+import { generateJobsPDFReport } from "@/services/mmi/pdfReportService";
 
 export default function MMIJobsPanel() {
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const { toast } = useToast();
+
+  const handleGeneratePDFReport = async () => {
+    setIsGeneratingPDF(true);
+    try {
+      const { jobs } = await fetchJobs();
+      await generateJobsPDFReport(jobs, {
+        title: 'Relatório MMI - Manutenção Inteligente com IA',
+        includeAIRecommendations: true,
+      });
+      
+      toast({
+        title: "Relatório Gerado",
+        description: "O relatório PDF foi gerado com sucesso e está sendo baixado.",
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "Não foi possível gerar o relatório PDF.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Wrench className="h-8 w-8 text-primary" />
-          <h1 className="text-3xl font-bold">Central de Jobs MMI</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Wrench className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl font-bold">Central de Jobs MMI v1.1.0</h1>
+          </div>
+          <Button 
+            onClick={handleGeneratePDFReport}
+            disabled={isGeneratingPDF}
+            variant="outline"
+          >
+            <FileDown className="h-4 w-4 mr-2" />
+            {isGeneratingPDF ? 'Gerando...' : 'Exportar Relatório PDF'}
+          </Button>
         </div>
         <p className="text-muted-foreground">
-          Gestão inteligente de manutenção e melhoria industrial com automação via IA
+          Gestão inteligente de manutenção com IA adaptativa e aprendizado contínuo
         </p>
       </div>
 
@@ -87,36 +129,42 @@ export default function MMIJobsPanel() {
           <div className="space-y-3">
             <h3 className="font-semibold text-lg flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-green-600" />
-              Automação Inteligente Integrada
+              Novidades v1.1.0 - IA Adaptativa
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               <div className="flex items-start gap-2">
-                <div className="mt-1">📩</div>
-                <div>
-                  <strong>Criar OS com 1 clique</strong>
-                  <p className="text-muted-foreground">
-                    Gere ordens de serviço instantaneamente
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
                 <div className="mt-1">🧠</div>
                 <div>
-                  <strong>Postergar com IA</strong>
+                  <strong>Aprendizado Contínuo</strong>
                   <p className="text-muted-foreground">
-                    Justificativa automatizada e inteligente
+                    Vetorização automática com histórico de jobs via pgvector
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
-                <div className="mt-1">👁️‍🗨️</div>
+                <div className="mt-1">💬</div>
                 <div>
-                  <strong>Sugestões da IA</strong>
+                  <strong>Copilot IA Contextual</strong>
                   <p className="text-muted-foreground">
-                    Recomendações direto no card
+                    Recomendações baseadas em casos similares reais
                   </p>
                 </div>
               </div>
+              <div className="flex items-start gap-2">
+                <div className="mt-1">📄</div>
+                <div>
+                  <strong>Relatórios Inteligentes</strong>
+                  <p className="text-muted-foreground">
+                    PDFs com sugestões IA e análise de histórico
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="pt-2 border-t border-blue-200 mt-3">
+              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <Brain className="h-3 w-3" />
+                Sistema integrado: SGSO, Assistente IA Global, Dashboard BI
+              </p>
             </div>
           </div>
         </CardContent>
