@@ -23,10 +23,10 @@ serve(async (req) => {
     // Initialize Supabase client
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Query jobs with status 'completed', grouped by component_id
+    // Query jobs with status 'completed', get component_id, created_at, and updated_at
     const { data, error } = await supabase
       .from("mmi_jobs")
-      .select("component_id")
+      .select("component_id, created_at, updated_at")
       .eq("status", "completed");
 
     if (error) {
@@ -39,18 +39,36 @@ serve(async (req) => {
       );
     }
 
-    // Group and count by component_id
-    const groupedData = (data || []).reduce((acc: Record<string, number>, job: any) => {
-      const componentId = job.component_id || "null";
-      acc[componentId] = (acc[componentId] || 0) + 1;
+    // Group by component_id and calculate count and average duration
+    const groupedData = (data || []).reduce((acc: Record<string, { count: number; totalDuration: number }>, job: any) => {
+      const componentId = job.component_id || "Unknown";
+      
+      // Calculate duration in hours
+      let duration = 0;
+      if (job.created_at && job.updated_at) {
+        const createdAt = new Date(job.created_at).getTime();
+        const updatedAt = new Date(job.updated_at).getTime();
+        duration = (updatedAt - createdAt) / (1000 * 60 * 60); // Convert ms to hours
+      }
+      
+      if (!acc[componentId]) {
+        acc[componentId] = { count: 0, totalDuration: 0 };
+      }
+      
+      acc[componentId].count += 1;
+      acc[componentId].totalDuration += duration;
+      
       return acc;
     }, {});
 
-    // Format the result as an array of objects with component_id and count
-    const result = Object.entries(groupedData).map(([component_id, count]) => ({
-      component_id: component_id === "null" ? null : component_id,
-      count
-    }));
+    // Format the result as an array of objects with component_id, count, and avg_duration
+    const result = Object.entries(groupedData)
+      .map(([component_id, stats]) => ({
+        component_id,
+        count: stats.count,
+        avg_duration: stats.count > 0 ? Number((stats.totalDuration / stats.count).toFixed(2)) : 0
+      }))
+      .sort((a, b) => b.count - a.count); // Sort by count descending
 
     return new Response(
       JSON.stringify(result),
