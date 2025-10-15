@@ -84,7 +84,7 @@ describe("MMI Jobs API Service", () => {
       expect(result.os_id).toBeDefined();
       expect(result.message).toBeDefined();
       expect(result.message).toContain("sucesso");
-    });
+    }, 15000); // Increased timeout to 15 seconds for external API calls
 
     it("should generate a valid OS ID", async () => {
       const result = await createWorkOrder("JOB-001");
