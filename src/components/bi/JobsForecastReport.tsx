@@ -5,6 +5,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 
 interface TrendData {
+  month?: string;
+  total_jobs?: number;
   date?: string;
   jobs?: number;
   [key: string]: unknown;
@@ -12,9 +14,10 @@ interface TrendData {
 
 interface JobsForecastReportProps {
   trend: TrendData[];
+  onForecastUpdate?: (forecast: string) => void;
 }
 
-export default function JobsForecastReport({ trend }: JobsForecastReportProps) {
+export default function JobsForecastReport({ trend, onForecastUpdate }: JobsForecastReportProps) {
   const [forecast, setForecast] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -27,15 +30,30 @@ export default function JobsForecastReport({ trend }: JobsForecastReportProps) {
 
       if (error) {
         console.error("Error fetching forecast:", error);
-        setForecast("Erro ao buscar previsão. Tente novamente.");
+        const errorMessage = "Erro ao buscar previsão. Tente novamente.";
+        setForecast(errorMessage);
+        if (onForecastUpdate) {
+          onForecastUpdate(errorMessage);
+        }
       } else if (data?.forecast) {
         setForecast(data.forecast);
+        if (onForecastUpdate) {
+          onForecastUpdate(data.forecast);
+        }
       } else {
-        setForecast("Nenhuma previsão disponível.");
+        const noDataMessage = "Nenhuma previsão disponível.";
+        setForecast(noDataMessage);
+        if (onForecastUpdate) {
+          onForecastUpdate(noDataMessage);
+        }
       }
     } catch (error) {
       console.error("Error invoking forecast function:", error);
-      setForecast("Erro ao buscar previsão. Tente novamente.");
+      const errorMessage = "Erro ao buscar previsão. Tente novamente.";
+      setForecast(errorMessage);
+      if (onForecastUpdate) {
+        onForecastUpdate(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
