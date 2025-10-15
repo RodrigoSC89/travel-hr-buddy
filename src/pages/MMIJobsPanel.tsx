@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wrench, TrendingUp, CheckCircle, Clock } from "lucide-react";
 import JobCards from "@/components/mmi/JobCards";
+import MMICopilot from "@/components/mmi/MMICopilot";
 
 export default function MMIJobsPanel() {
   return (
@@ -67,6 +68,9 @@ export default function MMIJobsPanel() {
           </CardContent>
         </Card>
       </div>
+
+      {/* MMI Copilot - AI Assistant */}
+      <MMICopilot />
 
       {/* Main Content - Jobs Cards */}
       <Card>
