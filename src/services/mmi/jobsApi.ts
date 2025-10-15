@@ -18,6 +18,7 @@ export interface Job {
   };
   suggestion_ia?: string;
   can_postpone?: boolean;
+  resolved_history?: string[];
 }
 
 // Mock data for jobs
@@ -37,6 +38,11 @@ const mockJobs: Job[] = [
     },
     suggestion_ia: "Recomenda-se realizar a manutenção durante a próxima parada programada. Histórico indica desgaste acelerado nas últimas 200h de operação.",
     can_postpone: true,
+    resolved_history: [
+      "OS-2024-001 (Jan/2024): Troca de vedações - Concluída",
+      "OS-2024-045 (Abr/2024): Manutenção preventiva - Concluída",
+      "OS-2024-089 (Jul/2024): Ajuste de pressão - Concluída",
+    ],
   },
   {
     id: "JOB-002",
@@ -53,6 +59,10 @@ const mockJobs: Job[] = [
     },
     suggestion_ia: "Atenção: Válvula #2 apresenta leitura fora do padrão. Substituição recomendada antes da próxima operação.",
     can_postpone: false,
+    resolved_history: [
+      "OS-2024-012 (Fev/2024): Inspeção anual - Concluída",
+      "OS-2024-067 (Mai/2024): Substituição de válvula #1 - Concluída",
+    ],
   },
   {
     id: "JOB-003",
@@ -84,6 +94,10 @@ const mockJobs: Job[] = [
     },
     suggestion_ia: "Sensor #7 com drift de +3°C. Calibração urgente recomendada para manter precisão do sistema.",
     can_postpone: true,
+    resolved_history: [
+      "OS-2024-023 (Mar/2024): Calibração semestral - Concluída",
+      "OS-2024-078 (Jun/2024): Substituição sensor #3 - Concluída",
+    ],
   },
 ];
 

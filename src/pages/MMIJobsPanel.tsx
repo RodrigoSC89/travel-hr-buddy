@@ -1,17 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wrench, TrendingUp, CheckCircle, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Wrench, TrendingUp, CheckCircle, Clock, FileText } from "lucide-react";
+import { toast } from "sonner";
 import JobCards from "@/components/mmi/JobCards";
 import MMICopilot from "@/components/mmi/MMICopilot";
+import { fetchJobs } from "@/services/mmi/jobsApi";
+import { generateMMIReport } from "@/components/mmi/ReportPDF";
 
 export default function MMIJobsPanel() {
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+
+  const handleGenerateReport = async () => {
+    setIsGeneratingReport(true);
+    try {
+      const { jobs } = await fetchJobs();
+      
+      if (jobs.length === 0) {
+        toast.error("Nenhum job disponível para gerar relatório");
+        return;
+      }
+
+      await generateMMIReport(jobs);
+      toast.success("Relatório PDF gerado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao gerar relatório:", error);
+      toast.error("Erro ao gerar relatório PDF");
+    } finally {
+      setIsGeneratingReport(false);
+    }
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Wrench className="h-8 w-8 text-primary" />
-          <h1 className="text-3xl font-bold">Central de Jobs MMI</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Wrench className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl font-bold">Central de Jobs MMI</h1>
+          </div>
+          <Button
+            onClick={handleGenerateReport}
+            disabled={isGeneratingReport}
+            className="gap-2"
+          >
+            <FileText className="h-4 w-4" />
+            {isGeneratingReport ? "Gerando..." : "Gerar Relatório PDF"}
+          </Button>
         </div>
         <p className="text-muted-foreground">
           Gestão inteligente de manutenção e melhoria industrial com automação via IA
