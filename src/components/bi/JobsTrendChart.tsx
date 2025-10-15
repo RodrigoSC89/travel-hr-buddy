@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { TrendingUp } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface TrendData {
   data: string;
@@ -22,30 +23,46 @@ const JobsTrendChart = () => {
   const fetchTrendData = async () => {
     setLoading(true);
     try {
-      // Mock data - In production, this would call the API endpoint
-      // const res = await fetch('/api/bi/jobs-trend');
-      // const json = await res.json();
+      // Try to call the Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('jobs-trend', {
+        body: { timeRange }
+      });
       
-      // Generate mock trend data based on time range
-      const days = timeRange === "7d" ? 7 : timeRange === "30d" ? 30 : 90;
-      const mockData: TrendData[] = [];
-      
-      for (let i = days - 1; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        mockData.push({
-          data: date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
-          concluídos: Math.floor(Math.random() * 8) + 2,
-          iniciados: Math.floor(Math.random() * 10) + 3,
-        });
+      if (error) {
+        console.error('Error calling jobs-trend function:', error);
+        // Fall back to mock data
+        generateMockData();
+      } else if (data) {
+        setTrendData(data);
+      } else {
+        // Fall back to mock data if no data returned
+        generateMockData();
       }
-      
-      setTrendData(mockData);
     } catch (error) {
       console.error('Error fetching trend data:', error);
+      // Fall back to mock data
+      generateMockData();
     } finally {
       setLoading(false);
     }
+  };
+
+  const generateMockData = () => {
+    // Generate mock trend data based on time range
+    const days = timeRange === "7d" ? 7 : timeRange === "30d" ? 30 : 90;
+    const mockData: TrendData[] = [];
+    
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      mockData.push({
+        data: date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+        concluídos: Math.floor(Math.random() * 8) + 2,
+        iniciados: Math.floor(Math.random() * 10) + 3,
+      });
+    }
+    
+    setTrendData(mockData);
   };
 
   const totalConcluidos = trendData.reduce((sum, item) => sum + item.concluídos, 0);
