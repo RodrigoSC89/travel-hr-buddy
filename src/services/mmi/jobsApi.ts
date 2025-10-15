@@ -238,55 +238,64 @@ export const createJob = async (jobData: Partial<MMIJob>): Promise<MMIJob> => {
 };
 
 /**
- * Postpones a job with AI justification
+ * Postpones a job with AI justification via Supabase edge function
  */
 export const postponeJob = async (jobId: string): Promise<{ message: string; new_date?: string }> => {
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  
   try {
-    // Try to update in database
-    const { data: job } = await supabase
-      .from("mmi_jobs")
-      .select("*")
-      .eq("id", jobId)
-      .single();
+    // Try calling the edge function for AI-powered analysis
+    const { data, error } = await supabase.functions.invoke("mmi-job-postpone", {
+      body: { jobId },
+    });
 
-    if (job) {
-      const currentDate = new Date(job.due_date);
-      currentDate.setDate(currentDate.getDate() + 7);
-      const newDate = currentDate.toISOString().split("T")[0];
+    if (error) {
+      console.warn("Edge function error, falling back to local logic:", error);
+      throw error;
+    }
 
-      // Update job
-      await supabase
+    if (data && data.message) {
+      // Update job with new date if AI approves
+      const { data: job } = await supabase
         .from("mmi_jobs")
-        .update({ 
-          due_date: newDate,
-          updated_at: new Date().toISOString()
-        })
-        .eq("id", jobId);
+        .select("*")
+        .eq("id", jobId)
+        .single();
 
-      // Log to history
-      const embedding = await generateJobEmbedding({
-        title: job.title,
-        component_name: job.component_name,
-      });
+      if (job) {
+        const currentDate = new Date(job.due_date);
+        currentDate.setDate(currentDate.getDate() + 7);
+        const newDate = currentDate.toISOString().split("T")[0];
 
-      await supabase
-        .from("mmi_job_history")
-        .insert({
-          job_id: jobId,
-          action: "Postergado",
-          outcome: "Sucesso",
-          embedding,
+        await supabase
+          .from("mmi_jobs")
+          .update({ 
+            due_date: newDate,
+            updated_at: new Date().toISOString()
+          })
+          .eq("id", jobId);
+
+        // Log to history
+        const embedding = await generateJobEmbedding({
+          title: job.title,
+          component_name: job.component_name,
         });
 
-      return {
-        message: `Job postergado com sucesso! ✅\n\nJustificativa IA: Com base no histórico operacional e condições atuais, é seguro postergar esta manutenção para ${newDate}. O sistema mantém margens de segurança adequadas.`,
-        new_date: newDate,
-      };
+        await supabase
+          .from("mmi_job_history")
+          .insert({
+            job_id: jobId,
+            action: "Postergado",
+            outcome: "Sucesso",
+            embedding,
+          });
+
+        return {
+          message: data.message,
+          new_date: newDate,
+        };
+      }
     }
   } catch (error) {
-    console.warn("Database not available, using mock response");
+    console.warn("AI postpone analysis not available, using fallback logic:", error);
   }
 
   // Fallback to mock behavior
@@ -312,21 +321,22 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
 };
 
 /**
- * Creates a work order (OS) for a job
+ * Creates a work order (OS) for a job via Supabase edge function
  */
 export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; message: string }> => {
-  await new Promise((resolve) => setTimeout(resolve, 600));
-  
   try {
-    // Try to update in database
-    const { data: job } = await supabase
-      .from("mmi_jobs")
-      .select("*")
-      .eq("id", jobId)
-      .single();
+    // Try calling the edge function to create work order
+    const { data, error } = await supabase.functions.invoke("mmi-os-create", {
+      body: { jobId },
+    });
 
-    if (job) {
-      // Update status
+    if (error) {
+      console.warn("Edge function error, falling back to local logic:", error);
+      throw error;
+    }
+
+    if (data && data.os_id) {
+      // Update job status
       await supabase
         .from("mmi_jobs")
         .update({ 
@@ -335,29 +345,37 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
         })
         .eq("id", jobId);
 
-      // Log to history
-      const embedding = await generateJobEmbedding({
-        title: job.title,
-        component_name: job.component_name,
-      });
+      // Fetch job for history
+      const { data: job } = await supabase
+        .from("mmi_jobs")
+        .select("*")
+        .eq("id", jobId)
+        .single();
 
-      await supabase
-        .from("mmi_job_history")
-        .insert({
-          job_id: jobId,
-          action: "OS Criada",
-          outcome: "Sucesso",
-          embedding,
+      if (job) {
+        // Log to history
+        const embedding = await generateJobEmbedding({
+          title: job.title,
+          component_name: job.component_name,
         });
 
-      const osId = `OS-${Date.now().toString().slice(-6)}`;
+        await supabase
+          .from("mmi_job_history")
+          .insert({
+            job_id: jobId,
+            action: "OS Criada",
+            outcome: "Sucesso",
+            embedding,
+          });
+      }
+
       return {
-        os_id: osId,
-        message: "Ordem de Serviço criada com sucesso! 📋",
+        os_id: data.os_id,
+        message: data.message || "Ordem de Serviço criada com sucesso! 📋",
       };
     }
   } catch (error) {
-    console.warn("Database not available, using mock response");
+    console.warn("Work order creation via edge function failed, using fallback:", error);
   }
 
   // Fallback

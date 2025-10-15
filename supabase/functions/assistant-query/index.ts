@@ -95,11 +95,39 @@ const commandPatterns: Record<string, CommandAction> = {
   },
   "ajuda": {
     type: "info",
-    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
+    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n• 'mmi' ou 'manutenção' - Módulo de Manutenção Inteligente\n\n🔧 **MMI - Manutenção Inteligente:**\n• 'jobs de manutenção' - Lista de jobs\n• 'jobs críticos' - Informações sobre jobs críticos\n• 'criar os' - Como criar Ordem de Serviço\n• 'postergar manutenção' - Como postergar com análise IA\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
   },
   "help": {
     type: "info",
     message: "💡 Digite 'ajuda' para ver a lista de comandos disponíveis.",
+  },
+  // MMI Module commands
+  "mmi": {
+    type: "navigation",
+    target: "/mmi",
+    message: "🔧 Navegando para o módulo MMI - Manutenção Inteligente...",
+  },
+  "manutenção": {
+    type: "navigation",
+    target: "/mmi",
+    message: "🔧 Abrindo módulo de Manutenção Inteligente...",
+  },
+  "jobs de manutenção": {
+    type: "navigation",
+    target: "/mmi",
+    message: "📋 Abrindo lista de jobs de manutenção...",
+  },
+  "jobs críticos": {
+    type: "info",
+    message: "⚠️ Para ver jobs críticos, acesse o módulo MMI em /mmi e filtre por prioridade 'Crítica'. O sistema usa IA para analisar a urgência de cada manutenção.",
+  },
+  "criar os": {
+    type: "info",
+    message: "📋 Para criar uma Ordem de Serviço (OS):\n1. Acesse o módulo MMI (/mmi)\n2. Selecione o job de manutenção\n3. Clique em 'Criar OS'\n\nO sistema criará automaticamente a OS no banco de dados.",
+  },
+  "postergar manutenção": {
+    type: "info",
+    message: "⏰ Para postergar uma manutenção:\n1. Acesse o módulo MMI (/mmi)\n2. Selecione o job desejado\n3. Clique em 'Postergar'\n\nA IA (GPT-4) analisará se é seguro postergar baseado em:\n• Histórico operacional\n• Condições atuais do equipamento\n• Disponibilidade de peças\n• Status da missão",
   },
 };
 
@@ -295,6 +323,12 @@ Módulos disponíveis no sistema:
 10. **Tripulação** (/crew) - Gestão de tripulação
 11. **Reservas** (/reservations) - Sistema de reservas
 12. **Comunicação** (/communication) - Centro de comunicação
+13. **MMI - Manutenção Inteligente** (/mmi)
+    - Jobs de manutenção preventiva e corretiva
+    - Análise IA para postergação de manutenções (GPT-4)
+    - Criação de Ordens de Serviço (OS)
+    - Monitoramento de componentes e sistemas
+    - Histórico de manutenções com embeddings vetoriais
 
 Sempre forneça respostas práticas e direcionadas. Quando relevante, sugira a rota específica do módulo.
 Seja claro, direto e útil.
