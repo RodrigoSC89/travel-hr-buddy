@@ -1,29 +1,29 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+"use client";
+import { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export default function IncidentAiModal() {
   const [incident, setIncident] = useState<any>(null);
   const [open, setOpen] = useState(false);
-  const [analysis, setAnalysis] = useState('');
+  const [analysis, setAnalysis] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Check localStorage on mount
     const checkForIncident = () => {
-      const data = localStorage.getItem('incident_to_analyze');
+      const data = localStorage.getItem("incident_to_analyze");
       if (data) {
         try {
           const parsed = JSON.parse(data);
           setIncident(parsed);
           setOpen(true);
-          setAnalysis(''); // Reset analysis when new incident is loaded
-          localStorage.removeItem('incident_to_analyze');
+          setAnalysis(""); // Reset analysis when new incident is loaded
+          localStorage.removeItem("incident_to_analyze");
         } catch (error) {
-          console.error('Error parsing incident data:', error);
+          console.error("Error parsing incident data:", error);
         }
       }
     };
@@ -36,10 +36,10 @@ export default function IncidentAiModal() {
       checkForIncident();
     };
 
-    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
 
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
@@ -48,29 +48,29 @@ export default function IncidentAiModal() {
     setLoading(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('dp-intel-analyze', {
+      const { data, error } = await supabase.functions.invoke("dp-intel-analyze", {
         body: { incident },
       });
 
       if (error) {
-        console.error('Error calling AI analysis:', error);
-        toast.error('Erro ao analisar incidente', {
-          description: error.message || 'Tente novamente mais tarde',
+        console.error("Error calling AI analysis:", error);
+        toast.error("Erro ao analisar incidente", {
+          description: error.message || "Tente novamente mais tarde",
         });
-        setAnalysis('Erro ao processar análise. Por favor, tente novamente.');
+        setAnalysis("Erro ao processar análise. Por favor, tente novamente.");
         return;
       }
 
       if (data?.result) {
         setAnalysis(data.result);
-        toast.success('Análise concluída com sucesso');
+        toast.success("Análise concluída com sucesso");
       } else {
-        setAnalysis('Análise não retornou resultados.');
+        setAnalysis("Análise não retornou resultados.");
       }
     } catch (err) {
-      console.error('Unexpected error:', err);
-      toast.error('Erro inesperado ao analisar incidente');
-      setAnalysis('Erro inesperado. Por favor, tente novamente.');
+      console.error("Unexpected error:", err);
+      toast.error("Erro inesperado ao analisar incidente");
+      setAnalysis("Erro inesperado. Por favor, tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -80,7 +80,7 @@ export default function IncidentAiModal() {
     setOpen(newOpen);
     if (!newOpen) {
       // Reset state when closing
-      setAnalysis('');
+      setAnalysis("");
     }
   };
 
@@ -94,12 +94,12 @@ export default function IncidentAiModal() {
         </DialogHeader>
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            {incident.summary || incident.description || 'Sem descrição'}
+            {incident.summary || incident.description || "Sem descrição"}
           </p>
           
           {!analysis && (
             <Button onClick={handleAnalyze} disabled={loading} className="w-full">
-              {loading ? 'Analisando...' : 'Executar análise IA'}
+              {loading ? "Analisando..." : "Executar análise IA"}
             </Button>
           )}
           
@@ -114,7 +114,7 @@ export default function IncidentAiModal() {
                 variant="outline"
                 className="w-full"
               >
-                {loading ? 'Analisando...' : 'Executar nova análise'}
+                {loading ? "Analisando..." : "Executar nova análise"}
               </Button>
             </>
           )}

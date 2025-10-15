@@ -306,7 +306,7 @@ export function validateEnvironment(): ValidationResult {
     category: "Environment",
     name: "Configuration Check",
     status: "success",
-    message: `All required environment variables configured`,
+    message: "All required environment variables configured",
     duration,
     details: { configured }
   };

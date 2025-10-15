@@ -14,7 +14,7 @@ const isProduction = import.meta.env.PROD;
 // Type-safe environment variable
 const getSentryDsn = (): string | undefined => {
   const dsn = import.meta.env.VITE_SENTRY_DSN;
-  return typeof dsn === 'string' ? dsn : undefined;
+  return typeof dsn === "string" ? dsn : undefined;
 };
 
 interface LogContext {
@@ -107,13 +107,13 @@ export const logger = {
         if (Sentry && getSentryDsn()) {
           Sentry.captureException(error, { 
             extra: { message, ...context },
-            tags: { source: 'logger' }
+            tags: { source: "logger" }
           });
         }
       } catch (sentryError) {
         // Fail silently if Sentry is not available
         if (isDevelopment) {
-          console.warn('Failed to send error to Sentry:', sentryError);
+          console.warn("Failed to send error to Sentry:", sentryError);
         }
       }
     }
@@ -144,13 +144,13 @@ export const logger = {
         if (Sentry && getSentryDsn()) {
           Sentry.captureException(error, { 
             extra: { message, ...context },
-            tags: { source: 'logger' }
+            tags: { source: "logger" }
           });
         }
       } catch (sentryError) {
         // Fail silently if Sentry is not available
         if (isDevelopment) {
-          console.warn('Failed to send error to Sentry:', sentryError);
+          console.warn("Failed to send error to Sentry:", sentryError);
         }
       }
     }

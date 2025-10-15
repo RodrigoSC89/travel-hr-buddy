@@ -69,9 +69,9 @@ export default function RestoreDashboard() {
   const [emailSending, setEmailSending] = useState(false);
 
   // Generate public URL
-  const publicUrl = typeof window !== 'undefined' 
+  const publicUrl = typeof window !== "undefined" 
     ? `${window.location.origin}/admin/documents/restore-dashboard?public=1`
-    : '';
+    : "";
 
   // Auto-refresh every 10 seconds
   useEffect(() => {
@@ -160,7 +160,7 @@ export default function RestoreDashboard() {
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", `restore-analytics.csv`);
+      link.setAttribute("download", "restore-analytics.csv");
       link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
@@ -553,16 +553,16 @@ export default function RestoreDashboard() {
                   labels: departmentSummary.map(d => d.department),
                   datasets: [
                     {
-                      label: 'Restaurações',
+                      label: "Restaurações",
                       data: departmentSummary.map(d => d.count),
-                      backgroundColor: 'rgba(34, 197, 94, 0.8)',
-                      borderColor: 'rgba(34, 197, 94, 1)',
+                      backgroundColor: "rgba(34, 197, 94, 0.8)",
+                      borderColor: "rgba(34, 197, 94, 1)",
                       borderWidth: 1,
                     },
                   ],
                 }}
                 options={{
-                  indexAxis: 'y' as const,
+                  indexAxis: "y" as const,
                   responsive: true,
                   maintainAspectRatio: false,
                   plugins: {

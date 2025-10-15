@@ -105,8 +105,8 @@ export interface MMISystem {
   id: string;
   vessel_id?: string;
   system_name: string;
-  system_type: 'propulsion' | 'electrical' | 'navigation' | 'safety' | 'auxiliary';
-  criticality: 'critical' | 'high' | 'medium' | 'low';
+  system_type: "propulsion" | "electrical" | "navigation" | "safety" | "auxiliary";
+  criticality: "critical" | "high" | "medium" | "low";
   description?: string;
   compliance_metadata?: {
     normam?: string[];
@@ -148,7 +148,7 @@ export interface MMIOS {
   id: string;
   job_id?: string;
   os_number: string;
-  status: 'open' | 'in_progress' | 'completed' | 'cancelled';
+  status: "open" | "in_progress" | "completed" | "cancelled";
   assigned_to?: string;
   start_date?: string;
   completion_date?: string;
@@ -179,7 +179,7 @@ export interface MMIHourometerLog {
   new_hours: number;
   hours_added?: number;
   recorded_by: string;
-  source: 'automated' | 'manual' | 'sensor';
+  source: "automated" | "manual" | "sensor";
   notes?: string;
   created_at: string;
 }
@@ -192,8 +192,8 @@ export interface MMIJobEnhanced {
   component_id?: string;
   title: string;
   description?: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'cancelled' | 'postponed';
-  priority: 'critical' | 'high' | 'medium' | 'low';
+  status: "pending" | "in_progress" | "completed" | "cancelled" | "postponed";
+  priority: "critical" | "high" | "medium" | "low";
   due_date?: string;
   completed_date?: string;
   embedding?: number[];

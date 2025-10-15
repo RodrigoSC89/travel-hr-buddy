@@ -4,14 +4,14 @@
  * Comprehensive test suite for the MMI module with complete database schema
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { 
   MMISystem, 
   MMIComponent, 
   MMIOS, 
   MMIHourometerLog,
   MMIJobEnhanced 
-} from '../types/mmi';
+} from "../types/mmi";
 
 // Mock Supabase client
 const mockSupabase = {
@@ -19,81 +19,81 @@ const mockSupabase = {
   rpc: vi.fn(),
 };
 
-vi.mock('../integrations/supabase/client', () => ({
+vi.mock("../integrations/supabase/client", () => ({
   supabase: mockSupabase,
 }));
 
-describe('MMI Complete Schema', () => {
+describe("MMI Complete Schema", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('MMI Systems', () => {
-    it('should have correct system types', () => {
-      const validTypes: MMISystem['system_type'][] = [
-        'propulsion',
-        'electrical',
-        'navigation',
-        'safety',
-        'auxiliary',
+  describe("MMI Systems", () => {
+    it("should have correct system types", () => {
+      const validTypes: MMISystem["system_type"][] = [
+        "propulsion",
+        "electrical",
+        "navigation",
+        "safety",
+        "auxiliary",
       ];
 
       validTypes.forEach((type) => {
         const system: MMISystem = {
-          id: '123',
-          system_name: 'Test System',
+          id: "123",
+          system_name: "Test System",
           system_type: type,
-          criticality: 'high',
+          criticality: "high",
         };
         expect(system.system_type).toBe(type);
       });
     });
 
-    it('should have correct criticality levels', () => {
-      const validLevels: MMISystem['criticality'][] = [
-        'critical',
-        'high',
-        'medium',
-        'low',
+    it("should have correct criticality levels", () => {
+      const validLevels: MMISystem["criticality"][] = [
+        "critical",
+        "high",
+        "medium",
+        "low",
       ];
 
       validLevels.forEach((level) => {
         const system: MMISystem = {
-          id: '123',
-          system_name: 'Test System',
-          system_type: 'propulsion',
+          id: "123",
+          system_name: "Test System",
+          system_type: "propulsion",
           criticality: level,
         };
         expect(system.criticality).toBe(level);
       });
     });
 
-    it('should support compliance metadata', () => {
+    it("should support compliance metadata", () => {
       const system: MMISystem = {
-        id: '123',
-        system_name: 'Main Propulsion',
-        system_type: 'propulsion',
-        criticality: 'critical',
+        id: "123",
+        system_name: "Main Propulsion",
+        system_type: "propulsion",
+        criticality: "critical",
         compliance_metadata: {
-          normam: ['NORMAM-05'],
-          solas: ['II-1'],
-          marpol: ['Annex VI'],
+          normam: ["NORMAM-05"],
+          solas: ["II-1"],
+          marpol: ["Annex VI"],
           inspection_required: true,
-          next_inspection: '2025-12-31',
+          next_inspection: "2025-12-31",
         },
       };
 
-      expect(system.compliance_metadata?.normam).toContain('NORMAM-05');
-      expect(system.compliance_metadata?.solas).toContain('II-1');
+      expect(system.compliance_metadata?.normam).toContain("NORMAM-05");
+      expect(system.compliance_metadata?.solas).toContain("II-1");
       expect(system.compliance_metadata?.inspection_required).toBe(true);
     });
   });
 
-  describe('MMI Components', () => {
-    it('should track hourometer correctly', () => {
+  describe("MMI Components", () => {
+    it("should track hourometer correctly", () => {
       const component: MMIComponent = {
-        id: '456',
-        component_name: 'Main Engine ME-4500',
+        id: "456",
+        component_name: "Main Engine ME-4500",
         current_hours: 1850.5,
         maintenance_interval_hours: 2000,
         is_operational: true,
@@ -103,10 +103,10 @@ describe('MMI Complete Schema', () => {
       expect(component.maintenance_interval_hours).toBe(2000);
     });
 
-    it('should calculate maintenance percentage', () => {
+    it("should calculate maintenance percentage", () => {
       const component: MMIComponent = {
-        id: '456',
-        component_name: 'Generator',
+        id: "456",
+        component_name: "Generator",
         current_hours: 1900,
         maintenance_interval_hours: 2000,
         is_operational: true,
@@ -116,35 +116,35 @@ describe('MMI Complete Schema', () => {
       expect(percentage).toBe(95);
     });
 
-    it('should support equipment metadata', () => {
+    it("should support equipment metadata", () => {
       const component: MMIComponent = {
-        id: '456',
-        component_name: 'Main Engine',
+        id: "456",
+        component_name: "Main Engine",
         current_hours: 1850,
         maintenance_interval_hours: 2000,
         is_operational: true,
-        manufacturer: 'Caterpillar',
-        model: 'CAT 3516',
-        serial_number: 'SN123456789',
+        manufacturer: "Caterpillar",
+        model: "CAT 3516",
+        serial_number: "SN123456789",
       };
 
-      expect(component.manufacturer).toBe('Caterpillar');
-      expect(component.model).toBe('CAT 3516');
-      expect(component.serial_number).toBe('SN123456789');
+      expect(component.manufacturer).toBe("Caterpillar");
+      expect(component.model).toBe("CAT 3516");
+      expect(component.serial_number).toBe("SN123456789");
     });
 
-    it('should handle operational status', () => {
+    it("should handle operational status", () => {
       const operational: MMIComponent = {
-        id: '1',
-        component_name: 'Engine 1',
+        id: "1",
+        component_name: "Engine 1",
         current_hours: 100,
         maintenance_interval_hours: 1000,
         is_operational: true,
       };
 
       const nonOperational: MMIComponent = {
-        id: '2',
-        component_name: 'Engine 2',
+        id: "2",
+        component_name: "Engine 2",
         current_hours: 100,
         maintenance_interval_hours: 1000,
         is_operational: false,
@@ -155,22 +155,22 @@ describe('MMI Complete Schema', () => {
     });
   });
 
-  describe('MMI Jobs Enhanced', () => {
-    it('should support all job statuses', () => {
-      const statuses: MMIJobEnhanced['status'][] = [
-        'pending',
-        'in_progress',
-        'completed',
-        'cancelled',
-        'postponed',
+  describe("MMI Jobs Enhanced", () => {
+    it("should support all job statuses", () => {
+      const statuses: MMIJobEnhanced["status"][] = [
+        "pending",
+        "in_progress",
+        "completed",
+        "cancelled",
+        "postponed",
       ];
 
       statuses.forEach((status) => {
         const job: MMIJobEnhanced = {
-          id: '789',
-          title: 'Test Job',
+          id: "789",
+          title: "Test Job",
           status: status,
-          priority: 'high',
+          priority: "high",
           can_postpone: true,
           postponement_count: 0,
         };
@@ -178,19 +178,19 @@ describe('MMI Complete Schema', () => {
       });
     });
 
-    it('should support all priority levels', () => {
-      const priorities: MMIJobEnhanced['priority'][] = [
-        'critical',
-        'high',
-        'medium',
-        'low',
+    it("should support all priority levels", () => {
+      const priorities: MMIJobEnhanced["priority"][] = [
+        "critical",
+        "high",
+        "medium",
+        "low",
       ];
 
       priorities.forEach((priority) => {
         const job: MMIJobEnhanced = {
-          id: '789',
-          title: 'Test Job',
-          status: 'pending',
+          id: "789",
+          title: "Test Job",
+          status: "pending",
           priority: priority,
           can_postpone: true,
           postponement_count: 0,
@@ -199,26 +199,26 @@ describe('MMI Complete Schema', () => {
       });
     });
 
-    it('should track postponements', () => {
+    it("should track postponements", () => {
       const job: MMIJobEnhanced = {
-        id: '789',
-        title: 'Maintenance Job',
-        status: 'postponed',
-        priority: 'medium',
+        id: "789",
+        title: "Maintenance Job",
+        status: "postponed",
+        priority: "medium",
         can_postpone: true,
         postponement_count: 2,
       };
 
       expect(job.postponement_count).toBe(2);
-      expect(job.status).toBe('postponed');
+      expect(job.status).toBe("postponed");
     });
 
-    it('should prevent postponement when not allowed', () => {
+    it("should prevent postponement when not allowed", () => {
       const criticalJob: MMIJobEnhanced = {
-        id: '789',
-        title: 'Critical Maintenance',
-        status: 'pending',
-        priority: 'critical',
+        id: "789",
+        title: "Critical Maintenance",
+        status: "pending",
+        priority: "critical",
         can_postpone: false,
         postponement_count: 0,
       };
@@ -226,12 +226,12 @@ describe('MMI Complete Schema', () => {
       expect(criticalJob.can_postpone).toBe(false);
     });
 
-    it('should support AI embeddings', () => {
+    it("should support AI embeddings", () => {
       const job: MMIJobEnhanced = {
-        id: '789',
-        title: 'Engine failure',
-        status: 'pending',
-        priority: 'high',
+        id: "789",
+        title: "Engine failure",
+        status: "pending",
+        priority: "high",
         can_postpone: true,
         postponement_count: 0,
         embedding: new Array(1536).fill(0.1),
@@ -241,41 +241,41 @@ describe('MMI Complete Schema', () => {
     });
   });
 
-  describe('MMI Work Orders (OS)', () => {
-    it('should generate OS number in correct format', () => {
+  describe("MMI Work Orders (OS)", () => {
+    it("should generate OS number in correct format", () => {
       const workOrder: MMIOS = {
-        id: '101',
-        os_number: 'OS-20250001',
-        status: 'open',
+        id: "101",
+        os_number: "OS-20250001",
+        status: "open",
       };
 
       expect(workOrder.os_number).toMatch(/^OS-\d{4}\d{4}$/);
-      expect(workOrder.os_number).toBe('OS-20250001');
+      expect(workOrder.os_number).toBe("OS-20250001");
     });
 
-    it('should support all work order statuses', () => {
-      const statuses: MMIOS['status'][] = [
-        'open',
-        'in_progress',
-        'completed',
-        'cancelled',
+    it("should support all work order statuses", () => {
+      const statuses: MMIOS["status"][] = [
+        "open",
+        "in_progress",
+        "completed",
+        "cancelled",
       ];
 
       statuses.forEach((status) => {
         const os: MMIOS = {
-          id: '101',
-          os_number: 'OS-20250001',
+          id: "101",
+          os_number: "OS-20250001",
           status: status,
         };
         expect(os.status).toBe(status);
       });
     });
 
-    it('should calculate total cost', () => {
+    it("should calculate total cost", () => {
       const workOrder: MMIOS = {
-        id: '101',
-        os_number: 'OS-20250001',
-        status: 'completed',
+        id: "101",
+        os_number: "OS-20250001",
+        status: "completed",
         parts_cost: 1500,
         labor_cost: 800,
         total_cost: 2300,
@@ -287,26 +287,26 @@ describe('MMI Complete Schema', () => {
       );
     });
 
-    it('should track parts used', () => {
+    it("should track parts used", () => {
       const workOrder: MMIOS = {
-        id: '101',
-        os_number: 'OS-20250001',
-        status: 'completed',
+        id: "101",
+        os_number: "OS-20250001",
+        status: "completed",
         parts_used: [
-          { name: 'Oil Filter', quantity: 2, cost: 50 },
-          { name: 'Air Filter', quantity: 1, cost: 80 },
+          { name: "Oil Filter", quantity: 2, cost: 50 },
+          { name: "Air Filter", quantity: 1, cost: 80 },
         ],
       };
 
       expect(workOrder.parts_used).toHaveLength(2);
-      expect(workOrder.parts_used?.[0].name).toBe('Oil Filter');
+      expect(workOrder.parts_used?.[0].name).toBe("Oil Filter");
     });
 
-    it('should support effectiveness rating', () => {
+    it("should support effectiveness rating", () => {
       const workOrder: MMIOS = {
-        id: '101',
-        os_number: 'OS-20250001',
-        status: 'completed',
+        id: "101",
+        os_number: "OS-20250001",
+        status: "completed",
         effectiveness_rating: 5,
       };
 
@@ -316,16 +316,16 @@ describe('MMI Complete Schema', () => {
     });
   });
 
-  describe('MMI Hourometer Logs', () => {
-    it('should calculate hours added', () => {
+  describe("MMI Hourometer Logs", () => {
+    it("should calculate hours added", () => {
       const log: MMIHourometerLog = {
-        id: '201',
-        component_id: '456',
+        id: "201",
+        component_id: "456",
         previous_hours: 1850,
         new_hours: 1851.5,
         hours_added: 1.5,
-        recorded_by: 'system',
-        source: 'automated',
+        recorded_by: "system",
+        source: "automated",
         created_at: new Date().toISOString(),
       };
 
@@ -333,20 +333,20 @@ describe('MMI Complete Schema', () => {
       expect(log.hours_added).toBe(log.new_hours - log.previous_hours);
     });
 
-    it('should support different log sources', () => {
-      const sources: MMIHourometerLog['source'][] = [
-        'automated',
-        'manual',
-        'sensor',
+    it("should support different log sources", () => {
+      const sources: MMIHourometerLog["source"][] = [
+        "automated",
+        "manual",
+        "sensor",
       ];
 
       sources.forEach((source) => {
         const log: MMIHourometerLog = {
-          id: '201',
-          component_id: '456',
+          id: "201",
+          component_id: "456",
           previous_hours: 1850,
           new_hours: 1851,
-          recorded_by: source === 'automated' ? 'system' : 'user-123',
+          recorded_by: source === "automated" ? "system" : "user-123",
           source: source,
           created_at: new Date().toISOString(),
         };
@@ -354,44 +354,44 @@ describe('MMI Complete Schema', () => {
       });
     });
 
-    it('should track who recorded the hours', () => {
+    it("should track who recorded the hours", () => {
       const systemLog: MMIHourometerLog = {
-        id: '201',
-        component_id: '456',
+        id: "201",
+        component_id: "456",
         previous_hours: 1850,
         new_hours: 1851,
-        recorded_by: 'system',
-        source: 'automated',
+        recorded_by: "system",
+        source: "automated",
         created_at: new Date().toISOString(),
       };
 
       const userLog: MMIHourometerLog = {
-        id: '202',
-        component_id: '456',
+        id: "202",
+        component_id: "456",
         previous_hours: 1851,
         new_hours: 1855,
-        recorded_by: 'user-123',
-        source: 'manual',
+        recorded_by: "user-123",
+        source: "manual",
         created_at: new Date().toISOString(),
       };
 
-      expect(systemLog.recorded_by).toBe('system');
-      expect(userLog.recorded_by).toBe('user-123');
+      expect(systemLog.recorded_by).toBe("system");
+      expect(userLog.recorded_by).toBe("user-123");
     });
   });
 
-  describe('Database Functions', () => {
-    it('should support match_mmi_jobs function', async () => {
+  describe("Database Functions", () => {
+    it("should support match_mmi_jobs function", async () => {
       const mockEmbedding = new Array(1536).fill(0.1);
       const mockResults = [
         {
-          id: '1',
-          title: 'Similar Job 1',
+          id: "1",
+          title: "Similar Job 1",
           similarity: 0.89,
         },
         {
-          id: '2',
-          title: 'Similar Job 2',
+          id: "2",
+          title: "Similar Job 2",
           similarity: 0.82,
         },
       ];
@@ -401,7 +401,7 @@ describe('MMI Complete Schema', () => {
         error: null,
       });
 
-      const { data, error } = await mockSupabase.rpc('match_mmi_jobs', {
+      const { data, error } = await mockSupabase.rpc("match_mmi_jobs", {
         query_embedding: mockEmbedding,
         match_threshold: 0.78,
         match_count: 5,
@@ -412,24 +412,24 @@ describe('MMI Complete Schema', () => {
       expect(data[0].similarity).toBeGreaterThan(0.78);
     });
 
-    it('should support generate_os_number function', async () => {
+    it("should support generate_os_number function", async () => {
       mockSupabase.rpc.mockResolvedValue({
-        data: 'OS-20250042',
+        data: "OS-20250042",
         error: null,
       });
 
-      const { data, error } = await mockSupabase.rpc('generate_os_number');
+      const { data, error } = await mockSupabase.rpc("generate_os_number");
 
       expect(error).toBeNull();
       expect(data).toMatch(/^OS-\d{4}\d{4}$/);
     });
   });
 
-  describe('Integration Tests', () => {
-    it('should create maintenance job when component reaches 95% threshold', () => {
+  describe("Integration Tests", () => {
+    it("should create maintenance job when component reaches 95% threshold", () => {
       const component: MMIComponent = {
-        id: '456',
-        component_name: 'Main Engine',
+        id: "456",
+        component_name: "Main Engine",
         current_hours: 1900, // 95% of 2000
         maintenance_interval_hours: 2000,
         is_operational: true,
@@ -440,23 +440,23 @@ describe('MMI Complete Schema', () => {
 
       // Job should be created with appropriate priority
       const job: MMIJobEnhanced = {
-        id: '789',
+        id: "789",
         component_id: component.id,
         title: `Manutenção programada - ${component.component_name}`,
-        status: 'pending',
-        priority: 'medium',
+        status: "pending",
+        priority: "medium",
         can_postpone: true,
         postponement_count: 0,
       };
 
       expect(job.component_id).toBe(component.id);
-      expect(job.status).toBe('pending');
+      expect(job.status).toBe("pending");
     });
 
-    it('should create critical job when component exceeds interval', () => {
+    it("should create critical job when component exceeds interval", () => {
       const component: MMIComponent = {
-        id: '456',
-        component_name: 'Generator',
+        id: "456",
+        component_name: "Generator",
         current_hours: 2050, // Exceeded 2000
         maintenance_interval_hours: 2000,
         is_operational: true,
@@ -467,53 +467,53 @@ describe('MMI Complete Schema', () => {
       );
 
       const job: MMIJobEnhanced = {
-        id: '789',
+        id: "789",
         component_id: component.id,
         title: `Manutenção urgente - ${component.component_name}`,
-        status: 'pending',
-        priority: 'critical',
+        status: "pending",
+        priority: "critical",
         can_postpone: false,
         postponement_count: 0,
       };
 
-      expect(job.priority).toBe('critical');
+      expect(job.priority).toBe("critical");
       expect(job.can_postpone).toBe(false);
     });
 
-    it('should log hours when component is updated', () => {
+    it("should log hours when component is updated", () => {
       const previousHours = 1850;
       const newHours = 1851.5;
 
       const log: MMIHourometerLog = {
-        id: '201',
-        component_id: '456',
+        id: "201",
+        component_id: "456",
         previous_hours: previousHours,
         new_hours: newHours,
         hours_added: newHours - previousHours,
-        recorded_by: 'system',
-        source: 'automated',
+        recorded_by: "system",
+        source: "automated",
         created_at: new Date().toISOString(),
       };
 
       expect(log.hours_added).toBe(1.5);
-      expect(log.source).toBe('automated');
+      expect(log.source).toBe("automated");
     });
 
-    it('should create work order from job', () => {
+    it("should create work order from job", () => {
       const job: MMIJobEnhanced = {
-        id: '789',
-        title: 'Engine Maintenance',
-        status: 'in_progress',
-        priority: 'high',
+        id: "789",
+        title: "Engine Maintenance",
+        status: "in_progress",
+        priority: "high",
         can_postpone: false,
         postponement_count: 0,
       };
 
       const workOrder: MMIOS = {
-        id: '101',
+        id: "101",
         job_id: job.id,
-        os_number: 'OS-20250015',
-        status: 'open',
+        os_number: "OS-20250015",
+        status: "open",
         work_description: job.title,
       };
 
@@ -522,11 +522,11 @@ describe('MMI Complete Schema', () => {
     });
   });
 
-  describe('Edge Cases', () => {
-    it('should handle zero hours', () => {
+  describe("Edge Cases", () => {
+    it("should handle zero hours", () => {
       const component: MMIComponent = {
-        id: '456',
-        component_name: 'New Component',
+        id: "456",
+        component_name: "New Component",
         current_hours: 0,
         maintenance_interval_hours: 2000,
         is_operational: true,
@@ -535,10 +535,10 @@ describe('MMI Complete Schema', () => {
       expect(component.current_hours).toBe(0);
     });
 
-    it('should handle very large hour values', () => {
+    it("should handle very large hour values", () => {
       const component: MMIComponent = {
-        id: '456',
-        component_name: 'Old Component',
+        id: "456",
+        component_name: "Old Component",
         current_hours: 99999.99,
         maintenance_interval_hours: 2000,
         is_operational: true,
@@ -547,12 +547,12 @@ describe('MMI Complete Schema', () => {
       expect(component.current_hours).toBeGreaterThan(0);
     });
 
-    it('should handle missing optional fields', () => {
+    it("should handle missing optional fields", () => {
       const minimalJob: MMIJobEnhanced = {
-        id: '789',
-        title: 'Minimal Job',
-        status: 'pending',
-        priority: 'low',
+        id: "789",
+        title: "Minimal Job",
+        status: "pending",
+        priority: "low",
         can_postpone: true,
         postponement_count: 0,
       };
@@ -562,11 +562,11 @@ describe('MMI Complete Schema', () => {
       expect(minimalJob.embedding).toBeUndefined();
     });
 
-    it('should handle empty parts array', () => {
+    it("should handle empty parts array", () => {
       const workOrder: MMIOS = {
-        id: '101',
-        os_number: 'OS-20250001',
-        status: 'completed',
+        id: "101",
+        os_number: "OS-20250001",
+        status: "completed",
         parts_used: [],
       };
 
@@ -575,20 +575,20 @@ describe('MMI Complete Schema', () => {
   });
 });
 
-describe('MMI Edge Functions', () => {
-  describe('simulate-hours', () => {
-    it('should process operational components only', () => {
+describe("MMI Edge Functions", () => {
+  describe("simulate-hours", () => {
+    it("should process operational components only", () => {
       const components: MMIComponent[] = [
         {
-          id: '1',
-          component_name: 'Engine 1',
+          id: "1",
+          component_name: "Engine 1",
           current_hours: 100,
           maintenance_interval_hours: 1000,
           is_operational: true,
         },
         {
-          id: '2',
-          component_name: 'Engine 2',
+          id: "2",
+          component_name: "Engine 2",
           current_hours: 200,
           maintenance_interval_hours: 1000,
           is_operational: false,
@@ -597,16 +597,16 @@ describe('MMI Edge Functions', () => {
 
       const operational = components.filter((c) => c.is_operational);
       expect(operational).toHaveLength(1);
-      expect(operational[0].id).toBe('1');
+      expect(operational[0].id).toBe("1");
     });
 
-    it('should add random hours between 0.5 and 2.0', () => {
+    it("should add random hours between 0.5 and 2.0", () => {
       const hoursToAdd = Math.random() * 1.5 + 0.5;
       expect(hoursToAdd).toBeGreaterThanOrEqual(0.5);
       expect(hoursToAdd).toBeLessThanOrEqual(2.0);
     });
 
-    it('should create job at 95% threshold', () => {
+    it("should create job at 95% threshold", () => {
       const maintenanceInterval = 2000;
       const threshold95 = maintenanceInterval * 0.95;
       const threshold98 = maintenanceInterval * 0.98;
@@ -624,46 +624,46 @@ describe('MMI Edge Functions', () => {
     });
   });
 
-  describe('send-alerts', () => {
-    it('should filter critical and high priority jobs', () => {
+  describe("send-alerts", () => {
+    it("should filter critical and high priority jobs", () => {
       const jobs: MMIJobEnhanced[] = [
         {
-          id: '1',
-          title: 'Critical Job',
-          status: 'pending',
-          priority: 'critical',
+          id: "1",
+          title: "Critical Job",
+          status: "pending",
+          priority: "critical",
           can_postpone: false,
           postponement_count: 0,
         },
         {
-          id: '2',
-          title: 'High Job',
-          status: 'pending',
-          priority: 'high',
+          id: "2",
+          title: "High Job",
+          status: "pending",
+          priority: "high",
           can_postpone: true,
           postponement_count: 0,
         },
         {
-          id: '3',
-          title: 'Low Job',
-          status: 'pending',
-          priority: 'low',
+          id: "3",
+          title: "Low Job",
+          status: "pending",
+          priority: "low",
           can_postpone: true,
           postponement_count: 0,
         },
       ];
 
       const priorityJobs = jobs.filter(
-        (j) => j.priority === 'critical' || j.priority === 'high'
+        (j) => j.priority === "critical" || j.priority === "high"
       );
 
       expect(priorityJobs).toHaveLength(2);
     });
 
-    it('should format date correctly', () => {
-      const dateStr = '2025-10-20';
+    it("should format date correctly", () => {
+      const dateStr = "2025-10-20";
       const date = new Date(dateStr);
-      const formatted = date.toLocaleDateString('pt-BR');
+      const formatted = date.toLocaleDateString("pt-BR");
 
       expect(formatted).toBeTruthy();
     });
