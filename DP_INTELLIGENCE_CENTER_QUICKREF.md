@@ -19,7 +19,18 @@ Stores DP incident data from IMCA and other sources.
 ### 2. API Endpoint: `dp-intel-feed`
 **Function:** `supabase/functions/dp-intel-feed/index.ts`
 
-Mock API with 5 sample IMCA incidents (2024-2025).
+Queries the `dp_incidents` database table with filtering support.
+
+**Query Parameters:**
+- `limit`: Maximum number of results (default: 50)
+- `class_dp`: Filter by DP class (e.g., "DP Class 2")
+- `source`: Filter by source organization (e.g., "IMCA")
+- `tag`: Filter by tag (e.g., "gyro", "thruster")
+
+### 3. Analysis Storage: `incident_analysis`
+**Migration:** `supabase/migrations/20251014195400_create_incident_analysis_table.sql`
+
+Stores AI-powered analysis results from the `dp-intel-analyze` function.
 
 ## 🚀 Quick Start
 
@@ -38,8 +49,14 @@ supabase functions deploy dp-intel-feed
 # Local testing
 curl http://localhost:54321/functions/v1/dp-intel-feed
 
+# With filters
+curl "http://localhost:54321/functions/v1/dp-intel-feed?class_dp=DP%20Class%202&limit=10"
+
 # Production
 curl https://YOUR_PROJECT.supabase.co/functions/v1/dp-intel-feed
+
+# Production with filters
+curl "https://YOUR_PROJECT.supabase.co/functions/v1/dp-intel-feed?tag=gyro&limit=5"
 ```
 
 ### Query Database
@@ -61,7 +78,7 @@ WHERE class_dp = 'DP Class 3';
 
 ## 📊 Sample Data
 
-The API currently returns 5 mock incidents:
+The migration includes 5 sample incidents in the database:
 
 1. **Loss of Position Due to Gyro Drift** (Campos Basin, DP Class 2)
 2. **Thruster Control Software Failure** (North Sea, DP Class 3)
@@ -69,12 +86,14 @@ The API currently returns 5 mock incidents:
 4. **Power Management System Malfunction** (Santos Basin, DP Class 2)
 5. **Wind Sensor Calibration Issue** (West Africa, DP Class 2)
 
+These are automatically inserted during migration and can be queried via the API.
+
 ## 📝 Next Steps
 
 ### Immediate (Phase 2)
-- [ ] Replace mock data with real IMCA API/crawler
+- [ ] Implement real IMCA API/crawler integration
 - [ ] Add data validation and deduplication
-- [ ] Schedule automated updates
+- [ ] Schedule automated updates via cron jobs
 
 ### Short-term (Phase 3)
 - [ ] Build React components for visualization

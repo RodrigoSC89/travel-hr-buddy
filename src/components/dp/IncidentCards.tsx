@@ -25,8 +25,8 @@ export default function IncidentCards() {
   useEffect(() => {
     const fetchIncidents = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('dp-intel-feed', {
-          method: 'GET',
+        const { data, error } = await supabase.functions.invoke("dp-intel-feed", {
+          method: "GET",
         });
 
         if (error) throw error;

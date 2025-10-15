@@ -36,10 +36,11 @@ dp_incidents
 **File:** `supabase/functions/dp-intel-feed/index.ts`
 - ✅ Created Supabase Edge Function
 - ✅ Implemented CORS support
-- ✅ Added 5 realistic IMCA incident samples
+- ✅ Connected to database for real-time queries
+- ✅ Added query parameter filtering (limit, class_dp, source, tag)
 - ✅ Included proper error handling
 - ✅ Structured JSON response with metadata
-- ✅ Total: 121 lines of TypeScript
+- ✅ Total: 111 lines of TypeScript
 
 **Sample Incidents:**
 1. Loss of Position Due to Gyro Drift (Campos Basin, 2025)
@@ -47,6 +48,8 @@ dp_incidents
 3. Reference System Failure in Heavy Weather (Gulf of Mexico, 2025)
 4. Power Management System Malfunction (Santos Basin, 2024)
 5. Wind Sensor Calibration Issue (West Africa, 2024)
+
+Sample data is included in the migration and automatically inserted into the database.
 
 ### 3. Comprehensive Documentation
 Created 3 documentation files totaling 652 lines:
@@ -92,8 +95,9 @@ Created 3 documentation files totaling 652 lines:
 - **Delivered:** Complete table with 13 fields, 4 indexes, RLS policies
 
 ✅ **Requirement 2:** "Criar processo de ingestão (crawler/API IMCA)"
-- **Delivered:** Mock API endpoint with realistic IMCA data structure
+- **Delivered:** Database-connected API endpoint with filtering capabilities
 - **Note:** Real crawler/API integration planned for Phase 2
+- **Features:** Query parameters for class_dp, source, tag, and limit
 
 ✅ **Requirement 3:** Database fields as specified:
 - id ✅ (text PK)
