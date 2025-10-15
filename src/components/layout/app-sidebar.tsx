@@ -39,7 +39,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import nautilusOneLogo from "@/assets/nautilus-one-logo.png";
-import { usePermissions } from "@/hooks/use-permissions";
+import { usePermissions, Permission } from "@/hooks/use-permissions";
 
 import {
   Sidebar,
@@ -72,7 +72,7 @@ import {
 interface NavigationItem {
   title: string;
   url?: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon?: React.ComponentType<{ className?: string }>;
   alwaysVisible?: boolean;
   requiresRole?: readonly string[];
   permission?: string;
@@ -478,7 +478,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
     
     // Verificar permissão específica
     if (item.permission) {
-      return hasPermission(item.permission, "read");
+      return hasPermission(item.permission as Permission, "read");
     }
     
     return true;
@@ -539,15 +539,15 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                   if (item.items) {
                     return (
                       <Collapsible 
-                        key={item.url}
-                        open={openItems.includes(item.url)}
-                        onOpenChange={() => toggleItem(item.url)}
+                        key={item.url || item.title}
+                        open={openItems.includes(item.url || item.title)}
+                        onOpenChange={() => toggleItem(item.url || item.title)}
                       >
                         <SidebarMenuItem>
                           <CollapsibleTrigger asChild>
                             <SidebarMenuButton className="w-full justify-between">
                               <div className="flex items-center">
-                                <item.icon className="h-4 w-4" />
+                                {item.icon && <item.icon className="h-4 w-4" />}
                                 {!collapsed && <span className="ml-2">{item.title}</span>}
                               </div>
                               {!collapsed && (
@@ -559,13 +559,13 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                             <CollapsibleContent>
                               <SidebarMenuSub>
                                 {item.items.map((subItem) => (
-                                  <SidebarMenuSubItem key={subItem.url}>
+                                  <SidebarMenuSubItem key={subItem.url || subItem.title}>
                                     <SidebarMenuSubButton 
-                                      onClick={() => handleItemClick(subItem.url)}
-                                      isActive={isItemActive(subItem.url)}
+                                      onClick={() => handleItemClick(subItem.url || "")}
+                                      isActive={isItemActive(subItem.url || "")}
                                       className="w-full"
                                     >
-                                      <subItem.icon className="h-4 w-4" />
+                                      {subItem.icon && <subItem.icon className="h-4 w-4" />}
                                       <span className="ml-2">{subItem.title}</span>
                                     </SidebarMenuSubButton>
                                   </SidebarMenuSubItem>
@@ -587,7 +587,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                         className="w-full justify-start"
                         title={collapsed ? item.title : undefined}
                       >
-                        <item.icon className="h-4 w-4" />
+                        {item.icon && <item.icon className="h-4 w-4" />}
                         {!collapsed && <span className="ml-2">{item.title}</span>}
                       </SidebarMenuButton>
                     </SidebarMenuItem>

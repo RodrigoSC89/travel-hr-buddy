@@ -32,7 +32,7 @@ interface Integration {
   id: string;
   name: string;
   description: string;
-  icon: React.ReactNode;
+  icon: React.ComponentType<{ className?: string }>;
   category: string;
   status: "connected" | "disconnected" | "error";
   lastSync?: Date;
@@ -307,7 +307,7 @@ const IntegrationsHub = () => {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className="p-2 rounded-lg bg-muted">
-                        <integration.icon className="w-5 h-5" />
+                        {React.createElement(integration.icon, { className: "w-5 h-5" })}
                       </div>
                       <div>
                         <h3 className="font-semibold">{integration.name}</h3>
