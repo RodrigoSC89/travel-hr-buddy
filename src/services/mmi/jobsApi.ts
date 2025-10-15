@@ -17,6 +17,7 @@ export interface Job {
     };
   };
   suggestion_ia?: string;
+  ai_suggestion?: string; // New field for copilot-generated suggestions
   can_postpone?: boolean;
 }
 
@@ -143,5 +144,28 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
   return {
     os_id: osId,
     message: `Ordem de Serviço criada com sucesso! 📋`,
+  };
+};
+
+/**
+ * Fetches a job with AI copilot suggestion
+ */
+export const fetchJobWithCopilot = async (jobId: string): Promise<Job> => {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 400));
+  
+  const job = mockJobs.find((j) => j.id === jobId);
+  if (!job) {
+    throw new Error("Job não encontrado");
+  }
+  
+  // In production, this would call the actual copilot endpoint
+  // For now, we're importing the service directly to avoid circular dependencies
+  const { generateCopilotSuggestion, formatSuggestionAsText } = await import('./copilotService');
+  const suggestion = await generateCopilotSuggestion(job.title);
+  
+  return {
+    ...job,
+    ai_suggestion: formatSuggestionAsText(suggestion),
   };
 };
