@@ -17,7 +17,7 @@ export interface SimilarJob {
   description: string;
   status: string;
   similarity: number;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   created_at: string;
 }
 
@@ -53,7 +53,9 @@ export const findSimilarJobsById = async (
 ): Promise<SimilarJobsResponseGET> => {
   const { data, error } = await supabase.functions.invoke("mmi-jobs-similar", {
     method: "GET",
-    // @ts-ignore - Supabase types don't include query params properly
+    // Supabase types don't include query params properly for GET requests
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error - params not in type definition
     params: { jobId },
   });
 
