@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Incident {
   id: string;
@@ -19,12 +20,21 @@ interface Incident {
 
 export default function IncidentCards() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/dp/intel/feed")
-      .then(res => res.json())
-      .then(data => setIncidents(data.incidents))
-      .catch(err => {
+    const fetchIncidents = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('dp-intel-feed', {
+          method: 'GET',
+        });
+
+        if (error) throw error;
+        
+        if (data && data.incidents) {
+          setIncidents(data.incidents);
+        }
+      } catch (err) {
         console.error("Erro ao carregar incidentes DP", err);
         // Demo data for testing when API is not available
         setIncidents([
@@ -77,8 +87,17 @@ export default function IncidentCards() {
             link: "https://www.imca-int.com/incident-reports"
           }
         ]);
-      });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchIncidents();
   }, []);
+
+  if (loading) {
+    return <div className="text-center py-8">Carregando incidentes DP...</div>;
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
