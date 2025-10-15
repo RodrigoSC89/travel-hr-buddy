@@ -145,3 +145,18 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
     message: `Ordem de Serviço criada com sucesso! 📋`,
   };
 };
+
+/**
+ * Fetches a job with copilot AI suggestion
+ */
+export const fetchJobWithCopilot = async (jobId: string): Promise<Job> => {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 400));
+  
+  const job = mockJobs.find((j) => j.id === jobId);
+  if (!job) {
+    throw new Error("Job não encontrado");
+  }
+  
+  return job;
+};
