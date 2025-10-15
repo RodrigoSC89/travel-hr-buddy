@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { FileText, Download } from 'lucide-react';
-import { generateMaintenanceReport, MaintenanceJob } from './ReportPDF';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { FileText, Download } from "lucide-react";
+import { generateMaintenanceReport, MaintenanceJob } from "./ReportPDF";
+import { useToast } from "@/hooks/use-toast";
 
 /**
  * Demo component for MMI Report PDF generation
@@ -16,49 +16,49 @@ export const MMIReportDemo: React.FC = () => {
   // Mock data for demonstration - this would come from the actual maintenance system
   const mockMaintenanceJobs: MaintenanceJob[] = [
     {
-      id: '1',
-      title: 'Inspeção do Motor Principal',
-      component_id: 'ENG-001',
-      status: 'scheduled',
-      due_date: '2025-10-20',
-      priority: 'high',
-      ai_suggestion: 'Recomenda-se realizar inspeção preventiva antes do prazo devido ao histórico de uso intensivo.'
+      id: "1",
+      title: "Inspeção do Motor Principal",
+      component_id: "ENG-001",
+      status: "scheduled",
+      due_date: "2025-10-20",
+      priority: "high",
+      ai_suggestion: "Recomenda-se realizar inspeção preventiva antes do prazo devido ao histórico de uso intensivo."
     },
     {
-      id: '2',
-      title: 'Troca de Filtros de Óleo',
-      component_id: 'FLT-023',
-      status: 'in_progress',
-      due_date: '2025-10-18',
-      priority: 'medium',
-      ai_suggestion: 'Filtros apresentam 75% de saturação. Substituição recomendada nas próximas 48 horas.'
+      id: "2",
+      title: "Troca de Filtros de Óleo",
+      component_id: "FLT-023",
+      status: "in_progress",
+      due_date: "2025-10-18",
+      priority: "medium",
+      ai_suggestion: "Filtros apresentam 75% de saturação. Substituição recomendada nas próximas 48 horas."
     },
     {
-      id: '3',
-      title: 'Revisão Sistema Hidráulico',
-      component_id: 'HYD-005',
-      status: 'overdue',
-      due_date: '2025-10-12',
-      priority: 'critical',
-      ai_suggestion: 'Manutenção atrasada! Detectados vazamentos menores. Intervenção urgente necessária.'
+      id: "3",
+      title: "Revisão Sistema Hidráulico",
+      component_id: "HYD-005",
+      status: "overdue",
+      due_date: "2025-10-12",
+      priority: "critical",
+      ai_suggestion: "Manutenção atrasada! Detectados vazamentos menores. Intervenção urgente necessária."
     },
     {
-      id: '4',
-      title: 'Calibração de Sensores',
-      component_id: 'SNS-042',
-      status: 'completed',
-      due_date: '2025-10-10',
-      priority: 'low',
-      ai_suggestion: 'Calibração realizada com sucesso. Próxima verificação em 90 dias.'
+      id: "4",
+      title: "Calibração de Sensores",
+      component_id: "SNS-042",
+      status: "completed",
+      due_date: "2025-10-10",
+      priority: "low",
+      ai_suggestion: "Calibração realizada com sucesso. Próxima verificação em 90 dias."
     },
     {
-      id: '5',
-      title: 'Manutenção Preventiva Geradores',
-      component_id: 'GEN-001',
-      status: 'scheduled',
-      due_date: '2025-10-25',
-      priority: 'medium',
-      ai_suggestion: 'Análise de vibração detectou desvios mínimos. Manutenção preventiva conforme planejado.'
+      id: "5",
+      title: "Manutenção Preventiva Geradores",
+      component_id: "GEN-001",
+      status: "scheduled",
+      due_date: "2025-10-25",
+      priority: "medium",
+      ai_suggestion: "Análise de vibração detectou desvios mínimos. Manutenção preventiva conforme planejado."
     }
   ];
 
@@ -69,15 +69,15 @@ export const MMIReportDemo: React.FC = () => {
       generateMaintenanceReport(mockMaintenanceJobs);
       
       toast({
-        title: '📄 Relatório PDF Gerado',
-        description: 'O relatório de manutenção foi gerado e está sendo baixado.',
+        title: "📄 Relatório PDF Gerado",
+        description: "O relatório de manutenção foi gerado e está sendo baixado.",
       });
     } catch (error) {
-      console.error('Error generating report:', error);
+      console.error("Error generating report:", error);
       toast({
-        title: 'Erro ao gerar relatório',
-        description: 'Ocorreu um erro ao gerar o PDF. Tente novamente.',
-        variant: 'destructive',
+        title: "Erro ao gerar relatório",
+        description: "Ocorreu um erro ao gerar o PDF. Tente novamente.",
+        variant: "destructive",
       });
     } finally {
       setIsGenerating(false);
@@ -128,7 +128,7 @@ export const MMIReportDemo: React.FC = () => {
           size="lg"
         >
           <Download className="h-4 w-4 mr-2" />
-          {isGenerating ? 'Gerando Relatório...' : 'Exportar Relatório PDF'}
+          {isGenerating ? "Gerando Relatório..." : "Exportar Relatório PDF"}
         </Button>
 
         <p className="text-xs text-center text-muted-foreground">

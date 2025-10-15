@@ -1,4 +1,4 @@
-import html2pdf from 'html2pdf.js';
+import html2pdf from "html2pdf.js";
 
 /**
  * Interface for Maintenance Job data structure
@@ -18,41 +18,41 @@ export interface MaintenanceJob {
  * @param jobs - Array of maintenance jobs to include in the report
  */
 export function generateMaintenanceReport(jobs: MaintenanceJob[]): void {
-  const now = new Date().toLocaleDateString('pt-BR');
-  const timestamp = new Date().toLocaleString('pt-BR');
+  const now = new Date().toLocaleDateString("pt-BR");
+  const timestamp = new Date().toLocaleString("pt-BR");
   
   // Helper function to get status badge styling
   const getStatusStyle = (status: string): string => {
     const statusMap: Record<string, string> = {
-      'scheduled': 'background: #dbeafe; color: #1e40af;',
-      'in_progress': 'background: #fef3c7; color: #92400e;',
-      'completed': 'background: #dcfce7; color: #166534;',
-      'overdue': 'background: #fecaca; color: #991b1b;',
-      'cancelled': 'background: #f1f5f9; color: #475569;'
+      "scheduled": "background: #dbeafe; color: #1e40af;",
+      "in_progress": "background: #fef3c7; color: #92400e;",
+      "completed": "background: #dcfce7; color: #166534;",
+      "overdue": "background: #fecaca; color: #991b1b;",
+      "cancelled": "background: #f1f5f9; color: #475569;"
     };
-    return statusMap[status] || 'background: #f1f5f9; color: #475569;';
+    return statusMap[status] || "background: #f1f5f9; color: #475569;";
   };
 
   // Helper function to get priority badge styling
   const getPriorityStyle = (priority: string): string => {
     const priorityMap: Record<string, string> = {
-      'critical': 'background: #fecaca; color: #991b1b;',
-      'high': 'background: #fed7aa; color: #9a3412;',
-      'medium': 'background: #fef3c7; color: #92400e;',
-      'low': 'background: #dcfce7; color: #166534;',
-      'normal': 'background: #dbeafe; color: #1e40af;'
+      "critical": "background: #fecaca; color: #991b1b;",
+      "high": "background: #fed7aa; color: #9a3412;",
+      "medium": "background: #fef3c7; color: #92400e;",
+      "low": "background: #dcfce7; color: #166534;",
+      "normal": "background: #dbeafe; color: #1e40af;"
     };
-    return priorityMap[priority?.toLowerCase() || 'normal'] || 'background: #dbeafe; color: #1e40af;';
+    return priorityMap[priority?.toLowerCase() || "normal"] || "background: #dbeafe; color: #1e40af;";
   };
 
   // Helper function to format status text
   const getStatusLabel = (status: string): string => {
     const statusLabels: Record<string, string> = {
-      'scheduled': 'Agendado',
-      'in_progress': 'Em Progresso',
-      'completed': 'Concluído',
-      'overdue': 'Atrasado',
-      'cancelled': 'Cancelado'
+      "scheduled": "Agendado",
+      "in_progress": "Em Progresso",
+      "completed": "Concluído",
+      "overdue": "Atrasado",
+      "cancelled": "Cancelado"
     };
     return statusLabels[status] || status;
   };
@@ -60,13 +60,13 @@ export function generateMaintenanceReport(jobs: MaintenanceJob[]): void {
   // Helper function to format priority text
   const getPriorityLabel = (priority: string): string => {
     const priorityLabels: Record<string, string> = {
-      'critical': 'Crítica',
-      'high': 'Alta',
-      'medium': 'Média',
-      'low': 'Baixa',
-      'normal': 'Normal'
+      "critical": "Crítica",
+      "high": "Alta",
+      "medium": "Média",
+      "low": "Baixa",
+      "normal": "Normal"
     };
-    return priorityLabels[priority?.toLowerCase() || 'normal'] || priority || 'Normal';
+    return priorityLabels[priority?.toLowerCase() || "normal"] || priority || "Normal";
   };
 
   const content = `
@@ -293,7 +293,7 @@ export function generateMaintenanceReport(jobs: MaintenanceJob[]): void {
         <div class="no-jobs">
             <p>Nenhum job de manutenção disponível no momento.</p>
         </div>
-        ` : jobs.map((j, index) => `
+        ` : jobs.map((j) => `
         <div class="job-card">
             <div class="job-header">
                 <div>
@@ -305,8 +305,8 @@ export function generateMaintenanceReport(jobs: MaintenanceJob[]): void {
                     <span class="badge" style="${getStatusStyle(j.status)}">
                         ${getStatusLabel(j.status)}
                     </span>
-                    <span class="badge" style="${getPriorityStyle(j.priority || 'normal')}">
-                        ${getPriorityLabel(j.priority || 'normal')}
+                    <span class="badge" style="${getPriorityStyle(j.priority || "normal")}">
+                        ${getPriorityLabel(j.priority || "normal")}
                     </span>
                 </div>
             </div>
@@ -318,7 +318,7 @@ export function generateMaintenanceReport(jobs: MaintenanceJob[]): void {
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Prazo</span>
-                    <span class="detail-value">${j.due_date ? new Date(j.due_date).toLocaleDateString('pt-BR') : 'Não definido'}</span>
+                    <span class="detail-value">${j.due_date ? new Date(j.due_date).toLocaleDateString("pt-BR") : "Não definido"}</span>
                 </div>
             </div>
             
@@ -331,9 +331,9 @@ export function generateMaintenanceReport(jobs: MaintenanceJob[]): void {
                     ${j.ai_suggestion}
                 </div>
             </div>
-            ` : ''}
+            ` : ""}
         </div>
-        `).join('')}
+        `).join("")}
     </div>
 
     <div class="footer">
@@ -347,10 +347,10 @@ export function generateMaintenanceReport(jobs: MaintenanceJob[]): void {
   // Configure PDF options for better quality
   const opt = {
     margin: 10,
-    filename: `Relatorio-MMI-${now.replace(/\//g, '-')}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
+    filename: `Relatorio-MMI-${now.replace(/\//g, "-")}.pdf`,
+    image: { type: "jpeg", quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
   };
 
   html2pdf().from(content).set(opt).save();
