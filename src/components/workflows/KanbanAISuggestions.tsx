@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface Suggestion {
   etapa: string;
@@ -22,21 +22,21 @@ export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[]
     try {
       setAccepted((prev) => [...prev, etapa]);
       
-      const { error } = await supabase.from('workflow_ai_suggestions').insert({
+      const { error } = await supabase.from("workflow_ai_suggestions").insert({
         etapa: s.etapa,
         tipo_sugestao: s.tipo_sugestao,
         conteudo: s.conteudo,
         criticidade: s.criticidade,
         responsavel_sugerido: s.responsavel_sugerido,
-        origem: 'Copilot',
+        origem: "Copilot",
       });
 
       if (error) {
-        console.error('Error inserting AI suggestion:', error);
+        console.error("Error inserting AI suggestion:", error);
         toast({
-          title: 'Erro',
-          description: 'Não foi possível salvar a sugestão da IA',
-          variant: 'destructive',
+          title: "Erro",
+          description: "Não foi possível salvar a sugestão da IA",
+          variant: "destructive",
         });
         // Revert the accepted state on error
         setAccepted((prev) => prev.filter(e => e !== etapa));
@@ -44,15 +44,15 @@ export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[]
       }
 
       toast({
-        title: 'Sucesso',
-        description: 'Sugestão da IA aceita e salva com sucesso!',
+        title: "Sucesso",
+        description: "Sugestão da IA aceita e salva com sucesso!",
       });
     } catch (error) {
-      console.error('Error accepting suggestion:', error);
+      console.error("Error accepting suggestion:", error);
       toast({
-        title: 'Erro',
-        description: 'Ocorreu um erro ao processar a sugestão',
-        variant: 'destructive',
+        title: "Erro",
+        description: "Ocorreu um erro ao processar a sugestão",
+        variant: "destructive",
       });
       // Revert the accepted state on error
       setAccepted((prev) => prev.filter(e => e !== etapa));

@@ -1,1 +1,1 @@
-export { KanbanAISuggestions } from './KanbanAISuggestions';
+export { KanbanAISuggestions } from "./KanbanAISuggestions";
