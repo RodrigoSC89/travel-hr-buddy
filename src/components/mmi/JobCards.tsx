@@ -4,7 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { fetchJobs, postponeJob, createWorkOrder, type Job } from '@/services/mmi/jobsApi';
-import { Loader2, Wrench, Clock } from 'lucide-react';
+import { generateJobReport } from '@/services/mmi/reportGenerator';
+import { Loader2, Wrench, Clock, FileText } from 'lucide-react';
 
 export default function JobCards() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -74,6 +75,29 @@ export default function JobCards() {
     }
   };
 
+  const handleGenerateReport = async (job: Job) => {
+    setProcessingJobId(job.id);
+    try {
+      await generateJobReport(job, {
+        includeAISuggestion: true,
+        includeMetadata: true,
+      });
+      toast({
+        title: "Relatório PDF Gerado",
+        description: `Relatório do job ${job.id} foi gerado com sucesso.`,
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: error instanceof Error ? error.message : "Não foi possível gerar o relatório.",
+        variant: "destructive",
+      });
+    } finally {
+      setProcessingJobId(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -114,7 +138,7 @@ export default function JobCards() {
                 {job.suggestion_ia}
               </div>
             )}
-            <div className="flex gap-2 pt-2">
+            <div className="flex flex-wrap gap-2 pt-2">
               <Button 
                 variant="default" 
                 size="sm" 
@@ -143,6 +167,19 @@ export default function JobCards() {
                   Postergar com IA
                 </Button>
               )}
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                onClick={() => handleGenerateReport(job)}
+                disabled={processingJobId === job.id}
+              >
+                {processingJobId === job.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                ) : (
+                  <FileText className="h-4 w-4 mr-1" />
+                )}
+                Relatório PDF
+              </Button>
             </div>
           </CardContent>
         </Card>
