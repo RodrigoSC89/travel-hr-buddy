@@ -112,29 +112,43 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
   try {
     // Try fetching from Supabase
     const { data, error } = await supabase
-      .from('mmi_jobs')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("mmi_jobs")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.warn('Supabase fetch error, using mock data:', error);
+      console.warn("Supabase fetch error, using mock data:", error);
       throw error;
     }
 
     if (data && data.length > 0) {
       // Convert database format to MMIJob format
-      const jobs: MMIJob[] = data.map(dbJob => ({
+      const jobs: MMIJob[] = data.map((dbJob: {
+        id: string;
+        title: string;
+        status?: string;
+        priority?: string;
+        due_date?: string;
+        component_name: string;
+        asset_name?: string;
+        vessel_name?: string;
+        suggestion_ia?: string;
+        can_postpone?: boolean;
+        created_at?: string;
+        updated_at?: string;
+        embedding?: number[];
+      }) => ({
         id: dbJob.id,
         title: dbJob.title,
-        status: dbJob.status || 'Pendente',
-        priority: dbJob.priority || 'Média',
-        due_date: dbJob.due_date || new Date().toISOString().split('T')[0],
+        status: dbJob.status || "Pendente",
+        priority: dbJob.priority || "Média",
+        due_date: dbJob.due_date || new Date().toISOString().split("T")[0],
         component_name: dbJob.component_name,
         component: {
           name: dbJob.component_name,
           asset: {
-            name: dbJob.asset_name || 'Unknown Asset',
-            vessel: dbJob.vessel_name || 'Unknown Vessel',
+            name: dbJob.asset_name || "Unknown Asset",
+            vessel: dbJob.vessel_name || "Unknown Vessel",
           },
         },
         suggestion_ia: dbJob.suggestion_ia,
@@ -147,7 +161,7 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
       return { jobs };
     }
   } catch (error) {
-    console.warn('Database not available, using mock data');
+    console.warn("Database not available, using mock data");
   }
 
   // Fallback to mock data
@@ -161,30 +175,30 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
 export const fetchJobWithAI = async (jobId: string): Promise<MMIJob | null> => {
   try {
     const { data, error } = await supabase
-      .from('mmi_jobs')
-      .select('*')
-      .eq('id', jobId)
+      .from("mmi_jobs")
+      .select("*")
+      .eq("id", jobId)
       .single();
 
     if (error || !data) {
       throw error;
     }
 
-    const job = convertToMMIJob(data as any);
+    const job = convertToMMIJob(data as Job);
     
     // Generate AI recommendation
     const jobDescription = `${job.title} - ${job.component_name}`;
-    job.ai_recommendation = await getAIRecommendation(jobDescription, jobId);
+    job.ai_recommendation = await getAIRecommendation(jobDescription);
 
     return job;
   } catch (error) {
-    console.warn('Failed to fetch job from database:', error);
+    console.warn("Failed to fetch job from database:", error);
     // Fallback to mock
     const mockJob = mockJobs.find(j => j.id === jobId);
     if (mockJob) {
       const job = convertToMMIJob(mockJob);
       const jobDescription = `${job.title} - ${job.component_name}`;
-      job.ai_recommendation = await getAIRecommendation(jobDescription, jobId);
+      job.ai_recommendation = await getAIRecommendation(jobDescription);
       return job;
     }
     return null;
@@ -198,13 +212,13 @@ export const createJob = async (jobData: Partial<MMIJob>): Promise<MMIJob> => {
   try {
     // Generate embedding
     const embedding = await generateJobEmbedding({
-      title: jobData.title || '',
-      component_name: jobData.component_name || '',
+      title: jobData.title || "",
+      component_name: jobData.component_name || "",
       priority: jobData.priority,
     });
 
     const { data, error } = await supabase
-      .from('mmi_jobs')
+      .from("mmi_jobs")
       .insert({
         ...jobData,
         embedding,
@@ -216,10 +230,10 @@ export const createJob = async (jobData: Partial<MMIJob>): Promise<MMIJob> => {
 
     if (error) throw error;
 
-    return convertToMMIJob(data as any);
+    return convertToMMIJob(data as Job);
   } catch (error) {
-    console.error('Failed to create job:', error);
-    throw new Error('Não foi possível criar o job');
+    console.error("Failed to create job:", error);
+    throw new Error("Não foi possível criar o job");
   }
 };
 
@@ -232,9 +246,9 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
   try {
     // Try to update in database
     const { data: job } = await supabase
-      .from('mmi_jobs')
-      .select('*')
-      .eq('id', jobId)
+      .from("mmi_jobs")
+      .select("*")
+      .eq("id", jobId)
       .single();
 
     if (job) {
@@ -244,12 +258,12 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
 
       // Update job
       await supabase
-        .from('mmi_jobs')
+        .from("mmi_jobs")
         .update({ 
           due_date: newDate,
           updated_at: new Date().toISOString()
         })
-        .eq('id', jobId);
+        .eq("id", jobId);
 
       // Log to history
       const embedding = await generateJobEmbedding({
@@ -258,11 +272,11 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
       });
 
       await supabase
-        .from('mmi_job_history')
+        .from("mmi_job_history")
         .insert({
           job_id: jobId,
-          action: 'Postergado',
-          outcome: 'Sucesso',
+          action: "Postergado",
+          outcome: "Sucesso",
           embedding,
         });
 
@@ -272,7 +286,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
       };
     }
   } catch (error) {
-    console.warn('Database not available, using mock response');
+    console.warn("Database not available, using mock response");
   }
 
   // Fallback to mock behavior
@@ -306,20 +320,20 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
   try {
     // Try to update in database
     const { data: job } = await supabase
-      .from('mmi_jobs')
-      .select('*')
-      .eq('id', jobId)
+      .from("mmi_jobs")
+      .select("*")
+      .eq("id", jobId)
       .single();
 
     if (job) {
       // Update status
       await supabase
-        .from('mmi_jobs')
+        .from("mmi_jobs")
         .update({ 
-          status: 'OS Criada',
+          status: "OS Criada",
           updated_at: new Date().toISOString()
         })
-        .eq('id', jobId);
+        .eq("id", jobId);
 
       // Log to history
       const embedding = await generateJobEmbedding({
@@ -328,22 +342,22 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
       });
 
       await supabase
-        .from('mmi_job_history')
+        .from("mmi_job_history")
         .insert({
           job_id: jobId,
-          action: 'OS Criada',
-          outcome: 'Sucesso',
+          action: "OS Criada",
+          outcome: "Sucesso",
           embedding,
         });
 
       const osId = `OS-${Date.now().toString().slice(-6)}`;
       return {
         os_id: osId,
-        message: `Ordem de Serviço criada com sucesso! 📋`,
+        message: "Ordem de Serviço criada com sucesso! 📋",
       };
     }
   } catch (error) {
-    console.warn('Database not available, using mock response');
+    console.warn("Database not available, using mock response");
   }
 
   // Fallback
@@ -355,6 +369,6 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
   const osId = `OS-${Date.now().toString().slice(-6)}`;
   return {
     os_id: osId,
-    message: `Ordem de Serviço criada com sucesso! 📋`,
+    message: "Ordem de Serviço criada com sucesso! 📋",
   };
 };

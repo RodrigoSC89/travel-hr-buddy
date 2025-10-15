@@ -3,9 +3,9 @@
  * Generates vector embeddings for similarity search using OpenAI
  */
 
-import OpenAI from 'openai';
+import OpenAI from "openai";
 
-const EMBEDDING_MODEL = 'text-embedding-3-small';
+const EMBEDDING_MODEL = "text-embedding-3-small";
 const EMBEDDING_DIMENSIONS = 1536;
 
 // Mock embedding for fallback when API is not available
@@ -20,8 +20,8 @@ const generateMockEmbedding = (): number[] => {
 export const generateEmbedding = async (text: string): Promise<number[]> => {
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
   
-  if (!apiKey || apiKey === 'your_openai_api_key_here') {
-    console.warn('OpenAI API key not configured, using mock embedding');
+  if (!apiKey || apiKey === "your_openai_api_key_here") {
+    console.warn("OpenAI API key not configured, using mock embedding");
     return generateMockEmbedding();
   }
 
@@ -39,8 +39,8 @@ export const generateEmbedding = async (text: string): Promise<number[]> => {
 
     return response.data[0].embedding;
   } catch (error) {
-    console.error('Error generating embedding:', error);
-    console.warn('Falling back to mock embedding');
+    console.error("Error generating embedding:", error);
+    console.warn("Falling back to mock embedding");
     return generateMockEmbedding();
   }
 };
@@ -54,7 +54,7 @@ export const generateJobEmbedding = async (jobData: {
   priority?: string;
   description?: string;
 }): Promise<number[]> => {
-  const text = `${jobData.title} ${jobData.component_name} ${jobData.priority || ''} ${jobData.description || ''}`;
+  const text = `${jobData.title} ${jobData.component_name} ${jobData.priority || ""} ${jobData.description || ""}`;
   return generateEmbedding(text);
 };
 
@@ -63,7 +63,7 @@ export const generateJobEmbedding = async (jobData: {
  */
 export const cosineSimilarity = (vecA: number[], vecB: number[]): number => {
   if (vecA.length !== vecB.length) {
-    throw new Error('Vectors must have the same length');
+    throw new Error("Vectors must have the same length");
   }
 
   let dotProduct = 0;

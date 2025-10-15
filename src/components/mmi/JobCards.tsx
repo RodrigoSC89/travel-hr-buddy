@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
-import { fetchJobs, postponeJob, createWorkOrder, fetchJobWithAI } from '@/services/mmi/jobsApi';
-import { generatePDFReport } from '@/services/mmi/pdfReportService';
-import { MMIJob } from '@/types/mmi';
-import { Loader2, Wrench, Clock, Sparkles, FileText } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { fetchJobs, postponeJob, createWorkOrder, fetchJobWithAI } from "@/services/mmi/jobsApi";
+import { generatePDFReport } from "@/services/mmi/pdfReportService";
+import { MMIJob } from "@/types/mmi";
+import { Loader2, Wrench, Clock, Sparkles, FileText } from "lucide-react";
 
 export default function JobCards() {
   const [jobs, setJobs] = useState<MMIJob[]>([]);
@@ -106,8 +106,8 @@ export default function JobCards() {
     try {
       await generatePDFReport(jobs, {
         includeAIRecommendations: true,
-        title: 'Relatório MMI - Manutenção Inteligente',
-        subtitle: 'Nautilus One v1.1.0 - Sistema com IA Adaptativa',
+        title: "Relatório MMI - Manutenção Inteligente",
+        subtitle: "Nautilus One v1.1.0 - Sistema com IA Adaptativa",
       });
       toast({
         title: "Relatório Gerado",
@@ -263,7 +263,7 @@ export default function JobCards() {
                   <p><strong>Ação:</strong> {selectedJob.ai_recommendation.technical_action}</p>
                   <p><strong>Componente:</strong> {selectedJob.ai_recommendation.component}</p>
                   <p><strong>Prazo Sugerido:</strong> {selectedJob.ai_recommendation.deadline}</p>
-                  <p><strong>Requer OS Formal:</strong> {selectedJob.ai_recommendation.requires_work_order ? 'Sim' : 'Não'}</p>
+                  <p><strong>Requer OS Formal:</strong> {selectedJob.ai_recommendation.requires_work_order ? "Sim" : "Não"}</p>
                 </div>
               </div>
 

@@ -3,8 +3,8 @@
  * Generates professional PDF reports with AI recommendations
  */
 
-import html2pdf from 'html2pdf.js';
-import { MMIJob } from '@/types/mmi';
+import html2pdf from "html2pdf.js";
+import { MMIJob } from "@/types/mmi";
 
 interface ReportOptions {
   includeAIRecommendations?: boolean;
@@ -18,15 +18,15 @@ interface ReportOptions {
 const generateReportHTML = (jobs: MMIJob[], options: ReportOptions = {}): string => {
   const {
     includeAIRecommendations = true,
-    title = 'Relatório MMI - Manutenção Inteligente',
-    subtitle = 'Nautilus One v1.1.0'
+    title = "Relatório MMI - Manutenção Inteligente",
+    subtitle = "Nautilus One v1.1.0"
   } = options;
 
-  const today = new Date().toLocaleDateString('pt-BR');
+  const today = new Date().toLocaleDateString("pt-BR");
   
   // Calculate statistics
   const totalJobs = jobs.length;
-  const pendingJobs = jobs.filter(j => j.status.toLowerCase().includes('pendente')).length;
+  const pendingJobs = jobs.filter(j => j.status.toLowerCase().includes("pendente")).length;
   const withAI = jobs.filter(j => j.suggestion_ia || j.ai_recommendation).length;
   const canPostpone = jobs.filter(j => j.can_postpone).length;
 
@@ -196,11 +196,11 @@ const generateReportHTML = (jobs: MMIJob[], options: ReportOptions = {}): string
       </div>
 
       ${jobs.map(job => {
-        const priorityClass = job.priority.toLowerCase().includes('crít') ? 'critical' 
-          : job.priority.toLowerCase().includes('alta') ? 'medium' 
-          : 'low';
+    const priorityClass = job.priority.toLowerCase().includes("crít") ? "critical" 
+      : job.priority.toLowerCase().includes("alta") ? "medium" 
+        : "low";
         
-        return `
+    return `
           <div class="job-card ${priorityClass}">
             <div class="job-header">
               <div class="job-title">${job.title}</div>
@@ -216,8 +216,8 @@ const generateReportHTML = (jobs: MMIJob[], options: ReportOptions = {}): string
             <div class="badges">
               <span class="badge badge-priority">Prioridade: ${job.priority}</span>
               <span class="badge badge-status">Status: ${job.status}</span>
-              ${job.suggestion_ia ? '<span class="badge badge-ai">💡 Com IA</span>' : ''}
-              ${job.can_postpone ? '<span class="badge badge-postpone">🕒 Pode Postergar</span>' : ''}
+              ${job.suggestion_ia ? "<span class=\"badge badge-ai\">💡 Com IA</span>" : ""}
+              ${job.can_postpone ? "<span class=\"badge badge-postpone\">🕒 Pode Postergar</span>" : ""}
             </div>
 
             ${job.suggestion_ia ? `
@@ -225,7 +225,7 @@ const generateReportHTML = (jobs: MMIJob[], options: ReportOptions = {}): string
                 <strong style="font-size: 12px; color: #374151;">Sugestão IA v1.0:</strong><br>
                 <span style="font-size: 13px; color: #4b5563;">${job.suggestion_ia}</span>
               </div>
-            ` : ''}
+            ` : ""}
 
             ${includeAIRecommendations && job.ai_recommendation ? `
               <div class="ai-section">
@@ -233,7 +233,7 @@ const generateReportHTML = (jobs: MMIJob[], options: ReportOptions = {}): string
                 <p><strong>Ação Técnica:</strong> ${job.ai_recommendation.technical_action}</p>
                 <p><strong>Componente:</strong> ${job.ai_recommendation.component}</p>
                 <p><strong>Prazo Sugerido:</strong> ${job.ai_recommendation.deadline}</p>
-                <p><strong>Requer OS:</strong> ${job.ai_recommendation.requires_work_order ? 'Sim' : 'Não'}</p>
+                <p><strong>Requer OS:</strong> ${job.ai_recommendation.requires_work_order ? "Sim" : "Não"}</p>
                 <p><strong>Raciocínio:</strong> ${job.ai_recommendation.reasoning}</p>
                 
                 ${job.ai_recommendation.similar_cases.length > 0 ? `
@@ -243,14 +243,14 @@ const generateReportHTML = (jobs: MMIJob[], options: ReportOptions = {}): string
                       <div class="similar-case">
                         ${sc.job_id} - ${(sc.similarity * 100).toFixed(0)}% similar: ${sc.action} → ${sc.outcome}
                       </div>
-                    `).join('')}
+                    `).join("")}
                   </div>
-                ` : ''}
+                ` : ""}
               </div>
-            ` : ''}
+            ` : ""}
           </div>
         `;
-      }).join('')}
+  }).join("")}
 
       <div class="footer">
         <p><strong>Nautilus One v1.1.0</strong> - Sistema de Manutenção Inteligente com IA</p>
@@ -274,18 +274,18 @@ export const generatePDFReport = async (
     const html = generateReportHTML(jobs, options);
     
     // Create temporary container
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     container.innerHTML = html;
-    container.style.position = 'absolute';
-    container.style.left = '-9999px';
+    container.style.position = "absolute";
+    container.style.left = "-9999px";
     document.body.appendChild(container);
 
     const pdfOptions = {
       margin: 10,
-      filename: `MMI_Report_${new Date().toISOString().split('T')[0]}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
+      filename: `MMI_Report_${new Date().toISOString().split("T")[0]}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
     };
 
     await html2pdf().set(pdfOptions).from(container).save();
@@ -293,7 +293,7 @@ export const generatePDFReport = async (
     // Cleanup
     document.body.removeChild(container);
   } catch (error) {
-    console.error('Error generating PDF report:', error);
-    throw new Error('Falha ao gerar relatório PDF');
+    console.error("Error generating PDF report:", error);
+    throw new Error("Falha ao gerar relatório PDF");
   }
 };
