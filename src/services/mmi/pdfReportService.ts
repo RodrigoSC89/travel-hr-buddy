@@ -297,3 +297,45 @@ export const generatePDFReport = async (
     throw new Error("Falha ao gerar relatório PDF");
   }
 };
+
+/**
+ * Generate and download PDF report for a single job
+ */
+export const generateJobReport = async (
+  job: MMIJob,
+  options: ReportOptions = {}
+): Promise<void> => {
+  try {
+    const jobTitle = job.title.replace(/[^a-zA-Z0-9]/g, "_").substring(0, 30);
+    const date = new Date().toISOString().split("T")[0];
+    
+    const html = generateReportHTML([job], {
+      ...options,
+      title: options.title || `Relatório Job - ${job.id}`,
+      subtitle: options.subtitle || "Nautilus One v1.1.0 - Relatório Individual"
+    });
+    
+    // Create temporary container
+    const container = document.createElement("div");
+    container.innerHTML = html;
+    container.style.position = "absolute";
+    container.style.left = "-9999px";
+    document.body.appendChild(container);
+
+    const pdfOptions = {
+      margin: 10,
+      filename: `Job_${jobTitle}_${date}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+    };
+
+    await html2pdf().set(pdfOptions).from(container).save();
+    
+    // Cleanup
+    document.body.removeChild(container);
+  } catch (error) {
+    console.error("Error generating job PDF report:", error);
+    throw new Error("Falha ao gerar relatório PDF do job");
+  }
+};

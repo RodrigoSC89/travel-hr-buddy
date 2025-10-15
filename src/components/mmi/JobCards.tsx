@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { fetchJobs, postponeJob, createWorkOrder, fetchJobWithAI } from "@/services/mmi/jobsApi";
-import { generatePDFReport } from "@/services/mmi/pdfReportService";
+import { generatePDFReport, generateJobReport } from "@/services/mmi/pdfReportService";
 import { MMIJob } from "@/types/mmi";
 import { Loader2, Wrench, Clock, Sparkles, FileText } from "lucide-react";
 
@@ -17,6 +17,7 @@ export default function JobCards() {
   const [showAIModal, setShowAIModal] = useState(false);
   const [loadingAI, setLoadingAI] = useState(false);
   const [generatingPDF, setGeneratingPDF] = useState(false);
+  const [generatingJobPDF, setGeneratingJobPDF] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -125,6 +126,28 @@ export default function JobCards() {
     }
   };
 
+  const handleGenerateJobReport = async (job: MMIJob) => {
+    setGeneratingJobPDF(job.id);
+    try {
+      await generateJobReport(job, {
+        includeAIRecommendations: true,
+      });
+      toast({
+        title: "Relatório Gerado",
+        description: `PDF do job "${job.title}" exportado com sucesso!`,
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "Não foi possível gerar o relatório PDF do job.",
+        variant: "destructive",
+      });
+    } finally {
+      setGeneratingJobPDF(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -211,6 +234,19 @@ export default function JobCards() {
                     Postergar com IA
                   </Button>
                 )}
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  onClick={() => handleGenerateJobReport(job)}
+                  disabled={generatingJobPDF === job.id}
+                >
+                  {generatingJobPDF === job.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                  ) : (
+                    <FileText className="h-4 w-4 mr-1" />
+                  )}
+                  Relatório PDF
+                </Button>
                 <Button 
                   variant="outline" 
                   size="sm" 
