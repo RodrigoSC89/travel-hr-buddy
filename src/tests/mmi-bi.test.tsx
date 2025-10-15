@@ -13,6 +13,21 @@ describe("MmiBI Dashboard", () => {
     expect(screen.getByText(/Efetividade das Sugestões da IA/i)).toBeDefined();
   });
 
+  it("should render the PDF export button", () => {
+    render(<MmiBI />);
+    expect(screen.getByText(/Exportar PDF/i)).toBeDefined();
+  });
+
+  it("should render the trend chart", () => {
+    render(<MmiBI />);
+    expect(screen.getByText(/Tendência de Jobs/i)).toBeDefined();
+  });
+
+  it("should render the forecast report", () => {
+    render(<MmiBI />);
+    expect(screen.getByText(/Previsão de Manutenção/i)).toBeDefined();
+  });
+
   it("should render the component without errors", () => {
     const { container } = render(<MmiBI />);
     expect(container).toBeDefined();
