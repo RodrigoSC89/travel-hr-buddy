@@ -4,27 +4,30 @@
 
 This Supabase Edge Function provides job similarity search using AI-powered semantic embeddings. It finds the most similar jobs based on title and description analysis using OpenAI's `text-embedding-ada-002` model.
 
-## Endpoint
+The function supports two modes:
+1. **GET with jobId**: Find jobs similar to an existing job in the database
+2. **POST with query**: Find jobs similar to a free-form text query (semantic search)
+
+## Endpoints
+
+### GET - Find Similar Jobs by Job ID
 
 ```
 GET /functions/v1/mmi-jobs-similar?jobId=<uuid>
 ```
 
-## Parameters
+#### Parameters
 
 | Parameter | Type   | Required | Description                           |
 |-----------|--------|----------|---------------------------------------|
 | jobId     | UUID   | Yes      | The ID of the job to find similar to  |
 
-## Response
-
-### Success (200)
+#### Response (200)
 
 ```json
 {
   "success": true,
   "job_id": "uuid",
-  "job_title": "Job Title",
   "similar_jobs": [
     {
       "id": "uuid",
@@ -40,7 +43,53 @@ GET /functions/v1/mmi-jobs-similar?jobId=<uuid>
 }
 ```
 
-### Error (400)
+### POST - Semantic Search with Text Query
+
+```
+POST /functions/v1/mmi-jobs-similar
+Content-Type: application/json
+
+{
+  "query": "hydraulic system maintenance",
+  "match_threshold": 0.7,
+  "match_count": 10
+}
+```
+
+#### Request Body
+
+| Parameter       | Type   | Required | Default | Description                                    |
+|----------------|--------|----------|---------|------------------------------------------------|
+| query          | string | Yes      | -       | Text query for semantic search                 |
+| match_threshold| float  | No       | 0.78    | Minimum similarity score (0-1)                 |
+| match_count    | int    | No       | 5       | Maximum number of results to return            |
+
+#### Response (200)
+
+```json
+{
+  "data": [
+    {
+      "id": "uuid",
+      "title": "Manutenção preventiva do sistema hidráulico",
+      "description": "Job description",
+      "status": "active",
+      "similarity": 0.92,
+      "metadata": {},
+      "created_at": "2025-10-15T00:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "query": "hydraulic system maintenance",
+    "results_count": 5,
+    "timestamp": "2025-10-15T00:00:00.000Z"
+  }
+}
+```
+
+## Error Responses
+
+### Error (400) - Missing Parameters
 
 ```json
 {
@@ -48,7 +97,15 @@ GET /functions/v1/mmi-jobs-similar?jobId=<uuid>
 }
 ```
 
-### Error (404)
+or
+
+```json
+{
+  "error": "Missing or invalid 'query' parameter in request body"
+}
+```
+
+### Error (404) - Job Not Found
 
 ```json
 {
@@ -56,7 +113,15 @@ GET /functions/v1/mmi-jobs-similar?jobId=<uuid>
 }
 ```
 
-### Error (500)
+### Error (405) - Method Not Allowed
+
+```json
+{
+  "error": "Method not allowed. Use GET or POST"
+}
+```
+
+### Error (500) - Server Error
 
 ```json
 {
@@ -67,31 +132,75 @@ GET /functions/v1/mmi-jobs-similar?jobId=<uuid>
 
 ## Features
 
+- **Dual Mode Operation**: 
+  - GET endpoint for finding similar jobs to existing ones
+  - POST endpoint for semantic search with any text query
 - **Semantic Search**: Uses OpenAI embeddings (text-embedding-ada-002) to understand job context
 - **Cosine Similarity**: Calculates similarity scores between 0 and 1
-- **Configurable Threshold**: Default match threshold of 0.78 (78% similarity)
-- **Top Results**: Returns up to 5 most similar jobs (excluding the query job itself)
+- **Configurable Parameters**: 
+  - Adjustable match threshold (default: 0.78 / 78% similarity)
+  - Customizable result count (default: 5 results)
 - **CORS Enabled**: Allows cross-origin requests
 
 ## Use Cases
 
-1. **Suggest Similar Issues**: Find jobs that had similar problems and suggest resolutions
-2. **Pattern Recognition**: Identify recurring issues across similar jobs
-3. **Risk Assessment**: Alert if a current job resembles one that became a critical failure
-4. **Technical History**: Show historical technical data by semantic similarity
+### 1. Find Similar Existing Jobs (GET)
+When reviewing a job, find other similar jobs in your history:
+```
+"What other jobs are like this one?"
+```
+
+### 2. Semantic Search (POST)
+Search for jobs using natural language descriptions:
+```
+"Find maintenance work related to hydraulic systems"
+"Show me all electrical panel issues"
+```
+
+### 3. Pattern Recognition
+Identify recurring issues across similar jobs by querying:
+```
+"engine overheating problems"
+```
+
+### 4. Risk Assessment
+Alert if a current description resembles previous critical failures:
+```
+"cooling system failure emergency"
+```
+
+### 5. Technical History
+Show historical technical data by semantic similarity:
+```
+"pump replacement procedures"
+```
 
 ## Example Usage
 
-### Using cURL
+### GET Request - Using cURL
 
 ```bash
 curl -X GET 'https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/mmi-jobs-similar?jobId=550e8400-e29b-41d4-a716-446655440000' \
   -H 'Authorization: Bearer YOUR_ANON_KEY'
 ```
 
-### Using JavaScript/TypeScript
+### POST Request - Using cURL
+
+```bash
+curl -X POST 'https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/mmi-jobs-similar' \
+  -H 'Authorization: Bearer YOUR_ANON_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "query": "hydraulic system maintenance",
+    "match_threshold": 0.7,
+    "match_count": 10
+  }'
+```
+
+### GET Request - Using JavaScript/TypeScript
 
 ```typescript
+// Find similar jobs to an existing job
 const response = await fetch(
   `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/mmi-jobs-similar?jobId=${jobId}`,
   {
@@ -103,6 +212,31 @@ const response = await fetch(
 
 const data = await response.json();
 console.log('Similar jobs:', data.similar_jobs);
+```
+
+### POST Request - Using JavaScript/TypeScript
+
+```typescript
+// Semantic search with a text query
+const response = await fetch(
+  'https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/mmi-jobs-similar',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      query: 'hydraulic system maintenance',
+      match_threshold: 0.7,
+      match_count: 10
+    })
+  }
+);
+
+const data = await response.json();
+console.log('Search results:', data.data);
+console.log('Found', data.meta.results_count, 'matching jobs');
 ```
 
 ## Environment Variables

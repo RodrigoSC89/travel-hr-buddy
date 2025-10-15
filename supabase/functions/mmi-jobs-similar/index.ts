@@ -13,20 +13,6 @@ serve(async (req) => {
   }
 
   try {
-    // Parse request parameters
-    const url = new URL(req.url);
-    const jobId = url.searchParams.get("jobId");
-
-    if (!jobId) {
-      return new Response(
-        JSON.stringify({ error: "Missing jobId parameter" }),
-        { 
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
-        }
-      );
-    }
-
     // Check for required environment variables
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) {
@@ -43,26 +29,77 @@ serve(async (req) => {
     // Initialize Supabase client
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch the job from database
-    const { data: job, error: jobError } = await supabase
-      .from("mmi_jobs")
-      .select("*")
-      .eq("id", jobId)
-      .single();
+    let embeddingText = "";
+    let querySource = "";
+    let matchThreshold = 0.78;
+    let matchCount = 5;
 
-    if (jobError || !job) {
+    // Handle POST request with query text
+    if (req.method === "POST") {
+      const body = await req.json();
+      const query = body.query;
+      
+      if (!query || typeof query !== "string") {
+        return new Response(
+          JSON.stringify({ error: "Missing or invalid 'query' parameter in request body" }),
+          { 
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" }
+          }
+        );
+      }
+
+      embeddingText = query.trim();
+      querySource = "query";
+      matchThreshold = body.match_threshold || 0.78;
+      matchCount = body.match_count || 5;
+    }
+    // Handle GET request with jobId
+    else if (req.method === "GET") {
+      const url = new URL(req.url);
+      const jobId = url.searchParams.get("jobId");
+
+      if (!jobId) {
+        return new Response(
+          JSON.stringify({ error: "Missing jobId parameter" }),
+          { 
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" }
+          }
+        );
+      }
+
+      // Fetch the job from database
+      const { data: job, error: jobError } = await supabase
+        .from("mmi_jobs")
+        .select("*")
+        .eq("id", jobId)
+        .single();
+
+      if (jobError || !job) {
+        return new Response(
+          JSON.stringify({ error: "Job not found" }),
+          { 
+            status: 404,
+            headers: { ...corsHeaders, "Content-Type": "application/json" }
+          }
+        );
+      }
+
+      embeddingText = `${job.title} ${job.description || ""}`.trim();
+      querySource = jobId;
+    }
+    else {
       return new Response(
-        JSON.stringify({ error: "Job not found" }),
+        JSON.stringify({ error: "Method not allowed. Use GET or POST" }),
         { 
-          status: 404,
+          status: 405,
           headers: { ...corsHeaders, "Content-Type": "application/json" }
         }
       );
     }
 
-    // Generate embedding for the job using OpenAI
-    const embeddingText = `${job.title} ${job.description || ""}`.trim();
-    
+    // Generate embedding using OpenAI
     const embeddingResponse = await fetch("https://api.openai.com/v1/embeddings", {
       method: "POST",
       headers: {
@@ -87,8 +124,8 @@ serve(async (req) => {
     // Call the match_mmi_jobs RPC function to find similar jobs
     const { data: matches, error: matchError } = await supabase.rpc("match_mmi_jobs", {
       query_embedding: embedding,
-      match_threshold: 0.78,
-      match_count: 5
+      match_threshold: matchThreshold,
+      match_count: matchCount
     });
 
     if (matchError) {
@@ -96,17 +133,29 @@ serve(async (req) => {
       throw new Error(`Error finding similar jobs: ${matchError.message}`);
     }
 
-    // Filter out the current job from results
-    const filteredMatches = (matches || []).filter((match: any) => match.id !== jobId);
+    // Filter out the current job from results if querying by jobId
+    const filteredMatches = req.method === "GET" 
+      ? (matches || []).filter((match: any) => match.id !== querySource)
+      : (matches || []);
+
+    const response = req.method === "POST" 
+      ? {
+          data: filteredMatches,
+          meta: {
+            query: embeddingText,
+            results_count: filteredMatches.length,
+            timestamp: new Date().toISOString()
+          }
+        }
+      : {
+          success: true,
+          job_id: querySource,
+          similar_jobs: filteredMatches,
+          count: filteredMatches.length
+        };
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        job_id: jobId,
-        job_title: job.title,
-        similar_jobs: filteredMatches,
-        count: filteredMatches.length
-      }),
+      JSON.stringify(response),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
