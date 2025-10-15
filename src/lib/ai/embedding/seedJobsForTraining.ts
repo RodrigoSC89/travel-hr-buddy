@@ -3,7 +3,17 @@
 import { createClient } from "@/lib/supabase/client";
 import { createEmbedding } from "@/lib/ai/openai/createEmbedding";
 
-export async function seedJobsForTraining() {
+export interface EmbeddedJob {
+  id: string;
+  embedding: number[];
+  metadata: {
+    component_id: string;
+    title: string;
+    created_at: string;
+  };
+}
+
+export async function seedJobsForTraining(): Promise<EmbeddedJob[]> {
   const supabase = createClient();
 
   // Coleta os 10 últimos jobs finalizados com sugestão IA
