@@ -88,6 +88,7 @@ const TemplateEditorPage = React.lazy(() => import("./pages/admin/templates/edit
 const MMIJobsPanel = React.lazy(() => import("./pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("./pages/MmiBI"));
 const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAnalysis"));
+const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreationWithSimilarExamples"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -176,6 +177,7 @@ function App() {
                       <Route path="/nautilus-one" element={<NautilusOne />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
+                      <Route path="/mmi/job-creation-demo" element={<JobCreationWithSimilarExamples />} />
                       <Route path="/innovation" element={<Innovation />} />
                       <Route path="/optimization" element={<Optimization />} />
                       <Route path="/collaboration" element={<Collaboration />} />
