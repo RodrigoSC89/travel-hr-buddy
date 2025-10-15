@@ -235,13 +235,13 @@ export default function JobCreationWithSimilarExamples() {
                 <strong>Descreva o problema:</strong> Digite o título, componente ou descrição detalhada do problema de manutenção
               </li>
               <li>
-                <strong>Busque exemplos:</strong> Clique em "🔍 Ver exemplos semelhantes" no painel direito para encontrar casos históricos similares
+                <strong>Busque exemplos:</strong> Clique em &quot;🔍 Ver exemplos semelhantes&quot; no painel direito para encontrar casos históricos similares
               </li>
               <li>
                 <strong>Revise os resultados:</strong> Veja os jobs similares ordenados por relevância, com percentual de similaridade e sugestões de IA
               </li>
               <li>
-                <strong>Use como base:</strong> Clique em "📋 Usar como base" em qualquer exemplo para popular o campo de descrição automaticamente
+                <strong>Use como base:</strong> Clique em &quot;📋 Usar como base&quot; em qualquer exemplo para popular o campo de descrição automaticamente
               </li>
               <li>
                 <strong>Ajuste e salve:</strong> Edite a descrição conforme necessário e salve o novo job de manutenção
