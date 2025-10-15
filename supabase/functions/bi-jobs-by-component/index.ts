@@ -16,28 +16,14 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Query to get jobs count grouped by component_id
+    // Call the RPC function to get jobs statistics by component
     const { data, error } = await supabase
-      .from("mmi_jobs")
-      .select("component_id")
-      .not("component_id", "is", null);
+      .rpc("jobs_by_component_stats");
 
     if (error) throw error;
 
-    // Group by component_id and count
-    const jobsByComponent = (data || []).reduce((acc: Record<string, number>, job: any) => {
-      const componentId = job.component_id;
-      if (componentId) {
-        acc[componentId] = (acc[componentId] || 0) + 1;
-      }
-      return acc;
-    }, {});
-
-    // Convert to array format expected by the chart
-    const result = Object.entries(jobsByComponent).map(([component_id, count]) => ({
-      component_id,
-      count,
-    }));
+    // The RPC function returns: component_id, count, avg_duration
+    const result = data || [];
 
     return new Response(
       JSON.stringify(result),

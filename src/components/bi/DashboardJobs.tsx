@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 interface JobsByComponent {
   component_id: string;
   count: number;
+  avg_duration: number;
 }
 
 export default function DashboardJobs() {
@@ -36,7 +37,7 @@ export default function DashboardJobs() {
 
   return (
     <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-4">📊 Falhas por Componente</h2>
+      <h2 className="text-xl font-semibold mb-4">📊 Falhas por Componente + Tempo Médio</h2>
       <CardContent>
         {loading ? (
           <Skeleton className="h-64 w-full" />
@@ -47,7 +48,8 @@ export default function DashboardJobs() {
               <YAxis dataKey="component_id" type="category" />
               <Tooltip />
               <Legend />
-              <Bar dataKey="count" fill="#0f172a" name="Jobs" />
+              <Bar dataKey="count" fill="#0f172a" name="Jobs Finalizados" />
+              <Bar dataKey="avg_duration" fill="#3b82f6" name="Tempo Médio (h)" />
             </BarChart>
           </ResponsiveContainer>
         )}

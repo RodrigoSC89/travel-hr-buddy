@@ -39,8 +39,8 @@ describe("DashboardJobs Component", () => {
 
   it("should call the bi-jobs-by-component function on mount", async () => {
     const mockData = [
-      { component_id: "comp-1", count: 5 },
-      { component_id: "comp-2", count: 3 },
+      { component_id: "comp-1", count: 5, avg_duration: 2.5 },
+      { component_id: "comp-2", count: 3, avg_duration: 3.2 },
     ];
 
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
@@ -82,5 +82,15 @@ describe("DashboardJobs Component", () => {
     const { container } = render(<DashboardJobs />);
     expect(container).toBeDefined();
     expect(container.firstChild).toBeDefined();
+  });
+
+  it("should display title with both metrics mentioned", () => {
+    vi.mocked(supabase.functions.invoke).mockResolvedValue({
+      data: [],
+      error: null,
+    });
+
+    render(<DashboardJobs />);
+    expect(screen.getByText(/Falhas por Componente \+ Tempo Médio/i)).toBeDefined();
   });
 });
