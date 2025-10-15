@@ -15,6 +15,43 @@ interface CommandAction {
 
 // Command mapping for the assistant
 const commandPatterns: Record<string, CommandAction> = {
+  // MMI (Manutenção Inteligente) commands
+  "manutenção": {
+    type: "navigation",
+    target: "/mmi",
+    message: "🔧 Navegando para o Módulo de Manutenção Inteligente (MMI)...",
+  },
+  "manutencao": {
+    type: "navigation",
+    target: "/mmi",
+    message: "🔧 Abrindo módulo de Manutenção Inteligente...",
+  },
+  "jobs": {
+    type: "navigation",
+    target: "/mmi/jobs",
+    message: "📋 Navegando para lista de jobs de manutenção...",
+  },
+  "criar job": {
+    type: "action",
+    message: "🔧 Para criar um job de manutenção, você pode:\n\n1. Usar o Copilot: Digite descrição detalhada (ex: 'Criar job de troca de óleo no gerador BB')\n2. Acessar: MMI > Jobs > Novo Job\n3. Especificar: Ativo, componente, tipo de manutenção, prioridade\n\n💡 O Copilot pode criar jobs automaticamente via linguagem natural!",
+  },
+  "os": {
+    type: "action",
+    message: "📄 Ordens de Serviço (OS):\n\n• Ver OS críticas: 'listar OS críticas'\n• Criar OS de um job: 'gerar OS para job #[número]'\n• Gerenciar: MMI > Ordens de Serviço\n\n🔗 Navegue para o módulo MMI para mais opções.",
+  },
+  "ordem de serviço": {
+    type: "action",
+    message: "📄 Para gerenciar Ordens de Serviço:\n\n1. Acesse: MMI > Ordens de Serviço\n2. Ou use comandos: 'criar OS', 'OS críticas', 'OS pendentes'\n\n💡 Cada OS está vinculada a um job de manutenção.",
+  },
+  "postergar": {
+    type: "action",
+    message: "⏰ Postergação de Jobs:\n\nPara avaliar se um job pode ser postergado:\n• Digite: 'postergar job #[número]'\n• IA analisará: histórico, horas atuais, criticidade\n• Resposta incluirá: nível de risco, condições, data recomendada\n\n⚠️ A IA considera segurança e impacto operacional na análise.",
+  },
+  "equipamentos": {
+    type: "navigation",
+    target: "/mmi/assets",
+    message: "⚙️ Navegando para gestão de equipamentos e ativos...",
+  },
   // Navigation commands
   "criar checklist": {
     type: "navigation",
@@ -95,7 +132,7 @@ const commandPatterns: Record<string, CommandAction> = {
   },
   "ajuda": {
     type: "info",
-    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
+    message: "💡 **Comandos disponíveis:**\n\n🔧 **MMI - Manutenção Inteligente:**\n• 'manutenção' - Abrir módulo MMI\n• 'jobs' - Ver jobs de manutenção\n• 'criar job' - Instruções para criar job\n• 'postergar job #123' - Avaliar postergação\n• 'os' - Gerenciar ordens de serviço\n• 'equipamentos' - Gestão de ativos\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
   },
   "help": {
     type: "info",
@@ -281,6 +318,10 @@ Você pode realizar ações como:
 - Listar documentos recentes
 - Gerar PDF com resumo
 - Redirecionar para rotas internas do painel
+- Gerenciar manutenção inteligente (MMI)
+- Criar jobs de manutenção
+- Avaliar postergações de manutenção
+- Gerenciar ordens de serviço
 
 Módulos disponíveis no sistema:
 1. **Dashboard** (/dashboard) - Visão geral do sistema
@@ -295,6 +336,25 @@ Módulos disponíveis no sistema:
 10. **Tripulação** (/crew) - Gestão de tripulação
 11. **Reservas** (/reservations) - Sistema de reservas
 12. **Comunicação** (/communication) - Centro de comunicação
+13. **MMI - Manutenção Inteligente** (/mmi) - Gestão inteligente de manutenção
+    - Jobs de manutenção (preventiva, corretiva, inspeção, emergência)
+    - Ordens de serviço (OS)
+    - Gestão de ativos e equipamentos
+    - Avaliação de postergação com IA
+    - Análise preditiva de falhas
+
+**MMI - Módulo de Manutenção Inteligente:**
+Quando o usuário mencionar equipamentos, falhas, jobs, OS (ordens de serviço), ou manutenção preditiva:
+- Forneça respostas técnicas orientadas à ação
+- Sugira comandos específicos do MMI
+- Referencie o Copilot de Manutenção para tarefas complexas
+- Considere segurança e impacto operacional
+
+Exemplos de comandos MMI:
+- "criar job de troca de óleo no gerador BB"
+- "postergar job #2493"
+- "listar OS críticas"
+- "equipamentos com manutenção vencida"
 
 Sempre forneça respostas práticas e direcionadas. Quando relevante, sugira a rota específica do módulo.
 Seja claro, direto e útil.
