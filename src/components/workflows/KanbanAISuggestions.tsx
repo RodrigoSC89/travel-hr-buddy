@@ -5,14 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
-interface Suggestion {
-  etapa: string;
-  tipo_sugestao: string;
-  conteudo: string;
-  criticidade: string;
-  responsavel_sugerido: string;
-}
+import type { Suggestion } from "./ExportSuggestionsPDF";
 
 export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[] }) {
   const [accepted, setAccepted] = useState<string[]>([]);
@@ -55,7 +48,7 @@ export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[]
         variant: "destructive",
       });
       // Revert the accepted state on error
-      setAccepted((prev) => prev.filter(e => e !== etapa));
+      setAccepted((prev) => prev.filter((e) => e !== etapa));
     }
   };
 
@@ -65,7 +58,7 @@ export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[]
         🤖 Sugestões da IA para este workflow
       </h2>
       {suggestions.map((s, idx) => (
-        <Card key={idx} className={accepted.includes(s.etapa) ? 'opacity-50' : ''}>
+        <Card key={idx} className={accepted.includes(s.etapa) ? "opacity-50" : ""}>
           <CardContent className="pt-6">
             <div className="space-y-3">
               <div className="flex items-center gap-2">

@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { exportSuggestionsToPDF } from "@/components/workflows";
 
 interface SmartWorkflow {
   id: string
@@ -366,7 +367,7 @@ export default function WorkflowDetailPage() {
       
       toast({
         title: "Sucesso",
-        description: `Tarefa movida para ${targetStatus.replace('_', ' ')}!`
+        description: `Tarefa movida para ${targetStatus.replace("_", " ")}!`
       });
       fetchSteps();
     } catch (error) {
@@ -832,6 +833,66 @@ export default function WorkflowDetailPage() {
                   {new Date(workflow.updated_at).toLocaleString("pt-BR")}
                 </span>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* AI Suggestions Section with Export */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>🤖 Sugestões da IA</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const demoSuggestions = [
+                      {
+                        etapa: "Planejamento",
+                        tipo_sugestao: "Análise de Riscos",
+                        conteudo: "Realizar análise de riscos detalhada antes de iniciar o desenvolvimento para identificar possíveis bloqueadores.",
+                        criticidade: "Alta",
+                        responsavel_sugerido: "Project Manager"
+                      },
+                      {
+                        etapa: "Desenvolvimento",
+                        tipo_sugestao: "Code Review",
+                        conteudo: "Implementar revisão de código em pares para garantir qualidade e compartilhar conhecimento entre a equipe.",
+                        criticidade: "Média",
+                        responsavel_sugerido: "Tech Lead"
+                      },
+                      {
+                        etapa: "Testes",
+                        tipo_sugestao: "Automação",
+                        conteudo: "Criar suite de testes automatizados para cobrir casos críticos e reduzir tempo de regressão.",
+                        criticidade: "Alta",
+                        responsavel_sugerido: "QA Lead"
+                      },
+                      {
+                        etapa: "Deploy",
+                        tipo_sugestao: "Monitoramento",
+                        conteudo: "Configurar monitoramento e alertas para acompanhar a saúde da aplicação após o deploy.",
+                        criticidade: "Média",
+                        responsavel_sugerido: "DevOps Engineer"
+                      }
+                    ];
+                    
+                    exportSuggestionsToPDF(demoSuggestions);
+                    
+                    toast({
+                      title: "PDF Exportado",
+                      description: "O plano de ações foi exportado com sucesso!",
+                    });
+                  }}
+                >
+                  📄 Exportar PDF
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                As sugestões da IA ajudam a otimizar seu workflow com recomendações inteligentes baseadas em melhores práticas. 
+                Clique no botão acima para exportar um relatório PDF com sugestões de exemplo.
+              </p>
             </CardContent>
           </Card>
         </div>
