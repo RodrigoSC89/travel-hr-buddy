@@ -97,3 +97,116 @@ export interface JobHistory {
   created_at: string;
   embedding?: number[];
 }
+
+/**
+ * MMI System - Ship systems catalog
+ */
+export interface MMISystem {
+  id: string;
+  vessel_id?: string;
+  system_name: string;
+  system_type: 'propulsion' | 'electrical' | 'navigation' | 'safety' | 'auxiliary';
+  criticality: 'critical' | 'high' | 'medium' | 'low';
+  description?: string;
+  compliance_metadata?: {
+    normam?: string[];
+    solas?: string[];
+    marpol?: string[];
+    inspection_required?: boolean;
+    next_inspection?: string;
+  };
+  created_at?: string;
+  updated_at?: string;
+}
+
+/**
+ * MMI Component - Components with hourometer tracking
+ */
+export interface MMIComponent {
+  id: string;
+  system_id?: string;
+  component_name: string;
+  current_hours: number;
+  maintenance_interval_hours: number;
+  last_maintenance_date?: string;
+  next_maintenance_date?: string;
+  is_operational: boolean;
+  component_type?: string;
+  manufacturer?: string;
+  model?: string;
+  serial_number?: string;
+  installation_date?: string;
+  metadata?: Record<string, unknown>;
+  created_at?: string;
+  updated_at?: string;
+}
+
+/**
+ * MMI Work Order (OS)
+ */
+export interface MMIOS {
+  id: string;
+  job_id?: string;
+  os_number: string;
+  status: 'open' | 'in_progress' | 'completed' | 'cancelled';
+  assigned_to?: string;
+  start_date?: string;
+  completion_date?: string;
+  work_description?: string;
+  parts_used?: Array<{
+    name: string;
+    quantity: number;
+    cost: number;
+  }>;
+  labor_hours?: number;
+  parts_cost?: number;
+  labor_cost?: number;
+  total_cost?: number;
+  effectiveness_rating?: number;
+  feedback?: string;
+  notes?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+/**
+ * MMI Hourometer Log
+ */
+export interface MMIHourometerLog {
+  id: string;
+  component_id: string;
+  previous_hours: number;
+  new_hours: number;
+  hours_added?: number;
+  recorded_by: string;
+  source: 'automated' | 'manual' | 'sensor';
+  notes?: string;
+  created_at: string;
+}
+
+/**
+ * Enhanced MMI Job with full schema support
+ */
+export interface MMIJobEnhanced {
+  id: string;
+  component_id?: string;
+  title: string;
+  description?: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled' | 'postponed';
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  due_date?: string;
+  completed_date?: string;
+  embedding?: number[];
+  suggestion_ia?: string;
+  can_postpone: boolean;
+  postponement_count: number;
+  assigned_to?: string;
+  estimated_hours?: number;
+  actual_hours?: number;
+  metadata?: Record<string, unknown>;
+  created_at?: string;
+  updated_at?: string;
+  // Relations
+  component?: MMIComponent;
+  ai_recommendation?: AIRecommendation;
+}

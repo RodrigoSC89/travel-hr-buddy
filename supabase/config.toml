@@ -16,6 +16,12 @@ verify_jwt = false
 [functions.mmi-jobs-similar]
 verify_jwt = false
 
+[functions.simulate-hours]
+verify_jwt = false
+
+[functions.send-alerts]
+verify_jwt = false
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)
@@ -44,3 +50,15 @@ name = "send-restore-dashboard-daily"
 function_name = "send-restore-dashboard-daily"
 schedule = "0 8 * * *"  # Every day at 08:00 UTC (5h BRT)
 description = "Send daily restore dashboard report via email with PDF attachment"
+
+[[edge_runtime.cron]]
+name = "simulate-hours"
+function_name = "simulate-hours"
+schedule = "0 * * * *"  # Every hour
+description = "MMI: Simulate hourometer progression and create maintenance jobs"
+
+[[edge_runtime.cron]]
+name = "send-alerts"
+function_name = "send-alerts"
+schedule = "0 8 * * *"  # Every day at 08:00 UTC
+description = "MMI: Send email alerts for critical and high-priority maintenance jobs"
