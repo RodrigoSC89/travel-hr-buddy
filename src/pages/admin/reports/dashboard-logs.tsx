@@ -1,16 +1,16 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { supabase } from '@/integrations/supabase/client'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { ArrowLeft, Download } from 'lucide-react'
-import { format } from 'date-fns'
-import { logger } from '@/lib/logger'
-import { toast } from 'sonner'
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ArrowLeft, Download } from "lucide-react";
+import { format } from "date-fns";
+import { logger } from "@/lib/logger";
+import { toast } from "sonner";
 
 interface DashboardLog {
   id: string
@@ -21,77 +21,77 @@ interface DashboardLog {
 }
 
 export default function DashboardLogs() {
-  const navigate = useNavigate()
-  const [logs, setLogs] = useState<DashboardLog[]>([])
-  const [loading, setLoading] = useState(true)
-  const [statusFilter, setStatusFilter] = useState('')
-  const [dateStart, setDateStart] = useState('')
-  const [dateEnd, setDateEnd] = useState('')
+  const navigate = useNavigate();
+  const [logs, setLogs] = useState<DashboardLog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState("");
+  const [dateStart, setDateStart] = useState("");
+  const [dateEnd, setDateEnd] = useState("");
 
   async function fetchLogs() {
     try {
-      setLoading(true)
+      setLoading(true);
       let query = supabase
-        .from('dashboard_report_logs')
-        .select('*')
-        .order('executed_at', { ascending: false })
-        .limit(100)
+        .from("dashboard_report_logs")
+        .select("*")
+        .order("executed_at", { ascending: false })
+        .limit(100);
 
-      if (statusFilter) query = query.eq('status', statusFilter)
-      if (dateStart) query = query.gte('executed_at', dateStart)
-      if (dateEnd) query = query.lte('executed_at', dateEnd)
+      if (statusFilter) query = query.eq("status", statusFilter);
+      if (dateStart) query = query.gte("executed_at", dateStart);
+      if (dateEnd) query = query.lte("executed_at", dateEnd);
 
-      const { data, error } = await query
+      const { data, error } = await query;
 
       if (error) {
-        logger.error('Error fetching dashboard logs:', error)
-        toast.error('Erro ao carregar logs')
-        return
+        logger.error("Error fetching dashboard logs:", error);
+        toast.error("Erro ao carregar logs");
+        return;
       }
 
-      setLogs(data || [])
+      setLogs(data || []);
     } catch (error) {
-      logger.error('Error fetching dashboard logs:', error)
-      toast.error('Erro ao carregar logs')
+      logger.error("Error fetching dashboard logs:", error);
+      toast.error("Erro ao carregar logs");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchLogs()
-  }, [statusFilter, dateStart, dateEnd])
+    fetchLogs();
+  }, [statusFilter, dateStart, dateEnd]);
 
   const exportCSV = () => {
     if (logs.length === 0) {
-      toast.error('Nenhum log para exportar')
-      return
+      toast.error("Nenhum log para exportar");
+      return;
     }
 
     const csv = [
-      ['Data', 'Status', 'Email', 'Mensagem'].join(','),
+      ["Data", "Status", "Email", "Mensagem"].join(","),
       ...logs.map(log =>
         [
-          format(new Date(log.executed_at), 'yyyy-MM-dd HH:mm'),
+          format(new Date(log.executed_at), "yyyy-MM-dd HH:mm"),
           log.status,
           log.email,
-          log.message?.replace(/\n/g, ' ').replace(/,/g, ';') || '',
-        ].map(cell => `"${cell}"`).join(',')
+          log.message?.replace(/\n/g, " ").replace(/,/g, ";") || "",
+        ].map(cell => `"${cell}"`).join(",")
       ),
-    ].join('\n')
+    ].join("\n");
 
-    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `dashboard_logs_${format(new Date(), 'yyyy-MM-dd_HHmmss')}.csv`
-    a.click()
-    URL.revokeObjectURL(url)
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `dashboard_logs_${format(new Date(), "yyyy-MM-dd_HHmmss")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
 
-    toast.success('CSV exportado com sucesso!', {
+    toast.success("CSV exportado com sucesso!", {
       description: `${logs.length} registros exportados`
-    })
-  }
+    });
+  };
 
   return (
     <div className="min-h-screen p-6 bg-gray-50">
@@ -102,7 +102,7 @@ export default function DashboardLogs() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => navigate('/admin')}
+              onClick={() => navigate("/admin")}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar
@@ -164,7 +164,7 @@ export default function DashboardLogs() {
             <CardContent className="p-4">
               <div className="text-sm text-muted-foreground">Sucessos</div>
               <div className="text-2xl font-bold text-green-600">
-                {logs.filter(log => log.status === 'success').length}
+                {logs.filter(log => log.status === "success").length}
               </div>
             </CardContent>
           </Card>
@@ -172,7 +172,7 @@ export default function DashboardLogs() {
             <CardContent className="p-4">
               <div className="text-sm text-muted-foreground">Erros</div>
               <div className="text-2xl font-bold text-red-600">
-                {logs.filter(log => log.status === 'error').length}
+                {logs.filter(log => log.status === "error").length}
               </div>
             </CardContent>
           </Card>
@@ -208,22 +208,22 @@ export default function DashboardLogs() {
                       {logs.map((log) => (
                         <tr key={log.id} className="border-b hover:bg-muted/30 transition-colors">
                           <td className="p-3 whitespace-nowrap">
-                            {format(new Date(log.executed_at), 'dd/MM/yyyy HH:mm')}
+                            {format(new Date(log.executed_at), "dd/MM/yyyy HH:mm")}
                           </td>
                           <td className="p-3">
                             <span
                               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                log.status === 'success'
-                                  ? 'bg-green-100 text-green-800'
-                                  : 'bg-red-100 text-red-800'
+                                log.status === "success"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-red-100 text-red-800"
                               }`}
                             >
                               {log.status}
                             </span>
                           </td>
                           <td className="p-3">{log.email}</td>
-                          <td className="p-3 max-w-[300px] truncate" title={log.message || ''}>
-                            {log.message || '-'}
+                          <td className="p-3 max-w-[300px] truncate" title={log.message || ""}>
+                            {log.message || "-"}
                           </td>
                         </tr>
                       ))}
@@ -236,5 +236,5 @@ export default function DashboardLogs() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

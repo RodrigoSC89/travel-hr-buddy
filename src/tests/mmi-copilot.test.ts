@@ -32,6 +32,7 @@ describe("MMI Copilot AI Suggestions", () => {
       };
 
       const { supabase } = await import("@/integrations/supabase/client");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.functions.invoke as any).mockResolvedValue(mockResponse);
 
       const result = await getCopilotSuggestion("Válvula de Controle Hidráulico");
@@ -54,6 +55,7 @@ describe("MMI Copilot AI Suggestions", () => {
       };
 
       const { supabase } = await import("@/integrations/supabase/client");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.functions.invoke as any).mockResolvedValue(mockResponse);
 
       const result = await getCopilotSuggestion("Componente Novo");
@@ -77,6 +79,7 @@ describe("MMI Copilot AI Suggestions", () => {
       };
 
       const { supabase } = await import("@/integrations/supabase/client");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.functions.invoke as any).mockResolvedValue(mockResponse);
 
       const result = await getCopilotSuggestion("Motor Principal");
@@ -88,6 +91,7 @@ describe("MMI Copilot AI Suggestions", () => {
 
     it("should handle API errors gracefully", async () => {
       const { supabase } = await import("@/integrations/supabase/client");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.functions.invoke as any).mockResolvedValue({
         data: null,
         error: { message: "Service unavailable" },
@@ -109,6 +113,7 @@ describe("MMI Copilot AI Suggestions", () => {
       };
 
       const { supabase } = await import("@/integrations/supabase/client");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.functions.invoke as any).mockResolvedValue(mockResponse);
 
       await getCopilotSuggestion(
@@ -140,6 +145,7 @@ describe("MMI Copilot AI Suggestions", () => {
       };
 
       const { supabase } = await import("@/integrations/supabase/client");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.functions.invoke as any).mockResolvedValue(mockResponse);
 
       const result = await getCopilotSuggestion("Válvula Hidráulica");
@@ -158,6 +164,7 @@ describe("MMI Copilot AI Suggestions", () => {
       };
 
       const { supabase } = await import("@/integrations/supabase/client");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.functions.invoke as any).mockResolvedValue(mockResponse);
 
       const result = await getCopilotSuggestion("Teste");
@@ -184,6 +191,7 @@ describe("MMI Copilot AI Suggestions", () => {
       };
 
       const { supabase } = await import("@/integrations/supabase/client");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.functions.invoke as any).mockResolvedValue(mockResponse);
 
       const result = await getCopilotSuggestion("Componente");
@@ -217,6 +225,7 @@ describe("MMI Copilot AI Suggestions", () => {
       };
 
       const { supabase } = await import("@/integrations/supabase/client");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.functions.invoke as any).mockResolvedValue(mockResponse);
 
       const result = await getCopilotSuggestion("Componente");

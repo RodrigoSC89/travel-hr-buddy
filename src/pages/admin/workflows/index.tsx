@@ -1,16 +1,16 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { supabase } from '@/integrations/supabase/client'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Plus, Workflow, Calendar, User } from 'lucide-react'
-import { useToast } from '@/hooks/use-toast'
-import { Link } from 'react-router-dom'
-import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper'
-import { ModulePageWrapper } from '@/components/ui/module-page-wrapper'
-import { ModuleHeader } from '@/components/ui/module-header'
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus, Workflow, Calendar, User } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
+import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
 
 interface SmartWorkflow {
   id: string
@@ -25,84 +25,84 @@ interface SmartWorkflow {
 }
 
 export default function SmartWorkflowPage() {
-  const [workflows, setWorkflows] = useState<SmartWorkflow[]>([])
-  const [newTitle, setNewTitle] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [isCreating, setIsCreating] = useState(false)
-  const { toast } = useToast()
+  const [workflows, setWorkflows] = useState<SmartWorkflow[]>([]);
+  const [newTitle, setNewTitle] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
+  const { toast } = useToast();
 
   async function fetchWorkflows() {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const { data, error } = await supabase
-        .from('smart_workflows')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("smart_workflows")
+        .select("*")
+        .order("created_at", { ascending: false });
       
-      if (error) throw error
-      setWorkflows(data || [])
+      if (error) throw error;
+      setWorkflows(data || []);
     } catch (error) {
-      console.error('Error fetching workflows:', error)
+      console.error("Error fetching workflows:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível carregar os fluxos de trabalho',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível carregar os fluxos de trabalho",
+        variant: "destructive"
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   async function createWorkflow() {
     if (!newTitle.trim()) {
       toast({
-        title: 'Erro',
-        description: 'Por favor, insira um título para o fluxo de trabalho',
-        variant: 'destructive'
-      })
-      return
+        title: "Erro",
+        description: "Por favor, insira um título para o fluxo de trabalho",
+        variant: "destructive"
+      });
+      return;
     }
 
     try {
-      setIsCreating(true)
-      const { data: { user } } = await supabase.auth.getUser()
+      setIsCreating(true);
+      const { data: { user } } = await supabase.auth.getUser();
       
       const { error } = await supabase
-        .from('smart_workflows')
+        .from("smart_workflows")
         .insert({ 
           title: newTitle,
           created_by: user?.id 
-        })
+        });
       
-      if (error) throw error
+      if (error) throw error;
       
-      setNewTitle('')
+      setNewTitle("");
       toast({
-        title: 'Sucesso',
-        description: 'Fluxo de trabalho criado com sucesso!'
-      })
-      fetchWorkflows()
+        title: "Sucesso",
+        description: "Fluxo de trabalho criado com sucesso!"
+      });
+      fetchWorkflows();
     } catch (error) {
-      console.error('Error creating workflow:', error)
+      console.error("Error creating workflow:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível criar o fluxo de trabalho',
-        variant: 'destructive'
-      })
+        title: "Erro",
+        description: "Não foi possível criar o fluxo de trabalho",
+        variant: "destructive"
+      });
     } finally {
-      setIsCreating(false)
+      setIsCreating(false);
     }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      createWorkflow()
+    if (e.key === "Enter") {
+      createWorkflow();
     }
-  }
+  };
 
   useEffect(() => {
-    fetchWorkflows()
-  }, [])
+    fetchWorkflows();
+  }, []);
 
   return (
     <MultiTenantWrapper>
@@ -113,9 +113,9 @@ export default function SmartWorkflowPage() {
           description="Gerencie fluxos de trabalho inteligentes e automatizados"
           gradient="blue"
           badges={[
-            { icon: Workflow, label: 'Automação' },
-            { icon: Calendar, label: 'Etapas' },
-            { icon: User, label: 'Responsáveis' }
+            { icon: Workflow, label: "Automação" },
+            { icon: Calendar, label: "Etapas" },
+            { icon: User, label: "Responsáveis" }
           ]}
         />
 
@@ -135,7 +135,7 @@ export default function SmartWorkflowPage() {
               disabled={isCreating || !newTitle.trim()}
             >
               <Plus className="w-4 h-4 mr-1" /> 
-              {isCreating ? 'Criando...' : 'Criar'}
+              {isCreating ? "Criando..." : "Criar"}
             </Button>
           </div>
 
@@ -161,11 +161,11 @@ export default function SmartWorkflowPage() {
                     <div className="flex items-start justify-between">
                       <h3 className="text-lg font-semibold">{wf.title}</h3>
                       <span className={`text-xs px-2 py-1 rounded ${
-                        wf.status === 'active' 
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-gray-100 text-gray-800'
+                        wf.status === "active" 
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-800"
                       }`}>
-                        {wf.status === 'active' ? 'Ativo' : 'Rascunho'}
+                        {wf.status === "active" ? "Ativo" : "Rascunho"}
                       </span>
                     </div>
                     
@@ -178,7 +178,7 @@ export default function SmartWorkflowPage() {
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <Calendar className="w-3 h-3" />
                       <span>
-                        {new Date(wf.created_at).toLocaleDateString('pt-BR')}
+                        {new Date(wf.created_at).toLocaleDateString("pt-BR")}
                       </span>
                     </div>
                     
@@ -200,5 +200,5 @@ export default function SmartWorkflowPage() {
         </div>
       </ModulePageWrapper>
     </MultiTenantWrapper>
-  )
+  );
 }

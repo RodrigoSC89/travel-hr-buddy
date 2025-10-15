@@ -155,7 +155,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
   
   return {
     os_id: osId,
-    message: `Ordem de Serviço criada com sucesso! 📋`,
+    message: "Ordem de Serviço criada com sucesso! 📋",
   };
 };
 
@@ -168,7 +168,7 @@ export const getCopilotSuggestion = async (
   job_id?: string
 ): Promise<CopilotSuggestion> => {
   try {
-    const { data, error } = await supabase.functions.invoke('mmi-copilot', {
+    const { data, error } = await supabase.functions.invoke("mmi-copilot", {
       body: {
         componente,
         job_description,

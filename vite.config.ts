@@ -197,8 +197,8 @@ export default defineConfig(({ mode }) => ({
     } : undefined,
   },
   define: {
-    'process.env': {},
-    'process': { env: {} }
+    "process.env": {},
+    "process": { env: {} }
   },
   preview: {
     host: true,
