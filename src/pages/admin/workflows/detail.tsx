@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus, AlertCircle, Edit2, Trash2, GripVertical } from "lucide-react";
+import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus, AlertCircle, Edit2, Trash2, GripVertical, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { exportSuggestionsToPDF, WorkflowSuggestion } from "@/components/workflows";
 
 interface SmartWorkflow {
   id: string
@@ -412,6 +413,51 @@ export default function WorkflowDetailPage() {
     }
   };
 
+  // Export workflow suggestions to PDF (demo function with sample data)
+  function handleExportSuggestionsPDF() {
+    try {
+      // Sample suggestions for demonstration
+      // In production, this would fetch real data from workflow_ai_suggestions table
+      const sampleSuggestions: WorkflowSuggestion[] = [
+        {
+          etapa: "Aprovação de Despesas",
+          tipo_sugestao: "Otimização de Processo",
+          conteudo: "Implementar aprovação automática para despesas abaixo de R$ 500,00 quando dentro do orçamento aprovado",
+          criticidade: "Média",
+          responsavel_sugerido: "Gerente Financeiro"
+        },
+        {
+          etapa: "Onboarding de Tripulantes",
+          tipo_sugestao: "Melhoria de Eficiência",
+          conteudo: "Criar checklist digital interativo para reduzir tempo de onboarding de 5 dias para 3 dias",
+          criticidade: "Alta",
+          responsavel_sugerido: "RH - Coordenador de Treinamento"
+        },
+        {
+          etapa: "Renovação de Certificados",
+          tipo_sugestao: "Automação",
+          conteudo: "Configurar alertas automáticos 60 dias antes do vencimento de certificados marítimos",
+          criticidade: "Crítica",
+          responsavel_sugerido: "Departamento de Certificação"
+        }
+      ];
+
+      exportSuggestionsToPDF(sampleSuggestions);
+      
+      toast({
+        title: "PDF exportado com sucesso",
+        description: "O plano de ações foi exportado como PDF.",
+      });
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      toast({
+        title: "Erro ao exportar PDF",
+        description: error instanceof Error ? error.message : "Não foi possível exportar o documento.",
+        variant: "destructive"
+      });
+    }
+  }
+
   useEffect(() => {
     fetchWorkflow();
     fetchSteps();
@@ -476,14 +522,24 @@ export default function WorkflowDetailPage() {
               </Link>
             </Button>
             
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button onClick={openCreateDialog}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Nova Tarefa
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[550px]">
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                onClick={handleExportSuggestionsPDF}
+                title="Exportar sugestões de IA para PDF"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Exportar Sugestões PDF
+              </Button>
+              
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button onClick={openCreateDialog}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Nova Tarefa
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[550px]">
                 <DialogHeader>
                   <DialogTitle>
                     {editingStep ? "Editar Tarefa" : "Nova Tarefa"}
@@ -589,6 +645,7 @@ export default function WorkflowDetailPage() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+            </div>
           </div>
 
           {/* Quick Add Form */}
