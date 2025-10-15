@@ -108,12 +108,19 @@ export const AutomationWorkflowsManager: React.FC = () => {
   const { toast } = useToast();
 
   // Form state para criação/edição
-  const [formData, setFormData] = useState({
+  type WorkflowFormData = {
+    name: string;
+    description: string;
+    trigger_type: "schedule" | "event" | "condition";
+    trigger_config: TriggerConfig;
+    actions: WorkflowAction[];
+  };
+  const [formData, setFormData] = useState<WorkflowFormData>({
     name: "",
     description: "",
-    trigger_type: "schedule" as const,
+    trigger_type: "schedule",
     trigger_config: { cron: "0 9 * * *", timezone: "America/Sao_Paulo" } as ScheduleTriggerConfig,
-    actions: [] as WorkflowAction[]
+    actions: []
   });
 
   const loadWorkflows = useCallback(async () => {
@@ -384,10 +391,10 @@ export const AutomationWorkflowsManager: React.FC = () => {
                   <Label htmlFor="cron">Expressão Cron</Label>
                   <Input
                     id="cron"
-                    value={formData.trigger_config.cron}
+                    value={(formData.trigger_config as ScheduleTriggerConfig).cron}
                     onChange={(e) => setFormData(prev => ({
                       ...prev,
-                      trigger_config: { ...prev.trigger_config, cron: e.target.value }
+                      trigger_config: { ...(prev.trigger_config as ScheduleTriggerConfig), cron: e.target.value }
                     }))}
                     placeholder="Ex: 0 9 * * * (todo dia às 9h)"
                   />
