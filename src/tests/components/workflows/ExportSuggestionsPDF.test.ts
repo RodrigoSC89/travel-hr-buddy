@@ -255,8 +255,8 @@ describe("ExportSuggestionsPDF", () => {
     });
 
     it("should split long text into lines", () => {
-      const maxWidth = 170;
       const longText = "This is a very long text that needs to be split";
+      // Verify that long text needs to be handled
       expect(longText.length).toBeGreaterThan(20);
     });
   });
