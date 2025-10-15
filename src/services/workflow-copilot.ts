@@ -5,8 +5,8 @@
  * Supabase Edge Function from a React component or service.
  */
 
-import React from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import React from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface WorkflowSuggestionRequest {
   workflow: string;
@@ -30,26 +30,26 @@ export async function getWorkflowSuggestions(
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
-      throw new Error('User not authenticated');
+      throw new Error("User not authenticated");
     }
 
     // Get the Supabase URL from environment
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://vnbptmixvwropvanyhdb.supabase.co';
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://vnbptmixvwropvanyhdb.supabase.co";
     const functionUrl = `${supabaseUrl}/functions/v1/workflows-copilot-suggest`;
 
     // Make the request
     const response = await fetch(functionUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${session.access_token}`,
       },
       body: JSON.stringify(request),
     });
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.error || 'Failed to get suggestions');
+      throw new Error(error.error || "Failed to get suggestions");
     }
 
     // Handle streaming response
@@ -57,7 +57,7 @@ export async function getWorkflowSuggestions(
     const decoder = new TextDecoder();
 
     if (!reader) {
-      throw new Error('No response body');
+      throw new Error("No response body");
     }
 
     while (true) {
@@ -71,7 +71,7 @@ export async function getWorkflowSuggestions(
       onChunk(text);
     }
   } catch (error) {
-    console.error('Error getting workflow suggestions:', error);
+    console.error("Error getting workflow suggestions:", error);
     throw error;
   }
 }
@@ -81,20 +81,20 @@ export async function getWorkflowSuggestions(
  */
 export function useWorkflowSuggestions() {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [suggestion, setSuggestion] = React.useState('');
+  const [suggestion, setSuggestion] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
 
   const getSuggestions = async (request: WorkflowSuggestionRequest) => {
     setIsLoading(true);
     setError(null);
-    setSuggestion('');
+    setSuggestion("");
 
     try {
       await getWorkflowSuggestions(request, (chunk) => {
         setSuggestion((prev) => prev + chunk);
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setIsLoading(false);
     }

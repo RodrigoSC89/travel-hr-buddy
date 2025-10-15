@@ -210,7 +210,7 @@ describe("AITemplatesPage", () => {
 
     // Find star buttons (favorite toggle)
     const starButtons = screen.getAllByRole("button").filter(
-      (button) => button.querySelector('svg')?.classList.contains('lucide-star')
+      (button) => button.querySelector("svg")?.classList.contains("lucide-star")
     );
 
     fireEvent.click(starButtons[0]);
