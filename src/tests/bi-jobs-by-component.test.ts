@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, vi } from 'vitest';
+import { describe, it, expect, beforeAll, vi } from "vitest";
 
 // Mock Supabase client
 const mockRpc = vi.fn();
@@ -10,25 +10,25 @@ const mockSupabase = {
 const mockDeno = {
   env: {
     get: (key: string) => {
-      if (key === 'SUPABASE_URL') return 'https://test.supabase.co';
-      if (key === 'SUPABASE_SERVICE_ROLE_KEY') return 'test-key';
+      if (key === "SUPABASE_URL") return "https://test.supabase.co";
+      if (key === "SUPABASE_SERVICE_ROLE_KEY") return "test-key";
       return null;
     },
   },
 };
 
-describe('BI Jobs by Component API', () => {
+describe("BI Jobs by Component API", () => {
   beforeAll(() => {
     // Setup global mocks
-    vi.stubGlobal('Deno', mockDeno);
+    vi.stubGlobal("Deno", mockDeno);
   });
 
-  describe('Response Structure', () => {
-    it('should return correct structure with all required fields', async () => {
+  describe("Response Structure", () => {
+    it("should return correct structure with all required fields", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'Motor Principal ME-4500',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "Motor Principal ME-4500",
           total_jobs: 15,
           avg_execution_time_days: 4.2,
           pending_jobs: 3,
@@ -39,24 +39,24 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
 
       expect(result.data).toBeDefined();
       expect(result.data).toHaveLength(1);
-      expect(result.data[0]).toHaveProperty('component_id');
-      expect(result.data[0]).toHaveProperty('component_name');
-      expect(result.data[0]).toHaveProperty('total_jobs');
-      expect(result.data[0]).toHaveProperty('avg_execution_time_days');
-      expect(result.data[0]).toHaveProperty('pending_jobs');
-      expect(result.data[0]).toHaveProperty('in_progress_jobs');
-      expect(result.data[0]).toHaveProperty('completed_jobs');
+      expect(result.data[0]).toHaveProperty("component_id");
+      expect(result.data[0]).toHaveProperty("component_name");
+      expect(result.data[0]).toHaveProperty("total_jobs");
+      expect(result.data[0]).toHaveProperty("avg_execution_time_days");
+      expect(result.data[0]).toHaveProperty("pending_jobs");
+      expect(result.data[0]).toHaveProperty("in_progress_jobs");
+      expect(result.data[0]).toHaveProperty("completed_jobs");
     });
 
-    it('should have correct data types for each field', async () => {
+    it("should have correct data types for each field", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'Test Component',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "Test Component",
           total_jobs: 10,
           avg_execution_time_days: 3.5,
           pending_jobs: 2,
@@ -67,25 +67,25 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
       const item = result.data[0];
 
-      expect(typeof item.component_id).toBe('string');
-      expect(typeof item.component_name).toBe('string');
-      expect(typeof item.total_jobs).toBe('number');
-      expect(typeof item.avg_execution_time_days).toBe('number');
-      expect(typeof item.pending_jobs).toBe('number');
-      expect(typeof item.in_progress_jobs).toBe('number');
-      expect(typeof item.completed_jobs).toBe('number');
+      expect(typeof item.component_id).toBe("string");
+      expect(typeof item.component_name).toBe("string");
+      expect(typeof item.total_jobs).toBe("number");
+      expect(typeof item.avg_execution_time_days).toBe("number");
+      expect(typeof item.pending_jobs).toBe("number");
+      expect(typeof item.in_progress_jobs).toBe("number");
+      expect(typeof item.completed_jobs).toBe("number");
     });
   });
 
-  describe('Job Counting Logic', () => {
-    it('should count total jobs correctly', async () => {
+  describe("Job Counting Logic", () => {
+    it("should count total jobs correctly", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'Component A',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "Component A",
           total_jobs: 10,
           avg_execution_time_days: 5.0,
           pending_jobs: 3,
@@ -96,7 +96,7 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
       const item = result.data[0];
 
       // Total should equal sum of all statuses
@@ -105,11 +105,11 @@ describe('BI Jobs by Component API', () => {
       );
     });
 
-    it('should handle components with zero jobs', async () => {
+    it("should handle components with zero jobs", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'Unused Component',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "Unused Component",
           total_jobs: 0,
           avg_execution_time_days: null,
           pending_jobs: 0,
@@ -120,7 +120,7 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
       const item = result.data[0];
 
       expect(item.total_jobs).toBe(0);
@@ -130,12 +130,12 @@ describe('BI Jobs by Component API', () => {
     });
   });
 
-  describe('Average Execution Time Calculation', () => {
-    it('should calculate average execution time for completed jobs', async () => {
+  describe("Average Execution Time Calculation", () => {
+    it("should calculate average execution time for completed jobs", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'Component with Completed Jobs',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "Component with Completed Jobs",
           total_jobs: 5,
           avg_execution_time_days: 4.2,
           pending_jobs: 0,
@@ -146,18 +146,18 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
       const item = result.data[0];
 
       expect(item.avg_execution_time_days).toBeGreaterThan(0);
       expect(item.completed_jobs).toBeGreaterThan(0);
     });
 
-    it('should return null for average execution time when no completed jobs', async () => {
+    it("should return null for average execution time when no completed jobs", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'Component with No Completed Jobs',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "Component with No Completed Jobs",
           total_jobs: 5,
           avg_execution_time_days: null,
           pending_jobs: 3,
@@ -168,18 +168,18 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
       const item = result.data[0];
 
       expect(item.avg_execution_time_days).toBeNull();
       expect(item.completed_jobs).toBe(0);
     });
 
-    it('should handle very quick jobs (less than 1 day)', async () => {
+    it("should handle very quick jobs (less than 1 day)", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'Quick Jobs Component',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "Quick Jobs Component",
           total_jobs: 3,
           avg_execution_time_days: 0.5,
           pending_jobs: 0,
@@ -190,18 +190,18 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
       const item = result.data[0];
 
       expect(item.avg_execution_time_days).toBeLessThan(1);
       expect(item.avg_execution_time_days).toBeGreaterThan(0);
     });
 
-    it('should handle long-running jobs (more than 30 days)', async () => {
+    it("should handle long-running jobs (more than 30 days)", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'Long Jobs Component',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "Long Jobs Component",
           total_jobs: 2,
           avg_execution_time_days: 45.8,
           pending_jobs: 0,
@@ -212,19 +212,19 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
       const item = result.data[0];
 
       expect(item.avg_execution_time_days).toBeGreaterThan(30);
     });
   });
 
-  describe('Sorting and Ordering', () => {
-    it('should sort by total jobs descending', async () => {
+  describe("Sorting and Ordering", () => {
+    it("should sort by total jobs descending", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'Component A',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "Component A",
           total_jobs: 20,
           avg_execution_time_days: 5.0,
           pending_jobs: 5,
@@ -232,8 +232,8 @@ describe('BI Jobs by Component API', () => {
           completed_jobs: 10,
         },
         {
-          component_id: '223e4567-e89b-12d3-a456-426614174001',
-          component_name: 'Component B',
+          component_id: "223e4567-e89b-12d3-a456-426614174001",
+          component_name: "Component B",
           total_jobs: 10,
           avg_execution_time_days: 3.0,
           pending_jobs: 3,
@@ -241,8 +241,8 @@ describe('BI Jobs by Component API', () => {
           completed_jobs: 5,
         },
         {
-          component_id: '323e4567-e89b-12d3-a456-426614174002',
-          component_name: 'Component C',
+          component_id: "323e4567-e89b-12d3-a456-426614174002",
+          component_name: "Component C",
           total_jobs: 5,
           avg_execution_time_days: 2.0,
           pending_jobs: 1,
@@ -253,7 +253,7 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
 
       expect(result.data[0].total_jobs).toBeGreaterThanOrEqual(
         result.data[1].total_jobs
@@ -263,11 +263,11 @@ describe('BI Jobs by Component API', () => {
       );
     });
 
-    it('should sort alphabetically by component name when job counts are equal', async () => {
+    it("should sort alphabetically by component name when job counts are equal", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'Alpha Component',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "Alpha Component",
           total_jobs: 10,
           avg_execution_time_days: 5.0,
           pending_jobs: 3,
@@ -275,8 +275,8 @@ describe('BI Jobs by Component API', () => {
           completed_jobs: 4,
         },
         {
-          component_id: '223e4567-e89b-12d3-a456-426614174001',
-          component_name: 'Beta Component',
+          component_id: "223e4567-e89b-12d3-a456-426614174001",
+          component_name: "Beta Component",
           total_jobs: 10,
           avg_execution_time_days: 4.0,
           pending_jobs: 2,
@@ -287,25 +287,25 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
 
-      expect(result.data[0].component_name).toBe('Alpha Component');
-      expect(result.data[1].component_name).toBe('Beta Component');
+      expect(result.data[0].component_name).toBe("Alpha Component");
+      expect(result.data[1].component_name).toBe("Beta Component");
     });
   });
 
-  describe('Edge Cases', () => {
-    it('should handle empty result set', async () => {
+  describe("Edge Cases", () => {
+    it("should handle empty result set", async () => {
       mockRpc.mockResolvedValueOnce({ data: [], error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
 
       expect(result.data).toBeDefined();
       expect(result.data).toHaveLength(0);
       expect(Array.isArray(result.data)).toBe(true);
     });
 
-    it('should handle null component_id gracefully', async () => {
+    it("should handle null component_id gracefully", async () => {
       const mockData = [
         {
           component_id: null,
@@ -320,18 +320,18 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
       const item = result.data[0];
 
       expect(item.component_id).toBeNull();
       expect(item.component_name).toBeNull();
     });
 
-    it('should handle components with high job volumes', async () => {
+    it("should handle components with high job volumes", async () => {
       const mockData = [
         {
-          component_id: '123e4567-e89b-12d3-a456-426614174000',
-          component_name: 'High Volume Component',
+          component_id: "123e4567-e89b-12d3-a456-426614174000",
+          component_name: "High Volume Component",
           total_jobs: 1000,
           avg_execution_time_days: 5.3,
           pending_jobs: 300,
@@ -342,7 +342,7 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
       const item = result.data[0];
 
       expect(item.total_jobs).toBeGreaterThan(100);
@@ -352,54 +352,54 @@ describe('BI Jobs by Component API', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('should handle database errors gracefully', async () => {
+  describe("Error Handling", () => {
+    it("should handle database errors gracefully", async () => {
       mockRpc.mockResolvedValueOnce({
         data: null,
-        error: { message: 'Database connection failed' },
+        error: { message: "Database connection failed" },
       });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
 
       expect(result.error).toBeDefined();
-      expect(result.error.message).toBe('Database connection failed');
+      expect(result.error.message).toBe("Database connection failed");
     });
 
-    it('should handle RPC function not found', async () => {
+    it("should handle RPC function not found", async () => {
       mockRpc.mockResolvedValueOnce({
         data: null,
-        error: { message: 'Function jobs_by_component_stats does not exist' },
+        error: { message: "Function jobs_by_component_stats does not exist" },
       });
 
-      const result = await mockSupabase.rpc('jobs_by_component_stats');
+      const result = await mockSupabase.rpc("jobs_by_component_stats");
 
       expect(result.error).toBeDefined();
-      expect(result.error.message).toContain('does not exist');
+      expect(result.error.message).toContain("does not exist");
     });
   });
 
-  describe('CORS Headers', () => {
-    it('should include CORS headers in response', () => {
+  describe("CORS Headers", () => {
+    it("should include CORS headers in response", () => {
       const corsHeaders = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers':
-          'authorization, x-client-info, apikey, content-type',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers":
+          "authorization, x-client-info, apikey, content-type",
       };
 
-      expect(corsHeaders['Access-Control-Allow-Origin']).toBe('*');
-      expect(corsHeaders['Access-Control-Allow-Headers']).toContain(
-        'authorization'
+      expect(corsHeaders["Access-Control-Allow-Origin"]).toBe("*");
+      expect(corsHeaders["Access-Control-Allow-Headers"]).toContain(
+        "authorization"
       );
     });
 
-    it('should handle OPTIONS preflight request', () => {
-      const method = 'OPTIONS';
-      expect(method).toBe('OPTIONS');
+    it("should handle OPTIONS preflight request", () => {
+      const method = "OPTIONS";
+      expect(method).toBe("OPTIONS");
     });
   });
 
-  describe('Performance Considerations', () => {
-    it('should return results in reasonable time', async () => {
+  describe("Performance Considerations", () => {
+    it("should return results in reasonable time", async () => {
       const startTime = Date.now();
 
       const mockData = Array.from({ length: 50 }, (_, i) => ({
@@ -414,7 +414,7 @@ describe('BI Jobs by Component API', () => {
 
       mockRpc.mockResolvedValueOnce({ data: mockData, error: null });
 
-      await mockSupabase.rpc('jobs_by_component_stats');
+      await mockSupabase.rpc("jobs_by_component_stats");
 
       const endTime = Date.now();
       const executionTime = endTime - startTime;
