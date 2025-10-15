@@ -1,11 +1,16 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import { Skeleton } from "@/components/ui/skeleton";
 
+interface JobByComponent {
+  component_id: string;
+  count: number;
+  avg_duration: number;
+}
 
 export default function DashboardJobs() {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<JobByComponent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -13,13 +18,13 @@ export default function DashboardJobs() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const res = await fetch('/api/bi/jobs-by-component');
-        if (!res.ok) throw new Error('Erro ao buscar dados de BI');
+        const res = await fetch("/api/bi/jobs-by-component");
+        if (!res.ok) throw new Error("Erro ao buscar dados de BI");
         const json = await res.json();
         setData(json);
-      } catch (err: any) {
+      } catch (err) {
         console.error(err);
-        setError(err.message);
+        setError(err instanceof Error ? err.message : "Erro desconhecido");
       } finally {
         setLoading(false);
       }
@@ -49,7 +54,7 @@ export default function DashboardJobs() {
         ) : (
           <ResponsiveContainer width="100%" height={350}>
             <BarChart data={data} layout="vertical" margin={{ left: 40 }}>
-              <XAxis type="number" label={{ value: 'Qtd Jobs / Horas (Empilhado)', position: 'insideBottomRight', offset: -5 }} />
+              <XAxis type="number" label={{ value: "Qtd Jobs / Horas (Empilhado)", position: "insideBottomRight", offset: -5 }} />
               <YAxis dataKey="component_id" type="category" />
               <Tooltip />
               <Legend />
