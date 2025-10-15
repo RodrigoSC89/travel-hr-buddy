@@ -53,7 +53,7 @@ POST /functions/v1/rewrite-template
 
 ### Configuration
 - **Model:** GPT-4 (as specified in requirements)
-- **Temperature:** 0.5 (balanced for technical content)
+- **Temperature:** 0.4 (formal, consistent, and professional results)
 - **Max Retries:** 3 with exponential backoff
 - **Timeout:** 30 seconds per request
 - **CORS:** Enabled for all origins
@@ -72,7 +72,7 @@ e adaptando para uso em templates operacionais.
 | **Purpose** | Rewrite selected text snippets | Rewrite complete documents |
 | **Use Case** | Template editing, selected text | Document improvement |
 | **Model** | GPT-4 | GPT-4o-mini |
-| **Temperature** | 0.5 | 0.7 |
+| **Temperature** | 0.4 | 0.7 |
 | **Context** | Maritime/technical templates | Professional documents |
 | **Max Tokens** | Default (shorter) | 2000 |
 | **Request Key** | `input` | `content` |
@@ -297,7 +297,7 @@ As mentioned in the problem statement, the Templates module with AI is now compl
 ## Summary
 
 ✅ **Created:** Supabase Edge Function for template snippet rewriting  
-✅ **Model:** GPT-4 with temperature 0.5  
+✅ **Model:** GPT-4 with temperature 0.4  
 ✅ **Tests:** 5 new tests, all passing  
 ✅ **Documentation:** Comprehensive README with examples  
 ✅ **Error Handling:** Retry logic with exponential backoff  

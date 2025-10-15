@@ -32,7 +32,7 @@ const rewritten = data?.result;
 
 ## Configuration
 - **Model:** GPT-4
-- **Temperature:** 0.5
+- **Temperature:** 0.4
 - **Retries:** 3 with exponential backoff
 - **Timeout:** 30 seconds
 
@@ -58,7 +58,7 @@ const rewritten = data?.result;
 |---------|-----------------|------------------|
 | Purpose | Snippets | Full documents |
 | Model | GPT-4 | GPT-4o-mini |
-| Temperature | 0.5 | 0.7 |
+| Temperature | 0.4 | 0.7 |
 | Request key | `input` | `content` |
 | Response key | `result` | `rewritten` |
 

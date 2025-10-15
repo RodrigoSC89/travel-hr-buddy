@@ -46,10 +46,10 @@ describe("Rewrite Template Function", () => {
   it("should validate model configuration", () => {
     const config = {
       model: "gpt-4",
-      temperature: 0.5,
+      temperature: 0.4,
     };
     
     expect(config.model).toBe("gpt-4");
-    expect(config.temperature).toBe(0.5);
+    expect(config.temperature).toBe(0.4);
   });
 });
