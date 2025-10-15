@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus, AlertCircle, Edit2, Trash2, GripVertical } from "lucide-react";
+import { ArrowLeft, Workflow, Calendar, User, CheckSquare, Plus, AlertCircle, Edit2, Trash2, GripVertical, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { exportSuggestionsToPDF, Suggestion } from "@/components/workflows";
 
 interface SmartWorkflow {
   id: string
@@ -91,6 +92,55 @@ export default function WorkflowDetailPage() {
     priority: "medium"
   });
   const { toast } = useToast();
+
+  // Demo AI suggestions data
+  const demoSuggestions: Suggestion[] = [
+    {
+      etapa: "Planejamento",
+      tipo_sugestao: "Análise de Riscos",
+      conteudo: "Realizar análise de riscos detalhada antes de iniciar o projeto, identificando possíveis obstáculos e preparando planos de contingência.",
+      criticidade: "Alta",
+      responsavel_sugerido: "Project Manager"
+    },
+    {
+      etapa: "Execução",
+      tipo_sugestao: "Automação de Testes",
+      conteudo: "Implementar testes automatizados para garantir a qualidade do código e reduzir o tempo de validação manual.",
+      criticidade: "Média",
+      responsavel_sugerido: "QA Lead"
+    },
+    {
+      etapa: "Monitoramento",
+      tipo_sugestao: "Dashboard de Métricas",
+      conteudo: "Criar dashboard em tempo real para acompanhamento de KPIs e métricas de desempenho do projeto.",
+      criticidade: "Alta",
+      responsavel_sugerido: "Tech Lead"
+    },
+    {
+      etapa: "Revisão",
+      tipo_sugestao: "Retrospectiva",
+      conteudo: "Agendar sessões de retrospectiva ao final de cada sprint para identificar melhorias e celebrar conquistas.",
+      criticidade: "Média",
+      responsavel_sugerido: "Scrum Master"
+    }
+  ];
+
+  const handleExportPDF = () => {
+    try {
+      exportSuggestionsToPDF(demoSuggestions);
+      toast({
+        title: "Sucesso",
+        description: "PDF exportado com sucesso!",
+      });
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível exportar o PDF",
+        variant: "destructive",
+      });
+    }
+  };
 
   async function fetchWorkflow() {
     if (!id) return;
@@ -804,6 +854,58 @@ export default function WorkflowDetailPage() {
               </CardContent>
             </Card>
           )}
+
+          {/* AI Suggestions Section */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <AlertCircle className="w-5 h-5" />
+                Sugestões da IA
+              </CardTitle>
+              <Button 
+                onClick={handleExportPDF}
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Exportar PDF
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {demoSuggestions.map((suggestion, index) => (
+                  <div 
+                    key={index} 
+                    className="p-4 border rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline">{suggestion.etapa}</Badge>
+                          <Badge 
+                            variant={suggestion.criticidade === "Alta" ? "destructive" : "secondary"}
+                          >
+                            {suggestion.criticidade}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm">{suggestion.tipo_sugestao}</p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {suggestion.conteudo}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <User className="w-3 h-3" />
+                        <span>Responsável sugerido: {suggestion.responsavel_sugerido}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
           <Card>
             <CardHeader>
