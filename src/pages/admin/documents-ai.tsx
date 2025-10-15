@@ -25,15 +25,15 @@ export default function DocumentsAIPage() {
   const [rewriting, setRewriting] = useState(false);
   const [summary, setSummary] = useState("");
 
-  // Load applied template from sessionStorage
+  // Load applied template from localStorage
   useEffect(() => {
-    const appliedTemplate = sessionStorage.getItem("appliedTemplate");
+    const appliedTemplate = localStorage.getItem("applied_template");
     if (appliedTemplate) {
       try {
         const templateData = JSON.parse(appliedTemplate);
         setTitle(templateData.title || "");
         setGenerated(templateData.content || "");
-        sessionStorage.removeItem("appliedTemplate");
+        localStorage.removeItem("applied_template");
         toast({
           title: "Template aplicado",
           description: "O template foi carregado com sucesso.",

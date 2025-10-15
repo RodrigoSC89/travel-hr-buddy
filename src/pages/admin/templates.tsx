@@ -397,8 +397,8 @@ export default function TemplatesPage() {
 
   // Apply template to documents-ai
   const applyTemplate = (template: Template) => {
-    // Store template data in sessionStorage
-    sessionStorage.setItem("appliedTemplate", JSON.stringify({
+    // Store template data in localStorage
+    localStorage.setItem("applied_template", JSON.stringify({
       title: template.title,
       content: template.content,
     }));
