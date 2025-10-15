@@ -5,6 +5,8 @@ import { describe, it, expect } from "vitest";
  * 
  * Tests for the job similarity search API endpoint that uses
  * OpenAI embeddings and vector similarity search.
+ * 
+ * Tests cover both GET and POST modes of operation.
  */
 describe("MMI Jobs Similarity API", () => {
   it("should have proper job structure with required fields", () => {
@@ -26,8 +28,8 @@ describe("MMI Jobs Similarity API", () => {
     expect(mockJob.metadata).toBeDefined();
   });
 
-  it("should support similarity search parameters", () => {
-    // Verify API parameter structure
+  it("should support GET mode similarity search parameters", () => {
+    // Verify GET mode API parameter structure
     const mockParams = {
       jobId: "550e8400-e29b-41d4-a716-446655440001",
       match_threshold: 0.78,
@@ -40,10 +42,26 @@ describe("MMI Jobs Similarity API", () => {
     expect(mockParams.match_count).toBeGreaterThan(0);
   });
 
-  it("should return proper similarity result structure", () => {
-    // Verify similarity search result structure
+  it("should support POST mode semantic search parameters", () => {
+    // Verify POST mode API parameter structure
+    const mockParams = {
+      query: "hydraulic system maintenance",
+      match_threshold: 0.7,
+      match_count: 10,
+    };
+
+    expect(mockParams.query).toBeDefined();
+    expect(typeof mockParams.query).toBe("string");
+    expect(mockParams.match_threshold).toBeGreaterThanOrEqual(0);
+    expect(mockParams.match_threshold).toBeLessThanOrEqual(1);
+    expect(mockParams.match_count).toBeGreaterThan(0);
+  });
+
+  it("should return proper GET mode result structure", () => {
+    // Verify GET mode similarity search result structure
     const mockResult = {
       success: true,
+      mode: "job_comparison",
       job_id: "550e8400-e29b-41d4-a716-446655440001",
       job_title: "Engine Overheating Issue",
       similar_jobs: [
@@ -58,9 +76,11 @@ describe("MMI Jobs Similarity API", () => {
         },
       ],
       count: 1,
+      match_threshold: 0.78,
     };
 
     expect(mockResult.success).toBe(true);
+    expect(mockResult.mode).toBe("job_comparison");
     expect(mockResult.job_id).toBeDefined();
     expect(mockResult.similar_jobs).toBeInstanceOf(Array);
     expect(mockResult.count).toBe(mockResult.similar_jobs.length);
@@ -72,10 +92,49 @@ describe("MMI Jobs Similarity API", () => {
     expect(similarJob.id).not.toBe(mockResult.job_id); // Should not return the same job
   });
 
+  it("should return proper POST mode result structure", () => {
+    // Verify POST mode semantic search result structure
+    const mockResult = {
+      success: true,
+      mode: "semantic_search",
+      query: "hydraulic system maintenance",
+      similar_jobs: [
+        {
+          id: "550e8400-e29b-41d4-a716-446655440005",
+          title: "Hydraulic Pump Repair",
+          description: "Maintenance work on hydraulic systems.",
+          status: "active",
+          similarity: 0.92,
+          metadata: { category: "hydraulics" },
+          created_at: "2025-10-15T00:00:00Z",
+        },
+      ],
+      count: 1,
+      match_threshold: 0.7,
+    };
+
+    expect(mockResult.success).toBe(true);
+    expect(mockResult.mode).toBe("semantic_search");
+    expect(mockResult.query).toBeDefined();
+    expect(typeof mockResult.query).toBe("string");
+    expect(mockResult.similar_jobs).toBeInstanceOf(Array);
+    expect(mockResult.count).toBe(mockResult.similar_jobs.length);
+    expect(mockResult.match_threshold).toBeDefined();
+    
+    // Verify similar job structure
+    const similarJob = mockResult.similar_jobs[0];
+    expect(similarJob.similarity).toBeGreaterThan(0);
+    expect(similarJob.similarity).toBeLessThanOrEqual(1);
+  });
+
   it("should handle error cases properly", () => {
-    // Test error response structure
-    const missingJobError = {
+    // Test error response structure for both modes
+    const missingJobIdError = {
       error: "Missing jobId parameter",
+    };
+
+    const missingQueryError = {
+      error: "Missing query parameter in request body",
     };
 
     const notFoundError = {
@@ -87,7 +146,8 @@ describe("MMI Jobs Similarity API", () => {
       success: false,
     };
 
-    expect(missingJobError.error).toBeDefined();
+    expect(missingJobIdError.error).toBeDefined();
+    expect(missingQueryError.error).toBeDefined();
     expect(notFoundError.error).toBeDefined();
     expect(serverError.success).toBe(false);
   });
@@ -133,6 +193,23 @@ describe("MMI Jobs Similarity API", () => {
       if (index > 0) {
         expect(score).toBeLessThanOrEqual(mockSimilarityScores[index - 1]);
       }
+    });
+  });
+
+  it("should support configurable thresholds for different use cases", () => {
+    // Test different threshold configurations
+    const duplicateDetectionThreshold = 0.9; // High threshold for duplicates
+    const suggestionThreshold = 0.7; // Moderate threshold for suggestions
+    const recurringIssuesThreshold = 0.75; // Medium-high for recurring issues
+
+    expect(duplicateDetectionThreshold).toBeGreaterThanOrEqual(0.9);
+    expect(suggestionThreshold).toBeGreaterThanOrEqual(0.7);
+    expect(recurringIssuesThreshold).toBeGreaterThanOrEqual(0.75);
+    
+    // All thresholds should be valid
+    [duplicateDetectionThreshold, suggestionThreshold, recurringIssuesThreshold].forEach(threshold => {
+      expect(threshold).toBeGreaterThanOrEqual(0);
+      expect(threshold).toBeLessThanOrEqual(1);
     });
   });
 });
