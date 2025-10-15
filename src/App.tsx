@@ -48,6 +48,7 @@ const ControlPanel = React.lazy(() => import("./pages/admin/control-panel"));
 const TestDashboard = React.lazy(() => import("./pages/admin/tests"));
 const CIHistory = React.lazy(() => import("./pages/admin/ci-history"));
 const AdminAnalytics = React.lazy(() => import("./pages/admin/analytics"));
+const AdminBI = React.lazy(() => import("./pages/admin/bi"));
 const AdminWall = React.lazy(() => import("./pages/admin/wall"));
 const AdminChecklists = React.lazy(() => import("./pages/admin/checklists"));
 const AdminChecklistsDashboard = React.lazy(() => import("./pages/admin/checklists-dashboard"));
@@ -194,6 +195,7 @@ function App() {
                       <Route path="/admin/tests" element={<TestDashboard />} />
                       <Route path="/admin/ci-history" element={<CIHistory />} />
                       <Route path="/admin/analytics" element={<AdminAnalytics />} />
+                      <Route path="/admin/bi" element={<AdminBI />} />
                       <Route path="/admin/performance-analysis" element={<PerformanceAnalysis />} />
                       <Route path="/admin/wall" element={<AdminWall />} />
                       <Route path="/admin/checklists" element={<AdminChecklists />} />
