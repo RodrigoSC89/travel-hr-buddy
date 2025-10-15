@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -19,106 +19,160 @@ describe("JobsForecastReport Component", () => {
   });
 
   it("should render the component title", () => {
-    render(<JobsForecastReport trend={[]} />);
-    expect(screen.getByText(/🔮 Previsão IA de Jobs/i)).toBeDefined();
-  });
-
-  it("should show generate button when no trend data is provided", () => {
-    render(<JobsForecastReport trend={[]} />);
-    expect(screen.getByText(/Gerar Previsão/i)).toBeDefined();
+    (supabase.functions.invoke as any).mockResolvedValue({
+      data: null,
+      error: null,
+    });
+    render(<JobsForecastReport />);
+    expect(screen.getByText(/🔮 Previsão IA de Manutenção/i)).toBeDefined();
   });
 
   it("should show loading skeleton when fetching forecast", async () => {
     const mockInvoke = vi.fn(() => 
-      new Promise((resolve) => setTimeout(() => resolve({ data: { forecast: "Test forecast" }, error: null }), 100))
+      new Promise((resolve) => setTimeout(() => resolve({ 
+        data: {
+          forecasts: [],
+          summary: { totalPredictions: 0, criticalActions: 0, accuracy: 0 }
+        }, 
+        error: null 
+      }), 100))
     );
     (supabase.functions.invoke as any).mockImplementation(mockInvoke);
 
-    render(<JobsForecastReport trend={[{ date: "2025-01", jobs: 10 }]} />);
+    render(<JobsForecastReport />);
     
-    // The component should show loading state
-    await waitFor(() => {
-      const skeletons = document.querySelectorAll(".animate-pulse");
-      expect(skeletons.length).toBeGreaterThan(0);
-    });
+    // The component should show loading state initially
+    const skeletons = document.querySelectorAll(".animate-pulse");
+    expect(skeletons.length).toBeGreaterThan(0);
   });
 
-  it("should display forecast when data is loaded", async () => {
-    const mockForecast = "Previsão: Esperamos um aumento de 15% nos próximos 2 meses";
+  it("should display forecast data when loaded", async () => {
+    const mockData = {
+      forecasts: [
+        {
+          component: "Gerador Principal",
+          priority: "critical",
+          prediction: "Provável falha nas próximas 48h",
+          action: "Agendar inspeção preventiva imediata"
+        }
+      ],
+      summary: {
+        totalPredictions: 4,
+        criticalActions: 1,
+        accuracy: 87
+      }
+    };
+
     (supabase.functions.invoke as any).mockResolvedValue({
-      data: { forecast: mockForecast },
+      data: mockData,
       error: null,
     });
 
-    render(<JobsForecastReport trend={[{ date: "2025-01", jobs: 10 }]} />);
+    render(<JobsForecastReport />);
 
     await waitFor(() => {
-      expect(screen.getByText(mockForecast)).toBeDefined();
+      expect(screen.getByText("Gerador Principal")).toBeDefined();
+      expect(screen.getByText(/Provável falha nas próximas 48h/i)).toBeDefined();
     });
   });
 
-  it("should handle error when forecast fetch fails", async () => {
+  it("should display summary statistics", async () => {
+    const mockData = {
+      forecasts: [],
+      summary: {
+        totalPredictions: 4,
+        criticalActions: 1,
+        accuracy: 87
+      }
+    };
+
+    (supabase.functions.invoke as any).mockResolvedValue({
+      data: mockData,
+      error: null,
+    });
+
+    render(<JobsForecastReport />);
+
+    await waitFor(() => {
+      expect(screen.getByText("4")).toBeDefined();
+      expect(screen.getByText("1")).toBeDefined();
+      expect(screen.getByText("87%")).toBeDefined();
+    });
+  });
+
+  it("should handle error with fallback to mock data", async () => {
     (supabase.functions.invoke as any).mockResolvedValue({
       data: null,
       error: new Error("API Error"),
     });
 
-    render(<JobsForecastReport trend={[{ date: "2025-01", jobs: 10 }]} />);
+    render(<JobsForecastReport />);
 
     await waitFor(() => {
-      expect(screen.getByText(/Erro ao buscar previsão/i)).toBeDefined();
+      // Should display mock data when API fails
+      expect(screen.getByText("Gerador Principal")).toBeDefined();
     });
   });
 
-  it("should call generate forecast when button is clicked", async () => {
-    const mockForecast = "Previsão gerada manualmente";
-    (supabase.functions.invoke as any).mockResolvedValue({
-      data: { forecast: mockForecast },
-      error: null,
-    });
-
-    render(<JobsForecastReport trend={[]} />);
-    
-    const button = screen.getByText(/Gerar Previsão/i);
-    fireEvent.click(button);
-
-    await waitFor(() => {
-      expect(screen.getByText(mockForecast)).toBeDefined();
-    });
-  });
-
-  it("should automatically fetch forecast when trend data is provided", async () => {
+  it("should automatically fetch forecast on mount", async () => {
     const mockInvoke = vi.fn().mockResolvedValue({
-      data: { forecast: "Auto-generated forecast" },
+      data: {
+        forecasts: [],
+        summary: { totalPredictions: 0, criticalActions: 0, accuracy: 0 }
+      },
       error: null,
     });
     (supabase.functions.invoke as any).mockImplementation(mockInvoke);
 
-    const trendData = [
-      { date: "2025-01", jobs: 10 },
-      { date: "2025-02", jobs: 15 },
-    ];
-
-    render(<JobsForecastReport trend={trendData} />);
+    render(<JobsForecastReport />);
 
     await waitFor(() => {
-      expect(mockInvoke).toHaveBeenCalledWith("bi-jobs-forecast", {
-        body: { trend: trendData }
-      });
+      expect(mockInvoke).toHaveBeenCalledWith("bi-jobs-forecast");
     });
   });
 
-  it("should not fetch when trend array is empty", () => {
-    const mockInvoke = vi.fn();
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+  it("should display priority indicators correctly", async () => {
+    const mockData = {
+      forecasts: [
+        {
+          component: "Critical Component",
+          priority: "critical",
+          prediction: "Test prediction",
+          action: "Test action"
+        },
+        {
+          component: "High Priority Component",
+          priority: "high",
+          prediction: "Test prediction",
+          action: "Test action"
+        }
+      ],
+      summary: {
+        totalPredictions: 2,
+        criticalActions: 1,
+        accuracy: 90
+      }
+    };
 
-    render(<JobsForecastReport trend={[]} />);
+    (supabase.functions.invoke as any).mockResolvedValue({
+      data: mockData,
+      error: null,
+    });
 
-    expect(mockInvoke).not.toHaveBeenCalled();
+    render(<JobsForecastReport />);
+
+    await waitFor(() => {
+      expect(screen.getByText("🔴")).toBeDefined();
+      expect(screen.getByText("🟠")).toBeDefined();
+    });
   });
 
   it("should render the component without errors", () => {
-    const { container } = render(<JobsForecastReport trend={[]} />);
+    (supabase.functions.invoke as any).mockResolvedValue({
+      data: null,
+      error: null,
+    });
+    const { container } = render(<JobsForecastReport />);
     expect(container).toBeDefined();
     expect(container.firstChild).toBeDefined();
   });
