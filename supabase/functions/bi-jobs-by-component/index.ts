@@ -16,13 +16,42 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Call the RPC function to get comprehensive BI statistics
-    const { data, error } = await supabase.rpc('jobs_by_component_stats');
+    // Query completed jobs with component names and actual hours
+    const { data: jobs, error } = await supabase
+      .from('mmi_jobs')
+      .select('component_id, actual_hours, mmi_components(component_name)')
+      .eq('status', 'completed')
+      .not('actual_hours', 'is', null);
 
     if (error) throw error;
 
+    // Group by component and calculate statistics
+    const statsMap = new Map<string, { count: number; totalHours: number; componentName: string }>();
+    
+    jobs?.forEach((job: any) => {
+      const componentName = job.mmi_components?.component_name || job.component_id;
+      const hours = parseFloat(job.actual_hours) || 0;
+      
+      if (!statsMap.has(componentName)) {
+        statsMap.set(componentName, { count: 0, totalHours: 0, componentName });
+      }
+      
+      const stats = statsMap.get(componentName)!;
+      stats.count++;
+      stats.totalHours += hours;
+    });
+
+    // Convert to array and calculate averages
+    const result = Array.from(statsMap.values())
+      .map(({ componentName, count, totalHours }) => ({
+        component_id: componentName,
+        count,
+        avg_duration: count > 0 ? parseFloat((totalHours / count).toFixed(1)) : 0
+      }))
+      .sort((a, b) => b.count - a.count); // Sort by count descending
+
     return new Response(
-      JSON.stringify(data || []),
+      JSON.stringify(result),
       {
         status: 200,
         headers: {

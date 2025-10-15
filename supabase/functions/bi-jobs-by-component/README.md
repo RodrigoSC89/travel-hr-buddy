@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Supabase Edge Function provides comprehensive Business Intelligence analytics for maintenance jobs grouped by component. It enables dashboard insights, performance monitoring, and capacity planning for the MMI (Intelligent Maintenance Module) system.
+This Supabase Edge Function provides Business Intelligence analytics for completed maintenance jobs grouped by component with duration metrics. It enables dashboard insights showing both job volume and average execution time for the MMI (Intelligent Maintenance Module) system.
 
 ## Endpoint
 
@@ -17,22 +17,14 @@ Returns an array of objects with the following structure:
 ```json
 [
   {
-    "component_id": "uuid-string",
-    "component_name": "Motor Principal ME-4500",
-    "total_jobs": 15,
-    "avg_execution_time_days": 4.2,
-    "pending_jobs": 3,
-    "in_progress_jobs": 5,
-    "completed_jobs": 7
+    "component_id": "Motor Principal ME-4500",
+    "count": 15,
+    "avg_duration": 8.5
   },
   {
-    "component_id": "uuid-string",
-    "component_name": "Gerador Auxiliar GE-2000",
-    "total_jobs": 8,
-    "avg_execution_time_days": 2.5,
-    "pending_jobs": 1,
-    "in_progress_jobs": 2,
-    "completed_jobs": 5
+    "component_id": "Gerador Principal GE-1",
+    "count": 10,
+    "avg_duration": 5.2
   }
 ]
 ```
@@ -41,25 +33,26 @@ Returns an array of objects with the following structure:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `component_id` | UUID | Unique identifier of the component |
-| `component_name` | String | Name of the component |
-| `total_jobs` | Number | Total count of all jobs for this component |
-| `avg_execution_time_days` | Number/Null | Average time in days from job creation to completion (only for completed jobs with completed_date) |
-| `pending_jobs` | Number | Count of jobs with status='pending' |
-| `in_progress_jobs` | Number | Count of jobs with status='in_progress' |
-| `completed_jobs` | Number | Count of jobs with status='completed' |
+| `component_id` | String | Human-readable name of the component |
+| `count` | Number | Total count of completed jobs for this component |
+| `avg_duration` | Number | Average execution time in hours based on actual_hours field |
 
 ## Usage Examples
 
 ### JavaScript/TypeScript
 
 ```typescript
-const { data, error } = await supabase.rpc('jobs_by_component_stats');
+const { data, error } = await supabase.functions.invoke('bi-jobs-by-component');
 
 if (error) {
   console.error('Error:', error);
 } else {
   console.log('Job statistics:', data);
+  // Example output:
+  // [
+  //   { component_id: "Motor ME-4500", count: 15, avg_duration: 8.5 },
+  //   { component_id: "Gerador GE-1", count: 10, avg_duration: 5.2 }
+  // ]
 }
 ```
 
@@ -86,48 +79,49 @@ const response = await fetch(
 const data = await response.json();
 ```
 
-## Database Function
+## Implementation Details
 
-This Edge Function calls the PostgreSQL RPC function `jobs_by_component_stats()` which:
+This Edge Function:
 
-- Performs a LEFT JOIN between `mmi_components` and `mmi_jobs`
-- Calculates average execution time only for completed jobs with a `completed_date`
-- Uses conditional aggregation for status-specific counts
-- Sorts results by total jobs (descending), then component name (ascending)
-- Leverages existing indexes for optimal performance
+- Queries the `mmi_jobs` table for completed jobs only (`status='completed'`)
+- Joins with `mmi_components` table to retrieve human-readable component names
+- Filters out jobs without `actual_hours` data
+- Aggregates data by component to calculate:
+  - Total completed jobs per component
+  - Average duration (in hours) from the `actual_hours` field
+- Sorts results by job count (descending) for easy identification of high-volume components
+- Returns component names as `component_id` for backwards compatibility
 
 ## Use Cases
 
 ### 📊 Dashboard Analytics
-Visualize maintenance workload distribution across components with bar charts, pie charts, or data tables.
+Visualize maintenance workload distribution across components with dual-metric bar charts showing both job volume and average execution time.
 
 ### 📈 Performance Monitoring
-Track average execution times per component to identify bottlenecks and optimize maintenance processes.
+Track average execution times per component to identify components that require more maintenance effort.
 
 ### 🎯 Capacity Planning
 Identify components with high job volumes to allocate resources effectively.
 
-### 🔍 Problem Detection
-Find components with:
-- Long execution times that may need process improvements
-- High pending job counts indicating resource constraints
-- Components with no completed jobs that may need attention
+### 🔍 Efficiency Analysis
+Compare components by both frequency and time investment to optimize maintenance processes.
 
 ## Features
 
 ✅ **Real-time Analytics** - Always reflects current database state  
-✅ **Performance Optimized** - Uses indexed columns and efficient SQL  
-✅ **Dashboard Ready** - Perfect for BI visualizations  
-✅ **NULL Handling** - Components with no completed jobs show `null` for `avg_execution_time_days`  
-✅ **RLS Compliant** - Respects Row Level Security policies  
+✅ **Performance Optimized** - Efficient query with proper filtering  
+✅ **Dashboard Ready** - Perfect for BI visualizations with dual metrics  
+✅ **Human-Readable** - Component names instead of UUIDs  
+✅ **Accurate Metrics** - Based on actual_hours field for completed jobs  
 ✅ **CORS Enabled** - Supports cross-origin requests
 
 ## Notes
 
-- Average execution time is calculated only for jobs with status='completed' AND a non-null `completed_date`
-- Components with no jobs are included in the results with 0 counts
-- Results are sorted by total jobs (most active first), then alphabetically by component name
-- All timestamps use the server's timezone (TIMESTAMPTZ)
+- Only includes jobs with `status='completed'`
+- Only includes jobs with non-null `actual_hours` values
+- Component names are returned in the `component_id` field for backwards compatibility
+- Results are sorted by job count (most active components first)
+- Average duration is calculated in hours and rounded to 1 decimal place
 
 ## Error Handling
 
@@ -148,21 +142,21 @@ Error responses include a JSON object with an `error` field:
 
 - Supabase JS Client v2.39.3
 - Deno runtime
-- PostgreSQL function `jobs_by_component_stats()`
+- Table: `mmi_components`
+- Table: `mmi_jobs`
 
 ## Deployment
 
 ```bash
 # Deploy the edge function
 supabase functions deploy bi-jobs-by-component
-
-# Apply the database migration (if not already applied)
-supabase db push
 ```
 
-## Related
+The component can be integrated in any dashboard:
 
-- Migration: `20251015183600_create_jobs_by_component_stats.sql`
-- Table: `mmi_components`
-- Table: `mmi_jobs`
-- RPC Function: `jobs_by_component_stats()`
+```typescript
+import DashboardJobs from '@/components/bi/DashboardJobs';
+
+// Component automatically fetches and displays the data
+<DashboardJobs />
+```
