@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import DashboardJobs from "@/components/bi/DashboardJobs";
 
 const data = [
   { sistema: "Gerador", ia_efetiva: 6, total: 10 },
@@ -30,6 +31,8 @@ export default function MmiBI() {
           </ResponsiveContainer>
         </CardContent>
       </Card>
+
+      <DashboardJobs />
     </div>
   );
 }
