@@ -104,6 +104,32 @@ These templates can be integrated with:
 - Workflow automation systems
 - AI-powered workflow suggestions
 
+### Example Integration
+
+See `exampleIntegration.ts` for practical examples of how to use these templates, including:
+- Converting templates to workflow format
+- Filtering by criticidade or responsible party
+- Creating derived workflows from templates
+- Generating summary statistics
+
+Example usage:
+```typescript
+import { getHighPriorityTemplates, getTemplateSummary } from '@/lib/workflows/exampleIntegration';
+
+// Get all high priority templates
+const urgentTemplates = getHighPriorityTemplates();
+
+// Get summary statistics
+const stats = getTemplateSummary();
+console.log(`Total: ${stats.total}, High: ${stats.alta}, Medium: ${stats.media}`);
+```
+
+## Files in this Module
+
+- `suggestionTemplates.ts` - Core template definitions and types
+- `exampleIntegration.ts` - Example integration functions
+- `README.md` - This documentation file
+
 ## Future Enhancements
 
 Potential future improvements:
