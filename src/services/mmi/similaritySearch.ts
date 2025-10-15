@@ -18,7 +18,7 @@ export interface SimilarJob {
   description?: string;
   status: string;
   similarity: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   created_at: string;
 }
 
@@ -58,17 +58,7 @@ export interface SemanticSearchOptions {
  * @returns Promise with job comparison results
  */
 export async function findSimilarJobsById(jobId: string): Promise<JobComparisonResponse> {
-  const { data, error } = await supabase.functions.invoke("mmi-jobs-similar", {
-    method: "GET",
-    body: undefined,
-    // Pass jobId as query parameter
-  });
-
-  if (error) {
-    throw new Error(`Failed to find similar jobs: ${error.message}`);
-  }
-
-  // Manually construct URL with query params since Supabase client doesn't support it well
+  // Manually construct URL with query params since Supabase client doesn't support it well for GET
   const url = `${supabase.supabaseUrl}/functions/v1/mmi-jobs-similar?jobId=${jobId}`;
   const response = await fetch(url, {
     method: "GET",

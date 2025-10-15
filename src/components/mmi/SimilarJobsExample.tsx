@@ -9,8 +9,6 @@ import {
   useSimilarJobsById,
   useSemanticSearch,
   detectDuplicateJobs,
-  getJobSuggestions,
-  findRecurringIssues,
   type SimilarJob,
 } from "@/services/mmi/similaritySearch";
 import { Button } from "@/components/ui/button";
@@ -61,7 +59,7 @@ export function SimilarJobsByIdExample() {
         {data && (
           <div className="space-y-2">
             <div className="text-sm text-muted-foreground mb-2">
-              Found {data.count} similar jobs to "{data.job_title}"
+              Found {data.count} similar jobs to &ldquo;{data.job_title}&rdquo;
             </div>
             <SimilarJobsList jobs={similarJobs} />
           </div>
@@ -113,7 +111,7 @@ export function SemanticSearchExample() {
         {data && (
           <div className="space-y-2">
             <div className="text-sm text-muted-foreground mb-2">
-              Found {data.count} jobs matching "{data.query}"
+              Found {data.count} jobs matching &ldquo;{data.query}&rdquo;
             </div>
             <SimilarJobsList jobs={results} />
           </div>
