@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import IncidentAiModal from "@/components/dp/IncidentAiModal";
 import { 
   AlertTriangle, 
   FileText, 
@@ -22,7 +23,8 @@ import {
   MapPin,
   Plus,
   Search,
-  Activity
+  Activity,
+  Brain
 } from "lucide-react";
 
 interface Incident {
@@ -67,6 +69,31 @@ export const PeotramIncidentManager: React.FC = () => {
   const [isNewIncidentOpen, setIsNewIncidentOpen] = useState(false);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("all");
+
+  const handleAnalyzeWithAI = (incident: Incident) => {
+    // Store incident in localStorage for the modal to pick up
+    localStorage.setItem('incident_to_analyze', JSON.stringify({
+      id: incident.id,
+      title: incident.title,
+      description: incident.description,
+      summary: incident.description, // Use description as summary if no separate summary field
+      type: incident.type,
+      severity: incident.severity,
+      status: incident.status,
+      location: incident.location,
+      reportedBy: incident.reportedBy,
+      reportedAt: incident.reportedAt,
+      rootCause: incident.rootCause,
+      correctiveActions: incident.correctiveActions,
+      preventiveActions: incident.preventiveActions,
+      impact: incident.impact,
+      witnesses: incident.witnesses,
+      attachments: incident.attachments
+    }));
+    
+    // Trigger a custom event to notify the modal
+    window.dispatchEvent(new Event('storage'));
+  };
 
   function getDemoIncidents(): Incident[] {
     return [
@@ -386,9 +413,14 @@ export const PeotramIncidentManager: React.FC = () => {
                       <Edit className="w-3 h-3 mr-1" />
                       Editar
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1">
-                      <FileText className="w-3 h-3 mr-1" />
-                      Investigar
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => handleAnalyzeWithAI(incident)}
+                    >
+                      <Brain className="w-3 h-3 mr-1" />
+                      Analisar com IA
                     </Button>
                   </div>
                 </CardContent>
@@ -518,6 +550,8 @@ export const PeotramIncidentManager: React.FC = () => {
           </div>
         </TabsContent>
       </Tabs>
+      <IncidentAiModal />
     </div>
   );
+};
 };
