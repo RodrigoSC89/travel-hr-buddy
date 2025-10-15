@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper'
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper'
 import { ModuleHeader } from '@/components/ui/module-header'
+import { WorkflowAIScoreCard } from '@/components/workflows/WorkflowAIScoreCard'
 
 interface SmartWorkflow {
   id: string
@@ -120,6 +121,9 @@ export default function SmartWorkflowPage() {
         />
 
         <div className="p-6 space-y-6">
+          {/* AI Score Card */}
+          <WorkflowAIScoreCard />
+
           <div className="flex gap-2 items-end">
             <div className="flex-1">
               <Input
