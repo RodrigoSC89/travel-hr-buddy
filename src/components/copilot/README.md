@@ -1,8 +1,20 @@
-# Similar Examples Component
+# Copilot Components
 
 ## Overview
 
-The `SimilarExamples` component provides an intelligent interface for finding and reusing historical maintenance job data. It uses vector similarity search powered by OpenAI embeddings to find similar maintenance cases based on user input.
+This module contains AI-powered components for intelligent job creation and maintenance assistance. The main components are:
+
+- **SimilarExamples**: An intelligent interface for finding and reusing historical maintenance job data using vector similarity search
+- **JobFormWithExamples**: A complete job creation form that integrates with SimilarExamples for AI-powered suggestions
+- **CopilotJobFormExample**: A full-featured demo page showcasing all capabilities
+- **CopilotJobForm Page**: A simple demo page accessible at `/copilot/job-form`
+
+All components use vector similarity search powered by OpenAI embeddings to find similar maintenance cases based on user input.
+
+## Demo Pages
+
+You can see these components in action at:
+- `/copilot/job-form` - Simple, clean demo of JobFormWithExamples
 
 ## Features
 
@@ -19,18 +31,43 @@ The `SimilarExamples` component provides an intelligent interface for finding an
 src/
 ├── components/
 │   └── copilot/
-│       └── SimilarExamples.tsx          # Main UI component
+│       ├── SimilarExamples.tsx              # Similar examples finder component
+│       ├── JobFormWithExamples.tsx          # Job creation form with AI suggestions
+│       ├── CopilotJobFormExample.tsx        # Full-featured demo page
+│       └── index.ts                         # Component exports
+├── pages/
+│   └── CopilotJobForm.tsx                   # Simple demo page at /copilot/job-form
 ├── lib/
 │   └── ai/
 │       └── copilot/
-│           └── querySimilarJobs.ts      # Query service
+│           └── querySimilarJobs.ts          # Query service
 └── tests/
-    └── similar-jobs-query.test.ts       # Unit tests
+    └── components/
+        └── JobFormWithExamples.test.tsx     # Unit tests
 ```
 
 ## Usage
 
-### Basic Usage
+### JobFormWithExamples - Complete Form
+
+The easiest way to use the copilot components is with the `JobFormWithExamples` component, which includes the form and similar examples integration:
+
+```tsx
+import { JobFormWithExamples } from "@/components/copilot";
+
+function MaintenancePage() {
+  const handleJobSubmit = (data: { component: string; description: string }) => {
+    console.log("Job submitted:", data);
+    // Call your API to save the job
+  };
+
+  return <JobFormWithExamples onSubmit={handleJobSubmit} />;
+}
+```
+
+### SimilarExamples - Standalone Usage
+
+You can also use the `SimilarExamples` component independently:
 
 ```tsx
 import SimilarExamples from "@/components/copilot/SimilarExamples";
