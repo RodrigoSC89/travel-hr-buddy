@@ -86,6 +86,7 @@ const RestoreChartEmbed = React.lazy(() => import("./pages/embed/RestoreChartEmb
 const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
 const TemplateEditorPage = React.lazy(() => import("./pages/admin/templates/editor"));
 const MMIJobsPanel = React.lazy(() => import("./pages/MMIJobsPanel"));
+const PerformanceAnalysis = React.lazy(() => import("./pages/PerformanceAnalysis"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -217,6 +218,7 @@ function App() {
                       <Route path="/admin/reports/assistant" element={<AssistantReportLogs />} />
                       <Route path="/admin/reports/dashboard-logs" element={<DashboardLogs />} />
                       <Route path="/admin/reports/restore-analytics" element={<RestoreAnalytics />} />
+                      <Route path="/admin/performance-analysis" element={<PerformanceAnalysis />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
