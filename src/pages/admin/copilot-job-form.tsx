@@ -62,11 +62,11 @@ export default function CopilotJobFormPage() {
               </div>
               <div className="flex gap-2">
                 <span className="font-semibold text-primary">3.</span>
-                <p>Clique em "Ver exemplos semelhantes"</p>
+                <p>Clique em &ldquo;Ver exemplos semelhantes&rdquo;</p>
               </div>
               <div className="flex gap-2">
                 <span className="font-semibold text-primary">4.</span>
-                <p>Escolha um exemplo e clique em "Usar como base"</p>
+                <p>Escolha um exemplo e clique em &ldquo;Usar como base&rdquo;</p>
               </div>
               <div className="flex gap-2">
                 <span className="font-semibold text-primary">5.</span>
@@ -74,7 +74,7 @@ export default function CopilotJobFormPage() {
               </div>
               <div className="flex gap-2">
                 <span className="font-semibold text-primary">6.</span>
-                <p>Clique em "Criar Job" para finalizar</p>
+                <p>Clique em &ldquo;Criar Job&rdquo; para finalizar</p>
               </div>
             </CardContent>
           </Card>
@@ -140,19 +140,19 @@ export default function CopilotJobFormPage() {
               <div className="p-2 bg-muted rounded">
                 <p className="font-semibold">Gerador Diesel</p>
                 <p className="text-xs text-muted-foreground">
-                  "Ruído anormal no gerador STBD"
+                  &ldquo;Ruído anormal no gerador STBD&rdquo;
                 </p>
               </div>
               <div className="p-2 bg-muted rounded">
                 <p className="font-semibold">Bomba Hidráulica</p>
                 <p className="text-xs text-muted-foreground">
-                  "Vibração excessiva na bomba"
+                  &ldquo;Vibração excessiva na bomba&rdquo;
                 </p>
               </div>
               <div className="p-2 bg-muted rounded">
                 <p className="font-semibold">Sistema Elétrico</p>
                 <p className="text-xs text-muted-foreground">
-                  "Falha no circuito de iluminação"
+                  &ldquo;Falha no circuito de iluminação&rdquo;
                 </p>
               </div>
             </CardContent>
