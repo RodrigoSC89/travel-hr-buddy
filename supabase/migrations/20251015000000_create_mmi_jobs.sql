@@ -1,61 +1,123 @@
--- Create mmi_jobs table for MMI job management
+-- Enable pgvector extension for embeddings
+CREATE EXTENSION IF NOT EXISTS vector;
+
+-- Create mmi_jobs table for maintenance management with AI support
 CREATE TABLE IF NOT EXISTS public.mmi_jobs (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    job_id TEXT UNIQUE NOT NULL,
-    title TEXT NOT NULL,
-    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'in_progress', 'completed', 'awaiting_parts', 'postponed')),
-    priority TEXT DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high', 'critical')),
-    due_date TIMESTAMP WITH TIME ZONE,
-    component_name TEXT,
-    asset_name TEXT,
-    vessel_name TEXT,
-    suggestion_ia TEXT,
-    can_postpone BOOLEAN DEFAULT true,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-    created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL
+  id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'in_progress', 'completed', 'cancelled')),
+  priority TEXT NOT NULL DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high', 'critical')),
+  component TEXT,
+  asset_name TEXT,
+  vessel TEXT,
+  due_date DATE,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  embedding vector(1536) -- OpenAI ada-002 embedding dimension
 );
 
--- Add RLS policies
+-- Create index for vector similarity search
+CREATE INDEX IF NOT EXISTS mmi_jobs_embedding_idx ON public.mmi_jobs 
+USING ivfflat (embedding vector_cosine_ops)
+WITH (lists = 100);
+
+-- Enable Row Level Security
 ALTER TABLE public.mmi_jobs ENABLE ROW LEVEL SECURITY;
 
--- Allow authenticated users to read jobs
-CREATE POLICY "Users can view mmi_jobs"
-    ON public.mmi_jobs
-    FOR SELECT
-    TO authenticated
-    USING (true);
+-- Create RLS policies
+CREATE POLICY "Users can view all mmi_jobs" ON public.mmi_jobs FOR SELECT USING (true);
+CREATE POLICY "Authenticated users can insert mmi_jobs" ON public.mmi_jobs FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Authenticated users can update mmi_jobs" ON public.mmi_jobs FOR UPDATE USING (auth.role() = 'authenticated');
 
--- Allow authenticated users to create jobs
-CREATE POLICY "Users can create mmi_jobs"
-    ON public.mmi_jobs
-    FOR INSERT
-    TO authenticated
-    WITH CHECK (true);
+-- Create function to match similar jobs using embeddings
+CREATE OR REPLACE FUNCTION match_mmi_jobs(
+  query_embedding vector(1536),
+  match_threshold float DEFAULT 0.78,
+  match_count int DEFAULT 3
+)
+RETURNS TABLE (
+  id UUID,
+  title TEXT,
+  description TEXT,
+  status TEXT,
+  priority TEXT,
+  component TEXT,
+  asset_name TEXT,
+  vessel TEXT,
+  similarity float
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    mmi_jobs.id,
+    mmi_jobs.title,
+    mmi_jobs.description,
+    mmi_jobs.status,
+    mmi_jobs.priority,
+    mmi_jobs.component,
+    mmi_jobs.asset_name,
+    mmi_jobs.vessel,
+    1 - (mmi_jobs.embedding <=> query_embedding) as similarity
+  FROM public.mmi_jobs
+  WHERE 1 - (mmi_jobs.embedding <=> query_embedding) > match_threshold
+  ORDER BY mmi_jobs.embedding <=> query_embedding
+  LIMIT match_count;
+END;
+$$;
 
--- Allow authenticated users to update jobs
-CREATE POLICY "Users can update mmi_jobs"
-    ON public.mmi_jobs
-    FOR UPDATE
-    TO authenticated
-    USING (true);
-
--- Allow authenticated users to delete jobs
-CREATE POLICY "Users can delete mmi_jobs"
-    ON public.mmi_jobs
-    FOR DELETE
-    TO authenticated
-    USING (true);
+-- Insert sample historical jobs for testing
+INSERT INTO public.mmi_jobs (title, description, status, priority, component, asset_name, vessel, due_date, embedding)
+VALUES 
+  (
+    'Falha no gerador STBD',
+    'Gerador STBD apresentando ruído incomum e aumento de temperatura durante operação. Identificado desgaste no ventilador e necessidade de limpeza de dutos. Resolvido com troca de ventilador e limpeza completa.',
+    'completed',
+    'high',
+    'Gerador Diesel',
+    'Gerador STBD #2',
+    'Navio Atlantic Star',
+    '2024-04-15',
+    NULL -- Will be populated via API
+  ),
+  (
+    'Manutenção preventiva bomba hidráulica',
+    'Bomba hidráulica principal apresentando vibração excessiva. Histórico indica desgaste acelerado nas últimas 200h de operação. Substituídos rolamentos e vedações.',
+    'completed',
+    'medium',
+    'Sistema Hidráulico',
+    'Bomba Hidráulica #3',
+    'Navio Oceanic Explorer',
+    '2024-03-20',
+    NULL
+  ),
+  (
+    'Falha válvula de segurança',
+    'Válvula de alívio #2 com leitura fora do padrão. Substituição imediata recomendada. Impacto crítico na segurança operacional.',
+    'completed',
+    'critical',
+    'Sistema de Segurança',
+    'Válvulas de Alívio',
+    'Navio Pacific Voyager',
+    '2024-05-10',
+    NULL
+  ),
+  (
+    'Calibração sensores temperatura',
+    'Sensor #7 apresentando drift de +3°C. Calibração urgente necessária para manter precisão do sistema de monitoramento.',
+    'completed',
+    'medium',
+    'Sistema de Monitoramento',
+    'Sensores Sala de Máquinas',
+    'Navio Oceanic Explorer',
+    '2024-02-28',
+    NULL
+  );
 
 -- Create trigger for updated_at
 CREATE TRIGGER update_mmi_jobs_updated_at
-    BEFORE UPDATE ON public.mmi_jobs
-    FOR EACH ROW
-    EXECUTE FUNCTION public.update_updated_at_column();
-
--- Create indexes for better performance
-CREATE INDEX idx_mmi_jobs_job_id ON public.mmi_jobs(job_id);
-CREATE INDEX idx_mmi_jobs_status ON public.mmi_jobs(status);
-CREATE INDEX idx_mmi_jobs_priority ON public.mmi_jobs(priority);
-CREATE INDEX idx_mmi_jobs_due_date ON public.mmi_jobs(due_date);
-CREATE INDEX idx_mmi_jobs_created_at ON public.mmi_jobs(created_at DESC);
+  BEFORE UPDATE ON public.mmi_jobs
+  FOR EACH ROW
+  EXECUTE FUNCTION public.update_updated_at_column();
