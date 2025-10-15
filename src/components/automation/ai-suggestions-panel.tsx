@@ -83,7 +83,7 @@ export const AISuggestionsPanel: React.FC = () => {
 
       const { error } = await supabase
         .from("ai_suggestions")
-        .update(updates)
+        .update(updates as any)
         .eq("id", suggestion.id);
 
       if (error) throw error;
@@ -307,22 +307,22 @@ export const AISuggestionsPanel: React.FC = () => {
                       
                       {suggestion.action_data && Object.keys(suggestion.action_data).length > 0 && (
                         <div className="flex gap-2 text-xs text-muted-foreground">
-                          {suggestion.action_data.savings && (
+                          {(suggestion.action_data as any)?.savings && (
                             <div className="flex items-center gap-1">
                               <TrendingUp className="w-3 h-3" />
-                              Economia: {suggestion.action_data.savings}
+                              Economia: {(suggestion.action_data as any).savings}
                             </div>
                           )}
-                          {suggestion.action_data.vessel && (
+                          {(suggestion.action_data as any)?.vessel && (
                             <div className="flex items-center gap-1">
                               <Ship className="w-3 h-3" />
-                              {suggestion.action_data.vessel}
+                              {(suggestion.action_data as any).vessel}
                             </div>
                           )}
-                          {suggestion.action_data.days_overdue && (
+                          {(suggestion.action_data as any)?.days_overdue && (
                             <div className="flex items-center gap-1">
                               <AlertTriangle className="w-3 h-3" />
-                              {suggestion.action_data.days_overdue} dias em atraso
+                              {(suggestion.action_data as any).days_overdue} dias em atraso
                             </div>
                           )}
                         </div>

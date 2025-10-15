@@ -124,7 +124,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setWorkflows(data as AutomationWorkflow[] || []);
+      setWorkflows((data as any) || []);
     } catch (error) {
       toast({
         title: "Erro",
@@ -219,13 +219,13 @@ export const AutomationWorkflowsManager: React.FC = () => {
     try {
       const { data: user } = await supabase.auth.getUser();
       
-      const { error } = await supabase
+      const { error} = await supabase
         .from("automation_workflows")
         .insert({
           ...formData,
           created_by: user.user?.id,
           organization_id: user.user?.id // Temporário para demo
-        });
+        } as any);
 
       if (error) throw error;
 
@@ -256,7 +256,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
     const template = actionTemplates[actionType as keyof typeof actionTemplates];
     setFormData(prev => ({
       ...prev,
-      actions: [...prev.actions, { type: actionType, ...template.config }]
+      actions: [...prev.actions, { type: actionType, config: template.config }]
     }));
   };
 
@@ -272,11 +272,11 @@ export const AutomationWorkflowsManager: React.FC = () => {
     
     switch (trigger_type) {
     case "schedule":
-      return `Agendado: ${trigger_config.cron}`;
+      return `Agendado: ${(trigger_config as ScheduleTriggerConfig).cron}`;
     case "event":
-      return `Evento: ${trigger_config.event_type}`;
+      return `Evento: ${(trigger_config as EventTriggerConfig).event_type}`;
     case "condition":
-      return `Condição: ${trigger_config.condition}`;
+      return `Condição: ${JSON.stringify((trigger_config as ConditionTriggerConfig).conditions)}`;
     default:
       return "Não configurado";
     }

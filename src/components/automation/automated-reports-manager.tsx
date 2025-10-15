@@ -107,13 +107,21 @@ export const AutomatedReportsManager: React.FC = () => {
   const { toast } = useToast();
 
   // Form state
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    description: string;
+    report_type: string;
+    schedule_cron: string;
+    recipients: string[];
+    format: "pdf" | "excel" | "html";
+    filters: ReportFilters;
+  }>({
     name: "",
     description: "",
     report_type: "",
     schedule_cron: "0 9 * * *",
     recipients: [""],
-    format: "pdf" as const,
+    format: "pdf",
     filters: {} as ReportFilters
   });
 
@@ -149,10 +157,10 @@ export const AutomatedReportsManager: React.FC = () => {
         .from("automated_reports")
         .insert({
           ...formData,
-          recipients: formData.recipients.filter(email => email.trim() !== ""),
+          recipients: formData.recipients.filter(email => email.trim() !== "") as any,
           created_by: user.user?.id,
           organization_id: user.user?.id // Temporário para demo
-        });
+        } as any);
 
       if (error) throw error;
 
