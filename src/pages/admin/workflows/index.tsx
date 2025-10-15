@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import { MultiTenantWrapper } from '@/components/layout/multi-tenant-wrapper'
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper'
 import { ModuleHeader } from '@/components/ui/module-header'
+import { seedSuggestionsForWorkflow } from '@/lib/workflows/seedSuggestions'
 
 interface SmartWorkflow {
   id: string
@@ -67,14 +68,31 @@ export default function SmartWorkflowPage() {
       setIsCreating(true)
       const { data: { user } } = await supabase.auth.getUser()
       
-      const { error } = await supabase
+      const { data: newWorkflow, error } = await supabase
         .from('smart_workflows')
         .insert({ 
           title: newTitle,
           created_by: user?.id 
         })
+        .select()
+        .single()
       
       if (error) throw error
+      
+      // Seed automatic suggestions for the new workflow
+      if (newWorkflow) {
+        try {
+          await seedSuggestionsForWorkflow(newWorkflow.id)
+        } catch (suggestionError) {
+          console.error('Failed to seed suggestions:', suggestionError)
+          // Don't fail the workflow creation if suggestions fail
+          toast({
+            title: 'Aviso',
+            description: 'Fluxo criado, mas algumas sugestões não puderam ser adicionadas.',
+            variant: 'default'
+          })
+        }
+      }
       
       setNewTitle('')
       toast({

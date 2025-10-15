@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { WorkflowSuggestionsPanel } from "@/components/automation/workflow-suggestions-panel";
 
 interface SmartWorkflow {
   id: string
@@ -590,6 +591,9 @@ export default function WorkflowDetailPage() {
               </DialogContent>
             </Dialog>
           </div>
+
+          {/* AI Suggestions Panel */}
+          <WorkflowSuggestionsPanel workflowId={id!} />
 
           {/* Quick Add Form */}
           <Card>
