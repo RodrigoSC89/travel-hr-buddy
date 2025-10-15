@@ -76,6 +76,10 @@ travel-hr-buddy/
 │   │       │   - getCopilotSuggestions()
 │   │       │   - streamCopilotSuggestions()
 │   │       │
+│   │       ├── reportGenerator.ts
+│   │       │   - generateJobReport()
+│   │       │   - generateBatchReport()
+│   │       │
 │   │       └── jobsApi.ts (existing)
 │   │
 │   ├── components/
@@ -86,6 +90,9 @@ travel-hr-buddy/
 │   │       │   - Streaming suggestion display
 │   │       │
 │   │       └── JobCards.tsx (existing)
+│   │           - Displays jobs with AI suggestions
+│   │           - PDF report generation button
+│   │           - Postpone and Create OS actions
 │   │
 │   ├── pages/
 │   │   └── MMIJobsPanel.tsx
@@ -93,14 +100,22 @@ travel-hr-buddy/
 │   │       - Shows above job cards
 │   │
 │   └── tests/
-│       └── mmi-copilot-api.test.ts
-│           - 8 test cases covering:
-│             • Function invocation
+│       ├── mmi-copilot-api.test.ts
+│       │   - 8 test cases covering:
+│       │     • Function invocation
+│       │     • Error handling
+│       │     • Response formats
+│       │     • Streaming support
+│       │     • Input validation
+│       │     • Callback handling
+│       │
+│       └── mmi-report-generator.test.ts
+│           - 12 test cases covering:
+│             • Single job PDF generation
+│             • Batch report generation
+│             • AI suggestion inclusion
 │             • Error handling
-│             • Response formats
-│             • Streaming support
-│             • Input validation
-│             • Callback handling
+│             • Metadata options
 │
 └── MMI_COPILOT_README.md
     - Complete documentation
@@ -143,6 +158,23 @@ travel-hr-buddy/
 │ • Gera sugestões baseadas em histórico real              │
 │ • Responde com ações técnicas: peça, prazo, OS           │
 └────────────────────────────────────────────────────────────┘
+
+### Job Cards with PDF Report
+
+```
+┌────────────────────────────────────────────────────────────┐
+│ Manutenção preventiva do sistema hidráulico      10/20    │
+│ Componente: Sistema Hidráulico Principal                  │
+│ Embarcação: Navio Oceanic Explorer                        │
+│                                                            │
+│ [Prioridade: Alta] [Status: Pendente] [💡 Sugestão IA]   │
+│                                                            │
+│ 💡 Recomenda-se realizar a manutenção durante a próxima   │
+│ parada programada. Histórico indica desgaste acelerado... │
+│                                                            │
+│ [🔧 Criar OS] [🕒 Postergar com IA] [📄 Relatório PDF]   │
+└────────────────────────────────────────────────────────────┘
+```
 ```
 
 ## 🔧 Database Schema
@@ -230,7 +262,24 @@ Caso 1: Falha no gerador STBD em abr/2024...
     ✓ should call onChunk callback with received data
     ✓ should handle multiple callback invocations
 
-Total: 326 tests passed (including existing tests)
+✓ src/tests/mmi-report-generator.test.ts (12 tests passed)
+  ✓ generateJobReport
+    ✓ should generate a PDF report for a single job
+    ✓ should include AI suggestions when requested
+    ✓ should exclude AI suggestions when not requested
+    ✓ should include metadata when requested
+    ✓ should handle jobs without AI suggestions gracefully
+    ✓ should generate unique filenames with date
+  ✓ generateBatchReport
+    ✓ should generate a consolidated report for multiple jobs
+    ✓ should include all jobs in the report
+    ✓ should handle empty job list
+    ✓ should respect includeAISuggestion option
+    ✓ should add page breaks when needed
+  ✓ Error handling
+    ✓ should handle PDF generation errors gracefully
+
+Total: 404 tests passed (including existing tests)
 ```
 
 ## 🚀 Deployment Steps
@@ -294,8 +343,10 @@ npm run deploy:vercel  # or your preferred platform
 ✅ **Historical Context**: Leverages past cases for better suggestions
 ✅ **Technical Expertise**: GPT-4 with maintenance engineer persona
 ✅ **Actionable Output**: Component, timeline, and OS recommendations
+✅ **PDF Report Generation**: One-click PDF reports with AI suggestions
+✅ **Batch Reporting**: Consolidated reports for multiple jobs
 ✅ **Error Handling**: Comprehensive error handling and fallbacks
-✅ **Test Coverage**: 8 test cases covering core functionality
+✅ **Test Coverage**: 20 test cases covering core functionality
 ✅ **Documentation**: Complete README with examples and troubleshooting
 
 ## 🔄 Integration with Existing System

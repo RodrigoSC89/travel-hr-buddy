@@ -19,7 +19,9 @@ The MMI (Maritime Maintenance Intelligence) Copilot is an AI-powered assistant t
 
 ### Frontend
 - **Service**: `src/services/mmi/copilotApi.ts`
+- **Service**: `src/services/mmi/reportGenerator.ts` (PDF generation)
 - **Component**: `src/components/mmi/MMICopilot.tsx`
+- **Component**: `src/components/mmi/JobCards.tsx` (with PDF report button)
 - **Integration**: MMIJobsPanel page
 
 ## Features
@@ -43,6 +45,13 @@ The MMI (Maritime Maintenance Intelligence) Copilot is an AI-powered assistant t
 - Real-time text streaming for better UX
 - Progressive display of suggestions
 - Handles long responses efficiently
+
+### 📄 PDF Report Generation
+- One-click PDF report generation for any job
+- Includes job details, component information, and AI suggestions
+- Formatted suggestions with historical context
+- Automatic timestamp and metadata inclusion
+- Supports both single job and batch report generation
 
 ## Usage
 
@@ -135,7 +144,11 @@ Required for Frontend:
 
 Run the test suite:
 ```bash
+# Test MMI Copilot API
 npm test src/tests/mmi-copilot-api.test.ts
+
+# Test PDF Report Generator
+npm test src/tests/mmi-report-generator.test.ts
 ```
 
 Tests cover:
@@ -145,6 +158,10 @@ Tests cover:
 - Streaming support
 - Input validation
 - Callback handling
+- PDF generation with various options
+- Single job and batch report generation
+- AI suggestion inclusion/exclusion
+- Error handling in PDF generation
 
 ## Deployment
 
@@ -173,6 +190,13 @@ Tests cover:
 - **Result Limit**: Adjust `match_count` to balance context vs. token usage
 - **Streaming**: Reduces perceived latency for long responses
 
+## Recent Enhancements
+
+- ✅ PDF report generation with jsPDF
+- ✅ Single job and batch report generation
+- ✅ AI suggestions included in PDF reports
+- ✅ Comprehensive test coverage (20 tests total)
+
 ## Future Enhancements
 
 - [ ] Add feedback mechanism to improve suggestions
@@ -182,6 +206,8 @@ Tests cover:
 - [ ] Integrate with work order creation workflow
 - [ ] Track suggestion acceptance rate
 - [ ] Add cost tracking for OpenAI API usage
+- [ ] Email PDF reports directly from the interface
+- [ ] Custom PDF report templates
 
 ## Troubleshooting
 
