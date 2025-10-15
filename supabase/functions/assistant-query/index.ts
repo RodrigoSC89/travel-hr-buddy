@@ -101,6 +101,47 @@ const commandPatterns: Record<string, CommandAction> = {
     type: "info",
     message: "💡 Digite 'ajuda' para ver a lista de comandos disponíveis.",
   },
+  // MMI Module Commands
+  "jobs de manutenção": {
+    type: "navigation",
+    target: "/mmi/jobs",
+    message: "🔧 Abrindo central de jobs de manutenção...",
+  },
+  "criar job": {
+    type: "navigation",
+    target: "/mmi/jobs",
+    message: "🔧 Para criar um job de manutenção, acesse a Central de Manutenção.",
+  },
+  "mmi": {
+    type: "navigation",
+    target: "/mmi/dashboard",
+    message: "🔧 Abrindo dashboard do MMI (Manutenção Inteligente)...",
+  },
+  "manutenção": {
+    type: "navigation",
+    target: "/mmi/jobs",
+    message: "🔧 Abrindo central de manutenção...",
+  },
+  "jobs críticos": {
+    type: "query",
+    message: "🚨 Consultando jobs críticos de manutenção...",
+  },
+  "postergar manutenção": {
+    type: "action",
+    message: "⏰ Para postergar manutenção, acesse o job específico e use a opção 'Postergar com IA'.",
+  },
+  "criar os": {
+    type: "action",
+    message: "📋 Para criar uma OS (Ordem de Serviço), acesse o job de manutenção e clique em 'Criar OS'.",
+  },
+  "horas do motor": {
+    type: "query",
+    message: "⏱️ Consultando horímetros dos componentes...",
+  },
+  "manutenções pendentes": {
+    type: "query",
+    message: "📋 Consultando manutenções pendentes...",
+  },
 };
 
 function findCommand(question: string): CommandAction | null {
@@ -232,6 +273,97 @@ serve(async (req) => {
       );
     }
 
+    // 👉 Real database queries for MMI critical jobs
+    if (lower.includes("jobs críticos") || lower.includes("manutenções críticas")) {
+      const { data, error } = await supabase
+        .from("mmi_jobs")
+        .select("id, title, priority, due_date, status")
+        .eq("priority", "critical")
+        .in("status", ["pending", "scheduled"])
+        .order("due_date", { ascending: true })
+        .limit(5);
+
+      if (error || !data) {
+        console.error("Error querying critical jobs:", error);
+        return new Response(
+          JSON.stringify({
+            answer: "⚠️ Não foi possível buscar jobs críticos.",
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      if (data.length === 0) {
+        return new Response(
+          JSON.stringify({
+            answer: "✅ Não há jobs críticos de manutenção no momento.",
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      const list = data
+        .map((job) => `🚨 ${job.title} — Previsto: ${new Date(job.due_date).toLocaleDateString("pt-BR")}`)
+        .join("\n");
+
+      return new Response(
+        JSON.stringify({
+          answer: `🚨 Jobs críticos de manutenção:\n${list}\n\n👉 <a href="/mmi/jobs" class="text-blue-600 underline">Ver todos os jobs</a>`,
+          action: "query",
+          timestamp: new Date().toISOString(),
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        }
+      );
+    }
+
+    // 👉 Real database queries for pending maintenance
+    if (lower.includes("manutenções pendentes") || lower.includes("jobs pendentes")) {
+      const { count, error } = await supabase
+        .from("mmi_jobs")
+        .select("*", { count: "exact", head: true })
+        .in("status", ["pending", "scheduled"]);
+
+      if (error) {
+        console.error("Error querying pending maintenance:", error);
+        return new Response(
+          JSON.stringify({
+            answer: "⚠️ Erro ao consultar manutenções pendentes.",
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      return new Response(
+        JSON.stringify({
+          answer: `🔧 Você tem ${count || 0} manutenções pendentes.\n\n👉 <a href="/mmi/jobs" class="text-blue-600 underline">Ver central de manutenção</a>`,
+          action: "query",
+          timestamp: new Date().toISOString(),
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        }
+      );
+    }
+
     // Try to match with predefined commands
     const commandAction = findCommand(question);
     
@@ -295,6 +427,24 @@ Módulos disponíveis no sistema:
 10. **Tripulação** (/crew) - Gestão de tripulação
 11. **Reservas** (/reservations) - Sistema de reservas
 12. **Comunicação** (/communication) - Centro de comunicação
+13. **MMI - Manutenção Inteligente** (/mmi/dashboard, /mmi/jobs) - Gestão inteligente de manutenção
+
+**Módulo #13: MMI - Manutenção Inteligente**
+Você tem acesso especial ao módulo de Manutenção Inteligente (MMI) com as seguintes capacidades:
+- Gestão de jobs de manutenção (preventiva, corretiva, preditiva)
+- Análise de postergação com IA (avaliação de risco)
+- Criação automatizada de OS (Ordem de Serviço)
+- Consulta de horímetros de componentes
+- Histórico de falhas e manutenções
+- Conformidade com normas marítimas (NORMAM, SOLAS, MARPOL)
+
+Comandos MMI disponíveis:
+- "criar job de manutenção" - Acessar criação de jobs
+- "jobs críticos" - Listar jobs com prioridade crítica
+- "postergar manutenção" - Analisar possibilidade de postergação
+- "criar OS" - Gerar ordem de serviço
+- "manutenções pendentes" - Ver contagem de jobs pendentes
+- "horas do motor" - Consultar horímetros
 
 Sempre forneça respostas práticas e direcionadas. Quando relevante, sugira a rota específica do módulo.
 Seja claro, direto e útil.
@@ -332,6 +482,8 @@ Seja claro, direto e útil.
       enhanced += "\n\n📄 <a href=\"/admin/documents\" class=\"text-blue-600 underline\">Ver Documentos</a>";
     } else if (/alertas?/i.test(question)) {
       enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
+    } else if (/manutenção|mmi|job/i.test(question)) {
+      enhanced += "\n\n🔧 <a href=\"/mmi/jobs\" class=\"text-blue-600 underline\">Central de Manutenção</a>";
     }
 
     return new Response(
