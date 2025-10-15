@@ -93,9 +93,32 @@ const commandPatterns: Record<string, CommandAction> = {
     target: "/reports",
     message: "📊 Navegando para relatórios...",
   },
+  "mmi": {
+    type: "navigation",
+    target: "/mmi/jobs",
+    message: "🔧 Abrindo MMI - Manutenção Inteligente...",
+  },
+  "manutenção": {
+    type: "navigation",
+    target: "/mmi/jobs",
+    message: "🔧 Navegando para central de manutenção...",
+  },
+  "jobs manutenção": {
+    type: "navigation",
+    target: "/mmi/jobs",
+    message: "🔧 Abrindo jobs de manutenção...",
+  },
+  "postergar job": {
+    type: "action",
+    message: "🕒 Para postergar um job, vá para MMI e use o botão 'Postergar com IA' no job desejado. A IA irá analisar e fornecer uma justificativa baseada no histórico operacional.",
+  },
+  "criar os": {
+    type: "action",
+    message: "📋 Para criar uma Ordem de Serviço, acesse o MMI e clique em 'Criar OS' no job correspondente.",
+  },
   "ajuda": {
     type: "info",
-    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos",
+    message: "💡 **Comandos disponíveis:**\n\n🎯 **Navegação:**\n• 'criar checklist' - Criar novo checklist\n• 'alertas' - Ver alertas de preço\n• 'dashboard' - Ir para o painel principal\n• 'documentos' - Acessar documentos\n• 'analytics' - Ver análises\n• 'relatórios' - Acessar relatórios\n• 'mmi' ou 'manutenção' - Acessar módulo de manutenção\n\n⚡ **Consultas em tempo real:**\n• 'quantas tarefas pendentes' - Ver contagem real de tarefas\n• 'documentos recentes' - Listar últimos 5 documentos\n• 'status do sistema' - Monitorar sistema\n• 'resumir documento' - Resumir com IA\n• 'gerar pdf' - Exportar documentos\n\n🔧 **MMI - Manutenção Inteligente:**\n• 'jobs manutenção' - Ver jobs de manutenção\n• 'postergar job' - Postergar com análise IA\n• 'criar os' - Criar Ordem de Serviço",
   },
   "help": {
     type: "info",
@@ -281,6 +304,9 @@ Você pode realizar ações como:
 - Listar documentos recentes
 - Gerar PDF com resumo
 - Redirecionar para rotas internas do painel
+- Gerenciar jobs de manutenção (MMI)
+- Postergar manutenção com análise IA
+- Criar ordens de serviço
 
 Módulos disponíveis no sistema:
 1. **Dashboard** (/dashboard) - Visão geral do sistema
@@ -295,9 +321,15 @@ Módulos disponíveis no sistema:
 10. **Tripulação** (/crew) - Gestão de tripulação
 11. **Reservas** (/reservations) - Sistema de reservas
 12. **Comunicação** (/communication) - Centro de comunicação
+13. **MMI - Manutenção Inteligente** (/mmi/jobs) - Módulo de manutenção com IA
+    - Gestão de jobs de manutenção preventiva e corretiva
+    - Análise de postergação com IA integrada
+    - Criação de ordens de serviço (OS)
+    - Sugestões inteligentes baseadas em histórico
+    - Monitoramento de componentes e ativos
 
 Sempre forneça respostas práticas e direcionadas. Quando relevante, sugira a rota específica do módulo.
-Seja claro, direto e útil.
+Seja claro, direto e útil. Para questões sobre manutenção, mencione o módulo MMI.
 `;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -332,6 +364,8 @@ Seja claro, direto e útil.
       enhanced += "\n\n📄 <a href=\"/admin/documents\" class=\"text-blue-600 underline\">Ver Documentos</a>";
     } else if (/alertas?/i.test(question)) {
       enhanced += "\n\n🚨 <a href=\"/admin/alerts\" class=\"text-blue-600 underline\">Ver Alertas</a>";
+    } else if (/manutenção|mmi|job|os|ordem/i.test(question)) {
+      enhanced += "\n\n🔧 <a href=\"/mmi/jobs\" class=\"text-blue-600 underline\">Ir para MMI - Manutenção Inteligente</a>";
     }
 
     return new Response(

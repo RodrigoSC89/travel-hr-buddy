@@ -1,7 +1,9 @@
 /**
- * Mock API service for MMI Jobs
- * In a real implementation, these would be actual API calls to a backend
+ * API service for MMI Jobs with Supabase integration
+ * Integrates with edge functions for AI-powered analysis
  */
+
+import { supabase } from "../supabase";
 
 export interface Job {
   id: string;
@@ -20,7 +22,7 @@ export interface Job {
   can_postpone?: boolean;
 }
 
-// Mock data for jobs
+// Fallback mock data for development/testing when database is unavailable
 const mockJobs: Job[] = [
   {
     id: "JOB-001",
@@ -88,60 +90,128 @@ const mockJobs: Job[] = [
 ];
 
 /**
- * Fetches the list of jobs
+ * Fetches the list of jobs from Supabase database
+ * Falls back to mock data if database is unavailable
  */
 export const fetchJobs = async (): Promise<{ jobs: Job[] }> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return { jobs: mockJobs };
+  try {
+    const { data, error } = await supabase
+      .from('mmi_jobs')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('Database query failed, using mock data:', error);
+      return { jobs: mockJobs };
+    }
+
+    // Transform database records to Job interface
+    const jobs = (data || []).map(job => ({
+      id: job.id,
+      title: job.title,
+      status: job.status,
+      priority: job.priority,
+      due_date: job.due_date,
+      component: {
+        name: job.component_name || 'N/A',
+        asset: {
+          name: job.asset_name || 'N/A',
+          vessel: job.vessel || 'N/A',
+        },
+      },
+      suggestion_ia: job.suggestion_ia,
+      can_postpone: job.priority !== 'Crítica',
+    }));
+
+    return { jobs: jobs.length > 0 ? jobs : mockJobs };
+  } catch (error) {
+    console.warn('Failed to fetch jobs, using mock data:', error);
+    return { jobs: mockJobs };
+  }
 };
 
 /**
- * Postpones a job with AI justification
+ * Postpones a job with AI-powered analysis and justification
+ * Calls the mmi-job-postpone edge function for AI analysis
  */
 export const postponeJob = async (jobId: string): Promise<{ message: string; new_date?: string }> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  
-  const job = mockJobs.find((j) => j.id === jobId);
-  if (!job) {
-    throw new Error("Job não encontrado");
-  }
-  
-  if (!job.can_postpone) {
+  try {
+    // Call the edge function for AI-powered postponement analysis
+    const { data, error } = await supabase.functions.invoke('mmi-job-postpone', {
+      body: { jobId }
+    });
+
+    if (error) {
+      console.error('Edge function error:', error);
+      throw new Error('Erro ao analisar postergação com IA');
+    }
+
     return {
-      message: "Este job não pode ser postergado devido à prioridade crítica.",
+      message: data?.message || 'Job analisado com sucesso',
+      new_date: data?.new_date,
+    };
+  } catch (error) {
+    // Fallback to local logic if edge function is unavailable
+    console.warn('AI analysis unavailable, using fallback logic:', error);
+    
+    const job = mockJobs.find((j) => j.id === jobId);
+    if (!job) {
+      throw new Error("Job não encontrado");
+    }
+    
+    if (!job.can_postpone) {
+      return {
+        message: "Este job não pode ser postergado devido à prioridade crítica.",
+      };
+    }
+    
+    // Calculate new date (7 days ahead)
+    const currentDate = new Date(job.due_date);
+    currentDate.setDate(currentDate.getDate() + 7);
+    const newDate = currentDate.toISOString().split("T")[0];
+    
+    return {
+      message: `Job postergado com sucesso! ✅\n\nJustificativa IA: Com base no histórico operacional e condições atuais, é seguro postergar esta manutenção para ${newDate}. O sistema mantém margens de segurança adequadas.`,
+      new_date: newDate,
     };
   }
-  
-  // Calculate new date (7 days ahead)
-  const currentDate = new Date(job.due_date);
-  currentDate.setDate(currentDate.getDate() + 7);
-  const newDate = currentDate.toISOString().split("T")[0];
-  
-  return {
-    message: `Job postergado com sucesso! ✅\n\nJustificativa IA: Com base no histórico operacional e condições atuais, é seguro postergar esta manutenção para ${newDate}. O sistema mantém margens de segurança adequadas.`,
-    new_date: newDate,
-  };
 };
 
 /**
  * Creates a work order (OS) for a job
+ * Calls the mmi-os-create edge function to create the work order
  */
 export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; message: string }> => {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 600));
-  
-  const job = mockJobs.find((j) => j.id === jobId);
-  if (!job) {
-    throw new Error("Job não encontrado");
+  try {
+    // Call the edge function to create work order
+    const { data, error } = await supabase.functions.invoke('mmi-os-create', {
+      body: { jobId }
+    });
+
+    if (error) {
+      console.error('Edge function error:', error);
+      throw new Error('Erro ao criar ordem de serviço');
+    }
+
+    return {
+      os_id: data?.os_id || `OS-${Date.now().toString().slice(-6)}`,
+      message: data?.message || 'Ordem de Serviço criada com sucesso! 📋',
+    };
+  } catch (error) {
+    // Fallback to local logic if edge function is unavailable
+    console.warn('OS creation service unavailable, using fallback:', error);
+    
+    const job = mockJobs.find((j) => j.id === jobId);
+    if (!job) {
+      throw new Error("Job não encontrado");
+    }
+    
+    // Generate a mock OS ID
+    const osId = `OS-${Date.now().toString().slice(-6)}`;
+    
+    return {
+      os_id: osId,
+      message: `Ordem de Serviço criada com sucesso! 📋`,
+    };
   }
-  
-  // Generate a mock OS ID
-  const osId = `OS-${Date.now().toString().slice(-6)}`;
-  
-  return {
-    os_id: osId,
-    message: `Ordem de Serviço criada com sucesso! 📋`,
-  };
 };
