@@ -24,7 +24,7 @@ describe("DashboardJobs Component", () => {
     );
 
     render(<DashboardJobs />);
-    expect(screen.getByText(/📊 Falhas por Componente/i)).toBeDefined();
+    expect(screen.getByText(/📊 Falhas por Componente \+ Tempo Médio/i)).toBeDefined();
   });
 
   it("should render the chart title", () => {
@@ -34,13 +34,13 @@ describe("DashboardJobs Component", () => {
     });
 
     render(<DashboardJobs />);
-    expect(screen.getByText(/📊 Falhas por Componente/i)).toBeDefined();
+    expect(screen.getByText(/📊 Falhas por Componente \+ Tempo Médio/i)).toBeDefined();
   });
 
   it("should call the bi-jobs-by-component function on mount", async () => {
     const mockData = [
-      { component_id: "comp-1", count: 5 },
-      { component_id: "comp-2", count: 3 },
+      { component_id: "Motor Principal ME-4500", count: 15, avg_duration: 8.5 },
+      { component_id: "Gerador Principal GE-1", count: 10, avg_duration: 5.2 },
     ];
 
     vi.mocked(supabase.functions.invoke).mockResolvedValue({

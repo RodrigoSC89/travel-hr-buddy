@@ -16,28 +16,49 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Query to get jobs count grouped by component_id
+    // Query to get completed jobs with component names and actual hours
     const { data, error } = await supabase
       .from("mmi_jobs")
-      .select("component_id")
+      .select("component_id, actual_hours, mmi_components(component_name)")
+      .eq("status", "completed")
       .not("component_id", "is", null);
 
     if (error) throw error;
 
-    // Group by component_id and count
-    const jobsByComponent = (data || []).reduce((acc: Record<string, number>, job: any) => {
+    // Group by component_id, count jobs, and calculate average duration
+    interface ComponentStats {
+      count: number;
+      totalHours: number;
+      componentName: string;
+    }
+
+    const jobsByComponent = (data || []).reduce((acc: Record<string, ComponentStats>, job: any) => {
       const componentId = job.component_id;
+      const actualHours = job.actual_hours || 0;
+      const componentName = job.mmi_components?.component_name || componentId;
+
       if (componentId) {
-        acc[componentId] = (acc[componentId] || 0) + 1;
+        if (!acc[componentId]) {
+          acc[componentId] = {
+            count: 0,
+            totalHours: 0,
+            componentName,
+          };
+        }
+        acc[componentId].count += 1;
+        acc[componentId].totalHours += actualHours;
       }
       return acc;
     }, {});
 
-    // Convert to array format expected by the chart
-    const result = Object.entries(jobsByComponent).map(([component_id, count]) => ({
-      component_id,
-      count,
-    }));
+    // Convert to array format expected by the chart and calculate averages
+    const result = Object.entries(jobsByComponent)
+      .map(([component_id, stats]) => ({
+        component_id: stats.componentName,
+        count: stats.count,
+        avg_duration: stats.count > 0 ? Number((stats.totalHours / stats.count).toFixed(2)) : 0,
+      }))
+      .sort((a, b) => b.count - a.count); // Sort by count descending
 
     return new Response(
       JSON.stringify(result),
