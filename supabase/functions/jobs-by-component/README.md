@@ -1,12 +1,16 @@
 # Jobs By Component BI API
 
+> ⚠️ **DEPRECATED**: This endpoint is superseded by `/bi-jobs-by-component` which provides comprehensive analytics including component names, average execution times, and status breakdowns. Consider migrating to the new endpoint for enhanced functionality.
+
 ## Endpoint
 
 `/jobs-by-component`
 
 ## Description
 
-This endpoint provides Business Intelligence (BI) data about completed jobs grouped by component. It's designed for dashboard visualization to show the distribution of completed work across different components.
+This endpoint provides basic Business Intelligence (BI) data about completed jobs grouped by component. It returns only the count of completed jobs per component_id.
+
+**For comprehensive analytics with component names, execution times, and status breakdowns, use `/bi-jobs-by-component` instead.**
 
 ## What it does
 
