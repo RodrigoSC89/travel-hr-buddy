@@ -3,6 +3,8 @@
  * In a real implementation, these would be actual API calls to a backend
  */
 
+import { supabase } from "@/integrations/supabase/client";
+
 export interface Job {
   id: string;
   title: string;
@@ -18,6 +20,17 @@ export interface Job {
   };
   suggestion_ia?: string;
   can_postpone?: boolean;
+}
+
+export interface CopilotSuggestion {
+  suggestion: string;
+  has_historical_data: boolean;
+  similar_cases_count?: number;
+  most_effective_action?: string;
+  average_duration_hours?: number;
+  success_rate?: number;
+  ai_generated?: boolean;
+  timestamp: string;
 }
 
 // Mock data for jobs
@@ -144,4 +157,33 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
     os_id: osId,
     message: `Ordem de Serviço criada com sucesso! 📋`,
   };
+};
+
+/**
+ * Get AI Copilot suggestion for a job based on historical data
+ */
+export const getCopilotSuggestion = async (
+  componente: string, 
+  job_description?: string,
+  job_id?: string
+): Promise<CopilotSuggestion> => {
+  try {
+    const { data, error } = await supabase.functions.invoke('mmi-copilot', {
+      body: {
+        componente,
+        job_description,
+        job_id
+      }
+    });
+
+    if (error) {
+      console.error("Error calling mmi-copilot function:", error);
+      throw new Error(`Erro ao obter sugestão da IA: ${error.message}`);
+    }
+
+    return data as CopilotSuggestion;
+  } catch (error) {
+    console.error("Error in getCopilotSuggestion:", error);
+    throw error;
+  }
 };
