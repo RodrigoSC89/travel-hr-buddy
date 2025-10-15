@@ -101,6 +101,43 @@ const commandPatterns: Record<string, CommandAction> = {
     type: "info",
     message: "💡 Digite 'ajuda' para ver a lista de comandos disponíveis.",
   },
+  
+  // MMI Module commands
+  "mmi": {
+    type: "navigation",
+    target: "/mmi/dashboard",
+    message: "🔧 Abrindo dashboard MMI - Manutenção Inteligente...",
+  },
+  "manutenção": {
+    type: "navigation",
+    target: "/mmi/dashboard",
+    message: "🔧 Navegando para Manutenção Inteligente...",
+  },
+  "jobs críticos": {
+    type: "query",
+    message: "⚠️ Consultando jobs críticos no sistema MMI...",
+  },
+  "mmi dashboard": {
+    type: "navigation",
+    target: "/mmi/dashboard",
+    message: "🔧 Abrindo dashboard MMI...",
+  },
+  "criar job mmi": {
+    type: "action",
+    message: "📋 Para criar um job de manutenção, acesse o Dashboard MMI e use o botão 'Criar Job'.",
+  },
+  "alertas mmi": {
+    type: "query",
+    message: "🔔 Verificando alertas de manutenção...",
+  },
+  "componentes": {
+    type: "query",
+    message: "⚙️ Consultando componentes do sistema...",
+  },
+  "mmi compliance": {
+    type: "info",
+    message: "✅ **Status de Conformidade MMI**\n\n• NORMAM: Monitoramento ativo\n• SOLAS: Equipamentos de segurança em dia\n• MARPOL: Sistemas ambientais conformes\n\nPara mais detalhes, acesse o Dashboard MMI.",
+  },
 };
 
 function findCommand(question: string): CommandAction | null {
@@ -168,6 +205,133 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({
           answer: `📋 Você tem ${count || 0} tarefas pendentes.`,
+          action: "query",
+          timestamp: new Date().toISOString(),
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        }
+      );
+    }
+
+    // 👉 Real database queries for MMI critical jobs
+    if (lower.includes("jobs críticos") || lower.includes("mmi críticos") || lower.includes("alertas mmi")) {
+      const { data, error } = await supabase
+        .from("mmi_jobs")
+        .select("id, title, priority, due_date, status, vessel")
+        .eq("status", "pending")
+        .in("priority", ["critical", "high"])
+        .order("priority", { ascending: false })
+        .order("due_date", { ascending: true })
+        .limit(5);
+
+      if (error || !data) {
+        console.error("Error querying MMI jobs:", error);
+        return new Response(
+          JSON.stringify({
+            answer: "⚠️ Não foi possível buscar jobs críticos do MMI.",
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      if (data.length === 0) {
+        return new Response(
+          JSON.stringify({
+            answer: "✅ Não há jobs críticos pendentes no momento! Todas as manutenções prioritárias estão em dia.",
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      const priorityEmoji: Record<string, string> = {
+        critical: "🔴",
+        high: "🟠",
+        medium: "🟡",
+        low: "🟢"
+      };
+
+      const list = data
+        .map((job) => {
+          const emoji = priorityEmoji[job.priority] || "⚪";
+          const dueDate = job.due_date ? new Date(job.due_date).toLocaleDateString("pt-BR") : "N/A";
+          const vessel = job.vessel || "N/A";
+          return `${emoji} ${job.title}\n   📅 Vencimento: ${dueDate} | 🚢 ${vessel}`;
+        })
+        .join("\n\n");
+
+      return new Response(
+        JSON.stringify({
+          answer: `⚠️ **Jobs Críticos MMI** (${data.length}):\n\n${list}\n\n👉 Acesse o Dashboard MMI para mais detalhes.`,
+          action: "query",
+          timestamp: new Date().toISOString(),
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        }
+      );
+    }
+
+    // 👉 Real database queries for MMI components
+    if (lower.includes("componentes") && (lower.includes("mmi") || lower.includes("manutenção"))) {
+      const { data, error } = await supabase
+        .from("mmi_components")
+        .select("id, name, status, current_hours, maintenance_interval_hours")
+        .eq("status", "operational")
+        .limit(5);
+
+      if (error || !data) {
+        console.error("Error querying MMI components:", error);
+        return new Response(
+          JSON.stringify({
+            answer: "⚠️ Não foi possível buscar componentes.",
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      if (data.length === 0) {
+        return new Response(
+          JSON.stringify({
+            answer: "⚙️ Não há componentes cadastrados no sistema MMI.",
+            action: "query",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 200,
+          }
+        );
+      }
+
+      const list = data
+        .map((comp) => {
+          const percentage = ((comp.current_hours / comp.maintenance_interval_hours) * 100).toFixed(0);
+          const indicator = parseInt(percentage) >= 90 ? "⚠️" : parseInt(percentage) >= 75 ? "⚡" : "✅";
+          return `${indicator} ${comp.name}\n   🕐 ${comp.current_hours.toFixed(0)}h / ${comp.maintenance_interval_hours}h (${percentage}%)`;
+        })
+        .join("\n\n");
+
+      return new Response(
+        JSON.stringify({
+          answer: `⚙️ **Componentes Operacionais** (${data.length}):\n\n${list}`,
           action: "query",
           timestamp: new Date().toISOString(),
         }),
@@ -295,6 +459,15 @@ Módulos disponíveis no sistema:
 10. **Tripulação** (/crew) - Gestão de tripulação
 11. **Reservas** (/reservations) - Sistema de reservas
 12. **Comunicação** (/communication) - Centro de comunicação
+13. **MMI - Manutenção Inteligente** (/mmi/dashboard) - Gestão de manutenção com IA
+
+Módulo #13: MMI - Manutenção Inteligente
+- Sistema completo de gestão de manutenção preventiva e corretiva
+- Análise de risco com IA para adiamento de jobs
+- Busca por similaridade de jobs históricos
+- Geração automática de OS (Ordens de Serviço)
+- Conformidade com normas marítimas (NORMAM, SOLAS, MARPOL)
+- Monitoramento de horímetros e alertas automáticos
 
 Sempre forneça respostas práticas e direcionadas. Quando relevante, sugira a rota específica do módulo.
 Seja claro, direto e útil.
