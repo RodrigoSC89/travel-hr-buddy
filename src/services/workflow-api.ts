@@ -5,14 +5,14 @@
  * and manage workflow-related operations.
  */
 
-import { supabase } from '@/integrations/supabase/client';
-import { seedSuggestionsForWorkflow } from '@/lib/workflows/seedSuggestions';
+import { supabase } from "@/integrations/supabase/client";
+import { seedSuggestionsForWorkflow } from "@/lib/workflows/seedSuggestions";
 import type {
   CreateWorkflowRequest,
   CreateWorkflowResponse,
   Workflow,
   WorkflowAPIError,
-} from '@/types/workflow';
+} from "@/types/workflow";
 
 /**
  * Creates a new workflow using the Supabase Edge Function
@@ -28,37 +28,37 @@ export async function createWorkflow(
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
-      throw new Error('User not authenticated');
+      throw new Error("User not authenticated");
     }
 
     // Get the Supabase URL from environment
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     
     if (!supabaseUrl) {
-      throw new Error('VITE_SUPABASE_URL is not configured');
+      throw new Error("VITE_SUPABASE_URL is not configured");
     }
 
     const functionUrl = `${supabaseUrl}/functions/v1/create-workflow`;
 
     // Make the request
     const response = await fetch(functionUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${session.access_token}`,
       },
       body: JSON.stringify(request),
     });
 
     if (!response.ok) {
       const error: WorkflowAPIError = await response.json();
-      throw new Error(error.error || 'Failed to create workflow');
+      throw new Error(error.error || "Failed to create workflow");
     }
 
     const data: CreateWorkflowResponse = await response.json();
     return data;
   } catch (error) {
-    console.error('Error creating workflow:', error);
+    console.error("Error creating workflow:", error);
     throw error;
   }
 }
@@ -76,38 +76,38 @@ export async function createWorkflowDirect(
   try {
     // Insert workflow
     const { data: workflow, error: workflowError } = await supabase
-      .from('smart_workflows')
+      .from("smart_workflows")
       .insert({
         title: request.title,
         created_by: request.created_by,
         description: request.description,
         category: request.category,
         tags: request.tags,
-        status: 'draft',
+        status: "draft",
       })
       .select()
       .single();
 
     if (workflowError || !workflow) {
-      console.error('Error creating workflow:', workflowError);
-      throw new Error(workflowError?.message || 'Failed to create workflow');
+      console.error("Error creating workflow:", workflowError);
+      throw new Error(workflowError?.message || "Failed to create workflow");
     }
 
     // Seed AI suggestions
     try {
       await seedSuggestionsForWorkflow(workflow.id, request.created_by);
     } catch (suggestionError) {
-      console.error('Error seeding suggestions:', suggestionError);
+      console.error("Error seeding suggestions:", suggestionError);
       // Don't fail the whole operation if suggestions fail
     }
 
     return {
       success: true,
       workflow: workflow as Workflow,
-      message: 'Workflow automático criado com sucesso!',
+      message: "Workflow automático criado com sucesso!",
     };
   } catch (error) {
-    console.error('Error in createWorkflowDirect:', error);
+    console.error("Error in createWorkflowDirect:", error);
     throw error;
   }
 }
@@ -120,13 +120,13 @@ export async function createWorkflowDirect(
  */
 export async function getWorkflow(workflowId: string): Promise<Workflow> {
   const { data, error } = await supabase
-    .from('smart_workflows')
-    .select('*')
-    .eq('id', workflowId)
+    .from("smart_workflows")
+    .select("*")
+    .eq("id", workflowId)
     .single();
 
   if (error) {
-    console.error('Error fetching workflow:', error);
+    console.error("Error fetching workflow:", error);
     throw error;
   }
 
@@ -140,12 +140,12 @@ export async function getWorkflow(workflowId: string): Promise<Workflow> {
  */
 export async function listWorkflows(): Promise<Workflow[]> {
   const { data, error } = await supabase
-    .from('smart_workflows')
-    .select('*')
-    .order('created_at', { ascending: false });
+    .from("smart_workflows")
+    .select("*")
+    .order("created_at", { ascending: false });
 
   if (error) {
-    console.error('Error listing workflows:', error);
+    console.error("Error listing workflows:", error);
     throw error;
   }
 
@@ -161,17 +161,17 @@ export async function listWorkflows(): Promise<Workflow[]> {
  */
 export async function updateWorkflow(
   workflowId: string,
-  updates: Partial<Omit<Workflow, 'id' | 'created_at' | 'updated_at'>>
+  updates: Partial<Omit<Workflow, "id" | "created_at" | "updated_at">>
 ): Promise<Workflow> {
   const { data, error } = await supabase
-    .from('smart_workflows')
+    .from("smart_workflows")
     .update(updates)
-    .eq('id', workflowId)
+    .eq("id", workflowId)
     .select()
     .single();
 
   if (error) {
-    console.error('Error updating workflow:', error);
+    console.error("Error updating workflow:", error);
     throw error;
   }
 
@@ -186,12 +186,12 @@ export async function updateWorkflow(
  */
 export async function deleteWorkflow(workflowId: string): Promise<void> {
   const { error } = await supabase
-    .from('smart_workflows')
+    .from("smart_workflows")
     .delete()
-    .eq('id', workflowId);
+    .eq("id", workflowId);
 
   if (error) {
-    console.error('Error deleting workflow:', error);
+    console.error("Error deleting workflow:", error);
     throw error;
   }
 }
@@ -203,7 +203,7 @@ export async function deleteWorkflow(workflowId: string): Promise<void> {
  * @returns Promise with the updated workflow
  */
 export async function activateWorkflow(workflowId: string): Promise<Workflow> {
-  return updateWorkflow(workflowId, { status: 'active' });
+  return updateWorkflow(workflowId, { status: "active" });
 }
 
 /**
@@ -213,5 +213,5 @@ export async function activateWorkflow(workflowId: string): Promise<Workflow> {
  * @returns Promise with the updated workflow
  */
 export async function deactivateWorkflow(workflowId: string): Promise<Workflow> {
-  return updateWorkflow(workflowId, { status: 'inactive' });
+  return updateWorkflow(workflowId, { status: "inactive" });
 }
