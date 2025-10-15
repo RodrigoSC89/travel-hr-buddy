@@ -1,16 +1,60 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wrench, TrendingUp, CheckCircle, Clock } from "lucide-react";
+import { Wrench, TrendingUp, CheckCircle, Clock, FileText } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import JobCards from "@/components/mmi/JobCards";
+import { generateMaintenanceReport } from "@/components/mmi/ReportPDF";
+import { fetchJobs, type Job } from "@/services/mmi/jobsApi";
+import { useToast } from "@/hooks/use-toast";
 
 export default function MMIJobsPanel() {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    loadJobs();
+  }, []);
+
+  const loadJobs = async () => {
+    try {
+      const data = await fetchJobs();
+      setJobs(data.jobs);
+    } catch (error) {
+      console.error("Error loading jobs:", error);
+    }
+  };
+
+  const handleGenerateReport = () => {
+    if (jobs.length === 0) {
+      toast({
+        title: "Nenhum job disponível",
+        description: "Não há jobs para gerar o relatório.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    generateMaintenanceReport(jobs);
+    toast({
+      title: "Relatório gerado com sucesso!",
+      description: "O PDF está sendo baixado.",
+      variant: "default",
+    });
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Wrench className="h-8 w-8 text-primary" />
-          <h1 className="text-3xl font-bold">Central de Jobs MMI</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Wrench className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl font-bold">Central de Jobs MMI</h1>
+          </div>
+          <Button onClick={handleGenerateReport} className="gap-2">
+            <FileText className="h-4 w-4" />
+            Gerar Relatório PDF
+          </Button>
         </div>
         <p className="text-muted-foreground">
           Gestão inteligente de manutenção e melhoria industrial com automação via IA

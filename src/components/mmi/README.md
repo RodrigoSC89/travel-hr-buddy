@@ -11,6 +11,7 @@ O **MMI Jobs Panel** (Manutenção e Melhoria Industrial) é um sistema de gest�
 1. **📩 Criar OS com 1 clique**: Gere ordens de serviço instantaneamente
 2. **🧠 Postergar com IA**: Justificativa automatizada e inteligente para postergação
 3. **👁️‍🗨️ Sugestões da IA**: Recomendações direto no card do job
+4. **📄 Relatório PDF**: Gere relatórios inteligentes de manutenção em PDF com histórico de OS resolvidas
 
 ### 🎯 Recursos dos Cards
 
@@ -26,6 +27,7 @@ Cada card de job exibe:
 
 - **Criar OS**: Cria uma Ordem de Serviço para o job
 - **Postergar com IA**: Postergação inteligente com justificativa automatizada (apenas para jobs elegíveis)
+- **Gerar Relatório PDF**: Gera um relatório completo em PDF com todos os jobs e histórico de OS resolvidas
 
 ## Estrutura de Arquivos
 
@@ -34,6 +36,7 @@ src/
 ├── components/
 │   └── mmi/
 │       ├── JobCards.tsx          # Componente principal de cards de jobs
+│       ├── ReportPDF.tsx         # Componente de geração de relatório PDF
 │       └── README.md             # Esta documentação
 ├── services/
 │   └── mmi/
@@ -78,6 +81,7 @@ interface Job {
   };
   suggestion_ia?: string;
   can_postpone?: boolean;
+  resolved_history?: string;
 }
 ```
 
@@ -91,6 +95,9 @@ Postergação inteligente de um job com justificativa da IA.
 
 #### `createWorkOrder(jobId: string)`
 Cria uma Ordem de Serviço para o job especificado.
+
+#### `generateMaintenanceReport(jobs: Job[])`
+Gera um relatório PDF inteligente de manutenção com todas as informações dos jobs, incluindo histórico de OS resolvidas.
 
 ## Implementação Atual
 
