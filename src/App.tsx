@@ -90,7 +90,8 @@ const MMIJobsPanel = React.lazy(() => import("./pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("./pages/MmiBI"));
 const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAnalysis"));
 const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreationWithSimilarExamples"));
-const CopilotJobForm = React.lazy(() => import("./pages/admin/copilot-job-form"));
+const CopilotJobForm = React.lazy(() => import("./pages/CopilotJobForm"));
+const CopilotJobFormAdmin = React.lazy(() => import("./pages/admin/copilot-job-form"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -180,6 +181,7 @@ function App() {
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
                       <Route path="/mmi/job-creation-demo" element={<JobCreationWithSimilarExamples />} />
+                      <Route path="/copilot/job-form" element={<CopilotJobForm />} />
                       <Route path="/innovation" element={<Innovation />} />
                       <Route path="/optimization" element={<Optimization />} />
                       <Route path="/collaboration" element={<Collaboration />} />
@@ -207,7 +209,7 @@ function App() {
                       <Route path="/admin/assistant/logs" element={<AssistantLogs />} />
                       <Route path="/admin/assistant/history" element={<AssistantLogs />} />
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
-                      <Route path="/admin/copilot-job-form" element={<CopilotJobForm />} />
+                      <Route path="/admin/copilot-job-form" element={<CopilotJobFormAdmin />} />
                       <Route path="/admin/workflows" element={<SmartWorkflows />} />
                       <Route path="/admin/workflows/:id" element={<WorkflowDetail />} />
                       <Route path="/admin/documents" element={<DocumentList />} />

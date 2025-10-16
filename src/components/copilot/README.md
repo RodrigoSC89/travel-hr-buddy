@@ -1,6 +1,70 @@
-# Similar Examples Component
+# Copilot Components Module
 
 ## Overview
+
+The Copilot components module provides AI-powered tools for intelligent job creation and maintenance assistance. This includes form components with smart suggestions and vector similarity search capabilities.
+
+## 🎯 Demo Pages
+
+- **JobFormWithExamples Demo**: Navigate to `/copilot/job-form` to see the complete job form with AI-powered suggestions
+- **Admin Demo**: Alternative access at `/admin/copilot-job-form`
+- **Job Creation Demo**: Full-featured demo at `/mmi/job-creation-demo`
+
+## Components
+
+### 1. JobFormWithExamples
+
+A comprehensive job creation form with integrated AI-powered similar examples.
+
+#### Features
+- ✨ Smart form validation
+- 🤖 AI-powered suggestions using vector similarity search
+- 📋 One-click auto-fill from historical data
+- 🔔 Toast notifications for user feedback
+- ♿ WCAG compliant accessibility
+- 📱 Fully responsive design
+
+#### Quick Usage
+
+```tsx
+import { JobFormWithExamples } from '@/components/copilot';
+
+<JobFormWithExamples onSubmit={(data) => console.log(data)} />
+```
+
+#### Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `onSubmit` | `(data: { component: string; description: string }) => void` | No | Callback when form is submitted |
+
+## Module Structure
+
+```
+src/
+├── components/
+│   └── copilot/
+│       ├── JobFormWithExamples.tsx      # Main form component with AI
+│       ├── SimilarExamples.tsx          # Similar cases finder
+│       ├── SimilarExamplesDemo.tsx      # Demo for SimilarExamples
+│       ├── CopilotJobFormExample.tsx    # Demo page component
+│       ├── index.ts                     # Module exports
+│       └── README.md                    # This file
+├── pages/
+│   ├── CopilotJobForm.tsx               # Main demo page (/copilot/job-form)
+│   ├── JobCreationWithSimilarExamples.tsx  # Alternative demo
+│   └── admin/
+│       └── copilot-job-form.tsx         # Admin demo page
+├── lib/
+│   └── ai/
+│       └── copilot/
+│           └── querySimilarJobs.ts      # Query service
+└── tests/
+    └── components/
+        └── JobFormWithExamples.test.tsx # Component tests
+```
+
+### 2. SimilarExamples
 
 The `SimilarExamples` component provides an intelligent interface for finding and reusing historical maintenance job data. It uses vector similarity search powered by OpenAI embeddings to find similar maintenance cases based on user input.
 
