@@ -15,14 +15,19 @@ export default async function handler(
   }
 
   try {
-    // Call RPC function to get risk metrics
-    const { data, error } = await supabase.rpc("auditoria_metricas_risco");
+    const { nome_navio } = req.query;
+    
+    // Call RPC function to get metrics by vessel
+    const { data, error } = await supabase.rpc(
+      "auditoria_metricas_por_embarcacao",
+      { p_nome_navio: nome_navio ? String(nome_navio) : null }
+    );
 
     if (error) throw error;
 
     res.status(200).json(data);
   } catch (error) {
-    console.error("Erro ao buscar métricas de risco:", error);
-    res.status(500).json({ error: "Erro ao buscar métricas de risco." });
+    console.error("Erro ao buscar métricas por embarcação:", error);
+    res.status(500).json({ error: "Erro ao buscar métricas por embarcação." });
   }
 }
