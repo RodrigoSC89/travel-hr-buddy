@@ -13,8 +13,8 @@ export function ExportBIReport({ trend, forecast }: { trend: TrendData[]; foreca
     try {
       toast.info("Gerando PDF...");
       
-      const date = new Date().toISOString().split('T')[0];
-      const formattedDate = new Date().toLocaleDateString('pt-BR');
+      const date = new Date().toISOString().split("T")[0];
+      const formattedDate = new Date().toLocaleDateString("pt-BR");
       
       const content = `
         <div style="font-family: Arial; padding: 20px;">
@@ -50,9 +50,9 @@ export function ExportBIReport({ trend, forecast }: { trend: TrendData[]; foreca
       const opt = {
         margin: 10,
         filename: `BI_Report_${date}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
       };
 
       html2pdf().set(opt).from(content).save().then(() => {
