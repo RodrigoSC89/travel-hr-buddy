@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { ArrowLeft } from "lucide-react"
-import { ListaAuditoriasIMCA } from "@/components/sgso/ListaAuditoriasIMCA"
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { ListaAuditoriasIMCA } from "@/components/sgso/ListaAuditoriasIMCA";
 
 export default function AuditoriasIMCAPage() {
   return (
@@ -19,5 +19,5 @@ export default function AuditoriasIMCAPage() {
         <ListaAuditoriasIMCA />
       </div>
     </div>
-  )
+  );
 }

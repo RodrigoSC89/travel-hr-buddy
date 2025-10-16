@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useRef } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { format } from "date-fns"
-import html2pdf from "html2pdf.js"
-import { saveAs } from "file-saver"
+import { useEffect, useState, useRef } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { format } from "date-fns";
+import html2pdf from "html2pdf.js";
+import { saveAs } from "file-saver";
 
 interface Auditoria {
   id: string
@@ -20,15 +20,15 @@ interface Auditoria {
 }
 
 export function ListaAuditoriasIMCA() {
-  const [auditorias, setAuditorias] = useState<Auditoria[]>([])
-  const [filtro, setFiltro] = useState("")
-  const [explicacao, setExplicacao] = useState<Record<string, string>>({})
-  const [loadingIA, setLoadingIA] = useState<string | null>(null)
-  const pdfRef = useRef<HTMLDivElement>(null)
+  const [auditorias, setAuditorias] = useState<Auditoria[]>([]);
+  const [filtro, setFiltro] = useState("");
+  const [explicacao, setExplicacao] = useState<Record<string, string>>({});
+  const [loadingIA, setLoadingIA] = useState<string | null>(null);
+  const pdfRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
-    const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+    const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
     fetch(`${SUPABASE_URL}/functions/v1/auditorias-list`, {
       headers: {
@@ -38,23 +38,23 @@ export function ListaAuditoriasIMCA() {
     })
       .then((res) => res.json())
       .then((data) => setAuditorias(data))
-      .catch((error) => console.error("Erro ao carregar auditorias:", error))
-  }, [])
+      .catch((error) => console.error("Erro ao carregar auditorias:", error));
+  }, []);
 
   const corResultado: Record<string, string> = {
     "Conforme": "bg-green-100 text-green-800",
     "Não Conforme": "bg-red-100 text-red-800",
     "Observação": "bg-yellow-100 text-yellow-800",
-  }
+  };
 
   const auditoriasFiltradas = auditorias.filter((a) =>
     [a.navio, a.norma, a.resultado, a.item_auditado].some((v) =>
       v.toLowerCase().includes(filtro.toLowerCase())
     )
-  )
+  );
 
   const exportarCSV = () => {
-    const header = ["Navio", "Data", "Norma", "Item", "Resultado", "Comentários"]
+    const header = ["Navio", "Data", "Norma", "Item", "Resultado", "Comentários"];
     const rows = auditoriasFiltradas.map((a) => [
       a.navio,
       a.data,
@@ -62,14 +62,14 @@ export function ListaAuditoriasIMCA() {
       a.item_auditado,
       a.resultado,
       a.comentarios,
-    ])
-    const csv = [header, ...rows].map((e) => e.join(",")).join("\n")
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
-    saveAs(blob, "auditorias_imca.csv")
-  }
+    ]);
+    const csv = [header, ...rows].map((e) => e.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "auditorias_imca.csv");
+  };
 
   const exportarPDF = () => {
-    if (!pdfRef.current) return
+    if (!pdfRef.current) return;
     html2pdf()
       .from(pdfRef.current)
       .set({
@@ -78,14 +78,14 @@ export function ListaAuditoriasIMCA() {
         html2canvas: { scale: 2 },
         jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
       })
-      .save()
-  }
+      .save();
+  };
 
   const explicarIA = async (id: string, navio: string, item: string, norma: string) => {
-    setLoadingIA(id)
+    setLoadingIA(id);
     
-    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
-    const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+    const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
     try {
       const res = await fetch(`${SUPABASE_URL}/functions/v1/auditorias-explain`, {
@@ -95,16 +95,16 @@ export function ListaAuditoriasIMCA() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ navio, item, norma }),
-      })
-      const data = await res.json()
-      setExplicacao((prev) => ({ ...prev, [id]: data.resultado }))
+      });
+      const data = await res.json();
+      setExplicacao((prev) => ({ ...prev, [id]: data.resultado }));
     } catch (error) {
-      console.error("Erro ao obter explicação:", error)
-      setExplicacao((prev) => ({ ...prev, [id]: "Erro ao gerar explicação. Tente novamente." }))
+      console.error("Erro ao obter explicação:", error);
+      setExplicacao((prev) => ({ ...prev, [id]: "Erro ao gerar explicação. Tente novamente." }));
     } finally {
-      setLoadingIA(null)
+      setLoadingIA(null);
     }
-  }
+  };
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto mt-8">
@@ -176,5 +176,5 @@ export function ListaAuditoriasIMCA() {
         </Card>
       )}
     </div>
-  )
+  );
 }
