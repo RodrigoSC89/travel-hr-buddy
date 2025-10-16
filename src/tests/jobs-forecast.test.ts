@@ -4,41 +4,41 @@
  * Tests for the jobs-forecast edge function that uses AI to predict job completion trends
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
-describe('jobs-forecast Edge Function', () => {
+describe("jobs-forecast Edge Function", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Request Validation', () => {
-    it('should validate trend data is an array', () => {
+  describe("Request Validation", () => {
+    it("should validate trend data is an array", () => {
       const isValidTrend = (trend: any) => {
         return trend != null && Array.isArray(trend);
       };
 
       expect(isValidTrend([])).toBe(true); // Empty array is still a valid array
-      expect(isValidTrend([{ month: 'Jan', jobsCompleted: 10 }])).toBe(true);
+      expect(isValidTrend([{ month: "Jan", jobsCompleted: 10 }])).toBe(true);
       expect(isValidTrend(null)).toBe(false);
       expect(isValidTrend(undefined)).toBe(false);
-      expect(isValidTrend('not an array')).toBe(false);
+      expect(isValidTrend("not an array")).toBe(false);
       expect(isValidTrend({})).toBe(false);
     });
 
-    it('should accept trend data with month and jobsCompleted fields', () => {
+    it("should accept trend data with month and jobsCompleted fields", () => {
       const validTrend = [
-        { month: 'Janeiro', jobsCompleted: 45 },
-        { month: 'Fevereiro', jobsCompleted: 52 },
-        { month: 'Março', jobsCompleted: 38 },
+        { month: "Janeiro", jobsCompleted: 45 },
+        { month: "Fevereiro", jobsCompleted: 52 },
+        { month: "Março", jobsCompleted: 38 },
       ];
 
       expect(validTrend).toHaveLength(3);
-      expect(validTrend[0]).toHaveProperty('month');
-      expect(validTrend[0]).toHaveProperty('jobsCompleted');
-      expect(typeof validTrend[0].jobsCompleted).toBe('number');
+      expect(validTrend[0]).toHaveProperty("month");
+      expect(validTrend[0]).toHaveProperty("jobsCompleted");
+      expect(typeof validTrend[0].jobsCompleted).toBe("number");
     });
 
-    it('should handle empty trend array', () => {
+    it("should handle empty trend array", () => {
       const emptyTrend: any[] = [];
       
       expect(Array.isArray(emptyTrend)).toBe(true);
@@ -46,13 +46,13 @@ describe('jobs-forecast Edge Function', () => {
     });
   });
 
-  describe('Trend Data Processing', () => {
-    it('should process monthly trend data correctly', () => {
+  describe("Trend Data Processing", () => {
+    it("should process monthly trend data correctly", () => {
       const trendData = [
-        { month: 'Janeiro', jobsCompleted: 45 },
-        { month: 'Fevereiro', jobsCompleted: 52 },
-        { month: 'Março', jobsCompleted: 38 },
-        { month: 'Abril', jobsCompleted: 61 },
+        { month: "Janeiro", jobsCompleted: 45 },
+        { month: "Fevereiro", jobsCompleted: 52 },
+        { month: "Março", jobsCompleted: 38 },
+        { month: "Abril", jobsCompleted: 61 },
       ];
 
       const totalJobs = trendData.reduce((acc, item) => acc + item.jobsCompleted, 0);
@@ -62,11 +62,11 @@ describe('jobs-forecast Edge Function', () => {
       expect(avgJobs).toBe(49);
     });
 
-    it('should identify upward trend', () => {
+    it("should identify upward trend", () => {
       const trendData = [
-        { month: 'Janeiro', jobsCompleted: 30 },
-        { month: 'Fevereiro', jobsCompleted: 40 },
-        { month: 'Março', jobsCompleted: 50 },
+        { month: "Janeiro", jobsCompleted: 30 },
+        { month: "Fevereiro", jobsCompleted: 40 },
+        { month: "Março", jobsCompleted: 50 },
       ];
 
       const isUpwardTrend = trendData[trendData.length - 1].jobsCompleted > trendData[0].jobsCompleted;
@@ -74,11 +74,11 @@ describe('jobs-forecast Edge Function', () => {
       expect(isUpwardTrend).toBe(true);
     });
 
-    it('should identify downward trend', () => {
+    it("should identify downward trend", () => {
       const trendData = [
-        { month: 'Janeiro', jobsCompleted: 60 },
-        { month: 'Fevereiro', jobsCompleted: 45 },
-        { month: 'Março', jobsCompleted: 35 },
+        { month: "Janeiro", jobsCompleted: 60 },
+        { month: "Fevereiro", jobsCompleted: 45 },
+        { month: "Março", jobsCompleted: 35 },
       ];
 
       const isDownwardTrend = trendData[trendData.length - 1].jobsCompleted < trendData[0].jobsCompleted;
@@ -86,10 +86,10 @@ describe('jobs-forecast Edge Function', () => {
       expect(isDownwardTrend).toBe(true);
     });
 
-    it('should calculate growth rate', () => {
+    it("should calculate growth rate", () => {
       const trendData = [
-        { month: 'Janeiro', jobsCompleted: 40 },
-        { month: 'Fevereiro', jobsCompleted: 50 },
+        { month: "Janeiro", jobsCompleted: 40 },
+        { month: "Fevereiro", jobsCompleted: 50 },
       ];
 
       const growthRate = ((trendData[1].jobsCompleted - trendData[0].jobsCompleted) / trendData[0].jobsCompleted) * 100;
@@ -98,29 +98,29 @@ describe('jobs-forecast Edge Function', () => {
     });
   });
 
-  describe('OpenAI Integration', () => {
-    it('should use correct OpenAI model', () => {
+  describe("OpenAI Integration", () => {
+    it("should use correct OpenAI model", () => {
       const modelConfig = {
-        model: 'gpt-4',
+        model: "gpt-4",
         temperature: 0.4,
       };
 
-      expect(modelConfig.model).toBe('gpt-4');
+      expect(modelConfig.model).toBe("gpt-4");
       expect(modelConfig.temperature).toBe(0.4);
     });
 
-    it('should format system prompt correctly', () => {
-      const systemPrompt = 'Você é uma IA de manutenção preditiva. Analise tendências mensais de jobs finalizados para prever picos futuros e sugerir ações.';
+    it("should format system prompt correctly", () => {
+      const systemPrompt = "Você é uma IA de manutenção preditiva. Analise tendências mensais de jobs finalizados para prever picos futuros e sugerir ações.";
 
-      expect(systemPrompt).toContain('manutenção preditiva');
-      expect(systemPrompt).toContain('tendências mensais');
-      expect(systemPrompt).toContain('prever picos futuros');
+      expect(systemPrompt).toContain("manutenção preditiva");
+      expect(systemPrompt).toContain("tendências mensais");
+      expect(systemPrompt).toContain("prever picos futuros");
     });
 
-    it('should format user prompt with trend data', () => {
+    it("should format user prompt with trend data", () => {
       const trend = [
-        { month: 'Janeiro', jobsCompleted: 45 },
-        { month: 'Fevereiro', jobsCompleted: 52 },
+        { month: "Janeiro", jobsCompleted: 45 },
+        { month: "Fevereiro", jobsCompleted: 52 },
       ];
 
       const userPrompt = `Aqui estão os dados dos últimos meses:
@@ -128,36 +128,36 @@ ${JSON.stringify(trend, null, 2)}
 
 Gere uma previsão para os próximos 2 meses e recomende ações técnicas preventivas.`;
 
-      expect(userPrompt).toContain('dados dos últimos meses');
-      expect(userPrompt).toContain('Janeiro');
-      expect(userPrompt).toContain('previsão para os próximos 2 meses');
-      expect(userPrompt).toContain('ações técnicas preventivas');
+      expect(userPrompt).toContain("dados dos últimos meses");
+      expect(userPrompt).toContain("Janeiro");
+      expect(userPrompt).toContain("previsão para os próximos 2 meses");
+      expect(userPrompt).toContain("ações técnicas preventivas");
     });
 
-    it('should request 2-month forecast', () => {
+    it("should request 2-month forecast", () => {
       const forecastMonths = 2;
       const prompt = `Gere uma previsão para os próximos ${forecastMonths} meses`;
 
-      expect(prompt).toContain('2 meses');
+      expect(prompt).toContain("2 meses");
     });
   });
 
-  describe('Response Handling', () => {
-    it('should return forecast in response', () => {
+  describe("Response Handling", () => {
+    it("should return forecast in response", () => {
       const mockResponse = {
-        forecast: 'Com base nos dados fornecidos, prevê-se um aumento de 15% nos jobs em Maio...',
+        forecast: "Com base nos dados fornecidos, prevê-se um aumento de 15% nos jobs em Maio...",
       };
 
-      expect(mockResponse).toHaveProperty('forecast');
-      expect(typeof mockResponse.forecast).toBe('string');
+      expect(mockResponse).toHaveProperty("forecast");
+      expect(typeof mockResponse.forecast).toBe("string");
       expect(mockResponse.forecast.length).toBeGreaterThan(0);
     });
 
-    it('should handle successful response', () => {
+    it("should handle successful response", () => {
       const response = {
         status: 200,
         data: {
-          forecast: 'Análise preditiva completa...',
+          forecast: "Análise preditiva completa...",
         },
       };
 
@@ -165,7 +165,7 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
       expect(response.data.forecast).toBeTruthy();
     });
 
-    it('should include CORS headers', () => {
+    it("should include CORS headers", () => {
       const corsHeaders = {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -176,16 +176,16 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
     });
   });
 
-  describe('Error Handling', () => {
-    it('should handle missing OPENAI_API_KEY', () => {
+  describe("Error Handling", () => {
+    it("should handle missing OPENAI_API_KEY", () => {
       const hasApiKey = (key?: string) => !!key;
 
       expect(hasApiKey(undefined)).toBe(false);
-      expect(hasApiKey('')).toBe(false);
-      expect(hasApiKey('sk-test123')).toBe(true);
+      expect(hasApiKey("")).toBe(false);
+      expect(hasApiKey("sk-test123")).toBe(true);
     });
 
-    it('should return error for invalid trend data', () => {
+    it("should return error for invalid trend data", () => {
       const validateTrend = (trend: any) => {
         if (!trend || !Array.isArray(trend)) {
           return { 
@@ -201,18 +201,18 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
       expect(result.error).toBe("Trend data is required and must be an array");
     });
 
-    it('should handle OpenAI API errors', () => {
+    it("should handle OpenAI API errors", () => {
       const mockErrorResponse = {
         ok: false,
         status: 500,
-        text: async () => 'Internal Server Error',
+        text: async () => "Internal Server Error",
       };
 
       expect(mockErrorResponse.ok).toBe(false);
       expect(mockErrorResponse.status).toBe(500);
     });
 
-    it('should return 400 for bad request', () => {
+    it("should return 400 for bad request", () => {
       const errorResponse = {
         status: 400,
         body: { error: "Trend data is required and must be an array" },
@@ -222,7 +222,7 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
       expect(errorResponse.body.error).toBeTruthy();
     });
 
-    it('should return 500 for server errors', () => {
+    it("should return 500 for server errors", () => {
       const errorResponse = {
         status: 500,
         body: { error: "Erro ao gerar previsão com IA." },
@@ -232,7 +232,7 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
       expect(errorResponse.body.error).toContain("Erro ao gerar previsão");
     });
 
-    it('should handle network errors gracefully', () => {
+    it("should handle network errors gracefully", () => {
       const handleError = (error: unknown) => {
         if (error instanceof Error) {
           return { error: error.message };
@@ -246,7 +246,7 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
       expect(result.error).toBe("Network timeout");
     });
 
-    it('should handle unknown errors', () => {
+    it("should handle unknown errors", () => {
       const handleError = (error: unknown) => {
         if (error instanceof Error) {
           return error.message;
@@ -260,15 +260,15 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
     });
   });
 
-  describe('CORS Preflight', () => {
-    it('should handle OPTIONS request', () => {
+  describe("CORS Preflight", () => {
+    it("should handle OPTIONS request", () => {
       const method = "OPTIONS";
       const shouldReturnEarly = method === "OPTIONS";
 
       expect(shouldReturnEarly).toBe(true);
     });
 
-    it('should return null body for OPTIONS', () => {
+    it("should return null body for OPTIONS", () => {
       const optionsResponse = {
         body: null,
         headers: {
@@ -282,8 +282,8 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
     });
   });
 
-  describe('Forecast Output', () => {
-    it('should generate actionable recommendations', () => {
+  describe("Forecast Output", () => {
+    it("should generate actionable recommendations", () => {
       const mockForecast = `
       Previsão para os próximos 2 meses:
       - Maio: Aumento esperado de 20% nos jobs
@@ -295,36 +295,36 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
       3. Implementar turnos extras em Junho
       `;
 
-      expect(mockForecast).toContain('Previsão');
-      expect(mockForecast).toContain('Ações preventivas');
-      expect(mockForecast).toContain('Maio');
-      expect(mockForecast).toContain('Junho');
+      expect(mockForecast).toContain("Previsão");
+      expect(mockForecast).toContain("Ações preventivas");
+      expect(mockForecast).toContain("Maio");
+      expect(mockForecast).toContain("Junho");
     });
 
-    it('should provide 2-month forecast period', () => {
-      const forecastMonths = ['Maio', 'Junho'];
+    it("should provide 2-month forecast period", () => {
+      const forecastMonths = ["Maio", "Junho"];
 
       expect(forecastMonths).toHaveLength(2);
-      expect(forecastMonths).toContain('Maio');
-      expect(forecastMonths).toContain('Junho');
+      expect(forecastMonths).toContain("Maio");
+      expect(forecastMonths).toContain("Junho");
     });
   });
 
-  describe('Data Formatting', () => {
-    it('should format trend data as JSON', () => {
+  describe("Data Formatting", () => {
+    it("should format trend data as JSON", () => {
       const trend = [
-        { month: 'Janeiro', jobsCompleted: 45 },
-        { month: 'Fevereiro', jobsCompleted: 52 },
+        { month: "Janeiro", jobsCompleted: 45 },
+        { month: "Fevereiro", jobsCompleted: 52 },
       ];
 
       const formatted = JSON.stringify(trend, null, 2);
       
-      expect(formatted).toContain('Janeiro');
-      expect(formatted).toContain('"jobsCompleted": 45');
+      expect(formatted).toContain("Janeiro");
+      expect(formatted).toContain("\"jobsCompleted\": 45");
     });
 
-    it('should preserve month names in Portuguese', () => {
-      const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril'];
+    it("should preserve month names in Portuguese", () => {
+      const months = ["Janeiro", "Fevereiro", "Março", "Abril"];
       
       months.forEach(month => {
         expect(month).toMatch(/^[A-ZÇÁÉÍÓÚÂÊÔÃ]/); // Portuguese months start with capital letter
@@ -332,35 +332,35 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
     });
   });
 
-  describe('Logging', () => {
-    it('should log forecast generation', () => {
+  describe("Logging", () => {
+    it("should log forecast generation", () => {
       const logMessage = (trend: any) => {
         return `Generating jobs forecast for trend data: ${JSON.stringify(trend)}`;
       };
 
-      const trend = [{ month: 'Janeiro', jobsCompleted: 45 }];
+      const trend = [{ month: "Janeiro", jobsCompleted: 45 }];
       const message = logMessage(trend);
 
-      expect(message).toContain('Generating jobs forecast');
-      expect(message).toContain('Janeiro');
+      expect(message).toContain("Generating jobs forecast");
+      expect(message).toContain("Janeiro");
     });
 
-    it('should log successful generation', () => {
-      const successMessage = 'Jobs forecast generated successfully';
+    it("should log successful generation", () => {
+      const successMessage = "Jobs forecast generated successfully";
 
-      expect(successMessage).toContain('successfully');
+      expect(successMessage).toContain("successfully");
     });
 
-    it('should log errors with details', () => {
-      const error = new Error('OpenAI API error: 500');
+    it("should log errors with details", () => {
+      const error = new Error("OpenAI API error: 500");
       const logError = (err: Error) => {
         return `Error generating jobs forecast: ${err.message}`;
       };
 
       const message = logError(error);
 
-      expect(message).toContain('Error generating jobs forecast');
-      expect(message).toContain('OpenAI API error');
+      expect(message).toContain("Error generating jobs forecast");
+      expect(message).toContain("OpenAI API error");
     });
   });
 });

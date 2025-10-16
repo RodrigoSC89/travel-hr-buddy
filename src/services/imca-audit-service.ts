@@ -7,8 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 import type {
   IMCAAuditReport,
   AuditGenerationRequest,
-  NonConformity,
-  ActionPlanItem,
   AuditStatistics
 } from "@/types/imca-audit";
 import { IMCA_STANDARDS } from "@/types/imca-audit";
@@ -146,7 +144,7 @@ export function exportAuditToMarkdown(audit: IMCAAuditReport): string {
   let markdown = `# Auditoria Técnica IMCA - ${basicData.vesselName}\n\n`;
   
   // Basic Information
-  markdown += `## Informações Básicas\n\n`;
+  markdown += "## Informações Básicas\n\n";
   markdown += `- **Embarcação/Operação:** ${basicData.vesselName}\n`;
   markdown += `- **Tipo:** ${operationalData ? "Navio" : "Terra"}\n`;
   markdown += `- **Localização:** ${basicData.location}\n`;
@@ -156,7 +154,7 @@ export function exportAuditToMarkdown(audit: IMCAAuditReport): string {
 
   // Operational Data (if present)
   if (operationalData?.incidentDescription) {
-    markdown += `## Dados Operacionais\n\n`;
+    markdown += "## Dados Operacionais\n\n";
     markdown += `**Descrição do Incidente:**\n${operationalData.incidentDescription}\n\n`;
     if (operationalData.environmentalConditions) {
       markdown += `**Condições Ambientais:**\n${operationalData.environmentalConditions}\n\n`;
@@ -173,45 +171,45 @@ export function exportAuditToMarkdown(audit: IMCAAuditReport): string {
   }
 
   // Context
-  markdown += `## Contexto da Auditoria\n\n`;
+  markdown += "## Contexto da Auditoria\n\n";
   markdown += `${audit.context}\n\n`;
 
   // Standards Applied
-  markdown += `## Normas Aplicadas\n\n`;
+  markdown += "## Normas Aplicadas\n\n";
   audit.standardsApplied.forEach(std => {
     const standard = IMCA_STANDARDS.find(s => s.code === std);
     if (standard) {
       markdown += `- **${standard.code}** - ${standard.name}: ${standard.description}\n`;
     }
   });
-  markdown += `\n`;
+  markdown += "\n";
 
   // Modules Audited
-  markdown += `## Módulos Auditados\n\n`;
+  markdown += "## Módulos Auditados\n\n";
   audit.modulesAudited.forEach(module => {
     markdown += `- ${module}\n`;
   });
-  markdown += `\n`;
+  markdown += "\n";
 
   // Non-conformities
-  markdown += `## Não-Conformidades Identificadas\n\n`;
+  markdown += "## Não-Conformidades Identificadas\n\n";
   nonConformities.forEach((nc, index) => {
     markdown += `### ${index + 1}. ${nc.module}\n\n`;
     markdown += `**Norma:** ${nc.standard}\n\n`;
     markdown += `**Nível de Risco:** ${nc.riskLevel}\n\n`;
     markdown += `**Descrição:**\n${nc.description}\n\n`;
-    markdown += `**Causas Prováveis:**\n`;
+    markdown += "**Causas Prováveis:**\n";
     nc.probableCauses.forEach(cause => {
       markdown += `- ${cause}\n`;
     });
-    markdown += `\n`;
+    markdown += "\n";
     markdown += `**Ação Corretiva:**\n${nc.correctiveAction}\n\n`;
     markdown += `**Requisitos de Verificação:**\n${nc.verificationRequirements}\n\n`;
-    markdown += `---\n\n`;
+    markdown += "---\n\n";
   });
 
   // Action Plan
-  markdown += `## Plano de Ação Priorizado\n\n`;
+  markdown += "## Plano de Ação Priorizado\n\n";
   actionPlan.forEach((item, index) => {
     markdown += `### ${index + 1}. [${item.priority}] ${item.action}\n\n`;
     markdown += `- **Prazo Recomendado:** ${item.recommendedDeadline}\n`;
@@ -220,15 +218,15 @@ export function exportAuditToMarkdown(audit: IMCAAuditReport): string {
   });
 
   // Summary
-  markdown += `## Resumo\n\n`;
+  markdown += "## Resumo\n\n";
   markdown += `${audit.summary}\n\n`;
 
   // Recommendations
-  markdown += `## Recomendações\n\n`;
+  markdown += "## Recomendações\n\n";
   markdown += `${audit.recommendations}\n\n`;
 
   // Footer
-  markdown += `---\n\n`;
+  markdown += "---\n\n";
   markdown += `*Relatório gerado em: ${audit.generatedAt}*\n`;
   if (audit.generatedBy) {
     markdown += `*Gerado por: ${audit.generatedBy}*\n`;

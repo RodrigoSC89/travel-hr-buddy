@@ -100,31 +100,31 @@ const IMCAAuditGenerator = () => {
     toast.success("Relatório exportado com sucesso!");
   };
 
-  const getRiskColor = (risk: string) => {
+  const getRiskColor = (risk: string): "destructive" | "warning" | "secondary" | "default" => {
     switch (risk) {
-      case "Alto":
-        return "destructive";
-      case "Médio":
-        return "warning";
-      case "Baixo":
-        return "secondary";
-      default:
-        return "default";
+    case "Alto":
+      return "destructive";
+    case "Médio":
+      return "warning";
+    case "Baixo":
+      return "secondary";
+    default:
+      return "default";
     }
   };
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority: string): "destructive" | "warning" | "secondary" | "outline" | "default" => {
     switch (priority) {
-      case "Crítico":
-        return "destructive";
-      case "Alto":
-        return "warning";
-      case "Médio":
-        return "secondary";
-      case "Baixo":
-        return "outline";
-      default:
-        return "default";
+    case "Crítico":
+      return "destructive";
+    case "Alto":
+      return "warning";
+    case "Médio":
+      return "secondary";
+    case "Baixo":
+      return "outline";
+    default:
+      return "default";
     }
   };
 
@@ -457,8 +457,8 @@ const IMCAAuditGenerator = () => {
                           {auditReport.nonConformities.map((nc, index) => (
                             <Card key={index} className="border-l-4" style={{
                               borderLeftColor: nc.riskLevel === "Alto" ? "rgb(239, 68, 68)" : 
-                                              nc.riskLevel === "Médio" ? "rgb(251, 146, 60)" : 
-                                              "rgb(156, 163, 175)"
+                                nc.riskLevel === "Médio" ? "rgb(251, 146, 60)" : 
+                                  "rgb(156, 163, 175)"
                             }}>
                               <CardHeader>
                                 <div className="flex items-start justify-between">
@@ -470,7 +470,7 @@ const IMCAAuditGenerator = () => {
                                       </Badge>
                                     </CardDescription>
                                   </div>
-                                  <Badge variant={getRiskColor(nc.riskLevel) as any}>
+                                  <Badge variant={getRiskColor(nc.riskLevel)}>
                                     {nc.riskLevel}
                                   </Badge>
                                 </div>
@@ -519,7 +519,7 @@ const IMCAAuditGenerator = () => {
                                   <span className="font-bold text-lg text-gray-500">
                                     {index + 1}.
                                   </span>
-                                  <Badge variant={getPriorityColor(item.priority) as any}>
+                                  <Badge variant={getPriorityColor(item.priority)}>
                                     {item.priority}
                                   </Badge>
                                 </div>
