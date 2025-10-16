@@ -1,130 +1,82 @@
-import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wrench, TrendingUp, CheckCircle, Clock } from "lucide-react";
-import JobCards from "@/components/mmi/JobCards";
-import MMICopilot from "@/components/mmi/MMICopilot";
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+interface MMIJobForecast {
+  id: string;
+  title: string;
+  forecast: string | null;
+  hours: number | null;
+  responsible: string | null;
+  forecast_date: string | null;
+}
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL!,
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY!
+);
+
 
 export default function MMIJobsPanel() {
+  const [jobs, setJobs] = useState<MMIJobForecast[]>([]);
+  const [search, setSearch] = useState("");
+
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+
+  async function fetchJobs() {
+    const { data } = await supabase.from("mmi_jobs").select("*").order("forecast_date", { ascending: false });
+    if (data) setJobs(data);
+  }
+
+
+  async function handleExport(job: MMIJobForecast) {
+    const html = `
+      <h2>${job.title}</h2>
+      <p><strong>Previsão:</strong> ${job.forecast || 'N/A'}</p>
+      <p><strong>Horímetro:</strong> ${job.hours || 0}h</p>
+      <p><strong>Responsável:</strong> ${job.responsible || 'N/A'}</p>
+    `;
+    const blob = await (await import("html2pdf.js")).default().from(html).outputPdf("blob");
+    const url = URL.createObjectURL(blob);
+    window.open(url);
+  }
+
+
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Wrench className="h-8 w-8 text-primary" />
-          <h1 className="text-3xl font-bold">Central de Jobs MMI</h1>
-        </div>
-        <p className="text-muted-foreground">
-          Gestão inteligente de manutenção e melhoria industrial com automação via IA
-        </p>
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-semibold">🛠 Painel de Forecast MMI</h1>
+
+
+      <Input
+        placeholder="🔍 Buscar por sistema, componente..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {jobs
+          .filter((j) => j.title.toLowerCase().includes(search.toLowerCase()))
+          .map((job) => (
+            <Card key={job.id} className="border">
+              <CardContent className="p-4 space-y-2">
+                <h2 className="font-semibold text-lg">🔧 {job.title}</h2>
+                <p>📅 Previsão: <strong>{job.forecast || 'N/A'}</strong></p>
+                <p>⏱ Horímetro: <strong>{job.hours || 0}h</strong></p>
+                <p>👨‍🔧 Responsável: {job.responsible || 'N/A'}</p>
+                <Button variant="outline" onClick={() => handleExport(job)}>
+                  📤 Exportar PDF
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
       </div>
-
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground">Total de Jobs</p>
-                <p className="text-2xl font-bold">4</p>
-              </div>
-              <Wrench className="h-8 w-8 text-primary opacity-20" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground">Pendentes</p>
-                <p className="text-2xl font-bold text-yellow-600">2</p>
-              </div>
-              <Clock className="h-8 w-8 text-yellow-600 opacity-20" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground">Em Andamento</p>
-                <p className="text-2xl font-bold text-blue-600">1</p>
-              </div>
-              <TrendingUp className="h-8 w-8 text-blue-600 opacity-20" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground">Com Sugestão IA</p>
-                <p className="text-2xl font-bold text-green-600">3</p>
-              </div>
-              <CheckCircle className="h-8 w-8 text-green-600 opacity-20" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* MMI Copilot - AI Assistant */}
-      <MMICopilot />
-
-      {/* Main Content - Jobs Cards */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Jobs Ativos</CardTitle>
-          <CardDescription>
-            Gerencie suas ordens de manutenção com auxílio da Inteligência Artificial
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <JobCards />
-        </CardContent>
-      </Card>
-
-      {/* Features Info */}
-      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-        <CardContent className="p-6">
-          <div className="space-y-3">
-            <h3 className="font-semibold text-lg flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-600" />
-              Automação Inteligente Integrada
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div className="flex items-start gap-2">
-                <div className="mt-1">📩</div>
-                <div>
-                  <strong>Criar OS com 1 clique</strong>
-                  <p className="text-muted-foreground">
-                    Gere ordens de serviço instantaneamente
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <div className="mt-1">🧠</div>
-                <div>
-                  <strong>Postergar com IA</strong>
-                  <p className="text-muted-foreground">
-                    Justificativa automatizada e inteligente
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <div className="mt-1">👁️‍🗨️</div>
-                <div>
-                  <strong>Sugestões da IA</strong>
-                  <p className="text-muted-foreground">
-                    Recomendações direto no card
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
