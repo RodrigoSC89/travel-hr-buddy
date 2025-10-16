@@ -94,6 +94,7 @@ const CopilotJobForm = React.lazy(() => import("./pages/CopilotJobForm"));
 const CopilotJobFormAdmin = React.lazy(() => import("./pages/admin/copilot-job-form"));
 const DashboardAuditorias = React.lazy(() => import("./pages/admin/dashboard-auditorias"));
 const MetricasRisco = React.lazy(() => import("./pages/admin/metricas-risco"));
+const AuditoriasIMCA = React.lazy(() => import("./pages/AuditoriasIMCA"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -233,6 +234,7 @@ function App() {
                       <Route path="/admin/reports/restore-analytics" element={<RestoreAnalytics />} />
                       <Route path="/admin/dashboard-auditorias" element={<DashboardAuditorias />} />
                       <Route path="/admin/metricas-risco" element={<MetricasRisco />} />
+                      <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
