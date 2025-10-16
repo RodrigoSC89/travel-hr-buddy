@@ -13,10 +13,12 @@ import {
   Filter,
   BookOpen,
   Lightbulb,
-  CheckSquare
+  CheckSquare,
+  ClipboardCheck
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface Incident {
   id: string;
@@ -42,6 +44,7 @@ interface AnalysisResult {
 }
 
 const DPIntelligenceCenter = () => {
+  const navigate = useNavigate();
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [filteredIncidents, setFilteredIncidents] = useState<Incident[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -318,6 +321,34 @@ const DPIntelligenceCenter = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Quick Access Card for IMCA Audit */}
+      <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:shadow-xl transition-shadow">
+        <CardContent className="pt-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="bg-white/20 p-3 rounded-lg">
+                <ClipboardCheck className="h-8 w-8" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold mb-1">Auditoria Técnica IMCA DP</h3>
+                <p className="text-sm text-blue-50">
+                  Gere relatórios de auditoria com análise IA seguindo normas IMCA, IMO e MTS
+                </p>
+              </div>
+            </div>
+            <Button 
+              size="lg" 
+              variant="secondary"
+              onClick={() => navigate("/imca-audit")}
+              className="bg-white text-blue-600 hover:bg-blue-50"
+            >
+              <Brain className="h-4 w-4 mr-2" />
+              Gerar Auditoria
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Search and Filter Section */}
       <Card>
