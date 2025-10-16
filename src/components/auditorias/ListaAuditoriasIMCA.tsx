@@ -1,52 +1,52 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useRef } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { format } from "date-fns"
-import html2pdf from "html2pdf.js"
-import { saveAs } from "file-saver"
+import { useEffect, useState, useRef } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { format } from "date-fns";
+import html2pdf from "html2pdf.js";
+import { saveAs } from "file-saver";
 
 interface Auditoria {
-  id: string
-  navio: string
-  data: string
-  norma: string
-  item_auditado: string
-  resultado: "Conforme" | "Não Conforme" | "Observação"
-  comentarios: string
+  id: string;
+  navio: string;
+  data: string;
+  norma: string;
+  item_auditado: string;
+  resultado: "Conforme" | "Não Conforme" | "Observação";
+  comentarios: string;
 }
 
 export function ListaAuditoriasIMCA() {
-  const [auditorias, setAuditorias] = useState<Auditoria[]>([])
-  const [filtro, setFiltro] = useState("")
-  const [explicacao, setExplicacao] = useState<Record<string, string>>({})
-  const [loadingIA, setLoadingIA] = useState<string | null>(null)
-  const pdfRef = useRef<HTMLDivElement>(null)
+  const [auditorias, setAuditorias] = useState<Auditoria[]>([]);
+  const [filtro, setFiltro] = useState("");
+  const [explicacao, setExplicacao] = useState<Record<string, string>>({});
+  const [loadingIA, setLoadingIA] = useState<string | null>(null);
+  const pdfRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/auditorias/list")
       .then((res) => res.json())
       .then((data) => setAuditorias(data))
-      .catch((error) => console.error("Error fetching auditorias:", error))
-  }, [])
+      .catch((error) => console.error("Error fetching auditorias:", error));
+  }, []);
 
   const corResultado: Record<string, string> = {
     "Conforme": "bg-green-100 text-green-800",
     "Não Conforme": "bg-red-100 text-red-800",
     "Observação": "bg-yellow-100 text-yellow-800",
-  }
+  };
 
   const auditoriasFiltradas = auditorias.filter((a) =>
     [a.navio, a.norma, a.resultado, a.item_auditado].some((v) => 
       v?.toLowerCase().includes(filtro.toLowerCase())
     )
-  )
+  );
 
   const exportarCSV = () => {
-    const header = ["Navio", "Data", "Norma", "Item", "Resultado", "Comentários"]
+    const header = ["Navio", "Data", "Norma", "Item", "Resultado", "Comentários"];
     const rows = auditoriasFiltradas.map((a) => [
       a.navio, 
       a.data, 
@@ -54,42 +54,42 @@ export function ListaAuditoriasIMCA() {
       a.item_auditado, 
       a.resultado, 
       a.comentarios
-    ])
-    const csv = [header, ...rows].map((e) => e.join(",")).join("\n")
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
-    saveAs(blob, "auditorias_imca.csv")
-  }
+    ]);
+    const csv = [header, ...rows].map((e) => e.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "auditorias_imca.csv");
+  };
 
   const exportarPDF = () => {
-    if (!pdfRef.current) return
+    if (!pdfRef.current) return;
     html2pdf().from(pdfRef.current).set({
       margin: 0.5,
       filename: "auditorias_imca.pdf",
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-    }).save()
-  }
+    }).save();
+  };
 
   const explicarIA = async (id: string, navio: string, item: string, norma: string) => {
-    setLoadingIA(id)
+    setLoadingIA(id);
     try {
       const res = await fetch("/api/auditorias/explain", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ navio, item, norma }),
-      })
-      const data = await res.json()
-      setExplicacao((prev) => ({ ...prev, [id]: data.resultado }))
+      });
+      const data = await res.json();
+      setExplicacao((prev) => ({ ...prev, [id]: data.resultado }));
     } catch (error) {
-      console.error("Error getting AI explanation:", error)
+      console.error("Error getting AI explanation:", error);
       setExplicacao((prev) => ({ 
         ...prev, 
         [id]: "Erro ao gerar explicação. Tente novamente." 
-      }))
+      }));
     } finally {
-      setLoadingIA(null)
+      setLoadingIA(null);
     }
-  }
+  };
 
   return (
     <div className="space-y-6 p-6">
@@ -183,5 +183,5 @@ export function ListaAuditoriasIMCA() {
         </div>
       )}
     </div>
-  )
+  );
 }
