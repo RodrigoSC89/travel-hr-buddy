@@ -20,6 +20,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import { logger } from "@/lib/logger";
+import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
 
 export default function DocumentAIEditorPage() {
   const navigate = useNavigate();
@@ -238,11 +239,22 @@ export default function DocumentAIEditorPage() {
     }
   };
 
+  const handleApplyTemplate = (content: string) => {
+    if (editor) {
+      editor.commands.setContent(content);
+      toast({
+        title: "Template aplicado",
+        description: "O template foi carregado no editor.",
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">📝 Editor de Documentos com IA</h1>
         <div className="flex gap-2">
+          <ApplyTemplateModal onApply={handleApplyTemplate} />
           <Button variant="outline" onClick={() => navigate("/admin/documents/ai/templates")}>
             <FileText className="w-4 h-4 mr-2" />
             Templates
