@@ -72,7 +72,7 @@ export const PeotramIncidentManager: React.FC = () => {
 
   const handleAnalyzeWithAI = (incident: Incident) => {
     // Store incident in localStorage for the modal to pick up
-    localStorage.setItem('incident_to_analyze', JSON.stringify({
+    localStorage.setItem("incident_to_analyze", JSON.stringify({
       id: incident.id,
       title: incident.title,
       description: incident.description,
@@ -92,7 +92,7 @@ export const PeotramIncidentManager: React.FC = () => {
     }));
     
     // Trigger a custom event to notify the modal
-    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new Event("storage"));
   };
 
   function getDemoIncidents(): Incident[] {
