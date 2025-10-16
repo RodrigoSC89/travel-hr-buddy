@@ -1,7 +1,7 @@
 -- Create auditoria_comentarios table for audit comments with AI auto-responder
 CREATE TABLE IF NOT EXISTS auditoria_comentarios (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  auditoria_id UUID NOT NULL,
+  auditoria_id UUID NOT NULL REFERENCES auditorias_imca(id) ON DELETE CASCADE,
   comentario TEXT NOT NULL,
   user_id TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
