@@ -1,0 +1,6 @@
+version: '1'
+functions:
+  send-real-forecast:
+    schedule: '0 8 * * *' # Todos os dias às 08:00 UTC (05:00 BRT)
+    endpoint: '/api/cron/send-real-forecast'
+    method: GET

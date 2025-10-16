@@ -25,6 +25,9 @@ verify_jwt = false
 [functions.send-forecast-report]
 verify_jwt = false
 
+[functions.send-real-forecast]
+verify_jwt = false
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)
@@ -71,3 +74,9 @@ name = "send-forecast-report"
 function_name = "send-forecast-report"
 schedule = "0 6 * * 1"  # Every Monday at 06:00 UTC
 description = "MMI: Send weekly AI forecast report for maintenance by component"
+
+[[edge_runtime.cron]]
+name = "send-real-forecast"
+function_name = "send-real-forecast"
+schedule = "0 8 * * *"  # Every day at 08:00 UTC (05:00 BRT)
+description = "MMI: Send daily real forecast report for maintenance by component"
