@@ -92,6 +92,7 @@ const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAn
 const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreationWithSimilarExamples"));
 const CopilotJobForm = React.lazy(() => import("./pages/CopilotJobForm"));
 const CopilotJobFormAdmin = React.lazy(() => import("./pages/admin/copilot-job-form"));
+const ComentariosAuditoriaDemo = React.lazy(() => import("./pages/demo/ComentariosAuditoriaDemo"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -234,6 +235,7 @@ function App() {
                       <Route path="/modules" element={<Modules />} />
                       <Route path="/smart-layout-demo" element={<SmartLayoutDemo />} />
                       <Route path="/template-editor-demo" element={<TemplateEditorDemo />} />
+                      <Route path="/demo/comentarios-auditoria" element={<ComentariosAuditoriaDemo />} />
                       <Route path="/_offline" element={<Offline />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
