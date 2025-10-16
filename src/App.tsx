@@ -95,6 +95,7 @@ const CopilotJobFormAdmin = React.lazy(() => import("./pages/admin/copilot-job-f
 const DashboardAuditorias = React.lazy(() => import("./pages/admin/dashboard-auditorias"));
 const MetricasRisco = React.lazy(() => import("./pages/admin/metricas-risco"));
 const AdminSGSO = React.lazy(() => import("./pages/admin/sgso"));
+const IMCAAudit = React.lazy(() => import("./pages/IMCAAudit"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -168,6 +169,7 @@ function App() {
                       <Route path="/peo-dp" element={<PEODP />} />
                       <Route path="/dp-incidents" element={<DPIncidents />} />
                       <Route path="/dp-intelligence" element={<DPIntelligence />} />
+                      <Route path="/imca-audit" element={<IMCAAudit />} />
                       <Route path="/sgso" element={<SGSO />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/documents" element={<Documents />} />
