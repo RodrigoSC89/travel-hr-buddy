@@ -19,7 +19,7 @@ Stores DP incident data from IMCA and other sources.
 ### 2. API Endpoint: `dp-intel-feed`
 **Function:** `supabase/functions/dp-intel-feed/index.ts`
 
-Mock API with 5 sample IMCA incidents (2024-2025).
+Fetches DP incident data from the `dp_incidents` Supabase table.
 
 ## 🚀 Quick Start
 
@@ -61,7 +61,7 @@ WHERE class_dp = 'DP Class 3';
 
 ## 📊 Sample Data
 
-The API currently returns 5 mock incidents:
+The database is seeded with 5 initial IMCA incidents (via migration `20251016154500_seed_dp_incidents_data.sql`):
 
 1. **Loss of Position Due to Gyro Drift** (Campos Basin, DP Class 2)
 2. **Thruster Control Software Failure** (North Sea, DP Class 3)
@@ -72,7 +72,9 @@ The API currently returns 5 mock incidents:
 ## 📝 Next Steps
 
 ### Immediate (Phase 2)
-- [ ] Replace mock data with real IMCA API/crawler
+- [x] Connect `dp-intel-feed` to fetch from database
+- [x] Add seed data migration
+- [ ] Build real IMCA API/crawler to populate data
 - [ ] Add data validation and deduplication
 - [ ] Schedule automated updates
 
@@ -136,15 +138,16 @@ const { incidents, meta } = await response.json();
 - ✅ Service role can write (API ingestion)
 - ✅ CORS configured for frontend access
 
-## 📦 Files Created
+## 📦 Files Created/Modified
 
 ```
 supabase/
 ├── functions/
 │   └── dp-intel-feed/
-│       └── index.ts                          (121 lines)
+│       └── index.ts                          (Modified: Now fetches from database)
 └── migrations/
-    └── 20251014195300_create_dp_incidents_table.sql   (61 lines)
+    ├── 20251014195300_create_dp_incidents_table.sql   (Table schema)
+    └── 20251016154500_seed_dp_incidents_data.sql      (Initial data seed)
 
 DP_INTELLIGENCE_CENTER_IMPLEMENTATION.md      (171 lines)
 DP_INTELLIGENCE_CENTER_QUICKREF.md            (this file)
@@ -153,15 +156,17 @@ DP_INTELLIGENCE_CENTER_QUICKREF.md            (this file)
 ## ✅ Status
 
 - [x] Database schema created
-- [x] API mock endpoint created
-- [x] Sample data added
-- [x] Documentation written
+- [x] API endpoint created
+- [x] Sample data seeded
+- [x] Database integration complete
+- [x] Documentation updated
+- [x] Frontend UI components (already implemented)
 - [ ] Production deployment
-- [ ] Frontend UI components
-- [ ] Real data integration
+- [ ] Real data integration via IMCA crawler
 
 ---
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Created:** October 14, 2025  
-**Status:** ✅ Implementation Complete (Mock Phase)
+**Updated:** October 16, 2025  
+**Status:** ✅ Database Integration Complete
