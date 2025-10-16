@@ -20,6 +20,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import { logger } from "@/lib/logger";
+import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
 
 export default function DocumentAIEditorPage() {
   const navigate = useNavigate();
@@ -271,22 +272,31 @@ export default function DocumentAIEditorPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Editor</CardTitle>
-            <Button 
-              onClick={rewriteSelectedText} 
-              disabled={rewriting}
-              variant="ghost"
-              size="sm"
-            >
-              {rewriting ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Reformulando...
-                </>
-              ) : (
-                <>
-                  <RefreshCw className="w-4 h-4 mr-2" /> Reescrever Seleção com IA
-                </>
-              )}
-            </Button>
+            <div className="flex gap-2">
+              <ApplyTemplateModal
+                onApply={(content) => {
+                  if (editor) {
+                    editor.commands.setContent(content);
+                  }
+                }}
+              />
+              <Button 
+                onClick={rewriteSelectedText} 
+                disabled={rewriting}
+                variant="ghost"
+                size="sm"
+              >
+                {rewriting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Reformulando...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2" /> Reescrever Seleção com IA
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
