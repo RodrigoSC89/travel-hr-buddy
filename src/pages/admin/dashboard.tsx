@@ -168,6 +168,11 @@ export default function AdminDashboard() {
 
   const quickLinks = [
     {
+      title: "📊 Painel BI - Business Intelligence",
+      path: "/admin/bi",
+      icon: BarChart3,
+    },
+    {
       title: "Dashboard de Restaurações Completo",
       path: "/admin/documents/restore-dashboard",
       icon: BarChart3,
