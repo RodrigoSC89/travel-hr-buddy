@@ -92,6 +92,7 @@ const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAn
 const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreationWithSimilarExamples"));
 const CopilotJobForm = React.lazy(() => import("./pages/CopilotJobForm"));
 const CopilotJobFormAdmin = React.lazy(() => import("./pages/admin/copilot-job-form"));
+const AuditoriaIMCA = React.lazy(() => import("./pages/admin/auditoria-imca"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -210,6 +211,7 @@ function App() {
                       <Route path="/admin/assistant/history" element={<AssistantLogs />} />
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
                       <Route path="/admin/copilot-job-form" element={<CopilotJobFormAdmin />} />
+                      <Route path="/admin/auditoria-imca" element={<AuditoriaIMCA />} />
                       <Route path="/admin/workflows" element={<SmartWorkflows />} />
                       <Route path="/admin/workflows/:id" element={<WorkflowDetail />} />
                       <Route path="/admin/documents" element={<DocumentList />} />
