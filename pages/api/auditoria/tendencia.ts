@@ -10,14 +10,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { start, end, user_id } = req.query;
 
   try {
-    let query = supabase.from("auditorias_imca").select("created_at, user_id");
+    let query = supabase.from("peotram_audits").select("audit_date, created_by");
 
     if (start && end) {
-      query = query.gte("created_at", start as string).lte("created_at", end as string);
+      query = query.gte("audit_date", start as string).lte("audit_date", end as string);
     }
 
     if (user_id) {
-      query = query.eq("user_id", user_id as string);
+      query = query.eq("created_by", user_id as string);
     }
 
     const { data, error } = await query;
@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const agrupado: Record<string, number> = {};
     data.forEach((item) => {
-      const dataFormatada = new Date(item.created_at).toISOString().slice(0, 10);
+      const dataFormatada = new Date(item.audit_date).toISOString().slice(0, 10);
       agrupado[dataFormatada] = (agrupado[dataFormatada] || 0) + 1;
     });
 

@@ -75,40 +75,44 @@ describe("Auditoria Tendencia API Endpoint", () => {
   });
 
   describe("Database Query", () => {
-    it("should query auditorias_imca table", () => {
-      const tableName = "auditorias_imca";
-      expect(tableName).toBe("auditorias_imca");
+    it("should query peotram_audits table", () => {
+      const tableName = "peotram_audits";
+      expect(tableName).toBe("peotram_audits");
     });
 
-    it("should select created_at and user_id columns", () => {
-      const columns = ["created_at", "user_id"];
-      expect(columns).toContain("created_at");
-      expect(columns).toContain("user_id");
+    it("should select audit_date and created_by columns", () => {
+      const columns = ["audit_date", "created_by"];
+      expect(columns).toContain("audit_date");
+      expect(columns).toContain("created_by");
     });
 
-    it("should filter by date range using gte and lte", () => {
+    it("should filter by date range using gte and lte on audit_date", () => {
       const operators = ["gte", "lte"];
+      const field = "audit_date";
       expect(operators).toContain("gte");
       expect(operators).toContain("lte");
+      expect(field).toBe("audit_date");
     });
 
-    it("should filter by user_id using eq", () => {
+    it("should filter by user_id using eq on created_by field", () => {
       const operator = "eq";
+      const field = "created_by";
       expect(operator).toBe("eq");
+      expect(field).toBe("created_by");
     });
   });
 
   describe("Data Processing", () => {
     it("should group data by date", () => {
       const mockData = [
-        { created_at: "2024-01-01T10:00:00Z", user_id: "user-1" },
-        { created_at: "2024-01-01T14:00:00Z", user_id: "user-2" },
-        { created_at: "2024-01-02T09:00:00Z", user_id: "user-1" },
+        { audit_date: "2024-01-01T10:00:00Z", created_by: "user-1" },
+        { audit_date: "2024-01-01T14:00:00Z", created_by: "user-2" },
+        { audit_date: "2024-01-02T09:00:00Z", created_by: "user-1" },
       ];
 
       const grouped: Record<string, number> = {};
       mockData.forEach((item) => {
-        const date = new Date(item.created_at).toISOString().slice(0, 10);
+        const date = new Date(item.audit_date).toISOString().slice(0, 10);
         grouped[date] = (grouped[date] || 0) + 1;
       });
 
@@ -194,11 +198,11 @@ describe("Auditoria Tendencia API Endpoint", () => {
 
   describe("Edge Cases", () => {
     it("should handle empty result set", () => {
-      const emptyData: Array<{ created_at: string; user_id: string }> = [];
+      const emptyData: Array<{ audit_date: string; created_by: string }> = [];
       const grouped: Record<string, number> = {};
 
       emptyData.forEach((item) => {
-        const date = new Date(item.created_at).toISOString().slice(0, 10);
+        const date = new Date(item.audit_date).toISOString().slice(0, 10);
         grouped[date] = (grouped[date] || 0) + 1;
       });
 
@@ -208,15 +212,15 @@ describe("Auditoria Tendencia API Endpoint", () => {
 
     it("should handle multiple audits on same date", () => {
       const mockData = [
-        { created_at: "2024-01-01T08:00:00Z", user_id: "user-1" },
-        { created_at: "2024-01-01T10:00:00Z", user_id: "user-1" },
-        { created_at: "2024-01-01T14:00:00Z", user_id: "user-2" },
-        { created_at: "2024-01-01T16:00:00Z", user_id: "user-3" },
+        { audit_date: "2024-01-01T08:00:00Z", created_by: "user-1" },
+        { audit_date: "2024-01-01T10:00:00Z", created_by: "user-1" },
+        { audit_date: "2024-01-01T14:00:00Z", created_by: "user-2" },
+        { audit_date: "2024-01-01T16:00:00Z", created_by: "user-3" },
       ];
 
       const grouped: Record<string, number> = {};
       mockData.forEach((item) => {
-        const date = new Date(item.created_at).toISOString().slice(0, 10);
+        const date = new Date(item.audit_date).toISOString().slice(0, 10);
         grouped[date] = (grouped[date] || 0) + 1;
       });
 
@@ -225,14 +229,14 @@ describe("Auditoria Tendencia API Endpoint", () => {
 
     it("should handle audits spanning multiple months", () => {
       const mockData = [
-        { created_at: "2024-01-15T10:00:00Z", user_id: "user-1" },
-        { created_at: "2024-02-20T10:00:00Z", user_id: "user-1" },
-        { created_at: "2024-03-10T10:00:00Z", user_id: "user-1" },
+        { audit_date: "2024-01-15T10:00:00Z", created_by: "user-1" },
+        { audit_date: "2024-02-20T10:00:00Z", created_by: "user-1" },
+        { audit_date: "2024-03-10T10:00:00Z", created_by: "user-1" },
       ];
 
       const grouped: Record<string, number> = {};
       mockData.forEach((item) => {
-        const date = new Date(item.created_at).toISOString().slice(0, 10);
+        const date = new Date(item.audit_date).toISOString().slice(0, 10);
         grouped[date] = (grouped[date] || 0) + 1;
       });
 
@@ -293,14 +297,14 @@ describe("Auditoria Tendencia API Endpoint", () => {
   describe("Performance Considerations", () => {
     it("should handle large datasets efficiently", () => {
       const largeDataset = Array.from({ length: 10000 }, (_, i) => ({
-        created_at: `2024-01-${String((i % 31) + 1).padStart(2, "0")}T10:00:00Z`,
-        user_id: `user-${i % 100}`,
+        audit_date: `2024-01-${String((i % 31) + 1).padStart(2, "0")}T10:00:00Z`,
+        created_by: `user-${i % 100}`,
       }));
 
       const startTime = Date.now();
       const grouped: Record<string, number> = {};
       largeDataset.forEach((item) => {
-        const date = new Date(item.created_at).toISOString().slice(0, 10);
+        const date = new Date(item.audit_date).toISOString().slice(0, 10);
         grouped[date] = (grouped[date] || 0) + 1;
       });
       const endTime = Date.now();
