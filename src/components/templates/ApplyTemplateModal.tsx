@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -46,6 +46,12 @@ export default function ApplyTemplateModal({ onApply }: ApplyTemplateModalProps)
         <Button variant="outline">📂 Aplicar Template</Button>
       </DialogTrigger>
       <DialogContent className="max-w-xl">
+        <DialogHeader>
+          <DialogTitle>Aplicar Template</DialogTitle>
+          <DialogDescription>
+            Selecione um template para aplicar ao documento. Templates com variáveis serão preenchidos automaticamente.
+          </DialogDescription>
+        </DialogHeader>
         <Input
           placeholder="🔍 Buscar template..."
           value={search}
