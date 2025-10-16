@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
-import { supabase } from "@/integrations/supabase/client";
 
 interface JobsByComponent {
   component_id: string;
@@ -13,20 +12,32 @@ interface JobsByComponent {
 export default function DashboardJobs() {
   const [data, setData] = useState<JobsByComponent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchStats() {
       try {
-        const { data: result, error } = await supabase.functions.invoke("bi-jobs-by-component");
-        
-        if (error) {
-          console.error("Error fetching jobs by component:", error);
-          setData([]);
-        } else {
-          setData(result || []);
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/bi-jobs-by-component`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const result = await response.json();
+        setData(result || []);
+        setError(null);
       } catch (error) {
-        console.error("Error invoking function:", error);
+        console.error("Error fetching jobs by component:", error);
+        setError(error instanceof Error ? error.message : "Erro ao carregar dados");
         setData([]);
       } finally {
         setLoading(false);
@@ -35,6 +46,17 @@ export default function DashboardJobs() {
     fetchStats();
   }, []);
 
+  if (error) {
+    return (
+      <Card className="p-6">
+        <h2 className="text-xl font-semibold mb-4">📊 Falhas por Componente + Tempo Médio</h2>
+        <CardContent>
+          <p className="text-red-600">Erro ao carregar dados: {error}</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6">
       <h2 className="text-xl font-semibold mb-4">📊 Falhas por Componente + Tempo Médio</h2>
@@ -42,9 +64,9 @@ export default function DashboardJobs() {
         {loading ? (
           <Skeleton className="h-64 w-full" />
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={350}>
             <BarChart data={data} layout="vertical" margin={{ left: 40 }}>
-              <XAxis type="number" label={{ value: "Qtd Jobs / Horas", position: "insideBottomRight", offset: -5 }} />
+              <XAxis type="number" label={{ value: "Qtd Jobs / Horas (Empilhado)", position: "insideBottomRight", offset: -5 }} />
               <YAxis dataKey="component_id" type="category" />
               <Tooltip />
               <Legend />
