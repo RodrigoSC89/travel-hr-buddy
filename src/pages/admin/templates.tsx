@@ -42,6 +42,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import TipTapEditor from "@/components/templates/TipTapEditor";
 
 interface Template {
   id: string;
@@ -571,12 +572,10 @@ export default function TemplatesPage() {
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Conteúdo do Template</label>
-                <Textarea
-                  rows={12}
+                <TipTapEditor 
+                  content={content} 
+                  onUpdate={setContent}
                   placeholder="Digite ou gere o conteúdo do template..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="font-mono"
                 />
               </div>
 
