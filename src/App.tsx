@@ -64,6 +64,7 @@ const DocumentHistory = React.lazy(() => import("./pages/admin/documents/Documen
 const DocumentEditorPage = React.lazy(() => import("./pages/admin/documents/DocumentEditorPage"));
 const CollaborativeEditor = React.lazy(() => import("./pages/admin/documents/CollaborativeEditor"));
 const DocumentEditorDemo = React.lazy(() => import("./pages/admin/documents/DocumentEditorDemo"));
+const CreateDocumentPage = React.lazy(() => import("./pages/admin/documents/create"));
 const RestoreDashboard = React.lazy(() => import("./pages/admin/documents/restore-dashboard"));
 const ExecutionLogs = React.lazy(() => import("./pages/admin/automation/execution-logs"));
 const RestoreReportLogs = React.lazy(() => import("./pages/admin/reports/logs"));
@@ -211,6 +212,7 @@ function App() {
                       <Route path="/admin/workflows" element={<SmartWorkflows />} />
                       <Route path="/admin/workflows/:id" element={<WorkflowDetail />} />
                       <Route path="/admin/documents" element={<DocumentList />} />
+                      <Route path="/admin/documents/create" element={<CreateDocumentPage />} />
                       <Route path="/admin/documents/ai" element={<DocumentAIEditor />} />
                       <Route path="/admin/documents/ai/templates" element={<AITemplates />} />
                       <Route path="/admin/documents/editor" element={<DocumentEditorPage />} />
