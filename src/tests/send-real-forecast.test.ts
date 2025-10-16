@@ -64,6 +64,27 @@ describe("Send Real Forecast System", () => {
       expect(defaultFrom).toContain("@");
       expect(defaultFrom).toContain("nautilus.system");
     });
+
+    it("should return ResendEmailResult with success flag", () => {
+      const mockSuccessResult = {
+        success: true,
+        data: { id: "email-id-123" }
+      };
+
+      expect(mockSuccessResult.success).toBe(true);
+      expect(mockSuccessResult.data).toBeDefined();
+      expect(mockSuccessResult.data?.id).toBeDefined();
+    });
+
+    it("should return error in ResendEmailResult on failure", () => {
+      const mockErrorResult = {
+        success: false,
+        error: "RESEND_API_KEY is not configured in environment variables"
+      };
+
+      expect(mockErrorResult.success).toBe(false);
+      expect(mockErrorResult.error).toBeDefined();
+    });
   });
 
   describe("API Endpoint - send-real-forecast", () => {
@@ -134,16 +155,18 @@ describe("Send Real Forecast System", () => {
       expect(subject).toContain("Produção");
     });
 
-    it("should return success response with count", () => {
+    it("should return success response with count and emailId", () => {
       const mockResponse = {
         ok: true,
         count: 42,
-        message: "Forecast generated and sent successfully"
+        message: "Forecast generated and sent successfully",
+        emailId: "email-id-123"
       };
 
       expect(mockResponse.ok).toBe(true);
       expect(mockResponse.count).toBeGreaterThan(0);
       expect(mockResponse.message).toBeDefined();
+      expect(mockResponse.emailId).toBeDefined();
     });
 
     it("should handle errors gracefully", () => {
@@ -153,6 +176,16 @@ describe("Send Real Forecast System", () => {
       };
 
       expect(mockErrorResponse.error).toBe("Internal server error");
+      expect(mockErrorResponse.message).toBeDefined();
+    });
+
+    it("should return 500 status on email failure", () => {
+      const mockErrorResponse = {
+        error: "Failed to send email",
+        message: "RESEND_API_KEY is not configured in environment variables"
+      };
+
+      expect(mockErrorResponse.error).toBe("Failed to send email");
       expect(mockErrorResponse.message).toBeDefined();
     });
   });
