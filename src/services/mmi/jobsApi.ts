@@ -164,8 +164,7 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
     console.warn("Database not available, using mock data");
   }
 
-  // Fallback to mock data
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  // Fallback to mock data (no artificial delay for faster tests)
   return { jobs: mockJobs.map(convertToMMIJob) };
 };
 

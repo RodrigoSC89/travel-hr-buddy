@@ -1,6 +1,52 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { fetchJobs, postponeJob, createWorkOrder } from "@/services/mmi/jobsApi";
 
+// Mock Supabase client to prevent network calls
+vi.mock("@/integrations/supabase/client", () => ({
+  supabase: {
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        order: vi.fn(() => ({
+          error: null,
+          data: null,
+        })),
+        eq: vi.fn(() => ({
+          single: vi.fn(() => ({
+            data: null,
+            error: null,
+          })),
+        })),
+      })),
+      update: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          data: null,
+          error: null,
+        })),
+      })),
+      insert: vi.fn(() => ({
+        select: vi.fn(() => ({
+          single: vi.fn(() => ({
+            data: null,
+            error: null,
+          })),
+        })),
+      })),
+    })),
+    functions: {
+      invoke: vi.fn(() => Promise.resolve({
+        data: null,
+        error: { message: "Edge function not available in test environment" },
+      })),
+    },
+  },
+}));
+
+// Mock embedding service to avoid delays
+vi.mock("@/services/mmi/embeddingService", () => ({
+  generateJobEmbedding: vi.fn(() => Promise.resolve(Array.from({ length: 1536 }, () => 0.1))),
+  generateEmbedding: vi.fn(() => Promise.resolve(Array.from({ length: 1536 }, () => 0.1))),
+}));
+
 describe("MMI Jobs API Service", () => {
   beforeEach(() => {
     // Clear any mocks before each test
