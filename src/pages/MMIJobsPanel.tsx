@@ -38,9 +38,9 @@ export default function MMIJobsPanel() {
   async function handleExport(job: MMIJobForecast) {
     const html = `
       <h2>${job.title}</h2>
-      <p><strong>Previsão:</strong> ${job.forecast || 'N/A'}</p>
+      <p><strong>Previsão:</strong> ${job.forecast || "N/A"}</p>
       <p><strong>Horímetro:</strong> ${job.hours || 0}h</p>
-      <p><strong>Responsável:</strong> ${job.responsible || 'N/A'}</p>
+      <p><strong>Responsável:</strong> ${job.responsible || "N/A"}</p>
     `;
     const blob = await (await import("html2pdf.js")).default().from(html).outputPdf("blob");
     const url = URL.createObjectURL(blob);
@@ -67,9 +67,9 @@ export default function MMIJobsPanel() {
             <Card key={job.id} className="border">
               <CardContent className="p-4 space-y-2">
                 <h2 className="font-semibold text-lg">🔧 {job.title}</h2>
-                <p>📅 Previsão: <strong>{job.forecast || 'N/A'}</strong></p>
+                <p>📅 Previsão: <strong>{job.forecast || "N/A"}</strong></p>
                 <p>⏱ Horímetro: <strong>{job.hours || 0}h</strong></p>
-                <p>👨‍🔧 Responsável: {job.responsible || 'N/A'}</p>
+                <p>👨‍🔧 Responsável: {job.responsible || "N/A"}</p>
                 <Button variant="outline" onClick={() => handleExport(job)}>
                   📤 Exportar PDF
                 </Button>
