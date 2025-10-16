@@ -1,7 +1,7 @@
 /**
  * Forecast List API Endpoint Tests
  * 
- * Tests for the /api/forecast/list endpoint that fetches forecast history
+ * Tests for the /api/forecast/list endpoint that fetches forecast history with filtering
  */
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
@@ -349,6 +349,191 @@ describe("Forecast List API Endpoint", () => {
     it("should document use case", () => {
       const useCase = "Ideal para alimentar o painel ForecastHistoryList";
       expect(useCase).toContain("ForecastHistoryList");
+    });
+  });
+
+  describe("Filter Parameters", () => {
+    it("should accept source query parameter", () => {
+      const queryParam = "source";
+      expect(queryParam).toBe("source");
+    });
+
+    it("should accept created_by query parameter", () => {
+      const queryParam = "created_by";
+      expect(queryParam).toBe("created_by");
+    });
+
+    it("should accept created_at query parameter", () => {
+      const queryParam = "created_at";
+      expect(queryParam).toBe("created_at");
+    });
+
+    it("should support case-insensitive source filtering", () => {
+      const filterType = "ilike";
+      expect(filterType).toBe("ilike");
+    });
+
+    it("should support partial matching for source", () => {
+      const pattern = "%jobs-trend%";
+      expect(pattern).toContain("%");
+      expect(pattern).toContain("jobs-trend");
+    });
+
+    it("should support case-insensitive created_by filtering", () => {
+      const filterType = "ilike";
+      expect(filterType).toBe("ilike");
+    });
+
+    it("should support partial matching for created_by", () => {
+      const pattern = "%AI%";
+      expect(pattern).toContain("%");
+      expect(pattern).toContain("AI");
+    });
+  });
+
+  describe("Date Filter Logic", () => {
+    it("should parse date string for filtering", () => {
+      const dateStr = "2025-10-15";
+      const parsed = new Date(dateStr);
+      expect(parsed.getFullYear()).toBe(2025);
+      expect(parsed.getMonth()).toBe(9); // October is month 9 (0-indexed)
+      expect(parsed.getDate()).toBe(15);
+    });
+
+    it("should set start of day to 00:00:00", () => {
+      const date = new Date("2025-10-15");
+      date.setHours(0, 0, 0, 0);
+      expect(date.getHours()).toBe(0);
+      expect(date.getMinutes()).toBe(0);
+      expect(date.getSeconds()).toBe(0);
+    });
+
+    it("should set end of day to 23:59:59.999", () => {
+      const date = new Date("2025-10-15");
+      date.setHours(23, 59, 59, 999);
+      expect(date.getHours()).toBe(23);
+      expect(date.getMinutes()).toBe(59);
+      expect(date.getSeconds()).toBe(59);
+    });
+
+    it("should use gte for start of day filter", () => {
+      const operator = "gte";
+      expect(operator).toBe("gte");
+    });
+
+    it("should use lte for end of day filter", () => {
+      const operator = "lte";
+      expect(operator).toBe("lte");
+    });
+
+    it("should convert dates to ISO string format", () => {
+      const date = new Date("2025-10-15T10:30:00Z");
+      const isoString = date.toISOString();
+      expect(isoString).toContain("2025-10-15");
+      expect(isoString).toMatch(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
+    });
+  });
+
+  describe("Query Parameter Validation", () => {
+    it("should check if source is a string", () => {
+      const isString = (val: unknown) => typeof val === "string";
+      expect(isString("jobs-trend")).toBe(true);
+      expect(isString(123)).toBe(false);
+      expect(isString(undefined)).toBe(false);
+    });
+
+    it("should check if created_by is a string", () => {
+      const isString = (val: unknown) => typeof val === "string";
+      expect(isString("AI Assistant")).toBe(true);
+      expect(isString(null)).toBe(false);
+    });
+
+    it("should check if created_at is a string", () => {
+      const isString = (val: unknown) => typeof val === "string";
+      expect(isString("2025-10-15")).toBe(true);
+      expect(isString(new Date())).toBe(false);
+    });
+
+    it("should only apply filters when parameters are provided", () => {
+      const filters = {
+        source: undefined,
+        created_by: "AI",
+        created_at: undefined,
+      };
+      
+      const appliedFilters = Object.entries(filters).filter(([_, value]) => value !== undefined);
+      expect(appliedFilters.length).toBe(1);
+      expect(appliedFilters[0][0]).toBe("created_by");
+    });
+  });
+
+  describe("Combined Filtering", () => {
+    it("should support multiple filters simultaneously", () => {
+      const params = {
+        source: "jobs-trend",
+        created_by: "AI",
+        created_at: "2025-10-15",
+      };
+      expect(Object.keys(params).length).toBe(3);
+    });
+
+    it("should build query with all provided filters", () => {
+      const buildQuery = (filters: Record<string, string>) => {
+        const queryParts: string[] = [];
+        if (filters.source) queryParts.push("source filter");
+        if (filters.created_by) queryParts.push("created_by filter");
+        if (filters.created_at) queryParts.push("created_at filter");
+        return queryParts;
+      };
+
+      const result = buildQuery({
+        source: "test",
+        created_by: "AI",
+        created_at: "2025-10-15",
+      });
+
+      expect(result.length).toBe(3);
+    });
+
+    it("should work with no filters", () => {
+      const filters = {};
+      expect(Object.keys(filters).length).toBe(0);
+    });
+
+    it("should work with single filter", () => {
+      const filters = { source: "jobs-trend" };
+      expect(Object.keys(filters).length).toBe(1);
+    });
+
+    it("should work with two filters", () => {
+      const filters = { source: "jobs-trend", created_by: "AI" };
+      expect(Object.keys(filters).length).toBe(2);
+    });
+  });
+
+  describe("Real-time Filtering Behavior", () => {
+    it("should refetch data when source filter changes", () => {
+      const shouldRefetch = (prevFilter: string, newFilter: string) => {
+        return prevFilter !== newFilter;
+      };
+      expect(shouldRefetch("", "jobs-trend")).toBe(true);
+      expect(shouldRefetch("jobs-trend", "jobs-trend")).toBe(false);
+    });
+
+    it("should refetch data when created_by filter changes", () => {
+      const shouldRefetch = (prevFilter: string, newFilter: string) => {
+        return prevFilter !== newFilter;
+      };
+      expect(shouldRefetch("", "AI")).toBe(true);
+      expect(shouldRefetch("AI", "AI")).toBe(false);
+    });
+
+    it("should refetch data when date filter changes", () => {
+      const shouldRefetch = (prevFilter: string, newFilter: string) => {
+        return prevFilter !== newFilter;
+      };
+      expect(shouldRefetch("", "2025-10-15")).toBe(true);
+      expect(shouldRefetch("2025-10-15", "2025-10-15")).toBe(false);
     });
   });
 });

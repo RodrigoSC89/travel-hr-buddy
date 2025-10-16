@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
@@ -7,6 +5,7 @@ import DashboardJobs from "@/components/bi/DashboardJobs";
 import JobsTrendChart from "@/components/bi/JobsTrendChart";
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
 import { ExportBIReport } from "@/components/bi/ExportPDF";
+import { ForecastHistoryList } from "@/components/bi/ForecastHistoryList";
 import { supabase } from "@/integrations/supabase/client";
 
 const data = [
@@ -97,6 +96,13 @@ export default function MmiBI() {
 
       {/* JobsForecastReport Component - Shows AI-powered forecast */}
       <JobsForecastReport trend={trendData} onForecastUpdate={setForecastText} />
+
+      {/* ForecastHistoryList Component - Shows historical forecasts with filters */}
+      <Card>
+        <CardContent>
+          <ForecastHistoryList />
+        </CardContent>
+      </Card>
     </div>
   );
 }
