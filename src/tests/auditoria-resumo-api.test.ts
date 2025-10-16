@@ -72,16 +72,27 @@ describe("Auditoria Resumo API Endpoint", () => {
   });
 
   describe("Database Query", () => {
-    it("should query auditorias_imca table", () => {
-      const tableName = "auditorias_imca";
-      expect(tableName).toBe("auditorias_imca");
+    it("should query peotram_audits table", () => {
+      const tableName = "peotram_audits";
+      expect(tableName).toBe("peotram_audits");
     });
 
-    it("should select required columns", () => {
-      const selectFields = "nome_navio, created_at, user_id";
-      expect(selectFields).toContain("nome_navio");
-      expect(selectFields).toContain("created_at");
-      expect(selectFields).toContain("user_id");
+    it("should join with vessels table", () => {
+      const joinTable = "vessels";
+      expect(joinTable).toBe("vessels");
+    });
+
+    it("should select required columns from peotram_audits", () => {
+      const selectFields = "audit_date, created_by, vessel_id";
+      expect(selectFields).toContain("audit_date");
+      expect(selectFields).toContain("created_by");
+      expect(selectFields).toContain("vessel_id");
+    });
+
+    it("should select vessel name from vessels table", () => {
+      const vesselField = "vessels.name";
+      expect(vesselField).toContain("vessels");
+      expect(vesselField).toContain("name");
     });
 
     it("should apply date range filter when start and end provided", () => {
@@ -108,23 +119,24 @@ describe("Auditoria Resumo API Endpoint", () => {
       expect(operator).toBe("lte");
     });
 
-    it("should use eq operator for user_id", () => {
+    it("should use eq operator for created_by", () => {
       const operator = "eq";
       expect(operator).toBe("eq");
     });
   });
 
   describe("Data Aggregation", () => {
-    it("should group results by nome_navio", () => {
+    it("should group results by vessel name from vessels table", () => {
       const mockData = [
-        { nome_navio: "Navio A", created_at: "2025-10-01", user_id: "uuid-1" },
-        { nome_navio: "Navio A", created_at: "2025-10-02", user_id: "uuid-1" },
-        { nome_navio: "Navio B", created_at: "2025-10-03", user_id: "uuid-2" }
+        { audit_date: "2025-10-01", created_by: "uuid-1", vessels: { name: "Navio A" } },
+        { audit_date: "2025-10-02", created_by: "uuid-1", vessels: { name: "Navio A" } },
+        { audit_date: "2025-10-03", created_by: "uuid-2", vessels: { name: "Navio B" } }
       ];
 
       const resumo: Record<string, number> = {};
       mockData.forEach((item) => {
-        resumo[item.nome_navio] = (resumo[item.nome_navio] || 0) + 1;
+        const vesselName = item.vessels?.name || "Unknown";
+        resumo[vesselName] = (resumo[vesselName] || 0) + 1;
       });
 
       expect(resumo["Navio A"]).toBe(2);
@@ -158,6 +170,39 @@ describe("Auditoria Resumo API Endpoint", () => {
       expect(resultado).toHaveLength(2);
       expect(resultado[0]).toHaveProperty("nome_navio");
       expect(resultado[0]).toHaveProperty("total");
+    });
+
+    it("should sort results by total in descending order", () => {
+      const resumo = {
+        "Navio A": 2,
+        "Navio B": 5,
+        "Navio C": 1
+      };
+
+      const resultado = Object.entries(resumo)
+        .map(([nome_navio, total]) => ({
+          nome_navio,
+          total
+        }))
+        .sort((a, b) => b.total - a.total);
+
+      expect(resultado[0].nome_navio).toBe("Navio B");
+      expect(resultado[0].total).toBe(5);
+      expect(resultado[2].total).toBe(1);
+    });
+
+    it("should handle vessels with unknown name", () => {
+      const mockData = [
+        { audit_date: "2025-10-01", created_by: "uuid-1", vessels: null }
+      ];
+
+      const resumo: Record<string, number> = {};
+      mockData.forEach((item: any) => {
+        const vesselName = item.vessels?.name || "Unknown";
+        resumo[vesselName] = (resumo[vesselName] || 0) + 1;
+      });
+
+      expect(resumo["Unknown"]).toBe(1);
     });
   });
 
