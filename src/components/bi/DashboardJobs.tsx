@@ -49,7 +49,7 @@ export default function DashboardJobs() {
               <Tooltip />
               <Legend />
               <Bar dataKey="count" fill="#0f172a" name="Jobs Finalizados" />
-              <Bar dataKey="avg_duration" fill="#2563eb" name="Tempo Médio (h)" />
+              <Bar dataKey="avg_duration" fill="#3b82f6" name="Tempo Médio (h)" />
             </BarChart>
           </ResponsiveContainer>
         )}
