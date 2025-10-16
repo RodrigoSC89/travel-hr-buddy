@@ -18,6 +18,7 @@ const PEOTRAM = React.lazy(() => import("./pages/PEOTRAM"));
 const PEODP = React.lazy(() => import("./pages/PEODP"));
 const DPIncidents = React.lazy(() => import("./pages/DPIncidents"));
 const DPIntelligence = React.lazy(() => import("./pages/DPIntelligence"));
+const IMCAAudit = React.lazy(() => import("./pages/imca-audit"));
 const SGSO = React.lazy(() => import("./pages/SGSO"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Documents = React.lazy(() => import("./pages/Documents"));
@@ -164,6 +165,7 @@ function App() {
                       <Route path="/peo-dp" element={<PEODP />} />
                       <Route path="/dp-incidents" element={<DPIncidents />} />
                       <Route path="/dp-intelligence" element={<DPIntelligence />} />
+                      <Route path="/imca-audit" element={<IMCAAudit />} />
                       <Route path="/sgso" element={<SGSO />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/documents" element={<Documents />} />
