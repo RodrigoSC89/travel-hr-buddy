@@ -18,8 +18,8 @@ export default async function handler(
 
   try {
     let query = supabase
-      .from("auditorias_imca")
-      .select("nome_navio, created_at, user_id");
+      .from("peotram_audits")
+      .select("vessel_id, created_at, created_by, vessels(name)");
 
     if (start && end) {
       query = query
@@ -28,7 +28,7 @@ export default async function handler(
     }
 
     if (user_id) {
-      query = query.eq("user_id", user_id as string);
+      query = query.eq("created_by", user_id as string);
     }
 
     const { data, error } = await query;
@@ -36,14 +36,17 @@ export default async function handler(
     if (error) throw error;
 
     const resumo: Record<string, number> = {};
-    data.forEach((item) => {
-      resumo[item.nome_navio] = (resumo[item.nome_navio] || 0) + 1;
+    data.forEach((item: any) => {
+      const vesselName = item.vessels?.name || "Unknown Vessel";
+      resumo[vesselName] = (resumo[vesselName] || 0) + 1;
     });
 
-    const resultado = Object.entries(resumo).map(([nome_navio, total]) => ({
-      nome_navio,
-      total,
-    }));
+    const resultado = Object.entries(resumo)
+      .map(([nome_navio, total]) => ({
+        nome_navio,
+        total,
+      }))
+      .sort((a, b) => b.total - a.total);
 
     res.status(200).json(resultado);
   } catch (error) {

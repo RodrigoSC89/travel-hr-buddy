@@ -52,6 +52,7 @@ const AdminBI = React.lazy(() => import("./pages/admin/bi"));
 const AdminWall = React.lazy(() => import("./pages/admin/wall"));
 const AdminChecklists = React.lazy(() => import("./pages/admin/checklists"));
 const AdminChecklistsDashboard = React.lazy(() => import("./pages/admin/checklists-dashboard"));
+const DashboardAuditorias = React.lazy(() => import("./pages/admin/dashboard-auditorias"));
 const DocumentsAI = React.lazy(() => import("./pages/admin/documents-ai"));
 const DocumentAIEditor = React.lazy(() => import("./pages/admin/documents/ai-editor"));
 const AITemplates = React.lazy(() => import("./pages/admin/documents/ai-templates"));
@@ -205,6 +206,7 @@ function App() {
                       <Route path="/admin/wall" element={<AdminWall />} />
                       <Route path="/admin/checklists" element={<AdminChecklists />} />
                       <Route path="/admin/checklists/dashboard" element={<AdminChecklistsDashboard />} />
+                      <Route path="/admin/dashboard-auditorias" element={<DashboardAuditorias />} />
                       <Route path="/admin/assistant" element={<Assistant />} />
                       <Route path="/admin/assistant/logs" element={<AssistantLogs />} />
                       <Route path="/admin/assistant/history" element={<AssistantLogs />} />
