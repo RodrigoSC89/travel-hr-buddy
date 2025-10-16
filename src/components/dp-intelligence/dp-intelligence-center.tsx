@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useNavigate } from "react-router-dom";
 import {
   Brain,
   AlertTriangle,
@@ -13,7 +14,8 @@ import {
   Filter,
   BookOpen,
   Lightbulb,
-  CheckSquare
+  CheckSquare,
+  ClipboardList
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -42,6 +44,7 @@ interface AnalysisResult {
 }
 
 const DPIntelligenceCenter = () => {
+  const navigate = useNavigate();
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [filteredIncidents, setFilteredIncidents] = useState<Incident[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -318,6 +321,30 @@ const DPIntelligenceCenter = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Quick Access - IMCA Audit Generator */}
+      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ClipboardList className="h-5 w-5" />
+            Auditoria IMCA DP
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            Gere auditorias técnicas completas para embarcações DP com análise baseada em IA, 
+            seguindo normas IMCA, IMO e MTS internacionais.
+          </p>
+          <Button 
+            onClick={() => navigate("/imca-audit")}
+            className="w-full"
+            size="lg"
+          >
+            <FileText className="mr-2 h-4 w-4" />
+            Gerar Auditoria
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Search and Filter Section */}
       <Card>
