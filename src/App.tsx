@@ -92,6 +92,7 @@ const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAn
 const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreationWithSimilarExamples"));
 const CopilotJobForm = React.lazy(() => import("./pages/CopilotJobForm"));
 const CopilotJobFormAdmin = React.lazy(() => import("./pages/admin/copilot-job-form"));
+const DashboardAuditorias = React.lazy(() => import("./pages/admin/dashboard-auditorias"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -194,6 +195,7 @@ function App() {
                       <Route path="/predictive" element={<PredictiveAnalytics />} />
                       <Route path="/admin" element={<Admin />} />
                       <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                      <Route path="/admin/dashboard-auditorias" element={<DashboardAuditorias />} />
                       <Route path="/admin/api-tester" element={<APITester />} />
                       <Route path="/admin/api-status" element={<APIStatus />} />
                       <Route path="/admin/control-panel" element={<ControlPanel />} />
