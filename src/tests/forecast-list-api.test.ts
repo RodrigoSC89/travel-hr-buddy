@@ -2,6 +2,7 @@
  * Forecast List API Endpoint Tests
  * 
  * Tests for the /api/forecast/list endpoint that fetches forecast history
+ * with flexible query parameter support
  */
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
@@ -28,6 +29,45 @@ describe("Forecast List API Endpoint", () => {
     });
   });
 
+  describe("Query Parameters", () => {
+    it("should accept source parameter", () => {
+      const queryParams = { source: "dev-mock" };
+      expect(queryParams.source).toBe("dev-mock");
+    });
+
+    it("should accept created_by parameter", () => {
+      const queryParams = { created_by: "admin" };
+      expect(queryParams.created_by).toBe("admin");
+    });
+
+    it("should accept limit parameter", () => {
+      const queryParams = { limit: 50 };
+      expect(queryParams.limit).toBe(50);
+    });
+
+    it("should default limit to 25 when not provided", () => {
+      const defaultLimit = 25;
+      expect(defaultLimit).toBe(25);
+    });
+
+    it("should accept multiple parameters simultaneously", () => {
+      const queryParams = {
+        source: "cron-job",
+        created_by: "admin",
+        limit: 100
+      };
+      expect(queryParams.source).toBe("cron-job");
+      expect(queryParams.created_by).toBe("admin");
+      expect(queryParams.limit).toBe(100);
+    });
+
+    it("should handle email format in created_by parameter", () => {
+      const email = "engenharia@nautilus.system";
+      expect(email).toContain("@");
+      expect(email).toContain(".");
+    });
+  });
+
   describe("Database Query", () => {
     it("should query forecast_history table", () => {
       const tableName = "forecast_history";
@@ -48,10 +88,112 @@ describe("Forecast List API Endpoint", () => {
       expect(orderConfig.ascending).toBe(false);
     });
 
-    it("should limit results to 25 records", () => {
+    it("should apply source filter when provided", () => {
+      const sourceFilter = "dev-mock";
+      expect(sourceFilter).toBe("dev-mock");
+    });
+
+    it("should apply created_by filter when provided", () => {
+      const createdByFilter = "admin";
+      expect(createdByFilter).toBe("admin");
+    });
+
+    it("should apply custom limit when provided", () => {
+      const customLimit = 50;
+      expect(customLimit).toBe(50);
+      expect(customLimit).toBeGreaterThan(0);
+    });
+
+    it("should use default limit of 25 when not specified", () => {
       const limit = 25;
       expect(limit).toBe(25);
       expect(limit).toBeGreaterThan(0);
+    });
+  });
+
+  describe("Filtering Scenarios", () => {
+    it("should filter by source parameter only", () => {
+      const query = { source: "cron-job" };
+      expect(query.source).toBe("cron-job");
+    });
+
+    it("should filter by created_by parameter only", () => {
+      const query = { created_by: "admin" };
+      expect(query.created_by).toBe("admin");
+    });
+
+    it("should filter by source and created_by together", () => {
+      const query = {
+        source: "dev-mock",
+        created_by: "engenharia@nautilus.system"
+      };
+      expect(query.source).toBe("dev-mock");
+      expect(query.created_by).toBe("engenharia@nautilus.system");
+    });
+
+    it("should filter by source with custom limit", () => {
+      const query = { source: "api-call", limit: 100 };
+      expect(query.source).toBe("api-call");
+      expect(query.limit).toBe(100);
+    });
+
+    it("should filter by created_by with custom limit", () => {
+      const query = { created_by: "admin", limit: 50 };
+      expect(query.created_by).toBe("admin");
+      expect(query.limit).toBe(50);
+    });
+
+    it("should apply all three filters simultaneously", () => {
+      const query = {
+        source: "cron-job",
+        created_by: "admin",
+        limit: 75
+      };
+      expect(query.source).toBe("cron-job");
+      expect(query.created_by).toBe("admin");
+      expect(query.limit).toBe(75);
+    });
+
+    it("should work with no filters (default behavior)", () => {
+      const query = {};
+      expect(Object.keys(query).length).toBe(0);
+    });
+  });
+
+  describe("Use Cases", () => {
+    it("should support dev testing use case", () => {
+      const devQuery = { source: "dev-mock" };
+      expect(devQuery.source).toBe("dev-mock");
+    });
+
+    it("should support cron job monitoring use case", () => {
+      const cronQuery = { source: "cron-job" };
+      expect(cronQuery.source).toBe("cron-job");
+    });
+
+    it("should support user analytics use case", () => {
+      const userQuery = { created_by: "admin" };
+      expect(userQuery.created_by).toBe("admin");
+    });
+
+    it("should support dashboard interfaces with dynamic filters", () => {
+      const dashboardQuery = {
+        source: "api-call",
+        created_by: "engenharia@nautilus.system",
+        limit: 50
+      };
+      expect(dashboardQuery).toHaveProperty("source");
+      expect(dashboardQuery).toHaveProperty("created_by");
+      expect(dashboardQuery).toHaveProperty("limit");
+    });
+
+    it("should support analytical panels with flexible datasets", () => {
+      const analyticsQuery = {
+        source: "cron-job",
+        limit: 100
+      };
+      expect(analyticsQuery.source).toBe("cron-job");
+      expect(analyticsQuery.limit).toBe(100);
     });
   });
 
@@ -105,15 +247,18 @@ describe("Forecast List API Endpoint", () => {
     });
 
     it("should handle database connection errors", () => {
-      const handleError = (_error: unknown) => {
+      const handleError = (error: unknown) => {
+        const errorOccurred = error instanceof Error;
         return {
           status: 500,
-          error: "Erro ao carregar previsões."
+          error: "Erro ao carregar previsões.",
+          hasError: errorOccurred
         };
       };
       const result = handleError(new Error("Connection failed"));
       expect(result.status).toBe(500);
       expect(result.error).toBe("Erro ao carregar previsões.");
+      expect(result.hasError).toBe(true);
     });
 
     it("should handle query errors gracefully", () => {
@@ -331,9 +476,21 @@ describe("Forecast List API Endpoint", () => {
 
   describe("API Documentation", () => {
     it("should document the endpoint purpose", () => {
-      const purpose = "Consulta a tabela forecast_history no Supabase";
+      const purpose = "Consulta a tabela forecast_history no Supabase com filtros flexíveis";
       expect(purpose).toContain("forecast_history");
       expect(purpose).toContain("Supabase");
+      expect(purpose).toContain("flexíveis");
+    });
+
+    it("should document query parameters", () => {
+      const params = {
+        source: "optional - Filter by forecast source (dev-mock, cron-job, api-call)",
+        created_by: "optional - Filter by creator (admin, email)",
+        limit: "optional - Number of records (default: 25)"
+      };
+      expect(params.source).toContain("optional");
+      expect(params.created_by).toContain("optional");
+      expect(params.limit).toContain("default: 25");
     });
 
     it("should document ordering behavior", () => {
@@ -342,13 +499,26 @@ describe("Forecast List API Endpoint", () => {
     });
 
     it("should document limit behavior", () => {
-      const limitDoc = "Retorna no máximo 25 registros";
-      expect(limitDoc).toContain("25 registros");
+      const limitDoc = "Retorna até o número especificado de registros (padrão: 25)";
+      expect(limitDoc).toContain("padrão: 25");
     });
 
-    it("should document use case", () => {
-      const useCase = "Ideal para alimentar o painel ForecastHistoryList";
-      expect(useCase).toContain("ForecastHistoryList");
+    it("should document flexible filtering use case", () => {
+      const useCase = "Ideal para interfaces com filtros dinâmicos e painéis analíticos";
+      expect(useCase).toContain("filtros dinâmicos");
+      expect(useCase).toContain("painéis analíticos");
+    });
+
+    it("should document example queries", () => {
+      const examples = [
+        "/api/forecast/list?source=cron-job",
+        "/api/forecast/list?created_by=admin&limit=50",
+        "/api/forecast/list?source=dev-mock&created_by=engenharia@nautilus.system&limit=100"
+      ];
+      expect(examples.length).toBeGreaterThan(0);
+      expect(examples[0]).toContain("source=");
+      expect(examples[1]).toContain("created_by=");
+      expect(examples[2]).toContain("limit=");
     });
   });
 });

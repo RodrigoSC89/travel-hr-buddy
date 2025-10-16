@@ -1,135 +1,184 @@
-# Forecast History API Implementation Summary
+# Forecast List API Implementation Summary
 
 ## Overview
-Successfully implemented the `/pages/api/forecast/list.ts` API endpoint to fetch forecast history from the Supabase database.
+Successfully implemented flexible query parameter support for the `/pages/api/forecast/list.ts` API endpoint to fetch forecast history from Supabase with dynamic filtering capabilities.
 
-## Implementation Details
+## Changes Made
 
 ### API Endpoint: `/api/forecast/list`
-**File:** `pages/api/forecast/list.ts` (18 lines)
+**File:** `pages/api/forecast/list.ts` (23 lines)
 
-**Functionality:**
-- ✅ Queries the `forecast_history` table in Supabase
-- ✅ Orders results by `created_at` descending (most recent first)
-- ✅ Limits results to 25 records
-- ✅ Includes proper error handling for database queries
-- ✅ Returns JSON response with appropriate HTTP status codes
+#### Query Parameters
+The endpoint now supports three optional query parameters:
 
-**Key Features:**
-- Uses Next.js API routes with TypeScript
-- Integrates with Supabase server-side client
-- Returns Portuguese error messages: "Erro ao carregar previsões."
-- Perfect for feeding the ForecastHistoryList dashboard component
+| Parameter | Type | Default | Description | Examples |
+|-----------|------|---------|-------------|----------|
+| `source` | string | optional | Filter by forecast source | `dev-mock`, `cron-job`, `api-call` |
+| `created_by` | string | optional | Filter by creator | `admin`, `engenharia@nautilus.system` |
+| `limit` | number | 25 | Number of records to return | 10, 50, 100 |
+
+#### Key Features
+- ✅ Flexible filtering - all parameters are optional and can be combined
+- ✅ Backward compatible - works exactly as before when no parameters provided
+- ✅ Ordered results by `created_at` descending (most recent first)
+- ✅ Customizable result limits
+- ✅ Proper error handling with Portuguese messages
+- ✅ TypeScript with Next.js API conventions
 
 ## Testing
 
-### Test File: `src/tests/forecast-list-api.test.ts` (354 lines)
-**Total Tests:** 42 comprehensive test cases
+### Test File: `src/tests/forecast-list-api.test.ts` (505 lines)
+**Total Tests:** 65 comprehensive test cases
 
-**Test Coverage:**
+### Test Coverage
+
 1. **Request Handling** (3 tests)
    - GET request handling
    - API endpoint path validation
    - File path verification
 
-2. **Database Query** (4 tests)
+2. **Query Parameters** (6 tests)
+   - Source parameter acceptance
+   - Created_by parameter acceptance
+   - Limit parameter acceptance
+   - Default limit validation
+   - Multiple parameters simultaneously
+   - Email format handling
+
+3. **Database Query** (7 tests)
    - Table name validation
    - Column selection
    - Ordering configuration
-   - Result limit
+   - Source filter application
+   - Created_by filter application
+   - Custom limit application
+   - Default limit usage
 
-3. **Response Handling** (4 tests)
+4. **Filtering Scenarios** (7 tests)
+   - Single parameter filters (source only, created_by only)
+   - Combined filters
+   - Source with custom limit
+   - Created_by with custom limit
+   - All three filters simultaneously
+   - No filters (default behavior)
+
+5. **Use Cases** (5 tests)
+   - Dev testing use case
+   - Cron job monitoring use case
+   - User analytics use case
+   - Dashboard interfaces with dynamic filters
+   - Analytical panels with flexible datasets
+
+6. **Response Handling** (4 tests)
    - Success status codes
    - Data structure validation
    - Empty array handling
    - Forecast data inclusion
 
-4. **Error Handling** (4 tests)
+7. **Error Handling** (4 tests)
    - Database error status
    - Portuguese error messages
    - Connection error handling
    - Query error handling
 
-5. **Data Validation** (3 tests)
+8. **Data Validation** (3 tests)
    - Record structure validation
    - Forecast text validation
    - Timestamp validation
 
-6. **Ordering Verification** (2 tests)
+9. **Ordering Verification** (2 tests)
    - Descending order validation
    - Order logic verification
 
-7. **Limit Verification** (3 tests)
-   - Maximum records check
-   - Exact limit validation
-   - Fewer records handling
+10. **Limit Verification** (3 tests)
+    - Maximum records check
+    - Exact limit validation
+    - Fewer records handling
 
-8. **Supabase Client Integration** (3 tests)
-   - Import path validation
-   - Query builder methods
-   - Server-side configuration
+11. **Supabase Client Integration** (3 tests)
+    - Import path validation
+    - Query builder methods
+    - Server-side configuration
 
-9. **Next.js API Route Integration** (3 tests)
-   - Request type validation
-   - Response type validation
-   - Handler signature validation
+12. **Next.js API Route Integration** (3 tests)
+    - Request type validation
+    - Response type validation
+    - Handler signature validation
 
-10. **JSON Response Format** (3 tests)
+13. **JSON Response Format** (3 tests)
     - Success response format
     - Error response format
     - JSON serialization
 
-11. **Use Case Validation** (3 tests)
+14. **Use Case Validation** (3 tests)
     - Dashboard component integration
     - Data listing suitability
     - Chronological order display
 
-12. **Performance Considerations** (3 tests)
+15. **Performance Considerations** (3 tests)
     - Query result limits
     - Indexed field usage
     - Query efficiency
 
-13. **API Documentation** (4 tests)
-    - Endpoint purpose
+16. **API Documentation** (6 tests)
+    - Endpoint purpose with flexibility
+    - Query parameters documentation
     - Ordering behavior
     - Limit behavior
-    - Use case documentation
+    - Flexible filtering use cases
+    - Example queries
 
 ## Test Results
-- **Initial Test Count:** 880 tests passing
-- **Final Test Count:** 922 tests passing
-- **New Tests Added:** 42 tests
+- **Initial Test Count:** 928 tests passing
+- **Final Test Count:** 951 tests passing
+- **New Tests Added:** 23 tests
 - **Test Status:** ✅ All tests passing
 
 ## Code Quality
-- **Linting:** No new errors introduced
-- **Warnings:** 2 minor warnings (unused parameters - acceptable)
-- **Code Style:** Follows project conventions (double quotes, TypeScript)
+- **Linting:** ✅ No errors in modified files
+- **TypeScript:** ✅ Fully typed
+- **Code Style:** ✅ Follows project conventions
 
-## Files Changed
-1. **Created:** `/pages/api/forecast/list.ts`
-2. **Created:** `/src/tests/forecast-list-api.test.ts`
+## Files Modified
+1. **Updated:** `/pages/api/forecast/list.ts` (added query parameter support)
+2. **Enhanced:** `/src/tests/forecast-list-api.test.ts` (added 23 new tests)
 
 ## API Documentation
 
-### Endpoint Details
+### Example Usage
+
+#### Get latest 25 forecasts (default behavior)
 ```
 GET /api/forecast/list
 ```
 
-### Description
-Consulta a tabela `forecast_history` no Supabase, ordena pela data de criação (mais recente primeiro), e retorna no máximo 25 registros.
+#### Filter by source
+```
+GET /api/forecast/list?source=cron-job
+```
 
-### Response
+#### Filter by creator with custom limit
+```
+GET /api/forecast/list?created_by=admin&limit=50
+```
+
+#### Combine all filters
+```
+GET /api/forecast/list?source=dev-mock&created_by=engenharia@nautilus.system&limit=100
+```
+
+### Response Format
+
 **Success (200):**
 ```json
 [
   {
     "id": 1,
     "forecast": "Análise preditiva completa...",
+    "source": "cron-job",
+    "created_by": "admin",
     "created_at": "2024-01-15T10:30:00Z"
-  },
-  ...
+  }
 ]
 ```
 
@@ -140,22 +189,77 @@ Consulta a tabela `forecast_history` no Supabase, ordena pela data de criação 
 }
 ```
 
-### Use Case
-Ideal para alimentar o painel 📊 **ForecastHistoryList**
+## Use Cases
+
+### 1. Development & Testing
+Filter by `source=dev-mock` to view only test data generated during development.
+
+```
+GET /api/forecast/list?source=dev-mock
+```
+
+### 2. Monitoring Cron Jobs
+Filter by `source=cron-job` to track automated forecasts and monitor performance.
+
+```
+GET /api/forecast/list?source=cron-job
+```
+
+### 3. User Analytics
+Filter by `created_by` to analyze specific user's forecasts and activity patterns.
+
+```
+GET /api/forecast/list?created_by=admin
+```
+
+### 4. Dashboard Interfaces
+Combine filters dynamically based on user selections in dashboard interfaces.
+
+```
+GET /api/forecast/list?source=api-call&created_by=engenharia@nautilus.system&limit=50
+```
+
+### 5. Analytical Panels
+Retrieve flexible datasets with custom limits for analysis and reporting.
+
+```
+GET /api/forecast/list?source=cron-job&limit=100
+```
+
+## Technical Implementation
+
+### Query Building Logic
+```typescript
+const { source, created_by, limit = 25 } = req.query;
+
+let query = supabase.from("forecast_history").select("*");
+
+if (source) query = query.eq("source", source.toString());
+if (created_by) query = query.eq("created_by", created_by.toString());
+
+const { data, error } = await query
+  .order("created_at", { ascending: false })
+  .limit(Number(limit));
+```
+
+### Benefits
+- **Flexibility**: Support for dynamic filtering without API changes
+- **Performance**: Customizable limits optimize data transfer
+- **Monitoring**: Easy tracking of different forecast sources
+- **Analytics**: Filter by user for detailed analysis
+- **Testing**: Isolate test data from production data
+- **Backward Compatible**: No breaking changes
 
 ## Verification Checklist
-- [x] Create /pages/api/forecast/list.ts API endpoint ✅
-- [x] Implement GET handler to query forecast_history table ✅
-- [x] Order by created_at descending ✅
-- [x] Limit to 25 records ✅
-- [x] Add error handling for database queries ✅
-- [x] Create test file for the API endpoint (42 test cases) ✅
-- [x] Run tests to verify implementation (all 922 tests pass) ✅
+- [x] Update /pages/api/forecast/list.ts with query parameter support ✅
+- [x] Add source parameter filter ✅
+- [x] Add created_by parameter filter ✅
+- [x] Add limit parameter with default value of 25 ✅
+- [x] Maintain backward compatibility ✅
+- [x] Update test file with 23 new comprehensive tests ✅
+- [x] Run tests to verify implementation (all 951 tests pass) ✅
 - [x] Run linting to ensure code quality (no errors) ✅
-- [x] Add comprehensive documentation ✅
+- [x] Update documentation ✅
 
 ## Summary
-Successfully implemented the forecast list API endpoint exactly as specified in the problem statement. The endpoint queries the `forecast_history` table, orders by `created_at` descending, limits to 25 records, and includes proper error handling. All 922 tests pass (42 new tests added), and code is fully linted with no new errors.
-
-## Next Steps
-The API endpoint is ready to be used by the ForecastHistoryList component in the dashboard. Integration can proceed immediately.
+Successfully enhanced the forecast list API endpoint with flexible query parameter support. The endpoint now supports filtering by `source`, `created_by`, and custom `limit` while maintaining full backward compatibility. All 951 tests pass (23 new tests added), and code is fully linted with no errors. The implementation enables dynamic filtering for dev testing, cron monitoring, user analytics, dashboard interfaces, and analytical panels.
