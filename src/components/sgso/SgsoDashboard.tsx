@@ -24,6 +24,7 @@ import { AuditPlanner } from "./AuditPlanner";
 import { NonConformityManager } from "./NonConformityManager";
 import { ComplianceMetrics } from "./ComplianceMetrics";
 import { EmergencyResponse } from "./EmergencyResponse";
+import { PainelMetricasRisco } from "./PainelMetricasRisco";
 
 export const SgsoDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -358,8 +359,11 @@ export const SgsoDashboard: React.FC = () => {
               <NonConformityManager />
             </TabsContent>
 
-            <TabsContent value="metrics">
+            <TabsContent value="metrics" className="space-y-6">
               <ComplianceMetrics />
+              <div className="mt-8">
+                <PainelMetricasRisco />
+              </div>
             </TabsContent>
           </Tabs>
         </CardContent>
