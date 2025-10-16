@@ -17,33 +17,48 @@ export default async function handler(
   const { start, end, user_id } = req.query;
 
   try {
+    // Query peotram_audits with inner join to vessels table
     let query = supabase
-      .from("auditorias_imca")
-      .select("nome_navio, created_at, user_id");
+      .from("peotram_audits")
+      .select(`
+        id,
+        audit_date,
+        created_by,
+        vessels (
+          name
+        )
+      `);
 
+    // Apply date range filter if provided
     if (start && end) {
       query = query
-        .gte("created_at", start as string)
-        .lte("created_at", end as string);
+        .gte("audit_date", start as string)
+        .lte("audit_date", end as string);
     }
 
+    // Apply user_id filter if provided
     if (user_id) {
-      query = query.eq("user_id", user_id as string);
+      query = query.eq("created_by", user_id as string);
     }
 
     const { data, error } = await query;
 
     if (error) throw error;
 
+    // Group audits by vessel name and count
     const resumo: Record<string, number> = {};
-    data.forEach((item) => {
-      resumo[item.nome_navio] = (resumo[item.nome_navio] || 0) + 1;
+    data?.forEach((audit: any) => {
+      const vesselName = audit.vessels?.name || "Sem Navio";
+      resumo[vesselName] = (resumo[vesselName] || 0) + 1;
     });
 
-    const resultado = Object.entries(resumo).map(([nome_navio, total]) => ({
-      nome_navio,
-      total,
-    }));
+    // Transform to array format and sort by total (descending)
+    const resultado = Object.entries(resumo)
+      .map(([nome_navio, total]) => ({
+        nome_navio,
+        total,
+      }))
+      .sort((a, b) => b.total - a.total);
 
     res.status(200).json(resultado);
   } catch (error) {
