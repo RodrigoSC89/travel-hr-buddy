@@ -156,7 +156,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         validationRules: [
           {
             type: "range",
-            value: { min: 70, max: 85 },
+            value: [70, 85] as [number, number],
             message: "Temperatura fora do range operacional normal",
             severity: "warning"
           }
@@ -703,7 +703,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                       <div className="flex gap-2">
                         <Input
                           type="number"
-                          value={item.value || ""}
+                          value={String(item.value || "")}
                           onChange={(e) => handleItemValueChange(item.id, parseFloat(e.target.value) || 0)}
                           placeholder={`Valor${item.unit ? ` (${item.unit})` : ""}`}
                           disabled={readOnly}
@@ -749,7 +749,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
 
                     {item.type === "select" && (
                       <Select
-                        value={item.value || ""}
+                        value={String(item.value || "")}
                         onValueChange={(value) => handleItemValueChange(item.id, value)}
                         disabled={readOnly}
                       >

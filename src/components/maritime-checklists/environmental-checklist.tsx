@@ -231,7 +231,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
         <div className="flex items-center gap-2">
           <Input
             type="number"
-            value={item.value || ""}
+            value={String(item.value || "")}
             onChange={(e) => handleItemChange(item.id, "value", parseFloat(e.target.value))}
             placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
             className="w-32"
@@ -243,7 +243,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
     case "text":
       return (
         <Input
-          value={item.value || ""}
+          value={String(item.value || "")}
           onChange={(e) => handleItemChange(item.id, "value", e.target.value)}
           placeholder="Digite sua observação..."
           className="w-full"

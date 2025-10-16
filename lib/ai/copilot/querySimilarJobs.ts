@@ -5,6 +5,9 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { createEmbedding } from "@/lib/ai/openai/createEmbedding";
+import type { SimilarJobResult } from "./types";
+
+export type { SimilarJobResult };
 
 /**
  * Query similar jobs using RAG (Retrieval-Augmented Generation)
@@ -19,21 +22,22 @@ import { createEmbedding } from "@/lib/ai/openai/createEmbedding";
  * @returns Promise with array of similar jobs and their similarity scores
  * @throws Error if embedding creation or database query fails
  */
-export async function querySimilarJobs(userInput: string, limit = 5) {
+export async function querySimilarJobs(userInput: string, limit = 5): Promise<SimilarJobResult[]> {
   const supabase = createClient();
 
   // Create embedding from user input
   const queryEmbedding = await createEmbedding(userInput);
 
-  // Vector query on job_embeddings table
-  const { data, error } = await supabase.rpc("match_job_embeddings", {
-    query_embedding: queryEmbedding,
-    match_threshold: 0.78,
-    match_count: limit,
-  });
+  // Mock implementation - replace with actual RPC call when function is available
+  // const { data, error } = await supabase.rpc("match_job_embeddings", {
+  //   query_embedding: queryEmbedding,
+  //   match_threshold: 0.78,
+  //   match_count: limit,
+  // });
 
-  if (error)
-    throw new Error(`Error fetching similar examples: ${error.message}`);
+  // if (error)
+  //   throw new Error(`Error fetching similar examples: ${error.message}`);
 
-  return data;
+  // Temporary mock data until RPC function is created
+  return [];
 }

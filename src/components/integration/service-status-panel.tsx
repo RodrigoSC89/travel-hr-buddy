@@ -60,7 +60,7 @@ export const ServiceStatusPanel: React.FC = () => {
               Nenhum serviço configurado
             </p>
           )}
-          {services.map((service) => (
+          {services.map((service: { key: string; name: string; status: string; lastCheck?: Date }) => (
             <div
               key={service.key}
               className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"

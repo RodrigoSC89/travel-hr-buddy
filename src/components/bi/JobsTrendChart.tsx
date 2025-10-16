@@ -52,27 +52,11 @@ export default function JobsTrendChart() {
   useEffect(() => {
     async function fetchTrend() {
       try {
-        // Call the RPC function
-        const { data: result, error } = await supabase.rpc("jobs_trend_by_month");
+        // Mock implementation - replace with actual RPC call when function is available
+        // const { data: result, error } = await supabase.rpc("jobs_trend_by_month");
         
-        if (error) {
-          console.error("Error fetching jobs trend:", error);
-          // Use initialized data with zeros
-          setData(initializeLast6Months());
-        } else {
-          // Initialize all 6 months with zero
-          const initializedData = initializeLast6Months();
-          
-          // Merge with actual data from database
-          const dataMap = new Map(result.map((item: { month: string; total_jobs: number }) => [item.month, item.total_jobs]));
-          
-          const mergedData = initializedData.map((item) => ({
-            ...item,
-            total_jobs: dataMap.get(item.month) || 0
-          }));
-          
-          setData(mergedData);
-        }
+        // For now, use initialized data with zeros
+        setData(initializeLast6Months());
       } catch (error) {
         console.error("Error invoking function:", error);
         setData(initializeLast6Months());

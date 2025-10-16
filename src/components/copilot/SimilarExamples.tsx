@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { querySimilarJobs, SimilarJobResult } from "@/lib/ai/copilot/querySimilarJobs";
+import { querySimilarJobs, type SimilarJobResult } from "@/lib/ai/copilot/querySimilarJobs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
