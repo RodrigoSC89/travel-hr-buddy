@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,8 @@ import {
   Filter,
   BookOpen,
   Lightbulb,
-  CheckSquare
+  CheckSquare,
+  Sparkles
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -42,6 +44,7 @@ interface AnalysisResult {
 }
 
 const DPIntelligenceCenter = () => {
+  const navigate = useNavigate();
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [filteredIncidents, setFilteredIncidents] = useState<Incident[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -318,6 +321,53 @@ const DPIntelligenceCenter = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* IMCA Audit Quick Access Card */}
+      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-blue-500 rounded-lg">
+                <FileText className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Auditoria Técnica IMCA DP</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Gere auditorias técnicas completas seguindo normas IMCA, IMO e MTS
+                </p>
+              </div>
+            </div>
+            <Button 
+              onClick={() => navigate('/imca-audit')}
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Gerar Auditoria
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-2">
+            <Badge variant="secondary" className="bg-white">
+              <CheckSquare className="w-3 h-3 mr-1" />
+              12 Módulos DP
+            </Badge>
+            <Badge variant="secondary" className="bg-white">
+              <BookOpen className="w-3 h-3 mr-1" />
+              10 Normas Internacionais
+            </Badge>
+            <Badge variant="secondary" className="bg-white">
+              <Brain className="w-3 h-3 mr-1" />
+              Análise com IA
+            </Badge>
+            <Badge variant="secondary" className="bg-white">
+              <Lightbulb className="w-3 h-3 mr-1" />
+              Plano de Ação Priorizado
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Search and Filter Section */}
       <Card>
