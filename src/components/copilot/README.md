@@ -1,4 +1,84 @@
-# Similar Examples Component
+# Copilot Components Module
+
+## Overview
+
+The Copilot module provides AI-powered components for intelligent job creation and maintenance assistance. It combines smart form interfaces with vector similarity search to help users create better maintenance jobs based on historical data.
+
+## Components
+
+### 1. JobFormWithExamples
+The main component that combines job creation with AI-powered suggestions.
+
+**Demo Page:** `/copilot/job-form`
+
+**Features:**
+- Smart form creation with validation
+- AI-powered similar cases search
+- One-click auto-fill from suggestions
+- Toast notifications for user feedback
+- Responsive design and accessibility
+
+### 2. SimilarExamples
+Intelligent interface for finding and reusing historical maintenance job data using vector similarity search.
+
+**Features:**
+- AI-powered vector embeddings
+- Quick "Use as base" functionality
+- Similarity scores and metadata display
+- Graceful fallback with mock data
+
+### 3. Demo Pages
+- `CopilotJobFormExample.tsx` - Component-level demo
+- `/copilot/job-form` - Full demo page route
+- `/mmi/job-creation-demo` - Alternative demo with expanded form
+
+## Quick Start
+
+### View Live Demo
+Navigate to `/copilot/job-form` in your application to see the JobFormWithExamples component in action.
+
+### Basic Integration
+
+```tsx
+import { JobFormWithExamples } from '@/components/copilot';
+
+function MyPage() {
+  return <JobFormWithExamples onSubmit={(data) => console.log(data)} />;
+}
+```
+
+## Module Structure
+
+```
+src/
+├── components/
+│   └── copilot/
+│       ├── JobFormWithExamples.tsx      # Main form with AI suggestions
+│       ├── SimilarExamples.tsx          # Similar cases finder
+│       ├── SimilarExamplesDemo.tsx      # Demo page for SimilarExamples
+│       ├── CopilotJobFormExample.tsx    # Component demo
+│       ├── index.ts                     # Module exports
+│       └── README.md                    # This file
+├── pages/
+│   └── CopilotJobForm.tsx              # Full demo page route
+├── lib/
+│   └── ai/
+│       └── copilot/
+│           └── querySimilarJobs.ts      # Query service
+└── tests/
+    └── components/
+        └── JobFormWithExamples.test.tsx # Unit tests
+```
+
+## Documentation
+
+- **Quick Reference:** [COPILOT_JOB_FORM_QUICKREF.md](../../../COPILOT_JOB_FORM_QUICKREF.md)
+- **Implementation Guide:** [COPILOT_JOB_FORM_IMPLEMENTATION.md](../../../COPILOT_JOB_FORM_IMPLEMENTATION.md)
+- **Component Details:** See sections below
+
+---
+
+# SimilarExamples Component
 
 ## Overview
 
