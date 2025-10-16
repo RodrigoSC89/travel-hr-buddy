@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import DashboardJobs from "@/components/bi/DashboardJobs";
 import JobsTrendChart from "@/components/bi/JobsTrendChart";
+import { ForecastHistoryList } from "@/components/bi/ForecastHistoryList";
 
 const data = [
   { sistema: "Gerador", ia_efetiva: 6, total: 10 },
@@ -38,6 +39,13 @@ export default function MmiBI() {
 
       {/* JobsTrendChart Component - Shows last 6 months job completion trend */}
       <JobsTrendChart />
+
+      {/* ForecastHistoryList Component - Shows forecast history with filters */}
+      <Card>
+        <CardContent className="pt-6">
+          <ForecastHistoryList />
+        </CardContent>
+      </Card>
     </div>
   );
 }
