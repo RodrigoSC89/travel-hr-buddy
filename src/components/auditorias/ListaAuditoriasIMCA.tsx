@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { createClient } from "@supabase/supabase-js";
 
 interface Auditoria {
   id: string;
