@@ -31,8 +31,6 @@ import {
 } from "@/components/ui/select";
 import type {
   DPClass,
-  AuditBasicData,
-  AuditOperationalData,
   AuditResult,
   GenerateAuditRequest
 } from "@/types/imca-audit";
@@ -41,7 +39,6 @@ import {
   saveAudit,
   exportAuditToMarkdown
 } from "@/services/imca-audit-service";
-import { IMCA_STANDARDS, DP_MODULES } from "@/types/imca-audit";
 
 export const IMCAAuditGenerator: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("basic");
@@ -137,29 +134,29 @@ export const IMCAAuditGenerator: React.FC = () => {
 
   const getRiskColor = (risk: string): string => {
     switch (risk) {
-      case "Alto":
-        return "bg-red-500";
-      case "Médio":
-        return "bg-yellow-500";
-      case "Baixo":
-        return "bg-gray-500";
-      default:
-        return "bg-gray-400";
+    case "Alto":
+      return "bg-red-500";
+    case "Médio":
+      return "bg-yellow-500";
+    case "Baixo":
+      return "bg-gray-500";
+    default:
+      return "bg-gray-400";
     }
   };
 
   const getPriorityColor = (priority: string): string => {
     switch (priority) {
-      case "Crítico":
-        return "bg-red-500";
-      case "Alto":
-        return "bg-orange-500";
-      case "Médio":
-        return "bg-yellow-500";
-      case "Baixo":
-        return "bg-blue-500";
-      default:
-        return "bg-gray-400";
+    case "Crítico":
+      return "bg-red-500";
+    case "Alto":
+      return "bg-orange-500";
+    case "Médio":
+      return "bg-yellow-500";
+    case "Baixo":
+      return "bg-blue-500";
+    default:
+      return "bg-gray-400";
     }
   };
 

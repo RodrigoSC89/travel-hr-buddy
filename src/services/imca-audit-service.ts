@@ -219,7 +219,7 @@ function formatAuditForMarkdown(audit: AuditResult): string {
   
   lines.push(`# Auditoria IMCA - ${audit.vesselName}`);
   lines.push("");
-  lines.push(`## Dados Gerais`);
+  lines.push("## Dados Gerais");
   lines.push("");
   lines.push(`- **Embarcação**: ${audit.vesselName}`);
   lines.push(`- **Classe DP**: ${audit.dpClass}`);
@@ -229,14 +229,14 @@ function formatAuditForMarkdown(audit: AuditResult): string {
   lines.push(`- **Pontuação Geral**: ${audit.overallScore}/100`);
   lines.push("");
   
-  lines.push(`## Normas Avaliadas`);
+  lines.push("## Normas Avaliadas");
   lines.push("");
   audit.standards.forEach(std => {
     lines.push(`- **${std.code}**: ${std.title}`);
   });
   lines.push("");
   
-  lines.push(`## Módulos Avaliados`);
+  lines.push("## Módulos Avaliados");
   lines.push("");
   audit.modules.forEach(mod => {
     lines.push(`### ${mod.name}`);
@@ -246,20 +246,20 @@ function formatAuditForMarkdown(audit: AuditResult): string {
       lines.push("");
     }
     if (mod.conformities && mod.conformities.length > 0) {
-      lines.push(`**Conformidades**:`);
+      lines.push("**Conformidades**:");
       lines.push("");
       mod.conformities.forEach(c => lines.push(`- ${c}`));
       lines.push("");
     }
     if (mod.nonConformities && mod.nonConformities.length > 0) {
-      lines.push(`**Não Conformidades**:`);
+      lines.push("**Não Conformidades**:");
       lines.push("");
       mod.nonConformities.forEach(nc => lines.push(`- ${nc}`));
       lines.push("");
     }
   });
   
-  lines.push(`## Não Conformidades`);
+  lines.push("## Não Conformidades");
   lines.push("");
   audit.nonConformities.forEach((nc, index) => {
     lines.push(`### ${index + 1}. ${nc.description}`);
@@ -271,7 +271,7 @@ function formatAuditForMarkdown(audit: AuditResult): string {
     lines.push("");
   });
   
-  lines.push(`## Plano de Ação`);
+  lines.push("## Plano de Ação");
   lines.push("");
   audit.actionPlan.forEach((action, index) => {
     lines.push(`### ${index + 1}. ${action.description}`);
@@ -284,19 +284,19 @@ function formatAuditForMarkdown(audit: AuditResult): string {
     lines.push("");
   });
   
-  lines.push(`## Resumo`);
+  lines.push("## Resumo");
   lines.push("");
   lines.push(audit.summary);
   lines.push("");
   
-  lines.push(`## Recomendações`);
+  lines.push("## Recomendações");
   lines.push("");
   audit.recommendations.forEach(rec => {
     lines.push(`- ${rec}`);
   });
   lines.push("");
   
-  lines.push(`---`);
+  lines.push("---");
   lines.push(`*Gerado em: ${audit.generatedAt}*`);
   
   return lines.join("\n");

@@ -258,7 +258,7 @@ export function formatAuditForExport(audit: AuditResult): string {
   const lines: string[] = [];
   
   lines.push(`# Auditoria IMCA - ${audit.vesselName}`);
-  lines.push(`\n## Dados Gerais`);
+  lines.push("\n## Dados Gerais");
   lines.push(`- **Embarcação**: ${audit.vesselName}`);
   lines.push(`- **Classe DP**: ${audit.dpClass}`);
   lines.push(`- **Local**: ${audit.location}`);
@@ -266,28 +266,28 @@ export function formatAuditForExport(audit: AuditResult): string {
   lines.push(`- **Objetivo**: ${audit.auditObjective}`);
   lines.push(`- **Pontuação Geral**: ${audit.overallScore}/100`);
   
-  lines.push(`\n## Normas Avaliadas`);
+  lines.push("\n## Normas Avaliadas");
   audit.standards.forEach(std => {
     lines.push(`- **${std.code}**: ${std.title}`);
   });
   
-  lines.push(`\n## Módulos Avaliados`);
+  lines.push("\n## Módulos Avaliados");
   audit.modules.forEach(mod => {
     lines.push(`\n### ${mod.name}`);
     if (mod.score !== undefined) {
       lines.push(`**Pontuação**: ${mod.score}/100`);
     }
     if (mod.conformities && mod.conformities.length > 0) {
-      lines.push(`\n**Conformidades**:`);
+      lines.push("\n**Conformidades**:");
       mod.conformities.forEach(c => lines.push(`- ${c}`));
     }
     if (mod.nonConformities && mod.nonConformities.length > 0) {
-      lines.push(`\n**Não Conformidades**:`);
+      lines.push("\n**Não Conformidades**:");
       mod.nonConformities.forEach(nc => lines.push(`- ${nc}`));
     }
   });
   
-  lines.push(`\n## Não Conformidades`);
+  lines.push("\n## Não Conformidades");
   audit.nonConformities.forEach((nc, index) => {
     lines.push(`\n### ${index + 1}. ${nc.description}`);
     lines.push(`- **Módulo**: ${nc.module}`);
@@ -296,7 +296,7 @@ export function formatAuditForExport(audit: AuditResult): string {
     lines.push(`- **Recomendação**: ${nc.recommendation}`);
   });
   
-  lines.push(`\n## Plano de Ação`);
+  lines.push("\n## Plano de Ação");
   audit.actionPlan.forEach((action, index) => {
     lines.push(`\n### ${index + 1}. ${action.description}`);
     lines.push(`- **Prioridade**: ${action.priority}`);
@@ -306,16 +306,16 @@ export function formatAuditForExport(audit: AuditResult): string {
     }
   });
   
-  lines.push(`\n## Resumo`);
+  lines.push("\n## Resumo");
   lines.push(audit.summary);
   
-  lines.push(`\n## Recomendações`);
+  lines.push("\n## Recomendações");
   audit.recommendations.forEach(rec => {
     lines.push(`- ${rec}`);
   });
   
-  lines.push(`\n---`);
+  lines.push("\n---");
   lines.push(`*Gerado em: ${audit.generatedAt}*`);
   
-  return lines.join('\n');
+  return lines.join("\n");
 }
