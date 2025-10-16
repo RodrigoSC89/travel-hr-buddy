@@ -94,6 +94,7 @@ const CopilotJobForm = React.lazy(() => import("./pages/admin/copilot-job-form")
 const Forecast = React.lazy(() => import("./pages/Forecast"));
 const MMI = React.lazy(() => import("./pages/MMI"));
 const SmartWorkflow = React.lazy(() => import("./pages/SmartWorkflow"));
+const SystemStatus = React.lazy(() => import("./pages/admin/SystemStatus"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -214,6 +215,7 @@ function App() {
                       <Route path="/admin/assistant/history" element={<AssistantLogs />} />
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
                       <Route path="/admin/copilot-job-form" element={<CopilotJobForm />} />
+                      <Route path="/admin/status" element={<SystemStatus />} />
                       <Route path="/admin/workflows" element={<SmartWorkflows />} />
                       <Route path="/admin/workflows/:id" element={<WorkflowDetail />} />
                       <Route path="/admin/documents" element={<DocumentList />} />
