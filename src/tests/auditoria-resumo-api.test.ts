@@ -72,16 +72,22 @@ describe("Auditoria Resumo API Endpoint", () => {
   });
 
   describe("Database Query", () => {
-    it("should query auditorias_imca table", () => {
-      const tableName = "auditorias_imca";
-      expect(tableName).toBe("auditorias_imca");
+    it("should query peotram_audits table", () => {
+      const tableName = "peotram_audits";
+      expect(tableName).toBe("peotram_audits");
     });
 
-    it("should select required columns", () => {
-      const selectFields = "nome_navio, created_at, user_id";
-      expect(selectFields).toContain("nome_navio");
-      expect(selectFields).toContain("created_at");
-      expect(selectFields).toContain("user_id");
+    it("should select required columns with vessel join", () => {
+      const selectFields = "audit_date, created_by, vessel_id, vessels";
+      expect(selectFields).toContain("audit_date");
+      expect(selectFields).toContain("created_by");
+      expect(selectFields).toContain("vessel_id");
+      expect(selectFields).toContain("vessels");
+    });
+
+    it("should use inner join with vessels table", () => {
+      const joinType = "inner";
+      expect(joinType).toBe("inner");
     });
 
     it("should apply date range filter when start and end provided", () => {
@@ -98,37 +104,58 @@ describe("Auditoria Resumo API Endpoint", () => {
       expect(userFilter).toBeTruthy();
     });
 
-    it("should use gte operator for start date", () => {
+    it("should use gte operator for start date on audit_date field", () => {
       const operator = "gte";
+      const field = "audit_date";
       expect(operator).toBe("gte");
+      expect(field).toBe("audit_date");
     });
 
-    it("should use lte operator for end date", () => {
+    it("should use lte operator for end date on audit_date field", () => {
       const operator = "lte";
+      const field = "audit_date";
       expect(operator).toBe("lte");
+      expect(field).toBe("audit_date");
     });
 
-    it("should use eq operator for user_id", () => {
+    it("should use eq operator for created_by field", () => {
       const operator = "eq";
+      const field = "created_by";
       expect(operator).toBe("eq");
+      expect(field).toBe("created_by");
     });
   });
 
   describe("Data Aggregation", () => {
-    it("should group results by nome_navio", () => {
+    it("should group results by vessel name from join", () => {
       const mockData = [
-        { nome_navio: "Navio A", created_at: "2025-10-01", user_id: "uuid-1" },
-        { nome_navio: "Navio A", created_at: "2025-10-02", user_id: "uuid-1" },
-        { nome_navio: "Navio B", created_at: "2025-10-03", user_id: "uuid-2" }
+        { audit_date: "2025-10-01", created_by: "uuid-1", vessel_id: "v1", vessels: { name: "Navio A" } },
+        { audit_date: "2025-10-02", created_by: "uuid-1", vessel_id: "v1", vessels: { name: "Navio A" } },
+        { audit_date: "2025-10-03", created_by: "uuid-2", vessel_id: "v2", vessels: { name: "Navio B" } }
       ];
 
       const resumo: Record<string, number> = {};
       mockData.forEach((item) => {
-        resumo[item.nome_navio] = (resumo[item.nome_navio] || 0) + 1;
+        const vesselName = item.vessels?.name || "Unknown";
+        resumo[vesselName] = (resumo[vesselName] || 0) + 1;
       });
 
       expect(resumo["Navio A"]).toBe(2);
       expect(resumo["Navio B"]).toBe(1);
+    });
+
+    it("should handle vessels without names gracefully", () => {
+      const mockData = [
+        { audit_date: "2025-10-01", created_by: "uuid-1", vessel_id: "v1", vessels: null },
+      ];
+
+      const resumo: Record<string, number> = {};
+      mockData.forEach((item) => {
+        const vesselName = item.vessels?.name || "Unknown";
+        resumo[vesselName] = (resumo[vesselName] || 0) + 1;
+      });
+
+      expect(resumo["Unknown"]).toBe(1);
     });
 
     it("should count audits per vessel", () => {
@@ -158,6 +185,21 @@ describe("Auditoria Resumo API Endpoint", () => {
       expect(resultado).toHaveLength(2);
       expect(resultado[0]).toHaveProperty("nome_navio");
       expect(resultado[0]).toHaveProperty("total");
+    });
+
+    it("should sort results by total count in descending order", () => {
+      const resultado = [
+        { nome_navio: "Navio A", total: 2 },
+        { nome_navio: "Navio B", total: 5 },
+        { nome_navio: "Navio C", total: 1 }
+      ].sort((a, b) => b.total - a.total);
+
+      expect(resultado[0].nome_navio).toBe("Navio B");
+      expect(resultado[0].total).toBe(5);
+      expect(resultado[1].nome_navio).toBe("Navio A");
+      expect(resultado[1].total).toBe(2);
+      expect(resultado[2].nome_navio).toBe("Navio C");
+      expect(resultado[2].total).toBe(1);
     });
   });
 

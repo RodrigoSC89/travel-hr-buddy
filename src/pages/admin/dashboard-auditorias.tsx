@@ -43,19 +43,15 @@ export default function DashboardAuditorias() {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      if (dataInicio) params.append("startDate", dataInicio);
-      if (dataFim) params.append("endDate", dataFim);
-      if (userId) params.append("userId", userId);
-
-      const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-      const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      if (dataInicio) params.append("start", dataInicio);
+      if (dataFim) params.append("end", dataFim);
+      if (userId) params.append("user_id", userId);
 
       const response = await fetch(
-        `${SUPABASE_URL}/functions/v1/resumo-auditorias-api?${params.toString()}`,
+        `/api/auditoria/resumo?${params.toString()}`,
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
             "Content-Type": "application/json",
           },
         }
@@ -65,14 +61,26 @@ export default function DashboardAuditorias() {
         throw new Error("Erro ao buscar dados");
       }
 
-      const result = await response.json();
-      if (result.success) {
-        setDados(result.dadosPorNavio || []);
-        setTendencia(result.tendenciaPorData || []);
-        toast.success(`${result.totalAuditorias} auditorias encontradas`);
-      } else {
-        throw new Error(result.error || "Erro desconhecido");
+      const dadosPorNavio = await response.json();
+      setDados(dadosPorNavio || []);
+      
+      // Load trend data from tendencia API
+      const trendResponse = await fetch(
+        `/api/auditoria/tendencia?${params.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      
+      if (trendResponse.ok) {
+        const trendData = await trendResponse.json();
+        setTendencia(trendData || []);
       }
+      
+      toast.success(`${dadosPorNavio.length} navios com auditorias encontrados`);
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
       toast.error("Erro ao carregar dados das auditorias");

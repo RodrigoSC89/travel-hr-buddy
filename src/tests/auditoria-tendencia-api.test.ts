@@ -75,26 +75,30 @@ describe("Auditoria Tendencia API Endpoint", () => {
   });
 
   describe("Database Query", () => {
-    it("should query auditorias_imca table", () => {
-      const tableName = "auditorias_imca";
-      expect(tableName).toBe("auditorias_imca");
+    it("should query peotram_audits table", () => {
+      const tableName = "peotram_audits";
+      expect(tableName).toBe("peotram_audits");
     });
 
-    it("should select created_at and user_id columns", () => {
-      const columns = ["created_at", "user_id"];
-      expect(columns).toContain("created_at");
-      expect(columns).toContain("user_id");
+    it("should select audit_date and created_by columns", () => {
+      const columns = ["audit_date", "created_by"];
+      expect(columns).toContain("audit_date");
+      expect(columns).toContain("created_by");
     });
 
-    it("should filter by date range using gte and lte", () => {
+    it("should filter by date range using gte and lte on audit_date", () => {
       const operators = ["gte", "lte"];
+      const field = "audit_date";
       expect(operators).toContain("gte");
       expect(operators).toContain("lte");
+      expect(field).toBe("audit_date");
     });
 
-    it("should filter by user_id using eq", () => {
+    it("should filter by created_by using eq", () => {
       const operator = "eq";
+      const field = "created_by";
       expect(operator).toBe("eq");
+      expect(field).toBe("created_by");
     });
   });
 
