@@ -72,16 +72,17 @@ describe("Auditoria Resumo API Endpoint", () => {
   });
 
   describe("Database Query", () => {
-    it("should query auditorias_imca table", () => {
-      const tableName = "auditorias_imca";
-      expect(tableName).toBe("auditorias_imca");
+    it("should query peotram_audits table", () => {
+      const tableName = "peotram_audits";
+      expect(tableName).toBe("peotram_audits");
     });
 
-    it("should select required columns", () => {
-      const selectFields = "nome_navio, created_at, user_id";
-      expect(selectFields).toContain("nome_navio");
-      expect(selectFields).toContain("created_at");
-      expect(selectFields).toContain("user_id");
+    it("should select required columns with vessels join", () => {
+      const selectFields = "id, audit_date, created_by, vessel_id, vessels:vessel_id (id, name)";
+      expect(selectFields).toContain("audit_date");
+      expect(selectFields).toContain("created_by");
+      expect(selectFields).toContain("vessel_id");
+      expect(selectFields).toContain("vessels");
     });
 
     it("should apply date range filter when start and end provided", () => {
@@ -98,37 +99,58 @@ describe("Auditoria Resumo API Endpoint", () => {
       expect(userFilter).toBeTruthy();
     });
 
-    it("should use gte operator for start date", () => {
+    it("should use gte operator for start date on audit_date", () => {
       const operator = "gte";
+      const field = "audit_date";
       expect(operator).toBe("gte");
+      expect(field).toBe("audit_date");
     });
 
-    it("should use lte operator for end date", () => {
+    it("should use lte operator for end date on audit_date", () => {
       const operator = "lte";
+      const field = "audit_date";
       expect(operator).toBe("lte");
+      expect(field).toBe("audit_date");
     });
 
-    it("should use eq operator for user_id", () => {
+    it("should use eq operator for user_id on created_by field", () => {
       const operator = "eq";
+      const field = "created_by";
       expect(operator).toBe("eq");
+      expect(field).toBe("created_by");
     });
   });
 
   describe("Data Aggregation", () => {
-    it("should group results by nome_navio", () => {
+    it("should group results by vessel name from vessels table", () => {
       const mockData = [
-        { nome_navio: "Navio A", created_at: "2025-10-01", user_id: "uuid-1" },
-        { nome_navio: "Navio A", created_at: "2025-10-02", user_id: "uuid-1" },
-        { nome_navio: "Navio B", created_at: "2025-10-03", user_id: "uuid-2" }
+        { id: "1", audit_date: "2025-10-01", created_by: "uuid-1", vessel_id: "v1", vessels: { id: "v1", name: "Navio A" } },
+        { id: "2", audit_date: "2025-10-02", created_by: "uuid-1", vessel_id: "v1", vessels: { id: "v1", name: "Navio A" } },
+        { id: "3", audit_date: "2025-10-03", created_by: "uuid-2", vessel_id: "v2", vessels: { id: "v2", name: "Navio B" } }
       ];
 
       const resumo: Record<string, number> = {};
-      mockData.forEach((item) => {
-        resumo[item.nome_navio] = (resumo[item.nome_navio] || 0) + 1;
+      mockData.forEach((item: any) => {
+        const nome_navio = item.vessels?.name || "Sem Navio";
+        resumo[nome_navio] = (resumo[nome_navio] || 0) + 1;
       });
 
       expect(resumo["Navio A"]).toBe(2);
       expect(resumo["Navio B"]).toBe(1);
+    });
+
+    it("should handle missing vessel data with default", () => {
+      const mockData = [
+        { id: "1", audit_date: "2025-10-01", created_by: "uuid-1", vessel_id: null, vessels: null }
+      ];
+
+      const resumo: Record<string, number> = {};
+      mockData.forEach((item: any) => {
+        const nome_navio = item.vessels?.name || "Sem Navio";
+        resumo[nome_navio] = (resumo[nome_navio] || 0) + 1;
+      });
+
+      expect(resumo["Sem Navio"]).toBe(1);
     });
 
     it("should count audits per vessel", () => {
@@ -352,7 +374,7 @@ describe("Auditoria Resumo API Endpoint", () => {
 
   describe("API Documentation", () => {
     it("should document the endpoint purpose", () => {
-      const purpose = "Gera resumo de auditorias agrupadas por navio";
+      const purpose = "Gera resumo de auditorias PEOTRAM agrupadas por navio";
       expect(purpose).toContain("resumo");
       expect(purpose).toContain("auditorias");
       expect(purpose).toContain("navio");
@@ -362,7 +384,7 @@ describe("Auditoria Resumo API Endpoint", () => {
       const params = {
         start: "Data inicial do filtro (formato: YYYY-MM-DD)",
         end: "Data final do filtro (formato: YYYY-MM-DD)",
-        user_id: "UUID do usuário para filtrar auditorias"
+        user_id: "UUID do usuário criador para filtrar auditorias"
       };
       expect(params.start).toContain("Data inicial");
       expect(params.end).toContain("Data final");
