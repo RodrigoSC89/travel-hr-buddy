@@ -24,6 +24,7 @@ import { AuditPlanner } from "./AuditPlanner";
 import { NonConformityManager } from "./NonConformityManager";
 import { ComplianceMetrics } from "./ComplianceMetrics";
 import { EmergencyResponse } from "./EmergencyResponse";
+import { PainelSGSO } from "./PainelSGSO";
 
 export const SgsoDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -168,7 +169,7 @@ export const SgsoDashboard: React.FC = () => {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-9 w-full h-auto gap-2 bg-gray-100 p-2">
+            <TabsList className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-10 w-full h-auto gap-2 bg-gray-100 p-2">
               <TabsTrigger 
                 value="overview" 
                 className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
@@ -231,6 +232,13 @@ export const SgsoDashboard: React.FC = () => {
               >
                 <TrendingUp className="h-4 w-4 mr-2" />
                 Métricas
+              </TabsTrigger>
+              <TabsTrigger 
+                value="painel"
+                className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <Activity className="h-4 w-4 mr-2" />
+                Painel SGSO
               </TabsTrigger>
             </TabsList>
 
@@ -360,6 +368,10 @@ export const SgsoDashboard: React.FC = () => {
 
             <TabsContent value="metrics">
               <ComplianceMetrics />
+            </TabsContent>
+
+            <TabsContent value="painel">
+              <PainelSGSO />
             </TabsContent>
           </Tabs>
         </CardContent>
