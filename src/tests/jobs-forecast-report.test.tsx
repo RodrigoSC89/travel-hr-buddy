@@ -122,5 +122,34 @@ describe("JobsForecastReport Component", () => {
     expect(container).toBeDefined();
     expect(container.firstChild).toBeDefined();
   });
+
+  it("should call onForecastUpdate callback when forecast is loaded", async () => {
+    const mockForecast = "Previsão de teste";
+    const mockCallback = vi.fn();
+    (supabase.functions.invoke as any).mockResolvedValue({
+      data: { forecast: mockForecast },
+      error: null,
+    });
+
+    render(<JobsForecastReport trend={[{ date: "2025-01", jobs: 10 }]} onForecastUpdate={mockCallback} />);
+
+    await waitFor(() => {
+      expect(mockCallback).toHaveBeenCalledWith(mockForecast);
+    });
+  });
+
+  it("should call onForecastUpdate callback with error message on error", async () => {
+    const mockCallback = vi.fn();
+    (supabase.functions.invoke as any).mockResolvedValue({
+      data: null,
+      error: new Error("API Error"),
+    });
+
+    render(<JobsForecastReport trend={[{ date: "2025-01", jobs: 10 }]} onForecastUpdate={mockCallback} />);
+
+    await waitFor(() => {
+      expect(mockCallback).toHaveBeenCalledWith("Erro ao buscar previsão. Tente novamente.");
+    });
+  });
 });
 /* eslint-enable @typescript-eslint/no-explicit-any */
