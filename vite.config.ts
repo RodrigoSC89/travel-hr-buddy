@@ -12,6 +12,10 @@ export default defineConfig(({ mode }) => ({
     environment: "jsdom",
     setupFiles: "./src/tests/setup.ts",
     css: true,
+    testTimeout: 15000, // Increase timeout to 15 seconds for tests with external calls
+    env: {
+      NODE_ENV: "test", // Set NODE_ENV to test to skip delays in fallback logic
+    },
   },
   base: "/",
   server: {
