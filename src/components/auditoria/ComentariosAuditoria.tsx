@@ -80,21 +80,21 @@ export function ComentariosAuditoria({ auditoriaId }: { auditoriaId: string }) {
               <div 
                 key={c.id} 
                 className={`p-4 rounded-lg border ${
-                  c.user_id === 'ia-auto-responder' 
-                    ? 'bg-blue-50 border-blue-200' 
-                    : 'bg-white border-gray-200'
+                  c.user_id === "ia-auto-responder" 
+                    ? "bg-blue-50 border-blue-200" 
+                    : "bg-white border-gray-200"
                 }`}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-2xl">
-                    {c.user_id === 'ia-auto-responder' ? '🤖' : '👤'}
+                    {c.user_id === "ia-auto-responder" ? "🤖" : "👤"}
                   </span>
                   <div className="flex-1">
                     <div className="font-semibold text-sm">
-                      {c.user_id === 'ia-auto-responder' ? 'IA Auditor IMCA' : c.user_id}
+                      {c.user_id === "ia-auto-responder" ? "IA Auditor IMCA" : c.user_id}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {new Date(c.created_at).toLocaleString('pt-BR')}
+                      {new Date(c.created_at).toLocaleString("pt-BR")}
                     </div>
                   </div>
                 </div>
@@ -122,7 +122,7 @@ export function ComentariosAuditoria({ auditoriaId }: { auditoriaId: string }) {
             onClick={enviarComentario}
             className="bg-blue-600 hover:bg-blue-700"
           >
-            {carregando ? 'Enviando...' : 'Enviar'}
+            {carregando ? "Enviando..." : "Enviar"}
           </Button>
         </div>
       </div>

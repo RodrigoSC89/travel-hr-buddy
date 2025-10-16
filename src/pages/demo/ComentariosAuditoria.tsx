@@ -56,7 +56,7 @@ export default function ComentariosAuditoriaDemo() {
                   placeholder="Insira o ID da auditoria"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Use qualquer ID. Para testes, use "demo-audit-123"
+                  Use qualquer ID. Para testes, use &quot;demo-audit-123&quot;
                 </p>
               </div>
             </CardContent>
@@ -130,7 +130,7 @@ export default function ComentariosAuditoriaDemo() {
               <div>
                 <h3 className="text-lg font-semibold mb-2">Instalação</h3>
                 <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-                  <code>{`import { ComentariosAuditoria } from "@/components/auditoria";`}</code>
+                  <code>{"import { ComentariosAuditoria } from \"@/components/auditoria\";"}</code>
                 </pre>
               </div>
 
