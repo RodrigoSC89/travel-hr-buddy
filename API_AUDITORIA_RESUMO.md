@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Endpoint REST que fornece um resumo de auditorias IMCA agrupadas por navio, com suporte para filtros por data e usuário.
+Endpoint REST que fornece um resumo de auditorias PEOTRAM agrupadas por navio, com suporte para filtros por data e usuário. Utiliza o sistema de auditorias PEOTRAM com relacionamentos adequados com a tabela de navios.
 
 ## 🔗 Endpoint
 
@@ -38,6 +38,8 @@ GET /api/auditoria/resumo
   }
 ]
 ```
+
+**Nota**: Os resultados são ordenados por total de auditorias em ordem decrescente.
 
 ### Erro (500)
 
@@ -160,10 +162,19 @@ Este endpoint requer autenticação via Supabase Service Role Key, configurada a
 
 ## 🗄️ Fonte de Dados
 
-O endpoint consulta a tabela `auditorias_imca` no Supabase, selecionando os campos:
-- `nome_navio`: Nome do navio auditado
-- `created_at`: Data de criação da auditoria
-- `user_id`: UUID do usuário que criou a auditoria
+O endpoint consulta a tabela `peotram_audits` no Supabase com join à tabela `vessels`, selecionando os campos:
+- `audit_date`: Data da auditoria
+- `created_by`: UUID do usuário que criou a auditoria
+- `vessel_id`: UUID do navio auditado
+- `vessels.name`: Nome do navio (via inner join)
+
+### Relacionamentos
+
+```sql
+peotram_audits.vessel_id → vessels.id
+```
+
+O endpoint utiliza `inner join` para garantir que apenas auditorias com navios válidos sejam retornadas. Navios sem nome são listados como "Unknown".
 
 ## 🔧 Implementação Técnica
 
@@ -171,37 +182,58 @@ O endpoint consulta a tabela `auditorias_imca` no Supabase, selecionando os camp
 
 - **Next.js API Routes**: Framework para API endpoints
 - **Supabase**: Banco de dados PostgreSQL
-- **TypeScript**: Tipagem estática
+- **TypeScript**: Tipagem estática com interfaces definidas
 
 ### Lógica de Agregação
 
 O endpoint:
-1. Consulta a tabela `auditorias_imca` com os filtros fornecidos
-2. Agrupa os resultados por `nome_navio`
-3. Conta o número de auditorias para cada navio
-4. Retorna um array com o resumo
+1. Consulta a tabela `peotram_audits` com inner join em `vessels`
+2. Aplica filtros de data em `audit_date` e usuário em `created_by`
+3. Agrupa os resultados por nome do navio
+4. Conta o número de auditorias para cada navio
+5. Ordena por total de auditorias (decrescente)
+6. Retorna um array com o resumo
 
 ### Tratamento de Erros
 
 - Valida o método HTTP (apenas GET é permitido)
 - Captura e loga erros de banco de dados
 - Retorna mensagens de erro apropriadas
+- Trata navios sem nome com fallback para "Unknown"
+
+### Type Safety
+
+```typescript
+interface PeotramAudit {
+  audit_date: string;
+  created_by: string;
+  vessel_id: string;
+  vessels: {
+    name: string;
+  } | null;
+}
+```
 
 ## 📊 Performance
 
-- **Filtros otimizados**: Uso de índices no banco de dados para `created_at` e `user_id`
+- **Filtros otimizados**: Uso de índices no banco de dados para `audit_date` e `created_by`
+- **Inner join eficiente**: Relacionamento direto com tabela de navios
 - **Agregação eficiente**: Processamento em memória de resultados agrupados
 - **Resposta rápida**: Queries otimizadas com seleção específica de campos
+- **Ordenação**: Resultados pré-ordenados por relevância (total decrescente)
 
 ## 🧪 Testes
 
-O endpoint possui 48 testes automatizados que cobrem:
+O endpoint possui 51 testes automatizados que cobrem:
 - Validação de métodos HTTP
 - Parâmetros de query
 - Filtros e combinações
 - Formato de resposta
 - Tratamento de erros
 - Agregação de dados
+- Joins com tabela de navios
+- Ordenação de resultados
+- Tratamento de navios sem nome
 
 Execute os testes com:
 
@@ -215,16 +247,35 @@ npm test src/tests/auditoria-resumo-api.test.ts
 - Os filtros de data (`start` e `end`) devem ser usados em conjunto
 - O formato de data esperado é ISO 8601 (YYYY-MM-DD)
 - O campo `user_id` deve ser um UUID válido
+- Resultados são ordenados automaticamente por total de auditorias
+- Navios sem nome aparecem como "Unknown"
+
+## 🔄 Mudanças na v2.0.0
+
+### Migração de auditorias_imca para peotram_audits
+
+- **Tabela**: `auditorias_imca` → `peotram_audits`
+- **Campo de data**: `created_at` → `audit_date`
+- **Campo de usuário**: `user_id` → `created_by`
+- **Novo**: Inner join com tabela `vessels` para garantir integridade referencial
+- **Novo**: Ordenação automática por total de auditorias
+- **Novo**: Type safety com interfaces TypeScript
+
+### Compatibilidade
+
+O formato de resposta permanece o mesmo, garantindo compatibilidade com código existente.
 
 ## 🔗 Recursos Relacionados
 
 - [Documentação do Supabase](https://supabase.com/docs)
 - [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction)
 - [Testes com Vitest](https://vitest.dev/)
+- [Sistema PEOTRAM](./PEOTRAM_SYSTEM.md)
 
 ## ✅ Status
 
 **Status**: ✅ Pronto para produção  
-**Versão**: 1.0.0  
-**Data de implementação**: 2025-10-16  
-**Testes**: 48 testes passando
+**Versão**: 2.0.0  
+**Data de atualização**: 2025-10-16  
+**Testes**: 51 testes passando (1332 total no projeto)  
+**Breaking Changes**: Nenhum (compatibilidade mantida na API)
