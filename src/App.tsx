@@ -93,6 +93,7 @@ const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreat
 const CopilotJobForm = React.lazy(() => import("./pages/CopilotJobForm"));
 const CopilotJobFormAdmin = React.lazy(() => import("./pages/admin/copilot-job-form"));
 const DashboardAuditorias = React.lazy(() => import("./pages/admin/dashboard-auditorias"));
+const AuditoriasIMCA = React.lazy(() => import("./pages/admin/auditorias-imca"));
 const MetricasRisco = React.lazy(() => import("./pages/admin/metricas-risco"));
 
 // Loading component
@@ -232,6 +233,7 @@ function App() {
                       <Route path="/admin/reports/dashboard-logs" element={<DashboardLogs />} />
                       <Route path="/admin/reports/restore-analytics" element={<RestoreAnalytics />} />
                       <Route path="/admin/dashboard-auditorias" element={<DashboardAuditorias />} />
+                      <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/metricas-risco" element={<MetricasRisco />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
