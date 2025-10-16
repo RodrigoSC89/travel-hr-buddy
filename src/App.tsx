@@ -44,6 +44,7 @@ const PredictiveAnalytics = React.lazy(() => import("./pages/PredictiveAnalytics
 const Admin = React.lazy(() => import("./pages/Admin"));
 const APITester = React.lazy(() => import("./pages/admin/api-tester"));
 const APIStatus = React.lazy(() => import("./pages/admin/api-status"));
+const AdminStatus = React.lazy(() => import("./pages/admin/status"));
 const ControlPanel = React.lazy(() => import("./pages/admin/control-panel"));
 const TestDashboard = React.lazy(() => import("./pages/admin/tests"));
 const CIHistory = React.lazy(() => import("./pages/admin/ci-history"));
@@ -194,6 +195,7 @@ function App() {
                       <Route path="/admin/dashboard" element={<AdminDashboard />} />
                       <Route path="/admin/api-tester" element={<APITester />} />
                       <Route path="/admin/api-status" element={<APIStatus />} />
+                      <Route path="/admin/status" element={<AdminStatus />} />
                       <Route path="/admin/control-panel" element={<ControlPanel />} />
                       <Route path="/admin/tests" element={<TestDashboard />} />
                       <Route path="/admin/ci-history" element={<CIHistory />} />
