@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { supabase } from "@/integrations/supabase/client"
 
 export default function AuditoriaIMCA() {
   const [nomeNavio, setNomeNavio] = useState("")
@@ -14,17 +15,23 @@ export default function AuditoriaIMCA() {
   const handleSubmit = async () => {
     setLoading(true)
     try {
-      const response = await fetch("/api/auditoria/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nomeNavio, contexto }),
+      const { data, error } = await supabase.functions.invoke("auditoria-generate", {
+        body: { nomeNavio, contexto },
       })
-      const data = await response.json()
+
+      if (error) {
+        console.error("Error generating audit:", error)
+        setRelatorio("Erro ao gerar auditoria. Verifique o backend.")
+        return
+      }
+
       setRelatorio(data.output)
     } catch (error) {
+      console.error("Error:", error)
       setRelatorio("Erro ao gerar auditoria. Verifique o backend.")
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   return (
