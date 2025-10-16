@@ -64,13 +64,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // 4. Enviar e-mail
     console.log("📧 Sending email report...");
 
-    await resendEmail({
+    const emailResult = await resendEmail({
       to: "engenharia@nautilus.system",
       subject: "📊 Previsão de Falhas (Produção)",
       text: summary,
     });
 
-    console.log("✅ Email sent successfully");
+    if (!emailResult.success) {
+      console.error("Warning: Failed to send email:", emailResult.error);
+      // Don't fail the request, just log the error and continue
+    } else {
+      console.log("✅ Email sent successfully");
+    }
 
     return res.status(200).json({ 
       ok: true, 
