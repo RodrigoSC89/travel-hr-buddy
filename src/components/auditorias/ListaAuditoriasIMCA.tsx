@@ -1,49 +1,49 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { format } from "date-fns"
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 
 interface Auditoria {
-  id: string
-  navio: string
-  data: string
-  norma: string
-  resultado: 'Conforme' | 'Não Conforme' | 'Observação'
-  item_auditado: string
-  comentarios: string
+  id: string;
+  navio: string;
+  data: string;
+  norma: string;
+  resultado: "Conforme" | "Não Conforme" | "Observação";
+  item_auditado: string;
+  comentarios: string;
 }
 
 export function ListaAuditoriasIMCA() {
-  const [auditorias, setAuditorias] = useState<Auditoria[]>([])
-  const [loading, setLoading] = useState(true)
+  const [auditorias, setAuditorias] = useState<Auditoria[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/auditorias/list")
       .then((res) => res.json())
       .then((data) => {
-        setAuditorias(data)
-        setLoading(false)
+        setAuditorias(data);
+        setLoading(false);
       })
       .catch((error) => {
-        console.error("Error loading auditorias:", error)
-        setLoading(false)
-      })
-  }, [])
+        console.error("Error loading auditorias:", error);
+        setLoading(false);
+      });
+  }, []);
 
   const corResultado: Record<string, string> = {
     "Conforme": "bg-green-100 text-green-800",
     "Não Conforme": "bg-red-100 text-red-800",
     "Observação": "bg-yellow-100 text-yellow-800",
-  }
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <p className="text-gray-500">Carregando auditorias...</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -69,7 +69,7 @@ export function ListaAuditoriasIMCA() {
                 </div>
                 
                 <p className="text-gray-600 mb-2">
-                  {a.data && format(new Date(a.data), 'dd/MM/yyyy')} - Norma: {a.norma}
+                  {a.data && format(new Date(a.data), "dd/MM/yyyy")} - Norma: {a.norma}
                 </p>
                 
                 <div className="space-y-2">
@@ -89,5 +89,5 @@ export function ListaAuditoriasIMCA() {
         </div>
       )}
     </div>
-  )
+  );
 }
