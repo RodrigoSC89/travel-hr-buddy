@@ -25,8 +25,8 @@ export default function AdminBI() {
   const [filters, setFilters] = useState<FilterValues>({
     startDate: "",
     endDate: "",
-    vesselId: "",
-    standard: "",
+    vesselId: "all",
+    standard: "all",
   });
   const [auditData, setAuditData] = useState<any[]>([]);
   const [vesselData, setVesselData] = useState<any[]>([]);
@@ -73,7 +73,7 @@ export default function AdminBI() {
             .lte("audit_date", filters.endDate);
         }
 
-        if (filters.vesselId) {
+        if (filters.vesselId && filters.vesselId !== "all") {
           query = query.eq("vessel_id", filters.vesselId);
         }
 

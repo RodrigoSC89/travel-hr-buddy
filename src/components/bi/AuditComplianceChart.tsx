@@ -43,7 +43,7 @@ export default function AuditComplianceChart({ startDate, endDate, vesselId }: A
             .lte("audit_date", endDate);
         }
 
-        if (vesselId) {
+        if (vesselId && vesselId !== "all") {
           query = query.eq("vessel_id", vesselId);
         }
 

@@ -27,8 +27,8 @@ export default function BiFilters({ onFilterChange }: BiFiltersProps) {
   const [filters, setFilters] = useState<FilterValues>({
     startDate: "",
     endDate: "",
-    vesselId: "",
-    standard: "",
+    vesselId: "all",
+    standard: "all",
   });
   const [vessels, setVessels] = useState<Vessel[]>([]);
 
@@ -61,8 +61,8 @@ export default function BiFilters({ onFilterChange }: BiFiltersProps) {
     const resetFilters: FilterValues = {
       startDate: "",
       endDate: "",
-      vesselId: "",
-      standard: "",
+      vesselId: "all",
+      standard: "all",
     };
     setFilters(resetFilters);
     onFilterChange(resetFilters);
@@ -108,7 +108,7 @@ export default function BiFilters({ onFilterChange }: BiFiltersProps) {
                 <SelectValue placeholder="Todas as embarcações" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas as embarcações</SelectItem>
+                <SelectItem value="all">Todas as embarcações</SelectItem>
                 {vessels.map((vessel) => (
                   <SelectItem key={vessel.id} value={vessel.id}>
                     {vessel.name}
@@ -125,7 +125,7 @@ export default function BiFilters({ onFilterChange }: BiFiltersProps) {
                 <SelectValue placeholder="Todas as normas" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas as normas</SelectItem>
+                <SelectItem value="all">Todas as normas</SelectItem>
                 <SelectItem value="IMCA">IMCA</SelectItem>
                 <SelectItem value="ISO">ISO</SelectItem>
                 <SelectItem value="NORMAM">NORMAM</SelectItem>
