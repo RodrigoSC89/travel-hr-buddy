@@ -1,17 +1,22 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+
+interface MetricData {
+  auditoria_id: string;
+  falhas_criticas: number;
+}
 
 export function PainelMetricasRisco() {
-  const [dados, setDados] = useState<any[]>([])
+  const [dados, setDados] = useState<MetricData[]>([]);
 
   useEffect(() => {
     fetch("/api/admin/metrics")
       .then((res) => res.json())
-      .then((data) => setDados(data))
-  }, [])
+      .then((data) => setDados(data));
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -37,5 +42,5 @@ export function PainelMetricasRisco() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
