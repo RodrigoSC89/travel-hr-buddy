@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ModuleActionButton from "@/components/ui/module-action-button";
@@ -22,6 +23,7 @@ import {
 } from "lucide-react";
 
 const SGSO = () => {
+  const navigate = useNavigate();
   const { handleCreate, handleGenerateReport, handleExport, handleRefresh, showInfo } = useMaritimeActions();
   return (
     <ModulePageWrapper gradient="orange">
@@ -68,6 +70,12 @@ const SGSO = () => {
             label: "Auditorias",
             icon: <FileCheck className="h-3 w-3" />,
             action: () => showInfo("Auditorias", "Abrindo planejamento de auditorias")
+          },
+          {
+            id: "audits-imca",
+            label: "Auditorias IMCA",
+            icon: <FileCheck className="h-3 w-3" />,
+            action: () => navigate("/auditorias-imca")
           },
           {
             id: "training",
