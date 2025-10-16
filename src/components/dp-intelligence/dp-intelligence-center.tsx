@@ -13,8 +13,10 @@ import {
   Filter,
   BookOpen,
   Lightbulb,
-  CheckSquare
+  CheckSquare,
+  Ship
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -42,6 +44,7 @@ interface AnalysisResult {
 }
 
 const DPIntelligenceCenter = () => {
+  const navigate = useNavigate();
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [filteredIncidents, setFilteredIncidents] = useState<Incident[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -318,6 +321,38 @@ const DPIntelligenceCenter = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* IMCA Technical Audit Quick Access */}
+      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <CardContent className="pt-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-blue-600 rounded-lg">
+                <Ship className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Auditoria Técnica IMCA</h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Gere auditorias técnicas completas baseadas nas normas IMCA, IMO e MTS
+                </p>
+                <div className="flex gap-2 mt-2">
+                  <Badge variant="secondary" className="text-xs">10 Normas</Badge>
+                  <Badge variant="secondary" className="text-xs">12 Módulos</Badge>
+                  <Badge variant="secondary" className="text-xs">IA GPT-4o</Badge>
+                </div>
+              </div>
+            </div>
+            <Button 
+              size="lg"
+              onClick={() => navigate("/imca-audit")}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Gerar Auditoria
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Search and Filter Section */}
       <Card>
