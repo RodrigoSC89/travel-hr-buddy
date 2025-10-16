@@ -3,17 +3,18 @@ import { render, screen, waitFor } from "@testing-library/react";
 import DashboardAuditorias from "@/pages/admin/dashboard-auditorias";
 
 // Mock fetch
-global.fetch = vi.fn();
+const mockFetch = vi.fn();
+global.fetch = mockFetch as unknown as typeof fetch;
 
 describe("Dashboard Auditorias", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (global.fetch as any).mockResolvedValue({
+    mockFetch.mockResolvedValue({
       json: async () => [
         { nome_navio: "Vessel A", total: 10 },
         { nome_navio: "Vessel B", total: 5 },
       ],
-    });
+    } as Response);
   });
 
   it("should render the dashboard title", () => {
