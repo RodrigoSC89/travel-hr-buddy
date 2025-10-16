@@ -88,6 +88,9 @@ const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
 const TemplateEditorPage = React.lazy(() => import("./pages/admin/templates/editor"));
 const MMIJobsPanel = React.lazy(() => import("./pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("./pages/MmiBI"));
+const MMIDashboard = React.lazy(() => import("./pages/MMIDashboard"));
+const SmartWorkflow = React.lazy(() => import("./pages/SmartWorkflow"));
+const Forecast = React.lazy(() => import("./pages/Forecast"));
 const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAnalysis"));
 const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreationWithSimilarExamples"));
 const CopilotJobForm = React.lazy(() => import("./pages/admin/copilot-job-form"));
@@ -177,9 +180,12 @@ function App() {
                       <Route path="/maritime" element={<Maritime />} />
                       <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
                       <Route path="/nautilus-one" element={<NautilusOne />} />
+                      <Route path="/mmi" element={<MMIDashboard />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
                       <Route path="/mmi/job-creation-demo" element={<JobCreationWithSimilarExamples />} />
+                      <Route path="/smart-workflow" element={<SmartWorkflow />} />
+                      <Route path="/forecast" element={<Forecast />} />
                       <Route path="/innovation" element={<Innovation />} />
                       <Route path="/optimization" element={<Optimization />} />
                       <Route path="/collaboration" element={<Collaboration />} />
