@@ -1,6 +1,46 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { fetchJobs, postponeJob, createWorkOrder } from "@/services/mmi/jobsApi";
 
+// Mock Supabase client to avoid network calls during tests
+vi.mock("@/integrations/supabase/client", () => ({
+  supabase: {
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        order: vi.fn(() => ({
+          data: null,
+          error: { message: "Mocked error - using fallback" }
+        })),
+        eq: vi.fn(() => ({
+          single: vi.fn(() => ({
+            data: null,
+            error: { message: "Mocked error - using fallback" }
+          }))
+        }))
+      })),
+      insert: vi.fn(() => ({
+        select: vi.fn(() => ({
+          single: vi.fn(() => ({
+            data: null,
+            error: { message: "Mocked error - using fallback" }
+          }))
+        }))
+      })),
+      update: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          data: null,
+          error: null
+        }))
+      }))
+    })),
+    functions: {
+      invoke: vi.fn(() => Promise.resolve({
+        data: null,
+        error: { message: "Mocked error - using fallback" }
+      }))
+    }
+  }
+}));
+
 describe("MMI Jobs API Service", () => {
   beforeEach(() => {
     // Clear any mocks before each test
