@@ -91,6 +91,7 @@ const MmiBI = React.lazy(() => import("./pages/MmiBI"));
 const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAnalysis"));
 const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreationWithSimilarExamples"));
 const CopilotJobForm = React.lazy(() => import("./pages/admin/copilot-job-form"));
+const HistoricoAuditorias = React.lazy(() => import("./pages/admin/auditoria-imca/historico"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -208,6 +209,7 @@ function App() {
                       <Route path="/admin/assistant/history" element={<AssistantLogs />} />
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
                       <Route path="/admin/copilot-job-form" element={<CopilotJobForm />} />
+                      <Route path="/admin/auditoria-imca/historico" element={<HistoricoAuditorias />} />
                       <Route path="/admin/workflows" element={<SmartWorkflows />} />
                       <Route path="/admin/workflows/:id" element={<WorkflowDetail />} />
                       <Route path="/admin/documents" element={<DocumentList />} />
