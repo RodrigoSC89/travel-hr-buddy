@@ -8,9 +8,35 @@ const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY |
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
+// Safe storage adapter that checks for localStorage availability
+// This prevents crashes in environments where localStorage is not available (e.g., Cloudflare Workers, SSR)
+const safeLocalStorage = (() => {
+  try {
+    if (typeof window !== "undefined" && window.localStorage) {
+      // Test if we can actually use localStorage (may throw in private browsing mode)
+      window.localStorage.setItem("__storage_test__", "test");
+      window.localStorage.removeItem("__storage_test__");
+      return window.localStorage;
+    }
+  } catch (e) {
+    console.warn("localStorage is not available, using in-memory storage fallback");
+  }
+  
+  // Fallback to in-memory storage when localStorage is not available
+  const memoryStorage: Record<string, string> = {};
+  return {
+    getItem: (key: string) => memoryStorage[key] || null,
+    setItem: (key: string, value: string) => { memoryStorage[key] = value; },
+    removeItem: (key: string) => { delete memoryStorage[key]; },
+    clear: () => { Object.keys(memoryStorage).forEach(key => delete memoryStorage[key]); },
+    key: (index: number) => Object.keys(memoryStorage)[index] || null,
+    length: Object.keys(memoryStorage).length,
+  };
+})();
+
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    storage: localStorage,
+    storage: safeLocalStorage,
     persistSession: true,
     autoRefreshToken: true,
   },
