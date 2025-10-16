@@ -2424,6 +2424,33 @@ export type Database = {
         }
         Relationships: []
       }
+      forecast_history: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          forecast_summary: string
+          id: string
+          source: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          forecast_summary: string
+          id?: string
+          source?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          forecast_summary?: string
+          id?: string
+          source?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       flight_price_history: {
         Row: {
           airline_code: string
