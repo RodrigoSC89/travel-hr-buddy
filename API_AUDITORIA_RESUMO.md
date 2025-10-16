@@ -2,7 +2,7 @@
 
 ## 📋 Visão Geral
 
-Endpoint REST que fornece um resumo de auditorias IMCA agrupadas por navio, com suporte para filtros por data e usuário.
+Endpoint REST que fornece um resumo de auditorias PEOTRAM agrupadas por navio, com suporte para filtros por data e usuário.
 
 ## 🔗 Endpoint
 
@@ -16,7 +16,7 @@ GET /api/auditoria/resumo
 |-----------|--------|-----------|---------|
 | `start`   | string | Data inicial do filtro (formato ISO: YYYY-MM-DD) | `2025-10-01` |
 | `end`     | string | Data final do filtro (formato ISO: YYYY-MM-DD) | `2025-10-31` |
-| `user_id` | string | UUID do usuário para filtrar auditorias | `123e4567-e89b-12d3-a456-426614174000` |
+| `user_id` | string | UUID do usuário criador para filtrar auditorias | `123e4567-e89b-12d3-a456-426614174000` |
 
 ## 📤 Resposta
 
@@ -160,10 +160,12 @@ Este endpoint requer autenticação via Supabase Service Role Key, configurada a
 
 ## 🗄️ Fonte de Dados
 
-O endpoint consulta a tabela `auditorias_imca` no Supabase, selecionando os campos:
-- `nome_navio`: Nome do navio auditado
-- `created_at`: Data de criação da auditoria
-- `user_id`: UUID do usuário que criou a auditoria
+O endpoint consulta a tabela `peotram_audits` no Supabase com join para a tabela `vessels`, selecionando os campos:
+- `id`: ID da auditoria
+- `audit_date`: Data da auditoria
+- `created_by`: UUID do usuário que criou a auditoria
+- `vessel_id`: ID do navio (chave estrangeira)
+- `vessels.name`: Nome do navio (via join)
 
 ## 🔧 Implementação Técnica
 
@@ -176,10 +178,11 @@ O endpoint consulta a tabela `auditorias_imca` no Supabase, selecionando os camp
 ### Lógica de Agregação
 
 O endpoint:
-1. Consulta a tabela `auditorias_imca` com os filtros fornecidos
-2. Agrupa os resultados por `nome_navio`
-3. Conta o número de auditorias para cada navio
-4. Retorna um array com o resumo
+1. Consulta a tabela `peotram_audits` com join para `vessels` usando os filtros fornecidos
+2. Extrai o nome do navio de `vessels.name` (ou "Sem Navio" se não houver)
+3. Agrupa os resultados por nome do navio
+4. Conta o número de auditorias para cada navio
+5. Retorna um array com o resumo
 
 ### Tratamento de Erros
 
@@ -189,19 +192,21 @@ O endpoint:
 
 ## 📊 Performance
 
-- **Filtros otimizados**: Uso de índices no banco de dados para `created_at` e `user_id`
+- **Filtros otimizados**: Uso de índices no banco de dados para `audit_date` e `created_by`
+- **Join eficiente**: Relacionamento otimizado entre `peotram_audits` e `vessels`
 - **Agregação eficiente**: Processamento em memória de resultados agrupados
 - **Resposta rápida**: Queries otimizadas com seleção específica de campos
 
 ## 🧪 Testes
 
-O endpoint possui 48 testes automatizados que cobrem:
+O endpoint possui 49 testes automatizados que cobrem:
 - Validação de métodos HTTP
 - Parâmetros de query
 - Filtros e combinações
 - Formato de resposta
 - Tratamento de erros
-- Agregação de dados
+- Agregação de dados com join de vessels
+- Casos de dados faltantes
 
 Execute os testes com:
 
@@ -215,6 +220,8 @@ npm test src/tests/auditoria-resumo-api.test.ts
 - Os filtros de data (`start` e `end`) devem ser usados em conjunto
 - O formato de data esperado é ISO 8601 (YYYY-MM-DD)
 - O campo `user_id` deve ser um UUID válido
+- Auditorias sem navio associado aparecem como "Sem Navio"
+- Usa join com tabela `vessels` para obter nomes dos navios
 
 ## 🔗 Recursos Relacionados
 
@@ -225,6 +232,7 @@ npm test src/tests/auditoria-resumo-api.test.ts
 ## ✅ Status
 
 **Status**: ✅ Pronto para produção  
-**Versão**: 1.0.0  
-**Data de implementação**: 2025-10-16  
-**Testes**: 48 testes passando
+**Versão**: 2.0.0  
+**Data de atualização**: 2025-10-16  
+**Testes**: 49 testes passando  
+**Mudanças**: Migrado de `auditorias_imca` para `peotram_audits` com join de `vessels`
