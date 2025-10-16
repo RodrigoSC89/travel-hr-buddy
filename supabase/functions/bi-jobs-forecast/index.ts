@@ -84,12 +84,17 @@ Gere uma previsão clara e acionável em formato de texto.`;
 
     // Save forecast to database for tracking
     try {
+      // Extract summary from forecast (first 200 characters)
+      const forecast_summary = forecast.substring(0, 200) + (forecast.length > 200 ? '...' : '');
+      
       const { error: saveError } = await supabase
-        .from("ai_jobs_forecasts")
+        .from("forecast_history")
         .insert({
-          trend_data: trend,
+          forecast_summary: forecast_summary,
           forecast: forecast,
-          generated_at: new Date().toISOString(),
+          source: 'AI',
+          created_by: 'bi-jobs-forecast',
+          trend_data: trend,
         });
 
       if (saveError) {

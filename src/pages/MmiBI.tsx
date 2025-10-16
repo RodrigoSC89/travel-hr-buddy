@@ -6,6 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } fro
 import DashboardJobs from "@/components/bi/DashboardJobs";
 import JobsTrendChart from "@/components/bi/JobsTrendChart";
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
+import { ForecastHistoryList } from "@/components/bi/ForecastHistoryList";
 import { ExportBIReport } from "@/components/bi/ExportPDF";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -97,6 +98,9 @@ export default function MmiBI() {
 
       {/* JobsForecastReport Component - Shows AI-powered forecast */}
       <JobsForecastReport trend={trendData} onForecastUpdate={setForecastText} />
+
+      {/* ForecastHistoryList Component - Shows historical forecasts */}
+      <ForecastHistoryList />
     </div>
   );
 }
