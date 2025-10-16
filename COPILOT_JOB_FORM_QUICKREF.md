@@ -1,5 +1,11 @@
 # JobFormWithExamples Quick Reference
 
+## 🎯 Demo Page
+
+**Live Demo**: Navigate to `/copilot/job-form` in your application to see the component in action with comprehensive examples and documentation.
+
+Alternative admin route: `/admin/copilot-job-form`
+
 ## 🚀 Quick Start
 
 ```tsx
