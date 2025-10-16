@@ -58,10 +58,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (error) return res.status(500).json({ error: error.message });
 
-    // 🔁 Gerar sugestão técnica com IA (comentário automático)
-    const iaPrompt = `Você é um auditor técnico baseado nas normas IMCA. Dado o seguinte comentário de um usuário:
+    // 🔁 Gerar resposta técnica com IA
+    const iaPrompt = `Você é um auditor técnico baseado nas normas IMCA. Dado o seguinte comentário:
 "${comentario}"
-Gere uma resposta técnica sucinta com base nas melhores práticas de auditoria offshore.`;
+
+Responda tecnicamente.
+
+Avalie se há algum risco ou falha crítica mencionada.
+
+Se houver falha crítica, comece a resposta com: "⚠️ Atenção: "`;
 
     try {
       const iaResposta = await openai.chat.completions.create({
