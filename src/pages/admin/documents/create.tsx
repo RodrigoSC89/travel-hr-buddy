@@ -41,15 +41,14 @@ export default function CreateDocumentPage() {
     try {
       setSaving(true);
       
-      // Insert document into the documents table
+      // Insert document into the ai_generated_documents table
       const { data, error } = await supabase
-        .from("documents")
+        .from("ai_generated_documents")
         .insert({
           title,
-          description,
           content,
-          created_by: user.id,
-          updated_by: user.id,
+          prompt: description || `Documento criado manualmente: ${title}`,
+          generated_by: user.id,
         })
         .select()
         .single();
