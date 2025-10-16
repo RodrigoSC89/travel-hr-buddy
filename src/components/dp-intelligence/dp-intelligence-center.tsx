@@ -13,8 +13,10 @@ import {
   Filter,
   BookOpen,
   Lightbulb,
-  CheckSquare
+  CheckSquare,
+  ClipboardCheck
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -42,6 +44,7 @@ interface AnalysisResult {
 }
 
 const DPIntelligenceCenter = () => {
+  const navigate = useNavigate();
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [filteredIncidents, setFilteredIncidents] = useState<Incident[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -318,6 +321,32 @@ const DPIntelligenceCenter = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* IMCA Audit Quick Access */}
+      <Card className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950 dark:to-blue-950 border-indigo-200 dark:border-indigo-800">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-indigo-600 rounded-lg">
+                <ClipboardCheck className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Gerador de Auditoria Técnica IMCA</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Crie auditorias técnicas de DP com análise por IA seguindo normas IMCA, IMO e MTS
+                </p>
+              </div>
+            </div>
+            <Button 
+              onClick={() => navigate("/imca-audit")}
+              className="bg-indigo-600 hover:bg-indigo-700"
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Gerar Auditoria
+            </Button>
+          </div>
+        </CardHeader>
+      </Card>
 
       {/* Search and Filter Section */}
       <Card>
