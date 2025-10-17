@@ -283,7 +283,7 @@ describe("DPIntelligenceCenter Component", () => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
       });
       
-      const analyzeButtons = screen.getAllByText(/Analisar IA/i);
+      const analyzeButtons = screen.getAllByText(/Explicar com IA/i);
       fireEvent.click(analyzeButtons[0]);
       
       await waitFor(() => {
