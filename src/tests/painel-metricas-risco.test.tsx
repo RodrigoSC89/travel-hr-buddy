@@ -21,7 +21,7 @@ describe("PainelMetricasRisco", () => {
 
   it("should render a card component", () => {
     const { container } = render(<PainelMetricasRisco />);
-    const card = container.querySelector('[class*="space-y-4"]');
+    const card = container.querySelector("[class*=\"space-y-4\"]");
     expect(card).toBeInTheDocument();
   });
 });

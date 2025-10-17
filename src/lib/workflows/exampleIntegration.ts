@@ -153,7 +153,7 @@ export function getTemplateSummary(): {
   alta: number;
   media: number;
   baixa: number;
-} {
+  } {
   return {
     total: workflowSuggestionTemplates.length,
     alta: workflowSuggestionTemplates.filter((t) => t.criticidade === "Alta").length,

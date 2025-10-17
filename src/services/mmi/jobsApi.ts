@@ -166,7 +166,7 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
 
   // Fallback to mock data
   // Only add delay if not in test environment
-  if (typeof process !== 'undefined' && process.env?.NODE_ENV !== 'test') {
+  if (typeof process !== "undefined" && process.env?.NODE_ENV !== "test") {
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
   return { jobs: mockJobs.map(convertToMMIJob) };
