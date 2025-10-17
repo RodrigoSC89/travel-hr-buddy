@@ -20,6 +20,8 @@ vi.mock("@/components/bi", () => ({
   DashboardJobs: () => <div data-testid="dashboard-jobs">DashboardJobs Component</div>,
   JobsTrendChart: () => <div data-testid="jobs-trend-chart">JobsTrendChart Component</div>,
   JobsForecastReport: () => <div data-testid="jobs-forecast-report">JobsForecastReport Component</div>,
+  ComplianceByVesselChart: () => <div data-testid="compliance-by-vessel-chart">ComplianceByVesselChart Component</div>,
+  ComplianceByVesselTable: () => <div data-testid="compliance-by-vessel-table">ComplianceByVesselTable Component</div>,
 }));
 
 describe("AdminBI Page", () => {
@@ -57,7 +59,7 @@ describe("AdminBI Page", () => {
     expect(screen.getByText(/Análise de dados de manutenção com visualizações e previsões de IA/i)).toBeDefined();
   });
 
-  it("should render all three BI components", () => {
+  it("should render all BI components including compliance by vessel", () => {
     vi.mocked(supabase.rpc).mockResolvedValue({
       data: [],
       error: null,
@@ -70,6 +72,8 @@ describe("AdminBI Page", () => {
     );
     
     expect(screen.getByTestId("painel-bi")).toBeDefined();
+    expect(screen.getByTestId("compliance-by-vessel-chart")).toBeDefined();
+    expect(screen.getByTestId("compliance-by-vessel-table")).toBeDefined();
     expect(screen.getByTestId("dashboard-jobs")).toBeDefined();
     expect(screen.getByTestId("jobs-trend-chart")).toBeDefined();
     expect(screen.getByTestId("jobs-forecast-report")).toBeDefined();
