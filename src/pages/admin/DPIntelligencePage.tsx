@@ -22,7 +22,7 @@ type Incident = {
   root_cause?: string;
   class_dp?: string;
   severity?: string;
-  gpt_analysis?: any;
+  gpt_analysis?: Record<string, unknown>;
   updated_at?: string;
 };
 
@@ -66,7 +66,7 @@ export default function DPIntelligencePage() {
     }
   }
 
-  function determineSeverity(incident: any): string {
+  function determineSeverity(incident: Incident): string {
     const criticalKeywords = ["loss of position", "drive off", "blackout"];
     const highKeywords = ["thruster failure", "reference loss", "pms"];
 
