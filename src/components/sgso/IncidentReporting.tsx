@@ -13,6 +13,8 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { IncidentAIClassificationModal } from "@/components/sgso/IncidentAIClassificationModal";
+import { IncidentClassification } from "@/lib/ai/classifyIncidentWithAI";
 import {
   Bell,
   AlertTriangle,
@@ -23,7 +25,8 @@ import {
   Search,
   Filter,
   Plus,
-  Eye
+  Eye,
+  Sparkles
 } from "lucide-react";
 
 interface Incident {
@@ -143,6 +146,8 @@ export const IncidentReporting: React.FC = () => {
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchDialog, setShowSearchDialog] = useState(false);
+  const [showAIModal, setShowAIModal] = useState(false);
+  const [aiClassification, setAIClassification] = useState<IncidentClassification | null>(null);
   const [filterSeverity, setFilterSeverity] = useState({
     critical: true,
     high: true,
@@ -170,6 +175,21 @@ export const IncidentReporting: React.FC = () => {
       title: "🔍 Busca de Incidentes",
       description: "Digite o número do incidente, título ou palavra-chave"
     });
+  };
+
+  const handleOpenAIClassification = () => {
+    setShowAIModal(true);
+  };
+
+  const handleClassificationComplete = (classification: IncidentClassification) => {
+    setAIClassification(classification);
+    toast({
+      title: "✨ Classificação aplicada",
+      description: `Categoria: ${classification.sgso_category}, Risco: ${classification.sgso_risk_level}`,
+    });
+    // Here you would typically save this to your incident form state
+    // For now, we'll just log it
+    console.log("AI Classification applied:", classification);
   };
 
   const filteredIncidents = SAMPLE_INCIDENTS.filter(incident => {
@@ -250,10 +270,19 @@ export const IncidentReporting: React.FC = () => {
                 Registro, investigação e acompanhamento de incidentes
               </CardDescription>
             </div>
-            <Button className="bg-red-600 hover:bg-red-700 text-white font-semibold">
-              <Plus className="h-4 w-4 mr-2" />
-              Novo Incidente
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={handleOpenAIClassification}
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
+              >
+                <Sparkles className="h-4 w-4 mr-2" />
+                Classificar com IA
+              </Button>
+              <Button className="bg-red-600 hover:bg-red-700 text-white font-semibold">
+                <Plus className="h-4 w-4 mr-2" />
+                Novo Incidente
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -491,6 +520,13 @@ export const IncidentReporting: React.FC = () => {
           </Tabs>
         </CardContent>
       </Card>
+
+      {/* AI Classification Modal */}
+      <IncidentAIClassificationModal
+        open={showAIModal}
+        onOpenChange={setShowAIModal}
+        onClassificationComplete={handleClassificationComplete}
+      />
     </div>
   );
 };
