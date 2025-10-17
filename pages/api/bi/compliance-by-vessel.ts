@@ -61,7 +61,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Return formatted data
     return res.status(200).json(
-      data.map((row: any) => ({
+      data.map((row: {
+        vessel: string;
+        total: number;
+        concluido: number;
+        andamento: number;
+        pendente: number;
+      }) => ({
         vessel: row.vessel,
         total: row.total,
         concluido: row.concluido,
