@@ -35,25 +35,18 @@ export default function ListaAuditoriasIMCA() {
   const [plano, setPlano] = useState<Record<string, string>>({});
   const pdfRef = useRef<HTMLDivElement>(null);
 
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
   useEffect(() => {
     carregarDados();
   }, []);
 
   const carregarDados = async () => {
     try {
-      const response = await fetch(
-        `${supabaseUrl}/functions/v1/auditorias-lista`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${supabaseAnonKey}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch("/api/auditorias/list", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Erro ao carregar dados");
@@ -132,10 +125,9 @@ export default function ListaAuditoriasIMCA() {
     setLoadingIA(id);
     try {
       // Get explanation
-      const resExplain = await fetch(`${supabaseUrl}/functions/v1/auditorias-explain`, {
+      const resExplain = await fetch("/api/auditorias/explain", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${supabaseAnonKey}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ navio, item, norma }),
@@ -144,10 +136,9 @@ export default function ListaAuditoriasIMCA() {
       setExplicacao((prev) => ({ ...prev, [id]: dataExplain.resultado }));
 
       // Get action plan
-      const resPlano = await fetch(`${supabaseUrl}/functions/v1/auditorias-plano`, {
+      const resPlano = await fetch("/api/auditorias/plano", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${supabaseAnonKey}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ navio, item, norma }),
