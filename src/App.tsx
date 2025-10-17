@@ -96,6 +96,7 @@ const DashboardAuditorias = React.lazy(() => import("./pages/admin/dashboard-aud
 const MetricasRisco = React.lazy(() => import("./pages/admin/metricas-risco"));
 const AdminSGSO = React.lazy(() => import("./pages/admin/sgso"));
 const AuditoriasIMCA = React.lazy(() => import("./pages/admin/auditorias-imca"));
+const ComentariosAuditoriaDemo = React.lazy(() => import("./pages/demo/ComentariosAuditoria"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -242,6 +243,7 @@ function App() {
                       <Route path="/modules" element={<Modules />} />
                       <Route path="/smart-layout-demo" element={<SmartLayoutDemo />} />
                       <Route path="/template-editor-demo" element={<TemplateEditorDemo />} />
+                      <Route path="/demo/comentarios-auditoria" element={<ComentariosAuditoriaDemo />} />
                       <Route path="/_offline" element={<Offline />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
