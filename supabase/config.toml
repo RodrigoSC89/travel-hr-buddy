@@ -28,6 +28,9 @@ verify_jwt = false
 [functions.send-real-forecast]
 verify_jwt = false
 
+[functions.resend_pending_plans]
+verify_jwt = false
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)
@@ -80,3 +83,9 @@ name = "send-real-forecast"
 function_name = "send-real-forecast"
 schedule = "0 8 * * *"  # Every day at 08:00 UTC (05:00 BRT)
 description = "MMI: Send daily real forecast report for maintenance by component"
+
+[[edge_runtime.cron]]
+name = "resend-pending-plans"
+function_name = "resend_pending_plans"
+schedule = "0 8 * * *"  # Every day at 08:00 UTC (05:00 BRT)
+description = "DP: Resend pending action plans older than 7 days via email"
