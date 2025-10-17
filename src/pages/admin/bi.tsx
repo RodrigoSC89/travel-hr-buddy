@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DashboardJobs, JobsTrendChart, JobsForecastReport } from "@/components/bi";
+import { DashboardJobs, JobsTrendChart, JobsForecastReport, PainelBI } from "@/components/bi";
 import { supabase } from "@/integrations/supabase/client";
 
 interface JobTrendData {
@@ -47,6 +47,9 @@ export default function AdminBI() {
       </div>
 
       <div className="grid gap-6">
+        {/* IMCA Compliance Panel */}
+        <PainelBI />
+
         {/* Jobs by Component Analysis */}
         <DashboardJobs />
 

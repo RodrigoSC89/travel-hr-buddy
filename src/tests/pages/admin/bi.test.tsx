@@ -16,6 +16,7 @@ vi.mock("@/integrations/supabase/client", () => ({
 
 // Mock the BI components
 vi.mock("@/components/bi", () => ({
+  PainelBI: () => <div data-testid="painel-bi">PainelBI Component</div>,
   DashboardJobs: () => <div data-testid="dashboard-jobs">DashboardJobs Component</div>,
   JobsTrendChart: () => <div data-testid="jobs-trend-chart">JobsTrendChart Component</div>,
   JobsForecastReport: () => <div data-testid="jobs-forecast-report">JobsForecastReport Component</div>,
@@ -68,6 +69,7 @@ describe("AdminBI Page", () => {
       </BrowserRouter>
     );
     
+    expect(screen.getByTestId("painel-bi")).toBeDefined();
     expect(screen.getByTestId("dashboard-jobs")).toBeDefined();
     expect(screen.getByTestId("jobs-trend-chart")).toBeDefined();
     expect(screen.getByTestId("jobs-forecast-report")).toBeDefined();
