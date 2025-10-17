@@ -124,114 +124,6 @@ export type Database = {
         }
         Relationships: []
       }
-      ai_generated_documents: {
-        Row: {
-          id: string
-          title: string
-          content: string
-          prompt: string
-          generated_by: string | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          title: string
-          content: string
-          prompt: string
-          generated_by?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          title?: string
-          content?: string
-          prompt?: string
-          generated_by?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      document_comments: {
-        Row: {
-          content: string
-          created_at: string
-          document_id: string
-          id: string
-          user_id: string | null
-        }
-        Insert: {
-          content: string
-          created_at?: string
-          document_id: string
-          id?: string
-          user_id?: string | null
-        }
-        Update: {
-          content?: string
-          created_at?: string
-          document_id?: string
-          id?: string
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "document_comments_document_id_fkey"
-            columns: ["document_id"]
-            isOneToOne: false
-            referencedRelation: "ai_generated_documents"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "document_comments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      document_versions: {
-        Row: {
-          content: string
-          created_at: string | null
-          document_id: string
-          id: string
-          updated_by: string | null
-        }
-        Insert: {
-          content: string
-          created_at?: string | null
-          document_id: string
-          id?: string
-          updated_by?: string | null
-        }
-        Update: {
-          content?: string
-          created_at?: string | null
-          document_id?: string
-          id?: string
-          updated_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "document_versions_document_id_fkey"
-            columns: ["document_id"]
-            isOneToOne: false
-            referencedRelation: "ai_generated_documents"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "document_versions_updated_by_fkey"
-            columns: ["updated_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       ai_suggestions: {
         Row: {
           action_data: Json | null
@@ -2424,33 +2316,6 @@ export type Database = {
         }
         Relationships: []
       }
-      forecast_history: {
-        Row: {
-          created_at: string | null
-          created_by: string | null
-          forecast_summary: string
-          id: string
-          source: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          created_by?: string | null
-          forecast_summary: string
-          id?: string
-          source?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          created_by?: string | null
-          forecast_summary?: string
-          id?: string
-          source?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
       flight_price_history: {
         Row: {
           airline_code: string
@@ -3123,148 +2988,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      mmi_jobs: {
-        Row: {
-          asset_name: string | null
-          can_postpone: boolean | null
-          component_name: string | null
-          created_at: string
-          created_by: string | null
-          due_date: string | null
-          id: string
-          job_id: string
-          priority: string | null
-          status: string | null
-          suggestion_ia: string | null
-          title: string
-          updated_at: string
-          vessel_name: string | null
-        }
-        Insert: {
-          asset_name?: string | null
-          can_postpone?: boolean | null
-          component_name?: string | null
-          created_at?: string
-          created_by?: string | null
-          due_date?: string | null
-          id?: string
-          job_id: string
-          priority?: string | null
-          status?: string | null
-          suggestion_ia?: string | null
-          title: string
-          updated_at?: string
-          vessel_name?: string | null
-        }
-        Update: {
-          asset_name?: string | null
-          can_postpone?: boolean | null
-          component_name?: string | null
-          created_at?: string
-          created_by?: string | null
-          due_date?: string | null
-          id?: string
-          job_id?: string
-          priority?: string | null
-          status?: string | null
-          suggestion_ia?: string | null
-          title?: string
-          updated_at?: string
-          vessel_name?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "mmi_jobs_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      mmi_os_resolvidas: {
-        Row: {
-          acao_realizada: string | null
-          causa_confirmada: string | null
-          componente: string | null
-          created_at: string | null
-          descricao_tecnica: string | null
-          duracao_execucao: string | null
-          efetiva: boolean | null
-          evidencia_url: string | null
-          id: string
-          job_id: string | null
-          os_id: string
-          resolvido_em: string | null
-        }
-        Insert: {
-          acao_realizada?: string | null
-          causa_confirmada?: string | null
-          componente?: string | null
-          created_at?: string | null
-          descricao_tecnica?: string | null
-          duracao_execucao?: string | null
-          efetiva?: boolean | null
-          evidencia_url?: string | null
-          id?: string
-          job_id?: string | null
-          os_id: string
-          resolvido_em?: string | null
-        }
-        Update: {
-          acao_realizada?: string | null
-          causa_confirmada?: string | null
-          componente?: string | null
-          created_at?: string | null
-          descricao_tecnica?: string | null
-          duracao_execucao?: string | null
-          efetiva?: boolean | null
-          evidencia_url?: string | null
-          id?: string
-          job_id?: string | null
-          os_id?: string
-          resolvido_em?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "mmi_os_resolvidas_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "mmi_jobs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      modules: {
-        Row: {
-          created_at: string
-          description: string
-          id: string
-          name: string
-          path: string
-          status: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          description: string
-          id?: string
-          name: string
-          path: string
-          status: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          id?: string
-          name?: string
-          path?: string
-          status?: string
-          updated_at?: string
-        }
-        Relationships: []
       }
       nautilus_messages: {
         Row: {
@@ -6598,64 +6321,15 @@ export type Database = {
           },
         ]
       }
-      templates: {
-        Row: {
-          id: string
-          title: string
-          content: string
-          created_by: string
-          created_at: string
-          updated_at: string
-          is_favorite: boolean
-          is_private: boolean
-        }
-        Insert: {
-          id?: string
-          title: string
-          content: string
-          created_by: string
-          created_at?: string
-          updated_at?: string
-          is_favorite?: boolean
-          is_private?: boolean
-        }
-        Update: {
-          id?: string
-          title?: string
-          content?: string
-          created_by?: string
-          created_at?: string
-          updated_at?: string
-          is_favorite?: boolean
-          is_private?: boolean
-        }
-        Relationships: [
-          {
-            foreignKeyName: "templates_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
     }
     Views: {
-      mmi_os_ia_feed: {
-        Row: {
-          acao_realizada: string | null
-          causa_confirmada: string | null
-          componente: string | null
-          descricao_tecnica: string | null
-          duracao_execucao: string | null
-          efetiva: boolean | null
-          job_id: string | null
-          resolvido_em: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
+      binary_quantize: {
+        Args: { "": string } | { "": unknown }
+        Returns: unknown
+      }
       calculate_checklist_compliance_score: {
         Args: { checklist_items: Json }
         Returns: number
@@ -6742,6 +6416,22 @@ export type Database = {
         Args: { tenant_uuid: string; user_uuid?: string }
         Returns: string
       }
+      halfvec_avg: {
+        Args: { "": number[] }
+        Returns: unknown
+      }
+      halfvec_out: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      halfvec_send: {
+        Args: { "": unknown }
+        Returns: string
+      }
+      halfvec_typmod_in: {
+        Args: { "": unknown[] }
+        Returns: number
+      }
       has_feature_permission: {
         Args: {
           feature_name: string
@@ -6758,9 +6448,79 @@ export type Database = {
         }
         Returns: boolean
       }
+      hnsw_bit_support: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      hnsw_halfvec_support: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      hnsw_sparsevec_support: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      hnswhandler: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
       is_admin: {
         Args: { _user_id: string }
         Returns: boolean
+      }
+      ivfflat_bit_support: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      ivfflat_halfvec_support: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      ivfflathandler: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      jobs_trend_by_month: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          count: number
+          month: string
+        }[]
+      }
+      l2_norm: {
+        Args: { "": unknown } | { "": unknown }
+        Returns: number
+      }
+      l2_normalize: {
+        Args: { "": string } | { "": unknown } | { "": unknown }
+        Returns: unknown
+      }
+      match_mmi_jobs: {
+        Args: {
+          match_count?: number
+          match_threshold?: number
+          query_embedding: string
+        }
+        Returns: {
+          component_id: string
+          created_at: string
+          description: string
+          id: string
+          similarity: number
+          title: string
+        }[]
+      }
+      sparsevec_out: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      sparsevec_send: {
+        Args: { "": unknown }
+        Returns: string
+      }
+      sparsevec_typmod_in: {
+        Args: { "": unknown[] }
+        Returns: number
       }
       user_belongs_to_org: {
         Args: { _org_id: string; _user_id: string }
@@ -6785,6 +6545,30 @@ export type Database = {
       user_is_org_admin: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
+      }
+      vector_avg: {
+        Args: { "": number[] }
+        Returns: string
+      }
+      vector_dims: {
+        Args: { "": string } | { "": unknown }
+        Returns: number
+      }
+      vector_norm: {
+        Args: { "": string }
+        Returns: number
+      }
+      vector_out: {
+        Args: { "": string }
+        Returns: unknown
+      }
+      vector_send: {
+        Args: { "": string }
+        Returns: string
+      }
+      vector_typmod_in: {
+        Args: { "": unknown[] }
+        Returns: number
       }
     }
     Enums: {
@@ -6936,4 +6720,4 @@ export const Constants = {
       ],
     },
   },
-} as const;
+} as const

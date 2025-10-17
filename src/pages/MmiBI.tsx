@@ -35,15 +35,7 @@ export default function MmiBI() {
         
         if (error) {
           console.error("Error fetching trend data:", error);
-          // Fallback to mock data
-          setTrendData([
-            { month: "2025-05", total_jobs: 12, monthLabel: "mai de 2025" },
-            { month: "2025-06", total_jobs: 15, monthLabel: "jun de 2025" },
-            { month: "2025-07", total_jobs: 18, monthLabel: "jul de 2025" },
-            { month: "2025-08", total_jobs: 14, monthLabel: "ago de 2025" },
-            { month: "2025-09", total_jobs: 20, monthLabel: "set de 2025" },
-            { month: "2025-10", total_jobs: 16, monthLabel: "out de 2025" },
-          ]);
+          setTrendData([]);
         } else {
           setTrendData(result || []);
         }
