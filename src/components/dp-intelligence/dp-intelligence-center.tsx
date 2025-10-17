@@ -13,7 +13,8 @@ import {
   Filter,
   BookOpen,
   Lightbulb,
-  CheckSquare
+  CheckSquare,
+  Mail
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -31,6 +32,10 @@ interface Incident {
   link: string;
   severity?: "critical" | "high" | "medium" | "low";
   status?: "analyzed" | "pending";
+  plan_of_action?: string;
+  plan_sent_to?: string;
+  plan_status?: "pendente" | "em andamento" | "concluído";
+  plan_sent_at?: string;
 }
 
 interface AnalysisResult {
@@ -241,6 +246,17 @@ const DPIntelligenceCenter = () => {
           prevention: extractSection(result, "Prevenção", "Ações") || "Recomendações de prevenção não disponíveis.",
           actions: extractSection(result, "Ações", null) || "Ações corretivas não especificadas."
         });
+        
+        // Save the plan_of_action to the database
+        try {
+          await supabase
+            .from("dp_incidents")
+            .update({ plan_of_action: result })
+            .eq("id", incident.id);
+        } catch (updateError) {
+          console.error("Error saving plan_of_action:", updateError);
+        }
+        
         toast.success("Análise concluída com sucesso");
       }
     } catch (err) {
@@ -259,6 +275,45 @@ const DPIntelligenceCenter = () => {
     const endIndex = endMarker ? text.indexOf(endMarker, contentStart) : text.length;
     
     return text.substring(contentStart, endIndex === -1 ? text.length : endIndex).trim();
+  };
+
+  const sendPlan = async (id: string, email: string) => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/dp-incidents/send-plan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, email }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error("Erro ao enviar plano", {
+          description: error.error || "Tente novamente mais tarde"
+        });
+        return;
+      }
+
+      toast.success("Plano enviado com sucesso", {
+        description: `Email enviado para ${email}`
+      });
+      
+      await fetchIncidents();
+    } catch (error) {
+      console.error("Error sending plan:", error);
+      toast.error("Erro ao enviar plano");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendPlan = (incident: Incident) => {
+    const email = prompt("Para qual e-mail enviar o plano de ação?");
+    if (email) {
+      sendPlan(incident.id, email);
+    }
   };
 
   return (
@@ -435,6 +490,20 @@ const DPIntelligenceCenter = () => {
                   <div className="text-xs">
                     <span className="font-semibold">Causa Raiz:</span> {incident.rootCause}
                   </div>
+                  {incident.plan_sent_at && (
+                    <div className="text-xs pt-2 border-t">
+                      <span className="text-green-600 font-semibold">
+                        Enviado em {new Date(incident.plan_sent_at).toLocaleDateString()}
+                      </span>
+                      <br />
+                      <span className="font-semibold">Status:</span> {incident.plan_status || "N/A"}
+                    </div>
+                  )}
+                  {!incident.plan_sent_at && incident.plan_of_action && (
+                    <div className="text-xs pt-2 border-t">
+                      <span className="text-gray-400 italic">Não enviado</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-wrap gap-1">
@@ -450,24 +519,38 @@ const DPIntelligenceCenter = () => {
                   )}
                 </div>
 
-                <div className="flex gap-2 pt-2">
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="flex-1"
-                    onClick={() => window.open(incident.link, "_blank")}
-                  >
-                    <FileText className="h-4 w-4 mr-1" />
-                    Relatório
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    className="flex-1"
-                    onClick={() => handleAnalyzeIncident(incident)}
-                  >
-                    <Brain className="h-4 w-4 mr-1" />
-                    Analisar IA
-                  </Button>
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => window.open(incident.link, "_blank")}
+                    >
+                      <FileText className="h-4 w-4 mr-1" />
+                      Relatório
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => handleAnalyzeIncident(incident)}
+                    >
+                      <Brain className="h-4 w-4 mr-1" />
+                      Analisar IA
+                    </Button>
+                  </div>
+                  {incident.plan_of_action && (
+                    <Button 
+                      size="sm" 
+                      variant="secondary"
+                      className="w-full"
+                      onClick={() => handleSendPlan(incident)}
+                      disabled={loading}
+                    >
+                      <Mail className="h-4 w-4 mr-1" />
+                      📩 Enviar por E-mail
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -556,6 +639,20 @@ const DPIntelligenceCenter = () => {
               </p>
               <Button onClick={() => selectedIncident && handleAnalyzeIncident(selectedIncident)} className="w-full">
                 Executar análise IA
+              </Button>
+            </div>
+          )}
+          
+          {analysis && selectedIncident && (
+            <div className="mt-4 pt-4 border-t">
+              <Button 
+                variant="secondary"
+                className="w-full"
+                onClick={() => handleSendPlan(selectedIncident)}
+                disabled={loading}
+              >
+                <Mail className="h-4 w-4 mr-2" />
+                📩 Enviar Plano por E-mail
               </Button>
             </div>
           )}
