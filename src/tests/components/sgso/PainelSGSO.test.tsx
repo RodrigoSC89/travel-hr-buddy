@@ -78,7 +78,7 @@ describe("PainelSGSO", () => {
 
   it("should render bar chart", () => {
     const { container } = render(<PainelSGSO />);
-    expect(container.querySelector('[data-testid="bar-chart"]')).toBeDefined();
+    expect(container.querySelector("[data-testid=\"bar-chart\"]")).toBeDefined();
   });
 
   it("should call saveAs when CSV export button is clicked", async () => {
