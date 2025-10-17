@@ -17,8 +17,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/lib/*": ["./lib/*"]
+      "@/*": ["./src/*"]
     },
     "noUnusedParameters": false,
     "allowJs": true,

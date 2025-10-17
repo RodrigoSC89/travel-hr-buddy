@@ -24,7 +24,7 @@ export function undefinedToNull<T>(value: T | undefined): T | null {
  */
 export function deepNullToUndefined<T>(obj: T): T {
   if (obj === null) return undefined as T;
-  if (typeof obj !== 'object') return obj;
+  if (typeof obj !== "object") return obj;
   if (Array.isArray(obj)) {
     return obj.map(item => deepNullToUndefined(item)) as T;
   }

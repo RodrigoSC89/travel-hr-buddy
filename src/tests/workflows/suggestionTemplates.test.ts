@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { 
   workflowSuggestionTemplates, 
   WorkflowSuggestionTemplate 
-} from "../../../lib/workflows/suggestionTemplates";
+} from "@/lib/workflows/suggestionTemplates";
 
 describe("Workflow Suggestion Templates", () => {
   describe("Template Structure", () => {

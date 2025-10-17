@@ -9,8 +9,8 @@ import {
   createWorkflowFromTemplate,
   getAllTemplatesFormatted,
   getTemplateSummary,
-} from "../../../lib/workflows/exampleIntegration";
-import { workflowSuggestionTemplates } from "../../../lib/workflows/suggestionTemplates";
+} from "@/lib/workflows/exampleIntegration";
+import { workflowSuggestionTemplates } from "@/lib/workflows/suggestionTemplates";
 
 describe("Example Integration Functions", () => {
   describe("convertTemplateToWorkflowFormat", () => {
