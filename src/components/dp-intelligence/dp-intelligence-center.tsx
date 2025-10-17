@@ -6,6 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Brain,
   AlertTriangle,
   FileText,
@@ -13,7 +20,8 @@ import {
   Filter,
   BookOpen,
   Lightbulb,
-  CheckSquare
+  CheckSquare,
+  Download
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -31,6 +39,7 @@ interface Incident {
   link: string;
   severity?: "critical" | "high" | "medium" | "low";
   status?: "analyzed" | "pending";
+  gpt_analysis?: AnalysisResult;
 }
 
 interface AnalysisResult {
@@ -47,6 +56,8 @@ const DPIntelligenceCenter = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClass, setSelectedClass] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [filterVessel, setFilterVessel] = useState("");
+  const [filterSeverity, setFilterSeverity] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -182,6 +193,17 @@ const DPIntelligenceCenter = () => {
       filtered = filtered.filter(incident => incident.status === selectedStatus);
     }
 
+    if (filterVessel) {
+      const vesselQuery = filterVessel.toLowerCase();
+      filtered = filtered.filter(incident => 
+        incident.vessel?.toLowerCase().includes(vesselQuery)
+      );
+    }
+
+    if (filterSeverity && filterSeverity !== "all") {
+      filtered = filtered.filter(incident => incident.severity === filterSeverity);
+    }
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(incident => 
@@ -193,7 +215,34 @@ const DPIntelligenceCenter = () => {
     }
 
     setFilteredIncidents(filtered);
-  }, [searchQuery, selectedClass, selectedStatus, incidents]);
+  }, [searchQuery, selectedClass, selectedStatus, filterVessel, filterSeverity, incidents]);
+
+  const exportCSV = () => {
+    const headers = ["Título", "Navio", "Data", "Severidade", "Análise IA"];
+    const rows = filteredIncidents.map((incident) => [
+      incident.title || "",
+      incident.vessel || "",
+      incident.date || "",
+      incident.severity || "",
+      incident.gpt_analysis ? JSON.stringify(incident.gpt_analysis).replace(/\n/g, " ") : "",
+    ]);
+
+    const csv = [headers, ...rows]
+      .map((row) => row.map((field) => `"${field}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "dp_incidents.csv";
+    link.click();
+    window.URL.revokeObjectURL(url);
+    
+    toast.success("CSV exportado com sucesso", {
+      description: `${filteredIncidents.length} incidentes exportados`
+    });
+  };
 
   const getSeverityColor = (severity?: string) => {
     switch (severity) {
@@ -234,13 +283,24 @@ const DPIntelligenceCenter = () => {
       if (data?.result) {
         // Parse the AI response into structured sections
         const result = data.result;
-        setAnalysis({
+        const analysisResult = {
           summary: extractSection(result, "Resumo", "Normas") || result,
           standards: extractSection(result, "Normas", "Causas") || "Nenhuma norma específica identificada.",
           causes: extractSection(result, "Causas", "Prevenção") || "Análise de causas não disponível.",
           prevention: extractSection(result, "Prevenção", "Ações") || "Recomendações de prevenção não disponíveis.",
           actions: extractSection(result, "Ações", null) || "Ações corretivas não especificadas."
-        });
+        };
+        setAnalysis(analysisResult);
+        
+        // Update the incident with the analysis result
+        setIncidents(prevIncidents => 
+          prevIncidents.map(inc => 
+            inc.id === incident.id 
+              ? { ...inc, gpt_analysis: analysisResult, status: "analyzed" as const }
+              : inc
+          )
+        );
+        
         toast.success("Análise concluída com sucesso");
       }
     } catch (err) {
@@ -321,7 +381,7 @@ const DPIntelligenceCenter = () => {
 
       {/* Search and Filter Section */}
       <Card>
-        <CardContent className="pt-6">
+        <CardContent className="pt-6 space-y-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -332,7 +392,7 @@ const DPIntelligenceCenter = () => {
                 className="pl-10"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Button
                 variant={selectedClass === "1" ? "default" : "outline"}
                 onClick={() => setSelectedClass(selectedClass === "1" ? null : "1")}
@@ -354,12 +414,14 @@ const DPIntelligenceCenter = () => {
               >
                 DP-3
               </Button>
-              {(selectedClass || selectedStatus) && (
+              {(selectedClass || selectedStatus || filterVessel || filterSeverity) && (
                 <Button 
                   variant="outline" 
                   onClick={() => {
                     setSelectedClass(null);
                     setSelectedStatus(null);
+                    setFilterVessel("");
+                    setFilterSeverity("");
                   }}
                   className="whitespace-nowrap"
                 >
@@ -369,11 +431,48 @@ const DPIntelligenceCenter = () => {
               )}
             </div>
           </div>
-          {(searchQuery || selectedClass || selectedStatus) && (
-            <div className="mt-4 text-sm text-muted-foreground">
+          
+          {/* New Filter Row */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <Input
+                placeholder="Filtrar por navio..."
+                value={filterVessel}
+                onChange={(e) => setFilterVessel(e.target.value)}
+              />
+            </div>
+            <div className="w-full md:w-64">
+              <Select value={filterSeverity} onValueChange={setFilterSeverity}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Todas as severidades" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas as severidades</SelectItem>
+                  <SelectItem value="critical">Alta (Critical)</SelectItem>
+                  <SelectItem value="high">Média-Alta (High)</SelectItem>
+                  <SelectItem value="medium">Média (Medium)</SelectItem>
+                  <SelectItem value="low">Baixa (Low)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button 
+              onClick={exportCSV} 
+              variant="outline"
+              disabled={filteredIncidents.length === 0}
+              className="whitespace-nowrap"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Exportar CSV
+            </Button>
+          </div>
+          
+          {(searchQuery || selectedClass || selectedStatus || filterVessel || filterSeverity) && (
+            <div className="text-sm text-muted-foreground">
               Mostrando {filteredIncidents.length} de {stats.total} incidentes
               {selectedClass && ` (DP Class ${selectedClass})`}
               {selectedStatus && ` (${selectedStatus === "analyzed" ? "Analisados" : "Pendentes"})`}
+              {filterVessel && ` (Navio: ${filterVessel})`}
+              {filterSeverity && filterSeverity !== "all" && ` (Severidade: ${filterSeverity})`}
             </div>
           )}
         </CardContent>

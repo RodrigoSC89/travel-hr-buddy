@@ -291,4 +291,106 @@ describe("DPIntelligenceCenter Component", () => {
       });
     });
   });
+
+  describe("New Filter Features", () => {
+    it("should render vessel filter input", async () => {
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        const vesselFilter = screen.getByPlaceholderText(/Filtrar por navio/i);
+        expect(vesselFilter).toBeInTheDocument();
+      });
+    });
+
+    it("should render severity filter dropdown", async () => {
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Todas as severidades/i)).toBeInTheDocument();
+      });
+    });
+
+    it("should filter incidents by vessel name", async () => {
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        expect(screen.getByText(/DP Shuttle Tanker X/i)).toBeInTheDocument();
+      });
+      
+      const vesselFilter = screen.getByPlaceholderText(/Filtrar por navio/i);
+      fireEvent.change(vesselFilter, { target: { value: "Tanker" } });
+      
+      await waitFor(() => {
+        expect(screen.getByText(/DP Shuttle Tanker X/i)).toBeInTheDocument();
+      });
+    });
+
+    it("should render CSV export button", async () => {
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        const exportButton = screen.getByText(/Exportar CSV/i);
+        expect(exportButton).toBeInTheDocument();
+      });
+    });
+
+    it("should disable CSV export button when no incidents", async () => {
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
+      });
+      
+      // Filter to show no results
+      const searchInput = screen.getByPlaceholderText(/Buscar por título, embarcação, local ou tags/i);
+      fireEvent.change(searchInput, { target: { value: "nonexistent-xyz-123" } });
+      
+      await waitFor(() => {
+        const exportButton = screen.getByText(/Exportar CSV/i);
+        expect(exportButton).toBeDisabled();
+      });
+    });
+
+    it("should clear all filters including vessel and severity", async () => {
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
+      });
+      
+      // Apply vessel filter
+      const vesselFilter = screen.getByPlaceholderText(/Filtrar por navio/i);
+      fireEvent.change(vesselFilter, { target: { value: "Tanker" } });
+      
+      // Apply DP class filter
+      const dp2Button = screen.getByText("DP-2");
+      fireEvent.click(dp2Button);
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Limpar/i)).toBeInTheDocument();
+      });
+      
+      const clearButton = screen.getByText(/Limpar/i);
+      fireEvent.click(clearButton);
+      
+      await waitFor(() => {
+        expect(vesselFilter).toHaveValue("");
+      });
+    });
+
+    it("should show filter count with vessel filter info", async () => {
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
+      });
+      
+      const vesselFilter = screen.getByPlaceholderText(/Filtrar por navio/i);
+      fireEvent.change(vesselFilter, { target: { value: "Tanker" } });
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Navio: Tanker/i)).toBeInTheDocument();
+      });
+    });
+  });
 });

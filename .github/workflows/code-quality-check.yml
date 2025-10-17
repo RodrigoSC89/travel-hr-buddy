@@ -35,13 +35,13 @@ jobs:
         run: npx tsc --noEmit
         continue-on-error: true
       
-      - name: Run tests
-        run: npm run test
-      
       - name: Build project
         run: npm run build
         env:
-          NODE_ENV: production
+          NODE_ENV: test
+      
+      - name: Run tests
+        run: npm run test
       
       - name: Run security scan
         run: |
