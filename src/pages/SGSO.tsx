@@ -6,6 +6,7 @@ import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { SgsoDashboard } from "@/components/sgso/SgsoDashboard";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
+import { useNavigate } from "react-router-dom";
 import {
   Shield,
   AlertTriangle,
@@ -23,6 +24,7 @@ import {
 
 const SGSO = () => {
   const { handleCreate, handleGenerateReport, handleExport, handleRefresh, showInfo } = useMaritimeActions();
+  const navigate = useNavigate();
   return (
     <ModulePageWrapper gradient="orange">
       <ModuleHeader
@@ -80,6 +82,12 @@ const SGSO = () => {
             label: "Relatórios ANP",
             icon: <BookOpen className="h-3 w-3" />,
             action: () => handleGenerateReport("Relatórios ANP")
+          },
+          {
+            id: "pdf-report",
+            label: "Relatório PDF",
+            icon: <FileCheck className="h-3 w-3" />,
+            action: () => navigate("/sgso/report")
           }
         ]}
         quickActions={[
