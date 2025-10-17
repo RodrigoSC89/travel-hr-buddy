@@ -106,7 +106,7 @@ export default function ComentariosAuditoriaDemo() {
             </CardHeader>
             <CardContent>
               <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto text-xs">
-{`┌─────────────────────────────────┐
+                {`┌─────────────────────────────────┐
 │   ComentariosAuditoria (UI)    │
 └─────────────────────────────────┘
               ↓
@@ -160,8 +160,8 @@ export default function ComentariosAuditoriaDemo() {
                 <h4 className="font-semibold mb-2">Comentários da IA:</h4>
                 <ul className="list-disc pl-6 space-y-1">
                   <li>Fundo azul claro com bordas azuis</li>
-                  <li>Ícone de bot (🤖) com label "Auditor IA (IMCA)"</li>
-                  <li>user_id especial: "ia-auto-responder"</li>
+                  <li>Ícone de bot (🤖) com label &quot;Auditor IA (IMCA)&quot;</li>
+                  <li>user_id especial: &quot;ia-auto-responder&quot;</li>
                 </ul>
               </div>
               
@@ -170,9 +170,9 @@ export default function ComentariosAuditoriaDemo() {
               <div>
                 <h4 className="font-semibold mb-2">Estados:</h4>
                 <ul className="list-disc pl-6 space-y-1">
-                  <li><strong>Carregando:</strong> Spinner com mensagem "Carregando comentários..."</li>
-                  <li><strong>Vazio:</strong> Mensagem motivacional "Seja o primeiro a comentar!"</li>
-                  <li><strong>Enviando:</strong> Botão mostra "Enviando..." com spinner</li>
+                  <li><strong>Carregando:</strong> Spinner com mensagem &quot;Carregando comentários...&quot;</li>
+                  <li><strong>Vazio:</strong> Mensagem motivacional &quot;Seja o primeiro a comentar!&quot;</li>
+                  <li><strong>Enviando:</strong> Botão mostra &quot;Enviando...&quot; com spinner</li>
                   <li><strong>Erro:</strong> Mensagem de erro clara exibida abaixo do textarea</li>
                 </ul>
               </div>
@@ -187,7 +187,7 @@ export default function ComentariosAuditoriaDemo() {
             </CardHeader>
             <CardContent>
               <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-{`import { ComentariosAuditoria } from "@/components/auditoria";
+                {`import { ComentariosAuditoria } from "@/components/auditoria";
 
 function AuditDetailPage({ auditId }: { auditId: string }) {
   return (
@@ -241,7 +241,7 @@ function AuditDetailPage({ auditId }: { auditId: string }) {
                 <div>
                   <h4 className="font-semibold mb-2">GET - Buscar Comentários</h4>
                   <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto text-xs">
-{`GET /api/auditoria/[id]/comentarios
+                    {`GET /api/auditoria/[id]/comentarios
 
 Response:
 [
@@ -264,7 +264,7 @@ Response:
                 <div>
                   <h4 className="font-semibold mb-2">POST - Criar Comentário</h4>
                   <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto text-xs">
-{`POST /api/auditoria/[id]/comentarios
+                    {`POST /api/auditoria/[id]/comentarios
 Content-Type: application/json
 
 {
