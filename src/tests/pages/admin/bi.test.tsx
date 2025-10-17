@@ -16,6 +16,7 @@ vi.mock("@/integrations/supabase/client", () => ({
 
 // Mock the BI components
 vi.mock("@/components/bi", () => ({
+  BiFilters: () => <div data-testid="bi-filters">BiFilters Component</div>,
   DashboardJobs: () => <div data-testid="dashboard-jobs">DashboardJobs Component</div>,
   JobsTrendChart: () => <div data-testid="jobs-trend-chart">JobsTrendChart Component</div>,
   JobsForecastReport: () => <div data-testid="jobs-forecast-report">JobsForecastReport Component</div>,
