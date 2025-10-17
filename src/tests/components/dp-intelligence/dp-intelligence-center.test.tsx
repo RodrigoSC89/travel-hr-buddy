@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
 import DPIntelligenceCenter from "@/components/dp-intelligence/dp-intelligence-center";
 
 // Mock Supabase client
@@ -32,7 +33,11 @@ describe("DPIntelligenceCenter Component", () => {
 
   describe("Component Rendering", () => {
     it("should render statistics dashboard with correct metrics", async () => {
-      render(<DPIntelligenceCenter />);
+      render(
+        <BrowserRouter>
+          <DPIntelligenceCenter />
+        </BrowserRouter>
+      );
       
       await waitFor(() => {
         // Check for statistics cards
@@ -44,7 +49,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should render search input", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         const searchInput = screen.getByPlaceholderText(/Buscar por título, embarcação, local ou tags/i);
@@ -53,7 +58,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should render DP class filter buttons", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText("DP-1")).toBeInTheDocument();
@@ -63,7 +68,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should display loading state initially", () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       expect(screen.getByText("Carregando incidentes...")).toBeInTheDocument();
     });
@@ -71,7 +76,7 @@ describe("DPIntelligenceCenter Component", () => {
 
   describe("Data Loading", () => {
     it("should load and display demo incidents", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
@@ -80,7 +85,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should display incident details correctly", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         // Check for vessel information
@@ -94,7 +99,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should calculate statistics correctly", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         // Total should be 4 (demo data has 4 incidents)
@@ -106,7 +111,7 @@ describe("DPIntelligenceCenter Component", () => {
 
   describe("Filtering Functionality", () => {
     it("should filter incidents by search query", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
@@ -122,7 +127,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should filter by DP class when button is clicked", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
@@ -138,7 +143,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should display filter count when filters are applied", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
@@ -153,7 +158,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should show clear filter button when filters are active", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
@@ -168,7 +173,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should clear filters when clear button is clicked", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
@@ -190,7 +195,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should filter by status (analyzed/pending)", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
@@ -211,7 +216,7 @@ describe("DPIntelligenceCenter Component", () => {
 
   describe("Incident Cards", () => {
     it("should display severity badges", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getAllByText("critical").length).toBeGreaterThan(0);
@@ -220,7 +225,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should display status badges", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getAllByText("Analisado").length).toBeGreaterThan(0);
@@ -229,7 +234,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should display tags as badges", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText("gyro")).toBeInTheDocument();
@@ -239,7 +244,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should have Relatório button for each incident", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         const relatorioButtons = screen.getAllByText(/Relatório/i);
@@ -248,7 +253,7 @@ describe("DPIntelligenceCenter Component", () => {
     });
 
     it("should have Analisar IA button for each incident", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         const analyzeButtons = screen.getAllByText(/Analisar IA/i);
@@ -259,7 +264,7 @@ describe("DPIntelligenceCenter Component", () => {
 
   describe("Empty State", () => {
     it("should show empty state when no incidents match filters", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
@@ -277,7 +282,7 @@ describe("DPIntelligenceCenter Component", () => {
 
   describe("Modal Interactions", () => {
     it("should open modal when Analisar IA button is clicked", async () => {
-      render(<DPIntelligenceCenter />);
+      render(<BrowserRouter><DPIntelligenceCenter /></BrowserRouter>);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();

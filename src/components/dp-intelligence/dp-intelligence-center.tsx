@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,8 @@ import {
   Filter,
   BookOpen,
   Lightbulb,
-  CheckSquare
+  CheckSquare,
+  Ship
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -42,6 +44,7 @@ interface AnalysisResult {
 }
 
 const DPIntelligenceCenter = () => {
+  const navigate = useNavigate();
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [filteredIncidents, setFilteredIncidents] = useState<Incident[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -318,6 +321,49 @@ const DPIntelligenceCenter = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Quick Access - IMCA Audit */}
+      <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950 dark:to-cyan-950 border-2 border-blue-200 dark:border-blue-800">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-500 rounded-lg">
+                <Ship className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Auditoria Técnica IMCA</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Gere auditorias completas seguindo normas IMCA, IMO e MTS
+                </p>
+              </div>
+            </div>
+            <Button
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={() => navigate("/imca-audit")}
+            >
+              <FileText className="mr-2 h-4 w-4" />
+              Gerar Auditoria
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <CheckSquare className="h-4 w-4 text-blue-600" />
+              <span>12 Módulos DP avaliados</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4 text-blue-600" />
+              <span>10 Normas internacionais</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Lightbulb className="h-4 w-4 text-blue-600" />
+              <span>Análise com IA (GPT-4o)</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Search and Filter Section */}
       <Card>
