@@ -7,7 +7,15 @@ vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     functions: {
       invoke: vi.fn()
-    }
+    },
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        order: vi.fn(() => ({
+          data: [],
+          error: null
+        }))
+      }))
+    }))
   }
 }));
 
@@ -255,6 +263,15 @@ describe("DPIntelligenceCenter Component", () => {
         expect(analyzeButtons.length).toBeGreaterThan(0);
       });
     });
+
+    it("should have Plano de Ação button for each incident", async () => {
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        const actionButtons = screen.getAllByText(/Plano de Ação/i);
+        expect(actionButtons.length).toBeGreaterThan(0);
+      });
+    });
   });
 
   describe("Empty State", () => {
@@ -289,6 +306,118 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         expect(screen.getByText(/Análise IA –/i)).toBeInTheDocument();
       });
+    });
+  });
+
+  describe("Action Plan Generation", () => {
+    beforeEach(() => {
+      // Mock successful API response for action plan generation
+      global.fetch = vi.fn((url) => {
+        if (url.includes("/api/dp-incidents/action")) {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({
+              ok: true,
+              plan_of_action: {
+                diagnostico: "Test diagnosis",
+                causa_raiz: "Test root cause",
+                acoes_corretivas: ["Action 1", "Action 2"],
+                acoes_preventivas: ["Prevention 1", "Prevention 2"],
+                responsavel: "DPO",
+                prazo: "30 days",
+                normas: ["IMCA M103", "IMCA M117"]
+              }
+            })
+          } as Response);
+        }
+        return Promise.reject(new Error("Not found"));
+      }) as any;
+    });
+
+    it("should disable button while generating action plan", async () => {
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
+      });
+      
+      const actionButtons = screen.getAllByText(/Plano de Ação/i);
+      const firstButton = actionButtons[0];
+      
+      fireEvent.click(firstButton);
+      
+      // Button should show "Gerando..." immediately
+      await waitFor(() => {
+        expect(screen.getByText(/Gerando\.\.\./i)).toBeInTheDocument();
+      });
+    });
+
+    it("should call API when Plano de Ação button is clicked", async () => {
+      const fetchSpy = vi.spyOn(global, "fetch");
+      
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
+      });
+      
+      const actionButtons = screen.getAllByText(/Plano de Ação/i);
+      fireEvent.click(actionButtons[0]);
+      
+      await waitFor(() => {
+        expect(fetchSpy).toHaveBeenCalledWith(
+          "/api/dp-incidents/action",
+          expect.objectContaining({
+            method: "POST",
+            headers: expect.objectContaining({
+              "Content-Type": "application/json"
+            }),
+            body: expect.stringContaining("imca-2025-014")
+          })
+        );
+      });
+    });
+
+    it("should not display action plan section when plan_of_action is null", async () => {
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
+      });
+      
+      // Should not show the collapsible action plan
+      expect(screen.queryByText(/📋 Plano de Ação Gerado/i)).not.toBeInTheDocument();
+    });
+
+    it("should handle API errors gracefully", async () => {
+      global.fetch = vi.fn((url) => {
+        if (url.includes("/api/dp-incidents/action")) {
+          return Promise.resolve({
+            ok: false,
+            json: () => Promise.resolve({
+              error: "Failed to generate action plan"
+            })
+          } as Response);
+        }
+        return Promise.reject(new Error("Not found"));
+      }) as any;
+
+      const { toast } = await import("sonner");
+      const toastErrorSpy = vi.spyOn(toast, "error");
+
+      render(<DPIntelligenceCenter />);
+      
+      await waitFor(() => {
+        expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
+      });
+      
+      const actionButtons = screen.getAllByText(/Plano de Ação/i);
+      fireEvent.click(actionButtons[0]);
+      
+      await waitFor(() => {
+        // Should show error toast
+        expect(toastErrorSpy).toHaveBeenCalled();
+      }, { timeout: 3000 });
     });
   });
 });
