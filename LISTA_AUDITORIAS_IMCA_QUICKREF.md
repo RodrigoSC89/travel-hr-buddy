@@ -127,6 +127,23 @@ For issues or questions:
 
 ---
 
-**Last Updated**: October 16, 2025
-**Version**: 1.0.0
+**Last Updated**: October 17, 2025
+**Version**: 2.0.0
 **Status**: Production Ready ✅
+
+## 🆕 What's New in v2.0.0
+
+### Code Quality Improvements
+- **TypeScript Enhancement**: Added comprehensive interfaces and JSDoc comments
+- **Performance Optimization**: Implemented React hooks (useCallback, useMemo) for better performance
+- **Better Error Handling**: Added detailed error messages and configuration validation
+- **Loading States**: Improved UX with proper loading indicators
+- **CSV Export**: Enhanced with proper cell escaping for special characters
+- **PDF Export**: Multi-page support for large audit lists
+- **UI/UX**: Added disabled states for buttons and hover effects on cards
+
+### Technical Improvements
+- Refactored component structure for better maintainability
+- Added AuditoriasResponse interface for API type safety
+- Implemented proper null/undefined checks
+- Enhanced accessibility with better ARIA labels
