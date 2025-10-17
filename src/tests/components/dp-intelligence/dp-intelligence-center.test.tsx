@@ -83,13 +83,13 @@ describe("DPIntelligenceCenter Component", () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
-        // Check for vessel information
+        // Check for vessel information in the table
         expect(screen.getByText(/DP Shuttle Tanker X/i)).toBeInTheDocument();
         expect(screen.getByText(/DP DSV Subsea Alpha/i)).toBeInTheDocument();
         
-        // Check for location
-        expect(screen.getByText(/Campos Basin/i)).toBeInTheDocument();
-        expect(screen.getByText(/North Sea/i)).toBeInTheDocument();
+        // Check for dates in the table
+        expect(screen.getByText(/12\/09\/2025/i)).toBeInTheDocument();
+        expect(screen.getByText(/05\/08\/2025/i)).toBeInTheDocument();
       });
     });
 
@@ -209,50 +209,45 @@ describe("DPIntelligenceCenter Component", () => {
     });
   });
 
-  describe("Incident Cards", () => {
-    it("should display severity badges", async () => {
+  describe("Table View", () => {
+    it("should display severity badges in table", async () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
-        expect(screen.getAllByText("critical").length).toBeGreaterThan(0);
-        expect(screen.getAllByText("high").length).toBeGreaterThan(0);
+        // Check for severity values in the table
+        expect(screen.getAllByText("Alta").length).toBeGreaterThan(0);
+        expect(screen.getAllByText(/Média/i).length).toBeGreaterThan(0);
       });
     });
 
-    it("should display status badges", async () => {
+    it("should display AI analysis column", async () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
-        expect(screen.getAllByText("Analisado").length).toBeGreaterThan(0);
-        expect(screen.getAllByText("Pendente").length).toBeGreaterThan(0);
+        // Should show "Não analisado" for incidents without AI analysis
+        expect(screen.getAllByText("Não analisado").length).toBeGreaterThan(0);
       });
     });
 
-    it("should display tags as badges", async () => {
+    it("should display table headers", async () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
-        expect(screen.getByText("gyro")).toBeInTheDocument();
-        expect(screen.getByText("thruster")).toBeInTheDocument();
-        expect(screen.getByText("pms")).toBeInTheDocument();
+        expect(screen.getByText("Título")).toBeInTheDocument();
+        expect(screen.getByText("Navio")).toBeInTheDocument();
+        expect(screen.getByText("Data")).toBeInTheDocument();
+        expect(screen.getByText("Severidade")).toBeInTheDocument();
+        expect(screen.getAllByText("IA").length).toBeGreaterThan(0);
+        expect(screen.getByText("Ações")).toBeInTheDocument();
       });
     });
 
-    it("should have Relatório button for each incident", async () => {
+    it("should have Explicar com IA button for each incident", async () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
-        const relatorioButtons = screen.getAllByText(/Relatório/i);
-        expect(relatorioButtons.length).toBeGreaterThan(0);
-      });
-    });
-
-    it("should have Analisar IA button for each incident", async () => {
-      render(<DPIntelligenceCenter />);
-      
-      await waitFor(() => {
-        const analyzeButtons = screen.getAllByText(/Analisar IA/i);
-        expect(analyzeButtons.length).toBeGreaterThan(0);
+        const explicarButtons = screen.getAllByText(/Explicar com IA/i);
+        expect(explicarButtons.length).toBe(4); // 4 demo incidents
       });
     });
   });

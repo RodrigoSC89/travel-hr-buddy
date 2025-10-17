@@ -34,7 +34,7 @@ interface Incident {
   link: string;
   severity?: "critical" | "high" | "medium" | "low";
   status?: "analyzed" | "pending";
-  gpt_analysis?: any;
+  gpt_analysis?: AnalysisResult;
 }
 
 interface AnalysisResult {
@@ -196,9 +196,9 @@ const DPIntelligenceCenter = () => {
 
     if (filterSeverity) {
       const severityMap: { [key: string]: string } = {
-        'Alta': 'critical',
-        'Média': 'medium',
-        'Baixa': 'low'
+        "Alta": "critical",
+        "Média": "medium",
+        "Baixa": "low"
       };
       const mappedSeverity = severityMap[filterSeverity] || filterSeverity.toLowerCase();
       filtered = filtered.filter(incident => incident.severity === mappedSeverity);
@@ -225,13 +225,6 @@ const DPIntelligenceCenter = () => {
     case "low": return "bg-green-500";
     default: return "bg-gray-500";
     }
-  };
-
-  const getClassBadgeColor = (dpClass: string) => {
-    if (dpClass?.includes("1")) return "bg-blue-500";
-    if (dpClass?.includes("2")) return "bg-yellow-500";
-    if (dpClass?.includes("3")) return "bg-red-500";
-    return "bg-gray-500";
   };
 
   const handleAnalyzeIncident = async (incident: Incident) => {
@@ -512,8 +505,8 @@ const DPIntelligenceCenter = () => {
                     <TableCell>
                       <Badge className={getSeverityColor(incident.severity)}>
                         {incident.severity === "critical" ? "Alta" : 
-                         incident.severity === "medium" ? "Média" :
-                         incident.severity === "low" ? "Baixa" : incident.severity}
+                          incident.severity === "medium" ? "Média" :
+                            incident.severity === "low" ? "Baixa" : incident.severity}
                       </Badge>
                     </TableCell>
                     <TableCell>
