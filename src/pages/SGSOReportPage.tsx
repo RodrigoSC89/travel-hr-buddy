@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
@@ -92,7 +92,7 @@ const SGSOReportPage: React.FC = () => {
 
     const options = {
       margin: 0.5,
-      filename: `relatorio-sgso-${data.vessel.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`,
+      filename: `relatorio-sgso-${data.vessel.replace(/\s+/g, "-").toLowerCase()}-${new Date().toISOString().split("T")[0]}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true, logging: false },
       jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
@@ -179,10 +179,10 @@ const SGSOReportPage: React.FC = () => {
                       📄 Relatório SGSO - {data.vessel}
                     </h1>
                     <p className="text-sm text-gray-500 mt-1">
-                      Data de Geração: {new Date().toLocaleDateString('pt-BR', { 
-                        day: '2-digit', 
-                        month: 'long', 
-                        year: 'numeric' 
+                      Data de Geração: {new Date().toLocaleDateString("pt-BR", { 
+                        day: "2-digit", 
+                        month: "long", 
+                        year: "numeric" 
                       })}
                     </p>
                   </div>
@@ -212,7 +212,7 @@ const SGSOReportPage: React.FC = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <strong className="text-gray-900">
-                              {new Date(incident.date).toLocaleDateString('pt-BR')}
+                              {new Date(incident.date).toLocaleDateString("pt-BR")}
                             </strong>
                             <Badge className={getRiskLevelColor(incident.sgso_risk_level)}>
                               {incident.sgso_risk_level}
