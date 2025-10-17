@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   Brain,
   AlertTriangle,
@@ -13,10 +14,12 @@ import {
   Filter,
   BookOpen,
   Lightbulb,
-  CheckSquare
+  CheckSquare,
+  Download
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { format } from "date-fns";
 
 interface Incident {
   id: string;
@@ -31,6 +34,7 @@ interface Incident {
   link: string;
   severity?: "critical" | "high" | "medium" | "low";
   status?: "analyzed" | "pending";
+  gpt_analysis?: any;
 }
 
 interface AnalysisResult {
@@ -47,6 +51,8 @@ const DPIntelligenceCenter = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClass, setSelectedClass] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [filterVessel, setFilterVessel] = useState("");
+  const [filterSeverity, setFilterSeverity] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -182,6 +188,22 @@ const DPIntelligenceCenter = () => {
       filtered = filtered.filter(incident => incident.status === selectedStatus);
     }
 
+    if (filterVessel) {
+      filtered = filtered.filter(incident => 
+        incident.vessel?.toLowerCase().includes(filterVessel.toLowerCase())
+      );
+    }
+
+    if (filterSeverity) {
+      const severityMap: { [key: string]: string } = {
+        'Alta': 'critical',
+        'Média': 'medium',
+        'Baixa': 'low'
+      };
+      const mappedSeverity = severityMap[filterSeverity] || filterSeverity.toLowerCase();
+      filtered = filtered.filter(incident => incident.severity === mappedSeverity);
+    }
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(incident => 
@@ -193,7 +215,7 @@ const DPIntelligenceCenter = () => {
     }
 
     setFilteredIncidents(filtered);
-  }, [searchQuery, selectedClass, selectedStatus, incidents]);
+  }, [searchQuery, selectedClass, selectedStatus, filterVessel, filterSeverity, incidents]);
 
   const getSeverityColor = (severity?: string) => {
     switch (severity) {
@@ -234,13 +256,24 @@ const DPIntelligenceCenter = () => {
       if (data?.result) {
         // Parse the AI response into structured sections
         const result = data.result;
-        setAnalysis({
+        const analysisResult = {
           summary: extractSection(result, "Resumo", "Normas") || result,
           standards: extractSection(result, "Normas", "Causas") || "Nenhuma norma específica identificada.",
           causes: extractSection(result, "Causas", "Prevenção") || "Análise de causas não disponível.",
           prevention: extractSection(result, "Prevenção", "Ações") || "Recomendações de prevenção não disponíveis.",
           actions: extractSection(result, "Ações", null) || "Ações corretivas não especificadas."
-        });
+        };
+        setAnalysis(analysisResult);
+        
+        // Update the incident with the analysis
+        setIncidents(prevIncidents => 
+          prevIncidents.map(inc => 
+            inc.id === incident.id 
+              ? { ...inc, gpt_analysis: analysisResult, status: "analyzed" }
+              : inc
+          )
+        );
+        
         toast.success("Análise concluída com sucesso");
       }
     } catch (err) {
@@ -249,6 +282,37 @@ const DPIntelligenceCenter = () => {
     } finally {
       setAnalyzing(false);
     }
+  };
+
+  const exportCSV = () => {
+    const headers = [
+      "Título",
+      "Navio",
+      "Data",
+      "Severidade",
+      "Análise IA",
+    ];
+
+    const rows = filteredIncidents.map((incident) => [
+      incident.title || "",
+      incident.vessel || "",
+      incident.date || "",
+      incident.severity || "",
+      incident.gpt_analysis ? JSON.stringify(incident.gpt_analysis).replace(/\n/g, " ") : "",
+    ]);
+
+    const csv = [headers, ...rows]
+      .map((row) => row.map((field) => `"${field}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "dp_incidents.csv";
+    a.click();
+    window.URL.revokeObjectURL(url);
+    toast.success("CSV exportado com sucesso");
   };
 
   const extractSection = (text: string, startMarker: string, endMarker: string | null): string => {
@@ -322,7 +386,7 @@ const DPIntelligenceCenter = () => {
       {/* Search and Filter Section */}
       <Card>
         <CardContent className="pt-6">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
@@ -332,44 +396,66 @@ const DPIntelligenceCenter = () => {
                 className="pl-10"
               />
             </div>
-            <div className="flex gap-2">
-              <Button
-                variant={selectedClass === "1" ? "default" : "outline"}
-                onClick={() => setSelectedClass(selectedClass === "1" ? null : "1")}
-                className="whitespace-nowrap"
-              >
-                DP-1
-              </Button>
-              <Button
-                variant={selectedClass === "2" ? "default" : "outline"}
-                onClick={() => setSelectedClass(selectedClass === "2" ? null : "2")}
-                className="whitespace-nowrap"
-              >
-                DP-2
-              </Button>
-              <Button
-                variant={selectedClass === "3" ? "default" : "outline"}
-                onClick={() => setSelectedClass(selectedClass === "3" ? null : "3")}
-                className="whitespace-nowrap"
-              >
-                DP-3
-              </Button>
-              {(selectedClass || selectedStatus) && (
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    setSelectedClass(null);
-                    setSelectedStatus(null);
-                  }}
-                  className="whitespace-nowrap"
-                >
-                  <Filter className="h-4 w-4 mr-2" />
-                  Limpar
-                </Button>
-              )}
-            </div>
+            <Input
+              placeholder="Filtrar por navio"
+              value={filterVessel}
+              onChange={(e) => setFilterVessel(e.target.value)}
+              className="md:w-48"
+            />
+            <select
+              value={filterSeverity}
+              onChange={(e) => setFilterSeverity(e.target.value)}
+              className="border rounded-md px-3 py-2 md:w-48 bg-background"
+            >
+              <option value="">Todas as severidades</option>
+              <option value="Alta">Alta</option>
+              <option value="Média">Média</option>
+              <option value="Baixa">Baixa</option>
+            </select>
+            <Button onClick={exportCSV} variant="outline">
+              <Download className="h-4 w-4 mr-2" />
+              Exportar CSV
+            </Button>
           </div>
-          {(searchQuery || selectedClass || selectedStatus) && (
+          <div className="flex gap-2">
+            <Button
+              variant={selectedClass === "1" ? "default" : "outline"}
+              onClick={() => setSelectedClass(selectedClass === "1" ? null : "1")}
+              className="whitespace-nowrap"
+            >
+              DP-1
+            </Button>
+            <Button
+              variant={selectedClass === "2" ? "default" : "outline"}
+              onClick={() => setSelectedClass(selectedClass === "2" ? null : "2")}
+              className="whitespace-nowrap"
+            >
+              DP-2
+            </Button>
+            <Button
+              variant={selectedClass === "3" ? "default" : "outline"}
+              onClick={() => setSelectedClass(selectedClass === "3" ? null : "3")}
+              className="whitespace-nowrap"
+            >
+              DP-3
+            </Button>
+            {(selectedClass || selectedStatus || filterVessel || filterSeverity) && (
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSelectedClass(null);
+                  setSelectedStatus(null);
+                  setFilterVessel("");
+                  setFilterSeverity("");
+                }}
+                className="whitespace-nowrap"
+              >
+                <Filter className="h-4 w-4 mr-2" />
+                Limpar
+              </Button>
+            )}
+          </div>
+          {(searchQuery || selectedClass || selectedStatus || filterVessel || filterSeverity) && (
             <div className="mt-4 text-sm text-muted-foreground">
               Mostrando {filteredIncidents.length} de {stats.total} incidentes
               {selectedClass && ` (DP Class ${selectedClass})`}
@@ -379,7 +465,7 @@ const DPIntelligenceCenter = () => {
         </CardContent>
       </Card>
 
-      {/* Incidents List */}
+      {/* Incidents Table */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
@@ -402,77 +488,59 @@ const DPIntelligenceCenter = () => {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredIncidents.map((incident) => (
-            <Card key={incident.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex justify-between items-start gap-2 mb-2">
-                  <CardTitle className="text-base leading-tight">{incident.title}</CardTitle>
-                  <Badge className={getSeverityColor(incident.severity)}>
-                    {incident.severity || "medium"}
-                  </Badge>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Badge className={getClassBadgeColor(incident.classDP)}>
-                    {incident.classDP}
-                  </Badge>
-                  <Badge variant={incident.status === "analyzed" ? "default" : "secondary"}>
-                    {incident.status === "analyzed" ? "Analisado" : "Pendente"}
-                  </Badge>
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">{incident.date}</p>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <p className="text-sm line-clamp-3">{incident.summary}</p>
-                
-                <div className="space-y-2">
-                  <div className="text-xs">
-                    <span className="font-semibold">Embarcação:</span> {incident.vessel}
-                  </div>
-                  <div className="text-xs">
-                    <span className="font-semibold">Local:</span> {incident.location}
-                  </div>
-                  <div className="text-xs">
-                    <span className="font-semibold">Causa Raiz:</span> {incident.rootCause}
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-1">
-                  {incident.tags?.slice(0, 3).map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                  {incident.tags?.length > 3 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{incident.tags.length - 3}
-                    </Badge>
-                  )}
-                </div>
-
-                <div className="flex gap-2 pt-2">
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="flex-1"
-                    onClick={() => window.open(incident.link, "_blank")}
-                  >
-                    <FileText className="h-4 w-4 mr-1" />
-                    Relatório
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    className="flex-1"
-                    onClick={() => handleAnalyzeIncident(incident)}
-                  >
-                    <Brain className="h-4 w-4 mr-1" />
-                    Analisar IA
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <Card>
+          <CardContent className="pt-6">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Título</TableHead>
+                  <TableHead>Navio</TableHead>
+                  <TableHead>Data</TableHead>
+                  <TableHead>Severidade</TableHead>
+                  <TableHead>IA</TableHead>
+                  <TableHead>Ações</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredIncidents.map((incident) => (
+                  <TableRow key={incident.id}>
+                    <TableCell className="font-medium">{incident.title}</TableCell>
+                    <TableCell>{incident.vessel}</TableCell>
+                    <TableCell>
+                      {incident.date ? format(new Date(incident.date), "dd/MM/yyyy") : "-"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={getSeverityColor(incident.severity)}>
+                        {incident.severity === "critical" ? "Alta" : 
+                         incident.severity === "medium" ? "Média" :
+                         incident.severity === "low" ? "Baixa" : incident.severity}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {incident.gpt_analysis ? (
+                        <pre className="text-xs whitespace-pre-wrap bg-slate-100 dark:bg-slate-800 p-2 rounded-md max-w-md max-h-32 overflow-y-auto">
+                          {JSON.stringify(incident.gpt_analysis, null, 2)}
+                        </pre>
+                      ) : (
+                        <span className="text-gray-400 italic text-sm">Não analisado</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        disabled={analyzing}
+                        onClick={() => handleAnalyzeIncident(incident)}
+                      >
+                        <Brain className="h-4 w-4 mr-1" />
+                        Explicar com IA
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       )}
 
       {/* AI Analysis Modal */}
