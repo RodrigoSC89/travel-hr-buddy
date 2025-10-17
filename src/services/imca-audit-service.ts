@@ -9,7 +9,6 @@ import type {
   IMCAAuditInput,
   IMCAAuditReport,
   IMCAAuditRecord,
-  DPClass,
 } from "@/types/imca-audit";
 import { formatAuditToMarkdown } from "@/types/imca-audit";
 
@@ -72,14 +71,14 @@ export async function saveIMCAAudit(
         nonConformities: report.nonConformities,
       },
       recommendations: report.actionPlan.map(action => action.description),
-      metadata: report as any,
+      metadata: report as unknown as Record<string, unknown>,
       navio: report.vesselName,
       norma: report.standardsEvaluated.join(", "),
       item_auditado: `Auditoria Técnica ${report.dpClass}`,
       comentarios: report.executiveSummary,
       resultado: report.overallScore >= 80 ? "Conforme" : 
-                 report.overallScore >= 60 ? "Parcialmente Conforme" : 
-                 "Não Conforme",
+        report.overallScore >= 60 ? "Parcialmente Conforme" : 
+          "Não Conforme",
       data: report.auditDate,
     };
 

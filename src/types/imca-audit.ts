@@ -155,9 +155,9 @@ export interface IMCAAuditRecord {
   status: "draft" | "in_progress" | "completed" | "approved";
   audit_date?: string;
   score?: number;
-  findings: Record<string, any>; // JSONB field
+  findings: Record<string, unknown>; // JSONB field
   recommendations?: string[];
-  metadata: Record<string, any>; // JSONB field - stores full audit report
+  metadata: Record<string, unknown>; // JSONB field - stores full audit report
   created_at: string;
   updated_at: string;
   
@@ -173,29 +173,29 @@ export interface IMCAAuditRecord {
 // Helper functions
 export const getRiskLevelColor = (level: RiskLevel): string => {
   switch (level) {
-    case "Alto":
-      return "bg-red-500 text-white";
-    case "Médio":
-      return "bg-yellow-500 text-white";
-    case "Baixo":
-      return "bg-green-500 text-white";
-    default:
-      return "bg-gray-500 text-white";
+  case "Alto":
+    return "bg-red-500 text-white";
+  case "Médio":
+    return "bg-yellow-500 text-white";
+  case "Baixo":
+    return "bg-green-500 text-white";
+  default:
+    return "bg-gray-500 text-white";
   }
 };
 
 export const getPriorityLevelColor = (level: PriorityLevel): string => {
   switch (level) {
-    case "Crítico":
-      return "bg-red-600 text-white";
-    case "Alto":
-      return "bg-orange-500 text-white";
-    case "Médio":
-      return "bg-blue-500 text-white";
-    case "Baixo":
-      return "bg-gray-500 text-white";
-    default:
-      return "bg-gray-400 text-white";
+  case "Crítico":
+    return "bg-red-600 text-white";
+  case "Alto":
+    return "bg-orange-500 text-white";
+  case "Médio":
+    return "bg-blue-500 text-white";
+  case "Baixo":
+    return "bg-gray-500 text-white";
+  default:
+    return "bg-gray-400 text-white";
   }
 };
 
@@ -204,23 +204,23 @@ export const getDeadlineFromPriority = (priority: PriorityLevel): string => {
   let daysToAdd = 0;
   
   switch (priority) {
-    case "Crítico":
-      daysToAdd = 7;
-      break;
-    case "Alto":
-      daysToAdd = 30;
-      break;
-    case "Médio":
-      daysToAdd = 90;
-      break;
-    case "Baixo":
-      daysToAdd = 180;
-      break;
+  case "Crítico":
+    daysToAdd = 7;
+    break;
+  case "Alto":
+    daysToAdd = 30;
+    break;
+  case "Médio":
+    daysToAdd = 90;
+    break;
+  case "Baixo":
+    daysToAdd = 180;
+    break;
   }
   
   const deadline = new Date(today);
   deadline.setDate(deadline.getDate() + daysToAdd);
-  return deadline.toISOString().split('T')[0];
+  return deadline.toISOString().split("T")[0];
 };
 
 // Validation helpers
@@ -252,8 +252,8 @@ export const validateAuditInput = (input: IMCAAuditInput): string[] => {
 
 // Export formatting helper
 export const formatAuditToMarkdown = (report: IMCAAuditReport): string => {
-  let markdown = `# Auditoria Técnica IMCA DP\n\n`;
-  markdown += `## Informações Básicas\n\n`;
+  let markdown = "# Auditoria Técnica IMCA DP\n\n";
+  markdown += "## Informações Básicas\n\n";
   markdown += `- **Embarcação:** ${report.vesselName}\n`;
   markdown += `- **Classe DP:** ${report.dpClass}\n`;
   markdown += `- **Localização:** ${report.location}\n`;
@@ -263,26 +263,26 @@ export const formatAuditToMarkdown = (report: IMCAAuditReport): string => {
   
   markdown += `## Resumo Executivo\n\n${report.executiveSummary}\n\n`;
   
-  markdown += `## Normas Avaliadas\n\n`;
+  markdown += "## Normas Avaliadas\n\n";
   report.standardsEvaluated.forEach(standard => {
     markdown += `- ${standard}\n`;
   });
-  markdown += `\n`;
+  markdown += "\n";
   
-  markdown += `## Avaliação por Módulo\n\n`;
+  markdown += "## Avaliação por Módulo\n\n";
   report.moduleEvaluations.forEach(module => {
     markdown += `### ${module.moduleName} (${module.score}/100)\n\n`;
     markdown += `${module.findings}\n\n`;
     if (module.recommendations.length > 0) {
-      markdown += `**Recomendações:**\n`;
+      markdown += "**Recomendações:**\n";
       module.recommendations.forEach(rec => {
         markdown += `- ${rec}\n`;
       });
-      markdown += `\n`;
+      markdown += "\n";
     }
   });
   
-  markdown += `## Não Conformidades\n\n`;
+  markdown += "## Não Conformidades\n\n";
   report.nonConformities.forEach((nc, index) => {
     const riskEmoji = nc.riskLevel === "Alto" ? "🔴" : nc.riskLevel === "Médio" ? "🟡" : "⚪";
     markdown += `${index + 1}. ${riskEmoji} **${nc.standard}** - ${nc.module}\n`;
@@ -290,17 +290,17 @@ export const formatAuditToMarkdown = (report: IMCAAuditReport): string => {
     if (nc.evidence) {
       markdown += `   - *Evidência:* ${nc.evidence}\n`;
     }
-    markdown += `\n`;
+    markdown += "\n";
   });
   
-  markdown += `## Plano de Ação\n\n`;
+  markdown += "## Plano de Ação\n\n";
   report.actionPlan.forEach((action, index) => {
     markdown += `${index + 1}. **[${action.priority}]** ${action.description}\n`;
     markdown += `   - *Prazo:* ${action.deadline}\n`;
     if (action.responsible) {
       markdown += `   - *Responsável:* ${action.responsible}\n`;
     }
-    markdown += `\n`;
+    markdown += "\n";
   });
   
   if (report.observations) {

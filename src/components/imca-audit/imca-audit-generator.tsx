@@ -35,16 +35,11 @@ import type {
   IMCAAuditInput,
   IMCAAuditReport,
   DPClass,
-  ModuleEvaluation,
-  NonConformity,
-  ActionItem,
 } from "@/types/imca-audit";
 import {
   validateAuditInput,
   getRiskLevelColor,
   getPriorityLevelColor,
-  IMCA_STANDARDS,
-  DP_MODULES,
 } from "@/types/imca-audit";
 import { generateIMCAAudit, saveIMCAAudit, downloadAuditMarkdown } from "@/services/imca-audit-service";
 
