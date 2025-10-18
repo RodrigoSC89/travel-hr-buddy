@@ -52,7 +52,7 @@ export function SGSOEffectivenessChart() {
   };
 
   // Custom tooltip for the chart
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ payload: EffectivenessData }> }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
