@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PlanStatusSelect } from "./PlanStatusSelect";
 
 interface Incident {
   id: string;
@@ -15,6 +16,11 @@ interface Incident {
   tags: string[];
   summary: string;
   link: string;
+  plan_of_action?: string;
+  plan_status?: string;
+  plan_sent_to?: string;
+  plan_sent_at?: string;
+  plan_updated_at?: string;
 }
 
 export default function IncidentCards() {
@@ -80,11 +86,22 @@ export default function IncidentCards() {
       });
   }, []);
 
+  const handleStatusUpdate = (incidentId: string, newStatus: string) => {
+    // Update the local state with the new status
+    setIncidents(prevIncidents => 
+      prevIncidents.map(inc => 
+        inc.id === incidentId 
+          ? { ...inc, plan_status: newStatus, plan_updated_at: new Date().toISOString() }
+          : inc
+      )
+    );
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {incidents.map((incident) => (
         <Card key={incident.id} className="border-l-4 border-blue-600 p-4 shadow-sm">
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-3">
             <div className="flex justify-between items-center">
               <h3 className="font-semibold text-blue-800">{incident.title}</h3>
               <span className="text-sm text-gray-500">{incident.date}</span>
@@ -98,6 +115,17 @@ export default function IncidentCards() {
                 <Badge key={tag} variant="secondary">{tag}</Badge>
               ))}
             </div>
+            
+            {/* Show Plan Status Select if plan exists */}
+            {incident.plan_of_action && (
+              <div className="pt-2 border-t border-gray-200">
+                <PlanStatusSelect 
+                  incident={incident} 
+                  onUpdate={(status) => handleStatusUpdate(incident.id, status)}
+                />
+              </div>
+            )}
+            
             <div className="flex gap-2 pt-2">
               <a href={incident.link} target="_blank" rel="noopener noreferrer">
                 <Button size="sm" variant="outline">Ver relatório</Button>
