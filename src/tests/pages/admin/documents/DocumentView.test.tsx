@@ -122,7 +122,7 @@ describe("DocumentViewPage Component", () => {
               }),
             }),
           }),
-        } as any;
+        } as unknown;
       } else if (table === "document_versions") {
         return {
           select: vi.fn().mockReturnValue({
@@ -133,9 +133,9 @@ describe("DocumentViewPage Component", () => {
               }),
             }),
           }),
-        } as any;
+        } as unknown;
       }
-      return {} as any;
+      return {} as unknown;
     });
 
     render(
@@ -202,7 +202,7 @@ describe("DocumentViewPage Component", () => {
               }),
             }),
           }),
-        } as any;
+        } as unknown;
       } else if (table === "document_versions") {
         return {
           select: vi.fn().mockReturnValue({
@@ -213,9 +213,9 @@ describe("DocumentViewPage Component", () => {
               }),
             }),
           }),
-        } as any;
+        } as unknown;
       }
-      return {} as any;
+      return {} as unknown;
     });
 
     render(
@@ -282,7 +282,7 @@ describe("DocumentViewPage Component", () => {
               }),
             }),
           }),
-        } as any;
+        } as unknown;
       } else if (table === "document_versions") {
         return {
           select: vi.fn().mockReturnValue({
@@ -293,9 +293,9 @@ describe("DocumentViewPage Component", () => {
               }),
             }),
           }),
-        } as any;
+        } as unknown;
       }
-      return {} as any;
+      return {} as unknown;
     });
 
     render(
