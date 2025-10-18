@@ -14,6 +14,20 @@ export type SGSOCategory = typeof SGSO_CATEGORIES[number];
 
 export type SGSORiskLevel = 'baixo' | 'moderado' | 'alto' | 'crítico';
 
+// SGSO Incident type matching database schema
+export interface SGSOIncident {
+  id: string;
+  vessel_id?: string;
+  type: string;
+  description: string;
+  reported_at: string;
+  severity: string;
+  status: string;
+  corrective_action?: string;
+  created_at?: string;
+  created_by?: string;
+}
+
 export interface DPIncident {
   id: string;
   title?: string;
