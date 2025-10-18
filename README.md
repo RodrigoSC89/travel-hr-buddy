@@ -1,8 +1,12 @@
 # 🚢 Nautilus One
 
 [![CI](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/run-tests.yml/badge.svg)](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/run-tests.yml)
+[![Deploy](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/deploy-vercel.yml/badge.svg)](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/deploy-vercel.yml)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](./coverage/index.html)
 [![Status](https://img.shields.io/badge/build-passing-success)](./)
+[![Production](https://img.shields.io/badge/production-ready-brightgreen)](./)
+[![Vercel](https://img.shields.io/badge/deploy-vercel-black)](https://vercel.com)
+[![Supabase](https://img.shields.io/badge/backend-supabase-green)](https://supabase.com)
 
 A smart, modular, and extensible platform for managing maritime systems, intelligent workflows, fleet logistics, AI-powered assistance, and travel operations — all in one.
 
@@ -10,10 +14,15 @@ A smart, modular, and extensible platform for managing maritime systems, intelli
 
 ## 🌐 Live Preview
 
-🚀 **Production Deployment**: Ready for deployment to Vercel + Supabase
+🚀 **Production Status**: ✅ Ready for deployment to Vercel + Supabase
 
-📖 **[Production Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)** - Complete step-by-step guide
-✅ **[Production Checklist](./PRODUCTION_CHECKLIST.md)** - Verify production readiness
+### 📚 Deployment Documentation
+
+- 🚀 **[Quick Start (5 min)](./DEPLOYMENT_QUICKSTART.md)** - Fast deployment guide
+- 📖 **[Complete Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)** - Step-by-step deployment
+- ✅ **[Checklist](./PRODUCTION_CHECKLIST.md)** - Verify production readiness
+- 🔐 **[Environment Variables](./ENVIRONMENT_VARIABLES.md)** - All configuration options
+- 🏗️ **[Architecture](./DEPLOYMENT_ARCHITECTURE.md)** - System architecture overview
 
 ---
 
