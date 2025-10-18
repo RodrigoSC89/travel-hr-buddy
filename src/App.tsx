@@ -97,6 +97,8 @@ const MetricasRisco = React.lazy(() => import("./pages/admin/metricas-risco"));
 const AdminSGSO = React.lazy(() => import("./pages/admin/sgso"));
 const AuditoriasIMCA = React.lazy(() => import("./pages/admin/auditorias-imca"));
 const DPIntelligenceAdmin = React.lazy(() => import("./pages/admin/DPIntelligencePage"));
+const SystemHealth = React.lazy(() => import("./pages/admin/system-health"));
+const AdminForecast = React.lazy(() => import("./pages/admin/forecast"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -235,10 +237,15 @@ function App() {
                       <Route path="/admin/reports/dashboard-logs" element={<DashboardLogs />} />
                       <Route path="/admin/reports/restore-analytics" element={<RestoreAnalytics />} />
                       <Route path="/admin/dashboard-auditorias" element={<DashboardAuditorias />} />
+                      <Route path="/admin/audit" element={<DashboardAuditorias />} />
                       <Route path="/admin/metricas-risco" element={<MetricasRisco />} />
                       <Route path="/admin/sgso" element={<AdminSGSO />} />
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/dp-intelligence" element={<DPIntelligenceAdmin />} />
+                      <Route path="/admin/mmi" element={<MMIJobsPanel />} />
+                      <Route path="/admin/forecast" element={<AdminForecast />} />
+                      <Route path="/admin/ai-assistant" element={<Assistant />} />
+                      <Route path="/admin/system-health" element={<SystemHealth />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
