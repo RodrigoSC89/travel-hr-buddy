@@ -1,60 +1,60 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Label } from '@/components/ui/label'
-import html2pdf from 'html2pdf.js'
+import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import html2pdf from "html2pdf.js";
 
 const requisitosSGSO = [
-  { num: 1, titulo: 'Política de SMS', desc: 'Estabelecimento e divulgação de política de segurança e meio ambiente.' },
-  { num: 2, titulo: 'Planejamento Operacional', desc: 'Planejamento com metas e indicadores de SMS.' },
-  { num: 3, titulo: 'Treinamento e Capacitação', desc: 'Capacitação adequada e documentada da tripulação.' },
-  { num: 4, titulo: 'Comunicação e Acesso à Informação', desc: 'Documentação e procedimentos acessíveis e atualizados.' },
-  { num: 5, titulo: 'Gestão de Riscos', desc: 'Identificação e controle de riscos operacionais.' },
-  { num: 6, titulo: 'Equipamentos Críticos', desc: 'Manutenção e inspeção de equipamentos essenciais.' },
-  { num: 7, titulo: 'Procedimentos de Emergência', desc: 'Procedimentos treinados e simulados regularmente.' },
-  { num: 8, titulo: 'Manutenção Preventiva', desc: 'Planos documentados para sistemas críticos.' },
-  { num: 9, titulo: 'Inspeções e Verificações', desc: 'Rotinas formais com registros e responsáveis.' },
-  { num: 10, titulo: 'Auditorias Internas', desc: 'Verificação periódica da eficácia do SGSO.' },
-  { num: 11, titulo: 'Gestão de Mudanças', desc: 'Avaliação de impactos operacionais em mudanças.' },
-  { num: 12, titulo: 'Registro de Incidentes', desc: 'Registro e tratamento formal de incidentes.' },
-  { num: 13, titulo: 'Análise de Causa Raiz', desc: 'Metodologia apropriada e documentação.' },
-  { num: 14, titulo: 'Ações Corretivas e Preventivas', desc: 'Implementação e verificação da eficácia.' },
-  { num: 15, titulo: 'Monitoramento de Indicadores', desc: 'Definição e análise de indicadores de SMS.' },
-  { num: 16, titulo: 'Conformidade Legal', desc: 'Atendimento à legislação ambiental e de segurança.' },
-  { num: 17, titulo: 'Melhoria Contínua', desc: 'Revisões periódicas e aprendizado contínuo.' },
-]
+  { num: 1, titulo: "Política de SMS", desc: "Estabelecimento e divulgação de política de segurança e meio ambiente." },
+  { num: 2, titulo: "Planejamento Operacional", desc: "Planejamento com metas e indicadores de SMS." },
+  { num: 3, titulo: "Treinamento e Capacitação", desc: "Capacitação adequada e documentada da tripulação." },
+  { num: 4, titulo: "Comunicação e Acesso à Informação", desc: "Documentação e procedimentos acessíveis e atualizados." },
+  { num: 5, titulo: "Gestão de Riscos", desc: "Identificação e controle de riscos operacionais." },
+  { num: 6, titulo: "Equipamentos Críticos", desc: "Manutenção e inspeção de equipamentos essenciais." },
+  { num: 7, titulo: "Procedimentos de Emergência", desc: "Procedimentos treinados e simulados regularmente." },
+  { num: 8, titulo: "Manutenção Preventiva", desc: "Planos documentados para sistemas críticos." },
+  { num: 9, titulo: "Inspeções e Verificações", desc: "Rotinas formais com registros e responsáveis." },
+  { num: 10, titulo: "Auditorias Internas", desc: "Verificação periódica da eficácia do SGSO." },
+  { num: 11, titulo: "Gestão de Mudanças", desc: "Avaliação de impactos operacionais em mudanças." },
+  { num: 12, titulo: "Registro de Incidentes", desc: "Registro e tratamento formal de incidentes." },
+  { num: 13, titulo: "Análise de Causa Raiz", desc: "Metodologia apropriada e documentação." },
+  { num: 14, titulo: "Ações Corretivas e Preventivas", desc: "Implementação e verificação da eficácia." },
+  { num: 15, titulo: "Monitoramento de Indicadores", desc: "Definição e análise de indicadores de SMS." },
+  { num: 16, titulo: "Conformidade Legal", desc: "Atendimento à legislação ambiental e de segurança." },
+  { num: 17, titulo: "Melhoria Contínua", desc: "Revisões periódicas e aprendizado contínuo." },
+];
 
 export default function SGSOAuditPage() {
   const [auditData, setAuditData] = useState(() =>
     requisitosSGSO.map(req => ({
       ...req,
-      compliance: 'compliant',
-      evidence: '',
-      comment: ''
+      compliance: "compliant",
+      evidence: "",
+      comment: ""
     }))
-  )
+  );
 
   const handleChange = (index: number, field: string, value: string) => {
-    const updated = [...auditData]
-    updated[index][field] = value
-    setAuditData(updated)
-  }
+    const updated = [...auditData];
+    updated[index][field] = value;
+    setAuditData(updated);
+  };
 
   const handleSubmit = () => {
-    console.log('📤 Enviando auditoria SGSO:', auditData)
+    console.log("📤 Enviando auditoria SGSO:", auditData);
     // TODO: enviar para Supabase ou API
-  }
+  };
 
   const handleExportPDF = () => {
-    const element = document.getElementById('sgso-audit-content')
+    const element = document.getElementById("sgso-audit-content");
     if (element) {
-      html2pdf().from(element).save('auditoria-sgso.pdf')
+      html2pdf().from(element).save("auditoria-sgso.pdf");
     }
-  }
+  };
 
   return (
     <div className="container mx-auto p-6 max-w-5xl">
@@ -71,7 +71,7 @@ export default function SGSOAuditPage() {
               <RadioGroup
                 defaultValue="compliant"
                 className="flex gap-4 mt-2"
-                onValueChange={val => handleChange(idx, 'compliance', val)}
+                onValueChange={val => handleChange(idx, "compliance", val)}
               >
                 <div className="flex items-center gap-1">
                   <RadioGroupItem value="compliant" id={`c-${idx}`} />
@@ -90,12 +90,12 @@ export default function SGSOAuditPage() {
               <Textarea
                 placeholder="📄 Evidência observada"
                 value={item.evidence}
-                onChange={e => handleChange(idx, 'evidence', e.target.value)}
+                onChange={e => handleChange(idx, "evidence", e.target.value)}
               />
               <Textarea
                 placeholder="💬 Comentários adicionais"
                 value={item.comment}
-                onChange={e => handleChange(idx, 'comment', e.target.value)}
+                onChange={e => handleChange(idx, "comment", e.target.value)}
               />
             </CardContent>
           </Card>
@@ -107,5 +107,5 @@ export default function SGSOAuditPage() {
         <Button variant="outline" onClick={handleExportPDF}>📄 Exportar PDF</Button>
       </div>
     </div>
-  )
+  );
 }
