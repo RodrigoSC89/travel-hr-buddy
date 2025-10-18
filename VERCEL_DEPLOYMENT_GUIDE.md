@@ -1,10 +1,13 @@
 # 🚀 Guia de Deploy para Vercel - Travel HR Buddy
 
+> **Para um guia rápido de deploy, consulte: [DEPLOY_CHECKLIST.md](DEPLOY_CHECKLIST.md)**  
+> **Para configuração detalhada de variáveis, consulte: [ENV_PRODUCTION_SETUP_GUIDE.md](ENV_PRODUCTION_SETUP_GUIDE.md)**
+
 ## 📋 Pré-requisitos
 
 - Conta na Vercel (https://vercel.com)
 - Projeto Supabase configurado
-- Chaves de API necessárias (ver .env.example)
+- Chaves de API necessárias (ver [.env.production](.env.production) como referência completa)
 
 ## 🔧 Configuração Inicial
 
@@ -17,36 +20,62 @@
 
 ### 2. Configurar Variáveis de Ambiente
 
+> 📘 **Referência completa**: Consulte [.env.production](.env.production) para a lista completa de 55+ variáveis  
+> 📗 **Guia detalhado**: [ENV_PRODUCTION_SETUP_GUIDE.md](ENV_PRODUCTION_SETUP_GUIDE.md) para explicações completas
+
 Na dashboard da Vercel, vá em **Settings** → **Environment Variables** e adicione:
 
-#### Variáveis Essenciais (Obrigatórias)
+#### ✅ Variáveis Essenciais (14 Obrigatórias)
 
 ```bash
-# Supabase
+# Supabase (5 vars)
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
 VITE_SUPABASE_PROJECT_ID=seu-projeto-id
+SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
 
-# Sentry (Monitoramento)
+# OpenAI (1 var)
+VITE_OPENAI_API_KEY=sk-proj-...
+
+# Sentry (4 vars)
 VITE_SENTRY_DSN=https://your-sentry-dsn@o0.ingest.sentry.io/0000000
 SENTRY_ORG=your-organization
 SENTRY_PROJECT=your-project
 SENTRY_AUTH_TOKEN=your-auth-token
+
+# Resend (1 var)
+RESEND_API_KEY=re_...
+
+# System (3 vars)
+VITE_APP_URL=https://seu-app.vercel.app
+VITE_NODE_ENV=production
+VITE_APP_NAME=Nautilus One
 ```
 
-#### Variáveis Opcionais (Recomendadas)
+#### ⚡ Variáveis Recomendadas (8 variáveis para funcionalidade completa)
 
 ```bash
-# OpenAI (Assistente de IA)
-VITE_OPENAI_API_KEY=sk-proj-...
-
-# Mapbox (Mapas)
+# Mapbox (3 vars) - Mapas interativos
 VITE_MAPBOX_ACCESS_TOKEN=pk.eyJ...
 VITE_MAPBOX_TOKEN=pk.eyJ...
+MAPBOX_PUBLIC_TOKEN=pk.eyJ...
 
-# OpenWeather (Clima)
+# OpenWeather (2 vars) - Dados meteorológicos
 VITE_OPENWEATHER_API_KEY=...
+OPENWEATHER_API_KEY=...
 
+# Embed Access Token (1 var) - Segurança de rotas embed
+VITE_EMBED_ACCESS_TOKEN=seu_token_secreto_aqui
+
+# Admin Config (2 vars) - Emails e relatórios
+ADMIN_EMAIL=admin@empresa.com
+EMAIL_FROM=relatorios@nautilus.ai
+```
+
+#### 🔧 Variáveis Opcionais (33+ variáveis para recursos específicos)
+
+```bash
 # Amadeus (Viagens)
 VITE_AMADEUS_API_KEY=your-client-id
 VITE_AMADEUS_API_SECRET=your-client-secret
@@ -54,12 +83,16 @@ VITE_AMADEUS_API_SECRET=your-client-secret
 # ElevenLabs (Voz)
 VITE_ELEVENLABS_API_KEY=...
 
-# App Config
-VITE_APP_URL=https://seu-app.vercel.app
-VITE_NODE_ENV=production
+# Notificações
+VITE_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+VITE_TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrsTUVwxyz
 
-# Embed Access Token
-VITE_EMBED_ACCESS_TOKEN=seu_token_secreto_aqui
+# Feature Flags
+VITE_ENABLE_VOICE=true
+VITE_ENABLE_AI_CHAT=true
+
+# ... e mais 25+ variáveis opcionais
+# Ver .env.production para lista completa
 ```
 
 #### Variáveis para Notificações (Admin Wall)
@@ -264,5 +297,15 @@ Em caso de problemas:
 
 ---
 
-**Última atualização**: 2025-10-13
-**Versão do Guia**: 1.0
+## 📚 Documentação Adicional
+
+- 📘 **[.env.production](.env.production)** - Template completo de variáveis (55+)
+- 📗 **[DEPLOY_CHECKLIST.md](DEPLOY_CHECKLIST.md)** - Checklist rápido de deploy
+- 📙 **[ENV_PRODUCTION_SETUP_GUIDE.md](ENV_PRODUCTION_SETUP_GUIDE.md)** - Guia detalhado de configuração
+- 📕 **[PRODUCTION_ENV_IMPLEMENTATION_SUMMARY.md](PRODUCTION_ENV_IMPLEMENTATION_SUMMARY.md)** - Resumo e estatísticas
+- 📓 **[BEFORE_AFTER_PRODUCTION_ENV.md](BEFORE_AFTER_PRODUCTION_ENV.md)** - Comparação antes/depois
+
+---
+
+**Última atualização**: 2025-10-18
+**Versão do Guia**: 2.0
