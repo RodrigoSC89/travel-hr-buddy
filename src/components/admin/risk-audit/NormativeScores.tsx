@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { TrendingUp, TrendingDown, Minus, Shield } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { TrendingUp, TrendingDown, Minus, Shield } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-const AUDIT_TYPES = ['Petrobras', 'IBAMA', 'ISO', 'IMCA', 'ISM', 'SGSO'];
+const AUDIT_TYPES = ["Petrobras", "IBAMA", "ISO", "IMCA", "ISM", "SGSO"];
 
 interface NormativeScore {
   audit_type: string;
@@ -30,14 +30,14 @@ export function NormativeScores() {
   const loadScores = async () => {
     setLoading(true);
     try {
-      const { data } = await supabase.rpc('get_audit_readiness_summary');
+      const { data } = await supabase.rpc("get_audit_readiness_summary");
       
       if (data) {
         setScores(data);
       }
     } catch (error: any) {
-      console.error('Error loading normative scores:', error);
-      toast.error('Failed to load normative scores');
+      console.error("Error loading normative scores:", error);
+      toast.error("Failed to load normative scores");
     } finally {
       setLoading(false);
     }
@@ -45,46 +45,46 @@ export function NormativeScores() {
 
   const getProbabilityIcon = (probability: string) => {
     switch (probability) {
-      case 'Alta':
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'Baixa':
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
-      default:
-        return <Minus className="w-4 h-4 text-yellow-500" />;
+    case "Alta":
+      return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case "Baixa":
+      return <TrendingDown className="w-4 h-4 text-red-500" />;
+    default:
+      return <Minus className="w-4 h-4 text-yellow-500" />;
     }
   };
 
   const getReadinessColor = (level: string) => {
     switch (level) {
-      case 'Excellent':
-        return 'text-green-600';
-      case 'Good':
-        return 'text-blue-600';
-      case 'Fair':
-        return 'text-yellow-600';
-      default:
-        return 'text-red-600';
+    case "Excellent":
+      return "text-green-600";
+    case "Good":
+      return "text-blue-600";
+    case "Fair":
+      return "text-yellow-600";
+    default:
+      return "text-red-600";
     }
   };
 
   const getReadinessBadge = (level: string) => {
     switch (level) {
-      case 'Excellent':
-        return 'default';
-      case 'Good':
-        return 'secondary';
-      case 'Fair':
-        return 'outline';
-      default:
-        return 'destructive';
+    case "Excellent":
+      return "default";
+    case "Good":
+      return "secondary";
+    case "Fair":
+      return "outline";
+    default:
+      return "destructive";
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return 'text-green-600';
-    if (score >= 70) return 'text-blue-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 85) return "text-green-600";
+    if (score >= 70) return "text-blue-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
   };
 
   // Group scores by audit type
@@ -96,7 +96,7 @@ export function NormativeScores() {
   // Calculate overall statistics
   const overallStats = {
     avgScore: Math.round(scores.reduce((sum, s) => sum + (s.latest_score || 0), 0) / (scores.length || 1)),
-    highReadiness: scores.filter(s => s.readiness_level === 'Excellent' || s.readiness_level === 'Good').length,
+    highReadiness: scores.filter(s => s.readiness_level === "Excellent" || s.readiness_level === "Good").length,
     totalRisks: scores.reduce((sum, s) => sum + s.risk_count, 0),
     criticalRisks: scores.reduce((sum, s) => sum + s.critical_risks, 0),
   };
@@ -182,13 +182,13 @@ export function NormativeScores() {
             ? Math.round(typeScores.reduce((sum, s) => sum + (s.latest_score || 0), 0) / typeScores.length)
             : 0;
           
-          const highProbability = typeScores.filter(s => s.probability === 'Alta').length;
+          const highProbability = typeScores.filter(s => s.probability === "Alta").length;
           
           return (
             <Card 
               key={type}
               className={`cursor-pointer transition-shadow hover:shadow-lg ${
-                selectedType === type ? 'ring-2 ring-primary' : ''
+                selectedType === type ? "ring-2 ring-primary" : ""
               }`}
               onClick={() => setSelectedType(selectedType === type ? null : type)}
             >
@@ -200,7 +200,7 @@ export function NormativeScores() {
                   )}
                 </CardTitle>
                 <CardDescription>
-                  {typeScores.length > 0 ? `Score médio: ${avgScore}` : 'Sem dados'}
+                  {typeScores.length > 0 ? `Score médio: ${avgScore}` : "Sem dados"}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -275,7 +275,7 @@ export function NormativeScores() {
                   </div>
                   <div className="text-right space-y-1">
                     <div className={`text-2xl font-bold ${getScoreColor(score.latest_score)}`}>
-                      {score.latest_score || 'N/A'}
+                      {score.latest_score || "N/A"}
                     </div>
                     <div className="flex items-center gap-1 text-sm">
                       {getProbabilityIcon(score.probability)}

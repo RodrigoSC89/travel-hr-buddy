@@ -1,40 +1,40 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { createClient } from "@supabase/supabase-js";
+import OpenAI from "openai";
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const openaiKey = process.env.OPENAI_API_KEY;
 
-const AUDIT_TYPES = ['Petrobras', 'IBAMA', 'ISO', 'IMCA', 'ISM', 'SGSO'];
+const AUDIT_TYPES = ["Petrobras", "IBAMA", "ISO", "IMCA", "ISM", "SGSO"];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
     const { vessel_id, audit_type } = req.body;
 
     if (!vessel_id || !audit_type) {
-      return res.status(400).json({ error: 'vessel_id and audit_type are required' });
+      return res.status(400).json({ error: "vessel_id and audit_type are required" });
     }
 
     if (!AUDIT_TYPES.includes(audit_type)) {
-      return res.status(400).json({ error: `Invalid audit_type. Must be one of: ${AUDIT_TYPES.join(', ')}` });
+      return res.status(400).json({ error: `Invalid audit_type. Must be one of: ${AUDIT_TYPES.join(", ")}` });
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Get vessel details
     const { data: vessel } = await supabase
-      .from('vessels')
-      .select('*')
-      .eq('id', vessel_id)
+      .from("vessels")
+      .select("*")
+      .eq("id", vessel_id)
       .single();
 
     if (!vessel) {
-      return res.status(404).json({ error: 'Vessel not found' });
+      return res.status(404).json({ error: "Vessel not found" });
     }
 
     // Get 6 months of compliance data
@@ -43,24 +43,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const [incidents, certificates, trainingRecords, sgsoRecords] = await Promise.all([
       supabase
-        .from('safety_incidents')
-        .select('*')
-        .eq('vessel_id', vessel_id)
-        .gte('incident_date', sixMonthsAgo.toISOString()),
+        .from("safety_incidents")
+        .select("*")
+        .eq("vessel_id", vessel_id)
+        .gte("incident_date", sixMonthsAgo.toISOString()),
       supabase
-        .from('certificates')
-        .select('*')
-        .eq('vessel_id', vessel_id),
+        .from("certificates")
+        .select("*")
+        .eq("vessel_id", vessel_id),
       supabase
-        .from('crew_training_records')
-        .select('*')
-        .eq('vessel_id', vessel_id)
-        .gte('training_date', sixMonthsAgo.toISOString()),
+        .from("crew_training_records")
+        .select("*")
+        .eq("vessel_id", vessel_id)
+        .gte("training_date", sixMonthsAgo.toISOString()),
       supabase
-        .from('sgso_practices')
-        .select('*')
-        .eq('vessel_id', vessel_id)
-        .gte('date', sixMonthsAgo.toISOString())
+        .from("sgso_practices")
+        .select("*")
+        .eq("vessel_id", vessel_id)
+        .gte("date", sixMonthsAgo.toISOString())
     ]);
 
     const complianceData = {
@@ -71,7 +71,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       sgso_records: sgsoRecords.data || []
     };
 
-    let prediction: any = null;
+    let prediction: {
+      expected_score: number;
+      probability: string;
+      confidence_level: number;
+      weaknesses: string[];
+      recommendations: string[];
+      compliance_areas: Record<string, number>;
+    } | null = null;
 
     // Try AI analysis with OpenAI
     if (openaiKey) {
@@ -104,29 +111,29 @@ Generate a JSON prediction with this structure:
 Base your analysis on ${audit_type} audit standards.`;
 
         const completion = await openai.chat.completions.create({
-          model: 'gpt-4o-mini',
-          messages: [{ role: 'user', content: prompt }],
+          model: "gpt-4o-mini",
+          messages: [{ role: "user", content: prompt }],
           temperature: 0.3,
           max_tokens: 2000
         });
 
-        const content = completion.choices[0]?.message?.content || '';
+        const content = completion.choices[0]?.message?.content || "";
         const jsonMatch = content.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
           prediction = JSON.parse(jsonMatch[0]);
         }
       } catch (aiError) {
-        console.error('AI analysis failed, using fallback:', aiError);
+        console.error("AI analysis failed, using fallback:", aiError);
       }
     }
 
     // Fallback: rule-based prediction
     if (!prediction) {
       const incidentCount = incidents.data?.length || 0;
-      const validCerts = certificates.data?.filter((c: any) => new Date(c.expiry_date) > new Date()).length || 0;
+      const validCerts = certificates.data?.filter((c: { expiry_date?: string }) => c.expiry_date && new Date(c.expiry_date) > new Date()).length || 0;
       const totalCerts = certificates.data?.length || 1;
       const trainingCount = trainingRecords.data?.length || 0;
-      const sgsoCompliance = sgsoRecords.data?.filter((s: any) => s.compliance_level === 'high').length || 0;
+      const sgsoCompliance = sgsoRecords.data?.filter((s: { compliance_level?: string }) => s.compliance_level === "high").length || 0;
       const totalSgso = sgsoRecords.data?.length || 1;
 
       const certScore = Math.round((validCerts / totalCerts) * 100);
@@ -139,7 +146,7 @@ Base your analysis on ${audit_type} audit standards.`;
       baseScore = Math.round((baseScore + certScore + sgsoScore) / 3);
       baseScore = Math.max(0, Math.min(100, baseScore));
 
-      const probability = baseScore >= 80 ? 'Alta' : baseScore >= 60 ? 'Média' : 'Baixa';
+      const probability = baseScore >= 80 ? "Alta" : baseScore >= 60 ? "Média" : "Baixa";
       const confidenceLevel = 0.75;
 
       const weaknesses = [];
@@ -147,24 +154,24 @@ Base your analysis on ${audit_type} audit standards.`;
 
       if (incidentCount > 3) {
         weaknesses.push(`High incident rate: ${incidentCount} incidents in 6 months`);
-        recommendations.push('Implement enhanced safety protocols and training');
+        recommendations.push("Implement enhanced safety protocols and training");
       }
       if (certScore < 90) {
         weaknesses.push(`Certificate compliance at ${certScore}%`);
-        recommendations.push('Renew expiring certificates and maintain documentation');
+        recommendations.push("Renew expiring certificates and maintain documentation");
       }
       if (trainingCount < 10) {
-        weaknesses.push('Limited training records');
-        recommendations.push('Increase crew training frequency and documentation');
+        weaknesses.push("Limited training records");
+        recommendations.push("Increase crew training frequency and documentation");
       }
       if (sgsoScore < 70) {
         weaknesses.push(`SGSO compliance at ${sgsoScore}%`);
-        recommendations.push('Improve SGSO practice compliance and documentation');
+        recommendations.push("Improve SGSO practice compliance and documentation");
       }
 
       if (weaknesses.length === 0) {
-        weaknesses.push('No major weaknesses identified');
-        recommendations.push('Maintain current standards and continue monitoring');
+        weaknesses.push("No major weaknesses identified");
+        recommendations.push("Maintain current standards and continue monitoring");
       }
 
       prediction = {
@@ -189,7 +196,7 @@ Base your analysis on ${audit_type} audit standards.`;
     validUntil.setDate(validUntil.getDate() + 30);
 
     const { data: insertedPrediction, error: insertError } = await supabase
-      .from('audit_predictions')
+      .from("audit_predictions")
       .insert({
         vessel_id,
         audit_type,
@@ -201,14 +208,14 @@ Base your analysis on ${audit_type} audit standards.`;
         compliance_areas: prediction.compliance_areas,
         predicted_date: now.toISOString(),
         valid_until: validUntil.toISOString(),
-        status: 'active'
+        status: "active"
       })
       .select()
       .single();
 
     if (insertError) {
-      console.error('Error inserting prediction:', insertError);
-      return res.status(500).json({ error: 'Failed to store prediction' });
+      console.error("Error inserting prediction:", insertError);
+      return res.status(500).json({ error: "Failed to store prediction" });
     }
 
     return res.status(200).json({
@@ -217,7 +224,7 @@ Base your analysis on ${audit_type} audit standards.`;
       prediction: insertedPrediction
     });
   } catch (error: any) {
-    console.error('Error in score-predict:', error);
-    return res.status(500).json({ error: error.message || 'Internal server error' });
+    console.error("Error in score-predict:", error);
+    return res.status(500).json({ error: error.message || "Internal server error" });
   }
 }

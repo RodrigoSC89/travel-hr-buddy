@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { RefreshCw, AlertTriangle, CheckCircle2, AlertCircle, Info } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { RefreshCw, AlertTriangle, CheckCircle2, AlertCircle, Info } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface TacticalRisk {
   id: string;
@@ -47,24 +47,24 @@ export function TacticalRiskPanel() {
     setLoading(true);
     try {
       // Get risk summaries
-      const { data: summaries } = await supabase.rpc('get_vessel_risk_summary');
+      const { data: summaries } = await supabase.rpc("get_vessel_risk_summary");
       if (summaries) {
         setRiskSummaries(summaries);
       }
 
       // Get all risks
       const { data: risksData } = await supabase
-        .from('tactical_risks')
-        .select('*')
-        .eq('status', 'active')
-        .order('risk_score', { ascending: false });
+        .from("tactical_risks")
+        .select("*")
+        .eq("status", "active")
+        .order("risk_score", { ascending: false });
       
       if (risksData) {
         setRisks(risksData);
       }
     } catch (error: any) {
-      console.error('Error loading risk data:', error);
-      toast.error('Failed to load risk data');
+      console.error("Error loading risk data:", error);
+      toast.error("Failed to load risk data");
     } finally {
       setLoading(false);
     }
@@ -73,22 +73,22 @@ export function TacticalRiskPanel() {
   const generateForecasts = async () => {
     setGenerating(true);
     try {
-      const response = await fetch('/api/ai/forecast-risks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/ai/forecast-risks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}), // Generate for all vessels
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate forecasts');
+        throw new Error("Failed to generate forecasts");
       }
 
       const data = await response.json();
       toast.success(`Generated forecasts for ${data.results?.length || 0} vessel(s)`);
       await loadRiskData();
     } catch (error: any) {
-      console.error('Error generating forecasts:', error);
-      toast.error('Failed to generate forecasts');
+      console.error("Error generating forecasts:", error);
+      toast.error("Failed to generate forecasts");
     } finally {
       setGenerating(false);
     }
@@ -96,31 +96,31 @@ export function TacticalRiskPanel() {
 
   const getRiskIcon = (level: string) => {
     switch (level) {
-      case 'Critical':
-        return <AlertTriangle className="w-4 h-4 text-red-500" />;
-      case 'High':
-        return <AlertCircle className="w-4 h-4 text-orange-500" />;
-      case 'Medium':
-        return <Info className="w-4 h-4 text-yellow-500" />;
-      case 'Low':
-        return <CheckCircle2 className="w-4 h-4 text-green-500" />;
-      default:
-        return <Info className="w-4 h-4" />;
+    case "Critical":
+      return <AlertTriangle className="w-4 h-4 text-red-500" />;
+    case "High":
+      return <AlertCircle className="w-4 h-4 text-orange-500" />;
+    case "Medium":
+      return <Info className="w-4 h-4 text-yellow-500" />;
+    case "Low":
+      return <CheckCircle2 className="w-4 h-4 text-green-500" />;
+    default:
+      return <Info className="w-4 h-4" />;
     }
   };
 
   const getRiskBadgeVariant = (level: string) => {
     switch (level) {
-      case 'Critical':
-        return 'destructive';
-      case 'High':
-        return 'default';
-      case 'Medium':
-        return 'secondary';
-      case 'Low':
-        return 'outline';
-      default:
-        return 'outline';
+    case "Critical":
+      return "destructive";
+    case "High":
+      return "default";
+    case "Medium":
+      return "secondary";
+    case "Low":
+      return "outline";
+    default:
+      return "outline";
     }
   };
 
@@ -138,8 +138,8 @@ export function TacticalRiskPanel() {
           </p>
         </div>
         <Button onClick={generateForecasts} disabled={generating || loading}>
-          <RefreshCw className={`w-4 h-4 mr-2 ${generating ? 'animate-spin' : ''}`} />
-          {generating ? 'Gerando...' : 'Gerar Previsões'}
+          <RefreshCw className={`w-4 h-4 mr-2 ${generating ? "animate-spin" : ""}`} />
+          {generating ? "Gerando..." : "Gerar Previsões"}
         </Button>
       </div>
 
@@ -149,7 +149,7 @@ export function TacticalRiskPanel() {
           <Card 
             key={summary.vessel_id}
             className={`cursor-pointer transition-shadow hover:shadow-lg ${
-              selectedVessel === summary.vessel_id ? 'ring-2 ring-primary' : ''
+              selectedVessel === summary.vessel_id ? "ring-2 ring-primary" : ""
             }`}
             onClick={() => setSelectedVessel(
               selectedVessel === summary.vessel_id ? null : summary.vessel_id

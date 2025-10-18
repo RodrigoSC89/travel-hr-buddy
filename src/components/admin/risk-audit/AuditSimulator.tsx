@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Progress } from '@/components/ui/progress';
-import { Play, TrendingUp, TrendingDown, Minus } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Progress } from "@/components/ui/progress";
+import { Play, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-const AUDIT_TYPES = ['Petrobras', 'IBAMA', 'ISO', 'IMCA', 'ISM', 'SGSO'];
+const AUDIT_TYPES = ["Petrobras", "IBAMA", "ISO", "IMCA", "ISM", "SGSO"];
 
 interface AuditPrediction {
   id: string;
@@ -31,8 +31,8 @@ export function AuditSimulator() {
   const [loading, setLoading] = useState(false);
   const [simulating, setSimulating] = useState(false);
   const [vessels, setVessels] = useState<Vessel[]>([]);
-  const [selectedVessel, setSelectedVessel] = useState<string>('');
-  const [selectedAuditType, setSelectedAuditType] = useState<string>('');
+  const [selectedVessel, setSelectedVessel] = useState<string>("");
+  const [selectedAuditType, setSelectedAuditType] = useState<string>("");
   const [prediction, setPrediction] = useState<AuditPrediction | null>(null);
 
   useEffect(() => {
@@ -42,31 +42,31 @@ export function AuditSimulator() {
   const loadVessels = async () => {
     try {
       const { data } = await supabase
-        .from('vessels')
-        .select('id, name')
-        .eq('status', 'active')
-        .order('name');
+        .from("vessels")
+        .select("id, name")
+        .eq("status", "active")
+        .order("name");
       
       if (data) {
         setVessels(data);
       }
     } catch (error: any) {
-      console.error('Error loading vessels:', error);
-      toast.error('Failed to load vessels');
+      console.error("Error loading vessels:", error);
+      toast.error("Failed to load vessels");
     }
   };
 
   const simulateAudit = async () => {
     if (!selectedVessel || !selectedAuditType) {
-      toast.error('Please select both vessel and audit type');
+      toast.error("Please select both vessel and audit type");
       return;
     }
 
     setSimulating(true);
     try {
-      const response = await fetch('/api/audit/score-predict', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/audit/score-predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           vessel_id: selectedVessel,
           audit_type: selectedAuditType,
@@ -74,15 +74,15 @@ export function AuditSimulator() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate prediction');
+        throw new Error("Failed to generate prediction");
       }
 
       const data = await response.json();
       setPrediction(data.prediction);
-      toast.success('Audit prediction generated successfully');
+      toast.success("Audit prediction generated successfully");
     } catch (error: any) {
-      console.error('Error simulating audit:', error);
-      toast.error('Failed to simulate audit');
+      console.error("Error simulating audit:", error);
+      toast.error("Failed to simulate audit");
     } finally {
       setSimulating(false);
     }
@@ -90,31 +90,31 @@ export function AuditSimulator() {
 
   const getProbabilityIcon = (probability: string) => {
     switch (probability) {
-      case 'Alta':
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'Baixa':
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
-      default:
-        return <Minus className="w-4 h-4 text-yellow-500" />;
+    case "Alta":
+      return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case "Baixa":
+      return <TrendingDown className="w-4 h-4 text-red-500" />;
+    default:
+      return <Minus className="w-4 h-4 text-yellow-500" />;
     }
   };
 
   const getProbabilityColor = (probability: string) => {
     switch (probability) {
-      case 'Alta':
-        return 'text-green-600';
-      case 'Baixa':
-        return 'text-red-600';
-      default:
-        return 'text-yellow-600';
+    case "Alta":
+      return "text-green-600";
+    case "Baixa":
+      return "text-red-600";
+    default:
+      return "text-yellow-600";
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return 'text-green-600';
-    if (score >= 70) return 'text-blue-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 85) return "text-green-600";
+    if (score >= 70) return "text-blue-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
   };
 
   return (
@@ -173,8 +173,8 @@ export function AuditSimulator() {
             disabled={!selectedVessel || !selectedAuditType || simulating}
             className="w-full"
           >
-            <Play className={`w-4 h-4 mr-2 ${simulating ? 'animate-pulse' : ''}`} />
-            {simulating ? 'Simulando...' : 'Simular Auditoria'}
+            <Play className={`w-4 h-4 mr-2 ${simulating ? "animate-pulse" : ""}`} />
+            {simulating ? "Simulando..." : "Simular Auditoria"}
           </Button>
         </CardContent>
       </Card>

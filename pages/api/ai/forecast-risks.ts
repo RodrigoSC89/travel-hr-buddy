@@ -1,14 +1,14 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { createClient } from "@supabase/supabase-js";
+import OpenAI from "openai";
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const openaiKey = process.env.OPENAI_API_KEY;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
@@ -16,25 +16,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Get vessels to analyze
-    let vessels: any[] = [];
+    let vessels: { id: string; name: string; status: string }[] = [];
     if (vessel_id) {
       const { data } = await supabase
-        .from('vessels')
-        .select('*')
-        .eq('id', vessel_id)
-        .eq('status', 'active')
+        .from("vessels")
+        .select("*")
+        .eq("id", vessel_id)
+        .eq("status", "active")
         .single();
       if (data) vessels = [data];
     } else {
       const { data } = await supabase
-        .from('vessels')
-        .select('*')
-        .eq('status', 'active');
+        .from("vessels")
+        .select("*")
+        .eq("status", "active");
       if (data) vessels = data;
     }
 
     if (vessels.length === 0) {
-      return res.status(404).json({ error: 'No active vessels found' });
+      return res.status(404).json({ error: "No active vessels found" });
     }
 
     const results = [];
@@ -46,20 +46,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const [dpIncidents, sgsoRecords, safetyIncidents] = await Promise.all([
         supabase
-          .from('dp_incidents')
-          .select('*')
-          .eq('vessel_id', vessel.id)
-          .gte('incident_date', sixtyDaysAgo.toISOString()),
+          .from("dp_incidents")
+          .select("*")
+          .eq("vessel_id", vessel.id)
+          .gte("incident_date", sixtyDaysAgo.toISOString()),
         supabase
-          .from('sgso_practices')
-          .select('*')
-          .eq('vessel_id', vessel.id)
-          .gte('date', sixtyDaysAgo.toISOString()),
+          .from("sgso_practices")
+          .select("*")
+          .eq("vessel_id", vessel.id)
+          .gte("date", sixtyDaysAgo.toISOString()),
         supabase
-          .from('safety_incidents')
-          .select('*')
-          .eq('vessel_id', vessel.id)
-          .gte('incident_date', sixtyDaysAgo.toISOString())
+          .from("safety_incidents")
+          .select("*")
+          .eq("vessel_id", vessel.id)
+          .gte("incident_date", sixtyDaysAgo.toISOString())
       ]);
 
       const operationalData = {
@@ -69,7 +69,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         safety_incidents: safetyIncidents.data || []
       };
 
-      let risks: any[] = [];
+      let risks: { system: string; risk_type: string; risk_score: number; risk_level: string; description: string; suggested_action: string }[] = [];
 
       // Try AI analysis with OpenAI
       if (openaiKey) {
@@ -95,49 +95,49 @@ Generate a JSON array of predicted risks with this structure:
 Focus on systems with historical issues and predict 3-7 risks.`;
 
           const completion = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
-            messages: [{ role: 'user', content: prompt }],
+            model: "gpt-4o-mini",
+            messages: [{ role: "user", content: prompt }],
             temperature: 0.3,
             max_tokens: 2000
           });
 
-          const content = completion.choices[0]?.message?.content || '';
+          const content = completion.choices[0]?.message?.content || "";
           const jsonMatch = content.match(/\[[\s\S]*\]/);
           if (jsonMatch) {
             risks = JSON.parse(jsonMatch[0]);
           }
         } catch (aiError) {
-          console.error('AI analysis failed, using fallback:', aiError);
+          console.error("AI analysis failed, using fallback:", aiError);
         }
       }
 
       // Fallback: rule-based risk analysis
       if (risks.length === 0) {
-        const systems = ['DP', 'Energia', 'SGSO', 'Comunicações', 'Propulsion', 'Navigation'];
+        const systems = ["DP", "Energia", "SGSO", "Comunicações", "Propulsion", "Navigation"];
         const dpIssues = operationalData.dp_incidents.length;
-        const sgsoIssues = operationalData.sgso_practices.filter((p: any) => p.compliance_level === 'low').length;
+        const sgsoIssues = operationalData.sgso_practices.filter((p: { compliance_level?: string }) => p.compliance_level === "low").length;
         const safetyIssues = operationalData.safety_incidents.length;
 
         systems.forEach(system => {
           let riskScore = 30; // Base score
-          let riskType = 'Normal';
+          let riskType = "Normal";
           let description = `${system} operating normally`;
 
-          if (system === 'DP' && dpIssues > 5) {
+          if (system === "DP" && dpIssues > 5) {
             riskScore = Math.min(85, 50 + dpIssues * 3);
-            riskType = 'Intermittency';
+            riskType = "Intermittency";
             description = `High DP incident rate (${dpIssues} in 60 days)`;
-          } else if (system === 'SGSO' && sgsoIssues > 3) {
+          } else if (system === "SGSO" && sgsoIssues > 3) {
             riskScore = Math.min(75, 40 + sgsoIssues * 5);
-            riskType = 'Degradation';
-            description = `SGSO compliance issues detected`;
+            riskType = "Degradation";
+            description = "SGSO compliance issues detected";
           } else if (safetyIssues > 2) {
             riskScore = Math.min(70, 35 + safetyIssues * 5);
-            riskType = 'Delay';
-            description = `Safety incidents may impact operations`;
+            riskType = "Delay";
+            description = "Safety incidents may impact operations";
           }
 
-          const riskLevel = riskScore >= 75 ? 'Critical' : riskScore >= 60 ? 'High' : riskScore >= 40 ? 'Medium' : 'Low';
+          const riskLevel = riskScore >= 75 ? "Critical" : riskScore >= 60 ? "High" : riskScore >= 40 ? "Medium" : "Low";
 
           risks.push({
             system,
@@ -152,10 +152,10 @@ Focus on systems with historical issues and predict 3-7 risks.`;
 
       // Mark old risks as resolved
       await supabase
-        .from('tactical_risks')
-        .update({ status: 'resolved' })
-        .eq('vessel_id', vessel.id)
-        .eq('status', 'active');
+        .from("tactical_risks")
+        .update({ status: "resolved" })
+        .eq("vessel_id", vessel.id)
+        .eq("status", "active");
 
       // Insert new risks
       const now = new Date();
@@ -172,16 +172,16 @@ Focus on systems with historical issues and predict 3-7 risks.`;
         suggested_action: risk.suggested_action,
         predicted_date: now.toISOString(),
         valid_until: validUntil.toISOString(),
-        status: 'active'
+        status: "active"
       }));
 
       const { data: insertedRisks, error: insertError } = await supabase
-        .from('tactical_risks')
+        .from("tactical_risks")
         .insert(risksToInsert)
         .select();
 
       if (insertError) {
-        console.error('Error inserting risks:', insertError);
+        console.error("Error inserting risks:", insertError);
       }
 
       results.push({
@@ -198,7 +198,7 @@ Focus on systems with historical issues and predict 3-7 risks.`;
       results
     });
   } catch (error: any) {
-    console.error('Error in forecast-risks:', error);
-    return res.status(500).json({ error: error.message || 'Internal server error' });
+    console.error("Error in forecast-risks:", error);
+    return res.status(500).json({ error: error.message || "Internal server error" });
   }
 }

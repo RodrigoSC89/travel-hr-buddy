@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Target, PlayCircle, ListChecks, Award } from 'lucide-react';
-import { TacticalRiskPanel } from '@/components/admin/risk-audit/TacticalRiskPanel';
-import { AuditSimulator } from '@/components/admin/risk-audit/AuditSimulator';
-import { RecommendedActions } from '@/components/admin/risk-audit/RecommendedActions';
-import { NormativeScores } from '@/components/admin/risk-audit/NormativeScores';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, Target, PlayCircle, ListChecks, Award } from "lucide-react";
+import { TacticalRiskPanel } from "@/components/admin/risk-audit/TacticalRiskPanel";
+import { AuditSimulator } from "@/components/admin/risk-audit/AuditSimulator";
+import { RecommendedActions } from "@/components/admin/risk-audit/RecommendedActions";
+import { NormativeScores } from "@/components/admin/risk-audit/NormativeScores";
 
 export default function RiskAudit() {
-  const [activeTab, setActiveTab] = useState('risks');
+  const [activeTab, setActiveTab] = useState("risks");
 
   return (
     <div className="space-y-6 p-6">

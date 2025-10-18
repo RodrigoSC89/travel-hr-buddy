@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle2, User, AlertTriangle } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CheckCircle2, User, AlertTriangle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface Action {
   id: string;
-  type: 'risk' | 'audit';
+  type: "risk" | "audit";
   title: string;
   description: string;
-  priority: 'High' | 'Medium' | 'Low';
+  priority: "High" | "Medium" | "Low";
   assigned_to: string | null;
   status: string;
   vessel_name?: string;
@@ -40,12 +40,12 @@ export function RecommendedActions() {
       // Load users for assignment
       const { data: usersData } = await supabase.auth.admin.listUsers();
       if (usersData) {
-        setUsers(usersData.users.map(u => ({ id: u.id, email: u.email || 'Unknown' })));
+        setUsers(usersData.users.map(u => ({ id: u.id, email: u.email || "Unknown" })));
       }
 
       // Load tactical risks as actions
       const { data: risks } = await supabase
-        .from('tactical_risks')
+        .from("tactical_risks")
         .select(`
           id,
           system,
@@ -56,12 +56,12 @@ export function RecommendedActions() {
           status,
           vessels (name)
         `)
-        .eq('status', 'active')
-        .order('risk_score', { ascending: false });
+        .eq("status", "active")
+        .order("risk_score", { ascending: false });
 
       // Load audit predictions as actions
       const { data: predictions } = await supabase
-        .from('audit_predictions')
+        .from("audit_predictions")
         .select(`
           id,
           audit_type,
@@ -69,7 +69,7 @@ export function RecommendedActions() {
           probability,
           vessels (name)
         `)
-        .eq('status', 'active');
+        .eq("status", "active");
 
       const allActions: Action[] = [];
 
@@ -78,10 +78,10 @@ export function RecommendedActions() {
         risks.forEach((risk: any) => {
           allActions.push({
             id: risk.id,
-            type: 'risk',
+            type: "risk",
             title: `${risk.system} - Risk Mitigation`,
             description: risk.suggested_action || risk.description,
-            priority: risk.risk_level === 'Critical' ? 'High' : risk.risk_level === 'High' ? 'High' : risk.risk_level === 'Medium' ? 'Medium' : 'Low',
+            priority: risk.risk_level === "Critical" ? "High" : risk.risk_level === "High" ? "High" : risk.risk_level === "Medium" ? "Medium" : "Low",
             assigned_to: risk.assigned_to,
             status: risk.status,
             vessel_name: risk.vessels?.name,
@@ -97,12 +97,12 @@ export function RecommendedActions() {
             pred.recommendations.forEach((rec: string, idx: number) => {
               allActions.push({
                 id: `${pred.id}-${idx}`,
-                type: 'audit',
+                type: "audit",
                 title: `${pred.audit_type} Audit Recommendation`,
                 description: rec,
-                priority: pred.probability === 'Baixa' ? 'High' : pred.probability === 'Média' ? 'Medium' : 'Low',
+                priority: pred.probability === "Baixa" ? "High" : pred.probability === "Média" ? "Medium" : "Low",
                 assigned_to: null,
-                status: 'pending',
+                status: "pending",
                 vessel_name: pred.vessels?.name,
                 audit_type: pred.audit_type,
               });
@@ -119,8 +119,8 @@ export function RecommendedActions() {
 
       setActions(allActions);
     } catch (error: any) {
-      console.error('Error loading actions:', error);
-      toast.error('Failed to load actions');
+      console.error("Error loading actions:", error);
+      toast.error("Failed to load actions");
     } finally {
       setLoading(false);
     }
@@ -128,54 +128,54 @@ export function RecommendedActions() {
 
   const assignAction = async (actionId: string, userId: string) => {
     const action = actions.find(a => a.id === actionId);
-    if (!action || action.type !== 'risk') return;
+    if (!action || action.type !== "risk") return;
 
     try {
       const { error } = await supabase
-        .from('tactical_risks')
+        .from("tactical_risks")
         .update({ assigned_to: userId })
-        .eq('id', actionId);
+        .eq("id", actionId);
 
       if (error) throw error;
 
-      toast.success('Action assigned successfully');
+      toast.success("Action assigned successfully");
       await loadData();
     } catch (error: any) {
-      console.error('Error assigning action:', error);
-      toast.error('Failed to assign action');
+      console.error("Error assigning action:", error);
+      toast.error("Failed to assign action");
     }
   };
 
   const markComplete = async (actionId: string) => {
     const action = actions.find(a => a.id === actionId);
-    if (!action || action.type !== 'risk') return;
+    if (!action || action.type !== "risk") return;
 
     try {
       const { error } = await supabase
-        .from('tactical_risks')
-        .update({ status: 'resolved' })
-        .eq('id', actionId);
+        .from("tactical_risks")
+        .update({ status: "resolved" })
+        .eq("id", actionId);
 
       if (error) throw error;
 
-      toast.success('Action marked as complete');
+      toast.success("Action marked as complete");
       await loadData();
     } catch (error: any) {
-      console.error('Error marking complete:', error);
-      toast.error('Failed to mark action as complete');
+      console.error("Error marking complete:", error);
+      toast.error("Failed to mark action as complete");
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'High':
-        return 'destructive';
-      case 'Medium':
-        return 'default';
-      case 'Low':
-        return 'secondary';
-      default:
-        return 'outline';
+    case "High":
+      return "destructive";
+    case "Medium":
+      return "default";
+    case "Low":
+      return "secondary";
+    default:
+      return "outline";
     }
   };
 
@@ -210,7 +210,7 @@ export function RecommendedActions() {
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-red-500" />
               <span className="text-3xl font-bold text-red-600">
-                {actions.filter(a => a.priority === 'High').length}
+                {actions.filter(a => a.priority === "High").length}
               </span>
             </div>
           </CardContent>
@@ -259,17 +259,17 @@ export function RecommendedActions() {
                   </div>
                   <p className="text-sm text-muted-foreground">{action.description}</p>
                   
-                  {action.type === 'risk' && (
+                  {action.type === "risk" && (
                     <div className="flex items-center gap-2 flex-wrap">
                       <Select
-                        value={action.assigned_to || ''}
+                        value={action.assigned_to || ""}
                         onValueChange={(value) => assignAction(action.id, value)}
                       >
                         <SelectTrigger className="w-[250px]">
                           <SelectValue placeholder="Atribuir a...">
                             {action.assigned_to 
-                              ? users.find(u => u.id === action.assigned_to)?.email || 'Unknown'
-                              : 'Atribuir a...'
+                              ? users.find(u => u.id === action.assigned_to)?.email || "Unknown"
+                              : "Atribuir a..."
                             }
                           </SelectValue>
                         </SelectTrigger>
