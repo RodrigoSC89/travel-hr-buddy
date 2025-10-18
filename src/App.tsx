@@ -103,6 +103,7 @@ const IMCAAudit = React.lazy(() => import("./pages/IMCAAudit"));
 const Simulations = React.lazy(() => import("./pages/admin/simulations"));
 const CronMonitor = React.lazy(() => import("./pages/admin/cron-monitor"));
 const TrainingManagement = React.lazy(() => import("./pages/admin/training"));
+const RiskAudit = React.lazy(() => import("./pages/admin/risk-audit"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -250,6 +251,7 @@ function App() {
                       <Route path="/admin/simulations" element={<Simulations />} />
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
+                      <Route path="/admin/risk-audit" element={<RiskAudit />} />
                       <Route path="/imca-audit" element={<IMCAAudit />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
