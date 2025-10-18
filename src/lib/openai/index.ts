@@ -15,7 +15,10 @@ if (!apiKey || apiKey === "your_openai_api_key_here") {
 /**
  * Authenticated OpenAI client instance
  * Can be used in API routes and server-side operations
+ * Note: dangerouslyAllowBrowser is enabled for client-side usage
+ * Ensure API key is properly secured and not exposed in client code
  */
 export const openai = new OpenAI({
   apiKey: apiKey || "",
+  dangerouslyAllowBrowser: true,
 });
