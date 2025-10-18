@@ -7,16 +7,6 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  test: {
-    globals: true,
-    environment: "jsdom",
-    setupFiles: "./src/tests/setup.ts",
-    css: true,
-    testTimeout: 15000, // Increase timeout to 15 seconds for tests with external calls
-    env: {
-      NODE_ENV: "test", // Set NODE_ENV to test to skip delays in fallback logic
-    },
-  },
   base: "/",
   server: {
     host: true,
