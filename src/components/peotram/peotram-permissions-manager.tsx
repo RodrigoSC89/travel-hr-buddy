@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { UserCheck, Users, Ship, Building, Plus, Edit, Trash2, Shield, Eye, Calendar, Clock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { nullToUndefined } from "@/lib/type-helpers";
 
 interface User {
   id: string;
@@ -126,7 +127,11 @@ export const PeotramPermissionsManager: React.FC = () => {
         .order("name");
 
       if (error) throw error;
-      setVessels(data || []);
+      const mappedVessels = (data || []).map(v => ({
+        ...v,
+        imo_number: nullToUndefined(v.imo_number)
+      }));
+      setVessels(mappedVessels);
     } catch (error) {
     }
   };

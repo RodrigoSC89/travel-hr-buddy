@@ -18,6 +18,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { nullToUndefined } from "@/lib/type-helpers";
 
 interface Notification {
   id: string;
@@ -84,7 +85,12 @@ export const RealTimeNotificationCenter: React.FC = () => {
       if (smartError) throw smartError;
 
       setNotifications((regularNotifications || []) as Notification[]);
-      setIntelligentNotifications(smartNotifications || []);
+      const mappedSmartNotifications = (smartNotifications || []).map(n => ({
+        ...n,
+        action_type: nullToUndefined(n.action_type),
+        action_text: nullToUndefined(n.action_text)
+      }));
+      setIntelligentNotifications(mappedSmartNotifications);
     } catch (error) {
       toast({
         title: "Erro",

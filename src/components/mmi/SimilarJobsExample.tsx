@@ -219,8 +219,8 @@ function SimilarJobsList({ jobs }: { jobs: SimilarJob[] }) {
               )}
               <div className="flex gap-2 mt-2">
                 <Badge variant="outline">{job.status}</Badge>
-                {job.metadata?.category && (
-                  <Badge variant="secondary">{job.metadata.category}</Badge>
+                {job.metadata && typeof job.metadata === "object" && "category" in job.metadata && (
+                  <Badge variant="secondary">{String(job.metadata.category)}</Badge>
                 )}
               </div>
             </div>

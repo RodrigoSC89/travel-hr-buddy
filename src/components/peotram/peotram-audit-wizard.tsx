@@ -35,6 +35,7 @@ import {
   Plus
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { nullToUndefined } from "@/lib/type-helpers";
 
 interface AuditRequirement {
   id: string;
@@ -625,10 +626,10 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Select
                   value={requirement.score?.toString() || ""}
                   onValueChange={(value) => {
-                    const scoreValue = value === "N/A" ? null : parseInt(value);
+                    const scoreValue = value === "N/A" ? undefined : parseInt(value);
                     updateRequirement(currentElement, currentRequirement, { 
                       score: scoreValue,
-                      nonConformity: scoreValue !== null && scoreValue < 3
+                      nonConformity: scoreValue !== undefined && scoreValue < 3
                     });
                   }}
                 >

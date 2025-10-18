@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, User, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { nullToUndefined } from "@/lib/type-helpers";
 
 interface CrewMember {
   id: string;
@@ -40,7 +41,13 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
         .order("full_name");
 
       if (error) throw error;
-      setCrewMembers(data || []);
+      const mappedCrew = (data || []).map(member => ({
+        ...member,
+        status: member.status || "available",
+        vessel_assignment: nullToUndefined(member.vessel_id),
+        nationality: member.nationality || "Brasil"
+      }));
+      setCrewMembers(mappedCrew);
     } catch (error: any) {
       toast({
         title: "Erro ao carregar tripulantes",

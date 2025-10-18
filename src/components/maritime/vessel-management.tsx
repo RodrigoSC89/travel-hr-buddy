@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { nullToUndefined } from "@/lib/type-helpers";
 
 interface Vessel {
   id: string;
@@ -87,7 +88,23 @@ export function VesselManagement() {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setVessels(data || []);
+      const mappedVessels: Vessel[] = (data || []).map(v => ({
+        id: v.id,
+        name: v.name,
+        vessel_type: v.vessel_type,
+        imo_number: nullToUndefined(v.imo_number),
+        flag_state: v.flag_state,
+        gross_tonnage: nullToUndefined(v.gross_tonnage),
+        built_year: nullToUndefined(v.built_year),
+        classification_society: nullToUndefined(v.classification_society),
+        status: v.status || "active",
+        current_location: nullToUndefined(v.current_location),
+        crew_capacity: nullToUndefined(v.crew_capacity),
+        organization_id: nullToUndefined(v.organization_id),
+        created_at: v.created_at || new Date().toISOString(),
+        updated_at: v.updated_at || new Date().toISOString()
+      }));
+      setVessels(mappedVessels);
     } catch (error) {
       toast.error("Erro ao carregar navios");
     } finally {

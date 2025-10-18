@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { nullToUndefined } from "@/lib/type-helpers";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -50,7 +51,9 @@ export const EnhancedNotificationCenter: React.FC = () => {
       setNotifications((data || []).map(item => ({
         ...item,
         type: (item.type as "info" | "warning" | "error" | "success") || "info",
-        priority: (item.priority as "low" | "medium" | "high" | "urgent") || "medium"
+        priority: (item.priority as "low" | "medium" | "high" | "urgent") || "medium",
+        action_type: nullToUndefined(item.action_type),
+        action_text: nullToUndefined(item.action_text)
       })));
     } catch (error) {
       toast({
@@ -93,10 +96,13 @@ export const EnhancedNotificationCenter: React.FC = () => {
 
   const markAllAsRead = async () => {
     try {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user?.id) return;
+      
       const { error } = await supabase
         .from("intelligent_notifications")
         .update({ is_read: true })
-        .eq("user_id", (await supabase.auth.getUser()).data.user?.id);
+        .eq("user_id", userData.user.id);
 
       if (error) throw error;
 

@@ -18,6 +18,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { nullToUndefined } from "@/lib/type-helpers";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -99,7 +100,15 @@ export const EmployeeDossierSummary: React.FC = () => {
 
         setCrewMember(newMember);
       } else {
-        setCrewMember(memberData);
+        const mappedMember: CrewMember = {
+          id: memberData.id,
+          full_name: memberData.full_name,
+          position: memberData.position,
+          rank: memberData.rank || "Ordinary Seaman",
+          status: memberData.status || "available",
+          experience_years: memberData.experience_years || 0
+        };
+        setCrewMember(mappedMember);
       }
 
       // Buscar certificações
@@ -113,7 +122,14 @@ export const EmployeeDossierSummary: React.FC = () => {
 
         if (certError) {
         } else {
-          setCertifications(certData || []);
+          const mappedCerts = (certData || []).map(cert => ({
+            id: cert.id,
+            certification_name: cert.certification_name,
+            status: cert.status || "valid",
+            expiry_date: cert.expiry_date || "",
+            issuing_authority: cert.issuing_authority || ""
+          }));
+          setCertifications(mappedCerts);
         }
 
         // Buscar embarques
@@ -126,7 +142,15 @@ export const EmployeeDossierSummary: React.FC = () => {
 
         if (embarkError) {
         } else {
-          setEmbarkations(embarkData || []);
+          const mappedEmbarks = (embarkData || []).map(emb => ({
+            id: emb.id,
+            vessel_name: emb.vessel_name || "N/A",
+            embark_date: emb.embark_date,
+            disembark_date: emb.disembark_date || "",
+            function_role: emb.function_role || "",
+            hours_worked: emb.hours_worked || 0
+          }));
+          setEmbarkations(mappedEmbarks);
         }
       }
     } catch (error) {

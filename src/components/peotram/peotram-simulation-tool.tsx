@@ -270,7 +270,7 @@ export const PeotramSimulationTool: React.FC = () => {
     return recommendations;
   };
 
-  const updateParameter = (key: string, value: number) => {
+  const updateParameter = (key: keyof typeof parameters, value: number) => {
     setParameters(prev => ({
       ...prev,
       [key]: {
@@ -379,7 +379,7 @@ export const PeotramSimulationTool: React.FC = () => {
                 <div className="px-3">
                   <Slider
                     value={[param.simulatedValue]}
-                    onValueChange={(value) => updateParameter(key, value[0])}
+                    onValueChange={(value) => updateParameter(key as keyof typeof parameters, value[0])}
                     max={param.max}
                     min={param.min}
                     step={(param.max - param.min) / 100}

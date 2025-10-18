@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { nullToUndefined } from "@/lib/type-helpers";
 import { 
   Users, 
   UserCheck, 
@@ -76,13 +77,13 @@ export const CrewManagementDashboard = () => {
         full_name: member.full_name,
         position: member.position,
         rank: member.rank || "N/A",
-        status: member.status as any,
-        vessel_assignment: member.vessel_id,
-        contract_start: member.contract_start,
-        contract_end: member.contract_end,
+        status: member.status as "available" | "assigned" | "on_leave" | "training",
+        vessel_assignment: nullToUndefined(member.vessel_id),
+        contract_start: member.contract_start || "",
+        contract_end: member.contract_end || "",
         certification_count: Math.floor(Math.random() * 10) + 1,
         experience_years: member.experience_years || 0,
-        nationality: member.nationality,
+        nationality: member.nationality || "",
         last_assignment: "MV Atlantic Explorer"
       })) || [];
 

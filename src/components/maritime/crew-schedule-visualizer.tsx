@@ -110,7 +110,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
   };
 
   const generateGanttView = () => {
-    const months = [];
+    const months: Date[] = [];
     const currentDate = new Date();
     
     // Generate 12 months starting from current month
