@@ -98,13 +98,21 @@ export const EmployeeDossierSummary: React.FC = () => {
           return;
         }
 
-        setCrewMember(newMember);
+        const mappedNewMember: CrewMember = {
+          id: newMember.id,
+          full_name: newMember.full_name,
+          position: newMember.position,
+          rank: nullToUndefined(newMember.rank) || "Ordinary Seaman",
+          status: newMember.status || "available",
+          experience_years: newMember.experience_years || 0
+        };
+        setCrewMember(mappedNewMember);
       } else {
         const mappedMember: CrewMember = {
           id: memberData.id,
           full_name: memberData.full_name,
           position: memberData.position,
-          rank: memberData.rank || "Ordinary Seaman",
+          rank: nullToUndefined(memberData.rank) || "Ordinary Seaman",
           status: memberData.status || "available",
           experience_years: memberData.experience_years || 0
         };

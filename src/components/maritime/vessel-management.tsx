@@ -95,11 +95,8 @@ export function VesselManagement() {
         imo_number: nullToUndefined(v.imo_number),
         flag_state: v.flag_state,
         gross_tonnage: nullToUndefined(v.gross_tonnage),
-        built_year: nullToUndefined(v.built_year),
-        classification_society: nullToUndefined(v.classification_society),
         status: v.status || "active",
         current_location: nullToUndefined(v.current_location),
-        crew_capacity: nullToUndefined(v.crew_capacity),
         organization_id: nullToUndefined(v.organization_id),
         created_at: v.created_at || new Date().toISOString(),
         updated_at: v.updated_at || new Date().toISOString()

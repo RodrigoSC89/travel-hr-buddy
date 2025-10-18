@@ -43,6 +43,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format, differenceInDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { nullToUndefined } from "@/lib/type-helpers";
 import type { Database } from "@/integrations/supabase/types";
 
 type CrewMember = Database["public"]["Tables"]["crew_members"]["Row"];
@@ -397,7 +398,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16">
-            <AvatarImage src={dossier?.profile_photo_url} />
+            <AvatarImage src={nullToUndefined(dossier?.profile_photo_url)} />
             <AvatarFallback className="text-lg font-semibold bg-primary/10">
               {crewMember.full_name.split(" ").map(n => n[0]).join("").slice(0, 2)}
             </AvatarFallback>
@@ -504,7 +505,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
           <CardContent>
             <div className="space-y-3">
               {aiRecommendations.map((recommendation) => (
-                <div key={recommendation.id} className={`p-4 rounded-lg border ${getPriorityColor(recommendation.priority)}`}>
+                <div key={recommendation.id} className={`p-4 rounded-lg border ${getPriorityColor(nullToUndefined(recommendation.priority) || "medium")}`}>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h4 className="font-medium">{recommendation.title}</h4>
@@ -786,7 +787,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                         <div>
                           <label className="text-xs font-medium text-muted-foreground">Validade</label>
                           <p className="text-sm">
-                            {format(new Date(cert.expiry_date), "dd/MM/yyyy", { locale: ptBR })}
+                            {cert.expiry_date ? format(new Date(cert.expiry_date), "dd/MM/yyyy", { locale: ptBR }) : "N/A"}
                           </p>
                         </div>
                       </div>
@@ -930,9 +931,9 @@ export const ProfessionalCrewDossier: React.FC = () => {
                         <h4 className="font-medium">{doc.document_name}</h4>
                         <p className="text-sm text-muted-foreground">
                           {doc.document_category} - 
-                          {format(new Date(doc.upload_date), "dd/MM/yyyy", { locale: ptBR })}
+                          {doc.upload_date ? format(new Date(doc.upload_date), "dd/MM/yyyy", { locale: ptBR }) : "N/A"}
                         </p>
-                        {doc.tags.length > 0 && (
+                        {doc.tags && doc.tags.length > 0 && (
                           <div className="flex gap-1 mt-1">
                             {doc.tags.map((tag: string, index: number) => (
                               <Badge key={index} variant="secondary" className="text-xs">
@@ -945,7 +946,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                     </div>
                     
                     <div className="flex items-center gap-2">
-                      <Badge className={getStatusColor(doc.verification_status)}>
+                      <Badge className={getStatusColor(nullToUndefined(doc.verification_status) || "pending")}>
                         {doc.verification_status === "verified" ? "Verificado" :
                           doc.verification_status === "pending" ? "Pendente" : "Rejeitado"}
                       </Badge>

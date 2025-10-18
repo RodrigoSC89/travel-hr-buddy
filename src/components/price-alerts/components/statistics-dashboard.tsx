@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { TrendingUp, TrendingDown, Target, DollarSign, Bell, Activity } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { nullToUndefined } from "@/lib/type-helpers";
 
 interface UserStatistics {
   total_alerts: number;
@@ -51,7 +52,7 @@ export const StatisticsDashboard = () => {
       const { data, error } = await supabase
         .from("user_statistics")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user?.id ?? "")
         .single();
 
       if (error && error.code !== "PGRST116") {
@@ -59,7 +60,12 @@ export const StatisticsDashboard = () => {
       }
 
       if (data) {
-        setStatistics(data);
+        setStatistics({
+          total_alerts: data.total_alerts ?? 0,
+          active_alerts: data.active_alerts ?? 0,
+          total_savings: data.total_savings ?? 0,
+          alerts_triggered: data.alerts_triggered ?? 0
+        });
       }
     } catch (error) {
     }
@@ -70,7 +76,7 @@ export const StatisticsDashboard = () => {
       const { data: alerts, error } = await supabase
         .from("price_alerts")
         .select("*")
-        .eq("user_id", user?.id);
+        .eq("user_id", user?.id ?? "");
 
       if (error) {
         return;
@@ -80,16 +86,16 @@ export const StatisticsDashboard = () => {
         // Calcular métricas
         const total_products = alerts.length;
         const discounts = alerts
-          .filter(alert => alert.discount_percentage > 0)
-          .map(alert => alert.discount_percentage);
+          .filter(alert => (alert.discount_percentage ?? 0) > 0)
+          .map(alert => alert.discount_percentage ?? 0);
         
         const average_discount = discounts.length > 0 
-          ? discounts.reduce((a, b) => a + b, 0) / discounts.length 
+          ? discounts.reduce((a: number, b: number) => a + b, 0) / discounts.length 
           : 0;
 
         const best_deal = alerts
-          .filter(alert => alert.discount_percentage > 0)
-          .sort((a, b) => (b.discount_percentage || 0) - (a.discount_percentage || 0))[0] || null;
+          .filter(alert => (alert.discount_percentage ?? 0) > 0)
+          .sort((a, b) => (b.discount_percentage ?? 0) - (a.discount_percentage ?? 0))[0] || null;
 
         // Agrupar por categorias
         const categories = alerts.reduce((acc, alert) => {

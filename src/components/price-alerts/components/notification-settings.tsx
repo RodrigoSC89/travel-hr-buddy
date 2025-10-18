@@ -63,7 +63,7 @@ export const NotificationSettings = () => {
       const { data, error } = await supabase
         .from("notification_settings")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user?.id ?? "")
         .single();
 
       if (error && error.code !== "PGRST116") {
@@ -72,11 +72,11 @@ export const NotificationSettings = () => {
 
       if (data) {
         setSettings({
-          email_enabled: data.email_enabled,
-          push_enabled: data.push_enabled,
-          price_drop_threshold: data.price_drop_threshold,
-          daily_summary: data.daily_summary,
-          weekly_report: data.weekly_report,
+          email_enabled: data.email_enabled ?? true,
+          push_enabled: data.push_enabled ?? true,
+          price_drop_threshold: data.price_drop_threshold ?? 0,
+          daily_summary: data.daily_summary ?? false,
+          weekly_report: data.weekly_report ?? true,
         });
       }
     } catch (error) {

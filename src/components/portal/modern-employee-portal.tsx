@@ -51,6 +51,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { nullToUndefined } from "@/lib/type-helpers";
 import { useToast } from "@/hooks/use-toast";
 import { format, differenceInDays, startOfWeek, endOfWeek, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -141,7 +142,7 @@ export const ModernEmployeePortal: React.FC = () => {
       const { data: profile, error } = await supabase
         .from("crew_members")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user?.id ?? "")
         .maybeSingle();
 
       if (error) throw error;
@@ -191,7 +192,7 @@ export const ModernEmployeePortal: React.FC = () => {
       const totalCerts = certifications.data?.length || 0;
       const complianceRate = totalCerts > 0 ? (validCerts / totalCerts) * 100 : 0;
       
-      const avgPerformance = performance.data?.length > 0 
+      const avgPerformance = (performance.data && performance.data.length > 0)
         ? performance.data.reduce((sum, rev) => sum + rev.overall_score, 0) / performance.data.length
         : 0;
 
@@ -271,7 +272,7 @@ export const ModernEmployeePortal: React.FC = () => {
         priority: insight.priority as "high" | "medium" | "low",
         category: insight.category,
         actionable: true,
-        deadline: insight.deadline
+        deadline: nullToUndefined(insight.deadline)
       }));
 
       setAIInsights(formattedInsights);
@@ -620,12 +621,12 @@ export const ModernEmployeePortal: React.FC = () => {
             </div>
 
             {/* Alertas Importantes */}
-            {dashboardStats?.pendingCertificates > 0 && (
+            {dashboardStats && dashboardStats.pendingCertificates > 0 && (
               <Alert className="border-red-200 bg-red-50">
                 <AlertTriangle className="h-4 w-4 text-red-600" />
                 <AlertTitle className="text-red-800">Atenção Necessária</AlertTitle>
                 <AlertDescription className="text-red-700">
-                  Você possui {dashboardStats.pendingCertificates} certificado(s) expirando ou expirados. 
+                  Você possui {dashboardStats.pendingCertificates} certificado(s) expirando ou expirados.
                   Verifique na aba "Documentos" para mais detalhes.
                 </AlertDescription>
               </Alert>

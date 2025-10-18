@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { nullToUndefined } from "@/lib/type-helpers";
 import { 
   TrendingUp, 
   TrendingDown,
@@ -127,7 +128,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
       const { data, error } = await supabase
         .from("price_alerts")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user?.id ?? "")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -166,7 +167,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
           *,
           price_alerts!inner(user_id)
         `)
-        .eq("price_alerts.user_id", user?.id)
+        .eq("price_alerts.user_id", user?.id ?? "")
         .order("checked_at", { ascending: false })
         .limit(50);
 
@@ -237,7 +238,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
       const { data, error } = await supabase
         .from("price_alerts")
         .insert([{
-          user_id: user?.id,
+          user_id: user?.id ?? "",
           product_name: newAlert.product_name,
           target_price: parseFloat(newAlert.target_price),
           product_url: newAlert.product_url,
@@ -764,7 +765,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                     <div className="flex-1">
                       <p className="font-medium text-sm">{alert.product_name}</p>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className={`text-sm ${getPriceChangeColor(alert.current_price, alert.target_price)}`}>
+                        <span className={`text-sm ${getPriceChangeColor(nullToUndefined(alert.current_price), alert.target_price)}`}>
                           R$ {alert.current_price?.toFixed(2) || "---"}
                         </span>
                         <span className="text-xs text-muted-foreground">
@@ -868,7 +869,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">Preço Atual:</span>
-                        <span className={`font-bold ${getPriceChangeColor(alert.current_price, alert.target_price)}`}>
+                        <span className={`font-bold ${getPriceChangeColor(nullToUndefined(alert.current_price), alert.target_price)}`}>
                           R$ {alert.current_price?.toFixed(2) || "---"}
                         </span>
                       </div>

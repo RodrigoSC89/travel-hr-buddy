@@ -107,18 +107,31 @@ export const SharedAlerts = () => {
           .in("shared_alert_id", alertIds);
 
         const votesMap = votes?.reduce((acc, vote) => {
-          acc[vote.shared_alert_id] = vote.vote_type;
+          acc[vote.shared_alert_id] = nullToUndefined(vote.vote_type) || "";
           return acc;
         }, {} as Record<string, string>) || {};
 
         const alertsWithVotes = data.map(alert => ({
           ...alert,
+          description: alert.description ?? "",
+          upvotes: alert.upvotes ?? 0,
+          downvotes: alert.downvotes ?? 0,
+          is_featured: alert.is_featured ?? false,
+          created_at: alert.created_at ?? new Date().toISOString(),
           user_vote: votesMap[alert.id] as "upvote" | "downvote" | undefined,
         }));
 
         setSharedAlerts(alertsWithVotes);
       } else {
-        setSharedAlerts(data || []);
+        const mappedData = (data || []).map(alert => ({
+          ...alert,
+          description: alert.description ?? "",
+          upvotes: alert.upvotes ?? 0,
+          downvotes: alert.downvotes ?? 0,
+          is_featured: alert.is_featured ?? false,
+          created_at: alert.created_at ?? new Date().toISOString()
+        }));
+        setSharedAlerts(mappedData);
       }
     } catch (error) {
     } finally {
@@ -131,7 +144,7 @@ export const SharedAlerts = () => {
       const { data, error } = await supabase
         .from("price_alerts")
         .select("id, product_name, current_price, target_price")
-        .eq("user_id", user?.id)
+        .eq("user_id", user?.id ?? "")
         .eq("is_active", true);
 
       if (error) {

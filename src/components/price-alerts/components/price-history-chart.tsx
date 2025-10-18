@@ -55,7 +55,7 @@ export const PriceHistoryChart = () => {
       const { data, error } = await supabase
         .from("price_alerts")
         .select("id, product_name, target_price, current_price")
-        .eq("user_id", user?.id)
+        .eq("user_id", user?.id ?? "")
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -63,7 +63,11 @@ export const PriceHistoryChart = () => {
       }
 
       if (data && data.length > 0) {
-        setAlerts(data);
+        const mappedAlerts = data.map(alert => ({
+          ...alert,
+          current_price: alert.current_price ?? 0
+        }));
+        setAlerts(mappedAlerts);
         if (!selectedAlert) {
           setSelectedAlert(data[0].id);
         }
