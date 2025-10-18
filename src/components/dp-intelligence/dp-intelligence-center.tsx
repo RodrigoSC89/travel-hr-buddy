@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { PlanStatusSelect } from "@/components/dp-incidents/PlanStatusSelect";
 
 interface Incident {
   id: string;
@@ -33,6 +34,9 @@ interface Incident {
   severity?: "critical" | "high" | "medium" | "low";
   status?: "analyzed" | "pending";
   plan_of_action?: PlanOfAction | null;
+  plan_status?: string;
+  plan_sent_at?: string;
+  plan_updated_at?: string;
 }
 
 interface PlanOfAction {
@@ -112,7 +116,10 @@ const DPIntelligenceCenter = () => {
             link: inc.link || ""
           }),
           status: inc.status || "pending",
-          plan_of_action: inc.plan_of_action || null
+          plan_of_action: inc.plan_of_action || null,
+          plan_status: inc.plan_status || "pendente",
+          plan_sent_at: inc.plan_sent_at || null,
+          plan_updated_at: inc.plan_updated_at || null
         }));
         setIncidents(incidentsWithStatus);
       } else {
@@ -705,6 +712,31 @@ const DPIntelligenceCenter = () => {
                 </div>
               </TabsContent>
             </Tabs>
+            
+            {/* Plan Status Select */}
+            {selectedIncident && (
+              <div className="mt-6 pt-6 border-t">
+                <PlanStatusSelect 
+                  incident={selectedIncident}
+                  onStatusChange={(newStatus) => {
+                    // Update the local state
+                    setSelectedIncident({
+                      ...selectedIncident,
+                      plan_status: newStatus,
+                      plan_updated_at: new Date().toISOString()
+                    });
+                    // Update the incidents list
+                    setIncidents(prev => 
+                      prev.map(inc => 
+                        inc.id === selectedIncident.id 
+                          ? { ...inc, plan_status: newStatus, plan_updated_at: new Date().toISOString() }
+                          : inc
+                      )
+                    );
+                  }}
+                />
+              </div>
+            )}
           ) : (
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
