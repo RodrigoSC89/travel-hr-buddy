@@ -33,10 +33,11 @@ npm run build
 ```
 
 ### 5. Verify
-Navigate to `/dp-incidents` and check for:
-- Status dropdown on incidents with plans
+Navigate to `/dp-intelligence` and check for:
+- Status dropdown in modal for incidents with plans
 - Ability to change status
 - Toast notifications on success
+- Real-time updates in both modal and incident list
 
 ## 📋 Testing Checklist
 
@@ -63,10 +64,11 @@ Navigate to `/dp-incidents` and check for:
 ## 🎯 Quick Usage
 
 ### For Users
-1. Go to `/dp-incidents`
-2. Find incident with action plan
-3. Use dropdown to update status
-4. Status saves automatically
+1. Go to `/dp-intelligence`
+2. Click "Analisar IA" on any incident card
+3. If the incident has an action plan, status dropdown appears below analysis tabs
+4. Use dropdown to update status
+5. Status saves automatically with real-time updates
 
 ### For Admins
 Monitor in Supabase Dashboard:
@@ -118,10 +120,11 @@ WHERE plan_status = 'pendente'
 ## ✅ Success Indicators
 
 Your implementation is working if:
-- ✅ Dropdown appears on incidents with plans
+- ✅ Dropdown appears in modal for incidents with plans
 - ✅ Status changes save to database
 - ✅ Toast notifications appear
 - ✅ Timestamps update correctly
+- ✅ Modal and incident list update without page reload
 - ✅ Cron job runs daily (check logs)
 - ✅ Emails sent for overdue plans
 
