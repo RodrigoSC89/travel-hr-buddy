@@ -113,20 +113,23 @@ export default async function handler(
     }
 
     // Transform data to match expected format (flatten incident object)
-    const transformedData: SGSOActionPlan[] = (data || []).map((item: any) => ({
-      id: item.id,
-      incident_id: item.incident_id,
-      vessel_id: item.vessel_id,
-      correction_action: item.correction_action,
-      prevention_action: item.prevention_action,
-      recommendation_action: item.recommendation_action,
-      status: item.status,
-      approved_by: item.approved_by,
-      approved_at: item.approved_at,
-      created_at: item.created_at,
-      updated_at: item.updated_at,
-      incident: Array.isArray(item.incident) ? item.incident[0] : item.incident,
-    }));
+    const transformedData: SGSOActionPlan[] = (data || []).map((item: unknown) => {
+      const record = item as Record<string, unknown>;
+      return {
+        id: record.id,
+        incident_id: record.incident_id,
+        vessel_id: record.vessel_id,
+        correction_action: record.correction_action,
+        prevention_action: record.prevention_action,
+        recommendation_action: record.recommendation_action,
+        status: record.status,
+        approved_by: record.approved_by,
+        approved_at: record.approved_at,
+        created_at: record.created_at,
+        updated_at: record.updated_at,
+        incident: Array.isArray(record.incident) ? record.incident[0] : record.incident,
+      } as SGSOActionPlan;
+    });
 
     return res.status(200).json({
       success: true,
