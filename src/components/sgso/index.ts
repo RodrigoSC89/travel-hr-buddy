@@ -14,3 +14,4 @@ export { EmergencyResponse } from "./EmergencyResponse";
 export { MetricasPanel } from "./MetricasPanel";
 export { SGSOTrendChart } from "./SGSOTrendChart";
 export { SGSOActionPlanGenerator } from "./SGSOActionPlanGenerator";
+export { IbamaRequirementsList } from "./IbamaRequirementsList";
