@@ -19,6 +19,7 @@ const PEODP = React.lazy(() => import("./pages/PEODP"));
 const DPIncidents = React.lazy(() => import("./pages/DPIncidents"));
 const DPIntelligence = React.lazy(() => import("./pages/DPIntelligence"));
 const SGSO = React.lazy(() => import("./pages/SGSO"));
+const SGSOReportPage = React.lazy(() => import("./pages/SGSOReportPage"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Documents = React.lazy(() => import("./pages/Documents"));
 const IntelligentDocuments = React.lazy(() => import("./pages/IntelligentDocuments"));
@@ -171,6 +172,7 @@ function App() {
                       <Route path="/dp-incidents" element={<DPIncidents />} />
                       <Route path="/dp-intelligence" element={<DPIntelligence />} />
                       <Route path="/sgso" element={<SGSO />} />
+                      <Route path="/sgso/report" element={<SGSOReportPage />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/documents" element={<Documents />} />
                       <Route path="/intelligent-documents" element={<IntelligentDocuments />} />

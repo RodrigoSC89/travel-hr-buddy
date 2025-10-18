@@ -61,12 +61,23 @@ function formatData(rawData: RawDataEntry[]): ChartDataEntry[] {
     .map((key) => grouped[key]);
 }
 
-export function SGSOTrendChart() {
+interface SGSOTrendChartProps {
+  data?: RawDataEntry[];
+}
+
+export function SGSOTrendChart({ data: customData }: SGSOTrendChartProps = {}) {
   const [data, setData] = useState<RawDataEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // If custom data is provided, use it directly
+    if (customData && customData.length > 0) {
+      setData(customData);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -100,7 +111,7 @@ export function SGSOTrendChart() {
         ]);
         setLoading(false);
       });
-  }, []);
+  }, [customData]);
 
   const chartData = formatData(data);
 
