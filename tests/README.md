@@ -5,7 +5,7 @@ Este diretório contém os testes automatizados essenciais para validar os módu
 ## 📁 Estrutura de Testes
 
 ```
-__tests__/
+tests/
 ├── templates.test.tsx      # Templates com IA - CRUD operations
 ├── forecast.test.ts        # Forecast IA - AI predictions
 ├── assistant.test.ts       # Assistente IA - GPT-4 interactions
@@ -109,24 +109,24 @@ Estes testes garantem:
 
 ### Rodar todos os testes essenciais
 ```bash
-npm run test -- __tests__
+npm run test -- tests
 ```
 
 ### Rodar teste específico
 ```bash
-npm run test -- __tests__/templates.test.tsx
-npm run test -- __tests__/forecast.test.ts
-npm run test -- __tests__/assistant.test.ts
+npm run test -- tests/templates.test.tsx
+npm run test -- tests/forecast.test.ts
+npm run test -- tests/assistant.test.ts
 ```
 
 ### Rodar com coverage
 ```bash
-npm run test:coverage -- __tests__
+npm run test:coverage -- tests
 ```
 
 ### Rodar em modo watch
 ```bash
-npm run test:watch -- __tests__
+npm run test:watch -- tests
 ```
 
 ### Rodar com UI interativa

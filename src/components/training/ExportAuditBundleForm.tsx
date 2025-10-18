@@ -1,52 +1,52 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { useAuditExport } from '@/hooks/use-training-modules'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Loader2, Download, FileText } from 'lucide-react'
-import { toast } from 'sonner'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useAuditExport } from "@/hooks/use-training-modules";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Download, FileText } from "lucide-react";
+import { toast } from "sonner";
 
 // Common IMCA norms
 const COMMON_NORMS = [
-  'IMCA M 103',
-  'IMCA M 117',
-  'IMCA M 179',
-  'IMCA M 182',
-  'IMCA M 190',
-  'IMCA M 220',
-  'IMCA D 045',
-  'IMCA R 008',
-  'IMCA SEL 016'
-]
+  "IMCA M 103",
+  "IMCA M 117",
+  "IMCA M 179",
+  "IMCA M 182",
+  "IMCA M 190",
+  "IMCA M 220",
+  "IMCA D 045",
+  "IMCA R 008",
+  "IMCA SEL 016"
+];
 
 /**
  * Component for exporting audit bundles for external audits
  * (IBAMA, Petrobras, ANP, etc.)
  */
 export function ExportAuditBundleForm() {
-  const { exportBundle, isExporting } = useAuditExport()
-  const [vesselName, setVesselName] = useState('')
-  const [selectedNorms, setSelectedNorms] = useState<string[]>([])
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
-  const [exportFormat, setExportFormat] = useState<'json' | 'pdf'>('json')
+  const { exportBundle, isExporting } = useAuditExport();
+  const [vesselName, setVesselName] = useState("");
+  const [selectedNorms, setSelectedNorms] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [exportFormat, setExportFormat] = useState<"json" | "pdf">("json");
 
   const handleAddNorm = (norm: string) => {
     if (!selectedNorms.includes(norm)) {
-      setSelectedNorms([...selectedNorms, norm])
+      setSelectedNorms([...selectedNorms, norm]);
     }
-  }
+  };
 
   const handleRemoveNorm = (norm: string) => {
-    setSelectedNorms(selectedNorms.filter(n => n !== norm))
-  }
+    setSelectedNorms(selectedNorms.filter(n => n !== norm));
+  };
 
   const handleExport = async () => {
     if (!vesselName || selectedNorms.length === 0) {
-      toast.error('Preencha o nome da embarcação e selecione ao menos uma norma')
-      return
+      toast.error("Preencha o nome da embarcação e selecione ao menos uma norma");
+      return;
     }
 
     try {
@@ -56,28 +56,28 @@ export function ExportAuditBundleForm() {
         startDate: startDate || undefined,
         endDate: endDate || undefined,
         format: exportFormat
-      })
+      });
 
       if (result.success && result.bundle) {
         // Download as JSON
         const blob = new Blob([JSON.stringify(result.bundle, null, 2)], {
-          type: 'application/json'
-        })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `audit-bundle-${vesselName}-${Date.now()}.json`
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        URL.revokeObjectURL(url)
+          type: "application/json"
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `audit-bundle-${vesselName}-${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
 
-        toast.success('Bundle exportado com sucesso!')
+        toast.success("Bundle exportado com sucesso!");
       }
     } catch (error) {
-      console.error('Export error:', error)
+      console.error("Export error:", error);
     }
-  }
+  };
 
   return (
     <Card>
@@ -157,7 +157,7 @@ export function ExportAuditBundleForm() {
 
         <div className="space-y-2">
           <Label>Formato de Exportação</Label>
-          <Select value={exportFormat} onValueChange={(v: 'json' | 'pdf') => setExportFormat(v)}>
+          <Select value={exportFormat} onValueChange={(v: "json" | "pdf") => setExportFormat(v)}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -195,9 +195,9 @@ export function ExportAuditBundleForm() {
           className="w-full"
         >
           {isExporting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isExporting ? 'Exportando...' : 'Exportar Bundle de Auditoria'}
+          {isExporting ? "Exportando..." : "Exportar Bundle de Auditoria"}
         </Button>
       </CardContent>
     </Card>
-  )
+  );
 }

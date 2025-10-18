@@ -332,8 +332,8 @@ export function IMCAAuditGenerator() {
                               module.complianceStatus === "Compliant"
                                 ? "default"
                                 : module.complianceStatus === "Partial"
-                                ? "secondary"
-                                : "destructive"
+                                  ? "secondary"
+                                  : "destructive"
                             }>
                               {module.complianceStatus}
                             </Badge>

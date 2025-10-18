@@ -518,7 +518,7 @@ const DPIntelligenceCenter = () => {
             Generate comprehensive technical audits for DP vessels with automated compliance analysis.
           </p>
           <Button 
-            onClick={() => window.location.href = '/imca-audit'}
+            onClick={() => window.location.href = "/imca-audit"}
             className="w-full md:w-auto bg-blue-600 hover:bg-blue-700"
           >
             <FileText className="mr-2 h-4 w-4" />

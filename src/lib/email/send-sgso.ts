@@ -129,16 +129,16 @@ export async function sendSGSOReport(
     </ul>
 
     ${
-      dashboardLink
-        ? `
+  dashboardLink
+    ? `
     <p style="text-align: center;">
       <a href="${dashboardLink}" class="button">
         🔗 Acessar Painel SGSO
       </a>
     </p>
     `
-        : ""
-    }
+    : ""
+}
 
     <div class="footer">
       <p>

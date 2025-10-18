@@ -46,7 +46,7 @@ export default function SystemHealthPage() {
       const pdfLibAvailable = typeof window !== "undefined" && "jsPDF" in window;
 
       // Count routes from React Router
-      const routeCount = document.querySelectorAll('a[href^="/"]').length || 18;
+      const routeCount = document.querySelectorAll("a[href^=\"/\"]").length || 18;
 
       const systemStatus: SystemStatus = {
         supabase: supabaseStatus,
@@ -136,8 +136,8 @@ export default function SystemHealthPage() {
       {validationReport && (
         <Alert variant={
           validationReport.overallStatus === "healthy" ? "default" : 
-          validationReport.overallStatus === "degraded" ? "default" : 
-          "destructive"
+            validationReport.overallStatus === "degraded" ? "default" : 
+              "destructive"
         }>
           <div className="flex items-center gap-2">
             {validationReport.overallStatus === "healthy" && <CheckCircle2 className="h-4 w-4" />}
@@ -146,8 +146,8 @@ export default function SystemHealthPage() {
             <AlertTitle>
               Status Geral: {
                 validationReport.overallStatus === "healthy" ? "Saudável" :
-                validationReport.overallStatus === "degraded" ? "Com Avisos" :
-                "Crítico"
+                  validationReport.overallStatus === "degraded" ? "Com Avisos" :
+                    "Crítico"
               }
             </AlertTitle>
           </div>
@@ -266,7 +266,7 @@ export default function SystemHealthPage() {
           <CardHeader>
             <CardTitle>Resultados Detalhados da Validação</CardTitle>
             <CardDescription>
-              Última verificação: {new Date(validationReport.timestamp).toLocaleString('pt-BR')}
+              Última verificação: {new Date(validationReport.timestamp).toLocaleString("pt-BR")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -281,12 +281,12 @@ export default function SystemHealthPage() {
                       <span className="font-medium">{result.category}: {result.name}</span>
                       <Badge variant={
                         result.status === "success" ? "default" :
-                        result.status === "warning" ? "secondary" :
-                        "destructive"
+                          result.status === "warning" ? "secondary" :
+                            "destructive"
                       }>
                         {result.status === "success" ? "Sucesso" :
-                         result.status === "warning" ? "Aviso" :
-                         "Erro"}
+                          result.status === "warning" ? "Aviso" :
+                            "Erro"}
                       </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground">{result.message}</p>
@@ -325,7 +325,7 @@ export default function SystemHealthPage() {
       {/* Timestamp */}
       {status && (
         <div className="text-center text-sm text-muted-foreground">
-          Última atualização: {new Date(status.timestamp).toLocaleString('pt-BR')}
+          Última atualização: {new Date(status.timestamp).toLocaleString("pt-BR")}
         </div>
       )}
     </div>
