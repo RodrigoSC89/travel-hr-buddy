@@ -107,6 +107,8 @@ const Simulations = React.lazy(() => import("./pages/admin/simulations"));
 const CronMonitor = React.lazy(() => import("./pages/admin/cron-monitor"));
 const TrainingManagement = React.lazy(() => import("./pages/admin/training"));
 const BackupAudit = React.lazy(() => import("./pages/BackupAudit"));
+const CertViewer = React.lazy(() => import("./components/cert/CertViewer"));
+const QuizPage = React.lazy(() => import("./pages/admin/QuizPage"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -166,6 +168,7 @@ function App() {
                     {/* Routes outside SmartLayout (no auth, no navigation) */}
                     <Route path="/embed/restore-chart" element={<RestoreChartEmbed />} />
                     <Route path="/tv/logs" element={<TVWallLogs />} />
+                    <Route path="/cert/:token" element={<CertViewer />} />
                     <Route path="/unauthorized" element={<Unauthorized />} />
                     
                     {/* All routes wrapped in SmartLayout */}
@@ -257,6 +260,7 @@ function App() {
                       <Route path="/admin/simulations" element={<Simulations />} />
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
+                      <Route path="/admin/quiz" element={<QuizPage />} />
                       <Route path="/admin/audit" element={<BackupAudit />} />
                       <Route path="/backup-audit" element={<BackupAudit />} />
                       <Route path="/imca-audit" element={<IMCAAudit />} />
