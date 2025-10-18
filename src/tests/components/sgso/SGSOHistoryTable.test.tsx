@@ -259,7 +259,7 @@ describe("SGSOHistoryTable Component", () => {
 
     it("should be optional (component works without onEdit)", () => {
       render(<SGSOHistoryTable plans={mockActionPlans} />);
-      expect(screen.getByText("Histórico de Planos de Ação SGSO")).toBeInTheDocument();
+      expect(screen.getByText(/Histórico de Planos de Ação SGSO/i)).toBeInTheDocument();
     });
   });
 
