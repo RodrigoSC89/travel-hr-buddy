@@ -164,6 +164,14 @@ export default function AdminDashboard() {
       path: "/admin/assistant/history",
       roles: ["admin", "hr_manager"],
     },
+    {
+      title: "Sistema de Auditoria",
+      description: "Simulação, Performance e Evidências",
+      icon: FileText,
+      color: "green",
+      path: "/admin/audit-system",
+      roles: ["admin", "hr_manager"],
+    },
   ];
 
   const quickLinks = [
