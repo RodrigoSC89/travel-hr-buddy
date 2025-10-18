@@ -12,3 +12,7 @@ functions:
     schedule: '0 6 1 * *' # Dia 1 de cada mês às 06:00 UTC (03:00 BRT)
     endpoint: '/send-monthly-sgso'
     method: GET
+  run-compliance-engine:
+    schedule: '0 5 * * *' # Todos os dias às 05:00 UTC (02:00 BRT) - Live Compliance Module
+    endpoint: '/run-compliance-engine'
+    method: GET
