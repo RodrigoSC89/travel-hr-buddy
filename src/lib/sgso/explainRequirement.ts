@@ -62,8 +62,8 @@ Responda de forma técnica e direta.
 function generateMockExplanation(requirement: string, compliance: string): string {
   const complianceText = 
     compliance === "compliant" ? "Conforme" :
-    compliance === "partial" ? "Parcialmente conforme" :
-    "Não conforme";
+      compliance === "partial" ? "Parcialmente conforme" :
+        "Não conforme";
 
   const explanations: Record<string, string> = {
     "Política de SMS": `
