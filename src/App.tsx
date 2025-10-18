@@ -100,6 +100,7 @@ const AuditoriasIMCA = React.lazy(() => import("./pages/admin/auditorias-imca"))
 const AuditoriasLista = React.lazy(() => import("./pages/admin/auditorias-lista"));
 const DPIntelligenceAdmin = React.lazy(() => import("./pages/admin/DPIntelligencePage"));
 const IMCAAudit = React.lazy(() => import("./pages/IMCAAudit"));
+const SGSOAuditPage = React.lazy(() => import("./pages/admin/sgso/audit"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -241,6 +242,7 @@ function App() {
                       <Route path="/admin/dashboard-auditorias" element={<DashboardAuditorias />} />
                       <Route path="/admin/metricas-risco" element={<MetricasRisco />} />
                       <Route path="/admin/sgso" element={<AdminSGSO />} />
+                      <Route path="/admin/sgso/audit/:vesselId" element={<SGSOAuditPage />} />
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/auditorias-lista" element={<AuditoriasLista />} />
                       <Route path="/admin/dp-intelligence" element={<DPIntelligenceAdmin />} />
