@@ -29,7 +29,7 @@ export const useMaritimeChecklists = (userId: string) => {
       const transformedChecklists: Checklist[] = data?.map(item => ({
         id: item.id,
         title: item.title,
-        type: "dp" as any, // Default type, will be updated when we add proper type field
+        type: "dp" as unknown, // Default type, will be updated when we add proper type field
         version: "1.0",
         description: item.title || "",
         vessel: {
@@ -50,7 +50,7 @@ export const useMaritimeChecklists = (userId: string) => {
           phone: "+55 11 99999-9999",
           certifications: ["Maritime Inspector"]
         },
-        status: item.status as any,
+        status: item.status as unknown,
         items: item.checklist_items?.map((checklistItem: unknown) => ({
           id: checklistItem.id,
           title: checklistItem.title,
@@ -67,7 +67,7 @@ export const useMaritimeChecklists = (userId: string) => {
         createdAt: item.created_at,
         updatedAt: item.updated_at,
         completedAt: null, // Will be set when completed
-        priority: "medium" as any, // Default priority
+        priority: "medium" as unknown, // Default priority
         estimatedDuration: 180, // Default duration
         complianceScore: item.compliance_score,
         workflow: [],

@@ -77,7 +77,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const { data: { session }, error } = await Promise.race([
           sessionPromise,
           timeoutPromise
-        ]).catch(() => ({ data: { session: null }, error: null })) as any;
+        ]).catch(() => ({ data: { session: null }, error: null }));
 
         if (error) {
           try {

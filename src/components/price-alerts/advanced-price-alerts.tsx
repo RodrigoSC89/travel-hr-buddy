@@ -135,7 +135,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
       
       // Enhance with AI predictions
       const enhancedAlerts = await Promise.all(
-        (data || []).map(async (alert: any) => ({
+        (data || []).map(async (alert: unknown) => ({
           ...alert,
           threshold_type: alert.threshold_type || "below",
           notification_settings: {
@@ -200,7 +200,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
     setInsights(mockInsights);
   };
 
-  const generateAIPredictions = async (alert: any) => {
+  const generateAIPredictions = async (alert: unknown) => {
     // Simulated AI predictions - in production, this would use real ML models
     const trends = ["rising", "falling", "stable"] as const;
     const trend = trends[Math.floor(Math.random() * trends.length)];

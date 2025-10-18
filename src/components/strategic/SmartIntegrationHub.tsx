@@ -302,7 +302,7 @@ const SmartIntegrationHub: React.FC = () => {
             <Button
               key={tab.id}
               variant={activeTab === tab.id ? "default" : "ghost"}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as unknown)}
               className="flex items-center gap-2"
             >
               <Icon className="w-4 h-4" />

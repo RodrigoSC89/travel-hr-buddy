@@ -285,7 +285,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs value={filter} onValueChange={(value) => setFilter(value as any)} className="w-full">
+        <Tabs value={filter} onValueChange={(value) => setFilter(value as unknown)} className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">
               Todas ({notifications.length})

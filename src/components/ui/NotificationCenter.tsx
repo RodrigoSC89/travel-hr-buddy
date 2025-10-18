@@ -144,11 +144,11 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
       const formattedNotifications: Notification[] = data?.map(n => ({
         id: n.id,
-        type: n.type as any,
+        type: n.type as unknown,
         title: n.title,
         message: n.message,
         description: n.message,
-        priority: n.priority as any,
+        priority: n.priority as unknown,
         isRead: n.is_read,
         is_read: n.is_read,
         createdAt: new Date(n.created_at),
@@ -195,7 +195,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     });
   };
 
-  const createNotificationFromAlert = (alert: any) => {
+  const createNotificationFromAlert = (alert: unknown) => {
     const notification: Notification = {
       id: `alert-${alert.id}`,
       type: "compliance_alert",
@@ -211,7 +211,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     setUnreadCount(prev => prev + 1);
   };
 
-  const createNotificationFromMaintenance = (maintenance: any) => {
+  const createNotificationFromMaintenance = (maintenance: unknown) => {
     const notification: Notification = {
       id: `maintenance-${maintenance.id}`,
       type: "maintenance_due",

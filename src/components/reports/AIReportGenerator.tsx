@@ -10,7 +10,7 @@ import { FileText, Download, Loader2, Calendar, Settings, Sparkles } from "lucid
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface AIReportGeneratorProps {
-  onReportGenerated?: (report: any) => void;
+  onReportGenerated?: (report: unknown) => void;
 }
 
 const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated }) => {

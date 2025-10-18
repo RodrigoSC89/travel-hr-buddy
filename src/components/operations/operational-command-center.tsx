@@ -117,7 +117,7 @@ export const OperationalCommandCenter: React.FC = () => {
       .limit(10);
 
     if (error) throw error;
-    setAlerts((data || []).map((alert: any) => ({
+    setAlerts((data || []).map((alert: unknown) => ({
       ...alert,
       severity: alert.severity as "low" | "medium" | "high" | "critical",
       status: alert.status as "active" | "acknowledged" | "resolved"

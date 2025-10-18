@@ -202,7 +202,7 @@ export const PeotramOCRProcessor: React.FC = () => {
               <select
                 className="w-full px-3 py-2 border rounded-md"
                 value={language}
-                onChange={(e) => setLanguage(e.target.value as any)}
+                onChange={(e) => setLanguage(e.target.value as unknown)}
                 disabled={isProcessing}
               >
                 <option value="por+eng">Português + Inglês</option>

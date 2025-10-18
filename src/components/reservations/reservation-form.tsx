@@ -105,7 +105,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     });
   };
 
-  const handleTemplateUse = (templateData: any) => {
+  const handleTemplateUse = (templateData: Record<string, unknown>) => {
     setFormData({
       ...formData,
       title: templateData.title || "",

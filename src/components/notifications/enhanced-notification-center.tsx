@@ -276,7 +276,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
               key={filterType}
               variant={filter === filterType ? "default" : "outline"}
               size="sm"
-              onClick={() => setFilter(filterType as any)}
+              onClick={() => setFilter(filterType as unknown)}
             >
               {filterType === "all" && "Todas"}
               {filterType === "unread" && "Não lidas"}

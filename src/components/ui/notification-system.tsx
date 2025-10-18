@@ -148,7 +148,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
       if (Math.random() > 0.8) { // 20% chance a cada 30s
         const newNotification: Notification = {
           id: Date.now().toString(),
-          type: ["alert", "warning", "info"][Math.floor(Math.random() * 3)] as any,
+          type: ["alert", "warning", "info"][Math.floor(Math.random() * 3)] as unknown,
           title: "Nova Notificação",
           message: "Esta é uma notificação de exemplo em tempo real",
           timestamp: new Date(),
@@ -217,7 +217,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
                 {["all", "unread", "critical"].map((filterType) => (
                   <button
                     key={filterType}
-                    onClick={() => setFilter(filterType as any)}
+                    onClick={() => setFilter(filterType as unknown)}
                     className={cn(
                       "px-3 py-1 rounded-lg text-xs font-medium transition-colors",
                       filter === filterType

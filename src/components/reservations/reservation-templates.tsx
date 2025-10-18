@@ -48,7 +48,7 @@ interface ReservationTemplate {
 interface ReservationTemplatesProps {
   isOpen: boolean;
   onClose: () => void;
-  onUseTemplate: (templateData: any) => void;
+  onUseTemplate: (templateData: Record<string, unknown>) => void;
 }
 
 export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
@@ -219,7 +219,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       template_type: template.template_type,
       title: template.template_data.title,
       description: template.template_data.description || "",
-      reservation_type: template.template_data.reservation_type as any,
+      reservation_type: template.template_data.reservation_type as unknown,
       location: template.template_data.location || "",
       address: template.template_data.address || "",
       contact_info: template.template_data.contact_info || "",
@@ -441,7 +441,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                   value={formData.reservation_type}
                   onChange={(e) => setFormData({ 
                     ...formData, 
-                    reservation_type: e.target.value as any,
+                    reservation_type: e.target.value as unknown,
                     template_type: e.target.value 
                   })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"

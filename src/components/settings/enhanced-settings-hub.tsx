@@ -765,7 +765,7 @@ export const EnhancedSettingsHub: React.FC = () => {
                     <span className="text-amber-700 dark:text-amber-300">
                       <AlertTriangle className="w-4 h-4 inline mr-1" />
                       {Object.keys(settings).filter(key => 
-                        JSON.stringify((settings as any)[key]) !== JSON.stringify(settings[key as keyof SettingsData])
+                        JSON.stringify((settings as unknown)[key]) !== JSON.stringify(settings[key as keyof SettingsData])
                       ).length} seções com alterações pendentes
                     </span>
                   )}

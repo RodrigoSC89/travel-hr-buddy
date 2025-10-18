@@ -169,7 +169,7 @@ export const TenantUserManagement: React.FC = () => {
       user_id: Date.now().toString(),
       email: newUserEmail,
       full_name: newUserEmail.split("@")[0],
-      role: newUserRole as any,
+      role: newUserRole as unknown,
       status: "pending",
       joined_at: new Date().toISOString(),
       last_seen: undefined

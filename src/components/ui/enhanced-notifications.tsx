@@ -209,7 +209,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
         
         if (soundEnabled && "Audio" in window) {
           // Som de notificação simples
-          const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+          const audioContext = new (window.AudioContext || (window as unknown).webkitAudioContext)();
           const oscillator = audioContext.createOscillator();
           const gainNode = audioContext.createGain();
           

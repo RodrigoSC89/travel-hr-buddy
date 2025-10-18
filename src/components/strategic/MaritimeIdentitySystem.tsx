@@ -355,7 +355,7 @@ const MaritimeIdentitySystem: React.FC = () => {
             <Button
               key={section.id}
               variant={activeSection === section.id ? "default" : "ghost"}
-              onClick={() => setActiveSection(section.id as any)}
+              onClick={() => setActiveSection(section.id as unknown)}
               className="flex items-center gap-2"
             >
               <Icon className="w-4 h-4" />

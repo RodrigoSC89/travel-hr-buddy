@@ -95,7 +95,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
       
       if (data.success && data.data?.data) {
         // Transform Amadeus hotel data to our format
-        const transformedHotels = data.data.data.map((offer: any, index: number) => ({
+        const transformedHotels = data.data.data.map((offer: unknown, index: number) => ({
           id: offer.hotel?.hotelId || `hotel-${index}`,
           name: offer.hotel?.name || "Hotel Disponível",
           location: offer.hotel?.address?.cityName || destination,
@@ -148,7 +148,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
   };
 
   // Função para gerar URL específica de booking de hotel
-  const generateHotelBookingUrl = (offer: any, searchParams: any) => {
+  const generateHotelBookingUrl = (offer: unknown, searchParams: Record<string, unknown>) => {
     const hotelId = offer.hotel?.hotelId || "";
     const cityName = encodeURIComponent(offer.hotel?.address?.cityName || searchParams.destination);
     const checkinFormatted = searchParams.checkin;
@@ -159,7 +159,7 @@ export const ResponsiveHotelSearch: React.FC = () => {
     return `https://www.booking.com/hotel/br/${hotelId.toLowerCase()}.html?checkin=${checkinFormatted}&checkout=${checkoutFormatted}&group_adults=${guests}&group_children=0&selected_currency=BRL&changed_currency=1&top_ufis=1`;
   };
 
-  const generateMockHotelBookingUrl = (hotel: Hotel, searchParams: any) => {
+  const generateMockHotelBookingUrl = (hotel: Hotel, searchParams: unknown) => {
     const hotelName = encodeURIComponent(hotel.name.toLowerCase().replace(/\s+/g, "-"));
     const cityName = encodeURIComponent(searchParams.destination);
     const checkinFormatted = searchParams.checkin;

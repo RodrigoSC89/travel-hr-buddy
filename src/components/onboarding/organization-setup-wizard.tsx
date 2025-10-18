@@ -163,7 +163,7 @@ export const OrganizationSetupWizard: React.FC = () => {
           default_language: "pt-BR",
           default_currency: orgData.currency,
           timezone: orgData.timezone,
-          enabled_modules: orgData.modules as any,
+          enabled_modules: orgData.modules as unknown,
           custom_fields: {
             industry: orgData.industry,
             company_size: orgData.size,
@@ -181,7 +181,7 @@ export const OrganizationSetupWizard: React.FC = () => {
         accent_color: "#f59e0b",
         default_currency: orgData.currency,
         timezone: orgData.timezone,
-        enabled_modules: orgData.modules as any,
+        enabled_modules: orgData.modules as unknown,
         custom_fields: {
           industry: orgData.industry,
           company_size: orgData.size,

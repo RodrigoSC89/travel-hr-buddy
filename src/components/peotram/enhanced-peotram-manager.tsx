@@ -92,7 +92,7 @@ interface PeotramTemplate {
   id: string;
   year: number;
   version: string;
-  template_data: any;
+  template_data: Record<string, unknown>;
   is_active: boolean;
   checklist_type: "vessel" | "shore";
   created_at: string;
@@ -218,13 +218,13 @@ export const EnhancedPeotramManager: React.FC = () => {
     }
   ];
 
-  const handleSaveAudit = async (auditData: any) => {
+  const handleSaveAudit = async (auditData: Record<string, unknown>) => {
     // Implementar salvamento na API Supabase
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay
     await loadData(); // Recarregar dados
   };
 
-  const handleCompleteAudit = async (auditData: any) => {
+  const handleCompleteAudit = async (auditData: Record<string, unknown>) => {
     setIsNewAuditOpen(false);
     setSelectedAudit(null);
     // Implementar finalização na API
@@ -236,7 +236,7 @@ export const EnhancedPeotramManager: React.FC = () => {
     await loadData();
   };
 
-  const handleUpdateTemplate = async (template: any) => {
+  const handleUpdateTemplate = async (template: unknown) => {
     // Implementar atualização na API
     await loadData();
   };
@@ -625,7 +625,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="templates">
           <PeotramTemplateManager 
             templates={templates}
-            onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
+            onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
           />
         </TabsContent>
 
@@ -652,7 +652,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           {managementSubView === "templates" && (
             <PeotramTemplateManager 
               templates={templates}
-              onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
+              onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
             />
           )}
           {managementSubView === "analytics" && (
@@ -683,7 +683,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="templates">
           <PeotramTemplateManager 
             templates={templates}
-            onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
+            onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
           />
         </TabsContent>
 

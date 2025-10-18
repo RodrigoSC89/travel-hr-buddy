@@ -339,7 +339,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
         <div className="flex items-center gap-2">
           <select
             value={selectedPeriod}
-            onChange={(e) => setSelectedPeriod(e.target.value as any)}
+            onChange={(e) => setSelectedPeriod(e.target.value as unknown)}
             className="bg-background border border-border rounded px-3 py-2 text-sm"
           >
             <option value="7d">Últimos 7 dias</option>
@@ -366,7 +366,7 @@ export const AdvancedBusinessDashboard: React.FC = () => {
           <h2 className="text-xl font-semibold">Indicadores Principais</h2>
           <select
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value as any)}
+            onChange={(e) => setSelectedCategory(e.target.value as unknown)}
             className="bg-background border border-border rounded px-3 py-2 text-sm"
           >
             <option value="all">Todas as categorias</option>

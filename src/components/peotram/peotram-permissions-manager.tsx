@@ -108,7 +108,7 @@ export const PeotramPermissionsManager: React.FC = () => {
 
       if (error) throw error;
       
-      const mappedPermissions = (data || []).map((permission: any) => ({
+      const mappedPermissions = (data || []).map((permission: unknown) => ({
         ...permission,
         permission_level: permission.permission_level as "none" | "read" | "write" | "admin",
         location_type: permission.location_type as "vessel" | "shore" | "both"

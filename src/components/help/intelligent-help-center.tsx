@@ -216,7 +216,7 @@ export const IntelligentHelpCenter: React.FC = () => {
         .insert({
           knowledge_item_id: itemId || null,
           action_type: action,
-          session_data: data ? (data as any) : {},
+          session_data: data ? (data as unknown) : {},
           user_id: null // Seria auth.uid() se autenticado
         });
     } catch (error) {

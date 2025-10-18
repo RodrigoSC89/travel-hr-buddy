@@ -127,7 +127,7 @@ export const EnhancedMobileSupport: React.FC = () => {
       // Battery API (se disponível)
       if ("getBattery" in navigator) {
         try {
-          const battery = await (navigator as any).getBattery();
+          const battery = await (navigator as unknown).getBattery();
           info.batteryLevel = Math.round(battery.level * 100);
           info.isCharging = battery.charging;
         } catch (error) {
@@ -136,7 +136,7 @@ export const EnhancedMobileSupport: React.FC = () => {
 
       // Connection API (se disponível)
       if ("connection" in navigator) {
-        const connection = (navigator as any).connection;
+        const connection = (navigator as unknown).connection;
         info.connection = connection.effectiveType;
       }
 
@@ -157,7 +157,7 @@ export const EnhancedMobileSupport: React.FC = () => {
 
     // Verificar se está rodando como PWA
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches ||
-                        (window.navigator as any).standalone === true;
+                        (window.navigator as unknown).standalone === true;
     
     setPwaStatus(prev => ({ 
       ...prev, 

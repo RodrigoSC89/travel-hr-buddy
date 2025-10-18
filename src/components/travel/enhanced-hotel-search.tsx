@@ -320,7 +320,7 @@ export const EnhancedHotelSearch: React.FC = () => {
       if (error) throw error;
 
       if (data.success && data.data?.data) {
-        const transformedHotels = data.data.data.map((offer: any, index: number) => ({
+        const transformedHotels = data.data.data.map((offer: unknown, index: number) => ({
           id: offer.hotel?.hotelId || `hotel-${index}`,
           name: offer.hotel?.name || "Hotel Disponível",
           location: offer.hotel?.address?.cityName || destination,
@@ -362,7 +362,7 @@ export const EnhancedHotelSearch: React.FC = () => {
     }
   };
 
-  const generateBookingUrl = (offer: any, searchParams: any) => {
+  const generateBookingUrl = (offer: unknown, searchParams: Record<string, unknown>) => {
     const hotelId = offer.hotel?.hotelId || "";
     const cityName = encodeURIComponent(searchParams.destination);
     const checkin = format(searchParams.checkInDate, "yyyy-MM-dd");

@@ -215,7 +215,7 @@ const EnhancedAIChatbot: React.FC = () => {
         type: "ai",
         content: aiResponse.content,
         timestamp: new Date(),
-        category: selectedCapability as any,
+        category: selectedCapability as unknown,
         confidence: aiResponse.confidence,
         sources: aiResponse.sources
       };

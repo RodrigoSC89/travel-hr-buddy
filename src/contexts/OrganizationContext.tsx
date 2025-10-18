@@ -47,7 +47,7 @@ interface OrganizationContextType {
   switchOrganization: (orgId: string) => Promise<void>;
   updateBranding: (branding: Partial<OrganizationBranding>) => Promise<void>;
   checkPermission: (permission: string) => boolean;
-  getCurrentOrganizationUsers: () => Promise<any[]>;
+  getCurrentOrganizationUsers: () => Promise<unknown[]>;
   inviteUser: (email: string, role: string) => Promise<void>;
   removeUser: (userId: string) => Promise<void>;
   updateUserRole: (userId: string, role: string) => Promise<void>;
@@ -114,9 +114,9 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         default_currency: "BRL",
         timezone: "America/Sao_Paulo",
         custom_fields: {},
-        business_rules: {} as any,
-        enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as any,
-        module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as any
+        business_rules: {},
+        enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"],
+        module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
       };
       
       setCurrentBranding(demoBranding);
@@ -137,11 +137,11 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         const { data: branding, error: brandingError } = await Promise.race([
           fetchPromise,
           timeoutPromise
-        ]).catch(() => ({ data: null, error: null })) as any;
+        ]).catch(() => ({ data: null, error: null }));
 
         if (!brandingError && branding) {
-          setCurrentBranding(branding as any);
-          applyBrandingTheme(branding as any);
+          setCurrentBranding(branding);
+          applyBrandingTheme(branding);
         }
       } catch (err) {
         // Ignorar erros - já temos o branding demo configurado
@@ -184,10 +184,10 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     const updateData: Record<string, unknown> = {
       ...brandingUpdate,
-      business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules as any : undefined,
-      enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules as any : undefined,
-      custom_fields: brandingUpdate.custom_fields ? brandingUpdate.custom_fields as any : undefined,
-      module_settings: brandingUpdate.module_settings ? brandingUpdate.module_settings as any : undefined
+      business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules : undefined,
+      enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules : undefined,
+      custom_fields: brandingUpdate.custom_fields ? brandingUpdate.custom_fields : undefined,
+      module_settings: brandingUpdate.module_settings ? brandingUpdate.module_settings : undefined
     };
 
     const { data, error } = await supabase
@@ -199,8 +199,8 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     if (error) throw error;
 
-    setCurrentBranding(data as any);
-    applyBrandingTheme(data as any);
+    setCurrentBranding(data);
+    applyBrandingTheme(data);
   };
 
   const checkPermission = (permission: string): boolean => {
@@ -221,7 +221,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     return userPermissions.includes(permission) || userPermissions.includes("all");
   };
 
-  const getCurrentOrganizationUsers = async (): Promise<any[]> => {
+  const getCurrentOrganizationUsers = async (): Promise<unknown[]> => {
     // Mock data para demo
     const mockUsers = [
       {

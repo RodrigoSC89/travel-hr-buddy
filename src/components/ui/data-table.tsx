@@ -26,7 +26,7 @@ export interface Column<T = any> {
   header: string;
   sortable?: boolean;
   filterable?: boolean;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (value: unknown, row: T) => React.ReactNode;
   width?: string;
   align?: "left" | "center" | "right";
 }

@@ -65,7 +65,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
           checklist_id: checklist.id,
           overall_score: aiAnalysis.overallScore,
           analysis_type: "comprehensive",
-          analysis_data: aiAnalysis as any,
+          analysis_data: aiAnalysis as unknown,
           recommendations: aiAnalysis.suggestions,
           issues_found: aiAnalysis.anomalies.length,
           critical_issues: aiAnalysis.anomalies.filter(a => a.severity === "critical").length,

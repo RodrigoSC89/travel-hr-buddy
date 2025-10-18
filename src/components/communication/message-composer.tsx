@@ -194,7 +194,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       
       // Auto-set category based on template
       if (["general", "hr", "operations", "emergency"].includes(template.category)) {
-        setCategory(template.category as any);
+        setCategory(template.category as unknown);
       }
     }
   };
