@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DPIncident, SGSO_CATEGORIES, RISK_LEVEL_CONFIG, SGSORiskLevel } from "@/types/incident";
+import { DPIncident, SGSO_CATEGORIES, RISK_LEVEL_CONFIG } from "@/types/incident";
 import { Download, FileText, Filter, X } from "lucide-react";
 import { saveAs } from "file-saver";
 
@@ -146,14 +146,14 @@ export function IncidentsSGSOPanel() {
     ].join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    saveAs(blob, `incidentes-dp-sgso-${new Date().toISOString().split('T')[0]}.csv`);
+    saveAs(blob, `incidentes-dp-sgso-${new Date().toISOString().split("T")[0]}.csv`);
   };
 
   // Export to PDF (placeholder for future implementation)
   const exportToPDF = async () => {
     try {
-      const html2pdf = (await import('html2pdf.js')).default;
-      const element = document.getElementById('sgso-incidents-content');
+      const html2pdf = (await import("html2pdf.js")).default;
+      const element = document.getElementById("sgso-incidents-content");
       
       if (!element) {
         alert("Erro ao gerar PDF: conteúdo não encontrado");
@@ -162,10 +162,10 @@ export function IncidentsSGSOPanel() {
 
       const opt = {
         margin: 1,
-        filename: `incidentes-dp-sgso-${new Date().toISOString().split('T')[0]}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        filename: `incidentes-dp-sgso-${new Date().toISOString().split("T")[0]}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
       };
 
       html2pdf().set(opt).from(element).save();

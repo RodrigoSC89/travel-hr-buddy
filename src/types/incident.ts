@@ -3,7 +3,7 @@
  */
 
 // SGSO Risk Levels
-export type SGSORiskLevel = 'baixo' | 'moderado' | 'alto' | 'crítico';
+export type SGSORiskLevel = "baixo" | "moderado" | "alto" | "crítico";
 
 // SGSO Categories as defined in the requirements
 export const SGSO_CATEGORIES = [
@@ -49,10 +49,10 @@ export interface DPIncident {
 
 // Risk level display configurations
 export const RISK_LEVEL_CONFIG: Record<SGSORiskLevel, { emoji: string; color: string; label: string }> = {
-  'baixo': { emoji: '🟢', color: 'bg-green-100 text-green-800', label: 'Baixo' },
-  'moderado': { emoji: '🟡', color: 'bg-yellow-100 text-yellow-800', label: 'Moderado' },
-  'alto': { emoji: '🟠', color: 'bg-orange-100 text-orange-800', label: 'Alto' },
-  'crítico': { emoji: '🔴', color: 'bg-red-100 text-red-800', label: 'Crítico' },
+  "baixo": { emoji: "🟢", color: "bg-green-100 text-green-800", label: "Baixo" },
+  "moderado": { emoji: "🟡", color: "bg-yellow-100 text-yellow-800", label: "Moderado" },
+  "alto": { emoji: "🟠", color: "bg-orange-100 text-orange-800", label: "Alto" },
+  "crítico": { emoji: "🔴", color: "bg-red-100 text-red-800", label: "Crítico" },
 };
 
 // Filter options for SGSO panel
