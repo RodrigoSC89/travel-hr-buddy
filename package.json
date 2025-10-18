@@ -18,6 +18,8 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "clean:logs": "node scripts/clean-console-logs.cjs",
+    "verify:rls": "node scripts/verify-rls-policies.cjs",
+    "verify:rls-report": "node scripts/verify-rls-policies.cjs --report",
     "validate:api-keys": "node scripts/validate-api-keys.cjs",
     "demo:api-validation": "node scripts/demo-api-validation.cjs",
     "alert:low-coverage": "node scripts/low-coverage-alert.js",

@@ -1,13 +1,22 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import { createClient } from "@supabase/supabase-js";
+import { withRole, AuthenticatedRequest } from "@/lib/api-auth-middleware";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export default async function handler(
-  req: NextApiRequest,
+/**
+ * GET /api/admin/alertas
+ * 
+ * Get all audit alerts from auditoria_alertas table.
+ * Requires admin role.
+ * 
+ * @returns Array of audit alerts ordered by creation date (newest first)
+ */
+async function handler(
+  req: AuthenticatedRequest,
   res: NextApiResponse
 ) {
   if (req.method !== "GET") {
@@ -15,34 +24,7 @@ export default async function handler(
   }
 
   try {
-    // Get the auth token from the request headers
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ error: "Não autenticado." });
-    }
-
-    // Verify the token and get the user
-    const token = authHeader.replace("Bearer ", "");
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser(token);
-
-    if (authError || !user) {
-      return res.status(401).json({ error: "Não autenticado." });
-    }
-
-    // Check if user is admin
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-
-    if (profileError || !profile || profile.role !== "admin") {
-      return res.status(403).json({ error: "Acesso negado." });
-    }
-
+    // User is authenticated and authorized (checked by middleware)
     // Query auditoria_alertas table
     const { data, error } = await supabase
       .from("auditoria_alertas")
@@ -55,7 +37,11 @@ export default async function handler(
 
     return res.status(200).json(data);
   } catch (error) {
-    console.error("Erro ao buscar alertas:", error);
-    return res.status(500).json({ error: "Erro ao buscar alertas." });
+    // Error logging for production monitoring
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return res.status(500).json({ error: "Erro ao buscar alertas.", details: errorMessage });
   }
 }
+
+// Export handler wrapped with admin role requirement
+export default withRole('admin', handler);
