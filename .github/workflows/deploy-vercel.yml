@@ -1,0 +1,99 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  deploy:
+    name: Deploy to Vercel Production
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm run test
+        env:
+          NODE_ENV: test
+      
+      - name: Build project
+        run: npm run build
+        env:
+          NODE_ENV: production
+          # Vercel environment variables will be used automatically
+      
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      
+      - name: Deploy Project Artifacts to Vercel
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> $GITHUB_OUTPUT
+          echo "✅ Deployed to: $url"
+      
+      - name: Verify Deployment
+        run: |
+          echo "🔍 Verifying deployment..."
+          sleep 10
+          status_code=$(curl -s -o /dev/null -w "%{http_code}" ${{ steps.deploy.outputs.url }})
+          if [ $status_code -eq 200 ]; then
+            echo "✅ Deployment successful! Status code: $status_code"
+          else
+            echo "❌ Deployment verification failed! Status code: $status_code"
+            exit 1
+          fi
+      
+      - name: Create deployment comment
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = '${{ steps.deploy.outputs.url }}';
+            const body = `🚀 **Deployment Successful!**\n\n**URL:** ${url}\n\n**Environment:** Production\n**Branch:** ${context.ref}\n**Commit:** ${context.sha.substring(0, 7)}\n**Workflow:** [${context.workflow}](${context.payload.repository.html_url}/actions/runs/${context.runId})`;
+            
+            // Create a comment on the latest commit
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: body
+            });
+      
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `❌ **Deployment Failed!**\n\n**Branch:** ${context.ref}\n**Commit:** ${context.sha.substring(0, 7)}\n**Workflow:** [${context.workflow}](${context.payload.repository.html_url}/actions/runs/${context.runId})\n\nPlease check the workflow logs for details.`;
+            
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: body
+            });

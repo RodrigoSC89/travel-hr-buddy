@@ -10,7 +10,10 @@ A smart, modular, and extensible platform for managing maritime systems, intelli
 
 ## 🌐 Live Preview
 
-> Coming soon via Vercel deployment
+🚀 **Production Deployment**: Ready for deployment to Vercel + Supabase
+
+📖 **[Production Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)** - Complete step-by-step guide
+✅ **[Production Checklist](./PRODUCTION_CHECKLIST.md)** - Verify production readiness
 
 ---
 
@@ -41,18 +44,25 @@ After starting the dev server, visit `http://localhost:8080/health` to verify yo
 
 ### 📦 Common Scripts
 
-```json
-{
-  "dev": "vite --host",
-  "build": "vite build",
-  "start": "vite preview --host",
-  "test": "echo \"No tests specified\" && exit 0",
-  "lint": "eslint .",
-  "lint:fix": "eslint . --fix",
-  "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-  "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-  "clean:logs": "node scripts/clean-console-logs.cjs"
-}
+```bash
+# Development
+npm run dev              # Start dev server
+npm run build            # Build for production
+npm run preview          # Preview production build
+npm run test             # Run tests
+
+# Code Quality
+npm run lint             # Run ESLint
+npm run lint:fix         # Auto-fix lint issues
+npm run format           # Format with Prettier
+
+# Production
+npm run verify:production  # Verify production readiness
+npm run deploy:vercel      # Deploy to Vercel
+
+# Utilities
+npm run clean:logs       # Remove console.logs
+npm run validate:api-keys  # Validate API keys
 ```
 
 ---
@@ -214,62 +224,131 @@ npm run test
 
 ## 🚀 Deployment
 
-### Vercel Deployment (Recommended)
+### 📚 Complete Production Deployment Guide
 
-* Auto-deployed via **Vercel** on push to `main`
-* Build errors are linted and tested in CI before deployment
-* Environment variables must be configured in Vercel dashboard
+For a **complete step-by-step guide** to deploy Nautilus One to production, see:
 
-#### Vercel Configuration Details
+- 📖 **[Production Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)** - Complete guide with Vercel + Supabase setup
+- ✅ **[Production Checklist](./PRODUCTION_CHECKLIST.md)** - Comprehensive checklist of all requirements
+- 🔐 **[Environment Variables](./ENVIRONMENT_VARIABLES.md)** - All required and optional environment variables
+- 🔍 **[Vercel Deployment Guide](./VERCEL_DEPLOYMENT_GUIDE.md)** - Quick Vercel-specific guide
 
-The `vercel.json` configuration includes:
+### 🔍 Pre-Deployment Verification
 
-**Security Headers** (5 total):
-- `X-Content-Type-Options: nosniff` - Prevents MIME type sniffing attacks
-- `X-Frame-Options: DENY` - Prevents clickjacking attacks
-- `X-XSS-Protection: 1; mode=block` - Enables XSS filtering
-- `Referrer-Policy: strict-origin-when-cross-origin` - Privacy protection via referrer control
-- `Permissions-Policy: camera=(), microphone=(), geolocation=()` - Blocks unauthorized device access
-
-**Caching Strategy**:
-- Static assets (`/assets/*`): 1 year cache with immutable flag
-- Images (jpg, jpeg, png, gif, webp, svg, ico): 24-hour cache with revalidation
-- Expected performance gain: ~30-50% faster repeat page loads
-
-**Health Check Endpoint**:
-- Visit `/health` to verify deployment: `https://your-project.vercel.app/health`
-
-#### Environment Variables Setup
-
-Configure in Vercel Dashboard → Settings → Environment Variables:
-
-**Required**:
-- `VITE_SUPABASE_URL` - Your Supabase project URL
-- `VITE_SUPABASE_ANON_KEY` - Your Supabase anonymous key
-
-**Optional** (see `.env.example` for full list):
-- `VITE_OPENAI_API_KEY`, `VITE_MAPBOX_TOKEN`, etc.
-
-#### Framework Detection
-
-Vercel auto-detects build commands from `package.json`:
-- Build: `npm run build` (Vite build process)
-- Output: `dist` directory
-- Framework: Automatically detected as Vite
-
-For comprehensive deployment guide, see [VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md).
-
-### Manual Deployment
+Before deploying to production, run the verification script:
 
 ```bash
-# Build for production
-npm run build
+npm run verify:production
+```
 
-# Preview production build locally
-npm run preview
+This will check:
+- ✅ Environment variables configuration
+- ✅ Required files and directories
+- ✅ Build status
+- ✅ GitHub Actions workflows
+- ✅ Documentation completeness
 
-# Deploy to Vercel (requires Vercel CLI)
+### 🚀 Deployment Options
+
+#### Option 1: Automatic Deployment (Recommended)
+
+Once configured, every push to `main` automatically deploys via GitHub Actions:
+
+```bash
+git add .
+git commit -m "feat: new feature"
+git push origin main
+# ✅ Automatically builds, tests, and deploys to Vercel
+```
+
+**Features**:
+- ✅ Automated tests before deployment
+- ✅ Build verification
+- ✅ Automatic deployment to production
+- ✅ Deployment status notifications
+- ✅ Rollback capability
+
+#### Option 2: Manual Deployment via CLI
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Login to Vercel
+vercel login
+
+# Deploy to production
 npm run deploy:vercel
+```
+
+### ⚙️ Vercel Configuration
+
+The project includes optimized `vercel.json` configuration:
+
+**Security Headers** (5 total):
+- `X-Content-Type-Options: nosniff` - Prevents MIME type sniffing
+- `X-Frame-Options: DENY` - Prevents clickjacking
+- `X-XSS-Protection: 1; mode=block` - XSS protection
+- `Referrer-Policy: strict-origin-when-cross-origin` - Privacy protection
+- `Permissions-Policy` - Blocks unauthorized device access
+
+**Performance Optimizations**:
+- Static assets cached for 1 year (immutable)
+- Images cached for 24 hours with revalidation
+- Expected: 30-50% faster repeat page loads
+
+**Build Settings**:
+- Framework: Vite (auto-detected)
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Node Version: 22.x
+
+### 🔐 Environment Variables
+
+Required environment variables (configure in Vercel Dashboard):
+
+**Essential**:
+```bash
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=eyJ...
+VITE_SUPABASE_PROJECT_ID=your-project-id
+VITE_SENTRY_DSN=https://...@sentry.io/...
+VITE_APP_URL=https://your-app.vercel.app
+```
+
+**Optional** (for advanced features):
+```bash
+VITE_OPENAI_API_KEY=sk-proj-...
+VITE_MAPBOX_ACCESS_TOKEN=pk.eyJ...
+VITE_OPENWEATHER_API_KEY=...
+# See ENVIRONMENT_VARIABLES.md for complete list
+```
+
+### 📊 Post-Deployment Verification
+
+After deployment, verify:
+
+1. **Access**: Visit your production URL
+2. **Health Check**: Go to `/admin/system-health`
+3. **Login**: Test authentication
+4. **Features**: Test core functionality
+5. **Performance**: Run Lighthouse audit (target: >80)
+6. **Monitoring**: Check Sentry for errors
+
+### 🔄 Rollback Procedure
+
+If issues occur post-deployment:
+
+**Via Vercel Dashboard**:
+1. Go to Deployments
+2. Find the last stable deployment
+3. Click "Promote to Production"
+
+**Via Git**:
+```bash
+git revert HEAD
+git push origin main
+# Automatically triggers new deployment
 ```
 
 ---
