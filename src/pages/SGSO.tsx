@@ -80,6 +80,12 @@ const SGSO = () => {
             label: "Relatórios ANP",
             icon: <BookOpen className="h-3 w-3" />,
             action: () => handleGenerateReport("Relatórios ANP")
+          },
+          {
+            id: "pdf-report",
+            label: "Relatório PDF",
+            icon: <FileCheck className="h-3 w-3" />,
+            action: () => window.location.href = "/sgso/report"
           }
         ]}
         quickActions={[
