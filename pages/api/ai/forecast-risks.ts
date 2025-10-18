@@ -118,9 +118,9 @@ export default async function handler(
   }
 }
 
-async function collectOperationalData(vesselId: string): Promise<any> {
+async function collectOperationalData(vesselId: string): Promise<Record<string, OperationalLog>> {
   // Collect data from multiple sources
-  const [dpIncidents, safetyIncidents, sgsoData] = await Promise.all([
+  const [dpIncidents, , sgsoData] = await Promise.all([
     // DP Incidents
     supabase
       .from("dp_incidents")
@@ -162,7 +162,7 @@ async function collectOperationalData(vesselId: string): Promise<any> {
         dpIncidents.data?.[0]?.created_at || "N/A",
       avg_severity:
         dpIncidents.data?.reduce(
-          (acc: number, inc: any) =>
+          (acc: number, inc: { severity?: string }) =>
             acc + (inc.severity === "critical" ? 5 : inc.severity === "high" ? 4 : 3),
           0
         ) / (dpIncidents.data?.length || 1) || 0,
@@ -175,10 +175,10 @@ async function collectOperationalData(vesselId: string): Promise<any> {
     },
     SGSO: {
       system: "SGSO",
-      incidents: sgsoData.data?.filter((p: any) => p.status === "non_compliant").length || 0,
+      incidents: sgsoData.data?.filter((p: { status?: string }) => p.status === "non_compliant").length || 0,
       last_incident_date: sgsoData.data?.[0]?.updated_at || "N/A",
       avg_severity: sgsoData.data?.reduce(
-        (acc: number, p: any) => acc + (100 - (p.compliance_level || 0)) / 20,
+        (acc: number, p: { compliance_level?: number }) => acc + (100 - (p.compliance_level || 0)) / 20,
         0
       ) / (sgsoData.data?.length || 1) || 0,
     },
@@ -195,7 +195,7 @@ async function collectOperationalData(vesselId: string): Promise<any> {
 
 async function generateRiskPredictions(
   vessel: VesselData,
-  operationalData: any
+  operationalData: Record<string, OperationalLog>
 ): Promise<RiskPrediction[]> {
   const prompt = `
 Você é um sistema de previsão de riscos técnicos para embarcações offshore.
@@ -263,7 +263,7 @@ Considere TODOS os sistemas: DP, Energia, SGSO, Comunicações, mesmo que o risc
     console.error("Error generating AI predictions:", error);
     
     // Fallback: return basic predictions based on data analysis
-    return Object.values(operationalData).map((data: any) => ({
+    return Object.values(operationalData).map((data: OperationalLog) => ({
       system: data.system,
       predicted_risk: data.incidents > 3 ? "Intermitência" : "Normal",
       risk_score: Math.min(data.incidents * 15 + data.avg_severity * 10, 100),

@@ -90,7 +90,7 @@ export default async function handler(
   }
 }
 
-async function collectAuditData(vesselId: string, auditType: string) {
+async function collectAuditData(vesselId: string, _auditType: string) {
   const [
     sgsoData,
     safetyIncidents,
@@ -158,7 +158,7 @@ async function collectAuditData(vesselId: string, auditType: string) {
       total: safetyIncidents.data?.length || 0,
       critical: safetyIncidents.data?.filter((i) => i.severity === "critical").length || 0,
       unresolved: safetyIncidents.data?.filter((i) => i.status !== "closed").length || 0,
-      by_type: safetyIncidents.data?.reduce((acc: any, i: any) => {
+      by_type: safetyIncidents.data?.reduce((acc: Record<string, number>, i: { incident_type: string }) => {
         acc[i.incident_type] = (acc[i.incident_type] || 0) + 1;
         return acc;
       }, {}),
@@ -187,10 +187,18 @@ async function collectAuditData(vesselId: string, auditType: string) {
   };
 }
 
+interface AuditData {
+  sgso: { avg_compliance: number };
+  incidents: { critical: number; unresolved: number };
+  risks: { critical: number };
+  training: { expired: number; completed: number; total: number };
+  certificates: { expired: number };
+}
+
 async function generateAuditPrediction(
-  vessel: any,
+  vessel: { name: string },
   auditType: string,
-  auditData: any
+  auditData: AuditData
 ) {
   const prompt = `
 Você é um auditor experiente especializado em auditorias ${auditType} para embarcações offshore.

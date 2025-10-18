@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { CheckCircle2, User, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -20,8 +19,19 @@ interface RecommendedActionsProps {
 export const RecommendedActions: React.FC<RecommendedActionsProps> = ({
   selectedVessel,
 }) => {
-  const [actions, setActions] = useState<any[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
+  const [actions, setActions] = useState<{
+    id: string;
+    type: string;
+    vessel_name: string;
+    vessel_id: string;
+    title: string;
+    action: string;
+    priority: string;
+    score: number;
+    assigned_to: string | null;
+    created_at: string;
+  }[]>([]);
+  const [users, setUsers] = useState<{ id: string; full_name: string; email: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 

@@ -17,9 +17,15 @@ export const AuditSimulator: React.FC<AuditSimulatorProps> = ({
   selectedVessel,
   onVesselSelect,
 }) => {
-  const [vessels, setVessels] = useState<any[]>([]);
+  const [vessels, setVessels] = useState<{ id: string; name: string }[]>([]);
   const [auditType, setAuditType] = useState<string>("Petrobras");
-  const [prediction, setPrediction] = useState<any>(null);
+  const [prediction, setPrediction] = useState<{
+    expected_score: number;
+    probability_pass: string;
+    ai_confidence?: number;
+    weaknesses?: string[];
+    recommendations?: string[];
+  } | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 

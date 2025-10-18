@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, TrendingUp, Activity, RefreshCw } from "lucide-react";
+import { AlertTriangle, Activity, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -41,7 +41,7 @@ export const TacticalRiskPanel: React.FC<TacticalRiskPanelProps> = ({
   selectedVessel,
   onVesselSelect,
 }) => {
-  const [vessels, setVessels] = useState<any[]>([]);
+  const [vessels, setVessels] = useState<{ id: string; name: string }[]>([]);
   const [riskSummaries, setRiskSummaries] = useState<VesselRiskSummary[]>([]);
   const [tacticalRisks, setTacticalRisks] = useState<TacticalRisk[]>([]);
   const [loading, setLoading] = useState(true);
