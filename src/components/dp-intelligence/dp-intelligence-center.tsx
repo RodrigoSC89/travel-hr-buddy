@@ -13,7 +13,8 @@ import {
   Filter,
   BookOpen,
   Lightbulb,
-  CheckSquare
+  CheckSquare,
+  Wrench
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -31,6 +32,17 @@ interface Incident {
   link: string;
   severity?: "critical" | "high" | "medium" | "low";
   status?: "analyzed" | "pending";
+  plan_of_action?: PlanOfAction | null;
+}
+
+interface PlanOfAction {
+  diagnostico: string;
+  causa_raiz: string;
+  acoes_corretivas: string[];
+  acoes_preventivas: string[];
+  responsavel: string;
+  prazo: string;
+  normas: string[];
 }
 
 interface AnalysisResult {
@@ -52,6 +64,7 @@ const DPIntelligenceCenter = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
+  const [generatingAction, setGeneratingAction] = useState<string | null>(null);
   const [stats, setStats] = useState({
     total: 0,
     critical: 0,
@@ -66,17 +79,57 @@ const DPIntelligenceCenter = () => {
   const fetchIncidents = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/functions/v1/dp-intel-feed");
-      if (response.ok) {
-        const data = await response.json();
-        const incidentsWithStatus = (data.incidents || []).map((inc: Incident) => ({
-          ...inc,
-          severity: inc.severity || determineSeverity(inc),
-          status: inc.status || "pending"
+      
+      // First, try to fetch from the database
+      const { data: dbIncidents, error: dbError } = await supabase
+        .from("dp_incidents")
+        .select("*")
+        .order("date", { ascending: false });
+
+      if (dbIncidents && dbIncidents.length > 0) {
+        // Map database fields to component interface
+        const incidentsWithStatus = dbIncidents.map((inc: any) => ({
+          id: inc.id,
+          title: inc.title,
+          date: inc.incident_date || inc.date,
+          vessel: inc.vessel,
+          location: inc.location,
+          classDP: inc.class_dp,
+          rootCause: inc.root_cause,
+          tags: inc.tags || [],
+          summary: inc.summary || inc.description || "",
+          link: inc.link || "",
+          severity: inc.severity || determineSeverity({
+            id: inc.id,
+            title: inc.title,
+            date: inc.date,
+            vessel: inc.vessel,
+            location: inc.location,
+            classDP: inc.class_dp,
+            rootCause: inc.root_cause,
+            tags: inc.tags || [],
+            summary: inc.summary || "",
+            link: inc.link || ""
+          }),
+          status: inc.status || "pending",
+          plan_of_action: inc.plan_of_action || null
         }));
         setIncidents(incidentsWithStatus);
       } else {
-        loadDemoData();
+        // If no data in DB, try the function endpoint
+        const response = await fetch("/functions/v1/dp-intel-feed");
+        if (response.ok) {
+          const data = await response.json();
+          const incidentsWithStatus = (data.incidents || []).map((inc: Incident) => ({
+            ...inc,
+            severity: inc.severity || determineSeverity(inc),
+            status: inc.status || "pending",
+            plan_of_action: inc.plan_of_action || null
+          }));
+          setIncidents(incidentsWithStatus);
+        } else {
+          loadDemoData();
+        }
       }
     } catch (error) {
       console.error("Error fetching incidents:", error);
@@ -112,7 +165,8 @@ const DPIntelligenceCenter = () => {
         summary: "The vessel experienced a gradual loss of position due to undetected gyro drift during tandem loading ops.",
         tags: ["gyro", "drive off", "sensor", "position loss"],
         severity: "critical",
-        status: "pending"
+        status: "pending",
+        plan_of_action: null
       },
       {
         id: "imca-2025-009",
@@ -126,7 +180,8 @@ const DPIntelligenceCenter = () => {
         summary: "During critical ROV launch, the vessel experienced a momentary loss of thruster control.",
         tags: ["thruster", "software", "rov", "reboot"],
         severity: "high",
-        status: "analyzed"
+        status: "analyzed",
+        plan_of_action: null
       },
       {
         id: "imca-2025-006",
@@ -140,7 +195,8 @@ const DPIntelligenceCenter = () => {
         summary: "During heavy weather operations, the vessel lost multiple DGPS references simultaneously.",
         tags: ["dgps", "reference system", "weather", "acoustic"],
         severity: "high",
-        status: "pending"
+        status: "pending",
+        plan_of_action: null
       },
       {
         id: "imca-2024-089",
@@ -154,7 +210,8 @@ const DPIntelligenceCenter = () => {
         summary: "The Power Management System experienced a configuration error that resulted in unnecessary load shedding.",
         tags: ["pms", "power", "load shedding", "configuration"],
         severity: "medium",
-        status: "analyzed"
+        status: "analyzed",
+        plan_of_action: null
       }
     ];
     setIncidents(demoIncidents);
@@ -259,6 +316,41 @@ const DPIntelligenceCenter = () => {
     const endIndex = endMarker ? text.indexOf(endMarker, contentStart) : text.length;
     
     return text.substring(contentStart, endIndex === -1 ? text.length : endIndex).trim();
+  };
+
+  const handleGenerateAction = async (id: string) => {
+    setGeneratingAction(id);
+    try {
+      const response = await fetch("/api/dp-incidents/action", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Erro ao gerar plano de ação");
+      }
+
+      const data = await response.json();
+      
+      if (data.ok) {
+        toast.success("Plano de ação gerado com sucesso");
+        // Refresh incidents to get updated data
+        await fetchIncidents();
+      } else {
+        throw new Error("Erro ao gerar plano de ação");
+      }
+    } catch (error) {
+      console.error("Error generating action plan:", error);
+      toast.error("Erro ao gerar plano de ação", {
+        description: error instanceof Error ? error.message : "Tente novamente mais tarde"
+      });
+    } finally {
+      setGeneratingAction(null);
+    }
   };
 
   return (
@@ -462,6 +554,16 @@ const DPIntelligenceCenter = () => {
                   </Button>
                   <Button 
                     size="sm" 
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => handleGenerateAction(incident.id)}
+                    disabled={generatingAction === incident.id}
+                  >
+                    <Wrench className="h-4 w-4 mr-1" />
+                    {generatingAction === incident.id ? "Gerando..." : "Plano de Ação"}
+                  </Button>
+                  <Button 
+                    size="sm" 
                     className="flex-1"
                     onClick={() => handleAnalyzeIncident(incident)}
                   >
@@ -469,6 +571,60 @@ const DPIntelligenceCenter = () => {
                     Analisar IA
                   </Button>
                 </div>
+
+                {incident.plan_of_action && (
+                  <details className="bg-slate-100 dark:bg-slate-800 p-3 rounded text-sm mt-2">
+                    <summary className="cursor-pointer text-blue-600 dark:text-blue-400 font-semibold mb-2">
+                      📋 Plano de Ação Gerado
+                    </summary>
+                    <div className="space-y-3 mt-3">
+                      <div>
+                        <h4 className="font-semibold mb-1">🧠 Diagnóstico Técnico:</h4>
+                        <p className="text-xs">{incident.plan_of_action.diagnostico}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-1">🛠️ Causa Raiz Provável:</h4>
+                        <p className="text-xs">{incident.plan_of_action.causa_raiz}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-1">✅ Ações Corretivas:</h4>
+                        <ul className="list-disc list-inside text-xs space-y-1">
+                          {incident.plan_of_action.acoes_corretivas?.map((acao, idx) => (
+                            <li key={idx}>{acao}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-1">🔄 Ações Preventivas:</h4>
+                        <ul className="list-disc list-inside text-xs space-y-1">
+                          {incident.plan_of_action.acoes_preventivas?.map((acao, idx) => (
+                            <li key={idx}>{acao}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <h4 className="font-semibold mb-1">📌 Responsável:</h4>
+                          <p className="text-xs">{incident.plan_of_action.responsavel}</p>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold mb-1">⏱️ Prazo:</h4>
+                          <p className="text-xs">{incident.plan_of_action.prazo}</p>
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-1">🔗 Normas Referenciadas:</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {incident.plan_of_action.normas?.map((norma, idx) => (
+                            <Badge key={idx} variant="outline" className="text-xs">
+                              {norma}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                )}
               </CardContent>
             </Card>
           ))}
