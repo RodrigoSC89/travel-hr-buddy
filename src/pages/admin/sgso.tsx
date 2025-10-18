@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MetricasPanel } from "@/components/sgso/MetricasPanel";
-import { Shield, BarChart3, FileCheck, Mail } from "lucide-react";
+import { SGSOEffectivenessChart } from "@/components/sgso/SGSOEffectivenessChart";
+import { Shield, BarChart3, FileCheck, Mail, TrendingUp } from "lucide-react";
 
 const AdminSGSO = () => {
   return (
@@ -27,10 +28,14 @@ const AdminSGSO = () => {
 
       {/* Tabs */}
       <Tabs defaultValue="metrics" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="metrics">
             <BarChart3 className="mr-2 h-4 w-4" />
             Métricas Operacionais
+          </TabsTrigger>
+          <TabsTrigger value="effectiveness">
+            <TrendingUp className="mr-2 h-4 w-4" />
+            Efetividade
           </TabsTrigger>
           <TabsTrigger value="compliance">
             <FileCheck className="mr-2 h-4 w-4" />
@@ -44,6 +49,57 @@ const AdminSGSO = () => {
 
         <TabsContent value="metrics" className="space-y-4">
           <MetricasPanel />
+        </TabsContent>
+
+        <TabsContent value="effectiveness" className="space-y-4">
+          <SGSOEffectivenessChart />
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>💡 Insights para Melhoria Contínua</CardTitle>
+              <CardDescription>
+                Direcionamento estratégico para QSMS
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="rounded-lg border p-4 bg-green-50 dark:bg-green-950">
+                  <h3 className="font-semibold mb-2 flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-green-600" />
+                    💡 Efetividade por tipo
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Identifique quais categorias de incidentes têm planos de ação mais efetivos
+                    e quais precisam de revisão estratégica.
+                  </p>
+                </div>
+                
+                <div className="rounded-lg border p-4 bg-blue-50 dark:bg-blue-950">
+                  <h3 className="font-semibold mb-2">⏱️ Tempo médio de resposta</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Acompanhe o tempo entre abertura e fechamento de incidentes para
+                    otimizar rotinas operacionais.
+                  </p>
+                </div>
+                
+                <div className="rounded-lg border p-4 bg-purple-50 dark:bg-purple-950">
+                  <h3 className="font-semibold mb-2">🚢 Efetividade por navio</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Compare o desempenho entre embarcações para identificar melhores práticas
+                    e áreas que necessitam suporte adicional.
+                  </p>
+                </div>
+                
+                <div className="rounded-lg border p-4 bg-amber-50 dark:bg-amber-950">
+                  <h3 className="font-semibold mb-2">📍 Reincidência</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Monitore categorias com alta taxa de reincidência para ajustar
+                    planos de ação e prevenir futuros incidentes.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="compliance" className="space-y-4">
