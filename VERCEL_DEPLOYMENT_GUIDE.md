@@ -4,7 +4,7 @@
 
 - Conta na Vercel (https://vercel.com)
 - Projeto Supabase configurado
-- Chaves de API necessárias (ver .env.example)
+- Chaves de API necessárias (ver `.env.example` ou `.env.production`)
 
 ## 🔧 Configuração Inicial
 
@@ -16,6 +16,8 @@
 4. Mantenha as configurações padrão (já estão corretas no `vercel.json`)
 
 ### 2. Configurar Variáveis de Ambiente
+
+📝 **Referência**: Consulte o arquivo `.env.production` no repositório para ver a lista completa de variáveis disponíveis.
 
 Na dashboard da Vercel, vá em **Settings** → **Environment Variables** e adicione:
 
@@ -93,6 +95,17 @@ supabase secrets set ADMIN_EMAIL=admin@empresa.com
 supabase secrets set OPENWEATHER_API_KEY=...
 supabase secrets set MAPBOX_PUBLIC_TOKEN=pk.eyJ...
 ```
+
+## ✅ Checklist Pré-Deploy
+
+Antes de fazer o deploy, certifique-se de que:
+
+- [ ] `.env.production` preenchido com suas credenciais reais
+- [ ] Build local funcionando (`npm run build`)
+- [ ] Testes automatizados passando (`npm run test`)
+- [ ] Painel de saúde operacional (acesse `/admin/system-health` após deploy)
+- [ ] Supabase configurado e online
+- [ ] Edge Functions do Supabase configuradas com secrets necessários
 
 ## 🏗️ Processo de Deploy
 
