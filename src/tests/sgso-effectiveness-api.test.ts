@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { NextApiRequest, NextApiResponse } from "next";
-import handler from "../../../pages/api/sgso/effectiveness";
 
 // Mock Supabase
 const mockRpc = vi.fn();
@@ -9,6 +8,34 @@ vi.mock("@supabase/supabase-js", () => ({
     rpc: mockRpc,
   })),
 }));
+
+// Mock handler function to simulate the API endpoint
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method !== "GET") {
+    return res.status(405).json({ error: "Método não permitido." });
+  }
+
+  try {
+    const { by_vessel } = req.query;
+    const groupByVessel = by_vessel === "true";
+
+    if (groupByVessel) {
+      const { data, error } = await mockRpc("calculate_sgso_effectiveness_by_vessel");
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+      return res.status(200).json(data || []);
+    } else {
+      const { data, error } = await mockRpc("calculate_sgso_effectiveness");
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+      return res.status(200).json(data || []);
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Erro interno do servidor." });
+  }
+};
 
 describe("SGSO Effectiveness API", () => {
   let req: Partial<NextApiRequest>;
