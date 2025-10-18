@@ -1,9 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { MetricasPanel } from "@/components/sgso/MetricasPanel";
-import { Shield, BarChart3, FileCheck, Mail } from "lucide-react";
+import { Shield, BarChart3, FileCheck, Mail, CheckCircle2 } from "lucide-react";
 
 const AdminSGSO = () => {
   return (
@@ -19,10 +21,18 @@ const AdminSGSO = () => {
             Sistema de Gestão de Segurança Operacional - Métricas e Compliance
           </p>
         </div>
-        <Badge variant="default" className="text-sm">
-          <FileCheck className="mr-2 h-4 w-4" />
-          Compliance ANP 43/2007
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Link to="/admin/sgso/approvals">
+            <Button variant="default">
+              <CheckCircle2 className="mr-2 h-4 w-4" />
+              Aprovação de Planos
+            </Button>
+          </Link>
+          <Badge variant="default" className="text-sm">
+            <FileCheck className="mr-2 h-4 w-4" />
+            Compliance ANP 43/2007
+          </Badge>
+        </div>
       </div>
 
       {/* Tabs */}
