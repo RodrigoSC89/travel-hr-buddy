@@ -1,8 +1,6 @@
 import { useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { SGSOTrendChart } from "@/components/sgso/SGSOTrendChart";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
@@ -87,14 +85,6 @@ export default function SGSOReportPage({
     } finally {
       setIsExporting(false);
     }
-  };
-
-  const getRiskBadgeVariant = (level: string): "default" | "secondary" | "destructive" | "outline" => {
-    const levelLower = level.toLowerCase();
-    if (levelLower === "crítico") return "destructive";
-    if (levelLower === "alto") return "destructive";
-    if (levelLower === "médio") return "secondary";
-    return "outline";
   };
 
   const getRiskColor = (level: string): string => {

@@ -162,7 +162,7 @@ describe("SGSOTrendChart", () => {
     
     await waitFor(() => {
       // Card should be rendered (checking for the outer card structure)
-      expect(container.querySelector('[class*="card"]')).toBeDefined();
+      expect(container.querySelector("[class*=\"card\"]")).toBeDefined();
     });
   });
 });
