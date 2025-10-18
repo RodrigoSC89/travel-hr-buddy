@@ -112,7 +112,7 @@ const AdminSGSO = () => {
                     <h3 className="font-semibold">Exportação CSV</h3>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Disponível na aba "Métricas Operacionais" - Permite exportar dados
+                    Disponível na aba &quot;Métricas Operacionais&quot; - Permite exportar dados
                     de métricas por embarcação em formato CSV para análise externa.
                   </p>
                 </div>
