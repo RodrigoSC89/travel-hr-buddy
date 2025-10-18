@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlanStatusSelect } from "./PlanStatusSelect";
+import { DPIncident, RISK_LEVEL_COLORS, SGSORiskLevel } from "@/types/incident";
 
 interface Incident {
   id: string;
@@ -21,6 +22,9 @@ interface Incident {
   plan_sent_to?: string;
   plan_sent_at?: string;
   plan_updated_at?: string;
+  sgso_category?: string;
+  sgso_root_cause?: string;
+  sgso_risk_level?: SGSORiskLevel;
 }
 
 export default function IncidentCards() {
@@ -80,7 +84,10 @@ export default function IncidentCards() {
             rootCause: "Procedimento inadequado",
             tags: ["Testing", "FMEA", "Low"],
             summary: "Teste de análise de modos de falha revelou lacunas em procedimentos operacionais e necessidade de treinamento adicional.",
-            link: "https://www.imca-int.com/incident-reports"
+            link: "https://www.imca-int.com/incident-reports",
+            sgso_category: "Não conformidade com procedimento",
+            sgso_root_cause: "Lacunas em procedimentos operacionais",
+            sgso_risk_level: "baixo"
           }
         ]);
       });
@@ -115,6 +122,30 @@ export default function IncidentCards() {
                 <Badge key={tag} variant="secondary">{tag}</Badge>
               ))}
             </div>
+            
+            {/* SGSO Classification Section */}
+            {(incident.sgso_category || incident.sgso_risk_level) && (
+              <div className="pt-2 border-t border-gray-200 space-y-1">
+                <p className="text-xs font-semibold text-gray-700">Classificação SGSO:</p>
+                <div className="flex flex-wrap gap-2">
+                  {incident.sgso_category && (
+                    <Badge variant="outline" className="text-xs">
+                      {incident.sgso_category}
+                    </Badge>
+                  )}
+                  {incident.sgso_risk_level && (
+                    <Badge className={`text-xs ${RISK_LEVEL_COLORS[incident.sgso_risk_level]?.badge || 'bg-gray-600'}`}>
+                      {RISK_LEVEL_COLORS[incident.sgso_risk_level]?.icon} {incident.sgso_risk_level.charAt(0).toUpperCase() + incident.sgso_risk_level.slice(1)}
+                    </Badge>
+                  )}
+                </div>
+                {incident.sgso_root_cause && (
+                  <p className="text-xs text-gray-600 mt-1">
+                    <span className="font-medium">Causa Raiz:</span> {incident.sgso_root_cause}
+                  </p>
+                )}
+              </div>
+            )}
             
             {/* Show Plan Status Select if plan exists */}
             {incident.plan_of_action && (
