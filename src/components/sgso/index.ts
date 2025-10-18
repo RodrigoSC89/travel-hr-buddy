@@ -12,3 +12,4 @@ export { AuditPlanner } from "./AuditPlanner";
 export { NonConformityManager } from "./NonConformityManager";
 export { EmergencyResponse } from "./EmergencyResponse";
 export { MetricasPanel } from "./MetricasPanel";
+export { SGSOHistoryTable } from "./SGSOHistoryTable";
