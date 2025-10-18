@@ -411,6 +411,29 @@ const DPIntelligenceCenter = () => {
         </Card>
       </div>
 
+      {/* IMCA Audit Quick Access */}
+      <Card className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-200 dark:border-blue-800">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+            IMCA DP Technical Audit System
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            AI-powered audit system following IMCA, IMO, and MTS international standards. 
+            Generate comprehensive technical audits for DP vessels with automated compliance analysis.
+          </p>
+          <Button 
+            onClick={() => window.location.href = '/imca-audit'}
+            className="w-full md:w-auto bg-blue-600 hover:bg-blue-700"
+          >
+            <FileText className="mr-2 h-4 w-4" />
+            Gerar Auditoria IMCA
+          </Button>
+        </CardContent>
+      </Card>
+
       {/* Search and Filter Section */}
       <Card>
         <CardContent className="pt-6">
