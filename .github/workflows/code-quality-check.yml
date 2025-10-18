@@ -49,16 +49,16 @@ jobs:
         run: npx tsc --noEmit
         continue-on-error: true
       
+      - name: Build project
+        run: npm run build
+        env:
+          NODE_ENV: production
+      
       - name: Run tests
         run: |
           mkdir -p ./test-results
           set -o pipefail
           npm run test 2>&1 | tee ./test-results/tests.log
-      
-      - name: Build project
-        run: npm run build
-        env:
-          NODE_ENV: production
       
       - name: Run security scan
         run: |
