@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MetricasPanel } from "@/components/sgso/MetricasPanel";
+import { SGSOTrendChart } from "@/components/sgso/SGSOTrendChart";
 import { Shield, BarChart3, FileCheck, Mail } from "lucide-react";
 
 const AdminSGSO = () => {
@@ -44,6 +45,7 @@ const AdminSGSO = () => {
 
         <TabsContent value="metrics" className="space-y-4">
           <MetricasPanel />
+          <SGSOTrendChart />
         </TabsContent>
 
         <TabsContent value="compliance" className="space-y-4">
