@@ -4,8 +4,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MetricasPanel } from "@/components/sgso/MetricasPanel";
 import { SGSOTrendChart } from "@/components/sgso/SGSOTrendChart";
-import { IncidentsSGSOPanel } from "@/components/dp/IncidentsSGSOPanel";
-import { Shield, BarChart3, FileCheck, Mail, AlertTriangle } from "lucide-react";
+import { SGSOIncidentList } from "@/components/sgso/SGSOIncidentList";
+import { SGSOAiAnalysis } from "@/components/sgso/SGSOAiAnalysis";
+import { Shield, BarChart3, FileCheck, Mail, AlertTriangle, Brain } from "lucide-react";
 
 const AdminSGSO = () => {
   return (
@@ -29,10 +30,14 @@ const AdminSGSO = () => {
 
       {/* Tabs */}
       <Tabs defaultValue="incidents" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="incidents">
             <AlertTriangle className="mr-2 h-4 w-4" />
-            Incidentes DP
+            Incidentes
+          </TabsTrigger>
+          <TabsTrigger value="ai-analysis">
+            <Brain className="mr-2 h-4 w-4" />
+            Análise IA
           </TabsTrigger>
           <TabsTrigger value="metrics">
             <BarChart3 className="mr-2 h-4 w-4" />
@@ -49,7 +54,11 @@ const AdminSGSO = () => {
         </TabsList>
 
         <TabsContent value="incidents" className="space-y-4">
-          <IncidentsSGSOPanel />
+          <SGSOIncidentList />
+        </TabsContent>
+
+        <TabsContent value="ai-analysis" className="space-y-4">
+          <SGSOAiAnalysis />
         </TabsContent>
 
         <TabsContent value="metrics" className="space-y-4">
