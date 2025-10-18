@@ -153,7 +153,12 @@ src/
 
 ## 🔐 Environment Variables
 
-Set all required keys in `.env` using `.env.example` as a reference. Example keys:
+Set all required keys in `.env` using `.env.example` as a reference for development.
+
+**For Production Deployment:**
+- 📄 **[.env.production](./.env.production)** - Complete production template with 50+ variables
+- 📋 **[DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md)** - Quick deployment checklist
+- 📘 **[ENV_PRODUCTION_SETUP_GUIDE.md](./ENV_PRODUCTION_SETUP_GUIDE.md)** - Detailed setup guide
 
 ### Core Services
 

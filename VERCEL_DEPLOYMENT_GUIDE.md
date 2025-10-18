@@ -4,7 +4,27 @@
 
 - Conta na Vercel (https://vercel.com)
 - Projeto Supabase configurado
-- Chaves de API necessárias (ver .env.example)
+- Chaves de API necessárias
+
+**📚 Documentação de Referência:**
+- **[.env.production](./.env.production)** - Template completo de variáveis de produção
+- **[DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md)** - Checklist rápido de deploy (15 min)
+- **[ENV_PRODUCTION_SETUP_GUIDE.md](./ENV_PRODUCTION_SETUP_GUIDE.md)** - Guia completo passo-a-passo
+
+## ✅ Checklist Pré-Deploy
+
+Antes de iniciar o deploy, verifique:
+
+- [ ] Build local funciona: `npm run build`
+- [ ] Testes passando: `npm test`
+- [ ] Lint sem erros críticos: `npm run lint`
+- [ ] Variáveis essenciais identificadas (ver [.env.production](./.env.production))
+- [ ] Projeto Supabase criado e configurado
+- [ ] Migrations do banco aplicadas
+
+> 💡 **Dica:** Para um checklist completo, veja [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md)
+
+---
 
 ## 🔧 Configuração Inicial
 
@@ -17,7 +37,9 @@
 
 ### 2. Configurar Variáveis de Ambiente
 
-Na dashboard da Vercel, vá em **Settings** → **Environment Variables** e adicione:
+Na dashboard da Vercel, vá em **Settings** → **Environment Variables** e adicione as variáveis necessárias.
+
+**📄 Use como referência:** [.env.production](./.env.production) - Template completo com 50+ variáveis organizadas
 
 #### Variáveis Essenciais (Obrigatórias)
 
