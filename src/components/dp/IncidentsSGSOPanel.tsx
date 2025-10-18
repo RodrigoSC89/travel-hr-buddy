@@ -9,9 +9,9 @@ import { saveAs } from "file-saver";
 
 export function IncidentsSGSOPanel() {
   const [incidents, setIncidents] = useState<DPIncident[]>([]);
-  const [categoryFilter, setCategoryFilter] = useState<string>("");
-  const [riskFilter, setRiskFilter] = useState<string>("");
-  const [vesselFilter, setVesselFilter] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [riskFilter, setRiskFilter] = useState<string>("all");
+  const [vesselFilter, setVesselFilter] = useState<string>("all");
 
   useEffect(() => {
     // Load incidents from API or mock data
@@ -98,18 +98,18 @@ export function IncidentsSGSOPanel() {
   // Filtered incidents
   const filteredIncidents = useMemo(() => {
     return incidents.filter(incident => {
-      if (categoryFilter && incident.sgso_category !== categoryFilter) return false;
-      if (riskFilter && incident.sgso_risk_level !== riskFilter) return false;
-      if (vesselFilter && incident.vessel !== vesselFilter) return false;
+      if (categoryFilter && categoryFilter !== "all" && incident.sgso_category !== categoryFilter) return false;
+      if (riskFilter && riskFilter !== "all" && incident.sgso_risk_level !== riskFilter) return false;
+      if (vesselFilter && vesselFilter !== "all" && incident.vessel !== vesselFilter) return false;
       return true;
     });
   }, [incidents, categoryFilter, riskFilter, vesselFilter]);
 
   // Clear all filters
   const clearFilters = () => {
-    setCategoryFilter("");
-    setRiskFilter("");
-    setVesselFilter("");
+    setCategoryFilter("all");
+    setRiskFilter("all");
+    setVesselFilter("all");
   };
 
   // Export to CSV
@@ -175,7 +175,7 @@ export function IncidentsSGSOPanel() {
     }
   };
 
-  const activeFiltersCount = [categoryFilter, riskFilter, vesselFilter].filter(Boolean).length;
+  const activeFiltersCount = [categoryFilter, riskFilter, vesselFilter].filter(f => f !== "all").length;
 
   return (
     <div className="space-y-6">
@@ -228,7 +228,7 @@ export function IncidentsSGSOPanel() {
                   <SelectValue placeholder="Todas as categorias" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todas as categorias</SelectItem>
+                  <SelectItem value="all">Todas as categorias</SelectItem>
                   {SGSO_CATEGORIES.map(category => (
                     <SelectItem key={category} value={category}>
                       {category}
@@ -246,7 +246,7 @@ export function IncidentsSGSOPanel() {
                   <SelectValue placeholder="Todos os níveis" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos os níveis</SelectItem>
+                  <SelectItem value="all">Todos os níveis</SelectItem>
                   {Object.entries(RISK_LEVEL_CONFIG).map(([level, config]) => (
                     <SelectItem key={level} value={level}>
                       {config.emoji} {config.label}
@@ -264,7 +264,7 @@ export function IncidentsSGSOPanel() {
                   <SelectValue placeholder="Todas as embarcações" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todas as embarcações</SelectItem>
+                  <SelectItem value="all">Todas as embarcações</SelectItem>
                   {vessels.map(vessel => (
                     <SelectItem key={vessel} value={vessel}>
                       {vessel}
