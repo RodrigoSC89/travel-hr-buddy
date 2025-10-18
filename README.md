@@ -8,7 +8,7 @@ Sistema modular de operações marítimas, offshore e industriais com IA embarca
 
 | Camada     | Tecnologias |
 |------------|-------------|
-| Frontend   | Next.js 13+, TypeScript, TailwindCSS, TipTap |
+| Frontend   | Vite, React, TypeScript, TailwindCSS, TipTap |
 | Backend    | Supabase (PostgreSQL, Auth, RLS, Storage, Edge Functions) |
 | IA         | OpenAI GPT-4, embeddings, RAG |
 | Email IA   | Resend |
@@ -63,15 +63,55 @@ Utiliza: vitest + @testing-library/react
 
 ## 🚀 Deploy
 
-Configuração recomendada no Vercel:
+> **📘 Guia Completo**: [DEPLOY_CHECKLIST.md](DEPLOY_CHECKLIST.md)  
+> **📗 Setup Detalhado**: [ENV_PRODUCTION_SETUP_GUIDE.md](ENV_PRODUCTION_SETUP_GUIDE.md)  
+> **📙 Template Completo**: [.env.production](.env.production)
 
+### ✅ Variáveis Obrigatórias (14)
+
+Configuração no Vercel Dashboard → Settings → Environment Variables:
+
+```bash
+# Supabase (5 vars)
+VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+VITE_SUPABASE_PROJECT_ID=seu-projeto-id
+SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+
+# OpenAI (1 var)
+VITE_OPENAI_API_KEY=sk-proj-...
+
+# Sentry (4 vars)
+VITE_SENTRY_DSN=https://your-sentry-dsn@o0.ingest.sentry.io/0000000
+SENTRY_ORG=your-organization
+SENTRY_PROJECT=your-project
+SENTRY_AUTH_TOKEN=your-auth-token
+
+# Resend (1 var)
+RESEND_API_KEY=re_...
+
+# System (3 vars)
+VITE_APP_URL=https://seu-app.vercel.app
+VITE_NODE_ENV=production
+VITE_APP_NAME=Nautilus One
 ```
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-OPENAI_API_KEY=
-RESEND_API_KEY=
+
+### ⚡ Variáveis Recomendadas (8)
+
+```bash
+# Mapbox, OpenWeather, Embed Token, Admin Email
+# Ver .env.production para lista completa
 ```
+
+### 🔧 Variáveis Opcionais (33+)
+
+```bash
+# Amadeus, ElevenLabs, Slack, Telegram, Feature Flags, etc.
+# Ver .env.production para lista completa
+```
+
+**Nota**: Este é um projeto **Vite** (não Next.js), por isso usamos `VITE_*` prefix para variáveis de frontend.
 
 ## 📁 Estrutura de Diretórios
 
