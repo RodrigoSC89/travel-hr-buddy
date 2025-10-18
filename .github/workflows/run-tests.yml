@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     strategy:
       matrix:
@@ -17,6 +18,19 @@ jobs:
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
+      
+      - name: 🔍 Print environment for debugging
+        run: |
+          echo "==== Environment Variables ===="
+          env | sort
+          echo "==== Node/NPM versions ===="
+          node --version
+          npm --version
+          echo "==== System Info ===="
+          df -h
+          free -h
+          echo "==== Git Info ===="
+          git log -1 --pretty=format:"%H %s"
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
@@ -28,7 +42,10 @@ jobs:
         run: npm ci
 
       - name: 🧪 Run tests
-        run: npm run test
+        run: |
+          mkdir -p ./test-results
+          set -o pipefail
+          npm run test 2>&1 | tee ./test-results/tests.log
 
       - name: 📊 Generate coverage report
         run: npm run test:coverage || true
@@ -41,3 +58,15 @@ jobs:
           name: coverage-report
           path: coverage/
           retention-days: 30
+      
+      - name: 📤 Upload test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{ github.run_id }}
+          path: |
+            ./test-results/
+            ./coverage/
+            ./logs/
+            ./npm-debug.log*
+          retention-days: 14
