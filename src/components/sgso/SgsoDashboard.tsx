@@ -14,7 +14,8 @@ import {
   Clock,
   Activity,
   Bell,
-  Calendar
+  Calendar,
+  Brain
 } from "lucide-react";
 import { AnpPracticesManager } from "./AnpPracticesManager";
 import { RiskAssessmentMatrix } from "./RiskAssessmentMatrix";
@@ -26,6 +27,7 @@ import { ComplianceMetrics } from "./ComplianceMetrics";
 import { EmergencyResponse } from "./EmergencyResponse";
 import { PainelSGSO } from "./PainelSGSO";
 import { PainelMetricasRisco } from "./PainelMetricasRisco";
+import { SGSOActionPlanGenerator } from "./SGSOActionPlanGenerator";
 
 export const SgsoDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -170,7 +172,7 @@ export const SgsoDashboard: React.FC = () => {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-10 w-full h-auto gap-2 bg-gray-100 p-2">
+            <TabsList className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-11 w-full h-auto gap-2 bg-gray-100 p-2">
               <TabsTrigger 
                 value="overview" 
                 className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
@@ -226,6 +228,13 @@ export const SgsoDashboard: React.FC = () => {
               >
                 <XCircle className="h-4 w-4 mr-2" />
                 NCs
+              </TabsTrigger>
+              <TabsTrigger 
+                value="plano-ia"
+                className="data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <Brain className="h-4 w-4 mr-2" />
+                Plano IA
               </TabsTrigger>
               <TabsTrigger 
                 value="metrics"
@@ -365,6 +374,10 @@ export const SgsoDashboard: React.FC = () => {
 
             <TabsContent value="nc">
               <NonConformityManager />
+            </TabsContent>
+
+            <TabsContent value="plano-ia">
+              <SGSOActionPlanGenerator />
             </TabsContent>
 
             <TabsContent value="metrics">
