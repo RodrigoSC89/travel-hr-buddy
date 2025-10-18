@@ -98,6 +98,8 @@ const AdminSGSO = React.lazy(() => import("./pages/admin/sgso"));
 const AuditoriasIMCA = React.lazy(() => import("./pages/admin/auditorias-imca"));
 const DPIntelligenceAdmin = React.lazy(() => import("./pages/admin/DPIntelligencePage"));
 const IMCAAudit = React.lazy(() => import("./pages/IMCAAudit"));
+const CertViewer = React.lazy(() => import("./pages/cert/CertViewer"));
+const QuizPage = React.lazy(() => import("./pages/admin/quiz/QuizPage"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -157,6 +159,7 @@ function App() {
                     {/* Routes outside SmartLayout (no auth, no navigation) */}
                     <Route path="/embed/restore-chart" element={<RestoreChartEmbed />} />
                     <Route path="/tv/logs" element={<TVWallLogs />} />
+                    <Route path="/cert/:token" element={<CertViewer />} />
                     <Route path="/unauthorized" element={<Unauthorized />} />
                     
                     {/* All routes wrapped in SmartLayout */}
@@ -240,6 +243,7 @@ function App() {
                       <Route path="/admin/sgso" element={<AdminSGSO />} />
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/dp-intelligence" element={<DPIntelligenceAdmin />} />
+                      <Route path="/admin/quiz" element={<QuizPage />} />
                       <Route path="/imca-audit" element={<IMCAAudit />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
