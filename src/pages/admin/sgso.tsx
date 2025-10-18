@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MetricasPanel } from "@/components/sgso/MetricasPanel";
-import { Shield, BarChart3, FileCheck, Mail } from "lucide-react";
+import { IncidentsSGSOPanel } from "@/components/dp/IncidentsSGSOPanel";
+import { Shield, BarChart3, FileCheck, Mail, AlertTriangle } from "lucide-react";
 
 const AdminSGSO = () => {
   return (
@@ -26,11 +27,15 @@ const AdminSGSO = () => {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="metrics" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="incidents" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="incidents">
+            <AlertTriangle className="mr-2 h-4 w-4" />
+            Incidentes DP
+          </TabsTrigger>
           <TabsTrigger value="metrics">
             <BarChart3 className="mr-2 h-4 w-4" />
-            Métricas Operacionais
+            Métricas
           </TabsTrigger>
           <TabsTrigger value="compliance">
             <FileCheck className="mr-2 h-4 w-4" />
@@ -41,6 +46,10 @@ const AdminSGSO = () => {
             Relatórios
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="incidents" className="space-y-4">
+          <IncidentsSGSOPanel />
+        </TabsContent>
 
         <TabsContent value="metrics" className="space-y-4">
           <MetricasPanel />

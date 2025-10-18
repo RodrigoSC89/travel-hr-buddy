@@ -4,27 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlanStatusSelect } from "./PlanStatusSelect";
-
-interface Incident {
-  id: string;
-  title: string;
-  date: string;
-  vessel: string;
-  location: string;
-  class_dp: string;
-  rootCause: string;
-  tags: string[];
-  summary: string;
-  link: string;
-  plan_of_action?: string;
-  plan_status?: string;
-  plan_sent_to?: string;
-  plan_sent_at?: string;
-  plan_updated_at?: string;
-}
+import { DPIncident, RISK_LEVEL_CONFIG } from "@/types/incident";
 
 export default function IncidentCards() {
-  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [incidents, setIncidents] = useState<DPIncident[]>([]);
 
   useEffect(() => {
     fetch("/api/dp/intel/feed")
@@ -44,7 +27,10 @@ export default function IncidentCards() {
             rootCause: "Falha no sistema de propulsão",
             tags: ["Propulsion", "Critical", "Weather"],
             summary: "Embarcação perdeu posicionamento durante operação crítica devido a falha no sistema de propulsão principal combinado com condições meteorológicas adversas.",
-            link: "https://www.imca-int.com/incident-reports"
+            link: "https://www.imca-int.com/incident-reports",
+            sgso_category: "Falha de sistema",
+            sgso_root_cause: "Falha no sistema de propulsão",
+            sgso_risk_level: "crítico"
           },
           {
             id: "2",
@@ -56,7 +42,10 @@ export default function IncidentCards() {
             rootCause: "Erro de configuração",
             tags: ["Configuration", "Redundancy", "High"],
             summary: "Sistema de redundância não operou conforme esperado durante teste anual, revelando erro de configuração não detectado anteriormente.",
-            link: "https://www.imca-int.com/incident-reports"
+            link: "https://www.imca-int.com/incident-reports",
+            sgso_category: "Erro humano",
+            sgso_root_cause: "Erro de configuração no sistema de redundância",
+            sgso_risk_level: "alto"
           },
           {
             id: "3",
@@ -68,7 +57,10 @@ export default function IncidentCards() {
             rootCause: "Interferência eletromagnética",
             tags: ["Sensors", "Medium", "EMI"],
             summary: "Sistema perdeu referência de posição por 45 segundos devido a interferência eletromagnética de equipamento de soldagem submarino.",
-            link: "https://www.imca-int.com/incident-reports"
+            link: "https://www.imca-int.com/incident-reports",
+            sgso_category: "Fator externo (clima, mar, etc)",
+            sgso_root_cause: "Interferência eletromagnética de equipamento",
+            sgso_risk_level: "moderado"
           },
           {
             id: "4",
@@ -80,7 +72,10 @@ export default function IncidentCards() {
             rootCause: "Procedimento inadequado",
             tags: ["Testing", "FMEA", "Low"],
             summary: "Teste de análise de modos de falha revelou lacunas em procedimentos operacionais e necessidade de treinamento adicional.",
-            link: "https://www.imca-int.com/incident-reports"
+            link: "https://www.imca-int.com/incident-reports",
+            sgso_category: "Não conformidade com procedimento",
+            sgso_root_cause: "Procedimentos operacionais inadequados",
+            sgso_risk_level: "baixo"
           }
         ]);
       });
@@ -115,6 +110,35 @@ export default function IncidentCards() {
                 <Badge key={tag} variant="secondary">{tag}</Badge>
               ))}
             </div>
+            
+            {/* SGSO Classification Display */}
+            {(incident.sgso_category || incident.sgso_risk_level) && (
+              <div className="mt-2 p-3 bg-slate-50 rounded-md border border-slate-200">
+                <h4 className="text-xs font-semibold text-slate-700 mb-2">Classificação SGSO</h4>
+                <div className="space-y-1">
+                  {incident.sgso_category && (
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-slate-600 font-medium">Categoria:</span>
+                      <Badge variant="outline" className="text-xs">{incident.sgso_category}</Badge>
+                    </div>
+                  )}
+                  {incident.sgso_risk_level && RISK_LEVEL_CONFIG[incident.sgso_risk_level] && (
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-slate-600 font-medium">Nível de Risco:</span>
+                      <Badge className={`text-xs ${RISK_LEVEL_CONFIG[incident.sgso_risk_level].color}`}>
+                        {RISK_LEVEL_CONFIG[incident.sgso_risk_level].emoji} {RISK_LEVEL_CONFIG[incident.sgso_risk_level].label}
+                      </Badge>
+                    </div>
+                  )}
+                  {incident.sgso_root_cause && (
+                    <div className="text-xs">
+                      <span className="text-slate-600 font-medium">Causa Raiz:</span>
+                      <span className="text-slate-700 ml-1">{incident.sgso_root_cause}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             
             {/* Show Plan Status Select if plan exists */}
             {incident.plan_of_action && (
