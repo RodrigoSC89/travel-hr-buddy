@@ -65,7 +65,7 @@ describe("TestDashboard Component", () => {
   });
 
   it("should render the dashboard title", async () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown).mockRejectedValueOnce(new Error("Not found"));
     render(
       <MemoryRouter>
         <OrganizationProvider>
@@ -81,7 +81,7 @@ describe("TestDashboard Component", () => {
   });
 
   it("should display fallback message when coverage report is not available", async () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown).mockRejectedValueOnce(new Error("Not found"));
     
     render(
       <MemoryRouter>
@@ -98,7 +98,7 @@ describe("TestDashboard Component", () => {
 
   it("should display coverage percentage when report is available", async () => {
     const mockHtml = "<span class='strong'>85%</span>";
-    (global.fetch as any).mockResolvedValueOnce({
+    (global.fetch as unknown).mockResolvedValueOnce({
       text: () => Promise.resolve(mockHtml),
     });
     
@@ -116,7 +116,7 @@ describe("TestDashboard Component", () => {
   });
 
   it("should render link to full coverage report", async () => {
-    (global.fetch as any).mockRejectedValueOnce(new Error("Not found"));
+    (global.fetch as unknown).mockRejectedValueOnce(new Error("Not found"));
     
     render(
       <MemoryRouter>

@@ -175,7 +175,7 @@ export const PeotramPermissionsManager: React.FC = () => {
     }
   };
 
-  const updatePermission = async (id: string, updates: any) => {
+  const updatePermission = async (id: string, updates: Record<string, unknown>) => {
     try {
       const { error } = await supabase
         .from("user_feature_permissions")
@@ -380,7 +380,7 @@ export const PeotramPermissionsManager: React.FC = () => {
                   <Label>Nível de Permissão</Label>
                   <Select 
                     value={permissionForm.permission_level} 
-                    onValueChange={(value: any) => setPermissionForm(prev => ({ ...prev, permission_level: value }))}
+                    onValueChange={(value: unknown) => setPermissionForm(prev => ({ ...prev, permission_level: value }))}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -397,7 +397,7 @@ export const PeotramPermissionsManager: React.FC = () => {
                   <Label>Tipo de Local</Label>
                   <Select 
                     value={permissionForm.location_type} 
-                    onValueChange={(value: any) => setPermissionForm(prev => ({ ...prev, location_type: value }))}
+                    onValueChange={(value: unknown) => setPermissionForm(prev => ({ ...prev, location_type: value }))}
                   >
                     <SelectTrigger>
                       <SelectValue />

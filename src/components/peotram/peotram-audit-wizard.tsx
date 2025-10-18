@@ -150,8 +150,8 @@ const CRITICALITY_LEVELS = {
 
 interface PeotramAuditWizardProps {
   auditId?: string;
-  onSave?: (data: any) => void;
-  onComplete?: (data: any) => void;
+  onSave?: (data: Record<string, unknown>) => void;
+  onComplete?: (data: Record<string, unknown>) => void;
   onCancel?: () => void;
 }
 

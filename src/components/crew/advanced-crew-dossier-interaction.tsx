@@ -39,8 +39,8 @@ interface GamificationProfile {
   id: string;
   total_experience_points: number;
   current_level: number;
-  badges_earned: any[];
-  achievements: any[];
+  badges_earned: unknown[];
+  achievements: unknown[];
   skill_progression: any;
   leaderboard_rank: number;
 }

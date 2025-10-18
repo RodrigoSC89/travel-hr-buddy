@@ -525,7 +525,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
     return sectionItems.length > 0 ? (completedItems / sectionItems.length) * 100 : 0;
   };
 
-  const handleItemValueChange = (itemId: string, value: any) => {
+  const handleItemValueChange = (itemId: string, value: unknown) => {
     setChecklist(prev => ({
       ...prev,
       items: prev.items.map(item => 

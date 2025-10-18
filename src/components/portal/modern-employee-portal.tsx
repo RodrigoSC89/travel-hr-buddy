@@ -63,15 +63,15 @@ interface DashboardStats {
   complianceRate: number;
   pendingCertificates: number;
   upcomingTraining: number;
-  recentPayments: any[];
+  recentPayments: unknown[];
   nextEmbarkation?: any;
 }
 
 interface PersonalCalendar {
-  embarkations: any[];
-  training: any[];
-  certifications: any[];
-  medicalExams: any[];
+  embarkations: unknown[];
+  training: unknown[];
+  certifications: unknown[];
+  medicalExams: unknown[];
 }
 
 interface AIInsight {

@@ -62,7 +62,7 @@ describe("AdminDashboard - Public Mode", () => {
       signOut: vi.fn(),
       signUp: vi.fn(),
       resetPassword: vi.fn(),
-    } as any);
+    } as unknown);
 
     vi.mocked(usePermissions).mockReturnValue({
       userRole: "admin",
@@ -70,7 +70,7 @@ describe("AdminDashboard - Public Mode", () => {
       hasPermission: vi.fn(),
       hasAnyPermission: vi.fn(),
       hasAllPermissions: vi.fn(),
-    } as any);
+    } as unknown);
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
@@ -167,7 +167,7 @@ describe("AdminDashboard - Role-Based Access", () => {
       signOut: vi.fn(),
       signUp: vi.fn(),
       resetPassword: vi.fn(),
-    } as any);
+    } as unknown);
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
@@ -183,7 +183,7 @@ describe("AdminDashboard - Role-Based Access", () => {
       hasPermission: vi.fn(),
       hasAnyPermission: vi.fn(),
       hasAllPermissions: vi.fn(),
-    } as any);
+    } as unknown);
 
     render(
       <MemoryRouter initialEntries={["/admin/dashboard"]}>
@@ -203,7 +203,7 @@ describe("AdminDashboard - Role-Based Access", () => {
       hasPermission: vi.fn(),
       hasAnyPermission: vi.fn(),
       hasAllPermissions: vi.fn(),
-    } as any);
+    } as unknown);
 
     render(
       <MemoryRouter initialEntries={["/admin/dashboard"]}>
@@ -223,7 +223,7 @@ describe("AdminDashboard - Role-Based Access", () => {
       hasPermission: vi.fn(),
       hasAnyPermission: vi.fn(),
       hasAllPermissions: vi.fn(),
-    } as any);
+    } as unknown);
 
     render(
       <MemoryRouter initialEntries={["/admin/dashboard"]}>
@@ -245,7 +245,7 @@ describe("AdminDashboard - Role-Based Access", () => {
       hasPermission: vi.fn(),
       hasAnyPermission: vi.fn(),
       hasAllPermissions: vi.fn(),
-    } as any);
+    } as unknown);
 
     render(
       <MemoryRouter initialEntries={["/admin/dashboard?public=1"]}>
@@ -272,7 +272,7 @@ describe("AdminDashboard - Navigation", () => {
       signOut: vi.fn(),
       signUp: vi.fn(),
       resetPassword: vi.fn(),
-    } as any);
+    } as unknown);
 
     vi.mocked(usePermissions).mockReturnValue({
       userRole: "admin",
@@ -280,7 +280,7 @@ describe("AdminDashboard - Navigation", () => {
       hasPermission: vi.fn(),
       hasAnyPermission: vi.fn(),
       hasAllPermissions: vi.fn(),
-    } as any);
+    } as unknown);
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,

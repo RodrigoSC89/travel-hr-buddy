@@ -144,7 +144,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
     });
   };
 
-  const testWebhook = async (webhook: any) => {
+  const testWebhook = async (webhook: Record<string, unknown>) => {
     toast({
       title: "Testando Webhook",
       description: "Enviando payload de teste..."

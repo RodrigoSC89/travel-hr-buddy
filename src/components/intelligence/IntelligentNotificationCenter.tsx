@@ -146,7 +146,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     }
   };
 
-  const handleNewNotification = (payload: any) => {
+  const handleNewNotification = (payload: Record<string, unknown>) => {
     loadNotifications(); // Reload notifications
     
     toast({

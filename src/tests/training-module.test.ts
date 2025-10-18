@@ -52,7 +52,7 @@ describe("TrainingModuleService", () => {
       vi.mocked((await import("../services/supabase")).supabase.auth.getSession).mockResolvedValueOnce({
         data: { session: null },
         error: null
-      } as any);
+      });
 
       await expect(
         TrainingModuleService.generateTrainingModule({
@@ -75,7 +75,7 @@ describe("TrainingModuleService", () => {
       vi.mocked((await import("../services/supabase")).supabase.auth.getSession).mockResolvedValueOnce({
         data: { session: null },
         error: null
-      } as any);
+      });
 
       await expect(
         TrainingModuleService.recordCompletion("module-id", [0, 1, 2])
@@ -89,7 +89,7 @@ describe("TrainingModuleService", () => {
       vi.mocked((await import("../services/supabase")).supabase.auth.getSession).mockResolvedValueOnce({
         data: { session: null },
         error: null
-      } as any);
+      });
 
       await expect(
         TrainingModuleService.exportAuditBundle({

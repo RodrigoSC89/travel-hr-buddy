@@ -231,7 +231,7 @@ export const EnhancedPeotramManager: React.FC = () => {
     await loadData();
   };
 
-  const handleUpdateNonConformity = async (id: string, updates: any) => {
+  const handleUpdateNonConformity = async (id: string, updates: Record<string, unknown>) => {
     // Implementar atualização na API
     await loadData();
   };
@@ -614,7 +614,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="non-conformities">
           <PeotramNonConformities 
             nonConformities={nonConformities}
-            onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+            onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates)}
           />
         </TabsContent>
 
@@ -645,7 +645,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           {managementSubView === "non-conformities" && (
             <PeotramNonConformities 
               nonConformities={nonConformities}
-              onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+              onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates)}
             />
           )}
           {managementSubView === "reports" && <PeotramReportsGenerator />}
@@ -672,7 +672,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="non-conformities">
           <PeotramNonConformities 
             nonConformities={nonConformities}
-            onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+            onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates)}
           />
         </TabsContent>
 

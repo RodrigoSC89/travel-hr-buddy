@@ -51,7 +51,7 @@ export const useMaritimeChecklists = (userId: string) => {
           certifications: ["Maritime Inspector"]
         },
         status: item.status as any,
-        items: item.checklist_items?.map((checklistItem: any) => ({
+        items: item.checklist_items?.map((checklistItem: unknown) => ({
           id: checklistItem.id,
           title: checklistItem.title,
           description: checklistItem.description,

@@ -182,7 +182,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const updateBranding = async (brandingUpdate: Partial<OrganizationBranding>) => {
     if (!currentOrganization) return;
 
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       ...brandingUpdate,
       business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules as any : undefined,
       enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules as any : undefined,

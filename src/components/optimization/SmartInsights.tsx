@@ -178,7 +178,7 @@ export const SmartInsights: React.FC = () => {
 
       if (data.success) {
         // Convert performance data to predictions format
-        const predictiveData = data.metrics?.slice(0, 4).map((metric: any, index: number) => ({
+        const predictiveData = data.metrics?.slice(0, 4).map((metric: unknown, index: number) => ({
           id: `prediction_${index}`,
           name: `Previsão ${metric.name}`,
           currentValue: metric.value,

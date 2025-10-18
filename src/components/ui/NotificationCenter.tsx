@@ -172,7 +172,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     }
   };
 
-  const handleNewNotification = (payload: any) => {
+  const handleNewNotification = (payload: Record<string, unknown>) => {
     const newNotification: Notification = {
       id: payload.new.id,
       type: payload.new.type,

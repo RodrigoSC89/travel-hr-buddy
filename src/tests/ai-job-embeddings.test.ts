@@ -70,7 +70,7 @@ describe("AI Job Embeddings - seedJobsForTraining", () => {
       });
 
       const { createClient } = await import("@/lib/supabase/client");
-      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as unknown);
 
       const result = await seedJobsForTraining();
 
@@ -106,7 +106,7 @@ describe("AI Job Embeddings - seedJobsForTraining", () => {
       });
 
       const { createClient } = await import("@/lib/supabase/client");
-      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as unknown);
 
       await expect(seedJobsForTraining()).rejects.toThrow("Erro ao buscar jobs");
     });
@@ -132,7 +132,7 @@ describe("AI Job Embeddings - seedJobsForTraining", () => {
       });
 
       const { createClient } = await import("@/lib/supabase/client");
-      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as unknown);
 
       await expect(seedJobsForTraining()).rejects.toThrow("Erro ao buscar jobs");
     });
@@ -175,7 +175,7 @@ describe("AI Job Embeddings - seedJobsForTraining", () => {
       });
 
       const { createClient } = await import("@/lib/supabase/client");
-      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as unknown);
 
       await seedJobsForTraining();
 
@@ -222,7 +222,7 @@ describe("AI Job Embeddings - seedJobsForTraining", () => {
       });
 
       const { createClient } = await import("@/lib/supabase/client");
-      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as unknown);
 
       await seedJobsForTraining();
 
@@ -277,7 +277,7 @@ describe("AI Job Embeddings - seedJobsForTraining", () => {
       });
 
       const { createClient } = await import("@/lib/supabase/client");
-      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+      vi.mocked(createClient).mockReturnValue({ from: mockFrom } as unknown);
 
       const result = await seedJobsForTraining();
 

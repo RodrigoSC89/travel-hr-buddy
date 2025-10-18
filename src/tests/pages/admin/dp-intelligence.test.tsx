@@ -71,7 +71,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -97,7 +97,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -119,7 +119,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -138,7 +138,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -183,8 +183,8 @@ describe("DPIntelligencePage", () => {
       };
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+    (supabase.from as unknown).mockImplementation(mockFrom);
+    (supabase.functions.invoke as unknown).mockImplementation(mockInvoke);
 
     render(<DPIntelligencePage />);
 
@@ -216,7 +216,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -240,7 +240,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -292,8 +292,8 @@ describe("DPIntelligencePage", () => {
       };
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+    (supabase.from as unknown).mockImplementation(mockFrom);
+    (supabase.functions.invoke as unknown).mockImplementation(mockInvoke);
 
     render(<DPIntelligencePage />);
 

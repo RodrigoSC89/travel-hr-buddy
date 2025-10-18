@@ -247,7 +247,7 @@ describe("SGSO History API - /api/sgso/history/[vesselId]", () => {
       const { req, res } = createMocks({ vesselId: "DP Shuttle Tanker X" });
       await handler(req, res);
 
-      const callArgs = (res.json as any).mock.calls[0][0];
+      const callArgs = (res.json as unknown).mock.calls[0][0];
       const statuses = callArgs.data.map((plan: any) => plan.status);
 
       expect(statuses).toContain("aberto");
@@ -258,7 +258,7 @@ describe("SGSO History API - /api/sgso/history/[vesselId]", () => {
       const { req, res } = createMocks({ vesselId: "DP Shuttle Tanker X" });
       await handler(req, res);
 
-      const callArgs = (res.json as any).mock.calls[0][0];
+      const callArgs = (res.json as unknown).mock.calls[0][0];
       const approvedPlan = callArgs.data.find((plan: any) => plan.approved_by);
 
       expect(approvedPlan).toBeDefined();
@@ -321,7 +321,7 @@ describe("SGSO History API - /api/sgso/history/[vesselId]", () => {
       const { req, res } = createMocks({ vesselId: "DP Shuttle Tanker X" });
       await handler(req, res);
 
-      const callArgs = (res.json as any).mock.calls[0][0];
+      const callArgs = (res.json as unknown).mock.calls[0][0];
       const dates = callArgs.data.map((plan: any) => new Date(plan.created_at).getTime());
 
       // Check if sorted in descending order

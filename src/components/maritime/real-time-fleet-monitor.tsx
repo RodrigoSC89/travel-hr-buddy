@@ -103,7 +103,7 @@ export const RealTimeFleetMonitor = () => {
     }
   };
 
-  const handleFleetUpdate = (payload: any) => {
+  const handleFleetUpdate = (payload: Record<string, unknown>) => {
     // Update specific vessel data
     if (payload.eventType === "UPDATE") {
       setVessels(prev => prev.map(vessel => 

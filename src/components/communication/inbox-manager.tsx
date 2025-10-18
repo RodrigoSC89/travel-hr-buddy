@@ -51,7 +51,7 @@ interface Message {
   is_broadcast: boolean;
   created_at: string;
   read_at?: string;
-  attachments?: any[];
+  attachments?: unknown[];
   metadata?: any;
 }
 

@@ -156,7 +156,7 @@ describe("ExecutionLogsPage Component", () => {
           error: null,
         }),
       }),
-    } as any));
+    } as unknown));
 
     render(
       <MemoryRouter>

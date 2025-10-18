@@ -102,7 +102,7 @@ export const OperationalCommandCenter: React.FC = () => {
       .limit(8);
 
     if (error) throw error;
-    setMetrics((data || []).map((metric: any) => ({
+    setMetrics((data || []).map((metric: unknown) => ({
       ...metric,
       trend: metric.trend as "increasing" | "decreasing" | "stable"
     })));

@@ -255,7 +255,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     calculateHealth();
   }, [settings]);
 
-  const updateSettings = (category: keyof SettingsData, updates: any) => {
+  const updateSettings = (category: keyof SettingsData, updates: Record<string, unknown>) => {
     setSettings(prev => ({
       ...prev,
       [category]: {
@@ -540,7 +540,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     }
   };
 
-  const logSettingsChange = async (action: string, data: any) => {
+  const logSettingsChange = async (action: string, data: Record<string, unknown>) => {
     const logEntry = {
       timestamp: new Date().toISOString(),
       user: user?.email || "sistema",

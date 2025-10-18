@@ -32,7 +32,7 @@ describe("JobsForecastReport Component", () => {
     const mockInvoke = vi.fn(() => 
       new Promise((resolve) => setTimeout(() => resolve({ data: { forecast: "Test forecast" }, error: null }), 100))
     );
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+    (supabase.functions.invoke as unknown).mockImplementation(mockInvoke);
 
     render(<JobsForecastReport trend={[{ date: "2025-01", jobs: 10 }]} />);
     
@@ -45,7 +45,7 @@ describe("JobsForecastReport Component", () => {
 
   it("should display forecast when data is loaded", async () => {
     const mockForecast = "Previsão: Esperamos um aumento de 15% nos próximos 2 meses";
-    (supabase.functions.invoke as any).mockResolvedValue({
+    (supabase.functions.invoke as unknown).mockResolvedValue({
       data: { forecast: mockForecast },
       error: null,
     });
@@ -58,7 +58,7 @@ describe("JobsForecastReport Component", () => {
   });
 
   it("should handle error when forecast fetch fails", async () => {
-    (supabase.functions.invoke as any).mockResolvedValue({
+    (supabase.functions.invoke as unknown).mockResolvedValue({
       data: null,
       error: new Error("API Error"),
     });
@@ -72,7 +72,7 @@ describe("JobsForecastReport Component", () => {
 
   it("should call generate forecast when button is clicked", async () => {
     const mockForecast = "Previsão gerada manualmente";
-    (supabase.functions.invoke as any).mockResolvedValue({
+    (supabase.functions.invoke as unknown).mockResolvedValue({
       data: { forecast: mockForecast },
       error: null,
     });
@@ -92,7 +92,7 @@ describe("JobsForecastReport Component", () => {
       data: { forecast: "Auto-generated forecast" },
       error: null,
     });
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+    (supabase.functions.invoke as unknown).mockImplementation(mockInvoke);
 
     const trendData = [
       { date: "2025-01", jobs: 10 },
@@ -110,7 +110,7 @@ describe("JobsForecastReport Component", () => {
 
   it("should not fetch when trend array is empty", () => {
     const mockInvoke = vi.fn();
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+    (supabase.functions.invoke as unknown).mockImplementation(mockInvoke);
 
     render(<JobsForecastReport trend={[]} />);
 
@@ -126,7 +126,7 @@ describe("JobsForecastReport Component", () => {
   it("should call onForecastUpdate callback when forecast is loaded", async () => {
     const mockForecast = "Previsão de teste";
     const mockCallback = vi.fn();
-    (supabase.functions.invoke as any).mockResolvedValue({
+    (supabase.functions.invoke as unknown).mockResolvedValue({
       data: { forecast: mockForecast },
       error: null,
     });
@@ -140,7 +140,7 @@ describe("JobsForecastReport Component", () => {
 
   it("should call onForecastUpdate callback with error message on error", async () => {
     const mockCallback = vi.fn();
-    (supabase.functions.invoke as any).mockResolvedValue({
+    (supabase.functions.invoke as unknown).mockResolvedValue({
       data: null,
       error: new Error("API Error"),
     });

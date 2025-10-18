@@ -35,7 +35,7 @@ describe("DPIntelligenceCenter Component", () => {
     // Mock fetch to simulate API failure (will use demo data)
     global.fetch = vi.fn(() =>
       Promise.reject(new Error("API not available"))
-    ) as any;
+    ) as unknown;
   });
 
   describe("Component Rendering", () => {
@@ -331,7 +331,7 @@ describe("DPIntelligenceCenter Component", () => {
           } as Response);
         }
         return Promise.reject(new Error("Not found"));
-      }) as any;
+      }) as unknown;
     });
 
     it("should disable button while generating action plan", async () => {
@@ -400,7 +400,7 @@ describe("DPIntelligenceCenter Component", () => {
           } as Response);
         }
         return Promise.reject(new Error("Not found"));
-      }) as any;
+      }) as unknown;
 
       const { toast } = await import("sonner");
       const toastErrorSpy = vi.spyOn(toast, "error");

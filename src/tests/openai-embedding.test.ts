@@ -32,7 +32,7 @@ describe("OpenAI Embedding Service", () => {
         embeddings: {
           create: mockCreate,
         },
-      }) as any);
+      }) as unknown);
 
       const result = await createEmbedding("Test text for embedding");
 
@@ -67,7 +67,7 @@ describe("OpenAI Embedding Service", () => {
         embeddings: {
           create: mockCreate,
         },
-      }) as any);
+      }) as unknown);
 
       await expect(createEmbedding("Test text")).rejects.toThrow();
     });
@@ -84,7 +84,7 @@ describe("OpenAI Embedding Service", () => {
         embeddings: {
           create: mockCreate,
         },
-      }) as any);
+      }) as unknown);
 
       await createEmbedding("Test text");
 
@@ -107,7 +107,7 @@ describe("OpenAI Embedding Service", () => {
         embeddings: {
           create: mockCreate,
         },
-      }) as any);
+      }) as unknown);
 
       const result = await createEmbedding("");
 
@@ -131,7 +131,7 @@ describe("OpenAI Embedding Service", () => {
         embeddings: {
           create: mockCreate,
         },
-      }) as any);
+      }) as unknown);
 
       const result = await createEmbedding("Test text");
 

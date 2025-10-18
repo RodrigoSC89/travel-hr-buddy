@@ -114,7 +114,7 @@ export const useSystemActions = () => {
     window.print();
   };
 
-  const handleOfflineAction = (action: string, data: any) => {
+  const handleOfflineAction = (action: string, data: Record<string, unknown>) => {
     if (!isOnline) {
       addPendingChange(action, data);
       toast({

@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 export const useFormActions = () => {
   const { toast } = useToast();
 
-  const handleSaveForm = (formName: string, data?: any) => {
+  const handleSaveForm = (formName: string, data?: Record<string, unknown>) => {
     toast({
       title: "Salvando",
       description: `Salvando ${formName}...`,

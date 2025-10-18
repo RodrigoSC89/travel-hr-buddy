@@ -69,7 +69,7 @@ describe("DocumentVersionHistory Component", () => {
         })),
       })),
     }));
-    (supabase.from as any) = mockFrom;
+    (supabase.from as unknown) = mockFrom;
 
     render(<DocumentVersionHistory documentId={mockDocumentId} />);
     expect(screen.getByText(/Carregando histórico/i)).toBeInTheDocument();
@@ -83,7 +83,7 @@ describe("DocumentVersionHistory Component", () => {
         })),
       })),
     }));
-    (supabase.from as any) = mockFrom;
+    (supabase.from as unknown) = mockFrom;
 
     render(<DocumentVersionHistory documentId={mockDocumentId} />);
 
@@ -104,7 +104,7 @@ describe("DocumentVersionHistory Component", () => {
         })),
       })),
     }));
-    (supabase.from as any) = mockFrom;
+    (supabase.from as unknown) = mockFrom;
 
     render(<DocumentVersionHistory documentId={mockDocumentId} />);
 
@@ -121,7 +121,7 @@ describe("DocumentVersionHistory Component", () => {
         })),
       })),
     }));
-    (supabase.from as any) = mockFrom;
+    (supabase.from as unknown) = mockFrom;
 
     render(<DocumentVersionHistory documentId={mockDocumentId} />);
 
@@ -140,7 +140,7 @@ describe("DocumentVersionHistory Component", () => {
         })),
       })),
     }));
-    (supabase.from as any) = mockFrom;
+    (supabase.from as unknown) = mockFrom;
 
     render(<DocumentVersionHistory documentId={mockDocumentId} />);
 

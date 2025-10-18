@@ -66,7 +66,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
     }
   };
 
-  const updateTemplate = async (id: string, updates: any) => {
+  const updateTemplate = async (id: string, updates: Record<string, unknown>) => {
     try {
       const { error } = await supabase
         .from("peotram_templates")
