@@ -75,6 +75,7 @@ const AdminDashboard = React.lazy(() => import("./pages/admin/dashboard"));
 const SmartWorkflows = React.lazy(() => import("./pages/admin/workflows"));
 const WorkflowDetail = React.lazy(() => import("./pages/admin/workflows/detail"));
 const Templates = React.lazy(() => import("./pages/admin/templates"));
+const RiskAudit = React.lazy(() => import("./pages/admin/risk-audit"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
@@ -239,6 +240,7 @@ function App() {
                       <Route path="/admin/sgso" element={<AdminSGSO />} />
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/dp-intelligence" element={<DPIntelligenceAdmin />} />
+                      <Route path="/admin/risk-audit" element={<RiskAudit />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
