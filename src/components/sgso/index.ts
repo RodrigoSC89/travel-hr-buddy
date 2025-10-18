@@ -13,3 +13,5 @@ export { NonConformityManager } from "./NonConformityManager";
 export { EmergencyResponse } from "./EmergencyResponse";
 export { MetricasPanel } from "./MetricasPanel";
 export { SGSOTrendChart } from "./SGSOTrendChart";
+export { SGSOHistoryTable } from "./SGSOHistoryTable";
+export type { SGSOActionPlan } from "./SGSOHistoryTable";
