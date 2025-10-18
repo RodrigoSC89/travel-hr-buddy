@@ -18,7 +18,7 @@ export interface TrainingModule {
   quiz: QuizQuestion[]
   vessel_id?: string
   audit_id?: string
-  status: 'active' | 'archived' | 'draft'
+  status: "active" | "archived" | "draft"
   created_by?: string
   created_at: string
   updated_at: string
@@ -67,7 +67,7 @@ export interface AuditLog {
   navio: string
   norma: string
   item_auditado: string
-  resultado: 'Conforme' | 'Não Conforme' | 'Parcialmente Conforme' | 'Não Aplicável'
+  resultado: "Conforme" | "Não Conforme" | "Parcialmente Conforme" | "Não Aplicável"
   comentarios: string
   data: string
   score?: number
@@ -112,7 +112,7 @@ export interface ExportAuditBundleRequest {
   norms: string[]
   startDate?: string
   endDate?: string
-  format?: 'json' | 'pdf'
+  format?: "json" | "pdf"
 }
 
 export interface ExportAuditBundleResponse {
@@ -120,4 +120,48 @@ export interface ExportAuditBundleResponse {
   bundle?: AuditBundle
   format?: string
   message?: string
+}
+
+/**
+ * Crew Training Records Types (Stage 31)
+ * Types for tracking crew training, certifications, and compliance
+ */
+
+export type TrainingCategory = 
+  | "DP Operations"
+  | "Emergency Response"
+  | "Fire Fighting"
+  | "Blackout Recovery"
+  | "MOB Response"
+  | "SGSO Compliance"
+  | "Technical";
+
+export interface CrewTrainingRecord {
+  id: string
+  crew_id: string
+  training_module_id: string
+  date_completed: string
+  result: string
+  cert_url?: string // PDF certificate URL
+  valid_until?: string
+  category?: TrainingCategory
+  incident_id?: string // Link to technical failure that motivated training
+  created_at: string
+  updated_at?: string
+}
+
+export interface TrainingModuleExtended extends TrainingModule {
+  category?: TrainingCategory
+  duration_hours?: number
+  expiration_months?: number
+}
+
+export interface CrewTrainingStats {
+  crew_id: string
+  crew_name?: string
+  total_trainings: number
+  active_certifications: number
+  expired_certifications: number
+  upcoming_expirations: number
+  compliance_rate: number
 }
