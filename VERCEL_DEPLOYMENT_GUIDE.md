@@ -1,10 +1,14 @@
 # 🚀 Guia de Deploy para Vercel - Travel HR Buddy
 
+> 💡 **Dica**: Para um checklist rápido de deploy, veja [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md)  
+> 📚 **Guia Detalhado**: Configuração completa de variáveis em [ENV_PRODUCTION_SETUP_GUIDE.md](./ENV_PRODUCTION_SETUP_GUIDE.md)  
+> 📋 **Template**: Use [.env.production](./.env.production) como referência para todas as variáveis
+
 ## 📋 Pré-requisitos
 
 - Conta na Vercel (https://vercel.com)
 - Projeto Supabase configurado
-- Chaves de API necessárias (ver .env.example)
+- Chaves de API necessárias (ver [.env.production](./.env.production) para lista completa)
 
 ## 🔧 Configuração Inicial
 
@@ -16,6 +20,8 @@
 4. Mantenha as configurações padrão (já estão corretas no `vercel.json`)
 
 ### 2. Configurar Variáveis de Ambiente
+
+> 📖 **Guia Completo**: Para entender todas as variáveis e como configurá-las, veja [ENV_PRODUCTION_SETUP_GUIDE.md](./ENV_PRODUCTION_SETUP_GUIDE.md)
 
 Na dashboard da Vercel, vá em **Settings** → **Environment Variables** e adicione:
 
@@ -120,6 +126,8 @@ vercel --prod
 ```
 
 ## ✅ Checklist de Validação Pós-Deploy
+
+> ✅ **Checklist Completo**: Para verificação detalhada passo a passo, use [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md)
 
 ### 1. Verificar Build
 
@@ -264,5 +272,15 @@ Em caso de problemas:
 
 ---
 
-**Última atualização**: 2025-10-13
-**Versão do Guia**: 1.0
+## 📚 Documentação Relacionada
+
+- 📋 [.env.production](./.env.production) - Template completo de variáveis de produção
+- ✅ [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md) - Checklist rápido de deploy
+- 📖 [ENV_PRODUCTION_SETUP_GUIDE.md](./ENV_PRODUCTION_SETUP_GUIDE.md) - Guia detalhado de setup
+- 📊 [PRODUCTION_ENV_IMPLEMENTATION_SUMMARY.md](./PRODUCTION_ENV_IMPLEMENTATION_SUMMARY.md) - Resumo da implementação
+- 🔄 [BEFORE_AFTER_PRODUCTION_ENV.md](./BEFORE_AFTER_PRODUCTION_ENV.md) - Comparação antes/depois
+
+---
+
+**Última atualização**: 2025-10-18
+**Versão do Guia**: 2.0

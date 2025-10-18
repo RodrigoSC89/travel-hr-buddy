@@ -153,17 +153,28 @@ src/
 
 ## 🔐 Environment Variables
 
-Set all required keys in `.env` using `.env.example` as a reference. Example keys:
+> 🚀 **Production Template**: Use [.env.production](./.env.production) as complete reference for all production variables (55+ documented)  
+> 📖 **Setup Guide**: See [ENV_PRODUCTION_SETUP_GUIDE.md](./ENV_PRODUCTION_SETUP_GUIDE.md) for detailed configuration instructions  
+> ✅ **Deploy Checklist**: Follow [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md) for systematic deployment
 
-### Core Services
+Set all required keys in `.env` using `.env.example` (development) or `.env.production` (production) as reference. Example keys:
+
+### Core Services (Required)
 
 ```env
 # Supabase Configuration
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+VITE_SUPABASE_PROJECT_ID=seu-projeto-id
 
 # OpenAI Configuration
 VITE_OPENAI_API_KEY=sk-proj-...
+
+# Sentry - Error Monitoring
+VITE_SENTRY_DSN=https://...@sentry.io/...
+
+# Resend - Email Service
+RESEND_API_KEY=re_...
 ```
 
 ### Maps & Weather
@@ -199,7 +210,7 @@ MARINE_TRAFFIC_API_KEY=...
 VESSEL_FINDER_API_KEY=...
 ```
 
-See `.env.example` for the complete list of all available configuration options.
+See [.env.production](./.env.production) for the complete list of all 55+ production configuration options, organized into 20 categories with priority indicators (✅ Required, ⚡ Recommended, 🔧 Optional).
 
 ---
 
@@ -244,7 +255,11 @@ For a **complete step-by-step guide** to deploy Nautilus One to production, see:
 
 ### 🔍 Pre-Deployment Verification
 
-Before deploying to production, run the verification script:
+Before deploying to production:
+
+1. **Quick Checklist**: Follow [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md) (50+ verification items)
+2. **Environment Setup**: Configure all variables from [.env.production](./.env.production)
+3. **Run Local Verification**:
 
 ```bash
 npm run verify:production
@@ -256,6 +271,8 @@ This will check:
 - ✅ Build status
 - ✅ GitHub Actions workflows
 - ✅ Documentation completeness
+
+4. **Post-Deploy**: Visit `/admin/system-health` to verify all configurations
 
 ### 🚀 Deployment Options
 
@@ -314,23 +331,35 @@ The project includes optimized `vercel.json` configuration:
 
 ### 🔐 Environment Variables
 
+> 📋 **Complete Template**: See [.env.production](./.env.production) for all 55+ variables organized in 20 categories  
+> 📖 **Setup Guide**: [ENV_PRODUCTION_SETUP_GUIDE.md](./ENV_PRODUCTION_SETUP_GUIDE.md) has detailed configuration instructions
+
 Required environment variables (configure in Vercel Dashboard):
 
-**Essential**:
+**Essential** (✅ Required - 14 variables):
 ```bash
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=eyJ...
 VITE_SUPABASE_PROJECT_ID=your-project-id
+VITE_OPENAI_API_KEY=sk-proj-...
 VITE_SENTRY_DSN=https://...@sentry.io/...
 VITE_APP_URL=https://your-app.vercel.app
+VITE_NODE_ENV=production
+RESEND_API_KEY=re_...
 ```
 
-**Optional** (for advanced features):
+**Recommended** (⚡ Important - 8 variables):
 ```bash
-VITE_OPENAI_API_KEY=sk-proj-...
 VITE_MAPBOX_ACCESS_TOKEN=pk.eyJ...
 VITE_OPENWEATHER_API_KEY=...
-# See ENVIRONMENT_VARIABLES.md for complete list
+VITE_EMBED_ACCESS_TOKEN=seu_token_secreto
+```
+
+**Optional** (🔧 Advanced - 33+ variables):
+```bash
+VITE_AMADEUS_API_KEY=...
+VITE_ELEVENLABS_API_KEY=...
+# See .env.production for complete list
 ```
 
 ### 📊 Post-Deployment Verification
