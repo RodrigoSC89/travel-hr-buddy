@@ -58,7 +58,7 @@ export function AuditSimulator() {
         .eq("status", "active")
         .order("name");
 
-      setVessels(data || []);
+      setVessels((data as { id: string; name: string }[]) || []);
       if (data && data.length > 0) {
         setSelectedVessel(data[0].id);
       }
@@ -135,29 +135,16 @@ export function AuditSimulator() {
     }
   };
 
-  const getProbabilityColor = (probability: string) => {
-    switch (probability) {
-      case "Alta":
-        return "text-green-600";
-      case "Média":
-        return "text-yellow-600";
-      case "Baixa":
-        return "text-red-600";
-      default:
-        return "text-gray-600";
-    }
-  };
-
   const getProbabilityVariant = (probability: string) => {
     switch (probability) {
-      case "Alta":
-        return "default";
-      case "Média":
-        return "secondary";
-      case "Baixa":
-        return "destructive";
-      default:
-        return "outline";
+    case "Alta":
+      return "default";
+    case "Média":
+      return "secondary";
+    case "Baixa":
+      return "destructive";
+    default:
+      return "outline";
     }
   };
 
@@ -256,7 +243,7 @@ export function AuditSimulator() {
               </CardHeader>
               <CardContent>
                 <Badge 
-                  variant={getProbabilityVariant(prediction.probability) as any} 
+                  variant={getProbabilityVariant(prediction.probability) as "default" | "secondary" | "destructive" | "outline" | null | undefined} 
                   className="text-lg px-4 py-2"
                 >
                   {prediction.probability}
@@ -365,7 +352,7 @@ export function AuditSimulator() {
 
           <Alert>
             <AlertDescription className="text-xs text-muted-foreground">
-              Gerado em: {new Date(prediction.generated_at).toLocaleString("pt-BR")} • 
+              Gerado em: {new Date(prediction.generated_at).toLocaleString('pt-BR')} • 
               Esta previsão é válida por 30 dias e tem caráter consultivo.
             </AlertDescription>
           </Alert>

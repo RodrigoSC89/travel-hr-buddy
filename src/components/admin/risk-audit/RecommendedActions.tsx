@@ -34,7 +34,7 @@ export function RecommendedActions() {
 
       // Load users for assignment
       const { data: usersData } = await supabase.auth.admin.listUsers();
-      setUsers(usersData?.users || []);
+      setUsers((usersData?.users as { id: string; email?: string }[]) || []);
 
       // Load tactical risks actions
       const { data: risks } = await supabase
@@ -62,14 +62,14 @@ export function RecommendedActions() {
           recommendations,
           vessels (name)
         `)
-        .gt("valid_until", new Date().toISOString());
+        .gt("valid_until", new Date().toISOString()) as { data: { id: string; vessel_id: string; audit_type: string; recommendations: string[]; vessels?: { name: string } }[] | null };
 
       // Combine actions
       const combinedActions: Action[] = [];
 
       // Add risk actions
       if (risks) {
-        risks.forEach((risk: any) => {
+        (risks as { id: string; vessel_id: string; system: string; suggested_action: string; risk_level: string; assigned_to: string | null; status: string; vessels?: { name: string } }[]).forEach((risk) => {
           combinedActions.push({
             id: `risk-${risk.id}`,
             source: "risk",
@@ -85,7 +85,7 @@ export function RecommendedActions() {
 
       // Add audit recommendations
       if (audits) {
-        audits.forEach((audit: any) => {
+        audits.forEach((audit) => {
           if (audit.recommendations && Array.isArray(audit.recommendations)) {
             audit.recommendations.forEach((rec: string, index: number) => {
               combinedActions.push({
@@ -163,12 +163,12 @@ export function RecommendedActions() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "High":
-        return "destructive";
-      case "Medium":
-        return "default";
-      default:
-        return "secondary";
+    case "High":
+      return "destructive";
+    case "Medium":
+      return "default";
+    default:
+      return "secondary";
     }
   };
 
@@ -202,7 +202,7 @@ export function RecommendedActions() {
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 space-y-2">
                         <div className="flex items-center gap-2">
-                          <Badge variant={getPriorityColor(action.priority) as any}>
+                          <Badge variant={getPriorityColor(action.priority) as "default" | "destructive" | "secondary" | null | undefined}>
                             {action.priority}
                           </Badge>
                           <Badge variant="outline">

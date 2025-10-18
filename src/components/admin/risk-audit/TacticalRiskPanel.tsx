@@ -59,7 +59,7 @@ export function TacticalRiskPanel() {
         .eq("status", "active")
         .order("name");
 
-      setVessels(vesselsData || []);
+      setVessels((vesselsData as { id: string; name: string }[]) || []);
 
       // Load risk summary
       const { data: summaryData, error: summaryError } = await supabase
@@ -147,29 +147,29 @@ export function TacticalRiskPanel() {
 
   const getRiskLevelColor = (level: string) => {
     switch (level) {
-      case "Critical":
-        return "destructive";
-      case "High":
-        return "default";
-      case "Medium":
-        return "secondary";
-      default:
-        return "outline";
+    case "Critical":
+      return "destructive";
+    case "High":
+      return "default";
+    case "Medium":
+      return "secondary";
+    default:
+      return "outline";
     }
   };
 
   const getRiskTypeIcon = (type: string) => {
     switch (type) {
-      case "Failure":
-        return "🔴";
-      case "Intermittency":
-        return "⚠️";
-      case "Delay":
-        return "⏱️";
-      case "Degradation":
-        return "📉";
-      default:
-        return "✅";
+    case "Failure":
+      return "🔴";
+    case "Intermittency":
+      return "⚠️";
+    case "Delay":
+      return "⏱️";
+    case "Degradation":
+      return "📉";
+    default:
+      return "✅";
     }
   };
 
@@ -266,7 +266,7 @@ export function TacticalRiskPanel() {
           {risks.length === 0 ? (
             <Alert>
               <AlertDescription>
-                Nenhum risco tático identificado no momento. Clique em "Gerar Previsões" para criar novas análises.
+                Nenhum risco tático identificado no momento. Clique em &apos;Gerar Previsões&apos; para criar novas análises.
               </AlertDescription>
             </Alert>
           ) : (
@@ -291,7 +291,7 @@ export function TacticalRiskPanel() {
                           </div>
 
                           <div className="flex items-center gap-2 text-sm">
-                            <Badge variant={getRiskLevelColor(risk.risk_level) as any}>
+                            <Badge variant={getRiskLevelColor(risk.risk_level) as "default" | "destructive" | "secondary" | "outline" | null | undefined}>
                               {risk.risk_level}
                             </Badge>
                             <span className="text-muted-foreground">Score: {risk.risk_score}</span>
