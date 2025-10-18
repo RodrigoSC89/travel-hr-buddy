@@ -22,7 +22,7 @@ export async function runAutomatedTests(): Promise<AutomatedTestsResult> {
     if (supabaseUrl) {
       const res = await fetch(`${supabaseUrl}/functions/v1/system-health-tests`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
       
@@ -40,7 +40,7 @@ export async function runAutomatedTests(): Promise<AutomatedTestsResult> {
       lastRun: new Date().toISOString(),
     };
   } catch (error) {
-    console.error('Error fetching automated tests:', error);
+    console.error("Error fetching automated tests:", error);
     
     // Return fallback data on error
     return {

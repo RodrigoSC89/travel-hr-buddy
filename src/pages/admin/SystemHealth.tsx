@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { runAutomatedTests, AutomatedTestsResult } from '@/lib/systemHealth';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Loader2, CheckCircle, XCircle, TestTube, Clock } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { runAutomatedTests, AutomatedTestsResult } from "@/lib/systemHealth";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Loader2, CheckCircle, XCircle, TestTube, Clock } from "lucide-react";
 
 /**
  * System Health Page
@@ -19,7 +19,7 @@ const SystemHealth: React.FC = () => {
         const result = await runAutomatedTests();
         setStatus(result);
       } catch (error) {
-        console.error('Failed to fetch test results:', error);
+        console.error("Failed to fetch test results:", error);
       } finally {
         setLoading(false);
       }
@@ -31,12 +31,12 @@ const SystemHealth: React.FC = () => {
   const formatDate = (isoString: string) => {
     try {
       const date = new Date(isoString);
-      return date.toLocaleString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
+      return date.toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       });
     } catch {
       return isoString;
@@ -73,7 +73,7 @@ const SystemHealth: React.FC = () => {
               {/* Test Status Summary */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Overall Status */}
-                <Card className={status.failed === 0 ? 'border-green-500 bg-green-50 dark:bg-green-950' : 'border-red-500 bg-red-50 dark:bg-red-950'}>
+                <Card className={status.failed === 0 ? "border-green-500 bg-green-50 dark:bg-green-950" : "border-red-500 bg-red-50 dark:bg-red-950"}>
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between">
                       <div>
@@ -92,17 +92,17 @@ const SystemHealth: React.FC = () => {
                             <>
                               <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
                               <span className="text-lg font-bold text-red-600 dark:text-red-400">
-                                {status.failed} Falha{status.failed > 1 ? 's' : ''}
+                                {status.failed} Falha{status.failed > 1 ? "s" : ""}
                               </span>
                             </>
                           )}
                         </div>
                       </div>
                       <Badge 
-                        variant={status.failed === 0 ? 'default' : 'destructive'}
+                        variant={status.failed === 0 ? "default" : "destructive"}
                         className="text-lg px-3 py-1"
                       >
-                        {status.failed === 0 ? '✅' : '❌'}
+                        {status.failed === 0 ? "✅" : "❌"}
                       </Badge>
                     </div>
                   </CardContent>
@@ -159,8 +159,8 @@ const SystemHealth: React.FC = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
                     <span className="font-medium">✅ Testes Automatizados:</span>
-                    <span className={status.failed === 0 ? 'text-green-600 dark:text-green-400 font-semibold' : 'text-red-600 dark:text-red-400 font-semibold'}>
-                      {status.failed === 0 ? '100% Passed' : `${status.failed} Falhas`}
+                    <span className={status.failed === 0 ? "text-green-600 dark:text-green-400 font-semibold" : "text-red-600 dark:text-red-400 font-semibold"}>
+                      {status.failed === 0 ? "100% Passed" : `${status.failed} Falhas`}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
@@ -173,8 +173,8 @@ const SystemHealth: React.FC = () => {
                   </div>
                   <div className="flex justify-between items-center p-3 bg-muted rounded-lg">
                     <span className="font-medium">🔁 Resultado:</span>
-                    <Badge variant={status.failed === 0 ? 'default' : 'destructive'}>
-                      {status.failed === 0 ? 'Passed' : 'Failed'}
+                    <Badge variant={status.failed === 0 ? "default" : "destructive"}>
+                      {status.failed === 0 ? "Passed" : "Failed"}
                     </Badge>
                   </div>
                 </div>
