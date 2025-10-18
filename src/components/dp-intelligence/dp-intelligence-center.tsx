@@ -14,7 +14,8 @@ import {
   BookOpen,
   Lightbulb,
   CheckSquare,
-  Wrench
+  Wrench,
+  Mail
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -33,6 +34,9 @@ interface Incident {
   severity?: "critical" | "high" | "medium" | "low";
   status?: "analyzed" | "pending";
   plan_of_action?: PlanOfAction | null;
+  plan_sent_to?: string | null;
+  plan_sent_at?: string | null;
+  plan_status?: "pendente" | "em andamento" | "concluído" | null;
 }
 
 interface PlanOfAction {
@@ -65,6 +69,7 @@ const DPIntelligenceCenter = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [generatingAction, setGeneratingAction] = useState<string | null>(null);
+  const [sendingEmail, setSendingEmail] = useState<string | null>(null);
   const [stats, setStats] = useState({
     total: 0,
     critical: 0,
@@ -112,7 +117,10 @@ const DPIntelligenceCenter = () => {
             link: inc.link || ""
           }),
           status: inc.status || "pending",
-          plan_of_action: inc.plan_of_action || null
+          plan_of_action: inc.plan_of_action || null,
+          plan_sent_to: inc.plan_sent_to || null,
+          plan_sent_at: inc.plan_sent_at || null,
+          plan_status: inc.plan_status || null
         }));
         setIncidents(incidentsWithStatus);
       } else {
@@ -124,7 +132,10 @@ const DPIntelligenceCenter = () => {
             ...inc,
             severity: inc.severity || determineSeverity(inc),
             status: inc.status || "pending",
-            plan_of_action: inc.plan_of_action || null
+            plan_of_action: inc.plan_of_action || null,
+            plan_sent_to: inc.plan_sent_to || null,
+            plan_sent_at: inc.plan_sent_at || null,
+            plan_status: inc.plan_status || null
           }));
           setIncidents(incidentsWithStatus);
         } else {
@@ -166,7 +177,10 @@ const DPIntelligenceCenter = () => {
         tags: ["gyro", "drive off", "sensor", "position loss"],
         severity: "critical",
         status: "pending",
-        plan_of_action: null
+        plan_of_action: null,
+        plan_sent_to: null,
+        plan_sent_at: null,
+        plan_status: null
       },
       {
         id: "imca-2025-009",
@@ -181,7 +195,10 @@ const DPIntelligenceCenter = () => {
         tags: ["thruster", "software", "rov", "reboot"],
         severity: "high",
         status: "analyzed",
-        plan_of_action: null
+        plan_of_action: null,
+        plan_sent_to: null,
+        plan_sent_at: null,
+        plan_status: null
       },
       {
         id: "imca-2025-006",
@@ -196,7 +213,10 @@ const DPIntelligenceCenter = () => {
         tags: ["dgps", "reference system", "weather", "acoustic"],
         severity: "high",
         status: "pending",
-        plan_of_action: null
+        plan_of_action: null,
+        plan_sent_to: null,
+        plan_sent_at: null,
+        plan_status: null
       },
       {
         id: "imca-2024-089",
@@ -211,7 +231,10 @@ const DPIntelligenceCenter = () => {
         tags: ["pms", "power", "load shedding", "configuration"],
         severity: "medium",
         status: "analyzed",
-        plan_of_action: null
+        plan_of_action: null,
+        plan_sent_to: null,
+        plan_sent_at: null,
+        plan_status: null
       }
     ];
     setIncidents(demoIncidents);
@@ -350,6 +373,55 @@ const DPIntelligenceCenter = () => {
       });
     } finally {
       setGeneratingAction(null);
+    }
+  };
+
+  const handleSendPlan = async (id: string) => {
+    const email = prompt("Para qual e-mail enviar o plano de ação?");
+    if (!email) return;
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Email inválido", {
+        description: "Por favor, insira um endereço de email válido"
+      });
+      return;
+    }
+
+    setSendingEmail(id);
+    try {
+      const response = await fetch("/api/dp-incidents/send-plan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, email }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Erro ao enviar plano de ação");
+      }
+
+      const data = await response.json();
+      
+      if (data.ok) {
+        toast.success("Plano de ação enviado com sucesso", {
+          description: `Email enviado para ${email}`
+        });
+        // Refresh incidents to get updated data
+        await fetchIncidents();
+      } else {
+        throw new Error("Erro ao enviar plano de ação");
+      }
+    } catch (error) {
+      console.error("Error sending action plan:", error);
+      toast.error("Erro ao enviar plano de ação", {
+        description: error instanceof Error ? error.message : "Tente novamente mais tarde"
+      });
+    } finally {
+      setSendingEmail(null);
     }
   };
 
@@ -594,6 +666,42 @@ const DPIntelligenceCenter = () => {
                     Analisar IA
                   </Button>
                 </div>
+
+                {incident.plan_of_action && (
+                  <div className="flex gap-2 pt-2">
+                    <Button 
+                      size="sm" 
+                      variant="secondary"
+                      className="flex-1"
+                      onClick={() => handleSendPlan(incident.id)}
+                      disabled={sendingEmail === incident.id}
+                    >
+                      <Mail className="h-4 w-4 mr-1" />
+                      {sendingEmail === incident.id ? "Enviando..." : "📩 Enviar por E-mail"}
+                    </Button>
+                  </div>
+                )}
+
+                {incident.plan_sent_at && (
+                  <div className="mt-2 text-xs text-muted-foreground space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-600 dark:text-green-400">✓ Enviado em {new Date(incident.plan_sent_at).toLocaleDateString("pt-BR")}</span>
+                    </div>
+                    {incident.plan_status && (
+                      <div>
+                        Status: <Badge variant="outline" className="text-xs">
+                          {incident.plan_status}
+                        </Badge>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {!incident.plan_sent_at && incident.plan_of_action && (
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    <span className="text-gray-500">Não enviado</span>
+                  </div>
+                )}
 
                 {incident.plan_of_action && (
                   <details className="bg-slate-100 dark:bg-slate-800 p-3 rounded text-sm mt-2">
