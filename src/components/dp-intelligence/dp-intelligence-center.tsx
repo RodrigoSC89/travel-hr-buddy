@@ -653,90 +653,92 @@ const DPIntelligenceCenter = () => {
               </div>
             </div>
           ) : analysis ? (
-            <Tabs defaultValue="summary" className="w-full">
-              <TabsList className="grid w-full grid-cols-5">
-                <TabsTrigger value="summary">📄 Resumo</TabsTrigger>
-                <TabsTrigger value="standards">📚 Normas</TabsTrigger>
-                <TabsTrigger value="causes">⚠️ Causas</TabsTrigger>
-                <TabsTrigger value="prevention">💡 Prevenção</TabsTrigger>
-                <TabsTrigger value="actions">📋 Ações</TabsTrigger>
-              </TabsList>
+            <>
+              <Tabs defaultValue="summary" className="w-full">
+                <TabsList className="grid w-full grid-cols-5">
+                  <TabsTrigger value="summary">📄 Resumo</TabsTrigger>
+                  <TabsTrigger value="standards">📚 Normas</TabsTrigger>
+                  <TabsTrigger value="causes">⚠️ Causas</TabsTrigger>
+                  <TabsTrigger value="prevention">💡 Prevenção</TabsTrigger>
+                  <TabsTrigger value="actions">📋 Ações</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="summary" className="space-y-4">
+                  <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      <FileText className="h-5 w-5" />
+                      Resumo Técnico
+                    </h3>
+                    <p className="text-sm whitespace-pre-line">{analysis.summary}</p>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="standards" className="space-y-4">
+                  <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      <BookOpen className="h-5 w-5" />
+                      Normas Relacionadas (IMCA/IMO/PEO-DP)
+                    </h3>
+                    <p className="text-sm whitespace-pre-line">{analysis.standards}</p>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="causes" className="space-y-4">
+                  <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      <AlertTriangle className="h-5 w-5" />
+                      Análise de Causas Raiz
+                    </h3>
+                    <p className="text-sm whitespace-pre-line">{analysis.causes}</p>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="prevention" className="space-y-4">
+                  <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      <Lightbulb className="h-5 w-5" />
+                      Recomendações de Prevenção
+                    </h3>
+                    <p className="text-sm whitespace-pre-line">{analysis.prevention}</p>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="actions" className="space-y-4">
+                  <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      <CheckSquare className="h-5 w-5" />
+                      Ações Corretivas
+                    </h3>
+                    <p className="text-sm whitespace-pre-line">{analysis.actions}</p>
+                  </div>
+                </TabsContent>
+              </Tabs>
               
-              <TabsContent value="summary" className="space-y-4">
-                <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                  <h3 className="font-semibold mb-2 flex items-center gap-2">
-                    <FileText className="h-5 w-5" />
-                    Resumo Técnico
-                  </h3>
-                  <p className="text-sm whitespace-pre-line">{analysis.summary}</p>
+              {/* Plan Status Select */}
+              {selectedIncident && (
+                <div className="mt-6 pt-6 border-t">
+                  <PlanStatusSelect 
+                    incident={selectedIncident}
+                    onStatusChange={(newStatus) => {
+                      // Update the local state
+                      setSelectedIncident({
+                        ...selectedIncident,
+                        plan_status: newStatus,
+                        plan_updated_at: new Date().toISOString()
+                      });
+                      // Update the incidents list
+                      setIncidents(prev => 
+                        prev.map(inc => 
+                          inc.id === selectedIncident.id 
+                            ? { ...inc, plan_status: newStatus, plan_updated_at: new Date().toISOString() }
+                            : inc
+                        )
+                      );
+                    }}
+                  />
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="standards" className="space-y-4">
-                <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                  <h3 className="font-semibold mb-2 flex items-center gap-2">
-                    <BookOpen className="h-5 w-5" />
-                    Normas Relacionadas (IMCA/IMO/PEO-DP)
-                  </h3>
-                  <p className="text-sm whitespace-pre-line">{analysis.standards}</p>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="causes" className="space-y-4">
-                <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                  <h3 className="font-semibold mb-2 flex items-center gap-2">
-                    <AlertTriangle className="h-5 w-5" />
-                    Análise de Causas Raiz
-                  </h3>
-                  <p className="text-sm whitespace-pre-line">{analysis.causes}</p>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="prevention" className="space-y-4">
-                <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                  <h3 className="font-semibold mb-2 flex items-center gap-2">
-                    <Lightbulb className="h-5 w-5" />
-                    Recomendações de Prevenção
-                  </h3>
-                  <p className="text-sm whitespace-pre-line">{analysis.prevention}</p>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="actions" className="space-y-4">
-                <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                  <h3 className="font-semibold mb-2 flex items-center gap-2">
-                    <CheckSquare className="h-5 w-5" />
-                    Ações Corretivas
-                  </h3>
-                  <p className="text-sm whitespace-pre-line">{analysis.actions}</p>
-                </div>
-              </TabsContent>
-            </Tabs>
-            
-            {/* Plan Status Select */}
-            {selectedIncident && (
-              <div className="mt-6 pt-6 border-t">
-                <PlanStatusSelect 
-                  incident={selectedIncident}
-                  onStatusChange={(newStatus) => {
-                    // Update the local state
-                    setSelectedIncident({
-                      ...selectedIncident,
-                      plan_status: newStatus,
-                      plan_updated_at: new Date().toISOString()
-                    });
-                    // Update the incidents list
-                    setIncidents(prev => 
-                      prev.map(inc => 
-                        inc.id === selectedIncident.id 
-                          ? { ...inc, plan_status: newStatus, plan_updated_at: new Date().toISOString() }
-                          : inc
-                      )
-                    );
-                  }}
-                />
-              </div>
-            )}
+              )}
+            </>
           ) : (
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
