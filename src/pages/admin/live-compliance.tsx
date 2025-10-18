@@ -35,18 +35,22 @@ import {
   getCorrectiveActions,
   getTrainingAssignments,
   getEvidenceByNorm,
-  type ComplianceScore
+  type ComplianceScore,
+  type NonConformity,
+  type CorrectiveAction,
+  type TrainingAssignment,
+  type ComplianceEvidence
 } from "@/services/compliance-engine";
 import { format } from "date-fns";
 
 export default function LiveCompliancePage() {
   const [score, setScore] = useState<ComplianceScore | null>(null);
   const [statusSummary, setStatusSummary] = useState<string>("");
-  const [nonConformities, setNonConformities] = useState<any[]>([]);
-  const [trainingAssignments, setTrainingAssignments] = useState<any[]>([]);
-  const [evidenceByNorm, setEvidenceByNorm] = useState<Record<string, any[]>>({});
+  const [nonConformities, setNonConformities] = useState<NonConformity[]>([]);
+  const [trainingAssignments, setTrainingAssignments] = useState<TrainingAssignment[]>([]);
+  const [evidenceByNorm, setEvidenceByNorm] = useState<Record<string, ComplianceEvidence[]>>({});
   const [selectedNC, setSelectedNC] = useState<string | null>(null);
-  const [correctiveActions, setCorrectiveActions] = useState<any[]>([]);
+  const [correctiveActions, setCorrectiveActions] = useState<CorrectiveAction[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Load all data
@@ -232,11 +236,11 @@ export default function LiveCompliancePage() {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm">Atribuídos:</span>
-                <span className="font-bold">{trainingAssignments.filter(t => t.status === 'assigned').length}</span>
+                <span className="font-bold">{trainingAssignments.filter(t => t.status === "assigned").length}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm">Concluídos:</span>
-                <span className="font-bold text-green-600">{trainingAssignments.filter(t => t.status === 'completed').length}</span>
+                <span className="font-bold text-green-600">{trainingAssignments.filter(t => t.status === "completed").length}</span>
               </div>
             </div>
           </CardContent>
@@ -304,7 +308,7 @@ export default function LiveCompliancePage() {
                           <div className="mt-2">
                             <p className="text-xs font-semibold">Normas Aplicáveis:</p>
                             <div className="flex flex-wrap gap-1 mt-1">
-                              {nc.applicable_norms.map((norm: any, idx: number) => (
+                              {nc.applicable_norms.map((norm, idx: number) => (
                                 <Badge key={idx} variant="outline" className="text-xs">
                                   {norm.norm} - {norm.clause}
                                 </Badge>
