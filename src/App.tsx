@@ -100,6 +100,8 @@ const AuditoriasIMCA = React.lazy(() => import("./pages/admin/auditorias-imca"))
 const AuditoriasLista = React.lazy(() => import("./pages/admin/auditorias-lista"));
 const DPIntelligenceAdmin = React.lazy(() => import("./pages/admin/DPIntelligencePage"));
 const IMCAAudit = React.lazy(() => import("./pages/IMCAAudit"));
+const SystemHealth = React.lazy(() => import("./pages/admin/system-health"));
+const Forecast = React.lazy(() => import("./pages/admin/forecast"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -245,6 +247,13 @@ function App() {
                       <Route path="/admin/auditorias-lista" element={<AuditoriasLista />} />
                       <Route path="/admin/dp-intelligence" element={<DPIntelligenceAdmin />} />
                       <Route path="/imca-audit" element={<IMCAAudit />} />
+                      {/* System Health and Forecast pages */}
+                      <Route path="/admin/system-health" element={<SystemHealth />} />
+                      <Route path="/admin/forecast" element={<Forecast />} />
+                      {/* Route aliases for better discoverability */}
+                      <Route path="/admin/audit" element={<DashboardAuditorias />} />
+                      <Route path="/admin/mmi" element={<MMIJobsPanel />} />
+                      <Route path="/admin/ai-assistant" element={<Assistant />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
