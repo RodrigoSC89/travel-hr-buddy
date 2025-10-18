@@ -97,6 +97,9 @@ const MetricasRisco = React.lazy(() => import("./pages/admin/metricas-risco"));
 const AdminSGSO = React.lazy(() => import("./pages/admin/sgso"));
 const AuditoriasIMCA = React.lazy(() => import("./pages/admin/auditorias-imca"));
 const DPIntelligenceAdmin = React.lazy(() => import("./pages/admin/DPIntelligencePage"));
+const AdminSimulations = React.lazy(() => import("./pages/admin/simulations"));
+const AdminCronMonitor = React.lazy(() => import("./pages/admin/cron-monitor"));
+const AdminTraining = React.lazy(() => import("./pages/admin/training"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -239,6 +242,9 @@ function App() {
                       <Route path="/admin/sgso" element={<AdminSGSO />} />
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/dp-intelligence" element={<DPIntelligenceAdmin />} />
+                      <Route path="/admin/simulations" element={<AdminSimulations />} />
+                      <Route path="/admin/cron-monitor" element={<AdminCronMonitor />} />
+                      <Route path="/admin/training" element={<AdminTraining />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
