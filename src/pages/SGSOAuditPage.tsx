@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
+import { toast } from 'sonner'
+import { explainRequirementSGSO } from '@/lib/sgso/explainRequirement'
 
 const requisitosSGSO = [
   { num: 1, titulo: 'Política de SMS', desc: 'Estabelecimento e divulgação de política de segurança e meio ambiente.' },
@@ -34,6 +36,7 @@ export default function SGSOAuditPage() {
       comment: ''
     }))
   )
+  const [loadingExplanation, setLoadingExplanation] = useState<number | null>(null)
 
   const handleChange = (index: number, field: string, value: string) => {
     const updated = [...auditData]
@@ -44,6 +47,26 @@ export default function SGSOAuditPage() {
   const handleSubmit = () => {
     console.log('📤 Enviando auditoria SGSO:', auditData)
     // TODO: enviar para Supabase ou API
+  }
+
+  const handleExplainWithAI = async (idx: number) => {
+    const item = auditData[idx]
+    setLoadingExplanation(idx)
+    
+    try {
+      const explanation = await explainRequirementSGSO(item.titulo, item.compliance)
+      
+      if (explanation) {
+        toast.info(explanation, { duration: 12000 })
+      } else {
+        toast.error('Não foi possível gerar explicação. Tente novamente.')
+      }
+    } catch (error) {
+      console.error('Erro ao explicar requisito:', error)
+      toast.error('Erro ao gerar explicação com IA')
+    } finally {
+      setLoadingExplanation(null)
+    }
   }
 
   return (
@@ -87,6 +110,15 @@ export default function SGSOAuditPage() {
               value={item.comment}
               onChange={e => handleChange(idx, 'comment', e.target.value)}
             />
+
+            <Button
+              variant="outline"
+              onClick={() => handleExplainWithAI(idx)}
+              disabled={loadingExplanation === idx}
+              className="mt-2"
+            >
+              {loadingExplanation === idx ? '⏳ Carregando...' : '🤖 Explicar com IA'}
+            </Button>
           </CardContent>
         </Card>
       ))}
