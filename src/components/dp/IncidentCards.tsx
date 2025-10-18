@@ -134,7 +134,7 @@ export default function IncidentCards() {
                     </Badge>
                   )}
                   {incident.sgso_risk_level && (
-                    <Badge className={`text-xs ${RISK_LEVEL_COLORS[incident.sgso_risk_level]?.badge || 'bg-gray-600'}`}>
+                    <Badge className={`text-xs ${RISK_LEVEL_COLORS[incident.sgso_risk_level]?.badge || "bg-gray-600"}`}>
                       {RISK_LEVEL_COLORS[incident.sgso_risk_level]?.icon} {incident.sgso_risk_level.charAt(0).toUpperCase() + incident.sgso_risk_level.slice(1)}
                     </Badge>
                   )}

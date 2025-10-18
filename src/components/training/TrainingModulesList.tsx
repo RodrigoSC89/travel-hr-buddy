@@ -1,10 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { useTrainingModules } from '@/hooks/use-training-modules'
-import { BookOpen, Clock, Ship, FileText, Loader2 } from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useTrainingModules } from "@/hooks/use-training-modules";
+import { BookOpen, Clock, Ship, FileText, Loader2 } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface TrainingModulesListProps {
   vesselId?: string
@@ -15,14 +15,14 @@ interface TrainingModulesListProps {
  * Component to display list of active training modules
  */
 export function TrainingModulesList({ vesselId, onModuleClick }: TrainingModulesListProps) {
-  const { modules, isLoading, error } = useTrainingModules(vesselId)
+  const { modules, isLoading, error } = useTrainingModules(vesselId);
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -34,7 +34,7 @@ export function TrainingModulesList({ vesselId, onModuleClick }: TrainingModules
           </p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   if (modules.length === 0) {
@@ -49,7 +49,7 @@ export function TrainingModulesList({ vesselId, onModuleClick }: TrainingModules
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -115,5 +115,5 @@ export function TrainingModulesList({ vesselId, onModuleClick }: TrainingModules
         </Card>
       ))}
     </div>
-  )
+  );
 }

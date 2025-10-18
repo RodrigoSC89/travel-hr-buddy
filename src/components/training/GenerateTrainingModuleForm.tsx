@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Textarea } from '@/components/ui/textarea'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useTrainingModules } from '@/hooks/use-training-modules'
-import { Loader2, BookOpen, AlertCircle } from 'lucide-react'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useTrainingModules } from "@/hooks/use-training-modules";
+import { Loader2, BookOpen, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface GenerateTrainingModuleFormProps {
   auditId?: string
@@ -23,16 +23,16 @@ export function GenerateTrainingModuleForm({
   vesselId,
   onSuccess
 }: GenerateTrainingModuleFormProps) {
-  const { generateModule, isGenerating } = useTrainingModules(vesselId)
-  const [gapDetected, setGapDetected] = useState('')
-  const [normReference, setNormReference] = useState('')
-  const [vesselName, setVesselName] = useState('')
+  const { generateModule, isGenerating } = useTrainingModules(vesselId);
+  const [gapDetected, setGapDetected] = useState("");
+  const [normReference, setNormReference] = useState("");
+  const [vesselName, setVesselName] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!gapDetected || !normReference) {
-      return
+      return;
     }
 
     try {
@@ -41,18 +41,18 @@ export function GenerateTrainingModuleForm({
         gapDetected,
         normReference,
         vessel: vesselName || undefined
-      })
+      });
 
       // Reset form
-      setGapDetected('')
-      setNormReference('')
-      setVesselName('')
+      setGapDetected("");
+      setNormReference("");
+      setVesselName("");
 
-      onSuccess?.()
+      onSuccess?.();
     } catch (error) {
-      console.error('Error generating training module:', error)
+      console.error("Error generating training module:", error);
     }
-  }
+  };
 
   return (
     <Card>
@@ -118,10 +118,10 @@ export function GenerateTrainingModuleForm({
             className="w-full"
           >
             {isGenerating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isGenerating ? 'Gerando...' : 'Gerar Módulo de Treinamento'}
+            {isGenerating ? "Gerando..." : "Gerar Módulo de Treinamento"}
           </Button>
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
