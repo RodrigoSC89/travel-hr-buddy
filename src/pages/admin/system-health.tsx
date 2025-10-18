@@ -13,10 +13,13 @@ import {
   Key,
   FileText,
   Code,
-  MapPin
+  MapPin,
+  TestTube,
+  Clock
 } from "lucide-react";
 import { runSystemValidation, type SystemValidationReport } from "@/utils/system-validator";
 import { useToast } from "@/hooks/use-toast";
+import { runAutomatedTests, getTestSuccessRate, formatDuration, type AutomatedTestsResult } from "@/lib/systemHealth";
 
 interface SystemStatus {
   supabase: boolean;
@@ -30,6 +33,7 @@ interface SystemStatus {
 export default function SystemHealthPage() {
   const [status, setStatus] = useState<SystemStatus | null>(null);
   const [validationReport, setValidationReport] = useState<SystemValidationReport | null>(null);
+  const [testResults, setTestResults] = useState<AutomatedTestsResult | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -39,6 +43,10 @@ export default function SystemHealthPage() {
       // Run comprehensive system validation
       const report = await runSystemValidation();
       setValidationReport(report);
+
+      // Fetch automated test results
+      const tests = await runAutomatedTests();
+      setTestResults(tests);
 
       // Build simplified status object
       const supabaseStatus = report.results.find(r => r.category === "Database")?.status === "success";
@@ -60,10 +68,10 @@ export default function SystemHealthPage() {
       setStatus(systemStatus);
 
       // Show toast based on overall status
-      if (report.overallStatus === "healthy") {
+      if (report.overallStatus === "healthy" && tests.success) {
         toast({
           title: "Sistema Saudável ✅",
-          description: "Todos os componentes estão operacionais",
+          description: `Todos os componentes estão operacionais. ${tests.passed}/${tests.total} testes passando.`,
         });
       } else if (report.overallStatus === "degraded") {
         toast({
@@ -257,6 +265,105 @@ export default function SystemHealthPage() {
               </p>
             </CardContent>
           </Card>
+        </div>
+      )}
+
+      {/* Automated Tests Section */}
+      {testResults && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <TestTube className="h-5 w-5 text-primary" />
+            <h2 className="text-2xl font-bold tracking-tight">Testes Automatizados</h2>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {/* Test Status */}
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Status dos Testes
+                </CardTitle>
+                <TestTube className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2">
+                  {testResults.success ? (
+                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <XCircle className="h-5 w-5 text-red-500" />
+                  )}
+                  <span className="text-2xl font-bold">
+                    {testResults.success ? `${getTestSuccessRate(testResults)}%` : 'Falhou'}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {testResults.success ? 'Todos os testes passando' : `${testResults.failed} teste(s) falharam`}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Total Test Cases */}
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total de Casos
+                </CardTitle>
+                <Code className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-blue-500" />
+                  <span className="text-2xl font-bold">{testResults.total}</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {testResults.passed} passaram, {testResults.failed} falharam
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Last Execution */}
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Última Execução
+                </CardTitle>
+                <Clock className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  <span className="text-sm font-bold">
+                    {new Date(testResults.lastRun).toLocaleTimeString('pt-BR', { 
+                      hour: '2-digit', 
+                      minute: '2-digit' 
+                    })}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {new Date(testResults.lastRun).toLocaleDateString('pt-BR')}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Test Duration */}
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Duração
+                </CardTitle>
+                <Clock className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-blue-500" />
+                  <span className="text-2xl font-bold">{formatDuration(testResults.duration)}</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Tempo de execução total
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       )}
 
