@@ -96,6 +96,7 @@ const CopilotJobFormAdmin = React.lazy(() => import("./pages/admin/copilot-job-f
 const DashboardAuditorias = React.lazy(() => import("./pages/admin/dashboard-auditorias"));
 const MetricasRisco = React.lazy(() => import("./pages/admin/metricas-risco"));
 const AdminSGSO = React.lazy(() => import("./pages/admin/sgso"));
+const SGSOHistoryPage = React.lazy(() => import("./pages/admin/sgso/history/[vesselId]"));
 const AuditoriasIMCA = React.lazy(() => import("./pages/admin/auditorias-imca"));
 const AuditoriasLista = React.lazy(() => import("./pages/admin/auditorias-lista"));
 const DPIntelligenceAdmin = React.lazy(() => import("./pages/admin/DPIntelligencePage"));
@@ -244,6 +245,7 @@ function App() {
                       <Route path="/admin/dashboard-auditorias" element={<DashboardAuditorias />} />
                       <Route path="/admin/metricas-risco" element={<MetricasRisco />} />
                       <Route path="/admin/sgso" element={<AdminSGSO />} />
+                      <Route path="/admin/sgso/history/:vesselId" element={<SGSOHistoryPage />} />
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/auditorias-lista" element={<AuditoriasLista />} />
                       <Route path="/admin/dp-intelligence" element={<DPIntelligenceAdmin />} />
