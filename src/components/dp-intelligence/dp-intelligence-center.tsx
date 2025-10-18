@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { PlanStatusSelect } from "@/components/dp/PlanStatusSelect";
 
 interface Incident {
   id: string;
@@ -422,6 +423,26 @@ const DPIntelligenceCenter = () => {
       });
     } finally {
       setSendingEmail(null);
+    }
+  };
+
+  const handleStatusUpdate = (newStatus: string) => {
+    if (selectedIncident) {
+      // Update selected incident
+      setSelectedIncident({
+        ...selectedIncident,
+        plan_status: newStatus as "pendente" | "em andamento" | "concluído",
+        plan_updated_at: new Date().toISOString()
+      });
+
+      // Update incidents list
+      setIncidents(prevIncidents => 
+        prevIncidents.map(inc => 
+          inc.id === selectedIncident.id 
+            ? { ...inc, plan_status: newStatus as "pendente" | "em andamento" | "concluído", plan_updated_at: new Date().toISOString() }
+            : inc
+        )
+      );
     }
   };
 
@@ -844,6 +865,16 @@ const DPIntelligenceCenter = () => {
               <Button onClick={() => selectedIncident && handleAnalyzeIncident(selectedIncident)} className="w-full">
                 Executar análise IA
               </Button>
+            </div>
+          )}
+
+          {/* Plan Status Update - shown when incident has an action plan */}
+          {selectedIncident?.plan_of_action && (
+            <div className="mt-6 p-4 border-t">
+              <PlanStatusSelect 
+                incident={selectedIncident} 
+                onUpdate={handleStatusUpdate}
+              />
             </div>
           )}
         </DialogContent>
