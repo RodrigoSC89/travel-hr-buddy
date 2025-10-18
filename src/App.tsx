@@ -20,6 +20,7 @@ const DPIncidents = React.lazy(() => import("./pages/DPIncidents"));
 const DPIntelligence = React.lazy(() => import("./pages/DPIntelligence"));
 const SGSO = React.lazy(() => import("./pages/SGSO"));
 const SGSOReportPage = React.lazy(() => import("./pages/SGSOReportPage"));
+const SGSOAuditPage = React.lazy(() => import("./pages/SGSOAuditPage"));
 const Settings = React.lazy(() => import("./pages/Settings"));
 const Documents = React.lazy(() => import("./pages/Documents"));
 const IntelligentDocuments = React.lazy(() => import("./pages/IntelligentDocuments"));
