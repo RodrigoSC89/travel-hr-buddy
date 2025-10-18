@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { BookOpen, CheckCircle, AlertTriangle, Clock, Plus, FileText } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import type { CrewTrainingRecord, TrainingModuleExtended, CrewTrainingStats } from '@/types/training';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { BookOpen, CheckCircle, AlertTriangle, Clock, Plus, FileText } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { CrewTrainingRecord, TrainingModuleExtended, CrewTrainingStats } from "@/types/training";
 
 export default function TrainingPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'modules' | 'records'>('modules');
+  const [viewMode, setViewMode] = useState<"modules" | "records">("modules");
 
   // Fetch training statistics
   const { data: stats } = useQuery<CrewTrainingStats>({
-    queryKey: ['training-stats'],
+    queryKey: ["training-stats"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .rpc('get_crew_training_stats');
+        .rpc("get_crew_training_stats");
       
       if (error) throw error;
       return data as CrewTrainingStats;
@@ -25,16 +25,16 @@ export default function TrainingPage() {
 
   // Fetch training modules
   const { data: modules = [], isLoading: modulesLoading } = useQuery<TrainingModuleExtended[]>({
-    queryKey: ['training-modules', selectedCategory],
+    queryKey: ["training-modules", selectedCategory],
     queryFn: async () => {
       let query = supabase
-        .from('training_modules')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+        .from("training_modules")
+        .select("*")
+        .eq("status", "active")
+        .order("created_at", { ascending: false });
 
       if (selectedCategory) {
-        query = query.eq('category', selectedCategory);
+        query = query.eq("category", selectedCategory);
       }
 
       const { data, error } = await query;
@@ -45,16 +45,16 @@ export default function TrainingPage() {
 
   // Fetch training records
   const { data: records = [], isLoading: recordsLoading } = useQuery<CrewTrainingRecord[]>({
-    queryKey: ['training-records', selectedCategory],
+    queryKey: ["training-records", selectedCategory],
     queryFn: async () => {
       let query = supabase
-        .from('crew_training_records')
-        .select('*')
-        .order('date_completed', { ascending: false })
+        .from("crew_training_records")
+        .select("*")
+        .order("date_completed", { ascending: false })
         .limit(100);
 
       if (selectedCategory) {
-        query = query.eq('category', selectedCategory);
+        query = query.eq("category", selectedCategory);
       }
 
       const { data, error } = await query;
@@ -64,26 +64,26 @@ export default function TrainingPage() {
   });
 
   const categories = [
-    'DP Operations',
-    'Emergency Response',
-    'Fire Fighting',
-    'Blackout Recovery',
-    'MOB Response',
-    'SGSO Compliance',
-    'Technical',
+    "DP Operations",
+    "Emergency Response",
+    "Fire Fighting",
+    "Blackout Recovery",
+    "MOB Response",
+    "SGSO Compliance",
+    "Technical",
   ];
 
   const getCategoryBadge = (category?: string) => {
     const variants: Record<string, string> = {
-      'DP Operations': 'bg-blue-100 text-blue-800',
-      'Emergency Response': 'bg-red-100 text-red-800',
-      'Fire Fighting': 'bg-orange-100 text-orange-800',
-      'Blackout Recovery': 'bg-purple-100 text-purple-800',
-      'MOB Response': 'bg-yellow-100 text-yellow-800',
-      'SGSO Compliance': 'bg-green-100 text-green-800',
-      'Technical': 'bg-gray-100 text-gray-800',
+      "DP Operations": "bg-blue-100 text-blue-800",
+      "Emergency Response": "bg-red-100 text-red-800",
+      "Fire Fighting": "bg-orange-100 text-orange-800",
+      "Blackout Recovery": "bg-purple-100 text-purple-800",
+      "MOB Response": "bg-yellow-100 text-yellow-800",
+      "SGSO Compliance": "bg-green-100 text-green-800",
+      "Technical": "bg-gray-100 text-gray-800",
     };
-    return variants[category || ''] || variants.Technical;
+    return variants[category || ""] || variants.Technical;
   };
 
   const isExpired = (validUntil?: string) => {
@@ -174,16 +174,16 @@ export default function TrainingPage() {
             <CardTitle>Visualização</CardTitle>
             <div className="flex gap-2">
               <Button
-                variant={viewMode === 'modules' ? 'default' : 'outline'}
+                variant={viewMode === "modules" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode('modules')}
+                onClick={() => setViewMode("modules")}
               >
                 Módulos de Treinamento
               </Button>
               <Button
-                variant={viewMode === 'records' ? 'default' : 'outline'}
+                variant={viewMode === "records" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode('records')}
+                onClick={() => setViewMode("records")}
               >
                 Registros de Certificação
               </Button>
@@ -193,7 +193,7 @@ export default function TrainingPage() {
         <CardContent>
           <div className="flex flex-wrap gap-2">
             <Button
-              variant={selectedCategory === null ? 'default' : 'outline'}
+              variant={selectedCategory === null ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedCategory(null)}
             >
@@ -202,7 +202,7 @@ export default function TrainingPage() {
             {categories.map((category) => (
               <Button
                 key={category}
-                variant={selectedCategory === category ? 'default' : 'outline'}
+                variant={selectedCategory === category ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedCategory(category)}
               >
@@ -214,7 +214,7 @@ export default function TrainingPage() {
       </Card>
 
       {/* Training Modules View */}
-      {viewMode === 'modules' && (
+      {viewMode === "modules" && (
         <Card>
           <CardHeader>
             <CardTitle>Módulos de Treinamento</CardTitle>
@@ -272,7 +272,7 @@ export default function TrainingPage() {
       )}
 
       {/* Training Records View */}
-      {viewMode === 'records' && (
+      {viewMode === "records" && (
         <Card>
           <CardHeader>
             <CardTitle>Registros de Certificação</CardTitle>
@@ -319,11 +319,11 @@ export default function TrainingPage() {
                           </div>
                           <div className="text-sm space-y-1">
                             <p>
-                              Concluído em: {new Date(record.date_completed).toLocaleDateString('pt-BR')}
+                              Concluído em: {new Date(record.date_completed).toLocaleDateString("pt-BR")}
                             </p>
                             {record.valid_until && (
                               <p>
-                                Válido até: {new Date(record.valid_until).toLocaleDateString('pt-BR')}
+                                Válido até: {new Date(record.valid_until).toLocaleDateString("pt-BR")}
                               </p>
                             )}
                             {record.result && <p>Resultado: {record.result}</p>}

@@ -4,14 +4,14 @@
  */
 
 export type SimulationType = 
-  | 'DP' 
-  | 'Blackout' 
-  | 'Abandono' 
-  | 'Incêndio' 
-  | 'Man Overboard' 
-  | 'Spill';
+  | "DP" 
+  | "Blackout" 
+  | "Abandono" 
+  | "Incêndio" 
+  | "Man Overboard" 
+  | "Spill";
 
-export type SimulationStatus = 'scheduled' | 'completed' | 'overdue' | 'cancelled';
+export type SimulationStatus = "scheduled" | "completed" | "overdue" | "cancelled";
 
 export interface SimulationExercise {
   id: string;

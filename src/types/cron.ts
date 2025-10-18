@@ -3,8 +3,8 @@
  * Types for monitoring automated system tasks
  */
 
-export type CronJobStatus = 'active' | 'inactive' | 'error';
-export type CronJobExecutionStatus = 'success' | 'failed' | 'running' | 'cancelled';
+export type CronJobStatus = "active" | "inactive" | "error";
+export type CronJobExecutionStatus = "success" | "failed" | "running" | "cancelled";
 
 export interface CronJob {
   id: string;
@@ -31,7 +31,7 @@ export interface CronJobExecution {
   duration_ms?: number;
   error_message?: string;
   logs?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   created_at: string;
 }
 

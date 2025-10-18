@@ -18,7 +18,7 @@ export interface TrainingModule {
   quiz: QuizQuestion[]
   vessel_id?: string
   audit_id?: string
-  status: 'active' | 'archived' | 'draft'
+  status: "active" | "archived" | "draft"
   created_by?: string
   created_at: string
   updated_at: string
@@ -67,7 +67,7 @@ export interface AuditLog {
   navio: string
   norma: string
   item_auditado: string
-  resultado: 'Conforme' | 'Não Conforme' | 'Parcialmente Conforme' | 'Não Aplicável'
+  resultado: "Conforme" | "Não Conforme" | "Parcialmente Conforme" | "Não Aplicável"
   comentarios: string
   data: string
   score?: number
@@ -112,7 +112,7 @@ export interface ExportAuditBundleRequest {
   norms: string[]
   startDate?: string
   endDate?: string
-  format?: 'json' | 'pdf'
+  format?: "json" | "pdf"
 }
 
 export interface ExportAuditBundleResponse {
@@ -128,13 +128,13 @@ export interface ExportAuditBundleResponse {
  */
 
 export type TrainingCategory = 
-  | 'DP Operations'
-  | 'Emergency Response'
-  | 'Fire Fighting'
-  | 'Blackout Recovery'
-  | 'MOB Response'
-  | 'SGSO Compliance'
-  | 'Technical';
+  | "DP Operations"
+  | "Emergency Response"
+  | "Fire Fighting"
+  | "Blackout Recovery"
+  | "MOB Response"
+  | "SGSO Compliance"
+  | "Technical";
 
 export interface CrewTrainingRecord {
   id: string

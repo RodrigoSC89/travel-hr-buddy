@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Calendar, AlertTriangle, CheckCircle, Clock, Plus, Upload } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import type { SimulationExercise, SimulationStats } from '@/types/simulation';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Calendar, AlertTriangle, CheckCircle, Clock, Plus, Upload } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { SimulationExercise, SimulationStats } from "@/types/simulation";
 
 export default function SimulationsPage() {
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
   // Fetch simulation statistics
   const { data: stats } = useQuery<SimulationStats>({
-    queryKey: ['simulation-stats'],
+    queryKey: ["simulation-stats"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .rpc('get_simulation_stats');
+        .rpc("get_simulation_stats");
       
       if (error) throw error;
       return data as SimulationStats;
@@ -24,15 +24,15 @@ export default function SimulationsPage() {
 
   // Fetch simulation exercises
   const { data: simulations = [], isLoading } = useQuery<SimulationExercise[]>({
-    queryKey: ['simulations', selectedType],
+    queryKey: ["simulations", selectedType],
     queryFn: async () => {
       let query = supabase
-        .from('simulation_exercises')
-        .select('*')
-        .order('next_due', { ascending: true });
+        .from("simulation_exercises")
+        .select("*")
+        .order("next_due", { ascending: true });
 
       if (selectedType) {
-        query = query.eq('type', selectedType);
+        query = query.eq("type", selectedType);
       }
 
       const { data, error } = await query;
@@ -41,14 +41,14 @@ export default function SimulationsPage() {
     },
   });
 
-  const simulationTypes = ['DP', 'Blackout', 'Abandono', 'Incêndio', 'Man Overboard', 'Spill'];
+  const simulationTypes = ["DP", "Blackout", "Abandono", "Incêndio", "Man Overboard", "Spill"];
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, string> = {
-      completed: 'bg-green-100 text-green-800',
-      overdue: 'bg-red-100 text-red-800',
-      scheduled: 'bg-blue-100 text-blue-800',
-      cancelled: 'bg-gray-100 text-gray-800',
+      completed: "bg-green-100 text-green-800",
+      overdue: "bg-red-100 text-red-800",
+      scheduled: "bg-blue-100 text-blue-800",
+      cancelled: "bg-gray-100 text-gray-800",
     };
     return variants[status] || variants.scheduled;
   };
@@ -125,7 +125,7 @@ export default function SimulationsPage() {
         <CardContent>
           <div className="flex flex-wrap gap-2">
             <Button
-              variant={selectedType === null ? 'default' : 'outline'}
+              variant={selectedType === null ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedType(null)}
             >
@@ -134,7 +134,7 @@ export default function SimulationsPage() {
             {simulationTypes.map((type) => (
               <Button
                 key={type}
-                variant={selectedType === type ? 'default' : 'outline'}
+                variant={selectedType === type ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedType(type)}
               >
@@ -181,12 +181,12 @@ export default function SimulationsPage() {
                       <div className="flex gap-4 text-sm">
                         {simulation.last_simulation && (
                           <span>
-                            Última: {new Date(simulation.last_simulation).toLocaleDateString('pt-BR')}
+                            Última: {new Date(simulation.last_simulation).toLocaleDateString("pt-BR")}
                           </span>
                         )}
                         {simulation.next_due && (
                           <span>
-                            Próxima: {new Date(simulation.next_due).toLocaleDateString('pt-BR')}
+                            Próxima: {new Date(simulation.next_due).toLocaleDateString("pt-BR")}
                           </span>
                         )}
                         <span>Frequência: {simulation.frequency_days} dias</span>

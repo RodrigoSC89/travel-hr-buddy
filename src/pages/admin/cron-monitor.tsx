@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Clock, CheckCircle, XCircle, Activity, RefreshCw, Eye } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import type { CronJob, CronJobStats, CronJobExecution } from '@/types/cron';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Clock, CheckCircle, Activity, RefreshCw, Eye } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { CronJob, CronJobStats, CronJobExecution } from "@/types/cron";
 
 export default function CronMonitorPage() {
   const [selectedJob, setSelectedJob] = useState<string | null>(null);
 
   // Fetch cron statistics
   const { data: stats } = useQuery<CronJobStats>({
-    queryKey: ['cron-stats'],
+    queryKey: ["cron-stats"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .rpc('get_cron_stats');
+        .rpc("get_cron_stats");
       
       if (error) throw error;
       return data as CronJobStats;
@@ -24,12 +24,12 @@ export default function CronMonitorPage() {
 
   // Fetch cron jobs
   const { data: jobs = [], isLoading, refetch } = useQuery<CronJob[]>({
-    queryKey: ['cron-jobs'],
+    queryKey: ["cron-jobs"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('cron_jobs')
-        .select('*')
-        .order('name', { ascending: true });
+        .from("cron_jobs")
+        .select("*")
+        .order("name", { ascending: true });
 
       if (error) throw error;
       return data as CronJob[];
@@ -38,15 +38,15 @@ export default function CronMonitorPage() {
 
   // Fetch executions for selected job
   const { data: executions = [] } = useQuery<CronJobExecution[]>({
-    queryKey: ['cron-executions', selectedJob],
+    queryKey: ["cron-executions", selectedJob],
     queryFn: async () => {
       if (!selectedJob) return [];
 
       const { data, error } = await supabase
-        .from('cron_job_executions')
-        .select('*')
-        .eq('job_id', selectedJob)
-        .order('started_at', { ascending: false })
+        .from("cron_job_executions")
+        .select("*")
+        .eq("job_id", selectedJob)
+        .order("started_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
@@ -57,25 +57,25 @@ export default function CronMonitorPage() {
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, { className: string; label: string }> = {
-      active: { className: 'bg-green-100 text-green-800', label: 'Ativo' },
-      inactive: { className: 'bg-gray-100 text-gray-800', label: 'Inativo' },
-      error: { className: 'bg-red-100 text-red-800', label: 'Erro' },
+      active: { className: "bg-green-100 text-green-800", label: "Ativo" },
+      inactive: { className: "bg-gray-100 text-gray-800", label: "Inativo" },
+      error: { className: "bg-red-100 text-red-800", label: "Erro" },
     };
     return variants[status] || variants.inactive;
   };
 
   const getExecutionStatusBadge = (status: string) => {
     const variants: Record<string, { className: string; label: string }> = {
-      success: { className: 'bg-green-100 text-green-800', label: 'Sucesso' },
-      failed: { className: 'bg-red-100 text-red-800', label: 'Falhou' },
-      running: { className: 'bg-blue-100 text-blue-800', label: 'Executando' },
-      cancelled: { className: 'bg-gray-100 text-gray-800', label: 'Cancelado' },
+      success: { className: "bg-green-100 text-green-800", label: "Sucesso" },
+      failed: { className: "bg-red-100 text-red-800", label: "Falhou" },
+      running: { className: "bg-blue-100 text-blue-800", label: "Executando" },
+      cancelled: { className: "bg-gray-100 text-gray-800", label: "Cancelado" },
     };
     return variants[status] || variants.cancelled;
   };
 
   const formatDuration = (ms?: number) => {
-    if (!ms) return 'N/A';
+    if (!ms) return "N/A";
     const seconds = Math.floor(ms / 1000);
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -173,7 +173,7 @@ export default function CronMonitorPage() {
                   {jobs.map((job) => {
                     const successRate = job.execution_count > 0
                       ? ((job.success_count / job.execution_count) * 100).toFixed(1)
-                      : '0.0';
+                      : "0.0";
                     const statusBadge = getStatusBadge(job.status);
 
                     return (
@@ -195,7 +195,7 @@ export default function CronMonitorPage() {
                         <td className="p-3">
                           {job.last_run ? (
                             <div className="text-sm">
-                              {new Date(job.last_run).toLocaleString('pt-BR')}
+                              {new Date(job.last_run).toLocaleString("pt-BR")}
                             </div>
                           ) : (
                             <span className="text-muted-foreground">Nunca</span>
@@ -274,7 +274,7 @@ export default function CronMonitorPage() {
                               {statusBadge.label}
                             </Badge>
                             <span className="text-sm text-muted-foreground">
-                              {new Date(execution.started_at).toLocaleString('pt-BR')}
+                              {new Date(execution.started_at).toLocaleString("pt-BR")}
                             </span>
                           </div>
                           {execution.duration_ms && (

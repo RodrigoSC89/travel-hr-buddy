@@ -208,40 +208,40 @@ export function formatAuditAsMarkdown(report: IMCAAuditReport): string {
   const sections: string[] = [];
 
   // Header
-  sections.push(`# IMCA DP Technical Audit Report`);
-  sections.push(`\n## Vessel Information`);
+  sections.push("# IMCA DP Technical Audit Report");
+  sections.push("\n## Vessel Information");
   sections.push(`- **Vessel**: ${report.vesselName}`);
   sections.push(`- **DP Class**: ${report.dpClass}`);
   sections.push(`- **Location**: ${report.location}`);
-  sections.push(`- **Audit Date**: ${report.auditDate.toLocaleDateString('pt-BR')}`);
+  sections.push(`- **Audit Date**: ${report.auditDate.toLocaleDateString("pt-BR")}`);
   sections.push(`- **Overall Score**: ${report.overallScore}/100`);
-  sections.push(`\n## Audit Objective`);
+  sections.push("\n## Audit Objective");
   sections.push(report.auditObjective);
 
   // Standards
-  sections.push(`\n## Standards Applied`);
+  sections.push("\n## Standards Applied");
   report.standards.forEach((std) => {
     sections.push(`- **${std.code}**: ${std.name}`);
   });
 
   // Module Evaluations
-  sections.push(`\n## Module Evaluations`);
+  sections.push("\n## Module Evaluations");
   report.moduleEvaluations.forEach((mod) => {
     sections.push(`\n### ${mod.moduleName} (${mod.score}/100)`);
     sections.push(`**Status**: ${mod.complianceStatus}`);
     if (mod.findings.length > 0) {
-      sections.push(`\n**Findings**:`);
+      sections.push("\n**Findings**:");
       mod.findings.forEach((f) => sections.push(`- ${f}`));
     }
     if (mod.recommendations.length > 0) {
-      sections.push(`\n**Recommendations**:`);
+      sections.push("\n**Recommendations**:");
       mod.recommendations.forEach((r) => sections.push(`- ${r}`));
     }
   });
 
   // Non-Conformities
   if (report.nonConformities.length > 0) {
-    sections.push(`\n## Non-Conformities`);
+    sections.push("\n## Non-Conformities");
     report.nonConformities.forEach((nc) => {
       const icon = nc.riskLevel === "Alto" ? "🔴" : nc.riskLevel === "Médio" ? "🟡" : "⚪";
       sections.push(`\n### ${icon} ${nc.module}`);
@@ -254,22 +254,22 @@ export function formatAuditAsMarkdown(report: IMCAAuditReport): string {
 
   // Action Plan
   if (report.actionPlan.length > 0) {
-    sections.push(`\n## Action Plan`);
+    sections.push("\n## Action Plan");
     report.actionPlan.forEach((action, index) => {
       sections.push(`\n### ${index + 1}. ${action.description}`);
       sections.push(`- **Priority**: ${action.priority}`);
       sections.push(`- **Responsible**: ${action.responsibleParty}`);
-      sections.push(`- **Deadline**: ${action.deadline.toLocaleDateString('pt-BR')}`);
+      sections.push(`- **Deadline**: ${action.deadline.toLocaleDateString("pt-BR")}`);
     });
   }
 
   // Summary and Conclusion
-  sections.push(`\n## Summary`);
+  sections.push("\n## Summary");
   sections.push(report.summary);
-  sections.push(`\n## Conclusion`);
+  sections.push("\n## Conclusion");
   sections.push(report.conclusion);
 
-  return sections.join('\n');
+  return sections.join("\n");
 }
 
 /**
