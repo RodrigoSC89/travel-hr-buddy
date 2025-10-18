@@ -4,7 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MetricasPanel } from "@/components/sgso/MetricasPanel";
 import { SGSOTrendChart } from "@/components/sgso/SGSOTrendChart";
-import { Shield, BarChart3, FileCheck, Mail } from "lucide-react";
+import { SGSOEffectivenessChart } from "@/components/sgso/SGSOEffectivenessChart";
+import { Shield, BarChart3, FileCheck, Mail, TrendingUp } from "lucide-react";
 
 const AdminSGSO = () => {
   return (
@@ -28,10 +29,14 @@ const AdminSGSO = () => {
 
       {/* Tabs */}
       <Tabs defaultValue="metrics" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="metrics">
             <BarChart3 className="mr-2 h-4 w-4" />
             Métricas Operacionais
+          </TabsTrigger>
+          <TabsTrigger value="effectiveness">
+            <TrendingUp className="mr-2 h-4 w-4" />
+            Efetividade
           </TabsTrigger>
           <TabsTrigger value="compliance">
             <FileCheck className="mr-2 h-4 w-4" />
@@ -46,6 +51,10 @@ const AdminSGSO = () => {
         <TabsContent value="metrics" className="space-y-4">
           <MetricasPanel />
           <SGSOTrendChart />
+        </TabsContent>
+
+        <TabsContent value="effectiveness" className="space-y-4">
+          <SGSOEffectivenessChart />
         </TabsContent>
 
         <TabsContent value="compliance" className="space-y-4">
