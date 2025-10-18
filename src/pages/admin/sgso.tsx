@@ -4,8 +4,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MetricasPanel } from "@/components/sgso/MetricasPanel";
 import { SGSOTrendChart } from "@/components/sgso/SGSOTrendChart";
+import { SGSOEffectivenessChart } from "@/components/sgso/SGSOEffectivenessChart";
 import { IncidentsSGSOPanel } from "@/components/dp/IncidentsSGSOPanel";
-import { Shield, BarChart3, FileCheck, Mail, AlertTriangle } from "lucide-react";
+import { Shield, BarChart3, FileCheck, Mail, AlertTriangle, Target } from "lucide-react";
 
 const AdminSGSO = () => {
   return (
@@ -29,7 +30,7 @@ const AdminSGSO = () => {
 
       {/* Tabs */}
       <Tabs defaultValue="incidents" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="incidents">
             <AlertTriangle className="mr-2 h-4 w-4" />
             Incidentes DP
@@ -37,6 +38,10 @@ const AdminSGSO = () => {
           <TabsTrigger value="metrics">
             <BarChart3 className="mr-2 h-4 w-4" />
             Métricas
+          </TabsTrigger>
+          <TabsTrigger value="effectiveness">
+            <Target className="mr-2 h-4 w-4" />
+            Efetividade
           </TabsTrigger>
           <TabsTrigger value="compliance">
             <FileCheck className="mr-2 h-4 w-4" />
@@ -55,6 +60,10 @@ const AdminSGSO = () => {
         <TabsContent value="metrics" className="space-y-4">
           <MetricasPanel />
           <SGSOTrendChart />
+        </TabsContent>
+
+        <TabsContent value="effectiveness" className="space-y-4">
+          <SGSOEffectivenessChart />
         </TabsContent>
 
         <TabsContent value="compliance" className="space-y-4">
