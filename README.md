@@ -134,7 +134,9 @@ src/
 
 ## 🔐 Environment Variables
 
-Set all required keys in `.env` using `.env.example` as a reference. Example keys:
+📋 **Production Template**: See [`.env.production`](./.env.production) for a complete template ready for production deployment.
+
+Set all required keys in `.env` using `.env.example` or `.env.production` as a reference. Example keys:
 
 ### Core Services
 
@@ -241,14 +243,17 @@ The `vercel.json` configuration includes:
 
 #### Environment Variables Setup
 
+📋 **Quick Start**: See [`.env.production`](./.env.production) for complete template with all variables.
+
 Configure in Vercel Dashboard → Settings → Environment Variables:
 
 **Required**:
 - `VITE_SUPABASE_URL` - Your Supabase project URL
-- `VITE_SUPABASE_ANON_KEY` - Your Supabase anonymous key
+- `VITE_SUPABASE_PUBLISHABLE_KEY` - Your Supabase anonymous key
+- `VITE_OPENAI_API_KEY` - OpenAI API key for AI features
 
-**Optional** (see `.env.example` for full list):
-- `VITE_OPENAI_API_KEY`, `VITE_MAPBOX_TOKEN`, etc.
+**Optional** (see `.env.production` or `.env.example` for full list):
+- `VITE_MAPBOX_TOKEN`, `RESEND_API_KEY`, `VITE_SENTRY_DSN`, etc.
 
 #### Framework Detection
 
@@ -257,7 +262,11 @@ Vercel auto-detects build commands from `package.json`:
 - Output: `dist` directory
 - Framework: Automatically detected as Vite
 
-For comprehensive deployment guide, see [VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md).
+#### 📚 Deployment Guides
+
+- **Quick Reference**: [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md) - Fast deployment checklist
+- **Environment Setup**: [ENV_PRODUCTION_SETUP_GUIDE.md](./ENV_PRODUCTION_SETUP_GUIDE.md) - Environment variables guide
+- **Complete Guide**: [VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md) - Comprehensive deployment documentation
 
 ### Manual Deployment
 
