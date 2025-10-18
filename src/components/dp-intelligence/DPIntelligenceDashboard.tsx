@@ -191,8 +191,8 @@ export default function DPIntelligenceDashboard() {
                   <strong>
                     {vesselData.length > 0
                       ? vesselData.reduce((prev, current) =>
-                          prev.value > current.value ? prev : current
-                        ).name
+                        prev.value > current.value ? prev : current
+                      ).name
                       : "N/A"}
                   </strong>
                 </li>
@@ -201,8 +201,8 @@ export default function DPIntelligenceDashboard() {
                   <strong>
                     {severityData.length > 0
                       ? severityData.reduce((prev, current) =>
-                          prev.value > current.value ? prev : current
-                        ).name
+                        prev.value > current.value ? prev : current
+                      ).name
                       : "N/A"}
                   </strong>
                 </li>
