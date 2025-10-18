@@ -107,6 +107,7 @@ const Simulations = React.lazy(() => import("./pages/admin/simulations"));
 const CronMonitor = React.lazy(() => import("./pages/admin/cron-monitor"));
 const TrainingManagement = React.lazy(() => import("./pages/admin/training"));
 const BackupAudit = React.lazy(() => import("./pages/BackupAudit"));
+const Forecast = React.lazy(() => import("./pages/admin/forecast"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -223,7 +224,9 @@ function App() {
                       <Route path="/admin/checklists" element={<AdminChecklists />} />
                       <Route path="/admin/checklists/dashboard" element={<AdminChecklistsDashboard />} />
                       <Route path="/admin/system-health" element={<SystemHealth />} />
+                      <Route path="/admin/forecast" element={<Forecast />} />
                       <Route path="/admin/assistant" element={<Assistant />} />
+                      <Route path="/admin/ai-assistant" element={<Assistant />} />
                       <Route path="/admin/assistant/logs" element={<AssistantLogs />} />
                       <Route path="/admin/assistant/history" element={<AssistantLogs />} />
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
@@ -258,6 +261,7 @@ function App() {
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
                       <Route path="/admin/audit" element={<BackupAudit />} />
+                      <Route path="/admin/mmi" element={<MMIJobsPanel />} />
                       <Route path="/backup-audit" element={<BackupAudit />} />
                       <Route path="/imca-audit" element={<IMCAAudit />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
