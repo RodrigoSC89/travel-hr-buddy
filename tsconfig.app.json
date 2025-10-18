@@ -23,7 +23,12 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/types/*": ["./src/types/*"]
     }
   },
   "include": ["src", "supabase/functions"]

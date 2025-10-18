@@ -97,6 +97,7 @@ const MetricasRisco = React.lazy(() => import("./pages/admin/metricas-risco"));
 const AdminSGSO = React.lazy(() => import("./pages/admin/sgso"));
 const AuditoriasIMCA = React.lazy(() => import("./pages/admin/auditorias-imca"));
 const DPIntelligenceAdmin = React.lazy(() => import("./pages/admin/DPIntelligencePage"));
+const SystemHealth = React.lazy(() => import("./pages/admin/system-health"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -239,6 +240,7 @@ function App() {
                       <Route path="/admin/sgso" element={<AdminSGSO />} />
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/dp-intelligence" element={<DPIntelligenceAdmin />} />
+                      <Route path="/admin/system-health" element={<SystemHealth />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
