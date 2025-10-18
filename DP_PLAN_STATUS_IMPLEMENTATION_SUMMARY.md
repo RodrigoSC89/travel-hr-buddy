@@ -52,13 +52,15 @@ React component for status management:
 - **Callback Support:** Optional `onUpdate` prop for parent components
 
 ### 4. Integration
-**File:** `src/components/dp/IncidentCards.tsx` (modified)
+**File:** `src/components/dp-intelligence/dp-intelligence-center.tsx` (modified)
 
-Integrated PlanStatusSelect into existing DP Incidents display:
+Integrated PlanStatusSelect into DP Intelligence Center modal:
 - Conditionally renders status selector only when `plan_of_action` exists
-- Updates local state on successful status changes
-- Maintains separation between plan management and incident viewing
-- Added visual separator (border) to distinguish plan section
+- Positioned below AI analysis tabs in modal
+- Updates both selected incident and incidents list reactively
+- Callback handler `handleStatusUpdate` manages state synchronization
+- No page reload required for status updates
+- Added visual separator (border) to distinguish plan status section
 
 ### 5. Automated Email System
 **File:** `supabase/functions/resend_pending_plans/index.ts`
@@ -189,7 +191,7 @@ New Files:
 
 Modified Files:
 ~ supabase/config.toml (+9 lines)
-~ src/components/dp/IncidentCards.tsx (+30 lines, -1 line)
+~ src/components/dp-intelligence/dp-intelligence-center.tsx (+31 lines)
 ```
 
 ## 🚀 Deployment Checklist
@@ -238,13 +240,15 @@ npm run build
 
 ### For End Users (Responsible Party/Auditor)
 
-1. Navigate to `/dp-incidents` in Nautilus One
-2. View incident cards - those with action plans show a status dropdown
-3. Select new status from dropdown:
+1. Navigate to `/dp-intelligence` in Nautilus One
+2. Click "Analisar IA" on any incident card to open the modal
+3. If the incident has an action plan, a status dropdown appears below the analysis tabs
+4. Select new status from dropdown:
    - 🕒 Pendente → 🔄 Em andamento → ✅ Concluído
-4. Status saves automatically
-5. Timestamp updates and displays below dropdown
-6. If status remains "Pendente" for 7+ days, automatic email reminder sent
+5. Status saves automatically with real-time feedback
+6. Timestamp updates and displays below dropdown
+7. Both the modal and incident list update without page reload
+8. If status remains "Pendente" for 7+ days, automatic email reminder sent
 
 ### For Administrators
 
@@ -267,12 +271,13 @@ WHERE plan_status = 'pendente'
 
 ## 🎨 UI/UX Highlights
 
-1. **Seamless Integration:** Status selector appears naturally in incident cards
+1. **Seamless Integration:** Status selector appears naturally in DP Intelligence Center modal
 2. **Visual Feedback:** Emojis provide quick status recognition
 3. **Non-intrusive:** Only shows when relevant (plan exists)
-4. **Responsive Design:** Works on all screen sizes
-5. **Accessible:** Proper labels and ARIA attributes
-6. **Error Handling:** Clear messages, automatic recovery
+4. **Real-time Updates:** Both modal and incident list update without page reload
+5. **Responsive Design:** Works on all screen sizes
+6. **Accessible:** Proper labels and ARIA attributes
+7. **Error Handling:** Clear messages, automatic recovery with status rollback
 
 ## 🔒 Security Considerations
 
