@@ -193,7 +193,7 @@ describe("Auditorias List API Endpoint", () => {
     });
 
     it("should handle empty auditorias array", () => {
-      const auditorias: any[] = [];
+      const auditorias: Array<{ navio: string }> = [];
       const uniqueNavios = [...new Set(auditorias.map(a => a.navio))];
       expect(uniqueNavios).toEqual([]);
     });
