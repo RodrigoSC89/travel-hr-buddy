@@ -29,108 +29,138 @@ describe("Send Forecast Report System", () => {
     });
 
     it("should query mmi_jobs table correctly", () => {
-      // Mock query to get completed jobs from last 6 months
+      // Mock query to get active jobs for forecasting
       const mockQuery = {
         table: "mmi_jobs",
-        select: ["component_id", "completed_at"],
+        select: ["id", "title", "component_name", "vessel_name"],
         filter: {
-          status: "completed",
+          status: ["pending", "in_progress"],
         },
-        gte: {
-          field: "completed_at",
-          value: expect.any(String),
-        },
+        limit: 50,
       };
 
       expect(mockQuery.table).toBe("mmi_jobs");
-      expect(mockQuery.select).toContain("component_id");
-      expect(mockQuery.select).toContain("completed_at");
-      expect(mockQuery.filter.status).toBe("completed");
+      expect(mockQuery.select).toContain("id");
+      expect(mockQuery.select).toContain("title");
+      expect(mockQuery.select).toContain("component_name");
+      expect(mockQuery.select).toContain("vessel_name");
+      expect(mockQuery.filter.status).toContain("pending");
+      expect(mockQuery.filter.status).toContain("in_progress");
     });
 
-    it("should calculate 6 months ago correctly", () => {
-      const now = Date.now();
-      const sixMonthsAgo = new Date(now - 1000 * 60 * 60 * 24 * 180);
-      
-      const daysDiff = (now - sixMonthsAgo.getTime()) / (1000 * 60 * 60 * 24);
-      
-      expect(daysDiff).toBe(180);
-      expect(daysDiff).toBeGreaterThanOrEqual(180);
-    });
-
-    it("should format month string correctly", () => {
-      const testDate = "2025-10-15T10:30:00Z";
-      const month = testDate.slice(0, 7); // YYYY-MM format
-      
-      expect(month).toBe("2025-10");
-      expect(month).toMatch(/^\d{4}-\d{2}$/);
-    });
-
-    it("should group jobs by component correctly", () => {
-      const mockJobs = [
-        { component_id: "comp-1", completed_at: "2025-10-15T10:00:00Z" },
-        { component_id: "comp-1", completed_at: "2025-09-20T10:00:00Z" },
-        { component_id: "comp-2", completed_at: "2025-10-10T10:00:00Z" },
-      ];
-
-      const trendByComponent: Record<string, string[]> = {};
-      mockJobs.forEach((job) => {
-        if (job.completed_at) {
-          const month = job.completed_at.slice(0, 7);
-          const componentId = job.component_id || "unknown";
-          if (!trendByComponent[componentId]) {
-            trendByComponent[componentId] = [];
-          }
-          trendByComponent[componentId].push(month);
-        }
-      });
-
-      expect(trendByComponent["comp-1"]).toHaveLength(2);
-      expect(trendByComponent["comp-1"]).toContain("2025-10");
-      expect(trendByComponent["comp-1"]).toContain("2025-09");
-      expect(trendByComponent["comp-2"]).toHaveLength(1);
-      expect(trendByComponent["comp-2"]).toContain("2025-10");
-    });
-
-    it("should format AI prompt correctly", () => {
-      const mockTrend = {
-        "comp-1": ["2025-09", "2025-10"],
-        "comp-2": ["2025-10"]
+    it("should query mmi_logs for execution history", () => {
+      // Mock query to get job execution history
+      const mockQuery = {
+        table: "mmi_logs",
+        select: ["executado_em", "status"],
+        filter: {
+          job_id: expect.any(String),
+        },
+        order: { field: "executado_em", ascending: false },
+        limit: 5,
       };
 
-      const prompt = `Abaixo estão os dados de jobs por componente (por mês):\n
-${JSON.stringify(mockTrend, null, 2)}\n
-Gere uma previsão dos próximos dois meses por componente e indique os mais críticos.`;
-
-      expect(prompt).toContain("dados de jobs por componente");
-      expect(prompt).toContain("comp-1");
-      expect(prompt).toContain("comp-2");
-      expect(prompt).toContain("próximos dois meses");
-      expect(prompt).toContain("mais críticos");
+      expect(mockQuery.table).toBe("mmi_logs");
+      expect(mockQuery.select).toContain("executado_em");
+      expect(mockQuery.select).toContain("status");
+      expect(mockQuery.limit).toBe(5);
     });
 
-    it("should format email HTML correctly", () => {
-      const mockForecast = "Previsão: Componente A crítico, Componente B baixa prioridade.";
+    it("should format historical executions for AI context", () => {
+      const mockHistorico = [
+        { executado_em: "2025-08-01T10:00:00Z", status: "executado" },
+        { executado_em: "2025-05-01T10:00:00Z", status: "executado" },
+        { executado_em: "2025-02-01T10:00:00Z", status: "executado" },
+      ];
+
+      const context = `
+Job: Inspeção da bomba de lastro
+Últimas execuções:
+${mockHistorico.map((h) => `- ${h.executado_em} (${h.status})`).join('\n')}
+
+Recomende a próxima execução e avalie o risco técnico com base no histórico.
+`;
+
+      expect(context).toContain("Inspeção da bomba de lastro");
+      expect(context).toContain("2025-08-01T10:00:00Z");
+      expect(context).toContain("executado");
+      expect(context).toContain("Recomende a próxima execução");
+    });
+
+    it("should extract date from GPT-4 response", () => {
+      const mockResponse = "Próxima execução sugerida: 2025-11-01. Risco: alto.";
+      const dataRegex = /\d{4}-\d{2}-\d{2}/;
+      const dataSugerida = dataRegex.exec(mockResponse)?.[0];
+
+      expect(dataSugerida).toBe("2025-11-01");
+      expect(dataSugerida).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    });
+
+    it("should extract risk level from GPT-4 response", () => {
+      const mockResponse = "Próxima execução: 2025-11-01. Risco: alto devido a falhas recentes.";
+      const riscoRegex = /risco:\s*(.+)/i;
+      const risco = riscoRegex.exec(mockResponse)?.[1];
+
+      expect(risco).toContain("alto");
+    });
+
+    it("should normalize risk levels correctly", () => {
+      const testCases = [
+        { input: "risco: baixo", expected: "low" },
+        { input: "risco: alto", expected: "high" },
+        { input: "risco: crítico", expected: "high" },
+        { input: "risco: moderado", expected: "medium" },
+      ];
+
+      testCases.forEach(({ input, expected }) => {
+        const riscoRegex = /risco:\s*(.+)/i;
+        const risco = riscoRegex.exec(input)?.[1]?.toLowerCase() || "moderado";
+        
+        let normalizedRisk = "medium";
+        if (risco.includes("baixo") || risco.includes("low")) {
+          normalizedRisk = "low";
+        } else if (risco.includes("alto") || risco.includes("high") || risco.includes("crítico") || risco.includes("critical")) {
+          normalizedRisk = "high";
+        }
+
+        expect(normalizedRisk).toBe(expected);
+      });
+    });
+
+    it("should format email HTML with forecast results", () => {
+      const mockForecast = {
+        job_title: "Inspeção da bomba de lastro",
+        next_date: "2025-11-01",
+        risk_level: "high",
+        reasoning: "Sistema reportou falha no último ciclo, manutenção urgente necessária."
+      };
+
       const emailHtml = `
-      <div style="font-family: Arial; padding: 20px;">
-        <h2>🔮 Previsão IA</h2>
-        <pre style="background:#f4f4f4; padding: 10px; border-radius: 6px; white-space: pre-wrap;">${mockForecast}</pre>
+      <div style="margin-bottom: 25px; padding: 15px; border-left: 4px solid #ef4444; background: #f9fafb;">
+        <h3>${mockForecast.job_title}</h3>
+        <p><strong>📆 Próxima execução sugerida:</strong> ${mockForecast.next_date}</p>
+        <p><strong>⚠️ Nível de risco:</strong> <span style="color: #ef4444; font-weight: bold;">ALTO</span></p>
+        <p><strong>🧠 Justificativa:</strong></p>
+        <p>${mockForecast.reasoning}</p>
       </div>
     `;
 
-      expect(emailHtml).toContain("🔮 Previsão IA");
-      expect(emailHtml).toContain(mockForecast);
-      expect(emailHtml).toContain("font-family: Arial");
-      expect(emailHtml).toContain("white-space: pre-wrap");
+      expect(emailHtml).toContain(mockForecast.job_title);
+      expect(emailHtml).toContain(mockForecast.next_date);
+      expect(emailHtml).toContain("ALTO");
+      expect(emailHtml).toContain(mockForecast.reasoning);
+      expect(emailHtml).toContain("📆");
+      expect(emailHtml).toContain("⚠️");
+      expect(emailHtml).toContain("🧠");
     });
 
-    it("should have correct email subject", () => {
-      const subject = "🔧 Previsão Semanal de Manutenção por Componente";
+    it("should have correct email subject for GPT-4 report", () => {
+      const subject = "🔧 Previsão Semanal de Manutenção - Análise GPT-4";
       
       expect(subject).toContain("🔧");
       expect(subject).toContain("Previsão Semanal");
       expect(subject).toContain("Manutenção");
-      expect(subject).toContain("Componente");
+      expect(subject).toContain("GPT-4");
     });
 
     it("should parse email recipients correctly", () => {
@@ -152,36 +182,34 @@ Gere uma previsão dos próximos dois meses por componente e indique os mais cr�
   });
 
   describe("OpenAI Integration", () => {
-    it("should validate OpenAI request structure", () => {
+    it("should validate OpenAI request structure for job forecast", () => {
       const mockRequest = {
         model: "gpt-4",
         messages: [
           {
             role: "system",
-            content: "Você é uma IA técnica de manutenção embarcada, especializada em previsão por criticidade."
+            content: "Você é um engenheiro especialista em manutenção offshore."
           },
           { 
             role: "user", 
             content: expect.any(String) 
           }
         ],
-        temperature: 0.4
+        temperature: 0.3
       };
 
       expect(mockRequest.model).toBe("gpt-4");
       expect(mockRequest.messages).toHaveLength(2);
       expect(mockRequest.messages[0].role).toBe("system");
       expect(mockRequest.messages[1].role).toBe("user");
-      expect(mockRequest.temperature).toBe(0.4);
+      expect(mockRequest.temperature).toBe(0.3);
     });
 
-    it("should validate system prompt content", () => {
-      const systemPrompt = "Você é uma IA técnica de manutenção embarcada, especializada em previsão por criticidade.";
+    it("should validate system prompt content for offshore engineer", () => {
+      const systemPrompt = "Você é um engenheiro especialista em manutenção offshore.";
       
-      expect(systemPrompt).toContain("IA técnica");
-      expect(systemPrompt).toContain("manutenção");
-      expect(systemPrompt).toContain("previsão");
-      expect(systemPrompt).toContain("criticidade");
+      expect(systemPrompt).toContain("engenheiro especialista");
+      expect(systemPrompt).toContain("manutenção offshore");
     });
   });
 
@@ -249,25 +277,26 @@ Gere uma previsão dos próximos dois meses por componente e indique os mais cr�
         sent: true,
         message: "Forecast report sent successfully",
         jobsCount: 42,
-        componentsCount: 5,
+        forecastsGenerated: 40,
         recipients: ["engenharia@nautilus.system"]
       };
 
       expect(mockSuccessResponse.sent).toBe(true);
       expect(mockSuccessResponse.message).toContain("successfully");
       expect(mockSuccessResponse.jobsCount).toBeGreaterThan(0);
-      expect(mockSuccessResponse.componentsCount).toBeGreaterThan(0);
+      expect(mockSuccessResponse.forecastsGenerated).toBeGreaterThan(0);
       expect(mockSuccessResponse.recipients).toBeInstanceOf(Array);
     });
 
-    it("should log success to cron_execution_logs", () => {
+    it("should log success to cron_execution_logs with forecast data", () => {
       const mockLogEntry = {
         function_name: "send-forecast-report",
         status: "success",
         message: "Forecast report sent successfully to engenharia@nautilus.system",
         metadata: {
           jobs_count: 42,
-          components_count: 5,
+          forecasts_generated: 40,
+          forecasts_saved: 40,
           recipients: ["engenharia@nautilus.system"]
         },
       };
@@ -275,6 +304,24 @@ Gere uma previsão dos próximos dois meses por componente e indique os mais cr�
       expect(mockLogEntry.function_name).toBe("send-forecast-report");
       expect(mockLogEntry.status).toBe("success");
       expect(mockLogEntry.metadata.jobs_count).toBeGreaterThan(0);
+      expect(mockLogEntry.metadata.forecasts_generated).toBeGreaterThan(0);
+      expect(mockLogEntry.metadata.forecasts_saved).toBeGreaterThan(0);
+    });
+
+    it("should save forecasts to mmi_forecasts table", () => {
+      const mockForecastToSave = {
+        vessel_name: "Navio ABC",
+        system_name: "Bomba de lastro",
+        hourmeter: 0,
+        last_maintenance: [],
+        forecast_text: "Sistema reportou falha no último ciclo",
+        priority: "critical"
+      };
+
+      expect(mockForecastToSave.vessel_name).toBeTruthy();
+      expect(mockForecastToSave.system_name).toBeTruthy();
+      expect(mockForecastToSave.forecast_text).toBeTruthy();
+      expect(["low", "medium", "high", "critical"]).toContain(mockForecastToSave.priority);
     });
   });
 });
