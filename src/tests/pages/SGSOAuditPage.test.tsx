@@ -70,6 +70,11 @@ vi.mock("@/services/sgso-audit-service", () => ({
   loadSGSOAudit: vi.fn(),
 }));
 
+// Mock AI explanation
+vi.mock("@/lib/ai/sgso", () => ({
+  explainRequirementSGSO: vi.fn(),
+}));
+
 describe("SGSOAuditPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -254,5 +259,93 @@ describe("SGSOAuditPage", () => {
 
     // Verify no success toast was shown
     expect(toast.success).not.toHaveBeenCalled();
+  });
+
+  it("should render AI explanation button for each requirement", () => {
+    render(<SGSOAuditPage />);
+    const aiButtons = screen.getAllByText(/🤖.*Explicar com IA/);
+    
+    // Should have one button per requirement (17 requirements)
+    expect(aiButtons).toHaveLength(17);
+  });
+
+  it("should call AI explanation when button is clicked", async () => {
+    const { explainRequirementSGSO } = await import("@/lib/ai/sgso");
+    const { toast } = await import("sonner");
+    
+    const mockExplanation = "Teste de explicação IA para o requisito";
+    vi.mocked(explainRequirementSGSO).mockResolvedValue(mockExplanation);
+    
+    render(<SGSOAuditPage />);
+    
+    const aiButtons = screen.getAllByText(/🤖.*Explicar com IA/);
+    fireEvent.click(aiButtons[0]);
+    
+    await waitFor(() => {
+      expect(explainRequirementSGSO).toHaveBeenCalledWith("Política de SMS", "compliant");
+      expect(toast.info).toHaveBeenCalledWith(mockExplanation, { duration: 12000 });
+    });
+  });
+
+  it("should show error toast when AI explanation fails", async () => {
+    const { explainRequirementSGSO } = await import("@/lib/ai/sgso");
+    const { toast } = await import("sonner");
+    
+    vi.mocked(explainRequirementSGSO).mockResolvedValue(null);
+    
+    render(<SGSOAuditPage />);
+    
+    const aiButtons = screen.getAllByText(/🤖.*Explicar com IA/);
+    fireEvent.click(aiButtons[0]);
+    
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith("Não foi possível gerar explicação. Verifique a configuração da API.");
+    });
+  });
+
+  it("should show error toast when AI explanation throws error", async () => {
+    const { explainRequirementSGSO } = await import("@/lib/ai/sgso");
+    const { toast } = await import("sonner");
+    
+    vi.mocked(explainRequirementSGSO).mockRejectedValue(new Error("API Error"));
+    
+    render(<SGSOAuditPage />);
+    
+    const aiButtons = screen.getAllByText(/🤖.*Explicar com IA/);
+    fireEvent.click(aiButtons[0]);
+    
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith("Erro ao explicar requisito com IA");
+    });
+  });
+
+  it("should disable AI button and show loading text while processing", async () => {
+    const { explainRequirementSGSO } = await import("@/lib/ai/sgso");
+    
+    // Create a promise that we control
+    let resolveExplanation: (value: string) => void;
+    const explanationPromise = new Promise<string>((resolve) => {
+      resolveExplanation = resolve;
+    });
+    
+    vi.mocked(explainRequirementSGSO).mockReturnValue(explanationPromise);
+    
+    render(<SGSOAuditPage />);
+    
+    const aiButtons = screen.getAllByText(/🤖.*Explicar com IA/);
+    fireEvent.click(aiButtons[0]);
+    
+    // Check that button shows loading state
+    await waitFor(() => {
+      expect(screen.getByText(/🤖 Carregando\.\.\./)).toBeInTheDocument();
+    });
+    
+    // Resolve the promise
+    resolveExplanation!("Explicação gerada");
+    
+    // Wait for button to return to normal state
+    await waitFor(() => {
+      expect(screen.queryByText(/🤖 Carregando\.\.\./)).not.toBeInTheDocument();
+    });
   });
 });
