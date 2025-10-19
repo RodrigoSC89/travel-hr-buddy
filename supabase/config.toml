@@ -31,6 +31,9 @@ verify_jwt = false
 [functions.resend_pending_plans]
 verify_jwt = false
 
+[functions.forecast-weekly]
+verify_jwt = false
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)
@@ -89,3 +92,9 @@ name = "resend-pending-plans"
 function_name = "resend_pending_plans"
 schedule = "0 8 * * *"  # Every day at 08:00 UTC (05:00 BRT)
 description = "DP: Resend pending action plans older than 7 days via email"
+
+[[edge_runtime.cron]]
+name = "forecast-weekly"
+function_name = "forecast-weekly"
+schedule = "0 3 * * 0"  # Every Sunday at 03:00 UTC
+description = "MMI: Generate weekly AI forecasts for maintenance jobs and create work orders automatically"
