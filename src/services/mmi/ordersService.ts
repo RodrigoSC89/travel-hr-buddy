@@ -118,3 +118,47 @@ export async function addTechnicianComment(
     return false;
   }
 }
+
+/**
+ * Create work order (OS) from forecast
+ * 
+ * @param forecastId - UUID of the forecast
+ * @param jobId - Optional UUID of the related job
+ * @param descricao - Description of the work order
+ * @returns Promise<boolean> - True if successful, false otherwise
+ */
+export async function createOSFromForecast(
+  forecastId: string,
+  jobId: string | null,
+  descricao: string
+): Promise<boolean> {
+  try {
+    // Get authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError) {
+      console.error("Auth error:", authError);
+      throw new Error("Unauthorized");
+    }
+
+    // Insert work order into mmi_os table
+    const { error } = await supabase.from("mmi_os").insert({
+      forecast_id: forecastId,
+      job_id: jobId,
+      descricao,
+      status: "pendente",
+      created_by: user?.id || null,
+      opened_by: user?.id || null
+    });
+
+    if (error) {
+      console.error("Error creating OS:", error);
+      throw new Error(error.message);
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Failed to create OS from forecast:", error);
+    return false;
+  }
+}

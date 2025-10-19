@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { createOSFromForecast } from "@/services/mmi/ordersService";
 
 type Forecast = {
   id: string
@@ -43,32 +44,20 @@ export default function ForecastHistoryPage() {
     
     try {
       const priority = getPriorityLabel(forecast.priority);
+      const descricao = `Gerado automaticamente com base no forecast IA de risco "${priority.value}" - ${forecast.forecast_text}`;
       
-      const res = await fetch("/api/os/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          forecast_id: forecast.id,
-          vessel_name: forecast.vessel_name,
-          system_name: forecast.system_name,
-          description: forecast.forecast_text,
-          priority: priority.value,
-        }),
-      });
+      // Use the new createOSFromForecast function
+      const success = await createOSFromForecast(forecast.id, null, descricao);
 
-      const data = await res.json();
-
-      if (data.success) {
+      if (success) {
         toast({
-          title: "✅ Ordem de Serviço gerada com sucesso!",
+          title: "✅ Ordem de Serviço criada com sucesso!",
           description: `OS criada para ${forecast.system_name} - ${forecast.vessel_name}`,
         });
       } else {
         toast({
           title: "❌ Falha ao gerar OS",
-          description: data.error || "Erro desconhecido",
+          description: "Erro ao criar ordem de serviço",
           variant: "destructive",
         });
       }
@@ -145,7 +134,7 @@ export default function ForecastHistoryPage() {
                   onClick={() => handleGenerateOrder(f)}
                   disabled={generatingOrderId === f.id}
                 >
-                  {generatingOrderId === f.id ? "⏳ Gerando..." : "📄 Gerar Ordem de Serviço"}
+                  {generatingOrderId === f.id ? "⏳ Gerando..." : "➕ Gerar OS"}
                 </Button>
               </CardContent>
             </Card>
