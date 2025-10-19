@@ -165,10 +165,10 @@ export default function ForecastPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {lastUpdate ? lastUpdate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '--:--'}
+              {lastUpdate ? lastUpdate.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "--:--"}
             </div>
             <p className="text-xs text-muted-foreground">
-              {lastUpdate ? lastUpdate.toLocaleDateString('pt-BR') : 'Nunca'}
+              {lastUpdate ? lastUpdate.toLocaleDateString("pt-BR") : "Nunca"}
             </p>
           </CardContent>
         </Card>
@@ -210,8 +210,8 @@ export default function ForecastPage() {
                     </p>
                     <Badge variant={forecast.trend === "up" ? "default" : "secondary"}>
                       {forecast.trend === "up" ? "📈 Alta" : 
-                       forecast.trend === "down" ? "📉 Baixa" : 
-                       "➡️ Estável"}
+                        forecast.trend === "down" ? "📉 Baixa" : 
+                          "➡️ Estável"}
                     </Badge>
                   </div>
                 </div>
@@ -224,7 +224,7 @@ export default function ForecastPage() {
       {/* Footer Info */}
       {lastUpdate && (
         <div className="text-center text-sm text-muted-foreground">
-          Última atualização: {lastUpdate.toLocaleString('pt-BR')} | 
+          Última atualização: {lastUpdate.toLocaleString("pt-BR")} | 
           Powered by GPT-4 AI Model
         </div>
       )}
