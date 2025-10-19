@@ -1,79 +1,80 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function MMIForecastPage() {
-  const [vesselName, setVesselName] = useState('')
-  const [systemName, setSystemName] = useState('')
-  const [hourmeter, setHourmeter] = useState('')
-  const [maintenanceDates, setMaintenanceDates] = useState('')
-  const [forecast, setForecast] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [vesselName, setVesselName] = useState("");
+  const [systemName, setSystemName] = useState("");
+  const [hourmeter, setHourmeter] = useState("");
+  const [maintenanceDates, setMaintenanceDates] = useState("");
+  const [forecast, setForecast] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    setForecast('')
-    setLoading(true)
+    setForecast("");
+    setLoading(true);
 
     try {
-      const res = await fetch('/api/mmi/forecast', {
-        method: 'POST',
+      const res = await fetch("/api/mmi/forecast", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           vessel_name: vesselName,
           system_name: systemName,
           current_hourmeter: parseFloat(hourmeter) || 0,
-          last_maintenance_dates: maintenanceDates.split('\n').filter(line => line.trim())
+          last_maintenance_dates: maintenanceDates.split("\n").filter(line => line.trim())
         })
-      })
+      });
 
       if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`)
+        throw new Error(`HTTP error! status: ${res.status}`);
       }
 
-      const reader = res.body?.getReader()
-      const decoder = new TextDecoder()
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
 
       if (reader) {
-        let result = ''
+        let result = "";
+        // eslint-disable-next-line no-constant-condition
         while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
+          const { done, value } = await reader.read();
+          if (done) break;
           
-          const chunk = decoder.decode(value, { stream: true })
+          const chunk = decoder.decode(value, { stream: true });
           
           // Parse SSE format: data: {"content": "text"}\n\n
-          const lines = chunk.split('\n')
+          const lines = chunk.split("\n");
           for (const line of lines) {
-            if (line.startsWith('data: ')) {
+            if (line.startsWith("data: ")) {
               try {
-                const jsonStr = line.substring(6)
-                const data = JSON.parse(jsonStr)
+                const jsonStr = line.substring(6);
+                const data = JSON.parse(jsonStr);
                 if (data.content) {
-                  result += data.content
-                  setForecast(result)
+                  result += data.content;
+                  setForecast(result);
                 }
               } catch (e) {
                 // If not JSON, append as plain text
-                result += line.substring(6)
-                setForecast(result)
+                result += line.substring(6);
+                setForecast(result);
               }
             }
           }
         }
       }
     } catch (error) {
-      console.error('Error generating forecast:', error)
-      setForecast(`Erro ao gerar previsão: ${error instanceof Error ? error.message : 'Erro desconhecido'}`)
+      console.error("Error generating forecast:", error);
+      setForecast(`Erro ao gerar previsão: ${error instanceof Error ? error.message : "Erro desconhecido"}`);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="container mx-auto p-6">
@@ -120,7 +121,7 @@ export default function MMIForecastPage() {
           </div>
 
           <Button disabled={loading} onClick={handleSubmit} className="w-full">
-            {loading ? 'Gerando previsão...' : '📡 Gerar Forecast'}
+            {loading ? "Gerando previsão..." : "📡 Gerar Forecast"}
           </Button>
         </div>
 
@@ -136,5 +137,5 @@ export default function MMIForecastPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
