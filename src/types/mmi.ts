@@ -210,3 +210,67 @@ export interface MMIJobEnhanced {
   component?: MMIComponent;
   ai_recommendation?: AIRecommendation;
 }
+
+/**
+ * MMI History - Historical maintenance records
+ */
+export interface MMIHistory {
+  id: string;
+  vessel_id?: string;
+  system_name: string;
+  task_description: string;
+  executed_at?: string;
+  status: "executado" | "pendente" | "atrasado";
+  pdf_url?: string;
+  created_at?: string;
+  updated_at?: string;
+  // Relations
+  vessel?: {
+    id: string;
+    name: string;
+  };
+}
+
+/**
+ * MMI Task - Automatically generated maintenance tasks from forecasts
+ */
+export interface MMITask {
+  id: string;
+  title: string;
+  description: string;
+  forecast_date?: string;
+  vessel_id?: string;
+  system_name?: string;
+  status: "pendente" | "em_andamento" | "concluido" | "cancelado";
+  assigned_to?: string;
+  created_by?: string;
+  priority: "low" | "medium" | "high" | "critical";
+  ai_reasoning?: string;
+  created_at?: string;
+  updated_at?: string;
+  // Relations
+  vessel?: {
+    id: string;
+    name: string;
+  };
+  assignee?: {
+    id: string;
+    name: string;
+  };
+}
+
+/**
+ * AI Forecast Response with technical details
+ */
+export interface AIForecast {
+  next_intervention: string;
+  reasoning: string;
+  impact: string;
+  priority: "low" | "medium" | "high" | "critical";
+  suggested_date: string;
+  hourometer_current: number;
+  maintenance_history: Array<{
+    date: string;
+    action: string;
+  }>;
+}

@@ -92,6 +92,8 @@ const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
 const TemplateEditorPage = React.lazy(() => import("./pages/admin/templates/editor"));
 const MMIJobsPanel = React.lazy(() => import("./pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("./pages/MmiBI"));
+const MMIHistory = React.lazy(() => import("./pages/MMIHistory"));
+const MMITasks = React.lazy(() => import("./pages/MMITasks"));
 const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAnalysis"));
 const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreationWithSimilarExamples"));
 const CopilotJobForm = React.lazy(() => import("./pages/CopilotJobForm"));
@@ -204,6 +206,8 @@ function App() {
                       <Route path="/nautilus-one" element={<NautilusOne />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
+                      <Route path="/mmi/history" element={<MMIHistory />} />
+                      <Route path="/mmi/tasks" element={<MMITasks />} />
                       <Route path="/mmi/job-creation-demo" element={<JobCreationWithSimilarExamples />} />
                       <Route path="/copilot/job-form" element={<CopilotJobForm />} />
                       <Route path="/innovation" element={<Innovation />} />
