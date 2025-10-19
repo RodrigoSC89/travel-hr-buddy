@@ -78,7 +78,7 @@ export function AuditSimulator() {
         .limit(1)
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== "PGRST116") throw error;
       setPrediction(data);
     } catch (error: any) {
       console.error("Error loading prediction:", error);
@@ -119,11 +119,11 @@ export function AuditSimulator() {
 
   const getReadinessColor = (level: string) => {
     switch (level) {
-      case "excellent": return "text-green-600";
-      case "high": return "text-blue-600";
-      case "medium": return "text-yellow-600";
-      case "low": return "text-red-600";
-      default: return "text-gray-600";
+    case "excellent": return "text-green-600";
+    case "high": return "text-blue-600";
+    case "medium": return "text-yellow-600";
+    case "low": return "text-red-600";
+    default: return "text-gray-600";
     }
   };
 
@@ -184,7 +184,7 @@ export function AuditSimulator() {
                 disabled={simulating || !selectedVessel || !selectedAuditType}
                 className="w-full gap-2"
               >
-                <Play className={`h-4 w-4 ${simulating ? 'animate-pulse' : ''}`} />
+                <Play className={`h-4 w-4 ${simulating ? "animate-pulse" : ""}`} />
                 {simulating ? "Simulating..." : "Run Simulation"}
               </Button>
             </div>

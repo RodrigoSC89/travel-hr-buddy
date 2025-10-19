@@ -121,11 +121,11 @@ export function NormativeScores() {
 
   const getReadinessColor = (level: string) => {
     switch (level) {
-      case "excellent": return "text-green-600";
-      case "high": return "text-blue-600";
-      case "medium": return "text-yellow-600";
-      case "low": return "text-red-600";
-      default: return "text-gray-600";
+    case "excellent": return "text-green-600";
+    case "high": return "text-blue-600";
+    case "medium": return "text-yellow-600";
+    case "low": return "text-red-600";
+    default: return "text-gray-600";
     }
   };
 

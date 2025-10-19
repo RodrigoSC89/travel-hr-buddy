@@ -60,29 +60,29 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "aberto":
-        return (
-          <Badge variant="destructive" className="flex items-center gap-1">
-            <AlertCircle className="h-3 w-3" />
+    case "aberto":
+      return (
+        <Badge variant="destructive" className="flex items-center gap-1">
+          <AlertCircle className="h-3 w-3" />
             Aberto
-          </Badge>
-        );
-      case "em_andamento":
-        return (
-          <Badge variant="default" className="flex items-center gap-1 bg-yellow-500 hover:bg-yellow-600">
-            <Clock className="h-3 w-3" />
+        </Badge>
+      );
+    case "em_andamento":
+      return (
+        <Badge variant="default" className="flex items-center gap-1 bg-yellow-500 hover:bg-yellow-600">
+          <Clock className="h-3 w-3" />
             Em Andamento
-          </Badge>
-        );
-      case "resolvido":
-        return (
-          <Badge variant="default" className="flex items-center gap-1 bg-green-600 hover:bg-green-700">
-            <CheckCircle2 className="h-3 w-3" />
+        </Badge>
+      );
+    case "resolvido":
+      return (
+        <Badge variant="default" className="flex items-center gap-1 bg-green-600 hover:bg-green-700">
+          <CheckCircle2 className="h-3 w-3" />
             Resolvido
-          </Badge>
-        );
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+        </Badge>
+      );
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
@@ -90,16 +90,16 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
     if (!riskLevel) return <Badge variant="outline">N/A</Badge>;
 
     switch (riskLevel.toLowerCase()) {
-      case "crítico":
-        return <Badge variant="destructive">🔴 Crítico</Badge>;
-      case "alto":
-        return <Badge variant="destructive" className="bg-orange-500 hover:bg-orange-600">🟠 Alto</Badge>;
-      case "médio":
-        return <Badge variant="default" className="bg-yellow-500 hover:bg-yellow-600">🟡 Médio</Badge>;
-      case "baixo":
-        return <Badge variant="default" className="bg-green-600 hover:bg-green-700">🟢 Baixo</Badge>;
-      default:
-        return <Badge variant="outline">{riskLevel}</Badge>;
+    case "crítico":
+      return <Badge variant="destructive">🔴 Crítico</Badge>;
+    case "alto":
+      return <Badge variant="destructive" className="bg-orange-500 hover:bg-orange-600">🟠 Alto</Badge>;
+    case "médio":
+      return <Badge variant="default" className="bg-yellow-500 hover:bg-yellow-600">🟡 Médio</Badge>;
+    case "baixo":
+      return <Badge variant="default" className="bg-green-600 hover:bg-green-700">🟢 Baixo</Badge>;
+    default:
+      return <Badge variant="outline">{riskLevel}</Badge>;
     }
   };
 

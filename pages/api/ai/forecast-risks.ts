@@ -32,20 +32,20 @@ function generateRuleBasedRisks(vesselId: string, operationalData: any): RiskFor
   const today = new Date();
   
   // Weather-based risk
-  if (operationalData.weather_conditions?.includes('rough') || 
-      operationalData.weather_conditions?.includes('storm')) {
+  if (operationalData.weather_conditions?.includes("rough") || 
+      operationalData.weather_conditions?.includes("storm")) {
     risks.push({
       vessel_id: vesselId,
-      risk_type: 'weather',
-      risk_title: 'Adverse Weather Conditions',
-      risk_description: 'Rough sea conditions may impact operations',
-      severity: 'high',
-      probability: 'medium',
+      risk_type: "weather",
+      risk_title: "Adverse Weather Conditions",
+      risk_description: "Rough sea conditions may impact operations",
+      severity: "high",
+      probability: "medium",
       impact_score: 7,
-      forecast_date: new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      recommended_action: 'Monitor weather forecasts and prepare contingency plans',
+      forecast_date: new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      recommended_action: "Monitor weather forecasts and prepare contingency plans",
       confidence_score: 0.75,
-      predicted_by: 'rule-based'
+      predicted_by: "rule-based"
     });
   }
 
@@ -53,16 +53,16 @@ function generateRuleBasedRisks(vesselId: string, operationalData: any): RiskFor
   if (operationalData.days_since_maintenance > 60) {
     risks.push({
       vessel_id: vesselId,
-      risk_type: 'equipment',
-      risk_title: 'Equipment Maintenance Due',
-      risk_description: 'Critical equipment maintenance window approaching',
-      severity: 'medium',
-      probability: 'high',
+      risk_type: "equipment",
+      risk_title: "Equipment Maintenance Due",
+      risk_description: "Critical equipment maintenance window approaching",
+      severity: "medium",
+      probability: "high",
       impact_score: 6,
-      forecast_date: new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      recommended_action: 'Schedule maintenance inspection within next 7 days',
+      forecast_date: new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      recommended_action: "Schedule maintenance inspection within next 7 days",
       confidence_score: 0.85,
-      predicted_by: 'rule-based'
+      predicted_by: "rule-based"
     });
   }
 
@@ -70,16 +70,16 @@ function generateRuleBasedRisks(vesselId: string, operationalData: any): RiskFor
   if (operationalData.certification_expiry_days < 30) {
     risks.push({
       vessel_id: vesselId,
-      risk_type: 'compliance',
-      risk_title: 'Certification Expiry',
-      risk_description: 'Vessel certification expiring soon',
-      severity: 'high',
-      probability: 'high',
+      risk_type: "compliance",
+      risk_title: "Certification Expiry",
+      risk_description: "Vessel certification expiring soon",
+      severity: "high",
+      probability: "high",
       impact_score: 8,
-      forecast_date: new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      recommended_action: 'Initiate renewal process immediately',
+      forecast_date: new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      recommended_action: "Initiate renewal process immediately",
       confidence_score: 0.95,
-      predicted_by: 'rule-based'
+      predicted_by: "rule-based"
     });
   }
 
@@ -89,7 +89,7 @@ function generateRuleBasedRisks(vesselId: string, operationalData: any): RiskFor
 // AI-powered risk forecast using GPT-4o-mini
 async function forecastRisksWithAI(vesselId: string, operationalData: any): Promise<RiskForecast[]> {
   if (!openai) {
-    console.log('OpenAI not configured, using rule-based fallback');
+    console.log("OpenAI not configured, using rule-based fallback");
     return generateRuleBasedRisks(vesselId, operationalData);
   }
 
@@ -127,11 +127,11 @@ Return only valid JSON array, no markdown or explanations.`;
     return aiRisks.map((risk: any) => ({
       ...risk,
       vessel_id: vesselId,
-      predicted_by: 'ai',
-      data_source: { model: 'gpt-4o-mini', data: operationalData }
+      predicted_by: "ai",
+      data_source: { model: "gpt-4o-mini", data: operationalData }
     }));
   } catch (error) {
-    console.error('AI forecasting error:', error);
+    console.error("AI forecasting error:", error);
     return generateRuleBasedRisks(vesselId, operationalData);
   }
 }
@@ -143,19 +143,19 @@ async function getOperationalData(vesselId?: string) {
 
   // Get recent incidents
   const { data: incidents } = await supabase
-    .from('dp_incidents')
-    .select('*')
-    .gte('created_at', sixtyDaysAgo.toISOString())
-    .order('created_at', { ascending: false })
+    .from("dp_incidents")
+    .select("*")
+    .gte("created_at", sixtyDaysAgo.toISOString())
+    .order("created_at", { ascending: false })
     .limit(50);
 
   // Get vessel info if specific vessel
   let vesselData = null;
   if (vesselId) {
     const { data } = await supabase
-      .from('vessels')
-      .select('*')
-      .eq('id', vesselId)
+      .from("vessels")
+      .select("*")
+      .eq("id", vesselId)
       .single();
     vesselData = data;
   }
@@ -165,7 +165,7 @@ async function getOperationalData(vesselId?: string) {
     vessel: vesselData,
     days_since_maintenance: Math.floor(Math.random() * 90), // Mock data
     certification_expiry_days: Math.floor(Math.random() * 60), // Mock data
-    weather_conditions: ['normal', 'rough', 'calm'][Math.floor(Math.random() * 3)]
+    weather_conditions: ["normal", "rough", "calm"][Math.floor(Math.random() * 3)]
   };
 }
 
@@ -191,9 +191,9 @@ export default async function handler(
     if (process_all) {
       // Get all active vessels
       const { data: vessels } = await supabase
-        .from('vessels')
-        .select('id')
-        .eq('status', 'active');
+        .from("vessels")
+        .select("id")
+        .eq("status", "active");
       
       vesselsToProcess = vessels?.map(v => v.id) || [];
     } else {
@@ -209,7 +209,7 @@ export default async function handler(
       // Insert risks into database
       for (const risk of risks) {
         const { error } = await supabase
-          .from('tactical_risks')
+          .from("tactical_risks")
           .insert(risk);
         
         if (error) {
@@ -228,7 +228,7 @@ export default async function handler(
     });
 
   } catch (error: any) {
-    console.error('Forecast risks error:', error);
+    console.error("Forecast risks error:", error);
     return res.status(500).json({ 
       error: "Failed to forecast risks",
       details: error.message 

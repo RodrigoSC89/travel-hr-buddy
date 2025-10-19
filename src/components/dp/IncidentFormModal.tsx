@@ -18,7 +18,7 @@ interface IncidentFormModalProps {
 export function IncidentFormModal({ open, onOpenChange, incident, onSave }: IncidentFormModalProps) {
   const [formData, setFormData] = useState<Partial<DPIncident>>({
     vessel: incident?.vessel || "",
-    incident_date: incident?.incident_date || new Date().toISOString().split('T')[0],
+    incident_date: incident?.incident_date || new Date().toISOString().split("T")[0],
     severity: incident?.severity || "Média",
     title: incident?.title || "",
     description: incident?.description || "",
