@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+# Prevent concurrent runs on the same PR to avoid job cancellation issues
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
 jobs:
   quality-check:
     name: Code Quality & Security
@@ -111,16 +116,32 @@ jobs:
           name: coverage-report
           path: coverage/
           retention-days: 7
+          if-no-files-found: ignore
         continue-on-error: true
       
-      - name: Upload test results on failure
-        if: failure()
+      - name: Capture job status on failure or cancellation
+        if: failure() || cancelled()
+        run: |
+          mkdir -p ./test-results
+          echo "Job Status: ${{ job.status }}" > ./test-results/job-status.log
+          echo "Conclusion: ${{ job.status }}" >> ./test-results/job-status.log
+          echo "Run ID: ${{ github.run_id }}" >> ./test-results/job-status.log
+          echo "Job ID: ${{ github.job }}" >> ./test-results/job-status.log
+          echo "Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> ./test-results/job-status.log
+          echo "Workflow: ${{ github.workflow }}" >> ./test-results/job-status.log
+          echo "Ref: ${{ github.ref }}" >> ./test-results/job-status.log
+          echo "SHA: ${{ github.sha }}" >> ./test-results/job-status.log
+        continue-on-error: true
+      
+      - name: Upload test results on failure or cancellation
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-logs-${{ github.run_id }}
+          name: quality-check-logs-${{ github.run_id }}
           path: |
             ./test-results/
             ./coverage/
             ./logs/
             ./npm-debug.log*
           retention-days: 14
+          if-no-files-found: ignore

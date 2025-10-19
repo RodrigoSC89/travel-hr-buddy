@@ -6,6 +6,11 @@ on:
       - main
   workflow_dispatch:
 
+# Prevent concurrent deployments to avoid job cancellation issues
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -97,3 +102,30 @@ jobs:
               commit_sha: context.sha,
               body: body
             });
+      
+      - name: Capture deployment status on failure or cancellation
+        if: failure() || cancelled()
+        run: |
+          mkdir -p ./deployment-logs
+          echo "Job Status: ${{ job.status }}" > ./deployment-logs/job-status.log
+          echo "Conclusion: ${{ job.status }}" >> ./deployment-logs/job-status.log
+          echo "Run ID: ${{ github.run_id }}" >> ./deployment-logs/job-status.log
+          echo "Job ID: ${{ github.job }}" >> ./deployment-logs/job-status.log
+          echo "Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> ./deployment-logs/job-status.log
+          echo "Workflow: ${{ github.workflow }}" >> ./deployment-logs/job-status.log
+          echo "Ref: ${{ github.ref }}" >> ./deployment-logs/job-status.log
+          echo "SHA: ${{ github.sha }}" >> ./deployment-logs/job-status.log
+        continue-on-error: true
+      
+      - name: Upload deployment logs on failure or cancellation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-logs-${{ github.run_id }}
+          path: |
+            ./deployment-logs/
+            ./logs/
+            ./npm-debug.log*
+            ./.vercel/
+          retention-days: 14
+          if-no-files-found: ignore
