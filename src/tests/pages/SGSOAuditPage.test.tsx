@@ -64,6 +64,12 @@ vi.mock("@/lib/sgso/submit", () => ({
   submitSGSOAudit: vi.fn(),
 }));
 
+// Mock audit service
+const mockLoadSGSOAudit = vi.fn();
+vi.mock("@/services/sgso-audit-service", () => ({
+  loadSGSOAudit: () => mockLoadSGSOAudit(),
+}));
+
 describe("SGSOAuditPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -131,5 +137,14 @@ describe("SGSOAuditPage", () => {
     
     fireEvent.change(commentInputs[0], { target: { value: "Comentário teste" } });
     expect(commentInputs[0]).toHaveValue("Comentário teste");
+  });
+
+  it("should render vessel selector with vessels loaded", async () => {
+    render(<SGSOAuditPage />);
+    
+    // The select should be rendered
+    await waitFor(() => {
+      expect(screen.getByRole("combobox")).toBeInTheDocument();
+    });
   });
 });
