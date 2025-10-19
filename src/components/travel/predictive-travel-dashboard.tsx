@@ -123,7 +123,16 @@ export const PredictiveTravelDashboard: React.FC = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setAlerts(data || []);
+      if (data) {
+        setAlerts(data.map(alert => ({
+          ...alert,
+          current_price: alert.current_price ?? 0,
+          target_price: alert.target_price ?? 0,
+          travel_date: alert.travel_date ?? "",
+          passengers_or_guests: alert.passengers_or_guests ?? 1,
+          notification_sent: alert.notification_sent ?? false
+        })));
+      }
     } catch (error) {
     }
   };

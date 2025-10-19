@@ -41,7 +41,8 @@ interface ReservationTemplate {
     notes?: string;
   };
   is_public: boolean;
-  created_by: string;
+  created_by?: string;
+  organization_id?: string;
   created_at: string;
 }
 
@@ -94,10 +95,15 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setTemplates((data || []).map(item => ({
-        ...item,
-        template_data: item.template_data as any
-      })));
+      if (data) {
+        setTemplates(data.map(item => ({
+          ...item,
+          is_public: item.is_public ?? false,
+          created_by: item.created_by ?? undefined,
+          organization_id: item.organization_id ?? undefined,
+          template_data: item.template_data as any
+        })));
+      }
     } catch (error) {
       toast({
         title: "Erro",

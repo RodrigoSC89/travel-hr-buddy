@@ -56,7 +56,7 @@ export function PainelMetricasRisco() {
     : dados.filter(d => d.nome_navio === embarcacaoSelecionada);
 
   // Calculate temporal evolution (monthly aggregation)
-  const dadosTemporais: TemporalData[] = dadosFiltrados.reduce((acc: Record<string, number>, item) => {
+  const dadosTemporaisMap = dadosFiltrados.reduce((acc: Record<string, number>, item) => {
     if (!item.data_auditoria) return acc;
     
     const data = new Date(item.data_auditoria);
@@ -70,7 +70,7 @@ export function PainelMetricasRisco() {
     return acc;
   }, {});
 
-  const dadosTemporaisArray = Object.entries(dadosTemporais)
+  const dadosTemporaisArray: TemporalData[] = Object.entries(dadosTemporaisMap)
     .map(([mes, falhas_criticas]) => ({ mes, falhas_criticas }))
     .sort((a, b) => a.mes.localeCompare(b.mes));
 

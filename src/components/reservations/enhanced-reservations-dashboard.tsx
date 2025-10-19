@@ -109,7 +109,9 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       
       const enhancedData = (data || []).map(item => ({
         ...item,
-        crew_member_name: profileMap.get(item.user_id) || "N/A",
+        reservation_type: item.reservation_type as "hotel" | "transport" | "embarkation" | "flight" | "other",
+        status: item.status as "pending" | "confirmed" | "cancelled" | "completed",
+        crew_member_name: profileMap.get(item.user_id) ?? "N/A",
         conflict_detected: false,
         ai_suggestions: []
       })) as EnhancedReservation[];

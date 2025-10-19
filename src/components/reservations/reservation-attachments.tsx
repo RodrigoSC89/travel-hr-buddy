@@ -23,6 +23,7 @@ interface AttachmentFile {
   file_url: string;
   file_type: string;
   file_size: number;
+  uploaded_by?: string;
   created_at: string;
 }
 
@@ -59,7 +60,13 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setAttachments(data || []);
+      if (data) {
+        setAttachments(data.map(item => ({
+          ...item,
+          file_size: item.file_size ?? 0,
+          uploaded_by: item.uploaded_by ?? undefined
+        })));
+      }
     } catch (error) {
       toast({
         title: "Erro",

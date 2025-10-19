@@ -24,6 +24,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { nullToUndefined } from "@/lib/type-helpers";
 
 interface SharedAlert {
   id: string;
@@ -119,6 +120,15 @@ export const SharedAlerts = () => {
           is_featured: alert.is_featured ?? false,
           created_at: alert.created_at ?? new Date().toISOString(),
           user_vote: votesMap[alert.id] as "upvote" | "downvote" | undefined,
+          alert: {
+            product_name: alert.alert?.product_name ?? "",
+            product_url: alert.alert?.product_url ?? "",
+            target_price: alert.alert?.target_price ?? 0,
+            current_price: alert.alert?.current_price ?? 0,
+            discount_percentage: alert.alert?.discount_percentage ?? 0,
+            store_name: alert.alert?.store_name ?? "",
+            category: alert.alert?.category ?? ""
+          }
         }));
 
         setSharedAlerts(alertsWithVotes);
@@ -129,7 +139,16 @@ export const SharedAlerts = () => {
           upvotes: alert.upvotes ?? 0,
           downvotes: alert.downvotes ?? 0,
           is_featured: alert.is_featured ?? false,
-          created_at: alert.created_at ?? new Date().toISOString()
+          created_at: alert.created_at ?? new Date().toISOString(),
+          alert: {
+            product_name: alert.alert?.product_name ?? "",
+            product_url: alert.alert?.product_url ?? "",
+            target_price: alert.alert?.target_price ?? 0,
+            current_price: alert.alert?.current_price ?? 0,
+            discount_percentage: alert.alert?.discount_percentage ?? 0,
+            store_name: alert.alert?.store_name ?? "",
+            category: alert.alert?.category ?? ""
+          }
         }));
         setSharedAlerts(mappedData);
       }

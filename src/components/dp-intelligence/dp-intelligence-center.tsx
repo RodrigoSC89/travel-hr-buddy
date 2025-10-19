@@ -37,7 +37,8 @@ interface Incident {
   plan_of_action?: PlanOfAction | null;
   plan_sent_to?: string | null;
   plan_sent_at?: string | null;
-  plan_status?: "pendente" | "em andamento" | "concluído" | null;
+  plan_status?: "pendente" | "em andamento" | "concluído";
+  plan_updated_at?: string;
 }
 
 interface PlanOfAction {
