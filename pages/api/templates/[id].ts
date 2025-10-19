@@ -57,6 +57,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ data });
   }
 
+  // GET - Get single template
+  if (method === "GET") {
+    const { data, error } = await supabase
+      .from("templates")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      return res.status(404).json({ error: "Template not found" });
+    }
+
+    return res.status(200).json({ data });
+  }
+
   // DELETE - Delete template
   if (method === "DELETE") {
     // Deletar apenas templates do próprio usuário
