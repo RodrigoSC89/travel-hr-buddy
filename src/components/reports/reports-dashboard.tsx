@@ -6,9 +6,9 @@ import AIReportGenerator from "./AIReportGenerator";
 import DocumentProcessor from "../intelligence/DocumentProcessor";
 
 const ReportsDashboard = () => {
-  const [activeReport, setActiveReport] = useState<any>(null);
+  const [activeReport, setActiveReport] = useState<unknown>(null);
 
-  const handleReportGenerated = (report: any) => {
+  const handleReportGenerated = (report: unknown) => {
     setActiveReport(report);
   };
 

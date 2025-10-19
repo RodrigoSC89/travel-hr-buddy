@@ -203,7 +203,7 @@ export const SystemHealthMonitor: React.FC = () => {
             <Progress 
               value={metrics.cpu} 
               className="mt-2"
-              style={{ "--progress-foreground": getProgressColor(metrics.cpu) } as any}
+              style={{ "--progress-foreground": getProgressColor(metrics.cpu) } as unknown}
             />
             <p className="text-xs text-muted-foreground mt-1">
               Processamento
@@ -225,7 +225,7 @@ export const SystemHealthMonitor: React.FC = () => {
             <Progress 
               value={metrics.memory} 
               className="mt-2"
-              style={{ "--progress-foreground": getProgressColor(metrics.memory) } as any}
+              style={{ "--progress-foreground": getProgressColor(metrics.memory) } as unknown}
             />
             <p className="text-xs text-muted-foreground mt-1">
               RAM em uso
@@ -247,7 +247,7 @@ export const SystemHealthMonitor: React.FC = () => {
             <Progress 
               value={metrics.database} 
               className="mt-2"
-              style={{ "--progress-foreground": getProgressColor(metrics.database) } as any}
+              style={{ "--progress-foreground": getProgressColor(metrics.database) } as unknown}
             />
             <p className="text-xs text-muted-foreground mt-1">
               Conexões ativas
@@ -269,7 +269,7 @@ export const SystemHealthMonitor: React.FC = () => {
             <Progress 
               value={metrics.network} 
               className="mt-2"
-              style={{ "--progress-foreground": getProgressColor(metrics.network) } as any}
+              style={{ "--progress-foreground": getProgressColor(metrics.network) } as unknown}
             />
             <p className="text-xs text-muted-foreground mt-1">
               Banda utilizada

@@ -131,7 +131,7 @@ export const SettingsPanel = () => {
     }
   };
 
-  const updateSettings = (section: keyof UserSettings, updates: any) => {
+  const updateSettings = (section: keyof UserSettings, updates: unknown) => {
     setSettings(prev => ({
       ...prev,
       [section]: {

@@ -123,7 +123,7 @@ describe("ExecutionLogsPage Component", () => {
               error: null,
             }),
           }),
-        } as any;
+        } as unknown;
       } else if (table === "automation_executions") {
         return {
           select: vi.fn().mockReturnValue({
@@ -132,9 +132,9 @@ describe("ExecutionLogsPage Component", () => {
               error: null,
             }),
           }),
-        } as any;
+        } as unknown;
       }
-      return {} as any;
+      return {} as unknown;
     });
 
     render(
@@ -156,7 +156,7 @@ describe("ExecutionLogsPage Component", () => {
           error: null,
         }),
       }),
-    } as any));
+    } as unknown));
 
     render(
       <MemoryRouter>

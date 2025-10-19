@@ -24,7 +24,7 @@ import { useAuth } from "@/contexts/AuthContext";
 interface SyncItem {
   id: string;
   action: string;
-  data: any;
+  data: unknown;
   timestamp: number;
   synced: boolean;
   error?: string;

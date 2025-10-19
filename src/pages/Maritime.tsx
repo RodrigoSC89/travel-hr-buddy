@@ -103,7 +103,7 @@ export default function Maritime() {
     }
   };
 
-  const StatCard = ({ title, value, icon: Icon, variant = "default", trend, onClick }: any) => (
+  const StatCard = ({ title, value, icon: Icon, variant = "default", trend, onClick }: unknown) => (
     <Card className={onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""} onClick={onClick}>
       <CardContent className="pt-6">
         <div className="flex items-center justify-between">

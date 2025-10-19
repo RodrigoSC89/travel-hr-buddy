@@ -89,9 +89,9 @@ describe("PainelSGSO", () => {
     fireEvent.click(csvButton);
 
     expect(saveAs).toHaveBeenCalled();
-    const blob = (saveAs as any).mock.calls[0][0];
+    const blob = (saveAs as unknown).mock.calls[0][0];
     expect(blob).toBeInstanceOf(Blob);
-    expect((saveAs as any).mock.calls[0][1]).toBe("relatorio_sgso.csv");
+    expect((saveAs as unknown).mock.calls[0][1]).toBe("relatorio_sgso.csv");
   });
 
   it("should call html2pdf when PDF export button is clicked", async () => {

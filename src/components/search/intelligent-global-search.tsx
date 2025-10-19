@@ -32,7 +32,7 @@ interface SearchResult {
   url: string;
   icon: React.ElementType;
   priority: number;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 interface IntelligentGlobalSearchProps {

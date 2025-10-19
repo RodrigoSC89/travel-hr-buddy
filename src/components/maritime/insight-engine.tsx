@@ -217,7 +217,7 @@ export const InsightEngine: React.FC = () => {
                           </CardDescription>
                         </div>
                       </div>
-                      <Badge variant={getImpactColor(insight.impact) as any}>
+                      <Badge variant={getImpactColor(insight.impact) as unknown}>
                         {insight.impact.toUpperCase()}
                       </Badge>
                     </div>

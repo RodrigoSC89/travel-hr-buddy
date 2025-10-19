@@ -57,7 +57,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   }, []);
 
   // Save data to cache
-  const saveToCache = useCallback(async (key: string, data: any) => {
+  const saveToCache = useCallback(async (key: string, data: unknown) => {
     try {
       const db = await initDB();
       const transaction = db.transaction([CACHE_STORE], "readwrite");
@@ -94,7 +94,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   }, [initDB]);
 
   // Add pending change for offline sync
-  const addPendingChange = useCallback(async (action: string, data: any) => {
+  const addPendingChange = useCallback(async (action: string, data: unknown) => {
     try {
       const db = await initDB();
       const transaction = db.transaction([OFFLINE_STORE], "readwrite");

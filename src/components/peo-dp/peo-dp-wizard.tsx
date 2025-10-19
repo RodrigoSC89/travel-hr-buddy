@@ -83,13 +83,13 @@ const WIZARD_STEPS: WizardStep[] = [
 ];
 
 interface PeoDpWizardProps {
-  onComplete: (data: any) => void;
+  onComplete: (data: unknown) => void;
   onCancel: () => void;
 }
 
 export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<Record<string, unknown>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentWizardStep = WIZARD_STEPS[currentStep];
@@ -120,7 +120,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
     }
   };
 
-  const updateFormData = (field: string, value: any) => {
+  const updateFormData = (field: string, value: unknown) => {
     setFormData({ ...formData, [field]: value });
   };
 

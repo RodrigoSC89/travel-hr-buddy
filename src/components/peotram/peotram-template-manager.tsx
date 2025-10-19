@@ -40,7 +40,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<Partial<PeotramTemplate>>({});
 
-  const createNewTemplate = async (templateData: any) => {
+  const createNewTemplate = async (templateData: unknown) => {
     try {
       const { data, error } = await supabase
         .from("peotram_templates")
@@ -66,7 +66,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
     }
   };
 
-  const updateTemplate = async (id: string, updates: any) => {
+  const updateTemplate = async (id: string, updates: unknown) => {
     try {
       const { error } = await supabase
         .from("peotram_templates")

@@ -211,8 +211,8 @@ const IntelligentAlerts: React.FC = () => {
     
     const newAlert: IntelligentAlert = {
       id: Math.random().toString(),
-      type: alertTypes[Math.floor(Math.random() * alertTypes.length)] as any,
-      severity: severities[Math.floor(Math.random() * severities.length)] as any,
+      type: alertTypes[Math.floor(Math.random() * alertTypes.length)] as unknown,
+      severity: severities[Math.floor(Math.random() * severities.length)] as unknown,
       title: "Anomalia Detectada pelo Sistema de IA",
       description: "Sistema inteligente identificou padrão anômalo que requer atenção.",
       vessel_name: vessels[Math.floor(Math.random() * vessels.length)],

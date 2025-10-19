@@ -28,8 +28,8 @@ interface SystemNotification {
   is_read: boolean;
   created_at: string;
   action_type?: string;
-  action_data?: any;
-  metadata?: any;
+  action_data?: unknown;
+  metadata?: unknown;
 }
 
 export const EnhancedNotificationCenter: React.FC = () => {
@@ -276,7 +276,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
               key={filterType}
               variant={filter === filterType ? "default" : "outline"}
               size="sm"
-              onClick={() => setFilter(filterType as any)}
+              onClick={() => setFilter(filterType as unknown)}
             >
               {filterType === "all" && "Todas"}
               {filterType === "unread" && "Não lidas"}

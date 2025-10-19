@@ -30,7 +30,7 @@ vi.mock("@tiptap/react", () => ({
       },
     },
   })),
-  EditorContent: ({ editor }: any) => <div data-testid="editor-content">Editor</div>,
+  EditorContent: ({ editor }: unknown) => <div data-testid="editor-content">Editor</div>,
 }));
 
 vi.mock("@tiptap/starter-kit", () => ({
@@ -125,7 +125,7 @@ describe("DocumentAIEditorPage", () => {
   it("should apply template from localStorage on mount", async () => {
     const mockSetContent = vi.fn();
     const { useEditor } = await import("@tiptap/react");
-    (useEditor as any).mockReturnValue({
+    (useEditor as unknown).mockReturnValue({
       commands: {
         setContent: mockSetContent,
       },

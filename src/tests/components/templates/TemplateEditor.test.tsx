@@ -34,7 +34,7 @@ vi.mock("@tiptap/react", () => ({
       setContent: vi.fn(),
     },
   })),
-  EditorContent: ({ editor }: any) => <div data-testid="editor-content">Editor</div>,
+  EditorContent: ({ editor }: unknown) => <div data-testid="editor-content">Editor</div>,
 }));
 
 // Mock html2pdf

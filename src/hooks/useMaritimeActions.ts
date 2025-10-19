@@ -31,7 +31,7 @@ export const useMaritimeActions = () => {
     });
   }, [toast]);
 
-  const handleExport = useCallback(async (moduleName: string, data?: any) => {
+  const handleExport = useCallback(async (moduleName: string, data?: unknown) => {
     setIsLoading(true);
     try {
       // Simulate export action

@@ -18,7 +18,7 @@ const Expenses = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "approved" | "rejected">("all");
 
-  const handleCreateExpense = async (data: any) => {
+  const handleCreateExpense = async (data: unknown) => {
     try {
       setIsCreating(true);
       await createExpense(data);

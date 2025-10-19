@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Example: Integration in a workflow detail page
 export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: string }) {
-  const [aiSuggestions, setAiSuggestions] = useState<any>([]);
+  const [aiSuggestions, setAiSuggestions] = useState<unknown>([]);
 
   useEffect(() => {
     // Example: Fetch AI suggestions from an AI service or generate them
@@ -148,7 +148,7 @@ export async function generateAISuggestionsForWorkflow(workflowId: string) {
 
 // Example: Usage in a page component
 export default function ExampleWorkflowPage() {
-  const [suggestions, setSuggestions] = useState<any>([]);
+  const [suggestions, setSuggestions] = useState<unknown>([]);
 
   useEffect(() => {
     const loadSuggestions = async () => {

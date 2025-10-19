@@ -29,7 +29,7 @@ interface AdvancedSettings {
   debugMode: boolean;
   performanceMonitoring: boolean;
   errorTracking: boolean;
-  customFields: Record<string, any>;
+  customFields: Record<string, unknown>;
   workflowAutomation: boolean;
   enableBetaFeatures: boolean;
 }

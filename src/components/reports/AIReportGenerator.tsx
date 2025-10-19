@@ -10,7 +10,7 @@ import { FileText, Download, Loader2, Calendar, Settings, Sparkles } from "lucid
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface AIReportGeneratorProps {
-  onReportGenerated?: (report: any) => void;
+  onReportGenerated?: (report: unknown) => void;
 }
 
 const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated }) => {
@@ -23,7 +23,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
   });
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [customPrompt, setCustomPrompt] = useState("");
-  const [lastReport, setLastReport] = useState<any>(null);
+  const [lastReport, setLastReport] = useState<unknown>(null);
   const { toast } = useToast();
 
   const reportTypes = [

@@ -108,7 +108,7 @@ export const PeotramPermissionsManager: React.FC = () => {
 
       if (error) throw error;
       
-      const mappedPermissions = (data || []).map((permission: any) => ({
+      const mappedPermissions = (data || []).map((permission: unknown) => ({
         ...permission,
         permission_level: permission.permission_level as "none" | "read" | "write" | "admin",
         location_type: permission.location_type as "vessel" | "shore" | "both"
@@ -175,7 +175,7 @@ export const PeotramPermissionsManager: React.FC = () => {
     }
   };
 
-  const updatePermission = async (id: string, updates: any) => {
+  const updatePermission = async (id: string, updates: unknown) => {
     try {
       const { error } = await supabase
         .from("user_feature_permissions")
@@ -380,7 +380,7 @@ export const PeotramPermissionsManager: React.FC = () => {
                   <Label>Nível de Permissão</Label>
                   <Select 
                     value={permissionForm.permission_level} 
-                    onValueChange={(value: any) => setPermissionForm(prev => ({ ...prev, permission_level: value }))}
+                    onValueChange={(value: unknown) => setPermissionForm(prev => ({ ...prev, permission_level: value }))}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -397,7 +397,7 @@ export const PeotramPermissionsManager: React.FC = () => {
                   <Label>Tipo de Local</Label>
                   <Select 
                     value={permissionForm.location_type} 
-                    onValueChange={(value: any) => setPermissionForm(prev => ({ ...prev, location_type: value }))}
+                    onValueChange={(value: unknown) => setPermissionForm(prev => ({ ...prev, location_type: value }))}
                   >
                     <SelectTrigger>
                       <SelectValue />

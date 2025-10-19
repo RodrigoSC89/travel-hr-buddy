@@ -34,7 +34,7 @@ interface Feedback {
   rating?: number;
   page_url?: string;
   browser_info?: string;
-  attachments?: any;
+  attachments?: unknown;
   created_at: string;
   updated_at: string;
 }

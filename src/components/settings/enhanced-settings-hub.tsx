@@ -100,7 +100,7 @@ interface SettingsData {
   integrations: {
     apiKeys: Record<string, string>;
     webhooks: Array<{ id: string; name: string; url: string; active: boolean; events: string[] }>;
-    externalServices: Record<string, any>;
+    externalServices: Record<string, unknown>;
     rateLimits: Record<string, number>;
     enableApiVersioning: boolean;
   };
@@ -109,7 +109,7 @@ interface SettingsData {
     debugMode: boolean;
     performanceMonitoring: boolean;
     errorTracking: boolean;
-    customFields: Record<string, any>;
+    customFields: Record<string, unknown>;
     workflowAutomation: boolean;
     enableBetaFeatures: boolean;
   };
@@ -255,7 +255,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     calculateHealth();
   }, [settings]);
 
-  const updateSettings = (category: keyof SettingsData, updates: any) => {
+  const updateSettings = (category: keyof SettingsData, updates: unknown) => {
     setSettings(prev => ({
       ...prev,
       [category]: {
@@ -540,7 +540,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     }
   };
 
-  const logSettingsChange = async (action: string, data: any) => {
+  const logSettingsChange = async (action: string, data: unknown) => {
     const logEntry = {
       timestamp: new Date().toISOString(),
       user: user?.email || "sistema",
@@ -765,7 +765,7 @@ export const EnhancedSettingsHub: React.FC = () => {
                     <span className="text-amber-700 dark:text-amber-300">
                       <AlertTriangle className="w-4 h-4 inline mr-1" />
                       {Object.keys(settings).filter(key => 
-                        JSON.stringify((settings as any)[key]) !== JSON.stringify(settings[key as keyof SettingsData])
+                        JSON.stringify((settings as unknown)[key]) !== JSON.stringify(settings[key as keyof SettingsData])
                       ).length} seções com alterações pendentes
                     </span>
                   )}

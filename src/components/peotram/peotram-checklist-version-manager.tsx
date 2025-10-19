@@ -471,7 +471,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                       onChange={(e) =>
                         setSelectedTemplate({
                           ...selectedTemplate,
-                          vesselType: e.target.value as any,
+                          vesselType: e.target.value as unknown,
                         })
                       }
                       disabled={!isEditing}

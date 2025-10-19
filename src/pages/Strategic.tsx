@@ -199,7 +199,7 @@ const Strategic: React.FC = () => {
                     key={module.id} 
                     className="card-vessel hover-lift cursor-pointer group animate-slide-in-up"
                     style={{ animationDelay: `${index * 150}ms` }}
-                    onClick={() => setActiveModule(module.id as any)}
+                    onClick={() => setActiveModule(module.id as unknown)}
                   >
                     <div className={`h-2 bg-gradient-to-r ${module.color} animate-tide`} />
                       
@@ -241,7 +241,7 @@ const Strategic: React.FC = () => {
                         className="btn-maritime w-full mt-6 group-hover:shadow-beacon transition-all" 
                         onClick={(e) => {
                           e.stopPropagation();
-                          setActiveModule(module.id as any);
+                          setActiveModule(module.id as unknown);
                         }}
                       >
                           Navegar para Módulo
@@ -436,7 +436,7 @@ const Strategic: React.FC = () => {
                   <Button
                     key={module.id}
                     variant={activeModule === module.id ? "default" : "outline"}
-                    onClick={() => setActiveModule(module.id as any)}
+                    onClick={() => setActiveModule(module.id as unknown)}
                     className={`flex items-center gap-2 ${activeModule === module.id ? "btn-maritime" : "btn-harbor"}`}
                   >
                     <Icon className="w-4 h-4" />

@@ -25,7 +25,7 @@ interface SystemMetric {
   unit: string;
   status: "good" | "warning" | "critical";
   trend: "up" | "down" | "stable";
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<unknown>;
 }
 
 interface SystemAlert {

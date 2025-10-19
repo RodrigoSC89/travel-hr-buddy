@@ -30,7 +30,7 @@ interface VoiceInteractionPanelProps {
 interface AIInsight {
   id: string;
   analysis_type: string;
-  insights_data: any;
+  insights_data: unknown;
   confidence_score: number;
   created_at: string;
 }
@@ -39,9 +39,9 @@ interface GamificationProfile {
   id: string;
   total_experience_points: number;
   current_level: number;
-  badges_earned: any[];
-  achievements: any[];
-  skill_progression: any;
+  badges_earned: unknown[];
+  achievements: unknown[];
+  skill_progression: unknown;
   leaderboard_rank: number;
 }
 
@@ -438,7 +438,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         ].map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => setActiveTab(id as any)}
+            onClick={() => setActiveTab(id as unknown)}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md transition-colors ${
               activeTab === id
                 ? "bg-background text-foreground shadow-sm"

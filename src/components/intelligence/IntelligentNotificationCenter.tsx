@@ -28,7 +28,7 @@ interface IntelligentNotification {
   message: string;
   actionText?: string;
   actionType?: "navigate" | "configure" | "dismiss" | "learn";
-  actionData?: any;
+  actionData?: unknown;
   isRead: boolean;
   createdAt: Date;
   category?: string;
@@ -146,7 +146,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     }
   };
 
-  const handleNewNotification = (payload: any) => {
+  const handleNewNotification = (payload: unknown) => {
     loadNotifications(); // Reload notifications
     
     toast({
@@ -285,7 +285,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs value={filter} onValueChange={(value) => setFilter(value as any)} className="w-full">
+        <Tabs value={filter} onValueChange={(value) => setFilter(value as unknown)} className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">
               Todas ({notifications.length})

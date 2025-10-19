@@ -195,7 +195,7 @@ export const IoTSensorDashboard = () => {
     })));
   };
 
-  const processSensorData = async (vesselId: string, sensorData: any) => {
+  const processSensorData = async (vesselId: string, sensorData: unknown) => {
     try {
       const { data, error } = await supabase.functions.invoke("iot-sensor-processing", {
         body: {

@@ -93,7 +93,7 @@ export const MobileOptimizationCenter: React.FC = () => {
     const mockSessions: UserSession[] = Array.from({ length: 50 }, (_, i) => ({
       id: `session-${i}`,
       userId: `user-${Math.floor(Math.random() * 20)}`,
-      device: ["mobile", "tablet", "desktop"][Math.floor(Math.random() * 3)] as any,
+      device: ["mobile", "tablet", "desktop"][Math.floor(Math.random() * 3)] as unknown,
       os: ["iOS", "Android", "Windows", "macOS"][Math.floor(Math.random() * 4)],
       browser: ["Chrome", "Safari", "Firefox", "Edge"][Math.floor(Math.random() * 4)],
       location: ["São Paulo", "Rio de Janeiro", "Brasília", "Recife"][Math.floor(Math.random() * 4)],

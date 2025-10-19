@@ -81,7 +81,7 @@ export default function AdvancedSettingsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const updateSettings = (category: keyof SystemSettings, key: string, value: any) => {
+  const updateSettings = (category: keyof SystemSettings, key: string, value: unknown) => {
     setSettings(prev => ({
       ...prev,
       [category]: {

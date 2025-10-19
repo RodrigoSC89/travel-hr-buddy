@@ -267,7 +267,7 @@ export const AIThreatDetection: React.FC = () => {
                         <div>
                           <div className="flex items-center gap-2">
                             <CardTitle className="text-base">{threat.title}</CardTitle>
-                            <Badge variant={getSeverityColor(threat.severity) as any}>
+                            <Badge variant={getSeverityColor(threat.severity) as unknown}>
                               {threat.severity.toUpperCase()}
                             </Badge>
                           </div>

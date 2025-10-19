@@ -40,7 +40,7 @@ interface BookingOption {
   duration?: string;
   rating?: number;
   amenities?: string[];
-  details: any;
+  details: unknown;
 }
 
 interface BookingStep {

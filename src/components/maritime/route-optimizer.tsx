@@ -246,7 +246,7 @@ export const RealTimeRouteOptimizer: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Badge variant="outline">{opt.vessel}</Badge>
-                      <Badge variant={getStatusColor(opt.status) as any}>
+                      <Badge variant={getStatusColor(opt.status) as unknown}>
                         {opt.status.toUpperCase()}
                       </Badge>
                     </div>

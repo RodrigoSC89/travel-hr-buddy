@@ -37,10 +37,10 @@ export interface Notification {
   is_read?: boolean;
   createdAt: Date;
   timestamp?: string;
-  actionData?: any;
+  actionData?: unknown;
   action_url?: string;
   auto_dismiss?: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface NotificationCenterProps {
@@ -85,8 +85,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       .subscribe();
 
     // Setup maritime-specific subscriptions if variant is maritime or fleet
-    let alertsChannel: any;
-    let maintenanceChannel: any;
+    let alertsChannel: unknown;
+    let maintenanceChannel: unknown;
 
     if (variant === "maritime" || variant === "fleet") {
       alertsChannel = supabase
@@ -144,18 +144,18 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
       const formattedNotifications: Notification[] = data?.map(n => ({
         id: n.id,
-        type: n.type as any,
+        type: n.type as unknown,
         title: n.title,
         message: n.message,
         description: n.message,
-        priority: n.priority as any,
+        priority: n.priority as unknown,
         isRead: n.is_read,
         is_read: n.is_read,
         createdAt: new Date(n.created_at),
         timestamp: n.created_at,
         actionData: n.action_data,
         metadata: typeof n.metadata === "object" && n.metadata !== null && !Array.isArray(n.metadata)
-          ? n.metadata as Record<string, any>
+          ? n.metadata as Record<string, unknown>
           : {}
       })) || [];
 
@@ -172,7 +172,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     }
   };
 
-  const handleNewNotification = (payload: any) => {
+  const handleNewNotification = (payload: unknown) => {
     const newNotification: Notification = {
       id: payload.new.id,
       type: payload.new.type,
@@ -195,7 +195,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     });
   };
 
-  const createNotificationFromAlert = (alert: any) => {
+  const createNotificationFromAlert = (alert: unknown) => {
     const notification: Notification = {
       id: `alert-${alert.id}`,
       type: "compliance_alert",
@@ -211,7 +211,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     setUnreadCount(prev => prev + 1);
   };
 
-  const createNotificationFromMaintenance = (maintenance: any) => {
+  const createNotificationFromMaintenance = (maintenance: unknown) => {
     const notification: Notification = {
       id: `maintenance-${maintenance.id}`,
       type: "maintenance_due",

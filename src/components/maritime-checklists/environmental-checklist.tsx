@@ -170,7 +170,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
   const totalItems = checklist.items.length;
   const progressPercentage = (completedItems / totalItems) * 100;
 
-  const handleItemChange = (itemId: string, field: string, value: any) => {
+  const handleItemChange = (itemId: string, field: string, value: unknown) => {
     setChecklist(prev => ({
       ...prev,
       items: prev.items.map(item => 

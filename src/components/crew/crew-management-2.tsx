@@ -437,7 +437,7 @@ export const CrewManagement2: React.FC = () => {
                                   {cert.daysRemaining > 0 ? `${cert.daysRemaining} dias` : "Vencida"}
                                 </div>
                               </div>
-                              <Badge variant={getCertStatusColor(cert.status) as any}>
+                              <Badge variant={getCertStatusColor(cert.status) as unknown}>
                                 {cert.status.toUpperCase()}
                               </Badge>
                             </div>

@@ -3,10 +3,10 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { logger } from "@/lib/logger";
 
 interface LazyComponentProps {
-  loader: () => Promise<{ default: React.ComponentType<any> }>;
+  loader: () => Promise<{ default: React.ComponentType<unknown> }>;
   fallback?: React.ReactNode;
   children?: React.ReactNode;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export const LazyComponent: React.FC<LazyComponentProps> = memo(({ 
@@ -54,7 +54,7 @@ export const usePerformanceMonitor = (componentName: string) => {
 };
 
 // Componente otimizado para cards
-export const OptimizedCard = memo(({ children, className, ...props }: any) => {
+export const OptimizedCard = memo(({ children, className, ...props }: unknown) => {
   return (
     <div className={`transition-all duration-200 ${className}`} {...props}>
       {children}

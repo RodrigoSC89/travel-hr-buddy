@@ -56,7 +56,7 @@ describe("PersonalRestoreDashboard", () => {
             },
           ],
           error: null,
-        }) as any;
+        }) as unknown;
       }
       if (functionName === "get_restore_count_by_day_with_email") {
         return Promise.resolve({
@@ -66,9 +66,9 @@ describe("PersonalRestoreDashboard", () => {
             { day: "2025-10-12", count: 12 },
           ],
           error: null,
-        }) as any;
+        }) as unknown;
       }
-      return Promise.resolve({ data: null, error: null }) as any;
+      return Promise.resolve({ data: null, error: null }) as unknown;
     });
   });
 

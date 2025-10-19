@@ -63,15 +63,15 @@ interface DashboardStats {
   complianceRate: number;
   pendingCertificates: number;
   upcomingTraining: number;
-  recentPayments: any[];
-  nextEmbarkation?: any;
+  recentPayments: unknown[];
+  nextEmbarkation?: unknown;
 }
 
 interface PersonalCalendar {
-  embarkations: any[];
-  training: any[];
-  certifications: any[];
-  medicalExams: any[];
+  embarkations: unknown[];
+  training: unknown[];
+  certifications: unknown[];
+  medicalExams: unknown[];
 }
 
 interface AIInsight {
@@ -93,7 +93,7 @@ export const ModernEmployeePortal: React.FC = () => {
   const [personalCalendar, setPersonalCalendar] = useState<PersonalCalendar | null>(null);
   const [aiInsights, setAIInsights] = useState<AIInsight[]>([]);
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [userProfile, setUserProfile] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<unknown>(null);
   const [darkMode, setDarkMode] = useState(false);
 
   // AI Chat states

@@ -197,7 +197,7 @@ export const FlightSearch = () => {
       
       if (data.success && data.data?.data) {
         // Transform Amadeus data to our format
-        const transformedFlights = data.data.data.map((offer: any, index: number) => {
+        const transformedFlights = data.data.data.map((offer: unknown, index: number) => {
           // Gerar URL específica de booking com parâmetros do voo
           const bookingUrl = generateFlightBookingUrl(offer, searchParams);
           
@@ -346,7 +346,7 @@ export const FlightSearch = () => {
   };
 
   // Função para gerar URL específica de booking com parâmetros do voo
-  const generateFlightBookingUrl = (offer: any, searchParams: any) => {
+  const generateFlightBookingUrl = (offer: unknown, searchParams: unknown) => {
     const airline = offer.itineraries[0]?.segments[0]?.carrierCode || "XX";
     const flightNumber = offer.itineraries[0]?.segments[0]?.number || "0000";
     const originCode = offer.itineraries[0]?.segments[0]?.departure?.iataCode || "";
@@ -369,7 +369,7 @@ export const FlightSearch = () => {
     }
   };
 
-  const generateMockFlightBookingUrl = (flight: FlightOption, searchParams: any) => {
+  const generateMockFlightBookingUrl = (flight: FlightOption, searchParams: unknown) => {
     const originCode = flight.departure.airport;
     const destinationCode = flight.arrival.airport;
     const departureDate = searchParams.departure;

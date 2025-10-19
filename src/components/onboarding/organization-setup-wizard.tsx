@@ -163,12 +163,12 @@ export const OrganizationSetupWizard: React.FC = () => {
           default_language: "pt-BR",
           default_currency: orgData.currency,
           timezone: orgData.timezone,
-          enabled_modules: orgData.modules as any,
+          enabled_modules: orgData.modules as unknown,
           custom_fields: {
             industry: orgData.industry,
             company_size: orgData.size,
             description: orgData.description
-          } as any
+          } as unknown
         });
 
       if (brandingError) throw brandingError;
@@ -181,12 +181,12 @@ export const OrganizationSetupWizard: React.FC = () => {
         accent_color: "#f59e0b",
         default_currency: orgData.currency,
         timezone: orgData.timezone,
-        enabled_modules: orgData.modules as any,
+        enabled_modules: orgData.modules as unknown,
         custom_fields: {
           industry: orgData.industry,
           company_size: orgData.size,
           description: orgData.description
-        } as any
+        } as unknown
       });
       
       toast({
@@ -197,7 +197,7 @@ export const OrganizationSetupWizard: React.FC = () => {
       // Redirect to dashboard
       navigate("/");
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Erro na Configuração",
         description: error.message || "Erro ao salvar configurações",

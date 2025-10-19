@@ -225,7 +225,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                     <Select
                       value={profile?.preferences?.theme || "system"}
                       onValueChange={(value) => updateProfile({
-                        preferences: { ...profile?.preferences, theme: value as any }
+                        preferences: { ...profile?.preferences, theme: value as unknown }
                       })}
                     >
                       <SelectTrigger className="w-32">
@@ -270,7 +270,7 @@ export const UserProfileDialog: React.FC<UserProfileDialogProps> = ({ trigger })
                     <Select
                       value={profile?.preferences?.language || "pt"}
                       onValueChange={(value) => updateProfile({
-                        preferences: { ...profile?.preferences, language: value as any }
+                        preferences: { ...profile?.preferences, language: value as unknown }
                       })}
                     >
                       <SelectTrigger className="w-32">

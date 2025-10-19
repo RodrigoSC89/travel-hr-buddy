@@ -95,7 +95,7 @@ const DPIntelligenceCenter = () => {
 
       if (dbIncidents && dbIncidents.length > 0) {
         // Map database fields to component interface
-        const incidentsWithStatus = dbIncidents.map((inc: any) => ({
+        const incidentsWithStatus = dbIncidents.map((inc: unknown) => ({
           id: inc.id,
           title: inc.title,
           date: inc.incident_date || inc.date,

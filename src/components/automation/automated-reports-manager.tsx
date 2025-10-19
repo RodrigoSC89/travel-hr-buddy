@@ -157,10 +157,10 @@ export const AutomatedReportsManager: React.FC = () => {
         .from("automated_reports")
         .insert({
           ...formData,
-          recipients: formData.recipients.filter(email => email.trim() !== "") as any,
+          recipients: formData.recipients.filter(email => email.trim() !== "") as unknown,
           created_by: user.user?.id,
           organization_id: user.user?.id // Temporário para demo
-        } as any);
+        } as unknown);
 
       if (error) throw error;
 

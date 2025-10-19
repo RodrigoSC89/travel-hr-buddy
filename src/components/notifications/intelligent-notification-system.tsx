@@ -40,7 +40,7 @@ interface Notification {
   read: boolean;
   actionRequired: boolean;
   source: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 const IntelligentNotificationSystem = () => {
@@ -200,7 +200,7 @@ const IntelligentNotificationSystem = () => {
     deleteNotification(id);
   };
 
-  const updateSettings = (key: string, value: any) => {
+  const updateSettings = (key: string, value: unknown) => {
     setSettings(prev => ({
       ...prev,
       [key]: value

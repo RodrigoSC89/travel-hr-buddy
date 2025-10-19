@@ -66,7 +66,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
   const [auditResponses, setAuditResponses] = useState<Record<string, AuditResponse[]>>({});
   const [nonConformities, setNonConformities] = useState<NonConformity[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [aiInsights, setAiInsights] = useState<Record<string, any>>({});
+  const [aiInsights, setAiInsights] = useState<Record<string, unknown>>({});
   const [overallProgress, setOverallProgress] = useState(0);
 
   const elements = template.template_data.elements;
@@ -501,7 +501,7 @@ const RequirementForm: React.FC<{
           <Label>Avaliação</Label>
           <RadioGroup
             value={formData.score}
-            onValueChange={(value: any) => setFormData(prev => ({ ...prev, score: value }))}
+            onValueChange={(value: unknown) => setFormData(prev => ({ ...prev, score: value }))}
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="compliant" id="compliant" />
@@ -526,7 +526,7 @@ const RequirementForm: React.FC<{
           <Label>Criticidade</Label>
           <Select
             value={formData.criticality}
-            onValueChange={(value: any) => setFormData(prev => ({ ...prev, criticality: value }))}
+            onValueChange={(value: unknown) => setFormData(prev => ({ ...prev, criticality: value }))}
           >
             <SelectTrigger>
               <SelectValue />

@@ -109,7 +109,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
     elementId: element.id,
     elementName: element.name,
     progress: Math.floor(Math.random() * 100),
-    status: ["completed", "in-progress", "pending", "overdue"][Math.floor(Math.random() * 4)] as any,
+    status: ["completed", "in-progress", "pending", "overdue"][Math.floor(Math.random() * 4)] as unknown,
     dueDate: `2024-${String(12 - index % 12).padStart(2, "0")}-15`,
     assignedTo: `Auditor ${index + 1}`,
     lastUpdate: `2024-12-${String(Math.floor(Math.random() * 28) + 1).padStart(2, "0")}`
@@ -206,7 +206,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Tipo de Auditoria</label>
                 <select 
                   value={auditType} 
-                  onChange={(e) => setAuditType(e.target.value as any)}
+                  onChange={(e) => setAuditType(e.target.value as unknown)}
                   className="w-full mt-1 p-2 border rounded-md bg-background"
                 >
                   <option value="all">Todas</option>

@@ -251,7 +251,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px"
                   }}
-                  formatter={(value: any) => [`R$ ${value}`, ""]}
+                  formatter={(value: unknown) => [`R$ ${value}`, ""]}
                 />
                 <Line 
                   type="monotone" 
@@ -344,7 +344,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px"
                   }}
-                  formatter={(value: any, name: string) => [
+                  formatter={(value: unknown, name: string) => [
                     name === "savings" ? `R$ ${value}` : `${value} alertas`,
                     name === "savings" ? "Economia" : "Alertas"
                   ]}

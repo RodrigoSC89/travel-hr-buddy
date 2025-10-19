@@ -194,7 +194,7 @@ const ExecutiveMetricsPanel = () => {
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px"
                   }}
-                  formatter={(value: any, name: string) => [
+                  formatter={(value: unknown, name: string) => [
                     `R$ ${(value/1000).toFixed(0)}K`,
                     name === "revenue" ? "Receita" : name === "forecast" ? "Previsão" : "Despesas"
                   ]}

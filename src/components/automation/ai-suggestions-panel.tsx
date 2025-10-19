@@ -83,7 +83,7 @@ export const AISuggestionsPanel: React.FC = () => {
 
       const { error } = await supabase
         .from("ai_suggestions")
-        .update(updates as any)
+        .update(updates as unknown)
         .eq("id", suggestion.id);
 
       if (error) throw error;
@@ -307,22 +307,22 @@ export const AISuggestionsPanel: React.FC = () => {
                       
                       {suggestion.action_data && Object.keys(suggestion.action_data).length > 0 && (
                         <div className="flex gap-2 text-xs text-muted-foreground">
-                          {(suggestion.action_data as any)?.savings && (
+                          {(suggestion.action_data as unknown)?.savings && (
                             <div className="flex items-center gap-1">
                               <TrendingUp className="w-3 h-3" />
-                              Economia: {(suggestion.action_data as any).savings}
+                              Economia: {(suggestion.action_data as unknown).savings}
                             </div>
                           )}
-                          {(suggestion.action_data as any)?.vessel && (
+                          {(suggestion.action_data as unknown)?.vessel && (
                             <div className="flex items-center gap-1">
                               <Ship className="w-3 h-3" />
-                              {(suggestion.action_data as any).vessel}
+                              {(suggestion.action_data as unknown).vessel}
                             </div>
                           )}
-                          {(suggestion.action_data as any)?.days_overdue && (
+                          {(suggestion.action_data as unknown)?.days_overdue && (
                             <div className="flex items-center gap-1">
                               <AlertTriangle className="w-3 h-3" />
-                              {(suggestion.action_data as any).days_overdue} dias em atraso
+                              {(suggestion.action_data as unknown).days_overdue} dias em atraso
                             </div>
                           )}
                         </div>

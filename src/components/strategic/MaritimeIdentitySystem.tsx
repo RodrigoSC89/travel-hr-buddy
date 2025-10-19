@@ -355,7 +355,7 @@ const MaritimeIdentitySystem: React.FC = () => {
             <Button
               key={section.id}
               variant={activeSection === section.id ? "default" : "ghost"}
-              onClick={() => setActiveSection(section.id as any)}
+              onClick={() => setActiveSection(section.id as unknown)}
               className="flex items-center gap-2"
             >
               <Icon className="w-4 h-4" />
@@ -534,7 +534,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                       return (
                         <div
                           key={style.id}
-                          onClick={() => setSettings(prev => ({ ...prev, navigationStyle: style.id as any }))}
+                          onClick={() => setSettings(prev => ({ ...prev, navigationStyle: style.id as unknown }))}
                           className={`p-4 border rounded-lg cursor-pointer transition-all hover:scale-105 ${
                             settings.navigationStyle === style.id ? "border-primary bg-primary/5" : "border-muted"
                           }`}
@@ -566,7 +566,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                       return (
                         <div
                           key={option.id}
-                          onClick={() => setSettings(prev => ({ ...prev, terminology: option.id as any }))}
+                          onClick={() => setSettings(prev => ({ ...prev, terminology: option.id as unknown }))}
                           className={`p-4 border rounded-lg cursor-pointer transition-all hover:scale-[1.02] ${
                             settings.terminology === option.id ? "border-primary bg-primary/5" : "border-muted"
                           }`}

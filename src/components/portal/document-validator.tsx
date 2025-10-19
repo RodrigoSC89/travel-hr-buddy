@@ -25,7 +25,7 @@ interface ValidationResult {
   issues: string[];
   suggestions: string[];
   documentType: string;
-  extractedData: any;
+  extractedData: unknown;
 }
 
 interface DocumentValidatorProps {

@@ -143,7 +143,7 @@ const DashboardKPIWidget: React.FC<{
 };
 
 const DashboardExportPanel: React.FC<{
-  onExport: (format: string, options?: any) => void;
+  onExport: (format: string, options?: unknown) => void;
   isExporting?: boolean;
 }> = ({ onExport, isExporting }) => {
   const exportOptions: ExportOption[] = [
@@ -217,8 +217,8 @@ const DashboardExportPanel: React.FC<{
 };
 
 const DashboardFilters: React.FC<{
-  onFilterChange: (filters: any) => void;
-  currentFilters: any;
+  onFilterChange: (filters: unknown) => void;
+  currentFilters: unknown;
 }> = ({ onFilterChange, currentFilters }) => {
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],

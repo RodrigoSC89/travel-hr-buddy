@@ -95,7 +95,7 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
           {/* Tone Settings */}
           <div className="space-y-3">
             <Label>Tom de Comunicação</Label>
-            <Select value={settings.tone} onValueChange={(value) => setSettings(prev => ({ ...prev, tone: value as any }))}>
+            <Select value={settings.tone} onValueChange={(value) => setSettings(prev => ({ ...prev, tone: value as unknown }))}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -111,7 +111,7 @@ const VoicePersonality: React.FC<VoicePersonalityProps> = ({
           {/* Response Length */}
           <div className="space-y-3">
             <Label>Estilo de Resposta</Label>
-            <Select value={settings.responseLength} onValueChange={(value) => setSettings(prev => ({ ...prev, responseLength: value as any }))}>
+            <Select value={settings.responseLength} onValueChange={(value) => setSettings(prev => ({ ...prev, responseLength: value as unknown }))}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

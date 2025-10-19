@@ -169,7 +169,7 @@ export const TenantUserManagement: React.FC = () => {
       user_id: Date.now().toString(),
       email: newUserEmail,
       full_name: newUserEmail.split("@")[0],
-      role: newUserRole as any,
+      role: newUserRole as unknown,
       status: "pending",
       joined_at: new Date().toISOString(),
       last_seen: undefined
@@ -190,7 +190,7 @@ export const TenantUserManagement: React.FC = () => {
     setUsers(prev => 
       prev.map(user => 
         user.id === userId 
-          ? { ...user, role: newRole as any }
+          ? { ...user, role: newRole as unknown }
           : user
       )
     );
@@ -205,7 +205,7 @@ export const TenantUserManagement: React.FC = () => {
     setUsers(prev => 
       prev.map(user => 
         user.id === userId 
-          ? { ...user, status: newStatus as any }
+          ? { ...user, status: newStatus as unknown }
           : user
       )
     );

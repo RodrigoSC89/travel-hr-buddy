@@ -44,8 +44,8 @@ interface AutomationExecution {
   duration_ms: number | null;
   error_message: string | null;
   triggered_by: string | null;
-  trigger_data: any;
-  execution_log: any;
+  trigger_data: unknown;
+  execution_log: unknown;
 }
 
 export default function ExecutionLogsPage() {
@@ -101,7 +101,7 @@ export default function ExecutionLogsPage() {
         }
 
         // Transform data to include workflow name
-        const transformedData = (executionData || []).map((execution: any) => ({
+        const transformedData = (executionData || []).map((execution: unknown) => ({
           ...execution,
           workflow_name: execution.automation_workflows?.name || "Workflow Desconhecido"
         }));

@@ -77,7 +77,7 @@ export const VesselTracking = () => {
         longitude: -46.6333 + (Math.random() - 0.5) * 0.1,
         speed: Math.random() * 20,
         heading: Math.random() * 360,
-        status: ["sailing", "anchored", "docked"][Math.floor(Math.random() * 3)] as any,
+        status: ["sailing", "anchored", "docked"][Math.floor(Math.random() * 3)] as unknown,
         fuel_level: 50 + Math.random() * 50,
         last_update: new Date().toISOString(),
         weather: {
@@ -151,7 +151,7 @@ export const VesselTracking = () => {
           </p>
         </div>
         
-        <Tabs value={trackingMode} onValueChange={(value) => setTrackingMode(value as any)}>
+        <Tabs value={trackingMode} onValueChange={(value) => setTrackingMode(value as unknown)}>
           <TabsList>
             <TabsTrigger value="real-time">Tempo Real</TabsTrigger>
             <TabsTrigger value="historical">Histórico</TabsTrigger>

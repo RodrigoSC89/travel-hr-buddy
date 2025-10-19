@@ -134,7 +134,7 @@ export const PeoDpManager: React.FC = () => {
     setIsWizardOpen(true);
   };
 
-  const handleWizardComplete = async (data: any) => {
+  const handleWizardComplete = async (data: unknown) => {
     // TODO: Create plan in database
     setIsWizardOpen(false);
     toast.success("Plano PEO-DP criado com sucesso!");
@@ -225,7 +225,7 @@ export const PeoDpManager: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <Tabs value={activeView} onValueChange={(v) => setActiveView(v as any)} className="space-y-6">
+      <Tabs value={activeView} onValueChange={(v) => setActiveView(v as unknown)} className="space-y-6">
         <div className="flex items-center justify-between">
           <TabsList className="grid w-full max-w-md grid-cols-3">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">

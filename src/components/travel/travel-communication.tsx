@@ -51,7 +51,7 @@ interface ChatMessage {
   timestamp: Date;
   type: "text" | "file" | "location" | "travel-update" | "system";
   read: boolean;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 interface ChatUser {

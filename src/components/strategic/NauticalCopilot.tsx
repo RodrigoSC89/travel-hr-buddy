@@ -271,7 +271,7 @@ const NauticalCopilot: React.FC = () => {
                   key={mode}
                   variant={activeMode === mode ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setActiveMode(mode as any)}
+                  onClick={() => setActiveMode(mode as unknown)}
                   className="capitalize"
                 >
                   {mode === "chat" && <MessageSquare className="w-4 h-4 mr-1" />}

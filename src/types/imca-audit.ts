@@ -162,11 +162,6 @@ export function getDeadlineFromPriority(priority: Priority): Date {
 
   // Use UTC midnight to avoid timezone offsets affecting day calculations
   const now = new Date();
-  const utcMidnightToday = Date.UTC(
-    now.getUTCFullYear(),
-    now.getUTCMonth(),
-    now.getUTCDate()
-  );
   const utcMidnightDeadline = Date.UTC(
     now.getUTCFullYear(),
     now.getUTCMonth(),

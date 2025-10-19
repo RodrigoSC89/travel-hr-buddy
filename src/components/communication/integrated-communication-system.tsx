@@ -127,7 +127,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
       if (error) throw error;
 
-      const formattedMessages: Message[] = (data || []).map((msg: any) => ({
+      const formattedMessages: Message[] = (data || []).map((msg: unknown) => ({
         ...msg,
         message_type: msg.message_type as "text" | "voice" | "file" | "alert",
         sender_name: msg.sender?.full_name || "Unknown"
@@ -187,7 +187,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         sender_id: data.sender_id ?? "",
         message_type: data.message_type as "text" | "voice" | "file" | "alert",
         sender_name: "Você"
-      }] as any);
+      }] as unknown);
 
       setNewMessage("");
 
