@@ -152,6 +152,8 @@ export interface MMIOS {
   assigned_to?: string;
   start_date?: string;
   completion_date?: string;
+  executed_at?: string;
+  technician_comment?: string;
   work_description?: string;
   parts_used?: Array<{
     name: string;
