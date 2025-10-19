@@ -1,19 +1,19 @@
-import { useState, useCallback } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { TrainingModuleService } from '../services/training-module'
+import { useState, useCallback } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { TrainingModuleService } from "../services/training-module";
 import type {
   TrainingModule,
   TrainingCompletion,
   GenerateTrainingModuleRequest,
   ExportAuditBundleRequest
-} from '../types/training'
-import { toast } from 'sonner'
+} from "../types/training";
+import { toast } from "sonner";
 
 /**
  * Hook for managing training modules
  */
 export function useTrainingModules(vesselId?: string) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   // Fetch active training modules
   const {
@@ -22,29 +22,29 @@ export function useTrainingModules(vesselId?: string) {
     error,
     refetch
   } = useQuery({
-    queryKey: ['training-modules', vesselId],
+    queryKey: ["training-modules", vesselId],
     queryFn: () => TrainingModuleService.getActiveModules(vesselId),
-  })
+  });
 
   // Generate training module mutation
   const generateModuleMutation = useMutation({
     mutationFn: (request: GenerateTrainingModuleRequest) =>
       TrainingModuleService.generateTrainingModule(request),
     onSuccess: () => {
-      toast.success('Módulo de treinamento gerado com sucesso!')
-      queryClient.invalidateQueries({ queryKey: ['training-modules'] })
+      toast.success("Módulo de treinamento gerado com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["training-modules"] });
     },
     onError: (error: Error) => {
-      toast.error(`Erro ao gerar módulo: ${error.message}`)
+      toast.error(`Erro ao gerar módulo: ${error.message}`);
     },
-  })
+  });
 
   const generateModule = useCallback(
     (request: GenerateTrainingModuleRequest) => {
-      return generateModuleMutation.mutateAsync(request)
+      return generateModuleMutation.mutateAsync(request);
     },
     [generateModuleMutation]
-  )
+  );
 
   return {
     modules: modules || [],
@@ -53,7 +53,7 @@ export function useTrainingModules(vesselId?: string) {
     refetch,
     generateModule,
     isGenerating: generateModuleMutation.isPending,
-  }
+  };
 }
 
 /**
@@ -65,20 +65,20 @@ export function useTrainingModule(moduleId: string) {
     isLoading,
     error
   } = useQuery({
-    queryKey: ['training-module', moduleId],
+    queryKey: ["training-module", moduleId],
     queryFn: () => TrainingModuleService.getModuleById(moduleId),
     enabled: !!moduleId,
-  })
+  });
 
   // Get module statistics
   const {
     data: statistics,
     isLoading: isLoadingStats
   } = useQuery({
-    queryKey: ['training-module-stats', moduleId],
+    queryKey: ["training-module-stats", moduleId],
     queryFn: () => TrainingModuleService.getModuleStatistics(moduleId),
     enabled: !!moduleId,
-  })
+  });
 
   return {
     module,
@@ -86,14 +86,14 @@ export function useTrainingModule(moduleId: string) {
     isLoading,
     isLoadingStats,
     error,
-  }
+  };
 }
 
 /**
  * Hook for managing training completions
  */
 export function useTrainingCompletions(userId?: string, vesselId?: string) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   // Fetch user completions
   const {
@@ -101,9 +101,9 @@ export function useTrainingCompletions(userId?: string, vesselId?: string) {
     isLoading,
     error
   } = useQuery({
-    queryKey: ['training-completions', userId, vesselId],
+    queryKey: ["training-completions", userId, vesselId],
     queryFn: () => TrainingModuleService.getUserCompletions(userId, vesselId),
-  })
+  });
 
   // Record completion mutation
   const recordCompletionMutation = useMutation({
@@ -120,17 +120,17 @@ export function useTrainingCompletions(userId?: string, vesselId?: string) {
     }) => TrainingModuleService.recordCompletion(moduleId, quizAnswers, vesselId, notes),
     onSuccess: (data) => {
       if (data.passed) {
-        toast.success(`Parabéns! Você passou no treinamento com ${data.quiz_score}%`)
+        toast.success(`Parabéns! Você passou no treinamento com ${data.quiz_score}%`);
       } else {
-        toast.warning(`Você obteve ${data.quiz_score}%. É necessário 70% para passar.`)
+        toast.warning(`Você obteve ${data.quiz_score}%. É necessário 70% para passar.`);
       }
-      queryClient.invalidateQueries({ queryKey: ['training-completions'] })
-      queryClient.invalidateQueries({ queryKey: ['training-module-stats'] })
+      queryClient.invalidateQueries({ queryKey: ["training-completions"] });
+      queryClient.invalidateQueries({ queryKey: ["training-module-stats"] });
     },
     onError: (error: Error) => {
-      toast.error(`Erro ao registrar conclusão: ${error.message}`)
+      toast.error(`Erro ao registrar conclusão: ${error.message}`);
     },
-  })
+  });
 
   const recordCompletion = useCallback(
     (
@@ -144,10 +144,10 @@ export function useTrainingCompletions(userId?: string, vesselId?: string) {
         quizAnswers,
         vesselId,
         notes
-      })
+      });
     },
     [recordCompletionMutation]
-  )
+  );
 
   return {
     completions: completions || [],
@@ -155,35 +155,35 @@ export function useTrainingCompletions(userId?: string, vesselId?: string) {
     error,
     recordCompletion,
     isRecording: recordCompletionMutation.isPending,
-  }
+  };
 }
 
 /**
  * Hook for exporting audit bundles
  */
 export function useAuditExport() {
-  const [isExporting, setIsExporting] = useState(false)
+  const [isExporting, setIsExporting] = useState(false);
 
   const exportBundle = useCallback(
     async (request: ExportAuditBundleRequest) => {
-      setIsExporting(true)
+      setIsExporting(true);
       try {
-        const result = await TrainingModuleService.exportAuditBundle(request)
-        toast.success('Bundle de auditoria exportado com sucesso!')
-        return result
+        const result = await TrainingModuleService.exportAuditBundle(request);
+        toast.success("Bundle de auditoria exportado com sucesso!");
+        return result;
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido'
-        toast.error(`Erro ao exportar bundle: ${errorMessage}`)
-        throw error
+        const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+        toast.error(`Erro ao exportar bundle: ${errorMessage}`);
+        throw error;
       } finally {
-        setIsExporting(false)
+        setIsExporting(false);
       }
     },
     []
-  )
+  );
 
   return {
     exportBundle,
     isExporting,
-  }
+  };
 }

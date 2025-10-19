@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => ({
     env: {
       NODE_ENV: "test", // Set NODE_ENV to test to skip delays in fallback logic
     },
-    exclude: ['node_modules', 'dist', 'e2e', '**/*.spec.ts'], // Exclude E2E tests
+    exclude: ["node_modules", "dist", "e2e", "**/*.spec.ts"], // Exclude E2E tests
   },
   base: "/",
   server: {

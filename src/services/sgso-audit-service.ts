@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 export type AuditItem = {
   requirement_number: number;
   requirement_title: string;
-  compliance_status: 'compliant' | 'partial' | 'non-compliant';
+  compliance_status: "compliant" | "partial" | "non-compliant";
   evidence: string;
   comment: string;
 };
@@ -39,7 +39,7 @@ export async function submitSGSOAudit(
   items: AuditItem[]
 ): Promise<string> {
   const { data: audit, error: auditError } = await supabase
-    .from('sgso_audits')
+    .from("sgso_audits")
     .insert({
       vessel_id: vesselId,
       auditor_id: auditorId
@@ -57,7 +57,7 @@ export async function submitSGSOAudit(
   }));
 
   const { error: itemsError } = await supabase
-    .from('sgso_audit_items')
+    .from("sgso_audit_items")
     .insert(itemsPayload);
 
   if (itemsError) {
@@ -79,7 +79,7 @@ export async function submitSGSOAudit(
  */
 export async function loadSGSOAudit(vesselId: string): Promise<SGSOAudit[]> {
   const { data: audits, error } = await supabase
-    .from('sgso_audits')
+    .from("sgso_audits")
     .select(`
       id,
       audit_date,
@@ -93,8 +93,8 @@ export async function loadSGSOAudit(vesselId: string): Promise<SGSOAudit[]> {
         comment
       )
     `)
-    .eq('vessel_id', vesselId)
-    .order('audit_date', { ascending: false });
+    .eq("vessel_id", vesselId)
+    .order("audit_date", { ascending: false });
 
   if (error) {
     throw new Error(`Erro ao carregar auditorias: ${error.message}`);
