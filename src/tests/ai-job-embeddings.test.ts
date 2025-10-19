@@ -67,6 +67,7 @@ describe("AI Job Embeddings - seedJobsForTraining", () => {
             upsert: mockUpsert,
           };
         }
+        return {};
       });
 
       const { createClient } = await import("@/lib/supabase/client");

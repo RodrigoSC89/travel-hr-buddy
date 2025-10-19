@@ -90,7 +90,7 @@ export const FloatingActionButton: React.FC = () => {
         break;
         
       case "ArrowDown":
-      case "ArrowUp":
+      case "ArrowUp": {
         e.preventDefault();
         const direction = e.key === "ArrowDown" ? 1 : -1;
         setFocusedIndex(prev => {
@@ -100,6 +100,7 @@ export const FloatingActionButton: React.FC = () => {
           return newIndex;
         });
         break;
+      }
         
       case "Enter":
       case " ":
