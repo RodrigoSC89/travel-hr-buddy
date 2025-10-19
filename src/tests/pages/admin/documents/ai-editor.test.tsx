@@ -18,7 +18,7 @@ vi.mock("@tiptap/react", () => ({
       insertContent: vi.fn().mockReturnThis(),
       run: vi.fn(),
     })),
-    getHTML: vi.fn(() => &quot;<p>Test content</p>"),
+    getHTML: vi.fn(() => "<p>Test content</p>"),
     getText: vi.fn(() => "Test content"),
     state: {
       selection: {
@@ -129,7 +129,7 @@ describe("DocumentAIEditorPage", () => {
       commands: {
         setContent: mockSetContent,
       },
-      getHTML: vi.fn(() => &quot;<p>Test content</p>"),
+      getHTML: vi.fn(() => "<p>Test content</p>"),
       getText: vi.fn(() => "Test content"),
     });
 

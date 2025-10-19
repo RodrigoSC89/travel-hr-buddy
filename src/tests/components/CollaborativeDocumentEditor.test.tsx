@@ -28,7 +28,7 @@ vi.mock("@tiptap/react", () => ({
     commands: {
       setContent: vi.fn(),
     },
-    getHTML: vi.fn(() => &quot;<p>Test content</p>"),
+    getHTML: vi.fn(() => "<p>Test content</p>"),
     isDestroyed: false,
     extensionManager: {
       extensions: []

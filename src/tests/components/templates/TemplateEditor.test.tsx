@@ -29,7 +29,7 @@ vi.mock("@/hooks/use-toast", () => ({
 // Mock TipTap editor
 vi.mock("@tiptap/react", () => ({
   useEditor: vi.fn(() => ({
-    getHTML: vi.fn(() => &quot;<p>Test content</p>"),
+    getHTML: vi.fn(() => "<p>Test content</p>"),
     commands: {
       setContent: vi.fn(),
     },
