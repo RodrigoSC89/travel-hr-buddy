@@ -6,8 +6,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { useToast } from "@/hooks/use-toast";
 import { fetchJobs, postponeJob, createWorkOrder, fetchJobWithAI } from "@/services/mmi/jobsApi";
 import { generatePDFReport, generateJobReport } from "@/services/mmi/pdfReportService";
+import { generateOrderPDF } from "@/lib/pdf/generateOrderPDF";
+import { fetchOrderById } from "@/services/mmi/ordersService";
 import { MMIJob } from "@/types/mmi";
-import { Loader2, Wrench, Clock, Sparkles, FileText } from "lucide-react";
+import { Loader2, Wrench, Clock, Sparkles, FileText, Download } from "lucide-react";
 
 export default function JobCards() {
   const [jobs, setJobs] = useState<MMIJob[]>([]);
@@ -18,6 +20,8 @@ export default function JobCards() {
   const [loadingAI, setLoadingAI] = useState(false);
   const [generatingPDF, setGeneratingPDF] = useState(false);
   const [generatingJobPDF, setGeneratingJobPDF] = useState<string | null>(null);
+  const [exportingOrderPDF, setExportingOrderPDF] = useState<string | null>(null);
+  const [createdOrders, setCreatedOrders] = useState<Record<string, string>>({}); // jobId -> osId mapping
   const { toast } = useToast();
 
   useEffect(() => {
@@ -85,6 +89,10 @@ export default function JobCards() {
     setProcessingJobId(jobId);
     try {
       const data = await createWorkOrder(jobId);
+      
+      // Store the created order ID
+      setCreatedOrders(prev => ({ ...prev, [jobId]: data.os_id }));
+      
       toast({
         title: "Ordem de Serviço Criada",
         description: `${data.message}\nOS ID: ${data.os_id}`,
@@ -99,6 +107,45 @@ export default function JobCards() {
       });
     } finally {
       setProcessingJobId(null);
+    }
+  };
+
+  const handleExportOrderPDF = async (job: MMIJob, osId: string) => {
+    setExportingOrderPDF(job.id);
+    try {
+      // Fetch the work order details
+      const order = await fetchOrderById(osId);
+      
+      if (!order) {
+        throw new Error("Ordem de serviço não encontrada");
+      }
+
+      // Map the order data to the format expected by generateOrderPDF
+      generateOrderPDF({
+        id: order.os_number || osId,
+        vessel_name: job.component.asset.vessel,
+        system_name: job.component.name,
+        status: order.status,
+        priority: job.priority,
+        description: job.title + (job.suggestion_ia ? `\n\n${job.suggestion_ia}` : ""),
+        executed_at: order.completion_date,
+        technician_comment: order.notes,
+        created_at: order.created_at || new Date().toISOString(),
+      });
+
+      toast({
+        title: "PDF Exportado",
+        description: `Ordem de Serviço ${order.os_number} exportada com sucesso!`,
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: error instanceof Error ? error.message : "Não foi possível exportar o PDF da OS.",
+        variant: "destructive",
+      });
+    } finally {
+      setExportingOrderPDF(null);
     }
   };
 
@@ -210,15 +257,30 @@ export default function JobCards() {
                   variant="default" 
                   size="sm" 
                   onClick={() => handleCreateOS(job.id)}
-                  disabled={processingJobId === job.id}
+                  disabled={processingJobId === job.id || createdOrders[job.id]}
                 >
                   {processingJobId === job.id ? (
                     <Loader2 className="h-4 w-4 animate-spin mr-1" />
                   ) : (
                     <Wrench className="h-4 w-4 mr-1" />
                   )}
-                  Criar OS
+                  {createdOrders[job.id] ? "OS Criada" : "Criar OS"}
                 </Button>
+                {createdOrders[job.id] && (
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleExportOrderPDF(job, createdOrders[job.id])}
+                    disabled={exportingOrderPDF === job.id}
+                  >
+                    {exportingOrderPDF === job.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                    ) : (
+                      <Download className="h-4 w-4 mr-1" />
+                    )}
+                    📄 Exportar PDF
+                  </Button>
+                )}
                 {job.can_postpone && (
                   <Button 
                     variant="outline" 
