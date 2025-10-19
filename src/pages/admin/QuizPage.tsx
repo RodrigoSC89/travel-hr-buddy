@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Separator } from '@/components/ui/separator';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Trophy,
   Clock,
@@ -20,14 +20,14 @@ import {
   Download,
   RotateCcw,
   Target
-} from 'lucide-react';
+} from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 interface Question {
   question: string;
@@ -42,17 +42,17 @@ interface QuizConfig {
   difficulty: string;
 }
 
-const STANDARDS = ['SGSO', 'IMCA', 'ISO', 'ANP', 'ISM Code', 'ISPS Code'];
-const DIFFICULTIES = ['Basic', 'Intermediate', 'Advanced'];
+const STANDARDS = ["SGSO", "IMCA", "ISO", "ANP", "ISM Code", "ISPS Code"];
+const DIFFICULTIES = ["Basic", "Intermediate", "Advanced"];
 const QUESTIONS_PER_QUIZ = 10;
 const PASSING_SCORE = 7; // 70%
 
 export default function QuizPage() {
-  const [quizConfig, setQuizConfig] = useState<QuizConfig>({ standard: '', difficulty: '' });
+  const [quizConfig, setQuizConfig] = useState<QuizConfig>({ standard: "", difficulty: "" });
   const [quizStarted, setQuizStarted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string>('');
+  const [selectedAnswer, setSelectedAnswer] = useState<string>("");
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -69,11 +69,11 @@ export default function QuizPage() {
 
       // Try to fetch from templates first
       const { data: templates, error } = await supabase
-        .from('quiz_templates')
-        .select('*')
-        .eq('standard', quizConfig.standard)
-        .eq('difficulty', quizConfig.difficulty)
-        .eq('is_active', true)
+        .from("quiz_templates")
+        .select("*")
+        .eq("standard", quizConfig.standard)
+        .eq("difficulty", quizConfig.difficulty)
+        .eq("is_active", true)
         .limit(QUESTIONS_PER_QUIZ);
 
       if (error) throw error;
@@ -99,7 +99,7 @@ export default function QuizPage() {
       setQuizStarted(true);
       setStartTime(new Date());
     } catch (error) {
-      console.error('Error fetching quiz questions:', error);
+      console.error("Error fetching quiz questions:", error);
       // Use fallback questions on error
       const fallbackQuestions = generateFallbackQuestions(
         quizConfig.standard,
@@ -119,34 +119,34 @@ export default function QuizPage() {
       {
         question: `What is the primary focus of ${standard}?`,
         options: [
-          'Safety and compliance management',
-          'Cost reduction',
-          'Marketing strategies',
-          'Administrative tasks'
+          "Safety and compliance management",
+          "Cost reduction",
+          "Marketing strategies",
+          "Administrative tasks"
         ],
-        correct_answer: 'Safety and compliance management',
+        correct_answer: "Safety and compliance management",
         explanation: `${standard} focuses primarily on safety and compliance in maritime operations.`
       },
       {
         question: `${standard} applies to which industry?`,
         options: [
-          'Maritime and offshore',
-          'Agriculture',
-          'Retail',
-          'Entertainment'
+          "Maritime and offshore",
+          "Agriculture",
+          "Retail",
+          "Entertainment"
         ],
-        correct_answer: 'Maritime and offshore',
+        correct_answer: "Maritime and offshore",
         explanation: `${standard} is specifically designed for maritime and offshore operations.`
       },
       {
         question: `Who must comply with ${standard} standards?`,
         options: [
-          'All relevant personnel and vessels',
-          'Only management',
-          'Only external auditors',
-          'Only government agencies'
+          "All relevant personnel and vessels",
+          "Only management",
+          "Only external auditors",
+          "Only government agencies"
         ],
-        correct_answer: 'All relevant personnel and vessels',
+        correct_answer: "All relevant personnel and vessels",
         explanation: `Compliance with ${standard} is required for all relevant personnel and vessels.`
       }
     ];
@@ -180,7 +180,7 @@ export default function QuizPage() {
     // Move to next question or complete quiz
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedAnswer('');
+      setSelectedAnswer("");
     } else {
       completeQuiz(updatedQuestions);
     }
@@ -196,14 +196,14 @@ export default function QuizPage() {
       if (!user) return;
 
       const { data: profile } = await supabase
-        .from('profiles')
-        .select('organization_id')
-        .eq('id', user.id)
+        .from("profiles")
+        .select("organization_id")
+        .eq("id", user.id)
         .single();
 
       // Save quiz result
       const { data: result, error } = await supabase
-        .from('quiz_results')
+        .from("quiz_results")
         .insert({
           user_id: user.id,
           organization_id: profile?.organization_id,
@@ -224,7 +224,7 @@ export default function QuizPage() {
 
       // Generate certificate if passed
       if (score >= PASSING_SCORE && result) {
-        const { data: certData } = await supabase.rpc('generate_certificate_id', {
+        const { data: certData } = await supabase.rpc("generate_certificate_id", {
           p_result_id: result.id
         });
         
@@ -233,7 +233,7 @@ export default function QuizPage() {
         }
       }
     } catch (error) {
-      console.error('Error saving quiz result:', error);
+      console.error("Error saving quiz result:", error);
     }
   };
 
@@ -242,11 +242,11 @@ export default function QuizPage() {
     setQuizCompleted(false);
     setQuestions([]);
     setCurrentQuestionIndex(0);
-    setSelectedAnswer('');
+    setSelectedAnswer("");
     setScore(0);
     setStartTime(null);
     setCertificateId(null);
-    setQuizConfig({ standard: '', difficulty: '' });
+    setQuizConfig({ standard: "", difficulty: "" });
   };
 
   // Configuration screen
@@ -343,12 +343,12 @@ export default function QuizPage() {
                 <XCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
               )}
               <CardTitle className="text-3xl">
-                {passed ? 'Congratulations!' : 'Quiz Complete'}
+                {passed ? "Congratulations!" : "Quiz Complete"}
               </CardTitle>
               <CardDescription>
                 {passed 
-                  ? 'You have passed the quiz and earned a certificate!'
-                  : 'Keep practicing to improve your score'}
+                  ? "You have passed the quiz and earned a certificate!"
+                  : "Keep practicing to improve your score"}
               </CardDescription>
             </div>
           </CardHeader>
@@ -389,7 +389,7 @@ export default function QuizPage() {
                       <div className="flex-1">
                         <p className="font-medium">Question {idx + 1}: {q.question}</p>
                         <p className="text-sm text-muted-foreground mt-1">
-                          Your answer: <span className={isCorrect ? 'text-green-600' : 'text-red-600'}>
+                          Your answer: <span className={isCorrect ? "text-green-600" : "text-red-600"}>
                             {q.userAnswer}
                           </span>
                         </p>
@@ -471,7 +471,7 @@ export default function QuizPage() {
             onClick={handleAnswerSelect}
             disabled={!selectedAnswer}
           >
-            {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Complete Quiz'}
+            {currentQuestionIndex < questions.length - 1 ? "Next Question" : "Complete Quiz"}
           </Button>
         </CardContent>
       </Card>

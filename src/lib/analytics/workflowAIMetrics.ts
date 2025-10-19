@@ -22,7 +22,7 @@ export interface WorkflowAISummary {
  */
 export async function getWorkflowAISummary(): Promise<WorkflowAISummary> {
   // Return placeholder data since the table doesn't exist yet
-  console.warn('workflow_ai_suggestions table does not exist. Returning placeholder data.');
+  console.warn("workflow_ai_suggestions table does not exist. Returning placeholder data.");
   
   return {
     total: 0,

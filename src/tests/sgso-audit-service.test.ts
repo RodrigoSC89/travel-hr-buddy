@@ -204,10 +204,10 @@ describe("SGSO Audit Service", () => {
     });
 
     it("should accept valid compliance_status values", () => {
-      const statuses: Array<'compliant' | 'partial' | 'non-compliant'> = [
-        'compliant',
-        'partial',
-        'non-compliant'
+      const statuses: Array<"compliant" | "partial" | "non-compliant"> = [
+        "compliant",
+        "partial",
+        "non-compliant"
       ];
 
       statuses.forEach(status => {

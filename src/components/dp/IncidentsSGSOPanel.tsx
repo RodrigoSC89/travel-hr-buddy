@@ -152,7 +152,7 @@ export function IncidentsSGSOPanel() {
     ].join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    saveAs(blob, `incidentes-sgso-${new Date().toISOString().split('T')[0]}.csv`);
+    saveAs(blob, `incidentes-sgso-${new Date().toISOString().split("T")[0]}.csv`);
   };
 
   // Export to PDF (placeholder - requires html2pdf.js)
@@ -271,11 +271,11 @@ export function IncidentsSGSOPanel() {
                   <div className="flex-1">
                     <CardTitle className="text-lg">{incident.title}</CardTitle>
                     <CardDescription className="mt-1">
-                      {incident.vessel} • {new Date(incident.incident_date).toLocaleDateString('pt-BR')}
+                      {incident.vessel} • {new Date(incident.incident_date).toLocaleDateString("pt-BR")}
                     </CardDescription>
                   </div>
                   {incident.sgso_risk_level && (
-                    <Badge className={`${RISK_LEVEL_COLORS[incident.sgso_risk_level]?.badge || 'bg-gray-600'}`}>
+                    <Badge className={`${RISK_LEVEL_COLORS[incident.sgso_risk_level]?.badge || "bg-gray-600"}`}>
                       {RISK_LEVEL_COLORS[incident.sgso_risk_level]?.icon} {incident.sgso_risk_level.charAt(0).toUpperCase() + incident.sgso_risk_level.slice(1)}
                     </Badge>
                   )}
