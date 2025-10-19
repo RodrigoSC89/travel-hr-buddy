@@ -165,6 +165,8 @@ export interface MMIOS {
   effectiveness_rating?: number;
   feedback?: string;
   notes?: string;
+  executed_at?: string;
+  technician_comment?: string;
   created_at?: string;
   updated_at?: string;
 }
