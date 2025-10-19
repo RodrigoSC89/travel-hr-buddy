@@ -9,11 +9,13 @@ import { ptBR } from "date-fns/locale";
 import type { MMIComponent, MMIHistory, AIForecast } from "@/types/mmi";
 import { generateForecast } from "@/services/mmi/forecastService";
 import { createTaskFromForecast } from "@/services/mmi/taskService";
+import { saveForecast, formatForecastText } from "@/services/mmi/forecastStorageService";
 
 interface ForecastGeneratorProps {
   component: MMIComponent;
   systemName: string;
   vesselId?: string;
+  vesselName?: string;
   maintenanceHistory: MMIHistory[];
   onForecastGenerated?: () => void;
 }
@@ -22,6 +24,7 @@ export default function ForecastGenerator({
   component,
   systemName,
   vesselId,
+  vesselName,
   maintenanceHistory,
   onForecastGenerated,
 }: ForecastGeneratorProps) {
@@ -39,7 +42,29 @@ export default function ForecastGenerator({
       });
 
       setForecast(result);
-      toast.success("Forecast gerado com sucesso!");
+      
+      // Save forecast to database
+      try {
+        const forecastText = formatForecastText(result);
+        const lastMaintenanceDates = maintenanceHistory
+          .slice(0, 5)
+          .map((h) => h.executed_at ? new Date(h.executed_at).toLocaleDateString("pt-BR") : "N/A");
+        
+        await saveForecast({
+          vessel_id: vesselId,
+          vessel_name: vesselName || "Embarcação não especificada",
+          system_name: systemName,
+          hourmeter: component.current_hours,
+          last_maintenance: lastMaintenanceDates,
+          forecast_text: forecastText,
+          priority: result.priority,
+        });
+        
+        toast.success("Forecast gerado e salvo com sucesso!");
+      } catch (saveError) {
+        console.error("Error saving forecast:", saveError);
+        toast.success("Forecast gerado com sucesso! (Aviso: Não foi possível salvar no histórico)");
+      }
     } catch (error) {
       console.error("Error generating forecast:", error);
       toast.error("Erro ao gerar forecast");
