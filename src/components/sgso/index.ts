@@ -15,3 +15,4 @@ export { MetricasPanel } from "./MetricasPanel";
 export { SGSOTrendChart } from "./SGSOTrendChart";
 export { SGSOActionPlanGenerator } from "./SGSOActionPlanGenerator";
 export { SGSOHistoryTable } from "./SGSOHistoryTable";
+export { SGSOEffectivenessChart } from "./SGSOEffectivenessChart";
