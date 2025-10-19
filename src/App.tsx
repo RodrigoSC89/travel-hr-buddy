@@ -92,6 +92,7 @@ const TVWallLogs = React.lazy(() => import("./pages/tv/LogsPage"));
 const TemplateEditorPage = React.lazy(() => import("./pages/admin/templates/editor"));
 const MMIJobsPanel = React.lazy(() => import("./pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("./pages/MmiBI"));
+const MMIHistory = React.lazy(() => import("./pages/admin/MMIHistory"));
 const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAnalysis"));
 const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreationWithSimilarExamples"));
 const CopilotJobForm = React.lazy(() => import("./pages/CopilotJobForm"));
@@ -234,6 +235,7 @@ function App() {
                       <Route path="/admin/assistant" element={<Assistant />} />
                       <Route path="/admin/ai-assistant" element={<Assistant />} />
                       <Route path="/admin/mmi" element={<MMIJobsPanel />} />
+                      <Route path="/admin/mmi/history" element={<MMIHistory />} />
                       <Route path="/admin/assistant/logs" element={<AssistantLogs />} />
                       <Route path="/admin/assistant/history" element={<AssistantLogs />} />
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
