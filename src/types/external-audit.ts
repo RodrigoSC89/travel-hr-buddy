@@ -208,29 +208,29 @@ export const NORM_TYPE_OPTIONS: NormTypeOption[] = [
 // Helper functions
 export const getSeverityColor = (severity: NonConformity["severity"]): string => {
   switch (severity) {
-    case "critical":
-      return "text-red-600 bg-red-50";
-    case "major":
-      return "text-orange-600 bg-orange-50";
-    case "minor":
-      return "text-yellow-600 bg-yellow-50";
-    default:
-      return "text-gray-600 bg-gray-50";
+  case "critical":
+    return "text-red-600 bg-red-50";
+  case "major":
+    return "text-orange-600 bg-orange-50";
+  case "minor":
+    return "text-yellow-600 bg-yellow-50";
+  default:
+    return "text-gray-600 bg-gray-50";
   }
 };
 
 export const getStatusColor = (status: EvidenceStatus): string => {
   switch (status) {
-    case "validated":
-      return "text-green-600 bg-green-50";
-    case "submitted":
-      return "text-blue-600 bg-blue-50";
-    case "rejected":
-      return "text-red-600 bg-red-50";
-    case "pending":
-      return "text-yellow-600 bg-yellow-50";
-    default:
-      return "text-gray-600 bg-gray-50";
+  case "validated":
+    return "text-green-600 bg-green-50";
+  case "submitted":
+    return "text-blue-600 bg-blue-50";
+  case "rejected":
+    return "text-red-600 bg-red-50";
+  case "pending":
+    return "text-yellow-600 bg-yellow-50";
+  default:
+    return "text-gray-600 bg-gray-50";
   }
 };
 

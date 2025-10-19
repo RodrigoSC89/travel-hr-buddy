@@ -109,48 +109,48 @@ export function PerformanceDashboard() {
   const avgMTTR =
     metrics.filter((m) => m.mttr_hours).length > 0
       ? metrics
-          .filter((m) => m.mttr_hours)
-          .reduce((sum, m) => sum + (m.mttr_hours || 0), 0) /
+        .filter((m) => m.mttr_hours)
+        .reduce((sum, m) => sum + (m.mttr_hours || 0), 0) /
         metrics.filter((m) => m.mttr_hours).length
       : 0;
 
   // Prepare radar chart data
   const radarData = latestMetric
     ? [
-        {
-          metric: "Compliance",
-          value: latestMetric.compliance_percentage,
-          fullMark: 100,
-        },
-        {
-          metric: "Reliability",
-          value: Math.max(0, 100 - latestMetric.failure_count * 10),
-          fullMark: 100,
-        },
-        {
-          metric: "Training",
-          value: Math.min(100, latestMetric.training_completions * 10),
-          fullMark: 100,
-        },
-        {
-          metric: "AI Automation",
-          value: Math.min(
-            100,
-            (latestMetric.ai_actions_count /
+      {
+        metric: "Compliance",
+        value: latestMetric.compliance_percentage,
+        fullMark: 100,
+      },
+      {
+        metric: "Reliability",
+        value: Math.max(0, 100 - latestMetric.failure_count * 10),
+        fullMark: 100,
+      },
+      {
+        metric: "Training",
+        value: Math.min(100, latestMetric.training_completions * 10),
+        fullMark: 100,
+      },
+      {
+        metric: "AI Automation",
+        value: Math.min(
+          100,
+          (latestMetric.ai_actions_count /
               (latestMetric.ai_actions_count + latestMetric.human_actions_count || 1)) *
               100
-          ),
-          fullMark: 100,
-        },
-      ]
+        ),
+        fullMark: 100,
+      },
+    ]
     : [];
 
   // Prepare bar chart data for failures by system
   const failuresBySystem = latestMetric
     ? Object.entries(latestMetric.failures_by_system || {}).map(([system, count]) => ({
-        system: system.charAt(0).toUpperCase() + system.slice(1),
-        failures: count,
-      }))
+      system: system.charAt(0).toUpperCase() + system.slice(1),
+      failures: count,
+    }))
     : [];
 
   return (
