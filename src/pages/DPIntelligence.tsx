@@ -1,7 +1,6 @@
 import React from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
-import DPIntelligenceCenter from "@/components/dp-intelligence/dp-intelligence-center";
 import DPIntelligenceDashboard from "@/components/dp-intelligence/DPIntelligenceDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -40,7 +39,7 @@ const DPIntelligence = () => {
         </TabsList>
         
         <TabsContent value="incidents">
-          <DPIntelligenceCenter />
+          <DPIntelligenceDashboard />
         </TabsContent>
         
         <TabsContent value="dashboard">

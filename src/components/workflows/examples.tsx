@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect } from "react";
-import { KanbanAISuggestions } from "@/components/workflows";
+import { KanbanAISuggestions } from "@/_legacy/KanbanAISuggestions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -186,7 +186,7 @@ export default function ExampleWorkflowPage() {
 // Add this section to /src/pages/admin/workflows/detail.tsx
 
 /*
-import { KanbanAISuggestions } from '@/components/workflows';
+import { KanbanAISuggestions } from '@/_legacy/KanbanAISuggestions';
 import { generateAISuggestionsForWorkflow } from '@/components/workflows/examples';
 
 // Inside the component, add state:
