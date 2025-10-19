@@ -31,9 +31,9 @@ export default function MMIOrdersAdminPage() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('mmi_os')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("mmi_os")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setOrders(data || []);
@@ -49,10 +49,10 @@ export default function MMIOrdersAdminPage() {
     try {
       setUpdating(order.id);
 
-      const response = await supabase.functions.invoke('mmi-os-update', {
+      const response = await supabase.functions.invoke("mmi-os-update", {
         body: {
           id: order.id,
-          status: 'completed',
+          status: "completed",
           technician_comment: order.technician_comment,
           executed_at: order.executed_at
         }
@@ -72,29 +72,29 @@ export default function MMIOrdersAdminPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "bg-green-500/10 text-green-500 border-green-500/20";
-      case "in_progress":
-        return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-      case "open":
-        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
-      case "cancelled":
-        return "bg-red-500/10 text-red-500 border-red-500/20";
-      default:
-        return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+    case "completed":
+      return "bg-green-500/10 text-green-500 border-green-500/20";
+    case "in_progress":
+      return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+    case "open":
+      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+    case "cancelled":
+      return "bg-red-500/10 text-red-500 border-red-500/20";
+    default:
+      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="w-4 h-4" />;
-      case "in_progress":
-        return <Clock className="w-4 h-4" />;
-      case "open":
-        return <AlertCircle className="w-4 h-4" />;
-      default:
-        return null;
+    case "completed":
+      return <CheckCircle className="w-4 h-4" />;
+    case "in_progress":
+      return <Clock className="w-4 h-4" />;
+    case "open":
+      return <AlertCircle className="w-4 h-4" />;
+    default:
+      return null;
     }
   };
 
@@ -151,7 +151,7 @@ export default function MMIOrdersAdminPage() {
                   </Badge>
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  Criada: {new Date(order.created_at || '').toLocaleDateString('pt-BR')}
+                  Criada: {new Date(order.created_at || "").toLocaleDateString("pt-BR")}
                 </div>
               </div>
               {order.work_description && (
@@ -174,7 +174,7 @@ export default function MMIOrdersAdminPage() {
                   value={
                     order.executed_at
                       ? new Date(order.executed_at).toISOString().slice(0, 10)
-                      : ''
+                      : ""
                   }
                   onChange={(e) =>
                     setOrders(prev =>
@@ -184,7 +184,7 @@ export default function MMIOrdersAdminPage() {
                     )
                   }
                   className="max-w-md"
-                  disabled={order.status === 'completed'}
+                  disabled={order.status === "completed"}
                 />
               </div>
 
@@ -197,7 +197,7 @@ export default function MMIOrdersAdminPage() {
                 <Textarea
                   id={`comment-${order.id}`}
                   placeholder="Adicione comentários técnicos ou operacionais..."
-                  value={order.technician_comment || ''}
+                  value={order.technician_comment || ""}
                   onChange={(e) =>
                     setOrders(prev =>
                       prev.map(o =>
@@ -206,7 +206,7 @@ export default function MMIOrdersAdminPage() {
                     )
                   }
                   className="min-h-[100px]"
-                  disabled={order.status === 'completed'}
+                  disabled={order.status === "completed"}
                 />
               </div>
 
@@ -218,7 +218,7 @@ export default function MMIOrdersAdminPage() {
               )}
 
               {/* Action Button */}
-              {order.status !== 'completed' && (
+              {order.status !== "completed" && (
                 <Button
                   variant="default"
                   size="lg"
@@ -240,7 +240,7 @@ export default function MMIOrdersAdminPage() {
                 </Button>
               )}
 
-              {order.status === 'completed' && (
+              {order.status === "completed" && (
                 <div className="bg-green-500/10 border border-green-500/20 rounded p-4 text-green-700 dark:text-green-400">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5" />
@@ -248,7 +248,7 @@ export default function MMIOrdersAdminPage() {
                   </div>
                   {order.executed_at && (
                     <div className="text-sm mt-1">
-                      Executada em: {new Date(order.executed_at).toLocaleDateString('pt-BR')}
+                      Executada em: {new Date(order.executed_at).toLocaleDateString("pt-BR")}
                     </div>
                   )}
                 </div>
