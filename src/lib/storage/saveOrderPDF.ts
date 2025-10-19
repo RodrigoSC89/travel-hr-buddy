@@ -5,10 +5,16 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Create Supabase client only if environment variables are available
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+let supabase: ReturnType<typeof createClient> | null = null;
+
+// Only create client if credentials are available
+if (supabaseUrl && supabaseKey) {
+  supabase = createClient(supabaseUrl, supabaseKey);
+}
 
 export interface SaveOrderPDFResult {
   success: boolean;
@@ -26,6 +32,14 @@ export async function saveOrderPDF(
   id: string,
   pdfBlob: Blob
 ): Promise<SaveOrderPDFResult> {
+  if (!supabase) {
+    console.error('❌ Supabase client not initialized');
+    return {
+      success: false,
+      error: 'Supabase client not initialized',
+    };
+  }
+
   try {
     const fileName = `os-${id}.pdf`;
     const { error } = await supabase.storage
