@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { getWorkflowAISummary } from "@/lib/analytics/workflowAIMetrics";
+import { getWorkflowAISummary } from "@/_legacy/workflowAIMetrics";
 
 export function WorkflowAIScoreCard() {
   const [summary, setSummary] = useState<{ total: number; aceitas: number; taxa: string } | null>(null);
