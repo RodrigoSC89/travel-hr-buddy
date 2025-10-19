@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,6 +9,7 @@ import { ptBR } from "date-fns/locale";
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
 import type { MMIHistory } from "@/types/mmi";
+import { fetchMMIHistory, type MMIHistoryFilters } from "@/services/mmi/historyService";
 
 export default function HistoryPanel() {
   const [histories, setHistories] = useState<MMIHistory[]>([]);
@@ -18,29 +18,20 @@ export default function HistoryPanel() {
   const [selectedHistories, setSelectedHistories] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    fetchHistories();
+    loadHistories();
   }, [filterStatus]);
 
-  const fetchHistories = async () => {
+  const loadHistories = async () => {
     try {
       setLoading(true);
-      let query = supabase
-        .from("mmi_history")
-        .select(`
-          *,
-          vessel:vessels(id, name)
-        `)
-        .order("created_at", { ascending: false });
-
+      const filters: MMIHistoryFilters = {};
+      
       if (filterStatus !== "all") {
-        query = query.eq("status", filterStatus);
+        filters.status = filterStatus as "executado" | "pendente" | "atrasado";
       }
 
-      const { data, error } = await query;
-
-      if (error) throw error;
-
-      setHistories(data || []);
+      const data = await fetchMMIHistory(filters);
+      setHistories(data);
     } catch (error) {
       console.error("Error fetching histories:", error);
       toast.error("Erro ao carregar histórico");
