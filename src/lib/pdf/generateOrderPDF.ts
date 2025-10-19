@@ -1,4 +1,4 @@
-import html2pdf from 'html2pdf.js'
+import html2pdf from "html2pdf.js";
 
 export function generateOrderPDF(order: {
   id: string
@@ -22,20 +22,20 @@ export function generateOrderPDF(order: {
       <p><strong>Status:</strong> ${order.status}</p>
       <p><strong>Prioridade:</strong> ${order.priority}</p>
       <p><strong>Descrição:</strong><br/>${order.description}</p>
-      <p><strong>Data de Execução:</strong> ${order.executed_at || 'N/A'}</p>
-      <p><strong>Comentário Técnico:</strong><br/>${order.technician_comment || 'N/A'}</p>
+      <p><strong>Data de Execução:</strong> ${order.executed_at || "N/A"}</p>
+      <p><strong>Comentário Técnico:</strong><br/>${order.technician_comment || "N/A"}</p>
       <br/><br/>
       <p>_____________________________________<br/><strong>Responsável Técnico</strong></p>
     </div>
-  `
+  `;
 
   html2pdf()
     .set({
       margin: 1,
       filename: `os-${order.id}.pdf`,
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
     })
     .from(content)
-    .save()
+    .save();
 }
