@@ -64,9 +64,18 @@ vi.mock("@/lib/sgso/submit", () => ({
   submitSGSOAudit: vi.fn(),
 }));
 
+// Mock loadSGSOAudit function
+vi.mock("@/services/sgso-audit-service", () => ({
+  loadSGSOAudit: vi.fn(),
+}));
+
 describe("SGSOAuditPage", () => {
-  beforeEach(() => {
+  let mockLoadSGSOAudit: ReturnType<typeof vi.fn>;
+
+  beforeEach(async () => {
     vi.clearAllMocks();
+    const sgsoService = await import("@/services/sgso-audit-service");
+    mockLoadSGSOAudit = sgsoService.loadSGSOAudit as ReturnType<typeof vi.fn>;
   });
 
   it("should render the page title", () => {
@@ -131,5 +140,106 @@ describe("SGSOAuditPage", () => {
     
     fireEvent.change(commentInputs[0], { target: { value: "Comentário teste" } });
     expect(commentInputs[0]).toHaveValue("Comentário teste");
+  });
+
+  it("should not load audit when no vessel is selected", async () => {
+    mockLoadSGSOAudit.mockResolvedValue([]);
+    
+    render(<SGSOAuditPage />);
+    
+    // Wait a bit to ensure no async calls happen
+    await waitFor(() => {
+      expect(mockLoadSGSOAudit).not.toHaveBeenCalled();
+    });
+  });
+
+  it("should load and populate audit data when vessel is selected", async () => {
+    const { toast } = await import("sonner");
+    const mockAuditData = [
+      {
+        id: "audit-123",
+        audit_date: "2025-10-15",
+        auditor_id: "auditor-456",
+        sgso_audit_items: [
+          {
+            requirement_number: 1,
+            requirement_title: "Política de SMS",
+            compliance_status: "compliant",
+            evidence: "Documento aprovado",
+            comment: "Tudo conforme"
+          },
+          {
+            requirement_number: 2,
+            requirement_title: "Planejamento Operacional",
+            compliance_status: "partial",
+            evidence: "Parcialmente implementado",
+            comment: "Necessita ajustes"
+          }
+        ]
+      }
+    ];
+    
+    mockLoadSGSOAudit.mockResolvedValue(mockAuditData);
+    
+    render(<SGSOAuditPage />);
+    
+    // Simulate vessel selection
+    const select = screen.getByRole("combobox");
+    fireEvent.click(select);
+    
+    await waitFor(() => {
+      const vesselOption = screen.getByText("PSV Atlântico");
+      fireEvent.click(vesselOption);
+    });
+    
+    // Wait for the audit to be loaded
+    await waitFor(() => {
+      expect(mockLoadSGSOAudit).toHaveBeenCalledWith("1");
+      expect(toast.success).toHaveBeenCalledWith("✅ Última auditoria carregada.");
+    });
+  });
+
+  it("should show error toast when loading audit fails", async () => {
+    const { toast } = await import("sonner");
+    const errorMessage = "Network error";
+    mockLoadSGSOAudit.mockRejectedValue(new Error(errorMessage));
+    
+    render(<SGSOAuditPage />);
+    
+    // Simulate vessel selection
+    const select = screen.getByRole("combobox");
+    fireEvent.click(select);
+    
+    await waitFor(() => {
+      const vesselOption = screen.getByText("PSV Atlântico");
+      fireEvent.click(vesselOption);
+    });
+    
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(`Erro ao carregar auditoria: ${errorMessage}`);
+    });
+  });
+
+  it("should not show notification when no audits exist", async () => {
+    const { toast } = await import("sonner");
+    mockLoadSGSOAudit.mockResolvedValue([]);
+    
+    render(<SGSOAuditPage />);
+    
+    // Simulate vessel selection
+    const select = screen.getByRole("combobox");
+    fireEvent.click(select);
+    
+    await waitFor(() => {
+      const vesselOption = screen.getByText("PSV Atlântico");
+      fireEvent.click(vesselOption);
+    });
+    
+    await waitFor(() => {
+      expect(mockLoadSGSOAudit).toHaveBeenCalledWith("1");
+    });
+    
+    // Should not show success toast when no audits exist
+    expect(toast.success).not.toHaveBeenCalled();
   });
 });
