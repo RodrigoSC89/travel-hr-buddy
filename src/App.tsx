@@ -113,6 +113,7 @@ const RiskAudit = React.lazy(() => import("./pages/admin/risk-audit"));
 const CertViewer = React.lazy(() => import("./components/cert/CertViewer"));
 const QuizPage = React.lazy(() => import("./pages/admin/QuizPage"));
 const ExternalAuditSystem = React.lazy(() => import("./pages/ExternalAuditSystem"));
+const MMIHistoryPage = React.lazy(() => import("./pages/admin/mmi/history"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -234,6 +235,7 @@ function App() {
                       <Route path="/admin/assistant" element={<Assistant />} />
                       <Route path="/admin/ai-assistant" element={<Assistant />} />
                       <Route path="/admin/mmi" element={<MMIJobsPanel />} />
+                      <Route path="/admin/mmi/history" element={<MMIHistoryPage />} />
                       <Route path="/admin/assistant/logs" element={<AssistantLogs />} />
                       <Route path="/admin/assistant/history" element={<AssistantLogs />} />
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
