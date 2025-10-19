@@ -2,15 +2,30 @@ import { useState, useEffect } from "react";
 import html2pdf from "html2pdf.js";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FileDown } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { Ship, Save, FileDown, AlertCircle, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitSGSOAudit } from "@/lib/sgso/submit";
 import { toast } from "sonner";
+
+// Type definitions
+type ComplianceStatus = "compliant" | "partial" | "non-compliant";
+
+interface AuditItem {
+  num: number;
+  titulo: string;
+  desc: string;
+  compliance: ComplianceStatus;
+  evidence: string;
+  comment: string;
+}
 
 const requisitosSGSO = [
   { num: 1, titulo: "Política de SMS", desc: "Estabelecimento e divulgação de política de segurança e meio ambiente." },
@@ -32,15 +47,53 @@ const requisitosSGSO = [
   { num: 17, titulo: "Melhoria Contínua", desc: "Revisões periódicas e aprendizado contínuo." },
 ];
 
+// Helper functions
+const getComplianceLabel = (status: ComplianceStatus): string => {
+  const labels = {
+    compliant: "Conforme",
+    partial: "Parcial",
+    "non-compliant": "Não Conforme"
+  };
+  return labels[status];
+};
+
+const getComplianceStats = (items: AuditItem[]) => {
+  return {
+    compliant: items.filter(item => item.compliance === "compliant").length,
+    partial: items.filter(item => item.compliance === "partial").length,
+    nonCompliant: items.filter(item => item.compliance === "non-compliant").length
+  };
+};
+
+const validateAudit = (auditData: AuditItem[], selectedVessel: string): { valid: boolean; message: string } => {
+  if (!selectedVessel) {
+    return { valid: false, message: "Selecione uma embarcação antes de continuar." };
+  }
+
+  const incompleteItems = auditData.filter(
+    item => !item.evidence || !item.comment
+  );
+
+  if (incompleteItems.length > 0) {
+    return { 
+      valid: false, 
+      message: `${incompleteItems.length} requisito(s) sem evidência ou comentário. Deseja continuar?` 
+    };
+  }
+
+  return { valid: true, message: "Validação concluída com sucesso." };
+};
+
 export default function SGSOAuditPage() {
   const { user } = useAuth();
   const [vessels, setVessels] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedVessel, setSelectedVessel] = useState<string>("");
-  const [loading, setLoading] = useState(false);
-  const [auditData, setAuditData] = useState(() =>
+  const [isSaving, setIsSaving] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [auditData, setAuditData] = useState<AuditItem[]>(() =>
     requisitosSGSO.map(req => ({
       ...req,
-      compliance: "compliant",
+      compliance: "compliant" as ComplianceStatus,
       evidence: "",
       comment: ""
     }))
@@ -56,24 +109,38 @@ export default function SGSOAuditPage() {
     fetchVessels();
   }, []);
 
-  const handleChange = (index: number, field: string, value: string) => {
+  // Calculate statistics in real-time
+  const stats = getComplianceStats(auditData);
+
+  const handleChange = (index: number, field: keyof AuditItem, value: string) => {
     const updated = [...auditData];
-    updated[index][field] = value;
+    updated[index] = { ...updated[index], [field]: value };
     setAuditData(updated);
   };
 
   const handleSubmit = async () => {
     if (!user) {
-      toast.error("Usuário não autenticado");
-      return;
-    }
-    if (!selectedVessel) {
-      toast.error("Selecione uma embarcação");
+      toast.error("Usuário não autenticado", { 
+        description: "Faça login para enviar a auditoria." 
+      });
       return;
     }
 
+    // Validate before submission
+    const validation = validateAudit(auditData, selectedVessel);
+    if (!validation.valid) {
+      const shouldContinue = selectedVessel && validation.message.includes("requisito(s)");
+      if (shouldContinue) {
+        toast.warning("Atenção", { description: validation.message });
+      } else {
+        toast.error("Validação falhou", { description: validation.message });
+        return;
+      }
+    }
+
     try {
-      setLoading(true);
+      setIsSaving(true);
+      toast.info("Salvando auditoria...", { description: "Aguarde enquanto processamos os dados." });
 
       await submitSGSOAudit(
         selectedVessel,
@@ -87,124 +154,259 @@ export default function SGSOAuditPage() {
         }))
       );
 
-      toast.success("✅ Auditoria SGSO enviada com sucesso!");
+      toast.success("Auditoria enviada com sucesso!", {
+        description: "Os dados foram salvos no sistema."
+      });
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
-      toast.error(`Erro ao enviar auditoria: ${error.message}`);
+      toast.error("Erro ao enviar auditoria", {
+        description: error.message || "Tente novamente mais tarde."
+      });
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
-  const handleExportPDF = () => {
-    const element = document.getElementById("sgso-audit-pdf");
-    if (!element) return;
+  const handleExportPDF = async () => {
+    // Validate before export
+    const validation = validateAudit(auditData, selectedVessel);
+    if (!validation.valid && !selectedVessel) {
+      toast.error("Validação falhou", { description: validation.message });
+      return;
+    }
 
-    html2pdf()
-      .set({
-        margin: 10,
-        filename: `auditoria-sgso-${new Date().toISOString()}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-      })
-      .from(element)
-      .save();
+    const element = document.getElementById("sgso-audit-pdf");
+    if (!element) {
+      toast.error("Erro ao exportar", { description: "Conteúdo não encontrado." });
+      return;
+    }
+
+    try {
+      setIsExporting(true);
+      toast.info("Gerando PDF...", { description: "Por favor, aguarde." });
+
+      const vesselName = vessels.find(v => v.id === selectedVessel)?.name || "embarcacao";
+      const dateStr = new Date().toISOString().split("T")[0];
+      const filename = `auditoria-sgso-${vesselName.toLowerCase().replace(/\s+/g, "-")}-${dateStr}.pdf`;
+
+      await html2pdf()
+        .set({
+          margin: 10,
+          filename,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+        })
+        .from(element)
+        .save();
+
+      toast.success("PDF exportado com sucesso!", {
+        description: `Arquivo: ${filename}`
+      });
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
+      toast.error("Erro ao gerar PDF", {
+        description: "Não foi possível exportar o documento."
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   return (
-    <div className="container max-w-5xl py-8 mx-auto space-y-6">
-      <h1 className="text-3xl font-bold">🛡️ Auditoria SGSO - IBAMA</h1>
+    <ModulePageWrapper gradient="blue">
+      <ModuleHeader
+        icon={Ship}
+        title="Auditoria SGSO"
+        description="Sistema de Gestão de Segurança Operacional - IBAMA"
+        gradient="blue"
+      />
 
-      <div className="flex gap-4 items-center mb-6">
-        <div className="flex-1">
-          <Label htmlFor="vessel-select" className="mb-2 block">
-            Selecione a Embarcação
-          </Label>
-          <Select value={selectedVessel} onValueChange={setSelectedVessel}>
-            <SelectTrigger id="vessel-select">
-              <SelectValue placeholder="Selecione uma embarcação" />
-            </SelectTrigger>
-            <SelectContent>
-              {vessels.map(vessel => (
-                <SelectItem key={vessel.id} value={vessel.id}>
-                  {vessel.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      {/* Vessel Selection Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Ship className="w-5 h-5" />
+            Seleção de Embarcação
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="vessel-select" className="mb-2 block">
+              Selecione a Embarcação
+            </Label>
+            <Select value={selectedVessel} onValueChange={setSelectedVessel}>
+              <SelectTrigger id="vessel-select">
+                <SelectValue placeholder="Selecione uma embarcação" />
+              </SelectTrigger>
+              <SelectContent>
+                {vessels.map(vessel => (
+                  <SelectItem key={vessel.id} value={vessel.id}>
+                    {vessel.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Real-time Statistics */}
+          {selectedVessel && (
+            <div className="grid grid-cols-3 gap-4 mt-4 p-4 bg-muted/50 rounded-lg">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Conforme</p>
+                  <p className="text-2xl font-bold text-green-600">{stats.compliant}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Parcial</p>
+                  <p className="text-2xl font-bold text-yellow-600">{stats.partial}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <XCircle className="w-5 h-5 text-red-600" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Não Conforme</p>
+                  <p className="text-2xl font-bold text-red-600">{stats.nonCompliant}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Informational Alert when no vessel is selected */}
+      {!selectedVessel && (
+        <Alert>
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Selecione uma embarcação acima para começar a auditoria dos 17 requisitos SGSO.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Hidden PDF container - only used for PDF generation */}
       <div id="sgso-audit-pdf" className="hidden">
-        <div className="bg-white p-4">
-          <h2 className="text-xl font-semibold mb-4">Auditoria SGSO</h2>
+        <div className="bg-white p-8">
+          <h2 className="text-2xl font-bold mb-2">Auditoria SGSO - IBAMA</h2>
           <p className="text-sm text-gray-600 mb-4">
             Embarcação: {vessels.find(v => v.id === selectedVessel)?.name || "---"}
           </p>
+          <p className="text-sm text-gray-600 mb-6">
+            Data: {new Date().toLocaleDateString("pt-BR")}
+          </p>
+
+          {/* Statistics Summary */}
+          <div className="mb-6 p-4 bg-gray-100 rounded">
+            <h3 className="font-semibold mb-2">Resumo da Auditoria</h3>
+            <p>Conforme: {stats.compliant} | Parcial: {stats.partial} | Não Conforme: {stats.nonCompliant}</p>
+            <p>Total de Requisitos: {auditData.length}</p>
+          </div>
 
           {auditData.map((item, idx) => (
             <div key={idx} className="mb-6 border-b pb-4">
-              <p className="font-medium">{item.num}. {item.titulo}</p>
-              <p><strong>Status:</strong> {item.compliance}</p>
-              <p><strong>Evidência:</strong> {item.evidence}</p>
-              <p><strong>Comentário:</strong> {item.comment}</p>
+              <p className="font-medium text-lg">{item.num}. {item.titulo}</p>
+              <p className="text-sm text-gray-600 mb-2">{item.desc}</p>
+              <p><strong>Status:</strong> {getComplianceLabel(item.compliance)}</p>
+              <p><strong>Evidência:</strong> {item.evidence || "Não informada"}</p>
+              <p><strong>Comentário:</strong> {item.comment || "Nenhum comentário"}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {auditData.map((item, idx) => (
+      {/* Conditional Rendering: Requirements only appear after vessel selection */}
+      {selectedVessel && auditData.map((item, idx) => (
         <Card key={item.num}>
           <CardContent className="p-6 space-y-4">
-            <h3 className="font-semibold text-lg">
-              {item.num}. {item.titulo}
-            </h3>
-            <p className="text-muted-foreground text-sm">{item.desc}</p>
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg">
+                  {item.num}. {item.titulo}
+                </h3>
+                <p className="text-muted-foreground text-sm mt-1">{item.desc}</p>
+              </div>
+            </div>
 
-            <RadioGroup
-              defaultValue="compliant"
-              className="flex gap-4 mt-2"
-              onValueChange={val => handleChange(idx, "compliance", val)}
-            >
-              <div className="flex items-center gap-1">
-                <RadioGroupItem value="compliant" id={`c-${idx}`} />
-                <Label htmlFor={`c-${idx}`}>✅ Conforme</Label>
-              </div>
-              <div className="flex items-center gap-1">
-                <RadioGroupItem value="partial" id={`p-${idx}`} />
-                <Label htmlFor={`p-${idx}`}>⚠️ Parcial</Label>
-              </div>
-              <div className="flex items-center gap-1">
-                <RadioGroupItem value="non-compliant" id={`n-${idx}`} />
-                <Label htmlFor={`n-${idx}`}>❌ Não conforme</Label>
-              </div>
-            </RadioGroup>
+            <div>
+              <Label className="mb-2 block">Status de Conformidade</Label>
+              <RadioGroup
+                value={item.compliance}
+                className="flex gap-4 mt-2"
+                onValueChange={val => handleChange(idx, "compliance", val)}
+              >
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="compliant" id={`c-${idx}`} />
+                  <Label htmlFor={`c-${idx}`} className="flex items-center gap-1 cursor-pointer">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                    Conforme
+                  </Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="partial" id={`p-${idx}`} />
+                  <Label htmlFor={`p-${idx}`} className="flex items-center gap-1 cursor-pointer">
+                    <AlertTriangle className="w-4 h-4 text-yellow-600" />
+                    Parcial
+                  </Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="non-compliant" id={`n-${idx}`} />
+                  <Label htmlFor={`n-${idx}`} className="flex items-center gap-1 cursor-pointer">
+                    <XCircle className="w-4 h-4 text-red-600" />
+                    Não Conforme
+                  </Label>
+                </div>
+              </RadioGroup>
+            </div>
 
-            <Textarea
-              placeholder="📄 Descreva a evidência observada"
-              value={item.evidence}
-              onChange={e => handleChange(idx, "evidence", e.target.value)}
-            />
-            <Textarea
-              placeholder="💬 Comentário adicional ou observação"
-              value={item.comment}
-              onChange={e => handleChange(idx, "comment", e.target.value)}
-            />
+            <div>
+              <Label htmlFor={`evidence-${idx}`}>Evidência Observada</Label>
+              <Textarea
+                id={`evidence-${idx}`}
+                placeholder="Descreva a evidência observada durante a auditoria..."
+                value={item.evidence}
+                onChange={e => handleChange(idx, "evidence", e.target.value)}
+                className="mt-2"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor={`comment-${idx}`}>Comentários Adicionais</Label>
+              <Textarea
+                id={`comment-${idx}`}
+                placeholder="Adicione observações, recomendações ou detalhes adicionais..."
+                value={item.comment}
+                onChange={e => handleChange(idx, "comment", e.target.value)}
+                className="mt-2"
+              />
+            </div>
           </CardContent>
         </Card>
       ))}
 
-      <div className="flex gap-4 mt-6">
-        <Button onClick={handleExportPDF} variant="outline">
-          <FileDown className="w-4 h-4 mr-2" />
-          📄 Exportar PDF
-        </Button>
-        <Button onClick={handleSubmit} disabled={loading}>
-          📤 Enviar Auditoria SGSO
-        </Button>
-      </div>
-    </div>
+      {/* Action Buttons with Loading States */}
+      {selectedVessel && (
+        <div className="flex gap-4 mt-6">
+          <Button 
+            onClick={handleExportPDF} 
+            variant="outline"
+            disabled={isExporting}
+          >
+            <FileDown className="w-4 h-4 mr-2" />
+            {isExporting ? "Exportando..." : "Exportar PDF"}
+          </Button>
+          <Button 
+            onClick={handleSubmit} 
+            disabled={isSaving}
+          >
+            <Save className="w-4 h-4 mr-2" />
+            {isSaving ? "Salvando..." : "Salvar Auditoria"}
+          </Button>
+        </div>
+      )}
+    </ModulePageWrapper>
   );
 }
