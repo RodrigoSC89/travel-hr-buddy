@@ -109,6 +109,7 @@ const TrainingManagement = React.lazy(() => import("./pages/admin/training"));
 const BackupAudit = React.lazy(() => import("./pages/BackupAudit"));
 const CertViewer = React.lazy(() => import("./components/cert/CertViewer"));
 const QuizPage = React.lazy(() => import("./pages/admin/QuizPage"));
+const ExternalAuditSystem = React.lazy(() => import("./pages/ExternalAuditSystem"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -264,6 +265,7 @@ function App() {
                       <Route path="/admin/audit" element={<BackupAudit />} />
                       <Route path="/backup-audit" element={<BackupAudit />} />
                       <Route path="/imca-audit" element={<IMCAAudit />} />
+                      <Route path="/external-audit" element={<ExternalAuditSystem />} />
                       <Route path="/health-monitor" element={<HealthMonitorDemo />} />
                       <Route path="/health" element={<Health />} />
                       <Route path="/modules" element={<Modules />} />
