@@ -64,6 +64,11 @@ vi.mock("@/lib/sgso/submit", () => ({
   submitSGSOAudit: vi.fn(),
 }));
 
+// Mock sgso-audit-service
+vi.mock("@/services/sgso-audit-service", () => ({
+  loadSGSOAudit: vi.fn(),
+}));
+
 describe("SGSOAuditPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -131,5 +136,119 @@ describe("SGSOAuditPage", () => {
     
     fireEvent.change(commentInputs[0], { target: { value: "Comentário teste" } });
     expect(commentInputs[0]).toHaveValue("Comentário teste");
+  });
+
+  it("should not load audits when no vessel is selected", async () => {
+    const { loadSGSOAudit } = await import("@/services/sgso-audit-service");
+    render(<SGSOAuditPage />);
+    
+    await waitFor(() => {
+      expect(loadSGSOAudit).not.toHaveBeenCalled();
+    });
+  });
+
+  it("should load and populate audit data when vessel is selected", async () => {
+    const { loadSGSOAudit } = await import("@/services/sgso-audit-service");
+    const { toast } = await import("sonner");
+    
+    const mockAuditData = [{
+      id: "audit-1",
+      audit_date: "2024-01-01",
+      auditor_id: "user-123",
+      sgso_audit_items: [
+        {
+          id: "item-1",
+          requirement_number: 1,
+          requirement_title: "Política de SMS",
+          compliance_status: "partial",
+          evidence: "Evidência teste",
+          comment: "Comentário teste"
+        }
+      ]
+    }];
+
+    (loadSGSOAudit as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(mockAuditData);
+
+    render(<SGSOAuditPage />);
+    
+    // Wait for vessels to load first
+    await waitFor(() => {
+      expect(screen.getByRole("combobox")).toBeInTheDocument();
+    });
+
+    // Simulate vessel selection
+    const select = screen.getByRole("combobox");
+    fireEvent.click(select);
+    
+    await waitFor(() => {
+      const option = screen.getByText("PSV Atlântico");
+      fireEvent.click(option);
+    });
+
+    await waitFor(() => {
+      expect(loadSGSOAudit).toHaveBeenCalledWith("1");
+      expect(toast.success).toHaveBeenCalledWith("✅ Última auditoria carregada.");
+    });
+
+    // Verify that form was populated with audit data
+    const evidenceInputs = screen.getAllByPlaceholderText("📄 Descreva a evidência observada");
+    await waitFor(() => {
+      expect(evidenceInputs[0]).toHaveValue("Evidência teste");
+    });
+  });
+
+  it("should show error toast when loading fails", async () => {
+    const { loadSGSOAudit } = await import("@/services/sgso-audit-service");
+    const { toast } = await import("sonner");
+    
+    (loadSGSOAudit as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Database error"));
+
+    render(<SGSOAuditPage />);
+    
+    // Wait for vessels to load first
+    await waitFor(() => {
+      expect(screen.getByRole("combobox")).toBeInTheDocument();
+    });
+
+    // Simulate vessel selection
+    const select = screen.getByRole("combobox");
+    fireEvent.click(select);
+    
+    await waitFor(() => {
+      const option = screen.getByText("PSV Atlântico");
+      fireEvent.click(option);
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith("Erro ao carregar auditoria: Database error");
+    });
+  });
+
+  it("should not show notification when no historical audits exist", async () => {
+    const { loadSGSOAudit } = await import("@/services/sgso-audit-service");
+    const { toast } = await import("sonner");
+    
+    (loadSGSOAudit as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce([]);
+
+    render(<SGSOAuditPage />);
+    
+    // Wait for vessels to load first
+    await waitFor(() => {
+      expect(screen.getByRole("combobox")).toBeInTheDocument();
+    });
+
+    // Simulate vessel selection
+    const select = screen.getByRole("combobox");
+    fireEvent.click(select);
+    
+    await waitFor(() => {
+      const option = screen.getByText("PSV Atlântico");
+      fireEvent.click(option);
+    });
+
+    await waitFor(() => {
+      expect(loadSGSOAudit).toHaveBeenCalledWith("1");
+      expect(toast.success).not.toHaveBeenCalled();
+    });
   });
 });
