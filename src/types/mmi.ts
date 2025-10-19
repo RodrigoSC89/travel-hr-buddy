@@ -147,12 +147,14 @@ export interface MMIComponent {
 export interface MMIOS {
   id: string;
   job_id?: string;
-  os_number: string;
-  status: "open" | "in_progress" | "completed" | "cancelled";
+  forecast_id?: string;
+  os_number?: string;
+  status: "open" | "in_progress" | "completed" | "cancelled" | "pendente" | "executado" | "atrasado";
   assigned_to?: string;
   start_date?: string;
   completion_date?: string;
   work_description?: string;
+  descricao?: string;
   parts_used?: Array<{
     name: string;
     quantity: number;
