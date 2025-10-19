@@ -94,6 +94,7 @@ const MMIJobsPanel = React.lazy(() => import("./pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("./pages/MmiBI"));
 const MMIHistory = React.lazy(() => import("./pages/MMIHistory"));
 const MMITasks = React.lazy(() => import("./pages/MMITasks"));
+const AdminMMIHistory = React.lazy(() => import("./pages/admin/mmi/MMIHistory"));
 const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAnalysis"));
 const JobCreationWithSimilarExamples = React.lazy(() => import("./pages/JobCreationWithSimilarExamples"));
 const CopilotJobForm = React.lazy(() => import("./pages/CopilotJobForm"));
@@ -238,6 +239,7 @@ function App() {
                       <Route path="/admin/assistant" element={<Assistant />} />
                       <Route path="/admin/ai-assistant" element={<Assistant />} />
                       <Route path="/admin/mmi" element={<MMIJobsPanel />} />
+                      <Route path="/admin/mmi/history" element={<AdminMMIHistory />} />
                       <Route path="/admin/assistant/logs" element={<AssistantLogs />} />
                       <Route path="/admin/assistant/history" element={<AssistantLogs />} />
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
