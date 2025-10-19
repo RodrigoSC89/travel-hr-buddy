@@ -1,4 +1,4 @@
-export { KanbanAISuggestions } from "./KanbanAISuggestions";
+export { default as KanbanAISuggestions } from "@/_legacy/KanbanAISuggestions";
 export { WorkflowAIScoreCard } from "./WorkflowAIScoreCard";
 export { exportSuggestionsToPDF } from "./ExportSuggestionsPDF";
 
