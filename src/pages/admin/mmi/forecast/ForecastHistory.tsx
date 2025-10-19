@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { useToast } from '@/hooks/use-toast'
 
 type Forecast = {
   id: string
@@ -11,12 +12,77 @@ type Forecast = {
   hourmeter: number
   last_maintenance: string[]
   forecast_text: string
+  priority?: string
   created_at: string
 }
 
 export default function ForecastHistoryPage() {
   const [data, setData] = useState<Forecast[]>([])
   const [loading, setLoading] = useState(true)
+  const [generatingOrderId, setGeneratingOrderId] = useState<string | null>(null)
+  const { toast } = useToast()
+
+  // Map English priority to Portuguese with proper labels
+  const getPriorityLabel = (priority?: string) => {
+    switch (priority) {
+      case 'critical':
+        return { text: 'Crítica', badge: '🔴', value: 'crítica' }
+      case 'high':
+        return { text: 'Alta', badge: '🟠', value: 'alta' }
+      case 'medium':
+        return { text: 'Normal', badge: '🟡', value: 'normal' }
+      case 'low':
+        return { text: 'Baixa', badge: '🟢', value: 'baixa' }
+      default:
+        return { text: 'Normal', badge: '🟡', value: 'normal' }
+    }
+  }
+
+  const handleGenerateOrder = async (forecast: Forecast) => {
+    setGeneratingOrderId(forecast.id)
+    
+    try {
+      const priority = getPriorityLabel(forecast.priority)
+      
+      const res = await fetch('/api/os/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          forecast_id: forecast.id,
+          vessel_name: forecast.vessel_name,
+          system_name: forecast.system_name,
+          description: forecast.forecast_text,
+          priority: priority.value,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        toast({
+          title: '✅ Ordem de Serviço gerada com sucesso!',
+          description: `OS criada para ${forecast.system_name} - ${forecast.vessel_name}`,
+        })
+      } else {
+        toast({
+          title: '❌ Falha ao gerar OS',
+          description: data.error || 'Erro desconhecido',
+          variant: 'destructive',
+        })
+      }
+    } catch (error) {
+      console.error('Error generating order:', error)
+      toast({
+        title: '❌ Erro ao gerar OS',
+        description: 'Não foi possível conectar ao servidor',
+        variant: 'destructive',
+      })
+    } finally {
+      setGeneratingOrderId(null)
+    }
+  }
 
   useEffect(() => {
     setLoading(true)
@@ -61,24 +127,30 @@ export default function ForecastHistoryPage() {
           </CardContent>
         </Card>
       ) : (
-        data.map((f) => (
-          <Card key={f.id}>
-            <CardContent className="space-y-2 p-4">
-              <div><b>🚢 Embarcação:</b> {f.vessel_name}</div>
-              <div><b>⚙️ Sistema:</b> {f.system_name}</div>
-              <div><b>⏱ Horímetro:</b> {f.hourmeter}h</div>
-              <div><b>📅 Manutenções:</b> {f.last_maintenance.join(', ') || 'Nenhuma'}</div>
-              <div className="whitespace-pre-line border rounded-md p-3 text-sm bg-gray-100 dark:bg-gray-800">
-                {f.forecast_text}
-              </div>
-              <Button 
-                variant="default"
-                onClick={() => alert('📦 Ordem de serviço gerada com base neste forecast!')}>
-                📄 Gerar OS
-              </Button>
-            </CardContent>
-          </Card>
-        ))
+        data.map((f) => {
+          const priority = getPriorityLabel(f.priority)
+          return (
+            <Card key={f.id}>
+              <CardContent className="space-y-2 p-4">
+                <div><b>🚢 Embarcação:</b> {f.vessel_name}</div>
+                <div><b>⚙️ Sistema:</b> {f.system_name}</div>
+                <div><b>⏱ Horímetro:</b> {f.hourmeter}h</div>
+                <div><b>📊 Prioridade:</b> {priority.badge} {priority.text}</div>
+                <div><b>📅 Manutenções:</b> {f.last_maintenance.join(', ') || 'Nenhuma'}</div>
+                <div className="whitespace-pre-line border rounded-md p-3 text-sm bg-gray-100 dark:bg-gray-800">
+                  {f.forecast_text}
+                </div>
+                <Button 
+                  variant="default"
+                  onClick={() => handleGenerateOrder(f)}
+                  disabled={generatingOrderId === f.id}
+                >
+                  {generatingOrderId === f.id ? '⏳ Gerando...' : '📄 Gerar Ordem de Serviço'}
+                </Button>
+              </CardContent>
+            </Card>
+          )
+        })
       )}
     </div>
   )
