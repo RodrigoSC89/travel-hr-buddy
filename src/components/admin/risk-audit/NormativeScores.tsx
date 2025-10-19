@@ -112,7 +112,7 @@ export function NormativeScores() {
       } else {
         setAverageScore(0);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error loading scores:", error);
     } finally {
       setLoading(false);

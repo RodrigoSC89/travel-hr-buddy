@@ -48,7 +48,7 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
         nationality: member.nationality || "Brasil"
       }));
       setCrewMembers(mappedCrew);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Erro ao carregar tripulantes",
         description: error.message,

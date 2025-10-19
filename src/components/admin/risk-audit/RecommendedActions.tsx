@@ -78,7 +78,7 @@ export function RecommendedActions() {
       }
 
       setActions(allActions);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error loading actions:", error);
       toast.error("Failed to load recommended actions");
     } finally {

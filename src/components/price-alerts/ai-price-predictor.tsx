@@ -428,7 +428,7 @@ export const AIPricePredictor: React.FC = () => {
                         borderRadius: "8px",
                         fontSize: "12px"
                       }}
-                      formatter={(value: any) => [`R$ ${value.toFixed(2)}`, "Preço"]}
+                      formatter={(value: unknown) => [`R$ ${value.toFixed(2)}`, "Preço"]}
                       labelFormatter={(label) => new Date(label).toLocaleDateString("pt-BR")}
                     />
                     <Line 

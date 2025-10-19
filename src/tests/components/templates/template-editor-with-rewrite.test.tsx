@@ -80,7 +80,7 @@ describe("TemplateEditorWithRewrite Component", () => {
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
       data: { result: "Rewritten text" },
       error: null,
-    } as any);
+    } as unknown);
 
     render(<TemplateEditorWithRewrite />);
     const button = screen.getByRole("button", {
@@ -103,7 +103,7 @@ describe("TemplateEditorWithRewrite Component", () => {
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
       data: { result: "Rewritten text" },
       error: null,
-    } as any);
+    } as unknown);
 
     render(<TemplateEditorWithRewrite />);
     const button = screen.getByRole("button", {
@@ -127,7 +127,7 @@ describe("TemplateEditorWithRewrite Component", () => {
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
       data: null,
       error: new Error("API Error"),
-    } as any);
+    } as unknown);
 
     render(<TemplateEditorWithRewrite />);
     const button = screen.getByRole("button", {

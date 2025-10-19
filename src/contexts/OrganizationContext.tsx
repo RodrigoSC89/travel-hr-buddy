@@ -114,9 +114,9 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         default_currency: "BRL",
         timezone: "America/Sao_Paulo",
         custom_fields: {},
-        business_rules: {} as any,
-        enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as any,
-        module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as any
+        business_rules: {} as unknown,
+        enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as unknown,
+        module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as unknown
       };
       
       setCurrentBranding(demoBranding);
@@ -137,11 +137,11 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         const { data: branding, error: brandingError } = await Promise.race([
           fetchPromise,
           timeoutPromise
-        ]).catch(() => ({ data: null, error: null })) as any;
+        ]).catch(() => ({ data: null, error: null })) as unknown;
 
         if (!brandingError && branding) {
-          setCurrentBranding(branding as any);
-          applyBrandingTheme(branding as any);
+          setCurrentBranding(branding as unknown);
+          applyBrandingTheme(branding as unknown);
         }
       } catch (err) {
         // Ignorar erros - já temos o branding demo configurado
@@ -182,12 +182,12 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const updateBranding = async (brandingUpdate: Partial<OrganizationBranding>) => {
     if (!currentOrganization) return;
 
-    const updateData: any = {
+    const updateData: unknown = {
       ...brandingUpdate,
-      business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules as any : undefined,
-      enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules as any : undefined,
-      custom_fields: brandingUpdate.custom_fields ? brandingUpdate.custom_fields as any : undefined,
-      module_settings: brandingUpdate.module_settings ? brandingUpdate.module_settings as any : undefined
+      business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules as unknown : undefined,
+      enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules as unknown : undefined,
+      custom_fields: brandingUpdate.custom_fields ? brandingUpdate.custom_fields as unknown : undefined,
+      module_settings: brandingUpdate.module_settings ? brandingUpdate.module_settings as unknown : undefined
     };
 
     const { data, error } = await supabase
@@ -199,8 +199,8 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     if (error) throw error;
 
-    setCurrentBranding(data as any);
-    applyBrandingTheme(data as any);
+    setCurrentBranding(data as unknown);
+    applyBrandingTheme(data as unknown);
   };
 
   const checkPermission = (permission: string): boolean => {

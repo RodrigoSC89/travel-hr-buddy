@@ -56,7 +56,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
     business_rules: currentBranding?.business_rules || {}
   });
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -64,7 +64,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
     setHasChanges(true);
   };
 
-  const handleNestedChange = (parent: string, field: string, value: any) => {
+  const handleNestedChange = (parent: string, field: string, value: unknown) => {
     setFormData(prev => {
       const parentValue = prev[parent as keyof typeof prev];
       if (typeof parentValue === "object" && parentValue !== null) {

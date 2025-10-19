@@ -148,7 +148,7 @@ export const NotificationSettings = () => {
     }
   };
 
-  const updateSetting = (key: keyof NotificationSettings, value: any) => {
+  const updateSetting = (key: keyof NotificationSettings, value: unknown) => {
     setSettings(prev => ({ ...prev, [key]: value }));
   };
 

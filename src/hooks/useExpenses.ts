@@ -82,7 +82,7 @@ export const useExpenses = () => {
       toast.success("Despesa criada com sucesso");
 
       return data;
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errorMessage = err.message || "Erro ao criar despesa";
       toast.error(errorMessage);
       throw err;
@@ -107,7 +107,7 @@ export const useExpenses = () => {
       toast.success("Despesa atualizada com sucesso");
 
       return data;
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errorMessage = err.message || "Erro ao atualizar despesa";
       toast.error(errorMessage);
       throw err;
@@ -125,7 +125,7 @@ export const useExpenses = () => {
 
       setExpenses((prev) => prev.filter((exp) => exp.id !== id));
       toast.success("Despesa removida com sucesso");
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errorMessage = err.message || "Erro ao remover despesa";
       toast.error(errorMessage);
       throw err;

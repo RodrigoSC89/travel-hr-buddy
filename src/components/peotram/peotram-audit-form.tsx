@@ -501,7 +501,7 @@ const RequirementForm: React.FC<{
           <Label>Avaliação</Label>
           <RadioGroup
             value={formData.score}
-            onValueChange={(value: any) => setFormData(prev => ({ ...prev, score: value }))}
+            onValueChange={(value: unknown) => setFormData(prev => ({ ...prev, score: value }))}
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="compliant" id="compliant" />
@@ -526,7 +526,7 @@ const RequirementForm: React.FC<{
           <Label>Criticidade</Label>
           <Select
             value={formData.criticality}
-            onValueChange={(value: any) => setFormData(prev => ({ ...prev, criticality: value }))}
+            onValueChange={(value: unknown) => setFormData(prev => ({ ...prev, criticality: value }))}
           >
             <SelectTrigger>
               <SelectValue />

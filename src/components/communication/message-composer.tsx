@@ -455,7 +455,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label>Prioridade</Label>
-              <Select value={priority} onValueChange={(value: any) => setPriority(value)}>
+              <Select value={priority} onValueChange={(value: unknown) => setPriority(value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -470,7 +470,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             
             <div>
               <Label>Categoria</Label>
-              <Select value={category} onValueChange={(value: any) => setCategory(value)}>
+              <Select value={category} onValueChange={(value: unknown) => setCategory(value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

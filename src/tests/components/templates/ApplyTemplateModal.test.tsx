@@ -231,7 +231,7 @@ describe("ApplyTemplateModal Component", () => {
         order: vi.fn().mockResolvedValue({ data: null, error: new Error("Fetch failed") }),
       })),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown);
     
     const onApply = vi.fn();
     render(<ApplyTemplateModal onApply={onApply} />);

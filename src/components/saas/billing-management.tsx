@@ -35,7 +35,7 @@ interface UsageMetric {
   current: number;
   limit: number;
   unit: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<unknown>;
 }
 
 const mockInvoices: Invoice[] = [

@@ -93,7 +93,7 @@ export const ModernEmployeePortal: React.FC = () => {
   const [personalCalendar, setPersonalCalendar] = useState<PersonalCalendar | null>(null);
   const [aiInsights, setAIInsights] = useState<AIInsight[]>([]);
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [userProfile, setUserProfile] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<unknown>(null);
   const [darkMode, setDarkMode] = useState(false);
 
   // AI Chat states

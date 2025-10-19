@@ -41,7 +41,7 @@ Documentar e divulgar a política para toda equipe.
           },
         },
       ],
-    } as any);
+    } as unknown);
 
     const result = await explainRequirementSGSO("Política de SMS", "compliant");
 
@@ -69,7 +69,7 @@ Documentar e divulgar a política para toda equipe.
           },
         },
       ],
-    } as any);
+    } as unknown);
 
     await explainRequirementSGSO("Gestão de Riscos", "partial");
 
@@ -96,7 +96,7 @@ Documentar e divulgar a política para toda equipe.
           },
         },
       ],
-    } as any);
+    } as unknown);
 
     const result = await explainRequirementSGSO("Política de SMS", "compliant");
 
@@ -133,7 +133,7 @@ Documentar e divulgar a política para toda equipe.
           },
         },
       ],
-    } as any);
+    } as unknown);
 
     await explainRequirementSGSO("Treinamento e Capacitação", "non-compliant");
 
@@ -155,7 +155,7 @@ Documentar e divulgar a política para toda equipe.
           },
         },
       ],
-    } as any);
+    } as unknown);
 
     await explainRequirementSGSO("Equipamentos Críticos", "compliant");
 
@@ -177,7 +177,7 @@ Documentar e divulgar a política para toda equipe.
           },
         },
       ],
-    } as any);
+    } as unknown);
 
     await explainRequirementSGSO("Manutenção Preventiva", "compliant");
 

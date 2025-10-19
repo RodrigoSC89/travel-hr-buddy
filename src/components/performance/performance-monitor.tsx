@@ -27,7 +27,7 @@ export const PerformanceMonitor: React.FC = () => {
       const loadTime = navigation.loadEventEnd - navigation.fetchStart;
 
       // Measure memory (if available)
-      const memory = (performance as any).memory;
+      const memory = (performance as unknown).memory;
       const memoryUsage = memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 0;
 
       // Measure render time
@@ -57,7 +57,7 @@ export const PerformanceMonitor: React.FC = () => {
 
     // Periodic measurements
     const interval = setInterval(() => {
-      const memory = (performance as any).memory;
+      const memory = (performance as unknown).memory;
       if (memory) {
         setMetrics(prev => ({
           ...prev,

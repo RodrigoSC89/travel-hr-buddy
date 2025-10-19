@@ -23,7 +23,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
   });
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [customPrompt, setCustomPrompt] = useState("");
-  const [lastReport, setLastReport] = useState<any>(null);
+  const [lastReport, setLastReport] = useState<unknown>(null);
   const { toast } = useToast();
 
   const reportTypes = [

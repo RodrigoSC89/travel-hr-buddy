@@ -51,7 +51,7 @@ describe("DocumentHistoryPage Component", () => {
         }),
       }),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown);
   });
 
   it("should render the page with loading state initially", async () => {
@@ -150,7 +150,7 @@ describe("DocumentHistoryPage Component", () => {
         }),
       }),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown);
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/history/123"]}>
@@ -203,7 +203,7 @@ describe("DocumentHistoryPage Component", () => {
         }),
       }),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown);
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/history/123"]}>
@@ -340,7 +340,7 @@ describe("DocumentHistoryPage Component", () => {
         }),
       }),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+    } as unknown);
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/history/123"]}>

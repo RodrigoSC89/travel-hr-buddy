@@ -37,12 +37,12 @@ interface APITest {
   name: string;
   description: string;
   icon: React.ElementType;
-  testFn: () => Promise<any>;
+  testFn: () => Promise<unknown>;
   status: "idle" | "loading" | "success" | "error";
   result?: {
     message: string;
     responseTime?: number;
-    data?: any;
+    data?: Record<string, unknown>;
     error?: string;
   };
 }

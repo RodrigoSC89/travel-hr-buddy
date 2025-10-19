@@ -75,7 +75,7 @@ vi.mock("@/hooks/use-auth-profile", () => ({
 
 describe("DocumentViewPage - Version Restoration", () => {
   // Dynamically import the component after mocks are set up
-  let DocumentViewPage: any;
+  let DocumentViewPage: unknown;
 
   beforeEach(async () => {
     vi.clearAllMocks();

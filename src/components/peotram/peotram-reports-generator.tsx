@@ -309,7 +309,7 @@ export const PeotramReportsGenerator: React.FC = () => {
                       <Label htmlFor="format">Formato do Arquivo</Label>
                       <Select 
                         value={reportConfig.format} 
-                        onValueChange={(value: any) => setReportConfig(prev => ({ ...prev, format: value }))}
+                        onValueChange={(value: unknown) => setReportConfig(prev => ({ ...prev, format: value }))}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -366,7 +366,7 @@ export const PeotramReportsGenerator: React.FC = () => {
                       <Label htmlFor="auditType">Tipo de Auditoria</Label>
                       <Select 
                         value={reportConfig.auditType} 
-                        onValueChange={(value: any) => setReportConfig(prev => ({ ...prev, auditType: value }))}
+                        onValueChange={(value: unknown) => setReportConfig(prev => ({ ...prev, auditType: value }))}
                       >
                         <SelectTrigger>
                           <SelectValue />

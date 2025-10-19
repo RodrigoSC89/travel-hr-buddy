@@ -46,15 +46,15 @@ describe("RestoreDashboard - New Features", () => {
 
     vi.mocked(supabase.rpc).mockImplementation((fnName: string) => {
       if (fnName === "get_restore_summary") {
-        return Promise.resolve({ data: mockSummary, error: null }) as any;
+        return Promise.resolve({ data: mockSummary, error: null }) as unknown;
       }
       if (fnName === "get_restore_count_by_day_with_email") {
-        return Promise.resolve({ data: mockDailyData, error: null }) as any;
+        return Promise.resolve({ data: mockDailyData, error: null }) as unknown;
       }
       if (fnName === "get_monthly_restore_summary_by_department") {
-        return Promise.resolve({ data: mockDepartmentData, error: null }) as any;
+        return Promise.resolve({ data: mockDepartmentData, error: null }) as unknown;
       }
-      return Promise.resolve({ data: null, error: null }) as any;
+      return Promise.resolve({ data: null, error: null }) as unknown;
     });
 
     render(
@@ -76,7 +76,7 @@ describe("RestoreDashboard - New Features", () => {
 
   it("should display QR code for public access in non-public mode", async () => {
     // Mock RPC responses with minimal data
-    vi.mocked(supabase.rpc).mockResolvedValue({ data: [], error: null } as any);
+    vi.mocked(supabase.rpc).mockResolvedValue({ data: [], error: null } as unknown);
 
     render(
       <MemoryRouter>
@@ -99,7 +99,7 @@ describe("RestoreDashboard - New Features", () => {
 
   it("should hide QR code in public view mode", async () => {
     // Mock RPC responses
-    vi.mocked(supabase.rpc).mockResolvedValue({ data: [], error: null } as any);
+    vi.mocked(supabase.rpc).mockResolvedValue({ data: [], error: null } as unknown);
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/restore-dashboard?public=1"]}>
@@ -119,7 +119,7 @@ describe("RestoreDashboard - New Features", () => {
 
   it("should display enhanced public mode indicator", async () => {
     // Mock RPC responses
-    vi.mocked(supabase.rpc).mockResolvedValue({ data: [], error: null } as any);
+    vi.mocked(supabase.rpc).mockResolvedValue({ data: [], error: null } as unknown);
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/restore-dashboard?public=1"]}>
@@ -142,16 +142,16 @@ describe("RestoreDashboard - New Features", () => {
 
     vi.mocked(supabase.rpc).mockImplementation((fnName: string) => {
       if (fnName === "get_monthly_restore_summary_by_department") {
-        return Promise.resolve({ data: mockDepartmentData, error: null }) as any;
+        return Promise.resolve({ data: mockDepartmentData, error: null }) as unknown;
       }
       if (fnName === "get_restore_count_by_day_with_email") {
         // Return some daily data so the first chart renders
         return Promise.resolve({ 
           data: [{ day: "2025-10-13", count: 10 }], 
           error: null 
-        }) as any;
+        }) as unknown;
       }
-      return Promise.resolve({ data: [], error: null }) as any;
+      return Promise.resolve({ data: [], error: null }) as unknown;
     });
 
     render(
@@ -170,9 +170,9 @@ describe("RestoreDashboard - New Features", () => {
   it("should not render department chart when no data is available", async () => {
     vi.mocked(supabase.rpc).mockImplementation((fnName: string) => {
       if (fnName === "get_monthly_restore_summary_by_department") {
-        return Promise.resolve({ data: [], error: null }) as any;
+        return Promise.resolve({ data: [], error: null }) as unknown;
       }
-      return Promise.resolve({ data: [], error: null }) as any;
+      return Promise.resolve({ data: [], error: null }) as unknown;
     });
 
     render(

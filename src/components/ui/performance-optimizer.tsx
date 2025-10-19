@@ -3,7 +3,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { logger } from "@/lib/logger";
 
 interface LazyComponentProps {
-  loader: () => Promise<{ default: React.ComponentType<any> }>;
+  loader: () => Promise<{ default: React.ComponentType<unknown> }>;
   fallback?: React.ReactNode;
   children?: React.ReactNode;
   [key: string]: any;

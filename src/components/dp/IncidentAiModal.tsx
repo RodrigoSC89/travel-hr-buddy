@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 export default function IncidentAiModal() {
-  const [incident, setIncident] = useState<any>(null);
+  const [incident, setIncident] = useState<unknown>(null);
   const [open, setOpen] = useState(false);
   const [analysis, setAnalysis] = useState("");
   const [loading, setLoading] = useState(false);

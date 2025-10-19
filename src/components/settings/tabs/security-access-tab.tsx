@@ -42,7 +42,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
   onUpdate,
   testMode
 }) => {
-  const updatePasswordRule = (rule: keyof SecuritySettings["passwordRules"], value: any) => {
+  const updatePasswordRule = (rule: keyof SecuritySettings["passwordRules"], value: unknown) => {
     onUpdate({
       passwordRules: {
         ...settings.passwordRules,

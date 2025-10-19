@@ -74,7 +74,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     { value: "last_checked_at", label: "Última Verificação" },
   ];
 
-  const updateFilter = (key: keyof FilterOptions, value: any) => {
+  const updateFilter = (key: keyof FilterOptions, value: unknown) => {
     const newFilters = { ...tempFilters, [key]: value };
     setTempFilters(newFilters);
   };

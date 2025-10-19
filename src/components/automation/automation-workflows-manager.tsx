@@ -232,7 +232,7 @@ export const AutomationWorkflowsManager: React.FC = () => {
           ...formData,
           created_by: user.user?.id,
           organization_id: user.user?.id // Temporário para demo
-        } as any);
+        } as unknown);
 
       if (error) throw error;
 

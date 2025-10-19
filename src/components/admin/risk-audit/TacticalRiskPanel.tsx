@@ -81,7 +81,7 @@ export function TacticalRiskPanel() {
 
       if (error) throw error;
       setRisks(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error loading risks:", error);
       toast.error("Failed to load tactical risks");
     } finally {

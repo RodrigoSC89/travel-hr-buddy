@@ -80,7 +80,7 @@ export function AuditSimulator() {
 
       if (error && error.code !== "PGRST116") throw error;
       setPrediction(data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error loading prediction:", error);
     } finally {
       setLoading(false);

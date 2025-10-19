@@ -23,11 +23,11 @@ interface RiskForecast {
   recommended_action: string;
   confidence_score: number;
   predicted_by: string;
-  data_source?: any;
+  data_source?: Record<string, unknown>;
 }
 
 // Fallback rule-based risk assessment
-function generateRuleBasedRisks(vesselId: string, operationalData: any): RiskForecast[] {
+function generateRuleBasedRisks(vesselId: string, operationalData: Record<string, unknown>): RiskForecast[] {
   const risks: RiskForecast[] = [];
   const today = new Date();
   
@@ -124,7 +124,7 @@ Return only valid JSON array, no markdown or explanations.`;
     const content = completion.choices[0].message.content || "[]";
     const aiRisks = JSON.parse(content);
 
-    return aiRisks.map((risk: any) => ({
+    return aiRisks.map((risk: unknown) => ({
       ...risk,
       vessel_id: vesselId,
       predicted_by: "ai",
@@ -227,7 +227,7 @@ export default async function handler(
       risks: allRisks
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Forecast risks error:", error);
     return res.status(500).json({ 
       error: "Failed to forecast risks",

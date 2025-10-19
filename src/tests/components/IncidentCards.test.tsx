@@ -10,7 +10,7 @@ describe("IncidentCards Component", () => {
     // Mock fetch to return demo data
     global.fetch = vi.fn(() =>
       Promise.reject(new Error("API not available"))
-    ) as any;
+    ) as unknown;
   });
 
   it("should render incident cards", async () => {

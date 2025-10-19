@@ -236,7 +236,7 @@ export const EnhancedPeotramManager: React.FC = () => {
     await loadData();
   };
 
-  const handleUpdateTemplate = async (template: any) => {
+  const handleUpdateTemplate = async (template: unknown) => {
     // Implementar atualização na API
     await loadData();
   };
@@ -625,7 +625,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="templates">
           <PeotramTemplateManager 
             templates={templates}
-            onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
+            onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
           />
         </TabsContent>
 
@@ -652,7 +652,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           {managementSubView === "templates" && (
             <PeotramTemplateManager 
               templates={templates}
-              onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
+              onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
             />
           )}
           {managementSubView === "analytics" && (
@@ -683,7 +683,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="templates">
           <PeotramTemplateManager 
             templates={templates}
-            onTemplateUpdate={(template: any) => handleUpdateTemplate(template)}
+            onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
           />
         </TabsContent>
 

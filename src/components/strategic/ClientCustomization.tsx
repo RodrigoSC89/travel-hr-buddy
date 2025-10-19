@@ -373,7 +373,7 @@ export const ClientCustomization = () => {
                         <Label>Tipo</Label>
                         <Select 
                           value={field.type}
-                          onValueChange={(value: any) => updateCustomField(field.id, { type: value })}
+                          onValueChange={(value: unknown) => updateCustomField(field.id, { type: value })}
                         >
                           <SelectTrigger className="mt-1">
                             <SelectValue />
