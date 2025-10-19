@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -7,9 +6,20 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, FileDown, Ship, AlertCircle, CheckCircle, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
-import type { MMIHistory } from "@/types/mmi";
+import { exportToPDF, formatPDFContent } from "@/lib/pdf";
+
+interface MMIHistory {
+  id: string;
+  vessel_name: string;
+  system_name: string;
+  component_name: string;
+  task_description: string;
+  executed_at: string | null;
+  due_date: string | null;
+  status: "executado" | "pendente" | "atrasado";
+  priority: string;
+}
 
 export default function HistoryPanel() {
   const [histories, setHistories] = useState<MMIHistory[]>([]);
@@ -24,23 +34,21 @@ export default function HistoryPanel() {
   const fetchHistories = async () => {
     try {
       setLoading(true);
-      let query = supabase
-        .from("mmi_history")
-        .select(`
-          *,
-          vessel:vessels(id, name)
-        `)
-        .order("created_at", { ascending: false });
-
-      if (filterStatus !== "all") {
-        query = query.eq("status", filterStatus);
+      const response = await fetch("/api/mmi/history");
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch MMI history");
       }
 
-      const { data, error } = await query;
+      const data = await response.json();
+      
+      // Apply filter on client side if needed
+      let filteredData = data;
+      if (filterStatus !== "all") {
+        filteredData = data.filter((h: MMIHistory) => h.status === filterStatus);
+      }
 
-      if (error) throw error;
-
-      setHistories(data || []);
+      setHistories(filteredData || []);
     } catch (error) {
       console.error("Error fetching histories:", error);
       toast.error("Erro ao carregar histórico");
@@ -75,55 +83,45 @@ export default function HistoryPanel() {
     }
   };
 
-  const exportToPDF = async (history: MMIHistory) => {
+  const exportHistoryToPDF = async (history: MMIHistory) => {
     try {
       const content = `
-        <div style="padding: 20px; font-family: Arial, sans-serif;">
-          <h1 style="color: #1e40af; margin-bottom: 20px;">Relatório de Manutenção</h1>
-          
-          <div style="margin-bottom: 15px;">
-            <strong>Sistema:</strong> ${history.system_name}
-          </div>
-          
-          <div style="margin-bottom: 15px;">
-            <strong>Embarcação:</strong> ${history.vessel?.name || "N/A"}
-          </div>
-          
-          <div style="margin-bottom: 15px;">
-            <strong>Descrição:</strong><br/>
-            ${history.task_description}
-          </div>
-          
-          <div style="margin-bottom: 15px;">
-            <strong>Status:</strong> ${history.status.toUpperCase()}
-          </div>
-          
-          ${history.executed_at ? `
-            <div style="margin-bottom: 15px;">
-              <strong>Executado em:</strong> ${format(new Date(history.executed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
-            </div>
-          ` : ""}
-          
-          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc; font-size: 12px; color: #666;">
-            <p>Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}</p>
-            <p>Sistema MMI - Manutenção Inteligente</p>
-          </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Sistema:</strong> ${history.system_name}
         </div>
+        
+        <div style="margin-bottom: 15px;">
+          <strong>Componente:</strong> ${history.component_name}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+          <strong>Embarcação:</strong> ${history.vessel_name}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+          <strong>Descrição:</strong><br/>
+          ${history.task_description}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+          <strong>Status:</strong> ${history.status.toUpperCase()}
+        </div>
+        
+        ${history.executed_at ? `
+          <div style="margin-bottom: 15px;">
+            <strong>Executado em:</strong> ${format(new Date(history.executed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+          </div>
+        ` : ""}
       `;
 
-      const element = document.createElement("div");
-      element.innerHTML = content;
+      const formattedContent = formatPDFContent(
+        "Relatório de Manutenção",
+        content,
+        `<div style="font-size:12px">Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })} — Sistema Nautilus One</div>`
+      );
 
-      const opt = {
-        margin: 10,
-        filename: `manutencao-${history.system_name.replace(/\s+/g, "-")}-${format(new Date(), "yyyyMMdd")}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      };
-
-      await html2pdf().set(opt).from(element).save();
-      toast.success("PDF gerado com sucesso!");
+      const filename = `manutencao-${history.system_name.replace(/\s+/g, "-")}-${format(new Date(), "yyyyMMdd")}.pdf`;
+      await exportToPDF(formattedContent, filename);
     } catch (error) {
       console.error("Error exporting PDF:", error);
       toast.error("Erro ao gerar PDF");
@@ -139,56 +137,48 @@ export default function HistoryPanel() {
     try {
       const selectedRecords = histories.filter((h) => selectedHistories.has(h.id));
       
-      const content = `
-        <div style="padding: 20px; font-family: Arial, sans-serif;">
-          <h1 style="color: #1e40af; margin-bottom: 20px;">Relatório Consolidado de Manutenção</h1>
-          <p style="margin-bottom: 30px;">Total de registros: ${selectedRecords.length}</p>
+      const recordsContent = selectedRecords.map((history, index) => `
+        <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+          <h3 style="color: #1e40af; margin-bottom: 10px;">${index + 1}. ${history.system_name}</h3>
           
-          ${selectedRecords.map((history, index) => `
-            <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
-              <h3 style="color: #1e40af; margin-bottom: 10px;">${index + 1}. ${history.system_name}</h3>
-              
-              <div style="margin-bottom: 10px;">
-                <strong>Embarcação:</strong> ${history.vessel?.name || "N/A"}
-              </div>
-              
-              <div style="margin-bottom: 10px;">
-                <strong>Descrição:</strong><br/>
-                ${history.task_description}
-              </div>
-              
-              <div style="margin-bottom: 10px;">
-                <strong>Status:</strong> ${history.status.toUpperCase()}
-              </div>
-              
-              ${history.executed_at ? `
-                <div style="margin-bottom: 10px;">
-                  <strong>Executado em:</strong> ${format(new Date(history.executed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
-                </div>
-              ` : ""}
-            </div>
-          `).join("")}
-          
-          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc; font-size: 12px; color: #666;">
-            <p>Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}</p>
-            <p>Sistema MMI - Manutenção Inteligente</p>
+          <div style="margin-bottom: 10px;">
+            <strong>Componente:</strong> ${history.component_name}
           </div>
+          
+          <div style="margin-bottom: 10px;">
+            <strong>Embarcação:</strong> ${history.vessel_name}
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <strong>Descrição:</strong><br/>
+            ${history.task_description}
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <strong>Status:</strong> ${history.status.toUpperCase()}
+          </div>
+          
+          ${history.executed_at ? `
+            <div style="margin-bottom: 10px;">
+              <strong>Executado em:</strong> ${format(new Date(history.executed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+            </div>
+          ` : ""}
         </div>
+      `).join("");
+
+      const content = `
+        <p style="margin-bottom: 30px;">Total de registros: ${selectedRecords.length}</p>
+        ${recordsContent}
       `;
 
-      const element = document.createElement("div");
-      element.innerHTML = content;
+      const formattedContent = formatPDFContent(
+        "Relatório Consolidado de Manutenção",
+        content,
+        `<div style="font-size:12px">Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })} — Sistema Nautilus One</div>`
+      );
 
-      const opt = {
-        margin: 10,
-        filename: `manutencao-lote-${format(new Date(), "yyyyMMdd")}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      };
-
-      await html2pdf().set(opt).from(element).save();
-      toast.success("PDF em lote gerado com sucesso!");
+      const filename = `manutencao-lote-${format(new Date(), "yyyyMMdd")}.pdf`;
+      await exportToPDF(formattedContent, filename);
       setSelectedHistories(new Set());
     } catch (error) {
       console.error("Error exporting batch PDF:", error);
@@ -284,10 +274,10 @@ export default function HistoryPanel() {
                         </Badge>
                       </div>
 
-                      {history.vessel && (
+                      {history.vessel_name && (
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Ship className="w-4 h-4" />
-                          <span>{history.vessel.name}</span>
+                          <span>{history.vessel_name}</span>
                         </div>
                       )}
 
@@ -310,7 +300,7 @@ export default function HistoryPanel() {
                   </div>
 
                   <Button
-                    onClick={() => exportToPDF(history)}
+                    onClick={() => exportHistoryToPDF(history)}
                     variant="outline"
                     size="sm"
                   >
