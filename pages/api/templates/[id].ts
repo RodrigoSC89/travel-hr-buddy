@@ -17,6 +17,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: "ID inválido." });
   }
 
+  // GET - Get single template
+  if (method === "GET") {
+    const { data, error } = await supabase
+      .from("templates")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    if (!data) {
+      return res.status(404).json({ error: "Template não encontrado." });
+    }
+
+    return res.status(200).json({ success: true, data });
+  }
+
   // PUT - Update template
   if (method === "PUT") {
     const { title, content } = body;
