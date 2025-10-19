@@ -77,7 +77,7 @@ vi.mock("y-webrtc", () => ({
 
 // Mock lodash debounce
 vi.mock("lodash", () => ({
-  debounce: (fn: Function) => {
+  debounce: (fn: (...args: unknown[]) => unknown) => {
     const debounced = (...args: unknown[]) => fn(...args);
     debounced.cancel = vi.fn();
     return debounced;
