@@ -12,8 +12,8 @@ type MMIRecord = {
   system_name: string;
   task_description: string;
   executed_at: string | null;
-  status: 'executado' | 'pendente' | 'atrasado';
-}
+  status: "executado" | "pendente" | "atrasado";
+};
 
 export default async function handler(
   req: NextApiRequest,
@@ -45,7 +45,7 @@ export default async function handler(
           )
         )
       `)
-      .order('created_at', { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (jobsError) {
       console.error("Error fetching MMI jobs:", jobsError);
@@ -53,24 +53,25 @@ export default async function handler(
     }
 
     // Transform the data to match the expected format
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const records: MMIRecord[] = (jobs || []).map((job: any) => {
       const component = job.mmi_components;
       const system = component?.mmi_systems;
       
       // Determine status based on job status and dates
-      let status: 'executado' | 'pendente' | 'atrasado' = 'pendente';
+      let status: "executado" | "pendente" | "atrasado" = "pendente";
       
-      if (job.status === 'completed') {
-        status = 'executado';
-      } else if (job.due_date && new Date(job.due_date) < new Date() && job.status !== 'completed') {
-        status = 'atrasado';
+      if (job.status === "completed") {
+        status = "executado";
+      } else if (job.due_date && new Date(job.due_date) < new Date() && job.status !== "completed") {
+        status = "atrasado";
       }
 
       return {
         id: job.id,
-        vessel_name: system?.vessel_id || 'N/A',
-        system_name: system?.system_name || 'Sistema não especificado',
-        task_description: job.description || job.title || 'Sem descrição',
+        vessel_name: system?.vessel_id || "N/A",
+        system_name: system?.system_name || "Sistema não especificado",
+        task_description: job.description || job.title || "Sem descrição",
         executed_at: job.completed_date,
         status: status
       };

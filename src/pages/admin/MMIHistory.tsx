@@ -1,35 +1,35 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { exportToPDF } from '@/lib/pdf'
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { exportToPDF } from "@/lib/pdf";
 
 type MMIRecord = {
-  id: string
-  vessel_name: string
-  system_name: string
-  task_description: string
-  executed_at: string | null
-  status: 'executado' | 'pendente' | 'atrasado'
-}
+  id: string;
+  vessel_name: string;
+  system_name: string;
+  task_description: string;
+  executed_at: string | null;
+  status: "executado" | "pendente" | "atrasado";
+};
 
 export default function MMIHistoryPage() {
-  const [records, setRecords] = useState<MMIRecord[]>([])
-  const [filter, setFilter] = useState<'todos' | 'executado' | 'pendente' | 'atrasado'>('todos')
+  const [records, setRecords] = useState<MMIRecord[]>([]);
+  const [filter, setFilter] = useState<"todos" | "executado" | "pendente" | "atrasado">("todos");
 
   useEffect(() => {
-    fetch('/api/mmi/history')
+    fetch("/api/mmi/history")
       .then(res => res.json())
       .then(data => setRecords(data))
       .catch(error => {
-        console.error('Error fetching MMI history:', error)
-      })
-  }, [])
+        console.error("Error fetching MMI history:", error);
+      });
+  }, []);
 
   const filteredRecords = records.filter(record => {
-    if (filter === 'todos') return true
-    return record.status === filter
-  })
+    if (filter === "todos") return true;
+    return record.status === filter;
+  });
 
   return (
     <div className="p-6">
@@ -40,7 +40,7 @@ export default function MMIHistoryPage() {
         <select
           className="border rounded px-2 py-1"
           value={filter}
-          onChange={(e) => setFilter(e.target.value as any)}
+          onChange={(e) => setFilter(e.target.value as "todos" | "executado" | "pendente" | "atrasado")}
         >
           <option value="todos">Todos</option>
           <option value="executado">Executado</option>
@@ -55,7 +55,7 @@ export default function MMIHistoryPage() {
         <div key={record.id} className="border rounded p-4 mb-3 shadow-sm bg-white">
           <p><strong>🚢 Embarcação:</strong> {record.vessel_name}</p>
           <p><strong>🛠 Sistema:</strong> {record.system_name}</p>
-          <p><strong>📅 Data Execução:</strong> {record.executed_at || '---'}</p>
+          <p><strong>📅 Data Execução:</strong> {record.executed_at || "---"}</p>
           <p><strong>📌 Status:</strong> {record.status}</p>
           <p className="my-2"><strong>📝 Descrição:</strong> {record.task_description}</p>
           <Button
@@ -67,5 +67,5 @@ export default function MMIHistoryPage() {
         </div>
       ))}
     </div>
-  )
+  );
 }
