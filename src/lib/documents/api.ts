@@ -5,6 +5,7 @@ export interface Document {
   id?: string;
   title?: string;
   content: string;
+  prompt?: string;
   updated_by?: string;
   updated_at?: string;
   created_at?: string;
@@ -12,6 +13,8 @@ export interface Document {
 
 /**
  * Create a new document in the database
+ * If title and/or prompt are provided, saves to ai_generated_documents table
+ * Otherwise saves to documents table for collaborative editing
  * @param doc Document data to create
  * @returns Created document or null on error
  */
@@ -24,6 +27,28 @@ export async function createDocument(doc: Document): Promise<Document | null> {
       return null;
     }
 
+    // If title or prompt is provided, use ai_generated_documents table
+    if (doc.title || doc.prompt) {
+      const { data, error } = await supabase
+        .from("ai_generated_documents")
+        .insert({
+          title: doc.title || "Untitled Document",
+          content: doc.content,
+          prompt: doc.prompt || "",
+          generated_by: user.id,
+        })
+        .select()
+        .single();
+
+      if (error) {
+        logger.error("Error creating AI document:", error);
+        return null;
+      }
+
+      return data;
+    }
+
+    // Otherwise use documents table for collaborative editing
     const { data, error } = await supabase
       .from("documents")
       .insert({
@@ -73,10 +98,10 @@ export async function getDocument(id: string): Promise<Document | null> {
 /**
  * Update a document
  * @param id Document ID
- * @param content New content
+ * @param updates Document fields to update
  * @returns Updated document or null on error
  */
-export async function updateDocument(id: string, content: string): Promise<Document | null> {
+export async function updateDocument(id: string, updates: Partial<Document>): Promise<Document | null> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     
@@ -85,10 +110,30 @@ export async function updateDocument(id: string, content: string): Promise<Docum
       return null;
     }
 
+    // Try to update in ai_generated_documents first
+    if (updates.title !== undefined || updates.prompt !== undefined) {
+      const updateData: any = {};
+      if (updates.title !== undefined) updateData.title = updates.title;
+      if (updates.content !== undefined) updateData.content = updates.content;
+      if (updates.prompt !== undefined) updateData.prompt = updates.prompt;
+
+      const { data, error } = await supabase
+        .from("ai_generated_documents")
+        .update(updateData)
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (!error && data) {
+        return data;
+      }
+    }
+
+    // Otherwise update in documents table
     const { data, error } = await supabase
       .from("documents")
       .update({
-        content,
+        content: updates.content,
         updated_by: user.id,
       })
       .eq("id", id)

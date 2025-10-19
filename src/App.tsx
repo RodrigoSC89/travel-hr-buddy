@@ -67,6 +67,7 @@ const DocumentHistory = React.lazy(() => import("./pages/admin/documents/Documen
 const DocumentEditorPage = React.lazy(() => import("./pages/admin/documents/DocumentEditorPage"));
 const CollaborativeEditor = React.lazy(() => import("./pages/admin/documents/CollaborativeEditor"));
 const DocumentEditorDemo = React.lazy(() => import("./pages/admin/documents/DocumentEditorDemo"));
+const CreateFromTemplateDemo = React.lazy(() => import("./pages/admin/documents/create-from-template-demo"));
 const RestoreDashboard = React.lazy(() => import("./pages/admin/documents/restore-dashboard"));
 const ExecutionLogs = React.lazy(() => import("./pages/admin/automation/execution-logs"));
 const RestoreReportLogs = React.lazy(() => import("./pages/admin/reports/logs"));
@@ -262,6 +263,7 @@ function App() {
                       <Route path="/admin/templates" element={<Templates />} />
                       <Route path="/admin/templates/edit/:id" element={<EditTemplatePage />} />
                       <Route path="/admin/documents/demo" element={<DocumentEditorDemo />} />
+                      <Route path="/admin/documents/create-from-template" element={<CreateFromTemplateDemo />} />
                       <Route path="/admin/templates/editor" element={<TemplateEditorPage />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
