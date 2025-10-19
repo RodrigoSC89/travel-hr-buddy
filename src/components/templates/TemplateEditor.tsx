@@ -237,7 +237,7 @@ export default function TemplateEditor() {
         </div>
 
         <div className="text-xs text-muted-foreground space-y-1">
-          <p>💡 <strong>Dica:</strong> Clique em "Gerar com IA" para criar um template automaticamente baseado no título.</p>
+          <p>💡 <strong>Dica:</strong> Clique em &quot;Gerar com IA&quot; para criar um template automaticamente baseado no título.</p>
           <p>📝 Você pode editar o conteúdo gerado antes de salvar.</p>
           <p>🔒 Templates são salvos como públicos por padrão. Você pode editá-los posteriormente para torná-los privados.</p>
         </div>

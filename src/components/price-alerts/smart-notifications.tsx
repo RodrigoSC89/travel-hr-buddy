@@ -116,8 +116,7 @@ export const SmartNotifications: React.FC = () => {
         };
         setSettings(defaultSettings);
       }
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setIsLoading(false);
     }
   };

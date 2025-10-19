@@ -210,8 +210,7 @@ export const PeotramDocumentManager: React.FC = () => {
 
       setDocuments(mockDocuments);
       updateCategoryCompletion(mockDocuments);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const updateCategoryCompletion = (docs: Document[]) => {

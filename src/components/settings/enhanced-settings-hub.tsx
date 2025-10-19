@@ -536,8 +536,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           description: "Link das configurações copiado para área de transferência."
         });
       }
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const logSettingsChange = async (action: string, data: unknown) => {

@@ -130,8 +130,7 @@ export const EnhancedMobileSupport: React.FC = () => {
           const battery = await (navigator as unknown).getBattery();
           info.batteryLevel = Math.round(battery.level * 100);
           info.isCharging = battery.charging;
-        } catch (error) {
-        }
+        } catch (error) { /* Error handled silently */ }
       }
 
       // Connection API (se disponível)
@@ -141,8 +140,7 @@ export const EnhancedMobileSupport: React.FC = () => {
       }
 
       setDeviceInfo(info);
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setIsLoading(false);
     }
   };

@@ -179,8 +179,7 @@ export const PeotramSimulationTool: React.FC = () => {
       };
       
       setCurrentScenario(scenario);
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setIsRunning(false);
     }
   };

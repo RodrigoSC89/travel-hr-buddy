@@ -221,8 +221,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
     if (saved) {
       try {
         setRecentSearches(JSON.parse(saved));
-      } catch (error) {
-      }
+      } catch (error) { /* Error handled silently */ }
     }
   }, []);
 
@@ -255,8 +254,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
         .slice(0, 10);
 
       setResults(allResults);
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setIsLoading(false);
     }
   };
@@ -337,8 +335,7 @@ export const IntelligentGlobalSearch: React.FC<IntelligentGlobalSearchProps> = (
         });
       }
 
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const saveRecentSearch = (searchTerm: string) => {

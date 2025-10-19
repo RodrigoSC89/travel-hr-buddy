@@ -291,8 +291,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
         .order("priority", { ascending: false });
 
       setAIRecommendations(aiData || []);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const getPriorityColor = (priority: string) => {

@@ -270,7 +270,7 @@ export const AnalyticsDashboard = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className={`text-sm font-medium ${
-                        metric.change > 0 ? "text-success" : metric.change < 0 ? "text-danger" : "text-muted-foreground"
+                        metric.change > 0 ? &quot;text-success&quot; : metric.change < 0 ? "text-danger" : "text-muted-foreground"
                       }`}>
                         {metric.change > 0 ? "+" : ""}{metric.change}%
                       </span>

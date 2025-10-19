@@ -242,8 +242,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         )
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const markAllAsRead = async () => {
@@ -268,8 +267,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         title: "Notificações marcadas como lidas",
         description: `${unreadIds.length} notificações foram marcadas como lidas`,
       });
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const deleteNotification = async (notificationId: string) => {
@@ -287,8 +285,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       if (wasUnread) {
         setUnreadCount(prev => Math.max(0, prev - 1));
       }
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const getPriorityIcon = (priority: string) => {

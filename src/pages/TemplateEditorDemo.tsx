@@ -21,7 +21,7 @@ export default function TemplateEditorDemo() {
           <ol className="list-decimal list-inside space-y-2">
             <li>Digite ou cole seu texto no editor abaixo</li>
             <li>Selecione o trecho que deseja melhorar</li>
-            <li>Clique no botão "Reescrever seleção com IA"</li>
+            <li>Clique no botão &quot;Reescrever seleção com IA&quot;</li>
             <li>Aguarde enquanto a IA reformula o texto</li>
             <li>O texto selecionado será substituído pela versão melhorada</li>
           </ol>

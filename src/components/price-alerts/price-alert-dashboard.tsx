@@ -106,8 +106,7 @@ export const PriceAlertDashboardLegacy = () => {
 
       if (error) throw error;
       setNotifications(data || []);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const checkPriceForAlert = async (alert: PriceAlert) => {

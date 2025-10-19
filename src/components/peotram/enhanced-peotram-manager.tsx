@@ -120,8 +120,7 @@ export const EnhancedPeotramManager: React.FC = () => {
       setAudits(getDemoAudits());
       setNonConformities(getDemoNonConformities());
       setTemplates(getDemoTemplates());
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setIsLoading(false);
     }
   };

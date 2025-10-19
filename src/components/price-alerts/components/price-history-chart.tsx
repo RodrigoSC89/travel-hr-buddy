@@ -72,8 +72,7 @@ export const PriceHistoryChart = () => {
           setSelectedAlert(data[0].id);
         }
       }
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setLoading(false);
     }
   };
@@ -112,8 +111,7 @@ export const PriceHistoryChart = () => {
 
         setChartData(formattedData);
       }
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const getCurrentAlert = () => alerts.find(a => a.id === selectedAlert);

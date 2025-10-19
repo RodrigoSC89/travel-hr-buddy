@@ -297,9 +297,9 @@ export const PWAStatus: React.FC = () => {
             <div className="space-y-3 text-sm">
               <p><strong>Para instalar no {deviceType === "mobile" ? "celular" : "tablet"}:</strong></p>
               <ul className="space-y-1 ml-4">
-                <li>• No Chrome/Edge: Toque no menu ⋮ → "Instalar app"</li>
+                <li>• No Chrome/Edge: Toque no menu ⋮ → &quot;Instalar app&quot;</li>
                 <li>• No Safari (iOS): Toque no botão compartilhar → "Adicionar à Tela de Início"</li>
-                <li>• No Firefox: Toque no menu ⋮ → "Instalar"</li>
+                <li>• No Firefox: Toque no menu ⋮ → &quot;Instalar&quot;</li>
               </ul>
               <p className="text-muted-foreground">
                 Após instalado, o app funcionará como aplicativo nativo com funcionalidades offline.

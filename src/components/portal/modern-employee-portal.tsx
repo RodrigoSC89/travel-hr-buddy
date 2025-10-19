@@ -169,8 +169,7 @@ export const ModernEmployeePortal: React.FC = () => {
       } else {
         setUserProfile(profile);
       }
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const loadDashboardStats = async () => {
@@ -209,8 +208,7 @@ export const ModernEmployeePortal: React.FC = () => {
         recentPayments: [], // Implementar quando houver tabela de pagamentos
         nextEmbarkation: null
       });
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const loadPersonalCalendar = async () => {
@@ -240,8 +238,7 @@ export const ModernEmployeePortal: React.FC = () => {
         certifications: certifications.data || [],
         medicalExams: [] // Implementar quando houver tabela
       });
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const loadAIInsights = async () => {
@@ -276,8 +273,7 @@ export const ModernEmployeePortal: React.FC = () => {
       }));
 
       setAIInsights(formattedInsights);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const loadDocuments = async () => {
@@ -292,8 +288,7 @@ export const ModernEmployeePortal: React.FC = () => {
 
       if (error) throw error;
       setDocuments(docs || []);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const handleAIChat = async (message: string) => {

@@ -89,8 +89,7 @@ export const PeotramPermissionsManager: React.FC = () => {
 
       if (error) throw error;
       setUsers(data || []);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const fetchPermissions = async () => {
@@ -115,8 +114,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       }));
       
       setPermissions(mappedPermissions);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const fetchVessels = async () => {
@@ -132,8 +130,7 @@ export const PeotramPermissionsManager: React.FC = () => {
         imo_number: nullToUndefined(v.imo_number)
       }));
       setVessels(mappedVessels);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const createPermission = async () => {

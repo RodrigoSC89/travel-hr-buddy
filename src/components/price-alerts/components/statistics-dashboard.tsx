@@ -67,8 +67,7 @@ export const StatisticsDashboard = () => {
           alerts_triggered: data.alerts_triggered ?? 0
         });
       }
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const loadMetrics = async () => {
@@ -114,8 +113,7 @@ export const StatisticsDashboard = () => {
           categories,
         });
       }
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setLoading(false);
     }
   };

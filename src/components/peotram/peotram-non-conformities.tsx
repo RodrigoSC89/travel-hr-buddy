@@ -97,8 +97,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
       await onUpdate(id, updates);
       setIsEditDialogOpen(false);
       setSelectedNC(null);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const isOverdue = (targetDate: string) => {

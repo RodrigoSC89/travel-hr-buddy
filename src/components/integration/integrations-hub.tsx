@@ -396,8 +396,8 @@ const IntegrationsHub = () => {
                 <h4 className="font-medium mb-2">Como configurar:</h4>
                 <ol className="text-sm space-y-1 text-muted-foreground">
                   <li>1. Crie um novo Zap no Zapier</li>
-                  <li>2. Use "Webhooks by Zapier" como trigger</li>
-                  <li>3. Escolha "Catch Hook"</li>
+                  <li>2. Use &quot;Webhooks by Zapier&quot; como trigger</li>
+                  <li>3. Escolha &quot;Catch Hook&quot;</li>
                   <li>4. Cole a URL gerada acima</li>
                   <li>5. Configure as ações desejadas</li>
                 </ol>

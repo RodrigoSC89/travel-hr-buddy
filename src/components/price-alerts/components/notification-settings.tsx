@@ -79,8 +79,7 @@ export const NotificationSettings = () => {
           weekly_report: data.weekly_report ?? true,
         });
       }
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setLoading(false);
     }
   };
@@ -134,8 +133,7 @@ export const NotificationSettings = () => {
           variant: "destructive",
         });
       }
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const testPushNotification = () => {

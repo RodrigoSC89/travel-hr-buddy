@@ -279,8 +279,7 @@ export const EnhancedHotelSearch: React.FC = () => {
         }
       ];
       setAiSuggestions(suggestions);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const handleSearch = async () => {

@@ -253,9 +253,9 @@ export const AIAssistantPanel = () => {
           <div className="mt-4 text-sm text-muted-foreground">
             <p>Exemplos de consultas:</p>
             <ul className="mt-2 space-y-1">
-              <li>• "Comparar custos operacionais dos últimos 6 meses"</li>
-              <li>• "Identificar gargalos na logística portuária"</li>
-              <li>• "Prever demanda para o próximo trimestre"</li>
+              <li>• &quot;Comparar custos operacionais dos últimos 6 meses&quot;</li>
+              <li>• &quot;Identificar gargalos na logística portuária&quot;</li>
+              <li>• &quot;Prever demanda para o próximo trimestre&quot;</li>
             </ul>
           </div>
         </CardContent>

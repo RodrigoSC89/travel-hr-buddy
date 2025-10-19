@@ -276,7 +276,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
             <div className="text-center py-8 text-muted-foreground">
               <Brain className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhum insight gerado ainda.</p>
-              <p className="text-sm">Clique em "Gerar Análise" para começar.</p>
+              <p className="text-sm">Clique em &quot;Gerar Análise&quot; para começar.</p>
             </div>
           ) : (
             aiInsights.map((insight) => (
@@ -382,7 +382,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
             <div className="text-center py-8 text-muted-foreground">
               <Target className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhuma meta definida ainda.</p>
-              <p className="text-sm">Clique em "Sugerir Metas" para começar.</p>
+              <p className="text-sm">Clique em &quot;Sugerir Metas&quot; para começar.</p>
             </div>
           ) : (
             goals.map((goal) => (

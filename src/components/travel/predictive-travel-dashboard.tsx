@@ -106,8 +106,7 @@ export const PredictiveTravelDashboard: React.FC = () => {
 
       if (error) throw error;
       setRecommendations(data.data || []);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const loadAlerts = async () => {
@@ -133,8 +132,7 @@ export const PredictiveTravelDashboard: React.FC = () => {
           notification_sent: alert.notification_sent ?? false
         })));
       }
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const generatePrediction = async () => {

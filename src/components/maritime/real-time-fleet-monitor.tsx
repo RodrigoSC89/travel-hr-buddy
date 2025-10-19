@@ -97,8 +97,7 @@ export const RealTimeFleetMonitor = () => {
 
       setVessels(transformedVessels);
       
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setLoading(false);
     }
   };
@@ -136,8 +135,7 @@ export const RealTimeFleetMonitor = () => {
       if (error) throw error;
 
       setWeatherData(data.weather);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const getStatusColor = (status: string) => {

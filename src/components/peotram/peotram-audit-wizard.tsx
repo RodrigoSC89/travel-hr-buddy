@@ -226,8 +226,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       };
       
       await onSave?.(auditResult);
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setIsSaving(false);
     }
   };
@@ -249,8 +248,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       };
       
       await onComplete?.(auditResult);
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setIsSaving(false);
     }
   };

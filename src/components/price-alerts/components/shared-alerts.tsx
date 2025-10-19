@@ -152,8 +152,7 @@ export const SharedAlerts = () => {
         }));
         setSharedAlerts(mappedData);
       }
-    } catch (error) {
-    } finally {
+    } catch (error) { /* Error handled silently */ } finally {
       setLoading(false);
     }
   };
@@ -171,8 +170,7 @@ export const SharedAlerts = () => {
       }
 
       setUserAlerts(data || []);
-    } catch (error) {
-    }
+    } catch (error) { /* Error handled silently */ }
   };
 
   const handleVote = async (sharedAlertId: string, voteType: "upvote" | "downvote") => {
