@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import html2pdf from "html2pdf.js";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FileDown } from "lucide-react";
+import { loadSGSOAudit, type AuditItem } from "@/services/sgso-audit-service";
+import { toast } from "@/hooks/use-toast";
 
 const requisitosSGSO = [
   { num: 1, titulo: "Política de SMS", desc: "Estabelecimento e divulgação de política de segurança e meio ambiente." },
@@ -47,6 +49,47 @@ export default function SGSOAuditPage() {
       comment: ""
     }))
   );
+
+  useEffect(() => {
+    const fetchAudit = async () => {
+      if (!selectedVessel) return;
+
+      try {
+        const audits = await loadSGSOAudit(selectedVessel);
+        if (audits && audits.length > 0) {
+          const latest = audits[0];
+
+          const updatedData = requisitosSGSO.map(req => {
+            const match = latest.sgso_audit_items.find(
+              (item: AuditItem) => item.requirement_number === req.num
+            );
+
+            return {
+              ...req,
+              compliance: match?.compliance_status || "compliant",
+              evidence: match?.evidence || "",
+              comment: match?.comment || ""
+            };
+          });
+
+          setAuditData(updatedData);
+          toast({
+            title: "✅ Última auditoria carregada",
+            description: "Os dados da auditoria anterior foram carregados com sucesso."
+          });
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : "Erro desconhecido";
+        toast({
+          title: "Erro ao carregar auditoria",
+          description: errorMessage,
+          variant: "destructive"
+        });
+      }
+    };
+
+    fetchAudit();
+  }, [selectedVessel]);
 
   const handleChange = (index: number, field: string, value: string) => {
     const updated = [...auditData];
