@@ -378,12 +378,8 @@ export default function TemplatesPage() {
   };
 
   // Load template for editing
-  const editTemplate = (template: Template) => {
-    setTitle(template.title);
-    setContent(template.content);
-    setCurrentTemplateId(template.id);
-    setIsEditing(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const editTemplate = (id: string) => {
+    navigate(`/admin/templates/edit/${id}`);
   };
 
   // Duplicate template
@@ -694,7 +690,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => editTemplate(template)}
+                        onClick={() => editTemplate(template.id)}
                       >
                         <Edit className="w-3 h-3 mr-1" />
                         Editar

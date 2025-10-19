@@ -78,6 +78,7 @@ const AdminDashboard = React.lazy(() => import("./pages/admin/dashboard"));
 const SmartWorkflows = React.lazy(() => import("./pages/admin/workflows"));
 const WorkflowDetail = React.lazy(() => import("./pages/admin/workflows/detail"));
 const Templates = React.lazy(() => import("./pages/admin/templates"));
+const EditTemplatePage = React.lazy(() => import("./pages/admin/templates/edit/[id]"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
 const Offline = React.lazy(() => import("./pages/Offline"));
@@ -243,6 +244,7 @@ function App() {
                       <Route path="/admin/documents/ai" element={<DocumentAIEditor />} />
                       <Route path="/admin/documents/editor" element={<DocumentEditorPage />} />
                       <Route path="/admin/templates" element={<Templates />} />
+                      <Route path="/admin/templates/edit/:id" element={<EditTemplatePage />} />
                       <Route path="/admin/documents/demo" element={<DocumentEditorDemo />} />
                       <Route path="/admin/templates/editor" element={<TemplateEditorPage />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
