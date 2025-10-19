@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS public.mmi_orders (
   description TEXT,
   status TEXT DEFAULT 'pendente' CHECK (status IN ('pendente', 'em_andamento', 'concluido', 'cancelado')),
   priority TEXT DEFAULT 'normal' CHECK (priority IN ('baixa', 'normal', 'alta', 'crítica')),
+  technician_comment TEXT,
+  pdf_path TEXT,
+  ai_diagnosis TEXT,
   created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
