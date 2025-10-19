@@ -85,6 +85,7 @@
     "@tiptap/react": "^2.26.3",
     "@tiptap/starter-kit": "^2.26.3",
     "@types/qrcode.react": "^1.0.5",
+    "ai": "^5.0.76",
     "chart.js": "^4.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
