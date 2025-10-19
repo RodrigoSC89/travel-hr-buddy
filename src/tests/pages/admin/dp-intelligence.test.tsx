@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import DPIntelligencePage from "@/pages/admin/DPIntelligencePage";
+import DPIntelligencePage from "@/_legacy/DPIntelligencePage";
 import { supabase } from "@/integrations/supabase/client";
 
 // Mock Supabase client
