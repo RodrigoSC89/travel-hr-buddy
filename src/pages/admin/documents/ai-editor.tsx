@@ -19,7 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import { logger } from "@/lib/logger";
-import ApplyTemplateModal from "@/_legacy/ApplyTemplateModal";
+import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
 
 export default function DocumentAIEditorPage() {
   const navigate = useNavigate();
@@ -273,6 +273,7 @@ export default function DocumentAIEditorPage() {
             <CardTitle>Editor</CardTitle>
             <div className="flex gap-2">
               <ApplyTemplateModal
+                tableName="templates"
                 onApply={(content) => {
                   if (editor) {
                     editor.commands.setContent(content);

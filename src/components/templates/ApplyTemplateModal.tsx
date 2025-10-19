@@ -22,9 +22,10 @@ interface Template {
 
 interface ApplyTemplateModalProps {
   onApply: (content: string) => void;
+  tableName?: "templates" | "ai_document_templates";
 }
 
-export default function ApplyTemplateModal({ onApply }: ApplyTemplateModalProps) {
+export default function ApplyTemplateModal({ onApply, tableName = "templates" }: ApplyTemplateModalProps) {
   const [open, setOpen] = useState(false);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [search, setSearch] = useState("");
@@ -38,7 +39,7 @@ export default function ApplyTemplateModal({ onApply }: ApplyTemplateModalProps)
   async function fetchTemplates() {
     try {
       const { data, error } = await supabase
-        .from("ai_document_templates")
+        .from(tableName)
         .select("*")
         .order("created_at", { ascending: false });
 
