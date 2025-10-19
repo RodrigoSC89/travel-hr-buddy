@@ -333,7 +333,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                                 <Label htmlFor="status">Status</Label>
                                 <Select 
                                   value={selectedNC.status} 
-                                  onValueChange={(value: any) => setSelectedNC({ ...selectedNC, status: value })}
+                                  onValueChange={(value: unknown) => setSelectedNC({ ...selectedNC, status: value })}
                                 >
                                   <SelectTrigger>
                                     <SelectValue />

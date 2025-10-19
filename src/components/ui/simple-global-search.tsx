@@ -11,7 +11,7 @@ interface SearchResult {
   title: string;
   description: string;
   category: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<unknown>;
   path: string;
   keywords: string[];
 }

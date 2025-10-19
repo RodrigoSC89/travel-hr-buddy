@@ -26,7 +26,7 @@ export interface Column<T = any> {
   header: string;
   sortable?: boolean;
   filterable?: boolean;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (value: unknown, row: T) => React.ReactNode;
   width?: string;
   align?: "left" | "center" | "right";
 }
@@ -45,7 +45,7 @@ export interface DataTableProps<T = any> {
     delete?: (row: T) => void;
     custom?: Array<{
       label: string;
-      icon?: React.ComponentType<any>;
+      icon?: React.ComponentType<unknown>;
       action: (row: T) => void;
       color?: string;
     }>;

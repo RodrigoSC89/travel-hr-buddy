@@ -78,7 +78,7 @@ export const AdvancedSettings: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const handleSettingChange = (category: keyof UserSettings, key: string, value: any) => {
+  const handleSettingChange = (category: keyof UserSettings, key: string, value: unknown) => {
     setSettings(prev => ({
       ...prev,
       [category]: {

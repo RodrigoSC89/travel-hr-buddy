@@ -21,7 +21,7 @@ describe("DocumentEditor", () => {
   
   beforeEach(() => {
     vi.clearAllMocks();
-    (useAuth as any).mockReturnValue({ user: mockUser });
+    (useAuth as unknown).mockReturnValue({ user: mockUser });
   });
 
   it("renders the document editor with title and content fields", () => {
@@ -79,7 +79,7 @@ describe("DocumentEditor", () => {
       error: null,
     });
 
-    (supabase.from as any).mockImplementation((table: string) => {
+    (supabase.from as unknown).mockImplementation((table: string) => {
       if (table === "ai_generated_documents") {
         return { insert: mockInsert };
       }
@@ -119,7 +119,7 @@ describe("DocumentEditor", () => {
       error: null,
     });
 
-    (supabase.from as any).mockImplementation((table: string) => {
+    (supabase.from as unknown).mockImplementation((table: string) => {
       if (table === "ai_generated_documents") {
         return { update: mockUpdate };
       }

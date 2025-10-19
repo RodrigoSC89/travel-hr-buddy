@@ -37,7 +37,7 @@ export const RealTimeFleetMonitor = () => {
   const [vessels, setVessels] = useState<VesselMetrics[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [weatherData, setWeatherData] = useState<any>(null);
+  const [weatherData, setWeatherData] = useState<unknown>(null);
 
   useEffect(() => {
     loadFleetData();

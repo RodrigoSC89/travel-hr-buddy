@@ -130,7 +130,7 @@ describe("Auditoria Resumo API Endpoint", () => {
       ];
 
       const resumo: Record<string, number> = {};
-      mockData.forEach((item: any) => {
+      mockData.forEach((item: unknown) => {
         const nome_navio = item.vessels?.name || "Sem Navio";
         resumo[nome_navio] = (resumo[nome_navio] || 0) + 1;
       });
@@ -145,7 +145,7 @@ describe("Auditoria Resumo API Endpoint", () => {
       ];
 
       const resumo: Record<string, number> = {};
-      mockData.forEach((item: any) => {
+      mockData.forEach((item: unknown) => {
         const nome_navio = item.vessels?.name || "Sem Navio";
         resumo[nome_navio] = (resumo[nome_navio] || 0) + 1;
       });

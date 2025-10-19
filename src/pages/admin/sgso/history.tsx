@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { supabase } from '@/integrations/supabase/client'
-import { Link } from 'react-router-dom'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 interface Audit {
   id: string
@@ -21,15 +21,15 @@ interface Audit {
 }
 
 export default function SGSOAuditHistoryPage() {
-  const [audits, setAudits] = useState<Audit[]>([])
-  const [loading, setLoading] = useState(true)
+  const [audits, setAudits] = useState<Audit[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAudits = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
         const { data, error } = await supabase
-          .from('sgso_audits')
+          .from("sgso_audits")
           .select(`
             id,
             audit_date,
@@ -38,22 +38,22 @@ export default function SGSOAuditHistoryPage() {
             vessels ( name ),
             users:auditor_id ( full_name )
           `)
-          .order('audit_date', { ascending: false })
+          .order("audit_date", { ascending: false });
 
         if (error) {
-          console.error('Error fetching audits:', error)
+          console.error("Error fetching audits:", error);
         } else if (data) {
-          setAudits(data as Audit[])
+          setAudits(data as Audit[]);
         }
       } catch (err) {
-        console.error('Error:', err)
+        console.error("Error:", err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchAudits()
-  }, [])
+    fetchAudits();
+  }, []);
 
   return (
     <div className="p-6 space-y-4">
@@ -78,9 +78,9 @@ export default function SGSOAuditHistoryPage() {
       ) : (
         audits.map((audit) => (
           <Card key={audit.id} className="p-4 space-y-2">
-            <p><strong>Navio:</strong> {audit.vessels?.name || '---'}</p>
-            <p><strong>Auditor:</strong> {audit.users?.full_name || '---'}</p>
-            <p><strong>Data:</strong> {new Date(audit.audit_date).toLocaleDateString('pt-BR')}</p>
+            <p><strong>Navio:</strong> {audit.vessels?.name || "---"}</p>
+            <p><strong>Auditor:</strong> {audit.users?.full_name || "---"}</p>
+            <p><strong>Data:</strong> {new Date(audit.audit_date).toLocaleDateString("pt-BR")}</p>
 
             <Link
               to={`/admin/sgso/review/${audit.id}`}
@@ -92,5 +92,5 @@ export default function SGSOAuditHistoryPage() {
         ))
       )}
     </div>
-  )
+  );
 }

@@ -56,7 +56,7 @@ const VoiceTestingPanel: React.FC<VoiceTestingProps> = ({ onNavigate, isVisible 
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [lastCommand, setLastCommand] = useState("");
-  const [recognition, setRecognition] = useState<any>(null);
+  const [recognition, setRecognition] = useState<unknown>(null);
   const [synthesis] = useState(window.speechSynthesis);
   const { toast } = useToast();
 

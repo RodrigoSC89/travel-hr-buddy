@@ -208,7 +208,7 @@ export class APIHealthMonitor {
   private startMonitoring() {
     // Periodic health check (could be enhanced to actually ping APIs)
     this.intervalId = setInterval(() => {
-      this.healthStatus.forEach((status, name) => {
+      this.healthStatus.forEach((status) => {
         // Reset error counts gradually if no recent failures
         const timeSinceLastCheck = Date.now() - status.lastCheck.getTime();
         if (timeSinceLastCheck > 60000 && status.errorCount > 0) {

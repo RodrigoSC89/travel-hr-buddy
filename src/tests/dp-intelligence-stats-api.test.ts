@@ -247,7 +247,7 @@ describe("DP Intelligence Stats API Endpoint", () => {
     });
 
     it("should handle empty result set", () => {
-      const data: any[] = [];
+      const data: unknown[] = [];
       const stats = {
         byVessel: {},
         bySeverity: { Alta: 0, Média: 0, Baixa: 0 },

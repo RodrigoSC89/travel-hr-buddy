@@ -7,7 +7,7 @@ global.fetch = vi.fn(() =>
   Promise.resolve({
     json: () => Promise.resolve([]),
   })
-) as any;
+) as unknown;
 
 describe("PainelMetricasRisco", () => {
   beforeEach(() => {

@@ -103,7 +103,7 @@ export const logger = {
     // Send to Sentry in production
     if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
-        const Sentry = (window as any).Sentry;
+        const Sentry = (window as unknown).Sentry;
         if (Sentry && getSentryDsn()) {
           Sentry.captureException(error, { 
             extra: { message, ...context },
@@ -140,7 +140,7 @@ export const logger = {
     // Send to Sentry in production
     if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
-        const Sentry = (window as any).Sentry;
+        const Sentry = (window as unknown).Sentry;
         if (Sentry && getSentryDsn()) {
           Sentry.captureException(error, { 
             extra: { message, ...context },

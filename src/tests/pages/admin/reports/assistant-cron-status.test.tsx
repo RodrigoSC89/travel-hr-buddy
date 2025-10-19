@@ -47,7 +47,7 @@ describe("AssistantReportLogsPage - Cron Status", () => {
 
   it("should display cron status badge when status is ok", async () => {
     // Mock successful fetch responses
-    (global.fetch as any).mockImplementation((url: string) => {
+    (global.fetch as unknown).mockImplementation((url: string) => {
       if (url.includes("assistant-report-logs")) {
         return Promise.resolve({
           ok: true,
@@ -86,7 +86,7 @@ describe("AssistantReportLogsPage - Cron Status", () => {
 
   it("should display warning badge when cron has not run recently", async () => {
     // Mock fetch responses with warning status
-    (global.fetch as any).mockImplementation((url: string) => {
+    (global.fetch as unknown).mockImplementation((url: string) => {
       if (url.includes("assistant-report-logs")) {
         return Promise.resolve({
           ok: true,
@@ -125,7 +125,7 @@ describe("AssistantReportLogsPage - Cron Status", () => {
 
   it("should not display status badge if cron-status API fails", async () => {
     // Mock fetch responses where cron-status fails
-    (global.fetch as any).mockImplementation((url: string) => {
+    (global.fetch as unknown).mockImplementation((url: string) => {
       if (url.includes("assistant-report-logs")) {
         return Promise.resolve({
           ok: true,
@@ -159,7 +159,7 @@ describe("AssistantReportLogsPage - Cron Status", () => {
 
   it("should render page title and filters", async () => {
     // Mock successful fetch responses
-    (global.fetch as any).mockImplementation((url: string) => {
+    (global.fetch as unknown).mockImplementation((url: string) => {
       if (url.includes("assistant-report-logs")) {
         return Promise.resolve({
           ok: true,

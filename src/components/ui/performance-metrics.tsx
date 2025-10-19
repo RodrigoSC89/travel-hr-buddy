@@ -21,7 +21,7 @@ interface MetricData {
   trend: "up" | "down" | "stable";
   trendValue: number;
   status: "excellent" | "good" | "warning" | "critical";
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<unknown>;
   color: string;
 }
 
@@ -257,7 +257,7 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
           {["24h", "7d", "30d"].map((period) => (
             <button
               key={period}
-              onClick={() => setSelectedPeriod(period as any)}
+              onClick={() => setSelectedPeriod(period as unknown)}
               className={cn(
                 "px-3 py-1 rounded-lg text-sm font-medium transition-colors",
                 selectedPeriod === period

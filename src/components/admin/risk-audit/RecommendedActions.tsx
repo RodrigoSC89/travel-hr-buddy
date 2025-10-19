@@ -78,7 +78,7 @@ export function RecommendedActions() {
       }
 
       setActions(allActions);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error loading actions:", error);
       toast.error("Failed to load recommended actions");
     } finally {
@@ -88,26 +88,26 @@ export function RecommendedActions() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-      case "high":
-        return "destructive";
-      case "medium":
-        return "default";
-      default:
-        return "secondary";
+    case "critical":
+    case "high":
+      return "destructive";
+    case "medium":
+      return "default";
+    default:
+      return "secondary";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "closed":
-      case "mitigated":
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case "in_progress":
-      case "assigned":
-        return <Clock className="h-4 w-4 text-blue-500" />;
-      default:
-        return <XCircle className="h-4 w-4 text-orange-500" />;
+    case "closed":
+    case "mitigated":
+      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+    case "in_progress":
+    case "assigned":
+      return <Clock className="h-4 w-4 text-blue-500" />;
+    default:
+      return <XCircle className="h-4 w-4 text-orange-500" />;
     }
   };
 

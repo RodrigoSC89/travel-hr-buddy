@@ -71,7 +71,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -97,7 +97,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -109,7 +109,7 @@ describe("DPIntelligencePage", () => {
     });
   });
 
-  it('shows "Não analisado" when no GPT analysis exists', async () => {
+  it("shows \"Não analisado\" when no GPT analysis exists", async () => {
     const mockFrom = vi.fn().mockReturnValue({
       select: vi.fn().mockReturnValue({
         order: vi.fn().mockResolvedValue({
@@ -119,7 +119,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -128,7 +128,7 @@ describe("DPIntelligencePage", () => {
     });
   });
 
-  it('has "Explicar com IA" button for each incident', async () => {
+  it("has \"Explicar com IA\" button for each incident", async () => {
     const mockFrom = vi.fn().mockReturnValue({
       select: vi.fn().mockReturnValue({
         order: vi.fn().mockResolvedValue({
@@ -138,7 +138,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -183,8 +183,8 @@ describe("DPIntelligencePage", () => {
       };
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+    (supabase.from as unknown).mockImplementation(mockFrom);
+    (supabase.functions.invoke as unknown).mockImplementation(mockInvoke);
 
     render(<DPIntelligencePage />);
 
@@ -216,7 +216,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -225,7 +225,7 @@ describe("DPIntelligencePage", () => {
     });
   });
 
-  it('displays "-" when no date provided', async () => {
+  it("displays \"-\" when no date provided", async () => {
     const incidentWithoutDate = {
       ...mockIncidents[0],
       date: null,
@@ -240,7 +240,7 @@ describe("DPIntelligencePage", () => {
       }),
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
+    (supabase.from as unknown).mockImplementation(mockFrom);
 
     render(<DPIntelligencePage />);
 
@@ -292,8 +292,8 @@ describe("DPIntelligencePage", () => {
       };
     });
 
-    (supabase.from as any).mockImplementation(mockFrom);
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+    (supabase.from as unknown).mockImplementation(mockFrom);
+    (supabase.functions.invoke as unknown).mockImplementation(mockInvoke);
 
     render(<DPIntelligencePage />);
 

@@ -39,7 +39,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
 
   const activeFilterCount = Object.values(localFilters).filter(Boolean).length;
 
-  const handleFilterChange = (key: string, value: any) => {
+  const handleFilterChange = (key: string, value: unknown) => {
     const newFilters = { ...localFilters, [key]: value };
     setLocalFilters(newFilters);
     onFiltersChange?.(newFilters);

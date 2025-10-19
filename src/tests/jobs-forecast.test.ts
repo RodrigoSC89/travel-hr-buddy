@@ -13,7 +13,7 @@ describe("jobs-forecast Edge Function", () => {
 
   describe("Request Validation", () => {
     it("should validate trend data is an array", () => {
-      const isValidTrend = (trend: any) => {
+      const isValidTrend = (trend: unknown) => {
         return trend != null && Array.isArray(trend);
       };
 
@@ -39,7 +39,7 @@ describe("jobs-forecast Edge Function", () => {
     });
 
     it("should handle empty trend array", () => {
-      const emptyTrend: any[] = [];
+      const emptyTrend: unknown[] = [];
       
       expect(Array.isArray(emptyTrend)).toBe(true);
       expect(emptyTrend).toHaveLength(0);
@@ -186,7 +186,7 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
     });
 
     it("should return error for invalid trend data", () => {
-      const validateTrend = (trend: any) => {
+      const validateTrend = (trend: unknown) => {
         if (!trend || !Array.isArray(trend)) {
           return { 
             valid: false, 
@@ -334,7 +334,7 @@ Gere uma previsão para os próximos 2 meses e recomende ações técnicas preve
 
   describe("Logging", () => {
     it("should log forecast generation", () => {
-      const logMessage = (trend: any) => {
+      const logMessage = (trend: unknown) => {
         return `Generating jobs forecast for trend data: ${JSON.stringify(trend)}`;
       };
 

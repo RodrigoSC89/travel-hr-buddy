@@ -93,7 +93,7 @@ export const EnhancedMobileSupport: React.FC = () => {
     dataUsage: "normal"
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [installPrompt, setInstallPrompt] = useState<unknown>(null);
   
   const isMobile = useIsMobile();
   const { toast } = useToast();

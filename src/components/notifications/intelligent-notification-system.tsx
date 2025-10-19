@@ -200,7 +200,7 @@ const IntelligentNotificationSystem = () => {
     deleteNotification(id);
   };
 
-  const updateSettings = (key: string, value: any) => {
+  const updateSettings = (key: string, value: unknown) => {
     setSettings(prev => ({
       ...prev,
       [key]: value

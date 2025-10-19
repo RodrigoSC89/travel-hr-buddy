@@ -211,7 +211,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     setUnreadCount(prev => prev + 1);
   };
 
-  const createNotificationFromMaintenance = (maintenance: any) => {
+  const createNotificationFromMaintenance = (maintenance: unknown) => {
     const notification: Notification = {
       id: `maintenance-${maintenance.id}`,
       type: "maintenance_due",

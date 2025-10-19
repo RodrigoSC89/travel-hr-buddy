@@ -28,7 +28,7 @@ import {
 interface IntegrationSettings {
   apiKeys: Record<string, string>;
   webhooks: Array<{ id: string; name: string; url: string; active: boolean }>;
-  externalServices: Record<string, any>;
+  externalServices: Record<string, unknown>;
 }
 
 interface IntegrationsTabProps {
@@ -144,7 +144,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
     });
   };
 
-  const testWebhook = async (webhook: any) => {
+  const testWebhook = async (webhook: unknown) => {
     toast({
       title: "Testando Webhook",
       description: "Enviando payload de teste..."

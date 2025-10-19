@@ -47,7 +47,7 @@ describe("DPIntelligenceDashboard Component", () => {
         ok: true,
         json: () => Promise.resolve(mockStatsData),
       })
-    ) as any;
+    ) as unknown;
   });
 
   describe("Component Rendering", () => {
@@ -105,7 +105,7 @@ describe("DPIntelligenceDashboard Component", () => {
     it("should display error message when fetch fails", async () => {
       global.fetch = vi.fn(() =>
         Promise.reject(new Error("Network error"))
-      ) as any;
+      ) as unknown;
 
       render(<DPIntelligenceDashboard />);
 
@@ -120,7 +120,7 @@ describe("DPIntelligenceDashboard Component", () => {
           ok: false,
           status: 500,
         })
-      ) as any;
+      ) as unknown;
 
       render(<DPIntelligenceDashboard />);
 
@@ -224,7 +224,7 @@ describe("DPIntelligenceDashboard Component", () => {
             byMonth: {},
           }),
         })
-      ) as any;
+      ) as unknown;
 
       render(<DPIntelligenceDashboard />);
 
@@ -240,7 +240,7 @@ describe("DPIntelligenceDashboard Component", () => {
           ok: true,
           json: () => Promise.resolve(null),
         })
-      ) as any;
+      ) as unknown;
 
       render(<DPIntelligenceDashboard />);
 

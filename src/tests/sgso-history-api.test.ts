@@ -60,7 +60,7 @@ const mockSupabaseData = {
 
 vi.mock("@supabase/supabase-js", () => ({
   createClient: vi.fn(() => ({
-    from: vi.fn((table: string) => ({
+    from: vi.fn(() => ({
       select: vi.fn(() => ({
         eq: vi.fn((column: string, value: string) => ({
           order: vi.fn(() => ({

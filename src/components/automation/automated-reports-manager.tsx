@@ -160,7 +160,7 @@ export const AutomatedReportsManager: React.FC = () => {
           recipients: formData.recipients.filter(email => email.trim() !== "") as any,
           created_by: user.user?.id,
           organization_id: user.user?.id // Temporário para demo
-        } as any);
+        } as unknown);
 
       if (error) throw error;
 

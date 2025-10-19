@@ -29,7 +29,7 @@ interface Integration {
   rating: number;
   downloads: number;
   price: "free" | "paid" | "freemium";
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<unknown>;
   features: string[];
   developer: string;
   version: string;
