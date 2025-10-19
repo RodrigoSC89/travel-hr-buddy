@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { useEffect, useState } from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 type ChartData = {
   name: string
@@ -10,34 +10,34 @@ type ChartData = {
 }
 
 export default function BIForecastsPage() {
-  const [data, setData] = useState<ChartData[]>([])
-  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState<ChartData[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true)
-    fetch('/api/mmi/forecast/all')
+    setLoading(true);
+    fetch("/api/mmi/forecast/all")
       .then(res => res.json())
       .then((forecasts) => {
         const grouped = forecasts.reduce((acc: any, item: any) => {
-          const key = item.system_name
-          acc[key] = (acc[key] || 0) + 1
-          return acc
-        }, {})
+          const key = item.system_name;
+          acc[key] = (acc[key] || 0) + 1;
+          return acc;
+        }, {});
 
         const chartData = Object.keys(grouped).map((key) => ({
           name: key,
           total: grouped[key]
-        }))
-        setData(chartData)
+        }));
+        setData(chartData);
       })
       .catch((err) => {
-        console.error('Error loading forecast data:', err)
-        setData([])
+        console.error("Error loading forecast data:", err);
+        setData([]);
       })
       .finally(() => {
-        setLoading(false)
-      })
-  }, [])
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div className="p-6 space-y-6">
@@ -72,5 +72,5 @@ export default function BIForecastsPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

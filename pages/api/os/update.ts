@@ -25,10 +25,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Validate status values
-    const validStatuses = ['pendente', 'em andamento', 'concluída', 'cancelada'];
+    const validStatuses = ["pendente", "em andamento", "concluída", "cancelada"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ 
-        error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` 
+        error: `Invalid status. Must be one of: ${validStatuses.join(", ")}` 
       });
     }
 
@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const updateData: { status: string; completed_at?: string } = { status };
     
     // Set completed_at timestamp when marking as completed
-    if (status === 'concluída') {
+    if (status === "concluída") {
       updateData.completed_at = new Date().toISOString();
     }
 

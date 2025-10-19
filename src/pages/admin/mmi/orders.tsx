@@ -30,16 +30,16 @@ export default function OrdersPage() {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('/api/os/all');
+      const response = await fetch("/api/os/all");
       
       if (!response.ok) {
-        throw new Error('Erro ao carregar ordens de serviço');
+        throw new Error("Erro ao carregar ordens de serviço");
       }
       
       const data = await response.json();
       setOrders(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
+      const errorMessage = err instanceof Error ? err.message : "Erro desconhecido";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -49,72 +49,72 @@ export default function OrdersPage() {
 
   const updateStatus = async (id: string, status: string) => {
     try {
-      const response = await fetch('/api/os/update', {
-        method: 'POST',
+      const response = await fetch("/api/os/update", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ id, status }),
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao atualizar status');
+        throw new Error("Erro ao atualizar status");
       }
 
       // Update local state
       setOrders((prev) =>
-        prev.map((o) => (o.id === id ? { ...o, status, ...(status === 'concluída' ? { completed_at: new Date().toISOString() } : {}) } : o))
+        prev.map((o) => (o.id === id ? { ...o, status, ...(status === "concluída" ? { completed_at: new Date().toISOString() } : {}) } : o))
       );
       
-      toast.success('Status atualizado com sucesso!');
+      toast.success("Status atualizado com sucesso!");
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Erro ao atualizar';
+      const errorMessage = err instanceof Error ? err.message : "Erro ao atualizar";
       toast.error(errorMessage);
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority.toLowerCase()) {
-      case 'crítica':
-        return 'bg-red-500/10 text-red-500 border-red-500/20';
-      case 'alta':
-        return 'bg-orange-500/10 text-orange-500 border-orange-500/20';
-      case 'média':
-        return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
-      case 'baixa':
-        return 'bg-green-500/10 text-green-500 border-green-500/20';
-      default:
-        return 'bg-gray-500/10 text-gray-500 border-gray-500/20';
+    case "crítica":
+      return "bg-red-500/10 text-red-500 border-red-500/20";
+    case "alta":
+      return "bg-orange-500/10 text-orange-500 border-orange-500/20";
+    case "média":
+      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+    case "baixa":
+      return "bg-green-500/10 text-green-500 border-green-500/20";
+    default:
+      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'concluída':
-        return 'bg-green-500/10 text-green-500 border-green-500/20';
-      case 'em andamento':
-        return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
-      case 'pendente':
-        return 'bg-gray-500/10 text-gray-500 border-gray-500/20';
-      case 'cancelada':
-        return 'bg-red-500/10 text-red-500 border-red-500/20';
-      default:
-        return 'bg-gray-500/10 text-gray-500 border-gray-500/20';
+    case "concluída":
+      return "bg-green-500/10 text-green-500 border-green-500/20";
+    case "em andamento":
+      return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+    case "pendente":
+      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+    case "cancelada":
+      return "bg-red-500/10 text-red-500 border-red-500/20";
+    default:
+      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'concluída':
-        return <CheckCircle className="w-4 h-4" />;
-      case 'em andamento':
-        return <Clock className="w-4 h-4" />;
-      case 'pendente':
-        return <AlertTriangle className="w-4 h-4" />;
-      case 'cancelada':
-        return <XCircle className="w-4 h-4" />;
-      default:
-        return null;
+    case "concluída":
+      return <CheckCircle className="w-4 h-4" />;
+    case "em andamento":
+      return <Clock className="w-4 h-4" />;
+    case "pendente":
+      return <AlertTriangle className="w-4 h-4" />;
+    case "cancelada":
+      return <XCircle className="w-4 h-4" />;
+    default:
+      return null;
     }
   };
 
@@ -127,22 +127,22 @@ Embarcação: ${order.vessel_name}
 Sistema: ${order.system_name}
 Prioridade: ${order.priority}
 Status: ${order.status}
-Criada em: ${new Date(order.created_at).toLocaleDateString('pt-BR')}
-${order.completed_at ? `Concluída em: ${new Date(order.completed_at).toLocaleDateString('pt-BR')}` : ''}
+Criada em: ${new Date(order.created_at).toLocaleDateString("pt-BR")}
+${order.completed_at ? `Concluída em: ${new Date(order.completed_at).toLocaleDateString("pt-BR")}` : ""}
 
 Descrição:
 ${order.description}
 
 ═══════════════════════════════════════
-Documento gerado em: ${new Date().toLocaleString('pt-BR')}
+Documento gerado em: ${new Date().toLocaleString("pt-BR")}
     `.trim();
 
-    const blob = new Blob([content], { type: 'text/plain' });
-    const link = document.createElement('a');
+    const blob = new Blob([content], { type: "text/plain" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `os-${order.id}.txt`;
     link.click();
-    toast.success('PDF exportado com sucesso!');
+    toast.success("PDF exportado com sucesso!");
   };
 
   if (loading) {
@@ -234,23 +234,23 @@ Documento gerado em: ${new Date().toLocaleString('pt-BR')}
                 </div>
 
                 <div className="text-sm text-muted-foreground">
-                  Criada em: {new Date(order.created_at).toLocaleDateString('pt-BR')} às{' '}
-                  {new Date(order.created_at).toLocaleTimeString('pt-BR')}
+                  Criada em: {new Date(order.created_at).toLocaleDateString("pt-BR")} às{" "}
+                  {new Date(order.created_at).toLocaleTimeString("pt-BR")}
                 </div>
 
                 <div className="flex gap-2 flex-wrap">
                   <Button
-                    onClick={() => updateStatus(order.id, 'em andamento')}
-                    disabled={order.status === 'em andamento' || order.status === 'concluída'}
-                    variant={order.status === 'em andamento' ? 'secondary' : 'default'}
+                    onClick={() => updateStatus(order.id, "em andamento")}
+                    disabled={order.status === "em andamento" || order.status === "concluída"}
+                    variant={order.status === "em andamento" ? "secondary" : "default"}
                     size="sm"
                   >
                     🚧 Em Andamento
                   </Button>
                   <Button
-                    onClick={() => updateStatus(order.id, 'concluída')}
-                    disabled={order.status === 'concluída'}
-                    variant={order.status === 'concluída' ? 'secondary' : 'default'}
+                    onClick={() => updateStatus(order.id, "concluída")}
+                    disabled={order.status === "concluída"}
+                    variant={order.status === "concluída" ? "secondary" : "default"}
                     size="sm"
                   >
                     ✅ Concluir
