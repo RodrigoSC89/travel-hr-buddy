@@ -7,16 +7,16 @@
  * Template types supported for AI generation
  */
 export type TemplateType = 
-  | 'certificate'
-  | 'email'
-  | 'report'
-  | 'letter'
-  | 'contract'
-  | 'policy'
-  | 'procedure'
-  | 'form'
-  | 'memo'
-  | 'invoice';
+  | "certificate"
+  | "email"
+  | "report"
+  | "letter"
+  | "contract"
+  | "policy"
+  | "procedure"
+  | "form"
+  | "memo"
+  | "invoice";
 
 /**
  * Generates template content using AI based on type and context
@@ -49,24 +49,24 @@ Use formato estruturado e técnico com espaços reservados {{variavel}} para cam
  */
 export async function generateTemplateWithCustomPrompt(prompt: string): Promise<string> {
   try {
-    const res = await fetch('/api/ai/generate-template', {
-      method: 'POST',
+    const res = await fetch("/api/ai/generate-template", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ prompt }),
     });
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error(error.error || 'Failed to generate template');
+      throw new Error(error.error || "Failed to generate template");
     }
 
     const json = await res.json();
-    return json.output || '';
+    return json.output || "";
   } catch (error: any) {
-    console.error('Error generating template with AI:', error);
-    throw new Error(error.message || 'Failed to generate template with AI');
+    console.error("Error generating template with AI:", error);
+    throw new Error(error.message || "Failed to generate template with AI");
   }
 }
 
@@ -89,8 +89,8 @@ export async function generateTemplateWithVariables(
   includeVariables: string[] = []
 ): Promise<string> {
   const variablesText = includeVariables.length > 0
-    ? `\nIncluir as seguintes variáveis dinâmicas: ${includeVariables.map(v => `{{${v}}}`).join(', ')}`
-    : '';
+    ? `\nIncluir as seguintes variáveis dinâmicas: ${includeVariables.map(v => `{{${v}}}`).join(", ")}`
+    : "";
 
   const prompt = `Você é um assistente de documentação técnica. 
 Crie um template do tipo: "${type}"

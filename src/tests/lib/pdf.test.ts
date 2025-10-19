@@ -140,7 +140,7 @@ describe("pdf utility", () => {
     it("should remove temporary element after generation", async () => {
       await exportToPDF("<div>Test</div>");
       
-      const elements = document.querySelectorAll('[style*="-9999px"]');
+      const elements = document.querySelectorAll("[style*=\"-9999px\"]");
       expect(elements.length).toBe(0);
     });
 
@@ -169,7 +169,7 @@ describe("pdf utility", () => {
         // Expected to throw
       }
       
-      const elements = document.querySelectorAll('[style*="-9999px"]');
+      const elements = document.querySelectorAll("[style*=\"-9999px\"]");
       expect(elements.length).toBe(0);
     });
   });
