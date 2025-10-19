@@ -5,7 +5,7 @@
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter, Navigate, useNavigate } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import Unauthorized from "@/pages/Unauthorized";
 
 // Mock AuthContext para simular usuário não autenticado
@@ -42,6 +42,7 @@ describe("Protected Routes - E2E Simple Tests", () => {
   });
 
   it("valida estrutura de verificação de autenticação", () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authCheck = (user: any) => {
       return user !== null && user !== undefined;
     };

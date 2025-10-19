@@ -13,7 +13,7 @@ Implementar testes automatizados essenciais para garantir estabilidade, regress�
 ## 📁 Estrutura Criada
 
 ```
-__tests__/
+tests/
 ├── templates.test.tsx         # 4 testes - Templates com IA
 ├── forecast.test.ts           # 4 testes - Forecast IA  
 ├── assistant.test.ts          # 6 testes - Assistente IA (GPT-4)
@@ -24,11 +24,17 @@ __tests__/
 └── README.md                 # Documentação completa
 ```
 
+## 🔧 Configuração de Testes
+
+✅ **vitest.config.ts** - Configuração dedicada do Vitest (separada do vite.config.ts)  
+✅ **vitest.setup.ts** - Setup global para testes com mocks do ResizeObserver e IntersectionObserver  
+✅ **vite.config.ts** - Atualizado para remover configuração de testes (agora em vitest.config.ts)
+
 ## ✅ Testes Implementados por Módulo
 
 ### 1. Templates com IA (4 testes)
 **Tipo**: Unit + UI  
-**Arquivo**: `__tests__/templates.test.tsx`
+**Arquivo**: `tests/templates.test.tsx`
 
 ✅ Renderização da página  
 ✅ Operações de API (create, read, update, delete)  
@@ -48,7 +54,7 @@ it("renderiza corretamente o título", async () => {
 
 ### 2. Forecast IA (4 testes)
 **Tipo**: Unit  
-**Arquivo**: `__tests__/forecast.test.ts`
+**Arquivo**: `tests/forecast.test.ts`
 
 ✅ Geração de forecast válido com contexto  
 ✅ Validação de estrutura de dados de forecast  
@@ -67,7 +73,7 @@ it("deve gerar forecast válido com contexto", async () => {
 
 ### 3. Assistente IA (6 testes)
 **Tipo**: Unit  
-**Arquivo**: `__tests__/assistant.test.ts`
+**Arquivo**: `tests/assistant.test.ts`
 
 ✅ Enviar prompt e receber resposta GPT-4  
 ✅ Validar estrutura de mensagem do assistente  
@@ -88,7 +94,7 @@ it("deve enviar prompt e receber resposta GPT-4", async () => {
 
 ### 4. MMI - Maritime Maintenance Intelligence (7 testes)
 **Tipo**: Unit  
-**Arquivo**: `__tests__/mmi.test.ts`
+**Arquivo**: `tests/mmi.test.ts`
 
 ✅ Criar novo job com dados válidos  
 ✅ Validar estrutura de job  
@@ -110,7 +116,7 @@ it("deve gerar forecast por job", () => {
 
 ### 5. Auditoria Técnica (7 testes)
 **Tipo**: UI  
-**Arquivo**: `__tests__/audit.test.tsx`
+**Arquivo**: `tests/audit.test.tsx`
 
 ✅ Renderizar audit page corretamente  
 ✅ Validar props de auditoria  
@@ -131,7 +137,7 @@ it("valida props de auditoria", () => {
 
 ### 6. System Health (6 testes)
 **Tipo**: E2E Simple  
-**Arquivo**: `__tests__/system-health.test.tsx`
+**Arquivo**: `tests/system-health.test.tsx`
 
 ✅ Retornar status do sistema em /admin/api-status  
 ✅ Validar estrutura de resposta de health check  
@@ -151,7 +157,7 @@ it("deve validar estrutura de resposta de health check", () => {
 
 ### 7. Protected Routes (9 testes)
 **Tipo**: E2E Simple  
-**Arquivo**: `__tests__/protected-routes.test.tsx`
+**Arquivo**: `tests/protected-routes.test.tsx`
 
 ✅ Usuário sem login não acessa /admin/*  
 ✅ Validar redirecionamento para /unauthorized  
@@ -198,28 +204,28 @@ it("usuário sem login não acessa /admin/*", () => {
 
 ### Executar todos os testes essenciais
 ```bash
-npm run test -- __tests__
+npm run test -- tests
 ```
 
 ### Executar teste específico
 ```bash
-npm run test -- __tests__/templates.test.tsx
-npm run test -- __tests__/forecast.test.ts
-npm run test -- __tests__/assistant.test.ts
-npm run test -- __tests__/mmi.test.ts
-npm run test -- __tests__/audit.test.tsx
-npm run test -- __tests__/system-health.test.tsx
-npm run test -- __tests__/protected-routes.test.tsx
+npm run test -- tests/templates.test.tsx
+npm run test -- tests/forecast.test.ts
+npm run test -- tests/assistant.test.ts
+npm run test -- tests/mmi.test.ts
+npm run test -- tests/audit.test.tsx
+npm run test -- tests/system-health.test.tsx
+npm run test -- tests/protected-routes.test.tsx
 ```
 
 ### Executar com coverage
 ```bash
-npm run test:coverage -- __tests__
+npm run test:coverage -- tests
 ```
 
 ### Executar em modo watch
 ```bash
-npm run test:watch -- __tests__
+npm run test:watch -- tests
 ```
 
 ### Executar com UI interativa
@@ -290,7 +296,9 @@ it("descrição do comportamento esperado", async () => {
 
 ## 📝 Documentação
 
-✅ **README.md** completo no diretório `__tests__/`  
+✅ **README.md** completo no diretório `tests/`  
+✅ **vitest.config.ts** - Configuração dedicada para Vitest  
+✅ **vitest.setup.ts** - Setup global para testes  
 ✅ Instruções de execução documentadas  
 ✅ Exemplos de uso fornecidos  
 ✅ Padrões e convenções estabelecidos  
@@ -314,8 +322,10 @@ Todos os testes estão **passando** e prontos para uso em produção e CI/CD.
 
 - [Vitest Documentation](https://vitest.dev/)
 - [Testing Library](https://testing-library.com/)
-- [README dos Testes](./__tests__/README.md)
+- [README dos Testes](./tests/README.md)
 - [TESTING_LIBRARY_QUICKREF.md](./TESTING_LIBRARY_QUICKREF.md)
+- [vitest.config.ts](./vitest.config.ts)
+- [vitest.setup.ts](./vitest.setup.ts)
 
 ---
 
