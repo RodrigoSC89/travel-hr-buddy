@@ -57,7 +57,6 @@ const AdminChecklistsDashboard = React.lazy(() => import("./pages/admin/checklis
 const SystemHealth = React.lazy(() => import("./pages/admin/system-health"));
 const DocumentsAI = React.lazy(() => import("./pages/admin/documents-ai"));
 const DocumentAIEditor = React.lazy(() => import("./pages/admin/documents/ai-editor"));
-const AITemplates = React.lazy(() => import("./pages/admin/documents/ai-templates"));
 const Assistant = React.lazy(() => import("./pages/admin/assistant"));
 const AssistantLogs = React.lazy(() => import("./pages/admin/assistant-logs"));
 const AdminCollaboration = React.lazy(() => import("./pages/admin/collaboration"));
@@ -101,7 +100,6 @@ const AdminSGSO = React.lazy(() => import("./pages/admin/sgso"));
 const SGSOHistoryPage = React.lazy(() => import("./pages/admin/sgso/history/[vesselId]"));
 const AuditoriasIMCA = React.lazy(() => import("./pages/admin/auditorias-imca"));
 const AuditoriasLista = React.lazy(() => import("./pages/admin/auditorias-lista"));
-const DPIntelligenceAdmin = React.lazy(() => import("./pages/admin/DPIntelligencePage"));
 const IMCAAudit = React.lazy(() => import("./pages/IMCAAudit"));
 const Simulations = React.lazy(() => import("./pages/admin/simulations"));
 const CronMonitor = React.lazy(() => import("./pages/admin/cron-monitor"));
@@ -235,7 +233,6 @@ function App() {
                       <Route path="/admin/workflows/:id" element={<WorkflowDetail />} />
                       <Route path="/admin/documents" element={<DocumentList />} />
                       <Route path="/admin/documents/ai" element={<DocumentAIEditor />} />
-                      <Route path="/admin/documents/ai/templates" element={<AITemplates />} />
                       <Route path="/admin/documents/editor" element={<DocumentEditorPage />} />
                       <Route path="/admin/templates" element={<Templates />} />
                       <Route path="/admin/documents/demo" element={<DocumentEditorDemo />} />
@@ -256,7 +253,6 @@ function App() {
                       <Route path="/admin/sgso/history/:vesselId" element={<SGSOHistoryPage />} />
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/auditorias-lista" element={<AuditoriasLista />} />
-                      <Route path="/admin/dp-intelligence" element={<DPIntelligenceAdmin />} />
                       <Route path="/admin/simulations" element={<Simulations />} />
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
