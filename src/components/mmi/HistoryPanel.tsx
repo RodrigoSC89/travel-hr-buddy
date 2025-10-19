@@ -6,8 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, FileDown, Ship, AlertCircle, CheckCircle, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
+import { exportToPDF, formatPDFContent } from "@/lib/pdf";
 import type { MMIHistory } from "@/types/mmi";
 import { fetchMMIHistory, type MMIHistoryFilters } from "@/services/mmi/historyService";
 
@@ -66,125 +66,89 @@ export default function HistoryPanel() {
     }
   };
 
-  const exportToPDF = async (history: MMIHistory) => {
-    try {
-      const content = `
-        <div style="padding: 20px; font-family: Arial, sans-serif;">
-          <h1 style="color: #1e40af; margin-bottom: 20px;">Relatório de Manutenção</h1>
+  const exportSinglePDF = async (history: MMIHistory) => {
+    const content = `
+      <div style="margin-bottom: 15px;">
+        <strong>Sistema:</strong> ${history.system_name}
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <strong>Embarcação:</strong> ${history.vessel?.name || "N/A"}
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <strong>Descrição:</strong><br/>
+        ${history.task_description}
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <strong>Status:</strong> ${history.status.toUpperCase()}
+      </div>
+      
+      ${history.executed_at ? `
+        <div style="margin-bottom: 15px;">
+          <strong>Executado em:</strong> ${format(new Date(history.executed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+        </div>
+      ` : ""}
+    `;
+
+    const footer = `
+      <div>
+        <p>Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}</p>
+        <p>Sistema MMI - Manutenção Inteligente</p>
+      </div>
+    `;
+
+    const formattedContent = formatPDFContent("Relatório de Manutenção", content, footer);
+    const filename = `manutencao-${history.system_name.replace(/\s+/g, "-")}-${format(new Date(), "yyyyMMdd")}.pdf`;
+    
+    await exportToPDF(formattedContent, filename);
+  };
+
+  const exportBatchPDF = async () => {
+    const selectedRecords = histories.filter((h) => selectedHistories.has(h.id));
+    
+    const content = `
+      <p style="margin-bottom: 30px;">Total de registros: ${selectedRecords.length}</p>
+      
+      ${selectedRecords.map((history, index) => `
+        <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+          <h3 style="color: #1e40af; margin-bottom: 10px;">${index + 1}. ${history.system_name}</h3>
           
-          <div style="margin-bottom: 15px;">
-            <strong>Sistema:</strong> ${history.system_name}
-          </div>
-          
-          <div style="margin-bottom: 15px;">
+          <div style="margin-bottom: 10px;">
             <strong>Embarcação:</strong> ${history.vessel?.name || "N/A"}
           </div>
           
-          <div style="margin-bottom: 15px;">
+          <div style="margin-bottom: 10px;">
             <strong>Descrição:</strong><br/>
             ${history.task_description}
           </div>
           
-          <div style="margin-bottom: 15px;">
+          <div style="margin-bottom: 10px;">
             <strong>Status:</strong> ${history.status.toUpperCase()}
           </div>
           
           ${history.executed_at ? `
-            <div style="margin-bottom: 15px;">
+            <div style="margin-bottom: 10px;">
               <strong>Executado em:</strong> ${format(new Date(history.executed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
             </div>
           ` : ""}
-          
-          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc; font-size: 12px; color: #666;">
-            <p>Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}</p>
-            <p>Sistema MMI - Manutenção Inteligente</p>
-          </div>
         </div>
-      `;
+      `).join("")}
+    `;
 
-      const element = document.createElement("div");
-      element.innerHTML = content;
+    const footer = `
+      <div>
+        <p>Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}</p>
+        <p>Sistema MMI - Manutenção Inteligente</p>
+      </div>
+    `;
 
-      const opt = {
-        margin: 10,
-        filename: `manutencao-${history.system_name.replace(/\s+/g, "-")}-${format(new Date(), "yyyyMMdd")}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      };
-
-      await html2pdf().set(opt).from(element).save();
-      toast.success("PDF gerado com sucesso!");
-    } catch (error) {
-      console.error("Error exporting PDF:", error);
-      toast.error("Erro ao gerar PDF");
-    }
-  };
-
-  const exportBatchPDF = async () => {
-    if (selectedHistories.size === 0) {
-      toast.error("Selecione pelo menos um registro");
-      return;
-    }
-
-    try {
-      const selectedRecords = histories.filter((h) => selectedHistories.has(h.id));
-      
-      const content = `
-        <div style="padding: 20px; font-family: Arial, sans-serif;">
-          <h1 style="color: #1e40af; margin-bottom: 20px;">Relatório Consolidado de Manutenção</h1>
-          <p style="margin-bottom: 30px;">Total de registros: ${selectedRecords.length}</p>
-          
-          ${selectedRecords.map((history, index) => `
-            <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
-              <h3 style="color: #1e40af; margin-bottom: 10px;">${index + 1}. ${history.system_name}</h3>
-              
-              <div style="margin-bottom: 10px;">
-                <strong>Embarcação:</strong> ${history.vessel?.name || "N/A"}
-              </div>
-              
-              <div style="margin-bottom: 10px;">
-                <strong>Descrição:</strong><br/>
-                ${history.task_description}
-              </div>
-              
-              <div style="margin-bottom: 10px;">
-                <strong>Status:</strong> ${history.status.toUpperCase()}
-              </div>
-              
-              ${history.executed_at ? `
-                <div style="margin-bottom: 10px;">
-                  <strong>Executado em:</strong> ${format(new Date(history.executed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
-                </div>
-              ` : ""}
-            </div>
-          `).join("")}
-          
-          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc; font-size: 12px; color: #666;">
-            <p>Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}</p>
-            <p>Sistema MMI - Manutenção Inteligente</p>
-          </div>
-        </div>
-      `;
-
-      const element = document.createElement("div");
-      element.innerHTML = content;
-
-      const opt = {
-        margin: 10,
-        filename: `manutencao-lote-${format(new Date(), "yyyyMMdd")}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      };
-
-      await html2pdf().set(opt).from(element).save();
-      toast.success("PDF em lote gerado com sucesso!");
-      setSelectedHistories(new Set());
-    } catch (error) {
-      console.error("Error exporting batch PDF:", error);
-      toast.error("Erro ao gerar PDF em lote");
-    }
+    const formattedContent = formatPDFContent("Relatório Consolidado de Manutenção", content, footer);
+    const filename = `manutencao-lote-${format(new Date(), "yyyyMMdd")}.pdf`;
+    
+    await exportToPDF(formattedContent, filename);
+    setSelectedHistories(new Set());
   };
 
   const toggleSelection = (id: string) => {
@@ -301,7 +265,7 @@ export default function HistoryPanel() {
                   </div>
 
                   <Button
-                    onClick={() => exportToPDF(history)}
+                    onClick={() => exportSinglePDF(history)}
                     variant="outline"
                     size="sm"
                   >
