@@ -15,7 +15,7 @@ export function extractTemplateVariables(content: string): string[] {
   const matches = content.match(/{{(.*?)}}/g);
   if (!matches) return [];
 
-  return matches.map((match) => match.replace('{{', '').replace('}}', '').trim());
+  return matches.map((match) => match.replace("{{", "").replace("}}", "").trim());
 }
 
 /**
@@ -32,9 +32,9 @@ export function applyTemplate(content: string): string {
 
   let filled = content;
   matches.forEach((tag) => {
-    const field = tag.replace('{{', '').replace('}}', '').trim();
+    const field = tag.replace("{{", "").replace("}}", "").trim();
     const value = prompt(`Preencha o campo: ${field}`);
-    filled = filled.replaceAll(tag, value || '');
+    filled = filled.replaceAll(tag, value || "");
   });
 
   return filled;
@@ -59,7 +59,7 @@ export function applyTemplateWithValues(
   let result = content;
 
   Object.entries(values).forEach(([key, value]) => {
-    const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
+    const regex = new RegExp(`{{\\s*${key}\\s*}}`, "g");
     result = result.replace(regex, value);
   });
 

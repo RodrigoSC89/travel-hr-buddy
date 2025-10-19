@@ -104,16 +104,16 @@ export default function ForecastGenerator({
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-red-500/10 text-red-500 border-red-500/20";
-      case "high":
-        return "bg-orange-500/10 text-orange-500 border-orange-500/20";
-      case "medium":
-        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
-      case "low":
-        return "bg-green-500/10 text-green-500 border-green-500/20";
-      default:
-        return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+    case "critical":
+      return "bg-red-500/10 text-red-500 border-red-500/20";
+    case "high":
+      return "bg-orange-500/10 text-orange-500 border-orange-500/20";
+    case "medium":
+      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+    case "low":
+      return "bg-green-500/10 text-green-500 border-green-500/20";
+    default:
+      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
     }
   };
 
@@ -151,8 +151,8 @@ export default function ForecastGenerator({
                   progressPercentage >= 95
                     ? "bg-red-500"
                     : progressPercentage >= 80
-                    ? "bg-yellow-500"
-                    : "bg-green-500"
+                      ? "bg-yellow-500"
+                      : "bg-green-500"
                 }`}
                 style={{ width: `${Math.min(progressPercentage, 100)}%` }}
               />

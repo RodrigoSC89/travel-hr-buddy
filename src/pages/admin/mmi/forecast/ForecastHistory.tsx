@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { useToast } from '@/hooks/use-toast'
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 type Forecast = {
   id: string
@@ -17,37 +17,37 @@ type Forecast = {
 }
 
 export default function ForecastHistoryPage() {
-  const [data, setData] = useState<Forecast[]>([])
-  const [loading, setLoading] = useState(true)
-  const [generatingOrderId, setGeneratingOrderId] = useState<string | null>(null)
-  const { toast } = useToast()
+  const [data, setData] = useState<Forecast[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [generatingOrderId, setGeneratingOrderId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   // Map English priority to Portuguese with proper labels
   const getPriorityLabel = (priority?: string) => {
     switch (priority) {
-      case 'critical':
-        return { text: 'Crítica', badge: '🔴', value: 'crítica' }
-      case 'high':
-        return { text: 'Alta', badge: '🟠', value: 'alta' }
-      case 'medium':
-        return { text: 'Normal', badge: '🟡', value: 'normal' }
-      case 'low':
-        return { text: 'Baixa', badge: '🟢', value: 'baixa' }
-      default:
-        return { text: 'Normal', badge: '🟡', value: 'normal' }
+    case "critical":
+      return { text: "Crítica", badge: "🔴", value: "crítica" };
+    case "high":
+      return { text: "Alta", badge: "🟠", value: "alta" };
+    case "medium":
+      return { text: "Normal", badge: "🟡", value: "normal" };
+    case "low":
+      return { text: "Baixa", badge: "🟢", value: "baixa" };
+    default:
+      return { text: "Normal", badge: "🟡", value: "normal" };
     }
-  }
+  };
 
   const handleGenerateOrder = async (forecast: Forecast) => {
-    setGeneratingOrderId(forecast.id)
+    setGeneratingOrderId(forecast.id);
     
     try {
-      const priority = getPriorityLabel(forecast.priority)
+      const priority = getPriorityLabel(forecast.priority);
       
-      const res = await fetch('/api/os/create', {
-        method: 'POST',
+      const res = await fetch("/api/os/create", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           forecast_id: forecast.id,
@@ -56,37 +56,37 @@ export default function ForecastHistoryPage() {
           description: forecast.forecast_text,
           priority: priority.value,
         }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (data.success) {
         toast({
-          title: '✅ Ordem de Serviço gerada com sucesso!',
+          title: "✅ Ordem de Serviço gerada com sucesso!",
           description: `OS criada para ${forecast.system_name} - ${forecast.vessel_name}`,
-        })
+        });
       } else {
         toast({
-          title: '❌ Falha ao gerar OS',
-          description: data.error || 'Erro desconhecido',
-          variant: 'destructive',
-        })
+          title: "❌ Falha ao gerar OS",
+          description: data.error || "Erro desconhecido",
+          variant: "destructive",
+        });
       }
     } catch (error) {
-      console.error('Error generating order:', error)
+      console.error("Error generating order:", error);
       toast({
-        title: '❌ Erro ao gerar OS',
-        description: 'Não foi possível conectar ao servidor',
-        variant: 'destructive',
-      })
+        title: "❌ Erro ao gerar OS",
+        description: "Não foi possível conectar ao servidor",
+        variant: "destructive",
+      });
     } finally {
-      setGeneratingOrderId(null)
+      setGeneratingOrderId(null);
     }
-  }
+  };
 
   useEffect(() => {
-    setLoading(true)
-    fetch('/api/mmi/forecast/all')
+    setLoading(true);
+    fetch("/api/mmi/forecast/all")
       .then(res => res.json())
       .then((forecasts) => {
         // Transform the data to match expected format
@@ -95,17 +95,17 @@ export default function ForecastHistoryPage() {
           last_maintenance: Array.isArray(f.last_maintenance) 
             ? f.last_maintenance 
             : []
-        }))
-        setData(transformed)
+        }));
+        setData(transformed);
       })
       .catch((err) => {
-        console.error('Error loading forecasts:', err)
-        setData([])
+        console.error("Error loading forecasts:", err);
+        setData([]);
       })
       .finally(() => {
-        setLoading(false)
-      })
-  }, [])
+        setLoading(false);
+      });
+  }, []);
 
   if (loading) {
     return (
@@ -113,7 +113,7 @@ export default function ForecastHistoryPage() {
         <h1 className="text-2xl font-bold mb-4">📚 Histórico de Forecasts</h1>
         <p className="text-muted-foreground">Carregando forecasts...</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -128,7 +128,7 @@ export default function ForecastHistoryPage() {
         </Card>
       ) : (
         data.map((f) => {
-          const priority = getPriorityLabel(f.priority)
+          const priority = getPriorityLabel(f.priority);
           return (
             <Card key={f.id}>
               <CardContent className="space-y-2 p-4">
@@ -136,7 +136,7 @@ export default function ForecastHistoryPage() {
                 <div><b>⚙️ Sistema:</b> {f.system_name}</div>
                 <div><b>⏱ Horímetro:</b> {f.hourmeter}h</div>
                 <div><b>📊 Prioridade:</b> {priority.badge} {priority.text}</div>
-                <div><b>📅 Manutenções:</b> {f.last_maintenance.join(', ') || 'Nenhuma'}</div>
+                <div><b>📅 Manutenções:</b> {f.last_maintenance.join(", ") || "Nenhuma"}</div>
                 <div className="whitespace-pre-line border rounded-md p-3 text-sm bg-gray-100 dark:bg-gray-800">
                   {f.forecast_text}
                 </div>
@@ -145,13 +145,13 @@ export default function ForecastHistoryPage() {
                   onClick={() => handleGenerateOrder(f)}
                   disabled={generatingOrderId === f.id}
                 >
-                  {generatingOrderId === f.id ? '⏳ Gerando...' : '📄 Gerar Ordem de Serviço'}
+                  {generatingOrderId === f.id ? "⏳ Gerando..." : "📄 Gerar Ordem de Serviço"}
                 </Button>
               </CardContent>
             </Card>
-          )
+          );
         })
       )}
     </div>
-  )
+  );
 }
