@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   ShieldCheck, 
   AlertTriangle, 
@@ -17,7 +17,7 @@ import {
   XCircle,
   Loader2,
   Info
-} from 'lucide-react';
+} from "lucide-react";
 
 interface TokenValidation {
   valid: boolean;
@@ -36,11 +36,11 @@ export default function CertViewer() {
   const [loading, setLoading] = useState(true);
   const [validation, setValidation] = useState<TokenValidation | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
     if (!token) {
-      setError('No token provided');
+      setError("No token provided");
       setLoading(false);
       return;
     }
@@ -56,7 +56,7 @@ export default function CertViewer() {
       // Get IP and user agent
       const userAgent = navigator.userAgent;
       
-      const { data, error: rpcError } = await supabase.rpc('validate_cert_token', {
+      const { data, error: rpcError } = await supabase.rpc("validate_cert_token", {
         p_token: token,
         p_ip_address: null, // Would need server-side to get real IP
         p_user_agent: userAgent
@@ -67,14 +67,14 @@ export default function CertViewer() {
       }
 
       if (!data || data.length === 0 || !data[0].valid) {
-        setError('Invalid or expired token');
+        setError("Invalid or expired token");
         setValidation(null);
       } else {
         setValidation(data[0]);
       }
     } catch (err) {
-      console.error('Token validation error:', err);
-      setError('Failed to validate token');
+      console.error("Token validation error:", err);
+      setError("Failed to validate token");
     } finally {
       setLoading(false);
     }
@@ -101,7 +101,7 @@ export default function CertViewer() {
               <CardTitle>Access Denied</CardTitle>
             </div>
             <CardDescription>
-              {error || 'The certification token is invalid or has expired'}
+              {error || "The certification token is invalid or has expired"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -214,7 +214,7 @@ export default function CertViewer() {
                     <div>
                       <p className="font-medium">Audit Access</p>
                       <p className="text-sm text-muted-foreground">
-                        {validation.can_view_audits ? 'Enabled' : 'Disabled'}
+                        {validation.can_view_audits ? "Enabled" : "Disabled"}
                       </p>
                     </div>
                   </div>
@@ -228,7 +228,7 @@ export default function CertViewer() {
                     <div>
                       <p className="font-medium">Document Access</p>
                       <p className="text-sm text-muted-foreground">
-                        {validation.can_view_documents ? 'Enabled' : 'Disabled'}
+                        {validation.can_view_documents ? "Enabled" : "Disabled"}
                       </p>
                     </div>
                   </div>
@@ -242,7 +242,7 @@ export default function CertViewer() {
                     <div>
                       <p className="font-medium">Metrics Access</p>
                       <p className="text-sm text-muted-foreground">
-                        {validation.can_view_metrics ? 'Enabled' : 'Disabled'}
+                        {validation.can_view_metrics ? "Enabled" : "Disabled"}
                       </p>
                     </div>
                   </div>

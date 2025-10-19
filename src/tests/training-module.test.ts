@@ -1,16 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { TrainingModuleService } from '../services/training-module'
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { TrainingModuleService } from "../services/training-module";
 
 // Mock Supabase
-vi.mock('../services/supabase', () => ({
+vi.mock("../services/supabase", () => ({
   supabase: {
     auth: {
       getSession: vi.fn(() => 
         Promise.resolve({ 
           data: { 
             session: { 
-              access_token: 'test-token',
-              user: { id: 'test-user-id' }
+              access_token: "test-token",
+              user: { id: "test-user-id" }
             } 
           } 
         })
@@ -39,64 +39,64 @@ vi.mock('../services/supabase', () => ({
       }))
     }))
   }
-}))
+}));
 
-describe('TrainingModuleService', () => {
+describe("TrainingModuleService", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
-  describe('generateTrainingModule', () => {
-    it('should require authentication', async () => {
+  describe("generateTrainingModule", () => {
+    it("should require authentication", async () => {
       // Mock no session
-      vi.mocked((await import('../services/supabase')).supabase.auth.getSession).mockResolvedValueOnce({
+      vi.mocked((await import("../services/supabase")).supabase.auth.getSession).mockResolvedValueOnce({
         data: { session: null },
         error: null
-      } as any)
+      } as any);
 
       await expect(
         TrainingModuleService.generateTrainingModule({
-          gapDetected: 'Test gap',
-          normReference: 'IMCA M220'
+          gapDetected: "Test gap",
+          normReference: "IMCA M220"
         })
-      ).rejects.toThrow('Usuário não autenticado')
-    })
-  })
+      ).rejects.toThrow("Usuário não autenticado");
+    });
+  });
 
-  describe('getActiveModules', () => {
-    it('should be defined', () => {
-      expect(TrainingModuleService.getActiveModules).toBeDefined()
-    })
-  })
+  describe("getActiveModules", () => {
+    it("should be defined", () => {
+      expect(TrainingModuleService.getActiveModules).toBeDefined();
+    });
+  });
 
-  describe('recordCompletion', () => {
-    it('should require authentication', async () => {
+  describe("recordCompletion", () => {
+    it("should require authentication", async () => {
       // Mock no session
-      vi.mocked((await import('../services/supabase')).supabase.auth.getSession).mockResolvedValueOnce({
+      vi.mocked((await import("../services/supabase")).supabase.auth.getSession).mockResolvedValueOnce({
         data: { session: null },
         error: null
-      } as any)
+      } as any);
 
       await expect(
-        TrainingModuleService.recordCompletion('module-id', [0, 1, 2])
-      ).rejects.toThrow('Usuário não autenticado')
-    })
-  })
+        TrainingModuleService.recordCompletion("module-id", [0, 1, 2])
+      ).rejects.toThrow("Usuário não autenticado");
+    });
+  });
 
-  describe('exportAuditBundle', () => {
-    it('should require authentication', async () => {
+  describe("exportAuditBundle", () => {
+    it("should require authentication", async () => {
       // Mock no session
-      vi.mocked((await import('../services/supabase')).supabase.auth.getSession).mockResolvedValueOnce({
+      vi.mocked((await import("../services/supabase")).supabase.auth.getSession).mockResolvedValueOnce({
         data: { session: null },
         error: null
-      } as any)
+      } as any);
 
       await expect(
         TrainingModuleService.exportAuditBundle({
-          vesselName: 'Test Vessel',
-          norms: ['IMCA M220']
+          vesselName: "Test Vessel",
+          norms: ["IMCA M220"]
         })
-      ).rejects.toThrow('Usuário não autenticado')
-    })
-  })
-})
+      ).rejects.toThrow("Usuário não autenticado");
+    });
+  });
+});

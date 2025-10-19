@@ -135,22 +135,22 @@ export function TacticalRiskPanel() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "destructive";
-      case "high": return "destructive";
-      case "medium": return "default";
-      case "low": return "secondary";
-      default: return "outline";
+    case "critical": return "destructive";
+    case "high": return "destructive";
+    case "medium": return "default";
+    case "low": return "secondary";
+    default: return "outline";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pending": return "destructive";
-      case "assigned": return "default";
-      case "in_progress": return "default";
-      case "mitigated": return "secondary";
-      case "closed": return "outline";
-      default: return "outline";
+    case "pending": return "destructive";
+    case "assigned": return "default";
+    case "in_progress": return "default";
+    case "mitigated": return "secondary";
+    case "closed": return "outline";
+    default: return "outline";
     }
   };
 
@@ -188,12 +188,12 @@ export function TacticalRiskPanel() {
               disabled={forecasting}
               className="gap-2"
             >
-              <RefreshCw className={`h-4 w-4 ${forecasting ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 ${forecasting ? "animate-spin" : ""}`} />
               {forecasting ? "Forecasting..." : "Run AI Forecast"}
             </Button>
 
             <Button onClick={loadRisks} variant="outline" disabled={loading}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
               Refresh
             </Button>
           </div>

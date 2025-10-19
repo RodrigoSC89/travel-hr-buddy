@@ -45,47 +45,47 @@ function generateRuleBasedPrediction(
     ? Math.min(0.95, 0.5 + (predictedScore - passThreshold) / 80)
     : Math.max(0.05, predictedScore / passThreshold * 0.5);
 
-  let readinessLevel = 'low';
-  if (predictedScore >= 85) readinessLevel = 'excellent';
-  else if (predictedScore >= 75) readinessLevel = 'high';
-  else if (predictedScore >= 60) readinessLevel = 'medium';
+  let readinessLevel = "low";
+  if (predictedScore >= 85) readinessLevel = "excellent";
+  else if (predictedScore >= 75) readinessLevel = "high";
+  else if (predictedScore >= 60) readinessLevel = "medium";
 
   const weaknesses: string[] = [];
   const recommendations: string[] = [];
   const complianceGaps: string[] = [];
 
   if (incidentCount > 5) {
-    weaknesses.push('High incident rate in recent months');
-    recommendations.push('Implement enhanced safety protocols');
-    complianceGaps.push('Incident reduction program');
+    weaknesses.push("High incident rate in recent months");
+    recommendations.push("Implement enhanced safety protocols");
+    complianceGaps.push("Incident reduction program");
   }
 
   if (completedActions / totalActions < 0.7) {
-    weaknesses.push('Low completion rate of corrective actions');
-    recommendations.push('Prioritize and accelerate action plan execution');
-    complianceGaps.push('Action plan completion tracking');
+    weaknesses.push("Low completion rate of corrective actions");
+    recommendations.push("Prioritize and accelerate action plan execution");
+    complianceGaps.push("Action plan completion tracking");
   }
 
   // Audit-specific checks
   switch (auditType) {
-    case 'petrobras':
-      if (incidentCount > 3) complianceGaps.push('HSE procedures documentation');
-      break;
-    case 'ibama':
-      complianceGaps.push('Environmental impact assessments');
-      break;
-    case 'iso':
-      complianceGaps.push('Quality management system documentation');
-      break;
-    case 'imca':
-      complianceGaps.push('Marine operations standards');
-      break;
-    case 'ism':
-      complianceGaps.push('Safety management system certification');
-      break;
-    case 'sgso':
-      complianceGaps.push('QSMS compliance records');
-      break;
+  case "petrobras":
+    if (incidentCount > 3) complianceGaps.push("HSE procedures documentation");
+    break;
+  case "ibama":
+    complianceGaps.push("Environmental impact assessments");
+    break;
+  case "iso":
+    complianceGaps.push("Quality management system documentation");
+    break;
+  case "imca":
+    complianceGaps.push("Marine operations standards");
+    break;
+  case "ism":
+    complianceGaps.push("Safety management system certification");
+    break;
+  case "sgso":
+    complianceGaps.push("QSMS compliance records");
+    break;
   }
 
   return {
@@ -98,7 +98,7 @@ function generateRuleBasedPrediction(
     recommendations,
     compliance_gaps: complianceGaps,
     based_on_months: 6,
-    simulated_by: 'rule-based'
+    simulated_by: "rule-based"
   };
 }
 
@@ -109,7 +109,7 @@ async function predictAuditWithAI(
   complianceData: any
 ): Promise<AuditPrediction> {
   if (!openai) {
-    console.log('OpenAI not configured, using rule-based fallback');
+    console.log("OpenAI not configured, using rule-based fallback");
     return generateRuleBasedPrediction(vesselId, auditType, complianceData);
   }
 
@@ -154,10 +154,10 @@ Return only valid JSON, no markdown or explanations.`;
       audit_type: auditType,
       ...aiPrediction,
       based_on_months: 6,
-      simulated_by: 'ai'
+      simulated_by: "ai"
     };
   } catch (error) {
-    console.error('AI prediction error:', error);
+    console.error("AI prediction error:", error);
     return generateRuleBasedPrediction(vesselId, auditType, complianceData);
   }
 }
@@ -169,31 +169,31 @@ async function getComplianceData(vesselId: string) {
 
   // Get incidents
   const { data: incidents } = await supabase
-    .from('dp_incidents')
-    .select('*')
-    .eq('vessel_id', vesselId)
-    .gte('created_at', sixMonthsAgo.toISOString());
+    .from("dp_incidents")
+    .select("*")
+    .eq("vessel_id", vesselId)
+    .gte("created_at", sixMonthsAgo.toISOString());
 
   // Get action plans
   const { data: actionPlans } = await supabase
-    .from('sgso_action_plans')
-    .select('*')
-    .eq('vessel_id', vesselId);
+    .from("sgso_action_plans")
+    .select("*")
+    .eq("vessel_id", vesselId);
 
   // Get audits history
   const { data: audits } = await supabase
-    .from('auditorias_imca')
-    .select('*')
-    .eq('vessel_id', vesselId)
-    .gte('audit_date', sixMonthsAgo.toISOString());
+    .from("auditorias_imca")
+    .select("*")
+    .eq("vessel_id", vesselId)
+    .gte("audit_date", sixMonthsAgo.toISOString());
 
   return {
     incidents: incidents || [],
     action_plans: actionPlans || [],
     audits: audits || [],
     total_actions: actionPlans?.length || 0,
-    completed_actions: actionPlans?.filter(a => a.status === 'resolvido').length || 0,
-    pending_actions: actionPlans?.filter(a => a.status !== 'resolvido').length || 0
+    completed_actions: actionPlans?.filter(a => a.status === "resolvido").length || 0,
+    pending_actions: actionPlans?.filter(a => a.status !== "resolvido").length || 0
   };
 }
 
@@ -214,10 +214,10 @@ export default async function handler(
       });
     }
 
-    const validAuditTypes = ['petrobras', 'ibama', 'iso', 'imca', 'ism', 'sgso'];
+    const validAuditTypes = ["petrobras", "ibama", "iso", "imca", "ism", "sgso"];
     if (!validAuditTypes.includes(audit_type.toLowerCase())) {
       return res.status(400).json({ 
-        error: `Invalid audit_type. Must be one of: ${validAuditTypes.join(', ')}` 
+        error: `Invalid audit_type. Must be one of: ${validAuditTypes.join(", ")}` 
       });
     }
 
@@ -233,7 +233,7 @@ export default async function handler(
 
     // Insert prediction into database
     const { data, error } = await supabase
-      .from('audit_predictions')
+      .from("audit_predictions")
       .insert({
         ...prediction,
         audit_date: audit_date || null,
@@ -245,7 +245,7 @@ export default async function handler(
       .single();
 
     if (error) {
-      console.error('Database insert error:', error);
+      console.error("Database insert error:", error);
       return res.status(500).json({ error: "Failed to save prediction" });
     }
 
@@ -255,7 +255,7 @@ export default async function handler(
     });
 
   } catch (error: any) {
-    console.error('Audit prediction error:', error);
+    console.error("Audit prediction error:", error);
     return res.status(500).json({ 
       error: "Failed to generate audit prediction",
       details: error.message 
