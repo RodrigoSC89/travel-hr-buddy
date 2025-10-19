@@ -3,7 +3,7 @@
  * Types for tracking and analyzing SGSO action plan effectiveness
  */
 
-export type SGSOCategory = 'Erro humano' | 'Falha técnica' | 'Comunicação' | 'Falha organizacional';
+export type SGSOCategory = "Erro humano" | "Falha técnica" | "Comunicação" | "Falha organizacional";
 
 export interface SGSOEffectivenessByCategory {
   category: SGSOCategory;
@@ -37,10 +37,10 @@ export interface SGSOEffectivenessResponse {
   error?: string;
 }
 
-export type SGSOEffectivenessViewMode = 'general' | 'vessel' | 'detailed';
+export type SGSOEffectivenessViewMode = "general" | "vessel" | "detailed";
 
 export interface SGSOEffectivenessInsight {
-  type: 'warning' | 'success' | 'info';
+  type: "warning" | "success" | "info";
   category: string;
   message: string;
 }
