@@ -9,8 +9,9 @@ const supabase = createClient(
 
 // Validação de entrada
 const TemplateSchema = z.object({
-  title: z.string().min(3),
-  content: z.any()
+  title: z.string().min(2),
+  content: z.any(),
+  is_favorite: z.boolean().optional(),
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -36,15 +37,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Validação com Zod
     const parse = TemplateSchema.safeParse(body);
     if (!parse.success) {
-      return res.status(400).json({ error: "Invalid body" });
+      return res.status(400).json({ error: parse.error });
     }
 
-    const { title, content } = parse.data;
+    const { title, content, is_favorite } = parse.data;
 
     // Atualizar apenas templates do próprio usuário
     const { data, error } = await supabase
       .from("templates")
-      .update({ title, content, updated_at: new Date().toISOString() })
+      .update({ 
+        title, 
+        content, 
+        is_favorite: is_favorite ?? false,
+        updated_at: new Date().toISOString() 
+      })
       .eq("id", id)
       .eq("created_by", user.id)
       .select()
@@ -54,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ error: error.message });
     }
 
-    return res.status(200).json({ data });
+    return res.status(200).json({ success: true, data });
   }
 
   // GET - Get single template
@@ -85,7 +91,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ error: error.message });
     }
 
-    return res.status(204).json({ success: true });
+    return res.status(200).json({ success: true });
   }
 
   // Method not allowed
