@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { submitSGSOAudit } from "@/lib/sgso/submit";
 import { loadSGSOAudit } from "@/services/sgso-audit-service";
 import { toast } from "sonner";
+import { explainRequirementSGSO } from "@/lib/ai/sgso";
 
 const requisitosSGSO = [
   { num: 1, titulo: "Política de SMS", desc: "Estabelecimento e divulgação de política de segurança e meio ambiente." },
@@ -38,6 +39,7 @@ export default function SGSOAuditPage() {
   const [vessels, setVessels] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedVessel, setSelectedVessel] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [explainLoading, setExplainLoading] = useState<number | null>(null);
   const [auditData, setAuditData] = useState(() =>
     requisitosSGSO.map(req => ({
       ...req,
@@ -148,6 +150,26 @@ export default function SGSOAuditPage() {
       .save();
   };
 
+  const handleExplainWithAI = async (index: number) => {
+    const item = auditData[index];
+    
+    try {
+      setExplainLoading(index);
+      const explanation = await explainRequirementSGSO(item.titulo, item.compliance);
+      
+      if (explanation) {
+        toast.info(explanation, { duration: 12000 });
+      } else {
+        toast.error("Não foi possível gerar explicação. Verifique a configuração da API.");
+      }
+    } catch (error) {
+      console.error("Error explaining requirement:", error);
+      toast.error("Erro ao explicar requisito com IA");
+    } finally {
+      setExplainLoading(null);
+    }
+  };
+
   return (
     <div className="container max-w-5xl py-8 mx-auto space-y-6">
       <h1 className="text-3xl font-bold">🛡️ Auditoria SGSO - IBAMA</h1>
@@ -228,6 +250,14 @@ export default function SGSOAuditPage() {
               value={item.comment}
               onChange={e => handleChange(idx, "comment", e.target.value)}
             />
+            
+            <Button
+              variant="outline"
+              onClick={() => handleExplainWithAI(idx)}
+              disabled={explainLoading === idx}
+            >
+              🤖 {explainLoading === idx ? "Carregando..." : "Explicar com IA"}
+            </Button>
           </CardContent>
         </Card>
       ))}

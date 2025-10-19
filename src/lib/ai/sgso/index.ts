@@ -5,3 +5,4 @@
 
 export { generateSGSOActionPlan } from "./generateActionPlan";
 export type { SGSOIncident, SGSOActionPlan } from "./generateActionPlan";
+export { explainRequirementSGSO } from "./explainRequirement";
