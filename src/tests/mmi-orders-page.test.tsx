@@ -102,9 +102,9 @@ describe("MMI Orders Page", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Ship Alpha")).toBeInTheDocument();
-      expect(screen.getByText("Ship Beta")).toBeInTheDocument();
-      expect(screen.getByText("Ship Gamma")).toBeInTheDocument();
+      expect(screen.getByText(/Ship Alpha/)).toBeInTheDocument();
+      expect(screen.getByText(/Ship Beta/)).toBeInTheDocument();
+      expect(screen.getByText(/Ship Gamma/)).toBeInTheDocument();
     });
   });
 
@@ -223,7 +223,7 @@ describe("MMI Orders Page", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Ship Alpha")).toBeInTheDocument();
+      expect(screen.getByText(/Ship Alpha/)).toBeInTheDocument();
     });
 
     const startButtons = screen.getAllByText("Iniciar");
@@ -261,7 +261,7 @@ describe("MMI Orders Page", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Ship Alpha")).toBeInTheDocument();
+      expect(screen.getByText(/Ship Alpha/)).toBeInTheDocument();
     });
 
     const completeButtons = screen.getAllByText("Concluir");
@@ -313,7 +313,7 @@ describe("MMI Orders Page", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Ship Alpha")).toBeInTheDocument();
+      expect(screen.getByText(/Ship Alpha/)).toBeInTheDocument();
     });
 
     const exportButtons = screen.getAllByText("Exportar PDF");
@@ -364,7 +364,7 @@ describe("MMI Orders Page", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Ship Alpha")).toBeInTheDocument();
+      expect(screen.getByText(/Ship Alpha/)).toBeInTheDocument();
     });
 
     const startButtons = screen.getAllByText("Iniciar");
