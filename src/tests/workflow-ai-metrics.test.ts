@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { getWorkflowAISummary } from "@/lib/analytics/workflowAIMetrics";
+import { getWorkflowAISummary } from "@/_legacy/workflowAIMetrics";
 import { supabase } from "@/integrations/supabase/client";
 
 // Mock the supabase client

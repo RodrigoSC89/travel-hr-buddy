@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import DPIntelligenceCenter from "@/components/dp-intelligence/dp-intelligence-center";
+import DPIntelligenceCenter from "@/_legacy/dp-intelligence-center";
 
 // Mock Supabase client
 vi.mock("@/integrations/supabase/client", () => ({
