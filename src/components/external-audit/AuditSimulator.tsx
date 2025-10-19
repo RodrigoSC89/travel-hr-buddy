@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -24,7 +24,7 @@ export function AuditSimulator() {
   const [vessels, setVessels] = useState<Array<{ id: string; name: string }>>([]);
 
   // Fetch vessels on component mount
-  useState(() => {
+  useEffect(() => {
     const fetchVessels = async () => {
       const { data, error } = await supabase.from("vessels").select("id, name").order("name");
       if (!error && data) {
@@ -32,7 +32,7 @@ export function AuditSimulator() {
       }
     };
     fetchVessels();
-  });
+  }, []);
 
   const handleRunSimulation = async () => {
     if (!selectedVessel || !selectedAuditType) {
