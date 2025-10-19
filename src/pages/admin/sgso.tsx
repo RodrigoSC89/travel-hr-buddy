@@ -1,11 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { MetricasPanel } from "@/components/sgso/MetricasPanel";
 import { SGSOTrendChart } from "@/components/sgso/SGSOTrendChart";
 import { IncidentsSGSOPanel } from "@/components/dp/IncidentsSGSOPanel";
-import { Shield, BarChart3, FileCheck, Mail, AlertTriangle } from "lucide-react";
+import { Shield, BarChart3, FileCheck, Mail, AlertTriangle, History } from "lucide-react";
 
 const AdminSGSO = () => {
   return (
@@ -80,6 +82,22 @@ const AdminSGSO = () => {
                   <p className="text-sm text-muted-foreground">
                     Auditorias são classificadas por nível de risco (Crítico, Alto, Médio, Baixo, Negligenciável)
                     e rastreadas por embarcação para análise detalhada.
+                  </p>
+                </div>
+
+                <div className="rounded-lg border p-4 bg-blue-50/50 dark:bg-blue-950/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold">Histórico de Auditorias SGSO</h3>
+                    <Link to="/admin/sgso/history">
+                      <Button variant="outline" size="sm">
+                        <History className="mr-2 h-4 w-4" />
+                        Ver Histórico
+                      </Button>
+                    </Link>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Acesse o histórico completo de auditorias SGSO com possibilidade de revisão, 
+                    atualização e exportação de relatórios em PDF.
                   </p>
                 </div>
               </div>
