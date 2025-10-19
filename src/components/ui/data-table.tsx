@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export interface Column<T = any> {
+export interface Column<T = unknown> {
   key: string;
   header: string;
   sortable?: boolean;
@@ -31,7 +31,7 @@ export interface Column<T = any> {
   align?: "left" | "center" | "right";
 }
 
-export interface DataTableProps<T = any> {
+export interface DataTableProps<T = unknown> {
   data: T[];
   columns: Column<T>[];
   searchable?: boolean;

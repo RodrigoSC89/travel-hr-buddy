@@ -35,9 +35,9 @@ interface FleetOverviewProps {
 
 const FleetOverviewDashboard: React.FC<FleetOverviewProps> = ({ stats, onRefresh }) => {
   const { toast } = useToast();
-  const [performanceData, setPerformanceData] = useState<any[]>([]);
-  const [fleetDistribution, setFleetDistribution] = useState<any[]>([]);
-  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [performanceData, setPerformanceData] = useState<unknown[]>([]);
+  const [fleetDistribution, setFleetDistribution] = useState<unknown[]>([]);
+  const [recentActivities, setRecentActivities] = useState<unknown[]>([]);
 
   useEffect(() => {
     loadDashboardData();

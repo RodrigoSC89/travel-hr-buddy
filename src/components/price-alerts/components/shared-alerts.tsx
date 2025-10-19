@@ -58,7 +58,7 @@ export const SharedAlerts = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [sharedAlerts, setSharedAlerts] = useState<SharedAlert[]>([]);
-  const [userAlerts, setUserAlerts] = useState<any[]>([]);
+  const [userAlerts, setUserAlerts] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [shareForm, setShareForm] = useState<ShareAlertForm>({
     alert_id: "",

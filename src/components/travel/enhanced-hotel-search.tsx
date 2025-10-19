@@ -110,7 +110,7 @@ export const EnhancedHotelSearch: React.FC = () => {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [reservations, setReservations] = useState<HotelReservation[]>([]);
   const [itineraries, setItineraries] = useState<TravelItinerary[]>([]);
-  const [aiSuggestions, setAiSuggestions] = useState<any[]>([]);
+  const [aiSuggestions, setAiSuggestions] = useState<unknown[]>([]);
   
   // Filter states
   const [sortBy, setSortBy] = useState("price");

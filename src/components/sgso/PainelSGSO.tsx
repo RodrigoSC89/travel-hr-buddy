@@ -147,7 +147,7 @@ export const PainelSGSO: React.FC = () => {
           <ResponsiveContainer width="100%" height={400}>
             <BarChart
               data={dados.flatMap((d) =>
-                Object.entries(d.por_mes).map(([mes, valor]: [string, any]) => ({
+                Object.entries(d.por_mes).map(([mes, valor]: [string, unknown]) => ({
                   embarcacao: d.embarcacao,
                   mes,
                   falhas: valor,

@@ -59,7 +59,7 @@ export default function Maritime() {
     complianceScore: 0
   });
   const [loading, setLoading] = useState(true);
-  const [vessels, setVessels] = useState<any[]>([]);
+  const [vessels, setVessels] = useState<unknown[]>([]);
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
 
   useEffect(() => {

@@ -74,7 +74,7 @@ vi.mock("@supabase/supabase-js", () => ({
 }));
 
 // Helper to create mock request/response
-function createMocks(query: any = {}, method = "GET") {
+function createMocks(query: Record<string, unknown> = {}, method = "GET") {
   const req = {
     method,
     query,

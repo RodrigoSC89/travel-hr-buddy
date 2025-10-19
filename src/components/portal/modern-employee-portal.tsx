@@ -98,13 +98,13 @@ export const ModernEmployeePortal: React.FC = () => {
 
   // AI Chat states
   const [chatOpen, setChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState<any[]>([]);
+  const [chatMessages, setChatMessages] = useState<unknown[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Document upload states
   const [uploadingDoc, setUploadingDoc] = useState(false);
-  const [documents, setDocuments] = useState<any[]>([]);
+  const [documents, setDocuments] = useState<unknown[]>([]);
 
   useEffect(() => {
     initializePortal();

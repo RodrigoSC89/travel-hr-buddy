@@ -47,7 +47,7 @@ interface OrganizationContextType {
   switchOrganization: (orgId: string) => Promise<void>;
   updateBranding: (branding: Partial<OrganizationBranding>) => Promise<void>;
   checkPermission: (permission: string) => boolean;
-  getCurrentOrganizationUsers: () => Promise<any[]>;
+  getCurrentOrganizationUsers: () => Promise<unknown[]>;
   inviteUser: (email: string, role: string) => Promise<void>;
   removeUser: (userId: string) => Promise<void>;
   updateUserRole: (userId: string, role: string) => Promise<void>;
@@ -182,7 +182,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const updateBranding = async (brandingUpdate: Partial<OrganizationBranding>) => {
     if (!currentOrganization) return;
 
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       ...brandingUpdate,
       business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules as unknown : undefined,
       enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules as unknown : undefined,
@@ -221,7 +221,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     return userPermissions.includes(permission) || userPermissions.includes("all");
   };
 
-  const getCurrentOrganizationUsers = async (): Promise<any[]> => {
+  const getCurrentOrganizationUsers = async (): Promise<unknown[]> => {
     // Mock data para demo
     const mockUsers = [
       {

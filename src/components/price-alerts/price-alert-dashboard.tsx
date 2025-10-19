@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase as supabaseClient } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-const supabase: any = supabaseClient;
+const supabase: typeof supabaseClient;
 
 
 interface PriceAlert {

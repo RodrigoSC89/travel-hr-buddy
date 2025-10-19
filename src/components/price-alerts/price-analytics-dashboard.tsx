@@ -27,7 +27,7 @@ interface PriceData {
 
 interface AnalyticsData {
   categoryDistribution: { name: string; value: number; color: string }[];
-  priceHistory: { date: string; [key: string]: any }[];
+  priceHistory: { date: string; [key: string]: unknown }[];
   savingsOverTime: { month: string; savings: number; alerts: number }[];
   topProducts: { name: string; savings: number; frequency: number }[];
   trends: {

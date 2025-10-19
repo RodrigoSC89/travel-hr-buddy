@@ -39,7 +39,7 @@ interface CrewMember {
 
 export default function CrewManagement() {
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
-  const [vessels, setVessels] = useState<any[]>([]);
+  const [vessels, setVessels] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");

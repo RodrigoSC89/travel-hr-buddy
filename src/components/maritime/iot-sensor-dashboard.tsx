@@ -41,7 +41,7 @@ interface VesselSensors {
 export const IoTSensorDashboard = () => {
   const [vessels, setVessels] = useState<VesselSensors[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
-  const [alerts, setAlerts] = useState<any[]>([]);
+  const [alerts, setAlerts] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
