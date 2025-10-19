@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
+import ApplyTemplateModal from "@/_legacy/ApplyTemplateModal";
 
 // Mock templates data
 const mockTemplates = [
