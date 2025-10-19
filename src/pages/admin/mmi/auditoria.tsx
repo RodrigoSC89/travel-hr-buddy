@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DataTable, type Column } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
@@ -45,31 +45,31 @@ export default function AuditoriaOSPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "bg-green-500/10 text-green-500 border-green-500/20";
-      case "in_progress":
-        return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-      case "pending":
-        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
-      case "cancelled":
-        return "bg-red-500/10 text-red-500 border-red-500/20";
-      default:
-        return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+    case "completed":
+      return "bg-green-500/10 text-green-500 border-green-500/20";
+    case "in_progress":
+      return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+    case "pending":
+      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+    case "cancelled":
+      return "bg-red-500/10 text-red-500 border-red-500/20";
+    default:
+      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="w-4 h-4" />;
-      case "in_progress":
-        return <Clock className="w-4 h-4" />;
-      case "pending":
-        return <AlertCircle className="w-4 h-4" />;
-      case "cancelled":
-        return <XCircle className="w-4 h-4" />;
-      default:
-        return null;
+    case "completed":
+      return <CheckCircle className="w-4 h-4" />;
+    case "in_progress":
+      return <Clock className="w-4 h-4" />;
+    case "pending":
+      return <AlertCircle className="w-4 h-4" />;
+    case "cancelled":
+      return <XCircle className="w-4 h-4" />;
+    default:
+      return null;
     }
   };
 
@@ -85,16 +85,16 @@ export default function AuditoriaOSPage() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-red-500/10 text-red-500 border-red-500/20";
-      case "high":
-        return "bg-orange-500/10 text-orange-500 border-orange-500/20";
-      case "medium":
-        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
-      case "low":
-        return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-      default:
-        return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+    case "critical":
+      return "bg-red-500/10 text-red-500 border-red-500/20";
+    case "high":
+      return "bg-orange-500/10 text-orange-500 border-orange-500/20";
+    case "medium":
+      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+    case "low":
+      return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+    default:
+      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
     }
   };
 

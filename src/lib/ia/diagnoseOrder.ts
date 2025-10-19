@@ -3,7 +3,7 @@
  * Uses GPT-4 to diagnose technical issues
  */
 
-import { openai } from '@/lib/openai';
+import { openai } from "@/lib/openai";
 
 export interface OrderDiagnosticInput {
   system_name: string;
@@ -33,7 +33,7 @@ Analise a seguinte ordem de serviço para diagnóstico técnico.
 
 Sistema: ${order.system_name}
 Descrição: ${order.description}
-Comentário Técnico: ${order.technician_comment || 'N/A'}
+Comentário Técnico: ${order.technician_comment || "N/A"}
 
 Responda com:
 - Causa provável
@@ -43,8 +43,8 @@ Responda com:
     `;
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }],
+      model: "gpt-4",
+      messages: [{ role: "user", content: prompt }],
     });
 
     const diagnosis = response.choices[0].message.content;
@@ -52,18 +52,18 @@ Responda com:
     if (!diagnosis) {
       return {
         success: false,
-        error: 'No diagnosis returned from AI',
+        error: "No diagnosis returned from AI",
       };
     }
 
-    console.log('✅ Diagnóstico gerado com sucesso');
+    console.log("✅ Diagnóstico gerado com sucesso");
     return {
       success: true,
       diagnosis,
     };
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-    console.error('❌ Erro ao gerar diagnóstico:', errorMessage);
+    const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+    console.error("❌ Erro ao gerar diagnóstico:", errorMessage);
     return {
       success: false,
       error: errorMessage,

@@ -3,7 +3,7 @@
  * Sends service orders (OS) by email using Resend API
  */
 
-import { Resend } from 'resend';
+import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -32,37 +32,37 @@ export async function sendOrderEmail({
   const apiKey = process.env.RESEND_API_KEY;
 
   if (!apiKey) {
-    console.error('❌ RESEND_API_KEY is not configured in environment variables');
+    console.error("❌ RESEND_API_KEY is not configured in environment variables");
     return {
       success: false,
-      error: 'RESEND_API_KEY is not configured in environment variables',
+      error: "RESEND_API_KEY is not configured in environment variables",
     };
   }
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'os@nautilus.systems',
+      from: "os@nautilus.systems",
       to,
       subject,
       html,
     });
 
     if (error) {
-      console.error('❌ Erro ao enviar OS por email:', error);
+      console.error("❌ Erro ao enviar OS por email:", error);
       return { success: false, error };
     }
 
     if (data) {
-      console.log('✅ Email de OS enviado com sucesso:', data);
+      console.log("✅ Email de OS enviado com sucesso:", data);
       return { success: true, data };
     }
 
-    return { success: false, error: 'No data returned from Resend API' };
+    return { success: false, error: "No data returned from Resend API" };
   } catch (err) {
-    console.error('❌ Erro ao enviar OS por email:', err);
+    console.error("❌ Erro ao enviar OS por email:", err);
     return {
       success: false,
-      error: err instanceof Error ? err.message : 'Unknown error occurred',
+      error: err instanceof Error ? err.message : "Unknown error occurred",
     };
   }
 }
