@@ -1,95 +1,91 @@
-# MMI Forecast IA - Intelligent Forecasting with GPT-4
+# MMI Forecast Pipeline - AI-Powered Maintenance Forecasting
 
 ## Overview
 
-This module provides AI-powered maintenance forecasting using GPT-4 for the MMI (Maritime Maintenance Intelligence) system. It generates intelligent predictions for maintenance jobs, including next due dates, risk levels, and technical reasoning.
+**Etapa 2 Complete:** This module provides a complete AI-powered maintenance forecast pipeline using GPT-4o for the MMI (Maritime Maintenance Intelligence) system. It generates intelligent predictions for maintenance jobs and automatically persists them to the Supabase database.
+
+## Features
+
+✅ **AI Forecast Generation** - GPT-4o powered predictions
+✅ **Database Persistence** - Automatic save to Supabase
+✅ **Complete Pipeline** - One-line forecast generation and storage
+✅ **Type-Safe** - Full TypeScript support
+✅ **Risk Assessment** - Intelligent risk level mapping
+✅ **Comprehensive Testing** - 22 passing tests
 
 ## Installation
 
 The module is already integrated into the project. No additional installation required.
 
-## Usage
+## Quick Start
 
-### Basic Example
+### Complete Pipeline (Recommended)
 
 ```typescript
-import { generateForecastForJob } from "@/lib/mmi/forecast-ia";
+import { runForecastPipeline } from "@/lib/mmi";
 
-const forecast = await generateForecastForJob({
-  id: "job123",
-  title: "Inspeção de bombas hidráulicas",
-  system: "Hidráulico",
-  lastExecuted: "2025-09-01",
-  frequencyDays: 30,
-  observations: "Ocorreram falhas intermitentes no alarme"
-});
+const job = {
+  id: "550e8400-e29b-41d4-a716-446655440000",
+  title: "Manutenção preventiva - Sistema hidráulico",
+  component: {
+    name: "Sistema hidráulico do guindaste",
+    asset: { name: "Guindaste A1", vessel: "FPSO Alpha" }
+  },
+  status: "pending",
+  priority: "high",
+  due_date: "2025-11-30"
+};
+
+// Generate AI forecast AND save to database in one call
+const forecast = await runForecastPipeline(job);
 
 console.log(forecast);
 /*
 Output:
 {
-  next_due_date: "2025-10-05",
+  next_due_date: "2025-11-30",
   risk_level: "alto",
-  reasoning: "Manutenção crítica com falhas recentes, execução urgente recomendada."
+  reasoning: "Manutenção crítica com alta prioridade requer atenção imediata."
 }
 */
 ```
 
-### With Service Orders Integration
+### AI Generation Only
 
 ```typescript
-import { generateForecastForJob } from "@/lib/mmi/forecast-ia";
-import { supabase } from "@/integrations/supabase/client";
+import { generateForecastForJob } from "@/lib/mmi";
 
-async function createServiceOrderWithForecast(jobId: string) {
-  // 1. Fetch job data from database
-  const { data: job } = await supabase
-    .from("mmi_jobs")
-    .select("*")
-    .eq("id", jobId)
-    .single();
+// Generate forecast without saving to database
+const forecast = await generateForecastForJob(job);
+console.log("Forecast:", forecast);
+// Process forecast before saving, or save later
+```
 
-  if (!job) {
-    throw new Error("Job not found");
-  }
+### Database Save Only
 
-  // 2. Generate AI forecast
-  const forecast = await generateForecastForJob({
-    id: job.id,
-    title: job.description,
-    system: job.system,
-    lastExecuted: job.last_executed_at,
-    frequencyDays: job.frequency_days,
-    observations: job.observations,
-  });
+```typescript
+import { saveForecastToDB } from "@/lib/mmi";
 
-  // 3. Create service order with forecast data
-  const { data: order } = await supabase
-    .from("mmi_service_orders")
-    .insert({
-      job_id: job.id,
-      scheduled_date: forecast.next_due_date,
-      priority: forecast.risk_level,
-      ai_reasoning: forecast.reasoning,
-      status: "pending",
-    })
-    .select()
-    .single();
-
-  return { order, forecast };
-}
+// Save a pre-generated forecast
+await saveForecastToDB({
+  job_id: job.id,
+  system: job.component.name,
+  next_due_date: forecast.next_due_date,
+  risk_level: forecast.risk_level,
+  reasoning: forecast.reasoning
+});
 ```
 
 ### Batch Processing
 
 ```typescript
-import { generateForecastForJob } from "@/lib/mmi/forecast-ia";
+import { runForecastPipeline } from "@/lib/mmi";
 
 async function generateForecastsForAllJobs(jobs: MMIJob[]) {
   const forecasts = await Promise.all(
     jobs.map(async (job) => {
       try {
-        const forecast = await generateForecastForJob(job);
+        const forecast = await runForecastPipeline(job);
         return { job, forecast, success: true };
       } catch (error) {
         console.error(`Failed to generate forecast for job ${job.id}:`, error);
@@ -102,44 +98,46 @@ async function generateForecastsForAllJobs(jobs: MMIJob[]) {
 }
 ```
 
-### Custom Risk Assessment
+### Query Saved Forecasts
 
 ```typescript
-import { generateForecastForJob } from "@/lib/mmi/forecast-ia";
+import { supabase } from "@/integrations/supabase/client";
 
-async function assessMaintenanceRisk(jobId: string) {
-  const job = await fetchJobData(jobId); // Your job fetching logic
-  
-  const forecast = await generateForecastForJob(job);
+// Get forecast for a specific job
+const { data: forecast } = await supabase
+  .from("mmi_forecasts")
+  .select("*")
+  .eq("job_id", jobId)
+  .single();
 
-  // Map AI risk levels to your internal priority system
-  const priorityMap = {
-    "baixo": 1,
-    "médio": 2,
-    "alto": 3,
-  };
+// Get all high-risk forecasts
+const { data: highRisk } = await supabase
+  .from("mmi_forecasts")
+  .select("*")
+  .eq("risk_level", "alto")
+  .order("next_due_date", { ascending: true });
 
-  return {
-    ...forecast,
-    numericPriority: priorityMap[forecast.risk_level],
-    shouldAlert: forecast.risk_level === "alto",
-    daysUntilDue: calculateDaysUntilDue(forecast.next_due_date),
-  };
-}
+// Get upcoming maintenance (next 7 days)
+const today = new Date().toISOString().split("T")[0];
+const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  .toISOString()
+  .split("T")[0];
 
-function calculateDaysUntilDue(dueDate: string): number {
-  const today = new Date();
-  const due = new Date(dueDate);
-  const diffTime = due.getTime() - today.getTime();
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-}
+const { data: upcoming } = await supabase
+  .from("mmi_forecasts")
+  .select("*")
+  .gte("next_due_date", today)
+  .lte("next_due_date", nextWeek)
+  .order("next_due_date", { ascending: true });
 ```
 
 ## API Reference
 
-### `generateForecastForJob(job: MMIJob): Promise<ForecastResult>`
+### `runForecastPipeline(job: MMIJob): Promise<ForecastResult>`
 
-Generates an intelligent forecast for a maintenance job using GPT-4.
+Runs the complete forecast pipeline: generates AI forecast and saves to database.
+
+**Recommended for most use cases.**
 
 #### Parameters
 
@@ -147,12 +145,23 @@ Generates an intelligent forecast for a maintenance job using GPT-4.
 
 ```typescript
 type MMIJob = {
-  id: string;              // Unique job identifier
-  title: string;           // Job title/description
-  system: string;          // System name (e.g., "Hidráulico", "Elétrico")
-  lastExecuted: string | null; // ISO date string of last execution (or null)
-  frequencyDays: number;   // Expected frequency in days
-  observations?: string;   // Optional observations or notes
+  id: string;
+  title: string;
+  description?: string;
+  component: {
+    name: string;
+    current_hours?: number;
+    maintenance_interval_hours?: number;
+    asset?: {
+      name: string;
+      vessel?: string;
+    };
+  };
+  status: "pending" | "in_progress" | "completed" | "cancelled" | "postponed";
+  priority: "critical" | "high" | "medium" | "low";
+  due_date?: string;
+  completed_date?: string;
+  metadata?: Record<string, any>;
 };
 ```
 
@@ -162,71 +171,197 @@ Returns a `Promise<ForecastResult>` with the forecast data:
 
 ```typescript
 type ForecastResult = {
-  next_due_date: string;   // ISO date string for next due date
+  next_due_date: string;   // ISO date string (YYYY-MM-DD)
   risk_level: "baixo" | "médio" | "alto"; // Risk assessment
-  reasoning: string;       // Technical justification (max ~300 chars)
+  reasoning: string;       // Technical justification in Portuguese
+};
+```
+
+---
+
+### `generateForecastForJob(job: MMIJob): Promise<ForecastResult>`
+
+Generates an AI forecast using GPT-4o without saving to database.
+
+Use when you need to process the forecast before saving.
+
+---
+
+### `saveForecastToDB(forecast: ForecastData): Promise<void>`
+
+Saves a forecast to the database.
+
+Use when you have a pre-generated forecast to save.
+
+```typescript
+type ForecastData = {
+  job_id: string;
+  system: string;
+  next_due_date: string;
+  risk_level: "baixo" | "médio" | "alto";
+  reasoning: string;
 };
 ```
 
 ## Configuration
 
-The module uses the OpenAI client from `@/lib/ai/openai-client`, which requires:
+### Required Environment Variables
 
-- Environment variable: `VITE_OPENAI_API_KEY`
-- Model: GPT-4
-- Temperature: 0.2 (for consistent, deterministic results)
+```env
+VITE_OPENAI_API_KEY=sk-...
+VITE_SUPABASE_URL=https://...
+VITE_SUPABASE_ANON_KEY=...
+```
+
+### AI Model Configuration
+
+- **Model:** GPT-4o (`gpt-4o`)
+- **Temperature:** 0.2 (for consistent, deterministic results)
+- **Response Format:** JSON object
+- **Language:** Portuguese (Brazilian)
+
+### Database Configuration
+
+- **Table:** `mmi_forecasts`
+- **RLS:** Enabled
+- **Foreign Keys:** `job_id` → `mmi_jobs(id)`
+
+## Risk Level Classification
+
+The system automatically maps job priority to risk level:
+
+| Job Priority | Risk Level | Description |
+|-------------|-----------|-------------|
+| critical | alto | Immediate attention required |
+| high | alto | High priority maintenance |
+| medium | médio | Standard maintenance schedule |
+| low | baixo | Low priority, routine checks |
 
 ## Error Handling
 
 ```typescript
-import { generateForecastForJob } from "@/lib/mmi/forecast-ia";
+import { runForecastPipeline } from "@/lib/mmi";
 
 try {
-  const forecast = await generateForecastForJob(job);
-  // Use forecast data
+  const forecast = await runForecastPipeline(job);
+  console.log("Forecast saved successfully:", forecast);
 } catch (error) {
   if (error.message.includes("API key")) {
     console.error("OpenAI API key not configured");
   } else if (error.message.includes("rate limit")) {
     console.error("Rate limit exceeded, try again later");
+  } else if (error.message.includes("Failed to save")) {
+    console.error("Database error:", error);
   } else {
     console.error("Failed to generate forecast:", error);
   }
 }
 ```
 
+### Automatic Fallback
+
+If AI generation fails, the system provides an automatic fallback:
+- Uses job priority to determine risk level
+- Uses due_date or calculates 30 days from now
+- Provides a basic reasoning based on job data
+
 ## Testing
 
-Tests are located in `tests/forecast-ia.test.ts`.
+### Test Suite
+
+Tests are located in `src/tests/mmi-forecast-pipeline.test.ts`.
+
+**Coverage:**
+- ✅ 22 test cases (100% passing)
+- Data structure validation
+- Risk level mapping
+- Integration scenarios
+- Error handling
+- Date and UUID format validation
 
 Run tests:
 ```bash
-npm test tests/forecast-ia.test.ts
+# Run forecast pipeline tests
+npm test -- src/tests/mmi-forecast-pipeline.test.ts
+
+# Run all MMI tests
+npm test -- tests/mmi.test.ts src/tests/mmi-forecast-pipeline.test.ts
+
+# Run all tests
+npm test
 ```
+
+### Build Validation
+
+```bash
+# Type check
+npx tsc --noEmit
+
+# Lint
+npm run lint
+
+# Build
+npm run build
+```
+
+## Database Schema
+
+### mmi_forecasts Table
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | UUID | Primary key |
+| job_id | UUID | Foreign key to mmi_jobs |
+| system | TEXT | System name |
+| next_due_date | DATE | AI-predicted next maintenance date |
+| risk_level | TEXT | Risk level (baixo/médio/alto) |
+| reasoning | TEXT | Technical justification from AI |
+| created_at | TIMESTAMPTZ | Record creation timestamp |
+| updated_at | TIMESTAMPTZ | Last update timestamp |
+
+### Indexes
+
+- `idx_mmi_forecasts_job_id` - Fast job lookups
+- `idx_mmi_forecasts_next_due_date` - Upcoming maintenance queries
+- `idx_mmi_forecasts_risk_level` - Risk-based filtering
 
 ## Integration Points
 
 This module integrates with:
 
-1. **MMI Jobs System** - Processes maintenance job data
-2. **Service Orders (OS)** - Can be used to automatically create service orders
-3. **OpenAI GPT-4** - Uses AI for intelligent predictions
-4. **Supabase** - Can store forecast results for historical tracking
+1. **MMI Jobs System** - Complete job structure with components and assets
+2. **MMI Components** - Horímetro tracking and maintenance intervals
+3. **OpenAI GPT-4o** - Intelligent predictions in Portuguese
+4. **Supabase** - Persistent forecast storage with RLS
+5. **Future: Service Orders** - Automatic OS generation (Etapa 3)
 
 ## Best Practices
 
-1. **Cache Results**: Store forecast results in database to avoid repeated API calls
-2. **Rate Limiting**: Implement rate limiting for batch operations
-3. **Error Recovery**: Always handle API errors gracefully with fallback logic
-4. **Validation**: Validate job data before sending to GPT-4
-5. **Monitoring**: Log forecast accuracy over time to improve prompts
+1. **Use Pipeline**: Always use `runForecastPipeline()` for complete workflow
+2. **Validate Input**: Ensure job has required fields (id, title, component.name)
+3. **Error Handling**: Always wrap calls in try-catch blocks
+4. **Batch Processing**: Use Promise.all for multiple jobs efficiently
+5. **Query Optimization**: Use indexes when querying forecasts by date or risk
+6. **Monitor Costs**: Track OpenAI API usage for budget control
 
-## Future Enhancements
+## Documentation
 
-Potential improvements for future versions:
+- **Full Guide:** `ETAPA2_AI_FORECAST_PIPELINE_IMPLEMENTATION.md`
+- **Quick Reference:** `ETAPA2_AI_FORECAST_PIPELINE_QUICKREF.md`
+- **Visual Summary:** `ETAPA2_AI_FORECAST_PIPELINE_VISUAL.md`
+- **Examples:** `src/lib/mmi/examples.ts`
+- **Tests:** `src/tests/mmi-forecast-pipeline.test.ts`
 
-- Historical forecast accuracy tracking
-- Multi-language support
-- Custom risk level definitions per system
-- Integration with IoT sensor data
-- Automated service order creation based on high-risk forecasts
+## What's Next
+
+**Etapa 3: Gerar OS automaticamente**
+- Automatic work order generation based on forecasts
+- Integration with mmi_os table
+- Notification system for high-risk forecasts
+- Workflow automation
+
+---
+
+**Status:** ✅ Production Ready (Etapa 2 Complete)
+**Version:** 2.0.0
+**Last Updated:** 2025-10-19
