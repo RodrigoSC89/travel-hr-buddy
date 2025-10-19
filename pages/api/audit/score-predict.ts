@@ -28,7 +28,7 @@ interface AuditPrediction {
 function generateRuleBasedPrediction(
   vesselId: string,
   auditType: string,
-  complianceData: any
+  complianceData: Record<string, unknown>
 ): AuditPrediction {
   const incidentCount = complianceData.incidents?.length || 0;
   const completedActions = complianceData.completed_actions || 0;
