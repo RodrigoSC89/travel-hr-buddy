@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import html2pdf from "html2pdf.js";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FileDown } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { submitSGSOAudit } from "@/lib/sgso/submit";
+import { toast } from "sonner";
 
 const requisitosSGSO = [
   { num: 1, titulo: "Política de SMS", desc: "Estabelecimento e divulgação de política de segurança e meio ambiente." },
@@ -28,17 +32,11 @@ const requisitosSGSO = [
   { num: 17, titulo: "Melhoria Contínua", desc: "Revisões periódicas e aprendizado contínuo." },
 ];
 
-// Mock vessels data
-const vessels = [
-  { id: "1", name: "PSV Atlântico" },
-  { id: "2", name: "AHTS Pacífico" },
-  { id: "3", name: "OSV Caribe" },
-  { id: "4", name: "PLSV Mediterrâneo" },
-  { id: "5", name: "FPSO Nautilus One" },
-];
-
 export default function SGSOAuditPage() {
+  const { user } = useAuth();
+  const [vessels, setVessels] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedVessel, setSelectedVessel] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const [auditData, setAuditData] = useState(() =>
     requisitosSGSO.map(req => ({
       ...req,
@@ -48,15 +46,54 @@ export default function SGSOAuditPage() {
     }))
   );
 
+  useEffect(() => {
+    const fetchVessels = async () => {
+      const { data, error } = await supabase.from("vessels").select("id, name");
+      if (!error && data) {
+        setVessels(data);
+      }
+    };
+    fetchVessels();
+  }, []);
+
   const handleChange = (index: number, field: string, value: string) => {
     const updated = [...auditData];
     updated[index][field] = value;
     setAuditData(updated);
   };
 
-  const handleSubmit = () => {
-    console.log("📤 Enviando auditoria SGSO:", auditData);
-    // TODO: enviar para Supabase ou API
+  const handleSubmit = async () => {
+    if (!user) {
+      toast.error("Usuário não autenticado");
+      return;
+    }
+    if (!selectedVessel) {
+      toast.error("Selecione uma embarcação");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await submitSGSOAudit(
+        selectedVessel,
+        user.id,
+        auditData.map(item => ({
+          requirement_number: item.num,
+          requirement_title: item.titulo,
+          compliance_status: item.compliance,
+          evidence: item.evidence,
+          comment: item.comment
+        }))
+      );
+
+      toast.success("✅ Auditoria SGSO enviada com sucesso!");
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      toast.error(`Erro ao enviar auditoria: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleExportPDF = () => {
@@ -164,7 +201,7 @@ export default function SGSOAuditPage() {
           <FileDown className="w-4 h-4 mr-2" />
           📄 Exportar PDF
         </Button>
-        <Button onClick={handleSubmit}>
+        <Button onClick={handleSubmit} disabled={loading}>
           📤 Enviar Auditoria SGSO
         </Button>
       </div>

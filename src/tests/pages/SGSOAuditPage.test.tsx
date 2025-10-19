@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import SGSOAuditPage from "@/pages/SGSOAuditPage";
 
 // Mock html2pdf.js
@@ -9,6 +9,59 @@ vi.mock("html2pdf.js", () => ({
     from: vi.fn().mockReturnThis(),
     save: vi.fn().mockReturnThis(),
   })),
+}));
+
+// Mock sonner
+vi.mock("sonner", () => ({
+  toast: {
+    error: vi.fn(),
+    success: vi.fn(),
+    info: vi.fn(),
+  },
+}));
+
+// Mock AuthContext
+const mockUser = { id: "user-123", email: "test@example.com" };
+vi.mock("@/contexts/AuthContext", () => ({
+  useAuth: () => ({
+    user: mockUser,
+    session: null,
+    isLoading: false,
+    signUp: vi.fn(),
+    signIn: vi.fn(),
+    signOut: vi.fn(),
+    resetPassword: vi.fn(),
+  }),
+}));
+
+// Mock Supabase client
+const mockVessels = [
+  { id: "1", name: "PSV Atlântico" },
+  { id: "2", name: "AHTS Pacífico" },
+];
+
+vi.mock("@/integrations/supabase/client", () => ({
+  supabase: {
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        data: mockVessels,
+        error: null,
+      })),
+      insert: vi.fn(() => ({
+        select: vi.fn(() => ({
+          single: vi.fn(() => ({
+            data: { id: "audit-123" },
+            error: null,
+          })),
+        })),
+      })),
+    })),
+  },
+}));
+
+// Mock submit function
+vi.mock("@/lib/sgso/submit", () => ({
+  submitSGSOAudit: vi.fn(),
 }));
 
 describe("SGSOAuditPage", () => {
@@ -21,9 +74,14 @@ describe("SGSOAuditPage", () => {
     expect(screen.getByText("🛡️ Auditoria SGSO - IBAMA")).toBeInTheDocument();
   });
 
-  it("should render vessel selector", () => {
+  it("should render vessel selector", async () => {
     render(<SGSOAuditPage />);
     expect(screen.getByText("Selecione a Embarcação")).toBeInTheDocument();
+    
+    // Wait for vessels to be loaded
+    await waitFor(() => {
+      expect(screen.getByRole("combobox")).toBeInTheDocument();
+    });
   });
 
   it("should render all 17 SGSO requirements", () => {
