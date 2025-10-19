@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { MMIOS } from '@/types/mmi';
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { MMIOS } from "@/types/mmi";
 
 export default function MMIOrdersPage() {
   const [workOrders, setWorkOrders] = useState<MMIOS[]>([]);
@@ -24,18 +24,18 @@ export default function MMIOrdersPage() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('mmi_os')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("mmi_os")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setWorkOrders(data || []);
     } catch (error) {
-      console.error('Error loading work orders:', error);
+      console.error("Error loading work orders:", error);
       toast({
-        title: 'Erro ao carregar ordens de serviço',
-        description: error instanceof Error ? error.message : 'Erro desconhecido',
-        variant: 'destructive',
+        title: "Erro ao carregar ordens de serviço",
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -50,7 +50,7 @@ export default function MMIOrdersPage() {
   ) => {
     setSavingId(orderId);
     try {
-      const { data, error } = await supabase.functions.invoke('mmi-os-update', {
+      const { data, error } = await supabase.functions.invoke("mmi-os-update", {
         body: {
           id: orderId,
           status,
@@ -63,20 +63,20 @@ export default function MMIOrdersPage() {
 
       if (data?.success) {
         toast({
-          title: '✅ Ordem de serviço atualizada',
-          description: 'As informações foram salvas com sucesso.',
+          title: "✅ Ordem de serviço atualizada",
+          description: "As informações foram salvas com sucesso.",
         });
         // Reload work orders to show updated data
         await loadWorkOrders();
       } else {
-        throw new Error(data?.error || 'Erro ao atualizar');
+        throw new Error(data?.error || "Erro ao atualizar");
       }
     } catch (error) {
-      console.error('Error updating work order:', error);
+      console.error("Error updating work order:", error);
       toast({
-        title: '❌ Erro ao atualizar',
-        description: error instanceof Error ? error.message : 'Erro desconhecido',
-        variant: 'destructive',
+        title: "❌ Erro ao atualizar",
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+        variant: "destructive",
       });
     } finally {
       setSavingId(null);
@@ -85,10 +85,10 @@ export default function MMIOrdersPage() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      open: { label: 'Aberta', variant: 'outline' as const, emoji: '🟡' },
-      in_progress: { label: 'Em Andamento', variant: 'default' as const, emoji: '🔵' },
-      completed: { label: 'Concluída', variant: 'secondary' as const, emoji: '🟢' },
-      cancelled: { label: 'Cancelada', variant: 'destructive' as const, emoji: '🔴' },
+      open: { label: "Aberta", variant: "outline" as const, emoji: "🟡" },
+      in_progress: { label: "Em Andamento", variant: "default" as const, emoji: "🔵" },
+      completed: { label: "Concluída", variant: "secondary" as const, emoji: "🟢" },
+      cancelled: { label: "Cancelada", variant: "destructive" as const, emoji: "🔴" },
     };
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.open;
     return (
@@ -151,15 +151,15 @@ interface WorkOrderCardProps {
 
 function WorkOrderCard({ order, onUpdate, isSaving }: WorkOrderCardProps) {
   const [executedAt, setExecutedAt] = useState(
-    order.executed_at ? new Date(order.executed_at).toISOString().slice(0, 16) : ''
+    order.executed_at ? new Date(order.executed_at).toISOString().slice(0, 16) : ""
   );
-  const [technicianComment, setTechnicianComment] = useState(order.technician_comment || '');
+  const [technicianComment, setTechnicianComment] = useState(order.technician_comment || "");
   const [status, setStatus] = useState(order.status);
 
-  const isCompleted = status === 'completed';
+  const isCompleted = status === "completed";
   const hasChanges =
-    executedAt !== (order.executed_at ? new Date(order.executed_at).toISOString().slice(0, 16) : '') ||
-    technicianComment !== (order.technician_comment || '') ||
+    executedAt !== (order.executed_at ? new Date(order.executed_at).toISOString().slice(0, 16) : "") ||
+    technicianComment !== (order.technician_comment || "") ||
     status !== order.status;
 
   const handleSave = () => {
@@ -173,11 +173,11 @@ function WorkOrderCard({ order, onUpdate, isSaving }: WorkOrderCardProps) {
           <div>
             <CardTitle className="text-lg">OS-{order.id.slice(0, 8)}</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              Criada em: {new Date(order.created_at || '').toLocaleDateString('pt-BR')}
+              Criada em: {new Date(order.created_at || "").toLocaleDateString("pt-BR")}
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline">{status === 'open' ? '🟡 Aberta' : status === 'in_progress' ? '🔵 Em Andamento' : status === 'completed' ? '🟢 Concluída' : '🔴 Cancelada'}</Badge>
+            <Badge variant="outline">{status === "open" ? "🟡 Aberta" : status === "in_progress" ? "🔵 Em Andamento" : status === "completed" ? "🟢 Concluída" : "🔴 Cancelada"}</Badge>
           </div>
         </div>
       </CardHeader>
@@ -234,7 +234,7 @@ function WorkOrderCard({ order, onUpdate, isSaving }: WorkOrderCardProps) {
           disabled={!hasChanges || isCompleted || isSaving}
           className="w-full"
         >
-          {isSaving ? '⏳ Salvando...' : '✅ Salvar Conclusão'}
+          {isSaving ? "⏳ Salvando..." : "✅ Salvar Conclusão"}
         </Button>
 
         {isCompleted && (

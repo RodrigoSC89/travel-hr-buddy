@@ -11,12 +11,12 @@ async function loadHtml2Pdf() {
   if (html2pdfModule) return html2pdfModule;
   
   // Dynamic import for html2pdf
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     try {
-      html2pdfModule = (await import('html2pdf.js')).default;
+      html2pdfModule = (await import("html2pdf.js")).default;
     } catch (error) {
-      console.error('html2pdf.js not installed. Install with: npm install html2pdf.js');
-      throw new Error('html2pdf.js is required for PDF export');
+      console.error("html2pdf.js not installed. Install with: npm install html2pdf.js");
+      throw new Error("html2pdf.js is required for PDF export");
     }
   }
   
@@ -26,8 +26,8 @@ async function loadHtml2Pdf() {
 export interface PDFExportOptions {
   filename?: string;
   margin?: number | [number, number, number, number];
-  format?: 'a4' | 'letter' | 'legal' | [number, number];
-  orientation?: 'portrait' | 'landscape';
+  format?: "a4" | "letter" | "legal" | [number, number];
+  orientation?: "portrait" | "landscape";
   scale?: number;
 }
 
@@ -38,13 +38,13 @@ export interface PDFExportOptions {
  * @example
  * exportToPDF('<h1>My Document</h1>', 'output.pdf');
  */
-export async function exportToPDF(html: string, filename = 'template.pdf'): Promise<void> {
+export async function exportToPDF(html: string, filename = "template.pdf"): Promise<void> {
   const html2pdf = await loadHtml2Pdf();
   
   await html2pdf().from(html).set({
     filename,
     html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
   }).save();
 }
 
@@ -67,10 +67,10 @@ export async function exportToPDFWithOptions(
   const html2pdf = await loadHtml2Pdf();
   
   const {
-    filename = 'template.pdf',
+    filename = "template.pdf",
     margin = 0.5,
-    format = 'a4',
-    orientation = 'portrait',
+    format = "a4",
+    orientation = "portrait",
     scale = 2,
   } = options;
 
@@ -78,7 +78,7 @@ export async function exportToPDFWithOptions(
     filename,
     margin,
     html2canvas: { scale },
-    jsPDF: { unit: 'in', format, orientation },
+    jsPDF: { unit: "in", format, orientation },
   }).save();
 }
 
@@ -91,14 +91,14 @@ export async function exportToPDFWithOptions(
  */
 export async function exportElementToPDF(
   element: HTMLElement,
-  filename = 'template.pdf'
+  filename = "template.pdf"
 ): Promise<void> {
   const html2pdf = await loadHtml2Pdf();
   
   await html2pdf().from(element).set({
     filename,
     html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
   }).save();
 }
 
@@ -120,10 +120,10 @@ export async function exportElementToPDFWithOptions(
   const html2pdf = await loadHtml2Pdf();
   
   const {
-    filename = 'template.pdf',
+    filename = "template.pdf",
     margin = 0.5,
-    format = 'a4',
-    orientation = 'portrait',
+    format = "a4",
+    orientation = "portrait",
     scale = 2,
   } = options;
 
@@ -131,6 +131,6 @@ export async function exportElementToPDFWithOptions(
     filename,
     margin,
     html2canvas: { scale },
-    jsPDF: { unit: 'in', format, orientation },
+    jsPDF: { unit: "in", format, orientation },
   }).save();
 }
