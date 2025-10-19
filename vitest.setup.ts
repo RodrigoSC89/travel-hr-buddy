@@ -18,6 +18,7 @@ global.IntersectionObserver = class IntersectionObserver {
   takeRecords() {
     return [];
   }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;
 
 // Cleanup after each test case
