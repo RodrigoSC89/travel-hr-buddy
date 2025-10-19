@@ -10,6 +10,7 @@ import { FileDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitSGSOAudit } from "@/lib/sgso/submit";
+import { loadSGSOAudit } from "@/services/sgso-audit-service";
 import { toast } from "sonner";
 
 const requisitosSGSO = [
@@ -55,6 +56,41 @@ export default function SGSOAuditPage() {
     };
     fetchVessels();
   }, []);
+
+  useEffect(() => {
+    const fetchAudit = async () => {
+      if (!selectedVessel) return;
+
+      try {
+        const audits = await loadSGSOAudit(selectedVessel);
+        if (audits && audits.length > 0) {
+          const latest = audits[0];
+          
+          // Map audit items to form fields by requirement_number
+          const updatedData = requisitosSGSO.map(req => {
+            const match = latest.sgso_audit_items.find(
+              (item: { requirement_number: number }) => item.requirement_number === req.num
+            );
+
+            return {
+              ...req,
+              compliance: match?.compliance_status || "compliant",
+              evidence: match?.evidence || "",
+              comment: match?.comment || ""
+            };
+          });
+
+          setAuditData(updatedData);
+          toast.success("✅ Última auditoria carregada.");
+        }
+      } catch (err) {
+        const error = err instanceof Error ? err : new Error(String(err));
+        toast.error(`Erro ao carregar auditoria: ${error.message}`);
+      }
+    };
+
+    fetchAudit();
+  }, [selectedVessel]);
 
   const handleChange = (index: number, field: string, value: string) => {
     const updated = [...auditData];
