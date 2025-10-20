@@ -44,3 +44,14 @@ temp/
 # Test coverage
 coverage
 .nyc_output
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv

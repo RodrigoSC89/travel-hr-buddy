@@ -1,0 +1,51 @@
+{
+  "tipo": "AUTO_REPORT",
+  "versao": "3.0",
+  "data_geracao": "2025-10-20T00:00:00Z",
+  "embarcacao": "MV Nautilus Explorer",
+  "relatorio_consolidado": {
+    "status_geral": "operacional",
+    "saude_sistema": 94,
+    "modulos_ativos": [
+      "FMEA Auditor",
+      "ASOG Review",
+      "Forecast de Risco",
+      "BridgeLink"
+    ],
+    "metricas_operacionais": {
+      "tempo_operacao": "720 horas",
+      "eficiencia_energetica": 92,
+      "disponibilidade_sistemas": 98,
+      "conformidade_sgso": 95
+    },
+    "alertas_ativos": [
+      {
+        "nivel": "info",
+        "mensagem": "Manutenção programada do gerador auxiliar em 7 dias"
+      },
+      {
+        "nivel": "warning",
+        "mensagem": "Revisão de procedimentos operacionais pendente"
+      }
+    ],
+    "proximas_acoes": [
+      "Executar manutenção preventiva do gerador auxiliar",
+      "Atualizar documentação de procedimentos",
+      "Realizar simulado de emergência",
+      "Calibração de equipamentos de medição"
+    ],
+    "indicadores_desempenho": {
+      "fmea_score": 92,
+      "asog_score": 95,
+      "forecast_confidence": 87,
+      "sgso_compliance": 95
+    }
+  },
+  "tripulacao": {
+    "total": 18,
+    "certificacoes_validas": 18,
+    "treinamentos_atualizados": 17
+  },
+  "observacoes": "Sistema operando dentro dos parâmetros normais. Manutenção preventiva em dia.",
+  "status": "aprovado"
+}

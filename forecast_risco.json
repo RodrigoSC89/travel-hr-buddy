@@ -1,0 +1,43 @@
+{
+  "tipo": "FORECAST",
+  "versao": "1.5",
+  "data_previsao": "2025-10-20T00:00:00Z",
+  "periodo_analise": "30_dias",
+  "embarcacao": "MV Nautilus Explorer",
+  "previsao_risco": {
+    "meteorologia": {
+      "nivel_risco": "medio",
+      "probabilidade": 45,
+      "eventos_previstos": [
+        "Ventos moderados dias 15-18",
+        "Ondulação 2-3m dias 22-25"
+      ]
+    },
+    "manutencao_equipamentos": {
+      "nivel_risco": "baixo",
+      "probabilidade": 25,
+      "equipamentos_atencao": [
+        "Gerador auxiliar (próximo à manutenção programada)",
+        "Sistema de refrigeração (inspeção recomendada)"
+      ]
+    },
+    "operacional": {
+      "nivel_risco": "baixo",
+      "probabilidade": 20,
+      "fatores": [
+        "Tripulação experiente",
+        "Rota bem estabelecida",
+        "Condições operacionais favoráveis"
+      ]
+    }
+  },
+  "recomendacoes_ia": [
+    "Monitorar previsão meteorológica nos dias 15-25",
+    "Antecipar manutenção do gerador auxiliar",
+    "Manter estoque de peças críticas",
+    "Realizar inspeção visual de sistemas críticos"
+  ],
+  "nivel_risco_geral": "baixo",
+  "pontuacao_confianca": 87,
+  "status": "ativo"
+}

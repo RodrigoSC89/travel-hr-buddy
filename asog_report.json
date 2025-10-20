@@ -1,0 +1,43 @@
+{
+  "tipo": "ASOG",
+  "versao": "2.0",
+  "data_auditoria": "2025-10-20T00:00:00Z",
+  "embarcacao": "MV Nautilus Explorer",
+  "auditoria_operacional": {
+    "seguranca_pessoal": {
+      "conformidade": 95,
+      "itens_verificados": 48,
+      "nao_conformidades": 2,
+      "observacoes": [
+        "EPI completo e em bom estado",
+        "Treinamento de segurança atualizado"
+      ]
+    },
+    "procedimentos_operacionais": {
+      "conformidade": 92,
+      "itens_verificados": 35,
+      "nao_conformidades": 3,
+      "observacoes": [
+        "Procedimentos documentados",
+        "Alguns procedimentos necessitam revisão"
+      ]
+    },
+    "equipamentos_seguranca": {
+      "conformidade": 98,
+      "itens_verificados": 28,
+      "nao_conformidades": 1,
+      "observacoes": [
+        "Equipamentos calibrados",
+        "Manutenção em dia"
+      ]
+    }
+  },
+  "pontuacao_geral": 95,
+  "classificacao": "Excelente",
+  "recomendacoes": [
+    "Revisar procedimentos de emergência",
+    "Realizar simulados trimestrais",
+    "Atualizar documentação técnica"
+  ],
+  "status": "aprovado"
+}

@@ -1,0 +1,4 @@
+# Nautilus One - Python Dependencies
+# BridgeLink Module Requirements
+
+requests>=2.31.0

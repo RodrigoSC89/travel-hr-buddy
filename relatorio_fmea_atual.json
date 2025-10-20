@@ -1,0 +1,43 @@
+{
+  "tipo": "FMEA",
+  "versao": "1.0",
+  "data_geracao": "2025-10-20T00:00:00Z",
+  "embarcacao": "MV Nautilus Explorer",
+  "analise": {
+    "componentes_criticos": [
+      {
+        "nome": "Sistema de Propulsão Principal",
+        "modo_falha": "Perda de potência",
+        "severidade": 9,
+        "ocorrencia": 3,
+        "deteccao": 4,
+        "rpn": 108,
+        "acoes_recomendadas": [
+          "Inspeção programada a cada 500 horas",
+          "Monitoramento contínuo de vibração",
+          "Manutenção preventiva de componentes críticos"
+        ]
+      },
+      {
+        "nome": "Sistema Hidráulico de Governo",
+        "modo_falha": "Vazamento de fluido hidráulico",
+        "severidade": 8,
+        "ocorrencia": 4,
+        "deteccao": 3,
+        "rpn": 96,
+        "acoes_recomendadas": [
+          "Substituição de vedações",
+          "Verificação de pressão semanal",
+          "Manutenção de filtros"
+        ]
+      }
+    ],
+    "resumo": {
+      "total_componentes_analisados": 25,
+      "componentes_alto_risco": 2,
+      "componentes_medio_risco": 8,
+      "componentes_baixo_risco": 15
+    }
+  },
+  "status": "concluido"
+}
