@@ -1,0 +1,39 @@
+{
+    "timestamp": "2025-10-19T23:00:00",
+    "embarcacao": "Nautilus-01",
+    "tipo_operacao": "DP Class 2",
+    "resultado": {
+        "conformidade": true,
+        "parametros_verificados": [
+            {
+                "nome": "Redund\u00e2ncia de Propuls\u00e3o",
+                "status": "conforme",
+                "valor_atual": "100%",
+                "limite_minimo": "100%"
+            },
+            {
+                "nome": "Gera\u00e7\u00e3o de Energia",
+                "status": "conforme",
+                "valor_atual": "N+2",
+                "limite_minimo": "N+1"
+            },
+            {
+                "nome": "Sistema de Controle",
+                "status": "conforme",
+                "valor_atual": "Triplo redundante",
+                "limite_minimo": "Duplo redundante"
+            },
+            {
+                "nome": "Sensoriamento de Posi\u00e7\u00e3o",
+                "status": "conforme",
+                "valor_atual": "6 sistemas ativos",
+                "limite_minimo": "4 sistemas"
+            }
+        ]
+    },
+    "recomendacoes": [
+        "Manter rotina de testes semanais de failover",
+        "Realizar DP Trial anual conforme programa\u00e7\u00e3o",
+        "Validar sensores de refer\u00eancia mensalmente"
+    ]
+}

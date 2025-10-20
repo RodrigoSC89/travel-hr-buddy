@@ -44,3 +44,18 @@ temp/
 # Test coverage
 coverage
 .nyc_output
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Python test files (for testing only, not for commit)
+test_forecast.py
+test_edge_cases.py
+test_risk_scenarios.py
+
+# Python-generated forecast reports
+forecast_risco.json

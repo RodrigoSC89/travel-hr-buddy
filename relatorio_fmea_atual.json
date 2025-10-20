@@ -1,0 +1,66 @@
+[
+    {
+        "item": "Sistema de Propuls\u00e3o Principal",
+        "falha_potencial": "Falha no motor principal",
+        "severidade": 8,
+        "ocorrencia": 3,
+        "deteccao": 4,
+        "RPN": 96
+    },
+    {
+        "item": "Sistema de Posicionamento Din\u00e2mico",
+        "falha_potencial": "Perda de redund\u00e2ncia",
+        "severidade": 9,
+        "ocorrencia": 4,
+        "deteccao": 3,
+        "RPN": 108
+    },
+    {
+        "item": "Sistema de Gera\u00e7\u00e3o de Energia",
+        "falha_potencial": "Blackout total",
+        "severidade": 10,
+        "ocorrencia": 2,
+        "deteccao": 5,
+        "RPN": 100
+    },
+    {
+        "item": "Sistema de Controle de Lastro",
+        "falha_potencial": "Falha na v\u00e1lvula de controle",
+        "severidade": 7,
+        "ocorrencia": 5,
+        "deteccao": 4,
+        "RPN": 140
+    },
+    {
+        "item": "Sistema de Navega\u00e7\u00e3o",
+        "falha_potencial": "Falha no GPS/DGPS",
+        "severidade": 6,
+        "ocorrencia": 3,
+        "deteccao": 2,
+        "RPN": 36
+    },
+    {
+        "item": "Sistema de Comunica\u00e7\u00e3o",
+        "falha_potencial": "Perda de comunica\u00e7\u00e3o VHF",
+        "severidade": 5,
+        "ocorrencia": 4,
+        "deteccao": 3,
+        "RPN": 60
+    },
+    {
+        "item": "Sistema Hidr\u00e1ulico",
+        "falha_potencial": "Vazamento de \u00f3leo hidr\u00e1ulico",
+        "severidade": 7,
+        "ocorrencia": 6,
+        "deteccao": 4,
+        "RPN": 168
+    },
+    {
+        "item": "Sistema de Ancoragem",
+        "falha_potencial": "Ruptura de cabo/corrente",
+        "severidade": 9,
+        "ocorrencia": 2,
+        "deteccao": 6,
+        "RPN": 108
+    }
+]
