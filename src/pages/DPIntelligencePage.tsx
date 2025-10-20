@@ -22,6 +22,8 @@ type Incident = {
   root_cause?: string;
   class_dp?: string;
   severity?: string;
+  gravidade?: string;
+  sistema_afetado?: string;
   gpt_analysis?: Record<string, unknown>;
   updated_at?: string;
 };
@@ -30,18 +32,28 @@ export default function DPIntelligencePage() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(false);
   const [analyzingId, setAnalyzingId] = useState<string | null>(null);
+  const [gravidade, setGravidade] = useState<string | null>(null);
+  const [sistema, setSistema] = useState<string | null>(null);
 
   useEffect(() => {
     fetchIncidents();
-  }, []);
+  }, [gravidade, sistema]);
 
   async function fetchIncidents() {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      let query = supabase
         .from("dp_incidents")
-        .select("*")
-        .order("date", { ascending: false });
+        .select("*");
+
+      if (gravidade) {
+        query = query.eq("gravidade", gravidade);
+      }
+      if (sistema) {
+        query = query.ilike("sistema_afetado", `%${sistema}%`);
+      }
+
+      const { data, error } = await query.order("date", { ascending: false });
 
       if (error) {
         console.error("Error fetching incidents:", error);
@@ -156,6 +168,32 @@ export default function DPIntelligencePage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          {/* Filtros */}
+          <div className="flex gap-4 p-4 mb-4 bg-muted/50 rounded-md">
+            <select 
+              onChange={(e) => setGravidade(e.target.value || null)} 
+              className="border p-2 rounded-md bg-background"
+              value={gravidade || ""}
+            >
+              <option value="">Gravidade</option>
+              <option value="baixo">Baixo</option>
+              <option value="médio">Médio</option>
+              <option value="alto">Alto</option>
+            </select>
+
+            <select 
+              onChange={(e) => setSistema(e.target.value || null)} 
+              className="border p-2 rounded-md bg-background"
+              value={sistema || ""}
+            >
+              <option value="">Sistema Afetado</option>
+              <option value="DP">DP System</option>
+              <option value="Propulsor">Propulsor</option>
+              <option value="Energia">Energia</option>
+              <option value="Navegação">Navegação</option>
+            </select>
+          </div>
+
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">

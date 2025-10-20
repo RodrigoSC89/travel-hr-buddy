@@ -18,6 +18,7 @@ const PEOTRAM = React.lazy(() => import("./pages/PEOTRAM"));
 const PEODP = React.lazy(() => import("./pages/PEODP"));
 const DPIncidents = React.lazy(() => import("./pages/DPIncidents"));
 const DPIntelligence = React.lazy(() => import("./pages/DPIntelligence"));
+const DPIntelligenceAdmin = React.lazy(() => import("./pages/DPIntelligencePage"));
 const SGSO = React.lazy(() => import("./pages/SGSO"));
 const SGSOReportPage = React.lazy(() => import("./pages/SGSOReportPage"));
 const SGSOAuditPage = React.lazy(() => import("./pages/SGSOAuditPage"));
@@ -231,6 +232,7 @@ function App() {
                       <Route path="/predictive" element={<PredictiveAnalytics />} />
                       <Route path="/admin" element={<Admin />} />
                       <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                      <Route path="/admin/dp-intelligence" element={<DPIntelligenceAdmin />} />
                       <Route path="/admin/api-tester" element={<APITester />} />
                       <Route path="/admin/api-status" element={<APIStatus />} />
                       <Route path="/admin/control-panel" element={<ControlPanel />} />
