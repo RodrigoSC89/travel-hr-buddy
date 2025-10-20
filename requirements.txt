@@ -1,0 +1,12 @@
+# Nautilus One Decision Core - Python Dependencies
+# 
+# This module uses only Python standard library
+# No external dependencies required
+#
+# Python Version: 3.12+
+#
+# Standard library modules used:
+# - json: Data serialization
+# - os: File system operations
+# - datetime: Timestamp generation
+# - typing: Type hints (optional)
