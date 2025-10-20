@@ -1,0 +1,5 @@
+# BridgeLink Module Dependencies
+# Nautilus One System
+
+# HTTP requests library for API communication
+requests>=2.31.0

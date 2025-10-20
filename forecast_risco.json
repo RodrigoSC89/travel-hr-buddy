@@ -1,0 +1,114 @@
+{
+  "report_type": "FORECAST",
+  "version": "1.0",
+  "generated_at": "2025-10-20T11:00:00Z",
+  "system": "Nautilus One",
+  "forecast": {
+    "title": "Previsão de Risco Operacional",
+    "forecast_period": {
+      "start": "2025-10-21",
+      "end": "2025-11-20"
+    },
+    "overall_risk_level": "MEDIUM",
+    "confidence_level": 0.85,
+    "risk_categories": [
+      {
+        "category": "Operational",
+        "current_risk": "MEDIUM",
+        "predicted_risk": "MEDIUM-HIGH",
+        "trend": "INCREASING",
+        "probability": 0.68,
+        "impact": 7,
+        "factors": [
+          "Increased operational tempo",
+          "Seasonal weather challenges",
+          "Equipment wear and tear"
+        ],
+        "mitigation_actions": [
+          "Enhance operational procedures",
+          "Increase preventive maintenance",
+          "Prepare for adverse weather conditions"
+        ]
+      },
+      {
+        "category": "Technical",
+        "current_risk": "LOW",
+        "predicted_risk": "LOW-MEDIUM",
+        "trend": "STABLE",
+        "probability": 0.42,
+        "impact": 5,
+        "factors": [
+          "System updates scheduled",
+          "Aging infrastructure components",
+          "Integration complexity"
+        ],
+        "mitigation_actions": [
+          "Test system updates thoroughly",
+          "Plan infrastructure upgrades",
+          "Monitor integration points"
+        ]
+      },
+      {
+        "category": "Human Factors",
+        "current_risk": "LOW",
+        "predicted_risk": "LOW",
+        "trend": "DECREASING",
+        "probability": 0.28,
+        "impact": 4,
+        "factors": [
+          "Improved training programs",
+          "Better communication protocols",
+          "Enhanced team coordination"
+        ],
+        "mitigation_actions": [
+          "Continue training initiatives",
+          "Maintain communication standards",
+          "Foster team collaboration"
+        ]
+      },
+      {
+        "category": "Environmental",
+        "current_risk": "MEDIUM",
+        "predicted_risk": "HIGH",
+        "trend": "INCREASING",
+        "probability": 0.75,
+        "impact": 8,
+        "factors": [
+          "Approaching storm season",
+          "Temperature fluctuations",
+          "Sea state conditions"
+        ],
+        "mitigation_actions": [
+          "Monitor weather forecasts continuously",
+          "Prepare emergency response plans",
+          "Ensure equipment weather readiness"
+        ]
+      }
+    ],
+    "key_indicators": {
+      "operational_efficiency": 88,
+      "system_reliability": 92,
+      "safety_compliance": 95,
+      "maintenance_status": 87
+    },
+    "recommendations": [
+      "Focus on environmental risk mitigation for the next 30 days",
+      "Schedule technical infrastructure review",
+      "Maintain current operational tempo with enhanced safety protocols",
+      "Continue investment in personnel training and development"
+    ]
+  },
+  "metadata": {
+    "model": "Nautilus AI Forecast Engine v2.0",
+    "data_sources": [
+      "Historical operational data",
+      "Weather forecast services",
+      "Maintenance records",
+      "Safety incident reports"
+    ],
+    "analyst": "Nautilus AI System",
+    "forecast_date": "2025-10-20",
+    "next_forecast": "2025-10-27",
+    "classification": "OPERATIONAL"
+  }
+}

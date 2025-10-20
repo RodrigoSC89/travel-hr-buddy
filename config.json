@@ -1,0 +1,4 @@
+{
+  "endpoint": "https://api.sgso.nautilus.one/upload",
+  "auth_token": "Bearer TESTE-TOKEN-123456789"
+}
