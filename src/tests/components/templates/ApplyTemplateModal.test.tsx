@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import ApplyTemplateModal from "@/_legacy/ApplyTemplateModal";
+import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
 
 // Mock templates data
 const mockTemplates = [
@@ -81,7 +81,7 @@ describe("ApplyTemplateModal Component", () => {
     fireEvent.click(triggerButton);
     
     await waitFor(() => {
-      expect(supabase.from).toHaveBeenCalledWith("ai_document_templates");
+      expect(supabase.from).toHaveBeenCalledWith("templates");
     });
   });
 
