@@ -5,9 +5,14 @@ on:
   push:
     branches: [main, develop, feature/**, fix/**]
 
+permissions:
+  contents: read
+
 jobs:
   test-ui:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,8 +34,11 @@ jobs:
       - name: Run button tests
         run: npx playwright test tests/ui/buttons.spec.ts --project=chromium
 
-      - name: Accessibility tests
-        run: npm run test:accessibility || echo "Accessibility warnings only"
+      - name: Run UI accessibility tests
+        run: npx playwright test tests/ui/accessibility.spec.ts --project=chromium
+
+      - name: Run additional accessibility tests
+        run: npm run test:accessibility
 
       - name: Upload test report
         if: always()
@@ -38,3 +46,4 @@ jobs:
         with:
           name: ui-test-report
           path: playwright-report/
+          retention-days: 30
