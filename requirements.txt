@@ -1,0 +1,8 @@
+# Nautilus One - Python Dependencies
+# No external dependencies required for the current implementation
+# All modules use Python standard library
+
+# Future dependencies (for production use):
+# reportlab>=3.6.0  # For PDF generation
+# requests>=2.31.0  # For API connections
+# python-dotenv>=1.0.0  # For environment variables

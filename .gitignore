@@ -44,3 +44,24 @@ temp/
 # Test coverage
 coverage
 .nyc_output
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.venv/
+venv/
+ENV/
+
+# Nautilus One state and logs
+nautilus_state.json
+nautilus_logs.txt
+relatorio_*.txt
+relatorio_*.pdf

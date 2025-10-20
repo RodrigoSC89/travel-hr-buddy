@@ -1,0 +1,33 @@
+{
+  "titulo": "Relatório FMEA - Análise de Modo de Falha e Efeitos",
+  "data_geracao": "2025-10-20",
+  "sistema": "Nautilus One",
+  "analise": {
+    "modos_falha_identificados": 4,
+    "criticidade_alta": 2,
+    "criticidade_media": 1,
+    "criticidade_baixa": 1
+  },
+  "detalhes": [
+    {
+      "id": 1,
+      "modo": "Falha de equipamento crítico",
+      "severidade": 8,
+      "ocorrencia": 4,
+      "deteccao": 6,
+      "rpn": 192,
+      "acao_recomendada": "Implementar manutenção preventiva quinzenal"
+    },
+    {
+      "id": 2,
+      "modo": "Erro humano operacional",
+      "severidade": 6,
+      "ocorrencia": 5,
+      "deteccao": 7,
+      "rpn": 210,
+      "acao_recomendada": "Aumentar treinamentos e supervisão"
+    }
+  ],
+  "conclusao": "Sistema operacional com necessidade de atenção em 2 pontos críticos",
+  "proxima_revisao": "2025-11-20"
+}
