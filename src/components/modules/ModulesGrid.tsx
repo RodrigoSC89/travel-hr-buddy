@@ -40,6 +40,7 @@ import {
   HelpCircle,
   Settings2,
   Eye,
+  FolderSearch,
   LucideIcon
 } from "lucide-react";
 
@@ -84,6 +85,7 @@ const modules: Module[] = [
   { name: "Smart Workflow", icon: Repeat, category: "IA", slug: "workflow", status: "pending" },
   { name: "Centro de Ajuda", icon: HelpCircle, category: "Ajuda", slug: "help", status: "pending" },
   { name: "Automação IA", icon: Settings2, category: "IA", slug: "automation", status: "pending" },
+  { name: "Vault Técnico IA", icon: FolderSearch, category: "IA", slug: "vault-ai", status: "functional" },
   { name: "Visão Geral", icon: Eye, category: "Core", slug: "overview", status: "pending" },
 ];
 
