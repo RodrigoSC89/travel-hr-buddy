@@ -1,0 +1,223 @@
+{
+  "timestamp": "2025-10-20T14:00:00.000000",
+  "sistema": "Nautilus One - Maritime Operations",
+  "periodo_analise": "Q3 2025",
+  "sistemas_criticos": [
+    {
+      "id": "SYS-001",
+      "nome": "Sistema de Propulsão",
+      "categoria": "Propulsion",
+      "modos_falha": [
+        {
+          "id": "FM-PROP-001",
+          "descricao": "Falha no motor principal",
+          "severidade": 9,
+          "ocorrencia": 3,
+          "deteccao": 4,
+          "rpn": 108,
+          "status": "monitorado"
+        },
+        {
+          "id": "FM-PROP-002",
+          "descricao": "Perda de lubrificação",
+          "severidade": 8,
+          "ocorrencia": 2,
+          "deteccao": 3,
+          "rpn": 48,
+          "status": "controlado"
+        }
+      ]
+    },
+    {
+      "id": "SYS-002",
+      "nome": "Sistema de Posicionamento Dinâmico",
+      "categoria": "Dynamic Positioning",
+      "modos_falha": [
+        {
+          "id": "FM-DP-001",
+          "descricao": "Perda de referência GPS",
+          "severidade": 10,
+          "ocorrencia": 2,
+          "deteccao": 2,
+          "rpn": 40,
+          "status": "controlado"
+        },
+        {
+          "id": "FM-DP-002",
+          "descricao": "Falha no thruster",
+          "severidade": 9,
+          "ocorrencia": 4,
+          "deteccao": 3,
+          "rpn": 108,
+          "status": "monitorado"
+        },
+        {
+          "id": "FM-DP-003",
+          "descricao": "Perda de redundância",
+          "severidade": 8,
+          "ocorrencia": 3,
+          "deteccao": 2,
+          "rpn": 48,
+          "status": "controlado"
+        }
+      ]
+    },
+    {
+      "id": "SYS-003",
+      "nome": "Sistema de Geração de Energia",
+      "categoria": "Power Generation",
+      "modos_falha": [
+        {
+          "id": "FM-PWR-001",
+          "descricao": "Falha no gerador principal",
+          "severidade": 10,
+          "ocorrencia": 2,
+          "deteccao": 3,
+          "rpn": 60,
+          "status": "controlado"
+        },
+        {
+          "id": "FM-PWR-002",
+          "descricao": "Sobrecarga elétrica",
+          "severidade": 7,
+          "ocorrencia": 4,
+          "deteccao": 2,
+          "rpn": 56,
+          "status": "controlado"
+        }
+      ]
+    },
+    {
+      "id": "SYS-004",
+      "nome": "Sistema de Controle de Lastro",
+      "categoria": "Ballast Control",
+      "modos_falha": [
+        {
+          "id": "FM-BALL-001",
+          "descricao": "Falha na bomba de lastro",
+          "severidade": 8,
+          "ocorrencia": 3,
+          "deteccao": 4,
+          "rpn": 96,
+          "status": "monitorado"
+        },
+        {
+          "id": "FM-BALL-002",
+          "descricao": "Vazamento no tanque",
+          "severidade": 9,
+          "ocorrencia": 2,
+          "deteccao": 3,
+          "rpn": 54,
+          "status": "controlado"
+        }
+      ]
+    },
+    {
+      "id": "SYS-005",
+      "nome": "Sistema de Navegação",
+      "categoria": "Navigation",
+      "modos_falha": [
+        {
+          "id": "FM-NAV-001",
+          "descricao": "Falha no radar principal",
+          "severidade": 9,
+          "ocorrencia": 2,
+          "deteccao": 2,
+          "rpn": 36,
+          "status": "controlado"
+        },
+        {
+          "id": "FM-NAV-002",
+          "descricao": "Erro no sistema de cartas eletrônicas",
+          "severidade": 7,
+          "ocorrencia": 3,
+          "deteccao": 3,
+          "rpn": 63,
+          "status": "controlado"
+        }
+      ]
+    },
+    {
+      "id": "SYS-006",
+      "nome": "Sistema de Comunicação",
+      "categoria": "Communication",
+      "modos_falha": [
+        {
+          "id": "FM-COM-001",
+          "descricao": "Perda de comunicação VHF",
+          "severidade": 8,
+          "ocorrencia": 2,
+          "deteccao": 2,
+          "rpn": 32,
+          "status": "controlado"
+        },
+        {
+          "id": "FM-COM-002",
+          "descricao": "Falha no sistema GMDSS",
+          "severidade": 10,
+          "ocorrencia": 1,
+          "deteccao": 2,
+          "rpn": 20,
+          "status": "controlado"
+        }
+      ]
+    },
+    {
+      "id": "SYS-007",
+      "nome": "Sistema Hidráulico",
+      "categoria": "Hydraulics",
+      "modos_falha": [
+        {
+          "id": "FM-HYD-001",
+          "descricao": "Vazamento no sistema hidráulico",
+          "severidade": 7,
+          "ocorrencia": 5,
+          "deteccao": 3,
+          "rpn": 105,
+          "status": "monitorado"
+        },
+        {
+          "id": "FM-HYD-002",
+          "descricao": "Falha na bomba hidráulica",
+          "severidade": 8,
+          "ocorrencia": 3,
+          "deteccao": 4,
+          "rpn": 96,
+          "status": "monitorado"
+        }
+      ]
+    },
+    {
+      "id": "SYS-008",
+      "nome": "Sistema de Ancoragem",
+      "categoria": "Anchoring",
+      "modos_falha": [
+        {
+          "id": "FM-ANCH-001",
+          "descricao": "Falha no guincho de âncora",
+          "severidade": 9,
+          "ocorrencia": 2,
+          "deteccao": 3,
+          "rpn": 54,
+          "status": "controlado"
+        },
+        {
+          "id": "FM-ANCH-002",
+          "descricao": "Ruptura da amarra",
+          "severidade": 10,
+          "ocorrencia": 1,
+          "deteccao": 4,
+          "rpn": 40,
+          "status": "controlado"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_sistemas": 8,
+    "total_modos_falha": 17,
+    "rpn_medio": 62.59,
+    "rpn_maximo": 108,
+    "rpn_minimo": 20
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "timestamp": "2025-10-20T14:00:00.000000",
+  "sistema": "Nautilus One - ASOG Compliance",
+  "periodo": "Q3 2025",
+  "vessel": "PSV Nautilus One",
+  "parametros_operacionais": [
+    {
+      "id": "ASOG-001",
+      "parametro": "Temperatura do Motor Principal",
+      "valor_atual": 85,
+      "limite_inferior": 70,
+      "limite_superior": 95,
+      "unidade": "°C",
+      "status": "conforme",
+      "criticidade": "alta"
+    },
+    {
+      "id": "ASOG-002",
+      "parametro": "Pressão de Óleo Lubrificante",
+      "valor_atual": 4.2,
+      "limite_inferior": 3.5,
+      "limite_superior": 5.0,
+      "unidade": "bar",
+      "status": "conforme",
+      "criticidade": "alta"
+    },
+    {
+      "id": "ASOG-003",
+      "parametro": "Nível de Vibração - Mancal Principal",
+      "valor_atual": 3.8,
+      "limite_inferior": 0.0,
+      "limite_superior": 4.5,
+      "unidade": "mm/s",
+      "status": "conforme",
+      "criticidade": "média"
+    },
+    {
+      "id": "ASOG-004",
+      "parametro": "Tensão Elétrica - Barramento Principal",
+      "valor_atual": 440,
+      "limite_inferior": 420,
+      "limite_superior": 460,
+      "unidade": "V",
+      "status": "conforme",
+      "criticidade": "alta"
+    },
+    {
+      "id": "ASOG-005",
+      "parametro": "Frequência Elétrica",
+      "valor_atual": 60.1,
+      "limite_inferior": 59.5,
+      "limite_superior": 60.5,
+      "unidade": "Hz",
+      "status": "conforme",
+      "criticidade": "alta"
+    },
+    {
+      "id": "ASOG-006",
+      "parametro": "Posição DP - Desvio Máximo",
+      "valor_atual": 1.2,
+      "limite_inferior": 0.0,
+      "limite_superior": 2.0,
+      "unidade": "m",
+      "status": "conforme",
+      "criticidade": "crítica"
+    },
+    {
+      "id": "ASOG-007",
+      "parametro": "Nível de Combustível - Tanque Principal",
+      "valor_atual": 75,
+      "limite_inferior": 20,
+      "limite_superior": 95,
+      "unidade": "%",
+      "status": "conforme",
+      "criticidade": "média"
+    },
+    {
+      "id": "ASOG-008",
+      "parametro": "Temperatura Água de Resfriamento",
+      "valor_atual": 72,
+      "limite_inferior": 60,
+      "limite_superior": 85,
+      "unidade": "°C",
+      "status": "conforme",
+      "criticidade": "alta"
+    },
+    {
+      "id": "ASOG-009",
+      "parametro": "Pressão Hidráulica - Sistema Principal",
+      "valor_atual": 180,
+      "limite_inferior": 150,
+      "limite_superior": 200,
+      "unidade": "bar",
+      "status": "conforme",
+      "criticidade": "alta"
+    },
+    {
+      "id": "ASOG-010",
+      "parametro": "RPM - Motor Principal",
+      "valor_atual": 750,
+      "limite_inferior": 600,
+      "limite_superior": 900,
+      "unidade": "RPM",
+      "status": "conforme",
+      "criticidade": "alta"
+    },
+    {
+      "id": "ASOG-011",
+      "parametro": "Nível de Água - Tanque de Lastro",
+      "valor_atual": 60,
+      "limite_inferior": 10,
+      "limite_superior": 95,
+      "unidade": "%",
+      "status": "conforme",
+      "criticidade": "média"
+    },
+    {
+      "id": "ASOG-012",
+      "parametro": "Carga do Gerador Principal",
+      "valor_atual": 68,
+      "limite_inferior": 20,
+      "limite_superior": 85,
+      "unidade": "%",
+      "status": "conforme",
+      "criticidade": "alta"
+    }
+  ],
+  "compliance_summary": {
+    "total_parametros": 12,
+    "conformes": 12,
+    "fora_limites": 0,
+    "taxa_conformidade": 100.0,
+    "status_geral": "conforme",
+    "ultimo_incidente": null,
+    "proxima_revisao": "2025-10-27T14:00:00.000000"
+  },
+  "alertas": [],
+  "recomendacoes": [
+    "Manter rotina de monitoramento conforme estabelecido",
+    "Continuar com programa de manutenção preventiva",
+    "Todos os parâmetros dentro dos limites operacionais"
+  ]
+}
