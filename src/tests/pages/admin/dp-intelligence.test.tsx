@@ -309,4 +309,135 @@ describe("DPIntelligencePage", () => {
       expect(screen.getByText("Analisando...")).toBeInTheDocument();
     });
   });
+
+  it("renders gravidade filter dropdown", async () => {
+    const mockFrom = vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        order: vi.fn().mockResolvedValue({
+          data: [],
+          error: null,
+        }),
+      }),
+    });
+
+    (supabase.from as unknown).mockImplementation(mockFrom);
+
+    render(<DPIntelligencePage />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Filtrar por gravidade")).toBeInTheDocument();
+    });
+
+    const gravidadeSelect = screen.getByLabelText("Filtrar por gravidade") as HTMLSelectElement;
+    expect(gravidadeSelect).toBeInTheDocument();
+    
+    // Check options by looking within the select element
+    const options = Array.from(gravidadeSelect.options).map(opt => opt.value);
+    expect(options).toContain("");
+    expect(options).toContain("baixo");
+    expect(options).toContain("médio");
+    expect(options).toContain("alto");
+  });
+
+  it("renders sistema afetado filter dropdown", async () => {
+    const mockFrom = vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        order: vi.fn().mockResolvedValue({
+          data: [],
+          error: null,
+        }),
+      }),
+    });
+
+    (supabase.from as unknown).mockImplementation(mockFrom);
+
+    render(<DPIntelligencePage />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Filtrar por sistema afetado")).toBeInTheDocument();
+    });
+
+    const sistemaSelect = screen.getByLabelText("Filtrar por sistema afetado") as HTMLSelectElement;
+    expect(sistemaSelect).toBeInTheDocument();
+    
+    // Check options by looking within the select element
+    const options = Array.from(sistemaSelect.options).map(opt => opt.value);
+    expect(options).toContain("");
+    expect(options).toContain("DP System");
+    expect(options).toContain("Propulsor");
+    expect(options).toContain("Energia");
+    expect(options).toContain("Navegação");
+  });
+
+  it("applies gravidade filter to Supabase query", async () => {
+    const mockEq = vi.fn().mockReturnValue({
+      order: vi.fn().mockResolvedValue({
+        data: [],
+        error: null,
+      }),
+    });
+
+    const mockSelect = vi.fn().mockReturnValue({
+      eq: mockEq,
+      order: vi.fn().mockResolvedValue({
+        data: [],
+        error: null,
+      }),
+    });
+
+    const mockFrom = vi.fn().mockReturnValue({
+      select: mockSelect,
+    });
+
+    (supabase.from as unknown).mockImplementation(mockFrom);
+
+    render(<DPIntelligencePage />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Filtrar por gravidade")).toBeInTheDocument();
+    });
+
+    const gravidadeSelect = screen.getByLabelText("Filtrar por gravidade") as HTMLSelectElement;
+    fireEvent.change(gravidadeSelect, { target: { value: "alto" } });
+
+    await waitFor(() => {
+      expect(mockEq).toHaveBeenCalledWith("gravidade", "alto");
+    });
+  });
+
+  it("applies sistema afetado filter to Supabase query", async () => {
+    const mockIlike = vi.fn().mockReturnValue({
+      order: vi.fn().mockResolvedValue({
+        data: [],
+        error: null,
+      }),
+    });
+
+    const mockSelect = vi.fn().mockReturnValue({
+      ilike: mockIlike,
+      order: vi.fn().mockResolvedValue({
+        data: [],
+        error: null,
+      }),
+    });
+
+    const mockFrom = vi.fn().mockReturnValue({
+      select: mockSelect,
+    });
+
+    (supabase.from as unknown).mockImplementation(mockFrom);
+
+    render(<DPIntelligencePage />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Filtrar por sistema afetado")).toBeInTheDocument();
+    });
+
+    const sistemaSelect = screen.getByLabelText("Filtrar por sistema afetado") as HTMLSelectElement;
+    fireEvent.change(sistemaSelect, { target: { value: "DP System" } });
+
+    await waitFor(() => {
+      expect(mockIlike).toHaveBeenCalledWith("sistema_afetado", "%DP System%");
+    });
+  });
 });

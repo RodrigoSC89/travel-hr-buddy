@@ -22,6 +22,8 @@ type Incident = {
   root_cause?: string;
   class_dp?: string;
   severity?: string;
+  gravidade?: string;
+  sistema_afetado?: string;
   gpt_analysis?: Record<string, unknown>;
   updated_at?: string;
 };
@@ -30,18 +32,31 @@ export default function DPIntelligencePage() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(false);
   const [analyzingId, setAnalyzingId] = useState<string | null>(null);
+  const [gravidade, setGravidade] = useState<string>("");
+  const [sistema, setSistema] = useState<string>("");
 
   useEffect(() => {
     fetchIncidents();
-  }, []);
+  }, [gravidade, sistema]);
 
   async function fetchIncidents() {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      let query = supabase
         .from("dp_incidents")
-        .select("*")
-        .order("date", { ascending: false });
+        .select("*");
+
+      // Apply gravidade filter if selected
+      if (gravidade && gravidade !== "") {
+        query = query.eq("gravidade", gravidade);
+      }
+
+      // Apply sistema_afetado filter if selected (using ilike for partial matching)
+      if (sistema && sistema !== "") {
+        query = query.ilike("sistema_afetado", `%${sistema}%`);
+      }
+
+      const { data, error } = await query.order("date", { ascending: false });
 
       if (error) {
         console.error("Error fetching incidents:", error);
@@ -156,6 +171,46 @@ export default function DPIntelligencePage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          {/* Filters Section */}
+          <div className="flex gap-4 mb-6">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="gravidade-filter" className="text-sm font-medium">
+                Gravidade
+              </label>
+              <select
+                id="gravidade-filter"
+                value={gravidade}
+                onChange={(e) => setGravidade(e.target.value)}
+                className="border rounded-md p-2 min-w-[150px]"
+                aria-label="Filtrar por gravidade"
+              >
+                <option value="">Todos</option>
+                <option value="baixo">Baixo</option>
+                <option value="médio">Médio</option>
+                <option value="alto">Alto</option>
+              </select>
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <label htmlFor="sistema-filter" className="text-sm font-medium">
+                Sistema Afetado
+              </label>
+              <select
+                id="sistema-filter"
+                value={sistema}
+                onChange={(e) => setSistema(e.target.value)}
+                className="border rounded-md p-2 min-w-[200px]"
+                aria-label="Filtrar por sistema afetado"
+              >
+                <option value="">Todos</option>
+                <option value="DP System">DP System</option>
+                <option value="Propulsor">Propulsor</option>
+                <option value="Energia">Energia</option>
+                <option value="Navegação">Navegação</option>
+              </select>
+            </div>
+          </div>
+
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
