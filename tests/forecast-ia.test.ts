@@ -267,4 +267,156 @@ describe("MMI Forecast IA", () => {
     expect(prompt).toContain(jobData.frequencyDays.toString());
     expect(prompt).toContain(jobData.observations);
   });
+
+  // New tests for defensive behavior
+  it("deve processar job com estrutura completa de component", async () => {
+    const { openai } = await import("@/lib/ai/openai-client");
+    
+    vi.mocked(openai.chat.completions.create).mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              next_due_date: "2025-11-15",
+              risk_level: "médio",
+              reasoning: "Manutenção preventiva programada com base em horas de operação.",
+            }),
+          },
+          finish_reason: "stop",
+          index: 0,
+        },
+      ],
+    } as any);
+
+    const forecast = await generateForecastForJob({
+      id: "job-component",
+      component: {
+        name: "Sistema hidráulico",
+        current_hours: 1200,
+        maintenance_interval_hours: 1500,
+        asset: {
+          name: "Guindaste A1",
+          vessel: "FPSO Alpha",
+        },
+      },
+      priority: "high",
+      frequencyDays: 30,
+    });
+
+    expect(forecast.next_due_date).toBe("2025-11-15");
+    expect(forecast.risk_level).toBe("médio");
+    expect(forecast.reasoning).toBeTruthy();
+  });
+
+  it("deve processar job sem component usando valores padrão", async () => {
+    const { openai } = await import("@/lib/ai/openai-client");
+    
+    vi.mocked(openai.chat.completions.create).mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              next_due_date: "2025-11-01",
+              risk_level: "baixo",
+              reasoning: "Manutenção padrão sem histórico de falhas.",
+            }),
+          },
+          finish_reason: "stop",
+          index: 0,
+        },
+      ],
+    } as any);
+
+    const forecast = await generateForecastForJob({
+      id: "job-no-component",
+      frequencyDays: 60,
+    });
+
+    expect(forecast.next_due_date).toBe("2025-11-01");
+    expect(forecast.risk_level).toBe("baixo");
+    expect(forecast.reasoning).toBeTruthy();
+  });
+
+  it("deve usar fallback quando OpenAI falha", async () => {
+    const { openai } = await import("@/lib/ai/openai-client");
+    
+    // Mock API failure
+    vi.mocked(openai.chat.completions.create).mockRejectedValue(
+      new Error("API rate limit exceeded")
+    );
+
+    const forecast = await generateForecastForJob({
+      id: "job-fallback",
+      title: "Manutenção de teste",
+      priority: "high",
+      frequencyDays: 30,
+    });
+
+    expect(forecast).toHaveProperty("next_due_date");
+    expect(forecast).toHaveProperty("risk_level");
+    expect(forecast).toHaveProperty("reasoning");
+    expect(forecast.risk_level).toBe("alto"); // high priority maps to "alto"
+    expect(forecast.reasoning).toContain("Previsão gerada automaticamente");
+  });
+
+  it("deve mapear prioridade para nível de risco no fallback", async () => {
+    const { openai } = await import("@/lib/ai/openai-client");
+    
+    // Mock API failure
+    vi.mocked(openai.chat.completions.create).mockRejectedValue(
+      new Error("API error")
+    );
+
+    // Test critical priority
+    const forecastCritical = await generateForecastForJob({
+      id: "job-critical",
+      priority: "critical",
+      frequencyDays: 15,
+    });
+    expect(forecastCritical.risk_level).toBe("alto");
+
+    // Test low priority
+    const forecastLow = await generateForecastForJob({
+      id: "job-low",
+      priority: "low",
+      frequencyDays: 90,
+    });
+    expect(forecastLow.risk_level).toBe("baixo");
+
+    // Test medium/default priority
+    const forecastMedium = await generateForecastForJob({
+      id: "job-medium",
+      priority: "medium",
+      frequencyDays: 45,
+    });
+    expect(forecastMedium.risk_level).toBe("médio");
+  });
+
+  it("deve validar job com campos mínimos", async () => {
+    const { openai } = await import("@/lib/ai/openai-client");
+    
+    vi.mocked(openai.chat.completions.create).mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              next_due_date: "2025-10-25",
+              risk_level: "médio",
+              reasoning: "Manutenção planejada.",
+            }),
+          },
+          finish_reason: "stop",
+          index: 0,
+        },
+      ],
+    } as any);
+
+    // Job with only ID - should not throw
+    const forecast = await generateForecastForJob({
+      id: "minimal-job",
+    });
+
+    expect(forecast.next_due_date).toBe("2025-10-25");
+    expect(forecast.risk_level).toBe("médio");
+  });
 });
