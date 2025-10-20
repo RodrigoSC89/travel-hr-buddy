@@ -1,0 +1,20 @@
+{
+  "analise": "FMEA - Failure Mode and Effects Analysis",
+  "data": "2025-10-20",
+  "componentes_analisados": 15,
+  "modo_falha_critico": {
+    "componente": "Sistema Hidráulico Principal",
+    "severidade": 9,
+    "ocorrencia": 6,
+    "deteccao": 4,
+    "rpn": 216,
+    "acao_recomendada": "Implementar manutenção preventiva mensal"
+  },
+  "resumo": {
+    "total_modos_falha": 45,
+    "criticos": 3,
+    "moderados": 12,
+    "baixos": 30
+  },
+  "status": "Análise completa - Requer atenção aos 3 modos críticos"
+}

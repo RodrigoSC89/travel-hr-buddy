@@ -44,3 +44,23 @@ temp/
 # Test coverage
 coverage
 .nyc_output
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.python-version
+venv/
+env/
+ENV/
+
+# Python Auto-Report outputs (keep sample data, ignore generated reports)
+nautilus_full_report.json
+Nautilus_Tech_Report.pdf

@@ -1,0 +1,28 @@
+{
+  "analise": "ASOG - Analysis of Safety and Operational Guidelines",
+  "data": "2025-10-20",
+  "diretrizes_verificadas": 28,
+  "conformidade_geral": "87%",
+  "areas_avaliadas": [
+    {
+      "area": "Operações de Convés",
+      "conformidade": "92%",
+      "status": "Conforme"
+    },
+    {
+      "area": "Procedimentos de Emergência",
+      "conformidade": "95%",
+      "status": "Conforme"
+    },
+    {
+      "area": "Equipamentos de Segurança",
+      "conformidade": "78%",
+      "status": "Requer Melhoria"
+    }
+  ],
+  "recomendacoes": [
+    "Atualizar procedimentos de inspeção de equipamentos de segurança",
+    "Realizar treinamento adicional para equipe de convés"
+  ],
+  "status": "Conformidade satisfatória - Implementar recomendações"
+}

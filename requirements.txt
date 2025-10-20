@@ -1,0 +1,5 @@
+# Python Backend Dependencies for Sistema Nautilus One
+# Auto-Report Module Requirements
+
+# PDF generation library
+reportlab>=4.0.0

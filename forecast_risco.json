@@ -1,0 +1,33 @@
+{
+  "analise": "Forecast de Risco - Risk Prediction",
+  "data": "2025-10-20",
+  "periodo_previsao": "Próximos 90 dias",
+  "nivel_risco_geral": "Médio",
+  "fatores_risco": [
+    {
+      "fator": "Condições Meteorológicas",
+      "probabilidade": "35%",
+      "impacto": "Alto",
+      "mitigacao": "Monitoramento contínuo e planejamento de rotas alternativas"
+    },
+    {
+      "fator": "Desgaste de Equipamentos",
+      "probabilidade": "28%",
+      "impacto": "Médio",
+      "mitigacao": "Implementar programa de manutenção preditiva"
+    },
+    {
+      "fator": "Fatores Humanos",
+      "probabilidade": "15%",
+      "impacto": "Alto",
+      "mitigacao": "Intensificar treinamentos e programas de conscientização"
+    }
+  ],
+  "recomendacoes_prioritarias": [
+    "Aumentar frequência de inspeções técnicas",
+    "Revisar protocolos de resposta a emergências",
+    "Implementar sistema de monitoramento em tempo real"
+  ],
+  "previsao_tendencia": "Estável com leve tendência de melhoria ao implementar recomendações",
+  "status": "Monitoramento ativo recomendado"
+}
