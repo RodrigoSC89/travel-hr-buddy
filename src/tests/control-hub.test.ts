@@ -19,8 +19,8 @@ describe("Control Hub - HubCache", () => {
 
   it("should add entry to cache", async () => {
     await cache.addEntry({
-      module: 'mmi',
-      data: { test: 'data' },
+      module: "mmi",
+      data: { test: "data" },
       synchronized: false,
     });
 
@@ -31,26 +31,26 @@ describe("Control Hub - HubCache", () => {
 
   it("should get pending entries", async () => {
     await cache.addEntry({
-      module: 'mmi',
-      data: { test: 'data' },
+      module: "mmi",
+      data: { test: "data" },
       synchronized: false,
     });
 
     await cache.addEntry({
-      module: 'sgso',
-      data: { test: 'data2' },
+      module: "sgso",
+      data: { test: "data2" },
       synchronized: true,
     });
 
     const pending = cache.getPendingEntries();
     expect(pending).toHaveLength(1);
-    expect(pending[0].module).toBe('mmi');
+    expect(pending[0].module).toBe("mmi");
   });
 
   it("should mark entries as synchronized", async () => {
     await cache.addEntry({
-      module: 'mmi',
-      data: { test: 'data' },
+      module: "mmi",
+      data: { test: "data" },
       synchronized: false,
     });
 
@@ -65,8 +65,8 @@ describe("Control Hub - HubCache", () => {
 
   it("should get cache statistics", async () => {
     await cache.addEntry({
-      module: 'mmi',
-      data: { test: 'data' },
+      module: "mmi",
+      data: { test: "data" },
       synchronized: false,
     });
 
@@ -81,14 +81,14 @@ describe("Control Hub - HubCache", () => {
 
   it("should clear synchronized entries", async () => {
     await cache.addEntry({
-      module: 'mmi',
-      data: { test: 'data1' },
+      module: "mmi",
+      data: { test: "data1" },
       synchronized: true,
     });
 
     await cache.addEntry({
-      module: 'sgso',
-      data: { test: 'data2' },
+      module: "sgso",
+      data: { test: "data2" },
       synchronized: false,
     });
 
@@ -101,8 +101,8 @@ describe("Control Hub - HubCache", () => {
 
   it("should clear all cache", async () => {
     await cache.addEntry({
-      module: 'mmi',
-      data: { test: 'data' },
+      module: "mmi",
+      data: { test: "data" },
       synchronized: false,
     });
 
@@ -114,8 +114,8 @@ describe("Control Hub - HubCache", () => {
 
   it("should calculate cache size in bytes", async () => {
     await cache.addEntry({
-      module: 'mmi',
-      data: { test: 'data' },
+      module: "mmi",
+      data: { test: "data" },
       synchronized: false,
     });
 
@@ -130,8 +130,8 @@ describe("Control Hub - Module Structure", () => {
     
     expect(config.default.modules).toBeDefined();
     expect(config.default.modules.mmi).toBeDefined();
-    expect(config.default.modules['peo-dp']).toBeDefined();
-    expect(config.default.modules['dp-intelligence']).toBeDefined();
+    expect(config.default.modules["peo-dp"]).toBeDefined();
+    expect(config.default.modules["dp-intelligence"]).toBeDefined();
     expect(config.default.modules.bridgelink).toBeDefined();
     expect(config.default.modules.sgso).toBeDefined();
   });
@@ -141,7 +141,7 @@ describe("Control Hub - Module Structure", () => {
     
     expect(config.default.cache).toBeDefined();
     expect(config.default.cache.maxSize).toBe(104857600); // 100MB
-    expect(config.default.cache.storageKey).toBe('nautilus_control_hub_cache');
+    expect(config.default.cache.storageKey).toBe("nautilus_control_hub_cache");
   });
 
   it("should have sync configuration", async () => {
@@ -156,7 +156,7 @@ describe("Control Hub - Module Structure", () => {
     const config = await import("@/modules/control_hub/hub_config.json");
     
     expect(config.default.bridgelink).toBeDefined();
-    expect(config.default.bridgelink.endpoint).toBe('/api/bridgelink/sync');
+    expect(config.default.bridgelink.endpoint).toBe("/api/bridgelink/sync");
     expect(config.default.bridgelink.timeout).toBe(30000);
   });
 });

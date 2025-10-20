@@ -98,7 +98,7 @@ export class FileIndexer {
     this.index = this.index.filter((doc) => doc.id !== id);
     if (this.index.length < indexAnterior) {
       this.salvar();
-      logger.info(`Documento removido do índice`, { id });
+      logger.info("Documento removido do índice", { id });
       return true;
     }
     return false;

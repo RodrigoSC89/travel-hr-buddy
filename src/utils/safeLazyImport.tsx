@@ -4,12 +4,19 @@ import React from "react";
  * Safe Lazy Import – Prevents failures when loading dynamic modules
  * and displays a user-friendly fallback in case of error.
  * 
- * This utility wraps React.lazy() with comprehensive error handling to prevent
- * "Failed to fetch dynamically imported module" errors that can occur during
+ * This utility wraps React.lazy() with comprehensive error handling and retry mechanism
+ * to prevent "Failed to fetch dynamically imported module" errors that can occur during
  * production deployments when users have outdated cached chunks.
+ * 
+ * Features:
+ * - Automatic retry with exponential backoff (3 attempts by default)
+ * - Visual fallback component for errors
+ * - Controlled logging for audit trail
+ * - React 18+ compatible
  * 
  * @param importer - Function that returns a Promise of the module to import
  * @param name - Human-readable name of the module for debugging and user feedback
+ * @param retries - Number of retry attempts (default: 3)
  * @returns A React component that handles loading, error states, and renders the imported component
  * 
  * @example
@@ -17,13 +24,40 @@ import React from "react";
  */
 export const safeLazyImport = (
   importer: () => Promise<{ default: React.ComponentType<unknown> }>,
-  name: string
+  name: string,
+  retries = 3
 ) => {
+  /**
+   * Retry function with exponential backoff
+   */
+  const retryImport = async (
+    fn: () => Promise<{ default: React.ComponentType<unknown> }>,
+    retriesLeft = retries,
+    interval = 1000
+  ): Promise<{ default: React.ComponentType<unknown> }> => {
+    try {
+      return await fn();
+    } catch (error) {
+      if (retriesLeft === 0) {
+        throw error;
+      }
+      
+      console.warn(
+        `⚠️ Falha ao carregar ${name}. Tentando novamente... (${retries - retriesLeft + 1}/${retries})`
+      );
+      
+      // Exponential backoff
+      await new Promise((resolve) => setTimeout(resolve, interval));
+      
+      return retryImport(fn, retriesLeft - 1, interval * 2);
+    }
+  };
+
   const Component = React.lazy(async () => {
     try {
-      return await importer();
+      return await retryImport(importer);
     } catch (err) {
-      console.error(`❌ Erro ao carregar módulo ${name}:`, err);
+      console.error(`❌ Erro ao carregar módulo ${name} após ${retries} tentativas:`, err);
       
       // Return a fallback component that displays an error message
       return {

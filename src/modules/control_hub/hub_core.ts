@@ -3,11 +3,11 @@
  * Coordinates all Control Hub subsystems
  */
 
-import { ControlHubState, SystemHealth, HealthCheckResult } from './types';
-import { hubMonitor } from './hub_monitor';
-import { hubSync } from './hub_sync';
-import { hubCache } from './hub_cache';
-import { hubBridge } from './hub_bridge';
+import { ControlHubState, SystemHealth, HealthCheckResult } from "./types";
+import { hubMonitor } from "./hub_monitor";
+import { hubSync } from "./hub_sync";
+import { hubCache } from "./hub_cache";
+import { hubBridge } from "./hub_bridge";
 
 export class ControlHub {
   private initialized = false;
@@ -18,7 +18,7 @@ export class ControlHub {
    */
   async iniciar(): Promise<void> {
     if (this.initialized) {
-      console.warn('Control Hub already initialized');
+      console.warn("Control Hub already initialized");
       return;
     }
 
@@ -29,7 +29,7 @@ export class ControlHub {
     hubSync.startAutoSync();
 
     this.initialized = true;
-    console.log('Control Hub initialized successfully');
+    console.log("Control Hub initialized successfully");
   }
 
   /**
@@ -44,7 +44,7 @@ export class ControlHub {
     hubSync.stopAutoSync();
 
     this.initialized = false;
-    console.log('Control Hub stopped');
+    console.log("Control Hub stopped");
   }
 
   /**
@@ -130,25 +130,25 @@ export class ControlHub {
     const moduleStates = Object.values(modules);
 
     if (moduleStates.length === 0) {
-      return 'critical';
+      return "critical";
     }
 
-    const errorCount = moduleStates.filter(m => m.status === 'error').length;
-    const degradedCount = moduleStates.filter(m => m.status === 'degraded').length;
-    const offlineCount = moduleStates.filter(m => m.status === 'offline').length;
+    const errorCount = moduleStates.filter(m => m.status === "error").length;
+    const degradedCount = moduleStates.filter(m => m.status === "degraded").length;
+    const offlineCount = moduleStates.filter(m => m.status === "offline").length;
 
     const totalProblems = errorCount + degradedCount + offlineCount;
     const problemRatio = totalProblems / moduleStates.length;
 
     if (errorCount > 0 || problemRatio > 0.5) {
-      return 'critical';
+      return "critical";
     }
 
     if (degradedCount > 0 || offlineCount > 0) {
-      return 'degraded';
+      return "degraded";
     }
 
-    return 'healthy';
+    return "healthy";
   }
 
   /**

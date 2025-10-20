@@ -1,6 +1,6 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense } from "react";
 
-const TacticalRiskPanel = lazy(() => import('@/modules/risk-audit/TacticalRiskPanel'));
+const TacticalRiskPanel = lazy(() => import("@/modules/risk-audit/TacticalRiskPanel"));
 
 export default function RiskAuditPage() {
   return (

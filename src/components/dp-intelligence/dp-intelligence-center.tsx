@@ -331,8 +331,8 @@ export default function DPIntelligenceCenter() {
                     <div className="flex flex-wrap gap-2">
                       <Badge variant={
                         incident.severity === "critical" ? "destructive" :
-                        incident.severity === "high" ? "default" :
-                        incident.severity === "medium" ? "secondary" : "outline"
+                          incident.severity === "high" ? "default" :
+                            incident.severity === "medium" ? "secondary" : "outline"
                       }>
                         {incident.severity}
                       </Badge>

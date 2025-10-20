@@ -1,17 +1,17 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { format } from 'date-fns'
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 import { 
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 type Forecast = {
   id: string
@@ -21,30 +21,30 @@ type Forecast = {
   hourmeter: number
   last_maintenance: string[] | any
   forecast_text: string
-  priority: 'low' | 'medium' | 'high' | 'critical'
+  priority: "low" | "medium" | "high" | "critical"
   created_at: string
 }
 
 export default function ForecastPage() {
-  const [forecasts, setForecasts] = useState<Forecast[]>([])
-  const [filteredForecasts, setFilteredForecasts] = useState<Forecast[]>([])
-  const [loading, setLoading] = useState(true)
-  const [generatingOrderId, setGeneratingOrderId] = useState<string | null>(null)
+  const [forecasts, setForecasts] = useState<Forecast[]>([]);
+  const [filteredForecasts, setFilteredForecasts] = useState<Forecast[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [generatingOrderId, setGeneratingOrderId] = useState<string | null>(null);
   
   // Filters
-  const [vesselFilter, setVesselFilter] = useState<string>('all')
-  const [systemFilter, setSystemFilter] = useState<string>('all')
-  const [riskFilter, setRiskFilter] = useState<string>('all')
+  const [vesselFilter, setVesselFilter] = useState<string>("all");
+  const [systemFilter, setSystemFilter] = useState<string>("all");
+  const [riskFilter, setRiskFilter] = useState<string>("all");
   
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   // Fetch forecasts from API
   useEffect(() => {
     const fetchForecasts = async () => {
       try {
-        const res = await fetch('/api/mmi/forecast/all')
-        if (!res.ok) throw new Error('Failed to fetch forecasts')
-        const data = await res.json()
+        const res = await fetch("/api/mmi/forecast/all");
+        if (!res.ok) throw new Error("Failed to fetch forecasts");
+        const data = await res.json();
         
         // Transform data to ensure correct format
         const transformed = data.map((f: any) => ({
@@ -52,83 +52,83 @@ export default function ForecastPage() {
           last_maintenance: Array.isArray(f.last_maintenance) 
             ? f.last_maintenance 
             : [],
-          priority: f.priority || 'medium'
-        }))
+          priority: f.priority || "medium"
+        }));
         
-        setForecasts(transformed)
-        setFilteredForecasts(transformed)
+        setForecasts(transformed);
+        setFilteredForecasts(transformed);
       } catch (error) {
-        console.error('Error fetching forecasts:', error)
+        console.error("Error fetching forecasts:", error);
         toast({
           title: "❌ Erro ao carregar forecasts",
           description: "Não foi possível carregar os forecasts",
           variant: "destructive"
-        })
+        });
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchForecasts()
-  }, [toast])
+    fetchForecasts();
+  }, [toast]);
 
   // Apply filters
   useEffect(() => {
-    let filtered = [...forecasts]
+    let filtered = [...forecasts];
     
-    if (vesselFilter !== 'all') {
-      filtered = filtered.filter(f => f.vessel_name === vesselFilter)
+    if (vesselFilter !== "all") {
+      filtered = filtered.filter(f => f.vessel_name === vesselFilter);
     }
     
-    if (systemFilter !== 'all') {
-      filtered = filtered.filter(f => f.system_name === systemFilter)
+    if (systemFilter !== "all") {
+      filtered = filtered.filter(f => f.system_name === systemFilter);
     }
     
-    if (riskFilter !== 'all') {
-      filtered = filtered.filter(f => f.priority === riskFilter)
+    if (riskFilter !== "all") {
+      filtered = filtered.filter(f => f.priority === riskFilter);
     }
     
-    setFilteredForecasts(filtered)
-  }, [vesselFilter, systemFilter, riskFilter, forecasts])
+    setFilteredForecasts(filtered);
+  }, [vesselFilter, systemFilter, riskFilter, forecasts]);
 
   // Get unique values for filters
-  const vessels = Array.from(new Set(forecasts.map(f => f.vessel_name)))
-  const systems = Array.from(new Set(forecasts.map(f => f.system_name)))
+  const vessels = Array.from(new Set(forecasts.map(f => f.vessel_name)));
+  const systems = Array.from(new Set(forecasts.map(f => f.system_name)));
 
   // Map priority to Portuguese risk levels
-  const getRiskLevel = (priority: string): { level: string, variant: 'destructive' | 'default' | 'secondary' | 'outline' } => {
+  const getRiskLevel = (priority: string): { level: string, variant: "destructive" | "default" | "secondary" | "outline" } => {
     switch (priority) {
-      case 'critical':
-        return { level: 'alto', variant: 'destructive' }
-      case 'high':
-        return { level: 'alto', variant: 'destructive' }
-      case 'medium':
-        return { level: 'médio', variant: 'default' }
-      case 'low':
-        return { level: 'baixo', variant: 'secondary' }
-      default:
-        return { level: 'médio', variant: 'default' }
+    case "critical":
+      return { level: "alto", variant: "destructive" };
+    case "high":
+      return { level: "alto", variant: "destructive" };
+    case "medium":
+      return { level: "médio", variant: "default" };
+    case "low":
+      return { level: "baixo", variant: "secondary" };
+    default:
+      return { level: "médio", variant: "default" };
     }
-  }
+  };
 
   const getPriorityLabel = (priority?: string) => {
     switch (priority) {
-      case "critical":
-        return { text: "Crítica", badge: "🔴", value: "crítica" };
-      case "high":
-        return { text: "Alta", badge: "🟠", value: "alta" };
-      case "medium":
-        return { text: "Normal", badge: "🟡", value: "normal" };
-      case "low":
-        return { text: "Baixa", badge: "🟢", value: "baixa" };
-      default:
-        return { text: "Normal", badge: "🟡", value: "normal" };
+    case "critical":
+      return { text: "Crítica", badge: "🔴", value: "crítica" };
+    case "high":
+      return { text: "Alta", badge: "🟠", value: "alta" };
+    case "medium":
+      return { text: "Normal", badge: "🟡", value: "normal" };
+    case "low":
+      return { text: "Baixa", badge: "🟢", value: "baixa" };
+    default:
+      return { text: "Normal", badge: "🟡", value: "normal" };
     }
   };
 
   // Generate work order
   const handleGenerateOrder = async (forecast: Forecast) => {
-    setGeneratingOrderId(forecast.id)
+    setGeneratingOrderId(forecast.id);
     
     try {
       const priority = getPriorityLabel(forecast.priority);
@@ -171,43 +171,43 @@ export default function ForecastPage() {
     } finally {
       setGeneratingOrderId(null);
     }
-  }
+  };
 
   // Export to CSV
   const exportToCSV = () => {
-    const headers = ['Sistema', 'Embarcação', 'Próxima Execução', 'Risco', 'Justificativa']
+    const headers = ["Sistema", "Embarcação", "Próxima Execução", "Risco", "Justificativa"];
     const rows = filteredForecasts.map(f => {
-      const risk = getRiskLevel(f.priority)
-      const date = f.created_at ? format(new Date(f.created_at), 'dd/MM/yyyy') : 'N/A'
+      const risk = getRiskLevel(f.priority);
+      const date = f.created_at ? format(new Date(f.created_at), "dd/MM/yyyy") : "N/A";
       return [
         f.system_name,
         f.vessel_name,
         date,
         risk.level,
-        f.forecast_text.replace(/"/g, '""') // Escape quotes
-      ]
-    })
+        f.forecast_text.replace(/"/g, "\"\"") // Escape quotes
+      ];
+    });
 
     const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-    ].join('\n')
+      headers.join(","),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+    ].join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-    const link = document.createElement('a')
-    const url = URL.createObjectURL(blob)
-    link.setAttribute('href', url)
-    link.setAttribute('download', `forecasts_${format(new Date(), 'yyyy-MM-dd')}.csv`)
-    link.style.visibility = 'hidden'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `forecasts_${format(new Date(), "yyyy-MM-dd")}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
     toast({
       title: "✅ CSV exportado",
       description: `${filteredForecasts.length} forecast(s) exportado(s)`,
-    })
-  }
+    });
+  };
 
   if (loading) {
     return (
@@ -215,7 +215,7 @@ export default function ForecastPage() {
         <h1 className="text-2xl font-semibold">📊 Forecasts de Manutenção (IA)</h1>
         <p className="text-muted-foreground">Carregando forecasts...</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -298,8 +298,8 @@ export default function ForecastPage() {
               </tr>
             ) : (
               filteredForecasts.map((f) => {
-                const risk = getRiskLevel(f.priority)
-                const date = f.created_at ? format(new Date(f.created_at), 'dd/MM/yyyy') : 'N/A'
+                const risk = getRiskLevel(f.priority);
+                const date = f.created_at ? format(new Date(f.created_at), "dd/MM/yyyy") : "N/A";
                 
                 return (
                   <tr key={f.id} className="border-t hover:bg-muted/50">
@@ -325,12 +325,12 @@ export default function ForecastPage() {
                       </Button>
                     </td>
                   </tr>
-                )
+                );
               })
             )}
           </tbody>
         </table>
       </div>
     </div>
-  )
+  );
 }

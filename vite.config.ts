@@ -55,6 +55,7 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
+        maximumFileSizeToCacheInBytes: 10485760, // 10MB limit for PWA caching
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
         runtimeCaching: [
           {
@@ -117,34 +118,64 @@ export default defineConfig(({ mode }) => ({
     sourcemap: mode === "production",
     minify: "esbuild",
     target: "es2020",
-    chunkSizeWarningLimit: 1700,
+    chunkSizeWarningLimit: 5000, // Increased to 5MB for PWA compatibility
     rollupOptions: {
       output: {
         manualChunks: (id) => {
           // Vendor chunks for core libraries
           if (id.includes("node_modules")) {
             if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom")) {
-              return "vendor";
+              return "vendor-react";
             }
             if (id.includes("@radix-ui/react-dialog") || 
                 id.includes("@radix-ui/react-dropdown-menu") || 
                 id.includes("@radix-ui/react-tabs")) {
-              return "ui";
+              return "vendor-ui";
             }
             if (id.includes("recharts")) {
-              return "charts";
+              return "vendor-charts";
             }
             if (id.includes("@supabase/supabase-js")) {
-              return "supabase";
+              return "vendor-supabase";
             }
             if (id.includes("mapbox-gl")) {
-              return "mapbox";
+              return "vendor-mapbox";
             }
+            // Group other vendors
+            return "vendor-misc";
           }
+          
+          // Nautilus Core modules
+          if (id.includes("src/core/BridgeLink")) {
+            return "module-bridgelink";
+          }
+          if (id.includes("src/pages/ControlHub")) {
+            return "module-controlhub";
+          }
+          if (id.includes("src/ai/nautilus-core")) {
+            return "module-nautilus-ai";
+          }
+          
+          // DP module chunking
+          if (id.includes("src/pages/DP") || id.includes("src/modules/dp")) {
+            return "module-dp";
+          }
+          
+          // MMI module chunking
+          if (id.includes("src/pages/MMI") || id.includes("src/modules/mmi")) {
+            return "module-mmi";
+          }
+          
+          // FMEA module chunking
+          if (id.includes("src/modules/fmea")) {
+            return "module-fmea";
+          }
+          
           // SGSO module chunking
-          if (id.includes("src/components/sgso/")) {
-            return "sgso";
+          if (id.includes("src/components/sgso/") || id.includes("src/pages/SGSO")) {
+            return "module-sgso";
           }
+          
           // Travel module chunking
           if (id.includes("src/components/travel/")) {
             if (id.includes("enhanced-hotel-search") || id.includes("responsive-hotel-search")) {

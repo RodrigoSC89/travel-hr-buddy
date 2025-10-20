@@ -3,9 +3,9 @@
  * Nautilus One Phase 4 - Control Hub Implementation
  */
 
-export type ModuleStatus = 'operational' | 'degraded' | 'offline' | 'error';
-export type SystemHealth = 'healthy' | 'degraded' | 'critical';
-export type ConnectionQuality = 'excellent' | 'good' | 'poor' | 'offline';
+export type ModuleStatus = "operational" | "degraded" | "offline" | "error";
+export type SystemHealth = "healthy" | "degraded" | "critical";
+export type ConnectionQuality = "excellent" | "good" | "poor" | "offline";
 
 export interface ModuleState {
   name: string;
