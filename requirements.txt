@@ -1,0 +1,5 @@
+# Decision Core Module - Python Dependencies
+# This module uses Python standard library only for maximum portability
+# Python 3.12+ required
+
+# No external dependencies required - all functionality built with stdlib
