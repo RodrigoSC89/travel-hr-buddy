@@ -78,6 +78,7 @@ const AdminDashboard = React.lazy(() => import("./pages/admin/dashboard"));
 const SmartWorkflows = React.lazy(() => import("./pages/admin/workflows"));
 const WorkflowDetail = React.lazy(() => import("./pages/admin/workflows/detail"));
 const Templates = React.lazy(() => import("./pages/admin/templates"));
+const ButtonHandlersDemo = React.lazy(() => import("./pages/ButtonHandlersDemo"));
 const EditTemplatePage = React.lazy(() => import("./pages/admin/templates/edit/[id]"));
 const HealthMonitorDemo = React.lazy(() => import("./pages/HealthMonitorDemo"));
 const Health = React.lazy(() => import("./pages/Health"));
@@ -195,6 +196,7 @@ function App() {
                       <Route path="/peo-dp" element={<PEODP />} />
                       <Route path="/dp-incidents" element={<DPIncidents />} />
                       <Route path="/dp-intelligence" element={<DPIntelligence />} />
+                      <Route path="/button-handlers-demo" element={<ButtonHandlersDemo />} />
                       <Route path="/sgso" element={<SGSO />} />
                       <Route path="/sgso/report" element={<SGSOReportPage />} />
                       <Route path="/sgso/audit" element={<SGSOAuditPage />} />
