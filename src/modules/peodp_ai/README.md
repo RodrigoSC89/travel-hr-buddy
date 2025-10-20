@@ -200,13 +200,102 @@ async function executarAuditoriaDPCompleta() {
 - ✅ Tratamento de erros robusto
 - ✅ Dados sensíveis não expostos
 
-## 🎯 Próximos Passos
+## 🚀 Phase 2: Real-time Monitoring (NEW)
+
+### Real-time Event Monitoring
+
+The new `peodp_realtime.ts` module provides continuous monitoring of DP system events:
+
+```typescript
+import { peodpCore } from "@/modules/peodp_ai";
+
+// Start real-time monitoring
+const sessionId = peodpCore.iniciar_monitoramento_tempo_real("PSV Atlantic Explorer");
+
+// Execute monitoring cycles manually
+const evento = peodpCore.executar_ciclo();
+
+// Or start continuous loop
+peodpCore.iniciar_loop_continuo(3); // Check every 3 seconds
+
+// Stop and generate report
+const report = peodpCore.parar_monitoramento();
+```
+
+#### Monitored Events
+
+The system monitors 7 types of DP events:
+
+- **Loss of DP Reference** (Critical)
+- **Thruster Fault** (High)
+- **UPS Alarm** (High)
+- **Manual Override** (Medium)
+- **Position Drift** (Medium)
+- **Power Failure** (Critical)
+- **System Normal** (Info)
+
+### Smart Workflow Integration
+
+The `peodp_workflow.ts` module automatically triggers corrective actions:
+
+```typescript
+import { PEOWorkflow } from "@/modules/peodp_ai";
+
+const workflow = new PEOWorkflow();
+
+// Get predefined action for event type
+const action = workflow.obter_acao("Thruster Fault");
+
+// Trigger action for an event
+const result = workflow.acionar_acao(evento);
+```
+
+#### Automatic Actions by Event Type
+
+- **Loss of DP Reference** → Verify sensors, activate GPS/DGNSS backup
+- **Thruster Fault** → Engage machinery team, run MMI self-test
+- **UPS Alarm** → Check power bus and battery integrity
+- **Manual Override** → Confirm DPO intention and log justification
+- **Position Drift** → Verify sensor integrity, check environmental conditions
+- **Power Failure** → Activate emergency system, verify UPS
+
+### Session Reports
+
+Generate comprehensive reports with statistics:
+
+```typescript
+// Session monitoring report
+const sessionReport = peodpCore.gerar_relatorio_sessao();
+
+// Comparison between sessions
+const comparison = peodpCore.gerar_relatorio_comparacao();
+
+// Executive summary
+const summary = peodpCore.gerar_sumario_executivo();
+```
+
+### Complete Demo
+
+Run the complete Phase 2 demonstration:
+
+```typescript
+peodpCore.executar_demo();
+```
+
+This will:
+1. Execute a compliance audit
+2. Start real-time monitoring for 30 seconds
+3. Generate session report with statistics
+4. Create executive summary with recommendations
+
+## 🎯 Phase 3 Roadmap
 
 - [ ] Integração com banco de dados para logs DP reais
-- [ ] API para auditoria remota
-- [ ] Dashboard de conformidade em tempo real
+- [ ] BridgeLink API integration for SGSO Petrobras
+- [ ] Forecast IA Global for predictive risk analysis
+- [ ] Real-time visual dashboard for multi-vessel monitoring
+- [ ] Offline mode with automatic synchronization
 - [ ] Alertas automáticos de não conformidade
-- [ ] Integração com BridgeLink para envio ao SGSO Petrobras
 - [ ] Machine Learning para predição de não conformidades
 - [ ] Suporte a mais normas (IMO, DNV, etc.)
 
