@@ -1,6 +1,7 @@
-import { afterEach } from "vitest";
+import { afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import React from "react";
 
 // Mock ResizeObserver for recharts and other chart libraries
 global.ResizeObserver = class ResizeObserver {
@@ -20,6 +21,12 @@ global.IntersectionObserver = class IntersectionObserver {
   }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;
+
+// Mock ApplyTemplateModal for test stability
+vi.mock("@/components/templates/ApplyTemplateModal", () => ({
+  __esModule: true,
+  default: () => React.createElement("div", { "data-testid": "apply-template-modal" })
+}));
 
 // Cleanup after each test case
 afterEach(() => {
