@@ -28,6 +28,12 @@ vi.mock("@/components/templates/ApplyTemplateModal", () => ({
   default: () => React.createElement("div", { "data-testid": "apply-template-modal" })
 }));
 
+// Mock ApplyTemplateModal stub component for test stability
+vi.mock("@/components/ApplyTemplateModal", () => ({
+  __esModule: true,
+  default: () => React.createElement("div", { "data-testid": "apply-template-modal" })
+}));
+
 // Cleanup after each test case
 afterEach(() => {
   cleanup();
