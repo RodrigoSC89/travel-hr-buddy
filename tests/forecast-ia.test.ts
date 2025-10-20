@@ -267,4 +267,151 @@ describe("MMI Forecast IA", () => {
     expect(prompt).toContain(jobData.frequencyDays.toString());
     expect(prompt).toContain(jobData.observations);
   });
+
+  it("deve processar job com estrutura de component e asset", async () => {
+    const { openai } = await import("@/lib/ai/openai-client");
+    
+    vi.mocked(openai.chat.completions.create).mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              next_due_date: "2025-11-30",
+              risk_level: "alto",
+              reasoning: "Manutenção preventiva - Sistema hidráulico do guindaste",
+            }),
+          },
+          finish_reason: "stop",
+          index: 0,
+        },
+      ],
+    } as any);
+
+    const jobWithComponent = {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      title: "Manutenção preventiva - Sistema hidráulico",
+      component: {
+        name: "Sistema hidráulico do guindaste",
+        current_hours: 1200,
+        maintenance_interval_hours: 500,
+        asset: {
+          name: "Guindaste A1",
+          vessel: "FPSO Alpha",
+        },
+      },
+      status: "pending",
+      priority: "high",
+      due_date: "2025-11-30",
+    };
+
+    const forecast = await generateForecastForJob(jobWithComponent);
+
+    expect(forecast).toHaveProperty("next_due_date");
+    expect(forecast).toHaveProperty("risk_level");
+    expect(forecast).toHaveProperty("reasoning");
+    expect(forecast.next_due_date).toBe("2025-11-30");
+    expect(forecast.risk_level).toBe("alto");
+
+    const call = vi.mocked(openai.chat.completions.create).mock.calls[0][0];
+    const prompt = call.messages[0].content;
+
+    // Verify component info is in prompt
+    expect(prompt).toContain("Sistema hidráulico do guindaste");
+    expect(prompt).toContain("Guindaste A1");
+    expect(prompt).toContain("FPSO Alpha");
+    expect(prompt).toContain("1200 horas");
+    expect(prompt).toContain("500 horas");
+  });
+
+  it("deve processar job sem component usando valores padrão", async () => {
+    const { openai } = await import("@/lib/ai/openai-client");
+    
+    vi.mocked(openai.chat.completions.create).mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              next_due_date: "2025-10-25",
+              risk_level: "médio",
+              reasoning: "Job sem component, usando valores padrão",
+            }),
+          },
+          finish_reason: "stop",
+          index: 0,
+        },
+      ],
+    } as any);
+
+    const jobWithoutComponent = {
+      id: "job-no-component",
+      title: "Manutenção sem component",
+    };
+
+    const forecast = await generateForecastForJob(jobWithoutComponent);
+
+    expect(forecast.risk_level).toBe("médio");
+    expect(forecast.reasoning).toBeTruthy();
+
+    const call = vi.mocked(openai.chat.completions.create).mock.calls[0][0];
+    const prompt = call.messages[0].content;
+
+    // Verify default values are used
+    expect(prompt).toContain("Componente não especificado");
+    expect(prompt).toContain("Ativo não especificado");
+    expect(prompt).toContain("Embarcação não especificada");
+  });
+
+  it("deve usar fallback quando OpenAI falha", async () => {
+    const { openai } = await import("@/lib/ai/openai-client");
+    
+    // Mock API failure
+    vi.mocked(openai.chat.completions.create).mockRejectedValue(
+      new Error("OpenAI API error")
+    );
+
+    const job = {
+      id: "job-fallback",
+      title: "Job com fallback",
+      priority: "high",
+      frequencyDays: 45,
+    };
+
+    const forecast = await generateForecastForJob(job);
+
+    expect(forecast).toHaveProperty("next_due_date");
+    expect(forecast).toHaveProperty("risk_level");
+    expect(forecast).toHaveProperty("reasoning");
+    expect(forecast.risk_level).toBe("alto"); // high priority maps to alto
+    expect(forecast.reasoning).toContain("Previsão gerada automaticamente");
+  });
+
+  it("deve mapear priority para risk_level corretamente no fallback", async () => {
+    const { openai } = await import("@/lib/ai/openai-client");
+    
+    // Mock API failure
+    vi.mocked(openai.chat.completions.create).mockRejectedValue(
+      new Error("OpenAI API error")
+    );
+
+    // Test critical priority
+    const criticalJob = { id: "1", priority: "critical", frequencyDays: 30 };
+    const criticalForecast = await generateForecastForJob(criticalJob);
+    expect(criticalForecast.risk_level).toBe("alto");
+
+    // Test low priority
+    const lowJob = { id: "2", priority: "low", frequencyDays: 30 };
+    const lowForecast = await generateForecastForJob(lowJob);
+    expect(lowForecast.risk_level).toBe("baixo");
+
+    // Test medium priority (default)
+    const mediumJob = { id: "3", priority: "medium", frequencyDays: 30 };
+    const mediumForecast = await generateForecastForJob(mediumJob);
+    expect(mediumForecast.risk_level).toBe("médio");
+  });
+
+  it("deve lançar erro quando job é undefined", async () => {
+    await expect(generateForecastForJob(undefined as any)).rejects.toThrow(
+      "Job data is undefined in generateForecastForJob"
+    );
+  });
 });

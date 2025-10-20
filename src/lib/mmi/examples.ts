@@ -151,6 +151,47 @@ async function example4_batchProcessing() {
 }
 
 /**
+ * Example 5: Job with component and asset structure
+ */
+async function example5_componentStructure() {
+  console.log("=== Example 5: Component-Based Job ===\n");
+
+  const job: MMIJob = {
+    id: "550e8400-e29b-41d4-a716-446655440000",
+    title: "Manutenção preventiva - Sistema hidráulico",
+    component: {
+      name: "Sistema hidráulico do guindaste",
+      current_hours: 1200,
+      maintenance_interval_hours: 500,
+      asset: {
+        name: "Guindaste A1",
+        vessel: "FPSO Alpha",
+      },
+    },
+    status: "pending",
+    priority: "high",
+    due_date: "2025-11-30",
+    description: "Manutenção preventiva do sistema hidráulico",
+  };
+
+  const forecast = await generateForecastForJob(job);
+
+  console.log("Job:", job.title);
+  console.log("Component:", job.component?.name);
+  console.log("Asset:", job.component?.asset?.name);
+  console.log("Vessel:", job.component?.asset?.vessel);
+  console.log("Current Hours:", job.component?.current_hours);
+  console.log("Interval:", job.component?.maintenance_interval_hours);
+  console.log("\nForecast Results:");
+  console.log("- Next Due Date:", forecast.next_due_date);
+  console.log("- Risk Level:", forecast.risk_level);
+  console.log("- Reasoning:", forecast.reasoning);
+  console.log("\n");
+
+  return forecast;
+}
+
+/**
  * Main function to run all examples
  */
 async function runExamples() {
@@ -163,6 +204,7 @@ async function runExamples() {
     await example2_newJob();
     await example3_highPriority();
     await example4_batchProcessing();
+    await example5_componentStructure();
 
     console.log("=".repeat(60));
     console.log("All examples completed successfully!");
@@ -178,6 +220,7 @@ export {
   example2_newJob,
   example3_highPriority,
   example4_batchProcessing,
+  example5_componentStructure,
   runExamples,
 };
 
