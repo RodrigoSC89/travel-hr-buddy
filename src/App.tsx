@@ -126,6 +126,7 @@ const ForecastHistoryPage = safeLazyImport(() => import("@/pages/admin/mmi/forec
 const BIForecastsPage = safeLazyImport(() => import("@/pages/admin/bi/forecasts"), "BI Forecasts");
 const PEODPAuditPage = safeLazyImport(() => import("@/pages/admin/peodp-audit"), "PEO-DP Audit");
 const VaultAI = safeLazyImport(() => import("@/modules/vault_ai/pages/VaultAIPage"), "Vault AI");
+const ControlHub = safeLazyImport(() => import("@/pages/ControlHub"), "Control Hub");
 
 // Loading component
 const LoadingSpinner = () => (
@@ -217,6 +218,7 @@ function App() {
                       <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
                       <Route path="/nautilus-one" element={<NautilusOne />} />
                       <Route path="/vault-ai" element={<VaultAI />} />
+                      <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
                       <Route path="/mmi/history" element={<MMIHistory />} />
