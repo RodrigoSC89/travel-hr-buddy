@@ -11,6 +11,7 @@ import * as path from 'path';
 import { analyzeLogs, generateSummary, type AnalysisResult } from './analyzer';
 import { suggestFix } from './suggestFix';
 import { createAutoPR, commentOnPR } from './createPR';
+import { MemoryEngine } from './memory/memoryEngine';
 
 interface NautilusCoreConfig {
   workflowName: string;
@@ -73,6 +74,24 @@ async function main() {
           console.log(`✅ PR created successfully!`);
           console.log(`   URL: ${result.prUrl}`);
           console.log(`   Number: #${result.prNumber}\n`);
+
+          // 🧠 Store learning in Nautilus Memory Engine
+          console.log('🧠 Storing learning in Memory Engine...');
+          const memory = new MemoryEngine();
+          const findingsArray = analysis.findings.map(f => f.message || String(f));
+          memory.store(findingsArray, suggestion.title);
+          
+          // Check for recurrent patterns
+          const patterns = memory.getRecurrentPatterns();
+          if (patterns.length > 0) {
+            console.log('📊 Recurrent patterns detected:');
+            for (const p of patterns) {
+              console.log(`   🔁 ${p.pattern} → ${p.occurrences} occurrences`);
+            }
+          } else {
+            console.log('🧩 No recurrent patterns found yet.');
+          }
+          console.log('');
         } else {
           console.error(`❌ Failed to create PR: ${result.error}\n`);
           process.exit(1);

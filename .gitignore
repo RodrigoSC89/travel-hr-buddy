@@ -99,3 +99,4 @@ demo-logs.txt
 workflow.log
 logs/
 src/ai/nautilus-core/dist/
+src/ai/nautilus-core/memory/memoryDB.json
