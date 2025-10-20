@@ -13,7 +13,8 @@ import {
   Network,
   Zap,
   Activity,
-  Shield
+  Shield,
+  Database
 } from "lucide-react";
 import InsightEngine from "@/components/maritime/insight-engine";
 import PatternRecognition from "@/components/maritime/pattern-recognition";
@@ -23,6 +24,7 @@ import CompetencyHeatmap from "@/components/crew/competency-heatmap";
 import CrewManagement2 from "@/components/crew/crew-management-2";
 import APIHubNautilus from "@/components/integration/api-hub-nautilus";
 import AIThreatDetection from "@/components/security/ai-threat-detection";
+import { VaultCore } from "@/modules/vault_ai";
 
 const NautilusOne: React.FC = () => {
   const [activeModule, setActiveModule] = useState("overview");
@@ -58,7 +60,7 @@ const NautilusOne: React.FC = () => {
         </div>
 
         {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <Card className="bg-gradient-to-br from-blue-500 to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("insights")}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
@@ -123,6 +125,19 @@ const NautilusOne: React.FC = () => {
               <p className="text-sm text-indigo-100">Score Médio</p>
             </CardContent>
           </Card>
+
+          <Card className="bg-gradient-to-br from-violet-500 to-purple-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveModule("vault")}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Database className="h-5 w-5" />
+                Vault IA
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">📚</div>
+              <p className="text-sm text-violet-100">Documentos Técnicos</p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Main Content Tabs */}
@@ -152,6 +167,11 @@ const NautilusOne: React.FC = () => {
                 <TabsTrigger value="crewmgmt">Crew 2.0</TabsTrigger>
                 <TabsTrigger value="api">API Hub</TabsTrigger>
                 <TabsTrigger value="security">Segurança</TabsTrigger>
+              </TabsList>
+              <TabsList className="grid w-full grid-cols-3 mt-2">
+                <TabsTrigger value="vault">
+                  📚 Vault Técnico IA
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview" className="space-y-6 mt-6">
@@ -263,6 +283,33 @@ const NautilusOne: React.FC = () => {
                       </div>
                     </CardContent>
                   </Card>
+
+                  <Card className="md:col-span-2 border-2 border-indigo-500">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Database className="h-5 w-5 text-indigo-600" />
+                        📚 Vault Técnico IA
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="flex items-center justify-between p-3 bg-indigo-50 dark:bg-indigo-950 rounded-lg">
+                        <span className="font-medium">File Indexer</span>
+                        <Badge variant="default" className="bg-indigo-600">Ativo</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-indigo-50 dark:bg-indigo-950 rounded-lg">
+                        <span className="font-medium">Semantic Search</span>
+                        <Badge variant="default" className="bg-indigo-600">Ativo</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-indigo-50 dark:bg-indigo-950 rounded-lg">
+                        <span className="font-medium">LLM Interface</span>
+                        <Badge variant="default" className="bg-indigo-600">Ativo</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-indigo-50 dark:bg-indigo-950 rounded-lg">
+                        <span className="font-medium">Document Types: PDF, DOCX, TXT</span>
+                        <Badge variant="secondary">Suportados</Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 {/* System Status */}
@@ -326,6 +373,10 @@ const NautilusOne: React.FC = () => {
 
               <TabsContent value="security">
                 <AIThreatDetection />
+              </TabsContent>
+
+              <TabsContent value="vault">
+                <VaultCore />
               </TabsContent>
             </Tabs>
           </CardContent>
