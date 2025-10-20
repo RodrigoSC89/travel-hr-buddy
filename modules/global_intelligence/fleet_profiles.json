@@ -1,0 +1,71 @@
+{
+  "fleet_config": {
+    "version": "1.0.0",
+    "last_update": "2026-01-01T00:00:00Z",
+    "total_vessels": 3
+  },
+  "vessels": [
+    {
+      "id": "NAU-001",
+      "embarcacao": "Nautilus Explorer",
+      "tipo": "PSV",
+      "dp_class": "DP2",
+      "score_peodp": 92.5,
+      "falhas_dp": 2,
+      "tempo_dp": 4320,
+      "alertas_criticos": 1,
+      "conformidade_ok": 1,
+      "ultima_atualizacao": "2026-01-01T12:00:00Z"
+    },
+    {
+      "id": "NAU-002",
+      "embarcacao": "Nautilus Endeavor",
+      "tipo": "AHTS",
+      "dp_class": "DP2",
+      "score_peodp": 78.3,
+      "falhas_dp": 5,
+      "tempo_dp": 4100,
+      "alertas_criticos": 3,
+      "conformidade_ok": 0,
+      "ultima_atualizacao": "2026-01-01T12:00:00Z"
+    },
+    {
+      "id": "NAU-003",
+      "embarcacao": "Nautilus Pioneer",
+      "tipo": "OSV",
+      "dp_class": "DP3",
+      "score_peodp": 95.8,
+      "falhas_dp": 1,
+      "tempo_dp": 4400,
+      "alertas_criticos": 0,
+      "conformidade_ok": 1,
+      "ultima_atualizacao": "2026-01-01T12:00:00Z"
+    }
+  ],
+  "global_metrics": {
+    "average_score": 88.87,
+    "total_falhas": 8,
+    "total_tempo_dp": 12820,
+    "total_alertas": 4,
+    "conformidade_rate": 0.67
+  },
+  "integrations": {
+    "bridge_link": {
+      "enabled": true,
+      "endpoint": "https://bridge.nautilus/api/fleet_data",
+      "sync_interval_minutes": 15
+    },
+    "peo_dp": {
+      "enabled": true,
+      "provides": ["score_peodp", "conformidade_ok"]
+    },
+    "mmi": {
+      "enabled": true,
+      "provides": ["falhas_dp", "tempo_dp"]
+    },
+    "vault_ia": {
+      "enabled": true,
+      "model_storage": "modules/global_intelligence/global_model.pkl"
+    }
+  }
+}
