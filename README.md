@@ -142,13 +142,27 @@ VITE_APP_NAME=Nautilus One
 - Exportação CSV/PDF
 - Envio automático por cron (Resend)
 
+## 🐍 Módulos Python (Phase 3)
+
+Novos módulos Python para comunicação e previsão com IA:
+
+### 🌉 BridgeLink
+Sistema de comunicação segura bordo-costa para SGSO Petrobras.
+
+### 🔮 Forecast Global
+Motor de previsão de riscos com Machine Learning para toda a frota.
+
+**[📖 Documentação Completa](./modules/README.md)**
+
 ## 🧭 Roadmap
 
-- Finalizar SGSO
+- ✅ **Phase 3 Completa** - BridgeLink + Forecast Global
+- Finalizar SGSO integração
 - PEO-DP com IA explicadora
 - FMEA com geração automática
 - Exportação completa dos relatórios em PDF
 - Deploy final de produção + monitoramento
+- Control Hub web interface (Phase 3.4)
 
 ## 👥 Equipe
 
