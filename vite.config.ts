@@ -120,6 +120,11 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 1700,
     rollupOptions: {
       output: {
+        // Prevents dynamic import failures in Vercel/Lovable deployments
+        // Manual chunks can cause issues when chunks change between deployments
+        manualChunks: undefined,
+        
+        /* Previous manual chunking configuration - disabled to prevent dynamic import failures
         manualChunks: (id) => {
           // Vendor chunks for core libraries
           if (id.includes("node_modules")) {
@@ -189,6 +194,7 @@ export default defineConfig(({ mode }) => ({
             return "travel-misc";
           }
         }
+        */
       }
     },
     esbuild: mode === "production" ? {
