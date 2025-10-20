@@ -20,8 +20,7 @@ import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import { logger } from "@/lib/logger";
 
-// ✅ Import corrected to use minimal stub component for build stability
-import ApplyTemplateModal from "@/components/ApplyTemplateModal";
+import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
 
 export default function DocumentAIEditorPage() {
   const navigate = useNavigate();
@@ -274,17 +273,14 @@ export default function DocumentAIEditorPage() {
           <div className="flex items-center justify-between">
             <CardTitle>Editor</CardTitle>
             <div className="flex gap-2">
-              {/* ✅ Safe render of ApplyTemplateModal with typeof check */}
-              {typeof ApplyTemplateModal !== "undefined" && (
-                <ApplyTemplateModal
-                  tableName="templates"
-                  onApply={(content) => {
-                    if (editor) {
-                      editor.commands.setContent(content);
-                    }
-                  }}
-                />
-              )}
+              <ApplyTemplateModal
+                tableName="templates"
+                onApply={(content) => {
+                  if (editor) {
+                    editor.commands.setContent(content);
+                  }
+                }}
+              />
               <Button 
                 onClick={rewriteSelectedText} 
                 disabled={rewriting}
