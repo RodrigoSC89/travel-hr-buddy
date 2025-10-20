@@ -1,0 +1,54 @@
+{
+  "version": "1.0.0",
+  "hub_name": "Nautilus Control Hub",
+  "modules": {
+    "mmi": {
+      "name": "MMI - Manutenção Inteligente",
+      "enabled": true,
+      "priority": "high"
+    },
+    "peo_dp": {
+      "name": "PEO-DP - Auditoria e Conformidade",
+      "enabled": true,
+      "priority": "high"
+    },
+    "dp_intelligence": {
+      "name": "DP Intelligence - Forecast & Analytics",
+      "enabled": true,
+      "priority": "medium"
+    },
+    "bridge_link": {
+      "name": "BridgeLink - Conectividade Terra-Bordo",
+      "enabled": true,
+      "priority": "critical"
+    },
+    "sgso": {
+      "name": "SGSO - Sistema de Gestão",
+      "enabled": true,
+      "priority": "high"
+    }
+  },
+  "sync": {
+    "interval_seconds": 300,
+    "retry_attempts": 3,
+    "offline_mode": true,
+    "cache_max_size_mb": 100
+  },
+  "monitoring": {
+    "health_check_interval_seconds": 60,
+    "alert_threshold_errors": 5,
+    "log_retention_days": 30
+  },
+  "bridge_link": {
+    "api_endpoint": "/api/control-hub/bridge",
+    "auth_required": true,
+    "timeout_seconds": 30
+  },
+  "features": {
+    "offline_cache": true,
+    "real_time_sync": true,
+    "auto_recovery": true,
+    "encrypted_logs": true,
+    "dashboard_unified": true
+  }
+}

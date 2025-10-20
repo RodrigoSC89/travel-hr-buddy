@@ -121,6 +121,7 @@ const QuizPage = React.lazy(() => import("./pages/admin/QuizPage"));
 const ExternalAuditSystem = React.lazy(() => import("./pages/ExternalAuditSystem"));
 const ForecastHistoryPage = React.lazy(() => import("./pages/admin/mmi/forecast/ForecastHistory"));
 const BIForecastsPage = React.lazy(() => import("./pages/admin/bi/forecasts"));
+const ControlHub = React.lazy(() => import("./pages/ControlHub"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -210,6 +211,7 @@ function App() {
                       <Route path="/maritime" element={<Maritime />} />
                       <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
                       <Route path="/nautilus-one" element={<NautilusOne />} />
+                      <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
                       <Route path="/mmi/history" element={<MMIHistory />} />
