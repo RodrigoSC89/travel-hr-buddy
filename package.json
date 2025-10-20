@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "postinstall": "rm -rf node_modules/.vite dist || true",
     "dev": "vite --host",
     "build": "vite build",
     "build:dev": "vite build --mode development",
