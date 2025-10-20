@@ -16,6 +16,21 @@ export default defineConfig({
     },
     exclude: ["node_modules", "dist", "e2e", "**/*.spec.ts"], // Exclude E2E tests
     include: ["tests/**/*.test.ts", "tests/**/*.test.tsx", "src/tests/**/*.test.ts", "src/tests/**/*.test.tsx"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "lcov", "html"],
+      exclude: [
+        "node_modules/",
+        "dist/",
+        "**/*.config.{ts,js}",
+        "**/*.setup.{ts,js}",
+        "**/types/**",
+        "**/*.d.ts",
+        "**/__tests__/**",
+        "**/tests/**",
+        "e2e/**",
+      ],
+    },
   },
   resolve: {
     alias: {

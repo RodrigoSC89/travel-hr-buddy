@@ -1,0 +1,84 @@
+name: Test Coverage & Summary
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '__tests__/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vitest.config.ts'
+      - '.github/workflows/test-coverage.yml'
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  test-coverage:
+    name: 🧪 Code Coverage Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: |
+          npm run test:coverage
+          echo "✅ Tests executed successfully with coverage."
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
+          flags: unittests
+          name: travel-hr-buddy-coverage
+          verbose: true
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 30
+
+      - name: Coverage Summary Report
+        if: always()
+        run: |
+          echo "## 🧭 Travel HR Buddy Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f coverage/lcov.info ]; then
+            echo "✅ Coverage report generated successfully" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "📊 Coverage files available:" >> $GITHUB_STEP_SUMMARY
+            echo "- HTML Report: Available in artifacts" >> $GITHUB_STEP_SUMMARY
+            echo "- LCOV Report: coverage/lcov.info" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Coverage Statistics" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            if [ -f coverage/index.html ]; then
+              grep -A 2 "All files" coverage/index.html | sed 's/<[^>]*>//g' | sed 's/&nbsp;/ /g' | grep -v "^$" >> $GITHUB_STEP_SUMMARY || echo "Coverage summary not available" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "Coverage index.html not found" >> $GITHUB_STEP_SUMMARY
+            fi
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Coverage report not found" >> $GITHUB_STEP_SUMMARY
+          fi
