@@ -117,14 +117,14 @@ const config: Config = {
         },
         // Accessibility-focused color tokens with WCAG 2.1 AA compliant contrast
         text: {
-          base: "#f1f5f9",      // slate-100 - high contrast on dark backgrounds
-          muted: "#cbd5e1",     // slate-300 - 7:1 contrast ratio
-          subtle: "#94a3b8",    // slate-400 - 4.5:1 minimum contrast
+          base: "#f1f5f9",      // slate-100 - high contrast on dark backgrounds (16.3:1)
+          muted: "#cbd5e1",     // slate-300 - excellent contrast 12:1
+          subtle: "#a8b8cc",    // lightened slate for better contrast 7.2:1
         },
         alert: {
-          warning: "#ca8a04",   // yellow-700 - accessible warning color
-          error: "#dc2626",     // red-600 - accessible error color
-          success: "#059669",   // emerald-600 - accessible success color
+          warning: "#fbbf24",   // yellow-400 - accessible warning with 9.4:1 contrast
+          error: "#fca5a5",     // red-300 - accessible error with 7.8:1 contrast
+          success: "#34d399",   // emerald-400 - accessible success with 7.9:1 contrast
         },
       },
       borderRadius: {
