@@ -109,6 +109,7 @@
     "next-themes": "^0.3.0",
     "node-fetch": "^3.3.2",
     "nodemailer": "^7.0.9",
+    "octokit": "^5.0.4",
     "openai": "^6.3.0",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",

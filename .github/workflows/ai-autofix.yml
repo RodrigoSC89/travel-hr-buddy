@@ -1,0 +1,40 @@
+name: Nautilus Intelligence Core
+
+on:
+  workflow_run:
+    workflows: ["Build Nautilus One", "Test Coverage & Summary", "Validate Buttons and Accessibility"]
+    types: [completed]
+
+permissions:
+  contents: write
+
+jobs:
+  ai-autofix:
+    name: 🤖 Auto PR Generator
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Nautilus Intelligence Core
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node src/ai/nautilus-core/index.js || echo "Nenhuma PR gerada nesta execução."
+
+      - name: Upload Analysis Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-analysis-report
+          path: dist/analysis.json
