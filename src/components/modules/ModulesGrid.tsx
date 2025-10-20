@@ -40,6 +40,7 @@ import {
   HelpCircle,
   Settings2,
   Eye,
+  Database,
   LucideIcon
 } from "lucide-react";
 
@@ -85,6 +86,7 @@ const modules: Module[] = [
   { name: "Centro de Ajuda", icon: HelpCircle, category: "Ajuda", slug: "help", status: "pending" },
   { name: "Automação IA", icon: Settings2, category: "IA", slug: "automation", status: "pending" },
   { name: "Visão Geral", icon: Eye, category: "Core", slug: "overview", status: "pending" },
+  { name: "Vault AI", icon: Database, category: "IA", slug: "vault-ai", status: "functional", description: "Vault Técnico IA com busca semântica e LLM" },
 ];
 
 // Extract unique categories
