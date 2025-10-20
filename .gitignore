@@ -62,3 +62,13 @@ nautilus_state.json
 relatorio_*.json
 relatorio_*.pdf
 relatorio_*.txt
+
+# Machine Learning artifacts
+*.pkl
+*.joblib
+forecast_model.*
+forecast_scaler.*
+fleet_data.csv
+forecast_history.csv
+bridge_sync.db
+model_backups/
