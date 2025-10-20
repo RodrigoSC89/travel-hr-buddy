@@ -1,6 +1,6 @@
 // ============================================================================
 // Supabase Edge Function: forecast-weekly
-// Purpose: Weekly AI-powered forecast generation for MMI maintenance jobs
+// Purpose: Weekly AI-powered forecast generation for MMI maintenance jobs using GPT-4
 // Schedule: Runs every Sunday at 03:00 UTC via cron (0 3 * * 0)
 // ============================================================================
 
@@ -23,10 +23,93 @@ interface Job {
   asset_name: string | null;
 }
 
+interface LogData {
+  executado_em: string;
+  status: string;
+}
+
 interface ForecastResult {
   job_id: string;
+  job_title: string;
   risco_estimado: string;
   proxima_execucao: string;
+  justificativa: string;
+  historico_analisado: number;
+}
+
+/**
+ * Generate AI forecast for a single job using GPT-4
+ * Based on job execution history from mmi_logs
+ */
+async function generateForecastForJob(
+  job: Job,
+  historico: LogData[],
+  apiKey: string
+): Promise<ForecastResult> {
+  // Build context from historical data
+  const context = `
+Job: ${job.title}
+Últimas execuções:
+${historico?.map((h) => `- ${h.executado_em} (${h.status})`).join('\n') || '- Nenhuma execução registrada'}
+
+Recomende a próxima execução e avalie o risco técnico com base no histórico.
+`;
+
+  const gptPayload = {
+    model: 'gpt-4',
+    messages: [
+      { 
+        role: 'system', 
+        content: 'Você é um engenheiro especialista em manutenção offshore.' 
+      },
+      { 
+        role: 'user', 
+        content: context 
+      }
+    ],
+    temperature: 0.3
+  };
+
+  const gptRes = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(gptPayload)
+  });
+
+  if (!gptRes.ok) {
+    const errorText = await gptRes.text();
+    throw new Error(`OpenAI API error: ${gptRes.status} - ${errorText}`);
+  }
+
+  const gptData = await gptRes.json();
+  const resposta = gptData.choices?.[0]?.message?.content || '';
+
+  // 🔍 Extract data from response with regex
+  const dataRegex = /\d{4}-\d{2}-\d{2}/;
+  const riscoRegex = /risco:\s*(.+)/i;
+
+  const dataSugerida = dataRegex.exec(resposta)?.[0] || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const risco = riscoRegex.exec(resposta)?.[1]?.toLowerCase() || 'moderado';
+
+  // Normalize risk level to standard values
+  let normalizedRisk = 'moderado';
+  if (risco.includes('baixo') || risco.includes('low')) {
+    normalizedRisk = 'baixo';
+  } else if (risco.includes('alto') || risco.includes('high') || risco.includes('crítico') || risco.includes('critical')) {
+    normalizedRisk = 'alto';
+  }
+
+  return {
+    job_id: job.job_id,
+    job_title: job.title,
+    risco_estimado: normalizedRisk,
+    proxima_execucao: dataSugerida,
+    justificativa: resposta.substring(0, 500), // Limit reasoning to 500 chars
+    historico_analisado: historico?.length || 0
+  };
 }
 
 serve(async (req) => {
@@ -39,14 +122,19 @@ serve(async (req) => {
     // Initialize Supabase client with service role
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
 
     if (!supabaseUrl || !supabaseKey) {
       throw new Error('Missing Supabase environment variables');
     }
 
+    if (!OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is not configured');
+    }
+
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    console.log('🚀 Starting weekly forecast generation...');
+    console.log('🚀 Starting weekly forecast generation with GPT-4...');
 
     // Fetch all active jobs from mmi_jobs
     const { data: jobs, error: fetchError } = await supabase
@@ -82,26 +170,33 @@ serve(async (req) => {
     // Process each job
     for (const job of jobs as Job[]) {
       try {
-        // ⚙️ Simulação de forecast IA — substitua com GPT real depois
-        // Generate simulated risk assessment (70% chance of moderate, 30% chance of high)
-        const risco = Math.random() > 0.7 ? 'alto' : 'moderado';
-        
-        // Calculate next execution date based on risk
-        const proximaData = new Date();
-        proximaData.setDate(proximaData.getDate() + (risco === 'alto' ? 7 : 30));
+        console.log(`🔍 Processing job: ${job.title}`);
 
+        // Query historical execution data from mmi_logs
+        const { data: historico } = await supabase
+          .from('mmi_logs')
+          .select('executado_em, status')
+          .eq('job_id', job.id)
+          .order('executado_em', { ascending: false })
+          .limit(5);
+
+        console.log(`📜 Found ${historico?.length || 0} historical executions for ${job.title}`);
+
+        // Generate forecast using GPT-4
+        const forecast = await generateForecastForJob(job, historico || [], OPENAI_API_KEY);
+        
         // Prepare forecast data based on mmi_forecasts schema
         const forecastData = {
           vessel_name: job.vessel_name || 'Unknown Vessel',
           system_name: job.component_name || job.asset_name || 'Unknown System',
           hourmeter: 0, // Default value, could be enhanced with actual data
-          last_maintenance: [],
-          forecast_text: `Forecast gerado automaticamente via cron semanal para ${job.title}. Risco estimado: ${risco}. Próxima execução recomendada: ${proximaData.toISOString().split('T')[0]}.`,
-          priority: risco === 'alto' ? 'high' : 'medium',
+          last_maintenance: historico || [],
+          forecast_text: forecast.justificativa,
+          priority: forecast.risco_estimado === 'alto' ? 'high' : forecast.risco_estimado === 'baixo' ? 'low' : 'medium',
         };
 
         // Insert forecast into mmi_forecasts
-        const { data: forecast, error: forecastError } = await supabase
+        const { data: savedForecast, error: forecastError } = await supabase
           .from('mmi_forecasts')
           .insert(forecastData)
           .select()
@@ -113,21 +208,17 @@ serve(async (req) => {
         }
 
         forecastsCreated++;
-        console.log(`✅ Forecast created for job ${job.job_id} with risk: ${risco}`);
+        console.log(`✅ Forecast created for job ${job.job_id} with risk: ${forecast.risco_estimado}`);
 
-        forecastResults.push({
-          job_id: job.job_id,
-          risco_estimado: risco,
-          proxima_execucao: proximaData.toISOString(),
-        });
+        forecastResults.push(forecast);
 
         // Create work order (mmi_orders) automatically if risk is high
-        if (risco === 'alto' && forecast) {
+        if (forecast.risco_estimado === 'alto' && savedForecast) {
           const orderData = {
-            forecast_id: forecast.id,
+            forecast_id: savedForecast.id,
             vessel_name: job.vessel_name || 'Unknown Vessel',
             system_name: job.component_name || job.asset_name || 'Unknown System',
-            description: `OS gerada automaticamente via forecast semanal para ${job.title}. Prioridade alta requerida.`,
+            description: `OS gerada automaticamente via forecast semanal GPT-4 para ${job.title}. Justificativa: ${forecast.justificativa.substring(0, 200)}...`,
             status: 'pendente',
             priority: 'alta',
           };
@@ -160,12 +251,14 @@ serve(async (req) => {
       forecast_summary: {
         high_risk: forecastResults.filter(f => f.risco_estimado === 'alto').length,
         moderate_risk: forecastResults.filter(f => f.risco_estimado === 'moderado').length,
+        low_risk: forecastResults.filter(f => f.risco_estimado === 'baixo').length,
       },
+      forecasts: forecastResults,
     };
 
-    console.log('✅ Weekly forecast generation completed successfully!');
+    console.log('✅ Weekly forecast generation with GPT-4 completed successfully!');
     console.log(`📊 Summary: ${jobs.length} jobs processed, ${forecastsCreated} forecasts created, ${ordersCreated} work orders created`);
-    console.log(`⚠️  Risk distribution: ${summary.forecast_summary.high_risk} high-risk, ${summary.forecast_summary.moderate_risk} moderate-risk`);
+    console.log(`⚠️  Risk distribution: ${summary.forecast_summary.high_risk} high-risk, ${summary.forecast_summary.moderate_risk} moderate-risk, ${summary.forecast_summary.low_risk} low-risk`);
 
     return new Response(
       JSON.stringify(summary),
