@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { supabase } from '@/integrations/supabase/client'
-import { toast } from 'sonner'
-import { Brain, ExternalLink, Filter, Loader2 } from 'lucide-react'
-import { format } from 'date-fns'
+import { useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { Brain, ExternalLink, Filter, Loader2 } from "lucide-react";
+import { format } from "date-fns";
 
 interface DPIncident {
   id: string
@@ -30,99 +30,99 @@ interface DPIncident {
 }
 
 export default function DPIntelligencePage() {
-  const [incidentes, setIncidentes] = useState<DPIncident[]>([])
-  const [loading, setLoading] = useState(true)
-  const [analyzingId, setAnalyzingId] = useState<string | null>(null)
+  const [incidentes, setIncidentes] = useState<DPIncident[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [analyzingId, setAnalyzingId] = useState<string | null>(null);
   
   // Filters
-  const [filterVessel, setFilterVessel] = useState<string>('all')
-  const [filterSeverity, setFilterSeverity] = useState<string>('all')
-  const [filterSystem, setFilterSystem] = useState<string>('all')
-  const [searchTerm, setSearchTerm] = useState('')
+  const [filterVessel, setFilterVessel] = useState<string>("all");
+  const [filterSeverity, setFilterSeverity] = useState<string>("all");
+  const [filterSystem, setFilterSystem] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetchIncidentes()
-  }, [])
+    fetchIncidentes();
+  }, []);
 
   async function fetchIncidentes() {
     try {
-      setLoading(true)
+      setLoading(true);
       const { data, error } = await supabase
-        .from('dp_incidents')
-        .select('*')
-        .order('incident_date', { ascending: false })
+        .from("dp_incidents")
+        .select("*")
+        .order("incident_date", { ascending: false });
 
       if (error) {
-        console.error('Error fetching incidents:', error)
-        toast.error('Erro ao carregar incidentes', {
+        console.error("Error fetching incidents:", error);
+        toast.error("Erro ao carregar incidentes", {
           description: error.message
-        })
-        return
+        });
+        return;
       }
 
-      setIncidentes(data || [])
+      setIncidentes(data || []);
     } catch (error) {
-      console.error('Unexpected error:', error)
-      toast.error('Erro ao carregar incidentes')
+      console.error("Unexpected error:", error);
+      toast.error("Erro ao carregar incidentes");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   async function explicarIA(id: string, descricao: string, title: string, root_cause: string) {
     try {
-      setAnalyzingId(id)
-      toast.info('Analisando incidente com IA...')
+      setAnalyzingId(id);
+      toast.info("Analisando incidente com IA...");
 
-      const res = await fetch('/api/dp/explain', {
-        method: 'POST',
+      const res = await fetch("/api/dp/explain", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ id, descricao, title, root_cause }),
-      })
+      });
 
       if (!res.ok) {
-        throw new Error('Erro ao analisar incidente')
+        throw new Error("Erro ao analisar incidente");
       }
 
-      const result = await res.json()
+      const result = await res.json();
       
       if (result.success) {
-        toast.success('Análise concluída com sucesso!')
-        await fetchIncidentes() // Reload to show the new analysis
+        toast.success("Análise concluída com sucesso!");
+        await fetchIncidentes(); // Reload to show the new analysis
       } else {
-        throw new Error(result.error || 'Erro ao analisar incidente')
+        throw new Error(result.error || "Erro ao analisar incidente");
       }
     } catch (error) {
-      console.error('Error explaining incident:', error)
-      toast.error('Erro ao analisar incidente', {
-        description: error instanceof Error ? error.message : 'Tente novamente mais tarde'
-      })
+      console.error("Error explaining incident:", error);
+      toast.error("Erro ao analisar incidente", {
+        description: error instanceof Error ? error.message : "Tente novamente mais tarde"
+      });
     } finally {
-      setAnalyzingId(null)
+      setAnalyzingId(null);
     }
   }
 
   // Filter incidents
   const filteredIncidentes = incidentes.filter(incident => {
-    const matchesVessel = filterVessel === 'all' || incident.vessel === filterVessel
-    const matchesSeverity = filterSeverity === 'all' || incident.severity === filterSeverity
-    const matchesSystem = filterSystem === 'all' || 
+    const matchesVessel = filterVessel === "all" || incident.vessel === filterVessel;
+    const matchesSeverity = filterSeverity === "all" || incident.severity === filterSeverity;
+    const matchesSystem = filterSystem === "all" || 
       incident.sgso_category === filterSystem || 
-      incident.class_dp === filterSystem
-    const matchesSearch = searchTerm === '' || 
+      incident.class_dp === filterSystem;
+    const matchesSearch = searchTerm === "" || 
       incident.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       incident.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      incident.root_cause?.toLowerCase().includes(searchTerm.toLowerCase())
+      incident.root_cause?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchesVessel && matchesSeverity && matchesSystem && matchesSearch
-  })
+    return matchesVessel && matchesSeverity && matchesSystem && matchesSearch;
+  });
 
   // Get unique values for filters
-  const vessels = Array.from(new Set(incidentes.map(i => i.vessel)))
-  const severities = Array.from(new Set(incidentes.map(i => i.severity)))
-  const systems = Array.from(new Set(incidentes.map(i => i.sgso_category || i.class_dp).filter(Boolean)))
+  const vessels = Array.from(new Set(incidentes.map(i => i.vessel)));
+  const severities = Array.from(new Set(incidentes.map(i => i.severity)));
+  const systems = Array.from(new Set(incidentes.map(i => i.sgso_category || i.class_dp).filter(Boolean)));
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -222,22 +222,22 @@ export default function DPIntelligencePage() {
                     <div>
                       <span className="text-muted-foreground">Data:</span>
                       <p className="font-medium">
-                        {format(new Date(item.incident_date), 'dd/MM/yyyy')}
+                        {format(new Date(item.incident_date), "dd/MM/yyyy")}
                       </p>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Gravidade:</span>
                       <p className={`font-medium ${
-                        item.severity === 'Alta' ? 'text-red-600' :
-                        item.severity === 'Média' ? 'text-yellow-600' :
-                        'text-green-600'
+                        item.severity === "Alta" ? "text-red-600" :
+                          item.severity === "Média" ? "text-yellow-600" :
+                            "text-green-600"
                       }`}>
                         {item.severity}
                       </p>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Classe DP:</span>
-                      <p className="font-medium">{item.class_dp || 'N/A'}</p>
+                      <p className="font-medium">{item.class_dp || "N/A"}</p>
                     </div>
                   </div>
                   <p className="text-sm text-muted-foreground mb-3">{item.description}</p>
@@ -285,7 +285,7 @@ export default function DPIntelligencePage() {
                 </div>
               ) : (
                 <Button
-                  onClick={() => explicarIA(item.id, item.description, item.title, item.root_cause || '')}
+                  onClick={() => explicarIA(item.id, item.description, item.title, item.root_cause || "")}
                   disabled={analyzingId === item.id}
                   className="w-full md:w-auto"
                 >
@@ -319,5 +319,5 @@ export default function DPIntelligencePage() {
         )}
       </div>
     </div>
-  )
+  );
 }
