@@ -45,6 +45,10 @@ temp/
 coverage
 .nyc_output
 
+# Playwright
+playwright-report/
+test-results/
+
 # Python artifacts
 __pycache__/
 *.py[cod]
