@@ -80,6 +80,7 @@ const modules: Module[] = [
   { name: "Monitor Avançado", icon: Monitor, category: "Sistema", slug: "system-monitor", status: "pending" },
   { name: "Documentos IA", icon: FileCode2, category: "IA", slug: "documents-ai", status: "pending" },
   { name: "Assistente IA", icon: Bot, category: "IA", slug: "ai-assistant", status: "pending" },
+  { name: "Vault Técnico IA", icon: Database, category: "IA", slug: "vault-ai", status: "functional", description: "Repositório inteligente de documentos técnicos" },
   { name: "Business Intelligence", icon: AreaChart, category: "Análise", slug: "bi", status: "pending" },
   { name: "Smart Workflow", icon: Repeat, category: "IA", slug: "workflow", status: "pending" },
   { name: "Centro de Ajuda", icon: HelpCircle, category: "Ajuda", slug: "help", status: "pending" },

@@ -121,6 +121,7 @@ const QuizPage = React.lazy(() => import("./pages/admin/QuizPage"));
 const ExternalAuditSystem = React.lazy(() => import("./pages/ExternalAuditSystem"));
 const ForecastHistoryPage = React.lazy(() => import("./pages/admin/mmi/forecast/ForecastHistory"));
 const BIForecastsPage = React.lazy(() => import("./pages/admin/bi/forecasts"));
+const VaultAI = React.lazy(() => import("./pages/VaultAI"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -202,6 +203,7 @@ function App() {
                       <Route path="/documents" element={<Documents />} />
                       <Route path="/intelligent-documents" element={<IntelligentDocuments />} />
                       <Route path="/ai-assistant" element={<AIAssistant />} />
+                      <Route path="/vault-ai" element={<VaultAI />} />
                       <Route path="/travel" element={<Travel />} />
                       <Route path="/analytics" element={<Analytics />} />
                       <Route path="/hr" element={<HumanResources />} />
