@@ -52,3 +52,4 @@ __pycache__/
 *.so
 .Python
 forecast_risco.json
+demo_forecast.json
