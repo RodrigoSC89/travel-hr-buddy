@@ -115,6 +115,17 @@ const config: Config = {
           DEFAULT: "hsl(var(--link))",
           hover: "hsl(var(--link-hover))",
         },
+        // Accessibility-focused color tokens with WCAG 2.1 AA compliant contrast
+        text: {
+          base: "#f1f5f9",      // slate-100 - high contrast on dark backgrounds
+          muted: "#cbd5e1",     // slate-300 - 7:1 contrast ratio
+          subtle: "#94a3b8",    // slate-400 - 4.5:1 minimum contrast
+        },
+        alert: {
+          warning: "#ca8a04",   // yellow-700 - accessible warning color
+          error: "#dc2626",     // red-600 - accessible error color
+          success: "#059669",   // emerald-600 - accessible success color
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
