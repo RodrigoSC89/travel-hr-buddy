@@ -79,3 +79,6 @@ relatorio_*.json
 !asog_report.json
 relatorio_*.pdf
 relatorio_*.txt
+
+# ML models (auto-generated)
+*.pkl
