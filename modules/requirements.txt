@@ -11,6 +11,8 @@ joblib>=1.3.0
 
 # API Communication
 requests>=2.31.0
+flask>=2.3.0
+pyjwt>=2.8.0
 
 # PDF Generation (for existing modules)
 reportlab>=4.0.0

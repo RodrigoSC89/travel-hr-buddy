@@ -82,3 +82,12 @@ relatorio_*.txt
 
 # ML models (auto-generated)
 *.pkl
+
+# BridgeLink sync database
+bridge_sync.db
+bridge_sync.db-journal
+
+# Forecast Global state files
+forecast_history.csv
+*_state.json
+fleet_training_data.csv
