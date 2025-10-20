@@ -32,7 +32,8 @@
     "setup:daily-report": "node scripts/setup-daily-report.js",
     "verify:production": "node scripts/production-verification.cjs",
     "deploy:vercel": "vercel --prod",
-    "deploy:netlify": "netlify deploy --prod --dir=dist"
+    "deploy:netlify": "netlify deploy --prod --dir=dist",
+    "postinstall": "rm -rf .next node_modules/.vite src/_legacy || true"
   },
   "engines": {
     "node": "22.x",
