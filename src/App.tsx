@@ -21,6 +21,7 @@ const PEODP = safeLazyImport(() => import("@/pages/PEODP"), "PEO-DP");
 const DPIncidents = safeLazyImport(() => import("@/pages/DPIncidents"), "DP Incidents");
 const DPIntelligence = safeLazyImport(() => import("@/pages/DPIntelligence"), "DP Intelligence");
 const BridgeLink = safeLazyImport(() => import("@/pages/BridgeLink"), "Bridge Link");
+const ControlHub = safeLazyImport(() => import("@/pages/ControlHub"), "Control Hub");
 const SGSO = safeLazyImport(() => import("@/pages/SGSO"), "SGSO");
 const SGSOReportPage = safeLazyImport(() => import("@/pages/SGSOReportPage"), "SGSO Report");
 const SGSOAuditPage = safeLazyImport(() => import("@/pages/SGSOAuditPage"), "SGSO Audit");
@@ -201,6 +202,7 @@ function App() {
                       <Route path="/dp-incidents" element={<DPIncidents />} />
                       <Route path="/dp-intelligence" element={<DPIntelligence />} />
                       <Route path="/bridgelink" element={<BridgeLink />} />
+                      <Route path="/controlhub" element={<ControlHub />} />
                       <Route path="/sgso" element={<SGSO />} />
                       <Route path="/sgso/report" element={<SGSOReportPage />} />
                       <Route path="/sgso/audit" element={<SGSOAuditPage />} />
