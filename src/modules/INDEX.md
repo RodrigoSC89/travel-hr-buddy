@@ -1,6 +1,6 @@
 # 🎯 Nautilus One - Módulos do Sistema
 
-## 📊 Total de Módulos: 32
+## 📊 Total de Módulos: 33
 
 ### 🎛️ Módulos Principais (1-10)
 1. **dashboard** - Painel principal de controle
@@ -26,7 +26,7 @@
 19. **peotram** - Excelência operacional
 20. **peo-dp** - Gestão de RH e pessoal
 
-### 🔧 Módulos de Suporte (21-32)
+### 🔧 Módulos de Suporte (21-33)
 21. **sgso** - Sistema de gestão de saúde e segurança
 22. **templates** - Gestão de templates
 23. **analytics-avancado** - Analytics avançado
@@ -39,6 +39,7 @@
 30. **centro-ajuda** - Centro de ajuda
 31. **automacao-ia** - Automação com IA
 32. **visao-geral** - Visão geral executiva
+33. **asog-review** - ASOG Review - DP Operations Compliance
 
 ---
 
@@ -55,7 +56,7 @@ src/modules/<module-name>/
 └── README.md       # Documentação do módulo
 ```
 
-## ✅ Status: Todos os 32 módulos inicializados
+## ✅ Status: Todos os 33 módulos inicializados
 
-**Data:** 2025-10-09  
-**Versão:** 1.0.0
+**Data:** 2025-10-20  
+**Versão:** 1.1.0
