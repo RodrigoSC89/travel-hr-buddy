@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { MMIOS } from "@/types/mmi";
+import { utils, writeFile } from "xlsx";
+import html2pdf from "html2pdf.js";
 
 export default function MMIOrdersPage() {
   const [workOrders, setWorkOrders] = useState<MMIOS[]>([]);
@@ -83,19 +85,26 @@ export default function MMIOrdersPage() {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    const statusConfig = {
-      open: { label: "Aberta", variant: "outline" as const, emoji: "🟡" },
-      in_progress: { label: "Em Andamento", variant: "default" as const, emoji: "🔵" },
-      completed: { label: "Concluída", variant: "secondary" as const, emoji: "🟢" },
-      cancelled: { label: "Cancelada", variant: "destructive" as const, emoji: "🔴" },
-    };
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.open;
-    return (
-      <Badge variant={config.variant}>
-        {config.emoji} {config.label}
-      </Badge>
-    );
+  const exportToCSV = () => {
+    const worksheet = utils.json_to_sheet(workOrders);
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, worksheet, "Ordens de Serviço");
+    writeFile(workbook, "ordens-de-servico.xlsx");
+  };
+
+  const exportToPDF = () => {
+    const element = document.getElementById("os-table");
+    if (element) {
+      html2pdf()
+        .from(element)
+        .set({
+          margin: 0.5,
+          filename: "ordens-de-servico.pdf",
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+        })
+        .save();
+    }
   };
 
   if (loading) {
@@ -123,16 +132,70 @@ export default function MMIOrdersPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-6">
-          {workOrders.map((order) => (
-            <WorkOrderCard
-              key={order.id}
-              order={order}
-              onUpdate={handleUpdate}
-              isSaving={savingId === order.id}
-            />
-          ))}
-        </div>
+        <>
+          <div className="flex justify-end gap-2">
+            <Button onClick={exportToCSV} variant="secondary">
+              📊 Exportar CSV
+            </Button>
+            <Button onClick={exportToPDF} variant="outline">
+              📄 Exportar PDF
+            </Button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table id="os-table" className="w-full border text-sm">
+              <thead>
+                <tr className="bg-muted">
+                  <th className="border p-2 text-left">OS</th>
+                  <th className="border p-2 text-left">Status</th>
+                  <th className="border p-2 text-left">Criada em</th>
+                  <th className="border p-2 text-left">Executada em</th>
+                  <th className="border p-2 text-left">Comentário Técnico</th>
+                  <th className="border p-2 text-left">Notas</th>
+                </tr>
+              </thead>
+              <tbody>
+                {workOrders.map((order) => (
+                  <tr key={order.id}>
+                    <td className="border p-2">OS-{order.id.slice(0, 8)}</td>
+                    <td className="border p-2">
+                      {order.status === "open"
+                        ? "🟡 Aberta"
+                        : order.status === "in_progress"
+                          ? "🔵 Em Andamento"
+                          : order.status === "completed"
+                            ? "🟢 Concluída"
+                            : "🔴 Cancelada"}
+                    </td>
+                    <td className="border p-2">
+                      {order.created_at
+                        ? new Date(order.created_at).toLocaleDateString("pt-BR")
+                        : "-"}
+                    </td>
+                    <td className="border p-2">
+                      {order.executed_at
+                        ? new Date(order.executed_at).toLocaleDateString("pt-BR")
+                        : "-"}
+                    </td>
+                    <td className="border p-2">{order.technician_comment || "-"}</td>
+                    <td className="border p-2">{order.notes || "-"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="grid gap-6">
+            {workOrders.map((order) => (
+              <WorkOrderCard
+                key={order.id}
+                order={order}
+                onUpdate={handleUpdate}
+                isSaving={savingId === order.id}
+              />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
@@ -177,7 +240,15 @@ function WorkOrderCard({ order, onUpdate, isSaving }: WorkOrderCardProps) {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline">{status === "open" ? "🟡 Aberta" : status === "in_progress" ? "🔵 Em Andamento" : status === "completed" ? "🟢 Concluída" : "🔴 Cancelada"}</Badge>
+            <Badge variant="outline">
+              {status === "open"
+                ? "🟡 Aberta"
+                : status === "in_progress"
+                  ? "🔵 Em Andamento"
+                  : status === "completed"
+                    ? "🟢 Concluída"
+                    : "🔴 Cancelada"}
+            </Badge>
           </div>
         </div>
       </CardHeader>
