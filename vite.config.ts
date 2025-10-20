@@ -120,76 +120,8 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 1700,
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          // Vendor chunks for core libraries
-          if (id.includes("node_modules")) {
-            if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom")) {
-              return "vendor";
-            }
-            if (id.includes("@radix-ui/react-dialog") || 
-                id.includes("@radix-ui/react-dropdown-menu") || 
-                id.includes("@radix-ui/react-tabs")) {
-              return "ui";
-            }
-            if (id.includes("recharts")) {
-              return "charts";
-            }
-            if (id.includes("@supabase/supabase-js")) {
-              return "supabase";
-            }
-            if (id.includes("mapbox-gl")) {
-              return "mapbox";
-            }
-          }
-          // SGSO module chunking
-          if (id.includes("src/components/sgso/")) {
-            return "sgso";
-          }
-          // Travel module chunking
-          if (id.includes("src/components/travel/")) {
-            if (id.includes("enhanced-hotel-search") || id.includes("responsive-hotel-search")) {
-              return "travel-hotel";
-            }
-            if (id.includes("flight-search")) {
-              return "travel-flights";
-            }
-            if (id.includes("predictive-travel-dashboard")) {
-              return "travel-predictive";
-            }
-            if (id.includes("travel-booking-system")) {
-              return "travel-booking";
-            }
-            if (id.includes("travel-analytics-dashboard")) {
-              return "travel-analytics";
-            }
-            if (id.includes("ai-travel-assistant")) {
-              return "travel-ai";
-            }
-            if (id.includes("travel-expense-system")) {
-              return "travel-expenses";
-            }
-            if (id.includes("travel-policy-system")) {
-              return "travel-policy";
-            }
-            if (id.includes("travel-approval-system")) {
-              return "travel-approvals";
-            }
-            if (id.includes("travel-document-manager")) {
-              return "travel-documents";
-            }
-            if (id.includes("travel-communication")) {
-              return "travel-comms";
-            }
-            if (id.includes("travel-notification")) {
-              return "travel-notifications";
-            }
-            if (id.includes("travel-map")) {
-              return "travel-map";
-            }
-            return "travel-misc";
-          }
-        }
-      }
+        manualChunks: undefined, // Evita falhas de import dinâmico
+      },
     },
     esbuild: mode === "production" ? {
       drop: ["debugger"],
