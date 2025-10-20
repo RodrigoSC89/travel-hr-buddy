@@ -1,0 +1,10 @@
+# Nautilus One Decision Core - Python Dependencies
+# 
+# Currently, the system uses only Python standard library.
+# Future enhancements may require:
+# - reportlab>=4.0.0  # For PDF generation
+# - weasyprint>=60.0  # Alternative PDF engine
+# - requests>=2.31.0  # For SGSO API integration
+# - python-dotenv>=1.0.0  # For environment configuration
+
+# No external dependencies required for basic functionality
