@@ -1,0 +1,11 @@
+# Nautilus One - Decision Core
+# Python Dependencies
+
+# Currently using Python standard library only
+# No external dependencies required
+
+# Future enhancements may include:
+# - reportlab or fpdf2 for advanced PDF generation
+# - requests for HTTP API integration
+# - pandas for data analysis
+# - numpy for numerical computations

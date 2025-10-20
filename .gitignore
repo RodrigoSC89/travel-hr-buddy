@@ -44,3 +44,23 @@ temp/
 # Test coverage
 coverage
 .nyc_output
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.venv/
+venv/
+ENV/
+
+# Decision Core generated files
+nautilus_state.json
+nautilus_logs.txt
+relatorio_*.pdf
+relatorio_*.json
