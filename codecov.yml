@@ -1,0 +1,60 @@
+# Codecov configuration for Nautilus One
+# Ensures minimum coverage metrics and blocks merge if coverage drops
+
+codecov:
+  require_ci_to_pass: yes
+  notify:
+    after_n_builds: 1
+    wait_for_ci: yes
+
+coverage:
+  precision: 2
+  round: down
+  range: 80..100
+  status:
+    project:
+      default:
+        target: 85%
+        threshold: 1%
+        informational: false
+    patch:
+      default:
+        target: 80%
+        threshold: 1%
+        informational: false
+
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: true
+
+ignore:
+  - "tests/"
+  - "src/tests/"
+  - "src/lib/dev/mocks/"
+  - "src/assets/"
+  - "**/*.spec.ts"
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+
+flags:
+  ui:
+    paths:
+      - "src/components/"
+      - "src/modules/"
+    carryforward: true
+  backend:
+    paths:
+      - "src/services/"
+      - "src/integrations/"
+      - "src/lib/"
+      - "src/hooks/"
+    carryforward: true
+  ci:
+    paths:
+      - ".github/"
+    carryforward: true
+
+parsers:
+  javascript:
+    enable_partials: true
