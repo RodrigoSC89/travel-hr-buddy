@@ -1,6 +1,7 @@
 /**
  * Control Hub Panel
  * Main dashboard for Nautilus One Control Hub
+ * Phase Beta 3.1 - MQTT Integration
  */
 
 import React, { useEffect, useState } from "react";
@@ -18,11 +19,15 @@ import { useButtonHandlers } from "@/hooks/useButtonHandlers";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileDown, RotateCcw } from "lucide-react";
+import { MQTTClient } from "@/core/MQTTClient";
+import { BridgeLink } from "@/core/BridgeLink";
 
 export default function ControlHubPanel() {
   const [state, setState] = useState<ControlHubState | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastCheck, setLastCheck] = useState<Date | null>(null);
+  const [logs, setLogs] = useState<any[]>([]);
+  const [mqttConnected, setMqttConnected] = useState(false);
   const { exportReport, resetIndicators } = useButtonHandlers();
 
   useEffect(() => {
@@ -36,11 +41,33 @@ export default function ControlHubPanel() {
 
     init();
 
+    // Connect to MQTT
+    MQTTClient.connect();
+
+    // Subscribe to BridgeLink events
+    const unsub = BridgeLink.on("nautilus:event", (data) => {
+      console.log("📡 [ControlHub] Received event:", data);
+      setLogs((prev) => [...prev, data].slice(-50)); // Keep last 50 logs
+    });
+
+    // Subscribe to MQTT connection events
+    const unsubConnected = BridgeLink.on("mqtt:connected", () => {
+      setMqttConnected(true);
+    });
+
+    const unsubDisconnected = BridgeLink.on("mqtt:disconnected", () => {
+      setMqttConnected(false);
+    });
+
     // Auto-refresh every 30 seconds
     const interval = setInterval(updateState, 30000);
 
     return () => {
       clearInterval(interval);
+      unsub();
+      unsubConnected();
+      unsubDisconnected();
+      MQTTClient.disconnect();
     };
   }, []);
 
@@ -118,6 +145,31 @@ export default function ControlHubPanel() {
               <RotateCcw className="mr-2 h-4 w-4" />
               Resetar Indicadores
             </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* MQTT Telemetry Console */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Console de Telemetria Global</CardTitle>
+          <CardDescription>
+            Eventos em tempo real (BridgeLink + MQTT) • 
+            Status MQTT: {mqttConnected ? "🟢 Conectado" : "🔴 Offline"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2 max-h-64 overflow-y-auto bg-slate-950 text-green-400 p-4 rounded-lg font-mono text-sm">
+            {logs.length === 0 ? (
+              <p className="text-slate-500">Aguardando eventos...</p>
+            ) : (
+              logs.map((log, index) => (
+                <div key={index} className="border-b border-slate-800 pb-2">
+                  <span className="text-slate-500">[{log.timestamp}]</span>{" "}
+                  <span>{log.message}</span>
+                </div>
+              ))
+            )}
           </div>
         </CardContent>
       </Card>
