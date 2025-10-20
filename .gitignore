@@ -91,3 +91,6 @@ bridge_sync.db-journal
 forecast_history.csv
 *_state.json
 fleet_training_data.csv
+
+# Nautilus Memory Engine database
+src/ai/nautilus-core/memory/memoryDB.json
