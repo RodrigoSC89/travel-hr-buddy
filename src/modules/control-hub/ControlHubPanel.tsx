@@ -14,11 +14,16 @@ import {
 } from '@/modules/control_hub/hub_ui';
 import { ControlHubState } from '@/modules/control_hub/types';
 import { hubBridge } from '@/modules/control_hub/hub_bridge';
+import { useButtonHandlers } from "@/hooks/useButtonHandlers";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { FileDown, RotateCcw } from "lucide-react";
 
 export default function ControlHubPanel() {
   const [state, setState] = useState<ControlHubState | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastCheck, setLastCheck] = useState<Date | null>(null);
+  const { exportReport, resetIndicators } = useButtonHandlers();
 
   useEffect(() => {
     // Initialize Control Hub
@@ -82,6 +87,40 @@ export default function ControlHubPanel() {
 
       {/* System Status */}
       <SystemStatus health={state.systemHealth} />
+
+      {/* Technical Indicators Dashboard */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Indicadores Técnicos</CardTitle>
+          <CardDescription>Métricas de desempenho e compliance</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
+              <p className="text-sm text-muted-foreground">DP Reliability</p>
+              <p className="text-3xl font-bold text-green-600">98.5%</p>
+            </div>
+            <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-sm text-muted-foreground">ASOG Compliance</p>
+              <p className="text-3xl font-bold text-blue-600">100%</p>
+            </div>
+            <div className="p-4 bg-purple-50 dark:bg-purple-950 rounded-lg border border-purple-200 dark:border-purple-800">
+              <p className="text-sm text-muted-foreground">FMEA Actions</p>
+              <p className="text-3xl font-bold text-purple-600">12</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Button onClick={exportReport} className="flex-1">
+              <FileDown className="mr-2 h-4 w-4" />
+              Exportar Relatório
+            </Button>
+            <Button onClick={resetIndicators} variant="outline" className="flex-1">
+              <RotateCcw className="mr-2 h-4 w-4" />
+              Resetar Indicadores
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Top Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
