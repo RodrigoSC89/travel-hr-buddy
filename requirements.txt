@@ -1,0 +1,16 @@
+# MMI v2 - Marine Maintenance Intelligence 2.0
+# Python Dependencies
+
+# Core dependencies
+python-dateutil>=2.8.2
+
+# Optional: For future LLM integration with OpenAI
+# openai>=1.0.0
+
+# Optional: For database integration
+# psycopg2-binary>=2.9.0
+# sqlalchemy>=2.0.0
+
+# Optional: For API integration
+# requests>=2.31.0
+# aiohttp>=3.9.0

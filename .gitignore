@@ -44,3 +44,19 @@ temp/
 # Test coverage
 coverage
 .nyc_output
+
+# MMI v2 data files
+mmi_assets.json
+mmi_preventive_plans.json
+mmi_costs.json
+test_assets.json
+test_plans.json
+test_costs.json
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
