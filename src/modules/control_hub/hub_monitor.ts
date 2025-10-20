@@ -3,8 +3,8 @@
  * Monitors all operational modules and reports their status
  */
 
-import { ModuleState, ModuleStatus } from './types';
-import config from './hub_config.json';
+import { ModuleState, ModuleStatus } from "./types";
+import config from "./hub_config.json";
 
 export class HubMonitor {
   private modules: Map<string, ModuleState> = new Map();
@@ -19,7 +19,7 @@ export class HubMonitor {
     for (const [key, moduleConfig] of moduleConfigs) {
       this.modules.set(key, {
         name: moduleConfig.name,
-        status: 'offline',
+        status: "offline",
         uptime: 0,
         lastCheck: new Date(),
         errors: 0,
@@ -61,8 +61,8 @@ export class HubMonitor {
     try {
       const startTime = Date.now();
       const response = await fetch(moduleConfig.endpoint, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
         signal: AbortSignal.timeout(10000),
       });
 
@@ -84,7 +84,7 @@ export class HubMonitor {
         this.handleModuleError(moduleKey, `HTTP ${response.status}`);
       }
     } catch (error) {
-      this.handleModuleError(moduleKey, error instanceof Error ? error.message : 'Unknown error');
+      this.handleModuleError(moduleKey, error instanceof Error ? error.message : "Unknown error");
     }
   }
 
@@ -112,17 +112,17 @@ export class HubMonitor {
   getSystemStatus(): ModuleStatus {
     const states = Array.from(this.modules.values());
     
-    if (states.length === 0) return 'offline';
+    if (states.length === 0) return "offline";
     
-    const hasError = states.some(s => s.status === 'error');
-    const hasOffline = states.some(s => s.status === 'offline');
-    const hasDegraded = states.some(s => s.status === 'degraded');
+    const hasError = states.some(s => s.status === "error");
+    const hasOffline = states.some(s => s.status === "offline");
+    const hasDegraded = states.some(s => s.status === "degraded");
     
-    if (hasError) return 'error';
-    if (hasOffline) return 'degraded';
-    if (hasDegraded) return 'degraded';
+    if (hasError) return "error";
+    if (hasOffline) return "degraded";
+    if (hasDegraded) return "degraded";
     
-    return 'operational';
+    return "operational";
   }
 
   /**
@@ -136,10 +136,10 @@ export class HubMonitor {
 
     // Determine based on performance
     if (responseTime > 5000) {
-      return 'degraded';
+      return "degraded";
     }
 
-    return 'operational';
+    return "operational";
   }
 
   /**
@@ -152,9 +152,9 @@ export class HubMonitor {
     const errorCount = state.errors + 1;
     
     // Determine status based on error count
-    let status: ModuleStatus = 'degraded';
+    let status: ModuleStatus = "degraded";
     if (errorCount >= 3) {
-      status = 'error';
+      status = "error";
     }
 
     this.modules.set(moduleKey, {

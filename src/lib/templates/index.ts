@@ -17,4 +17,4 @@ export {
   type Template,
   type CreateTemplateData,
   type UpdateTemplateData,
-} from './api';
+} from "./api";

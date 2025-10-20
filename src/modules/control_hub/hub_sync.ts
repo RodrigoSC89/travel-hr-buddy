@@ -3,10 +3,10 @@
  * Handles automatic and manual synchronization with BridgeLink
  */
 
-import { SyncResult } from './types';
-import { hubCache } from './hub_cache';
-import { hubBridge } from './hub_bridge';
-import config from './hub_config.json';
+import { SyncResult } from "./types";
+import { hubCache } from "./hub_cache";
+import { hubBridge } from "./hub_bridge";
+import config from "./hub_config.json";
 
 export class HubSync {
   private syncInterval: NodeJS.Timeout | null = null;
@@ -50,7 +50,7 @@ export class HubSync {
         success: false,
         recordsSent: 0,
         recordsFailed: 0,
-        errors: ['Sync already in progress'],
+        errors: ["Sync already in progress"],
       };
     }
 
@@ -59,12 +59,12 @@ export class HubSync {
     try {
       // Check connection
       const quality = await hubBridge.checkConnection();
-      if (quality === 'offline') {
+      if (quality === "offline") {
         return {
           success: false,
           recordsSent: 0,
           recordsFailed: 0,
-          errors: ['No connection to BridgeLink'],
+          errors: ["No connection to BridgeLink"],
         };
       }
 
@@ -124,7 +124,7 @@ export class HubSync {
         success: false,
         recordsSent: 0,
         recordsFailed: pending.length,
-        errors: [error instanceof Error ? error.message : 'Unknown error'],
+        errors: [error instanceof Error ? error.message : "Unknown error"],
       };
     } finally {
       this.isSyncing = false;

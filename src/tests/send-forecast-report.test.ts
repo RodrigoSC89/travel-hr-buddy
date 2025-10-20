@@ -76,7 +76,7 @@ describe("Send Forecast Report System", () => {
       const context = `
 Job: Inspeção da bomba de lastro
 Últimas execuções:
-${mockHistorico.map((h) => `- ${h.executado_em} (${h.status})`).join('\n')}
+${mockHistorico.map((h) => `- ${h.executado_em} (${h.status})`).join("\n")}
 
 Recomende a próxima execução e avalie o risco técnico com base no histórico.
 `;
