@@ -1,4 +1,20 @@
-# 🚢 Nautilus One
+# 🧭 Nautilus One – Sistema de Gerenciamento Técnico Offshore
+
+[![Run Tests](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/run-tests.yml/badge.svg)](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/run-tests.yml)
+[![Code Quality Check](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/code-quality-check.yml/badge.svg)](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/code-quality-check.yml)
+[![Deploy to Vercel](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/deploy-vercel.yml/badge.svg)](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/deploy-vercel.yml)
+[![WCAG Compliance](https://img.shields.io/badge/WCAG%202.1%20AA-Accessible-brightgreen?style=flat-square)](https://www.w3.org/TR/WCAG21/)
+
+---
+
+### ⚙️ Status Geral dos Módulos
+| Módulo | Status | Última Verificação |
+|--------|--------|-------------------|
+| DP Intelligence | 🧠 Ativo | ✅ Testado |
+| Control Hub | ⚙️ Ativo | ✅ Testado |
+| Forecast Global | 🌦️ Em desenvolvimento | 🚧 Teste parcial |
+| FMEA Expert | 🔍 Ativo | ✅ Testado |
+| PEO-DP / BridgeLink | 🔗 Em integração | 🕓 Previsto para 2025 |
 
 Sistema modular de operações marítimas, offshore e industriais com IA embarcada, auditorias, checklists e relatórios automatizados.
 
@@ -40,6 +56,13 @@ Sistema modular de operações marítimas, offshore e industriais com IA embarca
 - Geração de documentos, planos de ação, forecasts
 - Explicações técnicas e normativas (IMCA, MTS, PEO-DP)
 - Log e rastreabilidade de cada interação
+
+---
+
+## 📊 Pipeline CI/CD
+
+Este projeto utiliza GitHub Actions e Vercel para automação de build, testes e deploy contínuo.
+Cada commit executa automaticamente verificações de acessibilidade, contraste, funcionalidade de botões e integração com os módulos críticos.
 
 ---
 
