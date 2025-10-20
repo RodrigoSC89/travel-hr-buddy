@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { BackToDashboard } from "@/components/ui/back-to-dashboard";
 import { logger } from "@/lib/logger";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 import {
   Plane, 
   Building, 
@@ -33,18 +34,18 @@ import {
   Users
 } from "lucide-react";
 
-// Lazy load travel components to reduce initial bundle size
-const FlightSearch = lazy(() => import("@/components/travel/flight-search").then(m => ({ default: m.FlightSearch })));
-const EnhancedHotelSearch = lazy(() => import("@/components/travel/enhanced-hotel-search").then(m => ({ default: m.EnhancedHotelSearch })));
-const TravelMap = lazy(() => import("@/components/travel/travel-map").then(m => ({ default: m.TravelMap })));
-const PredictiveTravelDashboard = lazy(() => import("@/components/travel/predictive-travel-dashboard").then(m => ({ default: m.PredictiveTravelDashboard })));
-const TravelAnalyticsDashboard = lazy(() => import("@/components/travel/travel-analytics-dashboard").then(m => ({ default: m.TravelAnalyticsDashboard })));
-const TravelBookingSystem = lazy(() => import("@/components/travel/travel-booking-system").then(m => ({ default: m.TravelBookingSystem })));
-const TravelApprovalSystem = lazy(() => import("@/components/travel/travel-approval-system").then(m => ({ default: m.TravelApprovalSystem })));
-const TravelExpenseSystem = lazy(() => import("@/components/travel/travel-expense-system").then(m => ({ default: m.TravelExpenseSystem })));
-const TravelCommunication = lazy(() => import("@/components/travel/travel-communication").then(m => ({ default: m.TravelCommunication })));
-const TravelNotifications = lazy(() => import("@/components/travel/travel-notifications").then(m => ({ default: m.TravelNotifications })));
-const TravelDocumentManager = lazy(() => import("@/components/travel/travel-document-manager").then(m => ({ default: m.TravelDocumentManager })));
+// Lazy load travel components with safeLazyImport to reduce initial bundle size
+const FlightSearch = safeLazyImport(() => import("@/components/travel/flight-search").then(m => ({ default: m.FlightSearch })), "Flight Search");
+const EnhancedHotelSearch = safeLazyImport(() => import("@/components/travel/enhanced-hotel-search").then(m => ({ default: m.EnhancedHotelSearch })), "Hotel Search");
+const TravelMap = safeLazyImport(() => import("@/components/travel/travel-map").then(m => ({ default: m.TravelMap })), "Travel Map");
+const PredictiveTravelDashboard = safeLazyImport(() => import("@/components/travel/predictive-travel-dashboard").then(m => ({ default: m.PredictiveTravelDashboard })), "Predictive Travel Dashboard");
+const TravelAnalyticsDashboard = safeLazyImport(() => import("@/components/travel/travel-analytics-dashboard").then(m => ({ default: m.TravelAnalyticsDashboard })), "Travel Analytics");
+const TravelBookingSystem = safeLazyImport(() => import("@/components/travel/travel-booking-system").then(m => ({ default: m.TravelBookingSystem })), "Booking System");
+const TravelApprovalSystem = safeLazyImport(() => import("@/components/travel/travel-approval-system").then(m => ({ default: m.TravelApprovalSystem })), "Approval System");
+const TravelExpenseSystem = safeLazyImport(() => import("@/components/travel/travel-expense-system").then(m => ({ default: m.TravelExpenseSystem })), "Expense System");
+const TravelCommunication = safeLazyImport(() => import("@/components/travel/travel-communication").then(m => ({ default: m.TravelCommunication })), "Communication");
+const TravelNotifications = safeLazyImport(() => import("@/components/travel/travel-notifications").then(m => ({ default: m.TravelNotifications })), "Notifications");
+const TravelDocumentManager = safeLazyImport(() => import("@/components/travel/travel-document-manager").then(m => ({ default: m.TravelDocumentManager })), "Document Manager");
 
 // Loading component for suspense fallback
 const ComponentLoader = () => (

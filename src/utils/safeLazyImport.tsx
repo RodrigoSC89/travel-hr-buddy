@@ -1,5 +1,8 @@
 import React from "react";
 
+// Log global message to indicate safeLazyImport is active
+console.log("✅ safeLazyImport ativo – fallback global configurado");
+
 /**
  * Safe Lazy Import – Prevents failures when loading dynamic modules
  * and displays a user-friendly fallback in case of error.
