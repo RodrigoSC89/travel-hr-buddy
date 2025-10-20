@@ -5,7 +5,7 @@
 
 import { logger } from "@/lib/logger";
 import { PEODPRules } from "./peodp_rules";
-import type { AuditResult, ComplianceStatus, RuleViolation } from "./types";
+import type { AuditResult, RuleViolation } from "./types";
 
 export class PEODPEngine {
   private rulesEngine: PEODPRules;

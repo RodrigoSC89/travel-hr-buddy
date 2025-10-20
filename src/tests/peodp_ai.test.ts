@@ -2,7 +2,7 @@
  * PEO-DP AI Module Tests
  */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { PEOdpCore } from "@/modules/peodp_ai/peodp_core";
 import { PEODPEngine } from "@/modules/peodp_ai/peodp_engine";
 import { PEODPRules } from "@/modules/peodp_ai/peodp_rules";
@@ -152,7 +152,6 @@ describe("PEO-DP AI Module", () => {
 
     it("should set tolerance limit", () => {
       realtime.setToleranceLimit(5);
-      const session = realtime.getSession();
       
       // Tolerance limit is set even without active session
       expect(realtime["limite_tolerancia"]).toBe(5);

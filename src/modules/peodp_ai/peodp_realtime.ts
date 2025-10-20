@@ -152,11 +152,11 @@ export class PEORealTime {
     let selectedIndex = 0;
 
     for (let i = 0; i < weights.length; i++) {
-      cumulative += weights[i];
-      if (random <= cumulative) {
-        selectedIndex = i;
-        break;
-      }
+        cumulative += weights[i];
+        if (random <= cumulative) {
+            selectedIndex = i;
+            break;
+        }
     }
 
     const evento: DPEvent = {

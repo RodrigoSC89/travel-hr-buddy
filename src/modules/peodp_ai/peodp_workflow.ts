@@ -109,7 +109,7 @@ export class PEOWorkflow {
       }
     });
 
-    logger.info(`Plano de ação criado`, {
+    logger.info("Plano de ação criado", {
       total_events: events.length,
       actions_created: actions.length
     });
