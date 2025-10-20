@@ -44,3 +44,31 @@ temp/
 # Test coverage
 coverage
 .nyc_output
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.venv
+venv/
+ENV/
+env/
+
+# Python ML Models and Data
+models/*.pkl
+models/*.joblib
+data/training/*.csv
+data/dashboard/*.json
+*.db
+*.sqlite
+*.sqlite3
+
+# Python logs
+*.log
