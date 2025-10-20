@@ -45,6 +45,15 @@ temp/
 coverage
 .nyc_output
 
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Vercel
+.vercel
+.vercel_cache
+
 # Python artifacts
 __pycache__/
 *.py[cod]
