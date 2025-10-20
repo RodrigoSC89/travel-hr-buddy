@@ -309,4 +309,120 @@ describe("DPIntelligencePage", () => {
       expect(screen.getByText("Analisando...")).toBeInTheDocument();
     });
   });
+
+  it("renders gravidade filter dropdown", async () => {
+    const mockFrom = vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        order: vi.fn().mockResolvedValue({
+          data: [],
+          error: null,
+        }),
+      }),
+    });
+
+    (supabase.from as unknown).mockImplementation(mockFrom);
+
+    render(<DPIntelligencePage />);
+
+    await waitFor(() => {
+      const gravidadeLabel = screen.getByText("Gravidade");
+      expect(gravidadeLabel).toBeInTheDocument();
+      const gravidadeSelect = screen.getByLabelText("Gravidade");
+      expect(gravidadeSelect).toBeInTheDocument();
+    });
+  });
+
+  it("renders sistema_afetado filter dropdown", async () => {
+    const mockFrom = vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        order: vi.fn().mockResolvedValue({
+          data: [],
+          error: null,
+        }),
+      }),
+    });
+
+    (supabase.from as unknown).mockImplementation(mockFrom);
+
+    render(<DPIntelligencePage />);
+
+    await waitFor(() => {
+      const sistemaLabel = screen.getByText("Sistema Afetado");
+      expect(sistemaLabel).toBeInTheDocument();
+      const sistemaSelect = screen.getByLabelText("Sistema Afetado");
+      expect(sistemaSelect).toBeInTheDocument();
+    });
+  });
+
+  it("applies gravidade filter when selected", async () => {
+    const mockEq = vi.fn().mockReturnValue({
+      order: vi.fn().mockResolvedValue({
+        data: [mockIncidents[0]],
+        error: null,
+      }),
+    });
+
+    const mockSelect = vi.fn().mockReturnValue({
+      eq: mockEq,
+      order: vi.fn().mockResolvedValue({
+        data: mockIncidents,
+        error: null,
+      }),
+    });
+
+    const mockFrom = vi.fn().mockReturnValue({
+      select: mockSelect,
+    });
+
+    (supabase.from as unknown).mockImplementation(mockFrom);
+
+    render(<DPIntelligencePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Loss of Position Due to Gyro Drift")).toBeInTheDocument();
+    });
+
+    const gravidadeSelect = screen.getByLabelText("Gravidade");
+    fireEvent.change(gravidadeSelect, { target: { value: "alto" } });
+
+    await waitFor(() => {
+      expect(mockEq).toHaveBeenCalledWith("gravidade", "alto");
+    });
+  });
+
+  it("applies sistema_afetado filter when selected", async () => {
+    const mockIlike = vi.fn().mockReturnValue({
+      order: vi.fn().mockResolvedValue({
+        data: [mockIncidents[0]],
+        error: null,
+      }),
+    });
+
+    const mockSelect = vi.fn().mockReturnValue({
+      ilike: mockIlike,
+      order: vi.fn().mockResolvedValue({
+        data: mockIncidents,
+        error: null,
+      }),
+    });
+
+    const mockFrom = vi.fn().mockReturnValue({
+      select: mockSelect,
+    });
+
+    (supabase.from as unknown).mockImplementation(mockFrom);
+
+    render(<DPIntelligencePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Loss of Position Due to Gyro Drift")).toBeInTheDocument();
+    });
+
+    const sistemaSelect = screen.getByLabelText("Sistema Afetado");
+    fireEvent.change(sistemaSelect, { target: { value: "DP" } });
+
+    await waitFor(() => {
+      expect(mockIlike).toHaveBeenCalledWith("sistema_afetado", "%DP%");
+    });
+  });
 });

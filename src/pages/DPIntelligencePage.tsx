@@ -170,28 +170,40 @@ export default function DPIntelligencePage() {
         <CardContent>
           {/* Filtros */}
           <div className="flex gap-4 p-4 mb-4 bg-muted/50 rounded-md">
-            <select 
-              onChange={(e) => setGravidade(e.target.value || null)} 
-              className="border p-2 rounded-md bg-background"
-              value={gravidade || ""}
-            >
-              <option value="">Gravidade</option>
-              <option value="baixo">Baixo</option>
-              <option value="médio">Médio</option>
-              <option value="alto">Alto</option>
-            </select>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="gravidade-filter" className="text-sm font-medium">
+                Gravidade
+              </label>
+              <select 
+                id="gravidade-filter"
+                onChange={(e) => setGravidade(e.target.value || null)} 
+                className="border p-2 rounded-md bg-background"
+                value={gravidade || ""}
+              >
+                <option value="">Todos</option>
+                <option value="baixo">Baixo</option>
+                <option value="médio">Médio</option>
+                <option value="alto">Alto</option>
+              </select>
+            </div>
 
-            <select 
-              onChange={(e) => setSistema(e.target.value || null)} 
-              className="border p-2 rounded-md bg-background"
-              value={sistema || ""}
-            >
-              <option value="">Sistema Afetado</option>
-              <option value="DP">DP System</option>
-              <option value="Propulsor">Propulsor</option>
-              <option value="Energia">Energia</option>
-              <option value="Navegação">Navegação</option>
-            </select>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="sistema-filter" className="text-sm font-medium">
+                Sistema Afetado
+              </label>
+              <select 
+                id="sistema-filter"
+                onChange={(e) => setSistema(e.target.value || null)} 
+                className="border p-2 rounded-md bg-background"
+                value={sistema || ""}
+              >
+                <option value="">Todos</option>
+                <option value="DP">DP System</option>
+                <option value="Propulsor">Propulsor</option>
+                <option value="Energia">Energia</option>
+                <option value="Navegação">Navegação</option>
+              </select>
+            </div>
           </div>
 
           {loading ? (
