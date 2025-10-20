@@ -23,7 +23,13 @@ export default defineConfig(({ mode }) => ({
     }),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "robots.txt", "placeholder.svg"],
+      includeAssets: [
+        "favicon.ico",
+        "robots.txt",
+        "placeholder.svg",
+        "src/modules/**/*",
+        "public/modules/**/*"
+      ],
       manifest: {
         name: "Nautilus One - Sistema de Gestão Empresarial",
         short_name: "Nautilus One",

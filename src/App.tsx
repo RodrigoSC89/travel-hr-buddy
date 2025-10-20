@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "./components/layout/error-boundary";
@@ -6,6 +6,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
 import { SmartLayout } from "./components/layout/SmartLayout";
+import { NAVIGATION, SuspenseFallback } from "@/config/navigation";
 
 // Lazy load all pages
 const Index = React.lazy(() => import("./pages/Index"));
@@ -298,6 +299,12 @@ function App() {
                       <Route path="/smart-layout-demo" element={<SmartLayoutDemo />} />
                       <Route path="/template-editor-demo" element={<TemplateEditorDemo />} />
                       <Route path="/_offline" element={<Offline />} />
+                      
+                      {/* Additional navigation routes from config */}
+                      {NAVIGATION.map(({ path, component: Component }) => (
+                        <Route key={path} path={path} element={<Suspense fallback={SuspenseFallback}><Component /></Suspense>} />
+                      ))}
+                      
                       <Route path="*" element={<NotFound />} />
                     </Route>
                   </Routes>
