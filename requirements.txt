@@ -1,0 +1,3 @@
+# Python dependencies for Nautilus One Decision Core
+# Currently no external dependencies required
+# Standard library modules only
