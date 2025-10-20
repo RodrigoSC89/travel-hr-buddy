@@ -91,3 +91,11 @@ bridge_sync.db-journal
 forecast_history.csv
 *_state.json
 fleet_training_data.csv
+
+# Nautilus Intelligence Core artifacts
+analysis.json
+demo-analysis.json
+demo-logs.txt
+workflow.log
+logs/
+src/ai/nautilus-core/dist/
