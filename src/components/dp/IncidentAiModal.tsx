@@ -90,11 +90,17 @@ export default function IncidentAiModal() {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Análise IA – {incident.title}</DialogTitle>
+          <DialogTitle>
+            Análise IA – {typeof incident === "object" && incident !== null && "title" in incident ? String(incident.title) : "Incidente"}
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            {incident.summary || incident.description || "Sem descrição"}
+            {typeof incident === "object" && incident !== null && "summary" in incident 
+              ? String(incident.summary)
+              : typeof incident === "object" && incident !== null && "description" in incident
+              ? String(incident.description)
+              : "Sem descrição"}
           </p>
           
           {!analysis && (

@@ -494,7 +494,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label htmlFor="type">Tipo de Feedback *</Label>
-                  <Select value={newFeedback.type} onValueChange={(value: unknown) => setNewFeedback({...newFeedback, type: value})}>
+                  <Select value={newFeedback.type} onValueChange={(value) => setNewFeedback({...newFeedback, type: value as "feature" | "bug" | "improvement"})}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>

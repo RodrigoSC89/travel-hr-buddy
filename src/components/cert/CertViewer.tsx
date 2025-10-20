@@ -58,14 +58,15 @@ export default function CertViewer() {
       
       // Simular validação de token por enquanto
       // TODO: Implementar função RPC validate_cert_token no Supabase
-      const mockValidation = {
+      const mockValidation: TokenValidation = {
         valid: true,
-        certificate_number: "MOCK-CERT-123",
-        holder_name: "Mock User",
-        issue_date: new Date().toISOString(),
-        expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-        status: "valid",
-        accessed_at: new Date().toISOString()
+        vessel_id: null,
+        organization_id: null,
+        can_view_audits: true,
+        can_view_documents: true,
+        can_view_metrics: true,
+        auditor_name: "External Auditor",
+        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
       };
       
       setValidation(mockValidation);
