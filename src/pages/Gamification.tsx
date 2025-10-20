@@ -1,11 +1,12 @@
 import React, { Suspense } from "react";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 import { Trophy, Star, Award, Target } from "lucide-react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
 
 // Lazy loading do sistema de gamificação
-const GamificationSystem = React.lazy(() => 
+const GamificationSystem = safeLazyImport(() => 
   import("@/components/innovation/gamification-system").then(module => ({
     default: module.GamificationSystem
   }))

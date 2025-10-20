@@ -1,11 +1,12 @@
 import React, { Suspense } from "react";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 import { Eye, Sparkles, Zap, Camera } from "lucide-react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
 
 // Lazy loading da interface AR
-const ARInterface = React.lazy(() => 
+const ARInterface = safeLazyImport(() => 
   import("@/components/innovation/ar-interface").then(module => ({
     default: module.ARInterface
   }))

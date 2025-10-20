@@ -1,11 +1,12 @@
 import React, { Suspense } from "react";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { User, Clock, FileText } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 // Lazy loading do portal moderno
-const ModernEmployeePortal = React.lazy(() => 
+const ModernEmployeePortal = safeLazyImport(() => 
   import("@/components/portal/modern-employee-portal").then(module => ({
     default: module.ModernEmployeePortal
   }))
