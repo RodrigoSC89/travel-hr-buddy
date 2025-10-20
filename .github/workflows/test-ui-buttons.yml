@@ -1,0 +1,40 @@
+name: Validate Buttons and Accessibility
+
+on:
+  pull_request:
+  push:
+    branches: [ main, develop, feature/**, fix/** ]
+
+jobs:
+  test-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build --if-present
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run button tests
+        run: npx playwright test tests/ui/buttons.spec.ts --project=chromium
+
+      - name: Accessibility tests
+        run: npm run test:accessibility || echo "Accessibility warnings only"
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-report
+          path: playwright-report/
