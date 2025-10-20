@@ -123,6 +123,7 @@ const ExternalAuditSystem = React.lazy(() => import("./pages/ExternalAuditSystem
 const ForecastHistoryPage = React.lazy(() => import("./pages/admin/mmi/forecast/ForecastHistory"));
 const BIForecastsPage = React.lazy(() => import("./pages/admin/bi/forecasts"));
 const PEODPAuditPage = React.lazy(() => import("./pages/admin/peodp-audit"));
+const VaultAI = React.lazy(() => import("./modules/vault_ai/pages/VaultAIPage"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -212,6 +213,7 @@ function App() {
                       <Route path="/maritime" element={<Maritime />} />
                       <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
                       <Route path="/nautilus-one" element={<NautilusOne />} />
+                      <Route path="/vault-ai" element={<VaultAI />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
                       <Route path="/mmi/history" element={<MMIHistory />} />
