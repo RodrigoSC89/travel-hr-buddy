@@ -121,6 +121,7 @@ const QuizPage = React.lazy(() => import("./pages/admin/QuizPage"));
 const ExternalAuditSystem = React.lazy(() => import("./pages/ExternalAuditSystem"));
 const ForecastHistoryPage = React.lazy(() => import("./pages/admin/mmi/forecast/ForecastHistory"));
 const BIForecastsPage = React.lazy(() => import("./pages/admin/bi/forecasts"));
+const AdminDPIntelligence = React.lazy(() => import("./pages/admin/dp-intelligence"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -281,6 +282,7 @@ function App() {
                       <Route path="/admin/sgso/review/:id" element={<SGSOAuditReview />} />
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/auditorias-lista" element={<AuditoriasLista />} />
+                      <Route path="/admin/dp-intelligence" element={<AdminDPIntelligence />} />
                       <Route path="/admin/simulations" element={<Simulations />} />
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
