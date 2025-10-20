@@ -20,8 +20,8 @@ import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import { logger } from "@/lib/logger";
 
-// ✅ Dynamic import to avoid SSR/CI issues
-const ApplyTemplateModal = lazy(() => import("@/components/templates/ApplyTemplateModal"));
+// ✅ Dynamic import with relative path for better compatibility
+const ApplyTemplateModal = lazy(() => import("../../../components/templates/ApplyTemplateModal"));
 
 export default function DocumentAIEditorPage() {
   const navigate = useNavigate();
