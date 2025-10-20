@@ -24,10 +24,10 @@ const config: Config = {
         heading: ["Space Grotesk", "system-ui", "sans-serif"],
       },
       colors: {
-        // Accessible color tokens for WCAG 2.1 AA compliance
+        // Accessible color tokens for WCAG 2.1 AA compliance (4.5:1 contrast minimum)
         primary: {
           DEFAULT: "#2563eb",
-          light: "#3b82f6",
+          light: "#60a5fa",
           dark: "#1e40af",
         },
         text: {
@@ -41,9 +41,9 @@ const config: Config = {
           elevated: "#334155",
         },
         alert: {
-          warning: "#ca8a04",
-          error: "#dc2626",
-          success: "#059669",
+          warning: "#fbbf24",
+          error: "#f87171",
+          success: "#34d399",
         },
         // Existing color tokens
         border: "hsl(var(--border))",
