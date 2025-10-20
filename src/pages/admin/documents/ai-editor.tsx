@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -19,7 +19,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import { logger } from "@/lib/logger";
-import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
+
+// ✅ Dynamic import to avoid SSR/CI issues
+const ApplyTemplateModal = lazy(() => import("@/components/templates/ApplyTemplateModal"));
 
 export default function DocumentAIEditorPage() {
   const navigate = useNavigate();
@@ -272,14 +274,17 @@ export default function DocumentAIEditorPage() {
           <div className="flex items-center justify-between">
             <CardTitle>Editor</CardTitle>
             <div className="flex gap-2">
-              <ApplyTemplateModal
-                tableName="templates"
-                onApply={(content) => {
-                  if (editor) {
-                    editor.commands.setContent(content);
-                  }
-                }}
-              />
+              {/* ✅ Wrapped in Suspense for safe dynamic loading */}
+              <Suspense fallback={<div className="w-4 h-4" />}>
+                <ApplyTemplateModal
+                  tableName="templates"
+                  onApply={(content) => {
+                    if (editor) {
+                      editor.commands.setContent(content);
+                    }
+                  }}
+                />
+              </Suspense>
               <Button 
                 onClick={rewriteSelectedText} 
                 disabled={rewriting}
