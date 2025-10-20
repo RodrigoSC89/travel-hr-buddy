@@ -3,12 +3,14 @@ import { Shield, Lock, CheckCircle, FileCheck } from "lucide-react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 
 // Lazy loading do sistema blockchain
-const BlockchainDocuments = React.lazy(() => 
-  import("@/components/innovation/blockchain-documents").then(module => ({
+const BlockchainDocuments = safeLazyImport(
+  () => import("@/components/innovation/blockchain-documents").then(module => ({
     default: module.BlockchainDocuments
-  }))
+  })),
+  "Blockchain Documents"
 );
 
 const Blockchain: React.FC = () => {
@@ -26,9 +28,7 @@ const Blockchain: React.FC = () => {
         ]}
       />
       
-      <Suspense fallback={<DashboardSkeleton />}>
-        <BlockchainDocuments />
-      </Suspense>
+      <BlockchainDocuments />
     </ModulePageWrapper>
   );
 };

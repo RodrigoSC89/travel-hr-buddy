@@ -1,14 +1,15 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { Trophy, Star, Award, Target } from "lucide-react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
-import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 
 // Lazy loading do sistema de gamificação
-const GamificationSystem = React.lazy(() => 
-  import("@/components/innovation/gamification-system").then(module => ({
+const GamificationSystem = safeLazyImport(
+  () => import("@/components/innovation/gamification-system").then(module => ({
     default: module.GamificationSystem
-  }))
+  })),
+  "Sistema de Gamificação"
 );
 
 const Gamification: React.FC = () => {
@@ -26,9 +27,7 @@ const Gamification: React.FC = () => {
         ]}
       />
       
-      <Suspense fallback={<DashboardSkeleton />}>
-        <GamificationSystem />
-      </Suspense>
+      <GamificationSystem />
     </ModulePageWrapper>
   );
 };
