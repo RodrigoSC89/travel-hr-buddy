@@ -56,6 +56,7 @@ export default defineConfig(({ mode }) => ({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB limit
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -124,69 +125,71 @@ export default defineConfig(({ mode }) => ({
           // Vendor chunks for core libraries
           if (id.includes("node_modules")) {
             if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom")) {
-              return "vendor";
+              return "vendor-react";
             }
-            if (id.includes("@radix-ui/react-dialog") || 
-                id.includes("@radix-ui/react-dropdown-menu") || 
-                id.includes("@radix-ui/react-tabs")) {
-              return "ui";
+            if (id.includes("@radix-ui")) {
+              return "vendor-ui";
             }
-            if (id.includes("recharts")) {
-              return "charts";
+            if (id.includes("recharts") || id.includes("chart.js")) {
+              return "vendor-charts";
             }
-            if (id.includes("@supabase/supabase-js")) {
-              return "supabase";
+            if (id.includes("@supabase")) {
+              return "vendor-supabase";
             }
             if (id.includes("mapbox-gl")) {
-              return "mapbox";
+              return "vendor-mapbox";
             }
+            if (id.includes("@tanstack/react-query")) {
+              return "vendor-query";
+            }
+            // Group other node_modules into vendor-misc
+            return "vendor-misc";
           }
+          
+          // Nautilus Core modules (new chunking strategy)
+          if (id.includes("src/core/")) {
+            return "nautilus-core";
+          }
+          if (id.includes("src/ai/nautilus-core")) {
+            return "nautilus-ai";
+          }
+          
+          // Module chunking
+          if (id.includes("src/modules/bridgelink/")) {
+            return "module-bridgelink";
+          }
+          if (id.includes("src/modules/control-hub/")) {
+            return "module-controlhub";
+          }
+          if (id.includes("src/modules/dp-intelligence/")) {
+            return "module-dp";
+          }
+          if (id.includes("src/modules/mmi/")) {
+            return "module-mmi";
+          }
+          if (id.includes("src/modules/fmea/")) {
+            return "module-fmea";
+          }
+          
           // SGSO module chunking
           if (id.includes("src/components/sgso/")) {
-            return "sgso";
+            return "module-sgso";
           }
+          
           // Travel module chunking
           if (id.includes("src/components/travel/")) {
-            if (id.includes("enhanced-hotel-search") || id.includes("responsive-hotel-search")) {
+            if (id.includes("hotel")) {
               return "travel-hotel";
             }
-            if (id.includes("flight-search")) {
+            if (id.includes("flight")) {
               return "travel-flights";
             }
-            if (id.includes("predictive-travel-dashboard")) {
-              return "travel-predictive";
-            }
-            if (id.includes("travel-booking-system")) {
-              return "travel-booking";
-            }
-            if (id.includes("travel-analytics-dashboard")) {
-              return "travel-analytics";
-            }
-            if (id.includes("ai-travel-assistant")) {
-              return "travel-ai";
-            }
-            if (id.includes("travel-expense-system")) {
-              return "travel-expenses";
-            }
-            if (id.includes("travel-policy-system")) {
-              return "travel-policy";
-            }
-            if (id.includes("travel-approval-system")) {
-              return "travel-approvals";
-            }
-            if (id.includes("travel-document-manager")) {
-              return "travel-documents";
-            }
-            if (id.includes("travel-communication")) {
-              return "travel-comms";
-            }
-            if (id.includes("travel-notification")) {
-              return "travel-notifications";
-            }
-            if (id.includes("travel-map")) {
-              return "travel-map";
-            }
             return "travel-misc";
+          }
+          
+          // Don't create chunks for pages - keep them dynamic
+          if (id.includes("src/pages/")) {
+            return undefined;
           }
         }
       }
