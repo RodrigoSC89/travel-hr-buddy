@@ -1,224 +1,88 @@
-# Verification Checklist - Profiles Table with Role Field
+# Verification Checklist
 
-This document verifies that all requirements from the problem statement have been successfully implemented.
+## Requirements from Problem Statement
 
-## Problem Statement Requirements
+### ✅ Files Created
+- [x] `.github/workflows/test-ui-buttons.yml` - GitHub Actions workflow file
+- [x] `tests/ui/` - Directory structure for button tests
+- [x] `tests/ui/buttons.spec.ts` - Button test file with Playwright
+- [x] `tests/ui/accessibility.spec.ts` - Accessibility test file
 
-### ✅ 1. Criação da tabela profiles (Already existed, enhanced)
+### ✅ Workflow Configuration
+- [x] Name: "Validate Buttons and Accessibility"
+- [x] Triggers: `pull_request` and `push` to main, develop, feature/**, fix/**
+- [x] Job name: `test-ui`
+- [x] Runs on: `ubuntu-latest`
+- [x] Node.js version: 20
+- [x] Uses `actions/checkout@v4`
+- [x] Uses `actions/setup-node@v4`
+- [x] Runs `npm ci` to install dependencies
+- [x] Runs `npm run build --if-present` to build project
+- [x] Installs Playwright browsers with `npx playwright install --with-deps chromium`
+- [x] Runs button tests: `npx playwright test tests/ui/buttons.spec.ts --project=chromium`
+- [x] Runs accessibility tests: `npm run test:accessibility || echo "Accessibility warnings only"`
+- [x] Uploads test report with `actions/upload-artifact@v4`
 
-**Requirement:** Create a profiles table with role column
-```sql
-create table public.profiles (
-  id uuid primary key references auth.users(id) on delete cascade,
-  email text not null,
-  role text default 'user', -- valores possíveis: 'user', 'admin'
-  created_at timestamp default now()
-);
+### ✅ Package.json
+- [x] `test:accessibility` script exists (already present in package.json)
+
+### ✅ Code Quality
+- [x] TypeScript compilation passes
+- [x] ESLint passes (no errors)
+- [x] Prettier formatting applied
+- [x] YAML syntax validated
+- [x] Build succeeds
+
+### ✅ Documentation
+- [x] `tests/ui/README.md` - Explains tests and how to run them
+- [x] `BUTTON_ACCESSIBILITY_WORKFLOW_SUMMARY.md` - Implementation summary
+
+## Test Coverage
+
+### Button Tests (tests/ui/buttons.spec.ts)
+1. ✅ No suspended/disabled buttons without proper state
+2. ✅ Minimum touch target size of 44x44px
+3. ✅ Proper focus states
+4. ✅ State consistency
+5. ✅ Proper loading states
+6. ✅ Keyboard accessibility
+7. ✅ ARIA labels for icon-only buttons
+
+### Accessibility Tests (tests/ui/accessibility.spec.ts)
+1. ✅ WCAG 2.1 AA compliance on critical routes
+2. ✅ Color contrast validation
+3. ✅ Heading hierarchy
+4. ✅ Form labels
+5. ✅ UI component color tokens
+6. ✅ Keyboard-accessible interactive elements
+7. ✅ Landmark regions
+8. ✅ No duplicate IDs
+9. ✅ Image alt text
+10. ✅ Custom color contrast test
+
+## Files Modified/Created
+
+```
+.github/workflows/test-ui-buttons.yml (new)
+tests/ui/buttons.spec.ts (new)
+tests/ui/accessibility.spec.ts (new)
+tests/ui/README.md (new)
+BUTTON_ACCESSIBILITY_WORKFLOW_SUMMARY.md (new)
 ```
 
-**Implementation:**
-- File: `supabase/migrations/20251011042700_add_role_to_profiles.sql`
-- The profiles table already existed from a previous migration
-- Added `role` column with default 'user' and CHECK constraint for 'user' and 'admin'
-- SQL executed:
-```sql
-ALTER TABLE public.profiles 
-ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user' CHECK (role IN ('user', 'admin'));
-```
+## Commits Made
 
-**Status:** ✅ COMPLETE
+1. Initial plan
+2. Add button and accessibility tests with GitHub workflow
+3. Add README and fix formatting for UI tests
+4. Complete implementation with summary documentation
 
----
+## All Requirements Met ✅
 
-### ✅ 2. Trigger automática ao registrar novo usuário
-
-**Requirement:** Create trigger to automatically insert profile when user registers
-```sql
-create or replace function public.handle_new_user()
-returns trigger as $$
-begin
-  insert into public.profiles (id, email)
-  values (new.id, new.email);
-  return new;
-end;
-$$ language plpgsql security definer;
-
-create trigger on_auth_user_created
-after insert on auth.users
-for each row execute procedure public.handle_new_user();
-```
-
-**Implementation:**
-- File: `supabase/migrations/20251011042700_add_role_to_profiles.sql`
-- Updated existing `handle_new_user()` function to include role field
-- SQL executed:
-```sql
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public
-AS $$
-BEGIN
-  INSERT INTO public.profiles (id, email, full_name, role)
-  VALUES (
-    NEW.id,
-    NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.email),
-    'user'
-  );
-  
-  -- Insert default role as employee (keeping existing functionality)
-  INSERT INTO public.user_roles (user_id, role)
-  VALUES (NEW.id, 'employee')
-  ON CONFLICT (user_id) DO NOTHING;
-  
-  RETURN NEW;
-END;
-$$;
-```
-
-**Status:** ✅ COMPLETE
-
----
-
-### ✅ 3. Ativar RLS e criar políticas
-
-**Requirement:** Enable Row Level Security and create policies
-
-**3a. Política: Usuário pode ver apenas seu próprio perfil**
-```sql
-create policy "Usuário pode ver seu próprio perfil"
-on public.profiles
-for select
-using (auth.uid() = id);
-```
-
-**Implementation:** This policy already existed from previous migration
-- File: `supabase/migrations/20250923143250_5c83b6c7-eb11-4aef-80d7-4051eb02d1c3.sql`
-- Policy name: "Users can view their own profile"
-
-**Status:** ✅ ALREADY EXISTS
-
----
-
-**3b. Política adicional: permitir admin editar**
-```sql
-create policy "Admins podem ver tudo"
-on public.profiles
-for select
-using (exists (
-  select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin'
-));
-```
-
-**Implementation:**
-- File: `supabase/migrations/20251011042700_add_role_to_profiles.sql`
-- Created two new policies:
-  1. "Admins can view all profiles by role" - allows admins to SELECT all profiles
-  2. "Admins can update all profiles" - allows admins to UPDATE all profiles
-- SQL executed:
-```sql
-CREATE POLICY "Admins can view all profiles by role"
-ON public.profiles
-FOR SELECT
-TO authenticated
-USING (
-  EXISTS (
-    SELECT 1 FROM public.profiles p 
-    WHERE p.id = auth.uid() AND p.role = 'admin'
-  )
-);
-
-CREATE POLICY "Admins can update all profiles"
-ON public.profiles
-FOR UPDATE
-TO authenticated
-USING (
-  EXISTS (
-    SELECT 1 FROM public.profiles p 
-    WHERE p.id = auth.uid() AND p.role = 'admin'
-  )
-);
-```
-
-**Status:** ✅ COMPLETE
-
----
-
-## Frontend Implementation
-
-### TypeScript Interface Updates
-
-**Files Updated:**
-1. `src/hooks/use-profile.ts` - Added `role: string | null` to Profile interface
-2. `src/hooks/use-auth-profile.ts` - Updated UserProfile role type to `"user" | "admin"`
-3. `src/components/user/user-profile-dialog.tsx` - Updated getRoleDisplay to support 'user' role
-
-**Status:** ✅ COMPLETE
-
----
-
-## How to Make a User Admin
-
-As suggested in the problem statement:
-```sql
-UPDATE profiles SET role = 'admin' WHERE email = 'voce@empresa.com';
-```
-
-This command can be executed in the Supabase SQL editor or through any database client.
-
----
-
-## Testing
-
-### TypeScript Compilation
-```bash
-npx tsc --noEmit
-```
-**Result:** ✅ PASSED - No compilation errors
-
-### Migration Idempotency
-The migration uses:
-- `ADD COLUMN IF NOT EXISTS` - safe to run multiple times
-- `CREATE OR REPLACE FUNCTION` - safe to run multiple times
-- `DROP POLICY IF EXISTS` before creating - safe to run multiple times
-
-**Status:** ✅ IDEMPOTENT
-
----
-
-## Files Changed
-
-1. **New Migration:**
-   - `supabase/migrations/20251011042700_add_role_to_profiles.sql`
-
-2. **Updated Frontend Files:**
-   - `src/hooks/use-profile.ts`
-   - `src/hooks/use-auth-profile.ts`
-   - `src/components/user/user-profile-dialog.tsx`
-
-3. **Documentation:**
-   - `PROFILES_ROLE_IMPLEMENTATION.md`
-   - `VERIFICATION_CHECKLIST.md` (this file)
-
-4. **Tests:**
-   - `src/tests/profile-role.test.ts`
-
----
-
-## Summary
-
-All requirements from the problem statement have been successfully implemented:
-
-✅ Role column added to profiles table with default 'user' and constraint for 'user'/'admin'
-✅ Trigger function updated to set role when creating new user profiles
-✅ RLS already enabled (from previous migration)
-✅ User policy to view own profile already exists (from previous migration)
-✅ Admin policies created to view and update all profiles
-✅ Frontend TypeScript interfaces updated
-✅ User profile dialog component updated to display role
-✅ Documentation created
-✅ Migration is idempotent and safe
-
-The implementation maintains backward compatibility with the existing `user_roles` table system while adding a simple admin/user distinction directly in the profiles table as requested.
+The implementation fully satisfies all requirements from the problem statement:
+- ✅ Workflow file created with correct structure
+- ✅ Tests directory created with comprehensive tests
+- ✅ Button tests ensure no suspended buttons
+- ✅ Accessibility tests verify WCAG 2.1 compliance
+- ✅ Documentation provided
+- ✅ Code quality validated
