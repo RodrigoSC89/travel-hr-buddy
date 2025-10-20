@@ -1,0 +1,5 @@
+# Python dependencies for Nautilus One System
+# Auto-Report Module
+
+# PDF Generation
+reportlab>=4.0.0

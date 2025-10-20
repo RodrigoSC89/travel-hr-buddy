@@ -44,3 +44,35 @@ temp/
 # Test coverage
 coverage
 .nyc_output
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Python test and report files
+relatorio_fmea_atual.json
+asog_report.json
+forecast_risco.json
+nautilus_full_report.json
+Nautilus_Tech_Report.pdf
