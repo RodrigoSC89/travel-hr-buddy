@@ -1,6 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import ApplyTemplateModal from "@/_legacy/ApplyTemplateModal";
+
+// Unmock the component for this test file
+vi.unmock("@/components/templates/ApplyTemplateModal");
+
+import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
 
 // Mock templates data
 const mockTemplates = [
@@ -75,7 +79,7 @@ describe("ApplyTemplateModal Component", () => {
 
   it("should fetch templates when modal opens", async () => {
     const onApply = vi.fn();
-    render(<ApplyTemplateModal onApply={onApply} />);
+    render(<ApplyTemplateModal onApply={onApply} tableName="ai_document_templates" />);
     
     const triggerButton = screen.getByRole("button", { name: /Aplicar Template/i });
     fireEvent.click(triggerButton);
