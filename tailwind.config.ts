@@ -24,6 +24,28 @@ const config: Config = {
         heading: ["Space Grotesk", "system-ui", "sans-serif"],
       },
       colors: {
+        // Accessible color tokens for WCAG 2.1 AA compliance
+        primary: {
+          DEFAULT: "#2563eb",
+          light: "#3b82f6",
+          dark: "#1e40af",
+        },
+        text: {
+          base: "#f1f5f9",
+          muted: "#cbd5e1",
+          subtle: "#94a3b8",
+        },
+        background: {
+          base: "#0f172a",
+          surface: "#1e293b",
+          elevated: "#334155",
+        },
+        alert: {
+          warning: "#ca8a04",
+          error: "#dc2626",
+          success: "#059669",
+        },
+        // Existing color tokens
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
