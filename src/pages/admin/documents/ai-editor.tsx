@@ -19,8 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import { logger } from "@/lib/logger";
-// Template system - to be implemented later
-// import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
+import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
 
 export default function DocumentAIEditorPage() {
   const navigate = useNavigate();
