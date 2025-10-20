@@ -385,8 +385,8 @@ export const MaritimeCommunicationCenter = () => {
                   
                   <div>
                     <Label>Tipo de Mensagem</Label>
-                    <Select value={newMessage.message_type} onValueChange={(value: unknown) => 
-                      setNewMessage(prev => ({ ...prev, message_type: value }))
+                    <Select value={newMessage.message_type} onValueChange={(value: string) => 
+                      setNewMessage(prev => ({ ...prev, message_type: value as typeof prev.message_type }))
                     }>
                       <SelectTrigger>
                         <SelectValue />
@@ -404,8 +404,8 @@ export const MaritimeCommunicationCenter = () => {
                 
                 <div>
                   <Label>Prioridade</Label>
-                  <Select value={newMessage.priority} onValueChange={(value: unknown) => 
-                    setNewMessage(prev => ({ ...prev, priority: value }))
+                  <Select value={newMessage.priority} onValueChange={(value: string) => 
+                    setNewMessage(prev => ({ ...prev, priority: value as typeof prev.priority }))
                   }>
                     <SelectTrigger>
                       <SelectValue />

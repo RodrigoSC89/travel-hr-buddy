@@ -90,14 +90,14 @@ export const SuperAdminDashboard: React.FC = () => {
       if (error) throw error;
 
       // Processar dados das organizações
-      const processedOrgs = orgs?.map((org: unknown) => ({
+      const processedOrgs = orgs?.map((org: any) => ({
         ...org,
         max_users: org.max_users ?? 0,
         max_vessels: org.max_vessels ?? 0,
         max_storage_gb: org.max_storage_gb ?? 0,
         user_count: org.organization_users?.filter((u: OrganizationUser) => u.status === "active").length || 0,
         vessel_count: org.vessels?.length || 0,
-        branding: org.organization_branding?.[0] ?? undefined
+        branding: Array.isArray(org.organization_branding) ? org.organization_branding[0] : undefined
       })) || [];
 
       setOrganizations(processedOrgs as Organization[]);

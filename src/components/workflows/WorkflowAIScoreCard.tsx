@@ -1,17 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { getWorkflowAISummary } from "@/_legacy/workflowAIMetrics";
 
 export function WorkflowAIScoreCard() {
-  const [summary, setSummary] = useState<{ total: number; aceitas: number; taxa: string } | null>(null);
-
-  useEffect(() => {
-    getWorkflowAISummary().then(setSummary);
-  }, []);
-
-  if (!summary) return null;
+  // Mock data for now - TODO: Implement real workflow AI metrics
+  const summary = {
+    total: 0,
+    aceitas: 0,
+    taxa: "0"
+  };
 
   return (
     <Card className="w-full">

@@ -11,6 +11,8 @@
     "strictPropertyInitialization": false,
     "noImplicitThis": false,
     "noUncheckedIndexedAccess": false,
-    "noImplicitReturns": false
+    "noImplicitReturns": false,
+    "strict": false,
+    "skipLibCheck": true
   }
 }

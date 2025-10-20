@@ -1,13 +1,11 @@
-// Performance Dashboard - Stub
-// TODO: Implement performance dashboard functionality
-
+// Stub component for workflow AI features
 import { Card, CardContent } from "@/components/ui/card";
 
-export function PerformanceDashboard() {
+export function KanbanAISuggestions() {
   return (
     <Card>
       <CardContent className="p-6 text-center text-muted-foreground">
-        <p>Dashboard de Performance em desenvolvimento</p>
+        <p>AI Suggestions em desenvolvimento</p>
       </CardContent>
     </Card>
   );
