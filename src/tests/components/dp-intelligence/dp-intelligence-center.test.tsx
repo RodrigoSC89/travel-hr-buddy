@@ -64,9 +64,9 @@ describe("DPIntelligenceCenter Component", () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
-        expect(screen.getByText("DP-1")).toBeInTheDocument();
-        expect(screen.getByText("DP-2")).toBeInTheDocument();
-        expect(screen.getByText("DP-3")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "DP-1" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "DP-2" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "DP-3" })).toBeInTheDocument();
       });
     });
 
@@ -136,7 +136,7 @@ describe("DPIntelligenceCenter Component", () => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
       });
       
-      const dp3Button = screen.getByText("DP-3");
+      const dp3Button = screen.getByRole("button", { name: "DP-3" });
       fireEvent.click(dp3Button);
       
       await waitFor(() => {
@@ -167,7 +167,7 @@ describe("DPIntelligenceCenter Component", () => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
       });
       
-      const dp2Button = screen.getByText("DP-2");
+      const dp2Button = screen.getByRole("button", { name: "DP-2" });
       fireEvent.click(dp2Button);
       
       await waitFor(() => {
@@ -182,14 +182,14 @@ describe("DPIntelligenceCenter Component", () => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
       });
       
-      const dp2Button = screen.getByText("DP-2");
+      const dp2Button = screen.getByRole("button", { name: "DP-2" });
       fireEvent.click(dp2Button);
       
       await waitFor(() => {
         expect(screen.getByText(/Limpar/i)).toBeInTheDocument();
       });
       
-      const clearButton = screen.getByText(/Limpar/i);
+      const clearButton = screen.getByRole("button", { name: /Limpar/i });
       fireEvent.click(clearButton);
       
       await waitFor(() => {
