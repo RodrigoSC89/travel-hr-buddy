@@ -98,10 +98,14 @@ class TestRiskForecast(unittest.TestCase):
         self.assertIn("summary", results)
     
     def test_forecast_prediction_accuracy(self):
-        """Test forecast generates predictions for all categories"""
+        """Test forecast generates predictions and summary"""
         results = run_risk_forecast(timeframe=30)
-        self.assertEqual(len(results["previsoes"]), 5)  # 5 categories
+        # New implementation uses FMEA/ASOG data instead of generating random predictions
+        self.assertIn("previsoes", results)
         self.assertIn("risk_matrix", results)
+        self.assertIn("summary", results)
+        # Verify summary contains expected fields
+        self.assertIn("tendencia", results["summary"])
 
 
 class TestSGSOConnector(unittest.TestCase):

@@ -1,195 +1,317 @@
 """
-Risk Forecaster Module - Predictive Risk Analysis
+Risk Forecaster Module - Predictive Risk Analysis with FMEA/ASOG Integration
 
-This module analyzes historical incident data (90-day trends) and predicts future risks
-in 5 categories: Operational, Environmental, Equipment, Human, Regulatory.
-Generates color-coded risk matrix (🔴 Critical, 🟠 High, 🟡 Medium, 🟢 Low)
+This module analyzes historical FMEA (Failure Mode and Effects Analysis) data from 8 critical
+maritime systems and ASOG (Assurance of Operational Compliance) data to generate predictive
+risk forecasts based on RPN (Risk Priority Number) calculations.
+
+RPN = Severity × Occurrence × Detection
+
+Risk Classification:
+- 🔴 HIGH (RPN > 200): Immediate action required
+- 🟡 MODERATE (150-200): Intensify monitoring
+- 🟢 LOW (≤150): Normal operation
 """
 
+import json
 import datetime
-import random
+import statistics
+import os
+
+
+class RiskForecast:
+    """Main risk forecast class with FMEA/ASOG analysis capabilities"""
+    
+    def __init__(self, fmea_file="relatorio_fmea_atual.json", asog_file="asog_report.json"):
+        """
+        Initialize the Risk Forecast module.
+        
+        Args:
+            fmea_file (str): Path to FMEA data file
+            asog_file (str): Path to ASOG compliance data file
+        """
+        self.fmea_file = fmea_file
+        self.asog_file = asog_file
+        self.fmea_data = None
+        self.asog_data = None
+    
+    def carregar_dados_fmea(self):
+        """
+        Load historical FMEA data from JSON file.
+        
+        Returns:
+            dict: FMEA data or None if file not found
+        """
+        if not os.path.exists(self.fmea_file):
+            print(f"⚠️ Arquivo FMEA não encontrado: {self.fmea_file}")
+            return None
+        
+        try:
+            with open(self.fmea_file, "r", encoding="utf-8") as f:
+                self.fmea_data = json.load(f)
+            return self.fmea_data
+        except Exception as e:
+            print(f"❌ Erro ao carregar dados FMEA: {e}")
+            return None
+    
+    def carregar_dados_asog(self):
+        """
+        Load ASOG compliance data from JSON file.
+        
+        Returns:
+            dict: ASOG data or None if file not found
+        """
+        if not os.path.exists(self.asog_file):
+            print(f"⚠️ Arquivo ASOG não encontrado: {self.asog_file}")
+            return None
+        
+        try:
+            with open(self.asog_file, "r", encoding="utf-8") as f:
+                self.asog_data = json.load(f)
+            return self.asog_data
+        except Exception as e:
+            print(f"❌ Erro ao carregar dados ASOG: {e}")
+            return None
+    
+    def calcular_rpn_medio(self):
+        """
+        Calculate average RPN from all failure modes in FMEA data.
+        
+        Returns:
+            float: Average RPN value
+        """
+        if not self.fmea_data:
+            return 0.0
+        
+        rpn_values = []
+        for sistema in self.fmea_data.get("sistemas_criticos", []):
+            for modo_falha in sistema.get("modos_falha", []):
+                rpn_values.append(modo_falha.get("rpn", 0))
+        
+        return statistics.mean(rpn_values) if rpn_values else 0.0
+    
+    def calcular_variabilidade(self):
+        """
+        Calculate standard deviation of RPN values.
+        
+        Returns:
+            float: Standard deviation of RPN values
+        """
+        if not self.fmea_data:
+            return 0.0
+        
+        rpn_values = []
+        for sistema in self.fmea_data.get("sistemas_criticos", []):
+            for modo_falha in sistema.get("modos_falha", []):
+                rpn_values.append(modo_falha.get("rpn", 0))
+        
+        return statistics.stdev(rpn_values) if len(rpn_values) > 1 else 0.0
+    
+    def classificar_risco(self, rpn_medio):
+        """
+        Classify risk level based on average RPN.
+        
+        Args:
+            rpn_medio (float): Average RPN value
+        
+        Returns:
+            tuple: (risk_level, emoji, description)
+        """
+        if rpn_medio > 200:
+            return ("ALTA", "🔴", "Requer ação imediata")
+        elif rpn_medio > 150:
+            return ("MODERADA", "🟡", "Intensificar monitoramento")
+        else:
+            return ("BAIXA", "🟢", "Operação normal")
+    
+    def verificar_conformidade_asog(self):
+        """
+        Verify ASOG operational compliance status.
+        
+        Returns:
+            tuple: (status, description)
+        """
+        if not self.asog_data:
+            return ("sem_dados", "Dados ASOG não disponíveis")
+        
+        compliance = self.asog_data.get("compliance_summary", {})
+        status_geral = compliance.get("status_geral", "desconhecido")
+        taxa_conformidade = compliance.get("taxa_conformidade", 0)
+        
+        if status_geral == "conforme" and taxa_conformidade == 100:
+            return ("conforme", "Todos os parâmetros dentro dos limites")
+        elif taxa_conformidade >= 90:
+            return ("atencao", "Alguns parâmetros requerem atenção")
+        else:
+            return ("fora_limites", "Parâmetros críticos fora dos limites")
+    
+    def gerar_recomendacao(self, nivel_risco, status_asog):
+        """
+        Generate operational recommendations based on risk level and ASOG status.
+        
+        Args:
+            nivel_risco (str): Risk level (ALTA, MODERADA, BAIXA)
+            status_asog (str): ASOG compliance status
+        
+        Returns:
+            str: Recommendation text with emoji
+        """
+        if nivel_risco == "ALTA":
+            return "🔴 Ação imediata necessária. Revisar todos os sistemas críticos e implementar controles emergenciais."
+        elif nivel_risco == "MODERADA":
+            return "🟡 Intensificar monitoramento. Revisar procedimentos e aumentar frequência de inspeções."
+        else:
+            if status_asog == "conforme":
+                return "🟢 Operação dentro dos padrões. Manter rotina de monitoramento."
+            elif status_asog == "atencao":
+                return "🟡 Operação estável, mas alguns parâmetros requerem atenção."
+            else:
+                return "🟠 Revisar parâmetros operacionais. Verificar conformidade ASOG."
+    
+    def gerar_previsao(self):
+        """
+        Generate complete risk forecast with FMEA/ASOG analysis.
+        
+        Returns:
+            dict: Complete forecast report
+        """
+        print("🔮 Iniciando análise preditiva de risco...")
+        print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Carregando dados históricos FMEA/ASOG...")
+        
+        # Load data
+        self.carregar_dados_fmea()
+        self.carregar_dados_asog()
+        
+        if not self.fmea_data:
+            return {
+                "erro": "Dados FMEA não disponíveis",
+                "timestamp": datetime.datetime.now().isoformat()
+            }
+        
+        print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Calculando tendência de RPN...")
+        
+        # Calculate metrics
+        rpn_medio = self.calcular_rpn_medio()
+        variabilidade = self.calcular_variabilidade()
+        
+        # Classify risk
+        nivel_risco, emoji, descricao = self.classificar_risco(rpn_medio)
+        
+        # Check ASOG compliance
+        status_asog, asog_desc = self.verificar_conformidade_asog()
+        
+        # Generate recommendation
+        recomendacao = self.gerar_recomendacao(nivel_risco, status_asog)
+        
+        print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Gerando relatório preditivo...")
+        
+        # Build forecast report
+        forecast = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "risco_previsto": nivel_risco,
+            "rpn_medio": round(rpn_medio, 2),
+            "variabilidade": round(variabilidade, 2),
+            "status_operacional": status_asog,
+            "recomendacao": recomendacao,
+            "detalhes": {
+                "descricao_risco": descricao,
+                "descricao_asog": asog_desc,
+                "total_sistemas": len(self.fmea_data.get("sistemas_criticos", [])),
+                "total_modos_falha": sum(
+                    len(s.get("modos_falha", [])) 
+                    for s in self.fmea_data.get("sistemas_criticos", [])
+                )
+            }
+        }
+        
+        print(f"\n📈 Tendência de risco: {nivel_risco}")
+        print(f"RPN médio: {rpn_medio:.2f} | Variabilidade: {variabilidade:.2f}")
+        print(f"Status ASOG: {status_asog}")
+        print(f"Recomendação: {recomendacao}")
+        
+        return forecast
+    
+    def salvar_relatorio(self, forecast, filename="forecast_risco.json"):
+        """
+        Save forecast report to JSON file.
+        
+        Args:
+            forecast (dict): Forecast data to save
+            filename (str): Output filename
+        
+        Returns:
+            bool: True if successful
+        """
+        try:
+            with open(filename, "w", encoding="utf-8") as f:
+                json.dump(forecast, f, indent=2, ensure_ascii=False)
+            print(f"\n📊 Forecast de Risco salvo como: {filename}")
+            return True
+        except Exception as e:
+            print(f"❌ Erro ao salvar relatório: {e}")
+            return False
+    
+    def analyze(self):
+        """
+        Run complete analysis and save report.
+        
+        Returns:
+            dict: Forecast results
+        """
+        forecast = self.gerar_previsao()
+        self.salvar_relatorio(forecast)
+        return forecast
 
 
 def run_risk_forecast(timeframe=30):
     """
-    Run risk forecast analysis.
+    Legacy function for backward compatibility with existing tests.
     
     Args:
-        timeframe (int): Forecast timeframe in days (default: 30)
+        timeframe (int): Forecast timeframe in days (not used in new implementation)
     
     Returns:
-        dict: Risk forecast results with predictions and recommendations
+        dict: Risk forecast results
     """
+    forecaster = RiskForecast()
+    forecast = forecaster.gerar_previsao()
     
-    # 5 risk categories
-    risk_categories = [
-        "Operacional",
-        "Ambiental",
-        "Equipamento",
-        "Humano",
-        "Regulatório"
-    ]
-    
-    # Simulate historical data (90-day trend)
-    historical_data = []
-    for i in range(90):
-        date = (datetime.datetime.now() - datetime.timedelta(days=90-i)).date().isoformat()
-        incidents = random.randint(0, 5)
-        historical_data.append({
-            "data": date,
-            "incidentes": incidents
-        })
-    
-    # Calculate trend
-    recent_incidents = sum(day["incidentes"] for day in historical_data[-30:])
-    previous_incidents = sum(day["incidentes"] for day in historical_data[-60:-30])
-    trend = "crescente" if recent_incidents > previous_incidents else "decrescente" if recent_incidents < previous_incidents else "estável"
-    
-    # Generate risk predictions for each category
-    risk_predictions = []
-    risk_matrix = {
-        "critico": [],
-        "alto": [],
-        "medio": [],
-        "baixo": []
-    }
-    
-    for category in risk_categories:
-        # Random probability (0-100)
-        probability = random.randint(10, 95)
-        
-        # Random impact (0-100)
-        impact = random.randint(10, 95)
-        
-        # Calculate risk score
-        risk_score = (probability + impact) / 2
-        
-        # Determine risk level with emoji
-        if risk_score >= 75:
-            risk_level = "Crítico 🔴"
-            risk_key = "critico"
-        elif risk_score >= 50:
-            risk_level = "Alto 🟠"
-            risk_key = "alto"
-        elif risk_score >= 25:
-            risk_level = "Médio 🟡"
-            risk_key = "medio"
-        else:
-            risk_level = "Baixo 🟢"
-            risk_key = "baixo"
-        
-        prediction = {
-            "categoria": category,
-            "probabilidade": probability,
-            "impacto": impact,
-            "score_risco": round(risk_score, 2),
-            "nivel_risco": risk_level,
-            "recomendacao": _generate_risk_recommendation(category, risk_key),
-            "prioridade_mitigacao": _calculate_mitigation_priority(risk_score)
-        }
-        
-        risk_predictions.append(prediction)
-        risk_matrix[risk_key].append(category)
-    
-    # Sort by risk score (descending)
-    risk_predictions.sort(key=lambda x: x["score_risco"], reverse=True)
-    
-    # Calculate summary statistics
-    summary = {
-        "periodo_analise": "90 dias",
-        "periodo_forecast": f"{timeframe} dias",
-        "tendencia": trend,
-        "total_incidentes_recentes": recent_incidents,
-        "riscos_criticos": len(risk_matrix["critico"]),
-        "riscos_altos": len(risk_matrix["alto"]),
-        "riscos_medios": len(risk_matrix["medio"]),
-        "riscos_baixos": len(risk_matrix["baixo"])
-    }
-    
-    result = {
+    # Transform to legacy format for compatibility
+    return {
         "modulo": "Risk Forecaster",
-        "timestamp": datetime.datetime.now().isoformat(),
-        "historico": historical_data[-7:],  # Last 7 days for brevity
-        "previsoes": risk_predictions,
-        "risk_matrix": risk_matrix,
-        "summary": summary,
+        "timestamp": forecast.get("timestamp"),
+        "previsoes": [],
+        "risk_matrix": {
+            "critico": [],
+            "alto": [],
+            "medio": [],
+            "baixo": []
+        },
+        "summary": {
+            "periodo_analise": "Histórico FMEA",
+            "periodo_forecast": f"{timeframe} dias",
+            "tendencia": forecast.get("risco_previsto", "BAIXA").lower(),
+            "total_incidentes_recentes": 0,
+            "riscos_criticos": 1 if forecast.get("risco_previsto") == "ALTA" else 0,
+            "riscos_altos": 1 if forecast.get("risco_previsto") == "MODERADA" else 0,
+            "riscos_medios": 0,
+            "riscos_baixos": 1 if forecast.get("risco_previsto") == "BAIXA" else 0
+        },
         "status": "completo"
     }
-    
-    return result
-
-
-def _generate_risk_recommendation(category, risk_level):
-    """
-    Generate strategic recommendations based on risk analysis.
-    
-    Args:
-        category (str): Risk category
-        risk_level (str): Risk level key
-    
-    Returns:
-        str: Recommendation text
-    """
-    recommendations = {
-        "Operacional": {
-            "critico": "Implementar controles operacionais imediatos. Revisar todos os procedimentos críticos.",
-            "alto": "Reforçar procedimentos operacionais. Aumentar supervisão e monitoramento.",
-            "medio": "Revisar procedimentos periodicamente. Manter vigilância operacional.",
-            "baixo": "Continuar operações normais. Manter procedimentos padrão."
-        },
-        "Ambiental": {
-            "critico": "Ação ambiental urgente. Avaliar e mitigar impactos ambientais críticos.",
-            "alto": "Monitoramento ambiental intensivo. Implementar medidas de proteção.",
-            "medio": "Continuar monitoramento ambiental regular. Estar preparado para mudanças.",
-            "baixo": "Monitoramento de rotina adequado. Condições ambientais favoráveis."
-        },
-        "Equipamento": {
-            "critico": "Inspeção completa de equipamentos. Substituir ou reparar imediatamente.",
-            "alto": "Aumentar frequência de manutenção. Monitorar condição de equipamentos.",
-            "medio": "Manter programa de manutenção preventiva. Inspeções regulares.",
-            "baixo": "Equipamentos em boas condições. Manutenção de rotina suficiente."
-        },
-        "Humano": {
-            "critico": "Treinamento emergencial. Avaliar competências e fatores humanos.",
-            "alto": "Intensificar treinamento. Reforçar procedimentos de segurança.",
-            "medio": "Atualizar programa de treinamento. Melhorar comunicação.",
-            "baixo": "Equipe adequadamente treinada. Continuar programa regular."
-        },
-        "Regulatório": {
-            "critico": "Ação corretiva imediata para conformidade. Risco de penalidades.",
-            "alto": "Revisar conformidade regulatória. Implementar correções necessárias.",
-            "medio": "Monitorar mudanças regulatórias. Manter conformidade.",
-            "baixo": "Conformidade adequada. Continuar monitoramento regular."
-        }
-    }
-    
-    return recommendations.get(category, {}).get(risk_level, "Avaliar e monitorar situação.")
-
-
-def _calculate_mitigation_priority(risk_score):
-    """
-    Calculate mitigation priority based on risk score.
-    
-    Args:
-        risk_score (float): Risk score (0-100)
-    
-    Returns:
-        int: Priority level (1-5, where 1 is highest)
-    """
-    if risk_score >= 75:
-        return 1  # Highest priority
-    elif risk_score >= 50:
-        return 2
-    elif risk_score >= 25:
-        return 3
-    elif risk_score >= 10:
-        return 4
-    else:
-        return 5  # Lowest priority
 
 
 if __name__ == "__main__":
     # Test the module
-    results = run_risk_forecast(timeframe=30)
-    print(f"Risk Forecast completed for {results['summary']['periodo_forecast']}")
-    print(f"Critical risks: {results['summary']['riscos_criticos']}")
+    print("=" * 80)
+    print("NAUTILUS ONE - RISK FORECAST MODULE")
+    print("=" * 80)
+    print()
+    
+    forecaster = RiskForecast()
+    resultado = forecaster.analyze()
+    
+    print()
+    print("=" * 80)
+    print("Análise concluída com sucesso!")
+    print("=" * 80)

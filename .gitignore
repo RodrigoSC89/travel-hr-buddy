@@ -59,6 +59,14 @@ build/
 # Python logs and state files
 nautilus_logs.txt
 nautilus_state.json
+test_logs.txt
+test_state.json
+test_export.*
+test_forecast.json
+forecast_risco.json
+demo_forecast_report.json
 relatorio_*.json
+!relatorio_fmea_atual.json
+!asog_report.json
 relatorio_*.pdf
 relatorio_*.txt
