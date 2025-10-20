@@ -1,0 +1,67 @@
+{
+  "report_type": "FMEA",
+  "version": "1.0",
+  "generated_at": "2025-10-20T11:00:00Z",
+  "system": "Nautilus One",
+  "analysis": {
+    "title": "Failure Mode and Effects Analysis",
+    "scope": "Operational Systems",
+    "risk_level": "MEDIUM",
+    "findings": [
+      {
+        "component": "Communication System",
+        "failure_mode": "Signal Loss",
+        "effects": "Delayed response time",
+        "severity": 7,
+        "occurrence": 3,
+        "detection": 5,
+        "rpn": 105,
+        "recommended_actions": [
+          "Implement redundant communication channels",
+          "Regular maintenance schedule",
+          "Monitor signal strength continuously"
+        ]
+      },
+      {
+        "component": "Data Storage",
+        "failure_mode": "Capacity Overload",
+        "effects": "System slowdown",
+        "severity": 5,
+        "occurrence": 4,
+        "detection": 6,
+        "rpn": 120,
+        "recommended_actions": [
+          "Implement automatic data archiving",
+          "Increase storage capacity",
+          "Set up monitoring alerts"
+        ]
+      },
+      {
+        "component": "Authentication Module",
+        "failure_mode": "Token Expiration",
+        "effects": "User session interruption",
+        "severity": 4,
+        "occurrence": 5,
+        "detection": 8,
+        "rpn": 160,
+        "recommended_actions": [
+          "Implement automatic token refresh",
+          "Extend token validity period",
+          "Add session warning notifications"
+        ]
+      }
+    ],
+    "summary": {
+      "total_failure_modes": 3,
+      "high_risk_items": 1,
+      "medium_risk_items": 2,
+      "low_risk_items": 0
+    }
+  },
+  "metadata": {
+    "analyst": "Nautilus AI System",
+    "review_date": "2025-10-20",
+    "next_review": "2025-11-20",
+    "classification": "OPERATIONAL"
+  }
+}

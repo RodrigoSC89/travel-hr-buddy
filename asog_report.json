@@ -1,0 +1,83 @@
+{
+  "report_type": "ASOG",
+  "version": "1.0",
+  "generated_at": "2025-10-20T11:00:00Z",
+  "system": "Nautilus One",
+  "audit": {
+    "title": "Auditoria de Segurança Operacional e Gestão",
+    "period": {
+      "start": "2025-09-01",
+      "end": "2025-10-20"
+    },
+    "compliance_score": 87.5,
+    "areas_audited": [
+      {
+        "area": "Safety Procedures",
+        "status": "COMPLIANT",
+        "score": 92,
+        "observations": [
+          "All safety protocols documented and accessible",
+          "Regular safety drills conducted",
+          "Emergency response procedures up to date"
+        ],
+        "recommendations": [
+          "Increase frequency of emergency drills",
+          "Update fire safety equipment"
+        ]
+      },
+      {
+        "area": "Equipment Maintenance",
+        "status": "COMPLIANT",
+        "score": 88,
+        "observations": [
+          "Maintenance logs properly maintained",
+          "Scheduled maintenance on track",
+          "Equipment inspection records complete"
+        ],
+        "recommendations": [
+          "Implement predictive maintenance for critical equipment",
+          "Digitize remaining paper maintenance records"
+        ]
+      },
+      {
+        "area": "Personnel Training",
+        "status": "NEEDS_ATTENTION",
+        "score": 78,
+        "observations": [
+          "Core training completed for all personnel",
+          "Some specialized training overdue",
+          "Training records need updating"
+        ],
+        "recommendations": [
+          "Schedule specialized training sessions",
+          "Update training management system",
+          "Implement continuous learning program"
+        ]
+      },
+      {
+        "area": "Documentation",
+        "status": "COMPLIANT",
+        "score": 92,
+        "observations": [
+          "All required documentation in place",
+          "Version control system active",
+          "Document accessibility good"
+        ],
+        "recommendations": [
+          "Migrate legacy documents to new system",
+          "Improve document search functionality"
+        ]
+      }
+    ],
+    "critical_findings": 0,
+    "major_findings": 1,
+    "minor_findings": 3
+  },
+  "metadata": {
+    "auditor": "Nautilus AI System",
+    "audit_date": "2025-10-20",
+    "next_audit": "2025-12-20",
+    "classification": "OPERATIONAL",
+    "reviewed_by": "Quality Assurance Team"
+  }
+}
