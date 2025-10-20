@@ -3,6 +3,7 @@
 [![Run Tests](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/run-tests.yml/badge.svg)](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/run-tests.yml)
 [![Code Quality Check](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/code-quality-check.yml/badge.svg)](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/code-quality-check.yml)
 [![Deploy to Vercel](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/deploy-vercel.yml/badge.svg)](https://github.com/RodrigoSC89/travel-hr-buddy/actions/workflows/deploy-vercel.yml)
+[![codecov](https://codecov.io/gh/RodrigoSC89/travel-hr-buddy/branch/main/graph/badge.svg)](https://codecov.io/gh/RodrigoSC89/travel-hr-buddy)
 [![WCAG Compliance](https://img.shields.io/badge/WCAG%202.1%20AA-Accessible-brightgreen?style=flat-square)](https://www.w3.org/TR/WCAG21/)
 
 ---
