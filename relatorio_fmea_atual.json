@@ -1,0 +1,66 @@
+[
+    {
+        "sistema": "Propuls\u00e3o Principal",
+        "modo_falha": "Perda de pot\u00eancia parcial",
+        "Severidade": 8,
+        "Ocorrencia": 4,
+        "Deteccao": 3,
+        "RPN": 96
+    },
+    {
+        "sistema": "Sistema de Posicionamento Din\u00e2mico",
+        "modo_falha": "Falha de sensor de refer\u00eancia",
+        "Severidade": 9,
+        "Ocorrencia": 3,
+        "Deteccao": 4,
+        "RPN": 108
+    },
+    {
+        "sistema": "Gera\u00e7\u00e3o de Energia",
+        "modo_falha": "Blackout parcial",
+        "Severidade": 10,
+        "Ocorrencia": 2,
+        "Deteccao": 3,
+        "RPN": 60
+    },
+    {
+        "sistema": "Sistema de Controle de Lastro",
+        "modo_falha": "Vazamento em v\u00e1lvulas",
+        "Severidade": 7,
+        "Ocorrencia": 5,
+        "Deteccao": 4,
+        "RPN": 140
+    },
+    {
+        "sistema": "Sistema de Navega\u00e7\u00e3o",
+        "modo_falha": "Perda de sinal GPS",
+        "Severidade": 6,
+        "Ocorrencia": 3,
+        "Deteccao": 2,
+        "RPN": 36
+    },
+    {
+        "sistema": "Sistema de Comunica\u00e7\u00e3o",
+        "modo_falha": "Interfer\u00eancia em r\u00e1dio VHF",
+        "Severidade": 5,
+        "Ocorrencia": 4,
+        "Deteccao": 3,
+        "RPN": 60
+    },
+    {
+        "sistema": "Sistema Hidr\u00e1ulico",
+        "modo_falha": "Queda de press\u00e3o",
+        "Severidade": 8,
+        "Ocorrencia": 3,
+        "Deteccao": 4,
+        "RPN": 96
+    },
+    {
+        "sistema": "Sistema de Ancoragem",
+        "modo_falha": "Desgaste de corrente",
+        "Severidade": 9,
+        "Ocorrencia": 2,
+        "Deteccao": 5,
+        "RPN": 90
+    }
+]
