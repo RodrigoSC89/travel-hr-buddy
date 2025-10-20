@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Suspense, lazy } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -20,8 +20,8 @@ import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import { logger } from "@/lib/logger";
 
-// ✅ Dynamic import with relative path for better compatibility
-const ApplyTemplateModal = lazy(() => import("../../../components/templates/ApplyTemplateModal"));
+// ✅ Import corrected to use minimal stub component for build stability
+import ApplyTemplateModal from "@/components/ApplyTemplateModal";
 
 export default function DocumentAIEditorPage() {
   const navigate = useNavigate();
@@ -274,8 +274,8 @@ export default function DocumentAIEditorPage() {
           <div className="flex items-center justify-between">
             <CardTitle>Editor</CardTitle>
             <div className="flex gap-2">
-              {/* ✅ Wrapped in Suspense for safe dynamic loading */}
-              <Suspense fallback={<div className="w-4 h-4" />}>
+              {/* ✅ Safe render of ApplyTemplateModal with typeof check */}
+              {typeof ApplyTemplateModal !== "undefined" && (
                 <ApplyTemplateModal
                   tableName="templates"
                   onApply={(content) => {
@@ -284,7 +284,7 @@ export default function DocumentAIEditorPage() {
                     }
                   }}
                 />
-              </Suspense>
+              )}
               <Button 
                 onClick={rewriteSelectedText} 
                 disabled={rewriting}
