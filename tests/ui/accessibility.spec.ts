@@ -12,7 +12,7 @@ test.describe("UI Accessibility Tests", () => {
     test(`${route.name} should meet WCAG 2.1 AA standards`, async ({ page }) => {
       // Navigate to the route
       await page.goto(route.path);
-      
+
       // Wait for content to load
       await page.waitForLoadState("networkidle");
 
@@ -31,7 +31,7 @@ test.describe("UI Accessibility Tests", () => {
     test(`${route.name} should have proper color contrast`, async ({ page }) => {
       // Navigate to the route
       await page.goto(route.path);
-      
+
       // Wait for content to load
       await page.waitForLoadState("networkidle");
 
@@ -43,16 +43,13 @@ test.describe("UI Accessibility Tests", () => {
 
       // Filter for color contrast violations
       const contrastViolations = accessibilityScanResults.violations.filter(
-        (violation) =>
-          violation.id.includes("color-contrast") ||
-          violation.tags.includes("wcag2aa")
+        violation => violation.id.includes("color-contrast") || violation.tags.includes("wcag2aa")
       );
 
       // Expect no color contrast violations (minimum 4.5:1 for normal text)
-      expect(
-        contrastViolations,
-        `Color contrast violations found on ${route.name}`
-      ).toHaveLength(0);
+      expect(contrastViolations, `Color contrast violations found on ${route.name}`).toHaveLength(
+        0
+      );
     });
   }
 
@@ -61,12 +58,10 @@ test.describe("UI Accessibility Tests", () => {
     await page.waitForLoadState("networkidle");
 
     // Check for proper heading hierarchy
-    const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(["wcag2a"])
-      .analyze();
+    const accessibilityScanResults = await new AxeBuilder({ page }).withTags(["wcag2a"]).analyze();
 
-    const headingViolations = accessibilityScanResults.violations.filter(
-      (violation) => violation.id.includes("heading")
+    const headingViolations = accessibilityScanResults.violations.filter(violation =>
+      violation.id.includes("heading")
     );
 
     expect(headingViolations, "Heading hierarchy violations found").toHaveLength(0);
@@ -77,12 +72,10 @@ test.describe("UI Accessibility Tests", () => {
     await page.waitForLoadState("networkidle");
 
     // Check for form label accessibility
-    const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(["wcag2a"])
-      .analyze();
+    const accessibilityScanResults = await new AxeBuilder({ page }).withTags(["wcag2a"]).analyze();
 
     const labelViolations = accessibilityScanResults.violations.filter(
-      (violation) => violation.id.includes("label") || violation.id.includes("form")
+      violation => violation.id.includes("label") || violation.id.includes("form")
     );
 
     expect(labelViolations, "Form label violations found").toHaveLength(0);
@@ -153,15 +146,11 @@ test.describe("UI Accessibility Tests", () => {
     `);
 
     // Run axe on our component color test page
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2aa", "wcag21aa"])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withTags(["wcag2aa", "wcag21aa"]).analyze();
 
     // Filter for contrast issues
-    const contrastIssues = results.violations.filter(
-      (v) => v.id === "color-contrast"
-    );
-    
+    const contrastIssues = results.violations.filter(v => v.id === "color-contrast");
+
     expect(
       contrastIssues,
       `UI components should have sufficient contrast (4.5:1 for normal text, 3:1 for large text)`
@@ -173,13 +162,11 @@ test.describe("UI Accessibility Tests", () => {
     await page.waitForLoadState("networkidle");
 
     // Check for keyboard accessibility violations
-    const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(["wcag2a"])
-      .analyze();
+    const accessibilityScanResults = await new AxeBuilder({ page }).withTags(["wcag2a"]).analyze();
 
     const keyboardViolations = accessibilityScanResults.violations.filter(
-      (violation) => 
-        violation.id.includes("keyboard") || 
+      violation =>
+        violation.id.includes("keyboard") ||
         violation.id.includes("focus") ||
         violation.id.includes("tabindex")
     );
@@ -192,14 +179,10 @@ test.describe("UI Accessibility Tests", () => {
     await page.waitForLoadState("networkidle");
 
     // Check for landmark region violations
-    const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(["wcag2a"])
-      .analyze();
+    const accessibilityScanResults = await new AxeBuilder({ page }).withTags(["wcag2a"]).analyze();
 
     const landmarkViolations = accessibilityScanResults.violations.filter(
-      (violation) => 
-        violation.id.includes("landmark") || 
-        violation.id.includes("region")
+      violation => violation.id.includes("landmark") || violation.id.includes("region")
     );
 
     expect(landmarkViolations, "Landmark region violations found").toHaveLength(0);
@@ -210,11 +193,10 @@ test.describe("UI Accessibility Tests", () => {
     await page.waitForLoadState("networkidle");
 
     // Check for duplicate ID violations
-    const accessibilityScanResults = await new AxeBuilder({ page })
-      .analyze();
+    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
     const duplicateIdViolations = accessibilityScanResults.violations.filter(
-      (violation) => violation.id === "duplicate-id"
+      violation => violation.id === "duplicate-id"
     );
 
     expect(duplicateIdViolations, "Duplicate ID violations found").toHaveLength(0);
@@ -225,14 +207,10 @@ test.describe("UI Accessibility Tests", () => {
     await page.waitForLoadState("networkidle");
 
     // Check for image alt text violations
-    const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(["wcag2a"])
-      .analyze();
+    const accessibilityScanResults = await new AxeBuilder({ page }).withTags(["wcag2a"]).analyze();
 
     const imageViolations = accessibilityScanResults.violations.filter(
-      (violation) => 
-        violation.id.includes("image") || 
-        violation.id.includes("img")
+      violation => violation.id.includes("image") || violation.id.includes("img")
     );
 
     expect(imageViolations, "Image accessibility violations found").toHaveLength(0);

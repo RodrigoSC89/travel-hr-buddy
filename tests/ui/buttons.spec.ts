@@ -18,12 +18,12 @@ test.describe("Button Component Tests", () => {
       if (isVisible && !isDisabled) {
         // Ensure button is clickable and not in a suspended state
         await expect(button).toBeEnabled();
-        
+
         // Check that the button has proper pointer-events
-        const pointerEvents = await button.evaluate((el) => 
-          window.getComputedStyle(el).pointerEvents
+        const pointerEvents = await button.evaluate(
+          el => window.getComputedStyle(el).pointerEvents
         );
-        
+
         // Enabled buttons should not have pointer-events: none
         if (pointerEvents === "none") {
           const buttonText = await button.textContent();
@@ -39,18 +39,18 @@ test.describe("Button Component Tests", () => {
 
     for (const button of buttons) {
       const isVisible = await button.isVisible();
-      
+
       if (isVisible) {
         const boundingBox = await button.boundingBox();
-        
+
         if (boundingBox) {
           const { width, height } = boundingBox;
           const buttonText = await button.textContent();
-          
+
           // WCAG 2.1 AAA requires minimum touch target of 44x44px
           expect(
             width >= 40 && height >= 40,
-            `Button "${buttonText?.trim() || 'unnamed'}" has insufficient touch target size: ${width.toFixed(0)}x${height.toFixed(0)}px (minimum 40x40px recommended)`
+            `Button "${buttonText?.trim() || "unnamed"}" has insufficient touch target size: ${width.toFixed(0)}x${height.toFixed(0)}px (minimum 40x40px recommended)`
           ).toBeTruthy();
         }
       }
@@ -64,18 +64,18 @@ test.describe("Button Component Tests", () => {
     if (buttons.length > 0) {
       const firstButton = buttons[0];
       await firstButton.focus();
-      
+
       // Check that the button has visible focus ring
-      const outlineWidth = await firstButton.evaluate((el) => 
-        window.getComputedStyle(el).outlineWidth
+      const outlineWidth = await firstButton.evaluate(
+        el => window.getComputedStyle(el).outlineWidth
       );
-      const ringWidth = await firstButton.evaluate((el) => 
-        window.getComputedStyle(el).getPropertyValue('--tw-ring-width')
+      const ringWidth = await firstButton.evaluate(el =>
+        window.getComputedStyle(el).getPropertyValue("--tw-ring-width")
       );
-      
+
       // Should have either outline or ring focus indicator
       const hasFocusIndicator = outlineWidth !== "0px" || ringWidth !== "";
-      
+
       expect(
         hasFocusIndicator,
         "Button should have visible focus indicator (outline or ring)"
@@ -95,12 +95,12 @@ test.describe("Button Component Tests", () => {
       // If button is disabled, it should have proper visual state
       if (isDisabled) {
         // Check for disabled-related classes or opacity
-        const opacity = await button.evaluate((el) => 
-          window.getComputedStyle(el).opacity
-        );
-        
+        const opacity = await button.evaluate(el => window.getComputedStyle(el).opacity);
+
         expect(
-          parseFloat(opacity) < 1 || className?.includes("disabled") || className?.includes("opacity"),
+          parseFloat(opacity) < 1 ||
+            className?.includes("disabled") ||
+            className?.includes("opacity"),
           "Disabled button should have visual indication (reduced opacity or disabled class)"
         ).toBeTruthy();
       }
@@ -114,11 +114,8 @@ test.describe("Button Component Tests", () => {
     for (const button of loadingButtons) {
       // Loading buttons should be disabled
       const isDisabled = await button.isDisabled();
-      
-      expect(
-        isDisabled,
-        "Button with loading indicator should be disabled"
-      ).toBeTruthy();
+
+      expect(isDisabled, "Button with loading indicator should be disabled").toBeTruthy();
     }
   });
 
@@ -128,26 +125,21 @@ test.describe("Button Component Tests", () => {
 
     if (buttons.length > 0) {
       const firstButton = buttons[0];
-      
+
       // Tab to the button
       await page.keyboard.press("Tab");
-      
+
       // Check if we can interact with keyboard
-      const isFocused = await firstButton.evaluate((el) => 
-        el === document.activeElement
-      );
-      
+      const isFocused = await firstButton.evaluate(el => el === document.activeElement);
+
       // At least one button should be keyboard accessible
       // (we might not focus the exact first button due to tab order)
       const anyButtonFocused = await page.evaluate(() => {
         const activeEl = document.activeElement;
         return activeEl?.tagName === "BUTTON";
       });
-      
-      expect(
-        anyButtonFocused,
-        "At least one button should be keyboard accessible"
-      ).toBeTruthy();
+
+      expect(anyButtonFocused, "At least one button should be keyboard accessible").toBeTruthy();
     }
   });
 
@@ -157,17 +149,17 @@ test.describe("Button Component Tests", () => {
 
     for (const button of buttons) {
       const isVisible = await button.isVisible();
-      
+
       if (isVisible) {
         const textContent = await button.textContent();
         const ariaLabel = await button.getAttribute("aria-label");
         const ariaLabelledBy = await button.getAttribute("aria-labelledby");
         const title = await button.getAttribute("title");
-        
+
         // If button has no visible text, it should have an accessible label
         if (!textContent?.trim()) {
           const hasAccessibleLabel = ariaLabel || ariaLabelledBy || title;
-          
+
           expect(
             hasAccessibleLabel,
             "Icon-only button should have aria-label, aria-labelledby, or title attribute"
