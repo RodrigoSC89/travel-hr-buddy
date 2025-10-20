@@ -1,0 +1,96 @@
+{
+  "profile_type": "vessel_configuration",
+  "version": "1.0",
+  "description": "Template de configuração de embarcação para PEO-DP",
+  "vessel_classes": {
+    "DP1": {
+      "description": "Manual position control with DP system backup",
+      "min_thrusters": 2,
+      "min_generators": 2,
+      "min_position_references": 1,
+      "redundancy_level": "basic",
+      "required_certifications": ["DPO Basic"]
+    },
+    "DP2": {
+      "description": "Automatic position control with single fault tolerance",
+      "min_thrusters": 4,
+      "min_generators": 3,
+      "min_position_references": 3,
+      "redundancy_level": "full",
+      "required_certifications": ["DPO Advanced", "STCW DP2"]
+    },
+    "DP3": {
+      "description": "Automatic position control with complete redundancy and separation",
+      "min_thrusters": 6,
+      "min_generators": 4,
+      "min_position_references": 3,
+      "redundancy_level": "complete_separation",
+      "required_certifications": ["DPO Expert", "STCW DP3"]
+    }
+  },
+  "common_systems": {
+    "position_references": [
+      "GPS",
+      "DGNSS",
+      "Laser",
+      "Taut Wire",
+      "Gyro Compass",
+      "Artemis"
+    ],
+    "propulsion_types": [
+      "Azimuth Thruster",
+      "Tunnel Thruster",
+      "Retractable Thruster",
+      "Main Propeller",
+      "Bow Thruster"
+    ],
+    "power_systems": [
+      "Diesel Generators",
+      "Gas Turbines",
+      "Battery Banks",
+      "UPS Systems",
+      "Emergency Generator"
+    ]
+  },
+  "monitoring_parameters": {
+    "critical": [
+      "thruster_status",
+      "position_reference_availability",
+      "power_distribution",
+      "ups_status",
+      "heading_reference",
+      "wind_speed",
+      "current_speed"
+    ],
+    "important": [
+      "fuel_levels",
+      "hydraulic_pressure",
+      "cooling_temperature",
+      "alarm_status",
+      "manual_override_status"
+    ],
+    "informational": [
+      "operation_mode",
+      "weather_forecast",
+      "crew_status",
+      "maintenance_schedule"
+    ]
+  },
+  "alarm_priorities": {
+    "emergency": {
+      "examples": ["Loss of Position", "Total Blackout", "Fire/Flooding"],
+      "response_time": "immediate",
+      "notification": "all_crew"
+    },
+    "critical": {
+      "examples": ["Thruster Fault", "Position Reference Loss", "UPS Alarm"],
+      "response_time": "< 5 minutes",
+      "notification": "bridge_team"
+    },
+    "warning": {
+      "examples": ["High Wind Alert", "Low Fuel Warning", "Maintenance Due"],
+      "response_time": "< 30 minutes",
+      "notification": "dpo_only"
+    }
+  }
+}

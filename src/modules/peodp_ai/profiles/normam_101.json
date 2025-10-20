@@ -1,0 +1,81 @@
+{
+  "profile_name": "NORMAM-101 Compliance",
+  "version": "1.0",
+  "authority": "Marinha do Brasil",
+  "description": "Normas da Autoridade Marítima para Sistemas de Posicionamento Dinâmico",
+  "rules": [
+    {
+      "id": "NOR-001",
+      "category": "Redundância de Sistema",
+      "rule": "Sistema DP deve possuir redundância completa de propulsores, geradores e sistemas de controle",
+      "severity": "critical",
+      "action": "Verificar configuração de redundância e ativar backup automático"
+    },
+    {
+      "id": "NOR-002",
+      "category": "Certificação DPO",
+      "rule": "Operador DPO deve possuir certificação válida conforme IMO/STCW",
+      "severity": "high",
+      "action": "Validar certificação DPO e programar renovação se necessário"
+    },
+    {
+      "id": "NOR-003",
+      "category": "Alarmes DP",
+      "rule": "Todos os alarmes críticos do sistema DP devem ser auditáveis e registrados",
+      "severity": "high",
+      "action": "Verificar integridade do sistema de log de alarmes"
+    },
+    {
+      "id": "NOR-004",
+      "category": "Testes Periódicos",
+      "rule": "Testes anuais de FMEA e capability plots são obrigatórios",
+      "severity": "high",
+      "action": "Agendar testes anuais conforme cronograma de manutenção"
+    },
+    {
+      "id": "NOR-005",
+      "category": "Manual Override",
+      "rule": "Manual override requer registro formal e justificativa do DPO",
+      "severity": "medium",
+      "action": "Registrar justificativa e obter aprovação do DPO antes de executar override"
+    },
+    {
+      "id": "NOR-006",
+      "category": "Sensores de Posição",
+      "rule": "Mínimo de 3 sensores independentes de posição devem estar operacionais",
+      "severity": "critical",
+      "action": "Verificar status de todos os sensores GPS/DGNSS e ativar backup"
+    },
+    {
+      "id": "NOR-007",
+      "category": "UPS e Alimentação",
+      "rule": "Sistema UPS deve garantir 30 minutos de operação sem alimentação principal",
+      "severity": "critical",
+      "action": "Testar autonomia do UPS e verificar carga de baterias"
+    },
+    {
+      "id": "NOR-008",
+      "category": "Treinamento",
+      "rule": "Tripulação deve realizar treinamento de DP a cada 6 meses",
+      "severity": "medium",
+      "action": "Agendar treinamento periódico da equipe de ponte"
+    }
+  ],
+  "compliance_levels": {
+    "green": {
+      "threshold": 95,
+      "status": "Totalmente Conforme",
+      "description": "Todos os requisitos críticos atendidos"
+    },
+    "yellow": {
+      "threshold": 80,
+      "status": "Conforme com Ressalvas",
+      "description": "Alguns requisitos não críticos pendentes"
+    },
+    "red": {
+      "threshold": 0,
+      "status": "Não Conforme",
+      "description": "Requisitos críticos não atendidos"
+    }
+  }
+}

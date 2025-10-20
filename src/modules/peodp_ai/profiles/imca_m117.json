@@ -1,0 +1,95 @@
+{
+  "profile_name": "IMCA M117 Guidelines",
+  "version": "2.0",
+  "authority": "International Marine Contractors Association",
+  "description": "Guidelines for Dynamic Positioning Operations",
+  "rules": [
+    {
+      "id": "IMCA-001",
+      "category": "DP Operations Manual",
+      "rule": "Vessel must maintain current DP Operations Manual (DPOM) onboard",
+      "severity": "high",
+      "action": "Verificar atualização e disponibilidade do DPOM na ponte"
+    },
+    {
+      "id": "IMCA-002",
+      "category": "DP FMEA",
+      "rule": "FMEA analysis must be conducted annually and after major system changes",
+      "severity": "critical",
+      "action": "Agendar FMEA anual e validar análise de modos de falha"
+    },
+    {
+      "id": "IMCA-003",
+      "category": "DP Trials",
+      "rule": "Annual DP trials must be conducted with documented results",
+      "severity": "critical",
+      "action": "Executar DP trials e documentar capability plots"
+    },
+    {
+      "id": "IMCA-004",
+      "category": "Position Reference Systems",
+      "rule": "At least three independent position reference systems required for DP2/DP3",
+      "severity": "critical",
+      "action": "Verificar redundância de sensores de posição e calibração"
+    },
+    {
+      "id": "IMCA-005",
+      "category": "Thruster Redundancy",
+      "rule": "Thruster configuration must maintain position after single failure",
+      "severity": "critical",
+      "action": "Testar capacidade de manter posição com falha de propulsor"
+    },
+    {
+      "id": "IMCA-006",
+      "category": "Power Management",
+      "rule": "Power management system must prevent blackout scenarios",
+      "severity": "critical",
+      "action": "Validar sistema de gerenciamento de carga e redundância elétrica"
+    },
+    {
+      "id": "IMCA-007",
+      "category": "Watch Keeping",
+      "rule": "Qualified DPO must be present during DP operations",
+      "severity": "high",
+      "action": "Confirmar presença e certificação do DPO durante operação DP"
+    },
+    {
+      "id": "IMCA-008",
+      "category": "Environmental Limits",
+      "rule": "Operations must remain within documented capability envelope",
+      "severity": "high",
+      "action": "Verificar condições ambientais contra capability plots"
+    },
+    {
+      "id": "IMCA-009",
+      "category": "DP Incidents",
+      "rule": "All DP incidents must be reported and analyzed",
+      "severity": "medium",
+      "action": "Registrar incidente no sistema SGSO e notificar autoridade competente"
+    },
+    {
+      "id": "IMCA-010",
+      "category": "Software Updates",
+      "rule": "DP system software updates require validation and testing",
+      "severity": "high",
+      "action": "Validar atualização de software e executar testes funcionais"
+    }
+  ],
+  "compliance_levels": {
+    "green": {
+      "threshold": 95,
+      "status": "Fully Compliant",
+      "description": "All critical requirements met"
+    },
+    "yellow": {
+      "threshold": 85,
+      "status": "Compliant with Observations",
+      "description": "Some non-critical requirements pending"
+    },
+    "red": {
+      "threshold": 0,
+      "status": "Non-Compliant",
+      "description": "Critical requirements not met"
+    }
+  }
+}
