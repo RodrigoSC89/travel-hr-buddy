@@ -31,6 +31,12 @@ Sistema modular de operações marítimas, offshore e industriais com IA embarca
 - Painel de Saúde do Sistema
 - System Debug Endpoint
 - Templates IA reutilizáveis
+- **🔱 Control Hub - Centro de Comando Embarcado** (Fase 4)
+  - Monitoramento em tempo real de todos os módulos
+  - Sincronização inteligente com BridgeLink
+  - Cache offline com store-and-forward
+  - Dashboard unificado de operações
+  - Operação contínua mesmo sem internet
 
 ---
 
@@ -40,6 +46,54 @@ Sistema modular de operações marítimas, offshore e industriais com IA embarca
 - Geração de documentos, planos de ação, forecasts
 - Explicações técnicas e normativas (IMCA, MTS, PEO-DP)
 - Log e rastreabilidade de cada interação
+
+---
+
+## 🔱 Control Hub - Centro de Comando Embarcado
+
+O **Nautilus Control Hub** é o sistema de controle centralizado para operações embarcadas, implementado na Fase 4.
+
+### Características Principais
+
+- **📡 Monitoramento em Tempo Real** - Status de todos os módulos (MMI, PEO-DP, DP Intelligence, BridgeLink, SGSO)
+- **🔄 Sincronização Inteligente** - Sincronização automática e manual com BridgeLink
+- **💾 Cache Offline** - Armazenamento local com store-and-forward (até 100 MB)
+- **🌐 BridgeLink** - Conectividade terra-bordo com retry automático
+- **📊 Dashboard Unificado** - Interface centralizada para todas as operações
+- **⚡ Operação Contínua** - Funciona mesmo sem conexão com internet
+
+### Acesso Rápido
+
+```
+Dashboard: /control-hub
+API Status: /api/control-hub/status
+API Sync: /api/control-hub/sync
+API Health: /api/control-hub/health
+```
+
+### Documentação Completa
+
+- 📚 [CONTROL_HUB_README.md](./CONTROL_HUB_README.md) - Documentação completa
+- ⚡ [CONTROL_HUB_QUICKREF.md](./CONTROL_HUB_QUICKREF.md) - Referência rápida
+- 📊 [CONTROL_HUB_VISUAL_SUMMARY.md](./CONTROL_HUB_VISUAL_SUMMARY.md) - Guia visual
+
+### Uso Programático
+
+```typescript
+import { controlHub } from '@/modules/control_hub';
+
+// Inicializar
+await controlHub.iniciar();
+
+// Obter status
+const state = controlHub.getState();
+
+// Sincronizar
+const result = await controlHub.sincronizar();
+
+// Verificar saúde
+const health = await controlHub.getHealth();
+```
 
 ---
 
