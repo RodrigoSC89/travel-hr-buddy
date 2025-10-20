@@ -22,8 +22,8 @@ global.IntersectionObserver = class IntersectionObserver {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;
 
-// Mock ApplyTemplateModal for test stability
-vi.mock("@/components/templates/ApplyTemplateModal", () => ({
+// ✅ Mock leve do ApplyTemplateModal para estabilizar CI e build
+vi.mock("@/components/ApplyTemplateModal", () => ({
   __esModule: true,
   default: () => React.createElement("div", { "data-testid": "apply-template-modal" })
 }));
