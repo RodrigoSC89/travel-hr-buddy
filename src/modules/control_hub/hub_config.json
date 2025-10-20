@@ -1,0 +1,40 @@
+{
+  "syncInterval": 300,
+  "cacheSizeLimit": 104857600,
+  "retryAttempts": 3,
+  "healthCheckInterval": 60,
+  "connectionTimeout": 30000,
+  "featureFlags": {
+    "offlineCache": true,
+    "realtimeSync": true,
+    "autoRecovery": true,
+    "encryptedLogs": true
+  },
+  "modules": {
+    "mmi": {
+      "name": "MMI (Manutenção Inteligente)",
+      "enabled": true,
+      "priority": 1
+    },
+    "peodp": {
+      "name": "PEO-DP (Auditoria e Conformidade)",
+      "enabled": true,
+      "priority": 2
+    },
+    "dpIntelligence": {
+      "name": "DP Intelligence (Forecast & Analytics)",
+      "enabled": true,
+      "priority": 3
+    },
+    "bridgeLink": {
+      "name": "BridgeLink (Conectividade)",
+      "enabled": true,
+      "priority": 4
+    },
+    "sgso": {
+      "name": "SGSO (Sistema de Gestão)",
+      "enabled": true,
+      "priority": 5
+    }
+  }
+}
