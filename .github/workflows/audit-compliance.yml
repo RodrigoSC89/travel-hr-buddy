@@ -1,0 +1,36 @@
+name: Audit Compliance CI
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: 🧾 Geração de Relatório de Conformidade Técnica
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install reportlab qrcode pillow
+
+      - name: Generate Audit Report
+        run: |
+          python3 scripts/generate_audit_report.py
+          echo "✅ Relatório de conformidade técnica gerado com sucesso."
+
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-report
+          path: dist/audit-report.pdf
