@@ -44,3 +44,11 @@ temp/
 # Test coverage
 coverage
 .nyc_output
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+forecast_risco.json

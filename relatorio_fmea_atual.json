@@ -1,0 +1,86 @@
+{
+  "sistema": "Análise FMEA - Sistemas Críticos Marítimos",
+  "data_analise": "2025-10-20",
+  "sistemas_analisados": [
+    {
+      "id": 1,
+      "nome": "Sistema de Propulsão Principal",
+      "falha_modo": "Perda de potência do motor principal",
+      "severidade": 9,
+      "ocorrencia": 4,
+      "deteccao": 3,
+      "rpn": 108,
+      "acoes_recomendadas": "Manutenção preventiva trimestral, monitoramento contínuo de temperatura"
+    },
+    {
+      "id": 2,
+      "nome": "Sistema de Posicionamento Dinâmico (DP)",
+      "falha_modo": "Falha de redundância no sistema DP",
+      "severidade": 10,
+      "ocorrencia": 2,
+      "deteccao": 2,
+      "rpn": 40,
+      "acoes_recomendadas": "Testes mensais de failover, certificação IMCA"
+    },
+    {
+      "id": 3,
+      "nome": "Sistema de Geração de Energia",
+      "falha_modo": "Parada de gerador diesel",
+      "severidade": 8,
+      "ocorrencia": 5,
+      "deteccao": 2,
+      "rpn": 80,
+      "acoes_recomendadas": "Análise de óleo, substituição de filtros, spare parts disponíveis"
+    },
+    {
+      "id": 4,
+      "nome": "Sistema de Controle de Lastro",
+      "falha_modo": "Vazamento em tanques de lastro",
+      "severidade": 7,
+      "ocorrencia": 3,
+      "deteccao": 4,
+      "rpn": 84,
+      "acoes_recomendadas": "Inspeção visual, testes de estanqueidade"
+    },
+    {
+      "id": 5,
+      "nome": "Sistema de Navegação",
+      "falha_modo": "Perda de sinal GPS/GNSS",
+      "severidade": 8,
+      "ocorrencia": 3,
+      "deteccao": 2,
+      "rpn": 48,
+      "acoes_recomendadas": "Sistemas redundantes, calibração de equipamentos"
+    },
+    {
+      "id": 6,
+      "nome": "Sistema de Comunicação",
+      "falha_modo": "Falha no GMDSS",
+      "severidade": 9,
+      "ocorrencia": 2,
+      "deteccao": 2,
+      "rpn": 36,
+      "acoes_recomendadas": "Testes semanais, baterias backup, treinamento de tripulação"
+    },
+    {
+      "id": 7,
+      "nome": "Sistema Hidráulico de Convés",
+      "falha_modo": "Perda de pressão hidráulica",
+      "severidade": 6,
+      "ocorrencia": 6,
+      "deteccao": 3,
+      "rpn": 108,
+      "acoes_recomendadas": "Manutenção de válvulas, troca de fluido hidráulico"
+    },
+    {
+      "id": 8,
+      "nome": "Sistema de Ancoragem",
+      "falha_modo": "Travamento do guincho de âncora",
+      "severidade": 7,
+      "ocorrencia": 4,
+      "deteccao": 3,
+      "rpn": 84,
+      "acoes_recomendadas": "Lubrificação, inspeção de correntes e freios"
+    }
+  ]
+}

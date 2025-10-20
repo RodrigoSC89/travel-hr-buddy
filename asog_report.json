@@ -1,0 +1,36 @@
+{
+  "relatorio": "ASOG - Assurance of Operational Compliance",
+  "data_verificacao": "2025-10-20",
+  "embarcacao": "PSV Nautilus One",
+  "parametros_operacionais": [
+    {
+      "parametro": "Posicionamento Dinâmico - Disponibilidade",
+      "valor_atual": 99.2,
+      "limite_minimo": 98.0,
+      "unidade": "%",
+      "status": "conforme"
+    },
+    {
+      "parametro": "Redundância de Sistemas Críticos",
+      "valor_atual": 100,
+      "limite_minimo": 100,
+      "unidade": "%",
+      "status": "conforme"
+    },
+    {
+      "parametro": "Tripulação Certificada DP",
+      "valor_atual": 95,
+      "limite_minimo": 90,
+      "unidade": "%",
+      "status": "conforme"
+    },
+    {
+      "parametro": "Horas de Operação sem Incidentes",
+      "valor_atual": 2450,
+      "limite_minimo": 2000,
+      "unidade": "horas",
+      "status": "conforme"
+    }
+  ],
+  "conclusao": "Embarcação em conformidade operacional. Todos os parâmetros ASOG atendem aos critérios estabelecidos."
+}
