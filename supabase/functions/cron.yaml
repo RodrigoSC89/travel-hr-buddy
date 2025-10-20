@@ -16,3 +16,7 @@ functions:
     schedule: '0 6 * * *' # Daily at 06:00 UTC - Automated tactical risk forecasting
     endpoint: '/forecast-risks-cron'
     method: POST
+  imca-crawler-cron:
+    schedule: '0 9 * * 1' # Every Monday at 09:00 UTC - Weekly IMCA incidents crawler
+    endpoint: '/imca-crawler-cron'
+    method: POST

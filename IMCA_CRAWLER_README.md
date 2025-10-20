@@ -89,24 +89,30 @@ Os incidentes aparecem automaticamente na:
 
 Para executar o crawler automaticamente 1x por semana:
 
-### Opção 1: Supabase Edge Function com Cron
+### Opção 1: Supabase Edge Function com Cron ✅ (Recomendado)
 
-Crie uma Edge Function:
+Uma Edge Function já está configurada em:
+- **Função**: `supabase/functions/imca-crawler-cron/index.ts`
+- **Cron**: Todo segunda-feira às 09:00 UTC (definido em `supabase/functions/cron.yaml`)
 
-```typescript
-// supabase/functions/imca-crawler-cron/index.ts
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+Para testar manualmente:
 
-serve(async (req) => {
-  // Execute o mesmo código do crawler
-  // ...
-  return new Response(JSON.stringify({ success: true }), {
-    headers: { "Content-Type": "application/json" },
-  });
-});
+```bash
+# Via Supabase CLI
+supabase functions serve imca-crawler-cron
+
+# Via curl (se a função já estiver deployed)
+curl -X POST https://seu-projeto.supabase.co/functions/v1/imca-crawler-cron \
+  -H "Authorization: Bearer seu-service-role-key"
 ```
 
-Configure o cron no dashboard do Supabase para executar semanalmente.
+Para fazer deploy da Edge Function:
+
+```bash
+supabase functions deploy imca-crawler-cron
+```
+
+A função executará automaticamente toda segunda-feira às 09:00 UTC conforme configurado no `cron.yaml`.
 
 ### Opção 2: GitHub Actions (Workflow)
 
