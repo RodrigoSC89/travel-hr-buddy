@@ -149,7 +149,7 @@ export interface MMIOS {
   job_id?: string;
   forecast_id?: string;
   os_number?: string;
-  status: "open" | "in_progress" | "completed" | "cancelled" | "pendente";
+  status: "open" | "in_progress" | "completed" | "cancelled" | "pendente" | "executado" | "atrasado";
   assigned_to?: string;
   start_date?: string;
   completion_date?: string;

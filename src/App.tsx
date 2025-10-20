@@ -96,6 +96,7 @@ const MMIHistory = React.lazy(() => import("./pages/MMIHistory"));
 const MMIHistoryAdmin = React.lazy(() => import("./pages/admin/mmi/history"));
 const MMIForecast = React.lazy(() => import("./pages/admin/mmi/forecast/page"));
 const MMIOrders = React.lazy(() => import("./pages/admin/mmi/orders"));
+const MMIOS = React.lazy(() => import("./pages/admin/mmi/os"));
 const MMITasks = React.lazy(() => import("./pages/MMITasks"));
 const MMIForecastPage = React.lazy(() => import("./pages/MMIForecastPage"));
 const PerformanceAnalysis = React.lazy(() => import("./pages/admin/PerformanceAnalysis"));
@@ -250,6 +251,7 @@ function App() {
                       <Route path="/admin/mmi/history" element={<MMIHistoryAdmin />} />
                       <Route path="/admin/mmi/forecast" element={<MMIForecast />} />
                       <Route path="/admin/mmi/orders" element={<MMIOrders />} />
+                      <Route path="/admin/mmi/os" element={<MMIOS />} />
                       <Route path="/admin/assistant/logs" element={<AssistantLogs />} />
                       <Route path="/admin/assistant/history" element={<AssistantLogs />} />
                       <Route path="/admin/collaboration" element={<AdminCollaboration />} />
