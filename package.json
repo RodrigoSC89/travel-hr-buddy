@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "start": "vite preview --host",
     "preview": "vite preview --host",
+    "postinstall": "rm -rf .next node_modules/.vite || true",
     "test": "vitest run",
     "test:unit": "vitest run",
     "test:watch": "vitest",
