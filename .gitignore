@@ -62,3 +62,6 @@ nautilus_state.json
 relatorio_*.json
 relatorio_*.pdf
 relatorio_*.txt
+
+# ML models (auto-generated)
+*.pkl
