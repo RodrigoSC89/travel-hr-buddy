@@ -1,0 +1,192 @@
+name: Nautilus Intelligence Core
+
+on:
+  workflow_run:
+    workflows: ["Build Nautilus One", "Test Coverage & Summary", "Validate Buttons and Accessibility"]
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  ai-autofix:
+    name: 🤖 AI-Powered Analysis & Auto-Fix
+    runs-on: ubuntu-latest
+    # Only run if the workflow failed
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download workflow logs
+        id: download-logs
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create logs directory
+          mkdir -p logs
+          
+          # Get the workflow run details
+          WORKFLOW_RUN_ID="${{ github.event.workflow_run.id }}"
+          REPO="${{ github.repository }}"
+          
+          echo "Downloading logs for workflow run: $WORKFLOW_RUN_ID"
+          
+          # Download logs using GitHub API
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/$REPO/actions/runs/$WORKFLOW_RUN_ID/logs" \
+            > logs/workflow-logs.zip || echo "Failed to download logs"
+          
+          # Extract if successful
+          if [ -f logs/workflow-logs.zip ]; then
+            unzip -q logs/workflow-logs.zip -d logs/ || echo "Failed to extract logs"
+            # Combine all log files
+            find logs -type f -name "*.txt" -exec cat {} \; > workflow.log
+            echo "Logs downloaded and combined into workflow.log"
+            echo "log_file=workflow.log" >> $GITHUB_OUTPUT
+          else
+            echo "No logs available"
+            echo "log_file=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create fallback log from workflow context
+        if: steps.download-logs.outputs.log_file == ''
+        run: |
+          cat > workflow.log << 'EOF'
+          === GitHub Actions Workflow Context ===
+          Workflow: ${{ github.event.workflow_run.name }}
+          Run ID: ${{ github.event.workflow_run.id }}
+          Run Number: ${{ github.event.workflow_run.run_number }}
+          Conclusion: ${{ github.event.workflow_run.conclusion }}
+          Event: ${{ github.event.workflow_run.event }}
+          Actor: ${{ github.event.workflow_run.actor.login }}
+          Head Branch: ${{ github.event.workflow_run.head_branch }}
+          Head SHA: ${{ github.event.workflow_run.head_sha }}
+          
+          === Workflow Run Failed ===
+          The workflow "${{ github.event.workflow_run.name }}" failed.
+          Please check the workflow run for more details.
+          EOF
+          echo "Created fallback log file"
+
+      - name: Run Nautilus Intelligence Core
+        id: nautilus-core
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_WORKFLOW: ${{ github.event.workflow_run.name }}
+          GITHUB_RUN_ID: ${{ github.event.workflow_run.id }}
+          LOG_SOURCES: workflow.log
+          CREATE_PR: "false"  # Set to false to only generate analysis
+          ANALYSIS_OUTPUT: analysis.json
+        run: |
+          echo "🌊 Running Nautilus Intelligence Core..."
+          
+          # Run the analyzer using tsx
+          npx tsx src/ai/nautilus-core/index.ts || echo "Analysis completed with warnings"
+          
+          # Check if analysis file was created
+          if [ -f analysis.json ]; then
+            echo "✅ Analysis complete - results saved to analysis.json"
+            cat analysis.json
+            echo "has_issues=true" >> $GITHUB_OUTPUT
+          else
+            echo "ℹ️ No analysis file generated"
+            echo "has_issues=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload analysis artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nautilus-analysis
+          path: |
+            analysis.json
+            workflow.log
+          retention-days: 30
+
+      - name: Post analysis comment
+        if: steps.nautilus-core.outputs.has_issues == 'true' && github.event.workflow_run.pull_requests[0]
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            
+            // Read analysis results
+            const analysis = JSON.parse(fs.readFileSync('analysis.json', 'utf8'));
+            
+            // Build comment
+            let comment = `## 🤖 Nautilus Intelligence Core - Analysis Results\n\n`;
+            comment += `**Workflow:** ${analysis.workflowName}\n`;
+            comment += `**Run ID:** ${analysis.workflowRun}\n`;
+            comment += `**Status:** ${analysis.hasIssues ? '❌ Issues Detected' : '✅ No Issues'}\n\n`;
+            
+            if (analysis.findings.length > 0) {
+              comment += `### 🔍 Issues Found (${analysis.findings.length})\n\n`;
+              
+              analysis.findings.forEach((finding, index) => {
+                const emoji = finding.severity === 'critical' ? '🔴' :
+                             finding.severity === 'high' ? '🟠' :
+                             finding.severity === 'medium' ? '🟡' : '🟢';
+                
+                comment += `${index + 1}. ${emoji} **${finding.message}**\n`;
+                comment += `   - Type: \`${finding.type}\`\n`;
+                comment += `   - Severity: \`${finding.severity}\`\n`;
+                comment += `   - Pattern: ${finding.pattern}\n\n`;
+              });
+              
+              comment += `\n📊 **Analysis artifact available in workflow artifacts**\n`;
+            }
+            
+            comment += `\n---\n*Analyzed by Nautilus Intelligence Core 🌊*\n`;
+            
+            // Post comment to PR
+            const prNumber = context.payload.workflow_run.pull_requests[0].number;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: comment
+            });
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## 🌊 Nautilus Intelligence Core - Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow Analyzed:** ${{ github.event.workflow_run.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Run ID:** ${{ github.event.workflow_run.id }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Conclusion:** ${{ github.event.workflow_run.conclusion }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f analysis.json ]; then
+            echo "### 📊 Analysis Results" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            cat analysis.json >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ No issues detected or analysis not available" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "*Powered by Nautilus Intelligence Core 🌊*" >> $GITHUB_STEP_SUMMARY
