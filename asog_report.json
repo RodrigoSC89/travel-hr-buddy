@@ -1,0 +1,51 @@
+{
+  "data_avaliacao": "2025-10-20T11:25:48.000Z",
+  "embarcacao": "Nautilus One",
+  "tipo_operacao": "Offshore - Posicionamento Dinâmico",
+  "status_geral": "conforme",
+  "parametros": [
+    {
+      "id": 1,
+      "parametro": "Disponibilidade de Sistema DP",
+      "valor_atual": 99.2,
+      "valor_minimo": 95.0,
+      "unidade": "%",
+      "status": "conforme",
+      "observacao": "Sistema operando dentro dos padrões IMCA"
+    },
+    {
+      "id": 2,
+      "parametro": "Tempo Médio Entre Falhas (MTBF)",
+      "valor_atual": 2400,
+      "valor_minimo": 2000,
+      "unidade": "horas",
+      "status": "conforme",
+      "observacao": "Desempenho acima do esperado"
+    },
+    {
+      "id": 3,
+      "parametro": "Redundância de Geradores",
+      "valor_atual": 3,
+      "valor_minimo": 2,
+      "unidade": "unidades",
+      "status": "conforme",
+      "observacao": "N+1 redundância mantida"
+    },
+    {
+      "id": 4,
+      "parametro": "Conformidade com Manutenção Preventiva",
+      "valor_atual": 98.5,
+      "valor_minimo": 95.0,
+      "unidade": "%",
+      "status": "conforme",
+      "observacao": "Cronograma de manutenção em dia"
+    }
+  ],
+  "recomendacoes": [
+    "Manter programa de manutenção preventiva",
+    "Continuar monitoramento contínuo dos sistemas críticos",
+    "Revisar análise FMEA trimestralmente"
+  ],
+  "auditor": "Sistema Automatizado Nautilus One",
+  "proxima_revisao": "2025-11-20"
+}

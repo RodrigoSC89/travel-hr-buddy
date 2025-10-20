@@ -1,0 +1,88 @@
+{
+  "data_geracao": "2025-10-20T11:25:48.000Z",
+  "embarcacao": "Nautilus One",
+  "tipo_operacao": "Offshore - Posicionamento Dinâmico",
+  "sistemas": [
+    {
+      "id": 1,
+      "nome": "Sistema de Propulsão Principal",
+      "modo_falha": "Perda de potência do motor principal",
+      "severidade": 8,
+      "ocorrencia": 3,
+      "deteccao": 4,
+      "causa_potencial": "Falha no sistema de combustível ou lubrificação",
+      "controles_atuais": "Monitoramento contínuo de parâmetros do motor"
+    },
+    {
+      "id": 2,
+      "nome": "Sistema de Posicionamento Dinâmico",
+      "modo_falha": "Perda de referência de posição",
+      "severidade": 9,
+      "ocorrencia": 2,
+      "deteccao": 3,
+      "causa_potencial": "Falha em sensores de posicionamento GPS/DGPS",
+      "controles_atuais": "Sistema redundante de sensores, alarmes em tempo real"
+    },
+    {
+      "id": 3,
+      "nome": "Geração de Energia",
+      "modo_falha": "Parada de gerador principal",
+      "severidade": 7,
+      "ocorrencia": 4,
+      "deteccao": 2,
+      "causa_potencial": "Sobrecarga ou falha mecânica",
+      "controles_atuais": "Manutenção preventiva, monitoramento de carga"
+    },
+    {
+      "id": 4,
+      "nome": "Sistema de Controle de Lastro",
+      "modo_falha": "Vazamento em tanque de lastro",
+      "severidade": 6,
+      "ocorrencia": 3,
+      "deteccao": 5,
+      "causa_potencial": "Corrosão ou dano estrutural",
+      "controles_atuais": "Inspeção visual periódica, sensores de nível"
+    },
+    {
+      "id": 5,
+      "nome": "Sistema de Navegação",
+      "modo_falha": "Falha no sistema de navegação eletrônica",
+      "severidade": 7,
+      "ocorrencia": 2,
+      "deteccao": 3,
+      "causa_potencial": "Falha de software ou hardware",
+      "controles_atuais": "Sistema backup, atualizações regulares"
+    },
+    {
+      "id": 6,
+      "nome": "Sistema de Comunicação",
+      "modo_falha": "Perda de comunicação VHF/Satélite",
+      "severidade": 8,
+      "ocorrencia": 2,
+      "deteccao": 2,
+      "causa_potencial": "Falha de equipamento ou condições meteorológicas",
+      "controles_atuais": "Múltiplos canais de comunicação, testes diários"
+    },
+    {
+      "id": 7,
+      "nome": "Sistema Hidráulico",
+      "modo_falha": "Vazamento de óleo hidráulico",
+      "severidade": 5,
+      "ocorrencia": 4,
+      "deteccao": 3,
+      "causa_potencial": "Desgaste de vedações ou mangueiras",
+      "controles_atuais": "Inspeção regular, monitoramento de pressão"
+    },
+    {
+      "id": 8,
+      "nome": "Sistema de Ancoragem",
+      "modo_falha": "Falha no mecanismo de liberação de âncora",
+      "severidade": 6,
+      "ocorrencia": 2,
+      "deteccao": 4,
+      "causa_potencial": "Corrosão ou travamento mecânico",
+      "controles_atuais": "Manutenção preventiva, testes operacionais"
+    }
+  ],
+  "notas": "Análise FMEA realizada conforme norma ISO 31010 e padrões IMCA M 220"
+}
