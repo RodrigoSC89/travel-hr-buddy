@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, AlertTriangle, Shield, TrendingUp, FileCheck } from "lucide-react";
 import { TacticalRiskPanel } from "@/components/admin/risk-audit/TacticalRiskPanel";
-import { AuditSimulator } from "@/components/admin/risk-audit/AuditSimulator";
+import { AuditSimulator } from "@/components/external-audit/AuditSimulator";
 import { RecommendedActions } from "@/components/admin/risk-audit/RecommendedActions";
 import { NormativeScores } from "@/components/admin/risk-audit/NormativeScores";
 
