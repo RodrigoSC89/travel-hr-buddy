@@ -20,6 +20,7 @@ const PEODP = React.lazy(() => import("./pages/PEODP"));
 const DPIncidents = React.lazy(() => import("./pages/DPIncidents"));
 const DPIntelligence = React.lazy(() => import("./pages/DPIntelligence"));
 const BridgeLink = React.lazy(() => import("./pages/BridgeLink"));
+const ControlHub = React.lazy(() => import("./pages/ControlHub"));
 const SGSO = React.lazy(() => import("./pages/SGSO"));
 const SGSOReportPage = React.lazy(() => import("./pages/SGSOReportPage"));
 const SGSOAuditPage = React.lazy(() => import("./pages/SGSOAuditPage"));
@@ -200,6 +201,7 @@ function App() {
                       <Route path="/dp-incidents" element={<DPIncidents />} />
                       <Route path="/dp-intelligence" element={<DPIntelligence />} />
                       <Route path="/bridgelink" element={<BridgeLink />} />
+                      <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/sgso" element={<SGSO />} />
                       <Route path="/sgso/report" element={<SGSOReportPage />} />
                       <Route path="/sgso/audit" element={<SGSOAuditPage />} />

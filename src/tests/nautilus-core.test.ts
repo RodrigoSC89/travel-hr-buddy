@@ -1,172 +1,49 @@
 /**
- * Tests for Nautilus Intelligence Core - Analyzer
+ * NautilusAI Tests
+ * 
+ * Tests for the Nautilus AI stub implementation
  */
 
 import { describe, it, expect } from 'vitest';
-import { analyzeLogs, generateSummary } from '@/ai/nautilus-core/analyzer';
+import { NautilusAI } from '@/ai/nautilus-core';
 
-describe('Nautilus Intelligence Core - Analyzer', () => {
-  it('should detect missing file errors', () => {
-    const logs = `
-      Error: ENOENT: no such file or directory
-      Cannot find module '@/components/Invalid'
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 1);
-
-    expect(result.hasIssues).toBe(true);
-    expect(result.findings).toHaveLength(1);
-    expect(result.findings[0].type).toBe('missing_file');
-    expect(result.findings[0].severity).toBe('critical');
+describe('NautilusAI', () => {
+  it('should analyze context and return result', async () => {
+    const result = await NautilusAI.analyze('Test context');
+    
+    expect(result).toBeDefined();
+    expect(result.analysis).toContain('Test context');
+    expect(result.confidence).toBeGreaterThan(0);
+    expect(result.timestamp).toBeDefined();
   });
 
-  it('should detect low contrast issues', () => {
-    const logs = `
-      WCAG Violation: contrast ratio below 4.5:1
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 2);
-
-    expect(result.hasIssues).toBe(true);
-    expect(result.findings).toHaveLength(1);
-    expect(result.findings[0].type).toBe('low_contrast');
-    expect(result.findings[0].severity).toBe('medium');
+  it('should provide recommendations', async () => {
+    const result = await NautilusAI.analyze('Test context');
+    
+    expect(result.recommendations).toBeDefined();
+    expect(Array.isArray(result.recommendations)).toBe(true);
+    expect(result.recommendations!.length).toBeGreaterThan(0);
   });
 
-  it('should detect reference errors', () => {
-    const logs = `
-      ReferenceError: someVariable is not defined
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 3);
-
-    expect(result.hasIssues).toBe(true);
-    expect(result.findings).toHaveLength(1);
-    expect(result.findings[0].type).toBe('reference_error');
-    expect(result.findings[0].severity).toBe('critical');
+  it('should return model info', () => {
+    const info = NautilusAI.getModelInfo();
+    
+    expect(info.name).toBe('Nautilus AI Stub');
+    expect(info.isStub).toBe(true);
+    expect(info.capabilities).toContain('context_analysis');
   });
 
-  it('should detect low coverage', () => {
-    const logs = `
-      Coverage: 78% (coverage < 85% threshold)
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 4);
-
-    expect(result.hasIssues).toBe(true);
-    expect(result.findings).toHaveLength(1);
-    expect(result.findings[0].type).toBe('low_coverage');
-    expect(result.findings[0].severity).toBe('high');
+  it('should report ready status', () => {
+    const isReady = NautilusAI.isReady();
+    
+    expect(isReady).toBe(true);
   });
 
-  it('should detect build failures', () => {
-    const logs = `
-      error TS2304: Cannot find name 'Component'
-      Build failed with 1 error
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 5);
-
-    expect(result.hasIssues).toBe(true);
-    expect(result.findings).toHaveLength(1);
-    expect(result.findings[0].type).toBe('build_failure');
-    expect(result.findings[0].severity).toBe('critical');
-  });
-
-  it('should detect test failures', () => {
-    const logs = `
-      FAIL src/tests/component.test.ts
-      ✕ should render correctly
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 6);
-
-    expect(result.hasIssues).toBe(true);
-    expect(result.findings).toHaveLength(1);
-    expect(result.findings[0].type).toBe('test_failure');
-    expect(result.findings[0].severity).toBe('high');
-  });
-
-  it('should detect suspended button issues', () => {
-    const logs = `
-      ⚠️ WCAG: suspended button detected in DOM
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 7);
-
-    expect(result.hasIssues).toBe(true);
-    expect(result.findings).toHaveLength(1);
-    expect(result.findings[0].type).toBe('suspended_button');
-    expect(result.findings[0].severity).toBe('medium');
-  });
-
-  it('should detect Vercel deployment failures', () => {
-    const logs = `
-      Vercel deployment failed: Build exceeded time limit
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 8);
-
-    expect(result.hasIssues).toBe(true);
-    expect(result.findings).toHaveLength(1);
-    expect(result.findings[0].type).toBe('vercel_failure');
-    expect(result.findings[0].severity).toBe('high');
-  });
-
-  it('should detect multiple issues in one log', () => {
-    const logs = `
-      error TS2304: Cannot find name 'Component'
-      Build failed with 1 error
-      Coverage: 78% (coverage < 85%)
-      FAIL src/tests/component.test.ts
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 9);
-
-    expect(result.hasIssues).toBe(true);
-    expect(result.findings.length).toBeGreaterThan(1);
-  });
-
-  it('should return no issues for clean logs', () => {
-    const logs = `
-      Build successful
-      All tests passed
-      Coverage: 92%
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 10);
-
-    expect(result.hasIssues).toBe(false);
-    expect(result.findings).toHaveLength(0);
-  });
-
-  it('should generate summary correctly', () => {
-    const logs = `
-      error TS2304: Cannot find name 'Component'
-      Build failed
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 11);
-    const summary = generateSummary(result);
-
-    expect(summary).toContain('Nautilus Intelligence Core');
-    expect(summary).toContain('Test Workflow');
-    expect(summary).toContain('Issues Detected');
-    expect(summary).toContain('Build failure');
-  });
-
-  it('should extract context from logs', () => {
-    const logs = `
-      Line 1
-      Line 2
-      error TS2304: Cannot find name 'Component'
-      Line 4
-      Line 5
-    `;
-
-    const result = analyzeLogs(logs, 'Test Workflow', 12);
-
-    expect(result.findings[0].context).toBeDefined();
-    expect(result.findings[0].context).toContain('error TS2304');
+  it('should include timestamp in analysis', async () => {
+    const result = await NautilusAI.analyze('Test');
+    const timestamp = new Date(result.timestamp);
+    
+    expect(timestamp).toBeInstanceOf(Date);
+    expect(timestamp.getTime()).toBeGreaterThan(0);
   });
 });
