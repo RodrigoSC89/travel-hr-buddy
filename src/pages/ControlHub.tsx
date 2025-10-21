@@ -15,6 +15,7 @@ const ControlHubPanel = safeLazyImport(() => import("@/components/control-hub/Co
 const SystemAlerts = safeLazyImport(() => import("@/components/control-hub/SystemAlerts"), "SystemAlerts");
 const AIInsightReporter = safeLazyImport(() => import("@/components/control-hub/AIInsightReporter"), "AIInsightReporter");
 const ComplianceDashboard = safeLazyImport(() => import("@/components/compliance/ComplianceDashboard"), "ComplianceDashboard");
+const ForecastDashboard = safeLazyImport(() => import("@/components/control-hub/ForecastDashboard"), "ForecastDashboard");
 
 export default function ControlHub() {
   return (
@@ -29,8 +30,8 @@ export default function ControlHub() {
         </div>
       </div>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Main Grid - Now 3 columns to include Forecast Dashboard */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Suspense fallback={<LoadingCard />}>
           <ControlHubPanel />
         </Suspense>
@@ -40,9 +41,14 @@ export default function ControlHub() {
         </Suspense>
 
         <Suspense fallback={<LoadingCard />}>
-          <ComplianceDashboard />
+          <ForecastDashboard />
         </Suspense>
       </div>
+
+      {/* Compliance Dashboard - Full Width */}
+      <Suspense fallback={<LoadingCard />}>
+        <ComplianceDashboard />
+      </Suspense>
 
       {/* AI Insights */}
       <Suspense fallback={<LoadingCard />}>
