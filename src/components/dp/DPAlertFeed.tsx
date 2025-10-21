@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { AlertTriangle } from "lucide-react";
-import { subscribeAlerts } from "@/lib/mqtt/publisher";
+import { subscribeDPAlerts } from "@/lib/mqtt/publisher";
 
 export default function DPAlertFeed() {
   const [alerts, setAlerts] = useState<Array<Record<string, unknown>>>([]);
 
   useEffect(() => {
-    const client = subscribeAlerts((msg) =>
+    const client = subscribeDPAlerts((msg) =>
       setAlerts((prev) => [msg, ...prev].slice(0, 10))
     );
     return () => client.end();
