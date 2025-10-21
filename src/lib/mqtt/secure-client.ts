@@ -7,7 +7,7 @@ export function initSecureMQTT(): MqttClient {
   const url = import.meta.env.VITE_MQTT_URL;
   if (!url) {
     console.warn("VITE_MQTT_URL not set, MQTT disabled");
-    // @ts-ignore - mock client for noop publish
+    // @ts-expect-error - mock client for noop publish
     return { publish: () => {}, on: () => {}, end: () => {} };
   }
   client = mqtt.connect(url, {

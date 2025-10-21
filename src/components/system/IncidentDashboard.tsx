@@ -24,14 +24,14 @@ export default function IncidentDashboard() {
     });
     // realtime stream (Supabase Realtime)
     const channel = supabase
-      // @ts-ignore
+      // @ts-expect-error - channel type definition issue
       .channel("incidents")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "incidents" }, (payload: any) => {
-        setIncidents((prev) => [payload.new as Incident, ...prev]);
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "incidents" }, (payload: { new: Incident }) => {
+        setIncidents((prev) => [payload.new, ...prev]);
       })
       .subscribe();
     return () => {
-      // @ts-ignore
+      // @ts-expect-error - removeChannel type definition issue
       supabase.removeChannel(channel);
     };
   }, []);
