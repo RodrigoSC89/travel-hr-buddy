@@ -128,6 +128,7 @@ const ForecastHistoryPage = safeLazyImport(() => import("@/pages/admin/mmi/forec
 const BIForecastsPage = safeLazyImport(() => import("@/pages/admin/bi/forecasts"), "BI Forecasts");
 const PEODPAuditPage = safeLazyImport(() => import("@/pages/admin/peodp-audit"), "PEO-DP Audit");
 const VaultAI = safeLazyImport(() => import("@/modules/vault_ai/pages/VaultAIPage"), "Vault AI");
+const AdminIncidents = safeLazyImport(() => import("@/pages/admin/incidents"), "Admin Incidents");
 
 // Loading component
 const LoadingSpinner = () => (
@@ -295,6 +296,7 @@ function App() {
                       <Route path="/admin/peodp-audit" element={<PEODPAuditPage />} />
                       <Route path="/admin/simulations" element={<Simulations />} />
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
+                      <Route path="/admin/incidents" element={<AdminIncidents />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
                       <Route path="/admin/risk-audit" element={<RiskAudit />} />
                       <Route path="/admin/quiz" element={<QuizPage />} />
