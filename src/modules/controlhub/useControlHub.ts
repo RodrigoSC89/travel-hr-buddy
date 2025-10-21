@@ -16,7 +16,7 @@ export const useControlHub = () => {
     advice: null,
     alerts: [],
     systemStatus: {
-      overall: 'healthy',
+      overall: "healthy",
       modules: [],
     },
   });

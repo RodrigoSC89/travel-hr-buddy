@@ -55,7 +55,7 @@ export class AdaptiveAI {
     const patterns = this.analyzeContext(lowerContext);
     
     // Generate advice based on patterns
-    if (patterns.includes('drift')) {
+    if (patterns.includes("drift")) {
       return {
         message: "⚠️ Recomenda recalibrar o Gyro em até 12h.",
         confidence: 0.92,
@@ -64,11 +64,11 @@ export class AdaptiveAI {
           "Revisar logs de drift nos últimos 7 dias",
           "Considerar recalibração do sistema DP",
         ],
-        priority: 'high',
+        priority: "high",
       };
     }
     
-    if (patterns.includes('thruster')) {
+    if (patterns.includes("thruster")) {
       return {
         message: "🔧 Verificar alinhamento de Thruster 2 — padrão de vibração detectado.",
         confidence: 0.87,
@@ -77,11 +77,11 @@ export class AdaptiveAI {
           "Análise de vibração e torque",
           "Verificar sistema de lubrificação",
         ],
-        priority: 'high',
+        priority: "high",
       };
     }
     
-    if (patterns.includes('gyro')) {
+    if (patterns.includes("gyro")) {
       return {
         message: "🎯 Oscilação detectada no Gyro — monitoramento contínuo recomendado.",
         confidence: 0.78,
@@ -90,11 +90,11 @@ export class AdaptiveAI {
           "Verificar calibração",
           "Revisar histórico de manutenção",
         ],
-        priority: 'medium',
+        priority: "medium",
       };
     }
     
-    if (patterns.includes('degradation') || patterns.includes('degrading')) {
+    if (patterns.includes("degradation") || patterns.includes("degrading")) {
       return {
         message: "📉 Tendência de degradação detectada — ação preventiva necessária.",
         confidence: 0.81,
@@ -103,7 +103,7 @@ export class AdaptiveAI {
           "Revisar parâmetros operacionais",
           "Análise FMEA recomendada",
         ],
-        priority: 'high',
+        priority: "high",
       };
     }
     
@@ -121,7 +121,7 @@ export class AdaptiveAI {
         "Manter monitoramento de rotina",
         "Continuar com plano de manutenção preventiva",
       ],
-      priority: 'low',
+      priority: "low",
     };
   }
 
@@ -132,8 +132,8 @@ export class AdaptiveAI {
     const patterns: string[] = [];
     
     const keywords = [
-      'drift', 'thruster', 'gyro', 'oscillation', 'degradation',
-      'degrading', 'failure', 'alarm', 'warning', 'critical'
+      "drift", "thruster", "gyro", "oscillation", "degradation",
+      "degrading", "failure", "alarm", "warning", "critical"
     ];
     
     keywords.forEach(keyword => {
@@ -163,7 +163,7 @@ export class AdaptiveAI {
           "Investigar causa raiz",
           "Implementar solução permanente",
         ],
-        priority: 'high',
+        priority: "high",
       };
     }
     
@@ -180,7 +180,7 @@ export class AdaptiveAI {
   /**
    * Get logs by severity
    */
-  getLogsBySeverity(severity: AILog['severity']): AILog[] {
+  getLogsBySeverity(severity: AILog["severity"]): AILog[] {
     return this.logs.filter(log => log.severity === severity);
   }
 
@@ -215,7 +215,7 @@ export class AdaptiveAI {
    */
   private saveToStorage(): void {
     try {
-      localStorage.setItem('nautilusAI_logs', JSON.stringify(this.logs));
+      localStorage.setItem("nautilusAI_logs", JSON.stringify(this.logs));
     } catch (error) {
       console.error("❌ Failed to save AI logs:", error);
     }
@@ -226,7 +226,7 @@ export class AdaptiveAI {
    */
   private loadFromStorage(): void {
     try {
-      const stored = localStorage.getItem('nautilusAI_logs');
+      const stored = localStorage.getItem("nautilusAI_logs");
       if (stored) {
         this.logs = JSON.parse(stored);
         console.log(`📚 Loaded ${this.logs.length} AI logs from storage`);
@@ -250,10 +250,10 @@ export class AdaptiveAI {
     return {
       totalLogs: this.logs.length,
       bySeverity: {
-        info: this.getLogsBySeverity('info').length,
-        warning: this.getLogsBySeverity('warning').length,
-        error: this.getLogsBySeverity('error').length,
-        critical: this.getLogsBySeverity('critical').length,
+        info: this.getLogsBySeverity("info").length,
+        warning: this.getLogsBySeverity("warning").length,
+        error: this.getLogsBySeverity("error").length,
+        critical: this.getLogsBySeverity("critical").length,
       },
       modelInfo: this.model,
     };

@@ -10,7 +10,7 @@ import { ForecastData, ForecastPrediction, ForecastConfig } from "@/types/foreca
 export class ForecastEngine {
   private subscribers: Array<(data: ForecastData) => void> = [];
   private config: ForecastConfig = {
-    model: 'ARIMA',
+    model: "ARIMA",
     interval: 3600000, // 1 hour in ms
     historicalDays: 30,
   };
@@ -123,16 +123,16 @@ export class ForecastEngine {
   /**
    * Determine trend from forecast text
    */
-  private determineTrend(forecastText: string): 'stable' | 'degrading' | 'improving' {
+  private determineTrend(forecastText: string): "stable" | "degrading" | "improving" {
     const lowerText = forecastText.toLowerCase();
     
-    if (lowerText.includes('degradation') || lowerText.includes('degrading')) {
-      return 'degrading';
+    if (lowerText.includes("degradation") || lowerText.includes("degrading")) {
+      return "degrading";
     }
-    if (lowerText.includes('improving') || lowerText.includes('optimal')) {
-      return 'improving';
+    if (lowerText.includes("improving") || lowerText.includes("optimal")) {
+      return "improving";
     }
-    return 'stable';
+    return "stable";
   }
 
   /**

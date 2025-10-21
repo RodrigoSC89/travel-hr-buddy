@@ -55,7 +55,7 @@ export default function ControlHub2() {
       timestamp: new Date().toISOString(),
       message: `Forecast processed: ${Object.keys(forecastData.forecast).length} modules`,
       context,
-      severity: 'info',
+      severity: "info",
     });
   };
 
@@ -95,18 +95,18 @@ export default function ControlHub2() {
       {/* AI Advisor Card */}
       {advice && (
         <Card className={`border-l-4 ${
-          advice.priority === 'critical' ? 'border-l-red-500' :
-          advice.priority === 'high' ? 'border-l-orange-500' :
-          advice.priority === 'medium' ? 'border-l-yellow-500' :
-          'border-l-green-500'
+          advice.priority === "critical" ? "border-l-red-500" :
+            advice.priority === "high" ? "border-l-orange-500" :
+              advice.priority === "medium" ? "border-l-yellow-500" :
+                "border-l-green-500"
         }`}>
           <CardHeader>
             <div className="flex items-start gap-3">
               <AlertTriangle className={`h-5 w-5 mt-1 ${
-                advice.priority === 'critical' ? 'text-red-500' :
-                advice.priority === 'high' ? 'text-orange-500' :
-                advice.priority === 'medium' ? 'text-yellow-500' :
-                'text-green-500'
+                advice.priority === "critical" ? "text-red-500" :
+                  advice.priority === "high" ? "text-orange-500" :
+                    advice.priority === "medium" ? "text-yellow-500" :
+                      "text-green-500"
               }`} />
               <div className="flex-1">
                 <CardTitle className="text-lg">NautilusAI Advisor</CardTitle>

@@ -76,7 +76,7 @@ export default function ForecastPage() {
         <CardContent>
           <div className="bg-gray-900 p-4 rounded-lg font-mono text-sm text-green-400">
             <pre className="whitespace-pre">
-{`[Telemetry] → [BridgeLink] → [Forecast Engine] ↔ [ControlHub]
+              {`[Telemetry] → [BridgeLink] → [Forecast Engine] ↔ [ControlHub]
                              ↕
                          [NautilusAI v2]
                              ↕
