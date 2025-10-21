@@ -19,9 +19,16 @@ export default function ForecastMetrics() {
         {metrics.map((m) => (
           <div key={m.label}>
             <p className="flex justify-between text-sm">
-              {m.label} <span>{m.value}%</span>
+              <span id={`metric-${m.label.replace(/\s+/g, '-').toLowerCase()}`}>{m.label}</span>
+              <span aria-label={`${m.label}: ${m.value} porcento`}>{m.value}%</span>
             </p>
-            <Progress value={m.value} />
+            <Progress 
+              value={m.value} 
+              aria-labelledby={`metric-${m.label.replace(/\s+/g, '-').toLowerCase()}`}
+              aria-valuenow={m.value}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            />
           </div>
         ))}
       </CardContent>

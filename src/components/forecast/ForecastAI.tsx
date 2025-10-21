@@ -32,17 +32,18 @@ export default function ForecastAI() {
     <Card className="border border-[var(--nautilus-accent)] bg-[var(--nautilus-bg)] shadow-lg">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Cpu className="text-[var(--nautilus-primary)]" /> AI Forecast Engine
+          <Cpu className="text-[var(--nautilus-primary)]" aria-hidden="true" /> 
+          <span>AI Forecast Engine</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
         {offline ? (
-          <p className="flex items-center gap-2 text-gray-400">
-            <WifiOff /> Operando em modo offline. Previsões locais desativadas.
+          <p className="flex items-center gap-2 text-gray-400" role="status" aria-live="polite">
+            <WifiOff aria-hidden="true" /> Operando em modo offline. Previsões locais desativadas.
           </p>
         ) : (
-          <p>
-            <Activity /> {status}:{" "}
+          <p role="status" aria-live="polite">
+            <Activity aria-hidden="true" /> {status}:{" "}
             <strong>{forecast ? `${forecast.toFixed(2)} unidades` : "Carregando..."}</strong>
           </p>
         )}
