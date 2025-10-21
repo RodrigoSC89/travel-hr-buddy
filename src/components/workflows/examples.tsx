@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Example: Using KanbanAISuggestions in a Workflow Detail Page
  * 
