@@ -18,6 +18,7 @@ const ComplianceDashboard = safeLazyImport(() => import("@/components/compliance
 const ResilienceMonitor = safeLazyImport(() => import("@/components/resilience/ResilienceMonitor"), "ResilienceMonitor");
 const ResilienceComplianceDashboard = safeLazyImport(() => import("@/components/resilience/ComplianceDashboard"), "ComplianceDashboard");
 const IncidentResponsePanel = safeLazyImport(() => import("@/components/resilience/IncidentResponsePanel"), "IncidentResponsePanel");
+const MaintenanceDashboard = safeLazyImport(() => import("@/components/maintenance/MaintenanceDashboard"), "MaintenanceDashboard");
 
 export default function ControlHub() {
   return (
@@ -48,6 +49,10 @@ export default function ControlHub() {
 
         <Suspense fallback={<LoadingCard />}>
           <ResilienceComplianceDashboard />
+        </Suspense>
+
+        <Suspense fallback={<LoadingCard />}>
+          <MaintenanceDashboard />
         </Suspense>
       </div>
 
