@@ -59,3 +59,105 @@ export const subscribeDP = (callback: (data: Record<string, unknown>) => void) =
   
   return client;
 };
+
+/**
+ * Subscribe to BridgeLink connection status updates
+ */
+export const subscribeBridgeStatus = (callback: (data: Record<string, unknown>) => void) => {
+  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
+  
+  client.on("connect", () => {
+    client.subscribe("nautilus/bridgelink/status", (err) => {
+      if (err) {
+        console.error("❌ Failed to subscribe to nautilus/bridgelink/status:", err);
+      } else {
+        console.log("✅ Subscribed to nautilus/bridgelink/status");
+      }
+    });
+  });
+  
+  client.on("message", (topic, msg) => {
+    if (topic === "nautilus/bridgelink/status") {
+      try {
+        const data = JSON.parse(msg.toString());
+        callback(data);
+      } catch (err) {
+        console.error("❌ Failed to parse MQTT message:", err);
+      }
+    }
+  });
+  
+  client.on("error", (err) => {
+    console.error("❌ MQTT connection error:", err);
+  });
+  
+  return client;
+};
+
+/**
+ * Subscribe to Forecast telemetry updates
+ */
+export const subscribeForecast = (callback: (data: Record<string, unknown>) => void) => {
+  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
+  
+  client.on("connect", () => {
+    client.subscribe("nautilus/forecast/telemetry", (err) => {
+      if (err) {
+        console.error("❌ Failed to subscribe to nautilus/forecast/telemetry:", err);
+      } else {
+        console.log("✅ Subscribed to nautilus/forecast/telemetry");
+      }
+    });
+  });
+  
+  client.on("message", (topic, msg) => {
+    if (topic === "nautilus/forecast/telemetry") {
+      try {
+        const data = JSON.parse(msg.toString());
+        callback(data);
+      } catch (err) {
+        console.error("❌ Failed to parse MQTT message:", err);
+      }
+    }
+  });
+  
+  client.on("error", (err) => {
+    console.error("❌ MQTT connection error:", err);
+  });
+  
+  return client;
+};
+
+/**
+ * Subscribe to system alerts
+ */
+export const subscribeAlerts = (callback: (data: Record<string, unknown>) => void) => {
+  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
+  
+  client.on("connect", () => {
+    client.subscribe("nautilus/alerts", (err) => {
+      if (err) {
+        console.error("❌ Failed to subscribe to nautilus/alerts:", err);
+      } else {
+        console.log("✅ Subscribed to nautilus/alerts");
+      }
+    });
+  });
+  
+  client.on("message", (topic, msg) => {
+    if (topic === "nautilus/alerts") {
+      try {
+        const data = JSON.parse(msg.toString());
+        callback(data);
+      } catch (err) {
+        console.error("❌ Failed to parse MQTT message:", err);
+      }
+    }
+  });
+  
+  client.on("error", (err) => {
+    console.error("❌ MQTT connection error:", err);
+  });
+  
+  return client;
+};
