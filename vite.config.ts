@@ -6,22 +6,26 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  base: "/",
-  server: {
-    host: true,
-    port: 8080,
-    strictPort: true,
-  },
-  plugins: [
-    react(), 
-    mode === "development" && componentTagger(),
-    mode === "production" && sentryVitePlugin({
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-    }),
-    VitePWA({
+export default defineConfig(({ mode }) => {
+  // Enable PWA only in production mode
+  const enablePwa = mode === "production";
+  
+  return {
+    base: "/",
+    server: {
+      host: true,
+      port: 8080,
+      strictPort: true,
+    },
+    plugins: [
+      react(), 
+      mode === "development" && componentTagger(),
+      mode === "production" && sentryVitePlugin({
+        org: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+      }),
+      enablePwa && VitePWA({
       registerType: "autoUpdate",
       includeAssets: [
         "favicon.ico",
@@ -107,7 +111,7 @@ export default defineConfig(({ mode }) => ({
         type: "module"
       }
     })
-  ].filter(Boolean),
+    ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -231,8 +235,9 @@ export default defineConfig(({ mode }) => ({
     "process.env": {},
     "process": { env: {} }
   },
-  preview: {
-    host: true,
-    port: 4173
-  }
-}));
+    preview: {
+      host: true,
+      port: 4173
+    }
+  };
+});
