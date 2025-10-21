@@ -4,8 +4,15 @@
  * Dashboard de monitoramento em tempo real que exibe eventos do BridgeLink,
  * estatísticas do sistema e status dos módulos.
  * 
+ * Patch 9 Updates:
+ * - Safe lazy loading with automatic retry mechanism
+ * - WCAG 2.1 AA accessibility standards
+ * - Bridge A11y for MQTT-based display synchronization
+ * - Control Panel for alerts dashboard
+ * - AI Insight Reporter integration
+ * 
  * @module ControlHub
- * @version 1.0.0 (Core Alpha)
+ * @version 2.0.0 (Patch 9 - Bridge Integration)
  */
 
 import React, { useState, useEffect } from "react";
@@ -14,6 +21,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { safeLazyImport } from "@/lib/safeLazyImport";
+
+// Safe lazy imports with automatic retry
+const BridgeA11y = safeLazyImport(
+  () => import("@/components/controlhub/BridgeA11y"),
+  "BridgeA11y"
+);
+
+const ControlPanel = safeLazyImport(
+  () => import("@/components/controlhub/ControlPanel"),
+  "ControlPanel"
+);
+
+const IncidentReporter = safeLazyImport(
+  () => import("@/components/controlhub/IncidentReporter"),
+  "IncidentReporter"
+);
 
 export default function ControlHub() {
   const [events, setEvents] = useState<BridgeLinkEvent[]>([]);
@@ -90,9 +114,17 @@ export default function ControlHub() {
           </p>
         </div>
         <Badge variant="outline" className="px-4 py-2">
-          Core Alpha v1.0.0
+          Patch 9 - Bridge Integration v2.0.0
         </Badge>
       </div>
+
+      {/* New Patch 9 Components */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <BridgeA11y />
+        <ControlPanel />
+      </div>
+
+      <IncidentReporter />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

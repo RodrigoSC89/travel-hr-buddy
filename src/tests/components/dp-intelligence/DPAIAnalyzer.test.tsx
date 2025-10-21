@@ -53,7 +53,7 @@ describe("DPAIAnalyzer Component", () => {
   it("should render within a card with accent border", () => {
     const { container } = render(<DPAIAnalyzer />);
     
-    const card = container.querySelector('[class*="border-\\[var\\(--nautilus-accent\\)\\]"]');
+    const card = container.querySelector("[class*=\"border-\\[var\\(--nautilus-accent\\)\\]\"]");
     expect(card).toBeTruthy();
   });
 });

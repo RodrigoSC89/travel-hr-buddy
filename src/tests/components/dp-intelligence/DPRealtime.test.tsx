@@ -69,14 +69,14 @@ describe("DPRealtime Component", () => {
   it("should render within a card component", () => {
     const { container } = render(<DPRealtime />);
     
-    const card = container.querySelector('[class*="shadow-md"]');
+    const card = container.querySelector("[class*=\"shadow-md\"]");
     expect(card).toBeTruthy();
   });
 
   it("should display metrics in a grid layout", () => {
     const { container } = render(<DPRealtime />);
     
-    const grid = container.querySelector('[class*="grid-cols-3"]');
+    const grid = container.querySelector("[class*=\"grid-cols-3\"]");
     expect(grid).toBeTruthy();
   });
 });
