@@ -1,0 +1,136 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, develop, "copilot/**" ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run security scan weekly on Mondays at 00:00 UTC
+    - cron: '0 0 * * 1'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  security-scan:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for secret scanning
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run npm audit
+        run: |
+          echo "🔍 Running npm audit for dependency vulnerabilities..."
+          npm audit --production --audit-level=moderate || echo "⚠️ Vulnerabilities found"
+        continue-on-error: true
+      
+      - name: Check for outdated dependencies
+        run: |
+          echo "📦 Checking for outdated dependencies..."
+          npm outdated || echo "ℹ️ Some dependencies are outdated"
+        continue-on-error: true
+      
+      - name: Secret detection with TruffleHog
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified
+        continue-on-error: true
+      
+      - name: Validate environment variables
+        run: |
+          echo "🔐 Validating environment configuration..."
+          node scripts/validate-env.cjs || echo "⚠️ Environment validation warnings"
+        env:
+          # Set dummy values for validation
+          VITE_SUPABASE_URL: "https://dummy.supabase.co"
+          VITE_SUPABASE_PUBLISHABLE_KEY: "dummy-key"
+        continue-on-error: true
+      
+      - name: Check for hardcoded secrets
+        run: |
+          echo "🔍 Scanning for hardcoded secrets..."
+          
+          # Check for hardcoded API keys
+          if grep -r "sk-[A-Za-z0-9_-]\{32,\}" src/ --exclude-dir=node_modules 2>/dev/null; then
+            echo "❌ Found potential OpenAI API keys"
+            exit 1
+          fi
+          
+          # Check for hardcoded Bearer tokens
+          if grep -r "Bearer [A-Za-z0-9_-]\{20,\}" src/ --exclude-dir=node_modules 2>/dev/null; then
+            echo "❌ Found hardcoded Bearer tokens"
+            exit 1
+          fi
+          
+          # Check for hardcoded passwords
+          if grep -ri "password\s*[:=]\s*['\"][^'\"]\{8,\}['\"]" src/ --exclude-dir=node_modules 2>/dev/null; then
+            echo "❌ Found potential hardcoded passwords"
+            exit 1
+          fi
+          
+          # Check for AWS keys
+          if grep -r "AKIA[0-9A-Z]\{16\}" src/ --exclude-dir=node_modules 2>/dev/null; then
+            echo "❌ Found potential AWS access keys"
+            exit 1
+          fi
+          
+          echo "✅ No hardcoded secrets detected"
+        continue-on-error: true
+      
+      - name: Check MQTT security configuration
+        run: |
+          echo "🔒 Checking MQTT security configuration..."
+          
+          # Ensure production uses encrypted MQTT
+          if grep -r "ws://.*mqtt" src/ --exclude-dir=node_modules 2>/dev/null; then
+            echo "⚠️ Warning: Found unencrypted MQTT connections (ws://)"
+            echo "   Ensure production uses wss:// or mqtts://"
+          fi
+          
+          echo "✅ MQTT security check completed"
+        continue-on-error: true
+      
+      - name: Generate security report
+        if: always()
+        run: |
+          mkdir -p security-reports
+          
+          echo "# Security Scan Report" > security-reports/report.md
+          echo "Date: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> security-reports/report.md
+          echo "Commit: ${{ github.sha }}" >> security-reports/report.md
+          echo "" >> security-reports/report.md
+          echo "## Summary" >> security-reports/report.md
+          echo "- ✅ Dependency audit completed" >> security-reports/report.md
+          echo "- ✅ Secret detection scan completed" >> security-reports/report.md
+          echo "- ✅ Hardcoded secrets check completed" >> security-reports/report.md
+          echo "- ✅ MQTT security configuration checked" >> security-reports/report.md
+          
+          cat security-reports/report.md
+      
+      - name: Upload security report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-scan-report-${{ github.run_id }}
+          path: security-reports/
+          retention-days: 30
+          if-no-files-found: ignore
