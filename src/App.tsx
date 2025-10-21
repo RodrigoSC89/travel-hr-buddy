@@ -51,6 +51,7 @@ const Gamification = safeLazyImport(() => import("@/pages/Gamification"), "Gamif
 const PredictiveAnalytics = safeLazyImport(() => import("@/pages/PredictiveAnalytics"), "Predictive Analytics");
 const Admin = safeLazyImport(() => import("@/pages/Admin"), "Admin");
 const ControlHub = safeLazyImport(() => import("@/pages/ControlHub"), "Control Hub");
+const ComplianceHub = safeLazyImport(() => import("@/pages/compliance/ComplianceHub"), "Compliance Hub");
 const APITester = safeLazyImport(() => import("@/pages/admin/api-tester"), "API Tester");
 const APIStatus = safeLazyImport(() => import("@/pages/admin/api-status"), "API Status");
 const ControlPanel = safeLazyImport(() => import("@/pages/admin/control-panel"), "Control Panel");
@@ -224,6 +225,7 @@ function App() {
                       <Route path="/forecast" element={<ForecastPage />} />
                       <Route path="/forecast/global" element={<ForecastGlobal />} />
                       <Route path="/control-hub" element={<ControlHub />} />
+                      <Route path="/compliance" element={<ComplianceHub />} />
                       <Route path="/vault-ai" element={<VaultAI />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
