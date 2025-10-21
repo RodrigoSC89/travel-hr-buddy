@@ -7,11 +7,18 @@ import mqtt from "mqtt";
 
 /**
  * Publish an event to MQTT broker
+ * @param topic - MQTT topic to publish to
+ * @param payload - Data to publish
+ * @param qos - Quality of Service level (0: at most once, 1: at least once, 2: exactly once)
  */
-export const publishEvent = (topic: string, payload: Record<string, unknown>) => {
+export const publishEvent = (
+  topic: string, 
+  payload: Record<string, unknown>, 
+  qos: 0 | 1 | 2 = 1
+) => {
   const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
   client.on("connect", () => {
-    client.publish(topic, JSON.stringify(payload), { qos: 1 }, (err) => {
+    client.publish(topic, JSON.stringify(payload), { qos }, (err) => {
       if (err) {
         console.error(`❌ Failed to publish to ${topic}:`, err);
       } else {
@@ -61,23 +68,24 @@ export const subscribeDP = (callback: (data: Record<string, unknown>) => void) =
 };
 
 /**
- * Subscribe to Forecast channel
+ * Subscribe to Forecast updates
+ * Returns an unsubscribe function for cleanup
  */
 export const subscribeForecast = (callback: (data: Record<string, unknown>) => void) => {
   const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
   
   client.on("connect", () => {
-    client.subscribe("nautilus/forecast", (err) => {
+    client.subscribe("nautilus/forecast/update", (err) => {
       if (err) {
-        console.error("❌ Failed to subscribe to nautilus/forecast:", err);
+        console.error("❌ Failed to subscribe to nautilus/forecast/update:", err);
       } else {
-        console.log("✅ Subscribed to nautilus/forecast");
+        console.log("✅ Subscribed to nautilus/forecast/update");
       }
     });
   });
   
   client.on("message", (topic, msg) => {
-    if (topic === "nautilus/forecast") {
+    if (topic === "nautilus/forecast/update") {
       try {
         const data = JSON.parse(msg.toString());
         callback(data);
@@ -91,7 +99,10 @@ export const subscribeForecast = (callback: (data: Record<string, unknown>) => v
     console.error("❌ MQTT connection error:", err);
   });
   
-  return client;
+  // Return cleanup function
+  return () => {
+    client.end();
+  };
 };
 
 /**
@@ -172,159 +183,3 @@ export const subscribeSystemStatus = (callback: (data: Record<string, unknown>) 
   return client;
 };
 
-/**
- * Subscribe to Bridge Status updates
- */
-export const subscribeBridgeStatus = (callback: (data: Record<string, unknown>) => void) => {
-  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
-  
-  client.on("connect", () => {
-    client.subscribe("nautilus/bridge/status", (err) => {
-      if (err) {
-        console.error("❌ Failed to subscribe to nautilus/bridge/status:", err);
-      } else {
-        console.log("✅ Subscribed to nautilus/bridge/status");
-      }
-    });
-  });
-  
-  client.on("message", (topic, msg) => {
-    if (topic === "nautilus/bridge/status") {
-      try {
-        const data = JSON.parse(msg.toString());
-        callback(data);
-      } catch (err) {
-        console.error("❌ Failed to parse MQTT message:", err);
-      }
-    }
-  });
-  
-  client.on("error", (err) => {
-    console.error("❌ MQTT connection error:", err);
-  });
-  
-  return client;
-};
-
-/**
- * Subscribe to Forecast data
- */
-export const subscribeForecast = (callback: (data: Record<string, unknown>) => void) => {
-  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
-  
-  client.on("connect", () => {
-    client.subscribe("nautilus/forecast/data", (err) => {
-      if (err) {
-        console.error("❌ Failed to subscribe to nautilus/forecast/data:", err);
-      } else {
-        console.log("✅ Subscribed to nautilus/forecast/data");
-      }
-    });
-  });
-  
-  client.on("message", (topic, msg) => {
-    if (topic === "nautilus/forecast/data") {
-      try {
-        const data = JSON.parse(msg.toString());
-        callback(data);
-      } catch (err) {
-        console.error("❌ Failed to parse MQTT message:", err);
-      }
-    }
-  });
-  
-  client.on("error", (err) => {
-    console.error("❌ MQTT connection error:", err);
-  });
-  
-  return client;
-};
-
-/**
- * Subscribe to DP Alerts
- */
-export const subscribeAlerts = (callback: (data: Record<string, unknown>) => void) => {
-  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
-  
-  client.on("connect", () => {
-    client.subscribe("nautilus/dp/alert", (err) => {
-      if (err) {
-        console.error("❌ Failed to subscribe to nautilus/dp/alert:", err);
-      } else {
-        console.log("✅ Subscribed to nautilus/dp/alert");
-      }
-    });
-  });
-  
-  client.on("message", (topic, msg) => {
-    if (topic === "nautilus/dp/alert") {
-      try {
-        const data = JSON.parse(msg.toString());
-        callback(data);
-      } catch (err) {
-        console.error("❌ Failed to parse MQTT message:", err);
-      }
-    }
-  });
-  
-  client.on("error", (err) => {
-    console.error("❌ MQTT connection error:", err);
-  });
-  
-  return client;
-};
-
-/**
- * Publish forecast data to MQTT broker
- */
-export const publishForecast = (data: { wind: number; wave: number; temp: number; visibility: number }) => {
-  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
-  client.on("connect", () => {
-    client.publish("nautilus/forecast/global", JSON.stringify(data), { qos: 1 }, (err) => {
-      if (err) {
-        console.error("❌ Failed to publish to nautilus/forecast/global:", err);
-      } else {
-        console.log("✅ Published to nautilus/forecast/global:", data);
-      }
-      client.end();
-    });
-  });
-  client.on("error", (err) => {
-    console.error("❌ MQTT connection error:", err);
-    client.end();
-  });
-};
-
-/**
- * Subscribe to forecast global data channel
- */
-export const subscribeForecast = (callback: (data: { wind: number; wave: number; temp: number; visibility: number }) => void) => {
-  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
-  
-  client.on("connect", () => {
-    client.subscribe("nautilus/forecast/global", (err) => {
-      if (err) {
-        console.error("❌ Failed to subscribe to nautilus/forecast/global:", err);
-      } else {
-        console.log("✅ Subscribed to nautilus/forecast/global");
-      }
-    });
-  });
-  
-  client.on("message", (topic, msg) => {
-    if (topic === "nautilus/forecast/global") {
-      try {
-        const data = JSON.parse(msg.toString());
-        callback(data);
-      } catch (err) {
-        console.error("❌ Failed to parse MQTT message:", err);
-      }
-    }
-  });
-  
-  client.on("error", (err) => {
-    console.error("❌ MQTT connection error:", err);
-  });
-  
-  return client;
-};
