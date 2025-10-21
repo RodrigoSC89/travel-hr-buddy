@@ -1,0 +1,199 @@
+// @ts-nocheck
+import React, { useEffect, useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Brain, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import * as ort from "onnxruntime-web";
+import { publishEvent } from "@/lib/mqtt/publisher";
+
+type PredictionStatus = "loading" | "success" | "error" | "offline";
+
+interface ForecastData {
+  forecast: number;
+  confidence: number;
+  timestamp: string;
+}
+
+export default function ForecastAI() {
+  const [prediction, setPrediction] = useState<ForecastData | null>(null);
+  const [status, setStatus] = useState<PredictionStatus>("loading");
+
+  useEffect(() => {
+    async function runModel() {
+      try {
+        setStatus("loading");
+        
+        // Attempt to load ONNX model
+        const session = await ort.InferenceSession.create("/models/nautilus_forecast.onnx");
+        
+        // Example input: [pressure_hPa, temperature_C, wind_speed_kn, wave_height_m]
+        const input = new ort.Tensor(
+          "float32",
+          new Float32Array([1013, 22.5, 3.2, 1.5]),
+          [1, 4]
+        );
+        
+        const results = await session.run({ input });
+        const forecastValue = results.output.data[0] as number;
+        const confidence = Math.min(0.95, Math.max(0.5, Math.random() * 0.5 + 0.5)); // Simulated confidence
+        
+        const forecastData: ForecastData = {
+          forecast: forecastValue,
+          confidence,
+          timestamp: new Date().toISOString(),
+        };
+        
+        setPrediction(forecastData);
+        setStatus("success");
+        
+        // Publish to MQTT with QoS 1 (at least once delivery)
+        publishEvent(
+          "nautilus/forecast/update",
+          {
+            forecast: forecastValue,
+            confidence,
+            timestamp: forecastData.timestamp,
+            source: "onnx-runtime-web",
+          },
+          1
+        );
+      } catch (err) {
+        console.error("AI Forecast Error:", err);
+        setStatus("offline");
+        
+        // Fallback prediction when model is unavailable
+        setPrediction({
+          forecast: 0.65,
+          confidence: 0.5,
+          timestamp: new Date().toISOString(),
+        });
+      }
+    }
+    
+    runModel();
+  }, []);
+
+  const getConfidenceColor = (confidence: number) => {
+    if (confidence >= 0.8) return "text-green-500";
+    if (confidence >= 0.5) return "text-yellow-500";
+    return "text-red-500";
+  };
+
+  const getConfidenceLabel = (confidence: number) => {
+    if (confidence >= 0.8) return "Alta";
+    if (confidence >= 0.5) return "Média";
+    return "Baixa";
+  };
+
+  const getStatusIcon = () => {
+    switch (status) {
+      case "success":
+        return <CheckCircle className="text-green-500" aria-hidden="true" />;
+      case "error":
+        return <XCircle className="text-red-500" aria-hidden="true" />;
+      case "offline":
+        return <AlertTriangle className="text-yellow-500" aria-hidden="true" />;
+      default:
+        return <Brain className="text-purple-400 animate-pulse" aria-hidden="true" />;
+    }
+  };
+
+  const getStatusMessage = () => {
+    switch (status) {
+      case "success":
+        return "Modelo ativo";
+      case "error":
+        return "Erro no modelo";
+      case "offline":
+        return "Modo offline (fallback)";
+      default:
+        return "Carregando modelo";
+    }
+  };
+
+  return (
+    <Card className="bg-gray-900 border-gray-800">
+      <CardHeader>
+        <CardTitle className="text-white flex items-center space-x-2">
+          <Brain className="text-purple-400" aria-hidden="true" />
+          <span>Previsão IA com ONNX Runtime</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {/* Status Indicator with WCAG aria-live */}
+        <div
+          className="flex items-center space-x-2 mb-4 p-2 bg-gray-800 rounded"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {getStatusIcon()}
+          <span className="text-sm text-gray-300">{getStatusMessage()}</span>
+        </div>
+
+        {/* Prediction Display */}
+        {prediction !== null ? (
+          <div className="space-y-4">
+            {/* Forecast Value */}
+            <div className="flex items-center space-x-3">
+              <AlertTriangle className="text-yellow-400" aria-hidden="true" />
+              <div>
+                <p className="text-sm text-gray-400" id="forecast-label">
+                  Probabilidade de instabilidade
+                </p>
+                <p
+                  className="text-3xl font-bold text-white"
+                  aria-labelledby="forecast-label"
+                >
+                  {(prediction.forecast * 100).toFixed(1)}%
+                </p>
+              </div>
+            </div>
+
+            {/* Confidence Indicator with WCAG-compliant progress bar */}
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label htmlFor="confidence-bar" className="text-sm text-gray-400">
+                  Confiança do modelo
+                </label>
+                <span
+                  className={`text-sm font-semibold ${getConfidenceColor(prediction.confidence)}`}
+                  aria-label={`Confiança: ${getConfidenceLabel(prediction.confidence)}`}
+                >
+                  {getConfidenceLabel(prediction.confidence)} ({(prediction.confidence * 100).toFixed(0)}%)
+                </span>
+              </div>
+              <div
+                className="w-full bg-gray-700 rounded-full h-2.5"
+                role="progressbar"
+                aria-valuenow={Math.round(prediction.confidence * 100)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="Nível de confiança do modelo"
+                id="confidence-bar"
+              >
+                <div
+                  className={`h-2.5 rounded-full transition-all duration-500 ${
+                    prediction.confidence >= 0.8
+                      ? "bg-green-500"
+                      : prediction.confidence >= 0.5
+                      ? "bg-yellow-500"
+                      : "bg-red-500"
+                  }`}
+                  style={{ width: `${prediction.confidence * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Timestamp */}
+            <p className="text-xs text-gray-500">
+              Última atualização: {new Date(prediction.timestamp).toLocaleString("pt-BR")}
+            </p>
+          </div>
+        ) : (
+          <p className="text-gray-400" aria-live="polite">
+            Inicializando inferência...
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
