@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
+    "clean": "rm -rf dist node_modules/.vite .next",
     "build": "NODE_OPTIONS='--max-old-space-size=4096' vite build",
     "build:dev": "NODE_OPTIONS='--max-old-space-size=4096' vite build --mode development",
     "build:ci": "NODE_OPTIONS='--max-old-space-size=4096' vite build",
