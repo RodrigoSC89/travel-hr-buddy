@@ -25,7 +25,7 @@ export const subscribeTopic = (topic: string, callback: (data: Record<string, un
     else console.log(`✅ Subscreveu ${topic}`);
   });
 
-  client.on("message", (receivedTopic, message) => {
+  const messageHandler = (receivedTopic, message) => {
     if (receivedTopic === topic) {
       try {
         callback(JSON.parse(message.toString()));
@@ -33,7 +33,17 @@ export const subscribeTopic = (topic: string, callback: (data: Record<string, un
         callback({ raw: message.toString() });
       }
     }
-  });
+  };
+
+  client.on("message", messageHandler);
+
+  // Return client-like object for backward compatibility
+  return {
+    end: () => {
+      // Remove only the message handler for this subscription
+      client.off("message", messageHandler);
+    }
+  };
 };
 
 /**
