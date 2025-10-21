@@ -41,7 +41,8 @@
     "preview:scan": "playwright test --config=preview-scan.config.ts",
     "preview:scan:report": "node scripts/generate-preview-report.cjs",
     "preview:validate": "npm run build && npm run preview:scan && npm run preview:scan:report",
-    "preview:initial-report": "node scripts/generate-initial-report.cjs"
+    "preview:initial-report": "node scripts/generate-initial-report.cjs",
+    "validate:build": "./scripts/build-validation.sh"
   },
   "engines": {
     "node": "22.x",
