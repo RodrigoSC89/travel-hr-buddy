@@ -233,7 +233,8 @@ export default defineConfig(({ mode }) => {
   },
   define: {
     "process.env": {},
-    "process": { env: {} }
+    "process": { env: {} },
+    "process.env.MQTT_URL": JSON.stringify(process.env.VITE_MQTT_URL),
   },
     preview: {
       host: true,

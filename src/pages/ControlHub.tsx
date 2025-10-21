@@ -5,15 +5,22 @@
  * estatísticas do sistema e status dos módulos.
  * 
  * @module ControlHub
- * @version 1.0.0 (Core Alpha)
+ * @version 1.1.0 (Patch 9 - WCAG Bridge Integration)
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { BridgeLink, BridgeLinkEvent } from "@/core/BridgeLink";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { safeLazyImport } from "@/lib/safeLazyImport";
+import { Loader } from "@/components/ui/loader";
+
+// Safe lazy imports for ControlHub components
+const ControlPanel = safeLazyImport("@/components/controlhub/ControlPanel");
+const IncidentReporter = safeLazyImport("@/components/controlhub/IncidentReporter");
+const BridgeA11y = safeLazyImport("@/components/controlhub/BridgeA11y");
 
 export default function ControlHub() {
   const [events, setEvents] = useState<BridgeLinkEvent[]>([]);
@@ -80,19 +87,25 @@ export default function ControlHub() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">⚓ ControlHub</h1>
-          <p className="text-muted-foreground">
-            Centro de Telemetria e Monitoramento em Tempo Real
-          </p>
+    <Suspense fallback={<Loader />}>
+      <div className="container mx-auto p-6 space-y-6 bg-[var(--nautilus-bg-alt)] text-[var(--nautilus-text)]">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight" role="heading" aria-level={1}>
+              ⚓ ControlHub – Painel de Controle
+            </h1>
+            <p className="text-muted-foreground">
+              Centro de Telemetria e Monitoramento em Tempo Real
+            </p>
+          </div>
+          <Badge variant="outline" className="px-4 py-2">
+            Patch 9 - WCAG Bridge
+          </Badge>
         </div>
-        <Badge variant="outline" className="px-4 py-2">
-          Core Alpha v1.0.0
-        </Badge>
-      </div>
+
+        {/* Bridge A11y Status */}
+        <BridgeA11y />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -123,6 +136,12 @@ export default function ControlHub() {
             <CardTitle className="text-3xl">{events.length}</CardTitle>
           </CardHeader>
         </Card>
+      </div>
+
+      {/* Control Panel with Alerts */}
+      <div>
+        <h2 className="text-xl font-bold mb-4">Painel de Controle - Alertas Ativos</h2>
+        <ControlPanel />
       </div>
 
       {/* Event Stream */}
@@ -214,6 +233,10 @@ export default function ControlHub() {
           </div>
         </CardContent>
       </Card>
+
+      {/* AI Insight Reporter */}
+      <IncidentReporter />
     </div>
+    </Suspense>
   );
 }
