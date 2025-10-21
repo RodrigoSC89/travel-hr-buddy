@@ -14,6 +14,10 @@ const DPAIAnalyzer = safeLazyImport(
   () => import("@/components/dp-intelligence/DPAIAnalyzer"),
   "DPAIAnalyzer"
 );
+const DPAdvisorPanel = safeLazyImport(
+  () => import("@/components/dp-intelligence/DPAdvisorPanel"),
+  "DPAdvisorPanel"
+);
 
 export default function DPIntelligence() {
   return (
@@ -23,7 +27,10 @@ export default function DPIntelligence() {
           DP Intelligence Center
         </h1>
         <DPAIAnalyzer />
-        <DPOverview />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <DPOverview />
+          <DPAdvisorPanel />
+        </div>
         <DPRealtime />
       </main>
     </Suspense>

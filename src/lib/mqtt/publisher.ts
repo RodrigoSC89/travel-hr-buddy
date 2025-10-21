@@ -131,7 +131,7 @@ export const subscribeAlerts = (callback: (data: Record<string, unknown>) => voi
 /**
  * Subscribe to BridgeLink connection status updates
  */
-export const subscribeBridgeStatus = (callback: (data: Record<string, unknown>) => void) => {
+export const subscribeBridgeLinkStatus = (callback: (data: Record<string, unknown>) => void) => {
   const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
   
   client.on("connect", () => {
@@ -165,7 +165,7 @@ export const subscribeBridgeStatus = (callback: (data: Record<string, unknown>) 
 /**
  * Subscribe to Forecast telemetry updates
  */
-export const subscribeForecast = (callback: (data: Record<string, unknown>) => void) => {
+export const subscribeForecastTelemetry = (callback: (data: Record<string, unknown>) => void) => {
   const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
   
   client.on("connect", () => {
@@ -199,7 +199,7 @@ export const subscribeForecast = (callback: (data: Record<string, unknown>) => v
 /**
  * Subscribe to system alerts
  */
-export const subscribeAlerts = (callback: (data: Record<string, unknown>) => void) => {
+export const subscribeSystemAlerts = (callback: (data: Record<string, unknown>) => void) => {
   const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
   
   client.on("connect", () => {
@@ -267,7 +267,7 @@ export const subscribeBridgeStatus = (callback: (data: Record<string, unknown>) 
 /**
  * Subscribe to Forecast data
  */
-export const subscribeForecast = (callback: (data: Record<string, unknown>) => void) => {
+export const subscribeForecastData = (callback: (data: Record<string, unknown>) => void) => {
   const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
   
   client.on("connect", () => {
@@ -301,7 +301,7 @@ export const subscribeForecast = (callback: (data: Record<string, unknown>) => v
 /**
  * Subscribe to DP Alerts
  */
-export const subscribeAlerts = (callback: (data: Record<string, unknown>) => void) => {
+export const subscribeDPAlerts = (callback: (data: Record<string, unknown>) => void) => {
   const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
   
   client.on("connect", () => {
@@ -356,7 +356,7 @@ export const publishForecast = (data: { wind: number; wave: number; temp: number
 /**
  * Subscribe to forecast global data channel
  */
-export const subscribeForecast = (callback: (data: { wind: number; wave: number; temp: number; visibility: number }) => void) => {
+export const subscribeForecastGlobal = (callback: (data: { wind: number; wave: number; temp: number; visibility: number }) => void) => {
   const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
   
   client.on("connect", () => {
