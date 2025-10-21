@@ -550,7 +550,12 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                       >
                         <SidebarMenuItem>
                           <CollapsibleTrigger asChild>
-                            <SidebarMenuButton className="w-full justify-between">
+                            <SidebarMenuButton 
+                              className="w-full justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nautilus-primary)]"
+                              tabIndex={0}
+                              role="button"
+                              aria-label={`Expandir ${item.title}`}
+                            >
                               <div className="flex items-center">
                                 {item.icon && <item.icon className="h-4 w-4" />}
                                 {!collapsed && <span className="ml-2">{item.title}</span>}
@@ -568,7 +573,10 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                                     <SidebarMenuSubButton 
                                       onClick={() => handleItemClick(subItem.url || "")}
                                       isActive={isItemActive(subItem.url || "")}
-                                      className="w-full"
+                                      className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nautilus-primary)]"
+                                      tabIndex={0}
+                                      role="link"
+                                      aria-label={`Navegar para ${subItem.title}`}
                                     >
                                       {subItem.icon && <subItem.icon className="h-4 w-4" />}
                                       <span className="ml-2">{subItem.title}</span>
@@ -589,8 +597,11 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                       <SidebarMenuButton 
                         onClick={() => handleItemClick(item.url)}
                         isActive={isItemActive(item.url)}
-                        className="w-full justify-start"
+                        className="w-full justify-start focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nautilus-primary)]"
                         title={collapsed ? item.title : undefined}
+                        tabIndex={0}
+                        role="link"
+                        aria-label={`Navegar para ${item.title}`}
                       >
                         {item.icon && <item.icon className="h-4 w-4" />}
                         {!collapsed && <span className="ml-2">{item.title}</span>}

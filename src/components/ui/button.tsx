@@ -50,19 +50,28 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
+  ariaLabel?: string;
+  label?: string;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, loading, disabled, onClick, children, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, loading, disabled, onClick, children, ariaLabel, label, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     const isDisabled = disabled || loading;
     
     return (
       <Comp 
-        className={cn(buttonVariants({ variant, size, className }))} 
+        className={cn(
+          buttonVariants({ variant, size }),
+          "focus:outline-none focus:ring-2 focus:ring-[var(--nautilus-primary)]",
+          className
+        )} 
         ref={ref} 
         disabled={isDisabled}
         onClick={isDisabled ? undefined : onClick}
+        role="button"
+        tabIndex={0}
+        aria-label={ariaLabel || label || (typeof children === 'string' ? children : 'Botão Nautilus')}
         {...props}
       >
         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

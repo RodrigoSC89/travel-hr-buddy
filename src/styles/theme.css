@@ -1,0 +1,49 @@
+/* === NAUTILUS ONE - DESIGN SYSTEM === */
+
+:root {
+  /* Dark theme colors for maritime consoles */
+  --nautilus-bg: #0e1117;
+  --nautilus-bg-alt: #1a1f27;
+  --nautilus-text: #e4e6eb;
+  --nautilus-primary: #3b82f6;
+  --nautilus-accent: #22c55e;
+  --nautilus-error: #ef4444;
+  --nautilus-focus: 2px solid #22c55e;
+  --nautilus-radius: 0.75rem;
+}
+
+[data-theme="light"] {
+  /* Light theme for web version */
+  --nautilus-bg: #f9fafb;
+  --nautilus-bg-alt: #ffffff;
+  --nautilus-text: #111827;
+  --nautilus-primary: #2563eb;
+  --nautilus-accent: #16a34a;
+  --nautilus-error: #dc2626;
+}
+
+/* Enhanced focus indicators for accessibility */
+*:focus-visible {
+  outline: var(--nautilus-focus) !important;
+  outline-offset: 2px !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --nautilus-bg: #000000;
+    --nautilus-text: #ffffff;
+    --nautilus-primary: #60a5fa;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
