@@ -8,8 +8,10 @@ export default function ForecastPanel() {
   const [data, setData] = useState({ wind: 0, wave: 0, temp: 0, visibility: 0 });
 
   useEffect(() => {
-    const client = subscribeForecast((msg) => setData(msg));
-    return () => client.end();
+    const unsubscribe = subscribeForecast((msg) => setData(msg));
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   return (
