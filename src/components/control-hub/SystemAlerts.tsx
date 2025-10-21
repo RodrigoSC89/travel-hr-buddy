@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
-import { subscribeAlerts } from "@/lib/mqtt/publisher";
+import { subscribeSystemAlerts } from "@/lib/mqtt/publisher";
 
 export default function SystemAlerts() {
   const [alerts, setAlerts] = useState([]);
 
   useEffect(() => {
-    const client = subscribeAlerts((data) => setAlerts((prev) => [data, ...prev].slice(0, 5)));
+    const client = subscribeSystemAlerts((data) => setAlerts((prev) => [data, ...prev].slice(0, 5)));
     return () => client.end();
   }, []);
 

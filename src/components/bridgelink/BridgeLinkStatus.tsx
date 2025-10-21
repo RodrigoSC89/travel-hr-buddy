@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Activity, Wifi, ShieldCheck } from "lucide-react";
-import { subscribeBridgeStatus } from "@/lib/mqtt/publisher";
+import { subscribeBridgeLinkStatus } from "@/lib/mqtt/publisher";
 
 export default function BridgeLinkStatus() {
   const [status, setStatus] = useState({ online: false, latency: 0, lastSync: "—" });
 
   useEffect(() => {
-    const client = subscribeBridgeStatus((data) => setStatus(data));
+    const client = subscribeBridgeLinkStatus((data) => setStatus(data));
     return () => client.end();
   }, []);
 
