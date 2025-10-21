@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -36,7 +35,18 @@ import {
   Globe
 } from "lucide-react";
 
-const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, description, color = "blue", delay = 0 }) => {
+interface InteractiveStatsCardProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  value: string | number;
+  change: number;
+  trend: "up" | "down";
+  description: string;
+  color?: "blue" | "green" | "purple" | "orange" | "pink" | "emerald";
+  delay?: number;
+}
+
+const InteractiveStatsCard: React.FC<InteractiveStatsCardProps> = ({ icon: Icon, title, value, change, trend, description, color = "blue", delay = 0 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -156,7 +166,15 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
   );
 };
 
-const FloatingActionButton = ({ icon: Icon, label, onClick, color = "primary", delay = 0 }) => {
+interface FloatingActionButtonProps {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  onClick: () => void;
+  color?: string;
+  delay?: number;
+}
+
+const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({ icon: Icon, label, onClick, color = "primary", delay = 0 }) => {
   const [isVisible, setIsVisible] = useState(false);
   
   useEffect(() => {
