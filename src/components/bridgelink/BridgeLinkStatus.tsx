@@ -16,7 +16,7 @@ export default function BridgeLinkStatus() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Wifi className="text-[var(--nautilus-primary)]" /> Status de Comunicação
+          <Wifi className="text-primary" /> Status de Comunicação
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-3 gap-4">

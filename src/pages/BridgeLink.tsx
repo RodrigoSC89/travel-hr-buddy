@@ -9,8 +9,8 @@ const BridgeLinkSync = safeLazyImport(() => import("@/components/bridgelink/Brid
 export default function BridgeLink() {
   return (
     <Suspense fallback={<Loading fullScreen message="Carregando BridgeLink..." />}>
-      <main className="p-6 flex flex-col gap-6 bg-[var(--nautilus-bg-alt)] min-h-screen">
-        <h1 className="text-3xl font-bold" role="heading" aria-level={1}>
+      <main className="p-6 flex flex-col gap-6 bg-background min-h-screen">
+        <h1 className="text-3xl font-bold text-foreground" role="heading" aria-level={1}>
           BridgeLink Integration Core
         </h1>
         <BridgeLinkStatus />

@@ -17,12 +17,12 @@ export default function BridgeLinkDashboard() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Activity className="text-[var(--nautilus-primary)]" /> Painel de Diagnóstico
+          <Activity className="text-primary" /> Painel de Diagnóstico
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex gap-4 mb-4">
-          <Button onClick={triggerSync} className="bg-[var(--nautilus-primary)] text-white">
+          <Button onClick={triggerSync} className="bg-primary text-primary-foreground hover:bg-primary/90">
             <RefreshCcw className="mr-2 h-4 w-4" /> Forçar Sincronização
           </Button>
         </div>

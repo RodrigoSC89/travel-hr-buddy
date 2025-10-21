@@ -25,7 +25,7 @@ export default function BridgeLinkSync() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <RefreshCw className="text-[var(--nautilus-primary)]" /> Sincronização em Tempo Real
+          <RefreshCw className="text-primary" /> Sincronização em Tempo Real
         </CardTitle>
       </CardHeader>
       <CardContent className="flex justify-around">
@@ -40,7 +40,7 @@ export default function BridgeLinkSync() {
 function StatusItem({ icon, label, value }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="text-[var(--nautilus-primary)]">{icon}</div>
+      <div className="text-primary">{icon}</div>
       <p className="text-gray-400 text-sm">{label}</p>
       <p className="text-sm font-semibold">{value}</p>
     </div>
