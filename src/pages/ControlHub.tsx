@@ -2,10 +2,17 @@
  * ControlHub - Painel Central de Telemetria
  * 
  * Dashboard de monitoramento em tempo real que exibe eventos do BridgeLink,
- * estatísticas do sistema e status dos módulos.
+ * estatísticas do sistema, status dos módulos, alertas e insights de IA.
+ * 
+ * Features:
+ * - Safe lazy loading with automatic retry mechanism
+ * - MQTT Bridge A11y for display synchronization
+ * - Real-time alerts and acknowledgment system
+ * - AI-powered incident reporting
+ * - WCAG 2.1 AA accessibility compliance
  * 
  * @module ControlHub
- * @version 1.0.0 (Core Alpha)
+ * @version 2.0.0 (Patch 9 - Bridge Integration)
  */
 
 import React, { useState, useEffect } from "react";
@@ -14,6 +21,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { safeLazyImport } from "@/utils/safeLazyImport";
+
+// Safe lazy imports with automatic retry and error handling
+const BridgeA11y = safeLazyImport(
+  () => import("@/components/controlhub/BridgeA11y"),
+  "BridgeA11y"
+);
+const ControlPanel = safeLazyImport(
+  () => import("@/components/controlhub/ControlPanel"),
+  "ControlPanel"
+);
+const IncidentReporter = safeLazyImport(
+  () => import("@/components/controlhub/IncidentReporter"),
+  "IncidentReporter"
+);
 
 export default function ControlHub() {
   const [events, setEvents] = useState<BridgeLinkEvent[]>([]);
@@ -84,15 +106,27 @@ export default function ControlHub() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">⚓ ControlHub</h1>
+          <h1 
+            className="text-3xl font-bold tracking-tight"
+            role="heading"
+            aria-level={1}
+          >
+            ⚓ ControlHub - Painel de Controle
+          </h1>
           <p className="text-muted-foreground">
             Centro de Telemetria e Monitoramento em Tempo Real
           </p>
         </div>
         <Badge variant="outline" className="px-4 py-2">
-          Core Alpha v1.0.0
+          Patch 9 - Bridge Integration
         </Badge>
       </div>
+
+      {/* Bridge A11y Status Monitor */}
+      <BridgeA11y />
+
+      {/* Control Panel - Alerts Dashboard */}
+      <ControlPanel />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -214,6 +248,9 @@ export default function ControlHub() {
           </div>
         </CardContent>
       </Card>
+
+      {/* AI Insight Reporter */}
+      <IncidentReporter />
     </div>
   );
 }
