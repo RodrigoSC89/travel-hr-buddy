@@ -60,7 +60,7 @@ export default defineConfig(({ mode }) => {
       },
       workbox: {
         maximumFileSizeToCacheInBytes: 10485760, // 10MB limit for PWA caching
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+        globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
