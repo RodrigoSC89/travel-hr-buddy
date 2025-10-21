@@ -33,6 +33,7 @@ import {
   FileText,
   Users
 } from "lucide-react";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 
 // Lazy load travel components to reduce initial bundle size
 const FlightSearch = safeLazyImport(

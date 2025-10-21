@@ -11,6 +11,7 @@ import {
   TrendingUp,
   BarChart3
 } from "lucide-react";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 
 const DPIntelligenceCenter = safeLazyImport(
   () => import("@/components/dp-intelligence/dp-intelligence-center"),
