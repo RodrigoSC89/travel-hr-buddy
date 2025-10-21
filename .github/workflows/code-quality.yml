@@ -1,0 +1,45 @@
+name: "Nautilus One - Code Quality and Diagnostics"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: TypeScript Check
+        run: npx tsc --noEmit
+
+      - name: Lint and Format
+        run: npm run lint
+
+      - name: Run Unit Tests
+        run: npm run test:unit
+
+      - name: Build Application
+        run: NODE_OPTIONS="--max-old-space-size=4096" npm run build
+
+      - name: Upload Diagnostics Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nautilus-diagnostics-report
+          path: diagnostics/
+
+      - name: Notify Build Result
+        if: failure()
+        run: echo "❌ Falha detectada no pipeline CI — verificar logs em diagnostics/."
