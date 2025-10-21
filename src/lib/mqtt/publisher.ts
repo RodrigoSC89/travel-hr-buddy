@@ -13,7 +13,7 @@ import { initSecureMQTT } from "./secure-client";
  */
 export function publishEvent(
   topic: string,
-  payload: Record<string, any>,
+  payload: Record<string, unknown>,
   qos: 0 | 1 | 2 = 1
 ): void {
   try {
@@ -37,7 +37,7 @@ export function publishEvent(
  * @param callback - Function to call when a message is received
  */
 export function subscribeForecast(
-  callback: (data: any) => void
+  callback: (data: unknown) => void
 ): () => void {
   try {
     const client = initSecureMQTT();
