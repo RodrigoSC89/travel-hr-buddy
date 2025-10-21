@@ -10,6 +10,8 @@
     "build:ci": "NODE_OPTIONS='--max-old-space-size=4096' vite build",
     "start": "vite preview --host",
     "preview": "vite preview --host",
+    "clean": "bash scripts/clean-lovable-cache.sh",
+    "rebuild": "npm run clean && npm run build && npm run dev",
     "test": "vitest run",
     "test:unit": "vitest run",
     "test:watch": "vitest",
