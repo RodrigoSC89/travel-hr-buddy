@@ -59,3 +59,58 @@ export const subscribeDP = (callback: (data: Record<string, unknown>) => void) =
   
   return client;
 };
+
+/**
+ * Publish forecast data to MQTT broker
+ */
+export const publishForecast = (data: { wind: number; wave: number; temp: number; visibility: number }) => {
+  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
+  client.on("connect", () => {
+    client.publish("nautilus/forecast/global", JSON.stringify(data), { qos: 1 }, (err) => {
+      if (err) {
+        console.error("❌ Failed to publish to nautilus/forecast/global:", err);
+      } else {
+        console.log("✅ Published to nautilus/forecast/global:", data);
+      }
+      client.end();
+    });
+  });
+  client.on("error", (err) => {
+    console.error("❌ MQTT connection error:", err);
+    client.end();
+  });
+};
+
+/**
+ * Subscribe to forecast global data channel
+ */
+export const subscribeForecast = (callback: (data: { wind: number; wave: number; temp: number; visibility: number }) => void) => {
+  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
+  
+  client.on("connect", () => {
+    client.subscribe("nautilus/forecast/global", (err) => {
+      if (err) {
+        console.error("❌ Failed to subscribe to nautilus/forecast/global:", err);
+      } else {
+        console.log("✅ Subscribed to nautilus/forecast/global");
+      }
+    });
+  });
+  
+  client.on("message", (topic, msg) => {
+    if (topic === "nautilus/forecast/global") {
+      try {
+        const data = JSON.parse(msg.toString());
+        callback(data);
+      } catch (err) {
+        console.error("❌ Failed to parse MQTT message:", err);
+      }
+    }
+  });
+  
+  client.on("error", (err) => {
+    console.error("❌ MQTT connection error:", err);
+  });
+  
+  return client;
+};
