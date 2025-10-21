@@ -39,8 +39,9 @@
     "verify:contrast": "node scripts/verify-contrast.js",
     "type-check": "tsc --noEmit",
     "preview:scan": "playwright test --config=preview-scan.config.ts",
-    "preview:scan:report": "node scripts/generate-preview-report.js",
-    "preview:validate": "npm run build && npm run preview:scan && npm run preview:scan:report"
+    "preview:scan:report": "node scripts/generate-preview-report.cjs",
+    "preview:validate": "npm run build && npm run preview:scan && npm run preview:scan:report",
+    "preview:initial-report": "node scripts/generate-initial-report.cjs"
   },
   "engines": {
     "node": "22.x",
