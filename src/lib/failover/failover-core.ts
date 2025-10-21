@@ -9,7 +9,7 @@ let lastHeartbeat = Date.now();
 let connected = false;
 
 export function initFailoverSystem() {
-  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL);
+  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt");
 
   client.on("connect", () => {
     connected = true;
