@@ -2,6 +2,8 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Shield, FileCheck, AlertCircle, TrendingUp } from "lucide-react";
+import ComplianceReporter from "@/components/compliance/ComplianceReporter";
+import ISMChecklist from "@/components/compliance/ISMChecklist";
 
 export default function ComplianceHub() {
   return (
@@ -10,7 +12,7 @@ export default function ComplianceHub() {
       <div>
         <h1 className="text-3xl font-bold mb-2">Compliance Hub</h1>
         <p className="text-muted-foreground">
-          Centro de Gestão de Conformidade e Regulamentações
+          Centro de Gestão de Conformidade e Regulamentações - Nautilus One
         </p>
       </div>
 
@@ -59,6 +61,12 @@ export default function ComplianceHub() {
             <p className="text-xs text-muted-foreground">Melhorias contínuas</p>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Incident Response AI Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ComplianceReporter />
+        <ISMChecklist />
       </div>
 
       {/* Compliance Overview */}
