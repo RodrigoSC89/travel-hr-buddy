@@ -48,7 +48,14 @@ coverage
 # Playwright
 test-results/
 playwright-report/
+playwright-report-preview/
 playwright/.cache/
+
+# Reports - keep these for tracking
+!reports/
+!reports/*.md
+!reports/*.json
+reports/*.log
 
 # Vercel
 .vercel
