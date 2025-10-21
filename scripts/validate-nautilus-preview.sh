@@ -40,13 +40,14 @@ const routes = [
   '/dashboard',
   '/dp-intelligence',
   '/bridgelink',
-  '/forecast-global',
+  '/forecast',
   '/control-hub',
-  '/fmea-expert',
   '/peo-dp',
-  '/documentos-ia',
-  '/assistente-ia',
-  '/analytics-avancado'
+  '/peotram',
+  '/checklists',
+  '/analytics',
+  '/intelligent-documents',
+  '/ai-assistant'
 ];
 
 for (const route of routes) {
