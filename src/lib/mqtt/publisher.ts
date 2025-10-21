@@ -17,6 +17,13 @@ export const publishEvent = (topic: string, payload: Record<string, unknown>) =>
 };
 
 /**
+ * 📤 Publica dados de forecast (compatibilidade)
+ */
+export const publishForecast = (data: Record<string, unknown>) => {
+  publishEvent("nautilus/forecast/global", data);
+};
+
+/**
  * 📡 Subscreve genericamente a um tópico MQTT
  */
 export const subscribeTopic = (topic: string, callback: (data: Record<string, unknown>) => void) => {
@@ -34,6 +41,8 @@ export const subscribeTopic = (topic: string, callback: (data: Record<string, un
       }
     }
   });
+  
+  return client;
 };
 
 /**
@@ -56,3 +65,6 @@ export const subscribeBridgeStatus = (callback) =>
 
 export const subscribeControlHub = (callback) =>
   subscribeTopic("nautilus/controlhub/telemetry", callback);
+
+export const subscribeSystemStatus = (callback) =>
+  subscribeTopic("nautilus/system/status", callback);
