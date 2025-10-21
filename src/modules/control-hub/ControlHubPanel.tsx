@@ -18,11 +18,15 @@ import { useButtonHandlers } from "@/hooks/useButtonHandlers";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileDown, RotateCcw } from "lucide-react";
+import { BridgeLink } from "@/core/BridgeLink";
+import { MQTTClient } from "@/core/MQTTClient";
 
 export default function ControlHubPanel() {
   const [state, setState] = useState<ControlHubState | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastCheck, setLastCheck] = useState<Date | null>(null);
+  const [telemetryLogs, setTelemetryLogs] = useState<Array<{ message: string; timestamp: string }>>([]);
+  const [mqttConnected, setMqttConnected] = useState(false);
   const { exportReport, resetIndicators } = useButtonHandlers();
 
   useEffect(() => {
@@ -36,11 +40,35 @@ export default function ControlHubPanel() {
 
     init();
 
+    // Connect to MQTT broker
+    MQTTClient.connect();
+
+    // Subscribe to BridgeLink events for telemetry
+    const unsubscribe = BridgeLink.on("nautilus:event" as any, (event) => {
+      const data = event.data as { message: string; timestamp: string };
+      setTelemetryLogs((prev) => {
+        const newLogs = [...prev, { 
+          message: data.message, 
+          timestamp: data.timestamp || new Date().toISOString() 
+        }];
+        // Keep only last 50 events
+        return newLogs.slice(-50);
+      });
+    });
+
+    // Check MQTT connection status
+    const mqttStatusInterval = setInterval(() => {
+      setMqttConnected(MQTTClient.isConnected());
+    }, 1000);
+
     // Auto-refresh every 30 seconds
     const interval = setInterval(updateState, 30000);
 
     return () => {
       clearInterval(interval);
+      clearInterval(mqttStatusInterval);
+      unsubscribe();
+      MQTTClient.disconnect();
     };
   }, []);
 
@@ -142,6 +170,44 @@ export default function ControlHubPanel() {
           total={cacheStats.total}
         />
       </div>
+
+      {/* Telemetry Console - Real-time events from BridgeLink + MQTT */}
+      <Card className="bg-slate-950 border-slate-800">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-green-400">🌐 Console de Telemetria Global</CardTitle>
+              <CardDescription className="text-slate-400">
+                Eventos em tempo real (BridgeLink + MQTT)
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-400">Status MQTT:</span>
+              <span className="text-lg">{mqttConnected ? "🟢" : "🔴"}</span>
+              <span className="text-sm text-slate-400">
+                {mqttConnected ? "Conectado" : "Desconectado"}
+              </span>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="bg-slate-900 rounded-lg p-4 border border-slate-800 h-64 overflow-y-auto font-mono text-sm">
+            {telemetryLogs.length === 0 ? (
+              <div className="text-slate-500 text-center py-8">
+                Aguardando eventos de telemetria...
+              </div>
+            ) : (
+              <div className="space-y-1">
+                {telemetryLogs.map((log, index) => (
+                  <div key={index} className="text-green-400">
+                    <span className="text-slate-500">[{log.timestamp}]</span> {log.message}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Modules Grid */}
       <div>
