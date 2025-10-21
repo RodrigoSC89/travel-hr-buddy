@@ -15,6 +15,7 @@ const ControlHubPanel = safeLazyImport(() => import("@/components/control-hub/Co
 const SystemAlerts = safeLazyImport(() => import("@/components/control-hub/SystemAlerts"), "SystemAlerts");
 const AIInsightReporter = safeLazyImport(() => import("@/components/control-hub/AIInsightReporter"), "AIInsightReporter");
 const ComplianceDashboard = safeLazyImport(() => import("@/components/compliance/ComplianceDashboard"), "ComplianceDashboard");
+const ForecastDashboard = safeLazyImport(() => import("@/components/control-hub/ForecastDashboard"), "ForecastDashboard");
 const ResilienceMonitor = safeLazyImport(() => import("@/components/resilience/ResilienceMonitor"), "ResilienceMonitor");
 const ResilienceComplianceDashboard = safeLazyImport(() => import("@/components/resilience/ComplianceDashboard"), "ComplianceDashboard");
 const IncidentResponsePanel = safeLazyImport(() => import("@/components/resilience/IncidentResponsePanel"), "IncidentResponsePanel");
@@ -33,8 +34,8 @@ export default function ControlHub() {
         </div>
       </div>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Top Row - 3 Column Grid with Forecast Dashboard */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Suspense fallback={<LoadingCard />}>
           <ControlHubPanel />
         </Suspense>
@@ -43,6 +44,13 @@ export default function ControlHub() {
           <SystemAlerts />
         </Suspense>
 
+        <Suspense fallback={<LoadingCard />}>
+          <ForecastDashboard />
+        </Suspense>
+      </div>
+
+      {/* Additional Monitoring Panels - 2 Column Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Suspense fallback={<LoadingCard />}>
           <ResilienceMonitor />
         </Suspense>
@@ -53,6 +61,10 @@ export default function ControlHub() {
 
         <Suspense fallback={<LoadingCard />}>
           <MaintenanceDashboard />
+        </Suspense>
+
+        <Suspense fallback={<LoadingCard />}>
+          <ComplianceDashboard />
         </Suspense>
       </div>
 
