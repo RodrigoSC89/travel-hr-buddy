@@ -45,3 +45,9 @@ export const subscribeForecastGlobal = (callback) => subscribeTopic("nautilus/fo
 export const subscribeAlerts = (callback) => subscribeTopic("nautilus/alerts", callback);
 export const subscribeBridgeStatus = (callback) => subscribeTopic("nautilus/bridge/status", callback);
 export const subscribeControlHub = (callback) => subscribeTopic("nautilus/controlhub/telemetry", callback);
+export const subscribeSystemStatus = (callback) => subscribeTopic("nautilus/system/status", callback);
+
+/**
+ * 📤 Funções de publicação específicas
+ */
+export const publishForecast = (payload: Record<string, unknown>) => publishEvent("nautilus/forecast/global", payload);
