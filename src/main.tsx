@@ -5,6 +5,10 @@ import App from "./App.tsx";
 import "./index.css";
 import "../sentry.client.config";
 import { logger } from "@/lib/logger";
+import { initFailoverSystem } from "@/lib/failover/failover-core";
+
+// Iniciar monitor de failover na inicialização
+initFailoverSystem();
 
 // Register service worker for PWA
 if ("serviceWorker" in navigator) {
