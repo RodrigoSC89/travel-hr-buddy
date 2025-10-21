@@ -80,16 +80,6 @@ const TravelDocumentManager = safeLazyImport(
   "Travel Document Manager"
 );
 
-// Loading component for suspense fallback
-const ComponentLoader = () => (
-  <div className="flex items-center justify-center py-12">
-    <div className="text-center space-y-4">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-      <p className="text-muted-foreground">Carregando...</p>
-    </div>
-  </div>
-);
-
 const Travel = () => {
   const [sampleLocations] = useState([
     {
