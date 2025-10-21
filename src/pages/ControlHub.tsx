@@ -14,6 +14,7 @@ import { Loader } from "lucide-react";
 const ControlHubPanel = safeLazyImport(() => import("@/components/control-hub/ControlHubPanel"), "ControlHubPanel");
 const SystemAlerts = safeLazyImport(() => import("@/components/control-hub/SystemAlerts"), "SystemAlerts");
 const AIInsightReporter = safeLazyImport(() => import("@/components/control-hub/AIInsightReporter"), "AIInsightReporter");
+const ComplianceDashboard = safeLazyImport(() => import("@/components/compliance/ComplianceDashboard"), "ComplianceDashboard");
 
 export default function ControlHub() {
   return (
@@ -36,6 +37,10 @@ export default function ControlHub() {
 
         <Suspense fallback={<LoadingCard />}>
           <SystemAlerts />
+        </Suspense>
+
+        <Suspense fallback={<LoadingCard />}>
+          <ComplianceDashboard />
         </Suspense>
       </div>
 
