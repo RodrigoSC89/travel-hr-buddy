@@ -1,0 +1,4 @@
+This is a placeholder for the ONNX model file.
+In production, this should be replaced with an actual trained ONNX model.
+The model should accept telemetry data and output probability predictions.
+Expected file size: ~4.2 MB

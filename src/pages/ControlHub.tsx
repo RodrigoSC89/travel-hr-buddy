@@ -4,7 +4,7 @@
  * Dashboard de monitoramento em tempo real com MQTT, AI insights e alertas unificados.
  * 
  * @module ControlHub
- * @version 1.2.0 (Patch 12 - MQTT Observability)
+ * @version 1.3.0 (Patch 19 - AI Predictive Optimization)
  */
 
 import React, { Suspense } from "react";
@@ -14,6 +14,7 @@ import { Loader } from "lucide-react";
 const ControlHubPanel = safeLazyImport(() => import("@/components/control-hub/ControlHubPanel"), "ControlHubPanel");
 const SystemAlerts = safeLazyImport(() => import("@/components/control-hub/SystemAlerts"), "SystemAlerts");
 const AIInsightReporter = safeLazyImport(() => import("@/components/control-hub/AIInsightReporter"), "AIInsightReporter");
+const ForecastDashboard = safeLazyImport(() => import("@/components/controlhub/ForecastDashboard"), "ForecastDashboard");
 
 export default function ControlHub() {
   return (
@@ -29,13 +30,17 @@ export default function ControlHub() {
       </div>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Suspense fallback={<LoadingCard />}>
           <ControlHubPanel />
         </Suspense>
 
         <Suspense fallback={<LoadingCard />}>
           <SystemAlerts />
+        </Suspense>
+
+        <Suspense fallback={<LoadingCard />}>
+          <ForecastDashboard />
         </Suspense>
       </div>
 
