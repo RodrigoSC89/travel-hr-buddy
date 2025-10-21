@@ -3,28 +3,25 @@
  * Validates ForecastGlobal page and its components
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import ForecastGlobal from "@/pages/ForecastGlobal";
-import ForecastPanel from "@/components/forecast/ForecastPanel";
-import ForecastMap from "@/components/forecast/ForecastMap";
-import ForecastAIInsights from "@/components/forecast/ForecastAIInsights";
 
-// Mock MQTT client
-const mockMqttClient = {
-  on: vi.fn(),
-  subscribe: vi.fn(),
-  publish: vi.fn(),
-  end: vi.fn(),
-};
-
-// Mock mqtt module
-vi.mock("mqtt", () => ({
-  default: {
-    connect: vi.fn(() => mockMqttClient),
-  },
-}));
+// Mock MQTT module with a client
+vi.mock("mqtt", () => {
+  const mockClient = {
+    on: vi.fn(),
+    subscribe: vi.fn(),
+    publish: vi.fn(),
+    end: vi.fn(),
+  };
+  
+  return {
+    default: {
+      connect: vi.fn(() => mockClient),
+    },
+  };
+});
 
 // Mock onnxruntime-web
 vi.mock("onnxruntime-web", () => ({
@@ -39,6 +36,16 @@ vi.mock("onnxruntime-web", () => ({
   },
   Tensor: vi.fn((type, data, dims) => ({ type, data, dims })),
 }));
+
+// NOW import components that use MQTT
+import ForecastGlobal from "@/pages/ForecastGlobal";
+import ForecastPanel from "@/components/forecast/ForecastPanel";
+import ForecastMap from "@/components/forecast/ForecastMap";
+import ForecastAIInsights from "@/components/forecast/ForecastAIInsights";
+import mqtt from "mqtt";
+
+// Get reference to the mocked client for assertions
+const mockMqttClient = (mqtt.connect as any)();
 
 describe("ForecastGlobal Page", () => {
   beforeEach(() => {
@@ -82,7 +89,7 @@ describe("ForecastPanel Component", () => {
       } else if (event === "message") {
         // Simulate receiving forecast data
         setTimeout(() => {
-          callback("nautilus/forecast/global", Buffer.from(JSON.stringify({
+          callback("nautilus/forecast", Buffer.from(JSON.stringify({
             wind: 15.2,
             wave: 2.8,
             temp: 26.5,
@@ -120,7 +127,7 @@ describe("ForecastPanel Component", () => {
 
     await waitFor(() => {
       expect(mockMqttClient.subscribe).toHaveBeenCalledWith(
-        "nautilus/forecast/global",
+        "nautilus/forecast",
         expect.any(Function)
       );
     });
