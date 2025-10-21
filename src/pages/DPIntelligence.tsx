@@ -1,60 +1,31 @@
-import React from "react";
-import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
-import { ModuleHeader } from "@/components/ui/module-header";
-import DPIntelligenceDashboard from "@/components/dp-intelligence/DPIntelligenceDashboard";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { Suspense } from "react";
 import { safeLazyImport } from "@/utils/safeLazyImport";
-import {
-  Brain,
-  Shield,
-  FileText,
-  TrendingUp,
-  BarChart3
-} from "lucide-react";
-import { safeLazyImport } from "@/utils/safeLazyImport";
+import { Loading } from "@/components/ui/Loading";
 
-const DPIntelligenceCenter = safeLazyImport(
-  () => import("@/components/dp-intelligence/dp-intelligence-center"),
-  "DP Intelligence Center"
+const DPOverview = safeLazyImport(
+  () => import("@/components/dp-intelligence/DPOverview"),
+  "DPOverview"
+);
+const DPRealtime = safeLazyImport(
+  () => import("@/components/dp-intelligence/DPRealtime"),
+  "DPRealtime"
+);
+const DPAIAnalyzer = safeLazyImport(
+  () => import("@/components/dp-intelligence/DPAIAnalyzer"),
+  "DPAIAnalyzer"
 );
 
-const DPIntelligence = () => {
+export default function DPIntelligence() {
   return (
-    <ModulePageWrapper gradient="blue">
-      <ModuleHeader
-        icon={Brain}
-        title="Centro de Inteligência DP"
-        description="Base de conhecimento de incidentes DP com análise por IA"
-        gradient="indigo"
-        badges={[
-          { icon: Shield, label: "IMCA Compliance" },
-          { icon: FileText, label: "Relatórios Técnicos" },
-          { icon: TrendingUp, label: "Análise IA" }
-        ]}
-      />
-      
-      <Tabs defaultValue="incidents" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6">
-          <TabsTrigger value="incidents" className="flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            Incidentes
-          </TabsTrigger>
-          <TabsTrigger value="dashboard" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Dashboard Analítico
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="incidents">
-          <DPIntelligenceCenter />
-        </TabsContent>
-        
-        <TabsContent value="dashboard">
-          <DPIntelligenceDashboard />
-        </TabsContent>
-      </Tabs>
-    </ModulePageWrapper>
+    <Suspense fallback={<Loading fullScreen message="Carregando DP Intelligence Center..." />}>
+      <main className="p-6 flex flex-col gap-6 bg-[var(--nautilus-bg-alt)] min-h-screen">
+        <h1 className="text-3xl font-bold" role="heading" aria-level={1}>
+          DP Intelligence Center
+        </h1>
+        <DPAIAnalyzer />
+        <DPOverview />
+        <DPRealtime />
+      </main>
+    </Suspense>
   );
-};
-
-export default DPIntelligence;
+}
