@@ -39,6 +39,9 @@ const MaritimeSupremo = safeLazyImport(() => import("@/pages/MaritimeSupremo"), 
 const NautilusOne = safeLazyImport(() => import("@/pages/NautilusOne"), "Nautilus One");
 const ForecastPage = safeLazyImport(() => import("@/pages/Forecast"), "Forecast Page");
 const ForecastGlobal = safeLazyImport(() => import("@/pages/ForecastGlobal"), "Forecast Global");
+const MaintenanceDashboard = safeLazyImport(() => import("@/pages/Maintenance"), "Maintenance Dashboard");
+const ComplianceHub = safeLazyImport(() => import("@/pages/compliance/ComplianceHub"), "Compliance Hub");
+const DPIntelligenceCenter = safeLazyImport(() => import("@/pages/dp-intelligence/DPIntelligenceCenter"), "DP Intelligence Center");
 const Innovation = safeLazyImport(() => import("@/pages/Innovation"), "Innovation");
 const Optimization = safeLazyImport(() => import("@/pages/Optimization"), "Optimization");
 const Collaboration = safeLazyImport(() => import("@/pages/Collaboration"), "Collaboration");
@@ -200,7 +203,9 @@ function App() {
                       <Route path="/reports" element={<Reports />} />
                       <Route path="/reservations" element={<Reservations />} />
                       <Route path="/checklists" element={<ChecklistsInteligentes />} />
+                      <Route path="/checklists-inteligentes" element={<ChecklistsInteligentes />} />
                       <Route path="/peotram" element={<PEOTRAM />} />
+                      <Route path="/peo-tram" element={<PEOTRAM />} />
                       <Route path="/peo-dp" element={<PEODP />} />
                       <Route path="/dp-incidents" element={<DPIncidents />} />
                       <Route path="/dp-intelligence" element={<DPIntelligence />} />
@@ -223,6 +228,9 @@ function App() {
                       <Route path="/nautilus-one" element={<NautilusOne />} />
                       <Route path="/forecast" element={<ForecastPage />} />
                       <Route path="/forecast/global" element={<ForecastGlobal />} />
+                      <Route path="/forecast-global" element={<ForecastGlobal />} />
+                      <Route path="/maintenance" element={<MaintenanceDashboard />} />
+                      <Route path="/compliance" element={<ComplianceHub />} />
                       <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/vault-ai" element={<VaultAI />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
