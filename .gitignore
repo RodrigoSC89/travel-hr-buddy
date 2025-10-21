@@ -49,6 +49,7 @@ coverage
 test-results/
 playwright-report/
 playwright/.cache/
+tests/preview.spec.ts
 
 # Vercel
 .vercel
