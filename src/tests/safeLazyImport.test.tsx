@@ -60,7 +60,8 @@ describe("safeLazyImport", () => {
     const testError = new Error("Failed to fetch dynamically imported module");
     const mockImporter = vi.fn(() => Promise.reject(testError));
 
-    const LazyComponent = safeLazyImport(mockImporter, "FailingModule");
+    // Use short interval (10ms) for faster test execution
+    const LazyComponent = safeLazyImport(mockImporter, "FailingModule", 3, 10);
 
     render(<LazyComponent />);
 
@@ -84,7 +85,7 @@ describe("safeLazyImport", () => {
 
     // Verify error was logged to console
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      expect.stringContaining("❌ Erro ao carregar módulo FailingModule:"),
+      expect.stringContaining("❌ Erro ao carregar módulo FailingModule após 3 tentativas:"),
       testError
     );
 
@@ -105,7 +106,8 @@ describe("safeLazyImport", () => {
       Promise.reject(new Error("Module load failed"))
     );
 
-    const LazyComponent = safeLazyImport(mockImporter, "ErrorModule");
+    // Use short interval (10ms) for faster test execution
+    const LazyComponent = safeLazyImport(mockImporter, "ErrorModule", 3, 10);
 
     render(<LazyComponent />);
 
@@ -169,7 +171,8 @@ describe("safeLazyImport", () => {
       Promise.reject(new Error("Test error"))
     );
 
-    const LazyComponent = safeLazyImport(mockImporter, "A11yErrorTest");
+    // Use short interval (10ms) for faster test execution
+    const LazyComponent = safeLazyImport(mockImporter, "A11yErrorTest", 3, 10);
 
     render(<LazyComponent />);
 
@@ -207,7 +210,8 @@ describe("safeLazyImport", () => {
     
     const mockImporter = vi.fn(() => Promise.reject(networkError));
 
-    const LazyComponent = safeLazyImport(mockImporter, "NetworkErrorModule");
+    // Use short interval (10ms) for faster test execution
+    const LazyComponent = safeLazyImport(mockImporter, "NetworkErrorModule", 3, 10);
 
     render(<LazyComponent />);
 
