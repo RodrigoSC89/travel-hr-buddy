@@ -1,9 +1,10 @@
-import React, { useState, Suspense } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 import { 
   Ship, 
   Users, 
@@ -21,21 +22,18 @@ import {
   Zap
 } from "lucide-react";
 
-// Lazy loading dos componentes pesados
-const VesselManagement = React.lazy(() => 
-  import("./vessel-management").then(module => ({
-    default: module.VesselManagement
-  }))
+// Lazy loading dos componentes pesados com safeLazyImport
+const VesselManagement = safeLazyImport(
+  () => import("./vessel-management").then(module => ({ default: module.VesselManagement })), 
+  "Vessel Management"
 );
-const CrewRotationPlanner = React.lazy(() => 
-  import("./crew-management-dashboard").then(module => ({
-    default: module.CrewManagementDashboard
-  }))
+const CrewRotationPlanner = safeLazyImport(
+  () => import("./crew-management-dashboard").then(module => ({ default: module.CrewManagementDashboard })),
+  "Crew Management Dashboard"
 );
-const CertificationManager = React.lazy(() => 
-  import("./maritime-certification-manager").then(module => ({
-    default: module.MaritimeCertificationManager
-  }))
+const CertificationManager = safeLazyImport(
+  () => import("./maritime-certification-manager").then(module => ({ default: module.MaritimeCertificationManager })),
+  "Maritime Certification Manager"
 );
 
 export const MaritimeDashboard: React.FC = () => {
@@ -69,35 +67,11 @@ export const MaritimeDashboard: React.FC = () => {
 
     switch (activeModule) {
     case "vessels":
-      return (
-        <Suspense fallback={
-          <div className="flex items-center justify-center p-8">
-            <LoadingSpinner size="lg" />
-          </div>
-        }>
-          <VesselManagement />
-        </Suspense>
-      );
+      return <VesselManagement />;
     case "crew":
-      return (
-        <Suspense fallback={
-          <div className="flex items-center justify-center p-8">
-            <LoadingSpinner size="lg" />
-          </div>
-        }>
-          <CrewRotationPlanner />
-        </Suspense>
-      );
+      return <CrewRotationPlanner />;
     case "certifications":
-      return (
-        <Suspense fallback={
-          <div className="flex items-center justify-center p-8">
-            <LoadingSpinner size="lg" />
-          </div>
-        }>
-          <CertificationManager />
-        </Suspense>
-      );
+      return <CertificationManager />;
     default:
       return <OverviewDashboard onNavigate={handleModuleChange} />;
     }

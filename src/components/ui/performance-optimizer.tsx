@@ -1,11 +1,13 @@
-import React, { Suspense, memo } from "react";
+import React, { memo } from "react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { logger } from "@/lib/logger";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 
 interface LazyComponentProps {
   loader: () => Promise<{ default: React.ComponentType<unknown> }>;
   fallback?: React.ReactNode;
   children?: React.ReactNode;
+  componentName?: string;
   [key: string]: any;
 }
 
@@ -13,25 +15,15 @@ export const LazyComponent: React.FC<LazyComponentProps> = memo(({
   loader, 
   fallback, 
   children,
+  componentName = "Component",
   ...props 
 }) => {
-  const Component = React.lazy(loader);
+  const Component = safeLazyImport(loader, componentName);
   
-  const defaultFallback = (
-    <div className="flex items-center justify-center p-8">
-      <div className="text-center">
-        <LoadingSpinner size="lg" />
-        <p className="mt-4 text-muted-foreground">Carregando módulo...</p>
-      </div>
-    </div>
-  );
-
   return (
-    <Suspense fallback={fallback || defaultFallback}>
-      <Component {...props}>
-        {children}
-      </Component>
-    </Suspense>
+    <Component {...props}>
+      {children}
+    </Component>
   );
 });
 

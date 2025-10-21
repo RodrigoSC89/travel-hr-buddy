@@ -1,14 +1,13 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { Eye, Sparkles, Zap, Camera } from "lucide-react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
-import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 
-// Lazy loading da interface AR
-const ARInterface = React.lazy(() => 
-  import("@/components/innovation/ar-interface").then(module => ({
-    default: module.ARInterface
-  }))
+// Lazy loading da interface AR com safeLazyImport
+const ARInterface = safeLazyImport(
+  () => import("@/components/innovation/ar-interface").then(module => ({ default: module.ARInterface })),
+  "AR Interface"
 );
 
 const AR: React.FC = () => {
@@ -26,9 +25,7 @@ const AR: React.FC = () => {
         ]}
       />
       
-      <Suspense fallback={<DashboardSkeleton />}>
-        <ARInterface />
-      </Suspense>
+      <ARInterface />
     </ModulePageWrapper>
   );
 };

@@ -23,7 +23,7 @@ import React from "react";
  * const Dashboard = safeLazyImport(() => import("@/pages/Dashboard"), "Dashboard");
  */
 export const safeLazyImport = (
-  importer: () => Promise<{ default: React.ComponentType<unknown> }>,
+  importer: () => Promise<{ default: React.ComponentType<any> }>,
   name: string,
   retries = 3
 ) => {
@@ -31,10 +31,10 @@ export const safeLazyImport = (
    * Retry function with exponential backoff
    */
   const retryImport = async (
-    fn: () => Promise<{ default: React.ComponentType<unknown> }>,
+    fn: () => Promise<{ default: React.ComponentType<any> }>,
     retriesLeft = retries,
     interval = 1000
-  ): Promise<{ default: React.ComponentType<unknown> }> => {
+  ): Promise<{ default: React.ComponentType<any> }> => {
     try {
       return await fn();
     } catch (error) {
