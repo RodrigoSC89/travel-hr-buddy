@@ -8,6 +8,12 @@ export default function ForecastDashboard() {
   const [forecast, setForecast] = useState({ level: "Carregando", value: 0 });
 
   useEffect(() => {
+    // Run initial analysis
+    runForecastAnalysis().then(setForecast).catch(() => {
+      setForecast({ level: "Erro", value: 0 });
+    });
+
+    // Set up interval for periodic updates
     const interval = setInterval(async () => {
       const result = await runForecastAnalysis();
       setForecast(result);
@@ -31,14 +37,22 @@ export default function ForecastDashboard() {
               ? "text-green-400"
               : forecast.level === "Risco"
               ? "text-yellow-400"
-              : "text-red-500"
+              : forecast.level === "Crítico"
+              ? "text-red-500"
+              : "text-gray-400"
           }`}
         >
           {forecast.level === "OK"
             ? "Operação estável"
             : forecast.level === "Risco"
             ? "Risco detectado — verifique ASOG"
-            : "Alerta crítico — acionar protocolo DP"}
+            : forecast.level === "Crítico"
+            ? "Alerta crítico — acionar protocolo DP"
+            : forecast.level === "Sem Dados"
+            ? "Aguardando dados de telemetria"
+            : forecast.level === "Carregando"
+            ? "Carregando previsões..."
+            : "Erro ao carregar previsões"}
         </p>
       </CardContent>
     </Card>
