@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' vite build",
+    "build:dev": "NODE_OPTIONS='--max-old-space-size=4096' vite build --mode development",
     "start": "vite preview --host",
     "preview": "vite preview --host",
     "test": "vitest run",
@@ -36,7 +36,14 @@
     "postinstall": "rm -rf .next node_modules/.vite src/_legacy || true",
     "test:axe": "playwright test --grep @a11y",
     "test:accessibility": "playwright test e2e/accessibility.spec.ts",
-    "verify:contrast": "node scripts/verify-contrast.js"
+    "verify:contrast": "node scripts/verify-contrast.js",
+    "type-check": "tsc --noEmit",
+    "preview:scan": "playwright test --config=preview-scan.config.ts",
+    "preview:scan:report": "node scripts/generate-preview-report.cjs",
+    "preview:validate": "npm run build && npm run preview:scan && npm run preview:scan:report",
+    "preview:initial-report": "node scripts/generate-initial-report.cjs",
+    "validate:build": "./scripts/build-validation.sh",
+    "status": "./scripts/status-check.sh"
   },
   "engines": {
     "node": "22.x",
