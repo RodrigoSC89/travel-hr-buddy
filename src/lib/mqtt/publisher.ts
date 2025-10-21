@@ -18,6 +18,7 @@ export const publishEvent = (topic: string, payload: Record<string, unknown>) =>
 
 /**
  * 📡 Subscreve genericamente a um tópico MQTT
+ * Retorna objeto com método end() para compatibilidade com componentes legados
  */
 export const subscribeTopic = (topic: string, callback: (data: Record<string, unknown>) => void) => {
   client.subscribe(topic, (err) => {
@@ -34,6 +35,14 @@ export const subscribeTopic = (topic: string, callback: (data: Record<string, un
       }
     }
   });
+
+  // Retorna objeto de cleanup com método end() no-op para backward compatibility
+  // Não desconecta o cliente global para evitar quebrar outros componentes
+  return {
+    end: () => {
+      console.log(`🔄 Cleanup solicitado para ${topic} (cliente global mantido)`);
+    }
+  };
 };
 
 /**
