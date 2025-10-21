@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { BackToDashboard } from "@/components/ui/back-to-dashboard";
 import { logger } from "@/lib/logger";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 import {
   Plane, 
   Building, 
@@ -33,18 +34,51 @@ import {
   Users
 } from "lucide-react";
 
-// Lazy load travel components to reduce initial bundle size
-const FlightSearch = lazy(() => import("@/components/travel/flight-search").then(m => ({ default: m.FlightSearch })));
-const EnhancedHotelSearch = lazy(() => import("@/components/travel/enhanced-hotel-search").then(m => ({ default: m.EnhancedHotelSearch })));
-const TravelMap = lazy(() => import("@/components/travel/travel-map").then(m => ({ default: m.TravelMap })));
-const PredictiveTravelDashboard = lazy(() => import("@/components/travel/predictive-travel-dashboard").then(m => ({ default: m.PredictiveTravelDashboard })));
-const TravelAnalyticsDashboard = lazy(() => import("@/components/travel/travel-analytics-dashboard").then(m => ({ default: m.TravelAnalyticsDashboard })));
-const TravelBookingSystem = lazy(() => import("@/components/travel/travel-booking-system").then(m => ({ default: m.TravelBookingSystem })));
-const TravelApprovalSystem = lazy(() => import("@/components/travel/travel-approval-system").then(m => ({ default: m.TravelApprovalSystem })));
-const TravelExpenseSystem = lazy(() => import("@/components/travel/travel-expense-system").then(m => ({ default: m.TravelExpenseSystem })));
-const TravelCommunication = lazy(() => import("@/components/travel/travel-communication").then(m => ({ default: m.TravelCommunication })));
-const TravelNotifications = lazy(() => import("@/components/travel/travel-notifications").then(m => ({ default: m.TravelNotifications })));
-const TravelDocumentManager = lazy(() => import("@/components/travel/travel-document-manager").then(m => ({ default: m.TravelDocumentManager })));
+// Lazy load travel components with safeLazyImport to prevent module loading failures
+const FlightSearch = safeLazyImport(
+  () => import("@/components/travel/flight-search").then(m => ({ default: m.FlightSearch })),
+  "Flight Search"
+);
+const EnhancedHotelSearch = safeLazyImport(
+  () => import("@/components/travel/enhanced-hotel-search").then(m => ({ default: m.EnhancedHotelSearch })),
+  "Hotel Search"
+);
+const TravelMap = safeLazyImport(
+  () => import("@/components/travel/travel-map").then(m => ({ default: m.TravelMap })),
+  "Travel Map"
+);
+const PredictiveTravelDashboard = safeLazyImport(
+  () => import("@/components/travel/predictive-travel-dashboard").then(m => ({ default: m.PredictiveTravelDashboard })),
+  "Predictive Travel Dashboard"
+);
+const TravelAnalyticsDashboard = safeLazyImport(
+  () => import("@/components/travel/travel-analytics-dashboard").then(m => ({ default: m.TravelAnalyticsDashboard })),
+  "Travel Analytics Dashboard"
+);
+const TravelBookingSystem = safeLazyImport(
+  () => import("@/components/travel/travel-booking-system").then(m => ({ default: m.TravelBookingSystem })),
+  "Travel Booking System"
+);
+const TravelApprovalSystem = safeLazyImport(
+  () => import("@/components/travel/travel-approval-system").then(m => ({ default: m.TravelApprovalSystem })),
+  "Travel Approval System"
+);
+const TravelExpenseSystem = safeLazyImport(
+  () => import("@/components/travel/travel-expense-system").then(m => ({ default: m.TravelExpenseSystem })),
+  "Travel Expense System"
+);
+const TravelCommunication = safeLazyImport(
+  () => import("@/components/travel/travel-communication").then(m => ({ default: m.TravelCommunication })),
+  "Travel Communication"
+);
+const TravelNotifications = safeLazyImport(
+  () => import("@/components/travel/travel-notifications").then(m => ({ default: m.TravelNotifications })),
+  "Travel Notifications"
+);
+const TravelDocumentManager = safeLazyImport(
+  () => import("@/components/travel/travel-document-manager").then(m => ({ default: m.TravelDocumentManager })),
+  "Travel Document Manager"
+);
 
 // Loading component for suspense fallback
 const ComponentLoader = () => (
@@ -229,57 +263,39 @@ const Travel = () => {
           </div>
 
           <TabsContent value="predictive" className="space-y-6">
-            <Suspense fallback={<ComponentLoader />}>
-              <PredictiveTravelDashboard />
-            </Suspense>
+            <PredictiveTravelDashboard />
           </TabsContent>
 
           <TabsContent value="booking" className="space-y-6">
-            <Suspense fallback={<ComponentLoader />}>
-              <TravelBookingSystem />
-            </Suspense>
+            <TravelBookingSystem />
           </TabsContent>
 
           <TabsContent value="flights" className="space-y-6">
-            <Suspense fallback={<ComponentLoader />}>
-              <FlightSearch />
-            </Suspense>
+            <FlightSearch />
           </TabsContent>
 
           <TabsContent value="hotels" className="space-y-6">
-            <Suspense fallback={<ComponentLoader />}>
-              <EnhancedHotelSearch />
-            </Suspense>
+            <EnhancedHotelSearch />
           </TabsContent>
 
           <TabsContent value="approvals" className="space-y-6">
-            <Suspense fallback={<ComponentLoader />}>
-              <TravelApprovalSystem />
-            </Suspense>
+            <TravelApprovalSystem />
           </TabsContent>
 
           <TabsContent value="expenses" className="space-y-6">
-            <Suspense fallback={<ComponentLoader />}>
-              <TravelExpenseSystem />
-            </Suspense>
+            <TravelExpenseSystem />
           </TabsContent>
 
           <TabsContent value="communication" className="space-y-6">
-            <Suspense fallback={<ComponentLoader />}>
-              <TravelCommunication />
-            </Suspense>
+            <TravelCommunication />
           </TabsContent>
 
           <TabsContent value="notifications" className="space-y-6">
-            <Suspense fallback={<ComponentLoader />}>
-              <TravelNotifications />
-            </Suspense>
+            <TravelNotifications />
           </TabsContent>
 
           <TabsContent value="documents" className="space-y-6">
-            <Suspense fallback={<ComponentLoader />}>
-              <TravelDocumentManager />
-            </Suspense>
+            <TravelDocumentManager />
           </TabsContent>
 
           <TabsContent value="map" className="space-y-6">
@@ -298,9 +314,7 @@ const Travel = () => {
               </CardHeader>
               <CardContent>
                 <div className="h-96 rounded-xl overflow-hidden border border-border/20">
-                  <Suspense fallback={<ComponentLoader />}>
-                    <TravelMap locations={sampleLocations} className="h-full" />
-                  </Suspense>
+                  <TravelMap locations={sampleLocations} className="h-full" />
                 </div>
                 <div className="mt-4 flex gap-2">
                   <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
@@ -318,9 +332,7 @@ const Travel = () => {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">
-            <Suspense fallback={<ComponentLoader />}>
-              <TravelAnalyticsDashboard />
-            </Suspense>
+            <TravelAnalyticsDashboard />
           </TabsContent>
         </Tabs>
       </div>
