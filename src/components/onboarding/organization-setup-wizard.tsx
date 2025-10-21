@@ -200,7 +200,7 @@ export const OrganizationSetupWizard: React.FC = () => {
     } catch (error: unknown) {
       toast({
         title: "Erro na Configuração",
-        description: error.message || "Erro ao salvar configurações",
+        description: (error as Error)?.message || "Erro ao salvar configurações",
         variant: "destructive"
       });
     } finally {

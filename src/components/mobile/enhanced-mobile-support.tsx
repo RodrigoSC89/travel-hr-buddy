@@ -93,7 +93,10 @@ export const EnhancedMobileSupport: React.FC = () => {
     dataUsage: "normal"
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [installPrompt, setInstallPrompt] = useState<unknown>(null);
+  const [installPrompt, setInstallPrompt] = useState<{
+    prompt: () => void;
+    userChoice: Promise<{ outcome: string }>;
+  } | null>(null);
   
   const isMobile = useIsMobile();
   const { toast } = useToast();
@@ -149,7 +152,7 @@ export const EnhancedMobileSupport: React.FC = () => {
 
   const setupPWAListeners = () => {
     // Listener para o evento beforeinstallprompt
-    window.addEventListener("beforeinstallprompt", (e) => {
+    window.addEventListener("beforeinstallprompt", (e: any) => {
       e.preventDefault();
       setInstallPrompt(e);
       setPwaStatus(prev => ({ ...prev, canInstall: true }));

@@ -210,11 +210,11 @@ export const HRDashboard = () => {
       render: (value, row) => (
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 rounded-full gradient-ocean flex items-center justify-center text-azure-50 font-bold text-sm">
-            {value.split(" ").map((n: string) => n[0]).join("")}
+            {String(value).split(" ").map((n: string) => n[0]).join("")}
           </div>
           <div>
-            <div className="font-medium">{value}</div>
-            <div className="text-sm text-muted-foreground">{row.position}</div>
+            <div className="font-medium">{String(value)}</div>
+            <div className="text-sm text-muted-foreground">{(row as any).position}</div>
           </div>
         </div>
       )
@@ -249,7 +249,7 @@ export const HRDashboard = () => {
       render: (value) => (
         <div className="flex items-center justify-center">
           <Star size={16} className="mr-1 text-warning" fill="currentColor" />
-          {value}
+          {String(value)}
         </div>
       )
     },
@@ -260,7 +260,7 @@ export const HRDashboard = () => {
       render: (value) => (
         <div className="flex items-center justify-center">
           <Award size={16} className="mr-1 text-primary" />
-          {value.length}
+          {Array.isArray(value) ? value.length : 0}
         </div>
       )
     },

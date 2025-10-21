@@ -34,11 +34,14 @@ export const PWAStatus: React.FC = () => {
   
   const [pendingCount, setPendingCount] = React.useState(0);
   const [isInstallable, setIsInstallable] = React.useState(false);
-  const [deferredPrompt, setDeferredPrompt] = React.useState<unknown>(null);
+  const [deferredPrompt, setDeferredPrompt] = React.useState<{
+    prompt: () => void;
+    userChoice: Promise<{ outcome: string }>;
+  } | null>(null);
 
   // Check if app is installable
   React.useEffect(() => {
-    const handler = (e: Event) => {
+    const handler = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
       setIsInstallable(true);

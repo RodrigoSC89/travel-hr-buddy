@@ -380,7 +380,7 @@ export const PeotramPermissionsManager: React.FC = () => {
                   <Label>Nível de Permissão</Label>
                   <Select 
                     value={permissionForm.permission_level} 
-                    onValueChange={(value: unknown) => setPermissionForm(prev => ({ ...prev, permission_level: value }))}
+                    onValueChange={(value: "read") => setPermissionForm(prev => ({ ...prev, permission_level: value }))}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -397,7 +397,7 @@ export const PeotramPermissionsManager: React.FC = () => {
                   <Label>Tipo de Local</Label>
                   <Select 
                     value={permissionForm.location_type} 
-                    onValueChange={(value: unknown) => setPermissionForm(prev => ({ ...prev, location_type: value }))}
+                    onValueChange={(value: "vessel" | "shore" | "both") => setPermissionForm(prev => ({ ...prev, location_type: value }))}
                   >
                     <SelectTrigger>
                       <SelectValue />

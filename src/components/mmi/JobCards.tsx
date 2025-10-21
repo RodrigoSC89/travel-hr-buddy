@@ -257,7 +257,7 @@ export default function JobCards() {
                   variant="default" 
                   size="sm" 
                   onClick={() => handleCreateOS(job.id)}
-                  disabled={processingJobId === job.id || createdOrders[job.id]}
+                  disabled={processingJobId === job.id || Boolean(createdOrders[job.id])}
                 >
                   {processingJobId === job.id ? (
                     <Loader2 className="h-4 w-4 animate-spin mr-1" />

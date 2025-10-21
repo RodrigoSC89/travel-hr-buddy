@@ -71,7 +71,7 @@ export const SmartInsights: React.FC = () => {
       if (error) throw error;
 
       if (data.success && data.insights) {
-        setInsights(data.insights.map((insight: unknown) => ({
+        setInsights(data.insights.map((insight: any) => ({
           id: insight.id || Math.random().toString(),
           type: insight.priority === "high" ? "warning" : "recommendation",
           title: insight.title,
@@ -178,7 +178,7 @@ export const SmartInsights: React.FC = () => {
 
       if (data.success) {
         // Convert performance data to predictions format
-        const predictiveData = data.metrics?.slice(0, 4).map((metric: unknown, index: number) => ({
+        const predictiveData = data.metrics?.slice(0, 4).map((metric: any, index: number) => ({
           id: `prediction_${index}`,
           name: `Previsão ${metric.name}`,
           currentValue: metric.value,

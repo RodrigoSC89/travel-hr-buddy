@@ -60,9 +60,15 @@ export const EnhancedFeedbackSystem: React.FC = () => {
   }>({});
   
   // Formulário para novo feedback
-  const [newFeedback, setNewFeedback] = useState({
+  const [newFeedback, setNewFeedback] = useState<{
+    module: string;
+    type: "bug" | "feature" | "improvement" | "praise";
+    title: string;
+    description: string;
+    rating: number;
+  }>({
     module: "",
-    type: "feature" as const,
+    type: "feature",
     title: "",
     description: "",
     rating: 5
@@ -494,7 +500,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label htmlFor="type">Tipo de Feedback *</Label>
-                  <Select value={newFeedback.type} onValueChange={(value) => setNewFeedback({...newFeedback, type: value as "feature" | "bug" | "improvement"})}>
+                  <Select value={newFeedback.type} onValueChange={(value: "feature" | "bug" | "improvement") => setNewFeedback({...newFeedback, type: value})}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
