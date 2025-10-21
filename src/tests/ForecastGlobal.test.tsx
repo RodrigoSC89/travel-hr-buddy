@@ -226,11 +226,11 @@ describe("MQTT Publisher Functions", () => {
     });
   });
 
-  it("subscribeForecast returns mqtt client", async () => {
-    const { subscribeForecast } = await import("@/lib/mqtt/publisher");
+  it("subscribeForecastGlobal returns mqtt client", async () => {
+    const { subscribeForecastGlobal } = await import("@/lib/mqtt/publisher");
     
     const callback = vi.fn();
-    const client = subscribeForecast(callback);
+    const client = subscribeForecastGlobal(callback);
 
     expect(client).toBe(mockMqttClient);
   });

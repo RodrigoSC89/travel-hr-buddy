@@ -4,7 +4,7 @@ import DPAlertFeed from "@/components/dp/DPAlertFeed";
 
 // Mock the MQTT publisher module
 vi.mock("@/lib/mqtt/publisher", () => ({
-  subscribeAlerts: vi.fn((callback) => {
+  subscribeDPAlerts: vi.fn((callback) => {
     // Simulate MQTT callback with mock alerts
     setTimeout(() => {
       callback({
@@ -30,7 +30,7 @@ describe("DPAlertFeed Component", () => {
   it("should display 'no alerts' message initially", () => {
     // Mock with no callbacks
     vi.doMock("@/lib/mqtt/publisher", () => ({
-      subscribeAlerts: vi.fn(() => ({ end: vi.fn() })),
+      subscribeDPAlerts: vi.fn(() => ({ end: vi.fn() })),
     }));
     
     render(<DPAlertFeed />);

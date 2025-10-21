@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Wind, Waves, Thermometer, Cloud } from "lucide-react";
-import { subscribeForecast } from "@/lib/mqtt/publisher";
+import { subscribeForecastGlobal } from "@/lib/mqtt/publisher";
 
 export default function ForecastPanel() {
   const [data, setData] = useState({ wind: 0, wave: 0, temp: 0, visibility: 0 });
 
   useEffect(() => {
-    const client = subscribeForecast((msg) => setData(msg));
+    const client = subscribeForecastGlobal((msg) => setData(msg));
     return () => client.end();
   }, []);
 
