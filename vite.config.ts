@@ -6,7 +6,11 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode }) => {
+  // Enable PWA only in production builds for better performance and stability
+  const enablePwa = mode === "production";
+  
+  return {
   base: "/",
   server: {
     host: true,
@@ -21,7 +25,7 @@ export default defineConfig(({ mode }) => ({
       project: process.env.SENTRY_PROJECT,
       authToken: process.env.SENTRY_AUTH_TOKEN,
     }),
-    VitePWA({
+    enablePwa && VitePWA({
       registerType: "autoUpdate",
       includeAssets: [
         "favicon.ico",
@@ -235,4 +239,5 @@ export default defineConfig(({ mode }) => ({
     host: true,
     port: 4173
   }
-}));
+};
+});
