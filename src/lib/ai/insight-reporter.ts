@@ -13,7 +13,11 @@ const supabase = createClient(
 export class AIInsightReporter {
   private mqttClient = initSecureMQTT();
 
-  async reportAnomaly(event: {
+  /**
+   * Report an incident/anomaly
+   * @param event - The incident event to report
+   */
+  async report(event: {
     module: string;
     severity: "info" | "warning" | "critical";
     message: string;
@@ -37,5 +41,17 @@ export class AIInsightReporter {
     );
 
     console.log(`🚨 [${event.severity.toUpperCase()}] ${event.module}: ${event.message}`);
+  }
+
+  /**
+   * @deprecated Use report() instead
+   */
+  async reportAnomaly(event: {
+    module: string;
+    severity: "info" | "warning" | "critical";
+    message: string;
+    metadata?: Record<string, unknown>;
+  }) {
+    return this.report(event);
   }
 }
