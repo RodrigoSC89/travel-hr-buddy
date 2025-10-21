@@ -8,11 +8,11 @@
  * @version 1.0.0 (Patch 21)
  */
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Wrench, AlertTriangle, CheckCircle } from 'lucide-react';
-import { runMaintenanceOrchestrator, type MaintenanceResult, type TelemetryData } from '@/lib/ai/maintenance-orchestrator';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Wrench, AlertTriangle, CheckCircle } from "lucide-react";
+import { runMaintenanceOrchestrator, type MaintenanceResult, type TelemetryData } from "@/lib/ai/maintenance-orchestrator";
 
 const REFRESH_INTERVAL = 60000; // 60 seconds
 
@@ -45,7 +45,7 @@ export default function MaintenanceDashboard() {
       const result = await runMaintenanceOrchestrator(telemetry);
       setStatus(result);
     } catch (error) {
-      console.error('Failed to fetch maintenance status:', error);
+      console.error("Failed to fetch maintenance status:", error);
     } finally {
       setLoading(false);
     }
@@ -74,34 +74,34 @@ export default function MaintenanceDashboard() {
    */
   function getStatusIndicator(level: string) {
     switch (level) {
-      case 'Normal':
-        return {
-          icon: CheckCircle,
-          color: 'text-green-500',
-          bgColor: 'bg-green-500/10',
-          badgeVariant: 'default' as const,
-        };
-      case 'Atenção':
-        return {
-          icon: AlertTriangle,
-          color: 'text-yellow-500',
-          bgColor: 'bg-yellow-500/10',
-          badgeVariant: 'secondary' as const,
-        };
-      case 'Crítico':
-        return {
-          icon: Wrench,
-          color: 'text-red-500',
-          bgColor: 'bg-red-500/10',
-          badgeVariant: 'destructive' as const,
-        };
-      default:
-        return {
-          icon: CheckCircle,
-          color: 'text-gray-500',
-          bgColor: 'bg-gray-500/10',
-          badgeVariant: 'default' as const,
-        };
+    case "Normal":
+      return {
+        icon: CheckCircle,
+        color: "text-green-500",
+        bgColor: "bg-green-500/10",
+        badgeVariant: "default" as const,
+      };
+    case "Atenção":
+      return {
+        icon: AlertTriangle,
+        color: "text-yellow-500",
+        bgColor: "bg-yellow-500/10",
+        badgeVariant: "secondary" as const,
+      };
+    case "Crítico":
+      return {
+        icon: Wrench,
+        color: "text-red-500",
+        bgColor: "bg-red-500/10",
+        badgeVariant: "destructive" as const,
+      };
+    default:
+      return {
+        icon: CheckCircle,
+        color: "text-gray-500",
+        bgColor: "bg-gray-500/10",
+        badgeVariant: "default" as const,
+      };
     }
   }
 
@@ -141,7 +141,7 @@ export default function MaintenanceDashboard() {
 
             {/* Timestamp */}
             <div className="text-xs text-muted-foreground text-right">
-              Última atualização: {new Date(status.timestamp).toLocaleString('pt-BR')}
+              Última atualização: {new Date(status.timestamp).toLocaleString("pt-BR")}
             </div>
 
             {/* Compliance Info */}

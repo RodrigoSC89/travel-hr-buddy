@@ -9,9 +9,9 @@
  * @version 1.0.0 (Patch 21)
  */
 
-import * as ort from 'onnxruntime-web';
-import { publishEvent } from '@/lib/mqtt/publisher';
-import { createClient } from '@/lib/supabase/client';
+import * as ort from "onnxruntime-web";
+import { publishEvent } from "@/lib/mqtt/publisher";
+import { createClient } from "@/lib/supabase/client";
 
 // Risk thresholds aligned with maritime standards
 const RISK_THRESHOLDS = {
@@ -20,7 +20,7 @@ const RISK_THRESHOLDS = {
   CRITICO: 1.0,     // Imminent failure detected, IMCA M254 preventive repair required
 } as const;
 
-export type RiskLevel = 'Normal' | 'Atenção' | 'Crítico';
+export type RiskLevel = "Normal" | "Atenção" | "Crítico";
 
 export interface TelemetryData {
   generator_load: number;      // 0-100%
@@ -41,9 +41,9 @@ export interface MaintenanceResult {
  * Classify risk level based on ONNX model output
  */
 function classifyRisk(riskScore: number): RiskLevel {
-  if (riskScore < RISK_THRESHOLDS.NORMAL) return 'Normal';
-  if (riskScore < RISK_THRESHOLDS.ATENCAO) return 'Atenção';
-  return 'Crítico';
+  if (riskScore < RISK_THRESHOLDS.NORMAL) return "Normal";
+  if (riskScore < RISK_THRESHOLDS.ATENCAO) return "Atenção";
+  return "Crítico";
 }
 
 /**
@@ -51,12 +51,12 @@ function classifyRisk(riskScore: number): RiskLevel {
  */
 function generateMessage(level: RiskLevel, score: number): string {
   switch (level) {
-    case 'Normal':
-      return `✅ Equipamento operando dentro dos parâmetros (risco: ${(score * 100).toFixed(1)}%)`;
-    case 'Atenção':
-      return `⚠️ Tendência de desgaste identificada - Inspeção recomendada (risco: ${(score * 100).toFixed(1)}%)`;
-    case 'Crítico':
-      return `🔧 Falha iminente detectada - Reparo preventivo IMCA M254 necessário (risco: ${(score * 100).toFixed(1)}%)`;
+  case "Normal":
+    return `✅ Equipamento operando dentro dos parâmetros (risco: ${(score * 100).toFixed(1)}%)`;
+  case "Atenção":
+    return `⚠️ Tendência de desgaste identificada - Inspeção recomendada (risco: ${(score * 100).toFixed(1)}%)`;
+  case "Crítico":
+    return `🔧 Falha iminente detectada - Reparo preventivo IMCA M254 necessário (risco: ${(score * 100).toFixed(1)}%)`;
   }
 }
 
@@ -71,7 +71,7 @@ export async function runMaintenanceOrchestrator(
 ): Promise<MaintenanceResult> {
   try {
     // Load ONNX model
-    const session = await ort.InferenceSession.create('/models/nautilus_maintenance_predictor.onnx');
+    const session = await ort.InferenceSession.create("/models/nautilus_maintenance_predictor.onnx");
 
     // Prepare input tensor (5 features)
     const inputData = new Float32Array([
@@ -82,7 +82,7 @@ export async function runMaintenanceOrchestrator(
       telemetry.power_fluctuation,
     ]);
 
-    const tensor = new ort.Tensor('float32', inputData, [1, 5]);
+    const tensor = new ort.Tensor("float32", inputData, [1, 5]);
     const feeds = { input: tensor };
 
     // Run inference
@@ -106,8 +106,8 @@ export async function runMaintenanceOrchestrator(
     await logToSupabase(result);
 
     // Publish MQTT alert for critical/warning conditions
-    if (riskLevel !== 'Normal') {
-      publishEvent('nautilus/maintenance/alert', {
+    if (riskLevel !== "Normal") {
+      publishEvent("nautilus/maintenance/alert", {
         level: riskLevel,
         score: riskScore,
         message,
@@ -117,13 +117,13 @@ export async function runMaintenanceOrchestrator(
 
     return result;
   } catch (error) {
-    console.error('❌ Maintenance orchestrator error:', error);
+    console.error("❌ Maintenance orchestrator error:", error);
     
     // Fallback result
     return {
       risk_score: 0,
-      risk_level: 'Normal',
-      message: 'Sistema de manutenção preditiva indisponível',
+      risk_level: "Normal",
+      message: "Sistema de manutenção preditiva indisponível",
       timestamp: new Date().toISOString(),
     };
   }
@@ -137,7 +137,7 @@ async function logToSupabase(result: MaintenanceResult): Promise<void> {
     const supabase = createClient();
     
     const { error } = await supabase
-      .from('maintenance_logs')
+      .from("maintenance_logs")
       .insert({
         timestamp: result.timestamp,
         level: result.risk_level,
@@ -145,9 +145,9 @@ async function logToSupabase(result: MaintenanceResult): Promise<void> {
       });
 
     if (error) {
-      console.error('❌ Failed to log to Supabase:', error);
+      console.error("❌ Failed to log to Supabase:", error);
     }
   } catch (error) {
-    console.error('❌ Supabase logging error:', error);
+    console.error("❌ Supabase logging error:", error);
   }
 }
