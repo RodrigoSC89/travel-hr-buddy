@@ -25,13 +25,13 @@ export default function DPAlertFeed() {
         {alerts.length === 0
           ? "Sem alertas recentes."
           : alerts.map((a, i) => (
-              <div key={i} className="border-b border-gray-700 pb-2">
-                <p>{a.type as string}</p>
-                <p className="text-xs text-gray-500">
-                  {new Date(a.timestamp as number).toLocaleTimeString()} — Risco: {((a.risk as number) * 100).toFixed(1)}%
-                </p>
-              </div>
-            ))}
+            <div key={i} className="border-b border-gray-700 pb-2">
+              <p>{a.type as string}</p>
+              <p className="text-xs text-gray-500">
+                {new Date(a.timestamp as number).toLocaleTimeString()} — Risco: {((a.risk as number) * 100).toFixed(1)}%
+              </p>
+            </div>
+          ))}
       </CardContent>
     </Card>
   );
