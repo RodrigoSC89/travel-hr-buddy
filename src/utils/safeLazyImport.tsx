@@ -17,6 +17,7 @@ import React from "react";
  * @param importer - Function that returns a Promise of the module to import
  * @param name - Human-readable name of the module for debugging and user feedback
  * @param retries - Number of retry attempts (default: 3)
+ * @param initialInterval - Initial retry interval in milliseconds (default: 1000)
  * @returns A React component that handles loading, error states, and renders the imported component
  * 
  * @example
@@ -25,7 +26,8 @@ import React from "react";
 export const safeLazyImport = (
   importer: () => Promise<{ default: React.ComponentType<any> }>,
   name: string,
-  retries = 3
+  retries = 3,
+  initialInterval = 1000
 ) => {
   /**
    * Retry function with exponential backoff
@@ -33,7 +35,7 @@ export const safeLazyImport = (
   const retryImport = async (
     fn: () => Promise<{ default: React.ComponentType<any> }>,
     retriesLeft = retries,
-    interval = 1000
+    interval = initialInterval
   ): Promise<{ default: React.ComponentType<any> }> => {
     try {
       return await fn();
