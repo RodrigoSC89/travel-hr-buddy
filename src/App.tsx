@@ -36,6 +36,7 @@ const Intelligence = safeLazyImport(() => import("@/pages/Intelligence"), "Intel
 const Maritime = safeLazyImport(() => import("@/pages/Maritime"), "Maritime");
 const MaritimeSupremo = safeLazyImport(() => import("@/pages/MaritimeSupremo"), "Maritime Supremo");
 const NautilusOne = safeLazyImport(() => import("@/pages/NautilusOne"), "Nautilus One");
+const ForecastPage = safeLazyImport(() => import("@/pages/Forecast"), "Forecast Page");
 const Innovation = safeLazyImport(() => import("@/pages/Innovation"), "Innovation");
 const Optimization = safeLazyImport(() => import("@/pages/Optimization"), "Optimization");
 const Collaboration = safeLazyImport(() => import("@/pages/Collaboration"), "Collaboration");
@@ -217,6 +218,7 @@ function App() {
                       <Route path="/maritime" element={<Maritime />} />
                       <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
                       <Route path="/nautilus-one" element={<NautilusOne />} />
+                      <Route path="/forecast" element={<ForecastPage />} />
                       <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/vault-ai" element={<VaultAI />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
