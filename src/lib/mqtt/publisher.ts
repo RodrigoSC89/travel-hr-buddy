@@ -2,64 +2,41 @@
 import mqtt from "mqtt";
 
 const MQTT_URL = import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt";
-
-// Cliente MQTT único global
 const client = mqtt.connect(MQTT_URL);
 
-/**
- * 📤 Publica um evento em qualquer tópico MQTT
- * @param topic - Tópico MQTT
- * @param payload - Dados a serem publicados
- * @param qos - Quality of Service (0: at most once, 1: at least once, 2: exactly once)
- */
-export const publishEvent = (
-  topic: string,
-  payload: Record<string, unknown>,
-  qos: 0 | 1 | 2 = 1
-) => {
+/** 📤 Publica um evento genérico MQTT */
+export const publishEvent = (topic, payload, qos = 1) => {
   client.publish(topic, JSON.stringify(payload), { qos }, (err) => {
-    if (err) console.error(`❌ Falha ao publicar em ${topic}:`, err);
+    if (err) console.error(`❌ Erro ao publicar em ${topic}:`, err);
     else console.log(`✅ Publicado em ${topic}:`, payload);
   });
 };
 
-/**
- * 📡 Subscreve genericamente a um tópico MQTT
- */
-export const subscribeTopic = (topic: string, callback: (data: Record<string, unknown>) => void) => {
+/** 📡 Subscreve a um tópico genérico e retorna cleanup */
+export const subscribeTopic = (topic, callback) => {
   client.subscribe(topic, (err) => {
     if (err) console.error(`❌ Falha ao subscrever ${topic}:`, err);
     else console.log(`✅ Subscreveu ${topic}`);
   });
-
   client.on("message", (receivedTopic, message) => {
     if (receivedTopic === topic) {
-      try {
-        callback(JSON.parse(message.toString()));
-      } catch {
-        callback({ raw: message.toString() });
-      }
+      try { callback(JSON.parse(message.toString())); }
+      catch { callback({ raw: message.toString() }); }
     }
   });
-
-  return client;
+  return { end: () => console.log(`🔄 Cleanup solicitado para ${topic}`) };
 };
 
-/**
- * 🔹 Canais específicos
- */
-export const subscribeDP = (callback) => subscribeTopic("nautilus/dp", callback);
-export const subscribeForecast = (callback) => subscribeTopic("nautilus/forecast", callback);
-export const subscribeForecastData = (callback) => subscribeTopic("nautilus/forecast/data", callback);
-export const subscribeForecastGlobal = (callback) => subscribeTopic("nautilus/forecast/global", callback);
-export const subscribeSystemAlerts = (callback) => subscribeTopic("nautilus/alerts", callback);
-export const subscribeDPAlerts = (callback) => subscribeTopic("nautilus/dp/alert", callback);
-export const subscribeBridgeStatus = (callback) => subscribeTopic("nautilus/bridgelink/status", callback);
-export const subscribeBridgeLinkStatus = (callback) => subscribeTopic("nautilus/bridgelink/status", callback);
-export const subscribeControlHub = (callback) => subscribeTopic("nautilus/controlhub/telemetry", callback);
-export const subscribeSystemStatus = (callback) => subscribeTopic("nautilus/system/status", callback);
-
-/**
- * 📤 Funções de publicação específicas
- */
-export const publishForecast = (payload: Record<string, unknown>, qos: 0 | 1 | 2 = 1) => publishEvent("nautilus/forecast/global", payload, qos);
+// 🔹 Canais específicos
+export const subscribeDP = (cb) => subscribeTopic("nautilus/dp", cb);
+export const subscribeForecast = (cb) => subscribeTopic("nautilus/forecast", cb);
+export const subscribeForecastData = (cb) => subscribeTopic("nautilus/forecast/data", cb);
+export const subscribeForecastGlobal = (cb) => subscribeTopic("nautilus/forecast/global", cb);
+export const subscribeAlerts = (cb) => subscribeTopic("nautilus/alerts", cb);
+export const subscribeSystemAlerts = (cb) => subscribeTopic("nautilus/alerts", cb);
+export const subscribeDPAlerts = (cb) => subscribeTopic("nautilus/dp/alert", cb);
+export const subscribeBridgeStatus = (cb) => subscribeTopic("nautilus/bridge/status", cb);
+export const subscribeBridgeLinkStatus = (cb) => subscribeTopic("nautilus/bridgelink/status", cb);
+export const subscribeControlHub = (cb) => subscribeTopic("nautilus/controlhub/telemetry", cb);
+export const subscribeSystemStatus = (cb) => subscribeTopic("nautilus/system/status", cb);
+export const publishForecast = (payload) => publishEvent("nautilus/forecast/global", payload);
