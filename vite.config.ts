@@ -26,216 +26,216 @@ export default defineConfig(({ mode }) => {
         authToken: process.env.SENTRY_AUTH_TOKEN,
       }),
       enablePwa && VitePWA({
-      registerType: "autoUpdate",
-      includeAssets: [
-        "favicon.ico",
-        "robots.txt",
-        "placeholder.svg",
-        "src/modules/**/*",
-        "public/modules/**/*"
-      ],
-      manifest: {
-        name: "Nautilus One - Sistema de Gestão Empresarial",
-        short_name: "Nautilus One",
-        description: "Sistema revolucionário de gestão empresarial com módulos de RH, viagens e hospedagem",
-        theme_color: "#0f172a",
-        background_color: "#0A0A0A",
-        display: "standalone",
-        orientation: "portrait",
-        start_url: "/",
-        icons: [
-          {
-            src: "/icons/icon.svg",
-            sizes: "192x192",
-            type: "image/svg+xml",
-            purpose: "any maskable"
-          },
-          {
-            src: "/icons/icon.svg",
-            sizes: "512x512",
-            type: "image/svg+xml",
-            purpose: "any maskable"
-          }
-        ]
-      },
-      workbox: {
-        maximumFileSizeToCacheInBytes: 10485760, // 10MB limit for PWA caching
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "google-fonts-cache",
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "gstatic-fonts-cache",
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: /\/api\/.*/i,
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "api-cache",
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 5 // 5 minutes
-              },
-              networkTimeoutSeconds: 10
-            }
-          }
+        registerType: "autoUpdate",
+        includeAssets: [
+          "favicon.ico",
+          "robots.txt",
+          "placeholder.svg",
+          "src/modules/**/*",
+          "public/modules/**/*"
         ],
-        navigateFallback: "/",
-        navigateFallbackDenylist: [/^\/api\//]
-      },
-      devOptions: {
-        enabled: false,
-        type: "module"
-      }
-    })
-    ].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-  build: {
-    outDir: "dist",
-    sourcemap: mode === "production",
-    minify: "esbuild",
-    target: "es2020",
-    chunkSizeWarningLimit: 5000, // Increased to 5MB for PWA compatibility
-    rollupOptions: {
-      output: {
-        manualChunks: (id) => {
-          // Vendor chunks for core libraries
-          if (id.includes("node_modules")) {
-            if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom")) {
-              return "vendor-react";
+        manifest: {
+          name: "Nautilus One - Sistema de Gestão Empresarial",
+          short_name: "Nautilus One",
+          description: "Sistema revolucionário de gestão empresarial com módulos de RH, viagens e hospedagem",
+          theme_color: "#0f172a",
+          background_color: "#0A0A0A",
+          display: "standalone",
+          orientation: "portrait",
+          start_url: "/",
+          icons: [
+            {
+              src: "/icons/icon.svg",
+              sizes: "192x192",
+              type: "image/svg+xml",
+              purpose: "any maskable"
+            },
+            {
+              src: "/icons/icon.svg",
+              sizes: "512x512",
+              type: "image/svg+xml",
+              purpose: "any maskable"
             }
-            if (id.includes("@radix-ui/react-dialog") || 
+          ]
+        },
+        workbox: {
+          maximumFileSizeToCacheInBytes: 10485760, // 10MB limit for PWA caching
+          globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+          runtimeCaching: [
+            {
+              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+              handler: "CacheFirst",
+              options: {
+                cacheName: "google-fonts-cache",
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            },
+            {
+              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+              handler: "CacheFirst",
+              options: {
+                cacheName: "gstatic-fonts-cache",
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            },
+            {
+              urlPattern: /\/api\/.*/i,
+              handler: "NetworkFirst",
+              options: {
+                cacheName: "api-cache",
+                expiration: {
+                  maxEntries: 50,
+                  maxAgeSeconds: 60 * 5 // 5 minutes
+                },
+                networkTimeoutSeconds: 10
+              }
+            }
+          ],
+          navigateFallback: "/",
+          navigateFallbackDenylist: [/^\/api\//]
+        },
+        devOptions: {
+          enabled: false,
+          type: "module"
+        }
+      })
+    ].filter(Boolean),
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+    },
+    build: {
+      outDir: "dist",
+      sourcemap: mode === "production",
+      minify: "esbuild",
+      target: "es2020",
+      chunkSizeWarningLimit: 5000, // Increased to 5MB for PWA compatibility
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+          // Vendor chunks for core libraries
+            if (id.includes("node_modules")) {
+              if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom")) {
+                return "vendor-react";
+              }
+              if (id.includes("@radix-ui/react-dialog") || 
                 id.includes("@radix-ui/react-dropdown-menu") || 
                 id.includes("@radix-ui/react-tabs")) {
-              return "vendor-ui";
+                return "vendor-ui";
+              }
+              if (id.includes("recharts")) {
+                return "vendor-charts";
+              }
+              if (id.includes("@supabase/supabase-js")) {
+                return "vendor-supabase";
+              }
+              if (id.includes("mapbox-gl")) {
+                return "vendor-mapbox";
+              }
+              // Group other vendors
+              return "vendor-misc";
             }
-            if (id.includes("recharts")) {
-              return "vendor-charts";
-            }
-            if (id.includes("@supabase/supabase-js")) {
-              return "vendor-supabase";
-            }
-            if (id.includes("mapbox-gl")) {
-              return "vendor-mapbox";
-            }
-            // Group other vendors
-            return "vendor-misc";
-          }
           
-          // Nautilus Core modules
-          if (id.includes("src/core/BridgeLink")) {
-            return "module-bridgelink";
-          }
-          if (id.includes("src/pages/ControlHub")) {
-            return "module-controlhub";
-          }
-          if (id.includes("src/ai/nautilus-core")) {
-            return "module-nautilus-ai";
-          }
+            // Nautilus Core modules
+            if (id.includes("src/core/BridgeLink")) {
+              return "module-bridgelink";
+            }
+            if (id.includes("src/pages/ControlHub")) {
+              return "module-controlhub";
+            }
+            if (id.includes("src/ai/nautilus-core")) {
+              return "module-nautilus-ai";
+            }
           
-          // DP module chunking
-          if (id.includes("src/pages/DP") || id.includes("src/modules/dp")) {
-            return "module-dp";
-          }
+            // DP module chunking
+            if (id.includes("src/pages/DP") || id.includes("src/modules/dp")) {
+              return "module-dp";
+            }
           
-          // MMI module chunking
-          if (id.includes("src/pages/MMI") || id.includes("src/modules/mmi")) {
-            return "module-mmi";
-          }
+            // MMI module chunking
+            if (id.includes("src/pages/MMI") || id.includes("src/modules/mmi")) {
+              return "module-mmi";
+            }
           
-          // FMEA module chunking
-          if (id.includes("src/modules/fmea")) {
-            return "module-fmea";
-          }
+            // FMEA module chunking
+            if (id.includes("src/modules/fmea")) {
+              return "module-fmea";
+            }
           
-          // SGSO module chunking
-          if (id.includes("src/components/sgso/") || id.includes("src/pages/SGSO")) {
-            return "module-sgso";
-          }
+            // SGSO module chunking
+            if (id.includes("src/components/sgso/") || id.includes("src/pages/SGSO")) {
+              return "module-sgso";
+            }
           
-          // Travel module chunking
-          if (id.includes("src/components/travel/")) {
-            if (id.includes("enhanced-hotel-search") || id.includes("responsive-hotel-search")) {
-              return "travel-hotel";
+            // Travel module chunking
+            if (id.includes("src/components/travel/")) {
+              if (id.includes("enhanced-hotel-search") || id.includes("responsive-hotel-search")) {
+                return "travel-hotel";
+              }
+              if (id.includes("flight-search")) {
+                return "travel-flights";
+              }
+              if (id.includes("predictive-travel-dashboard")) {
+                return "travel-predictive";
+              }
+              if (id.includes("travel-booking-system")) {
+                return "travel-booking";
+              }
+              if (id.includes("travel-analytics-dashboard")) {
+                return "travel-analytics";
+              }
+              if (id.includes("ai-travel-assistant")) {
+                return "travel-ai";
+              }
+              if (id.includes("travel-expense-system")) {
+                return "travel-expenses";
+              }
+              if (id.includes("travel-policy-system")) {
+                return "travel-policy";
+              }
+              if (id.includes("travel-approval-system")) {
+                return "travel-approvals";
+              }
+              if (id.includes("travel-document-manager")) {
+                return "travel-documents";
+              }
+              if (id.includes("travel-communication")) {
+                return "travel-comms";
+              }
+              if (id.includes("travel-notification")) {
+                return "travel-notifications";
+              }
+              if (id.includes("travel-map")) {
+                return "travel-map";
+              }
+              return "travel-misc";
             }
-            if (id.includes("flight-search")) {
-              return "travel-flights";
-            }
-            if (id.includes("predictive-travel-dashboard")) {
-              return "travel-predictive";
-            }
-            if (id.includes("travel-booking-system")) {
-              return "travel-booking";
-            }
-            if (id.includes("travel-analytics-dashboard")) {
-              return "travel-analytics";
-            }
-            if (id.includes("ai-travel-assistant")) {
-              return "travel-ai";
-            }
-            if (id.includes("travel-expense-system")) {
-              return "travel-expenses";
-            }
-            if (id.includes("travel-policy-system")) {
-              return "travel-policy";
-            }
-            if (id.includes("travel-approval-system")) {
-              return "travel-approvals";
-            }
-            if (id.includes("travel-document-manager")) {
-              return "travel-documents";
-            }
-            if (id.includes("travel-communication")) {
-              return "travel-comms";
-            }
-            if (id.includes("travel-notification")) {
-              return "travel-notifications";
-            }
-            if (id.includes("travel-map")) {
-              return "travel-map";
-            }
-            return "travel-misc";
           }
         }
-      }
+      },
+      esbuild: mode === "production" ? {
+        drop: ["debugger"],
+        pure: mode === "production" ? ["console.log", "console.debug"] : [],
+      } : undefined,
     },
-    esbuild: mode === "production" ? {
-      drop: ["debugger"],
-      pure: mode === "production" ? ["console.log", "console.debug"] : [],
-    } : undefined,
-  },
-  define: {
-    "process.env": {},
-    "process": { env: {} },
-    "process.env.MQTT_URL": JSON.stringify(process.env.VITE_MQTT_URL),
-  },
+    define: {
+      "process.env": {},
+      "process": { env: {} },
+      "process.env.MQTT_URL": JSON.stringify(process.env.VITE_MQTT_URL),
+    },
     preview: {
       host: true,
       port: 4173

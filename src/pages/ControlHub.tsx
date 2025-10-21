@@ -107,136 +107,136 @@ export default function ControlHub() {
         {/* Bridge A11y Status */}
         <BridgeA11y />
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>Total de Eventos</CardDescription>
-            <CardTitle className="text-3xl">{stats.totalEvents}</CardTitle>
-          </CardHeader>
-        </Card>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Total de Eventos</CardDescription>
+              <CardTitle className="text-3xl">{stats.totalEvents}</CardTitle>
+            </CardHeader>
+          </Card>
         
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>Tipos de Eventos</CardDescription>
-            <CardTitle className="text-3xl">{stats.eventTypes}</CardTitle>
-          </CardHeader>
-        </Card>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Tipos de Eventos</CardDescription>
+              <CardTitle className="text-3xl">{stats.eventTypes}</CardTitle>
+            </CardHeader>
+          </Card>
         
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>Listeners Ativos</CardDescription>
-            <CardTitle className="text-3xl">{stats.activeListeners}</CardTitle>
-          </CardHeader>
-        </Card>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Listeners Ativos</CardDescription>
+              <CardTitle className="text-3xl">{stats.activeListeners}</CardTitle>
+            </CardHeader>
+          </Card>
         
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>Tamanho do Log</CardDescription>
-            <CardTitle className="text-3xl">{events.length}</CardTitle>
-          </CardHeader>
-        </Card>
-      </div>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Tamanho do Log</CardDescription>
+              <CardTitle className="text-3xl">{events.length}</CardTitle>
+            </CardHeader>
+          </Card>
+        </div>
 
-      {/* Control Panel with Alerts */}
-      <div>
-        <h2 className="text-xl font-bold mb-4">Painel de Controle - Alertas Ativos</h2>
-        <ControlPanel />
-      </div>
+        {/* Control Panel with Alerts */}
+        <div>
+          <h2 className="text-xl font-bold mb-4">Painel de Controle - Alertas Ativos</h2>
+          <ControlPanel />
+        </div>
 
-      {/* Event Stream */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>📡 Stream de Eventos em Tempo Real</CardTitle>
-              <CardDescription>
+        {/* Event Stream */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>📡 Stream de Eventos em Tempo Real</CardTitle>
+                <CardDescription>
                 Monitoramento de todos os eventos do BridgeLink
-              </CardDescription>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant={autoScroll ? "default" : "outline"}
-                size="sm"
-                onClick={() => setAutoScroll(!autoScroll)}
-              >
-                {autoScroll ? "🔄 Auto-scroll ON" : "⏸️ Auto-scroll OFF"}
-              </Button>
-              <Button variant="destructive" size="sm" onClick={clearLogs}>
+                </CardDescription>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant={autoScroll ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setAutoScroll(!autoScroll)}
+                >
+                  {autoScroll ? "🔄 Auto-scroll ON" : "⏸️ Auto-scroll OFF"}
+                </Button>
+                <Button variant="destructive" size="sm" onClick={clearLogs}>
                 🗑️ Limpar Logs
-              </Button>
+                </Button>
+              </div>
             </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-[500px] w-full rounded-md border p-4">
-            <div className="space-y-2">
-              {events.length === 0 ? (
-                <div className="text-center text-muted-foreground py-8">
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-[500px] w-full rounded-md border p-4">
+              <div className="space-y-2">
+                {events.length === 0 ? (
+                  <div className="text-center text-muted-foreground py-8">
                   Nenhum evento registrado. Aguardando eventos do sistema...
-                </div>
-              ) : (
-                events.map((event) => (
-                  <div
-                    key={event.id}
-                    className="flex items-start gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
-                  >
-                    <div
-                      className={`w-2 h-2 rounded-full mt-2 ${getEventColor(event.type)}`}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <Badge variant="secondary" className="font-mono text-xs">
-                          {event.type}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">
-                          {formatTimestamp(event.timestamp)}
-                        </span>
-                        <span className="text-xs font-medium text-muted-foreground">
-                          📤 {event.source}
-                        </span>
-                      </div>
-                      <pre className="mt-1 text-xs text-muted-foreground overflow-x-auto">
-                        {JSON.stringify(event.data, null, 2)}
-                      </pre>
-                    </div>
                   </div>
-                ))
+                ) : (
+                  events.map((event) => (
+                    <div
+                      key={event.id}
+                      className="flex items-start gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                    >
+                      <div
+                        className={`w-2 h-2 rounded-full mt-2 ${getEventColor(event.type)}`}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <Badge variant="secondary" className="font-mono text-xs">
+                            {event.type}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">
+                            {formatTimestamp(event.timestamp)}
+                          </span>
+                          <span className="text-xs font-medium text-muted-foreground">
+                          📤 {event.source}
+                          </span>
+                        </div>
+                        <pre className="mt-1 text-xs text-muted-foreground overflow-x-auto">
+                          {JSON.stringify(event.data, null, 2)}
+                        </pre>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        {/* Listener Stats */}
+        <Card>
+          <CardHeader>
+            <CardTitle>👂 Estatísticas de Listeners</CardTitle>
+            <CardDescription>Listeners ativos por tipo de evento</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {stats.listenersByType.map(({ type, count }) => (
+                <div
+                  key={type}
+                  className="flex items-center justify-between p-3 rounded-lg border bg-card"
+                >
+                  <span className="text-sm font-mono">{type}</span>
+                  <Badge>{count}</Badge>
+                </div>
+              ))}
+              {stats.listenersByType.length === 0 && (
+                <div className="col-span-full text-center text-muted-foreground py-4">
+                Nenhum listener registrado
+                </div>
               )}
             </div>
-          </ScrollArea>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Listener Stats */}
-      <Card>
-        <CardHeader>
-          <CardTitle>👂 Estatísticas de Listeners</CardTitle>
-          <CardDescription>Listeners ativos por tipo de evento</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {stats.listenersByType.map(({ type, count }) => (
-              <div
-                key={type}
-                className="flex items-center justify-between p-3 rounded-lg border bg-card"
-              >
-                <span className="text-sm font-mono">{type}</span>
-                <Badge>{count}</Badge>
-              </div>
-            ))}
-            {stats.listenersByType.length === 0 && (
-              <div className="col-span-full text-center text-muted-foreground py-4">
-                Nenhum listener registrado
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* AI Insight Reporter */}
-      <IncidentReporter />
-    </div>
+        {/* AI Insight Reporter */}
+        <IncidentReporter />
+      </div>
     </Suspense>
   );
 }
