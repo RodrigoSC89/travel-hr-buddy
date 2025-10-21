@@ -2,14 +2,15 @@
  * ControlHub - Painel Central de Telemetria
  * 
  * Dashboard de monitoramento em tempo real que exibe eventos do BridgeLink,
- * estatísticas do sistema e status dos módulos.
+ * estatísticas do sistema e status dos módulos, com integração MQTT.
  * 
  * @module ControlHub
- * @version 1.0.0 (Core Alpha)
+ * @version 1.0.0 (Beta 3.1)
  */
 
 import React, { useState, useEffect } from "react";
 import { BridgeLink, BridgeLinkEvent } from "@/core/BridgeLink";
+import { MQTTClient } from "@/core/MQTTClient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,8 +20,14 @@ export default function ControlHub() {
   const [events, setEvents] = useState<BridgeLinkEvent[]>([]);
   const [stats, setStats] = useState(BridgeLink.getStats());
   const [autoScroll, setAutoScroll] = useState(true);
+  const [logs, setLogs] = useState<string[]>([]);
+  const [mqttConnected, setMqttConnected] = useState(false);
 
   useEffect(() => {
+    // Connect to MQTT broker
+    MQTTClient.connect();
+    setMqttConnected(MQTTClient.isConnected());
+
     // Subscribe to all event types
     const unsubscribers = [
       BridgeLink.on("mmi:forecast:update", handleEvent),
@@ -35,6 +42,16 @@ export default function ControlHub() {
       BridgeLink.on("telemetry:log", handleEvent),
     ];
 
+    // Subscribe to MQTT events through BridgeLink
+    const mqttUnsub = BridgeLink.on("telemetry:log", (data) => {
+      if (data.source === "MQTTClient") {
+        const mqttData = data.data as { topic?: string; message?: string };
+        if (mqttData.message) {
+          setLogs((prev) => [...prev, `[MQTT] ${mqttData.message}`].slice(-50));
+        }
+      }
+    });
+
     // Load initial history
     setEvents(BridgeLink.getHistory(100));
 
@@ -43,8 +60,15 @@ export default function ControlHub() {
       timestamp: Date.now(),
     });
 
+    // Check MQTT connection status periodically
+    const statusInterval = setInterval(() => {
+      setMqttConnected(MQTTClient.isConnected());
+    }, 2000);
+
     return () => {
       unsubscribers.forEach((unsub) => unsub());
+      mqttUnsub();
+      clearInterval(statusInterval);
     };
   }, []);
 
@@ -84,14 +108,19 @@ export default function ControlHub() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">⚓ ControlHub</h1>
+          <h1 className="text-3xl font-bold tracking-tight">🛰️ Nautilus Control Hub</h1>
           <p className="text-muted-foreground">
             Centro de Telemetria e Monitoramento em Tempo Real
           </p>
         </div>
-        <Badge variant="outline" className="px-4 py-2">
-          Core Alpha v1.0.0
-        </Badge>
+        <div className="flex gap-2">
+          <Badge variant={mqttConnected ? "default" : "secondary"} className="px-4 py-2">
+            {mqttConnected ? "📡 MQTT Conectado" : "📡 MQTT Desconectado"}
+          </Badge>
+          <Badge variant="outline" className="px-4 py-2">
+            Beta 3.1
+          </Badge>
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -183,6 +212,36 @@ export default function ControlHub() {
                     </div>
                   </div>
                 ))
+              )}
+            </div>
+          </ScrollArea>
+        </CardContent>
+      </Card>
+
+      {/* MQTT Telemetry Logs */}
+      <Card>
+        <CardHeader>
+          <CardTitle>📡 MQTT Telemetria em Tempo Real</CardTitle>
+          <CardDescription>
+            Mensagens recebidas do broker MQTT
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ScrollArea className="h-[300px] w-full rounded-md border p-4">
+            <div className="space-y-1">
+              {logs.length ? (
+                logs.map((log, i) => (
+                  <div
+                    key={i}
+                    className="text-sm font-mono p-2 rounded bg-muted/50 hover:bg-muted transition-colors"
+                  >
+                    {log}
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-muted-foreground py-8">
+                  Aguardando dados MQTT...
+                </div>
               )}
             </div>
           </ScrollArea>

@@ -19,7 +19,8 @@ export type BridgeLinkEventType =
   | "wsog:checklist:completed"
   | "ai:analysis:complete"
   | "system:module:loaded"
-  | "telemetry:log";
+  | "telemetry:log"
+  | "mqtt:event";
 
 // Estrutura de evento
 export interface BridgeLinkEvent<T = unknown> {
