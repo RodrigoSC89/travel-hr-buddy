@@ -15,6 +15,7 @@ dist-ssr
 .next
 build
 *.local
+.vite-cache
 
 # Environment files
 .env
