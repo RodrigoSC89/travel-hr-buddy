@@ -71,13 +71,15 @@ export default function IncidentResponsePanel() {
                 </span>
               </div>
               <p className="text-sm mt-1">{i.description}</p>
-              <p className={`text-sm mt-1 ${
-                i.level === "Não Conforme" 
-                  ? "text-red-400" 
-                  : i.level === "Risco" 
-                  ? "text-yellow-400" 
-                  : "text-green-400"
-              }`}>
+              <p 
+                className={`text-sm mt-1 ${
+                  i.level === "Não Conforme" 
+                    ? "text-red-400" 
+                    : i.level === "Risco" 
+                      ? "text-yellow-400" 
+                      : "text-green-400"
+                }`}
+              >
                 {i.level} ({(i.score * 100).toFixed(1)}%)
               </p>
               <p className="text-xs text-gray-500 mt-1 italic">

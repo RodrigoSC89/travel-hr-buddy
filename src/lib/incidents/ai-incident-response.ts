@@ -49,7 +49,7 @@ export async function handleIncident(event: IncidentEvent): Promise<IncidentRepo
   if (import.meta.env.VITE_MQTT_URL) {
     try {
       const client = mqtt.connect(import.meta.env.VITE_MQTT_URL);
-      client.on('connect', () => {
+      client.on("connect", () => {
         client.publish("nautilus/incidents/alert", JSON.stringify(report));
         client.end();
       });
@@ -76,5 +76,5 @@ function getRecommendation(level: string, type?: string): string {
     return `Verificar sistemas de suporte (${type || "N/A"}). Reavaliar ASOG.`;
   }
   
-  return `Executar resposta imediata. Acionar protocolo ISM/ISPS e registrar no Control Hub.`;
+  return "Executar resposta imediata. Acionar protocolo ISM/ISPS e registrar no Control Hub.";
 }
