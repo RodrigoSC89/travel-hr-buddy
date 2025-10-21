@@ -4,7 +4,7 @@
  * Dashboard de monitoramento em tempo real com MQTT, AI insights e alertas unificados.
  * 
  * @module ControlHub
- * @version 1.2.0 (Patch 12 - MQTT Observability)
+ * @version 1.3.0 (Patch 18 - AI Incident Response & Resilience Integration)
  */
 
 import React, { Suspense } from "react";
@@ -15,6 +15,9 @@ const ControlHubPanel = safeLazyImport(() => import("@/components/control-hub/Co
 const SystemAlerts = safeLazyImport(() => import("@/components/control-hub/SystemAlerts"), "SystemAlerts");
 const AIInsightReporter = safeLazyImport(() => import("@/components/control-hub/AIInsightReporter"), "AIInsightReporter");
 const ComplianceDashboard = safeLazyImport(() => import("@/components/compliance/ComplianceDashboard"), "ComplianceDashboard");
+const ResilienceMonitor = safeLazyImport(() => import("@/components/resilience/ResilienceMonitor"), "ResilienceMonitor");
+const ResilienceComplianceDashboard = safeLazyImport(() => import("@/components/resilience/ComplianceDashboard"), "ComplianceDashboard");
+const IncidentResponsePanel = safeLazyImport(() => import("@/components/resilience/IncidentResponsePanel"), "IncidentResponsePanel");
 
 export default function ControlHub() {
   return (
@@ -40,9 +43,18 @@ export default function ControlHub() {
         </Suspense>
 
         <Suspense fallback={<LoadingCard />}>
-          <ComplianceDashboard />
+          <ResilienceMonitor />
+        </Suspense>
+
+        <Suspense fallback={<LoadingCard />}>
+          <ResilienceComplianceDashboard />
         </Suspense>
       </div>
+
+      {/* Incident Response Panel */}
+      <Suspense fallback={<LoadingCard />}>
+        <IncidentResponsePanel />
+      </Suspense>
 
       {/* AI Insights */}
       <Suspense fallback={<LoadingCard />}>

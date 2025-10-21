@@ -33,9 +33,17 @@ export async function initComplianceEngine() {
   }
 }
 
+/**
+ * Analyze incident data for compliance violations
+ * Supports: DP Loss, Sensor Misalignment, ISM/ISPS Non-Compliance, ASOG/FMEA Deviations
+ */
 export async function runComplianceAudit(data) {
   if (!session) await initComplianceEngine();
-  const input = new ort.Tensor("float32", Float32Array.from(data), [1, data.length]);
+  
+  // Handle both array and object inputs
+  let inputArray = Array.isArray(data) ? data : convertIncidentDataToArray(data);
+  
+  const input = new ort.Tensor("float32", Float32Array.from(inputArray), [1, inputArray.length]);
   const results = await session.run({ input });
   const score = Object.values(results)[0][0];
 
@@ -48,8 +56,30 @@ export async function runComplianceAudit(data) {
     level: complianceLevel,
   });
 
-  const client = mqtt.connect(import.meta.env.VITE_MQTT_URL);
-  client.publish("nautilus/compliance/alerts", JSON.stringify({ level: complianceLevel, score: weightedScore }));
+  // Optional MQTT publishing
+  try {
+    const mqttUrl = import.meta.env.VITE_MQTT_URL;
+    if (mqttUrl) {
+      const client = mqtt.connect(mqttUrl);
+      client.publish("nautilus/compliance/alerts", JSON.stringify({ level: complianceLevel, score: weightedScore }));
+    }
+  } catch (error) {
+    console.warn("MQTT publishing skipped:", error);
+  }
 
   return { score: weightedScore, complianceLevel };
+}
+
+/**
+ * Convert incident object data to array format for ONNX model
+ */
+function convertIncidentDataToArray(data) {
+  return [
+    data.dpLoss ? 0.0 : 1.0,
+    data.sensorMisalignment ? 0.0 : 1.0,
+    data.ismNonCompliance ? 0.0 : 1.0,
+    data.ispsNonCompliance ? 0.0 : 1.0,
+    data.asogDeviations ? 0.0 : 1.0,
+    data.fmeaDeviations ? 0.0 : 1.0,
+  ];
 }
