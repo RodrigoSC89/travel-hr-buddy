@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { UserRole } from "./use-permissions";
 
-interface UserWithRole {
+export interface UserWithRole {
   id: string;
   email: string;
   full_name: string | null;
