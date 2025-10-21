@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import DPIntelligenceDashboard from "@/components/dp-intelligence/DPIntelligenceDashboard";
@@ -10,8 +10,12 @@ import {
   TrendingUp,
   BarChart3
 } from "lucide-react";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 
-const DPIntelligenceCenter = lazy(() => import("@/components/dp-intelligence/dp-intelligence-center"));
+const DPIntelligenceCenter = safeLazyImport(
+  () => import("@/components/dp-intelligence/dp-intelligence-center"),
+  "DP Intelligence Center"
+);
 
 const DPIntelligence = () => {
   return (
@@ -41,9 +45,7 @@ const DPIntelligence = () => {
         </TabsList>
         
         <TabsContent value="incidents">
-          <Suspense fallback={<p>Carregando módulo DP Intelligence...</p>}>
-            <DPIntelligenceCenter />
-          </Suspense>
+          <DPIntelligenceCenter />
         </TabsContent>
         
         <TabsContent value="dashboard">
