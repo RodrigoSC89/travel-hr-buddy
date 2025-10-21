@@ -99,8 +99,8 @@ export default function IncidentAiModal() {
             {typeof incident === "object" && incident !== null && "summary" in incident 
               ? String(incident.summary)
               : typeof incident === "object" && incident !== null && "description" in incident
-              ? String(incident.description)
-              : "Sem descrição"}
+                ? String(incident.description)
+                : "Sem descrição"}
           </p>
           
           {!analysis && (

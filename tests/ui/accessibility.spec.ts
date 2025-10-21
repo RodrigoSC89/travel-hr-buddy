@@ -153,7 +153,7 @@ test.describe("UI Accessibility Tests", () => {
 
     expect(
       contrastIssues,
-      `UI components should have sufficient contrast (4.5:1 for normal text, 3:1 for large text)`
+      "UI components should have sufficient contrast (4.5:1 for normal text, 3:1 for large text)"
     ).toHaveLength(0);
   });
 

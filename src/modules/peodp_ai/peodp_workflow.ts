@@ -209,7 +209,7 @@ export class PEOWorkflow {
     sucessos: number;
     falhas: number;
     porTipo: Record<string, number>;
-  } {
+    } {
     const total = this.actionHistory.length;
     const sucessos = this.actionHistory.filter((a) => a.success).length;
     const falhas = total - sucessos;

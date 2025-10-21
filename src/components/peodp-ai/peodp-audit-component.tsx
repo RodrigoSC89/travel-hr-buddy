@@ -255,8 +255,8 @@ export function PEODPAuditComponent() {
                                 item.cumprimento === "OK"
                                   ? "default"
                                   : item.cumprimento === "Não Conforme"
-                                  ? "destructive"
-                                  : "secondary"
+                                    ? "destructive"
+                                    : "secondary"
                               }
                             >
                               {item.cumprimento}

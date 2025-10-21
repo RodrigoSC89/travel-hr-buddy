@@ -224,8 +224,8 @@ export class PEOReport {
     for (const item of auditoria.resultado) {
       const icon = 
         item.cumprimento === "OK" ? "✅" :
-        item.cumprimento === "Não Conforme" ? "❌" :
-        item.cumprimento === "Pendente" ? "⏳" : "➖";
+          item.cumprimento === "Não Conforme" ? "❌" :
+            item.cumprimento === "Pendente" ? "⏳" : "➖";
       
       sections.push(`### ${icon} ${item.item} - ${item.cumprimento}`);
       sections.push(item.descricao);

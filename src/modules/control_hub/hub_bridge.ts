@@ -3,11 +3,11 @@
  * Manages connection and communication with BridgeLink shore-based system
  */
 
-import { ConnectionQuality } from './types';
-import config from './hub_config.json';
+import { ConnectionQuality } from "./types";
+import config from "./hub_config.json";
 
 export class HubBridge {
-  private connectionQuality: ConnectionQuality = 'offline';
+  private connectionQuality: ConnectionQuality = "offline";
   private lastCheck: Date | null = null;
   private token: string | null = null;
 
@@ -19,8 +19,8 @@ export class HubBridge {
 
     try {
       const startTime = Date.now();
-      const response = await fetch('/api/bridgelink/ping', {
-        method: 'GET',
+      const response = await fetch("/api/bridgelink/ping", {
+        method: "GET",
         headers: this.getHeaders(),
         signal: AbortSignal.timeout(5000),
       });
@@ -28,22 +28,22 @@ export class HubBridge {
       const latency = Date.now() - startTime;
 
       if (!response.ok) {
-        this.connectionQuality = 'offline';
+        this.connectionQuality = "offline";
         return this.connectionQuality;
       }
 
       // Classify connection quality based on latency
       if (latency < 200) {
-        this.connectionQuality = 'excellent';
+        this.connectionQuality = "excellent";
       } else if (latency < 500) {
-        this.connectionQuality = 'good';
+        this.connectionQuality = "good";
       } else {
-        this.connectionQuality = 'poor';
+        this.connectionQuality = "poor";
       }
 
       return this.connectionQuality;
     } catch (error) {
-      this.connectionQuality = 'offline';
+      this.connectionQuality = "offline";
       return this.connectionQuality;
     }
   }
@@ -54,7 +54,7 @@ export class HubBridge {
   async sendData(data: any, retryCount = 0): Promise<boolean> {
     try {
       const response = await fetch(config.bridgelink.endpoint, {
-        method: 'POST',
+        method: "POST",
         headers: this.getHeaders(),
         body: JSON.stringify(data),
         signal: AbortSignal.timeout(config.bridgelink.timeout),
@@ -78,8 +78,8 @@ export class HubBridge {
   async authenticate(token: string): Promise<boolean> {
     this.token = token;
     try {
-      const response = await fetch('/api/bridgelink/auth', {
-        method: 'POST',
+      const response = await fetch("/api/bridgelink/auth", {
+        method: "POST",
         headers: this.getHeaders(),
         body: JSON.stringify({ token }),
       });
@@ -108,11 +108,11 @@ export class HubBridge {
    */
   private getHeaders(): HeadersInit {
     const headers: HeadersInit = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     };
 
     if (this.token && config.bridgelink.authRequired) {
-      headers['Authorization'] = `Bearer ${this.token}`;
+      headers["Authorization"] = `Bearer ${this.token}`;
     }
 
     return headers;

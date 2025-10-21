@@ -3,8 +3,8 @@
  * Manages local cache for offline operation with 100MB capacity
  */
 
-import { CacheEntry } from './types';
-import config from './hub_config.json';
+import { CacheEntry } from "./types";
+import config from "./hub_config.json";
 
 export class HubCache {
   private readonly storageKey = config.cache.storageKey;
@@ -14,7 +14,7 @@ export class HubCache {
   /**
    * Add entry to cache
    */
-  async addEntry(entry: Omit<CacheEntry, 'id' | 'timestamp'>): Promise<void> {
+  async addEntry(entry: Omit<CacheEntry, "id" | "timestamp">): Promise<void> {
     const cache = this.getCache();
     const newEntry: CacheEntry = {
       ...entry,
@@ -122,7 +122,7 @@ export class HubCache {
         timestamp: new Date(entry.timestamp),
       }));
     } catch (error) {
-      console.error('Failed to parse cache:', error);
+      console.error("Failed to parse cache:", error);
       return [];
     }
   }
@@ -134,7 +134,7 @@ export class HubCache {
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(cache));
     } catch (error) {
-      console.error('Failed to set cache:', error);
+      console.error("Failed to set cache:", error);
     }
   }
 

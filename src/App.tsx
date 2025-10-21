@@ -47,6 +47,7 @@ const Blockchain = safeLazyImport(() => import("@/pages/Blockchain"), "Blockchai
 const Gamification = safeLazyImport(() => import("@/pages/Gamification"), "Gamification");
 const PredictiveAnalytics = safeLazyImport(() => import("@/pages/PredictiveAnalytics"), "Predictive Analytics");
 const Admin = safeLazyImport(() => import("@/pages/Admin"), "Admin");
+const ControlHub = safeLazyImport(() => import("@/pages/ControlHub"), "Control Hub");
 const APITester = safeLazyImport(() => import("@/pages/admin/api-tester"), "API Tester");
 const APIStatus = safeLazyImport(() => import("@/pages/admin/api-status"), "API Status");
 const ControlPanel = safeLazyImport(() => import("@/pages/admin/control-panel"), "Control Panel");
@@ -216,6 +217,7 @@ function App() {
                       <Route path="/maritime" element={<Maritime />} />
                       <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
                       <Route path="/nautilus-one" element={<NautilusOne />} />
+                      <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/vault-ai" element={<VaultAI />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
