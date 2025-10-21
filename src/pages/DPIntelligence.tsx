@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { Suspense } from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import DPIntelligenceDashboard from "@/components/dp-intelligence/DPIntelligenceDashboard";
@@ -10,8 +10,9 @@ import {
   TrendingUp,
   BarChart3
 } from "lucide-react";
+import { safeLazyImport } from "@/utils/safeLazyImport";
 
-const DPIntelligenceCenter = lazy(() => import("@/components/dp-intelligence/dp-intelligence-center"));
+const DPIntelligenceCenter = safeLazyImport(() => import("@/components/dp-intelligence/dp-intelligence-center"), "DP Intelligence Center");
 
 const DPIntelligence = () => {
   return (
