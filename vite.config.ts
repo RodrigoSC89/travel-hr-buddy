@@ -119,15 +119,22 @@ export default defineConfig(({ mode }) => {
   },
   build: {
     outDir: "dist",
-    sourcemap: mode === "production",
+    sourcemap: false,
+    chunkSizeWarningLimit: 800,
+    target: "esnext",
+    cssCodeSplit: true,
     minify: "esbuild",
-    target: "es2020",
-    chunkSizeWarningLimit: 5000, // Increased to 5MB for PWA compatibility
     rollupOptions: {
       output: {
         manualChunks: (id) => {
           // Vendor chunks for core libraries
           if (id.includes("node_modules")) {
+            if (id.includes("mqtt")) {
+              return "mqtt";
+            }
+            if (id.includes("@supabase/supabase-js")) {
+              return "supabase";
+            }
             if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom")) {
               return "vendor-react";
             }
@@ -139,14 +146,16 @@ export default defineConfig(({ mode }) => {
             if (id.includes("recharts")) {
               return "vendor-charts";
             }
-            if (id.includes("@supabase/supabase-js")) {
-              return "vendor-supabase";
-            }
             if (id.includes("mapbox-gl")) {
               return "vendor-mapbox";
             }
             // Group other vendors
             return "vendor-misc";
+          }
+          
+          // AI modules
+          if (id.includes("src/lib/ai/reporter.ts")) {
+            return "ai";
           }
           
           // Nautilus Core modules
@@ -226,10 +235,17 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
-    esbuild: mode === "production" ? {
+  },
+  optimizeDeps: {
+    include: ["mqtt", "@supabase/supabase-js"],
+  },
+  cacheDir: ".vite-cache",
+  esbuild: {
+    logOverride: { "this-is-undefined-in-esm": "silent" },
+    ...(mode === "production" ? {
       drop: ["debugger"],
-      pure: mode === "production" ? ["console.log", "console.debug"] : [],
-    } : undefined,
+      pure: ["console.log", "console.debug"],
+    } : {}),
   },
   define: {
     "process.env": {},
