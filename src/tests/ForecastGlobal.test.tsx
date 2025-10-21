@@ -10,21 +10,29 @@ import ForecastGlobal from "@/pages/ForecastGlobal";
 import ForecastPanel from "@/components/forecast/ForecastPanel";
 import ForecastMap from "@/components/forecast/ForecastMap";
 import ForecastAIInsights from "@/components/forecast/ForecastAIInsights";
-
-// Mock MQTT client
-const mockMqttClient = {
-  on: vi.fn(),
-  subscribe: vi.fn(),
-  publish: vi.fn(),
-  end: vi.fn(),
-};
+import mqtt from "mqtt";
 
 // Mock mqtt module
-vi.mock("mqtt", () => ({
-  default: {
-    connect: vi.fn(() => mockMqttClient),
-  },
-}));
+vi.mock("mqtt", () => {
+  const mockMqttClient = {
+    on: vi.fn(),
+    subscribe: vi.fn(),
+    publish: vi.fn(),
+    end: vi.fn(),
+  };
+  
+  return {
+    default: {
+      connect: vi.fn(() => mockMqttClient),
+    },
+  };
+});
+
+// Helper to get mock MQTT client
+const getMockMqttClient = () => {
+  const mqttModule = vi.mocked(mqtt);
+  return mqttModule.connect() as any;
+};
 
 // Mock onnxruntime-web
 vi.mock("onnxruntime-web", () => ({
@@ -75,6 +83,7 @@ describe("ForecastGlobal Page", () => {
 describe("ForecastPanel Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    const mockMqttClient = getMockMqttClient();
     // Setup MQTT mock behavior
     mockMqttClient.on.mockImplementation((event, callback) => {
       if (event === "connect") {
@@ -82,7 +91,7 @@ describe("ForecastPanel Component", () => {
       } else if (event === "message") {
         // Simulate receiving forecast data
         setTimeout(() => {
-          callback("nautilus/forecast/global", Buffer.from(JSON.stringify({
+          callback("nautilus/forecast", Buffer.from(JSON.stringify({
             wind: 15.2,
             wave: 2.8,
             temp: 26.5,
@@ -118,9 +127,10 @@ describe("ForecastPanel Component", () => {
   it("subscribes to MQTT forecast channel on mount", async () => {
     render(<ForecastPanel />);
 
+    const mockMqttClient = getMockMqttClient();
     await waitFor(() => {
       expect(mockMqttClient.subscribe).toHaveBeenCalledWith(
-        "nautilus/forecast/global",
+        "nautilus/forecast",
         expect.any(Function)
       );
     });
@@ -131,6 +141,7 @@ describe("ForecastPanel Component", () => {
     
     unmount();
 
+    const mockMqttClient = getMockMqttClient();
     await waitFor(() => {
       expect(mockMqttClient.end).toHaveBeenCalled();
     });
@@ -201,6 +212,7 @@ describe("MQTT Publisher Functions", () => {
   it("publishForecast sends data to correct topic", async () => {
     const { publishForecast } = await import("@/lib/mqtt/publisher");
     
+    const mockMqttClient = getMockMqttClient();
     mockMqttClient.on.mockImplementation((event, callback) => {
       if (event === "connect") {
         callback();
@@ -232,6 +244,7 @@ describe("MQTT Publisher Functions", () => {
     const callback = vi.fn();
     const client = subscribeForecast(callback);
 
+    const mockMqttClient = getMockMqttClient();
     expect(client).toBe(mockMqttClient);
   });
 });
