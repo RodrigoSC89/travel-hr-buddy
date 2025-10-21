@@ -8,9 +8,16 @@ const client = mqtt.connect(MQTT_URL);
 
 /**
  * 📤 Publica um evento em qualquer tópico MQTT
+ * @param topic - Tópico MQTT
+ * @param payload - Dados a serem publicados
+ * @param qos - Quality of Service (0: at most once, 1: at least once, 2: exactly once)
  */
-export const publishEvent = (topic: string, payload: Record<string, unknown>) => {
-  client.publish(topic, JSON.stringify(payload), { qos: 1 }, (err) => {
+export const publishEvent = (
+  topic: string,
+  payload: Record<string, unknown>,
+  qos: 0 | 1 | 2 = 1
+) => {
+  client.publish(topic, JSON.stringify(payload), { qos }, (err) => {
     if (err) console.error(`❌ Falha ao publicar em ${topic}:`, err);
     else console.log(`✅ Publicado em ${topic}:`, payload);
   });
@@ -53,4 +60,4 @@ export const subscribeSystemStatus = (callback) => subscribeTopic("nautilus/syst
 /**
  * 📤 Funções de publicação específicas
  */
-export const publishForecast = (payload: Record<string, unknown>) => publishEvent("nautilus/forecast/global", payload);
+export const publishForecast = (payload: Record<string, unknown>, qos: 0 | 1 | 2 = 1) => publishEvent("nautilus/forecast/global", payload, qos);
