@@ -195,7 +195,7 @@ describe("ForecastAIInsights Component", () => {
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
     
     // Mock ONNX to throw error
-    const ort = await import("onnxruntime-web");
+    const ort = await React.lazy(() => import(import("onnxruntime-web")));
     vi.mocked(ort.InferenceSession.create).mockRejectedValueOnce(new Error("Model load failed"));
 
     render(<ForecastAIInsights />);
@@ -210,7 +210,7 @@ describe("ForecastAIInsights Component", () => {
 
 describe("MQTT Publisher Functions", () => {
   it("publishForecast sends data to correct topic", async () => {
-    const { publishForecast } = await import("@/lib/mqtt/publisher");
+    const { publishForecast } = await React.lazy(() => import(import("@/lib/mqtt/publisher")));
     
     const mockMqttClient = getMockMqttClient();
     mockMqttClient.on.mockImplementation((event, callback) => {
@@ -239,7 +239,7 @@ describe("MQTT Publisher Functions", () => {
   });
 
   it("subscribeForecast returns mqtt client", async () => {
-    const { subscribeForecast } = await import("@/lib/mqtt/publisher");
+    const { subscribeForecast } = await React.lazy(() => import(import("@/lib/mqtt/publisher")));
     
     const callback = vi.fn();
     const client = subscribeForecast(callback);

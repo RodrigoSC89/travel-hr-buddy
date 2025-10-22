@@ -55,7 +55,7 @@ describe("TemplateEditorWithRewrite Component", () => {
   });
 
   it("should show loading state when rewriting", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
     vi.mocked(supabase.functions.invoke).mockImplementation(
       () =>
         new Promise((resolve) =>
@@ -76,7 +76,7 @@ describe("TemplateEditorWithRewrite Component", () => {
   });
 
   it("should call supabase function on button click", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
       data: { result: "Rewritten text" },
       error: null,
@@ -97,8 +97,8 @@ describe("TemplateEditorWithRewrite Component", () => {
   });
 
   it("should show success toast on successful rewrite", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
-    const { toast } = await import("@/hooks/use-toast");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
+    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
     
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
       data: { result: "Rewritten text" },
@@ -121,8 +121,8 @@ describe("TemplateEditorWithRewrite Component", () => {
   });
 
   it("should show error toast on failure", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
-    const { toast } = await import("@/hooks/use-toast");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
+    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
     
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
       data: null,

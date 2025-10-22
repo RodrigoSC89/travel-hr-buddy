@@ -42,7 +42,7 @@ describe("PersonalRestoreDashboard", () => {
     vi.clearAllMocks();
     
     // Import and mock supabase after the module is mocked
-    const { supabase } = await import("@/integrations/supabase/client");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
 
     // Default mock implementation for RPC calls
     vi.mocked(supabase.rpc).mockImplementation((functionName: string) => {
@@ -125,7 +125,7 @@ describe("PersonalRestoreDashboard", () => {
   });
 
   it("calls the correct RPC functions with user email", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
     
     render(
       <MemoryRouter>

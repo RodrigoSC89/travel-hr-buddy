@@ -42,7 +42,7 @@ export default function MMIJobsPanel() {
       <p><strong>Horímetro:</strong> ${job.hours || 0}h</p>
       <p><strong>Responsável:</strong> ${job.responsible || "N/A"}</p>
     `;
-    const blob = await (await import("html2pdf.js")).default().from(html).outputPdf("blob");
+    const blob = await (await React.lazy(() => import(import("html2pdf.js")).default().from(html).outputPdf("blob")));
     const url = URL.createObjectURL(blob);
     window.open(url);
   }

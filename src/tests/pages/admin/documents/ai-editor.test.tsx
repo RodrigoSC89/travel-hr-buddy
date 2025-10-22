@@ -124,7 +124,7 @@ describe("DocumentAIEditorPage", () => {
 
   it("should apply template from localStorage on mount", async () => {
     const mockSetContent = vi.fn();
-    const { useEditor } = await import("@tiptap/react");
+    const { useEditor } = await React.lazy(() => import(import("@tiptap/react")));
     (useEditor as any).mockReturnValue({
       commands: {
         setContent: mockSetContent,
@@ -146,7 +146,7 @@ describe("DocumentAIEditorPage", () => {
       expect(mockSetContent).toHaveBeenCalledWith("<p>Template content</p>");
     });
 
-    const { toast } = await import("@/hooks/use-toast");
+    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
     expect(toast).toHaveBeenCalledWith(
       expect.objectContaining({
         title: "Template aplicado",
@@ -168,8 +168,8 @@ describe("DocumentAIEditorPage", () => {
   });
 
   it("should save document to database", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
-    const { toast } = await import("@/hooks/use-toast");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
+    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
     
     render(
       <MemoryRouter>
@@ -194,7 +194,7 @@ describe("DocumentAIEditorPage", () => {
   });
 
   it("should export document as PDF", async () => {
-    const { toast } = await import("@/hooks/use-toast");
+    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
     
     render(
       <MemoryRouter>
@@ -218,7 +218,7 @@ describe("DocumentAIEditorPage", () => {
   });
 
   it("should show validation error when saving without title", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
     
     render(
       <MemoryRouter>

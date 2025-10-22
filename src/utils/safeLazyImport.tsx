@@ -21,7 +21,7 @@ import React from "react";
  * @returns A React component that handles loading, error states, and renders the imported component
  * 
  * @example
- * const Dashboard = safeLazyImport(() => import("@/pages/Dashboard"), "Dashboard");
+ * const Dashboard = safeLazyImport(() => React.lazy(() => import(import("@/pages/Dashboard"), "Dashboard")));
  */
 export const safeLazyImport = (
   importer: () => Promise<{ default: React.ComponentType<any> }>,

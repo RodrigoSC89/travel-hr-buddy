@@ -6,7 +6,7 @@ import { safeLazyImport } from "@/utils/safeLazyImport";
 
 // Lazy loading do sistema blockchain com safeLazyImport
 const BlockchainDocuments = safeLazyImport(
-  () => import("@/components/innovation/blockchain-documents").then(module => ({ default: module.BlockchainDocuments })),
+  () => React.lazy(() => import(import("@/components/innovation/blockchain-documents").then(module => ({ default: module.BlockchainDocuments })))),
   "Blockchain Documents"
 );
 

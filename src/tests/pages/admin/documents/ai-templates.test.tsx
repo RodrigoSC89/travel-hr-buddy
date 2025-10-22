@@ -161,7 +161,7 @@ describe("AITemplatesPage", () => {
     expect(localStorage.getItem("applied_template_title")).toBe("Template 1");
     expect(mockNavigate).toHaveBeenCalledWith("/admin/documents/ai");
     
-    const { toast } = await import("@/hooks/use-toast"); 
+    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast"))); 
     expect(toast).toHaveBeenCalledWith(
       expect.objectContaining({
         title: "Template aplicado",
@@ -183,7 +183,7 @@ describe("AITemplatesPage", () => {
     const copyButtons = screen.getAllByText("Copiar");
     fireEvent.click(copyButtons[0]);
 
-    const { toast } = await import("@/hooks/use-toast");
+    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
     
     await waitFor(() => {
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith("Content 1");
@@ -196,7 +196,7 @@ describe("AITemplatesPage", () => {
   });
 
   it("should toggle favorite status", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
     
     render(
       <MemoryRouter>
@@ -215,7 +215,7 @@ describe("AITemplatesPage", () => {
 
     fireEvent.click(starButtons[0]);
 
-    const { toast } = await import("@/hooks/use-toast");
+    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
     
     await waitFor(() => {
       expect(supabase.from).toHaveBeenCalledWith("ai_document_templates");
@@ -240,7 +240,7 @@ describe("AITemplatesPage", () => {
   });
 
   it("should create new template", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
     
     render(
       <MemoryRouter>
@@ -267,7 +267,7 @@ describe("AITemplatesPage", () => {
     const submitButton = screen.getByText("Criar Template");
     fireEvent.click(submitButton);
 
-    const { toast } = await import("@/hooks/use-toast");
+    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
     
     await waitFor(() => {
       expect(supabase.from).toHaveBeenCalledWith("ai_document_templates");
@@ -298,7 +298,7 @@ describe("AITemplatesPage", () => {
     const submitButton = screen.getByText("Criar Template");
     fireEvent.click(submitButton);
 
-    const { toast } = await import("@/hooks/use-toast");
+    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
     
     await waitFor(() => {
       expect(toast).toHaveBeenCalledWith(

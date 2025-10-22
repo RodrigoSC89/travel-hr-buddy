@@ -3,15 +3,15 @@ import { safeLazyImport } from "@/utils/safeLazyImport";
 import { Loading } from "@/components/ui/Loading";
 
 const DPOverview = safeLazyImport(
-  () => import("@/components/dp-intelligence/DPOverview"),
+  () => React.lazy(() => import(import("@/components/dp-intelligence/DPOverview"))),
   "DPOverview"
 );
 const DPRealtime = safeLazyImport(
-  () => import("@/components/dp-intelligence/DPRealtime"),
+  () => React.lazy(() => import(import("@/components/dp-intelligence/DPRealtime"))),
   "DPRealtime"
 );
 const DPAIAnalyzer = safeLazyImport(
-  () => import("@/components/dp-intelligence/DPAIAnalyzer"),
+  () => React.lazy(() => import(import("@/components/dp-intelligence/DPAIAnalyzer"))),
   "DPAIAnalyzer"
 );
 

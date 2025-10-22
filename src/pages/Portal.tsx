@@ -6,7 +6,7 @@ import { safeLazyImport } from "@/utils/safeLazyImport";
 
 // Lazy loading do portal moderno com safeLazyImport
 const ModernEmployeePortal = safeLazyImport(
-  () => import("@/components/portal/modern-employee-portal").then(module => ({ default: module.ModernEmployeePortal })),
+  () => React.lazy(() => import(import("@/components/portal/modern-employee-portal").then(module => ({ default: module.ModernEmployeePortal })))),
   "Modern Employee Portal"
 );
 

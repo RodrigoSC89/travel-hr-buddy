@@ -6,7 +6,7 @@ import { safeLazyImport } from "@/utils/safeLazyImport";
 
 // Lazy loading do sistema de gamificação com safeLazyImport
 const GamificationSystem = safeLazyImport(
-  () => import("@/components/innovation/gamification-system").then(module => ({ default: module.GamificationSystem })),
+  () => React.lazy(() => import(import("@/components/innovation/gamification-system").then(module => ({ default: module.GamificationSystem })))),
   "Gamification System"
 );
 

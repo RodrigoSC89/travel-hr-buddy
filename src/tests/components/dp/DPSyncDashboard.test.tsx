@@ -65,7 +65,7 @@ describe("DPSyncDashboard Component", () => {
   });
 
   it("should handle force sync button click", async () => {
-    const { publishEvent } = await import("@/lib/mqtt/publisher");
+    const { publishEvent } = await React.lazy(() => import(import("@/lib/mqtt/publisher")));
     render(<DPSyncDashboard />);
     
     const syncButton = screen.getByText(/Forçar Sincronização/);

@@ -98,7 +98,7 @@ describe("CollaborationPage", () => {
   });
 
   it("sets up real-time subscription on mount", async () => {
-    const { supabase } = await import("@/integrations/supabase/client");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
     
     render(
       <MemoryRouter>

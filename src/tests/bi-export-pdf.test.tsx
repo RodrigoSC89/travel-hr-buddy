@@ -41,7 +41,7 @@ describe("ExportBIReport Component", () => {
   });
 
   it("should call html2pdf when button is clicked", async () => {
-    const html2pdf = await import("html2pdf.js");
+    const html2pdf = await React.lazy(() => import(import("html2pdf.js")));
     const mockSave = vi.fn().mockResolvedValue(undefined);
     const mockFrom = vi.fn().mockReturnValue({ save: mockSave });
     const mockSet = vi.fn().mockReturnValue({ from: mockFrom });

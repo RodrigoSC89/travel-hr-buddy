@@ -80,7 +80,7 @@ describe("DocumentViewPage - Version Restoration", () => {
   beforeEach(async () => {
     vi.clearAllMocks();
     // Import the component fresh for each test
-    const module = await import("@/pages/admin/documents/DocumentView");
+    const module = await React.lazy(() => import(import("@/pages/admin/documents/DocumentView")));
     DocumentViewPage = module.default;
   });
 

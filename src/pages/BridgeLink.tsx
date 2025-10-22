@@ -2,9 +2,9 @@ import React, { Suspense } from "react";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 import { Loader } from "lucide-react";
 
-const BridgeLinkDashboard = safeLazyImport(() => import("@/components/bridgelink/BridgeLinkDashboard"), "BridgeLink Dashboard");
-const BridgeLinkStatus = safeLazyImport(() => import("@/components/bridgelink/BridgeLinkStatus"), "BridgeLink Status");
-const BridgeLinkSync = safeLazyImport(() => import("@/components/bridgelink/BridgeLinkSync"), "BridgeLink Sync");
+const BridgeLinkDashboard = safeLazyImport(() => React.lazy(() => import(import("@/components/bridgelink/BridgeLinkDashboard"), "BridgeLink Dashboard")));
+const BridgeLinkStatus = safeLazyImport(() => React.lazy(() => import(import("@/components/bridgelink/BridgeLinkStatus"), "BridgeLink Status")));
+const BridgeLinkSync = safeLazyImport(() => React.lazy(() => import(import("@/components/bridgelink/BridgeLinkSync"), "BridgeLink Sync")));
 
 export default function BridgeLink() {
   return (

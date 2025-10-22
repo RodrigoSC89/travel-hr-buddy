@@ -82,7 +82,7 @@ describe("PainelSGSO", () => {
   });
 
   it("should call saveAs when CSV export button is clicked", async () => {
-    const { saveAs } = await import("file-saver");
+    const { saveAs } = await React.lazy(() => import(import("file-saver")));
     render(<PainelSGSO />);
     
     const csvButton = screen.getByText(/Exportar CSV/i);
@@ -95,7 +95,7 @@ describe("PainelSGSO", () => {
   });
 
   it("should call html2pdf when PDF export button is clicked", async () => {
-    const html2pdf = (await import("html2pdf.js")).default;
+    const html2pdf = (await React.lazy(() => import(import("html2pdf.js")))).default;
     render(<PainelSGSO />);
     
     const pdfButton = screen.getByText(/Exportar PDF/i);

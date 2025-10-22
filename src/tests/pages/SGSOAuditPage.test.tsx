@@ -112,7 +112,7 @@ describe("SGSOAuditPage", () => {
   });
 
   it("should call html2pdf when export PDF button is clicked", async () => {
-    const html2pdf = (await import("html2pdf.js")).default;
+    const html2pdf = (await React.lazy(() => import(import("html2pdf.js")))).default;
     render(<SGSOAuditPage />);
     
     const exportButton = screen.getByText("📄 Exportar PDF");
@@ -180,7 +180,7 @@ describe("SGSOAuditPage", () => {
 
     vi.mocked(loadSGSOAudit).mockResolvedValue(mockAuditData);
     
-    const { toast } = await import("sonner");
+    const { toast } = await React.lazy(() => import(import("sonner")));
     render(<SGSOAuditPage />);
 
     // Wait for vessels to load
@@ -209,7 +209,7 @@ describe("SGSOAuditPage", () => {
     const errorMessage = "Failed to load audits";
     vi.mocked(loadSGSOAudit).mockRejectedValue(new Error(errorMessage));
     
-    const { toast } = await import("sonner");
+    const { toast } = await React.lazy(() => import(import("sonner")));
     render(<SGSOAuditPage />);
 
     // Wait for vessels to load
@@ -235,7 +235,7 @@ describe("SGSOAuditPage", () => {
   it("should not display toast when no historical audits exist", async () => {
     vi.mocked(loadSGSOAudit).mockResolvedValue([]);
     
-    const { toast } = await import("sonner");
+    const { toast } = await React.lazy(() => import(import("sonner")));
     render(<SGSOAuditPage />);
 
     // Wait for vessels to load
@@ -270,8 +270,8 @@ describe("SGSOAuditPage", () => {
   });
 
   it("should call AI explanation when button is clicked", async () => {
-    const { explainRequirementSGSO } = await import("@/lib/ai/sgso");
-    const { toast } = await import("sonner");
+    const { explainRequirementSGSO } = await React.lazy(() => import(import("@/lib/ai/sgso")));
+    const { toast } = await React.lazy(() => import(import("sonner")));
     
     const mockExplanation = "Teste de explicação IA para o requisito";
     vi.mocked(explainRequirementSGSO).mockResolvedValue(mockExplanation);
@@ -288,8 +288,8 @@ describe("SGSOAuditPage", () => {
   });
 
   it("should show error toast when AI explanation fails", async () => {
-    const { explainRequirementSGSO } = await import("@/lib/ai/sgso");
-    const { toast } = await import("sonner");
+    const { explainRequirementSGSO } = await React.lazy(() => import(import("@/lib/ai/sgso")));
+    const { toast } = await React.lazy(() => import(import("sonner")));
     
     vi.mocked(explainRequirementSGSO).mockResolvedValue(null);
     
@@ -304,8 +304,8 @@ describe("SGSOAuditPage", () => {
   });
 
   it("should show error toast when AI explanation throws error", async () => {
-    const { explainRequirementSGSO } = await import("@/lib/ai/sgso");
-    const { toast } = await import("sonner");
+    const { explainRequirementSGSO } = await React.lazy(() => import(import("@/lib/ai/sgso")));
+    const { toast } = await React.lazy(() => import(import("sonner")));
     
     vi.mocked(explainRequirementSGSO).mockRejectedValue(new Error("API Error"));
     
@@ -320,7 +320,7 @@ describe("SGSOAuditPage", () => {
   });
 
   it("should disable AI button and show loading text while processing", async () => {
-    const { explainRequirementSGSO } = await import("@/lib/ai/sgso");
+    const { explainRequirementSGSO } = await React.lazy(() => import(import("@/lib/ai/sgso")));
     
     // Create a promise that we control
     let resolveExplanation: (value: string) => void;

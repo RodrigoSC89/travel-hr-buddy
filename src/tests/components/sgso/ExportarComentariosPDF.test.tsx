@@ -56,7 +56,7 @@ describe("ExportarComentariosPDF", () => {
   });
 
   it("should call html2pdf when button is clicked", async () => {
-    const html2pdf = (await import("html2pdf.js")).default;
+    const html2pdf = (await React.lazy(() => import(import("html2pdf.js")))).default;
     render(<ExportarComentariosPDF comentarios={mockComentarios} />);
     
     const button = screen.getByRole("button");
@@ -66,7 +66,7 @@ describe("ExportarComentariosPDF", () => {
   });
 
   it("should not call html2pdf when there are no comments", async () => {
-    const html2pdf = (await import("html2pdf.js")).default;
+    const html2pdf = (await React.lazy(() => import(import("html2pdf.js")))).default;
     render(<ExportarComentariosPDF comentarios={[]} />);
     
     const button = screen.getByRole("button");

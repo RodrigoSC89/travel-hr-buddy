@@ -37,47 +37,47 @@ import {
 
 // Lazy load travel components to reduce initial bundle size
 const FlightSearch = safeLazyImport(
-  () => import("@/components/travel/flight-search").then(m => ({ default: m.FlightSearch })),
+  () => React.lazy(() => import(import("@/components/travel/flight-search").then(m => ({ default: m.FlightSearch })))),
   "Flight Search"
 );
 const EnhancedHotelSearch = safeLazyImport(
-  () => import("@/components/travel/enhanced-hotel-search").then(m => ({ default: m.EnhancedHotelSearch })),
+  () => React.lazy(() => import(import("@/components/travel/enhanced-hotel-search").then(m => ({ default: m.EnhancedHotelSearch })))),
   "Enhanced Hotel Search"
 );
 const TravelMap = safeLazyImport(
-  () => import("@/components/travel/travel-map").then(m => ({ default: m.TravelMap })),
+  () => React.lazy(() => import(import("@/components/travel/travel-map").then(m => ({ default: m.TravelMap })))),
   "Travel Map"
 );
 const PredictiveTravelDashboard = safeLazyImport(
-  () => import("@/components/travel/predictive-travel-dashboard").then(m => ({ default: m.PredictiveTravelDashboard })),
+  () => React.lazy(() => import(import("@/components/travel/predictive-travel-dashboard").then(m => ({ default: m.PredictiveTravelDashboard })))),
   "Predictive Travel Dashboard"
 );
 const TravelAnalyticsDashboard = safeLazyImport(
-  () => import("@/components/travel/travel-analytics-dashboard").then(m => ({ default: m.TravelAnalyticsDashboard })),
+  () => React.lazy(() => import(import("@/components/travel/travel-analytics-dashboard").then(m => ({ default: m.TravelAnalyticsDashboard })))),
   "Travel Analytics Dashboard"
 );
 const TravelBookingSystem = safeLazyImport(
-  () => import("@/components/travel/travel-booking-system").then(m => ({ default: m.TravelBookingSystem })),
+  () => React.lazy(() => import(import("@/components/travel/travel-booking-system").then(m => ({ default: m.TravelBookingSystem })))),
   "Travel Booking System"
 );
 const TravelApprovalSystem = safeLazyImport(
-  () => import("@/components/travel/travel-approval-system").then(m => ({ default: m.TravelApprovalSystem })),
+  () => React.lazy(() => import(import("@/components/travel/travel-approval-system").then(m => ({ default: m.TravelApprovalSystem })))),
   "Travel Approval System"
 );
 const TravelExpenseSystem = safeLazyImport(
-  () => import("@/components/travel/travel-expense-system").then(m => ({ default: m.TravelExpenseSystem })),
+  () => React.lazy(() => import(import("@/components/travel/travel-expense-system").then(m => ({ default: m.TravelExpenseSystem })))),
   "Travel Expense System"
 );
 const TravelCommunication = safeLazyImport(
-  () => import("@/components/travel/travel-communication").then(m => ({ default: m.TravelCommunication })),
+  () => React.lazy(() => import(import("@/components/travel/travel-communication").then(m => ({ default: m.TravelCommunication })))),
   "Travel Communication"
 );
 const TravelNotifications = safeLazyImport(
-  () => import("@/components/travel/travel-notifications").then(m => ({ default: m.TravelNotifications })),
+  () => React.lazy(() => import(import("@/components/travel/travel-notifications").then(m => ({ default: m.TravelNotifications })))),
   "Travel Notifications"
 );
 const TravelDocumentManager = safeLazyImport(
-  () => import("@/components/travel/travel-document-manager").then(m => ({ default: m.TravelDocumentManager })),
+  () => React.lazy(() => import(import("@/components/travel/travel-document-manager").then(m => ({ default: m.TravelDocumentManager })))),
   "Travel Document Manager"
 );
 

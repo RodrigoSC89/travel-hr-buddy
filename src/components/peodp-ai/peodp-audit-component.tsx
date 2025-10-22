@@ -57,7 +57,7 @@ export function PEODPAuditComponent() {
       });
 
       // Gerar recomendações
-      const engine = new (await import("@/modules/peodp_ai")).PEOEngine();
+      const engine = new (await React.lazy(() => import(import("@/modules/peodp_ai")).PEOEngine()));
       const recs = engine.gerarRecomendacoes(resultado);
       setRecomendacoes(recs);
 

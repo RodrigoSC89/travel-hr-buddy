@@ -70,7 +70,7 @@ describe("MMI History Admin Page", () => {
   };
 
   it("should render the admin page title", async () => {
-    const { fetchMMIHistory, getMMIHistoryStats } = await import("@/services/mmi/historyService");
+    const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
     vi.mocked(fetchMMIHistory).mockResolvedValue(mockHistories);
     vi.mocked(getMMIHistoryStats).mockResolvedValue(mockStats);
 
@@ -86,7 +86,7 @@ describe("MMI History Admin Page", () => {
   });
 
   it("should render statistics cards", async () => {
-    const { fetchMMIHistory, getMMIHistoryStats } = await import("@/services/mmi/historyService");
+    const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
     vi.mocked(fetchMMIHistory).mockResolvedValue(mockHistories);
     vi.mocked(getMMIHistoryStats).mockResolvedValue(mockStats);
 
@@ -109,7 +109,7 @@ describe("MMI History Admin Page", () => {
   });
 
   it("should display history records", async () => {
-    const { fetchMMIHistory, getMMIHistoryStats } = await import("@/services/mmi/historyService");
+    const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
     vi.mocked(fetchMMIHistory).mockResolvedValue(mockHistories);
     vi.mocked(getMMIHistoryStats).mockResolvedValue(mockStats);
 
@@ -128,7 +128,7 @@ describe("MMI History Admin Page", () => {
   });
 
   it("should show loading state", async () => {
-    const { fetchMMIHistory, getMMIHistoryStats } = await import("@/services/mmi/historyService");
+    const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
     vi.mocked(fetchMMIHistory).mockImplementation(() => new Promise(() => {}));
     vi.mocked(getMMIHistoryStats).mockImplementation(() => new Promise(() => {}));
 
@@ -142,7 +142,7 @@ describe("MMI History Admin Page", () => {
   });
 
   it("should display empty state when no records", async () => {
-    const { fetchMMIHistory, getMMIHistoryStats } = await import("@/services/mmi/historyService");
+    const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
     vi.mocked(fetchMMIHistory).mockResolvedValue([]);
     vi.mocked(getMMIHistoryStats).mockResolvedValue({
       total: 0,
@@ -163,7 +163,7 @@ describe("MMI History Admin Page", () => {
   });
 
   it("should have an export PDF button", async () => {
-    const { fetchMMIHistory, getMMIHistoryStats } = await import("@/services/mmi/historyService");
+    const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
     vi.mocked(fetchMMIHistory).mockResolvedValue(mockHistories);
     vi.mocked(getMMIHistoryStats).mockResolvedValue(mockStats);
 
@@ -179,7 +179,7 @@ describe("MMI History Admin Page", () => {
   });
 
   it("should display status badges with correct styling", async () => {
-    const { fetchMMIHistory, getMMIHistoryStats } = await import("@/services/mmi/historyService");
+    const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
     vi.mocked(fetchMMIHistory).mockResolvedValue(mockHistories);
     vi.mocked(getMMIHistoryStats).mockResolvedValue(mockStats);
 
@@ -199,7 +199,7 @@ describe("MMI History Admin Page", () => {
   });
 
   it("should have a status filter dropdown", async () => {
-    const { fetchMMIHistory, getMMIHistoryStats } = await import("@/services/mmi/historyService");
+    const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
     vi.mocked(fetchMMIHistory).mockResolvedValue(mockHistories);
     vi.mocked(getMMIHistoryStats).mockResolvedValue(mockStats);
 
@@ -215,8 +215,8 @@ describe("MMI History Admin Page", () => {
   });
 
   it("should handle service errors gracefully", async () => {
-    const { fetchMMIHistory, getMMIHistoryStats } = await import("@/services/mmi/historyService");
-    const { toast } = await import("sonner");
+    const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
+    const { toast } = await React.lazy(() => import(import("sonner")));
     
     vi.mocked(fetchMMIHistory).mockRejectedValue(new Error("Service error"));
     vi.mocked(getMMIHistoryStats).mockRejectedValue(new Error("Service error"));
