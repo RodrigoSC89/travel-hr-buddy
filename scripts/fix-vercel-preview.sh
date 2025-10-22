@@ -5,7 +5,7 @@ echo "🧹 Limpando caches antigos..."
 rm -rf .vite .vercel node_modules/.vite dist || true
 
 echo "🔎 Verificando variáveis de ambiente..."
-REQUIRED_VARS=("VITE_APP_URL" "SUPABASE_URL" "SUPABASE_ANON_KEY" "VITE_MQTT_URL")
+REQUIRED_VARS=("VITE_APP_URL" "VITE_SUPABASE_URL" "VITE_SUPABASE_PUBLISHABLE_KEY" "VITE_MQTT_URL")
 MISSING=()
 for V in "${REQUIRED_VARS[@]}"; do
   if [ -z "${!V}" ]; then
