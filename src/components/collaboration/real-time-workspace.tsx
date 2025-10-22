@@ -124,13 +124,22 @@ const RealTimeWorkspace: React.FC = () => {
             Object.keys(presenceState).forEach(userId => {
               const presences = presenceState[userId];
               if (presences && presences.length > 0) {
-                const presence = presences[0] as { name?: string; email?: string; avatar_url?: string; status?: string; last_seen?: string };
+                const presence = presences[0] as { 
+                  name?: string; 
+                  email?: string; 
+                  avatar_url?: string; 
+                  status?: string; 
+                  last_seen?: string;
+                  current_page?: string;
+                  vessel_id?: string;
+                };
+                const status = presence.status as "online" | "busy" | "away" | "offline" | undefined;
                 users.push({
                   user_id: userId,
                   name: presence.name || "Usuário",
                   email: presence.email || "",
                   avatar_url: presence.avatar_url,
-                  status: presence.status || "online",
+                  status: status || "online",
                   last_seen: presence.last_seen || new Date().toISOString(),
                   current_page: presence.current_page,
                   vessel_id: presence.vessel_id

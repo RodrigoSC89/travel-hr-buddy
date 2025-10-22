@@ -100,10 +100,15 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
   const [isChannelDetailOpen, setIsChannelDetailOpen] = useState(false);
   const { toast } = useToast();
 
-  const [newChannel, setNewChannel] = useState({
+  const [newChannel, setNewChannel] = useState<{
+    name: string;
+    description: string;
+    type: Channel["type"];
+    is_public: boolean;
+  }>({
     name: "",
     description: "",
-    type: "group" as const,
+    type: "group",
     is_public: true
   });
 

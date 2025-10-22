@@ -91,7 +91,9 @@ export const IntelligentChecklistManager: React.FC = () => {
           "Verificar sistema de alarme no item 15",
           "Incluir assinatura digital nos documentos",
           "Adicionar foto do painel de controle"
-        ]
+        ],
+        missing_fields: [],
+        inconsistencies: []
       },
       items: [
         {
