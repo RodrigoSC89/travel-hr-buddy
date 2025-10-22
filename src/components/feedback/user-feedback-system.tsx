@@ -23,6 +23,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { normalizeList, undef } from "@/lib/types/normalize";
 
 interface Feedback {
   id: string;
@@ -70,7 +71,10 @@ export const UserFeedbackSystem: React.FC = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setFeedbacks(data || []);
+      setFeedbacks(normalizeList(data, (r:any)=>({
+        ...r,
+        rating: undef(r.rating) // converte null => undefined
+      })));
     } catch (error) {
       toast({
         title: "Erro",
