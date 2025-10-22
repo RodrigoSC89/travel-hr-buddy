@@ -11,11 +11,11 @@ import { toast } from "sonner";
 /**
  * Options for html2pdf.js configuration
  */
-export interface Html2PdfOptions {
-  margin?: number | number[];
+export interface PdfExportOptions {
+  margin?: number | [number, number] | [number, number, number, number];
   filename?: string;
   image?: {
-    type: string;
+    type: "jpeg";
     quality: number;
   };
   html2canvas?: {
@@ -23,9 +23,9 @@ export interface Html2PdfOptions {
     useCORS?: boolean;
   };
   jsPDF?: {
-    unit: string;
-    format: string;
-    orientation: string;
+    unit?: "pt" | "mm" | "cm" | "in";
+    format?: string | [number, number];
+    orientation?: "portrait" | "landscape";
   };
 }
 
@@ -68,7 +68,7 @@ export function formatPDFContent(
 export async function exportToPDF(
   contentHtml: string,
   filename = "document.pdf",
-  customOptions: Partial<Html2PdfOptions> = {}
+  customOptions: Partial<PdfExportOptions> = {}
 ): Promise<void> {
   toast.info("Gerando PDF...");
 
@@ -79,7 +79,7 @@ export async function exportToPDF(
 
   try {
     // Default options
-    const defaultOptions: Html2PdfOptions = {
+    const defaultOptions: PdfExportOptions = {
       margin: 10,
       filename,
       image: { type: "jpeg", quality: 0.98 },
@@ -88,7 +88,7 @@ export async function exportToPDF(
     };
 
     // Merge custom options with defaults, including nested jsPDF options
-    const options: Html2PdfOptions = {
+    const options: any = {
       ...defaultOptions,
       ...customOptions,
       jsPDF: {

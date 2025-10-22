@@ -7,7 +7,7 @@ import { runComplianceAudit } from "@/lib/compliance/ai-compliance-engine";
  * @param event - Incident event containing type, description and data
  * @returns Generated incident report
  */
-export async function handleIncident(event) {
+export async function handleIncident(event: { type?: string; description?: string; data: any }) {
   const audit = await runComplianceAudit(event.data);
 
   const report = {
@@ -20,7 +20,7 @@ export async function handleIncident(event) {
     recommendation: getRecommendation(audit.complianceLevel, event.type),
   };
 
-  await supabase.from("incident_reports").insert(report);
+  await (supabase as any).from("incident_reports").insert(report);
 
   // Optional MQTT publishing (if configured)
   try {
@@ -39,7 +39,7 @@ export async function handleIncident(event) {
 /**
  * Generates AI recommendations based on compliance level and incident type
  */
-function getRecommendation(level, type) {
+function getRecommendation(level: string, type: string) {
   if (level === "Conforme") return "Nenhuma ação necessária. Manter monitoramento.";
   if (level === "Risco") return `Verificar sistemas de suporte relacionados (${type}). Reavaliar ASOG.`;
   return `Executar resposta imediata. Acionar protocolo ISM/ISPS e registrar no Control Hub.`;

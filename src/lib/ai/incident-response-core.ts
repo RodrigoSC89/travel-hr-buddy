@@ -90,7 +90,7 @@ export async function handleIncidentReport(
 
   // Persist to Supabase
   try {
-    await supabase.from("incident_reports").insert({
+    await (supabase as any).from("incident_reports").insert({
       id: response.id,
       timestamp: response.timestamp,
       module: response.module,

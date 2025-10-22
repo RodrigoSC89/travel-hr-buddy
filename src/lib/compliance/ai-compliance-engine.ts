@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import mqtt from "mqtt";
 
 const modelPath = "/models/nautilus_compliance.onnx";
-let session;
+let session: ort.InferenceSession | null = null;
 
 const RULES = [
   { id: "IMCA_M103", weight: 0.08 },
@@ -36,20 +36,20 @@ export async function initComplianceEngine() {
  * Analyze incident data for compliance violations
  * Supports: DP Loss, Sensor Misalignment, ISM/ISPS Non-Compliance, ASOG/FMEA Deviations
  */
-export async function runComplianceAudit(data) {
+export async function runComplianceAudit(data: any) {
   if (!session) await initComplianceEngine();
   
   // Handle both array and object inputs
   let inputArray = Array.isArray(data) ? data : convertIncidentDataToArray(data);
   
   const input = new ort.Tensor("float32", Float32Array.from(inputArray), [1, inputArray.length]);
-  const results = await session.run({ input });
-  const score = Object.values(results)[0][0];
+  const results = await session!.run({ input });
+  const score = (Object.values(results)[0] as any)[0] as number;
 
   const weightedScore = RULES.reduce((acc, rule) => acc + (score * rule.weight), 0);
   const complianceLevel = weightedScore > 0.85 ? "Conforme" : weightedScore > 0.65 ? "Risco" : "Não Conforme";
 
-  await supabase.from("compliance_audit_logs").insert({
+  await (supabase as any).from("compliance_audit_logs").insert({
     timestamp: new Date().toISOString(),
     score: weightedScore,
     level: complianceLevel,

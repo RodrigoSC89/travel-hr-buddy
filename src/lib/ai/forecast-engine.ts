@@ -31,7 +31,7 @@ export async function runForecastAnalysis(): Promise<ForecastResult> {
     const session = await ort.InferenceSession.create("/models/nautilus_forecast.onnx");
     
     // Query last 100 telemetry readings from Supabase
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("dp_telemetry")
       .select("*")
       .order("timestamp", { ascending: false })
@@ -53,14 +53,15 @@ export async function runForecastAnalysis(): Promise<ForecastResult> {
     }
 
     // Prepare input tensor from telemetry values
-    const values = data.map((x) => x.value || 0);
+    const rows = (data as any[]) || [];
+    const values = rows.map((x: any) => Number(x.value) || 0);
     const input = new ort.Tensor("float32", new Float32Array(values), [1, values.length]);
 
     // Run inference
     const output = await session.run({ input });
     
     // Extract prediction probability
-    const prediction = output.probabilities?.data?.[0] || output.output?.data?.[0] || 0;
+    const prediction = Number((output as any).probabilities?.data?.[0] ?? (output as any).output?.data?.[0] ?? 0);
 
     // Classify risk level
     const risk = classifyRisk(prediction);

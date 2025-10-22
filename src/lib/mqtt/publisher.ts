@@ -47,16 +47,16 @@ export const subscribeTopic = (
 /**
  * 🔹 Canais específicos
  */
-export const subscribeDP = (callback) => subscribeTopic("nautilus/dp", callback);
-export const subscribeForecast = (callback) => subscribeTopic("nautilus/forecast", callback);
-export const subscribeForecastData = (callback) => subscribeTopic("nautilus/forecast/data", callback);
-export const subscribeForecastGlobal = (callback) => subscribeTopic("nautilus/forecast/global", callback);
-export const subscribeSystemAlerts = (callback) => subscribeTopic("nautilus/alerts", callback);
-export const subscribeDPAlerts = (callback) => subscribeTopic("nautilus/dp/alert", callback);
-export const subscribeBridgeStatus = (callback) => subscribeTopic("nautilus/bridgelink/status", callback);
-export const subscribeBridgeLinkStatus = (callback) => subscribeTopic("nautilus/bridgelink/status", callback);
-export const subscribeControlHub = (callback) => subscribeTopic("nautilus/controlhub/telemetry", callback);
-export const subscribeSystemStatus = (callback) => subscribeTopic("nautilus/system/status", callback);
+export const subscribeDP = (callback: (data: Record<string, unknown>) => void) => subscribeTopic("nautilus/dp", callback);
+export const subscribeForecast = (callback: (data: Record<string, unknown>) => void) => subscribeTopic("nautilus/forecast", callback);
+export const subscribeForecastData = (callback: (data: Record<string, unknown>) => void) => subscribeTopic("nautilus/forecast/data", callback);
+export const subscribeForecastGlobal = (callback: (data: Record<string, unknown>) => void) => subscribeTopic("nautilus/forecast/global", callback);
+export const subscribeSystemAlerts = (callback: (data: Record<string, unknown>) => void) => subscribeTopic("nautilus/alerts", callback);
+export const subscribeDPAlerts = (callback: (data: Record<string, unknown>) => void) => subscribeTopic("nautilus/dp/alert", callback);
+export const subscribeBridgeStatus = (callback: (data: Record<string, unknown>) => void) => subscribeTopic("nautilus/bridgelink/status", callback);
+export const subscribeBridgeLinkStatus = (callback: (data: Record<string, unknown>) => void) => subscribeTopic("nautilus/bridgelink/status", callback);
+export const subscribeControlHub = (callback: (data: Record<string, unknown>) => void) => subscribeTopic("nautilus/controlhub/telemetry", callback);
+export const subscribeSystemStatus = (callback: (data: Record<string, unknown>) => void) => subscribeTopic("nautilus/system/status", callback);
 
 /**
  * 📤 Função de publicação específica

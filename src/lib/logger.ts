@@ -113,7 +113,7 @@ export const logger = {
       } catch (sentryError) {
         // Fail silently if Sentry is not available
         if (isDevelopment) {
-          console.warn("Failed to send error to Sentry:", sentryError);
+          console.warn("Failed to send error to Sentry:", String(sentryError));
         }
       }
     }
@@ -150,7 +150,7 @@ export const logger = {
       } catch (sentryError) {
         // Fail silently if Sentry is not available
         if (isDevelopment) {
-          console.warn("Failed to send error to Sentry:", sentryError);
+          console.warn("Failed to send error to Sentry:", String(sentryError));
         }
       }
     }

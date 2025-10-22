@@ -26,7 +26,7 @@ export function initFailoverSystem() {
     const diff = Date.now() - lastHeartbeat;
     if (diff > 8000) {
       console.warn("⚠️ Falha detectada! Último heartbeat há", diff / 1000, "segundos.");
-      await supabase.from("failover_events").insert({
+      await (supabase as any).from("failover_events").insert({
         event: "Loss of Heartbeat",
         timestamp: new Date().toISOString(),
         module: "DP-Sync",
@@ -37,11 +37,11 @@ export function initFailoverSystem() {
   }, 5000);
 }
 
-async function executeRecovery(client) {
+async function executeRecovery(client: any) {
   console.log("🔁 Executando protocolo de failover...");
   try {
     client.publish("nautilus/system/recovery", JSON.stringify({ action: "restart-dp-module" }));
-    await supabase.from("failover_events").insert({
+    await (supabase as any).from("failover_events").insert({
       event: "Failover Executed",
       timestamp: new Date().toISOString(),
       module: "DP-Sync",

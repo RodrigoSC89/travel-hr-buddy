@@ -4,7 +4,9 @@ import React, { lazy, Suspense } from "react";
  * Utilitário de importação segura para módulos React,
  * com tratamento automático de erros de carregamento.
  */
-export function safeLazyImport(importFn) {
+export function safeLazyImport(
+  importFn: () => Promise<{ default: React.ComponentType<any> }>
+): React.FC<any> {
   const LazyComponent = lazy(async () => {
     try {
       const module = await importFn();
@@ -17,7 +19,7 @@ export function safeLazyImport(importFn) {
     }
   });
 
-  return (props) => React.createElement(
+  return (props: any) => React.createElement(
     Suspense,
     { fallback: React.createElement("div", { className: "p-4 text-gray-400" }, "⏳ Carregando...") },
     React.createElement(LazyComponent, props)

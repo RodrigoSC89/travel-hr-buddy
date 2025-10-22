@@ -136,7 +136,7 @@ async function logToSupabase(result: MaintenanceResult): Promise<void> {
   try {
     const supabase = createClient();
     
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("maintenance_logs")
       .insert({
         timestamp: result.timestamp,

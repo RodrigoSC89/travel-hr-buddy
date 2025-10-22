@@ -24,7 +24,7 @@ export async function createDocument(doc: Document): Promise<Document | null> {
       return null;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("documents")
       .insert({
         content: doc.content,
@@ -38,7 +38,7 @@ export async function createDocument(doc: Document): Promise<Document | null> {
       return null;
     }
 
-    return data;
+    return data as Document;
   } catch (err) {
     logger.error("Exception creating document:", err);
     return null;
@@ -52,7 +52,7 @@ export async function createDocument(doc: Document): Promise<Document | null> {
  */
 export async function getDocument(id: string): Promise<Document | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("documents")
       .select("*")
       .eq("id", id)
@@ -63,7 +63,7 @@ export async function getDocument(id: string): Promise<Document | null> {
       return null;
     }
 
-    return data;
+    return data as Document;
   } catch (err) {
     logger.error("Exception fetching document:", err);
     return null;
@@ -85,7 +85,7 @@ export async function updateDocument(id: string, content: string): Promise<Docum
       return null;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("documents")
       .update({
         content,
@@ -100,7 +100,7 @@ export async function updateDocument(id: string, content: string): Promise<Docum
       return null;
     }
 
-    return data;
+    return data as Document;
   } catch (err) {
     logger.error("Exception updating document:", err);
     return null;
@@ -114,7 +114,7 @@ export async function updateDocument(id: string, content: string): Promise<Docum
  */
 export async function deleteDocument(id: string): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("documents")
       .delete()
       .eq("id", id);
@@ -137,7 +137,7 @@ export async function deleteDocument(id: string): Promise<boolean> {
  */
 export async function listDocuments(): Promise<Document[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("documents")
       .select("*")
       .order("created_at", { ascending: false });
@@ -147,7 +147,7 @@ export async function listDocuments(): Promise<Document[]> {
       return [];
     }
 
-    return data || [];
+    return (data || []) as Document[];
   } catch (err) {
     logger.error("Exception listing documents:", err);
     return [];

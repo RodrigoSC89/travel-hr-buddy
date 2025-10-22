@@ -7,7 +7,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 /**
  * AI Insight Reporter — coleta métricas em segundo plano e envia para Supabase
  */
-export const reportInsight = async (category, payload) => {
+export const reportInsight = async (category: string, payload: unknown): Promise<void> => {
   try {
     const entry = {
       timestamp: new Date().toISOString(),
