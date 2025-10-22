@@ -16,7 +16,8 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: 8080,
       strictPort: true,
-      hmr: { overlay: false }
+      hmr: { overlay: false, timeout: 20000 },
+      watch: { usePolling: true }
     },
     plugins: [
       react(), 
@@ -121,10 +122,10 @@ export default defineConfig(({ mode }) => {
   build: {
     outDir: "dist",
     sourcemap: false,
-    chunkSizeWarningLimit: 1600,
+    chunkSizeWarningLimit: 1500,
     target: "esnext",
     cssCodeSplit: true,
-    minify: "terser",
+    minify: "esbuild",
     terserOptions: {
       compress: {
         drop_console: false,
@@ -245,7 +246,7 @@ export default defineConfig(({ mode }) => {
   optimizeDeps: {
     include: ["mqtt", "@supabase/supabase-js", "react-router-dom"],
   },
-  cacheDir: ".vite-cache",
+  cacheDir: ".vite_cache",
   esbuild: {
     logOverride: { "this-is-undefined-in-esm": "silent" },
     logLevel: "silent",

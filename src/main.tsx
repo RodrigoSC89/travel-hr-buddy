@@ -7,9 +7,13 @@ import "./index.css";
 import "../sentry.client.config";
 import { logger } from "@/lib/logger";
 import { initFailoverSystem } from "@/lib/failover/failover-core";
+import { initCodeRefresher } from "@/lib/ai/CodeRefresher";
 
 // Iniciar monitor de failover na inicialização
 initFailoverSystem();
+
+// Iniciar AI CodeRefresher para HMR inteligente
+initCodeRefresher();
 
 // Register service worker for PWA
 if ("serviceWorker" in navigator) {

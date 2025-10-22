@@ -49,7 +49,8 @@
     "status": "./scripts/status-check.sh",
     "sync:lovable": "echo '🔄 Syncing Lovable configuration...' && rm -rf .vite .vercel_cache",
     "fix:typescript": "bash scripts/fix-typescript-universal.sh",
-    "fix:typescript:full": "bash scripts/fix-typescript-universal.sh --full-clean"
+    "fix:typescript:full": "bash scripts/fix-typescript-universal.sh --full-clean",
+    "hotreload:enable": "bash scripts/enable-ai-hotreload.sh"
   },
   "engines": {
     "node": "22.x",
