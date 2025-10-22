@@ -121,15 +121,10 @@ export default defineConfig(({ mode }) => {
   build: {
     outDir: "dist",
     sourcemap: false,
-    chunkSizeWarningLimit: 1600,
+    chunkSizeWarningLimit: 1200,
     target: "esnext",
     cssCodeSplit: true,
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: false,
-      },
-    },
+    minify: "esbuild",
     rollupOptions: {
       output: {
         manualChunks: (id) => {
@@ -245,8 +240,9 @@ export default defineConfig(({ mode }) => {
   optimizeDeps: {
     include: ["mqtt", "@supabase/supabase-js", "react-router-dom"],
   },
-  cacheDir: ".vite-cache",
+  cacheDir: ".vite",
   esbuild: {
+    target: "esnext",
     logOverride: { "this-is-undefined-in-esm": "silent" },
     logLevel: "silent",
     ...(mode === "production" ? {

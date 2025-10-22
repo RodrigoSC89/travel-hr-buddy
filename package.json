@@ -9,6 +9,7 @@
     "build": "NODE_OPTIONS='--max-old-space-size=4096' vite build",
     "build:dev": "NODE_OPTIONS='--max-old-space-size=4096' vite build --mode development",
     "build:ci": "NODE_OPTIONS='--max-old-space-size=4096' vite build",
+    "optimize:build": "bash scripts/optimize-performance.sh",
     "start": "vite preview --host",
     "preview": "vite preview --host",
     "rebuild": "npm run clean && npm run build && npm run dev",

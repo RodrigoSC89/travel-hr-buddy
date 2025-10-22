@@ -16,6 +16,8 @@ dist-ssr
 build
 *.local
 .vite-cache
+.vite
+src/_legacy
 
 # Environment files
 .env
