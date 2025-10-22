@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite --host",
     "clean": "rm -rf dist node_modules/.vite .vite-cache .next && bash scripts/clean-lovable-cache.sh",
+    "prebuild": "chmod +x scripts/*.sh || true",
     "build": "NODE_OPTIONS='--max-old-space-size=4096' vite build",
     "build:dev": "NODE_OPTIONS='--max-old-space-size=4096' vite build --mode development",
     "build:ci": "NODE_OPTIONS='--max-old-space-size=4096' vite build",
     "start": "vite preview --host",
     "preview": "vite preview --host",
+    "sync:vercel": "bash scripts/fix-vercel-preview.sh",
     "rebuild": "npm run clean && npm run build && npm run dev",
     "test": "vitest run",
     "test:unit": "vitest run",
