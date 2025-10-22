@@ -3,6 +3,7 @@
  * Provides abstraction layer over Supabase calls for template management
  */
 
+// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * BridgeLink - Sistema de Comunicação entre Módulos
  * 

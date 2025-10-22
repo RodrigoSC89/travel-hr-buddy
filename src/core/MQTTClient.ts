@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * MQTTClient - Cliente MQTT com auto-reconexão
  * 

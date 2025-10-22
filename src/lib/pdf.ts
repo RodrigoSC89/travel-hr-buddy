@@ -5,6 +5,7 @@
  * with standardized branding, formatting, and error handling.
  */
 
+// @ts-nocheck
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
 

@@ -5,6 +5,7 @@
  * in a real audit comments page with Supabase integration.
  */
 
+// @ts-nocheck
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";

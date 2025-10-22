@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { memo } from "react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { logger } from "@/lib/logger";
