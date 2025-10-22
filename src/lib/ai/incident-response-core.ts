@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Incident Response AI Core
  * Automated incident detection and compliance tracking for Nautilus One

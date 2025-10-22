@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * AI Forecast Engine
  * Uses ONNX models to predict operational failures based on telemetry data

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Query Similar Jobs Service
  * Fetches similar maintenance jobs using vector similarity search
