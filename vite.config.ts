@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: 8080,
       strictPort: true,
+      hmr: { overlay: false },
     },
     plugins: [
       react(), 
@@ -237,7 +238,7 @@ export default defineConfig(({ mode }) => {
     },
   },
   optimizeDeps: {
-    include: ["mqtt", "@supabase/supabase-js"],
+    include: ["mqtt", "@supabase/supabase-js", "react-router-dom"],
   },
   cacheDir: ".vite-cache",
   esbuild: {
@@ -249,7 +250,8 @@ export default defineConfig(({ mode }) => {
   },
   define: {
     "process.env": {},
-    "process": { env: {} }
+    "process": { env: {} },
+    "process.env.LOVABLE_FULL_PREVIEW": true
   },
     preview: {
       host: true,

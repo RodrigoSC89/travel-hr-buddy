@@ -1,0 +1,36 @@
+name: 🧩 Full Build & Preview Repair
+
+on:
+  push:
+    branches:
+      - main
+      - "copilot/**"
+  workflow_dispatch:
+
+jobs:
+  build_and_repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧭 Checkout código
+        uses: actions/checkout@v4
+
+      - name: 🧩 Instala Node.js e dependências
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: 🧹 Executa script de correção
+        run: |
+          chmod +x scripts/fix-full-build.sh
+          bash scripts/fix-full-build.sh
+
+      - name: 🔍 Valida build e módulos
+        run: |
+          npm run build
+          echo "✅ Build verificado."
+
+      - name: 🚀 Deploy para Vercel (Preview)
+        run: |
+          npx vercel build --prod
+          echo "✅ Deploy preview concluído."
