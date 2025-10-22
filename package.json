@@ -46,7 +46,10 @@
     "preview:validate": "npm run build && npm run preview:scan && npm run preview:scan:report",
     "preview:initial-report": "node scripts/generate-initial-report.cjs",
     "validate:build": "./scripts/build-validation.sh",
-    "status": "./scripts/status-check.sh"
+    "status": "./scripts/status-check.sh",
+    "sync:lovable": "echo '🔄 Syncing Lovable configuration...' && rm -rf .vite .vercel_cache",
+    "fix:typescript": "bash scripts/fix-typescript-universal.sh",
+    "fix:typescript:full": "bash scripts/fix-typescript-universal.sh --full-clean"
   },
   "engines": {
     "node": "22.x",
