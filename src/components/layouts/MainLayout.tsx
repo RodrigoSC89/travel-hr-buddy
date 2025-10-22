@@ -2,7 +2,9 @@ import React, { Suspense, lazy } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Loader } from "@/components/ui/loader";
 
-const AppSidebar = lazy(() => React.lazy(() => import(import("@/components/layout/app-sidebar").then(module => ({ default: module.AppSidebar })))));
+const AppSidebar = React.lazy(() =>
+  import("@/components/layout/app-sidebar").then(module => ({ default: module.AppSidebar }))
+);
 
 interface MainLayoutProps {
   children: React.ReactNode;

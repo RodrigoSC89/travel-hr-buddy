@@ -48,9 +48,9 @@ export const logger = {
   /**
    * Log informational messages (development only)
    */
-  info: (message: string, context?: LogContext) => {
+  info: (message: string, context?: unknown) => {
     if (isDevelopment) {
-      if (context) {
+      if (context !== undefined) {
         console.info(`ℹ️ ${message}`, context);
       } else {
         console.info(`ℹ️ ${message}`);

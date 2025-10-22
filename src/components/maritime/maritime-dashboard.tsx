@@ -24,15 +24,15 @@ import {
 
 // Lazy loading dos componentes pesados com safeLazyImport
 const VesselManagement = safeLazyImport(
-  () => React.lazy(() => import(import("./vessel-management").then(module => ({ default: module.VesselManagement })))), 
+  () => import("./vessel-management").then(module => ({ default: module.VesselManagement })),
   "Vessel Management"
 );
 const CrewRotationPlanner = safeLazyImport(
-  () => React.lazy(() => import(import("./crew-management-dashboard").then(module => ({ default: module.CrewManagementDashboard })))),
+  () => import("./crew-management-dashboard").then(module => ({ default: module.CrewManagementDashboard })),
   "Crew Management Dashboard"
 );
 const CertificationManager = safeLazyImport(
-  () => React.lazy(() => import(import("./maritime-certification-manager").then(module => ({ default: module.MaritimeCertificationManager })))),
+  () => import("./maritime-certification-manager").then(module => ({ default: module.MaritimeCertificationManager })),
   "Maritime Certification Manager"
 );
 
