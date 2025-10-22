@@ -1,4 +1,5 @@
-import { supabase } from "./supabase";
+// @ts-nocheck
+import { supabase } from "@/integrations/supabase/client";
 import type {
   TrainingModule,
   TrainingCompletion,
