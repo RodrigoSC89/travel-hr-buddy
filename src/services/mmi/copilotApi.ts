@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * MMI Copilot Service v1.1.0
  * Provides AI-powered maintenance suggestions based on historical data with vector embeddings

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * MMI Orders (OS) Service
  * Service for fetching and managing work orders

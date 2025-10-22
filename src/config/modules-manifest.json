@@ -1,0 +1,55 @@
+{
+  "core": [
+    "dp-intelligence",
+    "bridgelink",
+    "control-hub",
+    "forecast-global",
+    "maintenance-dashboard",
+    "fmea-expert",
+    "compliance-hub",
+    "sgso-audits"
+  ],
+  "ai": [
+    "ai-report-generator",
+    "ai-price-predictor",
+    "ai-feedback-analyzer",
+    "automation-engine",
+    "forecast-ai-engine",
+    "incident-replay-ai"
+  ],
+  "operations": [
+    "fleet-manager",
+    "crew-scheduler",
+    "portal-rh",
+    "documents-intelligence",
+    "checklists",
+    "performance-monitor"
+  ],
+  "communication": [
+    "communication-center",
+    "real-time-workspace",
+    "channel-manager",
+    "audit-center",
+    "training-hub"
+  ],
+  "analytics": [
+    "analytics-core",
+    "performance-bi",
+    "reports-hub",
+    "risk-forecast",
+    "fmea-metrics-dashboard"
+  ],
+  "compliance": [
+    "certification-viewer",
+    "ai-quiz-system",
+    "external-access-tokens"
+  ],
+  "infrastructure": [
+    "supabase-sync",
+    "system-health-monitor",
+    "system-debug-endpoint",
+    "lovable-preview-validator",
+    "forecast-scheduler",
+    "auto-healing-runtime"
+  ]
+}
