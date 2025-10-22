@@ -35,6 +35,7 @@ echo "⚙️ Iniciando build..."
 npm run build --if-present --verbose || vite build --mode production --force
 echo "✅ Build concluído com sucesso!"
 
-# 5️⃣ Reinicia Preview do Lovable
-echo "🌐 Reiniciando preview..."
-npm run dev -- --clearScreen=false
+echo ""
+echo "🎉 Correção completa! Para iniciar o preview, execute:"
+echo "   npm run dev"
+
