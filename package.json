@@ -46,7 +46,10 @@
     "preview:validate": "npm run build && npm run preview:scan && npm run preview:scan:report",
     "preview:initial-report": "node scripts/generate-initial-report.cjs",
     "validate:build": "./scripts/build-validation.sh",
-    "status": "./scripts/status-check.sh"
+    "status": "./scripts/status-check.sh",
+    "fix:supabase": "bash scripts/fix-supabase-types.sh",
+    "rebuild:lovable": "npm run clean && npm run build",
+    "sync:lovable": "npm run type-check"
   },
   "engines": {
     "node": "22.x",
