@@ -10,7 +10,7 @@ import { createClient } from "@supabase/supabase-js";
 // Extend jsPDF type to include autoTable
 declare module "jspdf" {
   interface jsPDF {
-    autoTable: (options: unknown) => jsPDF;
+    autoTable: (options: any) => jsPDF;
   }
 }
 

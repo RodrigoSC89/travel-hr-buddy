@@ -114,7 +114,7 @@ export class ForecastEngine {
   /**
    * Process DP system events for predictive analysis
    */
-  private processDPEvent(event: unknown): void {
+  private processDPEvent(event: any): void {
     // Process event and update predictions
     console.log("📊 Processing DP event for forecast update", event);
     // Implementation for real-time event processing

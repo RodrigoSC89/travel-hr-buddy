@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: 8080,
       strictPort: true,
+      hmr: { overlay: false }
     },
     plugins: [
       react(), 
@@ -120,7 +121,7 @@ export default defineConfig(({ mode }) => {
   build: {
     outDir: "dist",
     sourcemap: false,
-    chunkSizeWarningLimit: 800,
+    chunkSizeWarningLimit: 1600,
     target: "esnext",
     cssCodeSplit: true,
     minify: "terser",
@@ -242,11 +243,12 @@ export default defineConfig(({ mode }) => {
     },
   },
   optimizeDeps: {
-    include: ["mqtt", "@supabase/supabase-js"],
+    include: ["mqtt", "@supabase/supabase-js", "react-router-dom"],
   },
   cacheDir: ".vite-cache",
   esbuild: {
     logOverride: { "this-is-undefined-in-esm": "silent" },
+    logLevel: "silent",
     ...(mode === "production" ? {
       drop: ["debugger"],
       pure: ["console.log", "console.debug"],
@@ -254,7 +256,8 @@ export default defineConfig(({ mode }) => {
   },
   define: {
     "process.env": {},
-    "process": { env: {} }
+    "process": { env: {} },
+    "process.env.LOVABLE_FULL_PREVIEW": true
   },
     preview: {
       host: true,

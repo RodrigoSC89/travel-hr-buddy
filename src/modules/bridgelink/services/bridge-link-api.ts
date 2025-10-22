@@ -38,7 +38,7 @@ export async function getBridgeLinkData(): Promise<BridgeLinkData> {
  * @returns Cleanup function to close the connection
  */
 export function connectToLiveStream(
-  onMessage: (event: unknown) => void
+  onMessage: (event: any) => void
 ): () => void {
   const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
   const wsUrl = `${protocol}//${window.location.host}/api/dp-intelligence/stream`;

@@ -18,20 +18,20 @@ const getSentryDsn = (): string | undefined => {
 };
 
 interface LogContext {
-  [key: string]: unknown;
+  [key: string]: any;
 }
 
 /**
  * Type guard to safely handle error objects
  */
-function isError(error: unknown): error is Error {
+function isError(error: any): error is Error {
   return error instanceof Error;
 }
 
 /**
  * Safely extract error message from unknown error type
  */
-function getErrorMessage(error: unknown): string {
+function getErrorMessage(error: any): string {
   if (isError(error)) {
     return error.message;
   }
@@ -85,7 +85,7 @@ export const logger = {
   /**
    * Log error messages (always logged and sent to monitoring in production)
    */
-  error: (message: string, error?: unknown, context?: LogContext) => {
+  error: (message: string, error?: any, context?: LogContext) => {
     const errorMessage = error ? getErrorMessage(error) : "";
     const fullContext = {
       ...context,
@@ -122,7 +122,7 @@ export const logger = {
   /**
    * Log caught errors with proper type handling
    */
-  logCaughtError: (message: string, error: unknown, context?: LogContext) => {
+  logCaughtError: (message: string, error: any, context?: LogContext) => {
     const errorMessage = getErrorMessage(error);
     const fullContext = {
       ...context,
@@ -159,7 +159,7 @@ export const logger = {
   /**
    * Log table (development only)
    */
-  table: (data: unknown) => {
+  table: (data: any) => {
     if (isDevelopment) {
       console.table(data);
     }
