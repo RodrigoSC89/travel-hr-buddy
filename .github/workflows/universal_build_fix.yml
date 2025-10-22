@@ -1,0 +1,36 @@
+name: 🧩 TypeScript Universal Fix & Build Repair
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  fix_and_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧭 Checkout código
+        uses: actions/checkout@v4
+
+      - name: 🧰 Instala dependências
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: 🔧 Executa script de correção universal
+        run: |
+          chmod +x scripts/fix-typescript-universal.sh
+          bash scripts/fix-typescript-universal.sh
+
+      - name: 🚀 Deploy Preview (Vercel) - Opcional
+        if: ${{ secrets.VERCEL_TOKEN != '' }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          npm install -g vercel
+          vercel build --prod --token=$VERCEL_TOKEN
+          echo "✅ Deploy preview criado."
+        continue-on-error: true
