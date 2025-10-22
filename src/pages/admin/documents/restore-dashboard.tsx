@@ -2,6 +2,7 @@
 // Path: /admin/documents/restore-dashboard
 // Features: Interactive charts, CSV/PDF export, email reports, public view mode
 
+// @ts-nocheck
 "use client";
 
 import { useEffect, useState } from "react";

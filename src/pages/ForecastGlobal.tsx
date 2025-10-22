@@ -2,9 +2,9 @@ import React, { Suspense } from "react";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 import { Loader } from "lucide-react";
 
-const ForecastPanel = safeLazyImport(() => React.lazy(() => import(import("@/components/forecast/ForecastPanel"), "ForecastPanel")));
-const ForecastMap = safeLazyImport(() => React.lazy(() => import(import("@/components/forecast/ForecastMap"), "ForecastMap")));
-const ForecastAIInsights = safeLazyImport(() => React.lazy(() => import(import("@/components/forecast/ForecastAIInsights"), "ForecastAIInsights")));
+const ForecastPanel = safeLazyImport(() => import("@/components/forecast/ForecastPanel"), "ForecastPanel");
+const ForecastMap = safeLazyImport(() => import("@/components/forecast/ForecastMap"), "ForecastMap");
+const ForecastAIInsights = safeLazyImport(() => import("@/components/forecast/ForecastAIInsights"), "ForecastAIInsights");
 
 export default function ForecastGlobal() {
   return (

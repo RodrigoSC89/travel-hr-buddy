@@ -1,13 +1,6 @@
 {
   "version": 2,
-  "framework": "vite",
   "routes": [
     { "src": "/(.*)", "dest": "/" }
-  ],
-  "env": {
-    "VITE_APP_URL": "https://travel-hr-buddy.vercel.app",
-    "VITE_MQTT_URL": "wss://broker.hivemq.com:8884/mqtt",
-    "VITE_SUPABASE_URL": "@vite_supabase_url",
-    "VITE_SUPABASE_ANON_KEY": "@vite_supabase_anon_key"
-  }
+  ]
 }
