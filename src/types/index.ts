@@ -24,13 +24,27 @@ export type * from "./cron";
 export type * from "./dashboard";
 
 // External Audit Types
-export type * from "./external-audit";
+export type {
+  Conformity,
+  NonConformity as ExternalNonConformity,
+  ActionItem as ExternalActionItem,
+  VesselPerformanceMetrics,
+  AuditStatus,
+} from "./external-audit";
 
 // Forecast Types
 export type * from "./forecast";
 
 // IMCA Audit Types
-export type * from "./imca-audit";
+export type {
+  ModuleEvaluation,
+  NonConformity as IMCANonConformity,
+  ActionItem as IMCAActionItem,
+  OperationalData,
+  RiskLevel,
+  Priority,
+  IMCAAuditReport
+} from "./imca-audit";
 
 // Incident Types
 export type * from "./incident";

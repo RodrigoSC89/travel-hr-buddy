@@ -28,7 +28,7 @@ export const logUserAction = (action: string, details?: Record<string, unknown>)
     url: window.location.href
   };
   
-  logger.log("🎯 User Action:", logEntry);
+  logger.info("🎯 User Action:", { logEntry });
   
   // Persist to localStorage for debugging (keep last 50)
   try {
@@ -60,7 +60,7 @@ export const getUserActionLogs = (): LogEntry[] => {
 export const clearUserActionLogs = (): void => {
   try {
     localStorage.removeItem("user-actions");
-    logger.log("✅ User action logs cleared");
+    logger.info("✅ User action logs cleared");
   } catch (error) {
     logger.error("Error clearing logs:", error);
   }
@@ -82,7 +82,7 @@ export const exportUserActionLogs = (): void => {
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
     
-    logger.log("✅ Logs exported successfully");
+    logger.info("✅ Logs exported successfully");
   } catch (error) {
     logger.error("Error exporting logs:", error);
   }

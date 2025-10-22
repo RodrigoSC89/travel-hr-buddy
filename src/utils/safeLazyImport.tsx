@@ -118,6 +118,7 @@ export const safeLazyImport = (
   });
 
   // Set display name for better debugging in React DevTools
+  // @ts-ignore - displayName is not in type but works at runtime
   Component.displayName = `SafeLazy(${name})`;
 
   // Return a component that wraps the lazy-loaded component with Suspense

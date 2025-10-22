@@ -86,7 +86,7 @@ export class RealtimeChat {
 
   async init() {
     try {
-      logger.log("Initializing realtime chat...");
+      logger.info("Initializing realtime chat...");
       
       // Check if we can make request (circuit breaker)
       if (!apiHealthMonitor.canMakeRequest("realtime")) {
@@ -113,7 +113,7 @@ export class RealtimeChat {
           
           retries++;
           if (retries < maxTokenRetries) {
-            logger.log(`Retrying token fetch (${retries}/${maxTokenRetries})...`);
+            logger.info(`Retrying token fetch (${retries}/${maxTokenRetries})...`);
             await new Promise(resolve => setTimeout(resolve, 1000 * retries));
           }
         } catch (fetchError) {
@@ -129,7 +129,7 @@ export class RealtimeChat {
       }
 
       const EPHEMERAL_KEY = data.client_secret.value;
-      logger.log("Got ephemeral token, setting up WebRTC...");
+      logger.info("Got ephemeral token, setting up WebRTC...");
 
       // Create peer connection
       this.pc = new RTCPeerConnection();
@@ -137,11 +137,11 @@ export class RealtimeChat {
       // Monitor connection state
       this.pc.onconnectionstatechange = () => {
         const state = this.pc?.connectionState;
-        logger.log("Connection state changed:", state);
+        logger.info(`Connection state changed: ${state}`);
         this.onConnectionStateChange?.(state || "unknown");
         
         if (state === "failed" || state === "disconnected") {
-          logger.log("Connection lost, attempting to reconnect...");
+          logger.info("Connection lost, attempting to reconnect...");
           this.handleConnectionLoss();
         } else if (state === "connected") {
           this.reconnectAttempts = 0;
@@ -156,7 +156,7 @@ export class RealtimeChat {
 
       // Set up remote audio
       this.pc.ontrack = (e) => {
-        logger.log("Received remote audio track");
+        logger.info("Received remote audio track");
         this.audioEl.srcObject = e.streams[0];
       };
 
@@ -176,11 +176,11 @@ export class RealtimeChat {
       this.dc = this.pc.createDataChannel("oai-events");
       this.dc.addEventListener("message", (e) => {
         const event = JSON.parse(e.data);
-        logger.log("Received event:", event.type, event);
+        logger.info(`Received event: ${event.type}`, { event });
         
         // Processo de navegação por comandos de voz
         if (event.type === "conversation.item.input_audio_transcription.completed") {
-          logger.log("User said:", event.transcript);
+          logger.info(`User said: ${event.transcript}`);
           // Processar comando de navegação
           this.processVoiceNavigation(event.transcript);
         }
@@ -225,7 +225,7 @@ export class RealtimeChat {
       };
       
       await this.pc.setRemoteDescription(answer);
-      logger.log("WebRTC connection established");
+      logger.info("WebRTC connection established");
 
       // Start recording
       this.recorder = new AudioRecorder((audioData) => {
@@ -292,7 +292,7 @@ export class RealtimeChat {
     if (!transcript || !this.onNavigate) return;
     
     const text = transcript.toLowerCase().trim();
-    logger.log("Processing voice navigation for:", text);
+    logger.info(`Processing voice navigation for: ${text}`);
     
     // Mapeamento de comandos para módulos
     const navigationMap: Record<string, string> = {
@@ -364,7 +364,7 @@ export class RealtimeChat {
     // Procurar correspondência
     for (const [command, module] of Object.entries(navigationMap)) {
       if (text.includes(command)) {
-        logger.log(`Voice navigation: ${command} -> ${module}`);
+        logger.info(`Voice navigation: ${command} -> ${module}`);
         this.onNavigate(module);
         return;
       }
@@ -382,7 +382,7 @@ export class RealtimeChat {
 
   private async handleConnectionLoss() {
     if (this.isReconnecting) {
-      logger.log("Already reconnecting, skipping...");
+      logger.info("Already reconnecting, skipping...");
       return;
     }
 
@@ -395,7 +395,7 @@ export class RealtimeChat {
     this.isReconnecting = true;
     this.reconnectAttempts++;
 
-    logger.log(`Reconnection attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts}`);
+    logger.info(`Reconnection attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts}`);
 
     // Clean up existing connection
     this.cleanupConnection(false);
@@ -406,7 +406,7 @@ export class RealtimeChat {
 
     try {
       await this.init();
-      logger.log("Reconnection successful");
+      logger.info("Reconnection successful");
     } catch (error) {
       logger.error("Reconnection failed:", error);
       this.isReconnecting = false;
@@ -459,7 +459,7 @@ export class RealtimeChat {
   }
 
   disconnect() {
-    logger.log("Disconnecting realtime chat...");
+    logger.info("Disconnecting realtime chat...");
     this.cleanupConnection(true);
     this.onConnectionStateChange?.("closed");
   }

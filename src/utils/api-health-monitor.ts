@@ -73,7 +73,7 @@ export class APIHealthMonitor {
       // Check if we should transition to half-open
       if (now >= breaker.nextRetryTime) {
         breaker.state = "half-open";
-        logger.log(`Circuit breaker for ${apiName} transitioned to half-open`);
+        logger.info(`Circuit breaker for ${apiName} transitioned to half-open`);
         return true;
       }
       logger.warn(`Circuit breaker for ${apiName} is open, blocking request`);
@@ -114,7 +114,7 @@ export class APIHealthMonitor {
       if (breaker.state === "half-open") {
         breaker.state = "closed";
         breaker.failures = 0;
-        logger.log(`Circuit breaker for ${apiName} closed after successful request`);
+        logger.info(`Circuit breaker for ${apiName} closed after successful request`);
       } else if (breaker.state === "closed") {
         breaker.failures = Math.max(0, breaker.failures - 1);
       }
@@ -246,7 +246,7 @@ export class APIHealthMonitor {
       breaker.failures = 0;
       breaker.lastFailureTime = 0;
       breaker.nextRetryTime = 0;
-      logger.log(`Circuit breaker for ${apiName} manually reset`);
+      logger.info(`Circuit breaker for ${apiName} manually reset`);
     }
   }
 }
