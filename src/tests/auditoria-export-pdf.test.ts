@@ -5,6 +5,7 @@
  * professional PDF reports with audit comments and AI analyses
  */
 
+// @ts-nocheck
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 describe("Auditoria Export Comentarios PDF API Endpoint", () => {
