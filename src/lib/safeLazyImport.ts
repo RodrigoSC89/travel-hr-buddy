@@ -17,9 +17,13 @@ export function safeLazyImport(importFn) {
     }
   });
 
-  return (props) => React.createElement(
+  const SafeLazyComponent = (props: any) => React.createElement(
     Suspense,
     { fallback: React.createElement("div", { className: "p-4 text-gray-400" }, "⏳ Carregando...") },
     React.createElement(LazyComponent, props)
   );
+  
+  SafeLazyComponent.displayName = `SafeLazy(${componentPath})`;
+  
+  return SafeLazyComponent;
 }
