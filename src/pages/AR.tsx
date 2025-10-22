@@ -6,7 +6,7 @@ import { safeLazyImport } from "@/utils/safeLazyImport";
 
 // Lazy loading da interface AR com safeLazyImport
 const ARInterface = safeLazyImport(
-  () => import("@/components/innovation/ar-interface").then(module => ({ default: module.ARInterface })),
+  () => React.lazy(() => import(import("@/components/innovation/ar-interface").then(module => ({ default: module.ARInterface })))),
   "AR Interface"
 );
 

@@ -50,7 +50,7 @@ describe("MMI Orders Admin Page", () => {
       },
     ];
 
-    const { supabase } = await import("@/integrations/supabase/client");
+    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
     vi.mocked(supabase.from).mockReturnValue({
       select: vi.fn().mockReturnValue({
         order: vi.fn().mockResolvedValue({

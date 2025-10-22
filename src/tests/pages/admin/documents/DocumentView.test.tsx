@@ -158,7 +158,7 @@ describe("DocumentViewPage Component", () => {
 
   it("should display author email to admin users", async () => {
     // Mock useAuthProfile to return admin role
-    const { useAuthProfile } = await import("@/hooks/use-auth-profile");
+    const { useAuthProfile } = await React.lazy(() => import(import("@/hooks/use-auth-profile")));
     vi.mocked(useAuthProfile).mockReturnValue({
       profile: {
         id: "test-admin",
@@ -238,7 +238,7 @@ describe("DocumentViewPage Component", () => {
 
   it("should NOT display author email to non-admin users", async () => {
     // Mock useAuthProfile to return non-admin role (hr_manager)
-    const { useAuthProfile } = await import("@/hooks/use-auth-profile");
+    const { useAuthProfile } = await React.lazy(() => import(import("@/hooks/use-auth-profile")));
     vi.mocked(useAuthProfile).mockReturnValue({
       profile: {
         id: "test-hr-manager",

@@ -95,7 +95,7 @@ describe("ApplyTemplate", () => {
   });
 
   it("should save document and show success toast", async () => {
-    const { createDocument } = await import("@/lib/documents/api");
+    const { createDocument } = await React.lazy(() => import(import("@/lib/documents/api")));
     
     render(<ApplyTemplate template={mockTemplate} />);
     
@@ -125,7 +125,7 @@ describe("ApplyTemplate", () => {
   });
 
   it("should handle save failure gracefully", async () => {
-    const { createDocument } = await import("@/lib/documents/api");
+    const { createDocument } = await React.lazy(() => import(import("@/lib/documents/api")));
     vi.mocked(createDocument).mockResolvedValueOnce(null);
     
     render(<ApplyTemplate template={mockTemplate} />);

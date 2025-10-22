@@ -11,15 +11,15 @@ import React, { Suspense } from "react";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 import { Loader } from "lucide-react";
 
-const ControlHubPanel = safeLazyImport(() => import("@/components/control-hub/ControlHubPanel"), "ControlHubPanel");
-const SystemAlerts = safeLazyImport(() => import("@/components/control-hub/SystemAlerts"), "SystemAlerts");
-const AIInsightReporter = safeLazyImport(() => import("@/components/control-hub/AIInsightReporter"), "AIInsightReporter");
-const ComplianceDashboard = safeLazyImport(() => import("@/components/compliance/ComplianceDashboard"), "ComplianceDashboard");
-const ForecastDashboard = safeLazyImport(() => import("@/components/control-hub/ForecastDashboard"), "ForecastDashboard");
-const ResilienceMonitor = safeLazyImport(() => import("@/components/resilience/ResilienceMonitor"), "ResilienceMonitor");
-const ResilienceComplianceDashboard = safeLazyImport(() => import("@/components/resilience/ComplianceDashboard"), "ComplianceDashboard");
-const IncidentResponsePanel = safeLazyImport(() => import("@/components/resilience/IncidentResponsePanel"), "IncidentResponsePanel");
-const MaintenanceDashboard = safeLazyImport(() => import("@/components/maintenance/MaintenanceDashboard"), "MaintenanceDashboard");
+const ControlHubPanel = safeLazyImport(() => React.lazy(() => import(import("@/components/control-hub/ControlHubPanel"), "ControlHubPanel")));
+const SystemAlerts = safeLazyImport(() => React.lazy(() => import(import("@/components/control-hub/SystemAlerts"), "SystemAlerts")));
+const AIInsightReporter = safeLazyImport(() => React.lazy(() => import(import("@/components/control-hub/AIInsightReporter"), "AIInsightReporter")));
+const ComplianceDashboard = safeLazyImport(() => React.lazy(() => import(import("@/components/compliance/ComplianceDashboard"), "ComplianceDashboard")));
+const ForecastDashboard = safeLazyImport(() => React.lazy(() => import(import("@/components/control-hub/ForecastDashboard"), "ForecastDashboard")));
+const ResilienceMonitor = safeLazyImport(() => React.lazy(() => import(import("@/components/resilience/ResilienceMonitor"), "ResilienceMonitor")));
+const ResilienceComplianceDashboard = safeLazyImport(() => React.lazy(() => import(import("@/components/resilience/ComplianceDashboard"), "ComplianceDashboard")));
+const IncidentResponsePanel = safeLazyImport(() => React.lazy(() => import(import("@/components/resilience/IncidentResponsePanel"), "IncidentResponsePanel")));
+const MaintenanceDashboard = safeLazyImport(() => React.lazy(() => import(import("@/components/maintenance/MaintenanceDashboard"), "MaintenanceDashboard")));
 
 export default function ControlHub() {
   return (

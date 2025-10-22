@@ -406,7 +406,7 @@ describe("DPIntelligenceCenter Component", () => {
         return Promise.reject(new Error("Not found"));
       }) as unknown;
 
-      const { toast } = await import("sonner");
+      const { toast } = await React.lazy(() => import(import("sonner")));
       const toastErrorSpy = vi.spyOn(toast, "error");
 
       render(<DPIntelligenceCenter />);

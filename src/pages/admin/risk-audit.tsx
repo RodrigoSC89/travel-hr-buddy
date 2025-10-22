@@ -1,7 +1,7 @@
 import { safeLazyImport } from "@/utils/safeLazyImport";
 
 const TacticalRiskPanel = safeLazyImport(
-  () => import("@/modules/risk-audit/TacticalRiskPanel"),
+  () => React.lazy(() => import(import("@/modules/risk-audit/TacticalRiskPanel"))),
   "Tactical Risk Panel"
 );
 
