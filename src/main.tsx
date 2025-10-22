@@ -7,6 +7,7 @@ import "./index.css";
 import "../sentry.client.config";
 import { logger } from "@/lib/logger";
 import { initFailoverSystem } from "@/lib/failover/failover-core";
+import { ErrorGuard } from "@/lib/core/ErrorGuard";
 
 // Iniciar monitor de failover na inicialização
 initFailoverSystem();
@@ -27,8 +28,10 @@ if ("serviceWorker" in navigator) {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <HelmetProvider>
-      <App />
-    </HelmetProvider>
+    <ErrorGuard>
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
+    </ErrorGuard>
   </StrictMode>,
 );
