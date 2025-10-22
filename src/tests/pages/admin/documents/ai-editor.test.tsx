@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
@@ -124,11 +125,9 @@ describe("DocumentAIEditorPage", () => {
 
   it("should apply template from localStorage on mount", async () => {
     const mockSetContent = vi.fn();
-    const { useEditor } = await React.lazy(() => import(import("@tiptap/react")));
-    (useEditor as any).mockReturnValue({
-      commands: {
-        setContent: mockSetContent,
-      },
+    const mod: any = await import("@tiptap/react");
+    mod.useEditor.mockReturnValue({
+      commands: { setContent: mockSetContent },
       getHTML: vi.fn(() => "<p>Test content</p>"),
       getText: vi.fn(() => "Test content"),
     });
@@ -146,8 +145,8 @@ describe("DocumentAIEditorPage", () => {
       expect(mockSetContent).toHaveBeenCalledWith("<p>Template content</p>");
     });
 
-    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
-    expect(toast).toHaveBeenCalledWith(
+    const toastMod: any = await import("@/hooks/use-toast");
+    expect(toastMod.toast).toHaveBeenCalledWith(
       expect.objectContaining({
         title: "Template aplicado",
       })
@@ -168,8 +167,8 @@ describe("DocumentAIEditorPage", () => {
   });
 
   it("should save document to database", async () => {
-    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
-    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
+    const supaMod: any = await import("@/integrations/supabase/client");
+    const toastMod: any = await import("@/hooks/use-toast");
     
     render(
       <MemoryRouter>
@@ -184,8 +183,8 @@ describe("DocumentAIEditorPage", () => {
     fireEvent.click(saveButton);
 
     await waitFor(() => {
-      expect(supabase.from).toHaveBeenCalledWith("ai_generated_documents");
-      expect(toast).toHaveBeenCalledWith(
+      expect(supaMod.supabase.from).toHaveBeenCalledWith("ai_generated_documents");
+      expect(toastMod.toast).toHaveBeenCalledWith(
         expect.objectContaining({
           title: "Documento salvo com sucesso",
         })
@@ -194,7 +193,7 @@ describe("DocumentAIEditorPage", () => {
   });
 
   it("should export document as PDF", async () => {
-    const { toast } = await React.lazy(() => import(import("@/hooks/use-toast")));
+    const toastMod: any = await import("@/hooks/use-toast");
     
     render(
       <MemoryRouter>
@@ -209,7 +208,7 @@ describe("DocumentAIEditorPage", () => {
     fireEvent.click(exportButton);
 
     await waitFor(() => {
-      expect(toast).toHaveBeenCalledWith(
+      expect(toastMod.toast).toHaveBeenCalledWith(
         expect.objectContaining({
           title: "PDF exportado com sucesso",
         })
@@ -218,7 +217,7 @@ describe("DocumentAIEditorPage", () => {
   });
 
   it("should show validation error when saving without title", async () => {
-    const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
+    const supaMod: any = await import("@/integrations/supabase/client");
     
     render(
       <MemoryRouter>
@@ -238,6 +237,6 @@ describe("DocumentAIEditorPage", () => {
     await new Promise(resolve => setTimeout(resolve, 100));
     
     // Verify that supabase.from was NOT called (validation failed)
-    expect(supabase.from).not.toHaveBeenCalled();
+    expect(supaMod.supabase.from).not.toHaveBeenCalled();
   });
 });
