@@ -1,23 +1,47 @@
 // @ts-nocheck
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { safeLazyImport } from "@/lib/safeLazyImport";
+import { AutoHealSystem } from "@/lib/ai/AutoHealSystem";
 
-// 🔹 Módulos principais
-const Dashboard = safeLazyImport(() => import("@/pages/Dashboard"));
-const MaintenanceDashboard = safeLazyImport(() => import("@/pages/Maintenance"));
-const ComplianceHub = safeLazyImport(() => import("@/pages/compliance/ComplianceHub"));
-const DPIntelligenceCenter = safeLazyImport(() => import("@/pages/dp-intelligence/DPIntelligenceCenter"));
-const ControlHub = safeLazyImport(() => import("@/pages/control/ControlHub"));
-const ForecastGlobal = safeLazyImport(() => import("@/pages/forecast/ForecastGlobal"));
-const BridgeLink = safeLazyImport(() => import("@/pages/bridgelink/BridgeLink"));
+// 🔹 Módulos principais com AutoHeal
+const Dashboard = React.lazy(() =>
+  AutoHealSystem.loadSafely("Dashboard", () => import("@/pages/Dashboard"))
+);
+const MaintenanceDashboard = React.lazy(() =>
+  AutoHealSystem.loadSafely("MaintenanceDashboard", () => import("@/pages/Maintenance"))
+);
+const ComplianceHub = React.lazy(() =>
+  AutoHealSystem.loadSafely("ComplianceHub", () => import("@/pages/compliance/ComplianceHub"))
+);
+const DPIntelligenceCenter = React.lazy(() =>
+  AutoHealSystem.loadSafely("DPIntelligenceCenter", () => import("@/pages/dp-intelligence/DPIntelligenceCenter"))
+);
+const ControlHub = React.lazy(() =>
+  AutoHealSystem.loadSafely("ControlHub", () => import("@/pages/control/ControlHub"))
+);
+const ForecastGlobal = React.lazy(() =>
+  AutoHealSystem.loadSafely("ForecastGlobal", () => import("@/pages/forecast/ForecastGlobal"))
+);
+const BridgeLink = React.lazy(() =>
+  AutoHealSystem.loadSafely("BridgeLink", () => import("@/pages/bridgelink/BridgeLink"))
+);
 
-// 🔹 Suporte e operações
-const Optimization = safeLazyImport(() => import("@/pages/Optimization"));
-const Maritime = safeLazyImport(() => import("@/pages/Maritime"));
-const PEODP = safeLazyImport(() => import("@/pages/PEODP"));
-const PEOTRAM = safeLazyImport(() => import("@/pages/PEOTRAM"));
-const ChecklistsInteligentes = safeLazyImport(() => import("@/pages/ChecklistsInteligentes"));
+// 🔹 Suporte e operações com AutoHeal
+const Optimization = React.lazy(() =>
+  AutoHealSystem.loadSafely("Optimization", () => import("@/pages/Optimization"))
+);
+const Maritime = React.lazy(() =>
+  AutoHealSystem.loadSafely("Maritime", () => import("@/pages/Maritime"))
+);
+const PEODP = React.lazy(() =>
+  AutoHealSystem.loadSafely("PEODP", () => import("@/pages/PEODP"))
+);
+const PEOTRAM = React.lazy(() =>
+  AutoHealSystem.loadSafely("PEOTRAM", () => import("@/pages/PEOTRAM"))
+);
+const ChecklistsInteligentes = React.lazy(() =>
+  AutoHealSystem.loadSafely("ChecklistsInteligentes", () => import("@/pages/ChecklistsInteligentes"))
+);
 
 export default function AppRouter() {
   return (

@@ -7,9 +7,13 @@ import "./index.css";
 import "../sentry.client.config";
 import { logger } from "@/lib/logger";
 import { initFailoverSystem } from "@/lib/failover/failover-core";
+import { initAutoHealMonitor } from "@/lib/ai/AutoHealMonitor";
 
 // Iniciar monitor de failover na inicialização
 initFailoverSystem();
+
+// Iniciar monitor de AutoHeal
+initAutoHealMonitor();
 
 // Register service worker for PWA
 if ("serviceWorker" in navigator) {
