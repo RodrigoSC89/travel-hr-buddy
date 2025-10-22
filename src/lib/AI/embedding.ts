@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * AI Embedding Generation
  * Provides vector embeddings for text data

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copilot AI Suggestion Engine
  * Provides AI-powered suggestions and context-aware assistance

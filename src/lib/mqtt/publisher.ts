@@ -1,4 +1,3 @@
-// @ts-nocheck
 import mqtt from "mqtt";
 
 const MQTT_URL = import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt";
