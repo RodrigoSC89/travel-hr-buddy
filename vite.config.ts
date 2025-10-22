@@ -123,7 +123,12 @@ export default defineConfig(({ mode }) => {
     chunkSizeWarningLimit: 800,
     target: "esnext",
     cssCodeSplit: true,
-    minify: "esbuild",
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: false,
+      },
+    },
     rollupOptions: {
       output: {
         manualChunks: (id) => {
