@@ -20,39 +20,12 @@ jobs:
           node-version: 20
           cache: "npm"
 
-      - name: 📦 Instala dependências
-        run: npm install --legacy-peer-deps
-
-      - name: 🔧 Aplica correções TypeScript
+      - name: 🧹 Executa script de correção
         run: |
-          # Adiciona // @ts-nocheck nos arquivos críticos se necessário
-          declare -a FILES=(
-            "src/components/feedback/user-feedback-system.tsx"
-            "src/components/fleet/vessel-management-system.tsx"
-            "src/components/fleet/vessel-management.tsx"
-            "src/components/performance/performance-monitor.tsx"
-            "src/components/portal/crew-selection.tsx"
-            "src/components/portal/modern-employee-portal.tsx"
-            "src/components/price-alerts/ai-price-predictor.tsx"
-            "src/components/price-alerts/price-alert-dashboard.tsx"
-            "src/components/reports/AIReportGenerator.tsx"
-          )
-          for f in "${FILES[@]}"; do
-            if [ -f "$f" ]; then
-              grep -q "@ts-nocheck" "$f" || sed -i '1i // @ts-nocheck' "$f"
-              echo "✅ Verificado // @ts-nocheck → $f"
-            fi
-          done
+          chmod +x scripts/fix-full-build.sh
+          bash scripts/fix-full-build.sh
 
       - name: 🔍 Valida build e módulos
         run: |
           npm run build
           echo "✅ Build verificado."
-
-      - name: 🚀 Deploy para Vercel (Preview)
-        if: env.VERCEL_TOKEN != ''
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          npx vercel build --prod --token $VERCEL_TOKEN
-          echo "✅ Deploy preview concluído."
