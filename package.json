@@ -46,7 +46,8 @@
     "preview:validate": "npm run build && npm run preview:scan && npm run preview:scan:report",
     "preview:initial-report": "node scripts/generate-initial-report.cjs",
     "validate:build": "./scripts/build-validation.sh",
-    "status": "./scripts/status-check.sh"
+    "status": "./scripts/status-check.sh",
+    "diagnostics:setup": "bash scripts/setup-realtime-diagnostics.sh"
   },
   "engines": {
     "node": "22.x",

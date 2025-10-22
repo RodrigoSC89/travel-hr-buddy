@@ -7,9 +7,13 @@ import "./index.css";
 import "../sentry.client.config";
 import { logger } from "@/lib/logger";
 import { initFailoverSystem } from "@/lib/failover/failover-core";
+import { initLogSync } from "@/lib/monitoring/logsync";
 
 // Iniciar monitor de failover na inicialização
 initFailoverSystem();
+
+// Iniciar sistema de sincronização de logs em tempo real
+initLogSync();
 
 // Register service worker for PWA
 if ("serviceWorker" in navigator) {
