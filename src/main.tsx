@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
@@ -25,10 +25,17 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+class RootErrorBoundary extends React.Component<{children: React.ReactNode},{hasError:boolean}>{
+  constructor(p:any){ super(p); this.state={hasError:false}; }
+  static getDerivedStateFromError(){ return {hasError:true}; }
+  componentDidCatch(e:any){ console.error("Root error:", e); }
+  render(){ return this.state.hasError ? <div>App failed to render.</div> : this.props.children; }
+}
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <RootErrorBoundary>
     <HelmetProvider>
       <App />
     </HelmetProvider>
-  </StrictMode>,
+  </RootErrorBoundary>
 );

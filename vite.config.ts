@@ -255,9 +255,8 @@ export default defineConfig(({ mode }) => {
     } : {}),
   },
   define: {
-    "process.env": {},
-    "process": { env: {} },
-    "process.env.LOVABLE_FULL_PREVIEW": true
+    "process.env.LOVABLE_FULL_PREVIEW": true,
+    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "production")
   },
     preview: {
       host: true,
