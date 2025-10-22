@@ -50,7 +50,8 @@
     "sync:lovable": "echo '🔄 Syncing Lovable configuration...' && rm -rf .vite .vercel_cache",
     "sync:vercel": "bash scripts/fix-vercel-preview.sh",
     "fix:typescript": "bash scripts/fix-typescript-universal.sh",
-    "fix:typescript:full": "bash scripts/fix-typescript-universal.sh --full-clean"
+    "fix:typescript:full": "bash scripts/fix-typescript-universal.sh --full-clean",
+    "fix:ts-safe": "bash scripts/fix-typescript-safe-mode.sh"
   },
   "engines": {
     "node": "22.x",
