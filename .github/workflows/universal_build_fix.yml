@@ -1,0 +1,33 @@
+name: 🧩 TypeScript Universal Fix & Build Repair
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  fix_and_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧭 Checkout código
+        uses: actions/checkout@v4
+
+      - name: 🧰 Instala dependências
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: 🔧 Executa script de correção
+        run: |
+          chmod +x scripts/fix-typescript-universal.sh
+          bash scripts/fix-typescript-universal.sh
+
+      - name: 🔍 Valida build final
+        run: |
+          npm run build
+          echo "✅ Build validado."
+
+      - name: 🚀 Deploy (Preview Vercel)
+        run: |
+          npx vercel build --prod
