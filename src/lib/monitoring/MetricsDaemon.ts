@@ -149,8 +149,7 @@ class MetricsDaemon {
           metric_unit: "percent",
           category: "system",
           status: metrics.cpu_usage > 80 ? "critical" : metrics.cpu_usage > 60 ? "warning" : "healthy",
-          recorded_at: metrics.timestamp,
-          metadata: { source: "metrics_daemon" }
+          recorded_at: metrics.timestamp
         },
         {
           metric_name: "memory_usage",
@@ -158,8 +157,7 @@ class MetricsDaemon {
           metric_unit: "MB",
           category: "system",
           status: "healthy",
-          recorded_at: metrics.timestamp,
-          metadata: { source: "metrics_daemon" }
+          recorded_at: metrics.timestamp
         },
         {
           metric_name: "active_modules",
@@ -167,8 +165,7 @@ class MetricsDaemon {
           metric_unit: "count",
           category: "system",
           status: "healthy",
-          recorded_at: metrics.timestamp,
-          metadata: { source: "metrics_daemon" }
+          recorded_at: metrics.timestamp
         }
       ]);
 

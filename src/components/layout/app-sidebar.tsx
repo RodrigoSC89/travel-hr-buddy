@@ -670,7 +670,8 @@ const URL_ALIASES: Record<string, string> = {
 
 function canonicalizeUrl(url?: string): string | undefined {
   if (!url) return url;
-  return URL_ALIASES[url] || url;
+  const absolute = url.startsWith("/") ? url : `/${url}`;
+  return URL_ALIASES[absolute] || absolute;
 }
 
 // Helper: deduplicate navigation items by URL to avoid duplicates in the sidebar

@@ -154,12 +154,7 @@ class SystemWatchdog {
         category: "health_check",
         status: this.getSystemStatus().health === "healthy" ? "healthy" : 
                 this.getSystemStatus().health === "degraded" ? "warning" : "critical",
-        recorded_at: timestamp,
-        metadata: {
-          modules: metrics,
-          routes: this.routeMetrics.slice(-10),
-          source: "system_watchdog"
-        }
+        recorded_at: timestamp
       });
     } catch (error) {
       console.error("Failed to persist metrics:", error);
