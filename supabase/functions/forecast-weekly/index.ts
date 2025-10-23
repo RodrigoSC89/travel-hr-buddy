@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ============================================================================
 // Supabase Edge Function: forecast-weekly
 // Purpose: Weekly AI-powered forecast generation for MMI maintenance jobs

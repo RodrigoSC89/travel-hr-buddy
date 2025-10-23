@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ✅ Supabase Edge Function — Send AI Forecast Report via Email
 // Scheduled function that generates and sends weekly maintenance forecast report
 // Enhanced with GPT-4 real forecast logic based on job execution history

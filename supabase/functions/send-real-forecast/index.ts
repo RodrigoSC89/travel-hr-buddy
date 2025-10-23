@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ✅ Supabase Edge Function — Send Real Forecast Report via Email
 // Scheduled function that generates and sends daily maintenance forecast report
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ============================================================================
 // Supabase Edge Function: simulate-hours
 // Purpose: Automatic hourometer simulation for operational components

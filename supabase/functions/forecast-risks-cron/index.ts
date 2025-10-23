@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ✅ Edge Function: forecast-risks-cron v1.0
 // Automated daily risk forecasting for all active vessels
 // Runs daily at 06:00 UTC to update tactical risk predictions

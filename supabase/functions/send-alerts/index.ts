@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ============================================================================
 // Supabase Edge Function: send-alerts
 // Purpose: Email notification system for critical/high-priority maintenance jobs

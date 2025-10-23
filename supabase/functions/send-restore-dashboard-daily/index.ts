@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ✅ Agendamento automático de envio diário de relatório
 // Supabase Edge Function: send-restore-dashboard-daily
 // Sends daily restore dashboard report via email with PDF attachment

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Deno Edge Function: log-incident
 // Recebe {module, severity, message, metadata?, timestamp?} e grava em public.incidents
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";

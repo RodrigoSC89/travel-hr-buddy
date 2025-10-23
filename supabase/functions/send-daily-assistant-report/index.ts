@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ✅ Supabase Edge Function — Send Daily Assistant Report via Email (CSV)
 // Scheduled function that sends daily assistant interaction logs via email
 

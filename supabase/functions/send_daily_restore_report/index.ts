@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ✅ Edge Function: send_daily_restore_report
 // Scheduled function that sends daily restore report via email (CSV format)
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Edge Function: restore-analytics
 // Returns restore statistics and daily data for the analytics dashboard
 

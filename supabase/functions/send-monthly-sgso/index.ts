@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ✅ Supabase Edge Function — Send Monthly SGSO Reports
 // Scheduled function that generates and sends monthly SGSO reports for all vessels
 

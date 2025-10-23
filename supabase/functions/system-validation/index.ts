@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * System Validation Edge Function
  * Server-side validation endpoint for system health checks

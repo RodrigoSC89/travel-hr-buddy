@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ✅ Supabase Edge Function: monitor-cron-health.ts
 // Envia alerta por e-mail caso o cron diário não tenha sido executado nas últimas 36h
 

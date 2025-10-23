@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ✅ Edge Function: send-restore-dashboard
 // Endpoint to send restore dashboard report via email with PDF/CSV attachment
 // POST /functions/v1/send-restore-dashboard

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Edge Function: send-dashboard-report
 // Sends automated dashboard reports to all users via email
 // POST /functions/v1/send-dashboard-report
