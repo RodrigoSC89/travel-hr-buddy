@@ -1,0 +1,19 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 30000,
+    "wait": 1000,
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox", "--disable-setuid-sandbox"]
+    },
+    "runners": ["axe", "htmlcs"]
+  },
+  "urls": [
+    "http://localhost:4173",
+    "http://localhost:4173/dashboard",
+    "http://localhost:4173/vessels",
+    "http://localhost:4173/crew",
+    "http://localhost:4173/incidents",
+    "http://localhost:4173/compliance"
+  ]
+}

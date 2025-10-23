@@ -1,0 +1,90 @@
+name: Performance Tests
+
+on:
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run performance tests daily at 4 AM UTC
+    - cron: '0 4 * * *'
+
+jobs:
+  performance:
+    name: Performance Testing
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run performance tests
+        run: npm run test:performance
+        env:
+          CI: true
+          NODE_ENV: test
+      
+      - name: Analyze bundle size
+        run: |
+          npm run build
+          npx bundlesize
+      
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            http://localhost:8080
+            http://localhost:8080/dashboard
+            http://localhost:8080/vessels
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+      
+      - name: Store performance results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: |
+            .lighthouseci/
+            performance-results/
+          retention-days: 30
+      
+      - name: Compare with baseline
+        run: |
+          # Compare current performance with main branch baseline
+          node scripts/compare-performance.js
+      
+      - name: Comment PR with performance metrics
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('performance-results/summary.json', 'utf8'));
+            
+            const comment = `
+            ## 📊 Performance Test Results
+            
+            | Metric | Current | Baseline | Change |
+            |--------|---------|----------|--------|
+            | First Contentful Paint | ${results.fcp}ms | ${results.baselineFcp}ms | ${results.fcpChange}% |
+            | Largest Contentful Paint | ${results.lcp}ms | ${results.baselineLcp}ms | ${results.lcpChange}% |
+            | Time to Interactive | ${results.tti}ms | ${results.baselineTti}ms | ${results.ttiChange}% |
+            | Total Blocking Time | ${results.tbt}ms | ${results.baselineTbt}ms | ${results.tbtChange}% |
+            | Bundle Size | ${results.bundleSize}KB | ${results.baselineBundleSize}KB | ${results.bundleSizeChange}% |
+            
+            ${results.hasRegression ? '⚠️ **Performance regression detected!**' : '✅ No performance regressions'}
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

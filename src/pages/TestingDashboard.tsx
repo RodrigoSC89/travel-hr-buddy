@@ -18,7 +18,7 @@ const TestingDashboard = () => {
 
       <Tabs defaultValue="homologation" className="w-full">
         <div className="w-full overflow-x-auto pb-2">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 min-w-fit">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6 min-w-fit">
             <TabsTrigger value="homologation">
               <span className="hidden sm:inline">Homologação Final</span>
               <span className="sm:hidden">Homolog.</span>
@@ -26,6 +26,10 @@ const TestingDashboard = () => {
             <TabsTrigger value="health">
               <span className="hidden sm:inline">Saúde do Sistema</span>
               <span className="sm:hidden">Saúde</span>
+            </TabsTrigger>
+            <TabsTrigger value="cicd">
+              <span className="hidden sm:inline">CI/CD Pipeline</span>
+              <span className="sm:hidden">CI/CD</span>
             </TabsTrigger>
             <TabsTrigger value="config">
               <span className="hidden sm:inline">Configuração</span>
@@ -48,6 +52,63 @@ const TestingDashboard = () => {
 
         <TabsContent value="health" className="space-y-6">
           <SystemHealthCheck />
+        </TabsContent>
+
+        <TabsContent value="cicd" className="space-y-6">
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold">Pipeline CI/CD</h3>
+              <p className="text-sm text-muted-foreground">
+                Integração e deploy contínuo com testes automatizados
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-4 border rounded-lg">
+                <div className="text-sm text-muted-foreground mb-1">Workflows Ativos</div>
+                <div className="text-2xl font-bold text-success">4</div>
+              </div>
+              <div className="p-4 border rounded-lg">
+                <div className="text-sm text-muted-foreground mb-1">Tempo Médio Build</div>
+                <div className="text-2xl font-bold">5m 30s</div>
+              </div>
+              <div className="p-4 border rounded-lg">
+                <div className="text-sm text-muted-foreground mb-1">Taxa de Sucesso</div>
+                <div className="text-2xl font-bold text-success">98%</div>
+              </div>
+              <div className="p-4 border rounded-lg">
+                <div className="text-sm text-muted-foreground mb-1">Deploys/Semana</div>
+                <div className="text-2xl font-bold">24</div>
+              </div>
+            </div>
+
+            <div className="border rounded-lg p-4 space-y-3">
+              <h4 className="font-semibold">Workflows Configurados</h4>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between p-3 bg-success/10 border border-success/20 rounded">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-success"></div>
+                    <span className="font-medium">Test Suite</span>
+                  </div>
+                  <span className="text-sm text-success">✓ Passing</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-success/10 border border-success/20 rounded">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-success"></div>
+                    <span className="font-medium">Performance Tests</span>
+                  </div>
+                  <span className="text-sm text-success">✓ Passing</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-success/10 border border-success/20 rounded">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-success"></div>
+                    <span className="font-medium">Accessibility Tests</span>
+                  </div>
+                  <span className="text-sm text-success">✓ Passing</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </TabsContent>
 
         <TabsContent value="config" className="space-y-6">

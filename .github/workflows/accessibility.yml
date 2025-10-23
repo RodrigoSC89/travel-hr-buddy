@@ -1,0 +1,95 @@
+name: Accessibility Tests
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+
+jobs:
+  accessibility:
+    name: A11y Testing
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Start preview server
+        run: |
+          npm run preview &
+          npx wait-on http://localhost:4173
+      
+      - name: Run axe accessibility tests
+        run: npm run test:a11y
+      
+      - name: Run Pa11y tests
+        run: |
+          npx pa11y-ci \
+            --config .pa11yci.json \
+            --json > a11y-results.json || true
+      
+      - name: Analyze accessibility results
+        run: |
+          node scripts/analyze-a11y.js
+      
+      - name: Upload accessibility report
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-report
+          path: |
+            a11y-results.json
+            a11y-report.html
+          retention-days: 30
+      
+      - name: Check for critical violations
+        run: |
+          CRITICAL_COUNT=$(cat a11y-results.json | jq '[.[] | select(.issues[] | .type == "error")] | length')
+          if [ "$CRITICAL_COUNT" -gt 0 ]; then
+            echo "Found $CRITICAL_COUNT critical accessibility violations"
+            exit 1
+          fi
+          echo "No critical accessibility violations found"
+      
+      - name: Comment PR with a11y results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('a11y-results.json', 'utf8'));
+            
+            const criticalCount = results.filter(r => r.issues.some(i => i.type === 'error')).length;
+            const warningCount = results.filter(r => r.issues.some(i => i.type === 'warning')).length;
+            
+            const comment = `
+            ## ♿ Accessibility Test Results
+            
+            | Severity | Count |
+            |----------|-------|
+            | 🔴 Critical | ${criticalCount} |
+            | 🟡 Warning | ${warningCount} |
+            
+            ${criticalCount === 0 ? '✅ No critical accessibility issues found!' : '⚠️ Critical issues need to be addressed before merging'}
+            
+            [View detailed report](${context.payload.pull_request.html_url}/files)
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
