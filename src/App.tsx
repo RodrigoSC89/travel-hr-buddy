@@ -156,6 +156,7 @@ const VoyagePlanner = React.lazy(() => import("@/modules/planning/voyage-planner
 const TaskAutomation = React.lazy(() => import("@/modules/task-automation"));
 const AuditCenter = React.lazy(() => import("@/modules/compliance/audit-center"));
 const DeveloperStatus = React.lazy(() => import("@/pages/developer/status"));
+const ModuleStatus = React.lazy(() => import("@/pages/developer/ModuleStatus"));
 const EmergencyResponse = React.lazy(() => import("@/modules/emergency/emergency-response"));
 const ExecutiveReport = React.lazy(() => import("@/pages/ExecutiveReport"));
 const ComplianceHubModule = React.lazy(() => import("@/modules/compliance/compliance-hub"));
@@ -405,6 +406,8 @@ function App() {
                       <Route path="/task-automation" element={<TaskAutomation />} />
                       <Route path="/audit-center" element={<AuditCenter />} />
                       <Route path="/developer/status" element={<DeveloperStatus />} />
+                      <Route path="/developer/modules" element={<ModuleStatus />} />
+                      <Route path="/modules/status" element={<ModuleStatus />} />
                       <Route path="/emergency-response" element={<EmergencyResponse />} />
                       <Route path="/executive-report" element={<ExecutiveReport />} />
                       <Route path="/compliance-hub" element={<ComplianceHubModule />} />

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
-import { FolderTree, CheckCircle2, Package, Layers } from "lucide-react";
+import { FolderTree, CheckCircle2, Package, Layers, Filter } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const moduleGroups = [
   {
@@ -110,6 +112,16 @@ const moduleGroups = [
 const totalModules = moduleGroups.reduce((sum, group) => sum + group.modules.length, 0);
 
 export default function Patch66Dashboard() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+
+  const filteredGroups = moduleGroups.filter(group => {
+    const matchesSearch = group.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         group.modules.some(m => m.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesFilter = !selectedGroup || group.name === selectedGroup;
+    return matchesSearch && matchesFilter;
+  });
+
   return (
     <ModulePageWrapper gradient="blue">
       <ModuleHeader
@@ -145,16 +157,60 @@ export default function Patch66Dashboard() {
           </Card>
         </div>
 
+        {/* Filtros e Busca */}
+        <Card className="p-6">
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
+            <div className="flex-1">
+              <Input
+                placeholder="Buscar módulo ou grupo..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                variant={selectedGroup === null ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedGroup(null)}
+              >
+                Todos ({totalModules})
+              </Button>
+              {moduleGroups.slice(0, 5).map((group) => (
+                <Button
+                  key={group.name}
+                  variant={selectedGroup === group.name ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedGroup(group.name)}
+                >
+                  {group.icon} {group.name}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </Card>
+
         {/* Estrutura de Grupos */}
         <Card className="p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
             <FolderTree className="h-6 w-6 text-primary" />
             Organograma da Estrutura Modular
+            {searchTerm && (
+              <Badge variant="secondary" className="ml-2">
+                {filteredGroups.length} resultados
+              </Badge>
+            )}
           </h2>
           
           <ScrollArea className="h-[600px] pr-4">
             <div className="space-y-4">
-              {moduleGroups.map((group) => (
+              {filteredGroups.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Filter className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>Nenhum módulo encontrado com "{searchTerm}"</p>
+                </div>
+              ) : (
+                filteredGroups.map((group) => (
                 <Card 
                   key={group.name}
                   className="p-5 bg-card/50 hover:bg-card/80 transition-colors border-l-4"
@@ -192,7 +248,8 @@ export default function Patch66Dashboard() {
                     </div>
                   </div>
                 </Card>
-              ))}
+              ))
+            )}
             </div>
           </ScrollArea>
         </Card>
