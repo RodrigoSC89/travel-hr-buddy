@@ -300,6 +300,207 @@ const navigationItems = [
     ],
   },
   {
+    title: "Módulos do Sistema",
+    icon: Database,
+    items: [
+      {
+        title: "Comunicação",
+        url: "/comunicacao",
+        icon: MessageSquare,
+      },
+      {
+        title: "Tripulação",
+        url: "/crew",
+        icon: Users,
+      },
+      {
+        title: "Documentos",
+        url: "/documentos",
+        icon: FileText,
+      },
+      {
+        title: "DP Intelligence",
+        url: "/dp-intelligence",
+        icon: Brain,
+      },
+      {
+        title: "Feedback",
+        url: "/feedback",
+        icon: MessageSquare,
+      },
+      {
+        title: "Gestão de Frota",
+        url: "/fleet",
+        icon: Ship,
+      },
+      {
+        title: "Performance",
+        url: "/performance",
+        icon: TrendingUp,
+      },
+      {
+        title: "Portal Funcionário",
+        url: "/portal-funcionario",
+        icon: User,
+      },
+      {
+        title: "Alertas Preços",
+        url: "/alertas-precos",
+        icon: Bell,
+      },
+      {
+        title: "Relatórios",
+        url: "/reports-module",
+        icon: FileText,
+      },
+      {
+        title: "Automação",
+        url: "/automation",
+        icon: Zap,
+      },
+      {
+        title: "Workspace Tempo Real",
+        url: "/real-time-workspace",
+        icon: Activity,
+      },
+      {
+        title: "Gerenciador Canais",
+        url: "/channel-manager",
+        icon: MessageSquare,
+      },
+      {
+        title: "Checklists",
+        url: "/checklists-inteligentes",
+        icon: CheckCircle,
+      },
+      {
+        title: "Academia Treinamento",
+        url: "/training-academy",
+        icon: Trophy,
+      },
+      {
+        title: "Gestão de Riscos",
+        url: "/risk-management",
+        icon: Shield,
+      },
+      {
+        title: "Planejador Manutenção",
+        url: "/maintenance-planner",
+        icon: Target,
+      },
+      {
+        title: "Logs de Missões",
+        url: "/mission-logs",
+        icon: FileText,
+      },
+      {
+        title: "Relatórios Incidentes",
+        url: "/incident-reports",
+        icon: Bell,
+      },
+      {
+        title: "Otimizador Combustível",
+        url: "/fuel-optimizer",
+        icon: Activity,
+      },
+      {
+        title: "Dashboard Meteorológico",
+        url: "/weather-dashboard",
+        icon: Globe,
+      },
+      {
+        title: "Planejador Viagens",
+        url: "/voyage-planner",
+        icon: MapPin,
+      },
+      {
+        title: "Automação Tarefas",
+        url: "/task-automation",
+        icon: Zap,
+      },
+      {
+        title: "Centro Auditoria",
+        url: "/audit-center",
+        icon: Shield,
+      },
+      {
+        title: "Hub Compliance",
+        url: "/compliance-hub",
+        icon: Shield,
+      },
+      {
+        title: "AI Insights",
+        url: "/ai-insights",
+        icon: Brain,
+      },
+      {
+        title: "Hub Logística",
+        url: "/logistics-hub",
+        icon: Database,
+      },
+      {
+        title: "Bem-estar Tripulação",
+        url: "/crew-wellbeing",
+        icon: Users,
+      },
+      {
+        title: "Rastreador Satélite",
+        url: "/satellite-tracker",
+        icon: Globe,
+      },
+      {
+        title: "Timeline Projetos",
+        url: "/project-timeline",
+        icon: Calendar,
+      },
+      {
+        title: "Gestão Usuários",
+        url: "/user-management",
+        icon: UserCog,
+      },
+      {
+        title: "Resposta Emergências",
+        url: "/emergency-response",
+        icon: Bell,
+      },
+      {
+        title: "Controle Missão",
+        url: "/mission-control",
+        icon: Target,
+      },
+      {
+        title: "Hub Financeiro",
+        url: "/finance-hub",
+        icon: BarChart3,
+      },
+      {
+        title: "API Gateway",
+        url: "/api-gateway",
+        icon: Globe,
+      },
+      {
+        title: "Analytics Core",
+        url: "/analytics-core",
+        icon: BarChart3,
+      },
+      {
+        title: "Document AI",
+        url: "/document-ai",
+        icon: Brain,
+      },
+      {
+        title: "Assistente Voz",
+        url: "/voice-assistant",
+        icon: Mic,
+      },
+      {
+        title: "Centro Notificações",
+        url: "/notifications-center",
+        icon: Bell,
+      },
+    ],
+  },
+  {
     title: "Comunicação",
     url: "/communication",
     icon: MessageSquare,
