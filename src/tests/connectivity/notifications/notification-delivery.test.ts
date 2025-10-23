@@ -86,7 +86,7 @@ describe("Notification Delivery System", () => {
         channel: "email",
       };
 
-      const result = await service.sendNotification(notification);
+      const result = await service.sendNotification(notification) as { success: boolean };
 
       expect(result.success).toBe(true);
       expect(service.getStats().sent).toBe(1);

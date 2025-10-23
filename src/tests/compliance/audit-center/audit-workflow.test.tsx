@@ -9,8 +9,8 @@ import { ReactNode } from "react";
 
 // Mock audit hook
 const useAuditWorkflow = () => {
-  const [audits, setAudits] = vi.fn()([]);
-  const [currentAudit, setCurrentAudit] = vi.fn()(null);
+  let audits: any[] = [];
+  let currentAudit: any = null;
 
   const createAudit = async (data: any) => {
     const newAudit = {
@@ -19,7 +19,7 @@ const useAuditWorkflow = () => {
       status: "pending",
       createdAt: new Date(),
     };
-    setAudits((prev: any) => [...prev, newAudit]);
+    audits = [...audits, newAudit];
     return newAudit;
   };
 
@@ -27,8 +27,8 @@ const useAuditWorkflow = () => {
     const audit = audits.find((a: any) => a.id === auditId);
     if (audit) {
       const updated = { ...audit, status: "in_progress", startedAt: new Date() };
-      setAudits((prev: any) => prev.map((a: any) => (a.id === auditId ? updated : a)));
-      setCurrentAudit(updated);
+      audits = audits.map((a: any) => (a.id === auditId ? updated : a));
+      currentAudit = updated;
     }
   };
 
@@ -41,7 +41,7 @@ const useAuditWorkflow = () => {
         completedAt: new Date(),
         findings 
       };
-      setAudits((prev: any) => prev.map((a: any) => (a.id === auditId ? updated : a)));
+      audits = audits.map((a: any) => (a.id === auditId ? updated : a));
       return updated;
     }
   };
@@ -175,7 +175,7 @@ describe("Audit Center Workflow", () => {
         await result.current.completeAudit(auditId, findings);
       });
 
-      const completed = result.current.audits.find(a => a.id === auditId);
+      const completed = result.current.audits.find((a: any) => a.id === auditId);
       expect(completed?.status).toBe("completed");
       expect(completed?.findings).toEqual(findings);
       expect(completed?.completedAt).toBeInstanceOf(Date);
@@ -197,7 +197,7 @@ describe("Audit Center Workflow", () => {
         await result.current.completeAudit(auditId, []);
       });
 
-      const completed = result.current.audits.find(a => a.id === auditId);
+      const completed = result.current.audits.find((a: any) => a.id === auditId);
       expect(completed?.status).toBe("completed");
       expect(completed?.findings).toEqual([]);
     });
@@ -216,7 +216,7 @@ describe("Audit Center Workflow", () => {
       });
 
       expect(result.current.audits).toHaveLength(3);
-      expect(result.current.audits.map(a => a.type)).toEqual([
+      expect(result.current.audits.map((a: any) => a.type)).toEqual([
         "safety",
         "compliance",
         "routine",
