@@ -136,11 +136,36 @@ class MetricsDaemon {
         avg_response_time: this.calculateAvgResponseTime(),
       };
 
-      await supabase.from("system_metrics").insert({
-        timestamp: metrics.timestamp,
-        metric_type: "performance",
-        data: metrics,
-      });
+      // Store in performance_metrics table (using existing schema)
+      await supabase.from("performance_metrics").insert([
+        {
+          metric_name: "cpu_usage",
+          metric_value: metrics.cpu_usage,
+          metric_unit: "percent",
+          category: "system",
+          status: metrics.cpu_usage > 80 ? "critical" : metrics.cpu_usage > 60 ? "warning" : "healthy",
+          recorded_at: metrics.timestamp,
+          metadata: { source: "metrics_daemon" }
+        },
+        {
+          metric_name: "memory_usage",
+          metric_value: metrics.memory_usage,
+          metric_unit: "MB",
+          category: "system",
+          status: "healthy",
+          recorded_at: metrics.timestamp,
+          metadata: { source: "metrics_daemon" }
+        },
+        {
+          metric_name: "active_modules",
+          metric_value: metrics.active_modules,
+          metric_unit: "count",
+          category: "system",
+          status: "healthy",
+          recorded_at: metrics.timestamp,
+          metadata: { source: "metrics_daemon" }
+        }
+      ]);
 
       logsEngine.debug("metrics", "Metrics collected and sent", metrics);
     } catch (error) {

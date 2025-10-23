@@ -139,14 +139,22 @@ class SystemWatchdog {
   private async persistMetrics(timestamp: string) {
     try {
       const metrics = Array.from(this.moduleStatuses.values());
+      const avgResponseTime = metrics.reduce((acc, m) => acc + m.responseTime, 0) / metrics.length || 0;
       
-      await supabase.from("system_metrics").insert({
-        timestamp,
-        metric_type: "health_check",
-        data: {
+      // Store in performance_metrics table
+      await supabase.from("performance_metrics").insert({
+        metric_name: "system_health",
+        metric_value: avgResponseTime,
+        metric_unit: "ms",
+        category: "health_check",
+        status: this.getSystemStatus().health === "healthy" ? "healthy" : 
+                this.getSystemStatus().health === "degraded" ? "warning" : "critical",
+        recorded_at: timestamp,
+        metadata: {
           modules: metrics,
-          routes: this.routeMetrics.slice(-10), // Last 10 routes
-        },
+          routes: this.routeMetrics.slice(-10),
+          source: "system_watchdog"
+        }
       });
     } catch (error) {
       console.error("Failed to persist metrics:", error);

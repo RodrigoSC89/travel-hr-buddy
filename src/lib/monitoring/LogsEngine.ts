@@ -161,7 +161,7 @@ class LogsEngine {
   }
 
   /**
-   * Flush logs to Supabase
+   * Flush logs to Supabase (using localStorage as fallback)
    */
   async flush() {
     if (this.logs.length === 0) return;
@@ -170,19 +170,15 @@ class LogsEngine {
     this.logs = [];
 
     try {
-      await supabase.from("system_logs").insert(
-        logsToFlush.map(log => ({
-          level: log.level,
-          category: log.category,
-          message: log.message,
-          data: log.data,
-          timestamp: log.timestamp,
-          module: log.module,
-          user_id: log.userId,
-        }))
-      );
+      // Store in localStorage as primary storage since system_logs table doesn't exist yet
+      const storedLogs = JSON.parse(localStorage.getItem('nautilus_system_logs') || '[]');
+      const combinedLogs = [...storedLogs, ...logsToFlush].slice(-1000); // Keep last 1000
+      localStorage.setItem('nautilus_system_logs', JSON.stringify(combinedLogs));
+      
+      // Optional: Could be adapted to use ai_insights or another table if needed
+      // For now, keeping logs client-side until proper table is created
     } catch (error) {
-      console.error("Failed to flush logs to Supabase:", error);
+      console.error("Failed to flush logs:", error);
       // Add logs back to queue
       this.logs = [...logsToFlush, ...this.logs];
     }
