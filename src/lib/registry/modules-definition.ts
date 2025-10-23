@@ -473,4 +473,14 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     fallbackAvailable: true,
     description: "Embedded AI system with context memory, natural language commands, and intelligent diagnostics"
   },
+  {
+    id: "thought-chain",
+    name: "Chain of Thought",
+    path: "/mission-control/thought-chain",
+    category: "ai",
+    aiEnabled: true,
+    connectedTo: ["Supabase", "OpenAI"],
+    fallbackAvailable: true,
+    description: "Multi-step reasoning system with visual chain execution and context-aware analysis"
+  },
 ];
