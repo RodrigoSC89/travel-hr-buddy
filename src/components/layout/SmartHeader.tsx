@@ -45,10 +45,11 @@ export function SmartHeader() {
           size="icon"
           className="relative rounded-full hover:bg-zinc-700 dark:hover:bg-zinc-800 transition-colors"
           title="Notificações"
+          aria-label={`Notificações${notificationCount > 0 ? ` - ${notificationCount} novas` : ''}`}
         >
           <Bell className="w-5 h-5" />
           {notificationCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold" aria-label={`${notificationCount} notificações não lidas`}>
               {notificationCount}
             </span>
           )}
@@ -60,6 +61,7 @@ export function SmartHeader() {
           size="icon"
           className="rounded-full hover:bg-zinc-700 dark:hover:bg-zinc-800 transition-colors"
           title="Assistente IA"
+          aria-label="Abrir Assistente de Inteligência Artificial"
         >
           <Bot className="w-5 h-5" />
         </Button>
