@@ -509,7 +509,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
             <img 
-              src={nautilusLogo} 
+              src={`${nautilusLogo}?v=2`}
               alt="Nautilus One" 
               className="w-10 h-10 object-contain"
             />
