@@ -384,6 +384,16 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     description: "API management and gateway"
   },
   {
+    id: "api-gateway-docs",
+    name: "API Documentation",
+    path: "/api-gateway/docs",
+    category: "system",
+    aiEnabled: false,
+    connectedTo: ["Supabase"],
+    fallbackAvailable: true,
+    description: "API Gateway documentation and testing"
+  },
+  {
     id: "mission-control",
     name: "Controle de Missão",
     path: "/mission-control",

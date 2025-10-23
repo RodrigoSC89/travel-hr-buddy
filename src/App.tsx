@@ -166,6 +166,7 @@ const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insigh
 const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
 const FinanceHub = React.lazy(() => import("@/modules/finance-hub"));
 const APIGateway = React.lazy(() => import("@/modules/api-gateway"));
+const APIGatewayDocs = React.lazy(() => import("@/pages/api-gateway-docs"));
 const AutomationModule = React.lazy(() => import("@/modules/automation"));
 const RiskManagementModule = React.lazy(() => import("@/modules/risk-management"));
 const AnalyticsCoreModule = React.lazy(() => import("@/modules/analytics-core"));
@@ -411,6 +412,7 @@ function App() {
                       <Route path="/finance-hub" element={<FinanceHub />} />
                       <Route path="/finance" element={<FinanceHub />} />
                       <Route path="/api-gateway" element={<APIGateway />} />
+                      <Route path="/api-gateway/docs" element={<APIGatewayDocs />} />
                       <Route path="/automation" element={<AutomationModule />} />
                       <Route path="/risk-management" element={<RiskManagementModule />} />
                       <Route path="/risk" element={<RiskManagementModule />} />

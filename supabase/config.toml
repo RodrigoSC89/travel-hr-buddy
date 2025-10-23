@@ -34,6 +34,12 @@ verify_jwt = false
 [functions.forecast-weekly]
 verify_jwt = false
 
+[functions.generate-insight-report]
+verify_jwt = false
+
+[functions.api-gateway]
+verify_jwt = false
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)

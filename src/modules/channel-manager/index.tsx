@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Radio, MessageCircle, Send, TrendingUp } from "lucide-react";
+import { ExternalAPITest } from "./components/ExternalAPITest";
 
 const ChannelManager = () => {
   return (
@@ -67,6 +68,9 @@ const ChannelManager = () => {
           </p>
         </CardContent>
       </Card>
+
+      {/* External API Integration Test */}
+      <ExternalAPITest />
     </div>
   );
 };
