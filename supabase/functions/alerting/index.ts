@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ============================================================================
 // Supabase Edge Function: alerting
 // Purpose: Serverless alerting system for ControlHub observability

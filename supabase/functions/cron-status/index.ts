@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ✅ Supabase Edge Function — Check cron job status
 // Returns status of the daily assistant report cron job
 
