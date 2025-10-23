@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import BridgeLinkDashboard from "@/modules/bridgelink/BridgeLinkDashboard";
-import * as bridgeLinkApi from "@/modules/bridgelink/services/bridge-link-api";
+import BridgeLinkDashboard from "@/modules/control/bridgelink/BridgeLinkDashboard";
+import * as bridgeLinkApi from "@/modules/control/bridgelink/services/bridge-link-api";
 
 // Mock Chart.js components
 vi.mock("react-chartjs-2", () => ({
@@ -9,7 +9,7 @@ vi.mock("react-chartjs-2", () => ({
 }));
 
 // Mock the API module
-vi.mock("@/modules/bridgelink/services/bridge-link-api", () => ({
+vi.mock("@/modules/control/bridgelink/services/bridge-link-api", () => ({
   getBridgeLinkData: vi.fn(),
   connectToLiveStream: vi.fn(() => vi.fn()),
   exportReportJSON: vi.fn(),

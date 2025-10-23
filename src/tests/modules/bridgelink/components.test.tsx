@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { DPStatusCard } from "@/modules/bridgelink/components/DPStatusCard";
-import { RiskAlertPanel } from "@/modules/bridgelink/components/RiskAlertPanel";
-import { LiveDecisionMap } from "@/modules/bridgelink/components/LiveDecisionMap";
-import type { RiskAlert, DPEvent } from "@/modules/bridgelink/types";
+import { DPStatusCard } from "@/modules/control/bridgelink/components/DPStatusCard";
+import { RiskAlertPanel } from "@/modules/control/bridgelink/components/RiskAlertPanel";
+import { LiveDecisionMap } from "@/modules/control/bridgelink/components/LiveDecisionMap";
+import type { RiskAlert, DPEvent } from "@/modules/control/bridgelink/types";
 
 // Mock Chart.js components
 vi.mock("react-chartjs-2", () => ({
