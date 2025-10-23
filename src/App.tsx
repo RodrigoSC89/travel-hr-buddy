@@ -48,7 +48,7 @@ const DPIntelligenceCenter = React.lazy(() => import("@/pages/dp-intelligence/DP
 const Innovation = React.lazy(() => import("@/pages/Innovation"));
 const Optimization = React.lazy(() => import("@/pages/Optimization"));
 const Collaboration = React.lazy(() => import("@/pages/Collaboration"));
-const Voice = React.lazy(() => import("@/modules/voice-assistant"));
+const Voice = React.lazy(() => import("@/modules/assistants/voice-assistant"));
 const Portal = React.lazy(() => import("@/modules/portal-funcionario"));
 const AR = React.lazy(() => import("@/pages/AR"));
 const IoT = React.lazy(() => import("@/pages/IoT"));
@@ -173,7 +173,7 @@ const NautilusLLM = React.lazy(() => import("@/pages/mission-control/nautilus-ll
 const ThoughtChain = React.lazy(() => import("@/pages/mission-control/thought-chain"));
 const NautilusOS = React.lazy(() => import("@/pages/NautilusOS"));
 const FinanceHub = React.lazy(() => import("@/modules/finance-hub"));
-const APIGateway = React.lazy(() => import("@/modules/api-gateway"));
+const APIGateway = React.lazy(() => import("@/modules/connectivity/api-gateway"));
 const APIGatewayDocs = React.lazy(() => import("@/pages/api-gateway-docs"));
 const AutomationModule = React.lazy(() => import("@/modules/intelligence/automation"));
 const RiskManagementModule = React.lazy(() => import("@/modules/emergency/risk-management"));
