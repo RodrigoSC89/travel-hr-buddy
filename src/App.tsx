@@ -31,7 +31,7 @@ const SGSOAuditPage = React.lazy(() => import("@/pages/SGSOAuditPage"));
 const Settings = React.lazy(() => import("@/pages/Settings"));
 const Documents = React.lazy(() => import("@/modules/documentos-ia/DocumentsAI"));
 const IntelligentDocuments = React.lazy(() => import("@/modules/documentos-ia/DocumentsAI"));
-const AIAssistant = React.lazy(() => import("@/modules/assistente-ia/AIChatAssistant"));
+const AIAssistant = React.lazy(() => import("@/pages/AIAssistant"));
 const Travel = React.lazy(() => import("@/pages/Travel"));
 const Analytics = React.lazy(() => import("@/pages/Analytics"));
 const HumanResources = React.lazy(() => import("@/pages/HumanResources"));
