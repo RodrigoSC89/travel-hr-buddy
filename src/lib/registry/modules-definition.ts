@@ -453,4 +453,14 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     fallbackAvailable: true,
     description: "Smart AI-driven crew health and wellbeing monitoring with confidential check-ins"
   },
+  {
+    id: "ai-command-center",
+    name: "AI Command Center",
+    path: "/mission-control/ai-command",
+    category: "ai",
+    aiEnabled: true,
+    connectedTo: ["Supabase", "Lovable AI"],
+    fallbackAvailable: true,
+    description: "Central AI command interface for system-wide control and queries"
+  },
 ];

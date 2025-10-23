@@ -40,6 +40,9 @@ verify_jwt = false
 [functions.crew-ai-analysis]
 verify_jwt = true
 
+[functions.nautilus-command]
+verify_jwt = false
+
 [functions.api-gateway]
 verify_jwt = false
 
