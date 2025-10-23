@@ -30,7 +30,6 @@ const SGSOReportPage = React.lazy(() => import("@/pages/SGSOReportPage"));
 const SGSOAuditPage = React.lazy(() => import("@/pages/SGSOAuditPage"));
 const Settings = React.lazy(() => import("@/pages/Settings"));
 const Documents = React.lazy(() => import("@/modules/documentos-ia/DocumentsAI"));
-const IntelligentDocuments = React.lazy(() => import("@/modules/documentos-ia/DocumentsAI"));
 const AIAssistant = React.lazy(() => import("@/pages/AIAssistant"));
 const Travel = React.lazy(() => import("@/pages/Travel"));
 const Analytics = React.lazy(() => import("@/pages/Analytics"));
@@ -184,14 +183,6 @@ const AnalyticsCoreModule = React.lazy(() => import("@/modules/intelligence/anal
 const VoiceAssistantModule = React.lazy(() => import("@/modules/assistants/voice-assistant"));
 const NotificationsCenterModule = React.lazy(() => import("@/modules/connectivity/notifications-center"));
 
-// Portuguese Module Imports
-const ComunicacaoModule = React.lazy(() => import("@/modules/comunicacao"));
-const PortalFuncionarioModule = React.lazy(() => import("@/modules/portal-funcionario"));
-const AlertasPrecosModule = React.lazy(() => import("@/modules/alertas-precos"));
-const ChecklistsInteligentesModule = React.lazy(() => import("@/modules/checklists-inteligentes"));
-const RealTimeWorkspaceModule = React.lazy(() => import("@/modules/workspace/real-time-workspace"));
-const VoiceAssistantModule2 = React.lazy(() => import("@/modules/assistants/voice-assistant"));
-
 // Loading component
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -280,7 +271,7 @@ function App() {
                       <Route path="/sgso/audit" element={<SGSOAuditPage />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/documents" element={<Documents />} />
-                      <Route path="/intelligent-documents" element={<IntelligentDocuments />} />
+                      <Route path="/intelligent-documents" element={<Documents />} />
                       <Route path="/ai-assistant" element={<AIAssistant />} />
                       <Route path="/travel" element={<Travel />} />
                       <Route path="/analytics" element={<Analytics />} />
@@ -449,12 +440,12 @@ function App() {
                       <Route path="/notifications" element={<NotificationsCenterModule />} />
                       
                       {/* Portuguese Module Routes with English Aliases */}
-                      <Route path="/comunicacao" element={<ComunicacaoModule />} />
-                      <Route path="/portal-funcionario" element={<PortalFuncionarioModule />} />
-                      <Route path="/alertas-precos" element={<AlertasPrecosModule />} />
-                      <Route path="/checklists-inteligentes" element={<ChecklistsInteligentesModule />} />
-                      <Route path="/real-time-workspace" element={<RealTimeWorkspaceModule />} />
-                      <Route path="/voice-assistant-new" element={<VoiceAssistantModule2 />} />
+                      <Route path="/comunicacao" element={<Communication />} />
+                      <Route path="/portal-funcionario" element={<Portal />} />
+                      <Route path="/alertas-precos" element={<PriceAlerts />} />
+                      <Route path="/checklists-inteligentes" element={<ChecklistsInteligentes />} />
+                      <Route path="/real-time-workspace" element={<RealTimeWorkspace />} />
+                      <Route path="/voice-assistant-new" element={<VoiceAssistantModule />} />
                       
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (
