@@ -137,34 +137,34 @@ const BIForecastsPage = React.lazy(() => import("@/pages/admin/bi/forecasts"));
 const PEODPAuditPage = React.lazy(() => import("@/pages/admin/peodp-audit"));
 const VaultAI = React.lazy(() => import("@/modules/vault_ai/pages/VaultAIPage"));
 
-// New Module Imports
-const CrewModule = React.lazy(() => import("@/modules/crew"));
-const FeedbackModule = React.lazy(() => import("@/modules/feedback"));
-const FleetModule = React.lazy(() => import("@/modules/fleet"));
-const PerformanceModule = React.lazy(() => import("@/modules/performance"));
-const ReportsModule = React.lazy(() => import("@/modules/reports"));
-const RealTimeWorkspace = React.lazy(() => import("@/modules/real-time-workspace"));
-const ChannelManager = React.lazy(() => import("@/modules/channel-manager"));
-const TrainingAcademy = React.lazy(() => import("@/modules/training-academy"));
+// New Module Imports - PATCH 66.0 Updated Paths
+const CrewModule = React.lazy(() => import("@/modules/operations/crew"));
+const FeedbackModule = React.lazy(() => import("@/modules/operations/feedback"));
+const FleetModule = React.lazy(() => import("@/modules/operations/fleet"));
+const PerformanceModule = React.lazy(() => import("@/modules/operations/performance"));
+const ReportsModule = React.lazy(() => import("@/modules/compliance/reports"));
+const RealTimeWorkspace = React.lazy(() => import("@/modules/workspace/real-time-workspace"));
+const ChannelManager = React.lazy(() => import("@/modules/connectivity/channel-manager"));
+const TrainingAcademy = React.lazy(() => import("@/modules/hr/training-academy"));
 const MaintenancePlanner = React.lazy(() => import("@/modules/maintenance-planner"));
-const MissionLogs = React.lazy(() => import("@/modules/mission-logs"));
+const MissionLogs = React.lazy(() => import("@/modules/emergency/mission-logs"));
 const IncidentReports = React.lazy(() => import("@/modules/incident-reports"));
-const FuelOptimizer = React.lazy(() => import("@/modules/fuel-optimizer"));
+const FuelOptimizer = React.lazy(() => import("@/modules/logistics/fuel-optimizer"));
 const WeatherDashboard = React.lazy(() => import("@/modules/weather-dashboard"));
-const VoyagePlanner = React.lazy(() => import("@/modules/voyage-planner"));
+const VoyagePlanner = React.lazy(() => import("@/modules/planning/voyage-planner"));
 const TaskAutomation = React.lazy(() => import("@/modules/task-automation"));
-const AuditCenter = React.lazy(() => import("@/modules/audit-center"));
+const AuditCenter = React.lazy(() => import("@/modules/compliance/audit-center"));
 const DeveloperStatus = React.lazy(() => import("@/pages/developer/status"));
-const EmergencyResponse = React.lazy(() => import("@/modules/emergency-response"));
+const EmergencyResponse = React.lazy(() => import("@/modules/emergency/emergency-response"));
 const ExecutiveReport = React.lazy(() => import("@/pages/ExecutiveReport"));
-const ComplianceHubModule = React.lazy(() => import("@/modules/compliance-hub"));
-const AIInsights = React.lazy(() => import("@/modules/ai-insights"));
-const LogisticsHub = React.lazy(() => import("@/modules/logistics-hub"));
-const CrewWellbeing = React.lazy(() => import("@/modules/crew-wellbeing"));
-const SatelliteTracker = React.lazy(() => import("@/modules/satellite-tracker"));
+const ComplianceHubModule = React.lazy(() => import("@/modules/compliance/compliance-hub"));
+const AIInsights = React.lazy(() => import("@/modules/intelligence/ai-insights"));
+const LogisticsHub = React.lazy(() => import("@/modules/logistics/logistics-hub"));
+const CrewWellbeing = React.lazy(() => import("@/modules/operations/crew-wellbeing"));
+const SatelliteTracker = React.lazy(() => import("@/modules/logistics/satellite-tracker"));
 const ProjectTimeline = React.lazy(() => import("@/modules/project-timeline"));
 const UserManagement = React.lazy(() => import("@/modules/user-management"));
-const MissionControl = React.lazy(() => import("@/modules/mission-control"));
+const MissionControl = React.lazy(() => import("@/modules/emergency/mission-control"));
 const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insight-dashboard"));
 const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
 const AICommandCenter = React.lazy(() => import("@/pages/mission-control/ai-command-center"));
@@ -175,19 +175,19 @@ const NautilusOS = React.lazy(() => import("@/pages/NautilusOS"));
 const FinanceHub = React.lazy(() => import("@/modules/finance-hub"));
 const APIGateway = React.lazy(() => import("@/modules/api-gateway"));
 const APIGatewayDocs = React.lazy(() => import("@/pages/api-gateway-docs"));
-const AutomationModule = React.lazy(() => import("@/modules/automation"));
-const RiskManagementModule = React.lazy(() => import("@/modules/risk-management"));
-const AnalyticsCoreModule = React.lazy(() => import("@/modules/analytics-core"));
-const VoiceAssistantModule = React.lazy(() => import("@/modules/voice-assistant"));
-const NotificationsCenterModule = React.lazy(() => import("@/modules/notifications-center"));
+const AutomationModule = React.lazy(() => import("@/modules/intelligence/automation"));
+const RiskManagementModule = React.lazy(() => import("@/modules/emergency/risk-management"));
+const AnalyticsCoreModule = React.lazy(() => import("@/modules/intelligence/analytics-core"));
+const VoiceAssistantModule = React.lazy(() => import("@/modules/assistants/voice-assistant"));
+const NotificationsCenterModule = React.lazy(() => import("@/modules/connectivity/notifications-center"));
 
 // Portuguese Module Imports
 const ComunicacaoModule = React.lazy(() => import("@/modules/comunicacao"));
 const PortalFuncionarioModule = React.lazy(() => import("@/modules/portal-funcionario"));
 const AlertasPrecosModule = React.lazy(() => import("@/modules/alertas-precos"));
 const ChecklistsInteligentesModule = React.lazy(() => import("@/modules/checklists-inteligentes"));
-const RealTimeWorkspaceModule = React.lazy(() => import("@/modules/real-time-workspace"));
-const VoiceAssistantModule2 = React.lazy(() => import("@/modules/voice-assistant"));
+const RealTimeWorkspaceModule = React.lazy(() => import("@/modules/workspace/real-time-workspace"));
+const VoiceAssistantModule2 = React.lazy(() => import("@/modules/assistants/voice-assistant"));
 
 // Loading component
 const LoadingSpinner = () => (
