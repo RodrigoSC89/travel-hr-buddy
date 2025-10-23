@@ -170,6 +170,13 @@ const DocumentAIModule = React.lazy(() => import("@/modules/document-ai"));
 const VoiceAssistantModule = React.lazy(() => import("@/modules/voice-assistant"));
 const NotificationsCenterModule = React.lazy(() => import("@/modules/notifications-center"));
 
+// Portuguese Module Imports
+const ComunicacaoModule = React.lazy(() => import("@/modules/comunicacao"));
+const DocumentosModule = React.lazy(() => import("@/modules/documentos"));
+const PortalFuncionarioModule = React.lazy(() => import("@/modules/portal-funcionario"));
+const AlertasPrecosModule = React.lazy(() => import("@/modules/alertas-precos"));
+const ChecklistsInteligentesModule = React.lazy(() => import("@/modules/checklists-inteligentes"));
+
 // Loading component
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -402,6 +409,13 @@ function App() {
                       <Route path="/voice-assistant" element={<VoiceAssistantModule />} />
                       <Route path="/notifications-center" element={<NotificationsCenterModule />} />
                       <Route path="/notifications" element={<NotificationsCenterModule />} />
+                      
+                      {/* Portuguese Module Routes with English Aliases */}
+                      <Route path="/comunicacao" element={<ComunicacaoModule />} />
+                      <Route path="/documentos" element={<DocumentosModule />} />
+                      <Route path="/portal-funcionario" element={<PortalFuncionarioModule />} />
+                      <Route path="/alertas-precos" element={<AlertasPrecosModule />} />
+                      <Route path="/checklists-inteligentes" element={<ChecklistsInteligentesModule />} />
                       
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (
