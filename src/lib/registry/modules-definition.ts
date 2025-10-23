@@ -248,16 +248,6 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     description: "Intelligent document management"
   },
   {
-    id: "document-ai",
-    name: "Document AI",
-    path: "/document-ai",
-    category: "documents",
-    aiEnabled: true,
-    connectedTo: ["Supabase", "OpenAI"],
-    fallbackAvailable: true,
-    description: "AI-powered document processing"
-  },
-  {
     id: "compliance-hub",
     name: "Hub de Compliance",
     path: "/compliance-hub",
