@@ -92,3 +92,17 @@ export interface SAROperation {
   estimatedDuration: number;
   coordinatingAuthority: string;
 }
+
+export interface EmergencyProtocolResult {
+  crewStatus: string;
+  location: string;
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+  };
+  vessel: string;
+  incident: string;
+  lastCheck: string;
+  severity: EmergencySeverity;
+  recommendedActions: string[];
+}
