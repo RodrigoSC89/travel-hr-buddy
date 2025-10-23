@@ -121,7 +121,7 @@ export default defineConfig(({ mode }) => {
   build: {
     outDir: "dist",
     sourcemap: false,
-    chunkSizeWarningLimit: 1600,
+    chunkSizeWarningLimit: 2000,
     target: "esnext",
     cssCodeSplit: true,
     minify: "terser",
@@ -144,16 +144,26 @@ export default defineConfig(({ mode }) => {
             if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom")) {
               return "vendor-react";
             }
-            if (id.includes("@radix-ui/react-dialog") || 
-                id.includes("@radix-ui/react-dropdown-menu") || 
-                id.includes("@radix-ui/react-tabs")) {
+            if (id.includes("@radix-ui")) {
               return "vendor-ui";
             }
-            if (id.includes("recharts")) {
+            if (id.includes("recharts") || id.includes("chart.js") || id.includes("react-chartjs-2")) {
               return "vendor-charts";
             }
             if (id.includes("mapbox-gl")) {
               return "vendor-mapbox";
+            }
+            if (id.includes("@tanstack/react-query")) {
+              return "vendor-query";
+            }
+            if (id.includes("framer-motion")) {
+              return "vendor-motion";
+            }
+            if (id.includes("@tiptap")) {
+              return "vendor-editor";
+            }
+            if (id.includes("lucide-react")) {
+              return "vendor-icons";
             }
             // Group other vendors
             return "vendor-misc";
