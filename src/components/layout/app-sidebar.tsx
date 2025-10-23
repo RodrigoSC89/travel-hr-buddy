@@ -724,6 +724,24 @@ const { handleNavigation } = useSidebarActions();
   // Build a de-duplicated navigation list once
   const dedupedNav = useMemo(() => dedupeNavigation(navigationItems), []);
 
+  // Build a Set of existing URLs to prevent duplicates when adding extra items
+  const navUrlSet = useMemo(() => {
+    const set = new Set<string>();
+    const add = (items: NavigationItem[]) => {
+      for (const it of items) {
+        const u = canonicalizeUrl(it.url);
+        if (u) set.add(u);
+        if (it.items) add(it.items);
+      }
+    };
+    add(dedupedNav);
+    return set;
+  }, [dedupedNav]);
+
+  const hasUrl = (url: string) => {
+    const u = canonicalizeUrl(url);
+    return u ? navUrlSet.has(u) : false;
+  };
 
   const toggleItem = (itemUrl: string) => {
     setOpenItems(prev => 
@@ -875,11 +893,11 @@ const isMainGroupOpen = dedupedNav.some(item =>
                 })}
 
                 {/* Administração - Apenas para admins e gerentes de RH */}
-                {canAccessModule("admin") && (
+                {canAccessModule("admin") && !hasUrl("/admin") && (
                   <SidebarMenuItem>
                     <SidebarMenuButton 
-                      onClick={() => handleItemClick("admin")}
-                      isActive={isItemActive("admin")}
+                      onClick={() => handleItemClick("/admin")}
+                      isActive={isItemActive("/admin")}
                       className="w-full justify-start"
                       title={collapsed ? "Administração" : undefined}
                     >
@@ -890,17 +908,19 @@ const isMainGroupOpen = dedupedNav.some(item =>
                 )}
 
                 {/* Automação IA - Para todos os usuários */}
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    onClick={() => navigate("/automation")}
-                    isActive={location.pathname === "/automation"}
-                    className="w-full justify-start"
-                    title={collapsed ? "Automação IA" : undefined}
-                  >
-                    <Zap className="h-4 w-4" />
-                    {!collapsed && <span className="ml-2">Automação IA</span>}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                {!hasUrl("/automation") && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton 
+                      onClick={() => handleItemClick("/automation")}
+                      isActive={isItemActive("/automation")}
+                      className="w-full justify-start"
+                      title={collapsed ? "Automação IA" : undefined}
+                    >
+                      <Zap className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">Automação IA</span>}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
 
                 {/* SaaS Manager - Para super admins */}
                 {userRole === "admin" && (
@@ -918,11 +938,11 @@ const isMainGroupOpen = dedupedNav.some(item =>
                 )}
 
                 {/* Dashboard Executivo - Para admins e gerentes */}
-                {(userRole === "admin" || userRole === "hr_manager" || userRole === "department_manager") && (
+                {(userRole === "admin" || userRole === "hr_manager" || userRole === "department_manager") && !hasUrl("/executive-dashboard") && (
                   <SidebarMenuItem>
                     <SidebarMenuButton 
-                      onClick={() => handleItemClick("executive")}
-                      isActive={isItemActive("executive")}
+                      onClick={() => handleItemClick("/executive-dashboard")}
+                      isActive={isItemActive("/executive-dashboard")}
                       className="w-full justify-start"
                       title={collapsed ? "Dashboard Executivo" : undefined}
                     >
