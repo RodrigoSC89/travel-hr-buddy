@@ -648,12 +648,38 @@ const navigationItems = [
   },
 ]; 
 
+// Helper: canonicalize URLs (aliases -> canonical)
+const URL_ALIASES: Record<string, string> = {
+  "/forecast/global": "/forecast-global",
+  "/compliance-hub": "/compliance-hub", // keep
+  "/logistics": "/logistics-hub",
+  "/wellbeing": "/crew-wellbeing",
+  "/weather": "/weather-dashboard",
+  "/voyage": "/voyage-planner",
+  "/risk": "/risk-management",
+  "/notifications": "/notifications-center",
+  "/portal-funcionario": "/portal",
+  "/comunicacao": "/communication",
+  "/intelligent-documents": "/documents",
+  "/emergency": "/emergency-response",
+  "/voice-assistant-new": "/voice-assistant",
+  "/peo-tram": "/peotram",
+  "/patch-66": "/patch66",
+  "/users": "/user-management",
+};
+
+function canonicalizeUrl(url?: string): string | undefined {
+  if (!url) return url;
+  return URL_ALIASES[url] || url;
+}
+
 // Helper: deduplicate navigation items by URL to avoid duplicates in the sidebar
 function dedupeNavigation(items: NavigationItem[]): NavigationItem[] {
   const seen = new Set<string>();
 
   const dedupeItem = (item: NavigationItem): NavigationItem | null => {
-    const key = item.url || item.title;
+    const canonicalUrl = canonicalizeUrl(item.url);
+    const key = canonicalUrl || item.title;
     if (key && seen.has(key)) return null;
     if (key) seen.add(key);
 
@@ -665,7 +691,7 @@ function dedupeNavigation(items: NavigationItem[]): NavigationItem[] {
       if (filtered.length) children = filtered;
     }
 
-    return { ...item, ...(children ? { items: children } : {}) };
+    return { ...item, ...(canonicalUrl ? { url: canonicalUrl } : {}), ...(children ? { items: children } : {}) };
   };
 
   return items.map(dedupeItem).filter(Boolean) as NavigationItem[];
