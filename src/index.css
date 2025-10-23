@@ -107,15 +107,29 @@
     --maritime-sgso: 0 84% 45%;              /* #dc2626 - Vermelho segurança */
     --maritime-sgso-fg: 0 0% 100%;           /* Branco para contraste 7:1+ */
     
+    /* === HIGH CONTRAST CARD COLORS (WCAG AAA Compliant) === */
+    --card-green: 155 80% 15%;               /* #1F5133 - Verde escuro */
+    --card-green-fg: 140 60% 95%;            /* #E8FFF0 - Texto verde claro */
+    
+    --card-blue: 210 70% 24%;                /* #123B64 - Azul escuro */
+    --card-blue-fg: 210 100% 95%;            /* #E2F0FF - Texto azul claro */
+    
+    --card-purple: 260 30% 25%;              /* #3B2E56 - Roxo escuro */
+    --card-purple-fg: 260 100% 96%;          /* #F3EFFF - Texto roxo claro */
+    
+    --card-orange: 25 55% 22%;               /* #583215 - Laranja escuro */
+    --card-orange-fg: 35 100% 96%;           /* #FFF5E8 - Texto laranja claro */
+    
     /* Text Colors - WCAG AAA Compliance (7:1 ratio) */
     --text-primary: 0 0% 0%;                 /* #000000 - Preto puro */
-    --text-secondary: 0 0% 10%;              /* #1a1a1a - Quase preto */
-    --text-tertiary: 220 9% 30%;             /* Cinza escuro para contraste */
+    --text-secondary: 0 0% 15%;              /* #262626 - Quase preto (AUMENTADO CONTRASTE) */
+    --text-tertiary: 220 9% 25%;             /* Cinza escuro para contraste (AUMENTADO) */
     
     /* Background Colors - Maximum Contrast */
     --bg-primary: 0 0% 100%;                 /* #ffffff - Branco puro */
     --bg-secondary: 220 13% 98%;             /* #f8fafc - Branco azulado muito claro */
     --bg-tertiary: 220 13% 95%;              /* #f1f5f9 - Cinza muito claro */
+    --bg-overlay-dark: 0 0% 0% / 0.6;        /* Overlay escuro para hero sections */
     
     /* Button Minimum Heights - Touch Target Compliance */
     --btn-min-height: 44px;                  /* WCAG AA+ mínimo para touch */
@@ -123,7 +137,14 @@
     
     /* Card and Container - Enhanced Visibility */
     --card-border-width: 2px;                /* Bordas mais visíveis */
+    --card-border-subtle: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil para cards escuros */
     --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    
+    /* Font Weights - Enhanced Readability */
+    --font-weight-normal: 500;               /* Aumentado de 400 para 500 */
+    --font-weight-medium: 600;               /* Aumentado de 500 para 600 */
+    --font-weight-semibold: 600;             /* Mantém 600 */
+    --font-weight-bold: 700;                 /* Mantém 700 */
     
     /* Gradients Azuis */
     --gradient-ocean: linear-gradient(135deg, hsl(var(--azure-500)), hsl(var(--azure-400)));
@@ -468,6 +489,54 @@
       min-height: 64px !important;
       min-width: 64px !important;
     }
+  }
+  
+  /* Maritime System Colors - High Contrast Cards */
+  .card-high-contrast-green {
+    background: hsl(var(--card-green));
+    color: hsl(var(--card-green-fg));
+    border: var(--card-border-subtle);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .card-high-contrast-blue {
+    background: hsl(var(--card-blue));
+    color: hsl(var(--card-blue-fg));
+    border: var(--card-border-subtle);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .card-high-contrast-purple {
+    background: hsl(var(--card-purple));
+    color: hsl(var(--card-purple-fg));
+    border: var(--card-border-subtle);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .card-high-contrast-orange {
+    background: hsl(var(--card-orange));
+    color: hsl(var(--card-orange-fg));
+    border: var(--card-border-subtle);
+    font-weight: var(--font-weight-medium);
+  }
+
+  /* Enhanced Hero Section with Dark Overlay */
+  .hero-section-overlay {
+    position: relative;
+  }
+  
+  .hero-section-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 1;
+  }
+  
+  .hero-section-overlay > * {
+    position: relative;
+    z-index: 2;
   }
   
   /* Maritime System Colors */
