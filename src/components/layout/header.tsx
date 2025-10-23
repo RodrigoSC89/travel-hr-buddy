@@ -7,8 +7,10 @@ import { RealTimeNotificationCenter } from "@/components/notifications/real-time
 import { UserMenu } from "@/components/auth/user-menu";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { OrganizationSelector } from "@/components/admin/organization-selector";
+import { useHighContrastTheme } from "@/hooks/useHighContrastTheme";
 
 export const Header: React.FC = () => {
+  const { isHighContrast, toggleHighContrast } = useHighContrastTheme();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/98 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90">
       <div className="container flex h-14 items-center">
@@ -25,6 +27,13 @@ export const Header: React.FC = () => {
             <OrganizationSelector />
             <RealTimeNotificationCenter />
             <UserMenu />
+            <Button
+              variant={isHighContrast ? "default" : "outline"}
+              onClick={toggleHighContrast}
+              aria-label={isHighContrast ? "Desativar alto contraste" : "Ativar alto contraste"}
+            >
+              Contraste
+            </Button>
             <ThemeToggle />
           </nav>
         </div>

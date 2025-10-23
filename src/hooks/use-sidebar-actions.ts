@@ -28,10 +28,10 @@ export const useSidebarActions = () => {
   const handleModuleAccess = (moduleKey: string) => {
     // Map module keys to their routes
     const moduleRoutes: Record<string, string> = {
-      dashboard: "/",
+      dashboard: "/dashboard",
       admin: "/admin",
       hr: "/hr",
-      maritime: "/maritime",
+      maritime: "/sistema-maritimo",
       "maritime-certifications": "/maritime-certifications",
       "fleet-tracking": "/fleet-tracking",
       "fleet-management": "/fleet-management",

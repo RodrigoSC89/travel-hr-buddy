@@ -38,9 +38,9 @@ import {
   Scan
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import nautilusLogo from "@/assets/nautilus-logo.png";
+import nautilusLogo from "@/assets/nautilus-logo.svg";
 import { usePermissions, Permission } from "@/hooks/use-permissions";
-
+import { useOrganization } from "@/contexts/OrganizationContext";
 import {
   Sidebar,
   SidebarContent,
@@ -660,12 +660,19 @@ const URL_ALIASES: Record<string, string> = {
   "/notifications": "/notifications-center",
   "/portal-funcionario": "/portal",
   "/comunicacao": "/communication",
+  "/documentos": "/documents",
+  "/documentos-ia": "/documents",
   "/intelligent-documents": "/documents",
   "/emergency": "/emergency-response",
   "/voice-assistant-new": "/voice-assistant",
   "/peo-tram": "/peotram",
   "/patch-66": "/patch66",
   "/users": "/user-management",
+  // New aliases to consolidate duplicates after reorg
+  "/maritime": "/sistema-maritimo",
+  "/alertas-precos": "/price-alerts",
+  "/reservas": "/reservations",
+  "/viagens": "/travel",
 };
 
 function canonicalizeUrl(url?: string): string | undefined {
@@ -712,7 +719,8 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const location = useLocation();
   const { canAccessModule, hasPermission, getRoleDisplayName, userRole } = usePermissions();
 const { handleNavigation } = useSidebarActions();
-
+  const { currentBranding } = useOrganization();
+  const logoSrc = currentBranding?.logo_url || nautilusLogo;
   // Build a de-duplicated navigation list once
   const dedupedNav = useMemo(() => dedupeNavigation(navigationItems), []);
 
@@ -765,8 +773,8 @@ const isMainGroupOpen = dedupedNav.some(item =>
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
             <img 
-              src={`${nautilusLogo}?v=2`}
-              alt="Nautilus One" 
+              src={`${logoSrc}?v=3`}
+              alt={currentBranding?.company_name || "Nautilus One"}
               className="w-10 h-10 object-contain"
             />
           </div>

@@ -143,6 +143,10 @@ class SystemWatchdog {
    */
   private async persistMetrics(timestamp: string) {
     try {
+      // Feature flag: disable client metrics by default to avoid RLS issues in preview/prod
+      const ENABLE = import.meta.env.VITE_ENABLE_CLIENT_METRICS === "true";
+      if (!ENABLE) return;
+
       const metrics = Array.from(this.moduleStatuses.values());
       const avgResponseTime = metrics.reduce((acc, m) => acc + m.responseTime, 0) / metrics.length || 0;
       

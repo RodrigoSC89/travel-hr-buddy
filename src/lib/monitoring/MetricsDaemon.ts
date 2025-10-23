@@ -31,6 +31,13 @@ class MetricsDaemon {
       console.log("📊 MetricsDaemon: Already running");
       return;
     }
+
+    // Feature flag: disable client metrics by default to avoid RLS issues in preview/prod
+    const ENABLE = import.meta.env.VITE_ENABLE_CLIENT_METRICS === "true";
+    if (!ENABLE) {
+      console.log("📊 MetricsDaemon: Disabled (VITE_ENABLE_CLIENT_METRICS not true)");
+      return;
+    }
     
     console.log("📊 MetricsDaemon: Starting metrics collection...");
     

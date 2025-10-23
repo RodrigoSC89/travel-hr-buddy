@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nautilus One Logo">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="hsl(210, 90%, 55%)" />
+      <stop offset="100%" stop-color="hsl(210, 90%, 40%)" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="rgba(0,0,0,0.25)" />
+    </filter>
+  </defs>
+  <rect x="8" y="8" width="80" height="80" rx="18" fill="url(#g)" filter="url(#shadow)"/>
+  <g transform="translate(18,18)">
+    <path d="M12 48V12h8l22 22V12h8v36h-8L20 26v22h-8z" fill="white"/>
+  </g>
+</svg>
