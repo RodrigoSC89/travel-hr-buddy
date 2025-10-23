@@ -398,6 +398,7 @@ function App() {
                       <Route path="/logistics" element={<LogisticsHub />} />
                       <Route path="/crew-wellbeing" element={<CrewWellbeing />} />
                       <Route path="/wellbeing" element={<CrewWellbeing />} />
+                      <Route path="/portal/crew/wellbeing" element={<CrewWellbeing />} />
                       <Route path="/satellite-tracker" element={<SatelliteTracker />} />
                       <Route path="/satellite" element={<SatelliteTracker />} />
                       <Route path="/project-timeline" element={<ProjectTimeline />} />

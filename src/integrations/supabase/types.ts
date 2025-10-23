@@ -230,7 +230,7 @@ export type Database = {
           action: string
           created_at: string
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           metadata: Json | null
           new_values: Json | null
           old_values: Json | null
@@ -244,7 +244,7 @@ export type Database = {
           action: string
           created_at?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           metadata?: Json | null
           new_values?: Json | null
           old_values?: Json | null
@@ -258,7 +258,7 @@ export type Database = {
           action?: string
           created_at?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           metadata?: Json | null
           new_values?: Json | null
           old_values?: Json | null
@@ -1747,6 +1747,42 @@ export type Database = {
           },
         ]
       }
+      crew_health_logs: {
+        Row: {
+          created_at: string | null
+          crew_member_id: string
+          energy_level: number | null
+          id: string
+          mood: number | null
+          notes: string | null
+          sleep_quality: number | null
+          stress_level: number | null
+          timestamp: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          crew_member_id: string
+          energy_level?: number | null
+          id?: string
+          mood?: number | null
+          notes?: string | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          timestamp?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          crew_member_id?: string
+          energy_level?: number | null
+          id?: string
+          mood?: number | null
+          notes?: string | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          timestamp?: string | null
+        }
+        Relationships: []
+      }
       crew_members: {
         Row: {
           contract_end: string | null
@@ -1923,6 +1959,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crew_status: {
+        Row: {
+          created_at: string | null
+          crew_member_id: string
+          department: string | null
+          full_name: string | null
+          id: string
+          position: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          crew_member_id: string
+          department?: string | null
+          full_name?: string | null
+          id?: string
+          position?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          crew_member_id?: string
+          department?: string | null
+          full_name?: string | null
+          id?: string
+          position?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       dashboard_activities: {
         Row: {
@@ -4153,7 +4222,7 @@ export type Database = {
       ports: {
         Row: {
           code: string
-          coordinates: unknown | null
+          coordinates: unknown
           country: string
           created_at: string | null
           facilities: string[] | null
@@ -4164,7 +4233,7 @@ export type Database = {
         }
         Insert: {
           code: string
-          coordinates?: unknown | null
+          coordinates?: unknown
           country: string
           created_at?: string | null
           facilities?: string[] | null
@@ -4175,7 +4244,7 @@ export type Database = {
         }
         Update: {
           code?: string
-          coordinates?: unknown | null
+          coordinates?: unknown
           country?: string
           created_at?: string | null
           facilities?: string[] | null
@@ -4964,7 +5033,7 @@ export type Database = {
           action: string
           created_at: string | null
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           metadata: Json | null
           new_values: Json | null
           old_values: Json | null
@@ -4978,7 +5047,7 @@ export type Database = {
           action: string
           created_at?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           metadata?: Json | null
           new_values?: Json | null
           old_values?: Json | null
@@ -4992,7 +5061,7 @@ export type Database = {
           action?: string
           created_at?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           metadata?: Json | null
           new_values?: Json | null
           old_values?: Json | null
@@ -6326,10 +6395,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      binary_quantize: {
-        Args: { "": string } | { "": unknown }
-        Returns: unknown
-      }
       calculate_checklist_compliance_score: {
         Args: { checklist_items: Json }
         Returns: number
@@ -6358,10 +6423,7 @@ export type Database = {
         Args: { limit_type: string; tenant_uuid: string }
         Returns: boolean
       }
-      create_sample_peotram_audit: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      create_sample_peotram_audit: { Args: never; Returns: string }
       detect_reservation_conflicts: {
         Args: {
           p_end_date: string
@@ -6384,14 +6446,8 @@ export type Database = {
         Args: { frequency: string; last_date?: string }
         Returns: string
       }
-      get_current_organization_id: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      get_current_tenant_id: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      get_current_organization_id: { Args: never; Returns: string }
+      get_current_tenant_id: { Args: never; Returns: string }
       get_reservation_stats: {
         Args: { p_user_id?: string }
         Returns: {
@@ -6416,22 +6472,6 @@ export type Database = {
         Args: { tenant_uuid: string; user_uuid?: string }
         Returns: string
       }
-      halfvec_avg: {
-        Args: { "": number[] }
-        Returns: unknown
-      }
-      halfvec_out: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      halfvec_send: {
-        Args: { "": unknown }
-        Returns: string
-      }
-      halfvec_typmod_in: {
-        Args: { "": unknown[] }
-        Returns: number
-      }
       has_feature_permission: {
         Args: {
           feature_name: string
@@ -6448,52 +6488,13 @@ export type Database = {
         }
         Returns: boolean
       }
-      hnsw_bit_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      hnsw_halfvec_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      hnsw_sparsevec_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      hnswhandler: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      is_admin: {
-        Args: { _user_id: string }
-        Returns: boolean
-      }
-      ivfflat_bit_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      ivfflat_halfvec_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      ivfflathandler: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
       jobs_trend_by_month: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           count: number
           month: string
         }[]
-      }
-      l2_norm: {
-        Args: { "": unknown } | { "": unknown }
-        Returns: number
-      }
-      l2_normalize: {
-        Args: { "": string } | { "": unknown } | { "": unknown }
-        Returns: unknown
       }
       match_mmi_jobs: {
         Args: {
@@ -6509,18 +6510,6 @@ export type Database = {
           similarity: number
           title: string
         }[]
-      }
-      sparsevec_out: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      sparsevec_send: {
-        Args: { "": unknown }
-        Returns: string
-      }
-      sparsevec_typmod_in: {
-        Args: { "": unknown[] }
-        Returns: number
       }
       user_belongs_to_org: {
         Args: { _org_id: string; _user_id: string }
@@ -6545,30 +6534,6 @@ export type Database = {
       user_is_org_admin: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
-      }
-      vector_avg: {
-        Args: { "": number[] }
-        Returns: string
-      }
-      vector_dims: {
-        Args: { "": string } | { "": unknown }
-        Returns: number
-      }
-      vector_norm: {
-        Args: { "": string }
-        Returns: number
-      }
-      vector_out: {
-        Args: { "": string }
-        Returns: unknown
-      }
-      vector_send: {
-        Args: { "": string }
-        Returns: string
-      }
-      vector_typmod_in: {
-        Args: { "": unknown[] }
-        Returns: number
       }
     }
     Enums: {
@@ -6720,4 +6685,4 @@ export const Constants = {
       ],
     },
   },
-} as const;
+} as const

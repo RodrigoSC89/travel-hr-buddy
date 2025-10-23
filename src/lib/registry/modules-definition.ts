@@ -443,4 +443,14 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     fallbackAvailable: true,
     description: "Satellite tracking and communication"
   },
+  {
+    id: "crew-wellbeing",
+    name: "Crew Wellbeing",
+    path: "/portal/crew/wellbeing",
+    category: "crew",
+    aiEnabled: true,
+    connectedTo: ["Supabase", "Lovable AI"],
+    fallbackAvailable: true,
+    description: "Smart AI-driven crew health and wellbeing monitoring with confidential check-ins"
+  },
 ];
