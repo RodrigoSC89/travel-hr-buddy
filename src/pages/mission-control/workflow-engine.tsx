@@ -62,7 +62,7 @@ const WorkflowEngine = () => {
     if (error) {
       console.error("Error loading workflows:", error);
     } else {
-      setWorkflows(data || []);
+      setWorkflows((data || []) as any);
     }
   };
 

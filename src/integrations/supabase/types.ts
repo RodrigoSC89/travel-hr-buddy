@@ -3121,6 +3121,36 @@ export type Database = {
         }
         Relationships: []
       }
+      nautilus_workflows: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          description: string | null
+          id: string
+          name: string
+          steps: Json
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          id?: string
+          name: string
+          steps: Json
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          id?: string
+          name?: string
+          steps?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       notification_settings: {
         Row: {
           created_at: string | null
@@ -6413,6 +6443,88 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflow_execution_logs: {
+        Row: {
+          execution_id: string
+          id: string
+          input: Json | null
+          output: Json | null
+          status: string
+          step_index: number
+          step_name: string
+          timestamp: string | null
+        }
+        Insert: {
+          execution_id: string
+          id?: string
+          input?: Json | null
+          output?: Json | null
+          status: string
+          step_index: number
+          step_name: string
+          timestamp?: string | null
+        }
+        Update: {
+          execution_id?: string
+          id?: string
+          input?: Json | null
+          output?: Json | null
+          status?: string
+          step_index?: number
+          step_name?: string
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_execution_logs_execution_id_fkey"
+            columns: ["execution_id"]
+            isOneToOne: false
+            referencedRelation: "workflow_executions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflow_executions: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          current_step: number | null
+          id: string
+          started_at: string | null
+          status: string
+          total_steps: number
+          workflow_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          current_step?: number | null
+          id?: string
+          started_at?: string | null
+          status: string
+          total_steps: number
+          workflow_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          current_step?: number | null
+          id?: string
+          started_at?: string | null
+          status?: string
+          total_steps?: number
+          workflow_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_executions_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "nautilus_workflows"
             referencedColumns: ["id"]
           },
         ]

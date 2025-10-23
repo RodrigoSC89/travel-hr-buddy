@@ -12,13 +12,14 @@ import { NAUTILUS_MODULES } from "@/lib/registry/modules-definition";
 import { ModuleDefinition } from "@/lib/registry/ModuleRegistry";
 import { 
   Home, Settings, Search, Zap, Brain, Ship, 
-  Activity, FileText, Users, Shield 
+  Activity, FileText, Users, Shield, Workflow 
 } from "lucide-react";
 
 const quickActions = [
   { id: "home", label: "Ir para Dashboard", icon: Home, action: "/" },
   { id: "settings", label: "Configurações", icon: Settings, action: "/settings" },
   { id: "ai-command", label: "AI Command Center", icon: Brain, action: "/mission-control/ai-command" },
+  { id: "workflows", label: "Workflow Engine", icon: Workflow, action: "/mission-control/workflows" },
   { id: "autonomy", label: "Autonomy Console", icon: Zap, action: "/mission-control/autonomy" },
   { id: "insights", label: "Insight Dashboard", icon: Activity, action: "/mission-control/insight-dashboard" },
 ];
