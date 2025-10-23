@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useSidebarActions } from "@/hooks/use-sidebar-actions";
 import { 
   LayoutDashboard, 
@@ -646,7 +646,31 @@ const navigationItems = [
     url: "/help",
     icon: HelpCircle,
   },
-];
+]; 
+
+// Helper: deduplicate navigation items by URL to avoid duplicates in the sidebar
+function dedupeNavigation(items: NavigationItem[]): NavigationItem[] {
+  const seen = new Set<string>();
+
+  const dedupeItem = (item: NavigationItem): NavigationItem | null => {
+    const key = item.url || item.title;
+    if (key && seen.has(key)) return null;
+    if (key) seen.add(key);
+
+    let children: NavigationItem[] | undefined;
+    if (item.items && item.items.length) {
+      const filtered = item.items
+        .map(dedupeItem)
+        .filter(Boolean) as NavigationItem[];
+      if (filtered.length) children = filtered;
+    }
+
+    return { ...item, ...(children ? { items: children } : {}) };
+  };
+
+  return items.map(dedupeItem).filter(Boolean) as NavigationItem[];
+}
+
 
 interface AppSidebarProps {
   activeItem?: string;
@@ -660,7 +684,11 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { canAccessModule, hasPermission, getRoleDisplayName, userRole } = usePermissions();
-  const { handleNavigation } = useSidebarActions();
+const { handleNavigation } = useSidebarActions();
+
+  // Build a de-duplicated navigation list once
+  const dedupedNav = useMemo(() => dedupeNavigation(navigationItems), []);
+
 
   const toggleItem = (itemUrl: string) => {
     setOpenItems(prev => 
@@ -696,8 +724,8 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   };
 
   // Determinar se o grupo de navegação principal deve estar aberto
-  const isMainGroupOpen = navigationItems.some(item => 
-    item.items ? item.items.some(subItem => isItemActive(subItem.url)) : isItemActive(item.url)
+const isMainGroupOpen = dedupedNav.some(item => 
+    item.items ? item.items.some(subItem => isItemActive(subItem.url ?? "")) : isItemActive(item.url ?? "")
   );
 
   return (
@@ -735,7 +763,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             {!collapsed && <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>}
             <SidebarGroupContent>
               <SidebarMenu>
-                {navigationItems.map((item) => {
+                {dedupedNav.map((item) => {
                 // Verificar permissões para exibir o item
                   if (!canAccessItem(item)) {
                     return null;
@@ -794,10 +822,10 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
 
                   // Item simples
                   return (
-                    <SidebarMenuItem key={item.url}>
+                    <SidebarMenuItem key={item.url || item.title}>
                       <SidebarMenuButton 
-                        onClick={() => handleItemClick(item.url)}
-                        isActive={isItemActive(item.url)}
+                        onClick={() => handleItemClick(item.url ?? "")}
+                        isActive={isItemActive(item.url ?? "")}
                         className="w-full justify-start focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nautilus-primary)]"
                         title={collapsed ? item.title : undefined}
                         tabIndex={0}
