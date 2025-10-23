@@ -25,9 +25,9 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     path: "/dp-intelligence",
     category: "maritime",
     aiEnabled: true,
-    connectedTo: ["Supabase", "OpenAI", "MQTT"],
+    connectedTo: ["Supabase", "OpenAI"],
     fallbackAvailable: true,
-    description: "Dynamic Positioning intelligence and monitoring"
+    description: "Dynamic Positioning intelligence with real-time monitoring, AI analysis, and anomaly detection"
   },
   {
     id: "bridgelink",
