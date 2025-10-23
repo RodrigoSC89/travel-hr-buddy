@@ -135,6 +135,41 @@ const BIForecastsPage = React.lazy(() => import("@/pages/admin/bi/forecasts"));
 const PEODPAuditPage = React.lazy(() => import("@/pages/admin/peodp-audit"));
 const VaultAI = React.lazy(() => import("@/modules/vault_ai/pages/VaultAIPage"));
 
+// New Module Imports
+const CrewModule = React.lazy(() => import("@/modules/crew"));
+const FeedbackModule = React.lazy(() => import("@/modules/feedback"));
+const FleetModule = React.lazy(() => import("@/modules/fleet"));
+const PerformanceModule = React.lazy(() => import("@/modules/performance"));
+const ReportsModule = React.lazy(() => import("@/modules/reports"));
+const RealTimeWorkspace = React.lazy(() => import("@/modules/real-time-workspace"));
+const ChannelManager = React.lazy(() => import("@/modules/channel-manager"));
+const TrainingAcademy = React.lazy(() => import("@/modules/training-academy"));
+const MaintenancePlanner = React.lazy(() => import("@/modules/maintenance-planner"));
+const MissionLogs = React.lazy(() => import("@/modules/mission-logs"));
+const IncidentReports = React.lazy(() => import("@/modules/incident-reports"));
+const FuelOptimizer = React.lazy(() => import("@/modules/fuel-optimizer"));
+const WeatherDashboard = React.lazy(() => import("@/modules/weather-dashboard"));
+const VoyagePlanner = React.lazy(() => import("@/modules/voyage-planner"));
+const TaskAutomation = React.lazy(() => import("@/modules/task-automation"));
+const AuditCenter = React.lazy(() => import("@/modules/audit-center"));
+const ComplianceHubModule = React.lazy(() => import("@/modules/compliance-hub"));
+const AIInsights = React.lazy(() => import("@/modules/ai-insights"));
+const LogisticsHub = React.lazy(() => import("@/modules/logistics-hub"));
+const CrewWellbeing = React.lazy(() => import("@/modules/crew-wellbeing"));
+const SatelliteTracker = React.lazy(() => import("@/modules/satellite-tracker"));
+const ProjectTimeline = React.lazy(() => import("@/modules/project-timeline"));
+const UserManagement = React.lazy(() => import("@/modules/user-management"));
+const EmergencyResponse = React.lazy(() => import("@/modules/emergency-response"));
+const MissionControl = React.lazy(() => import("@/modules/mission-control"));
+const FinanceHub = React.lazy(() => import("@/modules/finance-hub"));
+const APIGateway = React.lazy(() => import("@/modules/api-gateway"));
+const AutomationModule = React.lazy(() => import("@/modules/automation"));
+const RiskManagementModule = React.lazy(() => import("@/modules/risk-management"));
+const AnalyticsCoreModule = React.lazy(() => import("@/modules/analytics-core"));
+const DocumentAIModule = React.lazy(() => import("@/modules/document-ai"));
+const VoiceAssistantModule = React.lazy(() => import("@/modules/voice-assistant"));
+const NotificationsCenterModule = React.lazy(() => import("@/modules/notifications-center"));
+
 // Loading component
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -321,6 +356,52 @@ function App() {
                       <Route path="/smart-layout-demo" element={<SmartLayoutDemo />} />
                       <Route path="/template-editor-demo" element={<TemplateEditorDemo />} />
                       <Route path="/_offline" element={<Offline />} />
+                      
+                      {/* New Module Routes */}
+                      <Route path="/crew" element={<CrewModule />} />
+                      <Route path="/feedback" element={<FeedbackModule />} />
+                      <Route path="/fleet" element={<FleetModule />} />
+                      <Route path="/performance" element={<PerformanceModule />} />
+                      <Route path="/reports-module" element={<ReportsModule />} />
+                      <Route path="/real-time-workspace" element={<RealTimeWorkspace />} />
+                      <Route path="/channel-manager" element={<ChannelManager />} />
+                      <Route path="/training-academy" element={<TrainingAcademy />} />
+                      <Route path="/maintenance-planner" element={<MaintenancePlanner />} />
+                      <Route path="/mission-logs" element={<MissionLogs />} />
+                      <Route path="/incident-reports" element={<IncidentReports />} />
+                      <Route path="/fuel-optimizer" element={<FuelOptimizer />} />
+                      <Route path="/weather-dashboard" element={<WeatherDashboard />} />
+                      <Route path="/weather" element={<WeatherDashboard />} />
+                      <Route path="/voyage-planner" element={<VoyagePlanner />} />
+                      <Route path="/voyage" element={<VoyagePlanner />} />
+                      <Route path="/task-automation" element={<TaskAutomation />} />
+                      <Route path="/audit-center" element={<AuditCenter />} />
+                      <Route path="/compliance-hub" element={<ComplianceHubModule />} />
+                      <Route path="/ai-insights" element={<AIInsights />} />
+                      <Route path="/logistics-hub" element={<LogisticsHub />} />
+                      <Route path="/logistics" element={<LogisticsHub />} />
+                      <Route path="/crew-wellbeing" element={<CrewWellbeing />} />
+                      <Route path="/wellbeing" element={<CrewWellbeing />} />
+                      <Route path="/satellite-tracker" element={<SatelliteTracker />} />
+                      <Route path="/satellite" element={<SatelliteTracker />} />
+                      <Route path="/project-timeline" element={<ProjectTimeline />} />
+                      <Route path="/timeline" element={<ProjectTimeline />} />
+                      <Route path="/user-management" element={<UserManagement />} />
+                      <Route path="/users" element={<UserManagement />} />
+                      <Route path="/emergency-response" element={<EmergencyResponse />} />
+                      <Route path="/emergency" element={<EmergencyResponse />} />
+                      <Route path="/mission-control" element={<MissionControl />} />
+                      <Route path="/finance-hub" element={<FinanceHub />} />
+                      <Route path="/finance" element={<FinanceHub />} />
+                      <Route path="/api-gateway" element={<APIGateway />} />
+                      <Route path="/automation" element={<AutomationModule />} />
+                      <Route path="/risk-management" element={<RiskManagementModule />} />
+                      <Route path="/risk" element={<RiskManagementModule />} />
+                      <Route path="/analytics-core" element={<AnalyticsCoreModule />} />
+                      <Route path="/document-ai" element={<DocumentAIModule />} />
+                      <Route path="/voice-assistant" element={<VoiceAssistantModule />} />
+                      <Route path="/notifications-center" element={<NotificationsCenterModule />} />
+                      <Route path="/notifications" element={<NotificationsCenterModule />} />
                       
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (
