@@ -91,18 +91,19 @@ describe('Integration: Auth to Dashboard Flow', () => {
     };
 
     const mockSupabase = {
-      from: vi.fn(() => ({
+      from: vi.fn((table: string) => ({
         select: vi.fn().mockReturnThis(),
         eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({
+        single: vi.fn(() => Promise.resolve({
           data: mockProfile,
           error: null,
-        }),
+        })),
       })),
     };
 
     // Act
-    const result = await mockSupabase.from('profiles').select('*').eq('user_id', mockSession.user.id).single();
+    const chain = mockSupabase.from('profiles').select('*').eq('user_id', mockSession.user.id);
+    const result = await chain.single();
     const profile = result.data;
 
     // Assert
