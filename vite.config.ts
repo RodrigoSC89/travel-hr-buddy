@@ -130,6 +130,9 @@ export default defineConfig(({ mode }) => {
         drop_console: false,
       },
     },
+    commonjsOptions: {
+      exclude: [/supabase\/functions/],
+    },
     rollupOptions: {
       output: {
         manualChunks: (id) => {

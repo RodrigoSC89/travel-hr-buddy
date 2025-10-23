@@ -3,18 +3,9 @@ import React, { Suspense } from "react";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 import { Loading } from "@/components/ui/Loading";
 
-const DPOverview = safeLazyImport(
-  () => React.lazy(() => import(import("@/components/dp-intelligence/DPOverview"))),
-  "DPOverview"
-);
-const DPRealtime = safeLazyImport(
-  () => React.lazy(() => import(import("@/components/dp-intelligence/DPRealtime"))),
-  "DPRealtime"
-);
-const DPAIAnalyzer = safeLazyImport(
-  () => React.lazy(() => import(import("@/components/dp-intelligence/DPAIAnalyzer"))),
-  "DPAIAnalyzer"
-);
+const DPOverview = React.lazy(() => import("@/components/dp-intelligence/DPOverview"));
+const DPRealtime = React.lazy(() => import("@/components/dp-intelligence/DPRealtime"));
+const DPAIAnalyzer = React.lazy(() => import("@/components/dp-intelligence/DPAIAnalyzer"));
 
 export default function DPIntelligence() {
   return (

@@ -216,16 +216,6 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     description: "Employee portal and HR services"
   },
   {
-    id: "crew-wellbeing",
-    name: "Bem-estar da Tripulação",
-    path: "/crew-wellbeing",
-    category: "hr",
-    aiEnabled: true,
-    connectedTo: ["Supabase", "OpenAI"],
-    fallbackAvailable: true,
-    description: "Crew wellbeing and health management"
-  },
-  {
     id: "training-academy",
     name: "Academia de Treinamento",
     path: "/training-academy",
@@ -446,8 +436,8 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
   {
     id: "crew-wellbeing",
     name: "Crew Wellbeing",
-    path: "/portal/crew/wellbeing",
-    category: "crew",
+    path: "/crew-wellbeing",
+    category: "hr",
     aiEnabled: true,
     connectedTo: ["Supabase", "Lovable AI"],
     fallbackAvailable: true,

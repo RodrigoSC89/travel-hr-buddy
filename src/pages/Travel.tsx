@@ -36,18 +36,9 @@ import {
 } from "lucide-react";
 
 // Lazy load travel components to reduce initial bundle size
-const FlightSearch = safeLazyImport(
-  () => React.lazy(() => import(import("@/components/travel/flight-search").then(m => ({ default: m.FlightSearch })))),
-  "Flight Search"
-);
-const EnhancedHotelSearch = safeLazyImport(
-  () => React.lazy(() => import(import("@/components/travel/enhanced-hotel-search").then(m => ({ default: m.EnhancedHotelSearch })))),
-  "Enhanced Hotel Search"
-);
-const TravelMap = safeLazyImport(
-  () => React.lazy(() => import(import("@/components/travel/travel-map").then(m => ({ default: m.TravelMap })))),
-  "Travel Map"
-);
+const FlightSearch = React.lazy(() => import("@/components/travel/flight-search").then(m => ({ default: m.FlightSearch })));
+const EnhancedHotelSearch = React.lazy(() => import("@/components/travel/enhanced-hotel-search").then(m => ({ default: m.EnhancedHotelSearch })));
+const TravelMap = React.lazy(() => import("@/components/travel/travel-map").then(m => ({ default: m.TravelMap })));
 const PredictiveTravelDashboard = safeLazyImport(
   () => React.lazy(() => import(import("@/components/travel/predictive-travel-dashboard").then(m => ({ default: m.PredictiveTravelDashboard })))),
   "Predictive Travel Dashboard"
