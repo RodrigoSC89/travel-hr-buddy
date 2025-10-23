@@ -1,7 +1,9 @@
 /**
  * Evaluate Audit Edge Function
- * PATCH 62.0 - AI-powered audit evaluation
+ * PATCH 62.0 - AI-powered audit evaluation using Lovable AI Gateway
  */
+
+/// <reference types="https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts" />
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
