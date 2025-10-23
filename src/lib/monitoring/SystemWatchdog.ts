@@ -31,6 +31,11 @@ class SystemWatchdog {
    * Start the watchdog monitoring
    */
   start() {
+    if (this.checkInterval) {
+      console.log("🐕 SystemWatchdog: Already running");
+      return;
+    }
+    
     console.log("🐕 SystemWatchdog: Starting monitoring...");
     
     // Initial check

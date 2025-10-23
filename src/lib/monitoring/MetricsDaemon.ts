@@ -27,6 +27,11 @@ class MetricsDaemon {
    * Start collecting metrics
    */
   start() {
+    if (this.metricsInterval) {
+      console.log("📊 MetricsDaemon: Already running");
+      return;
+    }
+    
     console.log("📊 MetricsDaemon: Starting metrics collection...");
     
     // Track FPS
