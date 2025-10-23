@@ -38,7 +38,7 @@ import {
   Scan
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import nautilusOneLogo from "@/assets/nautilus-one-logo.png";
+import nautilusLogo from "@/assets/nautilus-logo.png";
 import { usePermissions, Permission } from "@/hooks/use-permissions";
 
 import {
@@ -509,7 +509,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
             <img 
-              src={nautilusOneLogo} 
+              src={nautilusLogo} 
               alt="Nautilus One" 
               className="w-10 h-10 object-contain"
             />
