@@ -225,6 +225,87 @@ export type Database = {
           },
         ]
       }
+      audit_center_logs: {
+        Row: {
+          action: string
+          ai_response: Json | null
+          audit_id: string
+          audit_type: string
+          checklist_data: Json | null
+          compliance_score: number | null
+          created_at: string | null
+          evidence_files: string[] | null
+          id: string
+          metadata: Json | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          ai_response?: Json | null
+          audit_id: string
+          audit_type: string
+          checklist_data?: Json | null
+          compliance_score?: number | null
+          created_at?: string | null
+          evidence_files?: string[] | null
+          id?: string
+          metadata?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          ai_response?: Json | null
+          audit_id?: string
+          audit_type?: string
+          checklist_data?: Json | null
+          compliance_score?: number | null
+          created_at?: string | null
+          evidence_files?: string[] | null
+          id?: string
+          metadata?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      audit_evidence: {
+        Row: {
+          audit_id: string
+          file_name: string
+          file_path: string
+          file_size: number | null
+          file_type: string
+          id: string
+          metadata: Json | null
+          uploaded_at: string | null
+          uploaded_by: string | null
+        }
+        Insert: {
+          audit_id: string
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          file_type: string
+          id?: string
+          metadata?: Json | null
+          uploaded_at?: string | null
+          uploaded_by?: string | null
+        }
+        Update: {
+          audit_id?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          file_type?: string
+          id?: string
+          metadata?: Json | null
+          uploaded_at?: string | null
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
