@@ -37,6 +37,9 @@ verify_jwt = false
 [functions.generate-insight-report]
 verify_jwt = false
 
+[functions.crew-ai-analysis]
+verify_jwt = true
+
 [functions.api-gateway]
 verify_jwt = false
 
