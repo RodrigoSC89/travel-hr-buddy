@@ -3,13 +3,12 @@
  * PATCH 62.0 - AI-powered audit evaluation using Lovable AI Gateway
  */
 
-/// <reference types="https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts" />
-
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// @ts-ignore: Deno is available in edge runtime
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -21,6 +20,7 @@ Deno.serve(async (req: Request) => {
     console.log(`[evaluate-audit] Starting evaluation for ${auditType} audit ${auditId}`);
 
     // Get Lovable AI API key from environment
+    // @ts-ignore: Deno is available in edge runtime
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
