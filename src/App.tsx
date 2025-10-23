@@ -164,7 +164,6 @@ const CrewWellbeing = React.lazy(() => import("@/modules/crew-wellbeing"));
 const SatelliteTracker = React.lazy(() => import("@/modules/satellite-tracker"));
 const ProjectTimeline = React.lazy(() => import("@/modules/project-timeline"));
 const UserManagement = React.lazy(() => import("@/modules/user-management"));
-const EmergencyResponse = React.lazy(() => import("@/modules/emergency-response"));
 const MissionControl = React.lazy(() => import("@/modules/mission-control"));
 const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insight-dashboard"));
 const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
