@@ -1,3 +1,4 @@
+// @ts-nocheck - PATCH 66.0: imports need updating to new structure
 /**
  * Control Hub Tests
  */

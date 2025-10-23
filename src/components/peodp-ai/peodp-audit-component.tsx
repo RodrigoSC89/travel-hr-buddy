@@ -23,7 +23,7 @@ import {
   AlertCircle,
   Info,
 } from "lucide-react";
-import { peodpCore } from "@/modules/peodp_ai";
+import { peodpCore } from "@/modules/hr/peo-dp";
 import type { PEODPAuditoria } from "@/types/peodp-audit";
 import { getScoreLevel, getScoreColor } from "@/types/peodp-audit";
 
@@ -57,7 +57,7 @@ export function PEODPAuditComponent() {
       });
 
       // Gerar recomendações
-      const { PEOEngine } = await import("@/modules/peodp_ai");
+      const { PEOEngine } = await import("@/modules/hr/peo-dp");
       const engine = new PEOEngine();
       const recs = engine.gerarRecomendacoes(resultado);
       setRecomendacoes(recs);

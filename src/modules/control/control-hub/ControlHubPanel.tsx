@@ -4,16 +4,16 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { controlHub } from "@/modules/control_hub";
+import { controlHub } from "@/modules/control/control-hub";
 import { 
   SystemStatus, 
   ConnectionStatus, 
   ModuleCard, 
   CacheStats, 
   SyncStatus 
-} from "@/modules/control_hub/hub_ui";
-import { ControlHubState } from "@/modules/control_hub/types";
-import { hubBridge } from "@/modules/control_hub/hub_bridge";
+} from "@/modules/control/control-hub/hub_ui";
+import { ControlHubState } from "@/modules/control/control-hub/types";
+import { hubBridge } from "@/modules/control/control-hub/hub_bridge";
 import { useButtonHandlers } from "@/hooks/useButtonHandlers";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
