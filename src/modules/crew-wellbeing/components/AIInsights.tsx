@@ -37,7 +37,7 @@ export const AIInsights = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke("crew-ai-analysis", {
+      const { data, error } = await supabase.functions.invoke("crew-ai-analysis" as any, {
         body: { crewMemberId: user.id, analysisType: "wellbeing" }
       });
 

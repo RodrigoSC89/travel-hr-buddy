@@ -33,7 +33,7 @@ export const HealthCheckIn = () => {
         return;
       }
 
-      const { error } = await supabase.from("crew_health_logs").insert({
+      const { error } = await supabase.from("crew_health_logs" as any).insert({
         crew_member_id: user.id,
         stress_level: formData.stress_level,
         energy_level: formData.energy_level,
