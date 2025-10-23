@@ -473,4 +473,14 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     fallbackAvailable: true,
     description: "AI-powered multi-step workflow execution with approval and rollback"
   },
+  {
+    id: "nautilus-llm",
+    name: "Nautilus LLM Core",
+    path: "/mission-control/llm",
+    category: "ai",
+    aiEnabled: true,
+    connectedTo: ["Supabase", "OpenAI"],
+    fallbackAvailable: true,
+    description: "Embedded AI system with context memory, natural language commands, and intelligent diagnostics"
+  },
 ];

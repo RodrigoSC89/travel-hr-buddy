@@ -18,6 +18,7 @@ import {
 const quickActions = [
   { id: "home", label: "Ir para Dashboard", icon: Home, action: "/" },
   { id: "settings", label: "Configurações", icon: Settings, action: "/settings" },
+  { id: "nautilus-llm", label: "Nautilus LLM Core", icon: Brain, action: "/mission-control/llm" },
   { id: "ai-command", label: "AI Command Center", icon: Brain, action: "/mission-control/ai-command" },
   { id: "workflows", label: "Workflow Engine", icon: Workflow, action: "/mission-control/workflows" },
   { id: "autonomy", label: "Autonomy Console", icon: Zap, action: "/mission-control/autonomy" },

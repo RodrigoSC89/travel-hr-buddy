@@ -2555,6 +2555,81 @@ export type Database = {
         }
         Relationships: []
       }
+      ia_context_log: {
+        Row: {
+          confidence_score: number | null
+          context_snapshot: Json | null
+          created_at: string | null
+          execution_time_ms: number | null
+          id: string
+          metadata: Json | null
+          model_used: string | null
+          module_id: string | null
+          prompt: string
+          response: string
+          session_id: string
+          user_id: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          context_snapshot?: Json | null
+          created_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          metadata?: Json | null
+          model_used?: string | null
+          module_id?: string | null
+          prompt: string
+          response: string
+          session_id: string
+          user_id?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          context_snapshot?: Json | null
+          created_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          metadata?: Json | null
+          model_used?: string | null
+          module_id?: string | null
+          prompt?: string
+          response?: string
+          session_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ia_response_cache: {
+        Row: {
+          cached_response: string
+          created_at: string | null
+          id: string
+          last_used_at: string | null
+          model_used: string | null
+          prompt_hash: string
+          usage_count: number | null
+        }
+        Insert: {
+          cached_response: string
+          created_at?: string | null
+          id?: string
+          last_used_at?: string | null
+          model_used?: string | null
+          prompt_hash: string
+          usage_count?: number | null
+        }
+        Update: {
+          cached_response?: string
+          created_at?: string | null
+          id?: string
+          last_used_at?: string | null
+          model_used?: string | null
+          prompt_hash?: string
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
       intelligent_notifications: {
         Row: {
           action_data: Json | null
@@ -5015,6 +5090,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      system_context_snapshots: {
+        Row: {
+          active_modules: Json | null
+          context_id: string
+          created_at: string | null
+          id: string
+          performance_metrics: Json | null
+          recent_events: Json | null
+          summary: string | null
+          system_status: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          active_modules?: Json | null
+          context_id: string
+          created_at?: string | null
+          id?: string
+          performance_metrics?: Json | null
+          recent_events?: Json | null
+          summary?: string | null
+          system_status?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          active_modules?: Json | null
+          context_id?: string
+          created_at?: string | null
+          id?: string
+          performance_metrics?: Json | null
+          recent_events?: Json | null
+          summary?: string | null
+          system_status?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       system_metrics: {
         Row: {
