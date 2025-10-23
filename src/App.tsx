@@ -166,6 +166,7 @@ const MissionControl = React.lazy(() => import("@/modules/mission-control"));
 const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insight-dashboard"));
 const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
 const AICommandCenter = React.lazy(() => import("@/pages/mission-control/ai-command-center"));
+const WorkflowEngine = React.lazy(() => import("@/pages/mission-control/workflow-engine"));
 const FinanceHub = React.lazy(() => import("@/modules/finance-hub"));
 const APIGateway = React.lazy(() => import("@/modules/api-gateway"));
 const APIGatewayDocs = React.lazy(() => import("@/pages/api-gateway-docs"));
@@ -414,6 +415,7 @@ function App() {
                       <Route path="/mission-control/insight-dashboard" element={<InsightDashboard />} />
                       <Route path="/mission-control/autonomy" element={<AutonomyConsole />} />
                       <Route path="/mission-control/ai-command" element={<AICommandCenter />} />
+                      <Route path="/mission-control/workflows" element={<WorkflowEngine />} />
                       <Route path="/finance-hub" element={<FinanceHub />} />
                       <Route path="/finance" element={<FinanceHub />} />
                       <Route path="/api-gateway" element={<APIGateway />} />

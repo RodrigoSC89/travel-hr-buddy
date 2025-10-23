@@ -463,4 +463,14 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     fallbackAvailable: true,
     description: "Central AI command interface for system-wide control and queries"
   },
+  {
+    id: "workflow-engine",
+    name: "Workflow Engine",
+    path: "/mission-control/workflows",
+    category: "ai",
+    aiEnabled: true,
+    connectedTo: ["Supabase", "Lovable AI"],
+    fallbackAvailable: true,
+    description: "AI-powered multi-step workflow execution with approval and rollback"
+  },
 ];

@@ -43,6 +43,9 @@ verify_jwt = true
 [functions.nautilus-command]
 verify_jwt = false
 
+[functions.workflow-execute]
+verify_jwt = true
+
 [functions.api-gateway]
 verify_jwt = false
 
