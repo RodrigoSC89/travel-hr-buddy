@@ -394,6 +394,26 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     description: "Mission planning and control"
   },
   {
+    id: "insight-dashboard",
+    name: "Insight Dashboard",
+    path: "/mission-control/insight-dashboard",
+    category: "analytics",
+    aiEnabled: true,
+    connectedTo: ["Supabase", "OpenAI"],
+    fallbackAvailable: true,
+    description: "Strategic visibility and AI-driven insights"
+  },
+  {
+    id: "autonomy-console",
+    name: "Autonomy Console",
+    path: "/mission-control/autonomy",
+    category: "ai",
+    aiEnabled: true,
+    connectedTo: ["Supabase"],
+    fallbackAvailable: true,
+    description: "Autonomous decision-making console"
+  },
+  {
     id: "emergency-response",
     name: "Resposta a Emergências",
     path: "/emergency-response",

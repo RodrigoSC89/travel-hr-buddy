@@ -1,0 +1,2 @@
+[function.generate-insight-report]
+verify_jwt = false

@@ -8,6 +8,7 @@ import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
 import { SmartLayout } from "./components/layout/SmartLayout";
 import { NAVIGATION, SuspenseFallback } from "@/config/navigation";
+import { initializeMonitoring } from "@/lib/monitoring/init";
 // Removed safeLazyImport - using React.lazy directly
 
 // Lazy load all pages
@@ -161,6 +162,8 @@ const ProjectTimeline = React.lazy(() => import("@/modules/project-timeline"));
 const UserManagement = React.lazy(() => import("@/modules/user-management"));
 const EmergencyResponse = React.lazy(() => import("@/modules/emergency-response"));
 const MissionControl = React.lazy(() => import("@/modules/mission-control"));
+const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insight-dashboard"));
+const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
 const FinanceHub = React.lazy(() => import("@/modules/finance-hub"));
 const APIGateway = React.lazy(() => import("@/modules/api-gateway"));
 const AutomationModule = React.lazy(() => import("@/modules/automation"));
@@ -222,6 +225,11 @@ const RedirectHandler = () => {
 };
 
 function App() {
+  // Initialize monitoring systems on app start
+  useEffect(() => {
+    initializeMonitoring();
+  }, []);
+
   return (
     <ErrorBoundary>
       <AuthProvider>
@@ -398,6 +406,8 @@ function App() {
                       <Route path="/emergency-response" element={<EmergencyResponse />} />
                       <Route path="/emergency" element={<EmergencyResponse />} />
                       <Route path="/mission-control" element={<MissionControl />} />
+                      <Route path="/mission-control/insight-dashboard" element={<InsightDashboard />} />
+                      <Route path="/mission-control/autonomy" element={<AutonomyConsole />} />
                       <Route path="/finance-hub" element={<FinanceHub />} />
                       <Route path="/finance" element={<FinanceHub />} />
                       <Route path="/api-gateway" element={<APIGateway />} />
