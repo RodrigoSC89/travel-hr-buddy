@@ -184,6 +184,8 @@ const ComunicacaoModule = React.lazy(() => import("@/modules/comunicacao"));
 const PortalFuncionarioModule = React.lazy(() => import("@/modules/portal-funcionario"));
 const AlertasPrecosModule = React.lazy(() => import("@/modules/alertas-precos"));
 const ChecklistsInteligentesModule = React.lazy(() => import("@/modules/checklists-inteligentes"));
+const RealTimeWorkspaceModule = React.lazy(() => import("@/modules/real-time-workspace"));
+const VoiceAssistantModule2 = React.lazy(() => import("@/modules/voice-assistant"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -437,6 +439,8 @@ function App() {
                       <Route path="/portal-funcionario" element={<PortalFuncionarioModule />} />
                       <Route path="/alertas-precos" element={<AlertasPrecosModule />} />
                       <Route path="/checklists-inteligentes" element={<ChecklistsInteligentesModule />} />
+                      <Route path="/real-time-workspace" element={<RealTimeWorkspaceModule />} />
+                      <Route path="/voice-assistant-new" element={<VoiceAssistantModule2 />} />
                       
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (

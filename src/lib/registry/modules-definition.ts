@@ -137,9 +137,9 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     path: "/real-time-workspace",
     category: "communication",
     aiEnabled: true,
-    connectedTo: ["Supabase", "WebRTC"],
+    connectedTo: ["Supabase", "Realtime"],
     fallbackAvailable: true,
-    description: "Real-time collaborative workspace"
+    description: "Real-time collaborative workspace with chat, presence tracking, and document collaboration"
   },
   {
     id: "channel-manager",
@@ -334,12 +334,12 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
   {
     id: "voice-assistant",
     name: "Assistente de Voz",
-    path: "/voice-assistant",
+    path: "/voice-assistant-new",
     category: "ai",
     aiEnabled: true,
-    connectedTo: ["Supabase", "OpenAI"],
+    connectedTo: ["Web Speech API"],
     fallbackAvailable: true,
-    description: "Voice-controlled AI assistant"
+    description: "Voice-controlled AI assistant with speech recognition and synthesis for hands-free system control"
   },
   {
     id: "feedback",
