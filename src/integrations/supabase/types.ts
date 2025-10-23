@@ -3058,6 +3058,33 @@ export type Database = {
           },
         ]
       }
+      nautilus_conversations: {
+        Row: {
+          context: Json | null
+          created_at: string | null
+          id: string
+          messages: Json
+          timestamp: string | null
+          user_id: string
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string | null
+          id?: string
+          messages: Json
+          timestamp?: string | null
+          user_id: string
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string | null
+          id?: string
+          messages?: Json
+          timestamp?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       nautilus_messages: {
         Row: {
           content: string
