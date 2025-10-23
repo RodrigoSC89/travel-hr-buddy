@@ -136,6 +136,7 @@ const ForecastHistoryPage = React.lazy(() => import("@/pages/admin/mmi/forecast/
 const BIForecastsPage = React.lazy(() => import("@/pages/admin/bi/forecasts"));
 const PEODPAuditPage = React.lazy(() => import("@/pages/admin/peodp-audit"));
 const VaultAI = React.lazy(() => import("@/modules/vault_ai/pages/VaultAIPage"));
+const Patch66Dashboard = React.lazy(() => import("@/pages/Patch66Dashboard"));
 
 // New Module Imports - PATCH 66.0 Updated Paths
 const CrewModule = React.lazy(() => import("@/modules/operations/crew"));
@@ -294,6 +295,8 @@ function App() {
                       <Route path="/compliance" element={<ComplianceHub />} />
                       <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/vault-ai" element={<VaultAI />} />
+                      <Route path="/patch66" element={<Patch66Dashboard />} />
+                      <Route path="/patch-66" element={<Patch66Dashboard />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
                       <Route path="/mmi/history" element={<MMIHistory />} />
