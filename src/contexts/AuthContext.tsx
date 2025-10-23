@@ -1,9 +1,9 @@
-// @ts-nocheck
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
+import { Logger } from "@/lib/utils/logger";
 
 interface AuthContextType {
   user: User | null;
@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         } catch (err) {
           // Ignorar erros de toast
-          logger.warn("Toast error:", err);
+          Logger.warn("Toast error", err, "AuthContext");
         }
       }
     );
@@ -78,7 +78,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const { data: { session }, error } = await Promise.race([
           sessionPromise,
           timeoutPromise
-        ]).catch(() => ({ data: { session: null }, error: null })) as unknown;
+        ]).catch(() => ({ data: { session: null }, error: null })) as { data: { session: Session | null }, error: unknown };
 
         if (error) {
           try {
@@ -88,13 +88,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               variant: "destructive",
             });
           } catch (err) {
-            logger.warn("Toast error:", err);
+            Logger.warn("Toast error on session loading", err, "AuthContext");
           }
         }
         setSession(session);
         setUser(session?.user ?? null);
       } catch (error) {
-        logger.warn("Error loading session:", error);
+        Logger.warn("Error loading session", error, "AuthContext");
       } finally {
         setIsLoading(false);
       }

@@ -1,5 +1,5 @@
 /**
- * Monitoring System Initializer
+ * Monitoring System Initializer - PATCH 65.0
  * Starts all monitoring and autonomy systems
  */
 
@@ -7,6 +7,7 @@ import { systemWatchdog } from "./SystemWatchdog";
 import { metricsDaemon } from "./MetricsDaemon";
 import { logsEngine } from "./LogsEngine";
 import { autonomyEngine } from "@/lib/autonomy/AutonomyEngine";
+import { Logger } from "@/lib/utils/logger";
 
 let isInitialized = false;
 
@@ -15,11 +16,11 @@ let isInitialized = false;
  */
 export function initializeMonitoring() {
   if (isInitialized) {
-    console.log("🔧 Monitoring: Already initialized");
+    Logger.info("Monitoring: Already initialized", undefined, "MonitoringInit");
     return;
   }
 
-  console.log("🚀 Initializing Nautilus Monitoring Stack...");
+  Logger.info("Initializing Nautilus Monitoring Stack...", undefined, "MonitoringInit");
 
   try {
     // Start logs engine
@@ -36,14 +37,12 @@ export function initializeMonitoring() {
 
     isInitialized = true;
 
-    logsEngine.info("system", "Sistema de monitoramento totalmente operacional", {
+    Logger.info("Sistema de monitoramento totalmente operacional", {
       components: ["LogsEngine", "SystemWatchdog", "MetricsDaemon", "AutonomyEngine"]
-    });
-
-    console.log("✅ Nautilus Monitoring Stack: ONLINE");
+    }, "MonitoringInit");
 
   } catch (error) {
-    console.error("❌ Failed to initialize monitoring:", error);
+    Logger.error("Failed to initialize monitoring", error, "MonitoringInit");
     logsEngine.error("system", "Falha ao inicializar monitoramento", {
       error: error instanceof Error ? error.message : "Unknown error"
     });
@@ -56,7 +55,7 @@ export function initializeMonitoring() {
 export function stopMonitoring() {
   if (!isInitialized) return;
 
-  console.log("🛑 Stopping Nautilus Monitoring Stack...");
+  Logger.info("Stopping Nautilus Monitoring Stack...", undefined, "MonitoringInit");
 
   try {
     autonomyEngine.stop();
@@ -66,9 +65,9 @@ export function stopMonitoring() {
 
     isInitialized = false;
 
-    console.log("✅ Nautilus Monitoring Stack: OFFLINE");
+    Logger.info("Nautilus Monitoring Stack: OFFLINE", undefined, "MonitoringInit");
   } catch (error) {
-    console.error("❌ Failed to stop monitoring:", error);
+    Logger.error("Failed to stop monitoring", error, "MonitoringInit");
   }
 }
 

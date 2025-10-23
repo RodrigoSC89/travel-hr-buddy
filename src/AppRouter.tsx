@@ -1,23 +1,21 @@
-// @ts-nocheck
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { safeLazyImport } from "@/lib/safeLazyImport";
 
 // 🔹 Módulos principais
-const Dashboard = safeLazyImport(() => React.lazy(() => import(import("@/pages/Dashboard"))));
-const MaintenanceDashboard = safeLazyImport(() => React.lazy(() => import(import("@/pages/Maintenance"))));
-const ComplianceHub = safeLazyImport(() => React.lazy(() => import(import("@/pages/compliance/ComplianceHub"))));
-const DPIntelligenceCenter = safeLazyImport(() => React.lazy(() => import(import("@/pages/dp-intelligence/DPIntelligenceCenter"))));
-const ControlHub = safeLazyImport(() => React.lazy(() => import(import("@/pages/control/ControlHub"))));
-const ForecastGlobal = safeLazyImport(() => React.lazy(() => import(import("@/pages/forecast/ForecastGlobal"))));
-const BridgeLink = safeLazyImport(() => React.lazy(() => import(import("@/pages/bridgelink/BridgeLink"))));
+const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
+const MaintenanceDashboard = React.lazy(() => import("@/pages/Maintenance"));
+const ComplianceHub = React.lazy(() => import("@/pages/compliance/ComplianceHub"));
+const DPIntelligenceCenter = React.lazy(() => import("@/pages/dp-intelligence/DPIntelligenceCenter"));
+const ControlHub = React.lazy(() => import("@/pages/control/ControlHub"));
+const ForecastGlobal = React.lazy(() => import("@/pages/forecast/ForecastGlobal"));
+const BridgeLink = React.lazy(() => import("@/pages/bridgelink/BridgeLink"));
 
 // 🔹 Suporte e operações
-const Optimization = safeLazyImport(() => React.lazy(() => import(import("@/pages/Optimization"))));
-const Maritime = safeLazyImport(() => React.lazy(() => import(import("@/pages/Maritime"))));
-const PEODP = safeLazyImport(() => React.lazy(() => import(import("@/pages/PEODP"))));
-const PEOTRAM = safeLazyImport(() => React.lazy(() => import(import("@/pages/PEOTRAM"))));
-const ChecklistsInteligentes = safeLazyImport(() => React.lazy(() => import(import("@/pages/ChecklistsInteligentes"))));
+const Optimization = React.lazy(() => import("@/pages/Optimization"));
+const Maritime = React.lazy(() => import("@/pages/Maritime"));
+const PEODP = React.lazy(() => import("@/pages/PEODP"));
+const PEOTRAM = React.lazy(() => import("@/pages/PEOTRAM"));
+const ChecklistsInteligentes = React.lazy(() => import("@/pages/ChecklistsInteligentes"));
 
 export default function AppRouter() {
   return (
