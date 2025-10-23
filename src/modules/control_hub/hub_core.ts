@@ -1,5 +1,5 @@
 /**
- * Hub Core - Main Orchestration Engine
+ * Hub Core - Main Orchestration Engine - PATCH 65.0
  * Coordinates all Control Hub subsystems
  */
 
@@ -8,6 +8,7 @@ import { hubMonitor } from "./hub_monitor";
 import { hubSync } from "./hub_sync";
 import { hubCache } from "./hub_cache";
 import { hubBridge } from "./hub_bridge";
+import { Logger } from "@/lib/utils/logger";
 
 export class ControlHub {
   private initialized = false;
@@ -18,7 +19,7 @@ export class ControlHub {
    */
   async iniciar(): Promise<void> {
     if (this.initialized) {
-      console.warn("Control Hub already initialized");
+      Logger.warn("Control Hub already initialized", undefined, "ControlHub");
       return;
     }
 
@@ -29,7 +30,7 @@ export class ControlHub {
     hubSync.startAutoSync();
 
     this.initialized = true;
-    console.log("Control Hub initialized successfully");
+    Logger.info("Control Hub initialized successfully", undefined, "ControlHub");
   }
 
   /**
@@ -44,7 +45,7 @@ export class ControlHub {
     hubSync.stopAutoSync();
 
     this.initialized = false;
-    console.log("Control Hub stopped");
+    Logger.info("Control Hub stopped", undefined, "ControlHub");
   }
 
   /**

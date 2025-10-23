@@ -1,11 +1,12 @@
 /**
- * Forecast Engine
+ * Forecast Engine - PATCH 65.0
  * Core prediction engine for maritime operations
  * Generates forecasts for 24h, 72h, and 7 days
  */
 
 import { mqttClient } from "@/utils/mqttClient";
 import { ForecastData, ForecastPrediction, ForecastConfig } from "@/types/forecast";
+import { Logger } from "@/lib/utils/logger";
 
 export class ForecastEngine {
   private subscribers: Array<(data: ForecastData) => void> = [];
@@ -24,7 +25,7 @@ export class ForecastEngine {
         this.latestForecast = data;
         this.notify(data);
       } catch (error) {
-        console.error("❌ Failed to parse forecast event:", error);
+        Logger.error("Failed to parse forecast event", error, "ForecastEngine");
       }
     });
 
@@ -34,7 +35,7 @@ export class ForecastEngine {
         const data = JSON.parse(msg);
         this.processDPEvent(data);
       } catch (error) {
-        console.error("❌ Failed to parse DP event:", error);
+        Logger.error("Failed to parse DP event", error, "ForecastEngine");
       }
     });
   }
@@ -62,7 +63,7 @@ export class ForecastEngine {
       try {
         fn(data);
       } catch (error) {
-        console.error("❌ Error in forecast subscriber:", error);
+        Logger.error("Error in forecast subscriber", error, "ForecastEngine");
       }
     });
   }
@@ -115,8 +116,7 @@ export class ForecastEngine {
    * Process DP system events for predictive analysis
    */
   private processDPEvent(event: any): void {
-    // Process event and update predictions
-    console.log("📊 Processing DP event for forecast update", event);
+    Logger.debug("Processing DP event for forecast update", { event }, "ForecastEngine");
     // Implementation for real-time event processing
   }
 
@@ -140,7 +140,7 @@ export class ForecastEngine {
    */
   setConfig(config: Partial<ForecastConfig>): void {
     this.config = { ...this.config, ...config };
-    console.log("⚙️ Forecast engine config updated:", this.config);
+    Logger.info("Forecast engine config updated", { config: this.config }, "ForecastEngine");
   }
 
   /**

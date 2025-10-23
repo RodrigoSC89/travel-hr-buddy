@@ -1,6 +1,5 @@
-// @ts-nocheck
 /**
- * MQTTClient - Cliente MQTT com auto-reconexão
+ * MQTTClient - Cliente MQTT com auto-reconexão - PATCH 65.0
  * 
  * Gerencia conexão bidirecional com broker MQTT (ex: Mosquitto)
  * para sincronização com backend PEO-DP e outros sistemas externos.
@@ -10,14 +9,8 @@
  */
 
 import mqtt, { MqttClient } from "mqtt";
-import { BridgeLink } from "@/core/BridgeLink";
-
-// Extensão dos tipos de eventos do BridgeLink para incluir eventos MQTT
-declare module "@/core/BridgeLink" {
-  interface BridgeLinkEventType {
-    "nautilus:event": string;
-  }
-}
+import { BridgeLink, BridgeLinkEventType } from "@/core/BridgeLink";
+import { Logger } from "@/lib/utils/logger";
 
 interface MQTTClientConfig {
   url?: string;
@@ -40,7 +33,7 @@ class MQTTClientManager {
    */
   connect(config?: MQTTClientConfig): void {
     if (this.client?.connected || this.isConnecting) {
-      console.log("📡 [MQTT] Já conectado ou conectando");
+      Logger.info("MQTT já conectado ou conectando", undefined, "MQTTClient");
       return;
     }
 
@@ -55,13 +48,13 @@ class MQTTClientManager {
     const mqttUrl = this.config.url || import.meta.env.VITE_MQTT_URL;
     
     if (!mqttUrl) {
-      console.warn("📡 [MQTT] URL não configurada. Defina VITE_MQTT_URL no .env");
+      Logger.warn("MQTT URL não configurada. Defina VITE_MQTT_URL no .env", undefined, "MQTTClient");
       this.isConnecting = false;
       return;
     }
 
     try {
-      console.log(`📡 [MQTT] Conectando a ${mqttUrl}...`);
+      Logger.info(`Conectando MQTT a ${mqttUrl}`, undefined, "MQTTClient");
       
       this.client = mqtt.connect(mqttUrl, {
         reconnectPeriod: this.config.reconnectInterval,
@@ -70,7 +63,7 @@ class MQTTClientManager {
 
       this.setupEventHandlers();
     } catch (error) {
-      console.error("📡 [MQTT] Erro ao conectar:", error);
+      Logger.error("Erro ao conectar MQTT", error, "MQTTClient");
       this.isConnecting = false;
       this.scheduleReconnect();
     }
@@ -83,7 +76,7 @@ class MQTTClientManager {
     if (!this.client) return;
 
     this.client.on("connect", () => {
-      console.log("📡 [MQTT] Conectado ao broker");
+      Logger.info("Conectado ao broker MQTT", undefined, "MQTTClient");
       this.isConnecting = false;
       
       // Cancelar timer de reconexão se houver
@@ -96,7 +89,7 @@ class MQTTClientManager {
       this.config.topics?.forEach((topic) => {
         this.client?.subscribe(topic, (err) => {
           if (err) {
-            console.error(`📡 [MQTT] Erro ao subscrever ${topic}:`, err);
+            Logger.error(`Erro ao subscrever ${topic}`, err, "MQTTClient");
           } else {
             console.log(`📡 [MQTT] Subscrito a ${topic}`);
           }

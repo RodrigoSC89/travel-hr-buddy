@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
+import { Logger } from "@/lib/utils/logger";
 
 interface Organization {
   id: string;

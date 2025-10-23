@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * BridgeLink - Sistema de Comunicação entre Módulos
+ * BridgeLink - Sistema de Comunicação entre Módulos - PATCH 65.0
  * 
  * Barramento de eventos interno que conecta MMI, DP Intelligence, FMEA, ASOG e outros módulos
  * sem necessidade de backend. Opera 100% no browser com type-safety e telemetria automática.
@@ -8,6 +8,8 @@
  * @module BridgeLink
  * @version 1.0.0 (Core Alpha)
  */
+
+import { Logger } from "@/lib/utils/logger";
 
 // Tipos de eventos suportados
 export type BridgeLinkEventType =
@@ -97,7 +99,7 @@ class BridgeLinkManager {
         try {
           listener(event);
         } catch (error) {
-          console.error(`[BridgeLink] Error in listener for ${eventType}:`, error);
+          Logger.error(`Error in listener for ${eventType}`, error, "BridgeLink");
         }
       });
     }

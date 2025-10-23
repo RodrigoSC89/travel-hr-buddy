@@ -1,10 +1,11 @@
 /**
- * Adaptive AI
+ * Adaptive AI - PATCH 65.0
  * Embedded AI with continuous learning capabilities
  * Features RAG (Retrieval-Augmented Generation) for contextual analysis
  */
 
 import { AILog, AIAdvice, AIModel } from "@/types/ai";
+import { Logger } from "@/lib/utils/logger";
 
 export class AdaptiveAI {
   private logs: AILog[] = [];
@@ -18,7 +19,7 @@ export class AdaptiveAI {
   private confidenceThreshold = 0.7;
 
   constructor() {
-    console.log("🧠 NautilusAI v2.0 initialized");
+    Logger.info("NautilusAI v2.0 initialized", undefined, "AdaptiveAI");
     this.loadFromStorage();
   }
 
@@ -42,7 +43,7 @@ export class AdaptiveAI {
     // Persist to storage
     this.saveToStorage();
 
-    console.log(`📝 NautilusAI learned from: ${log.message}`);
+    Logger.debug(`NautilusAI learned from: ${log.message}`, { log }, "AdaptiveAI");
   }
 
   /**
@@ -190,7 +191,7 @@ export class AdaptiveAI {
   clearLogs(): void {
     this.logs = [];
     this.saveToStorage();
-    console.log("🗑️ AI logs cleared");
+    Logger.info("AI logs cleared", undefined, "AdaptiveAI");
   }
 
   /**
@@ -206,7 +207,7 @@ export class AdaptiveAI {
   updateAccuracy(accuracy: number): void {
     if (accuracy >= 0 && accuracy <= 1) {
       this.model.accuracy = accuracy;
-      console.log(`📈 Model accuracy updated to ${(accuracy * 100).toFixed(2)}%`);
+      Logger.info(`Model accuracy updated to ${(accuracy * 100).toFixed(2)}%`, { accuracy }, "AdaptiveAI");
     }
   }
 
@@ -217,7 +218,7 @@ export class AdaptiveAI {
     try {
       localStorage.setItem("nautilusAI_logs", JSON.stringify(this.logs));
     } catch (error) {
-      console.error("❌ Failed to save AI logs:", error);
+      Logger.error("Failed to save AI logs", error, "AdaptiveAI");
     }
   }
 
@@ -229,10 +230,10 @@ export class AdaptiveAI {
       const stored = localStorage.getItem("nautilusAI_logs");
       if (stored) {
         this.logs = JSON.parse(stored);
-        console.log(`📚 Loaded ${this.logs.length} AI logs from storage`);
+        Logger.info(`Loaded ${this.logs.length} AI logs from storage`, { count: this.logs.length }, "AdaptiveAI");
       }
     } catch (error) {
-      console.error("❌ Failed to load AI logs:", error);
+      Logger.error("Failed to load AI logs", error, "AdaptiveAI");
     }
   }
 
