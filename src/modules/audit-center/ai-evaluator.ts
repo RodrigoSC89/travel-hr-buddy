@@ -4,7 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import { Logger } from "@/lib/utils/logger-enhanced";
+import { Logger } from "@/lib/utils/logger";
 import { AUDIT_CONFIG } from "./config";
 import { AIAuditResponse, ChecklistStatus } from "./types";
 

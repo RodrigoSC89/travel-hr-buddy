@@ -154,6 +154,7 @@ const WeatherDashboard = React.lazy(() => import("@/modules/weather-dashboard"))
 const VoyagePlanner = React.lazy(() => import("@/modules/voyage-planner"));
 const TaskAutomation = React.lazy(() => import("@/modules/task-automation"));
 const AuditCenter = React.lazy(() => import("@/modules/audit-center"));
+const DeveloperStatus = React.lazy(() => import("@/pages/developer/status"));
 const ComplianceHubModule = React.lazy(() => import("@/modules/compliance-hub"));
 const AIInsights = React.lazy(() => import("@/modules/ai-insights"));
 const LogisticsHub = React.lazy(() => import("@/modules/logistics-hub"));
@@ -399,6 +400,7 @@ function App() {
                       <Route path="/voyage" element={<VoyagePlanner />} />
                       <Route path="/task-automation" element={<TaskAutomation />} />
                       <Route path="/audit-center" element={<AuditCenter />} />
+                      <Route path="/developer/status" element={<DeveloperStatus />} />
                       <Route path="/compliance-hub" element={<ComplianceHubModule />} />
                       <Route path="/ai-insights" element={<AIInsights />} />
                       <Route path="/logistics-hub" element={<LogisticsHub />} />

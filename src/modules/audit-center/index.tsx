@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Shield, FileCheck, Calendar, TrendingUp, Plus, CheckCircle, AlertCircle, Clock, Upload, Brain, Download } from "lucide-react";
-import { Logger } from "@/lib/utils/logger-enhanced";
+import { Logger } from "@/lib/utils/logger";
 import { toast } from "sonner";
 
 import { AuditItem, ChecklistStatus, AIAuditResponse } from "./types";
