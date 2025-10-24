@@ -3,10 +3,29 @@
  * 
  * Reusable utility for exporting HTML content to PDF using html2pdf.js
  * with standardized branding, formatting, and error handling.
+ * 
+ * PATCH 91.1: Added fallback PDF parser for document-hub module
  */
 
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
+
+/**
+ * PATCH 91.1 - Fallback PDF Parser
+ * Placeholder parser for PDF files to prevent import failures
+ * Returns placeholder content until full PDF parsing is implemented
+ */
+export const parsePdf = async (file: File) => {
+  return {
+    content: "Placeholder parser ativo",
+    metadata: {
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type,
+      lastModified: new Date(file.lastModified).toISOString(),
+    },
+  };
+};
 
 /**
  * Options for html2pdf.js configuration
