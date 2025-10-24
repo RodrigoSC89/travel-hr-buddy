@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { generatePDFReport, generateJobReport } from "@/services/mmi/pdfReportService";
 import { MMIJob } from "@/types/mmi";

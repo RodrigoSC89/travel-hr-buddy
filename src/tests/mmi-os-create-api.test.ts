@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, beforeEach } from "vitest";
 
 describe("MMI OS Create API - Request Validation", () => {

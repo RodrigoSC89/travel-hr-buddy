@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

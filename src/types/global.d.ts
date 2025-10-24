@@ -1,4 +1,3 @@
-// @ts-nocheck
 declare global {
   type Nullable<T> = T | null | undefined;
   interface Json { [key: string]: any }

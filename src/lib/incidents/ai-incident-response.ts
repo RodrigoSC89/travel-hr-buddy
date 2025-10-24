@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 import mqtt from "mqtt";
 import { runComplianceAudit } from "@/lib/compliance/ai-compliance-engine";

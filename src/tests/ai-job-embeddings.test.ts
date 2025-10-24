@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { seedJobsForTraining } from "@/lib/ai/embedding/seedJobsForTraining";
 import { createEmbedding } from "@/lib/ai/openai/createEmbedding";

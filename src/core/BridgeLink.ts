@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * BridgeLink - Sistema de Comunicação entre Módulos - PATCH 65.0
  * 

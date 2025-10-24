@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { Eye, Sparkles, Zap, Camera } from "lucide-react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
