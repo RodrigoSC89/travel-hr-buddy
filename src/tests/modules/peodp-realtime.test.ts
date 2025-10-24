@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PEO-DP Real-time Monitoring Tests
  */

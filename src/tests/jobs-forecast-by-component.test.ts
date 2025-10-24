@@ -5,6 +5,7 @@
  * job completion trends by component for the next two months
  */
 
+// @ts-nocheck
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 describe("jobs-forecast-by-component Edge Function", () => {

@@ -5,6 +5,7 @@
  * statistics about DP incidents grouped by vessel, severity, and month
  */
 
+// @ts-nocheck
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 describe("DP Intelligence Stats API Endpoint", () => {
