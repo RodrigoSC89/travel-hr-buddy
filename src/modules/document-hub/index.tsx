@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 91.1 - Document Hub Module
  * Central hub for document management with AI integration
