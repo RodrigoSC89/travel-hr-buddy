@@ -38,7 +38,7 @@ import {
   Scan
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import nautilusLogo from "@/assets/nautilus-logo.svg";
+import nautilusLogo from "@/assets/nautilus-logo.png";
 import { usePermissions, Permission } from "@/hooks/use-permissions";
 import { useOrganization } from "@/contexts/OrganizationContext";
 import {
