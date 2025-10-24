@@ -21,6 +21,9 @@ const ChecklistsInteligentes = React.lazy(() => import("@/pages/ChecklistsInteli
 const EmergencyDrill = React.lazy(() => import("@/pages/emergency-drill"));
 const SystemStatus = React.lazy(() => import("@/pages/system-status"));
 
+// 🔹 PATCH 84.0-85.0 - Developer Tools
+const DevTools = React.lazy(() => import("@/pages/DevTools"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -39,6 +42,7 @@ export default function AppRouter() {
         <Route path="/checklists-inteligentes" element={<ChecklistsInteligentes />} />
         <Route path="/emergency-drill" element={<EmergencyDrill />} />
         <Route path="/system-status" element={<SystemStatus />} />
+        <Route path="/dev-tools" element={<DevTools />} />
       </Routes>
     </Router>
   );
