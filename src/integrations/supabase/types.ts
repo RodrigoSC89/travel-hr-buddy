@@ -6639,6 +6639,60 @@ export type Database = {
           },
         ]
       }
+      watchdog_logs: {
+        Row: {
+          ai_analysis: Json | null
+          auto_fix_attempted: boolean | null
+          auto_fix_success: boolean | null
+          context: Json | null
+          created_at: string
+          error_id: string
+          error_type: string
+          id: string
+          message: string
+          module_name: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          severity: string
+          stack_trace: string | null
+          user_id: string | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          auto_fix_attempted?: boolean | null
+          auto_fix_success?: boolean | null
+          context?: Json | null
+          created_at?: string
+          error_id: string
+          error_type: string
+          id?: string
+          message: string
+          module_name?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          severity: string
+          stack_trace?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          auto_fix_attempted?: boolean | null
+          auto_fix_success?: boolean | null
+          context?: Json | null
+          created_at?: string
+          error_id?: string
+          error_type?: string
+          id?: string
+          message?: string
+          module_name?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          severity?: string
+          stack_trace?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       workflow_execution_logs: {
         Row: {
           execution_id: string

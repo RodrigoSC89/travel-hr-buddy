@@ -5,6 +5,7 @@
 
 import { logger } from '@/lib/logger';
 import { runAIContext } from '@/ai/kernel';
+import { supabase } from '@/integrations/supabase/client';
 
 interface WatchdogError {
   id: string;
@@ -102,9 +103,38 @@ class SystemWatchdog {
   }
 
   /**
+   * Salva erro no Supabase
+   */
+  private async saveToSupabase(error: WatchdogError) {
+    try {
+      const { error: dbError } = await supabase
+        .from('watchdog_logs')
+        .insert({
+          error_id: error.id,
+          error_type: error.type,
+          severity: error.count >= this.errorThreshold ? 'high' : 'medium',
+          message: error.message,
+          stack_trace: error.stack,
+          module_name: error.module,
+          context: {
+            count: error.count,
+            firstOccurrence: error.timestamp.toISOString(),
+            lastOccurrence: error.lastOccurrence.toISOString(),
+          },
+        });
+
+      if (dbError) {
+        logger.error('[Watchdog] Failed to save to Supabase:', dbError);
+      }
+    } catch (err) {
+      logger.error('[Watchdog] Error saving to Supabase:', err);
+    }
+  }
+
+  /**
    * Manipula um erro capturado
    */
-  private handleError(errorInfo: Partial<WatchdogError>) {
+  private async handleError(errorInfo: Partial<WatchdogError>) {
     const errorId = this.generateErrorId(errorInfo);
     const existingError = this.errors.get(errorId);
 
@@ -128,6 +158,9 @@ class SystemWatchdog {
         lastOccurrence: new Date(),
       };
       this.errors.set(errorId, newError);
+      
+      // Salvar novo erro no Supabase
+      this.saveToSupabase(newError);
     }
 
     logger.error(`[Watchdog] Error tracked: ${errorId}`, errorInfo);
@@ -196,10 +229,32 @@ class SystemWatchdog {
 
       if (fixResult.success) {
         logger.info(`[Watchdog] Autofix successful for ${error.id}:`, fixResult);
+        
+        // Atualizar no Supabase
+        await supabase
+          .from('watchdog_logs')
+          .update({
+            resolved_at: new Date().toISOString(),
+            resolution_notes: fixResult.description,
+            auto_fix_attempted: true,
+            auto_fix_success: true,
+          })
+          .eq('error_id', error.id);
+        
         // Resetar contador após correção
         this.errors.delete(error.id);
       } else {
         logger.error(`[Watchdog] Autofix failed for ${error.id}:`, fixResult);
+        
+        // Registrar tentativa falha no Supabase
+        await supabase
+          .from('watchdog_logs')
+          .update({
+            auto_fix_attempted: true,
+            auto_fix_success: false,
+            ai_analysis: { ...fixResult },
+          })
+          .eq('error_id', error.id);
       }
 
       return fixResult;
