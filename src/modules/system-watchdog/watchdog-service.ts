@@ -95,15 +95,29 @@ class WatchdogService {
   async checkSupabase(): Promise<HealthCheckResult> {
     const startTime = Date.now();
     try {
-      const { error } = await supabase.from('profiles').select('id').limit(1);
+      // Use a simple query that doesn't expose user data
+      const { error } = await supabase.rpc('health_check').single();
       const latency = Date.now() - startTime;
 
       if (error) {
+        // Fallback to a simple connection test if health_check RPC doesn't exist
+        const { error: fallbackError } = await supabase.from('profiles').select('count').limit(1).single();
+        const fallbackLatency = Date.now() - startTime;
+        
+        if (fallbackError) {
+          return {
+            service: 'supabase',
+            status: 'offline',
+            latency: fallbackLatency,
+            message: fallbackError.message,
+            timestamp: new Date()
+          };
+        }
+
         return {
           service: 'supabase',
-          status: 'offline',
-          latency,
-          message: error.message,
+          status: 'online',
+          latency: fallbackLatency,
           timestamp: new Date()
         };
       }
@@ -163,8 +177,14 @@ class WatchdogService {
     const startTime = Date.now();
     try {
       const currentPath = window.location.pathname;
-      const isValidRoute = currentPath === '/' || document.querySelector('[data-route-active]') !== null;
+      // More robust route validation - check if we're on a known route or have content
+      const hasContent = document.body && document.body.children.length > 0;
+      const isRootPath = currentPath === '/';
+      const hasRouteIndicator = document.querySelector('[data-route-active]') !== null || 
+                                document.querySelector('[role="main"]') !== null ||
+                                document.querySelector('main') !== null;
       
+      const isValidRoute = isRootPath || (hasContent && hasRouteIndicator);
       const latency = Date.now() - startTime;
 
       if (!isValidRoute) {
@@ -172,7 +192,7 @@ class WatchdogService {
           service: 'routing',
           status: 'degraded',
           latency,
-          message: `Route ${currentPath} may be invalid`,
+          message: `Route ${currentPath} may be invalid or not fully loaded`,
           timestamp: new Date()
         };
       }
@@ -271,6 +291,8 @@ class WatchdogService {
 
   /**
    * Rebuild a route
+   * Note: Uses window.location for compatibility. In production, consider
+   * integrating with the application's router for SPA-friendly navigation.
    */
   async rebuildRoute(route: string): Promise<boolean> {
     logger.info(`[Watchdog Service] Rebuilding route: ${route}`);
@@ -283,7 +305,9 @@ class WatchdogService {
         metadata: { route }
       });
 
-      // Force route navigation
+      // In a production environment, this should integrate with React Router
+      // For now, we use full page reload for compatibility
+      // TODO: Replace with router.navigate(route) when router context is available
       window.location.href = route;
 
       this.addEvent({
@@ -353,7 +377,7 @@ class WatchdogService {
   private addEvent(event: Omit<WatchdogEvent, 'id' | 'timestamp'>) {
     const newEvent: WatchdogEvent = {
       ...event,
-      id: `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
       timestamp: new Date()
     };
 
