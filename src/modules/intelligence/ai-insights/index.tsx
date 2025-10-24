@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, TrendingUp, Target, Lightbulb, AlertCircle, Activity } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { runAIContext } from "@/ai/kernel";
-import { logger } from "@/lib/logger";
+import { useLogger } from "@/hooks/use-logger";
 
 interface AIMetrics {
   insightsGenerated: number;
@@ -29,16 +29,22 @@ const AIInsights = () => {
   const [insights, setInsights] = useState<AIInsight[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // PATCH 89.4 - Enhanced logging
+  const dashboardLogger = useLogger({
+    module: 'intelligence.ai-insights',
+    componentName: 'AIInsights',
+    enableSupabaseLogging: false,
+  });
 
   useEffect(() => {
-    logger.info("AIInsights module mounted");
     loadAIMetrics();
     loadAIInsights();
   }, []);
 
   const loadAIMetrics = async () => {
     try {
-      logger.info("Loading AI metrics from Supabase");
+      dashboardLogger.logDataLoad('ai-metrics', true, { source: 'supabase' });
 
       // Query AI insights history
       const { data: insightsData, error: insightsError } = await supabase
@@ -47,7 +53,9 @@ const AIInsights = () => {
         .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString());
 
       if (insightsError) {
-        logger.error("Error loading AI insights", insightsError);
+        dashboardLogger.logDataLoad('ai_insights', false, { error: insightsError.message });
+      } else {
+        dashboardLogger.logDataLoad('ai_insights', true, { count: insightsData?.length });
       }
 
       // Query active recommendations
@@ -57,7 +65,9 @@ const AIInsights = () => {
         .eq('status', 'active');
 
       if (recommendationsError) {
-        logger.error("Error loading AI recommendations", recommendationsError);
+        dashboardLogger.logDataLoad('ai_recommendations', false, { error: recommendationsError.message });
+      } else {
+        dashboardLogger.logDataLoad('ai_recommendations', true, { count: recommendationsData?.length });
       }
 
       // Calculate metrics
@@ -76,16 +86,14 @@ const AIInsights = () => {
         activeRecommendations: activeRecsCount,
         estimatedImpact,
       });
-
-      logger.info("AI metrics loaded successfully", { insightsCount, avgConfidence, activeRecsCount });
     } catch (err) {
-      logger.error("Failed to load AI metrics", err);
+      dashboardLogger.logError(err, { operation: 'loadAIMetrics' });
     }
   };
 
   const loadAIInsights = async () => {
     try {
-      logger.info("Requesting AI insights from kernel");
+      dashboardLogger.logAIActivation('multi-module-analysis', true, { action: 'start' });
 
       // Get insights from different modules
       const modules = [
@@ -115,10 +123,13 @@ const AIInsights = () => {
       }));
 
       setInsights(loadedInsights);
-      logger.info("AI insights loaded successfully", { count: loadedInsights.length });
+      dashboardLogger.logAIActivation('multi-module-analysis', true, { 
+        count: loadedInsights.length,
+        modules: modules.length 
+      });
       setLoading(false);
     } catch (err) {
-      logger.error("Failed to load AI insights", err);
+      dashboardLogger.logAIActivation('multi-module-analysis', false, { error: String(err) });
       setError("Failed to load AI insights");
       setLoading(false);
     }

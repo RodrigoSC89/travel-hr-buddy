@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Ship, Users, Calendar, TrendingUp, AlertCircle, Activity } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { runAIContext } from "@/ai/kernel";
-import { logger } from "@/lib/logger";
+import { useLogger } from "@/hooks/use-logger";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface OperationalStats {
@@ -29,16 +29,22 @@ const OperationsDashboard = () => {
   const [aiInsight, setAiInsight] = useState<AIInsight | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // PATCH 89.4 - Enhanced logging
+  const dashboardLogger = useLogger({
+    module: 'operations-dashboard',
+    componentName: 'OperationsDashboard',
+    enableSupabaseLogging: false, // Set to true to enable Supabase logging
+  });
 
   useEffect(() => {
-    logger.info("OperationsDashboard mounted");
     loadOperationalData();
     loadAIInsights();
   }, []);
 
   const loadOperationalData = async () => {
     try {
-      logger.info("Loading operational data from Supabase");
+      dashboardLogger.logDataLoad('operational-data', true, { source: 'supabase' });
       
       // Query active fleet
       const { data: fleetData, error: fleetError } = await supabase
@@ -47,7 +53,9 @@ const OperationsDashboard = () => {
         .eq('status', 'active');
       
       if (fleetError) {
-        logger.error("Error loading fleet data", fleetError);
+        dashboardLogger.logDataLoad('fleet', false, { error: fleetError.message });
+      } else {
+        dashboardLogger.logDataLoad('fleet', true, { count: fleetData?.length });
       }
 
       // Query active crew members
@@ -57,7 +65,9 @@ const OperationsDashboard = () => {
         .eq('status', 'active');
       
       if (crewError) {
-        logger.error("Error loading crew data", crewError);
+        dashboardLogger.logDataLoad('crew', false, { error: crewError.message });
+      } else {
+        dashboardLogger.logDataLoad('crew', true, { count: crewData?.length });
       }
 
       // Query missions for today
@@ -69,7 +79,9 @@ const OperationsDashboard = () => {
         .lt('scheduled_date', `${today}T23:59:59`);
       
       if (missionsError) {
-        logger.error("Error loading missions data", missionsError);
+        dashboardLogger.logDataLoad('missions', false, { error: missionsError.message });
+      } else {
+        dashboardLogger.logDataLoad('missions', true, { count: missionsData?.length });
       }
 
       // Query operations history (last 8 weeks)
@@ -82,7 +94,9 @@ const OperationsDashboard = () => {
         .gte('scheduled_date', eightWeeksAgo.toISOString());
       
       if (operationsError) {
-        logger.error("Error loading operations history", operationsError);
+        dashboardLogger.logDataLoad('operations-history', false, { error: operationsError.message });
+      } else {
+        dashboardLogger.logDataLoad('operations-history', true, { count: operationsData?.length });
       }
 
       // Process weekly operations data
@@ -94,16 +108,10 @@ const OperationsDashboard = () => {
         todayMissions: missionsData?.length || 0,
         weeklyOperations: weeklyOps,
       });
-
-      logger.info("Operational data loaded successfully", { 
-        fleet: fleetData?.length,
-        crew: crewData?.length,
-        missions: missionsData?.length 
-      });
       
       setLoading(false);
     } catch (err) {
-      logger.error("Failed to load operational data", err);
+      dashboardLogger.logError(err, { operation: 'loadOperationalData' });
       setError("Failed to load operational data");
       setLoading(false);
     }
@@ -141,7 +149,7 @@ const OperationsDashboard = () => {
 
   const loadAIInsights = async () => {
     try {
-      logger.info("Requesting AI insights for operations-dashboard");
+      dashboardLogger.logAIActivation('analyze', true, { action: 'start' });
       
       const response = await runAIContext({
         module: "operations-dashboard",
@@ -157,9 +165,12 @@ const OperationsDashboard = () => {
         confidence: response.confidence,
       });
 
-      logger.info("AI insights loaded successfully", { confidence: response.confidence });
+      dashboardLogger.logAIActivation('analyze', true, { 
+        confidence: response.confidence,
+        type: response.type 
+      });
     } catch (err) {
-      logger.error("Failed to load AI insights", err);
+      dashboardLogger.logAIActivation('analyze', false, { error: String(err) });
     }
   };
 

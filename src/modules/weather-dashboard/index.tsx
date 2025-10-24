@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Cloud, Wind, Thermometer, Droplets, AlertTriangle, TrendingUp, MapPin, Activity } from "lucide-react";
 import { getCurrentWeather, getWeatherForecast, WeatherData, WeatherForecast } from "@/lib/weather";
 import { runAIContext } from "@/ai/kernel";
-import { logger } from "@/lib/logger";
+import { useLogger } from "@/hooks/use-logger";
 
 interface AIWeatherRecommendation {
   type: string;
@@ -17,31 +17,39 @@ const WeatherDashboard = () => {
   const [aiRecommendation, setAiRecommendation] = useState<AIWeatherRecommendation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // PATCH 89.4 - Enhanced logging
+  const dashboardLogger = useLogger({
+    module: 'weather-dashboard',
+    componentName: 'WeatherDashboard',
+    enableSupabaseLogging: false,
+  });
 
   useEffect(() => {
-    logger.info("WeatherDashboard mounted");
     loadWeatherData();
     loadAIRecommendations();
   }, []);
 
   const loadWeatherData = async () => {
     try {
-      logger.info("Loading weather data from OpenWeather API");
+      dashboardLogger.logDataLoad('weather-data', true, { source: 'OpenWeather' });
       
       const currentWeather = await getCurrentWeather();
       setWeather(currentWeather);
-      
-      const weatherForecast = await getWeatherForecast();
-      setForecast(weatherForecast);
-      
-      logger.info("Weather data loaded successfully", { 
+      dashboardLogger.logDataLoad('current-weather', true, { 
         location: currentWeather.location,
         alerts: currentWeather.alerts.length 
       });
       
+      const weatherForecast = await getWeatherForecast();
+      setForecast(weatherForecast);
+      dashboardLogger.logDataLoad('weather-forecast', true, { 
+        days: weatherForecast.length 
+      });
+      
       setLoading(false);
     } catch (err) {
-      logger.error("Failed to load weather data", err);
+      dashboardLogger.logError(err, { operation: 'loadWeatherData' });
       setError("Failed to load weather data");
       setLoading(false);
     }
@@ -49,7 +57,7 @@ const WeatherDashboard = () => {
 
   const loadAIRecommendations = async () => {
     try {
-      logger.info("Requesting AI weather recommendations");
+      dashboardLogger.logAIActivation('weather-analysis', true, { action: 'start' });
       
       const response = await runAIContext({
         module: "weather-dashboard",
@@ -65,9 +73,12 @@ const WeatherDashboard = () => {
         confidence: response.confidence,
       });
 
-      logger.info("AI recommendations loaded successfully", { confidence: response.confidence });
+      dashboardLogger.logAIActivation('weather-analysis', true, { 
+        confidence: response.confidence,
+        type: response.type 
+      });
     } catch (err) {
-      logger.error("Failed to load AI recommendations", err);
+      dashboardLogger.logAIActivation('weather-analysis', false, { error: String(err) });
     }
   };
 

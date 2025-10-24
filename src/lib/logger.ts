@@ -56,6 +56,8 @@ export const logger = {
         console.info(`ℹ️ ${message}`);
       }
     }
+    // Store in memory for dashboard use
+    storeLogEntry('info', message, context);
   },
 
   /**
@@ -69,6 +71,7 @@ export const logger = {
         console.debug(`🐛 ${message}`);
       }
     }
+    storeLogEntry('debug', message, context);
   },
 
   /**
@@ -80,6 +83,7 @@ export const logger = {
     } else {
       console.warn(`⚠️ ${message}`);
     }
+    storeLogEntry('warn', message, context);
   },
 
   /**
@@ -99,6 +103,8 @@ export const logger = {
       // eslint-disable-next-line no-console
       console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ""}`);
     }
+
+    storeLogEntry('error', message, fullContext);
 
     // Send to Sentry in production
     if (isProduction && isError(error) && typeof window !== "undefined") {
@@ -137,6 +143,8 @@ export const logger = {
       console.error(`❌ ${message}: ${errorMessage}`);
     }
 
+    storeLogEntry('error', message, fullContext);
+
     // Send to Sentry in production
     if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
@@ -165,3 +173,37 @@ export const logger = {
     }
   },
 };
+
+/**
+ * In-memory log storage (last 100 entries)
+ */
+interface LogEntry {
+  level: 'info' | 'debug' | 'warn' | 'error';
+  message: string;
+  context?: any;
+  timestamp: Date;
+}
+
+const logStore: LogEntry[] = [];
+const MAX_LOG_ENTRIES = 100;
+
+function storeLogEntry(level: LogEntry['level'], message: string, context?: any) {
+  logStore.push({
+    level,
+    message,
+    context,
+    timestamp: new Date(),
+  });
+
+  // Keep only last MAX_LOG_ENTRIES
+  if (logStore.length > MAX_LOG_ENTRIES) {
+    logStore.shift();
+  }
+}
+
+/**
+ * Get recent log entries
+ */
+export function getRecentLogs(count: number = 50): LogEntry[] {
+  return logStore.slice(-count);
+}
