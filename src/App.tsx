@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -10,6 +9,7 @@ import { SmartLayout } from "./components/layout/SmartLayout";
 import { NAVIGATION, SuspenseFallback } from "@/config/navigation";
 import { initializeMonitoring } from "@/lib/monitoring/init";
 import { CommandPalette } from "@/components/CommandPalette";
+import { systemWatchdog } from "@/ai/watchdog";
 // Removed safeLazyImport - using React.lazy directly
 
 // Lazy load all pages
@@ -18,8 +18,8 @@ const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const PriceAlerts = React.lazy(() => import("@/modules/features/price-alerts"));
 const Reports = React.lazy(() => import("@/pages/Reports"));
 const Reservations = React.lazy(() => import("@/pages/Reservations"));
-const ChecklistsInteligentes = React.lazy(() => import("@/modules/features/checklists"));
-const PEOTRAM = React.lazy(() => import("@/pages/PEOTRAM"));
+const ChecklistsInteligentes = React.lazy(() => import("@/pages/ChecklistsInteligentes"));
+const BridgeLink = React.lazy(() => import("@/pages/BridgeLink"));
 const PEODP = React.lazy(() => import("@/pages/PEODP"));
 const DPIncidents = React.lazy(() => import("@/pages/DPIncidents"));
 const DPIntelligence = React.lazy(() => import("@/pages/DPIntelligence"));
@@ -161,6 +161,9 @@ const EmergencyResponse = React.lazy(() => import("@/modules/emergency/emergency
 const ExecutiveReport = React.lazy(() => import("@/pages/ExecutiveReport"));
 const ComplianceHubModule = React.lazy(() => import("@/modules/compliance/compliance-hub"));
 const AIInsights = React.lazy(() => import("@/modules/intelligence/ai-insights"));
+const ModuleHealth = React.lazy(() => import("@/pages/developer/module-health"));
+const WatchdogMonitor = React.lazy(() => import("@/pages/developer/watchdog-monitor"));
+const PEOTRAM = React.lazy(() => import("@/pages/PEOTRAM"));
 const LogisticsHub = React.lazy(() => import("@/modules/logistics/logistics-hub"));
 const CrewWellbeing = React.lazy(() => import("@/modules/operations/crew-wellbeing"));
 const SatelliteTracker = React.lazy(() => import("@/modules/logistics/satellite-tracker"));
@@ -231,6 +234,13 @@ function App() {
   // Initialize monitoring systems on app start
   useEffect(() => {
     initializeMonitoring();
+    
+    // PATCH 85.0 - Iniciar System Watchdog automaticamente
+    systemWatchdog.start();
+    
+    return () => {
+      systemWatchdog.stop();
+    };
   }, []);
 
   return (
@@ -365,6 +375,8 @@ function App() {
                       <Route path="/admin/simulations" element={<Simulations />} />
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
+                      <Route path="/developer/module-health" element={<ModuleHealth />} />
+                      <Route path="/developer/watchdog" element={<WatchdogMonitor />} />
                       <Route path="/admin/risk-audit" element={<RiskAudit />} />
                       <Route path="/admin/quiz" element={<QuizPage />} />
                       <Route path="/admin/audit" element={<BackupAudit />} />
