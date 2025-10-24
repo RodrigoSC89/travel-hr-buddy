@@ -2,6 +2,7 @@ import React, { Component, ReactNode } from "react";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -32,9 +33,56 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       errorCount: prevState.errorCount + 1 
     }));
     
+    // Log to console for debugging
+    console.error("🚨 ErrorBoundary caught an error:", {
+      error: error.toString(),
+      stack: error.stack,
+      componentStack: errorInfo.componentStack,
+      timestamp: new Date().toISOString(),
+      errorCount: this.state.errorCount + 1,
+    });
+
+    // Log to Supabase for monitoring
+    this.logErrorToSupabase(error, errorInfo);
+    
     // Call optional error handler
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
+    }
+  }
+
+  /**
+   * Log error to Supabase for monitoring and analysis
+   */
+  private async logErrorToSupabase(error: Error, errorInfo: React.ErrorInfo) {
+    try {
+      const errorData = {
+        error_type: "react_error_boundary",
+        error_message: error.toString(),
+        error_stack: error.stack,
+        component_stack: errorInfo.componentStack,
+        user_agent: navigator.userAgent,
+        url: window.location.href,
+        timestamp: new Date().toISOString(),
+        error_count: this.state.errorCount + 1,
+      };
+
+      // Attempt to log to Supabase (don't fail if Supabase is down)
+      const { error: supabaseError } = await supabase
+        .from("system_logs")
+        .insert({
+          level: "error",
+          category: "error_boundary",
+          message: `React Error Boundary: ${error.toString()}`,
+          metadata: errorData,
+        });
+
+      if (supabaseError) {
+        console.warn("Failed to log error to Supabase:", supabaseError);
+      }
+    } catch (loggingError) {
+      // If logging fails, just log to console - don't throw
+      console.warn("Error logging to Supabase:", loggingError);
     }
   }
 
