@@ -27,6 +27,7 @@ export type ModuleCategory =
   | 'finance'
   | 'documents'
   | 'configuration'
+  | 'control'
   | 'features';
 
 export interface ModuleDefinition {
@@ -153,6 +154,43 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     status: 'active',
     route: '/maritime',
     icon: 'Ship',
+    lazy: true,
+  },
+
+  // ===== CONTROL =====
+  'control.bridgelink': {
+    id: 'control.bridgelink',
+    name: 'BridgeLink',
+    category: 'control',
+    path: 'modules/control/bridgelink/BridgeLinkDashboard',
+    description: 'Real-time operational dashboard with AI insights',
+    status: 'active',
+    route: '/bridgelink',
+    icon: 'Radio',
+    lazy: true,
+  },
+
+  'control.forecast-global': {
+    id: 'control.forecast-global',
+    name: 'Forecast Global Console',
+    category: 'control',
+    path: 'modules/control/forecast-global/ForecastConsole',
+    description: 'Global forecast management console',
+    status: 'active',
+    route: '/forecast-global',
+    icon: 'Cloud',
+    lazy: true,
+  },
+
+  'control.hub': {
+    id: 'control.hub',
+    name: 'Control Hub',
+    category: 'control',
+    path: 'modules/control/control-hub',
+    description: 'Central control center',
+    status: 'active',
+    route: '/control-hub',
+    icon: 'Command',
     lazy: true,
   },
 
@@ -660,6 +698,18 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     status: 'active',
     route: '/workflow',
     icon: 'GitBranch',
+    lazy: true,
+  },
+
+  // ===== FORECAST =====
+  'forecast.engine': {
+    id: 'forecast.engine',
+    name: 'Forecast Engine',
+    category: 'intelligence',
+    path: 'modules/forecast',
+    description: 'Core forecasting engine',
+    status: 'active',
+    icon: 'TrendingUp',
     lazy: true,
   },
 };
