@@ -2,9 +2,8 @@ import React, { Suspense } from "react";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 import { Loader } from "lucide-react";
 
-const BridgeLinkDashboard = safeLazyImport(() => import("@/components/bridgelink/BridgeLinkDashboard"), "BridgeLink Dashboard");
-const BridgeLinkStatus = safeLazyImport(() => import("@/components/bridgelink/BridgeLinkStatus"), "BridgeLink Status");
-const BridgeLinkSync = safeLazyImport(() => import("@/components/bridgelink/BridgeLinkSync"), "BridgeLink Sync");
+// Using the main BridgeLink module with AI integration and comprehensive features
+const BridgeLinkDashboard = safeLazyImport(() => import("@/modules/control/bridgelink/BridgeLinkDashboard"), "BridgeLink Dashboard");
 
 export default function BridgeLink() {
   return (
@@ -13,15 +12,11 @@ export default function BridgeLink() {
         <div>
           <h1 className="text-2xl font-bold">BridgeLink Integration Core</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Real-time communication and synchronization system
+            Real-time communication and synchronization system with AI-powered insights
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <BridgeLinkStatus />
-          <BridgeLinkSync />
-          <BridgeLinkDashboard />
-        </div>
+        <BridgeLinkDashboard />
       </div>
     </Suspense>
   );
