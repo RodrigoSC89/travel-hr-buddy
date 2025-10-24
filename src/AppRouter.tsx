@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const MaintenanceDashboard = React.lazy(() => import("@/pages/Maintenance"));
 const ComplianceHub = React.lazy(() => import("@/pages/compliance/ComplianceHub"));
-const DPIntelligenceCenter = React.lazy(() => import("@/pages/dp-intelligence/DPIntelligenceCenter"));
+const DPIntelligenceCenter = React.lazy(() => import("@/modules/intelligence/dp-intelligence"));
 const ControlHub = React.lazy(() => import("@/pages/control/ControlHub"));
 const ForecastGlobal = React.lazy(() => import("@/pages/forecast/ForecastGlobal"));
 const BridgeLink = React.lazy(() => import("@/pages/bridgelink/BridgeLink"));

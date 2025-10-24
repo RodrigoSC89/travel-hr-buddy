@@ -42,7 +42,7 @@ const ForecastPage = React.lazy(() => import("@/pages/Forecast"));
 const ForecastGlobal = React.lazy(() => import("@/pages/ForecastGlobal"));
 const MaintenanceDashboard = React.lazy(() => import("@/pages/Maintenance"));
 const ComplianceHub = React.lazy(() => import("@/pages/compliance/ComplianceHub"));
-const DPIntelligenceCenter = React.lazy(() => import("@/pages/dp-intelligence/DPIntelligenceCenter"));
+const DPIntelligenceCenter = React.lazy(() => import("@/modules/intelligence/dp-intelligence"));
 const Innovation = React.lazy(() => import("@/pages/Innovation"));
 const Optimization = React.lazy(() => import("@/pages/Optimization"));
 const Collaboration = React.lazy(() => import("@/pages/Collaboration"));

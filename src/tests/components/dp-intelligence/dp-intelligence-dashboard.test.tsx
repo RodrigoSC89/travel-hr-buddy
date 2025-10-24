@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import DPIntelligenceDashboard from "@/components/dp-intelligence/DPIntelligenceDashboard";
+import DPIntelligenceDashboard from "@/modules/intelligence/dp-intelligence/components/DPIntelligenceDashboard";
 
 // Mock recharts to avoid rendering issues in tests
 vi.mock("recharts", () => ({

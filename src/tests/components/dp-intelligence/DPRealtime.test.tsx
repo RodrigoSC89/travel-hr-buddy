@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import DPRealtime from "@/components/dp-intelligence/DPRealtime";
+import DPRealtime from "@/modules/intelligence/dp-intelligence/components/DPRealtime";
 
 // Mock MQTT client
 const mockMqttClient = {

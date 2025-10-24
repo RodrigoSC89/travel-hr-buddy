@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import DPOverview from "@/components/dp-intelligence/DPOverview";
+import DPOverview from "@/modules/intelligence/dp-intelligence/components/DPOverview";
 
 describe("DPOverview Component", () => {
   it("should render the operational summary title", () => {
