@@ -61,7 +61,14 @@ class AutoFixer {
    * Fix broken useEffect hooks
    */
   private async fixBrokenUseEffect(issue: DiagnosticIssue): Promise<void> {
-    const filePath = path.join(this.baseDir, issue.file);
+    // Fix path by removing double baseDir
+    let filePath = issue.file;
+    if (filePath.startsWith(this.baseDir)) {
+      filePath = issue.file;
+    } else {
+      filePath = path.join(this.baseDir, issue.file);
+    }
+    
     let content = fs.readFileSync(filePath, 'utf-8');
 
     if (issue.issue.includes('should not be async')) {
@@ -95,7 +102,14 @@ class AutoFixer {
    * Fix components returning undefined/null without fallback
    */
   private async fixUndefinedReturn(issue: DiagnosticIssue): Promise<void> {
-    const filePath = path.join(this.baseDir, issue.file);
+    // Fix path by removing double baseDir
+    let filePath = issue.file;
+    if (filePath.startsWith(this.baseDir)) {
+      filePath = issue.file;
+    } else {
+      filePath = path.join(this.baseDir, issue.file);
+    }
+    
     let content = fs.readFileSync(filePath, 'utf-8');
 
     // Add React.Suspense wrapper if not present
@@ -129,7 +143,14 @@ class AutoFixer {
    */
   private async fixBrokenRoute(issue: DiagnosticIssue): Promise<void> {
     // For broken routes, we'll comment them out instead of removing
-    const filePath = path.join(this.baseDir, issue.file);
+    // Fix path by removing double baseDir
+    let filePath = issue.file;
+    if (filePath.startsWith(this.baseDir)) {
+      filePath = issue.file;
+    } else {
+      filePath = path.join(this.baseDir, issue.file);
+    }
+    
     let content = fs.readFileSync(filePath, 'utf-8');
 
     // Extract the route path from the issue
@@ -182,7 +203,18 @@ class AutoFixer {
 
     // Add orphaned files as new modules
     for (const orphanedFile of report.moduleRegistry.orphanedFiles) {
-      const relativePath = orphanedFile.replace(/^src\//, '').replace(/\.(tsx?|jsx?)$/, '');
+      // Skip backup files
+      if (orphanedFile.includes('backup') || orphanedFile.includes('registry')) {
+        continue;
+      }
+      
+      // Remove absolute path prefix
+      let relativePath = orphanedFile;
+      if (relativePath.startsWith(this.baseDir)) {
+        relativePath = relativePath.substring(this.baseDir.length + 1);
+      }
+      
+      relativePath = relativePath.replace(/^src\//, '').replace(/\.(tsx?|jsx?)$/, '');
       const moduleName = path.basename(relativePath).replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
       const moduleId = relativePath.replace(/\//g, '.');
       

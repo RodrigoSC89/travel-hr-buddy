@@ -351,7 +351,12 @@ class DiagnosticScanner {
     const moduleFiles = await glob(`${this.baseDir}/src/modules/**/*.{ts,tsx}`);
     
     for (const file of moduleFiles) {
-      const relativePath = file.replace(/^src\//, '').replace(/\.(tsx?|jsx?)$/, '');
+      // Make path relative to baseDir
+      let relativePath = file;
+      if (file.startsWith(this.baseDir)) {
+        relativePath = file.substring(this.baseDir.length + 1);
+      }
+      relativePath = relativePath.replace(/^src\//, '').replace(/\.(tsx?|jsx?)$/, '');
       
       // Check if this path is in registry
       let foundInRegistry = false;
@@ -362,8 +367,8 @@ class DiagnosticScanner {
         }
       }
       
-      if (!foundInRegistry && !file.includes('test') && !file.includes('.test.')) {
-        this.orphanedFiles.push(file);
+      if (!foundInRegistry && !relativePath.includes('test') && !relativePath.includes('.test.')) {
+        this.orphanedFiles.push(relativePath);
       }
     }
   }

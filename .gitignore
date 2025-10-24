@@ -109,3 +109,7 @@ workflow.log
 logs/
 src/ai/nautilus-core/dist/
 src/ai/nautilus-core/memory/memoryDB.json
+
+# PATCH 83.0 - Diagnostic system artifacts
+dev/logs/*.json
+src/modules/registry.backup.ts
