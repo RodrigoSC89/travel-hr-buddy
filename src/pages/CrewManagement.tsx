@@ -16,9 +16,12 @@ import {
   Calendar,
   Search,
   Download,
-  Edit
+  Edit,
+  Brain
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CrewAIInsights } from "@/components/crew/crew-ai-insights";
 
 interface CrewMember {
   id: string;
@@ -250,8 +253,20 @@ export default function CrewManagement() {
         </Card>
       </div>
 
-      {/* Filters and Actions */}
-      <Card>
+      {/* Tabs for Content */}
+      <Tabs defaultValue="list" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3">
+          <TabsTrigger value="list">Lista de Tripulação</TabsTrigger>
+          <TabsTrigger value="ai-insights" className="gap-2 bg-gradient-to-r from-primary/10 to-secondary/10">
+            <Brain className="h-4 w-4" />
+            Insights IA
+          </TabsTrigger>
+          <TabsTrigger value="certifications">Certificações</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="list" className="space-y-6 mt-6">
+          {/* Filters and Actions */}
+          <Card>
         <CardHeader>
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
@@ -432,6 +447,26 @@ export default function CrewManagement() {
           )}
         </CardContent>
       </Card>
+        </TabsContent>
+
+        <TabsContent value="ai-insights" className="space-y-6 mt-6">
+          <CrewAIInsights crew={crewMembers} />
+        </TabsContent>
+
+        <TabsContent value="certifications" className="space-y-6 mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Certificações</CardTitle>
+              <CardDescription>
+                Gestão de certificações e documentos da tripulação
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">Em desenvolvimento...</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
