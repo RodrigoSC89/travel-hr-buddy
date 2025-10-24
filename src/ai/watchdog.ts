@@ -138,14 +138,15 @@ class SystemWatchdog {
    */
   private generateErrorId(error: Partial<WatchdogError>): string {
     const key = `${error.type}-${error.message}-${error.module}`;
-    // Use TextEncoder para lidar com caracteres não-Latin1
-    try {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(key);
-      const hashArray = Array.from(data.slice(0, 8));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 16);
-    } catch {
-      // Fallback: usar hash
+    // Use hash simples para evitar problemas com btoa e caracteres especiais
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) {
+      const char = key.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash).toString(16).substring(0, 16);
+  }
 
   /**
    * Tenta corrigir automaticamente o erro
