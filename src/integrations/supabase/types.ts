@@ -2816,6 +2816,50 @@ export type Database = {
         }
         Relationships: []
       }
+      logs: {
+        Row: {
+          created_at: string
+          id: string
+          level: string
+          message: string
+          metadata: Json | null
+          module: string
+          organization_id: string | null
+          timestamp: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          level: string
+          message: string
+          metadata?: Json | null
+          module: string
+          organization_id?: string | null
+          timestamp?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level?: string
+          message?: string
+          metadata?: Json | null
+          module?: string
+          organization_id?: string | null
+          timestamp?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       maintenance_records: {
         Row: {
           actual_cost: number | null
@@ -6975,6 +7019,7 @@ export type Database = {
         Args: { limit_type: string; tenant_uuid: string }
         Returns: boolean
       }
+      cleanup_old_logs: { Args: never; Returns: undefined }
       create_sample_peotram_audit: { Args: never; Returns: string }
       detect_reservation_conflicts: {
         Args: {
