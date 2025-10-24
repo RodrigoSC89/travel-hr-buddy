@@ -24,7 +24,6 @@ const PEODP = React.lazy(() => import("@/pages/PEODP"));
 const DPIncidents = React.lazy(() => import("@/pages/DPIncidents"));
 const DPIntelligence = React.lazy(() => import("@/pages/DPIntelligence"));
 const DPSyncEngine = React.lazy(() => import("@/pages/DPSyncEngine"));
-const BridgeLink = React.lazy(() => import("@/pages/BridgeLink"));
 const SGSO = React.lazy(() => import("@/pages/SGSO"));
 const SGSOReportPage = React.lazy(() => import("@/pages/SGSOReportPage"));
 const SGSOAuditPage = React.lazy(() => import("@/pages/SGSOAuditPage"));
