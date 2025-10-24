@@ -1,23 +1,18 @@
 /**
- * PATCH 88.0 - Enhanced 404 page with better UX and logging
+ * PATCH 88.0 - Fallback page for missing/removed routes
  * 
  * This component provides user-friendly feedback when accessing
  * routes that have been moved, removed, or don't exist.
  */
 
+import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect } from "react";
 import { AlertTriangle, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { logger } from "@/lib/logger";
 
-const NotFound = () => {
+export default function MissingRoute() {
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    logger.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4">
@@ -81,6 +76,4 @@ const NotFound = () => {
       </div>
     </div>
   );
-};
-
-export default NotFound;
+}
