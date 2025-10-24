@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * MMI Forecast Storage Service
  * Handles saving forecasts to the database

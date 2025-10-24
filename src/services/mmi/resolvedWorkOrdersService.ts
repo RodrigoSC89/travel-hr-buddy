@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Service for managing resolved work orders (OS) for AI learning
  */

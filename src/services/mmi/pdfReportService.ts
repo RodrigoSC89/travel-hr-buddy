@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * MMI PDF Report Service v1.1.0
  * Generates professional PDF reports with AI recommendations

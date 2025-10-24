@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import mqtt from "mqtt";

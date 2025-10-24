@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * SGSO Report Generation Library
  * Helper functions for generating SGSO reports and PDF buffers
