@@ -55,7 +55,7 @@ export class HubSync {
     }
 
     this.isSyncing = true;
-
+    let pendingCount = 0;
     try {
       // Check connection
       const quality = await hubBridge.checkConnection();
@@ -70,6 +70,7 @@ export class HubSync {
 
       // Get pending entries
       const pending = hubCache.getPendingEntries();
+      pendingCount = pending.length;
       if (pending.length === 0) {
         this.lastSync = new Date();
         return {
@@ -123,7 +124,7 @@ export class HubSync {
       return {
         success: false,
         recordsSent: 0,
-        recordsFailed: pending.length,
+        recordsFailed: pendingCount,
         errors: [error instanceof Error ? error.message : "Unknown error"],
       };
     } finally {
