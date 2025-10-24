@@ -1,3 +1,5 @@
+import { logger } from "@/lib/logger";
+
 /**
  * Monitora e otimiza eventos pesados (MQTT, AI e Builds)
  */
@@ -14,7 +16,7 @@ export const optimizeEventLoop = () => {
  */
 export const forceGC = () => {
   if (globalThis.gc) {
-    console.log("🧹 GC manual executado");
+    logger.info("🧹 GC manual executado");
     globalThis.gc();
   }
 };

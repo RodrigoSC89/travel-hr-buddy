@@ -8,7 +8,7 @@ export const useButtonHandlers = () => {
    * Generate DP positioning report
    */
   const generateReport = () => {
-    console.log("[DP Intelligence] Generating DP positioning report...");
+    logger.info("[DP Intelligence] Generating DP positioning report...");
     alert("Relatório DP em geração. Esta funcionalidade está em desenvolvimento.");
   };
 
@@ -16,7 +16,7 @@ export const useButtonHandlers = () => {
    * Synchronize dynamic positioning logs
    */
   const syncDPLogs = () => {
-    console.log("[DP Intelligence] Synchronizing DP logs...");
+    logger.info("[DP Intelligence] Synchronizing DP logs...");
     alert("Sincronizando dados de Posicionamento Dinâmico...");
   };
 
@@ -24,7 +24,7 @@ export const useButtonHandlers = () => {
    * Export report in PDF format
    */
   const exportReport = () => {
-    console.log("[Control Hub] Exporting report to PDF...");
+    logger.info("[Control Hub] Exporting report to PDF...");
     alert("Exportando relatório em PDF. Esta funcionalidade está em desenvolvimento.");
   };
 
@@ -32,7 +32,7 @@ export const useButtonHandlers = () => {
    * Reset indicators to default values
    */
   const resetIndicators = () => {
-    console.log("[Control Hub] Resetting indicators to default values...");
+    logger.info("[Control Hub] Resetting indicators to default values...");
     alert("Resetando indicadores para valores padrão...");
   };
 
@@ -40,7 +40,7 @@ export const useButtonHandlers = () => {
    * Execute FMEA mitigation actions
    */
   const applyMitigation = () => {
-    console.log("[FMEA Expert] Applying mitigation actions...");
+    logger.info("[FMEA Expert] Applying mitigation actions...");
     alert("Aplicando ações de mitigação FMEA. Verificando redundâncias do sistema de propulsão...");
   };
 
@@ -48,7 +48,7 @@ export const useButtonHandlers = () => {
    * Safe fallback for features in development
    */
   const defaultFallback = (actionName: string) => {
-    console.log(`[Action] ${actionName} triggered`);
+    logger.info(`[Action] ${actionName} triggered`);
     alert(`Ação "${actionName}" em desenvolvimento.`);
   };
 

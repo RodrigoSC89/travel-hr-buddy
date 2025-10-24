@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type { MMITask, AIForecast } from "@/types/mmi";
 
 interface CreateTaskFromForecastInput {
@@ -71,7 +72,7 @@ ${forecast.maintenance_history.map((h) => `• ${h.date}: ${h.action}`).join("\n
       throw error;
     }
 
-    console.log("Task created successfully:", task);
+    logger.info("Task created successfully:", task);
     return task;
   } catch (error) {
     console.error("Error in createTaskFromForecast:", error);

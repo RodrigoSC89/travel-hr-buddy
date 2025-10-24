@@ -6,6 +6,7 @@
  */
 
 import { useState } from "react";
+import { logger } from "@/lib/logger";
 import SimilarExamples from "@/components/copilot/SimilarExamples";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,7 @@ export default function JobCreationWithSimilarExamples() {
       return;
     }
 
-    console.log("Saving job:", {
+    logger.info("Saving job:", {
       title: jobTitle,
       description: jobDescription,
       vessel: vessel,

@@ -4,6 +4,7 @@
  */
 
 import { logsEngine } from "@/lib/monitoring/LogsEngine";
+import { logger } from "@/lib/logger";
 import type { AutonomousAction } from "./AutonomyEngine";
 
 export interface BehaviorPattern {
@@ -37,7 +38,7 @@ class PatternRecognition {
    * Start pattern learning
    */
   start() {
-    console.log("🧠 PatternRecognition: Iniciando aprendizado de padrões...");
+    logger.info("🧠 PatternRecognition: Iniciando aprendizado de padrões...");
     
     // Load existing patterns from storage
     this.loadPatterns();
@@ -59,7 +60,7 @@ class PatternRecognition {
       this.learningInterval = null;
     }
     this.savePatterns();
-    console.log("🧠 PatternRecognition: Stopped");
+    logger.info("🧠 PatternRecognition: Stopped");
   }
 
   /**
@@ -188,7 +189,7 @@ class PatternRecognition {
         const data = JSON.parse(stored);
         this.patterns = new Map(data.patterns || []);
         this.failurePatterns = new Map(data.failurePatterns || []);
-        console.log(`🧠 Carregados ${this.patterns.size} padrões conhecidos`);
+        logger.info(`🧠 Carregados ${this.patterns.size} padrões conhecidos`);
       }
     } catch (error) {
       console.error("Erro ao carregar padrões:", error);

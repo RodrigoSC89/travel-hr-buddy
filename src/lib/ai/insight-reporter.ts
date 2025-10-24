@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { logger } from "@/lib/logger";
 import { initSecureMQTT } from "@/lib/mqtt/secure-client";
 
 const supabase = createClient(
@@ -40,7 +41,7 @@ export class AIInsightReporter {
       })
     );
 
-    console.log(`🚨 [${event.severity.toUpperCase()}] ${event.module}: ${event.message}`);
+    logger.info(`🚨 [${event.severity.toUpperCase()}] ${event.module}: ${event.message}`);
   }
 
   /**

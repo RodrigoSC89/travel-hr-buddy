@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -189,7 +190,7 @@ export const IncidentReporting: React.FC = () => {
     });
     // Here you would typically save this to your incident form state
     // For now, we'll just log it
-    console.log("AI Classification applied:", classification);
+    logger.info("AI Classification applied:", classification);
   };
 
   const filteredIncidents = SAMPLE_INCIDENTS.filter(incident => {

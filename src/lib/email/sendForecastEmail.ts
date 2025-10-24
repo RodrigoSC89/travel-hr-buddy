@@ -5,6 +5,7 @@
 
 import { Resend } from "resend";
 
+import { logger } from "@/lib/logger";
 export interface ResendEmailOptions {
   to: string | string[];
   subject: string;
@@ -52,7 +53,7 @@ export async function resendEmail(options: ResendEmailOptions): Promise<ResendEm
     }
 
     if (data) {
-      console.log("✅ Email sent successfully:", data);
+      logger.info("✅ Email sent successfully:", data);
       return { success: true, data };
     }
 

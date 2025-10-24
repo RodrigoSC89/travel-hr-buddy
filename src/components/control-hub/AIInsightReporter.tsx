@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Brain, Download } from "lucide-react";
@@ -46,7 +47,7 @@ export default function AIInsightReporter() {
 
   const exportPDF = () => {
     // PDF export functionality would go here
-    console.log("📄 Exporting PDF...");
+    logger.info("📄 Exporting PDF...");
     alert("Funcionalidade de exportação PDF em desenvolvimento");
   };
 

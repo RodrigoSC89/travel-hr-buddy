@@ -5,6 +5,7 @@
  */
 
 import * as ort from "onnxruntime-web";
+import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import mqtt from "mqtt";
 
@@ -131,7 +132,7 @@ function publishForecastAlert(risk: RiskClassification): void {
         if (err) {
           console.error("❌ Failed to publish forecast alert:", err);
         } else {
-          console.log("✅ Published forecast alert:", alertData);
+          logger.info("✅ Published forecast alert:", alertData);
         }
         client.end();
       });

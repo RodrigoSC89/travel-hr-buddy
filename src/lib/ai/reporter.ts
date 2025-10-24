@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
+import { logger } from "@/lib/logger";
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -21,7 +22,7 @@ export const reportInsight = async (category: string, payload: unknown): Promise
     // Envia em background sem bloquear a UI
     queueMicrotask(async () => {
       await supabase.from("ai_insights").insert(entry);
-      console.log(`🧠 Insight enviado: ${category}`);
+      logger.info(`🧠 Insight enviado: ${category}`);
     });
   } catch (err) {
     console.warn("⚠️ Falha ao enviar insight:", err);

@@ -5,6 +5,7 @@
 
 import { Resend } from "resend";
 
+import { logger } from "@/lib/logger";
 export interface SendSGSOReportOptions {
   vessel: string;
   to: string | string[];
@@ -173,7 +174,7 @@ export async function sendSGSOReport(
     }
 
     if (data) {
-      console.log("✅ SGSO report email sent successfully:", data);
+      logger.info("✅ SGSO report email sent successfully:", data);
       return { success: true, data };
     }
 
