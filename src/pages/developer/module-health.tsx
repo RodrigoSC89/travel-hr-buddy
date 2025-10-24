@@ -4,11 +4,12 @@
  */
 
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Play, Download, RefreshCw, AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
+import { Play, Download, RefreshCw, AlertTriangle, CheckCircle2, Clock, BarChart3 } from 'lucide-react';
 import { runModuleHealthCheck, saveReport, type ModuleCheckResult } from '@/ai/module-checker';
 import { toast } from 'sonner';
 
@@ -80,6 +81,12 @@ export default function ModuleHealthDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Link to="/developer/ai-modules-status">
+            <Button variant="outline">
+              <BarChart3 className="mr-2 h-4 w-4" />
+              AI Modules Status
+            </Button>
+          </Link>
           <Button onClick={runCheck} disabled={isRunning}>
             {isRunning ? (
               <>

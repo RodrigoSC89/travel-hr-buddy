@@ -4,11 +4,12 @@
  */
 
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Play, Square, Activity, AlertTriangle, CheckCircle2, Bug } from 'lucide-react';
+import { Play, Square, Activity, AlertTriangle, CheckCircle2, Bug, BarChart3 } from 'lucide-react';
 import { systemWatchdog } from '@/ai/watchdog';
 import { toast } from 'sonner';
 
@@ -54,6 +55,12 @@ export default function WatchdogMonitor() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Link to="/developer/ai-modules-status">
+            <Button variant="outline">
+              <BarChart3 className="mr-2 h-4 w-4" />
+              AI Modules Status
+            </Button>
+          </Link>
           {isActive ? (
             <Button onClick={stopWatchdog} variant="destructive">
               <Square className="mr-2 h-4 w-4" />
