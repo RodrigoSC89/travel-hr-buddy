@@ -16,7 +16,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { runAIContext } from '@/ai/kernel';
 import { exportLogsAsPDF } from '@/lib/logger/exportToPDF';
 import { toast } from 'sonner';
-import type { LogEntry, LogLevel, LogFilter } from '../types';
+import type { LogEntry, LogLevel, LogFilter } from './types';
 
 export default function LogsCenter() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -39,7 +39,7 @@ export default function LogsCenter() {
   const fetchLogs = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('logs')
         .select('*')
         .order('timestamp', { ascending: false })
