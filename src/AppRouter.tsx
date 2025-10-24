@@ -25,7 +25,7 @@ const SystemStatus = React.lazy(() => import("@/pages/system-status"));
 const SystemWatchdog = React.lazy(() => import("@/pages/dashboard/system-watchdog"));
 
 // 🔹 PATCH 94.0 - Logs Center
-const LogsCenter = React.lazy(() => import("@/modules/logs-center"));
+const LogsCenter = React.lazy(() => import("@/modules/logs-center/LogsCenter"));
 
 export default function AppRouter() {
   return (
