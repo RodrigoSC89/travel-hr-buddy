@@ -62,6 +62,20 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
     };
   },
   
+  'operations-dashboard': async (ctx) => {
+    return {
+      type: 'recommendation',
+      message: 'Análise operacional: Eficiência da frota está 8% acima da média semanal. Tripulação apresenta distribuição balanceada. Recomenda-se manter o ritmo atual e revisar cronograma de manutenção preventiva para próximo mês.',
+      confidence: 91.5,
+      metadata: { 
+        fleetEfficiency: '+8%',
+        crewBalance: 'optimal',
+        nextReview: 'maintenance-schedule'
+      },
+      timestamp: new Date()
+    };
+  },
+  
   // HR modules
   'hr.employee-portal': async (ctx) => {
     return {

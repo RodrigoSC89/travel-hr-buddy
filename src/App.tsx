@@ -100,6 +100,7 @@ const TemplateEditorDemo = React.lazy(() => import("@/pages/TemplateEditorDemo")
 const Unauthorized = React.lazy(() => import("@/pages/Unauthorized"));
 const RestoreChartEmbed = React.lazy(() => import("@/pages/embed/RestoreChartEmbed"));
 const TVWallLogs = React.lazy(() => import("@/pages/tv/LogsPage"));
+const OperationsDashboard = React.lazy(() => import("@/pages/dashboard/OperationsDashboard"));
 const TemplateEditorPage = React.lazy(() => import("@/pages/admin/templates/editor"));
 const MMIJobsPanel = React.lazy(() => import("@/pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("@/pages/MmiBI"));
@@ -264,6 +265,7 @@ function App() {
                     <Route element={<SmartLayout />}>
                       <Route path="/" element={<Index />} />
                       <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/dashboard/operations-dashboard" element={<OperationsDashboard />} />
                       <Route path="/price-alerts" element={<PriceAlerts />} />
                       <Route path="/reports" element={<Reports />} />
                       <Route path="/reservations" element={<Reservations />} />

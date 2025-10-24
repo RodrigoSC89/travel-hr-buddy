@@ -97,6 +97,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+'operations.operations-dashboard': {
+    id: 'operations.operations-dashboard',
+    name: 'Operations Dashboard',
+    category: 'operations',
+    path: 'modules/operations/operations-dashboard',
+    description: 'Real-time operations dashboard with fleet, crew, and mission KPIs',
+    status: 'active',
+    route: '/dashboard/operations-dashboard',
+    icon: 'Activity',
+    lazy: true,
+    version: '89.1',
+  },
+
 'operations.crew-wellbeing': {
     id: 'operations.crew-wellbeing',
     name: 'Crew Wellbeing',
