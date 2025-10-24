@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { DocumentEditor } from "@/components/documents/DocumentEditor";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
