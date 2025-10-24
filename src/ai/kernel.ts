@@ -10,7 +10,7 @@
  * - Recent logs
  */
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface AIContextRequest {
   module: string;
@@ -539,13 +539,6 @@ async function logAIContext(request: AIContextRequest, response: AIContextRespon
     // Keep only last 100 logs
     if (logs.length > 100) logs.shift();
     localStorage.setItem('ai_context_logs', JSON.stringify(logs));
-    
-    // Also attempt to store in Supabase if available
-    if (supabase) {
-      await supabase.from('ai_context_logs').insert(log).catch(() => {
-        // Silently fail if table doesn't exist
-      });
-    }
   } catch (error) {
     console.warn('Failed to log AI context:', error);
   }
