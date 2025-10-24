@@ -138,8 +138,14 @@ class SystemWatchdog {
    */
   private generateErrorId(error: Partial<WatchdogError>): string {
     const key = `${error.type}-${error.message}-${error.module}`;
-    return btoa(key).substring(0, 16);
-  }
+    // Use TextEncoder para lidar com caracteres não-Latin1
+    try {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(key);
+      const hashArray = Array.from(data.slice(0, 8));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 16);
+    } catch {
+      // Fallback: usar hash
 
   /**
    * Tenta corrigir automaticamente o erro
