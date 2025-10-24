@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { safeLazyImport } from "@/utils/safeLazyImport";
 import React from "react";
 

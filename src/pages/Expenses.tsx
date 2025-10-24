@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { useExpenses } from "@/hooks/useExpenses";
 import { ExpenseForm } from "@/components/expenses/ExpenseForm";

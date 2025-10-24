@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { Suspense } from "react";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 import { Loader } from "lucide-react";

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";

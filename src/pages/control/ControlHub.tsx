@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * ControlHub - Painel Central de Telemetria e Observabilidade
  * 

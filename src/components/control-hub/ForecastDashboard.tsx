@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * ForecastDashboard Component
  * Real-time AI predictive failure forecast dashboard
