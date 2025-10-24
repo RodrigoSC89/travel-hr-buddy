@@ -96,7 +96,7 @@ class WatchdogService {
     const startTime = Date.now();
     try {
       // Use a simple query that doesn't expose user data
-      const { error } = await supabase.rpc('health_check').single();
+      const { error } = await (supabase.rpc as any)('health_check').single();
       const latency = Date.now() - startTime;
 
       if (error) {
@@ -399,7 +399,7 @@ class WatchdogService {
    */
   private async logToSupabase(event: WatchdogEvent) {
     try {
-      await supabase.from('watchdog_events').insert({
+      await (supabase.from as any)('watchdog_events').insert({
         event_id: event.id,
         event_type: event.type,
         service_name: event.service,
@@ -409,7 +409,7 @@ class WatchdogService {
       });
     } catch (err) {
       // Silently fail - don't want logging errors to cascade
-      logger.warn('[Watchdog Service] Could not log to Supabase:', err);
+      logger.warn('[Watchdog Service] Could not log to Supabase:', err as any);
     }
   }
 
