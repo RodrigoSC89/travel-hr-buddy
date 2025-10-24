@@ -6,6 +6,7 @@
  * - nautilus-core: Análise de logs e relatórios
  * 
  * @module ai
+ * @updated 2025-01-24
  */
 
 export { nautilusInference, type InferenceResult, type AnalysisResult } from "./nautilus-inference";

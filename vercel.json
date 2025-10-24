@@ -1,7 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "_deploy_trigger": "2025-01-24T12:00:00Z",
   "framework": "vite",
   "installCommand": "npm install",
   "buildCommand": "npm run build",
