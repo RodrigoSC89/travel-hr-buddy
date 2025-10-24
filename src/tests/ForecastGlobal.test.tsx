@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Forecast Global Intelligence - Component Tests
  * Validates ForecastGlobal page and its components

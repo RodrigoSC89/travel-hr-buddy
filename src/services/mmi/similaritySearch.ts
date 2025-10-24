@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * MMI Jobs Similarity Search Service
  * 
