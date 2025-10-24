@@ -215,10 +215,10 @@ const EnhancedUnifiedDashboard = () => {
       metric: `${dashboardData.moduleStats.peotram.completion}% concluído`
     },
     { 
-      title: "Gestão da Frota", 
-      description: "Monitoramento avançado de embarcações", 
+      title: "Operations Dashboard", 
+      description: "Central de operações e frota", 
       icon: Ship, 
-      path: "/fleet-dashboard",
+      path: "/operations-dashboard",
       color: "from-purple-600 to-purple-700",
       count: dashboardData.moduleStats.fleet.vessels,
       status: "info",

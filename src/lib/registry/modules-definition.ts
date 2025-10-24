@@ -384,14 +384,24 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     description: "Mission planning and control"
   },
   {
-    id: "insight-dashboard",
-    name: "Insight Dashboard",
-    path: "/mission-control/insight-dashboard",
+    id: "ai-insights",
+    name: "AI Insights",
+    path: "/ai-insights",
     category: "analytics",
     aiEnabled: true,
     connectedTo: ["Supabase", "OpenAI"],
     fallbackAvailable: true,
-    description: "Strategic visibility and AI-driven insights"
+    description: "AI-powered operational insights and analytics - PATCH 89.0"
+  },
+  {
+    id: "operations-dashboard",
+    name: "Operations Dashboard",
+    path: "/operations-dashboard",
+    category: "operations",
+    aiEnabled: true,
+    connectedTo: ["Supabase"],
+    fallbackAvailable: true,
+    description: "Central operations dashboard - Fleet, crew, performance - PATCH 89.0"
   },
   {
     id: "autonomy-console",

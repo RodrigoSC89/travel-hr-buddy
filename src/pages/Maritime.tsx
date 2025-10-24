@@ -162,7 +162,7 @@ export default function Maritime() {
           value={stats.totalVessels}
           icon={Ship}
           trend="+2 este mês"
-          onClick={() => navigate("/fleet-dashboard")}
+          onClick={() => navigate("/operations-dashboard")}
         />
         <StatCard
           title="Tripulação Ativa"
@@ -256,7 +256,7 @@ export default function Maritime() {
                     <Badge variant="outline">Operacional</Badge>
                   </div>
                 ))}
-                <Button variant="outline" className="w-full" onClick={() => navigate("/fleet-dashboard")}>
+                <Button variant="outline" className="w-full" onClick={() => navigate("/operations-dashboard")}>
                   Ver Todas as Embarcações
                 </Button>
               </CardContent>
@@ -387,7 +387,7 @@ export default function Maritime() {
                 <p className="text-muted-foreground mb-4">
                   Acesse a gestão completa da frota através do menu dedicado
                 </p>
-                <Button onClick={() => navigate("/fleet-dashboard")}>Ir para Gestão de Frota</Button>
+                <Button onClick={() => navigate("/operations-dashboard")}>Ir para Gestão de Frota</Button>
               </div>
             </CardContent>
           </Card>

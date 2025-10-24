@@ -128,8 +128,8 @@ const navigationItems = [
         icon: Ship,
       },
       {
-        title: "Dashboard da Frota",
-        url: "/fleet-dashboard",
+        title: "Operations Dashboard",
+        url: "/operations-dashboard",
         icon: Anchor,
       },
       {

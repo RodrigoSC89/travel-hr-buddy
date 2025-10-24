@@ -72,15 +72,15 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
     {
       id: "2",
       title: "Gestão da Frota",
-      description: "Painel de controle das embarcações",
+      description: "Dashboard operacional consolidado",
       category: "Módulos",
       icon: Ship,
-      path: "/fleet-dashboard",
+      path: "/operations-dashboard",
       relevance: 0.9,
       metadata: {
-        module: "Fleet",
+        module: "Operations",
         popular: true,
-        tags: ["frota", "embarcações", "monitoramento"]
+        tags: ["operações", "frota", "embarcações", "monitoramento", "performance"]
       }
     },
     {

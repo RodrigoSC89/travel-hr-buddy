@@ -22,6 +22,8 @@ const groupedModules = [
     items: [
       { label: "Dashboard Principal", path: "/" },
       { label: "Visão Geral", path: "/dashboard" },
+      { label: "Dashboard Operacional", path: "/operations-dashboard" },
+      { label: "AI Insights", path: "/ai-insights" },
     ],
   },
   {

@@ -176,7 +176,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
         actions: [
           {
             label: "Investigar",
-            action: () => navigate("/fleet-dashboard"),
+            action: () => navigate("/operations-dashboard"),
             variant: "destructive"
           },
           {

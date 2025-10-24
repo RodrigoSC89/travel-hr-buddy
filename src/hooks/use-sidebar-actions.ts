@@ -35,7 +35,7 @@ export const useSidebarActions = () => {
       "maritime-certifications": "/maritime-certifications",
       "fleet-tracking": "/fleet-tracking",
       "fleet-management": "/fleet-management",
-      "fleet-dashboard": "/fleet-dashboard",
+      "operations-dashboard": "/operations-dashboard",
       "crew-management": "/crew-management",
       portal: "/portal",
       travel: "/travel",
