@@ -51,7 +51,10 @@
     "sync:vercel": "bash scripts/fix-vercel-preview.sh",
     "fix:typescript": "bash scripts/fix-typescript-universal.sh",
     "fix:typescript:full": "bash scripts/fix-typescript-universal.sh --full-clean",
-    "fix:ts-safe": "bash scripts/fix-typescript-safe-mode.sh"
+    "fix:ts-safe": "bash scripts/fix-typescript-safe-mode.sh",
+    "diagnostic:scan": "tsx scripts/diagnostic-scanner.ts",
+    "diagnostic:fix": "tsx scripts/auto-fix.ts",
+    "diagnostic:full": "npm run diagnostic:scan && npm run diagnostic:fix"
   },
   "engines": {
     "node": "22.x",
