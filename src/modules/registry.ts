@@ -147,11 +147,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
 
 'compliance.audit-center': {
     id: 'compliance.audit-center',
-    name: 'Audit Center',
+    name: 'Audit Center (Legacy)',
     category: 'compliance',
     path: 'modules/compliance/audit-center',
-    description: 'Manage audits and inspections',
-    status: 'active',
+    description: 'Manage audits and inspections - DEPRECATED: Use compliance-hub instead',
+    status: 'deprecated',
     route: '/compliance/audit',
     icon: 'ClipboardCheck',
     lazy: true,
@@ -161,12 +161,13 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     id: 'compliance.hub',
     name: 'Compliance Hub',
     category: 'compliance',
-    path: 'modules/compliance/compliance-hub',
-    description: 'Central compliance management',
+    path: 'modules/compliance-hub',
+    description: 'Unified compliance management - AI-powered audits, checklists, risk assessment, and regulatory documentation (PATCH 92.0)',
     status: 'active',
-    route: '/compliance/hub',
+    route: '/dashboard/compliance-hub',
     icon: 'Shield',
     lazy: true,
+    version: '92.0',
   },
 
 'intelligence.ai-insights': {
@@ -243,11 +244,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
 
 'emergency.risk-management': {
     id: 'emergency.risk-management',
-    name: 'Risk Management',
+    name: 'Risk Management (Legacy)',
     category: 'emergency',
     path: 'modules/emergency/risk-management',
-    description: 'Risk assessment and management',
-    status: 'active',
+    description: 'Risk assessment and management - DEPRECATED: Use compliance-hub instead',
+    status: 'deprecated',
     route: '/emergency/risk',
     icon: 'AlertCircle',
     lazy: true,
@@ -545,11 +546,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
 
 'features.checklists': {
     id: 'features.checklists',
-    name: 'Smart Checklists',
+    name: 'Smart Checklists (Legacy)',
     category: 'features',
     path: 'modules/features/checklists',
-    description: 'Intelligent checklist system',
-    status: 'active',
+    description: 'Intelligent checklist system - DEPRECATED: Use compliance-hub instead',
+    status: 'deprecated',
     route: '/checklists',
     icon: 'CheckSquare',
     lazy: true,
