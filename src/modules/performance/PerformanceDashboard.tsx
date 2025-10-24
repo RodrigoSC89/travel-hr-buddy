@@ -88,25 +88,11 @@ const PerformanceDashboard: React.FC = () => {
       const endDate = new Date();
       const startDate = subDays(endDate, parseInt(selectedPeriod));
 
-      // Query Supabase for performance data
-      // Note: These tables might not exist yet, so we'll use simulated data for now
-      const { data: fleetLogs, error: fleetError } = await supabase
-        .from('fleet_logs')
-        .select('*')
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString());
-
-      const { data: missionActivities, error: missionError } = await supabase
-        .from('mission_activities')
-        .select('*')
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString());
-
-      const { data: fuelUsage, error: fuelError } = await supabase
-        .from('fuel_usage')
-        .select('*')
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString());
+      // Using mock data as these tables don't exist yet
+      // TODO: Create fleet_logs, mission_activities, fuel_usage tables
+      const fleetLogs: any[] = [];
+      const missionActivities: any[] = [];
+      const fuelUsage: any[] = [];
 
       // If tables don't exist, use simulated data
       const simulatedMetrics: PerformanceMetrics = {
