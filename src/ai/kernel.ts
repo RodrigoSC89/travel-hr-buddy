@@ -278,6 +278,21 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
     };
   },
   
+  // Weather module
+  'weather-dashboard': async (ctx) => {
+    return {
+      type: 'recommendation',
+      message: 'Condições meteorológicas favoráveis para operações nas próximas 48h. Ventos dentro dos limites operacionais. Recomenda-se aproveitar janela de bom tempo para missões prioritárias. Alertar tripulação sobre possível mudança de condições no 3º dia.',
+      confidence: 88.7,
+      metadata: {
+        windStatus: 'optimal',
+        visibility: 'good',
+        recommendation: 'proceed-with-caution'
+      },
+      timestamp: new Date()
+    };
+  },
+  
   // Connectivity modules
   'connectivity.channel-manager': async (ctx) => {
     return {
