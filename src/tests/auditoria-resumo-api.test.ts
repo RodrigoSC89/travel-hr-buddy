@@ -5,7 +5,6 @@
  * of audits grouped by vessel name with date and user filters
  */
 
-// @ts-nocheck
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 describe("Auditoria Resumo API Endpoint", () => {

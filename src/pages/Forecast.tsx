@@ -3,7 +3,6 @@
  * Main page for Forecast Global Engine with ONNX AI, MQTT sync, and WCAG 2.1 compliance
  */
 
-// @ts-nocheck
 import React, { Suspense } from "react";
 import { safeLazyImport } from "@/lib/safeLazyImport";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
