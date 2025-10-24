@@ -121,6 +121,18 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+'operations.dashboard': {
+    id: 'operations.dashboard',
+    name: 'Operations Dashboard',
+    category: 'operations',
+    path: 'modules/operations/operations-dashboard',
+    description: 'Consolidated operations dashboard - Fleet, crew, performance, and operational metrics with real-time monitoring',
+    status: 'active',
+    route: '/operations-dashboard',
+    icon: 'Ship',
+    lazy: true,
+  },
+
 'compliance.reports': {
     id: 'compliance.reports',
     name: 'Compliance Reports',
@@ -159,12 +171,12 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
 
 'intelligence.ai-insights': {
     id: 'intelligence.ai-insights',
-    name: 'AI Insights',
+    name: 'AI Insights Dashboard',
     category: 'intelligence',
     path: 'modules/intelligence/ai-insights',
-    description: 'AI-powered insights and analytics',
+    description: 'AI-powered insights, analytics, logs, alerts, and failure analysis with GPT-4o',
     status: 'active',
-    route: '/intelligence/insights',
+    route: '/ai-insights',
     icon: 'Brain',
     lazy: true,
   },
@@ -571,9 +583,9 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: 'Weather Dashboard',
     category: 'features',
     path: 'modules/weather-dashboard',
-    description: 'Weather monitoring and forecasting',
+    description: 'Weather monitoring, forecasting, climate and environmental risk analysis',
     status: 'active',
-    route: '/weather',
+    route: '/weather-dashboard',
     icon: 'Cloud',
     lazy: true,
   },
