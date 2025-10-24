@@ -21,6 +21,9 @@ const ChecklistsInteligentes = React.lazy(() => import("@/pages/ChecklistsInteli
 const EmergencyDrill = React.lazy(() => import("@/pages/emergency-drill"));
 const SystemStatus = React.lazy(() => import("@/pages/system-status"));
 
+// 🔹 PATCH 93.0 - System Watchdog
+const SystemWatchdog = React.lazy(() => import("@/pages/dashboard/system-watchdog"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -39,6 +42,7 @@ export default function AppRouter() {
         <Route path="/checklists-inteligentes" element={<ChecklistsInteligentes />} />
         <Route path="/emergency-drill" element={<EmergencyDrill />} />
         <Route path="/system-status" element={<SystemStatus />} />
+        <Route path="/dashboard/system-watchdog" element={<SystemWatchdog />} />
       </Routes>
     </Router>
   );
