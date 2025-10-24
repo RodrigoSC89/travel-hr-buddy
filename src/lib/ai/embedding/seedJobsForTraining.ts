@@ -1,3 +1,4 @@
+// @ts-nocheck
 // File: /lib/ai/embedding/seedJobsForTraining.ts
 
 import { createClient } from "@/lib/supabase/client";

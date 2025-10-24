@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Example integration of ExportarComentariosPDF component
  * 

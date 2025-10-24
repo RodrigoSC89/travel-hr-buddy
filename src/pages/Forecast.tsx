@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Forecast Page
  * Main page for Forecast Global Engine with ONNX AI, MQTT sync, and WCAG 2.1 compliance

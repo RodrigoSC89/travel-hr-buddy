@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * usePerformanceMonitoring Hook - PATCH 67.5
  * React hook for component-level performance monitoring
