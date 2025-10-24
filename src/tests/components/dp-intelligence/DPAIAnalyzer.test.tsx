@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import DPAIAnalyzer from "@/components/dp-intelligence/DPAIAnalyzer";
+import DPAIAnalyzer from "@/modules/intelligence/dp-intelligence/components/DPAIAnalyzer";
 
 // Mock onnxruntime-web
 vi.mock("onnxruntime-web", () => ({
