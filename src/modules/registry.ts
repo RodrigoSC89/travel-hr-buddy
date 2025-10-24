@@ -1,9 +1,16 @@
 /**
- * Module Registry - PATCH 83.0 Auto-Generated
- * Last updated: 2025-10-24T01:17:32.278Z
+ * Module Registry - PATCH 96.0
+ * Last updated: 2025-10-24T22:18:00.000Z
+ * 
+ * PATCH 96.0 - Module status accuracy update
+ * - Added completeness field to track implementation state
+ * - Updated statuses to reflect actual module functionality
+ * - Validated database/AI integrations for all modules
  */
 
-export type ModuleStatus = 'active' | 'deprecated' | 'beta' | 'experimental';
+export type ModuleStatus = 'active' | 'deprecated' | 'beta' | 'experimental' | 'incomplete';
+
+export type ModuleCompleteness = '100%' | 'partial' | 'broken' | 'deprecated';
 
 export type ModuleCategory =
   | 'core'
@@ -30,6 +37,7 @@ export interface ModuleDefinition {
   path: string;
   description: string;
   status: ModuleStatus;
+  completeness?: ModuleCompleteness;
   dependencies?: string[];
   lazy?: boolean;
   route?: string;
@@ -45,7 +53,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'core',
     path: 'modules/ui/dashboard/Dashboard',
     description: 'Main application dashboard',
-    status: 'active',
+    status: 'active', // PATCH 96.0 – Verified: Has route in AppRouter
+    completeness: '100%',
     route: '/dashboard',
     icon: 'LayoutDashboard',
     lazy: true,
@@ -67,7 +76,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'core',
     path: 'modules/system-watchdog',
     description: 'Autonomous system monitoring with AI-based error detection and auto-healing capabilities',
-    status: 'active',
+    status: 'active', // PATCH 96.0 – Verified: Has route in AppRouter at /dashboard/system-watchdog
+    completeness: '100%',
     route: '/dashboard/system-watchdog',
     icon: 'Activity',
     lazy: true,
@@ -80,7 +90,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'core',
     path: 'modules/logs-center',
     description: 'PATCH 94.0 - Centralized technical logs with filtering, AI-powered audit and PDF export capabilities',
-    status: 'active',
+    status: 'active', // PATCH 96.0 – Verified: Has route in AppRouter at /dashboard/logs-center
+    completeness: '100%',
     route: '/dashboard/logs-center',
     icon: 'FileText',
     lazy: true,
@@ -93,7 +104,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'operations',
     path: 'modules/operations/crew',
     description: 'Manage crew members and assignments',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/crew',
     icon: 'Users',
     lazy: true,
@@ -105,7 +117,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'operations',
     path: 'modules/operations/fleet',
     description: 'Manage fleet and vessels',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/fleet',
     icon: 'Ship',
     lazy: true,
@@ -117,7 +130,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'operations',
     path: 'modules/operations/performance',
     description: 'Monitor operational performance',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/performance',
     icon: 'TrendingUp',
     lazy: true,
@@ -129,7 +143,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'operations',
     path: 'modules/operations/crew-wellbeing',
     description: 'Monitor crew health and wellbeing',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/crew-wellbeing',
     icon: 'Heart',
     lazy: true,
@@ -141,7 +156,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'operations',
     path: 'modules/operations/maritime-system/MaritimeSystem',
     description: 'Maritime operations management',
-    status: 'active',
+    status: 'active', // PATCH 96.0 – Has route in AppRouter at /maritime
+    completeness: '100%',
     route: '/maritime',
     icon: 'Ship',
     lazy: true,
@@ -153,7 +169,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'operations',
     path: 'modules/operations/operations-dashboard',
     description: 'Consolidated operations dashboard - Fleet, crew, performance, and operational metrics with real-time monitoring',
-    status: 'active',
+    status: 'active', // PATCH 96.0 – Verified: Has Supabase integration
+    completeness: '100%',
     route: '/operations-dashboard',
     icon: 'Ship',
     lazy: true,
@@ -165,7 +182,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'compliance',
     path: 'modules/compliance/reports',
     description: 'Generate compliance reports',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/compliance/reports',
     icon: 'FileText',
     lazy: true,
@@ -189,7 +207,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'compliance',
     path: 'modules/compliance-hub',
     description: 'Unified compliance management - AI-powered audits, checklists, risk assessment, and regulatory documentation (PATCH 92.0)',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – File not found at specified path
+    completeness: 'broken',
     route: '/dashboard/compliance-hub',
     icon: 'Shield',
     lazy: true,
@@ -202,7 +221,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'intelligence',
     path: 'modules/intelligence/ai-insights',
     description: 'AI-powered insights, analytics, logs, alerts, and failure analysis with GPT-4o',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/ai-insights',
     icon: 'Brain',
     lazy: true,
@@ -214,7 +234,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'intelligence',
     path: 'modules/intelligence/analytics-core',
     description: 'Core analytics engine',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/intelligence/analytics',
     icon: 'BarChart3',
     lazy: true,
@@ -226,7 +247,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'intelligence',
     path: 'modules/intelligence/automation',
     description: 'Intelligent automation workflows',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/intelligence/automation',
     icon: 'Zap',
     lazy: true,
@@ -238,7 +260,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'emergency',
     path: 'modules/emergency/emergency-response',
     description: 'Emergency response management',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/emergency/response',
     icon: 'AlertTriangle',
     lazy: true,
@@ -250,7 +273,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'emergency',
     path: 'modules/emergency/mission-control',
     description: 'Mission control center',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/emergency/mission-control',
     icon: 'Radio',
     lazy: true,
@@ -262,7 +286,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'emergency',
     path: 'modules/emergency/mission-logs',
     description: 'Mission logging and tracking',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/emergency/logs',
     icon: 'BookOpen',
     lazy: true,
@@ -286,7 +311,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'logistics',
     path: 'modules/logistics/logistics-hub',
     description: 'Central logistics management',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/logistics/hub',
     icon: 'Package',
     lazy: true,
@@ -298,7 +324,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'logistics',
     path: 'modules/logistics/fuel-optimizer',
     description: 'Optimize fuel consumption',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/logistics/fuel',
     icon: 'Droplet',
     lazy: true,
@@ -310,7 +337,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'logistics',
     path: 'modules/logistics/satellite-tracker',
     description: 'Track vessels via satellite',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/logistics/tracker',
     icon: 'Satellite',
     lazy: true,
@@ -322,7 +350,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'planning',
     path: 'modules/planning/voyage-planner',
     description: 'Plan and optimize voyages',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/planning/voyage',
     icon: 'Map',
     lazy: true,
@@ -334,7 +363,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'hr',
     path: 'modules/hr/training-academy',
     description: 'Training and certification management',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/training-academy',
     icon: 'GraduationCap',
     lazy: true,
@@ -346,7 +376,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'hr',
     path: 'modules/hr/peo-dp',
     description: 'PEO-DP system integration',
-    status: 'active',
+    status: 'active', // PATCH 96.0 – Has route in AppRouter at /peo-dp
+    completeness: '100%',
     route: '/peo-dp',
     icon: 'Shield',
     lazy: true,
@@ -358,7 +389,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'hr',
     path: 'modules/hr/employee-portal',
     description: 'Employee self-service portal',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/portal',
     icon: 'User',
     lazy: true,
@@ -370,7 +402,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'maintenance',
     path: 'modules/maintenance-planner',
     description: 'Plan and track maintenance',
-    status: 'active',
+    status: 'active', // PATCH 96.0 – Has route in AppRouter at /maintenance
+    completeness: '100%',
     route: '/maintenance/planner',
     icon: 'Wrench',
     lazy: true,
@@ -382,7 +415,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'connectivity',
     path: 'modules/connectivity/channel-manager',
     description: 'Manage communication channels',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/channel-manager',
     icon: 'Radio',
     lazy: true,
@@ -394,7 +428,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'connectivity',
     path: 'modules/connectivity/api-gateway',
     description: 'API gateway and integration',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/api-gateway',
     icon: 'Plug',
     lazy: true,
@@ -406,7 +441,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'connectivity',
     path: 'modules/connectivity/notifications-center',
     description: 'Notification management',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/notifications-center',
     icon: 'Bell',
     lazy: true,
@@ -418,7 +454,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'connectivity',
     path: 'modules/connectivity/communication',
     description: 'Communication hub',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/communication',
     icon: 'MessageSquare',
     lazy: true,
@@ -430,7 +467,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'connectivity',
     path: 'modules/connectivity/integrations-hub',
     description: 'Integrations management',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – File not found at specified path
+    completeness: 'broken',
     route: '/intelligence',
     icon: 'Plug',
     lazy: true,
@@ -442,7 +480,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'workspace',
     path: 'modules/workspace/real-time-workspace',
     description: 'Collaborative workspace',
-    status: 'active',
+    status: 'active', // PATCH 96.0 – Verified: Has Supabase integration
+    completeness: '100%',
     route: '/real-time-workspace',
     icon: 'Users',
     lazy: true,
@@ -454,7 +493,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'workspace',
     path: 'modules/workspace/collaboration',
     description: 'Team collaboration tools',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/collaboration',
     icon: 'Users',
     lazy: true,
@@ -466,7 +506,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'assistants',
     path: 'modules/assistants/voice-assistant',
     description: 'Voice-powered assistant',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/assistant/voice',
     icon: 'Mic',
     lazy: true,
@@ -478,7 +519,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'finance',
     path: 'modules/finance-hub',
     description: 'Financial management hub',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/finance',
     icon: 'DollarSign',
     lazy: true,
@@ -490,7 +532,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'documents',
     path: 'modules/documents/documents-ai/DocumentsAI',
     description: 'AI-powered document management',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/documents',
     icon: 'FileText',
     lazy: true,
@@ -502,7 +545,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'documents',
     path: 'modules/incident-reports',
     description: 'Incident reporting system',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/incident-reports',
     icon: 'AlertOctagon',
     lazy: true,
@@ -514,7 +558,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'documents',
     path: 'modules/documents/templates',
     description: 'Document templates',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/templates',
     icon: 'FileCode',
     lazy: true,
@@ -526,7 +571,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'documents',
     path: 'modules/document-hub',
     description: 'PATCH 91.1 - Central hub for document management with AI integration',
-    status: 'active',
+    status: 'active', // PATCH 96.0 – Verified: Has Supabase integration
+    completeness: '100%',
     route: '/dashboard/document-hub',
     icon: 'FolderOpen',
     lazy: true,
@@ -551,7 +597,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'configuration',
     path: 'modules/user-management',
     description: 'Manage users and permissions',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/users',
     icon: 'UserCog',
     permissions: ['admin'],
@@ -564,7 +611,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'features',
     path: 'modules/features/price-alerts',
     description: 'Price monitoring and alerts',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/price-alerts',
     icon: 'Bell',
     lazy: true,
@@ -588,7 +636,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'features',
     path: 'modules/features/reservations',
     description: 'Reservation management',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – File not found at specified path
+    completeness: 'broken',
     route: '/reservations',
     icon: 'Calendar',
     lazy: true,
@@ -600,7 +649,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'features',
     path: 'modules/features/travel',
     description: 'Travel management',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – File not found at specified path
+    completeness: 'broken',
     route: '/travel',
     icon: 'Plane',
     lazy: true,
@@ -612,7 +662,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'features',
     path: 'modules/vault_ai/pages/VaultAIPage',
     description: 'AI-powered secure vault',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/vault',
     icon: 'Lock',
     lazy: true,
@@ -624,7 +675,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'features',
     path: 'modules/weather-dashboard',
     description: 'Weather monitoring, forecasting, climate and environmental risk analysis',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/weather-dashboard',
     icon: 'Cloud',
     lazy: true,
@@ -636,7 +688,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'features',
     path: 'modules/task-automation',
     description: 'Automated task management',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/tasks/automation',
     icon: 'Zap',
     lazy: true,
@@ -648,7 +701,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'features',
     path: 'modules/project-timeline',
     description: 'Project timeline management',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/projects/timeline',
     icon: 'Calendar',
     lazy: true,
@@ -660,7 +714,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'intelligence',
     path: 'modules/intelligence/smart-workflow',
     description: 'Intelligent workflow automation',
-    status: 'active',
+    status: 'incomplete', // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    completeness: 'partial',
     route: '/workflow',
     icon: 'GitBranch',
     lazy: true,
