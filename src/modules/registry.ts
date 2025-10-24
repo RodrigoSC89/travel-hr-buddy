@@ -91,7 +91,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: 'core',
     path: 'modules/shared',
     description: 'Shared components and utilities',
-    status: 'active',
+    status: 'deprecated',
     lazy: false,
   },
 
@@ -532,8 +532,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: 'Settings',
     category: 'configuration',
     path: 'modules/configuration/settings',
-    description: 'Application settings',
-    status: 'active',
+    description: 'Application settings (placeholder - no implementation)',
+    status: 'deprecated',
     route: '/settings',
     icon: 'Settings',
     lazy: true,
@@ -601,53 +601,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'features.communication': {
-    id: 'features.communication',
-    name: 'Communication',
-    category: 'features',
-    path: 'modules/comunicacao',
-    description: 'Internal communication platform',
-    status: 'active',
-    route: '/communication',
-    icon: 'MessageSquare',
-    lazy: true,
-  },
 
-  'features.employee-portal': {
-    id: 'features.employee-portal',
-    name: 'Employee Portal',
-    category: 'features',
-    path: 'modules/portal-funcionario',
-    description: 'Employee self-service portal',
-    status: 'active',
-    route: '/portal',
-    icon: 'User',
-    lazy: true,
-  },
-
-  'features.bookings': {
-    id: 'features.bookings',
-    name: 'Bookings',
-    category: 'features',
-    path: 'modules/reservas',
-    description: 'Booking and reservation system',
-    status: 'active',
-    route: '/bookings',
-    icon: 'Calendar',
-    lazy: true,
-  },
-
-  'features.maritime-system': {
-    id: 'features.maritime-system',
-    name: 'Maritime System',
-    category: 'features',
-    path: 'modules/sistema-maritimo/MaritimeSystem',
-    description: 'Comprehensive maritime operations',
-    status: 'active',
-    route: '/maritime',
-    icon: 'Anchor',
-    lazy: true,
-  },
 
   'features.vault-ai': {
     id: 'features.vault-ai',
@@ -697,13 +651,13 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'features.smart-workflow': {
-    id: 'features.smart-workflow',
+  'intelligence.smart-workflow': {
+    id: 'intelligence.smart-workflow',
     name: 'Smart Workflow',
-    category: 'features',
-    path: 'modules/smart-workflow',
+    category: 'intelligence',
+    path: 'modules/intelligence/smart-workflow',
     description: 'Intelligent workflow automation',
-    status: 'beta',
+    status: 'active',
     route: '/workflow',
     icon: 'GitBranch',
     lazy: true,

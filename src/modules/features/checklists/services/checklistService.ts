@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { Checklist, ChecklistTemplate } from "../types";
@@ -50,7 +49,7 @@ export class ChecklistService {
           certifications: ["Maritime Inspector"]
         },
         status: (item.status || "draft") as Checklist["status"],
-        items: item.checklist_items?.map((checklistItem: Record<string, unknown>) => ({
+        items: item.checklist_items?.map((checklistItem: any) => ({
           id: checklistItem.id,
           title: checklistItem.title,
           description: checklistItem.description,

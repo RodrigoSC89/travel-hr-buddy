@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Hub Sync - Intelligent Synchronization
  * Handles automatic and manual synchronization with BridgeLink
