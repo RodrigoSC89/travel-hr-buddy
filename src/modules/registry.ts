@@ -61,6 +61,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: false,
   },
 
+'core.system-watchdog': {
+    id: 'core.system-watchdog',
+    name: 'System Watchdog',
+    category: 'core',
+    path: 'modules/system-watchdog',
+    description: 'Autonomous system monitoring with AI-based error detection and auto-healing capabilities',
+    status: 'active',
+    route: '/dashboard/system-watchdog',
+    icon: 'Activity',
+    lazy: true,
+    version: '93.0',
+  },
+
 'operations.crew': {
     id: 'operations.crew',
     name: 'Crew Management',
