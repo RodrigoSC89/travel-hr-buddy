@@ -48,6 +48,19 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       
+      - name: Verify Vercel secrets
+        run: |
+          if [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ] || [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "❌ Missing Vercel secrets. Please set VERCEL_ORG_ID, VERCEL_PROJECT_ID and VERCEL_TOKEN in GitHub Secrets."
+            exit 1
+          fi
+
+      - name: Vercel auth check
+        run: vercel whoami --token=${{ secrets.VERCEL_TOKEN }}
+      
+      - name: Vercel link (non-interactive)
+        run: vercel link --yes --project ${{ secrets.VERCEL_PROJECT_ID }} --org ${{ secrets.VERCEL_ORG_ID }} --token=${{ secrets.VERCEL_TOKEN }}
+      
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
       
