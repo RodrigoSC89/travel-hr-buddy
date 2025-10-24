@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import CreateFromTemplate from "@/pages/admin/documents/create-from-template";
-import { createDocument } from "@/lib/documents/api";
+import { createDocument } from "../../../../../legacy/documents/documents/api";
 import "@testing-library/jest-dom";
 
 // Mock dependencies
-vi.mock("@/lib/documents/api", () => ({
+vi.mock("../../../../../legacy/documents/documents/api", () => ({
   createDocument: vi.fn(),
 }));
 

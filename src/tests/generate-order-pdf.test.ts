@@ -37,12 +37,12 @@ describe("generateOrderPDF", () => {
   });
 
   it("should generate PDF without errors", async () => {
-    const { generateOrderPDF } = await import("@/lib/pdf/generateOrderPDF");
+    const { generateOrderPDF } = await import("../../../legacy/documents/pdf/generateOrderPDF");
     expect(() => generateOrderPDF(mockOrder)).not.toThrow();
   });
 
   it("should handle order without optional fields", async () => {
-    const { generateOrderPDF } = await import("@/lib/pdf/generateOrderPDF");
+    const { generateOrderPDF } = await import("../../../legacy/documents/pdf/generateOrderPDF");
     const minimalOrder = {
       id: "OS-20250002",
       vessel_name: "Navio Teste 2",
@@ -57,7 +57,7 @@ describe("generateOrderPDF", () => {
   });
 
   it("should handle order with all fields", async () => {
-    const { generateOrderPDF } = await import("@/lib/pdf/generateOrderPDF");
+    const { generateOrderPDF } = await import("../../../legacy/documents/pdf/generateOrderPDF");
     const completeOrder = {
       id: "OS-20250003",
       vessel_name: "Navio Completo",

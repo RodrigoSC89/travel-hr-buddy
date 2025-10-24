@@ -46,7 +46,7 @@ describe("PDF Export Utility", () => {
     vi.mocked(mockHtml2pdf).mockReturnValue(mockInstance);
     
     // Re-import production code to get fresh instance
-    const pdfModule = await import("../../lib/pdf");
+    const pdfModule = await import("../../../../legacy/documents/pdf");
     exportToPDF = pdfModule.exportToPDF;
     formatPDFContent = pdfModule.formatPDFContent;
   });

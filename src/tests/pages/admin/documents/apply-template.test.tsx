@@ -8,7 +8,7 @@ vi.mock("@/hooks/use-toast", () => ({
   toast: vi.fn(),
 }));
 
-vi.mock("@/lib/documents/api", () => ({
+vi.mock("../../../../../legacy/documents/documents/api", () => ({
   createDocument: vi.fn().mockResolvedValue({ id: "test-doc-id" }),
 }));
 

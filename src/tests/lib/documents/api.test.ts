@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { createDocument, getDocument, updateDocument, deleteDocument, listDocuments } from "@/lib/documents/api";
+import { createDocument, getDocument, updateDocument, deleteDocument, listDocuments } from "../../../../legacy/documents/documents/api";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
