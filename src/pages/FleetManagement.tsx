@@ -45,6 +45,7 @@ import RealTimeTracking from "@/components/fleet/real-time-tracking";
 import IntelligentAlerts from "@/components/fleet/intelligent-alerts";
 import ComplianceCenter from "@/components/fleet/compliance-center";
 import NotificationCenter from "@/components/fleet/notification-center";
+import { FleetAIInsights } from "@/components/fleet/fleet-ai-insights";
 
 const MaritimeFleetManagement = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -60,6 +61,9 @@ const MaritimeFleetManagement = () => {
     efficiency: 0
   });
 
+  // Vessels data for AI
+  const [vessels, setVessels] = useState<any[]>([]);
+
   useEffect(() => {
     loadFleetStats();
   }, []);
@@ -69,7 +73,7 @@ const MaritimeFleetManagement = () => {
       setIsLoading(true);
       
       // Try to load from database, fallback to mock data
-      const { data: vessels, error } = await supabase
+      const { data: vesselsData, error } = await supabase
         .from("vessels")
         .select("*");
       
@@ -82,11 +86,12 @@ const MaritimeFleetManagement = () => {
           criticalAlerts: 2,
           efficiency: 87.5
         });
+        setVessels([]);
       } else {
         // Calculate stats from real data
-        const total = vessels?.length || 0;
-        const active = vessels?.filter(v => v.status === "active").length || 0;
-        const maintenance = vessels?.filter(v => v.status === "maintenance").length || 0;
+        const total = vesselsData?.length || 0;
+        const active = vesselsData?.filter(v => v.status === "active").length || 0;
+        const maintenance = vesselsData?.filter(v => v.status === "maintenance").length || 0;
         
         setFleetStats({
           totalVessels: total,
@@ -95,6 +100,7 @@ const MaritimeFleetManagement = () => {
           criticalAlerts: 2,
           efficiency: 87.5
         });
+        setVessels(vesselsData || []);
       }
     } catch (error) {
       logger.error("Failed to fetch vessel data:", error);
@@ -227,11 +233,16 @@ const MaritimeFleetManagement = () => {
         {/* Main Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <div className="w-full overflow-x-auto pb-2">
-            <TabsList className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-9 mb-8 min-w-fit">
+            <TabsList className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-10 mb-8 min-w-fit">
               <TabsTrigger value="overview" className="flex items-center gap-2">
                 <BarChart3 className="h-4 w-4" />
                 <span className="hidden sm:inline">Painel Geral</span>
                 <span className="sm:hidden">Painel</span>
+              </TabsTrigger>
+              <TabsTrigger value="ai-insights" className="flex items-center gap-2 bg-gradient-to-r from-primary/10 to-secondary/10">
+                <Activity className="h-4 w-4" />
+                <span className="hidden sm:inline">Insights IA</span>
+                <span className="sm:hidden">IA</span>
               </TabsTrigger>
               <TabsTrigger value="vessels" className="flex items-center gap-2">
                 <Ship className="h-4 w-4" />
@@ -278,6 +289,10 @@ const MaritimeFleetManagement = () => {
 
           <TabsContent value="overview" className="space-y-6">
             <FleetOverviewDashboard stats={fleetStats} onRefresh={loadFleetStats} />
+          </TabsContent>
+
+          <TabsContent value="ai-insights" className="space-y-6">
+            <FleetAIInsights vessels={vessels} />
           </TabsContent>
 
           <TabsContent value="vessels" className="space-y-6">
