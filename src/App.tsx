@@ -184,6 +184,7 @@ const RiskManagementModule = React.lazy(() => import("@/modules/emergency/risk-m
 const AnalyticsCoreModule = React.lazy(() => import("@/modules/intelligence/analytics-core"));
 const VoiceAssistantModule = React.lazy(() => import("@/modules/assistants/voice-assistant"));
 const NotificationsCenterModule = React.lazy(() => import("@/modules/connectivity/notifications-center"));
+const AIModulesStatus = React.lazy(() => import("@/pages/AIModulesStatus"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -376,6 +377,7 @@ function App() {
                       <Route path="/admin/training" element={<TrainingManagement />} />
                       <Route path="/developer/module-health" element={<ModuleHealth />} />
                       <Route path="/developer/watchdog" element={<WatchdogMonitor />} />
+                      <Route path="/developer/ai-modules-status" element={<AIModulesStatus />} />
                       <Route path="/admin/risk-audit" element={<RiskAudit />} />
                       <Route path="/admin/quiz" element={<QuizPage />} />
                       <Route path="/admin/audit" element={<BackupAudit />} />
