@@ -40,11 +40,12 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
   const generatePreview = () => {
     let content = template.content;
     for (const key of vars) {
-      content = content.replaceAll(`{{${key}}}`, variables[key] || "");
+      const placeholder = `{{${key}}}`;
+      // Use split/join for broad browser/TS compatibility instead of replaceAll
+      content = content.split(placeholder).join(variables[key] || "");
     }
     setPreview(content);
   };
-
   const handleSave = async () => {
     if (!preview) {
       toast({

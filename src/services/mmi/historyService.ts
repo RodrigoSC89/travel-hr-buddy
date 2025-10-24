@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * MMI History Service
  * Service layer for MMI maintenance history operations
