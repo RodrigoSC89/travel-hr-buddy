@@ -18,12 +18,14 @@ vi.mock('@/ai/kernel', () => ({
   runAIContext: vi.fn(),
 }));
 
-vi.mock('@/lib/logger', () => ({
-  logger: {
-    info: vi.fn(),
-    error: vi.fn(),
-    warn: vi.fn(),
-  },
+vi.mock('@/hooks/use-logger', () => ({
+  useLogger: vi.fn(() => ({
+    logMount: vi.fn(),
+    logDataLoad: vi.fn(),
+    logAIActivation: vi.fn(),
+    logUserAction: vi.fn(),
+    logError: vi.fn(),
+  })),
 }));
 
 describe('WeatherDashboard', () => {
