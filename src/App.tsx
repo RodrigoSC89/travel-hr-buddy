@@ -162,6 +162,8 @@ const ComplianceHubModule = React.lazy(() => import("@/modules/compliance/compli
 const AIInsights = React.lazy(() => import("@/modules/intelligence/ai-insights"));
 const ModuleHealth = React.lazy(() => import("@/pages/developer/module-health"));
 const WatchdogMonitor = React.lazy(() => import("@/pages/developer/watchdog-monitor"));
+// PATCH 89: Consolidated Dashboards
+const OperationsDashboard = React.lazy(() => import("@/modules/operations/operations-dashboard"));
 const PEOTRAM = React.lazy(() => import("@/pages/PEOTRAM"));
 const LogisticsHub = React.lazy(() => import("@/modules/logistics/logistics-hub"));
 const CrewWellbeing = React.lazy(() => import("@/modules/operations/crew-wellbeing"));
@@ -419,6 +421,9 @@ function App() {
                       <Route path="/executive-report" element={<ExecutiveReport />} />
                       <Route path="/compliance-hub" element={<ComplianceHubModule />} />
                       <Route path="/ai-insights" element={<AIInsights />} />
+                      {/* PATCH 89: Consolidated Dashboards */}
+                      <Route path="/operations-dashboard" element={<OperationsDashboard />} />
+                      <Route path="/operations" element={<OperationsDashboard />} />
                       <Route path="/logistics-hub" element={<LogisticsHub />} />
                       <Route path="/logistics" element={<LogisticsHub />} />
                       <Route path="/crew-wellbeing" element={<CrewWellbeing />} />
@@ -433,7 +438,9 @@ function App() {
                       <Route path="/emergency-response" element={<EmergencyResponse />} />
                       <Route path="/emergency" element={<EmergencyResponse />} />
                       <Route path="/mission-control" element={<MissionControl />} />
+                      {/* PATCH 89: Redirect insight-dashboard to ai-insights for consolidation */}
                       <Route path="/mission-control/insight-dashboard" element={<InsightDashboard />} />
+                      <Route path="/insights" element={<AIInsights />} />
                       <Route path="/mission-control/autonomy" element={<AutonomyConsole />} />
                       <Route path="/mission-control/ai-command" element={<AICommandCenter />} />
                       <Route path="/mission-control/workflows" element={<WorkflowEngine />} />
