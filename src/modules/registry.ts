@@ -74,6 +74,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: '93.0',
   },
 
+'core.logs-center': {
+    id: 'core.logs-center',
+    name: 'Logs Center',
+    category: 'core',
+    path: 'modules/logs-center',
+    description: 'PATCH 94.0 - Centralized technical logs with filtering, AI-powered audit and PDF export capabilities',
+    status: 'active',
+    route: '/dashboard/logs-center',
+    icon: 'FileText',
+    lazy: true,
+    version: '94.0',
+  },
+
 'operations.crew': {
     id: 'operations.crew',
     name: 'Crew Management',
