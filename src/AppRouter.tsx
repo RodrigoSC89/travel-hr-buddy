@@ -17,6 +17,10 @@ const PEODP = React.lazy(() => import("@/pages/PEODP"));
 const PEOTRAM = React.lazy(() => import("@/pages/PEOTRAM"));
 const ChecklistsInteligentes = React.lazy(() => import("@/pages/ChecklistsInteligentes"));
 
+// 🔹 PATCH 73.0-75.0 - Sistema de IA e Status
+const EmergencyDrill = React.lazy(() => import("@/pages/emergency-drill"));
+const SystemStatus = React.lazy(() => import("@/pages/system-status"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -33,6 +37,8 @@ export default function AppRouter() {
         <Route path="/peo-dp" element={<PEODP />} />
         <Route path="/peo-tram" element={<PEOTRAM />} />
         <Route path="/checklists-inteligentes" element={<ChecklistsInteligentes />} />
+        <Route path="/emergency-drill" element={<EmergencyDrill />} />
+        <Route path="/system-status" element={<SystemStatus />} />
       </Routes>
     </Router>
   );
