@@ -9,6 +9,7 @@
  */
 
 import { BridgeLink } from "@/core/BridgeLink";
+import { logger } from "@/lib/logger";
 
 /**
  * Resultado de análise de IA
@@ -152,7 +153,7 @@ class NautilusAICore {
    * @param version - Versão do modelo
    */
   async loadModel(modelName: string, version: string): Promise<void> {
-    console.log(`[NautilusAI] Loading model: ${modelName} v${version}`);
+    logger.info(`[NautilusAI] Loading model: ${modelName} v${version}`);
     
     // Stub: Simula carregamento de modelo
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -169,7 +170,7 @@ class NautilusAICore {
       timestamp: Date.now(),
     });
 
-    console.log(`[NautilusAI] Model ${modelName} v${version} loaded successfully`);
+    logger.info(`[NautilusAI] Model ${modelName} v${version} loaded successfully`);
   }
 
   /**
@@ -188,7 +189,7 @@ class NautilusAICore {
       modelName: null,
       version: null,
     };
-    console.log("[NautilusAI] Model unloaded");
+    logger.info("[NautilusAI] Model unloaded");
   }
 }
 

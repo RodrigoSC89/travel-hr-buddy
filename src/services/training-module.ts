@@ -9,6 +9,7 @@ import type {
   ExportAuditBundleResponse,
   QuizQuestion
 } from "../types/training";
+import { logger } from "@/lib/logger";
 
 /**
  * Training Module Service
@@ -82,7 +83,7 @@ export class TrainingModuleService {
       .single();
 
     if (error) {
-      console.error("Error fetching training module:", error);
+      logger.error("Error fetching training module:", error);
       return null;
     }
 

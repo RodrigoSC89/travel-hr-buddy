@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Shield, CheckCircle, AlertTriangle, XCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 /**
  * ComplianceDashboard (Resilience Module)
@@ -46,7 +47,7 @@ export default function ComplianceDashboard() {
           });
         }
       } catch (error) {
-        console.error("Error fetching compliance:", error);
+        logger.error("Error fetching compliance:", error);
         setCompliance({
           ism: 87.5,
           isps: 92.3,

@@ -4,6 +4,7 @@
  */
 
 import { openai } from "@/lib/openai";
+import { logger } from "@/lib/logger";
 
 /**
  * Explain a SGSO requirement using AI
@@ -44,7 +45,7 @@ Responda de forma técnica e direta.
 
     return response.choices[0]?.message.content || null;
   } catch (error) {
-    console.error("Error explaining SGSO requirement:", error);
+    logger.error("Error explaining SGSO requirement:", error);
     return null;
   }
 }

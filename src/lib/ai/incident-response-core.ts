@@ -6,6 +6,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import mqtt from "mqtt";
+import { logger } from "@/lib/logger";
 
 interface IncidentReport {
   type: string;
@@ -101,7 +102,7 @@ export async function handleIncidentReport(
       compliance: response.compliance,
     });
   } catch (error) {
-    console.error("Failed to save incident to Supabase:", error);
+    logger.error("Failed to save incident to Supabase:", error);
   }
 
   // Publish MQTT alert
@@ -120,7 +121,7 @@ export async function handleIncidentReport(
       });
     }
   } catch (error) {
-    console.warn("MQTT publishing skipped:", error);
+    logger.warn("MQTT publishing skipped:", error);
   }
 
   return response;

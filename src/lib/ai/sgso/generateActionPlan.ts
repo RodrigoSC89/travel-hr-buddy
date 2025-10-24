@@ -5,6 +5,7 @@
  */
 
 import { openai } from "@/lib/openai";
+import { logger } from "@/lib/logger";
 
 export interface SGSOIncident {
   description: string;
@@ -35,7 +36,7 @@ export async function generateSGSOActionPlan(
 
   // Mock mode when API key is not available
   if (!hasValidKey) {
-    console.log("🔄 Using mock mode for SGSO Action Plan (API key not configured)");
+    logger.info("🔄 Using mock mode for SGSO Action Plan (API key not configured)");
     return generateMockActionPlan(incident);
   }
 
@@ -83,7 +84,7 @@ Nível de risco: ${incident.sgso_risk_level}`;
       return null;
     }
   } catch (error) {
-    console.error("Error generating SGSO action plan:", error);
+    logger.error("Error generating SGSO action plan:", error);
     return null;
   }
 }

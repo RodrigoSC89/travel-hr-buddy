@@ -6,6 +6,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { generateEmbedding } from "@/services/mmi/embeddingService";
 import type { SimilarJobResult } from "./types";
+import { logger } from "@/lib/logger";
 
 export type { SimilarJobResult };
 
@@ -33,7 +34,7 @@ export const querySimilarJobs = async (
     });
 
     if (error) {
-      console.error("Error querying similar jobs:", error);
+      logger.error("Error querying similar jobs:", error);
       throw error;
     }
 
@@ -63,7 +64,7 @@ export const querySimilarJobs = async (
       similarity: job.similarity || 0,
     }));
   } catch (error) {
-    console.error("Error fetching similar jobs:", error);
+    logger.error("Error fetching similar jobs:", error);
     
     // Return mock data for development/testing
     return [

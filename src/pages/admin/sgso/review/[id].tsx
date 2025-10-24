@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, Download, Save, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import html2pdf from "html2pdf.js";
+import { logger } from "@/lib/logger";
 
 interface AuditItem {
   id: string
@@ -87,7 +88,7 @@ export default function SGSOAuditReviewPage() {
           .single();
 
         if (error) {
-          console.error("Error fetching audit:", error);
+          logger.error("Error fetching audit:", error);
           toast({
             title: "Erro",
             description: "Não foi possível carregar a auditoria",
@@ -98,7 +99,7 @@ export default function SGSOAuditReviewPage() {
           setItems((data.sgso_audit_items || []).sort((a, b) => a.requirement_number - b.requirement_number));
         }
       } catch (err) {
-        console.error("Error:", err);
+        logger.error("Error:", err);
         toast({
           title: "Erro",
           description: "Erro ao buscar auditoria",
@@ -146,7 +147,7 @@ export default function SGSOAuditReviewPage() {
         description: "Auditoria atualizada com sucesso"
       });
     } catch (error) {
-      console.error("Error saving:", error);
+      logger.error("Error saving:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar alterações",
@@ -178,7 +179,7 @@ export default function SGSOAuditReviewPage() {
         description: "PDF exportado com sucesso"
       });
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro",
         description: "Erro ao exportar PDF",

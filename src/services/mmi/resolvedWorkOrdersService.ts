@@ -5,6 +5,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { Database } from "@/integrations/supabase/types";
+import { logger } from "@/lib/logger";
 
 type MmiOsResolvidas = Database["public"]["Tables"]["mmi_os_resolvidas"];
 type MmiOsResolvidasInsert = MmiOsResolvidas["Insert"];
@@ -27,13 +28,13 @@ export const createResolvedWorkOrder = async (
       .single();
 
     if (error) {
-      console.error("Error creating resolved work order:", error);
+      logger.error("Error creating resolved work order:", error);
       return { data: null, error };
     }
 
     return { data: result, error: null };
   } catch (error) {
-    console.error("Unexpected error:", error);
+    logger.error("Unexpected error:", error);
     return { data: null, error: error as Error };
   }
 };
@@ -59,13 +60,13 @@ export const getResolvedWorkOrdersByComponent = async (
     const { data, error } = await query;
 
     if (error) {
-      console.error("Error fetching resolved work orders:", error);
+      logger.error("Error fetching resolved work orders:", error);
       return { data: null, error };
     }
 
     return { data, error: null };
   } catch (error) {
-    console.error("Unexpected error:", error);
+    logger.error("Unexpected error:", error);
     return { data: null, error: error as Error };
   }
 };
@@ -92,13 +93,13 @@ export const getAiLearningFeed = async (
     const { data, error } = await query;
 
     if (error) {
-      console.error("Error fetching AI learning feed:", error);
+      logger.error("Error fetching AI learning feed:", error);
       return { data: null, error };
     }
 
     return { data, error: null };
   } catch (error) {
-    console.error("Unexpected error:", error);
+    logger.error("Unexpected error:", error);
     return { data: null, error: error as Error };
   }
 };
@@ -119,7 +120,7 @@ export const getResolvedWorkOrderStats = async (componente?: string) => {
     const { data, error } = await query;
 
     if (error) {
-      console.error("Error fetching statistics:", error);
+      logger.error("Error fetching statistics:", error);
       return { data: null, error };
     }
 
@@ -153,7 +154,7 @@ export const getResolvedWorkOrderStats = async (componente?: string) => {
       error: null,
     };
   } catch (error) {
-    console.error("Unexpected error:", error);
+    logger.error("Unexpected error:", error);
     return { data: null, error: error as Error };
   }
 };
@@ -183,13 +184,13 @@ export const updateWorkOrderEffectiveness = async (
       .single();
 
     if (error) {
-      console.error("Error updating work order effectiveness:", error);
+      logger.error("Error updating work order effectiveness:", error);
       return { data: null, error };
     }
 
     return { data, error: null };
   } catch (error) {
-    console.error("Unexpected error:", error);
+    logger.error("Unexpected error:", error);
     return { data: null, error: error as Error };
   }
 };
@@ -226,7 +227,7 @@ export const getMostCommonCauses = async (
       .not("causa_confirmada", "is", null);
 
     if (error) {
-      console.error("Error fetching causes:", error);
+      logger.error("Error fetching causes:", error);
       return { data: null, error };
     }
 
@@ -250,7 +251,7 @@ export const getMostCommonCauses = async (
 
     return { data: sortedCauses, error: null };
   } catch (error) {
-    console.error("Unexpected error:", error);
+    logger.error("Unexpected error:", error);
     return { data: null, error: error as Error };
   }
 };
@@ -271,7 +272,7 @@ export const getMostEffectiveActions = async (
       .not("efetiva", "is", null);
 
     if (error) {
-      console.error("Error fetching actions:", error);
+      logger.error("Error fetching actions:", error);
       return { data: null, error };
     }
 
@@ -306,7 +307,7 @@ export const getMostEffectiveActions = async (
 
     return { data: sortedActions, error: null };
   } catch (error) {
-    console.error("Unexpected error:", error);
+    logger.error("Unexpected error:", error);
     return { data: null, error: error as Error };
   }
 };

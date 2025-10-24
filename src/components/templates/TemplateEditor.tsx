@@ -9,6 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import html2pdf from "html2pdf.js";
 import { supabase } from "@/integrations/supabase/client";
 import { Sparkles, Save, FileDown, Loader2 } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export default function TemplateEditor() {
   const [title, setTitle] = useState("");
@@ -71,7 +72,7 @@ export default function TemplateEditor() {
       setTitle("");
       editor.commands.setContent("<p>Comece seu template aqui...</p>");
     } catch (error) {
-      console.error("Error saving template:", error);
+      logger.error("Error saving template:", error);
       toast({
         title: "Erro ao salvar template",
         description: error instanceof Error ? error.message : "Erro desconhecido",
@@ -106,7 +107,7 @@ export default function TemplateEditor() {
         description: "O arquivo foi baixado para o seu dispositivo.",
       });
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Tente novamente mais tarde.",
@@ -146,7 +147,7 @@ export default function TemplateEditor() {
         throw new Error("Nenhum conteúdo foi gerado");
       }
     } catch (error) {
-      console.error("Error generating with AI:", error);
+      logger.error("Error generating with AI:", error);
       toast({
         title: "Erro ao gerar com IA",
         description: error instanceof Error ? error.message : "Erro desconhecido",

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 /**
  * AI Template Generation Utility
  * Provides functions for generating template content using GPT-4 AI
@@ -65,7 +66,7 @@ export async function generateTemplateWithCustomPrompt(prompt: string): Promise<
     const json = await res.json();
     return json.output || "";
   } catch (error: any) {
-    console.error("Error generating template with AI:", error);
+    logger.error("Error generating template with AI:", error);
     throw new Error(error.message || "Failed to generate template with AI");
   }
 }

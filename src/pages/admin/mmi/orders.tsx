@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { MMIOS } from "@/types/mmi";
 import { utils, writeFile } from "xlsx";
 import html2pdf from "html2pdf.js";
+import { logger } from "@/lib/logger";
 
 export default function MMIOrdersPage() {
   const [workOrders, setWorkOrders] = useState<MMIOS[]>([]);
@@ -34,7 +35,7 @@ export default function MMIOrdersPage() {
       if (error) throw error;
       setWorkOrders(data || []);
     } catch (error) {
-      console.error("Error loading work orders:", error);
+      logger.error("Error loading work orders:", error);
       toast({
         title: "Erro ao carregar ordens de serviço",
         description: error instanceof Error ? error.message : "Erro desconhecido",
@@ -75,7 +76,7 @@ export default function MMIOrdersPage() {
         throw new Error(data?.error || "Erro ao atualizar");
       }
     } catch (error) {
-      console.error("Error updating work order:", error);
+      logger.error("Error updating work order:", error);
       toast({
         title: "❌ Erro ao atualizar",
         description: error instanceof Error ? error.message : "Erro desconhecido",

@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { logger } from "@/lib/logger";
 
 /**
  * Nautilus Memory Engine
@@ -38,7 +39,7 @@ export class MemoryEngine {
         const data = fs.readFileSync(MEMORY_PATH, "utf-8");
         this.memory = JSON.parse(data);
       } catch (error) {
-        console.warn("⚠️  Failed to load memory, starting fresh:", error);
+        logger.warn("⚠️  Failed to load memory, starting fresh:", error);
         this.memory = [];
       }
     } else {
@@ -54,7 +55,7 @@ export class MemoryEngine {
       fs.mkdirSync(path.dirname(MEMORY_PATH), { recursive: true });
       fs.writeFileSync(MEMORY_PATH, JSON.stringify(this.memory, null, 2), "utf-8");
     } catch (error) {
-      console.error("❌ Failed to save memory:", error);
+      logger.error("❌ Failed to save memory:", error);
     }
   }
 

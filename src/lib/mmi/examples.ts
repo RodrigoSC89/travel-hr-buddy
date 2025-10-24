@@ -7,12 +7,13 @@
 
 import { generateForecastForJob } from "@/lib/mmi/forecast-ia";
 import type { MMIJob, ForecastResult } from "@/lib/mmi/forecast-ia";
+import { logger } from "@/lib/logger";
 
 /**
  * Example 1: Basic forecast generation
  */
 async function example1_basicForecast() {
-  console.log("=== Example 1: Basic Forecast ===\n");
+  logger.info("=== Example 1: Basic Forecast ===\n");
 
   const job: MMIJob = {
     id: "job123",
@@ -25,14 +26,14 @@ async function example1_basicForecast() {
 
   const forecast: ForecastResult = await generateForecastForJob(job);
 
-  console.log("Job:", job.title);
-  console.log("System:", job.system);
-  console.log("Last Executed:", job.lastExecuted);
-  console.log("\nForecast Results:");
-  console.log("- Next Due Date:", forecast.next_due_date);
-  console.log("- Risk Level:", forecast.risk_level);
-  console.log("- Reasoning:", forecast.reasoning);
-  console.log("\n");
+  logger.info("Job:", job.title);
+  logger.info("System:", job.system);
+  logger.info("Last Executed:", job.lastExecuted);
+  logger.info("\nForecast Results:");
+  logger.info("- Next Due Date:", forecast.next_due_date);
+  logger.info("- Risk Level:", forecast.risk_level);
+  logger.info("- Reasoning:", forecast.reasoning);
+  logger.info("\n");
 
   return forecast;
 }
@@ -41,7 +42,7 @@ async function example1_basicForecast() {
  * Example 2: Job without execution history
  */
 async function example2_newJob() {
-  console.log("=== Example 2: New Job (No History) ===\n");
+  logger.info("=== Example 2: New Job (No History) ===\n");
 
   const job: MMIJob = {
     id: "job456",
@@ -53,14 +54,14 @@ async function example2_newJob() {
 
   const forecast = await generateForecastForJob(job);
 
-  console.log("Job:", job.title);
-  console.log("System:", job.system);
-  console.log("Last Executed:", job.lastExecuted || "Never");
-  console.log("\nForecast Results:");
-  console.log("- Next Due Date:", forecast.next_due_date);
-  console.log("- Risk Level:", forecast.risk_level);
-  console.log("- Reasoning:", forecast.reasoning);
-  console.log("\n");
+  logger.info("Job:", job.title);
+  logger.info("System:", job.system);
+  logger.info("Last Executed:", job.lastExecuted || "Never");
+  logger.info("\nForecast Results:");
+  logger.info("- Next Due Date:", forecast.next_due_date);
+  logger.info("- Risk Level:", forecast.risk_level);
+  logger.info("- Reasoning:", forecast.reasoning);
+  logger.info("\n");
 
   return forecast;
 }
@@ -69,7 +70,7 @@ async function example2_newJob() {
  * Example 3: High priority maintenance with detailed observations
  */
 async function example3_highPriority() {
-  console.log("=== Example 3: High Priority Maintenance ===\n");
+  logger.info("=== Example 3: High Priority Maintenance ===\n");
 
   const job: MMIJob = {
     id: "job789",
@@ -82,15 +83,15 @@ async function example3_highPriority() {
 
   const forecast = await generateForecastForJob(job);
 
-  console.log("Job:", job.title);
-  console.log("System:", job.system);
-  console.log("Last Executed:", job.lastExecuted);
-  console.log("Observations:", job.observations);
-  console.log("\nForecast Results:");
-  console.log("- Next Due Date:", forecast.next_due_date);
-  console.log("- Risk Level:", forecast.risk_level);
-  console.log("- Reasoning:", forecast.reasoning);
-  console.log("\n");
+  logger.info("Job:", job.title);
+  logger.info("System:", job.system);
+  logger.info("Last Executed:", job.lastExecuted);
+  logger.info("Observations:", job.observations);
+  logger.info("\nForecast Results:");
+  logger.info("- Next Due Date:", forecast.next_due_date);
+  logger.info("- Risk Level:", forecast.risk_level);
+  logger.info("- Reasoning:", forecast.reasoning);
+  logger.info("\n");
 
   return forecast;
 }
@@ -99,7 +100,7 @@ async function example3_highPriority() {
  * Example 4: Batch processing multiple jobs
  */
 async function example4_batchProcessing() {
-  console.log("=== Example 4: Batch Processing ===\n");
+  logger.info("=== Example 4: Batch Processing ===\n");
 
   const jobs: MMIJob[] = [
     {
@@ -131,7 +132,7 @@ async function example4_batchProcessing() {
         const forecast = await generateForecastForJob(job);
         return { job, forecast, success: true };
       } catch (error) {
-        console.error(`Failed to generate forecast for job ${job.id}:`, error);
+        logger.error(`Failed to generate forecast for job ${job.id}:`, error);
         return { job, forecast: null, success: false };
       }
     })
@@ -139,13 +140,13 @@ async function example4_batchProcessing() {
 
   forecasts.forEach(({ job, forecast, success }) => {
     if (success && forecast) {
-      console.log(`✓ ${job.title}`);
-      console.log(`  Risk: ${forecast.risk_level} | Due: ${forecast.next_due_date}`);
+      logger.info(`✓ ${job.title}`);
+      logger.info(`  Risk: ${forecast.risk_level} | Due: ${forecast.next_due_date}`);
     } else {
-      console.log(`✗ ${job.title} - Failed to generate forecast`);
+      logger.info(`✗ ${job.title} - Failed to generate forecast`);
     }
   });
-  console.log("\n");
+  logger.info("\n");
 
   return forecasts;
 }
@@ -155,20 +156,20 @@ async function example4_batchProcessing() {
  */
 async function runExamples() {
   try {
-    console.log("\n" + "=".repeat(60));
-    console.log("MMI Forecast IA - Usage Examples");
-    console.log("=".repeat(60) + "\n");
+    logger.info("\n" + "=".repeat(60));
+    logger.info("MMI Forecast IA - Usage Examples");
+    logger.info("=".repeat(60) + "\n");
 
     await example1_basicForecast();
     await example2_newJob();
     await example3_highPriority();
     await example4_batchProcessing();
 
-    console.log("=".repeat(60));
-    console.log("All examples completed successfully!");
-    console.log("=".repeat(60) + "\n");
+    logger.info("=".repeat(60));
+    logger.info("All examples completed successfully!");
+    logger.info("=".repeat(60) + "\n");
   } catch (error) {
-    console.error("Error running examples:", error);
+    logger.error("Error running examples:", error);
   }
 }
 

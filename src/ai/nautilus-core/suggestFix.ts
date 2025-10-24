@@ -6,6 +6,7 @@
 
 import OpenAI from "openai";
 import type { Finding, AnalysisResult } from "./analyzer";
+import { logger } from "@/lib/logger";
 
 export interface FixSuggestion {
   title: string;
@@ -28,7 +29,7 @@ export async function suggestFix(analysis: AnalysisResult): Promise<FixSuggestio
   // Check if OpenAI API key is available
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    console.warn("⚠️ OPENAI_API_KEY not found. Using fallback fix suggestions.");
+    logger.warn("⚠️ OPENAI_API_KEY not found. Using fallback fix suggestions.");
     return generateFallbackSuggestion(findings);
   }
 
@@ -60,7 +61,7 @@ export async function suggestFix(analysis: AnalysisResult): Promise<FixSuggestio
 
     return parseAIResponse(content, findings);
   } catch (error) {
-    console.error("❌ Error calling OpenAI API:", error);
+    logger.error("❌ Error calling OpenAI API:", error);
     return generateFallbackSuggestion(findings);
   }
 }

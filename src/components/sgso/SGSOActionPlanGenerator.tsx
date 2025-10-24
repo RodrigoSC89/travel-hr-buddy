@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Brain, Loader2, Sparkles, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { generateSGSOActionPlan, type SGSOActionPlan } from "@/lib/ai/sgso";
+import { logger } from "@/lib/logger";
 
 export const SGSOActionPlanGenerator: React.FC = () => {
   const { toast } = useToast();
@@ -129,7 +130,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Error generating action plan:", error);
+      logger.error("Error generating action plan:", error);
       toast({
         title: "Erro ao gerar plano",
         description: "Ocorreu um erro ao processar a solicitação.",

@@ -5,6 +5,7 @@
 
 import { CacheEntry } from "./types";
 import config from "./hub_config.json";
+import { logger } from "@/lib/logger";
 
 export class HubCache {
   private readonly storageKey = config.cache.storageKey;
@@ -122,7 +123,7 @@ export class HubCache {
         timestamp: new Date(entry.timestamp),
       }));
     } catch (error) {
-      console.error("Failed to parse cache:", error);
+      logger.error("Failed to parse cache:", error);
       return [];
     }
   }
@@ -134,7 +135,7 @@ export class HubCache {
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(cache));
     } catch (error) {
-      console.error("Failed to set cache:", error);
+      logger.error("Failed to set cache:", error);
     }
   }
 

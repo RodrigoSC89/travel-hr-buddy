@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface Incident {
   id: string;
@@ -47,7 +48,7 @@ export function PlanStatusSelect({ incident, onUpdate }: PlanStatusSelectProps) 
         onUpdate(newStatus);
       }
     } catch (error) {
-      console.error("Error updating status:", error);
+      logger.error("Error updating status:", error);
       toast.error(error instanceof Error ? error.message : "Erro ao atualizar status");
       // Revert to previous status on error
       setStatus(incident.plan_status || "pendente");

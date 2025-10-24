@@ -17,6 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface IncidentRecord {
   id: string;
@@ -47,7 +48,7 @@ export default function ComplianceReporter() {
           table: "incident_reports",
         },
         (payload) => {
-          console.log("Incident update received:", payload);
+          logger.info("Incident update received:", payload);
           if (payload.eventType === "INSERT") {
             setIncidents((prev) => [payload.new as IncidentRecord, ...prev]);
           }
@@ -68,7 +69,7 @@ export default function ComplianceReporter() {
       .limit(50);
 
     if (error) {
-      console.error("Error fetching incidents:", error);
+      logger.error("Error fetching incidents:", error);
       return;
     }
 

@@ -1,4 +1,5 @@
 import React, { lazy, Suspense } from "react";
+import { logger } from "@/lib/logger";
 
 /**
  * Utilitário de importação segura para módulos React,
@@ -12,7 +13,7 @@ export function safeLazyImport(
       const module = await importFn();
       return module;
     } catch (error) {
-      console.error("⚠️ Falha ao importar módulo:", error);
+      logger.error("⚠️ Falha ao importar módulo:", error);
       return { 
         default: () => React.createElement("div", { className: "p-4 text-red-500" }, "Erro ao carregar módulo.") 
       };

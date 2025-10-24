@@ -14,6 +14,7 @@ import { submitSGSOAudit } from "@/lib/sgso/submit";
 import { loadSGSOAudit } from "@/services/sgso-audit-service";
 import { toast } from "sonner";
 import { explainRequirementSGSO } from "@/lib/ai/sgso";
+import { logger } from "@/lib/logger";
 
 const requisitosSGSO = [
   { num: 1, titulo: "Política de SMS", desc: "Estabelecimento e divulgação de política de segurança e meio ambiente." },
@@ -164,7 +165,7 @@ export default function SGSOAuditPage() {
         toast.error("Não foi possível gerar explicação. Verifique a configuração da API.");
       }
     } catch (error) {
-      console.error("Error explaining requirement:", error);
+      logger.error("Error explaining requirement:", error);
       toast.error("Erro ao explicar requisito com IA");
     } finally {
       setExplainLoading(null);

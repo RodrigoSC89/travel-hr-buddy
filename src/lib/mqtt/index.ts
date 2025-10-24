@@ -4,6 +4,7 @@
  */
 
 import mqtt, { MqttClient } from "mqtt";
+import { logger } from "@/lib/logger";
 
 let mqttClientInstance: MqttClient | null = null;
 
@@ -11,7 +12,7 @@ export function initMQTT(): MqttClient | null {
   const url = import.meta.env.VITE_MQTT_URL;
   
   if (!url) {
-    console.warn("VITE_MQTT_URL not set, MQTT disabled");
+    logger.warn("VITE_MQTT_URL not set, MQTT disabled");
     return null;
   }
   
@@ -43,20 +44,20 @@ export function initMQTT(): MqttClient | null {
     mqttClientInstance = mqtt.connect(url, options);
     
     mqttClientInstance.on("connect", () => {
-      console.log("✅ MQTT client connected");
+      logger.info("✅ MQTT client connected");
     });
     
     mqttClientInstance.on("error", (error) => {
-      console.error("❌ MQTT connection error:", error);
+      logger.error("❌ MQTT connection error:", error);
     });
     
     mqttClientInstance.on("offline", () => {
-      console.warn("⚠️ MQTT client offline");
+      logger.warn("⚠️ MQTT client offline");
     });
     
     return mqttClientInstance;
   } catch (error) {
-    console.error("❌ Failed to initialize MQTT client:", error);
+    logger.error("❌ Failed to initialize MQTT client:", error);
     return null;
   }
 }

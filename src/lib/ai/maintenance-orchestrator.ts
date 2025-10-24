@@ -12,6 +12,7 @@
 import * as ort from "onnxruntime-web";
 import { publishEvent } from "@/lib/mqtt/publisher";
 import { createClient } from "@/lib/supabase/client";
+import { logger } from "@/lib/logger";
 
 // Risk thresholds aligned with maritime standards
 const RISK_THRESHOLDS = {
@@ -117,7 +118,7 @@ export async function runMaintenanceOrchestrator(
 
     return result;
   } catch (error) {
-    console.error("❌ Maintenance orchestrator error:", error);
+    logger.error("❌ Maintenance orchestrator error:", error);
     
     // Fallback result
     return {
@@ -145,9 +146,9 @@ async function logToSupabase(result: MaintenanceResult): Promise<void> {
       });
 
     if (error) {
-      console.error("❌ Failed to log to Supabase:", error);
+      logger.error("❌ Failed to log to Supabase:", error);
     }
   } catch (error) {
-    console.error("❌ Supabase logging error:", error);
+    logger.error("❌ Supabase logging error:", error);
   }
 }

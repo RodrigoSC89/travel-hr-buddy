@@ -10,6 +10,7 @@ import type { MMIComponent, MMIHistory, AIForecast } from "@/types/mmi";
 import { generateForecast } from "@/services/mmi/forecastService";
 import { createTaskFromForecast } from "@/services/mmi/taskService";
 import { saveForecast, formatForecastText } from "@/services/mmi/forecastStorageService";
+import { logger } from "@/lib/logger";
 
 interface ForecastGeneratorProps {
   component: MMIComponent;
@@ -62,11 +63,11 @@ export default function ForecastGenerator({
         
         toast.success("Forecast gerado e salvo com sucesso!");
       } catch (saveError) {
-        console.error("Error saving forecast:", saveError);
+        logger.error("Error saving forecast:", saveError);
         toast.success("Forecast gerado com sucesso! (Aviso: Não foi possível salvar no histórico)");
       }
     } catch (error) {
-      console.error("Error generating forecast:", error);
+      logger.error("Error generating forecast:", error);
       toast.error("Erro ao gerar forecast");
     } finally {
       setGenerating(false);
@@ -95,7 +96,7 @@ export default function ForecastGenerator({
         toast.error("Erro ao criar tarefa");
       }
     } catch (error) {
-      console.error("Error creating task:", error);
+      logger.error("Error creating task:", error);
       toast.error("Erro ao criar tarefa");
     } finally {
       setCreatingTask(false);

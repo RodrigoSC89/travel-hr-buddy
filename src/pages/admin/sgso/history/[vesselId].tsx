@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { SGSOHistoryTable, SGSOActionPlan } from "@/components/sgso/SGSOHistoryTable";
 import { ArrowLeft, RefreshCw, History, Shield, Info } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 const SGSOHistoryPage: React.FC = () => {
   const { vesselId } = useParams<{ vesselId: string }>();
@@ -49,7 +50,7 @@ const SGSOHistoryPage: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Error fetching action plans:", error);
+      logger.error("Error fetching action plans:", error);
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Erro ao buscar histórico de planos de ação",

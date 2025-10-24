@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlanStatusSelect } from "./PlanStatusSelect";
 import { DPIncident, RISK_LEVEL_COLORS, SGSORiskLevel } from "@/types/incident";
+import { logger } from "@/lib/logger";
 
 interface Incident {
   id: string;
@@ -35,7 +36,7 @@ export default function IncidentCards() {
       .then(res => res.json())
       .then(data => setIncidents(data.incidents))
       .catch(err => {
-        console.error("Erro ao carregar incidentes DP", err);
+        logger.error("Erro ao carregar incidentes DP", err);
         // Demo data for testing when API is not available
         setIncidents([
           {

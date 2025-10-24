@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface Template {
   id: string;
@@ -48,7 +49,7 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
 
       setTemplates(data || []);
     } catch (error) {
-      console.error("Error fetching templates:", error);
+      logger.error("Error fetching templates:", error);
       toast({
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar os templates.",

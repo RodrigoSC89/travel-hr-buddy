@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export type LogLevel = "debug" | "info" | "warning" | "error" | "critical";
 
@@ -62,7 +63,7 @@ class LogsEngine {
    */
   error(category: string, message: string, data?: Record<string, any>, module?: string) {
     this.log("error", category, message, data, module);
-    console.error(`[${category}] ${message}`, data);
+    logger.error(`[${category}] ${message}`, data);
   }
 
   /**
@@ -70,7 +71,7 @@ class LogsEngine {
    */
   critical(category: string, message: string, data?: Record<string, any>, module?: string) {
     this.log("critical", category, message, data, module);
-    console.error(`[CRITICAL] [${category}] ${message}`, data);
+    logger.error(`[CRITICAL] [${category}] ${message}`, data);
     
     // Immediately flush critical errors
     this.flush();
@@ -106,7 +107,7 @@ class LogsEngine {
         critical: "🚨",
       }[level];
 
-      console.log(`${emoji} [${category}] ${message}`, data || "");
+      logger.info(`${emoji} [${category}] ${message}`, data || "");
     }
   }
 
@@ -178,7 +179,7 @@ class LogsEngine {
       // Optional: Could be adapted to use ai_insights or another table if needed
       // For now, keeping logs client-side until proper table is created
     } catch (error) {
-      console.error("Failed to flush logs:", error);
+      logger.error("Failed to flush logs:", error);
       // Add logs back to queue
       this.logs = [...logsToFlush, ...this.logs];
     }

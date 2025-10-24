@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 /**
  * Logger Universal - PATCH 65.0
  * Sistema centralizado de logs com níveis e contexto
@@ -26,22 +27,22 @@ class UniversalLogger {
     
     switch (level) {
       case "debug":
-        if (this.isDevelopment) console.debug(formatted, context?.data);
+        logger.debug(formatted, context?.data);
         break;
       case "info":
-        console.info(formatted, context?.data);
+        logger.info(formatted, context?.data);
         break;
       case "warn":
-        console.warn(formatted, context?.data);
+        logger.warn(formatted, context?.data);
         break;
       case "error":
-        console.error(formatted, context?.data);
+        logger.error(formatted, context?.data);
         break;
       case "ai":
-        console.info(`🧠 ${formatted}`, context?.data);
+        logger.info(`🧠 ${formatted}`, context?.data);
         break;
       case "module":
-        console.info(`📦 ${formatted}`, context?.data);
+        logger.info(`📦 ${formatted}`, context?.data);
         break;
     }
   }

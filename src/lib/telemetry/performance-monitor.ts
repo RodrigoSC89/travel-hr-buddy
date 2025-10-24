@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { MqttClient } from "mqtt";
+import { logger } from "@/lib/logger";
 
 export interface PerformanceMetrics {
   cpu: number;
@@ -72,7 +73,7 @@ export function usePerformanceMonitor(mqttClient?: MqttClient | null): Performan
             { qos: 0 }
           );
         } catch (error) {
-          console.error("Failed to publish performance metrics:", error);
+          logger.error("Failed to publish performance metrics:", error);
         }
       }
     }, 1000);

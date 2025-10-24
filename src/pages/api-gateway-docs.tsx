@@ -11,6 +11,7 @@ import {
   Code, Globe, Lock, Zap, CheckCircle, XCircle, 
   Cloud, Satellite, Anchor, Package 
 } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 const API_BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/api-gateway`;
 
@@ -121,7 +122,7 @@ export default function APIGatewayDocs() {
         description: `Status: ${response.status}`,
       });
     } catch (error) {
-      console.error('API test error:', error);
+      logger.error('API test error:', error);
       setTestResult({ error: error instanceof Error ? error.message : 'Unknown error' });
       toast({
         title: "API Error",

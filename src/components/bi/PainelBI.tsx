@@ -6,6 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } fro
 import { Button } from "@/components/ui/button";
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface ComplianceData {
   navio: string;
@@ -44,7 +45,7 @@ export function PainelBI() {
         const data = await response.json();
         setDados(data);
       } catch (err) {
-        console.error("Error fetching compliance data:", err);
+        logger.error("Error fetching compliance data:", err);
         setError("Erro ao carregar dados de conformidade");
         // Set sample data on error
         setDados([
@@ -122,7 +123,7 @@ export function PainelBI() {
       
       toast.success("CSV exportado com sucesso!");
     } catch (err) {
-      console.error("Error exporting CSV:", err);
+      logger.error("Error exporting CSV:", err);
       toast.error("Erro ao exportar CSV");
     }
   };
@@ -150,11 +151,11 @@ export function PainelBI() {
           toast.success("PDF exportado com sucesso!");
         })
         .catch((error) => {
-          console.error("Error generating PDF:", error);
+          logger.error("Error generating PDF:", error);
           toast.error("Erro ao gerar PDF");
         });
     } catch (err) {
-      console.error("Error in exportToPDF:", err);
+      logger.error("Error in exportToPDF:", err);
       toast.error("Erro ao gerar PDF");
     }
   };

@@ -8,10 +8,11 @@
 import JobFormWithExamples from "@/components/copilot/JobFormWithExamples";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sparkles, CheckCircle2, Search, Copy, Save } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export default function CopilotJobFormExample() {
   const handleJobSubmit = (data: { component: string; description: string }) => {
-    console.log("Job submitted:", data);
+    logger.info("Job submitted:", data);
     // In a real application, this would call an API to save the job
   };
 

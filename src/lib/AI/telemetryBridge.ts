@@ -5,6 +5,7 @@
 
 import OpenAI from "openai";
 import { PerformanceMetrics } from "@/lib/telemetry/performance-monitor";
+import { logger } from "@/lib/logger";
 
 export interface PerformanceInsights {
   summary: string;
@@ -20,7 +21,7 @@ function getOpenAIClient(): OpenAI | null {
 
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
   if (!apiKey) {
-    console.warn("VITE_OPENAI_API_KEY not set, AI insights disabled");
+    logger.warn("VITE_OPENAI_API_KEY not set, AI insights disabled");
     return null;
   }
 
@@ -31,7 +32,7 @@ function getOpenAIClient(): OpenAI | null {
     });
     return openaiClient;
   } catch (error) {
-    console.error("Failed to initialize OpenAI client:", error);
+    logger.error("Failed to initialize OpenAI client:", error);
     return null;
   }
 }
@@ -105,7 +106,7 @@ Format your response as JSON with keys: summary, recommendations (array), severi
       };
     }
   } catch (error) {
-    console.error("Failed to analyze performance metrics:", error);
+    logger.error("Failed to analyze performance metrics:", error);
     return {
       summary: "Performance analysis failed",
       recommendations: ["Check API configuration", "Review console logs"],
@@ -157,7 +158,7 @@ Provide a 3-4 sentence executive summary.`;
 
     return response.choices[0]?.message?.content || "Report generation failed";
   } catch (error) {
-    console.error("Failed to generate performance report:", error);
+    logger.error("Failed to generate performance report:", error);
     return "Failed to generate performance report";
   }
 }

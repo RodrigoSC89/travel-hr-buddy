@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface JobTrendData {
   month: string;
@@ -55,7 +56,7 @@ export default function JobsTrendChart() {
         const { data: result, error } = await supabase.rpc("jobs_trend_by_month");
         
         if (error) {
-          console.error("Error fetching jobs trend:", error);
+          logger.error("Error fetching jobs trend:", error);
           setData(initializeLast6Months());
         } else if (result && result.length > 0) {
           const monthsMap = new Map<string, number>();
@@ -74,7 +75,7 @@ export default function JobsTrendChart() {
           setData(initializeLast6Months());
         }
       } catch (error) {
-        console.error("Error invoking function:", error);
+        logger.error("Error invoking function:", error);
         setData(initializeLast6Months());
       } finally {
         setLoading(false);

@@ -4,12 +4,13 @@
  */
 
 import OpenAI from "openai";
+import { logger } from "@/lib/logger";
 
 // Get API key from environment
 const apiKey = process.env.VITE_OPENAI_API_KEY;
 
 if (!apiKey || apiKey === "your_openai_api_key_here") {
-  console.warn("⚠️ OpenAI API key not configured. Set VITE_OPENAI_API_KEY in your environment.");
+  logger.warn("⚠️ OpenAI API key not configured. Set VITE_OPENAI_API_KEY in your environment.");
 }
 
 /**

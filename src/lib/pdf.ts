@@ -7,6 +7,7 @@
 
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 /**
  * Options for html2pdf.js configuration
@@ -102,7 +103,7 @@ export async function exportToPDF(
     
     toast.success("PDF gerado com sucesso!");
   } catch (error) {
-    console.error("Error exporting PDF:", error);
+    logger.error("Error exporting PDF:", error);
     toast.error("Erro ao gerar PDF");
     throw error; // Re-throw for test assertions
   } finally {

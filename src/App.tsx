@@ -11,6 +11,7 @@ import { initializeMonitoring } from "@/lib/monitoring/init";
 import { CommandPalette } from "@/components/CommandPalette";
 import { systemWatchdog } from "@/ai/watchdog";
 // Removed safeLazyImport - using React.lazy directly
+import { logger } from "@/lib/logger";
 
 // Lazy load all pages
 const Index = React.lazy(() => import("@/pages/Index"));
@@ -222,7 +223,7 @@ const RedirectHandler = () => {
       }
     } catch (error) {
       // Handle cases where sessionStorage is not available
-      console.warn("Failed to restore navigation path:", error);
+      logger.warn("Failed to restore navigation path:", error);
     }
   }, [navigate, location]);
 

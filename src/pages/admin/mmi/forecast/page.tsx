@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 type Forecast = {
   id: string
@@ -58,7 +59,7 @@ export default function ForecastPage() {
         setForecasts(transformed);
         setFilteredForecasts(transformed);
       } catch (error) {
-        console.error("Error fetching forecasts:", error);
+        logger.error("Error fetching forecasts:", error);
         toast({
           title: "❌ Erro ao carregar forecasts",
           description: "Não foi possível carregar os forecasts",
@@ -162,7 +163,7 @@ export default function ForecastPage() {
         });
       }
     } catch (error) {
-      console.error("Error generating order:", error);
+      logger.error("Error generating order:", error);
       toast({
         title: "❌ Erro ao gerar OS",
         description: "Não foi possível conectar ao servidor",

@@ -8,6 +8,7 @@ import { logsEngine } from "@/lib/monitoring/LogsEngine";
 import { metricsDaemon } from "@/lib/monitoring/MetricsDaemon";
 import { patternRecognition } from "./PatternRecognition";
 import { hotfixManager } from "./HotfixManager";
+import { logger } from "@/lib/logger";
 
 export interface AutonomousAction {
   id: string;
@@ -42,11 +43,11 @@ class AutonomyEngine {
    */
   start() {
     if (this.isActive) {
-      console.log("🤖 AutonomyEngine: Already running");
+      logger.info("🤖 AutonomyEngine: Already running");
       return;
     }
 
-    console.log("🤖 AutonomyEngine: Iniciando sistema de autonomia...");
+    logger.info("🤖 AutonomyEngine: Iniciando sistema de autonomia...");
     this.isActive = true;
 
     // Start pattern learning
@@ -73,7 +74,7 @@ class AutonomyEngine {
     }
     this.isActive = false;
     patternRecognition.stop();
-    console.log("🤖 AutonomyEngine: Stopped");
+    logger.info("🤖 AutonomyEngine: Stopped");
   }
 
   /**
@@ -156,7 +157,7 @@ class AutonomyEngine {
    * Execute an autonomous action
    */
   private async executeAutonomousAction(action: AutonomousAction) {
-    console.log(`🤖 AutonomyEngine: Executando ação autônoma [${action.action}] em ${action.moduleId}`);
+    logger.info(`🤖 AutonomyEngine: Executando ação autônoma [${action.action}] em ${action.moduleId}`);
     
     const startTime = performance.now();
     let success = false;
@@ -222,7 +223,7 @@ class AutonomyEngine {
       this.restartHistory.set(moduleId, Date.now());
       
       // Simulate module restart logic
-      console.log(`🔄 Reiniciando módulo: ${moduleId}`);
+      logger.info(`🔄 Reiniciando módulo: ${moduleId}`);
       
       // Update watchdog
       systemWatchdog.updateModuleStatus(moduleId, {
@@ -242,7 +243,7 @@ class AutonomyEngine {
    */
   private async clearCache(moduleId: string): Promise<boolean> {
     try {
-      console.log(`🧹 Limpando cache do módulo: ${moduleId}`);
+      logger.info(`🧹 Limpando cache do módulo: ${moduleId}`);
       localStorage.removeItem(`cache_${moduleId}`);
       return true;
     } catch {
@@ -255,7 +256,7 @@ class AutonomyEngine {
    */
   private async reconnectAI(moduleId: string): Promise<boolean> {
     try {
-      console.log(`🧠 Reconectando IA para módulo: ${moduleId}`);
+      logger.info(`🧠 Reconectando IA para módulo: ${moduleId}`);
       // This would trigger AI reconnection logic
       return true;
     } catch {
@@ -275,7 +276,7 @@ class AutonomyEngine {
    */
   private async activateFallback(moduleId: string): Promise<boolean> {
     try {
-      console.log(`🛡️ Ativando fallback para módulo: ${moduleId}`);
+      logger.info(`🛡️ Ativando fallback para módulo: ${moduleId}`);
       return true;
     } catch {
       return false;

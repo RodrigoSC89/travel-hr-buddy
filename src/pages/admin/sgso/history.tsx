@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface Audit {
   id: string
@@ -42,12 +43,12 @@ export default function SGSOAuditHistoryPage() {
           .order("audit_date", { ascending: false });
 
         if (error) {
-          console.error("Error fetching audits:", error);
+          logger.error("Error fetching audits:", error);
         } else if (data) {
           setAudits(data as Audit[]);
         }
       } catch (err) {
-        console.error("Error:", err);
+        logger.error("Error:", err);
       } finally {
         setLoading(false);
       }

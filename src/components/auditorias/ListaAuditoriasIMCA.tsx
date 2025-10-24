@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { logger } from "@/lib/logger";
 
 interface Auditoria {
   id: string;
@@ -64,7 +65,7 @@ export default function ListaAuditoriasIMCA() {
       setFrota(data.frota || []);
       setCronStatus(data.cronStatus || "Status desconhecido");
     } catch (error) {
-      console.error("Erro ao carregar auditorias:", error);
+      logger.error("Erro ao carregar auditorias:", error);
       toast.error("Erro ao carregar auditorias");
     }
   };
@@ -123,7 +124,7 @@ export default function ListaAuditoriasIMCA() {
       pdf.save(`auditorias-imca-${new Date().toISOString().split("T")[0]}.pdf`);
       toast.success("PDF exportado com sucesso!");
     } catch (error) {
-      console.error("Erro ao exportar PDF:", error);
+      logger.error("Erro ao exportar PDF:", error);
       toast.error("Erro ao exportar PDF");
     }
   };
@@ -157,7 +158,7 @@ export default function ListaAuditoriasIMCA() {
 
       toast.success("Análise IA gerada com sucesso!");
     } catch (error) {
-      console.error("Erro ao gerar análise IA:", error);
+      logger.error("Erro ao gerar análise IA:", error);
       toast.error("Erro ao gerar análise IA");
     } finally {
       setLoadingIA(null);

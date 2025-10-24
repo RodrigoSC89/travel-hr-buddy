@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface JobsByComponent {
   component_id: string;
@@ -20,13 +21,13 @@ export default function DashboardJobs() {
         const { data: result, error } = await supabase.functions.invoke("bi-jobs-by-component");
         
         if (error) {
-          console.error("Error fetching jobs by component:", error);
+          logger.error("Error fetching jobs by component:", error);
           setData([]);
         } else {
           setData(result || []);
         }
       } catch (error) {
-        console.error("Error invoking function:", error);
+        logger.error("Error invoking function:", error);
         setData([]);
       } finally {
         setLoading(false);

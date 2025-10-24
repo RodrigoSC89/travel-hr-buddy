@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Sparkles, Loader2, AlertTriangle, CheckCircle } from "lucide-react";
 import { classifyIncidentWithAI, IncidentClassification } from "@/lib/ai/classifyIncidentWithAI";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface IncidentAIClassificationModalProps {
   open: boolean;
@@ -64,7 +65,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
         });
       }
     } catch (error) {
-      console.error("Error classifying incident:", error);
+      logger.error("Error classifying incident:", error);
       toast({
         title: "❌ Erro na classificação",
         description: "Ocorreu um erro ao processar a classificação. Verifique sua conexão.",

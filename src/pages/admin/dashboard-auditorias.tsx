@@ -19,6 +19,7 @@ import {
 } from "recharts";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { logger } from "@/lib/logger";
 
 interface DadosNavio {
   nome_navio: string;
@@ -74,7 +75,7 @@ export default function DashboardAuditorias() {
         throw new Error(result.error || "Erro desconhecido");
       }
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
+      logger.error("Erro ao carregar dados:", error);
       toast.error("Erro ao carregar dados das auditorias");
     } finally {
       setLoading(false);
@@ -105,7 +106,7 @@ export default function DashboardAuditorias() {
       pdf.save(`auditorias-dashboard-${new Date().toISOString().split("T")[0]}.pdf`);
       toast.success("PDF exportado com sucesso!");
     } catch (error) {
-      console.error("Erro ao exportar PDF:", error);
+      logger.error("Erro ao exportar PDF:", error);
       toast.error("Erro ao exportar PDF");
     }
   };

@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Brain, AlertCircle, CheckCircle, TrendingUp } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { logger } from "@/lib/logger";
 
 interface AIAnalysis {
   summary: string;
@@ -50,7 +51,7 @@ export const AIInsights = () => {
         description: "A IA gerou insights sobre seu bem-estar",
       });
     } catch (error) {
-      console.error("Error requesting analysis:", error);
+      logger.error("Error requesting analysis:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar análise",

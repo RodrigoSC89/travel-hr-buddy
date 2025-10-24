@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Activity, Heart, Moon, Zap } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export const HealthCheckIn = () => {
   const { toast } = useToast();
@@ -59,7 +60,7 @@ export const HealthCheckIn = () => {
         notes: "",
       });
     } catch (error) {
-      console.error("Error submitting check-in:", error);
+      logger.error("Error submitting check-in:", error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar o check-in",

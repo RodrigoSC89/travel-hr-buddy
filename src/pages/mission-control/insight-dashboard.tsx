@@ -17,6 +17,7 @@ import {
   Mail, RefreshCw, Zap, Clock, Database, Cpu 
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 export default function InsightDashboard() {
   const [metrics, setMetrics] = useState<any>(null);
@@ -82,7 +83,7 @@ export default function InsightDashboard() {
         description: "Análise de IA concluída com sucesso",
       });
     } catch (error) {
-      console.error("Erro ao gerar relatório:", error);
+      logger.error("Erro ao gerar relatório:", error);
       toast({
         title: "Erro",
         description: "Falha ao gerar relatório com IA",

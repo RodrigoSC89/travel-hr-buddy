@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { logger } from "@/lib/logger";
 
 export default function MMITasksPage() {
   const [tasks, setTasks] = useState<MMITask[]>([]);
@@ -33,7 +34,7 @@ export default function MMITasksPage() {
       const data = await fetchTasks();
       setTasks(data);
     } catch (error) {
-      console.error("Error loading tasks:", error);
+      logger.error("Error loading tasks:", error);
       toast.error("Erro ao carregar tarefas");
     } finally {
       setLoading(false);
@@ -83,7 +84,7 @@ export default function MMITasksPage() {
         toast.error("Erro ao criar Ordem de Serviço");
       }
     } catch (error) {
-      console.error("Error creating OS:", error);
+      logger.error("Error creating OS:", error);
       toast.error("Erro ao criar Ordem de Serviço");
     } finally {
       setCreatingOS(false);
@@ -100,7 +101,7 @@ export default function MMITasksPage() {
         toast.error("Erro ao atualizar status");
       }
     } catch (error) {
-      console.error("Error updating status:", error);
+      logger.error("Error updating status:", error);
       toast.error("Erro ao atualizar status");
     }
   };

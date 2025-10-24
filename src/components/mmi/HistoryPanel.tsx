@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { exportToPDF, formatPDFContent } from "@/lib/pdf";
 import type { MMIHistory } from "@/types/mmi";
 import { fetchMMIHistory, type MMIHistoryFilters } from "@/services/mmi/historyService";
+import { logger } from "@/lib/logger";
 
 export default function HistoryPanel() {
   const [histories, setHistories] = useState<MMIHistory[]>([]);
@@ -33,7 +34,7 @@ export default function HistoryPanel() {
       const data = await fetchMMIHistory(filters);
       setHistories(data);
     } catch (error) {
-      console.error("Error fetching histories:", error);
+      logger.error("Error fetching histories:", error);
       toast.error("Erro ao carregar histórico");
     } finally {
       setLoading(false);

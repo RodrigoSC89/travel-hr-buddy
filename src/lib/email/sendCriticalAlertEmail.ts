@@ -4,6 +4,7 @@
  */
 
 import { Resend } from "resend";
+import { logger } from "@/lib/logger";
 
 export interface CriticalAlertEmailParams {
   auditoriaId: string;
@@ -27,7 +28,7 @@ export async function sendCriticalAlertEmail(
   const apiKey = process.env.RESEND_API_KEY;
 
   if (!apiKey) {
-    console.error("❌ RESEND_API_KEY is not configured in environment variables");
+    logger.error("❌ RESEND_API_KEY is not configured in environment variables");
     return {
       success: false,
       error: "RESEND_API_KEY is not configured in environment variables",
@@ -46,18 +47,18 @@ export async function sendCriticalAlertEmail(
     });
 
     if (error) {
-      console.error("❌ Erro ao enviar alerta crítico por email:", error);
+      logger.error("❌ Erro ao enviar alerta crítico por email:", error);
       return { success: false, error };
     }
 
     if (data) {
-      console.log("✅ Email de alerta crítico enviado com sucesso:", data);
+      logger.info("✅ Email de alerta crítico enviado com sucesso:", data);
       return { success: true, data };
     }
 
     return { success: false, error: "No data returned from Resend API" };
   } catch (err) {
-    console.error("❌ Erro ao enviar alerta crítico por email:", err);
+    logger.error("❌ Erro ao enviar alerta crítico por email:", err);
     return {
       success: false,
       error: err instanceof Error ? err.message : "Unknown error occurred",

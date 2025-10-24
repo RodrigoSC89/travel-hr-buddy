@@ -7,6 +7,7 @@ import { useAuditExport } from "@/hooks/use-training-modules";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Download, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 // Common IMCA norms
 const COMMON_NORMS = [
@@ -75,7 +76,7 @@ export function ExportAuditBundleForm() {
         toast.success("Bundle exportado com sucesso!");
       }
     } catch (error) {
-      console.error("Export error:", error);
+      logger.error("Export error:", error);
     }
   };
 

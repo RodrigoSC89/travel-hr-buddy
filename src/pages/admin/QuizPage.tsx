@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { logger } from "@/lib/logger";
 
 interface Question {
   question: string;
@@ -100,7 +101,7 @@ export default function QuizPage() {
       setQuizStarted(true);
       setStartTime(new Date());
     } catch (error) {
-      console.error("Error fetching quiz questions:", error);
+      logger.error("Error fetching quiz questions:", error);
       // Use fallback questions on error
       const fallbackQuestions = generateFallbackQuestions(
         quizConfig.standard,
@@ -234,7 +235,7 @@ export default function QuizPage() {
         }
       }
     } catch (error) {
-      console.error("Error saving quiz result:", error);
+      logger.error("Error saving quiz result:", error);
     }
   };
 

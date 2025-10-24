@@ -26,6 +26,7 @@ import {
 import { peodpCore } from "@/modules/hr/peo-dp";
 import type { PEODPAuditoria } from "@/types/peodp-audit";
 import { getScoreLevel, getScoreColor } from "@/types/peodp-audit";
+import { logger } from "@/lib/logger";
 
 export function PEODPAuditComponent() {
   const { toast } = useToast();
@@ -75,7 +76,7 @@ export function PEODPAuditComponent() {
         description: "Falha ao executar auditoria PEO-DP",
         variant: "destructive",
       });
-      console.error("Erro na auditoria:", error);
+      logger.error("Erro na auditoria:", error);
     } finally {
       setLoading(false);
     }

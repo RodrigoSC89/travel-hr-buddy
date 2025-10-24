@@ -11,6 +11,7 @@ import type {
   SeedSuggestionsResult,
   WorkflowSuggestion,
 } from "@/types/workflow";
+import { logger } from "@/lib/logger";
 
 /**
  * Template suggestions based on workflow categories
@@ -269,7 +270,7 @@ export async function seedSuggestionsForWorkflow(
       .select();
 
     if (error) {
-      console.error("Error creating workflow steps:", error);
+      logger.error("Error creating workflow steps:", error);
       return {
         success: false,
         suggestions: [],
@@ -282,7 +283,7 @@ export async function seedSuggestionsForWorkflow(
       suggestions: data || [],
     };
   } catch (error) {
-    console.error("Unexpected error in seedSuggestionsForWorkflow:", error);
+    logger.error("Unexpected error in seedSuggestionsForWorkflow:", error);
     return {
       success: false,
       suggestions: [],

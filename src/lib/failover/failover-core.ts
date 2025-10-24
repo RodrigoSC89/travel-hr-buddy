@@ -1,5 +1,6 @@
 import mqtt from "mqtt";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 const HEARTBEAT_TOPIC = "nautilus/system/heartbeat";
 const STATUS_TOPIC = "nautilus/system/status";
@@ -12,7 +13,7 @@ export function initFailoverSystem() {
 
   client.on("connect", () => {
     connected = true;
-    console.log("✅ MQTT conectado ao Failover Core");
+    logger.info("✅ MQTT conectado ao Failover Core");
     client.subscribe(HEARTBEAT_TOPIC);
     client.publish(STATUS_TOPIC, JSON.stringify({ status: "online", timestamp: Date.now() }));
   });
@@ -25,7 +26,7 @@ export function initFailoverSystem() {
   setInterval(async () => {
     const diff = Date.now() - lastHeartbeat;
     if (diff > 8000) {
-      console.warn("⚠️ Falha detectada! Último heartbeat há", diff / 1000, "segundos.");
+      logger.warn("⚠️ Falha detectada! Último heartbeat há", diff / 1000, "segundos.");
       // Tabela failover_events não existe - comentado para evitar erros 404
       // await (supabase as any).from("failover_events").insert({
       //   event: "Loss of Heartbeat",
@@ -39,7 +40,7 @@ export function initFailoverSystem() {
 }
 
 async function executeRecovery(client: any) {
-  console.log("🔁 Executando protocolo de failover...");
+  logger.info("🔁 Executando protocolo de failover...");
   try {
     client.publish("nautilus/system/recovery", JSON.stringify({ action: "restart-dp-module" }));
     // Tabela failover_events não existe - comentado para evitar erros 404
@@ -49,6 +50,6 @@ async function executeRecovery(client: any) {
     //   module: "DP-Sync",
     // });
   } catch (err) {
-    console.error("❌ Falha ao executar recuperação:", err);
+    logger.error("❌ Falha ao executar recuperação:", err);
   }
 }

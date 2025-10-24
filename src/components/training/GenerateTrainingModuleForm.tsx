@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useTrainingModules } from "@/hooks/use-training-modules";
 import { Loader2, BookOpen, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { logger } from "@/lib/logger";
 
 interface GenerateTrainingModuleFormProps {
   auditId?: string
@@ -50,7 +51,7 @@ export function GenerateTrainingModuleForm({
 
       onSuccess?.();
     } catch (error) {
-      console.error("Error generating training module:", error);
+      logger.error("Error generating training module:", error);
     }
   };
 

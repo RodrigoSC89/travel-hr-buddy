@@ -4,6 +4,7 @@
  */
 
 import OpenAI from "openai";
+import { logger } from "@/lib/logger";
 
 const EMBEDDING_MODEL = "text-embedding-3-small";
 const EMBEDDING_DIMENSIONS = 1536;
@@ -34,7 +35,7 @@ export async function createEmbedding(text: string): Promise<number[]> {
 
     return response.data[0].embedding;
   } catch (error) {
-    console.error("Error creating embedding:", error);
+    logger.error("Error creating embedding:", error);
     throw error;
   }
 }

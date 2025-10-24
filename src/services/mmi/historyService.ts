@@ -6,6 +6,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import type { MMIHistory } from "@/types/mmi";
+import { logger } from "@/lib/logger";
 
 export interface MMIHistoryFilters {
   status?: "executado" | "pendente" | "atrasado";
@@ -42,7 +43,7 @@ export async function fetchMMIHistory(filters?: MMIHistoryFilters): Promise<MMIH
   const { data, error } = await query;
 
   if (error) {
-    console.error("Error fetching MMI history:", error);
+    logger.error("Error fetching MMI history:", error);
     throw new Error(`Failed to fetch MMI history: ${error.message}`);
   }
 
@@ -58,7 +59,7 @@ export async function getMMIHistoryStats(): Promise<MMIHistoryStats> {
     .select("status");
 
   if (error) {
-    console.error("Error fetching MMI history stats:", error);
+    logger.error("Error fetching MMI history stats:", error);
     throw new Error(`Failed to fetch MMI history stats: ${error.message}`);
   }
 
@@ -94,7 +95,7 @@ export async function createMMIHistory(
     .single();
 
   if (error) {
-    console.error("Error creating MMI history:", error);
+    logger.error("Error creating MMI history:", error);
     throw new Error(`Failed to create MMI history: ${error.message}`);
   }
 
@@ -119,7 +120,7 @@ export async function updateMMIHistory(
     .single();
 
   if (error) {
-    console.error("Error updating MMI history:", error);
+    logger.error("Error updating MMI history:", error);
     throw new Error(`Failed to update MMI history: ${error.message}`);
   }
 
@@ -136,7 +137,7 @@ export async function deleteMMIHistory(id: string): Promise<void> {
     .eq("id", id);
 
   if (error) {
-    console.error("Error deleting MMI history:", error);
+    logger.error("Error deleting MMI history:", error);
     throw new Error(`Failed to delete MMI history: ${error.message}`);
   }
 }

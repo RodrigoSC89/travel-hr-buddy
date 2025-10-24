@@ -9,6 +9,7 @@ import {
   ComplianceByVesselTable 
 } from "@/components/bi";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface JobTrendData {
   month: string;
@@ -25,13 +26,13 @@ export default function AdminBI() {
         const { data, error } = await supabase.rpc("jobs_trend_by_month");
         
         if (error) {
-          console.error("Error fetching jobs trend:", error);
+          logger.error("Error fetching jobs trend:", error);
           setTrendData([]);
         } else {
           setTrendData(data || []);
         }
       } catch (error) {
-        console.error("Error invoking function:", error);
+        logger.error("Error invoking function:", error);
         setTrendData([]);
       }
     }

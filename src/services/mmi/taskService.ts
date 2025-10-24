@@ -6,6 +6,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import type { MMITask, AIForecast } from "@/types/mmi";
+import { logger } from "@/lib/logger";
 
 interface CreateTaskFromForecastInput {
   forecast: AIForecast;
@@ -68,14 +69,14 @@ ${forecast.maintenance_history.map((h) => `• ${h.date}: ${h.action}`).join("\n
       .single();
 
     if (error) {
-      console.error("Error creating task:", error);
+      logger.error("Error creating task:", error);
       throw error;
     }
 
-    console.log("Task created successfully:", task);
+    logger.info("Task created successfully:", task);
     return task;
   } catch (error) {
-    console.error("Error in createTaskFromForecast:", error);
+    logger.error("Error in createTaskFromForecast:", error);
     return null;
   }
 }
@@ -115,7 +116,7 @@ export async function fetchTasks(filters?: {
 
     return data || [];
   } catch (error) {
-    console.error("Error fetching tasks:", error);
+    logger.error("Error fetching tasks:", error);
     return [];
   }
 }
@@ -137,7 +138,7 @@ export async function updateTaskStatus(
 
     return true;
   } catch (error) {
-    console.error("Error updating task status:", error);
+    logger.error("Error updating task status:", error);
     return false;
   }
 }
@@ -156,7 +157,7 @@ export async function assignTask(taskId: string, userId: string): Promise<boolea
 
     return true;
   } catch (error) {
-    console.error("Error assigning task:", error);
+    logger.error("Error assigning task:", error);
     return false;
   }
 }
@@ -248,7 +249,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
       id: workOrder.id,
     };
   } catch (error) {
-    console.error("Error creating work order from task:", error);
+    logger.error("Error creating work order from task:", error);
     return null;
   }
 }
@@ -267,7 +268,7 @@ export async function deleteTask(taskId: string): Promise<boolean> {
 
     return true;
   } catch (error) {
-    console.error("Error deleting task:", error);
+    logger.error("Error deleting task:", error);
     return false;
   }
 }

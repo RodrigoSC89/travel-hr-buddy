@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
 import DashboardJobs from "@/components/bi/DashboardJobs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 
 // Example 1: Basic usage with hardcoded trend data
 export function BasicExample() {
@@ -35,7 +36,7 @@ export function ApiExample() {
         const data = await response.json();
         setTrendData(data);
       } catch (error) {
-        console.error("Error fetching trend data:", error);
+        logger.error("Error fetching trend data:", error);
         setTrendData([]);
       } finally {
         setLoading(false);

@@ -2,6 +2,7 @@
 import React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import mqtt from "mqtt";
+import { logger } from "@/lib/logger";
 
 const modelPath = "/models/nautilus_compliance.onnx";
 let session: ort.InferenceSession | null = null;
@@ -27,9 +28,9 @@ const RULES = [
 export async function initComplianceEngine() {
   try {
     session = await ort.InferenceSession.create(modelPath);
-    console.log("✅ AI Compliance Engine iniciado");
+    logger.info("✅ AI Compliance Engine iniciado");
   } catch (err) {
-    console.error("Erro ao carregar modelo ONNX:", err);
+    logger.error("Erro ao carregar modelo ONNX:", err);
   }
 }
 
@@ -64,7 +65,7 @@ export async function runComplianceAudit(data: any) {
       client.publish("nautilus/compliance/alerts", JSON.stringify({ level: complianceLevel, score: weightedScore }));
     }
   } catch (error) {
-    console.warn("MQTT publishing skipped:", error);
+    logger.warn("MQTT publishing skipped:", error);
   }
 
   return { score: weightedScore, complianceLevel };

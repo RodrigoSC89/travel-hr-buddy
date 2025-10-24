@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface StatsData {
   byVessel: Record<string, number>;
@@ -40,7 +41,7 @@ export default function DPIntelligenceDashboard() {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Error fetching stats:", err);
+        logger.error("Error fetching stats:", err);
         setError(err.message);
         setLoading(false);
       });

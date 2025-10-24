@@ -4,6 +4,7 @@
  */
 
 import { logsEngine } from "@/lib/monitoring/LogsEngine";
+import { logger } from "@/lib/logger";
 
 export interface Hotfix {
   id: string;
@@ -55,7 +56,7 @@ class HotfixManager {
       fix: async () => {
         try {
           // Simulate voice service reconnection
-          console.log("🎤 Reconectando serviço de voz...");
+          logger.info("🎤 Reconectando serviço de voz...");
           return true;
         } catch {
           return false;
@@ -74,7 +75,7 @@ class HotfixManager {
       description: "Resincronizar workspace em tempo real",
       fix: async () => {
         try {
-          console.log("🔄 Ressincronizando workspace...");
+          logger.info("🔄 Ressincronizando workspace...");
           // Clear stale websocket connections
           return true;
         } catch {
@@ -87,7 +88,7 @@ class HotfixManager {
       createdAt: new Date().toISOString()
     });
 
-    console.log(`🔧 HotfixManager: ${this.hotfixes.size} hotfixes registrados`);
+    logger.info(`🔧 HotfixManager: ${this.hotfixes.size} hotfixes registrados`);
   }
 
   /**
@@ -121,7 +122,7 @@ class HotfixManager {
       return false;
     }
 
-    console.log(`🔧 Aplicando hotfix: ${hotfix.description}`);
+    logger.info(`🔧 Aplicando hotfix: ${hotfix.description}`);
 
     try {
       const success = await hotfix.fix();

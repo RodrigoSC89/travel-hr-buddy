@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Brain, AlertTriangle } from "lucide-react";
 import * as ort from "onnxruntime-web";
+import { logger } from "@/lib/logger";
 
 export default function ForecastAIInsights() {
   const [prediction, setPrediction] = useState<number | string | null>(null);
@@ -15,7 +16,7 @@ export default function ForecastAIInsights() {
         const output = await session.run({ input });
         setPrediction(output.result.data[0]);
       } catch (err) {
-        console.error("AI Forecast Error:", err);
+        logger.error("AI Forecast Error:", err);
         setPrediction("Erro na previsão IA");
       }
     }

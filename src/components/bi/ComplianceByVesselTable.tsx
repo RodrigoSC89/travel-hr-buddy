@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 
 interface ComplianceByVesselData {
   vessel: string;
@@ -30,7 +31,7 @@ export function ComplianceByVesselTable() {
         const responseData = await response.json();
         setData(responseData);
       } catch (err) {
-        console.error("Error fetching compliance by vessel data:", err);
+        logger.error("Error fetching compliance by vessel data:", err);
         setError("Erro ao carregar dados de conformidade por navio");
         // Set sample data on error
         setData([

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 // @ts-nocheck
 /**
  * Centralized Logger Utility
@@ -47,15 +48,13 @@ function getErrorMessage(error: any): string {
  */
 export const logger = {
   /**
-   * Log informational messages (development only)
+   * Log informational messages (all environments)
    */
   info: (message: string, context?: unknown) => {
-    if (isDevelopment) {
-      if (context !== undefined) {
-        console.info(`ℹ️ ${message}`, context);
-      } else {
-        console.info(`ℹ️ ${message}`);
-      }
+    if (context !== undefined) {
+      logger.info(`[INFO] ${message}`, context);
+    } else {
+      logger.info(`[INFO] ${message}`);
     }
   },
 
@@ -65,21 +64,21 @@ export const logger = {
   debug: (message: string, context?: LogContext) => {
     if (isDevelopment) {
       if (context) {
-        console.debug(`🐛 ${message}`, context);
+        logger.debug(`[DEBUG] ${message}`, context);
       } else {
-        console.debug(`🐛 ${message}`);
+        logger.debug(`[DEBUG] ${message}`);
       }
     }
   },
 
   /**
-   * Log warning messages
+   * Log warning messages (all environments)
    */
   warn: (message: string, context?: LogContext) => {
     if (context) {
-      console.warn(`⚠️ ${message}`, context);
+      logger.warn(`[WARN] ${message}`, context);
     } else {
-      console.warn(`⚠️ ${message}`);
+      logger.warn(`[WARN] ${message}`);
     }
   },
 
@@ -95,10 +94,10 @@ export const logger = {
 
     if (Object.keys(fullContext).length > 0) {
       // eslint-disable-next-line no-console
-      console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ""}`, fullContext);
+      logger.error(`[ERROR] ${message}${errorMessage ? `: ${errorMessage}` : ""}`, fullContext);
     } else {
       // eslint-disable-next-line no-console
-      console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ""}`);
+      logger.error(`[ERROR] ${message}${errorMessage ? `: ${errorMessage}` : ""}`);
     }
 
     // Send to Sentry in production
@@ -114,7 +113,7 @@ export const logger = {
       } catch (sentryError) {
         // Fail silently if Sentry is not available
         if (isDevelopment) {
-          console.warn("Failed to send error to Sentry:", String(sentryError));
+          logger.warn("Failed to send error to Sentry:", String(sentryError));
         }
       }
     }
@@ -132,10 +131,10 @@ export const logger = {
 
     if (Object.keys(fullContext).length > 0) {
       // eslint-disable-next-line no-console
-      console.error(`❌ ${message}: ${errorMessage}`, fullContext);
+      logger.error(`[ERROR] ${message}: ${errorMessage}`, fullContext);
     } else {
       // eslint-disable-next-line no-console
-      console.error(`❌ ${message}: ${errorMessage}`);
+      logger.error(`[ERROR] ${message}: ${errorMessage}`);
     }
 
     // Send to Sentry in production
@@ -151,7 +150,7 @@ export const logger = {
       } catch (sentryError) {
         // Fail silently if Sentry is not available
         if (isDevelopment) {
-          console.warn("Failed to send error to Sentry:", String(sentryError));
+          logger.warn("Failed to send error to Sentry:", String(sentryError));
         }
       }
     }

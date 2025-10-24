@@ -6,6 +6,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { systemWatchdog } from "./SystemWatchdog";
 import { logsEngine } from "./LogsEngine";
+import { logger } from "@/lib/logger";
 
 export interface SystemMetrics {
   timestamp: string;
@@ -28,18 +29,18 @@ class MetricsDaemon {
    */
   start() {
     if (this.metricsInterval) {
-      console.log("📊 MetricsDaemon: Already running");
+      logger.info("📊 MetricsDaemon: Already running");
       return;
     }
 
     // Feature flag: disable client metrics by default to avoid RLS issues in preview/prod
     const ENABLE = import.meta.env.VITE_ENABLE_CLIENT_METRICS === "true";
     if (!ENABLE) {
-      console.log("📊 MetricsDaemon: Disabled (VITE_ENABLE_CLIENT_METRICS not true)");
+      logger.info("📊 MetricsDaemon: Disabled (VITE_ENABLE_CLIENT_METRICS not true)");
       return;
     }
     
-    console.log("📊 MetricsDaemon: Starting metrics collection...");
+    logger.info("📊 MetricsDaemon: Starting metrics collection...");
     
     // Track FPS
     this.trackFPS();
@@ -60,7 +61,7 @@ class MetricsDaemon {
     if (this.metricsInterval) {
       clearInterval(this.metricsInterval);
       this.metricsInterval = null;
-      console.log("📊 MetricsDaemon: Stopped");
+      logger.info("📊 MetricsDaemon: Stopped");
     }
   }
 

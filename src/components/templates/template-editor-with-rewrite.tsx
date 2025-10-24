@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { RefreshCw, Loader2 } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export default function TemplateEditorWithRewrite() {
   const [loading, setLoading] = useState(false);
@@ -60,7 +61,7 @@ export default function TemplateEditorWithRewrite() {
         description: "A seleção foi reformulada com IA.",
       });
     } catch (err) {
-      console.error("Error rewriting selection:", err);
+      logger.error("Error rewriting selection:", err);
       toast({
         title: "Erro ao reescrever",
         description: "Não foi possível reescrever o texto. Tente novamente.",

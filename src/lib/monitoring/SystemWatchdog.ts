@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface ModuleStatus {
   id: string;
@@ -32,11 +33,11 @@ class SystemWatchdog {
    */
   start() {
     if (this.checkInterval) {
-      console.log("🐕 SystemWatchdog: Already running");
+      logger.info("🐕 SystemWatchdog: Already running");
       return;
     }
     
-    console.log("🐕 SystemWatchdog: Starting monitoring...");
+    logger.info("🐕 SystemWatchdog: Starting monitoring...");
     
     // Initial check
     this.performHealthCheck();
@@ -54,7 +55,7 @@ class SystemWatchdog {
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
       this.checkInterval = null;
-      console.log("🐕 SystemWatchdog: Monitoring stopped");
+      logger.info("🐕 SystemWatchdog: Monitoring stopped");
     }
   }
 
@@ -161,7 +162,7 @@ class SystemWatchdog {
         recorded_at: timestamp
       });
     } catch (error) {
-      console.error("Failed to persist metrics:", error);
+      logger.error("Failed to persist metrics:", error);
     }
   }
 

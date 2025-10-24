@@ -14,6 +14,7 @@ import { Brain } from "lucide-react";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 type Incident = {
   id: string;
@@ -45,7 +46,7 @@ export default function DPIntelligencePage() {
         .order("date", { ascending: false });
 
       if (error) {
-        console.error("Error fetching incidents:", error);
+        logger.error("Error fetching incidents:", error);
         toast.error("Erro ao carregar incidentes", {
           description: error.message
         });
@@ -60,7 +61,7 @@ export default function DPIntelligencePage() {
 
       setIncidents(incidentsWithSeverity);
     } catch (error) {
-      console.error("Unexpected error:", error);
+      logger.error("Unexpected error:", error);
       toast.error("Erro ao carregar incidentes");
     } finally {
       setLoading(false);
@@ -102,7 +103,7 @@ export default function DPIntelligencePage() {
       });
 
       if (error) {
-        console.error("Error analyzing incident:", error);
+        logger.error("Error analyzing incident:", error);
         toast.error("Erro ao analisar incidente", {
           description: error.message || "Tente novamente mais tarde"
         });
@@ -120,7 +121,7 @@ export default function DPIntelligencePage() {
           .eq("id", id);
 
         if (updateError) {
-          console.error("Error updating incident:", updateError);
+          logger.error("Error updating incident:", updateError);
           toast.error("Erro ao salvar análise");
           return;
         }
@@ -131,7 +132,7 @@ export default function DPIntelligencePage() {
         await fetchIncidents();
       }
     } catch (error) {
-      console.error("Unexpected error:", error);
+      logger.error("Unexpected error:", error);
       toast.error("Erro ao analisar incidente");
     } finally {
       setAnalyzingId(null);

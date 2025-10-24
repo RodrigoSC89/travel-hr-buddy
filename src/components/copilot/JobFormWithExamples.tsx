@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import SimilarExamples from "./SimilarExamples";
 import { Sparkles } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface JobFormWithExamplesProps {
   onSubmit?: (data: { component: string; description: string }) => void;
@@ -27,7 +28,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
       return;
     }
 
-    console.log("Criar job:", { component, description });
+    logger.info("Criar job:", { component, description });
     
     if (onSubmit) {
       onSubmit({ component, description });

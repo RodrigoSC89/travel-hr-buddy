@@ -1,4 +1,5 @@
 import React from "react";
+import { logger } from "@/lib/logger";
 
 /**
  * Safe Lazy Import – Prevents failures when loading dynamic modules
@@ -44,8 +45,8 @@ export const safeLazyImport = (
         throw error;
       }
       
-      console.warn(
-        `⚠️ Falha ao carregar ${name}. Tentando novamente... (${retries - retriesLeft + 1}/${retries})`
+      logger.warn(
+        `Falha ao carregar ${name}. Tentando novamente... (${retries - retriesLeft + 1}/${retries})`
       );
       
       // Exponential backoff
@@ -59,7 +60,7 @@ export const safeLazyImport = (
     try {
       return await retryImport(importer);
     } catch (err) {
-      console.error(`❌ Erro ao carregar módulo ${name} após ${retries} tentativas:`, err);
+      logger.error(`❌ Erro ao carregar módulo ${name} após ${retries} tentativas:`, err);
       
       // Return a fallback component that displays an error message
       return {

@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import * as ort from "onnxruntime-web";
 import { AlertTriangle, Cpu, CheckCircle2 } from "lucide-react";
 import { publishEvent } from "@/lib/mqtt/publisher";
+import { logger } from "@/lib/logger";
 
 export default function DPAIAnalyzer() {
   const [status, setStatus] = useState("Inicializando IA...");
@@ -25,7 +26,7 @@ export default function DPAIAnalyzer() {
         }
         setStatus("Análise concluída");
       } catch (err) {
-        console.error("Erro ao carregar modelo ONNX:", err);
+        logger.error("Erro ao carregar modelo ONNX:", err);
         setStatus("Falha ao carregar modelo ONNX");
       }
     };

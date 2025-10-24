@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Wrench, AlertTriangle, CheckCircle } from "lucide-react";
 import { runMaintenanceOrchestrator, type MaintenanceResult, type TelemetryData } from "@/lib/ai/maintenance-orchestrator";
+import { logger } from "@/lib/logger";
 
 const REFRESH_INTERVAL = 60000; // 60 seconds
 
@@ -45,7 +46,7 @@ export default function MaintenanceDashboard() {
       const result = await runMaintenanceOrchestrator(telemetry);
       setStatus(result);
     } catch (error) {
-      console.error("Failed to fetch maintenance status:", error);
+      logger.error("Failed to fetch maintenance status:", error);
     } finally {
       setLoading(false);
     }

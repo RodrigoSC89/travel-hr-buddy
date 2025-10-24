@@ -9,6 +9,7 @@ import { DPStatusCard } from "./components/DPStatusCard";
 import { RiskAlertPanel } from "./components/RiskAlertPanel";
 import { useBridgeLinkData } from "./hooks/useBridgeLinkData";
 import { connectToLiveStream, exportReportJSON } from "./services/bridge-link-api";
+import { logger } from "@/lib/logger";
 
 /**
  * BridgeLink Dashboard
@@ -49,7 +50,7 @@ export default function BridgeLinkDashboard() {
       URL.revokeObjectURL(url);
       toast.success("Relatório exportado com sucesso!");
     } catch (error) {
-      console.error("Erro ao exportar relatório:", error);
+      logger.error("Erro ao exportar relatório:", error);
       toast.error("Falha ao exportar relatório");
     }
   };

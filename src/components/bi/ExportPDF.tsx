@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface TrendData {
   month: string;
@@ -58,11 +59,11 @@ export function ExportBIReport({ trend, forecast }: { trend: TrendData[]; foreca
       html2pdf().set(opt).from(content).save().then(() => {
         toast.success("PDF exportado com sucesso!");
       }).catch((error) => {
-        console.error("Error generating PDF:", error);
+        logger.error("Error generating PDF:", error);
         toast.error("Erro ao gerar PDF. Tente novamente.");
       });
     } catch (error) {
-      console.error("Error in handleExport:", error);
+      logger.error("Error in handleExport:", error);
       toast.error("Erro ao gerar PDF. Tente novamente.");
     }
   }

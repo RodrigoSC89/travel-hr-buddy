@@ -4,6 +4,7 @@ import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Brain, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export default function AIInsightReporter() {
   const [insights, setInsights] = useState(null);
@@ -33,7 +34,7 @@ export default function AIInsightReporter() {
         });
       }
     } catch (err) {
-      console.error("Error fetching insights:", err);
+      logger.error("Error fetching insights:", err);
       // Set mock data on error
       setInsights({
         summary: "Sistema operando normalmente",
@@ -47,7 +48,7 @@ export default function AIInsightReporter() {
 
   const exportPDF = () => {
     // PDF export functionality would go here
-    console.log("📄 Exporting PDF...");
+    logger.info("📄 Exporting PDF...");
     alert("Funcionalidade de exportação PDF em desenvolvimento");
   };
 

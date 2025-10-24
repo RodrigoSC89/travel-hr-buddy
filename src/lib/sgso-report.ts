@@ -7,6 +7,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { createClient } from "@supabase/supabase-js";
+import { logger } from "@/lib/logger";
 
 // Extend jsPDF type to include autoTable
 declare module "jspdf" {
@@ -56,7 +57,7 @@ export async function getAllVessels(): Promise<VesselData[]> {
     .order("name");
 
   if (error) {
-    console.error("Error fetching vessels:", error);
+    logger.error("Error fetching vessels:", error);
     throw new Error(`Failed to fetch vessels: ${error.message}`);
   }
 

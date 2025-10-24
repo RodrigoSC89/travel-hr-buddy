@@ -7,6 +7,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Suggestion } from "./index";
+import { logger } from "@/lib/logger";
 
 export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[] }) {
   const [accepted, setAccepted] = useState<string[]>([]);
@@ -26,7 +27,7 @@ export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[]
       });
 
       if (error) {
-        console.error("Error inserting AI suggestion:", error);
+        logger.error("Error inserting AI suggestion:", error);
         toast({
           title: "Erro",
           description: "Não foi possível salvar a sugestão da IA",
@@ -42,7 +43,7 @@ export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[]
         description: "Sugestão da IA aceita e salva com sucesso!",
       });
     } catch (error) {
-      console.error("Error accepting suggestion:", error);
+      logger.error("Error accepting suggestion:", error);
       toast({
         title: "Erro",
         description: "Ocorreu um erro ao processar a sugestão",

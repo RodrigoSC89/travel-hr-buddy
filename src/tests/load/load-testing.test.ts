@@ -4,6 +4,7 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { logger } from '@/lib/logger';
 
 describe('Load Testing - Concurrent Users', () => {
   const BASE_URL = 'http://localhost:5173';
@@ -11,11 +12,11 @@ describe('Load Testing - Concurrent Users', () => {
   const REQUEST_DURATION_THRESHOLD = 2000; // 2 seconds
 
   beforeAll(() => {
-    console.log(`Starting load test with ${CONCURRENT_USERS} concurrent users`);
+    logger.info(`Starting load test with ${CONCURRENT_USERS} concurrent users`);
   });
 
   afterAll(() => {
-    console.log('Load test completed');
+    logger.info('Load test completed');
   });
 
   it('should handle 50 concurrent GET requests to dashboard', async () => {

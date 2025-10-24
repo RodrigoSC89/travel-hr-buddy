@@ -16,6 +16,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { logger } from "@/lib/logger";
 
 // Register ChartJS components
 ChartJS.register(
@@ -83,7 +84,7 @@ export const MetricasPanel = () => {
       const embarcacaoData = await embarcacaoResponse.json();
       setMetricsEmbarcacao(embarcacaoData || []);
     } catch (error) {
-      console.error("Erro ao buscar métricas:", error);
+      logger.error("Erro ao buscar métricas:", error);
     } finally {
       setLoading(false);
     }

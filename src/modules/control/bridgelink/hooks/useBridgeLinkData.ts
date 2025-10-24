@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getBridgeLinkData } from "../services/bridge-link-api";
 import type { DPEvent, RiskAlert } from "../types";
+import { logger } from "@/lib/logger";
 
 interface UseBridgeLinkDataReturn {
   dpEvents: DPEvent[];
@@ -34,7 +35,7 @@ export function useBridgeLinkData(): UseBridgeLinkDataReturn {
       setSystemStatus(data.status);
     } catch (err) {
       setError(err instanceof Error ? err : new Error("Unknown error"));
-      console.error("Erro ao buscar dados do BridgeLink:", err);
+      logger.error("Erro ao buscar dados do BridgeLink:", err);
     } finally {
       setLoading(false);
     }

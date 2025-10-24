@@ -7,6 +7,7 @@ import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { FileText, Download, Calendar, Ship, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 // Sample data for demonstration
 const SAMPLE_INCIDENTS = [
@@ -79,7 +80,7 @@ export default function SGSOReportPage({
         description: "O relatório foi baixado para seu dispositivo." 
       });
     } catch (error) {
-      console.error("Erro ao gerar PDF:", error);
+      logger.error("Erro ao gerar PDF:", error);
       toast.error("Erro ao gerar PDF", { 
         description: "Não foi possível gerar o relatório. Tente novamente." 
       });

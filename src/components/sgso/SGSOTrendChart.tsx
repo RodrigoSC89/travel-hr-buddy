@@ -13,6 +13,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { TrendingUp } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface RawDataEntry {
   mes: string; // YYYY-MM or YYYY-MM-DD format
@@ -93,7 +94,7 @@ export function SGSOTrendChart({ data: customData }: SGSOTrendChartProps = {}) {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Erro ao buscar dados de tendência SGSO:", err);
+        logger.error("Erro ao buscar dados de tendência SGSO:", err);
         // Use sample data when API is not available (e.g., local development)
         setData([
           { mes: "2025-10", risco: "baixo", total: 8 },

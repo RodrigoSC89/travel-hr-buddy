@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { streamCommandChat, Message, SystemContext } from "@/lib/ai/nautilus-command";
 import { Brain, Send, Loader2, Trash2, Cpu, Activity } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { logger } from "@/lib/logger";
 
 const AICommandCenter = () => {
   const { toast } = useToast();
@@ -66,7 +67,7 @@ const AICommandCenter = () => {
         onDelta: updateAssistant,
         onDone: () => setIsLoading(false),
         onError: (error) => {
-          console.error(error);
+          logger.error(error);
           toast({
             title: "Erro",
             description: "Não foi possível processar o comando",
@@ -76,7 +77,7 @@ const AICommandCenter = () => {
         },
       });
     } catch (error) {
-      console.error("Error sending message:", error);
+      logger.error("Error sending message:", error);
       setIsLoading(false);
     }
   };

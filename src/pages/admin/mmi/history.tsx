@@ -11,6 +11,7 @@ import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
 import type { MMIHistory } from "@/types/mmi";
 import { fetchMMIHistory, getMMIHistoryStats, type MMIHistoryFilters, type MMIHistoryStats } from "@/services/mmi/historyService";
+import { logger } from "@/lib/logger";
 
 export default function MMIHistoryAdminPage() {
   const [histories, setHistories] = useState<MMIHistory[]>([]);
@@ -39,7 +40,7 @@ export default function MMIHistoryAdminPage() {
       const historiesData = await fetchMMIHistory(filters);
       setHistories(historiesData);
     } catch (error) {
-      console.error("Error loading data:", error);
+      logger.error("Error loading data:", error);
       toast.error("Erro ao carregar dados");
     } finally {
       setLoading(false);
@@ -136,7 +137,7 @@ export default function MMIHistoryAdminPage() {
       await html2pdf().set(opt).from(element).save();
       toast.success("PDF gerado com sucesso!");
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      logger.error("Error exporting PDF:", error);
       toast.error("Erro ao gerar PDF");
     }
   };

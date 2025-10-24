@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { RefreshCcw, Brain } from "lucide-react";
 import { publishEvent, subscribeForecast } from "@/lib/mqtt/publisher";
 import * as ort from "onnxruntime-web";
+import { logger } from "@/lib/logger";
 
 export default function DPSyncDashboard() {
   const [sync, setSync] = useState("Sincronizando...");
@@ -17,7 +18,7 @@ export default function DPSyncDashboard() {
       const output = await session.run({ input });
       return output.result.data[0];
     } catch (error) {
-      console.error("❌ Failed to run AI model:", error);
+      logger.error("❌ Failed to run AI model:", error);
       return 0;
     }
   };

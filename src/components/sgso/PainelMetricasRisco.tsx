@@ -15,6 +15,7 @@ import {
   CartesianGrid,
   Legend
 } from "recharts";
+import { logger } from "@/lib/logger";
 
 interface MetricData {
   auditoria_id: string;
@@ -42,7 +43,7 @@ export function PainelMetricasRisco() {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Erro ao buscar métricas:", error);
+        logger.error("Erro ao buscar métricas:", error);
         setLoading(false);
       });
   }, []);

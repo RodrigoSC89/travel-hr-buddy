@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Satellite, Cloud, Anchor, RefreshCw, CheckCircle, XCircle } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export function ExternalAPITest() {
   const [weatherData, setWeatherData] = useState<any>(null);
@@ -39,7 +40,7 @@ export function ExternalAPITest() {
         description: `${endpoint} data retrieved successfully`,
       });
     } catch (error) {
-      console.error(`Error calling ${endpoint}:`, error);
+      logger.error(`Error calling ${endpoint}:`, error);
       toast({
         title: "API Error",
         description: error instanceof Error ? error.message : "Failed to fetch data",

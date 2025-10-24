@@ -13,6 +13,7 @@ import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { WorkflowAIScoreCard } from "@/components/workflows";
+import { logger } from "@/lib/logger";
 
 interface SmartWorkflow {
   id: string
@@ -44,7 +45,7 @@ export default function SmartWorkflowPage() {
       if (error) throw error;
       setWorkflows(data || []);
     } catch (error) {
-      console.error("Error fetching workflows:", error);
+      logger.error("Error fetching workflows:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os fluxos de trabalho",
@@ -85,7 +86,7 @@ export default function SmartWorkflowPage() {
       });
       fetchWorkflows();
     } catch (error) {
-      console.error("Error creating workflow:", error);
+      logger.error("Error creating workflow:", error);
       toast({
         title: "Erro",
         description: "Não foi possível criar o fluxo de trabalho",

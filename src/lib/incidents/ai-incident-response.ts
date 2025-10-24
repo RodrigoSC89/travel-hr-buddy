@@ -2,6 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import mqtt from "mqtt";
 import { runComplianceAudit } from "@/lib/compliance/ai-compliance-engine";
+import { logger } from "@/lib/logger";
 
 /**
  * Handles incident detection and response workflow
@@ -31,7 +32,7 @@ export async function handleIncident(event: { type?: string; description?: strin
       client.publish("nautilus/incidents/alert", JSON.stringify(report));
     }
   } catch (error) {
-    console.warn("MQTT publishing skipped:", error);
+    logger.warn("MQTT publishing skipped:", error);
   }
 
   return report;

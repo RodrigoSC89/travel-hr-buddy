@@ -5,6 +5,7 @@
  */
 
 import mqtt, { MqttClient } from "mqtt";
+import { logger } from "@/lib/logger";
 
 class MQTTClientManager {
   private client: MqttClient | null = null;
@@ -18,7 +19,7 @@ class MQTTClientManager {
    */
   connect(brokerUrl = "wss://broker.hivemq.com:8884/mqtt"): void {
     if (this.client) {
-      console.log("ℹ️ MQTT client already connected");
+      logger.info("ℹ️ MQTT client already connected");
       return;
     }
 
@@ -30,28 +31,28 @@ class MQTTClientManager {
       });
 
       this.client.on("connect", () => {
-        console.log("✅ MQTT client connected");
+        logger.info("✅ MQTT client connected");
         this.connected = true;
         this.reconnectAttempts = 0;
         this.resubscribeAll();
       });
 
       this.client.on("error", (error) => {
-        console.error("❌ MQTT connection error:", error);
+        logger.error("❌ MQTT connection error:", error);
         this.connected = false;
       });
 
       this.client.on("offline", () => {
-        console.warn("⚠️ MQTT client offline");
+        logger.warn("⚠️ MQTT client offline");
         this.connected = false;
       });
 
       this.client.on("reconnect", () => {
         this.reconnectAttempts++;
-        console.log(`🔄 MQTT reconnecting... (attempt ${this.reconnectAttempts})`);
+        logger.info(`🔄 MQTT reconnecting... (attempt ${this.reconnectAttempts})`);
         
         if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-          console.error("❌ Max reconnect attempts reached");
+          logger.error("❌ Max reconnect attempts reached");
           this.disconnect();
         }
       });
@@ -64,7 +65,7 @@ class MQTTClientManager {
         }
       });
     } catch (error) {
-      console.error("❌ Failed to create MQTT client:", error);
+      logger.error("❌ Failed to create MQTT client:", error);
     }
   }
 
@@ -85,9 +86,9 @@ class MQTTClientManager {
     if (this.connected && this.client) {
       this.client.subscribe(topic, (err) => {
         if (err) {
-          console.error(`❌ Failed to subscribe to ${topic}:`, err);
+          logger.error(`❌ Failed to subscribe to ${topic}:`, err);
         } else {
-          console.log(`✅ Subscribed to ${topic}`);
+          logger.info(`✅ Subscribed to ${topic}`);
         }
       });
     }
@@ -100,7 +101,7 @@ class MQTTClientManager {
     if (this.client && this.connected) {
       this.client.unsubscribe(topic, (err) => {
         if (err) {
-          console.error(`❌ Failed to unsubscribe from ${topic}:`, err);
+          logger.error(`❌ Failed to unsubscribe from ${topic}:`, err);
         }
       });
     }
@@ -112,13 +113,13 @@ class MQTTClientManager {
    */
   publish(topic: string, message: string, options = { qos: 0 as const }): void {
     if (!this.client) {
-      console.error("❌ MQTT client not connected");
+      logger.error("❌ MQTT client not connected");
       return;
     }
 
     this.client.publish(topic, message, options, (err) => {
       if (err) {
-        console.error(`❌ Failed to publish to ${topic}:`, err);
+        logger.error(`❌ Failed to publish to ${topic}:`, err);
       }
     });
   }
@@ -132,7 +133,7 @@ class MQTTClientManager {
     this.subscriptions.forEach((_, topic) => {
       this.client?.subscribe(topic, (err) => {
         if (err) {
-          console.error(`❌ Failed to resubscribe to ${topic}:`, err);
+          logger.error(`❌ Failed to resubscribe to ${topic}:`, err);
         }
       });
     });
@@ -146,7 +147,7 @@ class MQTTClientManager {
       this.client.end(true);
       this.client = null;
       this.connected = false;
-      console.log("🔌 MQTT client disconnected");
+      logger.info("🔌 MQTT client disconnected");
     }
   }
 

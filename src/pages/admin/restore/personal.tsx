@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Mail, FileDown, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface RestoreSummary {
   total: number
@@ -63,7 +64,7 @@ export default function PersonalRestoreDashboard() {
         }
       }
     } catch (error) {
-      console.error("Error fetching stats:", error);
+      logger.error("Error fetching stats:", error);
     } finally {
       setLoading(false);
     }
@@ -117,7 +118,7 @@ export default function PersonalRestoreDashboard() {
         alert("❌ Falha ao enviar relatório: " + (result.error || "Erro desconhecido"));
       }
     } catch (error) {
-      console.error("Error sending report:", error);
+      logger.error("Error sending report:", error);
       alert("❌ Erro ao enviar relatório");
     }
   }

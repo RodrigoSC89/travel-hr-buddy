@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 
 type ChartData = {
   name: string
@@ -31,7 +32,7 @@ export default function BIForecastsPage() {
         setData(chartData);
       })
       .catch((err) => {
-        console.error("Error loading forecast data:", err);
+        logger.error("Error loading forecast data:", err);
         setData([]);
       })
       .finally(() => {

@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 /**
  * PDF Export Utility
  * Provides functions for exporting HTML content and DOM elements to PDF
@@ -15,7 +16,7 @@ async function loadHtml2Pdf() {
     try {
       html2pdfModule = (await import("html2pdf.js")).default;
     } catch (error) {
-      console.error("html2pdf.js not installed. Install with: npm install html2pdf.js");
+      logger.error("html2pdf.js not installed. Install with: npm install html2pdf.js");
       throw new Error("html2pdf.js is required for PDF export");
     }
   }

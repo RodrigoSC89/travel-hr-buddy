@@ -13,6 +13,7 @@ import { ExportarComentariosPDF } from "./ExportarComentariosPDF";
 import { MessageSquare, User, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface AuditComment {
   user_id: string;
@@ -38,7 +39,7 @@ export function AuditCommentsExample() {
 
       if (error) {
         toast.error("Erro ao carregar comentários");
-        console.error(error);
+        logger.error(error);
         return;
       }
 
@@ -47,7 +48,7 @@ export function AuditCommentsExample() {
       }
     } catch (err) {
       toast.error("Erro ao buscar comentários");
-      console.error(err);
+      logger.error(err);
     } finally {
       setLoading(false);
     }

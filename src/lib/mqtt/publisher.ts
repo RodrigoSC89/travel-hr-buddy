@@ -1,4 +1,5 @@
 import mqtt from "mqtt";
+import { logger } from "@/lib/logger";
 
 const MQTT_URL = import.meta.env.VITE_MQTT_URL || "wss://broker.hivemq.com:8884/mqtt";
 
@@ -14,8 +15,8 @@ export const publishEvent = (
   qos: 0 | 1 | 2 = 1
 ) => {
   client.publish(topic, JSON.stringify(payload), { qos }, (err) => {
-    if (err) console.error(`❌ Falha ao publicar em ${topic}:`, err);
-    else console.log(`✅ Publicado em ${topic}:`, payload);
+    logger.error(`❌ Falha ao publicar em ${topic}:`, err);
+    logger.info(`✅ Publicado em ${topic}:`, payload);
   });
 };
 
@@ -27,8 +28,8 @@ export const subscribeTopic = (
   callback: (data: Record<string, unknown>) => void
 ) => {
   client.subscribe(topic, (err) => {
-    if (err) console.error(`❌ Falha ao subscrever ${topic}:`, err);
-    else console.log(`✅ Subscreveu ${topic}`);
+    logger.error(`❌ Falha ao subscrever ${topic}:`, err);
+    logger.info(`✅ Subscreveu ${topic}`);
   });
 
   client.on("message", (receivedTopic, message) => {

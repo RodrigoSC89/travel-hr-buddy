@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export default function IncidentAiModal() {
   const [incident, setIncident] = useState<unknown>(null);
@@ -23,7 +24,7 @@ export default function IncidentAiModal() {
           setAnalysis(""); // Reset analysis when new incident is loaded
           localStorage.removeItem("incident_to_analyze");
         } catch (error) {
-          console.error("Error parsing incident data:", error);
+          logger.error("Error parsing incident data:", error);
         }
       }
     };
@@ -53,7 +54,7 @@ export default function IncidentAiModal() {
       });
 
       if (error) {
-        console.error("Error calling AI analysis:", error);
+        logger.error("Error calling AI analysis:", error);
         toast.error("Erro ao analisar incidente", {
           description: error.message || "Tente novamente mais tarde",
         });
@@ -68,7 +69,7 @@ export default function IncidentAiModal() {
         setAnalysis("Análise não retornou resultados.");
       }
     } catch (err) {
-      console.error("Unexpected error:", err);
+      logger.error("Unexpected error:", err);
       toast.error("Erro inesperado ao analisar incidente");
       setAnalysis("Erro inesperado. Por favor, tente novamente.");
     } finally {

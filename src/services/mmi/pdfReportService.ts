@@ -6,6 +6,7 @@
 
 import html2pdf from "html2pdf.js";
 import { MMIJob } from "@/types/mmi";
+import { logger } from "@/lib/logger";
 
 interface ReportOptions {
   includeAIRecommendations?: boolean;
@@ -294,7 +295,7 @@ export const generatePDFReport = async (
     // Cleanup
     document.body.removeChild(container);
   } catch (error) {
-    console.error("Error generating PDF report:", error);
+    logger.error("Error generating PDF report:", error);
     throw new Error("Falha ao gerar relatório PDF");
   }
 };
@@ -336,7 +337,7 @@ export const generateJobReport = async (
     // Cleanup
     document.body.removeChild(container);
   } catch (error) {
-    console.error("Error generating job PDF report:", error);
+    logger.error("Error generating job PDF report:", error);
     throw new Error("Falha ao gerar relatório PDF do job");
   }
 };

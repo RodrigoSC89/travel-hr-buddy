@@ -7,6 +7,7 @@
 import { Octokit } from "octokit";
 import type { FixSuggestion } from "./suggestFix";
 import type { AnalysisResult } from "./analyzer";
+import { logger } from "@/lib/logger";
 
 export interface PRCreationResult {
   success: boolean;
@@ -38,7 +39,7 @@ export async function createAutoPR(
   // Check if GitHub token is available
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
-    console.error("❌ GITHUB_TOKEN not found. Cannot create PR.");
+    logger.error("❌ GITHUB_TOKEN not found. Cannot create PR.");
     return {
       success: false,
       error: "GITHUB_TOKEN environment variable is required"
@@ -51,11 +52,11 @@ export async function createAutoPR(
     // Build comprehensive PR body
     const prBody = buildPRBody(suggestion, analysis);
 
-    console.log("🚀 Creating automated PR...");
-    console.log(`   Owner: ${owner}`);
-    console.log(`   Repo: ${repo}`);
-    console.log(`   Base: ${baseBranch}`);
-    console.log(`   Head: ${headBranch}`);
+    logger.info("🚀 Creating automated PR...");
+    logger.info(`   Owner: ${owner}`);
+    logger.info(`   Repo: ${repo}`);
+    logger.info(`   Base: ${baseBranch}`);
+    logger.info(`   Head: ${headBranch}`);
 
     // Create the PR
     const response = await octokit.request("POST /repos/{owner}/{repo}/pulls", {
@@ -70,9 +71,9 @@ export async function createAutoPR(
       }
     });
 
-    console.log("✅ PR created successfully!");
-    console.log(`   Number: #${response.data.number}`);
-    console.log(`   URL: ${response.data.html_url}`);
+    logger.info("✅ PR created successfully!");
+    logger.info(`   Number: #${response.data.number}`);
+    logger.info(`   URL: ${response.data.html_url}`);
 
     return {
       success: true,
@@ -80,7 +81,7 @@ export async function createAutoPR(
       prUrl: response.data.html_url
     };
   } catch (error: any) {
-    console.error("❌ Failed to create PR:", error.message);
+    logger.error("❌ Failed to create PR:", error.message);
     
     // Handle specific error cases
     if (error.status === 404) {
@@ -194,7 +195,7 @@ export async function commentOnPR(
 
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
-    console.error("❌ GITHUB_TOKEN not found. Cannot comment on PR.");
+    logger.error("❌ GITHUB_TOKEN not found. Cannot comment on PR.");
     return false;
   }
 
@@ -210,10 +211,10 @@ export async function commentOnPR(
       body: comment
     });
 
-    console.log(`✅ Comment added to PR #${prNumber}`);
+    logger.info(`✅ Comment added to PR #${prNumber}`);
     return true;
   } catch (error: any) {
-    console.error("❌ Failed to comment on PR:", error.message);
+    logger.error("❌ Failed to comment on PR:", error.message);
     return false;
   }
 }

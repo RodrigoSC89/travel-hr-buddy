@@ -10,6 +10,7 @@
  */
 
 import * as ort from "onnxruntime-web";
+import { logger } from "@/lib/logger";
 
 export interface InferenceResult {
   text: string;
@@ -51,7 +52,7 @@ class NautilusInferenceEngine {
    */
   async loadModel(modelUrl: string): Promise<void> {
     try {
-      console.log("🧠 [Nautilus] Carregando modelo IA embarcada:", modelUrl);
+      logger.info("🧠 [Nautilus] Carregando modelo IA embarcada:", modelUrl);
       
       this.session = await ort.InferenceSession.create(modelUrl, {
         executionProviders: ["wasm"],
@@ -61,11 +62,11 @@ class NautilusInferenceEngine {
       this.isLoaded = true;
       this.modelUrl = modelUrl;
       
-      console.log("🧠 [Nautilus] Modelo IA embarcada carregado com sucesso");
-      console.log("🧠 [Nautilus] Inputs:", this.session.inputNames);
-      console.log("🧠 [Nautilus] Outputs:", this.session.outputNames);
+      logger.info("🧠 [Nautilus] Modelo IA embarcada carregado com sucesso");
+      logger.info("🧠 [Nautilus] Inputs:", this.session.inputNames);
+      logger.info("🧠 [Nautilus] Outputs:", this.session.outputNames);
     } catch (error) {
-      console.error("🧠 [Nautilus] Erro ao carregar modelo:", error);
+      logger.error("🧠 [Nautilus] Erro ao carregar modelo:", error);
       throw error;
     }
   }
@@ -77,7 +78,7 @@ class NautilusInferenceEngine {
    */
   async analyze(text: string): Promise<InferenceResult> {
     if (!this.isLoaded || !this.session) {
-      console.warn("🧠 [Nautilus] Modelo não carregado. Usando análise baseada em regras.");
+      logger.warn("🧠 [Nautilus] Modelo não carregado. Usando análise baseada em regras.");
       return this.fallbackAnalyze(text);
     }
 
@@ -103,7 +104,7 @@ class NautilusInferenceEngine {
         timestamp: Date.now()
       };
     } catch (error) {
-      console.error("🧠 [Nautilus] Erro durante inferência:", error);
+      logger.error("🧠 [Nautilus] Erro durante inferência:", error);
       return this.fallbackAnalyze(text);
     }
   }
@@ -114,7 +115,7 @@ class NautilusInferenceEngine {
    * @returns Análise detalhada
    */
   async analyzeContext(text: string): Promise<AnalysisResult> {
-    console.log("🧠 [Nautilus] Analisando contexto...");
+    logger.info("🧠 [Nautilus] Analisando contexto...");
 
     // Detecção de palavras-chave
     const keywords = this.extractKeywords(text);
@@ -370,11 +371,11 @@ class NautilusInferenceEngine {
    */
   async unloadModel(): Promise<void> {
     if (this.session) {
-      console.log("🧠 [Nautilus] Descarregando modelo...");
+      logger.info("🧠 [Nautilus] Descarregando modelo...");
       this.session = null;
       this.isLoaded = false;
       this.modelUrl = null;
-      console.log("🧠 [Nautilus] Modelo descarregado");
+      logger.info("🧠 [Nautilus] Modelo descarregado");
     }
   }
 }

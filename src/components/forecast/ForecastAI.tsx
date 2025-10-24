@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Brain, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import * as ort from "onnxruntime-web";
 import { publishEvent } from "@/lib/mqtt/publisher";
+import { logger } from "@/lib/logger";
 
 type PredictionStatus = "loading" | "success" | "error" | "offline";
 
@@ -57,7 +58,7 @@ export default function ForecastAI() {
           1
         );
       } catch (err) {
-        console.error("AI Forecast Error:", err);
+        logger.error("AI Forecast Error:", err);
         setStatus("offline");
         
         // Fallback prediction when model is unavailable

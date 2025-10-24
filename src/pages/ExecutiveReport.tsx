@@ -11,6 +11,7 @@ import { Download, TrendingUp, AlertTriangle, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { logger } from "@/lib/logger";
 
 const ExecutiveReport = () => {
   const reportRef = useRef<HTMLDivElement>(null);
@@ -77,7 +78,7 @@ const ExecutiveReport = () => {
       pdf.save(`nautilus-executive-report-${new Date().toISOString().split("T")[0]}.pdf`);
       toast.success("PDF report generated successfully!");
     } catch (error) {
-      console.error("Failed to generate PDF:", error);
+      logger.error("Failed to generate PDF:", error);
       toast.error("Failed to generate PDF report");
     }
   };

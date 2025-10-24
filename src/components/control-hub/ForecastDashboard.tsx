@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Gauge, TrendingUp, AlertTriangle, Loader } from "lucide-react";
 import { runForecastAnalysis } from "@/lib/ai/forecast-engine";
+import { logger } from "@/lib/logger";
 
 interface ForecastState {
   level: string;
@@ -64,7 +65,7 @@ export default function ForecastDashboard() {
         });
       }
     } catch (error) {
-      console.error("❌ Error loading forecast:", error);
+      logger.error("❌ Error loading forecast:", error);
       setForecast({
         level: "Erro",
         value: 0,

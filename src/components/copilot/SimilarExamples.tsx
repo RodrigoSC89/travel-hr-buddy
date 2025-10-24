@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Search, Copy, Clock, Wrench, TrendingUp, Sparkles } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export default function SimilarExamples({ input, onSelect }: { input: string, onSelect?: (text: string) => void }) {
   const [examples, setExamples] = useState<SimilarJobResult[]>([]);
@@ -38,7 +39,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
         });
       }
     } catch (err) {
-      console.error("Erro ao buscar exemplos:", err);
+      logger.error("Erro ao buscar exemplos:", err);
       toast({
         title: "❌ Erro ao buscar",
         description: "Ocorreu um erro ao buscar exemplos. Tente novamente.",

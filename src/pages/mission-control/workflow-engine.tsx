@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { logger } from "@/lib/logger";
 
 interface WorkflowStep {
   name: string;
@@ -60,7 +61,7 @@ const WorkflowEngine = () => {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error loading workflows:", error);
+      logger.error("Error loading workflows:", error);
     } else {
       setWorkflows((data || []) as any);
     }

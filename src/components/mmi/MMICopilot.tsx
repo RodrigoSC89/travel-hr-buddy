@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { streamCopilotSuggestions } from "@/services/mmi/copilotApi";
 import { Loader2, Sparkles, Send } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export default function MMICopilot() {
   const [prompt, setPrompt] = useState("");
@@ -35,7 +36,7 @@ export default function MMICopilot() {
         description: error instanceof Error ? error.message : "Não foi possível obter sugestões.",
         variant: "destructive",
       });
-      console.error("Error getting copilot suggestion:", error);
+      logger.error("Error getting copilot suggestion:", error);
     } finally {
       setIsLoading(false);
     }

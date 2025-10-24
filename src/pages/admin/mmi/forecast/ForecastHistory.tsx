@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { createOSFromForecast } from "@/services/mmi/ordersService";
+import { logger } from "@/lib/logger";
 
 type Forecast = {
   id: string
@@ -62,7 +63,7 @@ export default function ForecastHistoryPage() {
         });
       }
     } catch (error) {
-      console.error("Error generating order:", error);
+      logger.error("Error generating order:", error);
       toast({
         title: "❌ Erro ao gerar OS",
         description: "Não foi possível conectar ao servidor",
@@ -88,7 +89,7 @@ export default function ForecastHistoryPage() {
         setData(transformed);
       })
       .catch((err) => {
-        console.error("Error loading forecasts:", err);
+        logger.error("Error loading forecasts:", err);
         setData([]);
       })
       .finally(() => {

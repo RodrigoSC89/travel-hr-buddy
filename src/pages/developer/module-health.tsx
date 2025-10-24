@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Play, Download, RefreshCw, AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
 import { runModuleHealthCheck, saveReport, type ModuleCheckResult } from '@/ai/module-checker';
 import { toast } from 'sonner';
+import { logger } from "@/lib/logger";
 
 export default function ModuleHealthDashboard() {
   const [isRunning, setIsRunning] = useState(false);
@@ -31,7 +32,7 @@ export default function ModuleHealthDashboard() {
       toast.success(`Checklist completo! ${checkResults.length} módulos testados.`);
     } catch (error) {
       toast.error('Erro ao executar checklist');
-      console.error('[Module Health] Error:', error);
+      logger.error('[Module Health] Error:', error);
     } finally {
       setIsRunning(false);
     }

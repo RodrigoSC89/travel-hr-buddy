@@ -9,6 +9,7 @@ import JobsTrendChart from "@/components/bi/JobsTrendChart";
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
 import { ExportBIReport } from "@/components/bi/ExportPDF";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 const data = [
   { sistema: "Gerador", ia_efetiva: 6, total: 10 },
@@ -35,13 +36,13 @@ export default function MmiBI() {
         const { data: result, error } = await supabase.rpc("jobs_trend_by_month");
         
         if (error) {
-          console.error("Error fetching trend data:", error);
+          logger.error("Error fetching trend data:", error);
           setTrendData([]);
         } else {
           setTrendData(result || []);
         }
       } catch (error) {
-        console.error("Error invoking trend function:", error);
+        logger.error("Error invoking trend function:", error);
         // Fallback to mock data
         setTrendData([
           { month: "2025-05", total_jobs: 12, monthLabel: "mai de 2025" },

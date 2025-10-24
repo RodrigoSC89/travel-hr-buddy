@@ -18,6 +18,7 @@ import {
   Loader2,
   Info
 } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface TokenValidation {
   valid: boolean;
@@ -71,7 +72,7 @@ export default function CertViewer() {
       
       setValidation(mockValidation);
     } catch (err) {
-      console.error("Token validation error:", err);
+      logger.error("Token validation error:", err);
       setError("Failed to validate token");
     } finally {
       setLoading(false);

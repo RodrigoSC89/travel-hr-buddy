@@ -5,6 +5,7 @@
 
 import { ModuleState, ModuleStatus } from "./types";
 import config from "./hub_config.json";
+import { logger } from "@/lib/logger";
 
 export class HubMonitor {
   private modules: Map<string, ModuleState> = new Map();
@@ -164,7 +165,7 @@ export class HubMonitor {
       errors: errorCount,
     });
 
-    console.error(`Module ${moduleKey} error:`, error);
+    logger.error(`Module ${moduleKey} error:`, error);
   }
 }
 

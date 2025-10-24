@@ -7,6 +7,7 @@
 
 import React from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface WorkflowSuggestionRequest {
   workflow: string;
@@ -72,7 +73,7 @@ export async function getWorkflowSuggestions(
       onChunk(text);
     }
   } catch (error) {
-    console.error("Error getting workflow suggestions:", error);
+    logger.error("Error getting workflow suggestions:", error);
     throw error;
   }
 }

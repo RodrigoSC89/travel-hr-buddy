@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from "@/lib/logger";
 
 interface Incident {
   id: string;
@@ -57,7 +58,7 @@ export default function IncidentsPage() {
       if (error) throw error;
       setIncidents(data || []);
     } catch (error) {
-      console.error("Error loading incidents:", error);
+      logger.error("Error loading incidents:", error);
     } finally {
       setLoading(false);
     }

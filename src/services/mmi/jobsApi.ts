@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { generateJobEmbedding } from "./embeddingService";
 import { getAIRecommendation } from "./copilotApi";
 import { MMIJob } from "@/types/mmi";
+import { logger } from "@/lib/logger";
 
 // Legacy Job interface for backward compatibility
 export interface Job {
@@ -118,7 +119,7 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.warn("Supabase fetch error, using mock data:", error);
+      logger.warn("Supabase fetch error, using mock data:", error);
       throw error;
     }
 
@@ -162,7 +163,7 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
       return { jobs };
     }
   } catch (error) {
-    console.warn("Database not available, using mock data");
+    logger.warn("Database not available, using mock data");
   }
 
   // Fallback to mock data
@@ -196,7 +197,7 @@ export const fetchJobWithAI = async (jobId: string): Promise<MMIJob | null> => {
 
     return job;
   } catch (error) {
-    console.warn("Failed to fetch job from database:", error);
+    logger.warn("Failed to fetch job from database:", error);
     // Fallback to mock
     const mockJob = mockJobs.find(j => j.id === jobId);
     if (mockJob) {
@@ -236,7 +237,7 @@ export const createJob = async (jobData: Partial<MMIJob>): Promise<MMIJob> => {
 
     return convertToMMIJob(data as Job);
   } catch (error) {
-    console.error("Failed to create job:", error);
+    logger.error("Failed to create job:", error);
     throw new Error("Não foi possível criar o job");
   }
 };
@@ -252,7 +253,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
     });
 
     if (error) {
-      console.warn("Edge function error, falling back to local logic:", error);
+      logger.warn("Edge function error, falling back to local logic:", error);
       throw error;
     }
 
@@ -299,7 +300,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
       }
     }
   } catch (error) {
-    console.warn("AI postpone analysis not available, using fallback logic:", error);
+    logger.warn("AI postpone analysis not available, using fallback logic:", error);
   }
 
   // Fallback to mock behavior
@@ -335,7 +336,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
     });
 
     if (error) {
-      console.warn("Edge function error, falling back to local logic:", error);
+      logger.warn("Edge function error, falling back to local logic:", error);
       throw error;
     }
 
@@ -379,7 +380,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
       };
     }
   } catch (error) {
-    console.warn("Work order creation via edge function failed, using fallback:", error);
+    logger.warn("Work order creation via edge function failed, using fallback:", error);
   }
 
   // Fallback

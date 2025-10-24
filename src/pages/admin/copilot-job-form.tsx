@@ -10,12 +10,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, CheckCircle2, Search, Copy, Save, Lightbulb, Zap, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 export default function CopilotJobFormPage() {
   const { toast } = useToast();
 
   const handleJobSubmit = (data: { component: string; description: string }) => {
-    console.log("Job submitted:", data);
+    logger.info("Job submitted:", data);
     // In a real application, this would call an API to save the job
     toast({
       title: "✅ Job criado com sucesso!",

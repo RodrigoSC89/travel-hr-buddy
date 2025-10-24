@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Sparkles, Save, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { logger } from "@/lib/logger";
 
 export default function MMIForecastPage() {
   const [vesselName, setVesselName] = useState("");
@@ -80,7 +81,7 @@ export default function MMIForecastPage() {
 
       toast.success("Forecast gerado com sucesso!");
     } catch (error) {
-      console.error("Error generating forecast:", error);
+      logger.error("Error generating forecast:", error);
       toast.error("Erro ao gerar forecast");
     } finally {
       setLoading(false);
@@ -118,7 +119,7 @@ export default function MMIForecastPage() {
         toast.error(data.error || "Erro ao salvar forecast");
       }
     } catch (error) {
-      console.error("Error saving forecast:", error);
+      logger.error("Error saving forecast:", error);
       toast.error("Erro ao salvar forecast");
     } finally {
       setSaving(false);

@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from "@/lib/logger";
 
 export interface SystemContextSnapshot {
   contextId: string;
@@ -64,7 +65,7 @@ export async function getContextSnapshot(contextId: string = 'global'): Promise<
     };
 
   } catch (error) {
-    console.error('Error fetching context snapshot:', error);
+    logger.error('Error fetching context snapshot:', error);
     throw error;
   }
 }
@@ -87,12 +88,12 @@ export async function updateContextSnapshot(snapshot: Partial<SystemContextSnaps
       });
 
     if (error) {
-      console.error('Error updating context snapshot:', error);
+      logger.error('Error updating context snapshot:', error);
       throw error;
     }
 
   } catch (error) {
-    console.error('Error in updateContextSnapshot:', error);
+    logger.error('Error in updateContextSnapshot:', error);
     throw error;
   }
 }
@@ -125,7 +126,7 @@ export async function addRecentEvent(
     });
 
   } catch (error) {
-    console.error('Error adding recent event:', error);
+    logger.error('Error adding recent event:', error);
   }
 }
 
@@ -146,6 +147,6 @@ export async function updatePerformanceMetrics(
       performanceMetrics: metrics
     });
   } catch (error) {
-    console.error('Error updating performance metrics:', error);
+    logger.error('Error updating performance metrics:', error);
   }
 }
