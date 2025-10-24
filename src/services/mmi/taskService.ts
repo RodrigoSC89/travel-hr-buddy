@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * MMI Task Service
  * Automatic task and work order creation from AI forecasts
