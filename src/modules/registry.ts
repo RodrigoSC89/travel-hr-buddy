@@ -493,6 +493,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+'documents.hub': {
+    id: 'documents.hub',
+    name: 'Document Hub',
+    category: 'documents',
+    path: 'modules/document-hub',
+    description: 'PATCH 91.1 - Central hub for document management with AI integration',
+    status: 'active',
+    route: '/dashboard/document-hub',
+    icon: 'FolderOpen',
+    lazy: true,
+    version: '91.1',
+  },
+
 'config.settings': {
     id: 'config.settings',
     name: 'Settings',

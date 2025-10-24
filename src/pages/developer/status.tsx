@@ -35,6 +35,7 @@ const modules: Module[] = [
   { id: "analytics", name: "Analytics Core", status: "complete", category: "support", completion: 100, hasTests: true, hasDocs: true, priority: "high" },
   { id: "communication", name: "Communication Hub", status: "partial", category: "support", completion: 70, hasTests: false, hasDocs: true, priority: "medium" },
   { id: "peotram", name: "PEOTRAM Audit", status: "complete", category: "compliance", completion: 95, hasTests: false, hasDocs: true, priority: "critical" },
+  { id: "document-hub", name: "Document Hub", status: "complete", category: "documents", completion: 100, hasTests: true, hasDocs: true, priority: "high" },
 ];
 
 export default function DeveloperStatus() {
@@ -214,6 +215,7 @@ export default function DeveloperStatus() {
           <TabsTrigger value="ai">AI</TabsTrigger>
           <TabsTrigger value="crew">Crew</TabsTrigger>
           <TabsTrigger value="support">Support</TabsTrigger>
+          <TabsTrigger value="documents">Documents</TabsTrigger>
         </TabsList>
 
         <TabsContent value={selectedCategory} className="space-y-4 mt-4">

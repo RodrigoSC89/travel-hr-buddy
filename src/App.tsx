@@ -29,6 +29,7 @@ const SGSOReportPage = React.lazy(() => import("@/pages/SGSOReportPage"));
 const SGSOAuditPage = React.lazy(() => import("@/pages/SGSOAuditPage"));
 const Settings = React.lazy(() => import("@/pages/Settings"));
 const Documents = React.lazy(() => import("@/modules/documents/documents-ai/DocumentsAI"));
+const DocumentHub = React.lazy(() => import("@/modules/document-hub"));
 const AIAssistant = React.lazy(() => import("@/pages/AIAssistant"));
 const Travel = React.lazy(() => import("@/pages/Travel"));
 const Analytics = React.lazy(() => import("@/pages/Analytics"));
@@ -284,6 +285,7 @@ function App() {
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/documents" element={<Documents />} />
                       <Route path="/intelligent-documents" element={<Documents />} />
+                      <Route path="/dashboard/document-hub" element={<DocumentHub />} />
                       <Route path="/ai-assistant" element={<AIAssistant />} />
                       <Route path="/travel" element={<Travel />} />
                       <Route path="/analytics" element={<Analytics />} />
