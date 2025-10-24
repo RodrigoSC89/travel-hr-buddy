@@ -1,12 +1,6 @@
 /**
- * Module Registry - PATCH 68.0
- * Centralized registry for all application modules
- * 
- * This registry provides:
- * - Single source of truth for module definitions
- * - Metadata for each module (name, category, status)
- * - Dependency tracking
- * - Lazy loading configuration
+ * Module Registry - PATCH 83.0 Auto-Generated
+ * Last updated: 2025-10-24T01:17:32.278Z
  */
 
 export type ModuleStatus = 'active' | 'deprecated' | 'beta' | 'experimental';
@@ -30,50 +24,22 @@ export type ModuleCategory =
   | 'features';
 
 export interface ModuleDefinition {
-  /** Unique module identifier */
   id: string;
-  
-  /** Display name */
   name: string;
-  
-  /** Module category */
   category: ModuleCategory;
-  
-  /** Import path relative to src/ */
   path: string;
-  
-  /** Brief description */
   description: string;
-  
-  /** Current status */
   status: ModuleStatus;
-  
-  /** Module dependencies (module IDs) */
   dependencies?: string[];
-  
-  /** Whether to lazy load (default: true) */
   lazy?: boolean;
-  
-  /** Route path if applicable */
   route?: string;
-  
-  /** Icon name (Lucide React) */
   icon?: string;
-  
-  /** Required permissions */
   permissions?: string[];
-  
-  /** Version */
   version?: string;
 }
 
-/**
- * Central Module Registry
- * All application modules must be registered here
- */
 export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
-  // ===== CORE MODULES =====
-  'core.dashboard': {
+'core.dashboard': {
     id: 'core.dashboard',
     name: 'Dashboard',
     category: 'core',
@@ -85,7 +51,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'core.shared': {
+'core.shared': {
     id: 'core.shared',
     name: 'Shared Components',
     category: 'core',
@@ -95,8 +61,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: false,
   },
 
-  // ===== OPERATIONS =====
-  'operations.crew': {
+'operations.crew': {
     id: 'operations.crew',
     name: 'Crew Management',
     category: 'operations',
@@ -108,7 +73,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'operations.fleet': {
+'operations.fleet': {
     id: 'operations.fleet',
     name: 'Fleet Management',
     category: 'operations',
@@ -120,7 +85,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'operations.performance': {
+'operations.performance': {
     id: 'operations.performance',
     name: 'Performance Monitoring',
     category: 'operations',
@@ -132,7 +97,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'operations.crew-wellbeing': {
+'operations.crew-wellbeing': {
     id: 'operations.crew-wellbeing',
     name: 'Crew Wellbeing',
     category: 'operations',
@@ -144,7 +109,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'operations.maritime-system': {
+'operations.maritime-system': {
     id: 'operations.maritime-system',
     name: 'Maritime System',
     category: 'operations',
@@ -156,8 +121,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== COMPLIANCE =====
-  'compliance.reports': {
+'compliance.reports': {
     id: 'compliance.reports',
     name: 'Compliance Reports',
     category: 'compliance',
@@ -169,7 +133,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'compliance.audit-center': {
+'compliance.audit-center': {
     id: 'compliance.audit-center',
     name: 'Audit Center',
     category: 'compliance',
@@ -181,7 +145,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'compliance.hub': {
+'compliance.hub': {
     id: 'compliance.hub',
     name: 'Compliance Hub',
     category: 'compliance',
@@ -193,8 +157,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== INTELLIGENCE =====
-  'intelligence.ai-insights': {
+'intelligence.ai-insights': {
     id: 'intelligence.ai-insights',
     name: 'AI Insights',
     category: 'intelligence',
@@ -206,7 +169,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'intelligence.analytics': {
+'intelligence.analytics': {
     id: 'intelligence.analytics',
     name: 'Analytics Core',
     category: 'intelligence',
@@ -218,7 +181,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'intelligence.automation': {
+'intelligence.automation': {
     id: 'intelligence.automation',
     name: 'Automation',
     category: 'intelligence',
@@ -230,8 +193,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== EMERGENCY =====
-  'emergency.response': {
+'emergency.response': {
     id: 'emergency.response',
     name: 'Emergency Response',
     category: 'emergency',
@@ -243,7 +205,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'emergency.mission-control': {
+'emergency.mission-control': {
     id: 'emergency.mission-control',
     name: 'Mission Control',
     category: 'emergency',
@@ -255,7 +217,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'emergency.mission-logs': {
+'emergency.mission-logs': {
     id: 'emergency.mission-logs',
     name: 'Mission Logs',
     category: 'emergency',
@@ -267,7 +229,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'emergency.risk-management': {
+'emergency.risk-management': {
     id: 'emergency.risk-management',
     name: 'Risk Management',
     category: 'emergency',
@@ -279,8 +241,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== LOGISTICS =====
-  'logistics.hub': {
+'logistics.hub': {
     id: 'logistics.hub',
     name: 'Logistics Hub',
     category: 'logistics',
@@ -292,7 +253,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'logistics.fuel-optimizer': {
+'logistics.fuel-optimizer': {
     id: 'logistics.fuel-optimizer',
     name: 'Fuel Optimizer',
     category: 'logistics',
@@ -304,7 +265,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'logistics.satellite-tracker': {
+'logistics.satellite-tracker': {
     id: 'logistics.satellite-tracker',
     name: 'Satellite Tracker',
     category: 'logistics',
@@ -316,8 +277,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== PLANNING =====
-  'planning.voyage': {
+'planning.voyage': {
     id: 'planning.voyage',
     name: 'Voyage Planner',
     category: 'planning',
@@ -329,7 +289,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'hr.training': {
+'hr.training': {
     id: 'hr.training',
     name: 'Training Academy',
     category: 'hr',
@@ -341,7 +301,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'hr.peo-dp': {
+'hr.peo-dp': {
     id: 'hr.peo-dp',
     name: 'PEO-DP',
     category: 'hr',
@@ -353,7 +313,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'hr.employee-portal': {
+'hr.employee-portal': {
     id: 'hr.employee-portal',
     name: 'Employee Portal',
     category: 'hr',
@@ -365,8 +325,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== MAINTENANCE =====
-  'maintenance.planner': {
+'maintenance.planner': {
     id: 'maintenance.planner',
     name: 'Maintenance Planner',
     category: 'maintenance',
@@ -378,7 +337,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'connectivity.channel-manager': {
+'connectivity.channel-manager': {
     id: 'connectivity.channel-manager',
     name: 'Channel Manager',
     category: 'connectivity',
@@ -390,7 +349,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'connectivity.api-gateway': {
+'connectivity.api-gateway': {
     id: 'connectivity.api-gateway',
     name: 'API Gateway',
     category: 'connectivity',
@@ -402,7 +361,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'connectivity.notifications': {
+'connectivity.notifications': {
     id: 'connectivity.notifications',
     name: 'Notifications Center',
     category: 'connectivity',
@@ -414,7 +373,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'connectivity.communication': {
+'connectivity.communication': {
     id: 'connectivity.communication',
     name: 'Communication',
     category: 'connectivity',
@@ -426,7 +385,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'connectivity.integrations-hub': {
+'connectivity.integrations-hub': {
     id: 'connectivity.integrations-hub',
     name: 'Integrations Hub',
     category: 'connectivity',
@@ -438,8 +397,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== WORKSPACE =====
-  'workspace.realtime': {
+'workspace.realtime': {
     id: 'workspace.realtime',
     name: 'Real-Time Workspace',
     category: 'workspace',
@@ -451,7 +409,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'workspace.collaboration': {
+'workspace.collaboration': {
     id: 'workspace.collaboration',
     name: 'Collaboration',
     category: 'workspace',
@@ -463,8 +421,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== ASSISTANTS =====
-  'assistants.voice': {
+'assistants.voice': {
     id: 'assistants.voice',
     name: 'Voice Assistant',
     category: 'assistants',
@@ -476,8 +433,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== FINANCE =====
-  'finance.hub': {
+'finance.hub': {
     id: 'finance.hub',
     name: 'Finance Hub',
     category: 'finance',
@@ -489,8 +445,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== DOCUMENTS =====
-  'documents.ai': {
+'documents.ai': {
     id: 'documents.ai',
     name: 'AI Documents',
     category: 'documents',
@@ -502,7 +457,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'documents.incident-reports': {
+'documents.incident-reports': {
     id: 'documents.incident-reports',
     name: 'Incident Reports',
     category: 'documents',
@@ -514,7 +469,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'documents.templates': {
+'documents.templates': {
     id: 'documents.templates',
     name: 'Templates',
     category: 'documents',
@@ -526,8 +481,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== CONFIGURATION =====
-  'config.settings': {
+'config.settings': {
     id: 'config.settings',
     name: 'Settings',
     category: 'configuration',
@@ -539,7 +493,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'config.user-management': {
+'config.user-management': {
     id: 'config.user-management',
     name: 'User Management',
     category: 'configuration',
@@ -552,8 +506,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // ===== FEATURES =====
-  'features.price-alerts': {
+'features.price-alerts': {
     id: 'features.price-alerts',
     name: 'Price Alerts',
     category: 'features',
@@ -565,7 +518,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'features.checklists': {
+'features.checklists': {
     id: 'features.checklists',
     name: 'Smart Checklists',
     category: 'features',
@@ -577,7 +530,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'features.reservations': {
+'features.reservations': {
     id: 'features.reservations',
     name: 'Reservations',
     category: 'features',
@@ -589,7 +542,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'features.travel': {
+'features.travel': {
     id: 'features.travel',
     name: 'Travel',
     category: 'features',
@@ -601,9 +554,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-
-
-  'features.vault-ai': {
+'features.vault-ai': {
     id: 'features.vault-ai',
     name: 'Vault AI',
     category: 'features',
@@ -615,7 +566,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'features.weather': {
+'features.weather': {
     id: 'features.weather',
     name: 'Weather Dashboard',
     category: 'features',
@@ -627,7 +578,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'features.task-automation': {
+'features.task-automation': {
     id: 'features.task-automation',
     name: 'Task Automation',
     category: 'features',
@@ -639,7 +590,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'features.project-timeline': {
+'features.project-timeline': {
     id: 'features.project-timeline',
     name: 'Project Timeline',
     category: 'features',
@@ -651,7 +602,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  'intelligence.smart-workflow': {
+'intelligence.smart-workflow': {
     id: 'intelligence.smart-workflow',
     name: 'Smart Workflow',
     category: 'intelligence',
@@ -662,39 +613,424 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: 'GitBranch',
     lazy: true,
   },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.registry': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.registry',
+    name: 'Registry',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/registry',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.loader': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.loader',
+    name: 'Loader',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/loader',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.index': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.index',
+    name: 'Index',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/vault_ai/index',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.risk-audit.TacticalRiskPanel': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.risk-audit.TacticalRiskPanel',
+    name: 'TacticalRiskPanel',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/risk-audit/TacticalRiskPanel',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.forecast.useForecast': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.forecast.useForecast',
+    name: 'UseForecast',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/forecast/useForecast',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.forecast.index': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.forecast.index',
+    name: 'Index',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/forecast/index',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.forecast.ForecastEngine': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.forecast.ForecastEngine',
+    name: 'ForecastEngine',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/forecast/ForecastEngine',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.ai.useAIAdvisor': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.ai.useAIAdvisor',
+    name: 'UseAIAdvisor',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/ai/useAIAdvisor',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.ai.index': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.ai.index',
+    name: 'Index',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/ai/index',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.ai.AdaptiveAI': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.ai.AdaptiveAI',
+    name: 'AdaptiveAI',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/ai/AdaptiveAI',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.types.index': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.types.index',
+    name: 'Index',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/vault_ai/types/index',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.services.vaultLLM': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.services.vaultLLM',
+    name: 'VaultLLM',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/vault_ai/services/vaultLLM',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.services.semanticSearch': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.services.semanticSearch',
+    name: 'SemanticSearch',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/vault_ai/services/semanticSearch',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.services.fileIndexer': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.services.fileIndexer',
+    name: 'FileIndexer',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/vault_ai/services/fileIndexer',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.components.VaultCore': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.vault_ai.components.VaultCore',
+    name: 'VaultCore',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/vault_ai/components/VaultCore',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.planning.mmi.MaintenanceIntelligence': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.planning.mmi.MaintenanceIntelligence',
+    name: 'MaintenanceIntelligence',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/planning/mmi/MaintenanceIntelligence',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.planning.fmea.FMEAExpert': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.planning.fmea.FMEAExpert',
+    name: 'FMEAExpert',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/planning/fmea/FMEAExpert',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.operations.feedback.index': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.operations.feedback.index',
+    name: 'Index',
+    category: 'operations',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/operations/feedback/index',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.intelligence.dp-intelligence.DPIntelligenceCenter': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.intelligence.dp-intelligence.DPIntelligenceCenter',
+    name: 'DPIntelligenceCenter',
+    category: 'intelligence',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/intelligence/dp-intelligence/DPIntelligenceCenter',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.core.overview.SystemOverview': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.core.overview.SystemOverview',
+    name: 'SystemOverview',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/core/overview/SystemOverview',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.core.help-center.HelpCenter': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.core.help-center.HelpCenter',
+    name: 'HelpCenter',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/core/help-center/HelpCenter',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.forecast-global.ForecastConsole': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.forecast-global.ForecastConsole',
+    name: 'ForecastConsole',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/forecast-global/ForecastConsole',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.types': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.types',
+    name: 'Types',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/control-hub/types',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.index': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.index',
+    name: 'Index',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/control-hub/index',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_ui': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_ui',
+    name: 'Hub_ui',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/control-hub/hub_ui',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_sync': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_sync',
+    name: 'Hub_sync',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/control-hub/hub_sync',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_monitor': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_monitor',
+    name: 'Hub_monitor',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/control-hub/hub_monitor',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_core': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_core',
+    name: 'Hub_core',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/control-hub/hub_core',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_cache': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_cache',
+    name: 'Hub_cache',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/control-hub/hub_cache',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_bridge': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.hub_bridge',
+    name: 'Hub_bridge',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/control-hub/hub_bridge',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.ControlHubPanel': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.control-hub.ControlHubPanel',
+    name: 'ControlHubPanel',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/control-hub/ControlHubPanel',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.types': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.types',
+    name: 'Types',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/bridgelink/types',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.index': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.index',
+    name: 'Index',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/bridgelink/index',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.BridgeLinkDashboard': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.BridgeLinkDashboard',
+    name: 'BridgeLinkDashboard',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/bridgelink/BridgeLinkDashboard',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.compliance.sgso.SGSOSystem': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.compliance.sgso.SGSOSystem',
+    name: 'SGSOSystem',
+    category: 'compliance',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/compliance/sgso/SGSOSystem',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.services.bridge-link-api': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.services.bridge-link-api',
+    name: 'Bridge Link Api',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/bridgelink/services/bridge-link-api',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.hooks.useBridgeLinkData': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.hooks.useBridgeLinkData',
+    name: 'UseBridgeLinkData',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/bridgelink/hooks/useBridgeLinkData',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.components.RiskAlertPanel': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.components.RiskAlertPanel',
+    name: 'RiskAlertPanel',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/bridgelink/components/RiskAlertPanel',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.components.LiveDecisionMap': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.components.LiveDecisionMap',
+    name: 'LiveDecisionMap',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/bridgelink/components/LiveDecisionMap',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  },
+
+'.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.components.DPStatusCard': {
+    id: '.home.runner.work.travel-hr-buddy.travel-hr-buddy.src.modules.control.bridgelink.components.DPStatusCard',
+    name: 'DPStatusCard',
+    category: 'features',
+    path: '/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/control/bridgelink/components/DPStatusCard',
+    description: 'Auto-generated module entry',
+    status: 'active',
+    lazy: true,
+  }
 };
 
-/**
- * Get module by ID
- */
 export function getModule(id: string): ModuleDefinition | undefined {
   return MODULE_REGISTRY[id];
 }
 
-/**
- * Get all modules by category
- */
 export function getModulesByCategory(category: ModuleCategory): ModuleDefinition[] {
   return Object.values(MODULE_REGISTRY).filter(m => m.category === category);
 }
 
-/**
- * Get all active modules
- */
 export function getActiveModules(): ModuleDefinition[] {
   return Object.values(MODULE_REGISTRY).filter(m => m.status === 'active');
 }
 
-/**
- * Get all modules with routes
- */
 export function getRoutableModules(): ModuleDefinition[] {
   return Object.values(MODULE_REGISTRY).filter(m => m.route);
 }
 
-/**
- * Check if user has access to module
- */
 export function hasModuleAccess(module: ModuleDefinition, userPermissions: string[]): boolean {
   if (!module.permissions || module.permissions.length === 0) return true;
   return module.permissions.some(p => userPermissions.includes(p));

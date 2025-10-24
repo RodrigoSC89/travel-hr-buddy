@@ -1,0 +1,983 @@
+{
+  "timestamp": "2025-10-24T01:17:32.280Z",
+  "totalRoutes": 195,
+  "activeRoutes": 187,
+  "brokenRoutes": 8,
+  "routes": [
+    {
+      "path": "*",
+      "component": "NotFound",
+      "status": "active"
+    },
+    {
+      "path": "/",
+      "component": "Index",
+      "status": "broken"
+    },
+    {
+      "path": "/_offline",
+      "component": "Offline",
+      "status": "active"
+    },
+    {
+      "path": "/admin",
+      "component": "Admin",
+      "status": "active"
+    },
+    {
+      "path": "/admin/ai-assistant",
+      "component": "Assistant",
+      "status": "active"
+    },
+    {
+      "path": "/admin/analytics",
+      "component": "AdminAnalytics",
+      "status": "active"
+    },
+    {
+      "path": "/admin/api-status",
+      "component": "APIStatus",
+      "status": "active"
+    },
+    {
+      "path": "/admin/api-tester",
+      "component": "APITester",
+      "status": "active"
+    },
+    {
+      "path": "/admin/assistant",
+      "component": "Assistant",
+      "status": "active"
+    },
+    {
+      "path": "/admin/assistant/history",
+      "component": "AssistantLogs",
+      "status": "active"
+    },
+    {
+      "path": "/admin/assistant/logs",
+      "component": "AssistantLogs",
+      "status": "active"
+    },
+    {
+      "path": "/admin/audit",
+      "component": "BackupAudit",
+      "status": "active"
+    },
+    {
+      "path": "/admin/auditorias-imca",
+      "component": "AuditoriasIMCA",
+      "status": "active"
+    },
+    {
+      "path": "/admin/auditorias-lista",
+      "component": "AuditoriasLista",
+      "status": "active"
+    },
+    {
+      "path": "/admin/automation/execution-logs",
+      "component": "ExecutionLogs",
+      "status": "active"
+    },
+    {
+      "path": "/admin/bi",
+      "component": "AdminBI",
+      "status": "active"
+    },
+    {
+      "path": "/admin/bi/forecasts",
+      "component": "BIForecastsPage",
+      "status": "active"
+    },
+    {
+      "path": "/admin/checklists",
+      "component": "AdminChecklists",
+      "status": "active"
+    },
+    {
+      "path": "/admin/checklists/dashboard",
+      "component": "AdminChecklistsDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/admin/ci-history",
+      "component": "CIHistory",
+      "status": "active"
+    },
+    {
+      "path": "/admin/collaboration",
+      "component": "AdminCollaboration",
+      "status": "active"
+    },
+    {
+      "path": "/admin/control-panel",
+      "component": "ControlPanel",
+      "status": "active"
+    },
+    {
+      "path": "/admin/copilot-job-form",
+      "component": "CopilotJobFormAdmin",
+      "status": "active"
+    },
+    {
+      "path": "/admin/cron-monitor",
+      "component": "CronMonitor",
+      "status": "active"
+    },
+    {
+      "path": "/admin/dashboard",
+      "component": "AdminDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/admin/dashboard-auditorias",
+      "component": "DashboardAuditorias",
+      "status": "active"
+    },
+    {
+      "path": "/admin/documents",
+      "component": "DocumentList",
+      "status": "active"
+    },
+    {
+      "path": "/admin/documents/ai",
+      "component": "DocumentAIEditor",
+      "status": "active"
+    },
+    {
+      "path": "/admin/documents/demo",
+      "component": "DocumentEditorDemo",
+      "status": "active"
+    },
+    {
+      "path": "/admin/documents/edit/:id",
+      "component": "CollaborativeEditor",
+      "status": "active"
+    },
+    {
+      "path": "/admin/documents/editor",
+      "component": "DocumentEditorPage",
+      "status": "active"
+    },
+    {
+      "path": "/admin/documents/history/:id",
+      "component": "DocumentHistory",
+      "status": "active"
+    },
+    {
+      "path": "/admin/documents/restore-dashboard",
+      "component": "RestoreDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/admin/documents/view/:id",
+      "component": "DocumentView",
+      "status": "active"
+    },
+    {
+      "path": "/admin/forecast",
+      "component": "Forecast",
+      "status": "broken"
+    },
+    {
+      "path": "/admin/metricas-risco",
+      "component": "MetricasRisco",
+      "status": "active"
+    },
+    {
+      "path": "/admin/mmi",
+      "component": "MMIJobsPanel",
+      "status": "active"
+    },
+    {
+      "path": "/admin/mmi/forecast",
+      "component": "MMIForecast",
+      "status": "active"
+    },
+    {
+      "path": "/admin/mmi/forecast/history",
+      "component": "ForecastHistoryPage",
+      "status": "active"
+    },
+    {
+      "path": "/admin/mmi/history",
+      "component": "MMIHistoryAdmin",
+      "status": "active"
+    },
+    {
+      "path": "/admin/mmi/orders",
+      "component": "MMIOrders",
+      "status": "active"
+    },
+    {
+      "path": "/admin/peodp-audit",
+      "component": "PEODPAuditPage",
+      "status": "active"
+    },
+    {
+      "path": "/admin/performance-analysis",
+      "component": "PerformanceAnalysis",
+      "status": "active"
+    },
+    {
+      "path": "/admin/quiz",
+      "component": "QuizPage",
+      "status": "active"
+    },
+    {
+      "path": "/admin/reports/assistant",
+      "component": "AssistantReportLogs",
+      "status": "active"
+    },
+    {
+      "path": "/admin/reports/dashboard-logs",
+      "component": "DashboardLogs",
+      "status": "active"
+    },
+    {
+      "path": "/admin/reports/logs",
+      "component": "RestoreReportLogs",
+      "status": "active"
+    },
+    {
+      "path": "/admin/reports/restore-analytics",
+      "component": "RestoreAnalytics",
+      "status": "active"
+    },
+    {
+      "path": "/admin/restore/personal",
+      "component": "PersonalRestoreDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/admin/risk-audit",
+      "component": "RiskAudit",
+      "status": "active"
+    },
+    {
+      "path": "/admin/sgso",
+      "component": "AdminSGSO",
+      "status": "active"
+    },
+    {
+      "path": "/admin/sgso/history",
+      "component": "SGSOAuditHistory",
+      "status": "active"
+    },
+    {
+      "path": "/admin/sgso/history/:vesselId",
+      "component": "SGSOHistoryPage",
+      "status": "active"
+    },
+    {
+      "path": "/admin/sgso/review/:id",
+      "component": "SGSOAuditReview",
+      "status": "active"
+    },
+    {
+      "path": "/admin/simulations",
+      "component": "Simulations",
+      "status": "active"
+    },
+    {
+      "path": "/admin/system-health",
+      "component": "SystemHealth",
+      "status": "active"
+    },
+    {
+      "path": "/admin/templates",
+      "component": "Templates",
+      "status": "active"
+    },
+    {
+      "path": "/admin/templates/edit/:id",
+      "component": "EditTemplatePage",
+      "status": "active"
+    },
+    {
+      "path": "/admin/templates/editor",
+      "component": "TemplateEditorPage",
+      "status": "active"
+    },
+    {
+      "path": "/admin/tests",
+      "component": "TestDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/admin/training",
+      "component": "TrainingManagement",
+      "status": "active"
+    },
+    {
+      "path": "/admin/wall",
+      "component": "AdminWall",
+      "status": "active"
+    },
+    {
+      "path": "/admin/workflows",
+      "component": "SmartWorkflows",
+      "status": "active"
+    },
+    {
+      "path": "/admin/workflows/:id",
+      "component": "WorkflowDetail",
+      "status": "active"
+    },
+    {
+      "path": "/ai-assistant",
+      "component": "AIAssistant",
+      "status": "active"
+    },
+    {
+      "path": "/ai-insights",
+      "component": "AIInsights",
+      "status": "active"
+    },
+    {
+      "path": "/alertas-precos",
+      "component": "PriceAlerts",
+      "status": "active"
+    },
+    {
+      "path": "/analytics",
+      "component": "Analytics",
+      "status": "active"
+    },
+    {
+      "path": "/analytics-core",
+      "component": "AnalyticsCoreModule",
+      "status": "active"
+    },
+    {
+      "path": "/api-gateway",
+      "component": "APIGateway",
+      "status": "active"
+    },
+    {
+      "path": "/api-gateway/docs",
+      "component": "APIGatewayDocs",
+      "status": "active"
+    },
+    {
+      "path": "/ar",
+      "component": "AR",
+      "status": "active"
+    },
+    {
+      "path": "/audit-center",
+      "component": "AuditCenter",
+      "status": "active"
+    },
+    {
+      "path": "/automation",
+      "component": "AutomationModule",
+      "status": "active"
+    },
+    {
+      "path": "/backup-audit",
+      "component": "BackupAudit",
+      "status": "active"
+    },
+    {
+      "path": "/blockchain",
+      "component": "Blockchain",
+      "status": "active"
+    },
+    {
+      "path": "/bridgelink",
+      "component": "BridgeLink",
+      "status": "broken"
+    },
+    {
+      "path": "/cert/:token",
+      "component": "CertViewer",
+      "status": "active"
+    },
+    {
+      "path": "/channel-manager",
+      "component": "ChannelManager",
+      "status": "active"
+    },
+    {
+      "path": "/checklists",
+      "component": "ChecklistsInteligentes",
+      "status": "active"
+    },
+    {
+      "path": "/checklists-inteligentes",
+      "component": "ChecklistsInteligentes",
+      "status": "active"
+    },
+    {
+      "path": "/checklists-inteligentes",
+      "component": "ChecklistsInteligentes",
+      "status": "active"
+    },
+    {
+      "path": "/collaboration",
+      "component": "Collaboration",
+      "status": "active"
+    },
+    {
+      "path": "/communication",
+      "component": "Communication",
+      "status": "active"
+    },
+    {
+      "path": "/compliance",
+      "component": "ComplianceHub",
+      "status": "active"
+    },
+    {
+      "path": "/compliance-hub",
+      "component": "ComplianceHubModule",
+      "status": "active"
+    },
+    {
+      "path": "/comunicacao",
+      "component": "Communication",
+      "status": "active"
+    },
+    {
+      "path": "/control-hub",
+      "component": "ControlHub",
+      "status": "broken"
+    },
+    {
+      "path": "/copilot/job-form",
+      "component": "CopilotJobForm",
+      "status": "active"
+    },
+    {
+      "path": "/crew",
+      "component": "CrewModule",
+      "status": "active"
+    },
+    {
+      "path": "/crew-wellbeing",
+      "component": "CrewWellbeing",
+      "status": "active"
+    },
+    {
+      "path": "/dashboard",
+      "component": "Dashboard",
+      "status": "broken"
+    },
+    {
+      "path": "/developer/modules",
+      "component": "ModuleStatus",
+      "status": "active"
+    },
+    {
+      "path": "/developer/status",
+      "component": "DeveloperStatus",
+      "status": "active"
+    },
+    {
+      "path": "/developer/tests",
+      "component": "TestsDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/documents",
+      "component": "Documents",
+      "status": "active"
+    },
+    {
+      "path": "/dp-incidents",
+      "component": "DPIncidents",
+      "status": "active"
+    },
+    {
+      "path": "/dp-intelligence",
+      "component": "DPIntelligence",
+      "status": "broken"
+    },
+    {
+      "path": "/dp-sync-engine",
+      "component": "DPSyncEngine",
+      "status": "active"
+    },
+    {
+      "path": "/embed/restore-chart",
+      "component": "RestoreChartEmbed",
+      "status": "active"
+    },
+    {
+      "path": "/emergency",
+      "component": "EmergencyResponse",
+      "status": "active"
+    },
+    {
+      "path": "/emergency-response",
+      "component": "EmergencyResponse",
+      "status": "active"
+    },
+    {
+      "path": "/emergency-response",
+      "component": "EmergencyResponse",
+      "status": "active"
+    },
+    {
+      "path": "/executive-report",
+      "component": "ExecutiveReport",
+      "status": "active"
+    },
+    {
+      "path": "/external-audit",
+      "component": "ExternalAuditSystem",
+      "status": "active"
+    },
+    {
+      "path": "/feedback",
+      "component": "FeedbackModule",
+      "status": "active"
+    },
+    {
+      "path": "/finance",
+      "component": "FinanceHub",
+      "status": "active"
+    },
+    {
+      "path": "/finance-hub",
+      "component": "FinanceHub",
+      "status": "active"
+    },
+    {
+      "path": "/fleet",
+      "component": "FleetModule",
+      "status": "active"
+    },
+    {
+      "path": "/forecast",
+      "component": "ForecastPage",
+      "status": "active"
+    },
+    {
+      "path": "/forecast-global",
+      "component": "ForecastGlobal",
+      "status": "active"
+    },
+    {
+      "path": "/forecast/global",
+      "component": "ForecastGlobal",
+      "status": "active"
+    },
+    {
+      "path": "/fuel-optimizer",
+      "component": "FuelOptimizer",
+      "status": "active"
+    },
+    {
+      "path": "/gamification",
+      "component": "Gamification",
+      "status": "active"
+    },
+    {
+      "path": "/health",
+      "component": "Health",
+      "status": "active"
+    },
+    {
+      "path": "/health-monitor",
+      "component": "HealthMonitorDemo",
+      "status": "active"
+    },
+    {
+      "path": "/hr",
+      "component": "HumanResources",
+      "status": "active"
+    },
+    {
+      "path": "/imca-audit",
+      "component": "IMCAAudit",
+      "status": "active"
+    },
+    {
+      "path": "/incident-reports",
+      "component": "IncidentReports",
+      "status": "active"
+    },
+    {
+      "path": "/innovation",
+      "component": "Innovation",
+      "status": "active"
+    },
+    {
+      "path": "/intelligence",
+      "component": "Intelligence",
+      "status": "broken"
+    },
+    {
+      "path": "/intelligent-documents",
+      "component": "Documents",
+      "status": "active"
+    },
+    {
+      "path": "/iot",
+      "component": "IoT",
+      "status": "active"
+    },
+    {
+      "path": "/logistics",
+      "component": "LogisticsHub",
+      "status": "active"
+    },
+    {
+      "path": "/logistics-hub",
+      "component": "LogisticsHub",
+      "status": "active"
+    },
+    {
+      "path": "/maintenance",
+      "component": "MaintenanceDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/maintenance-planner",
+      "component": "MaintenancePlanner",
+      "status": "active"
+    },
+    {
+      "path": "/maritime",
+      "component": "Maritime",
+      "status": "active"
+    },
+    {
+      "path": "/maritime-supremo",
+      "component": "MaritimeSupremo",
+      "status": "active"
+    },
+    {
+      "path": "/mission-control",
+      "component": "MissionControl",
+      "status": "active"
+    },
+    {
+      "path": "/mission-control/ai-command",
+      "component": "AICommandCenter",
+      "status": "active"
+    },
+    {
+      "path": "/mission-control/autonomy",
+      "component": "AutonomyConsole",
+      "status": "active"
+    },
+    {
+      "path": "/mission-control/insight-dashboard",
+      "component": "InsightDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/mission-control/llm",
+      "component": "NautilusLLM",
+      "status": "active"
+    },
+    {
+      "path": "/mission-control/thought-chain",
+      "component": "ThoughtChain",
+      "status": "active"
+    },
+    {
+      "path": "/mission-control/workflows",
+      "component": "WorkflowEngine",
+      "status": "active"
+    },
+    {
+      "path": "/mission-logs",
+      "component": "MissionLogs",
+      "status": "active"
+    },
+    {
+      "path": "/mmi/bi",
+      "component": "MmiBI",
+      "status": "active"
+    },
+    {
+      "path": "/mmi/forecast",
+      "component": "MMIForecastPage",
+      "status": "active"
+    },
+    {
+      "path": "/mmi/history",
+      "component": "MMIHistory",
+      "status": "active"
+    },
+    {
+      "path": "/mmi/job-creation-demo",
+      "component": "JobCreationWithSimilarExamples",
+      "status": "active"
+    },
+    {
+      "path": "/mmi/jobs",
+      "component": "MMIJobsPanel",
+      "status": "active"
+    },
+    {
+      "path": "/mmi/tasks",
+      "component": "MMITasks",
+      "status": "active"
+    },
+    {
+      "path": "/modules",
+      "component": "Modules",
+      "status": "active"
+    },
+    {
+      "path": "/modules/status",
+      "component": "ModuleStatus",
+      "status": "active"
+    },
+    {
+      "path": "/nautilus-one",
+      "component": "NautilusOne",
+      "status": "active"
+    },
+    {
+      "path": "/nautilus-os",
+      "component": "NautilusOS",
+      "status": "active"
+    },
+    {
+      "path": "/notifications",
+      "component": "NotificationsCenterModule",
+      "status": "active"
+    },
+    {
+      "path": "/notifications-center",
+      "component": "NotificationsCenterModule",
+      "status": "active"
+    },
+    {
+      "path": "/optimization",
+      "component": "Optimization",
+      "status": "active"
+    },
+    {
+      "path": "/patch-66",
+      "component": "Patch66Dashboard",
+      "status": "active"
+    },
+    {
+      "path": "/patch66",
+      "component": "Patch66Dashboard",
+      "status": "active"
+    },
+    {
+      "path": "/peo-dp",
+      "component": "PEODP",
+      "status": "active"
+    },
+    {
+      "path": "/peo-tram",
+      "component": "PEOTRAM",
+      "status": "active"
+    },
+    {
+      "path": "/peotram",
+      "component": "PEOTRAM",
+      "status": "active"
+    },
+    {
+      "path": "/performance",
+      "component": "PerformanceModule",
+      "status": "active"
+    },
+    {
+      "path": "/portal",
+      "component": "Portal",
+      "status": "active"
+    },
+    {
+      "path": "/portal-funcionario",
+      "component": "Portal",
+      "status": "active"
+    },
+    {
+      "path": "/portal/crew/wellbeing",
+      "component": "CrewWellbeing",
+      "status": "active"
+    },
+    {
+      "path": "/predictive",
+      "component": "PredictiveAnalytics",
+      "status": "active"
+    },
+    {
+      "path": "/price-alerts",
+      "component": "PriceAlerts",
+      "status": "active"
+    },
+    {
+      "path": "/project-timeline",
+      "component": "ProjectTimeline",
+      "status": "active"
+    },
+    {
+      "path": "/real-time-workspace",
+      "component": "RealTimeWorkspace",
+      "status": "active"
+    },
+    {
+      "path": "/real-time-workspace",
+      "component": "RealTimeWorkspace",
+      "status": "active"
+    },
+    {
+      "path": "/reports",
+      "component": "Reports",
+      "status": "active"
+    },
+    {
+      "path": "/reports-module",
+      "component": "ReportsModule",
+      "status": "active"
+    },
+    {
+      "path": "/reservations",
+      "component": "Reservations",
+      "status": "active"
+    },
+    {
+      "path": "/risk",
+      "component": "RiskManagementModule",
+      "status": "active"
+    },
+    {
+      "path": "/risk-management",
+      "component": "RiskManagementModule",
+      "status": "active"
+    },
+    {
+      "path": "/satellite",
+      "component": "SatelliteTracker",
+      "status": "active"
+    },
+    {
+      "path": "/satellite-tracker",
+      "component": "SatelliteTracker",
+      "status": "active"
+    },
+    {
+      "path": "/settings",
+      "component": "Settings",
+      "status": "active"
+    },
+    {
+      "path": "/sgso",
+      "component": "SGSO",
+      "status": "broken"
+    },
+    {
+      "path": "/sgso/audit",
+      "component": "SGSOAuditPage",
+      "status": "active"
+    },
+    {
+      "path": "/sgso/report",
+      "component": "SGSOReportPage",
+      "status": "active"
+    },
+    {
+      "path": "/smart-layout-demo",
+      "component": "SmartLayoutDemo",
+      "status": "active"
+    },
+    {
+      "path": "/task-automation",
+      "component": "TaskAutomation",
+      "status": "active"
+    },
+    {
+      "path": "/template-editor-demo",
+      "component": "TemplateEditorDemo",
+      "status": "active"
+    },
+    {
+      "path": "/tests",
+      "component": "TestsDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/timeline",
+      "component": "ProjectTimeline",
+      "status": "active"
+    },
+    {
+      "path": "/training-academy",
+      "component": "TrainingAcademy",
+      "status": "active"
+    },
+    {
+      "path": "/travel",
+      "component": "Travel",
+      "status": "active"
+    },
+    {
+      "path": "/tv/logs",
+      "component": "TVWallLogs",
+      "status": "active"
+    },
+    {
+      "path": "/unauthorized",
+      "component": "Unauthorized",
+      "status": "active"
+    },
+    {
+      "path": "/user-management",
+      "component": "UserManagement",
+      "status": "active"
+    },
+    {
+      "path": "/users",
+      "component": "UserManagement",
+      "status": "active"
+    },
+    {
+      "path": "/vault-ai",
+      "component": "VaultAI",
+      "status": "active"
+    },
+    {
+      "path": "/voice",
+      "component": "Voice",
+      "status": "active"
+    },
+    {
+      "path": "/voice-assistant",
+      "component": "VoiceAssistantModule",
+      "status": "active"
+    },
+    {
+      "path": "/voice-assistant-new",
+      "component": "VoiceAssistantModule",
+      "status": "active"
+    },
+    {
+      "path": "/voyage",
+      "component": "VoyagePlanner",
+      "status": "active"
+    },
+    {
+      "path": "/voyage-planner",
+      "component": "VoyagePlanner",
+      "status": "active"
+    },
+    {
+      "path": "/weather",
+      "component": "WeatherDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/weather-dashboard",
+      "component": "WeatherDashboard",
+      "status": "active"
+    },
+    {
+      "path": "/wellbeing",
+      "component": "CrewWellbeing",
+      "status": "active"
+    }
+  ]
+}

@@ -44,7 +44,7 @@ export function usePerformanceMonitoring(componentName: string) {
       setMetrics(prev => ({
         ...prev,
         [metric.name]: metric,
-      }));
+      }, []));
     });
 
     return unsubscribe;
