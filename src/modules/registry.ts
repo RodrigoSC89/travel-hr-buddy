@@ -96,6 +96,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
   },
 
   // ===== OPERATIONS =====
+  'operations.dashboard': {
+    id: 'operations.dashboard',
+    name: 'Operations Dashboard',
+    category: 'operations',
+    path: 'modules/operations-dashboard',
+    description: 'Central operations dashboard - Fleet, crew, performance, and KPIs - PATCH 89.0',
+    status: 'active',
+    route: '/operations-dashboard',
+    icon: 'Activity',
+    lazy: true,
+    version: '89.0',
+  },
+
   'operations.crew': {
     id: 'operations.crew',
     name: 'Crew Management',
@@ -198,12 +211,13 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     id: 'intelligence.ai-insights',
     name: 'AI Insights',
     category: 'intelligence',
-    path: 'modules/intelligence/ai-insights',
-    description: 'AI-powered insights and analytics',
+    path: 'modules/ai-insights',
+    description: 'AI-powered operational insights and analytics - PATCH 89.0',
     status: 'active',
-    route: '/intelligence/insights',
+    route: '/ai-insights',
     icon: 'Brain',
     lazy: true,
+    version: '89.0',
   },
 
   'intelligence.analytics': {
@@ -620,11 +634,12 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: 'Weather Dashboard',
     category: 'features',
     path: 'modules/weather-dashboard',
-    description: 'Weather monitoring and forecasting',
+    description: 'Weather monitoring with AI-powered insights and DP risk assessment - PATCH 89.0',
     status: 'active',
-    route: '/weather',
+    route: '/weather-dashboard',
     icon: 'Cloud',
     lazy: true,
+    version: '89.0',
   },
 
   'features.task-automation': {

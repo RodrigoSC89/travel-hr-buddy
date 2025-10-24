@@ -134,7 +134,7 @@ const ForecastHistoryPage = React.lazy(() => import("@/pages/admin/mmi/forecast/
 const BIForecastsPage = React.lazy(() => import("@/pages/admin/bi/forecasts"));
 const PEODPAuditPage = React.lazy(() => import("@/pages/admin/peodp-audit"));
 const VaultAI = React.lazy(() => import("@/modules/vault_ai/pages/VaultAIPage"));
-const Patch66Dashboard = React.lazy(() => import("@/pages/Patch66Dashboard"));
+// Removed: Patch66Dashboard - moved to legacy/
 
 // New Module Imports - PATCH 66.0 Updated Paths
 const CrewModule = React.lazy(() => import("@/modules/operations/crew"));
@@ -170,6 +170,10 @@ const ProjectTimeline = React.lazy(() => import("@/modules/project-timeline"));
 const UserManagement = React.lazy(() => import("@/modules/user-management"));
 const MissionControl = React.lazy(() => import("@/modules/emergency/mission-control"));
 const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insight-dashboard"));
+
+// PATCH 89.0 - Consolidated Dashboard Modules
+const OperationsDashboard = React.lazy(() => import("@/modules/operations-dashboard"));
+const AIInsightsDashboard = React.lazy(() => import("@/modules/ai-insights"));
 const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
 const AICommandCenter = React.lazy(() => import("@/pages/mission-control/ai-command-center"));
 const WorkflowEngine = React.lazy(() => import("@/pages/mission-control/workflow-engine"));
@@ -297,8 +301,7 @@ function App() {
                       <Route path="/compliance" element={<ComplianceHub />} />
                       <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/vault-ai" element={<VaultAI />} />
-                      <Route path="/patch66" element={<Patch66Dashboard />} />
-                      <Route path="/patch-66" element={<Patch66Dashboard />} />
+                      {/* Removed legacy patch66 routes - see legacy/duplicated_dashboards/ */}
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
                       <Route path="/mmi/bi" element={<MmiBI />} />
                       <Route path="/mmi/history" element={<MMIHistory />} />
@@ -402,8 +405,17 @@ function App() {
                       <Route path="/mission-logs" element={<MissionLogs />} />
                       <Route path="/incident-reports" element={<IncidentReports />} />
                       <Route path="/fuel-optimizer" element={<FuelOptimizer />} />
+                      
+                      {/* PATCH 89.0 - Consolidated Dashboard Routes */}
+                      <Route path="/operations-dashboard" element={<OperationsDashboard />} />
+                      <Route path="/ai-insights" element={<AIInsightsDashboard />} />
                       <Route path="/weather-dashboard" element={<WeatherDashboard />} />
                       <Route path="/weather" element={<WeatherDashboard />} />
+                      
+                      {/* Redirects from old dashboard routes to consolidated ones */}
+                      <Route path="/fleet-dashboard" element={<OperationsDashboard />} />
+                      <Route path="/mission-control/insight-dashboard" element={<AIInsightsDashboard />} />
+                      
                       <Route path="/voyage-planner" element={<VoyagePlanner />} />
                       <Route path="/voyage" element={<VoyagePlanner />} />
                       <Route path="/task-automation" element={<TaskAutomation />} />
@@ -415,7 +427,6 @@ function App() {
                       <Route path="/tests" element={<TestsDashboard />} />
                       <Route path="/emergency-response" element={<EmergencyResponse />} />
                       <Route path="/executive-report" element={<ExecutiveReport />} />
-                      <Route path="/compliance-hub" element={<ComplianceHubModule />} />
                       <Route path="/ai-insights" element={<AIInsights />} />
                       <Route path="/logistics-hub" element={<LogisticsHub />} />
                       <Route path="/logistics" element={<LogisticsHub />} />
@@ -431,7 +442,7 @@ function App() {
                       <Route path="/emergency-response" element={<EmergencyResponse />} />
                       <Route path="/emergency" element={<EmergencyResponse />} />
                       <Route path="/mission-control" element={<MissionControl />} />
-                      <Route path="/mission-control/insight-dashboard" element={<InsightDashboard />} />
+                      {/* Old insight-dashboard route redirects to consolidated ai-insights */}
                       <Route path="/mission-control/autonomy" element={<AutonomyConsole />} />
                       <Route path="/mission-control/ai-command" element={<AICommandCenter />} />
                       <Route path="/mission-control/workflows" element={<WorkflowEngine />} />
