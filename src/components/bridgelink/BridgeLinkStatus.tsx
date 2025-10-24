@@ -7,8 +7,16 @@ export default function BridgeLinkStatus() {
   const [status, setStatus] = useState({ online: false, latency: 0, lastSync: "—" });
 
   useEffect(() => {
-    const client = subscribeBridgeLinkStatus((data) => setStatus(data));
-    return () => client.end();
+    const client = subscribeBridgeLinkStatus((data) => {
+      setStatus({
+        online: (data.online as boolean) ?? false,
+        latency: (data.latency as number) ?? 0,
+        lastSync: (data.lastSync as string) ?? "—"
+      });
+    });
+    return () => {
+      client.end();
+    };
   }, []);
 
   return (
@@ -28,7 +36,7 @@ export default function BridgeLinkStatus() {
   );
 }
 
-function Metric({ label, value, color }) {
+function Metric({ label, value, color }: { label: string; value: string; color: string }) {
   return (
     <div className="flex justify-between items-center">
       <span className="text-sm text-muted-foreground">{label}</span>

@@ -260,7 +260,7 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Mensagens Totais</p>
-                <p className="text-2xl font-bold">{stats.totalMessages.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{(stats.totalMessages ?? 0).toLocaleString()}</p>
                 <div className="flex items-center gap-1 mt-1">
                   {messageTrend.isPositive ? (
                     <TrendingUp className="h-3 w-3 text-success" />

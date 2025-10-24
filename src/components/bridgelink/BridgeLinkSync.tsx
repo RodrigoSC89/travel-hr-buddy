@@ -12,13 +12,15 @@ export default function BridgeLinkSync() {
     const channel = supabase
       .channel("nautilus-telemetry")
       .on("postgres_changes", { event: "*", schema: "public", table: "telemetry" }, (payload) => {
-        publishEvent("nautilus/bridgelink/update", payload.new);
+        publishEvent("nautilus/bridgelink/update", payload.new as Record<string, unknown>);
         setSyncStatus("Última atualização: " + new Date().toLocaleTimeString());
       })
       .subscribe();
 
-    return () => supabase.removeChannel(channel);
-  }, []);
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase]);
 
   return (
     <Card>
@@ -37,7 +39,7 @@ export default function BridgeLinkSync() {
   );
 }
 
-function StatusItem({ icon, label, value }) {
+function StatusItem({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">

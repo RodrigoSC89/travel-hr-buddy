@@ -410,7 +410,7 @@ export const ChatInterface = () => {
             type
           )
         `)
-        .eq("user_id", currentUser?.id)
+        .eq("user_id", currentUser?.id ?? "")
         .eq("conversations.type", "direct");
 
       if (existingConv) {
@@ -419,7 +419,7 @@ export const ChatInterface = () => {
             .from("conversation_participants")
             .select("user_id")
             .eq("conversation_id", conv.conversation_id)
-            .neq("user_id", currentUser?.id)
+            .neq("user_id", currentUser?.id ?? "")
             .single();
 
           if (otherParticipant?.user_id === userId) {
@@ -446,7 +446,7 @@ export const ChatInterface = () => {
       const { error: participantsError } = await supabase
         .from("conversation_participants")
         .insert([
-          { conversation_id: newConv.id, user_id: currentUser.id } as any,
+          { conversation_id: newConv.id, user_id: currentUser?.id ?? "" } as any,
           { conversation_id: newConv.id, user_id: userId } as any
         ]);
 
