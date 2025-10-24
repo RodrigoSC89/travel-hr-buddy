@@ -6,6 +6,7 @@
 
 import { openai } from "@/lib/openai";
 
+import { logger } from "@/lib/logger";
 export interface SGSOIncident {
   description: string;
   sgso_category: string;
@@ -35,7 +36,7 @@ export async function generateSGSOActionPlan(
 
   // Mock mode when API key is not available
   if (!hasValidKey) {
-    console.log("🔄 Using mock mode for SGSO Action Plan (API key not configured)");
+    logger.info("🔄 Using mock mode for SGSO Action Plan (API key not configured)");
     return generateMockActionPlan(incident);
   }
 

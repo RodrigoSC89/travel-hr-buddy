@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import html2pdf from "html2pdf.js";
 import { Textarea } from "@/components/ui/textarea";

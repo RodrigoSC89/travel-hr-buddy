@@ -5,6 +5,7 @@
  */
 
 import mqtt, { MqttClient } from "mqtt";
+import { logger } from "@/lib/logger";
 
 class MQTTClientManager {
   private client: MqttClient | null = null;
@@ -18,7 +19,7 @@ class MQTTClientManager {
    */
   connect(brokerUrl = "wss://broker.hivemq.com:8884/mqtt"): void {
     if (this.client) {
-      console.log("ℹ️ MQTT client already connected");
+      logger.info("ℹ️ MQTT client already connected");
       return;
     }
 
@@ -30,7 +31,7 @@ class MQTTClientManager {
       });
 
       this.client.on("connect", () => {
-        console.log("✅ MQTT client connected");
+        logger.info("✅ MQTT client connected");
         this.connected = true;
         this.reconnectAttempts = 0;
         this.resubscribeAll();
@@ -48,7 +49,7 @@ class MQTTClientManager {
 
       this.client.on("reconnect", () => {
         this.reconnectAttempts++;
-        console.log(`🔄 MQTT reconnecting... (attempt ${this.reconnectAttempts})`);
+        logger.info(`🔄 MQTT reconnecting... (attempt ${this.reconnectAttempts})`);
         
         if (this.reconnectAttempts >= this.maxReconnectAttempts) {
           console.error("❌ Max reconnect attempts reached");
@@ -87,7 +88,7 @@ class MQTTClientManager {
         if (err) {
           console.error(`❌ Failed to subscribe to ${topic}:`, err);
         } else {
-          console.log(`✅ Subscribed to ${topic}`);
+          logger.info(`✅ Subscribed to ${topic}`);
         }
       });
     }
@@ -146,7 +147,7 @@ class MQTTClientManager {
       this.client.end(true);
       this.client = null;
       this.connected = false;
-      console.log("🔌 MQTT client disconnected");
+      logger.info("🔌 MQTT client disconnected");
     }
   }
 

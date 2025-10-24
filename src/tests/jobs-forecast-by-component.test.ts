@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Jobs Forecast By Component Edge Function Tests
  * 

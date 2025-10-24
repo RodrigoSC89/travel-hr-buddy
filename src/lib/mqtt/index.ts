@@ -5,6 +5,7 @@
 
 import mqtt, { MqttClient } from "mqtt";
 
+import { logger } from "@/lib/logger";
 let mqttClientInstance: MqttClient | null = null;
 
 export function initMQTT(): MqttClient | null {
@@ -43,7 +44,7 @@ export function initMQTT(): MqttClient | null {
     mqttClientInstance = mqtt.connect(url, options);
     
     mqttClientInstance.on("connect", () => {
-      console.log("✅ MQTT client connected");
+      logger.info("✅ MQTT client connected");
     });
     
     mqttClientInstance.on("error", (error) => {

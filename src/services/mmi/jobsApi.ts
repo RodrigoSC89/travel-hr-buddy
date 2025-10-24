@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * MMI Jobs API v1.1.0
  * Enhanced with Supabase integration, vector embeddings, and graceful fallback

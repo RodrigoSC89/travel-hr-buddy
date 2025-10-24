@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { Trophy, Star, Award, Target } from "lucide-react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";

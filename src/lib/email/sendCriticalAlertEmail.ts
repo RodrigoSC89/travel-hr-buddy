@@ -5,6 +5,7 @@
 
 import { Resend } from "resend";
 
+import { logger } from "@/lib/logger";
 export interface CriticalAlertEmailParams {
   auditoriaId: string;
   descricao: string;
@@ -51,7 +52,7 @@ export async function sendCriticalAlertEmail(
     }
 
     if (data) {
-      console.log("✅ Email de alerta crítico enviado com sucesso:", data);
+      logger.info("✅ Email de alerta crítico enviado com sucesso:", data);
       return { success: true, data };
     }
 

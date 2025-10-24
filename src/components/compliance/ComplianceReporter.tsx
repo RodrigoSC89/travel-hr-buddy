@@ -1,10 +1,10 @@
-// @ts-nocheck
 /**
  * Compliance Reporter Component
  * Real-time incident tracking with Supabase Realtime subscriptions
  */
 
 import React, { useEffect, useState } from "react";
+import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Table,
@@ -47,7 +47,7 @@ export default function ComplianceReporter() {
           table: "incident_reports",
         },
         (payload) => {
-          console.log("Incident update received:", payload);
+          logger.info("Incident update received:", payload);
           if (payload.eventType === "INSERT") {
             setIncidents((prev) => [payload.new as IncidentRecord, ...prev]);
           }

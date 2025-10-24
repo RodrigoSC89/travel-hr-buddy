@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { logger } from "@/lib/logger";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
       return;
     }
 
-    console.log("Criar job:", { component, description });
+    logger.info("Criar job:", { component, description });
     
     if (onSubmit) {
       onSubmit({ component, description });

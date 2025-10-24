@@ -5,6 +5,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
+import { logger } from "@/lib/logger";
 export type LogLevel = "debug" | "info" | "warning" | "error" | "critical";
 
 export interface LogEntry {
@@ -106,7 +107,7 @@ class LogsEngine {
         critical: "🚨",
       }[level];
 
-      console.log(`${emoji} [${category}] ${message}`, data || "");
+      logger.info(`${emoji} [${category}] ${message}`, data || "");
     }
   }
 

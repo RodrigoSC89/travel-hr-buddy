@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
 import { Button } from "@/components/ui/button";

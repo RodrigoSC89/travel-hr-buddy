@@ -1,5 +1,6 @@
 import type { BridgeLinkData } from "../types";
 
+import { logger } from "@/lib/logger";
 /**
  * Fetch BridgeLink data from API
  * Connects to DP Intelligence Center and SGSO systems
@@ -49,7 +50,7 @@ export function connectToLiveStream(
     ws = new WebSocket(wsUrl);
     
     ws.onopen = () => {
-      console.log("🟢 BridgeLink WebSocket conectado");
+      logger.info("🟢 BridgeLink WebSocket conectado");
     };
     
     ws.onmessage = (event) => {
@@ -66,7 +67,7 @@ export function connectToLiveStream(
     };
     
     ws.onclose = () => {
-      console.log("🔴 BridgeLink WebSocket desconectado");
+      logger.info("🔴 BridgeLink WebSocket desconectado");
     };
   } catch (error) {
     console.error("Erro ao conectar WebSocket:", error);

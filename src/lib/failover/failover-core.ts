@@ -1,4 +1,5 @@
 import mqtt from "mqtt";
+import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 
 const HEARTBEAT_TOPIC = "nautilus/system/heartbeat";
@@ -12,7 +13,7 @@ export function initFailoverSystem() {
 
   client.on("connect", () => {
     connected = true;
-    console.log("✅ MQTT conectado ao Failover Core");
+    logger.info("✅ MQTT conectado ao Failover Core");
     client.subscribe(HEARTBEAT_TOPIC);
     client.publish(STATUS_TOPIC, JSON.stringify({ status: "online", timestamp: Date.now() }));
   });
@@ -39,7 +40,7 @@ export function initFailoverSystem() {
 }
 
 async function executeRecovery(client: any) {
-  console.log("🔁 Executando protocolo de failover...");
+  logger.info("🔁 Executando protocolo de failover...");
   try {
     client.publish("nautilus/system/recovery", JSON.stringify({ action: "restart-dp-module" }));
     // Tabela failover_events não existe - comentado para evitar erros 404

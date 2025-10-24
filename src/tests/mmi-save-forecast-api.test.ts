@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, beforeEach } from "vitest";
 
 describe("MMI Save Forecast API - Request Validation", () => {

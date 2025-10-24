@@ -1,4 +1,3 @@
-// @ts-nocheck
 export const supabase = {
   from: () => ({
     select: async () => ({ data: [], error: null }),

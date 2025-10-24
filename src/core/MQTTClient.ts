@@ -9,6 +9,7 @@
  */
 
 import mqtt, { MqttClient } from "mqtt";
+import { logger } from "@/lib/logger";
 import { BridgeLink, BridgeLinkEventType } from "@/core/BridgeLink";
 import { Logger } from "@/lib/utils/logger";
 
@@ -91,7 +92,7 @@ class MQTTClientManager {
           if (err) {
             Logger.error(`Erro ao subscrever ${topic}`, err, "MQTTClient");
           } else {
-            console.log(`📡 [MQTT] Subscrito a ${topic}`);
+            logger.info(`📡 [MQTT] Subscrito a ${topic}`);
           }
         });
       });
@@ -105,7 +106,7 @@ class MQTTClientManager {
 
     this.client.on("message", (topic: string, message: Buffer) => {
       const messageStr = message.toString();
-      console.log(`📡 [MQTT] Mensagem recebida de ${topic}:`, messageStr);
+      logger.info(`📡 [MQTT] Mensagem recebida de ${topic}:`, messageStr);
 
       // Emitir evento através do BridgeLink
       BridgeLink.emit("nautilus:event" as any, "MQTTClient", {
@@ -121,7 +122,7 @@ class MQTTClientManager {
     });
 
     this.client.on("disconnect", () => {
-      console.log("📡 [MQTT] Desconectado do broker");
+      logger.info("📡 [MQTT] Desconectado do broker");
       this.isConnecting = false;
       
       BridgeLink.emit("nautilus:event" as any, "MQTTClient", {
@@ -133,13 +134,13 @@ class MQTTClientManager {
     });
 
     this.client.on("offline", () => {
-      console.log("📡 [MQTT] Cliente offline");
+      logger.info("📡 [MQTT] Cliente offline");
       this.isConnecting = false;
       this.scheduleReconnect();
     });
 
     this.client.on("close", () => {
-      console.log("📡 [MQTT] Conexão fechada");
+      logger.info("📡 [MQTT] Conexão fechada");
       this.isConnecting = false;
     });
   }
@@ -150,12 +151,12 @@ class MQTTClientManager {
   private scheduleReconnect(): void {
     if (this.reconnectTimer) return;
 
-    console.log(`📡 [MQTT] Agendando reconexão em ${this.config.reconnectInterval}ms...`);
+    logger.info(`📡 [MQTT] Agendando reconexão em ${this.config.reconnectInterval}ms...`);
     
     this.reconnectTimer = setTimeout(() => {
       this.reconnectTimer = null;
       if (!this.client?.connected && !this.isConnecting) {
-        console.log("📡 [MQTT] Tentando reconectar...");
+        logger.info("📡 [MQTT] Tentando reconectar...");
         this.connect();
       }
     }, this.config.reconnectInterval);
@@ -178,7 +179,7 @@ class MQTTClientManager {
       if (err) {
         console.error(`📡 [MQTT] Erro ao publicar em ${topic}:`, err);
       } else {
-        console.log(`📡 [MQTT] Mensagem publicada em ${topic}`);
+        logger.info(`📡 [MQTT] Mensagem publicada em ${topic}`);
       }
     });
   }
@@ -200,7 +201,7 @@ class MQTTClientManager {
       if (err) {
         console.error(`📡 [MQTT] Erro ao subscrever ${topic}:`, err);
       } else {
-        console.log(`📡 [MQTT] Subscrito a ${topic}`);
+        logger.info(`📡 [MQTT] Subscrito a ${topic}`);
         if (!this.config.topics?.includes(topic)) {
           this.config.topics?.push(topic);
         }
@@ -222,7 +223,7 @@ class MQTTClientManager {
       if (err) {
         console.error(`📡 [MQTT] Erro ao remover subscrição de ${topic}:`, err);
       } else {
-        console.log(`📡 [MQTT] Subscrição removida de ${topic}`);
+        logger.info(`📡 [MQTT] Subscrição removida de ${topic}`);
         const index = this.config.topics?.indexOf(topic);
         if (index !== undefined && index > -1) {
           this.config.topics?.splice(index, 1);
@@ -241,9 +242,9 @@ class MQTTClientManager {
     }
 
     if (this.client) {
-      console.log("📡 [MQTT] Desconectando...");
+      logger.info("📡 [MQTT] Desconectando...");
       this.client.end(false, () => {
-        console.log("📡 [MQTT] Desconectado com sucesso");
+        logger.info("📡 [MQTT] Desconectado com sucesso");
       });
       this.client = null;
     }

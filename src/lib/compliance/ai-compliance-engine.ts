@@ -1,5 +1,5 @@
-// @ts-nocheck
 import React from "react";
+import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import mqtt from "mqtt";
 
@@ -27,7 +27,7 @@ const RULES = [
 export async function initComplianceEngine() {
   try {
     session = await ort.InferenceSession.create(modelPath);
-    console.log("✅ AI Compliance Engine iniciado");
+    logger.info("✅ AI Compliance Engine iniciado");
   } catch (err) {
     console.error("Erro ao carregar modelo ONNX:", err);
   }

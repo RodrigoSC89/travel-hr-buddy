@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * DP Intelligence Stats API Endpoint Tests
  * 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { Shield, Lock, CheckCircle, FileCheck } from "lucide-react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
