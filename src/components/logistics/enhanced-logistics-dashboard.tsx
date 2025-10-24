@@ -34,8 +34,11 @@ import {
   Plane,
   Ship,
   Navigation,
-  Anchor
+  Anchor,
+  Brain
 } from "lucide-react";
+import { LogisticsAIInsights } from "./logistics-ai-insights";
+import type { LogisticsOperation } from "@/hooks/use-logistics-ai";
 
 interface LogisticsData {
   id: string;
@@ -96,6 +99,18 @@ const EnhancedLogisticsDashboard: React.FC = () => {
       priority: "medium"
     }
   ];
+
+  // Converter dados para formato de operações de IA
+  const operations: LogisticsOperation[] = logisticsData.map(item => ({
+    id: item.id,
+    type: item.type === "maritime" || item.type === "air" ? "import" : item.type === "ground" ? "transfer" : "export",
+    cargo: `Carga ${item.id}`,
+    origin: item.origin,
+    destination: item.destination,
+    status: item.status as any,
+    estimatedArrival: item.estimatedDelivery,
+    priority: item.priority as any,
+  }));
 
   const quickStats = [
     { icon: Package, label: "Cargas Ativas", value: "124", color: "primary", trend: "+12%" },
@@ -286,10 +301,14 @@ const EnhancedLogisticsDashboard: React.FC = () => {
         {/* Enhanced Tabs */}
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
           <div className="flex justify-center">
-            <TabsList className="grid grid-cols-4 w-full max-w-2xl h-14 bg-card/50 backdrop-blur-sm border border-border/50">
+            <TabsList className="grid grid-cols-5 w-full max-w-3xl h-14 bg-card/50 backdrop-blur-sm border border-border/50">
               <TabsTrigger value="overview" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <BarChart3 className="h-5 w-5" />
                 <span className="hidden md:inline">Visão Geral</span>
+              </TabsTrigger>
+              <TabsTrigger value="ai-insights" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground bg-gradient-to-r from-primary/10 to-secondary/10">
+                <Brain className="h-5 w-5" />
+                <span className="hidden md:inline">Insights IA</span>
               </TabsTrigger>
               <TabsTrigger value="shipments" className="flex items-center gap-2 data-[state=active]:bg-info data-[state=active]:text-info-foreground">
                 <Package className="h-5 w-5" />
@@ -370,6 +389,10 @@ const EnhancedLogisticsDashboard: React.FC = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="ai-insights" className="space-y-6">
+            <LogisticsAIInsights operations={operations} />
           </TabsContent>
 
           <TabsContent value="shipments" className="space-y-6">
