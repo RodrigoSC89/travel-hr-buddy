@@ -41,6 +41,8 @@ export type ModuleStatus =
 
 ### Módulos por Status (Total: 92)
 
+**Nota:** Os módulos com `status: 'incomplete'` não são mais retornados pela função `getActiveModules()`, que filtra apenas módulos com `status: 'active'`. Isso pode impactar componentes que dependem dessa função para listar módulos disponíveis.
+
 #### ✅ **Active - 100% Complete** (9 módulos)
 Módulos com integração real e rotas ativas:
 - `core.dashboard` - Dashboard principal
@@ -78,6 +80,12 @@ Módulos marcados como obsoletos:
 #### 🔵 **Auto-generated entries** (40 módulos)
 Entradas geradas automaticamente com caminhos absolutos - mantidas como estão.
 
+**Nota:** Estas entradas auto-geradas criam inconsistência no registro. Recomenda-se:
+- Avaliar se são necessárias
+- Padronizar caminhos relativos
+- Remover duplicatas ou consolidar em módulos principais
+- Planejar limpeza em próximo patch
+
 ## 🔧 Mudanças Aplicadas
 
 ### Para cada módulo inconsistente:
@@ -111,11 +119,13 @@ Entradas geradas automaticamente com caminhos absolutos - mantidas como estão.
 | Métrica | Valor |
 |---------|-------|
 | **Total de Módulos** | 92 |
-| **Módulos Ativos (100%)** | 9 (10%) |
-| **Módulos Incompletos (partial)** | 34 (37%) |
-| **Módulos Quebrados (broken)** | 4 (4%) |
-| **Módulos Depreciados** | 5 (5%) |
-| **Entradas Auto-geradas** | 40 (43%) |
+| **Módulos Ativos (100%)** | 9 (9.8%) |
+| **Módulos Incompletos (partial)** | 34 (37.0%) |
+| **Módulos Quebrados (broken)** | 4 (4.3%) |
+| **Módulos Depreciados** | 5 (5.4%) |
+| **Entradas Auto-geradas** | 40 (43.5%) |
+
+_Nota: Porcentagens arredondadas para uma casa decimal._
 
 ## ✨ Benefícios
 
@@ -140,6 +150,6 @@ Entradas geradas automaticamente com caminhos absolutos - mantidas como estão.
 
 ---
 
-**Autor**: GitHub Copilot  
+**Implementado por**: Rodrigo SC  
 **Data**: 2025-10-24  
 **Patch**: 96.0
