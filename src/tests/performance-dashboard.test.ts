@@ -56,10 +56,10 @@ describe('Performance Dashboard Module', () => {
     it('should handle edge case with all threshold values', () => {
       const metrics = {
         fuelEfficiency: 90,
-        navigationHours: 0,
+        navigationHours: 160,
         productivity: 85,
         downtime: 5,
-        totalMissions: 0,
+        totalMissions: 20,
       };
 
       const status = getPerformanceStatus(metrics);

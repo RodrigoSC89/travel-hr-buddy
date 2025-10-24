@@ -137,24 +137,32 @@ export const comparePerformance = (
   currentMetrics: PerformanceMetrics,
   historicalMetrics: PerformanceMetrics
 ) => {
+  const getTrend = (current: number, previous: number, lowerIsBetter = false) => {
+    if (current === previous) return 'stable';
+    if (lowerIsBetter) {
+      return current < previous ? 'improving' : 'declining';
+    }
+    return current > previous ? 'improving' : 'declining';
+  };
+
   const trends = {
     fuelEfficiency: {
       current: currentMetrics.fuelEfficiency,
       previous: historicalMetrics.fuelEfficiency,
       change: currentMetrics.fuelEfficiency - historicalMetrics.fuelEfficiency,
-      trend: currentMetrics.fuelEfficiency > historicalMetrics.fuelEfficiency ? 'improving' : 'declining',
+      trend: getTrend(currentMetrics.fuelEfficiency, historicalMetrics.fuelEfficiency),
     },
     productivity: {
       current: currentMetrics.productivity,
       previous: historicalMetrics.productivity,
       change: currentMetrics.productivity - historicalMetrics.productivity,
-      trend: currentMetrics.productivity > historicalMetrics.productivity ? 'improving' : 'declining',
+      trend: getTrend(currentMetrics.productivity, historicalMetrics.productivity),
     },
     downtime: {
       current: currentMetrics.downtime,
       previous: historicalMetrics.downtime,
       change: currentMetrics.downtime - historicalMetrics.downtime,
-      trend: currentMetrics.downtime < historicalMetrics.downtime ? 'improving' : 'declining',
+      trend: getTrend(currentMetrics.downtime, historicalMetrics.downtime, true),
     },
   };
 
@@ -181,7 +189,12 @@ export const calculateKPIScore = (metrics: PerformanceMetrics): number => {
   const productivityScore = Math.min(100, metrics.productivity);
 
   // Normalize downtime (inverse, so lower is better)
-  const downtimeScore = Math.max(0, 100 - (metrics.downtime * 5));
+  // Downtime multiplier of 5 converts percentage to score impact
+  // e.g., 20% downtime = 100 - (20 * 5) = 0 score
+  // e.g., 10% downtime = 100 - (10 * 5) = 50 score
+  // e.g., 5% downtime = 100 - (5 * 5) = 75 score
+  const DOWNTIME_SCORE_MULTIPLIER = 5;
+  const downtimeScore = Math.max(0, 100 - (metrics.downtime * DOWNTIME_SCORE_MULTIPLIER));
 
   // Calculate weighted score
   const score = 

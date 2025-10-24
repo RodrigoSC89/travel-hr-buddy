@@ -4,7 +4,6 @@
  */
 
 import html2pdf from "html2pdf.js";
-import { formatPDFContent } from "@/lib/pdf";
 
 interface PerformanceMetrics {
   fuelEfficiency: number;
