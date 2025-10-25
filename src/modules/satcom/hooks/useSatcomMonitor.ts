@@ -1,6 +1,7 @@
 /**
- * useSatcomMonitor Hook - Patch 142.1
+ * useSatcomMonitor Hook - Patch 171.0 Enhanced
  * Monitors SATCOM connections and manages fallback state
+ * Now integrated with enhanced monitoring and alert systems
  */
 
 import { useState, useEffect, useCallback } from "react";
@@ -14,6 +15,10 @@ import {
   type SimulationEvent,
 } from "../simulator";
 import { useToast } from "@/hooks/use-toast";
+import { satcomStatusMonitor } from "../satcom-status";
+import { linkFallbackManager } from "../linkFallbackManager";
+import { alertHandler } from "../alertHandler";
+import { satcomWatchdogIntegration } from "../watchdog-integration";
 
 interface UseSatcomMonitorProps {
   connections: SatcomConnection[];
@@ -42,16 +47,54 @@ export const useSatcomMonitor = ({
   const [isFallbackActive, setIsFallbackActive] = useState(false);
   const { toast } = useToast();
 
-  // Sync with parent component
+  // Initialize watchdog integration on mount
+  useEffect(() => {
+    if (connections.length > 0) {
+      satcomWatchdogIntegration.start(connections);
+      linkFallbackManager.initialize(connections);
+
+      // Register alert handler callback
+      const unsubscribe = alertHandler.onAlert((alert) => {
+        toast({
+          title: alert.title,
+          description: alert.message,
+          variant: alert.severity === "error" || alert.severity === "critical" 
+            ? "destructive" 
+            : "default",
+        });
+      });
+
+      return () => {
+        satcomWatchdogIntegration.stop();
+        unsubscribe();
+      };
+    }
+  }, []); // Only run once on mount
+
+  // Sync with parent component and update watchdog
   useEffect(() => {
     setConnections(initialConnections);
+    satcomWatchdogIntegration.updateConnections(initialConnections);
+    
+    // Update status monitor for each connection
+    initialConnections.forEach(conn => {
+      satcomStatusMonitor.updateLatency(conn.id, conn.latency);
+    });
   }, [initialConnections]);
 
-  // Determine primary and fallback connections
-  const primaryConnection = connections.find(c => c.status === "connected") || null;
-  const fallbackConnection = isFallbackActive
-    ? connections.find(c => c.status === "connected" && c.id !== primaryConnection?.id) || null
+  // Determine primary and fallback connections from fallback manager
+  const fallbackState = linkFallbackManager.getState();
+  const primaryConnection = fallbackState.primaryConnectionId
+    ? connections.find(c => c.id === fallbackState.primaryConnectionId) || null
+    : connections.find(c => c.status === "connected") || null;
+  const fallbackConnection = fallbackState.isActive && fallbackState.fallbackConnectionId
+    ? connections.find(c => c.id === fallbackState.fallbackConnectionId) || null
     : null;
+
+  // Sync fallback state
+  useEffect(() => {
+    setIsFallbackActive(fallbackState.isActive);
+  }, [fallbackState.isActive]);
 
   // Add event to log
   const addEvent = useCallback((event: SimulationEvent) => {
