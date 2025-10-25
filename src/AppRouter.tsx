@@ -27,29 +27,8 @@ const SystemWatchdog = React.lazy(() => import("@/pages/dashboard/system-watchdo
 // 🔹 PATCH 94.0 - Logs Center
 const LogsCenter = React.lazy(() => import("@/modules/logs-center/LogsCenter"));
 
-// 🔹 PATCH 103.0 - Fleet Management
-const FleetManagement = React.lazy(() => import("../modules/fleet-management"));
-
-// 🔹 PATCH 104.0 - Route Optimizer
-const RouteOptimizer = React.lazy(() => import("../modules/route-optimizer"));
-
-// 🔹 PATCH 105.0 - Weather Station
-const WeatherStation = React.lazy(() => import("../modules/weather-station"));
-
 // 🔹 PATCH 106.0 - Crew Management
 const CrewManagement = React.lazy(() => import("@/pages/CrewManagement"));
-
-// 🔹 PATCH 107.0 - Predictive Maintenance Engine
-const MaintenanceEngine = React.lazy(() => import("../modules/maintenance-engine"));
-
-// 🔹 PATCH 108.0 - Security & Access Control
-const AccessControl = React.lazy(() => import("../modules/access-control"));
-
-// 🔹 PATCH 109.0 - SATCOM & AIS Integrations
-const CommunicationGateway = React.lazy(() => import("../modules/communication-gateway"));
-
-// 🔹 PATCH 110.0 - Offline Mode + Local Cache
-const OfflineCache = React.lazy(() => import("../modules/offline-cache"));
 
 export default function AppRouter() {
   return (
@@ -71,14 +50,7 @@ export default function AppRouter() {
         <Route path="/system-status" element={<SystemStatus />} />
         <Route path="/dashboard/system-watchdog" element={<SystemWatchdog />} />
         <Route path="/dashboard/logs-center" element={<LogsCenter />} />
-        <Route path="/fleet-management" element={<FleetManagement />} />
-        <Route path="/route-optimizer" element={<RouteOptimizer />} />
-        <Route path="/weather-station" element={<WeatherStation />} />
         <Route path="/crew-management" element={<CrewManagement />} />
-        <Route path="/maintenance-engine" element={<MaintenanceEngine />} />
-        <Route path="/access-control" element={<AccessControl />} />
-        <Route path="/communication-gateway" element={<CommunicationGateway />} />
-        <Route path="/offline-cache" element={<OfflineCache />} />
       </Routes>
     </Router>
   );
