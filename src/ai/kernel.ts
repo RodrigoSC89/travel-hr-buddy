@@ -579,102 +579,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       },
       timestamp: new Date()
     };
-  }
-};
-
-/**
- * Default AI response for modules without specific patterns
- */
-async function getDefaultResponse(module: string): Promise<AIContextResponse> {
-  return {
-    type: 'diagnosis',
-    message: `Módulo ${module} operacional. Sistema funcionando normalmente.`,
-    confidence: 85.0,
-    timestamp: new Date()
-  };
-}
-
-/**
- * Logs AI context call for audit
- */
-async function logAIContext(request: AIContextRequest, response: AIContextResponse) {
-  try {
-    const log = {
-      module: request.module,
-      user_id: request.userId,
-      action: request.action,
-      response_type: response.type,
-      confidence: response.confidence,
-      message: response.message,
-      timestamp: new Date().toISOString()
-    };
-    
-    // Store in localStorage for quick access
-    const logs = JSON.parse(localStorage.getItem('ai_context_logs') || '[]');
-    logs.push(log);
-    // Keep only last 100 logs
-    if (logs.length > 100) logs.shift();
-    localStorage.setItem('ai_context_logs', JSON.stringify(logs));
-  } catch (error) {
-    console.warn('Failed to log AI context:', error);
-  }
-}
-
-/**
- * Main AI Context Runner
- * Interprets user profile, history, module state, and logs to provide adaptive responses
- * 
- * @param request - AI context request with module and user information
- * @returns Promise with AI-generated response
- */
-export async function runAIContext(request: AIContextRequest): Promise<AIContextResponse> {
-  try {
-    // Get module-specific AI pattern or use default
-    const aiPattern = MODULE_AI_PATTERNS[request.module] || getDefaultResponse;
-    
-    // Generate AI response
-    const response = await aiPattern(request);
-    
-    // Log for audit
-    await logAIContext(request, response);
-    
-    return response;
-  } catch (error) {
-    console.error('AI Context error:', error);
-    
-    // Return fallback response
-    return {
-      type: 'diagnosis',
-      message: 'Sistema de IA temporariamente indisponível. Operações continuam normalmente.',
-      confidence: 50.0,
-      timestamp: new Date()
-    };
-  }
-}
-
-/**
- * Get AI context logs for a specific module
- */
-export function getAIContextLogs(module?: string): any[] {
-  try {
-    const logs = JSON.parse(localStorage.getItem('ai_context_logs') || '[]');
-    
-    if (module) {
-      return logs.filter((log: any) => log.module === module);
-    }
-    
-    return logs;
-  } catch (error) {
-    return [];
-  }
-}
-
-/**
- * Clear AI context logs
- */
-export function clearAIContextLogs() {
-  localStorage.removeItem('ai_context_logs');
-}
+  },
 
   // PATCH 111.0 - Inventory Hub AI Pattern
   'supply-analyzer': async (ctx) => {
@@ -866,8 +771,103 @@ export function clearAIContextLogs() {
       metadata: { activeRules, executionsToday, timeSaved, suggestedAutomations },
       timestamp: new Date()
     };
-  },
+  }
 };
+
+/**
+ * Default AI response for modules without specific patterns
+ */
+async function getDefaultResponse(module: string): Promise<AIContextResponse> {
+  return {
+    type: 'diagnosis',
+    message: `Módulo ${module} operacional. Sistema funcionando normalmente.`,
+    confidence: 85.0,
+    timestamp: new Date()
+  };
+}
+
+/**
+ * Logs AI context call for audit
+ */
+async function logAIContext(request: AIContextRequest, response: AIContextResponse) {
+  try {
+    const log = {
+      module: request.module,
+      user_id: request.userId,
+      action: request.action,
+      response_type: response.type,
+      confidence: response.confidence,
+      message: response.message,
+      timestamp: new Date().toISOString()
+    };
+    
+    // Store in localStorage for quick access
+    const logs = JSON.parse(localStorage.getItem('ai_context_logs') || '[]');
+    logs.push(log);
+    // Keep only last 100 logs
+    if (logs.length > 100) logs.shift();
+    localStorage.setItem('ai_context_logs', JSON.stringify(logs));
+  } catch (error) {
+    console.warn('Failed to log AI context:', error);
+  }
+}
+
+/**
+ * Main AI Context Runner
+ * Interprets user profile, history, module state, and logs to provide adaptive responses
+ * 
+ * @param request - AI context request with module and user information
+ * @returns Promise with AI-generated response
+ */
+export async function runAIContext(request: AIContextRequest): Promise<AIContextResponse> {
+  try {
+    // Get module-specific AI pattern or use default
+    const aiPattern = MODULE_AI_PATTERNS[request.module] || getDefaultResponse;
+    
+    // Generate AI response
+    const response = await aiPattern(request);
+    
+    // Log for audit
+    await logAIContext(request, response);
+    
+    return response;
+  } catch (error) {
+    console.error('AI Context error:', error);
+    
+    // Return fallback response
+    return {
+      type: 'diagnosis',
+      message: 'Sistema de IA temporariamente indisponível. Operações continuam normalmente.',
+      confidence: 50.0,
+      timestamp: new Date()
+    };
+  }
+}
+
+/**
+ * Get AI context logs for a specific module
+ */
+export function getAIContextLogs(module?: string): any[] {
+  try {
+    const logs = JSON.parse(localStorage.getItem('ai_context_logs') || '[]');
+    
+    if (module) {
+      return logs.filter((log: any) => log.module === module);
+    }
+    
+    return logs;
+  } catch (error) {
+    return [];
+  }
+}
+
+/**
+ * Clear AI context logs
+ */
+export function clearAIContextLogs() {
+  localStorage.removeItem('ai_context_logs');
+}
+
 
 /**
  * Get AI context statistics
