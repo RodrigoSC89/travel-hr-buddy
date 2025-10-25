@@ -61,17 +61,12 @@ export const useAIAssistant = (
       
       // Add conversation history if available
       if (context.history && context.history.length > 0) {
-        const recentHistory = context.history.slice(-5); // Last 5 interactions
+        const recentHistory = context.history.slice(-5);
         recentHistory.forEach((entry) => {
           if (entry.action && entry.result) {
-            messages.push(
-              { role: "user" as const, content: entry.action },
-              { role: "assistant" as const, content: entry.result }
-            );
+            messages.push({ role: "user" as const, content: entry.action });
           }
         });
-        // Add current query after history
-        messages.push({ role: "user" as const, content: input });
       }
       
       // Call AI engine

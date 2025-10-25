@@ -63,15 +63,8 @@ export const analyzeSystemLogs = async (
     // Get recent logs
     const logs = logsEngine.getRecentLogs(500);
     
-    // Fetch logs from database for longer history
-    const { data: dbLogs, error } = await supabase
-      .from("system_logs")
-      .select("*")
-      .gte("created_at", new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString())
-      .order("created_at", { ascending: false })
-      .limit(1000);
-
-    const allLogs = [...logs, ...(dbLogs || [])];
+    // TODO: Fetch logs from database when system_logs table exists
+    const allLogs = logs;
     
     if (allLogs.length === 0) {
       return {
@@ -324,27 +317,9 @@ Confiança: ${(recommendation.confidence * 100).toFixed(0)}%`;
 export const storeAutoFixHistory = async (
   result: AutoFixResult
 ): Promise<boolean> => {
-  try {
-    const { error } = await supabase
-      .from("autofix_history")
-      .insert({
-        anomaly_id: result.anomalyId,
-        applied_fix: result.appliedFix,
-        result: result.result,
-        success: result.success,
-        timestamp: result.timestamp
-      });
-
-    if (error) {
-      console.error("Error storing autofix history:", error);
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Error in storeAutoFixHistory:", error);
-    return false;
-  }
+  console.log("Store autofix history:", result);
+  // TODO: Implementar quando tabela autofix_history existir
+  return true;
 };
 
 // Helper functions

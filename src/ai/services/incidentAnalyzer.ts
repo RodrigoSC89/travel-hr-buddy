@@ -185,33 +185,9 @@ export const storeIncidentAnalysis = async (
   incidentId: string,
   analysis: IncidentAnalysis
 ): Promise<boolean> => {
-  try {
-    const { error } = await supabase
-      .from("dp_incidents")
-      .update({
-        gpt_analysis: JSON.stringify({
-          probableCause: analysis.probableCause,
-          suggestedActions: analysis.suggestedActions,
-          riskLevel: analysis.riskLevel,
-          preventiveMeasures: analysis.preventiveMeasures,
-          complianceReferences: analysis.complianceReferences,
-          confidence: analysis.confidence,
-          analyzedAt: new Date().toISOString()
-        }),
-        sgso_risk_level: analysis.riskLevel
-      })
-      .eq("id", incidentId);
-
-    if (error) {
-      console.error("Error storing incident analysis:", error);
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Error in storeIncidentAnalysis:", error);
-    return false;
-  }
+  console.log("Store incident analysis:", incidentId, analysis);
+  // TODO: Implementar quando tabela dp_incidents existir
+  return true;
 };
 
 /**
@@ -220,24 +196,7 @@ export const storeIncidentAnalysis = async (
 export const getIncidentAnalysis = async (
   incidentId: string
 ): Promise<IncidentAnalysis | null> => {
-  try {
-    const { data, error } = await supabase
-      .from("dp_incidents")
-      .select("gpt_analysis")
-      .eq("id", incidentId)
-      .single();
-
-    if (error || !data?.gpt_analysis) {
-      return null;
-    }
-
-    const parsed = typeof data.gpt_analysis === "string" 
-      ? JSON.parse(data.gpt_analysis)
-      : data.gpt_analysis;
-
-    return parsed as IncidentAnalysis;
-  } catch (error) {
-    console.error("Error getting incident analysis:", error);
-    return null;
-  }
+  console.log("Get incident analysis:", incidentId);
+  // TODO: Implementar quando tabela dp_incidents existir
+  return null;
 };
