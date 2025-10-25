@@ -137,7 +137,7 @@ export function StressTestDashboard() {
   };
 
   const getSuccessRate = (metric: StressTestMetrics) => {
-    if (metric.totalRequests === 0) return 0;
+    if (metric.totalRequests === 0) return "0";
     return ((metric.successfulRequests / metric.totalRequests) * 100).toFixed(2);
   };
 
