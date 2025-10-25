@@ -52,6 +52,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTenant } from "@/contexts/TenantContext";
 import { useToast } from "@/hooks/use-toast";
 import { EnhancedDashboardFilters } from "./enhanced-dashboard-filters";
+import nautilusLogoNew from "@/assets/nautilus-logo-new.png";
 
 import ProfessionalKPICards from "@/components/ui/professional-kpi-cards";
 import SystemStatusDashboard from "@/components/ui/system-status-dashboard";
@@ -373,11 +374,15 @@ const EnhancedUnifiedDashboard = () => {
               <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                 {/* Left Section - Branding */}
                 <div className="flex items-start gap-6 flex-1">
-                  {/* Icon with Glow */}
+                  {/* Logo Nautilus com Glow */}
                   <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-ocean rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity" />
-                    <div className="relative p-5 rounded-2xl bg-gradient-ocean shadow-glow">
-                      <Anchor className="w-12 h-12 text-white" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-azure-400 to-azure-600 rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative p-4 rounded-2xl bg-white dark:bg-azure-900/50 shadow-glow backdrop-blur-sm">
+                      <img 
+                        src={nautilusLogoNew} 
+                        alt="Nautilus One"
+                        className="w-14 h-14 object-contain group-hover:scale-110 transition-transform duration-300"
+                      />
                     </div>
                   </div>
 
