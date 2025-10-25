@@ -9,6 +9,7 @@ import { SmartLayout } from "./components/layout/SmartLayout";
 import { NAVIGATION, SuspenseFallback } from "@/config/navigation";
 import { initializeMonitoring } from "@/lib/monitoring/init";
 import { CommandPalette } from "@/components/CommandPalette";
+import { OfflineBanner } from "@/components/OfflineBanner";
 import { systemWatchdog } from "@/ai/watchdog";
 // Removed safeLazyImport - using React.lazy directly
 
@@ -255,6 +256,7 @@ function App() {
             <QueryClientProvider client={queryClient}>
               <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                 <CommandPalette />
+                <OfflineBanner />
                 <RedirectHandler />
                 <React.Suspense fallback={<LoadingSpinner />}>
                   <Routes>
