@@ -27,6 +27,15 @@ const SystemWatchdog = React.lazy(() => import("@/pages/dashboard/system-watchdo
 // 🔹 PATCH 94.0 - Logs Center
 const LogsCenter = React.lazy(() => import("@/modules/logs-center/LogsCenter"));
 
+// 🔹 PATCH 103.0 - Fleet Management
+const FleetManagement = React.lazy(() => import("@/modules/fleet-management"));
+
+// 🔹 PATCH 104.0 - Route Optimizer
+const RouteOptimizer = React.lazy(() => import("@/modules/route-optimizer"));
+
+// 🔹 PATCH 105.0 - Weather Station
+const WeatherStation = React.lazy(() => import("@/modules/weather-station"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -47,6 +56,9 @@ export default function AppRouter() {
         <Route path="/system-status" element={<SystemStatus />} />
         <Route path="/dashboard/system-watchdog" element={<SystemWatchdog />} />
         <Route path="/dashboard/logs-center" element={<LogsCenter />} />
+        <Route path="/fleet-management" element={<FleetManagement />} />
+        <Route path="/route-optimizer" element={<RouteOptimizer />} />
+        <Route path="/weather-station" element={<WeatherStation />} />
       </Routes>
     </Router>
   );
