@@ -211,19 +211,19 @@ export const useSyncManager = (): SyncManagerState & SyncManagerActions => {
    * Auto-sync interval (every 5 minutes if online)
    */
   useEffect(() => {
-    autoSyncIntervalRef.current = setInterval(async () => {
-      if (state.isOnline && state.networkQuality === 'good' && state.queueSize > 0) {
+    const intervalId = setInterval(async () => {
+      const currentQueueSize = await syncQueue.getQueueSize();
+      
+      if (state.isOnline && state.networkQuality === 'good' && currentQueueSize > 0) {
         console.log('Auto-sync check: syncing pending changes...');
         await syncNow();
       }
     }, 5 * 60 * 1000); // 5 minutes
 
     return () => {
-      if (autoSyncIntervalRef.current) {
-        clearInterval(autoSyncIntervalRef.current);
-      }
+      clearInterval(intervalId);
     };
-  }, [state.isOnline, state.networkQuality, state.queueSize, syncNow]);
+  }, [state.isOnline, state.networkQuality, syncNow]);
 
   /**
    * Initial queue size update

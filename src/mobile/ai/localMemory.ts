@@ -29,9 +29,14 @@ class LocalMemory {
    * Store a conversation message
    */
   async storeMessage(message: Omit<ConversationMessage, 'id' | 'timestamp'>): Promise<string> {
+    // Generate UUID if available, otherwise fallback to timestamp-based ID
+    const uuid = typeof crypto !== 'undefined' && crypto.randomUUID 
+      ? crypto.randomUUID()
+      : `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
     const fullMessage: ConversationMessage = {
       ...message,
-      id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: uuid,
       timestamp: Date.now()
     };
 

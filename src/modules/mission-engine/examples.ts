@@ -26,7 +26,7 @@ export const setupAutoCompleteChecklistMission = () => {
         
         const { data: overdueChecklists } = await supabase
           .from('checklists')
-          .select('*')
+          .select('id, title, items, created_at, completed')
           .eq('completed', false)
           .lt('created_at', oneHourAgo);
 
@@ -42,7 +42,7 @@ export const setupAutoCompleteChecklistMission = () => {
       
       const { data: overdueChecklists } = await supabase
         .from('checklists')
-        .select('*')
+        .select('id, title, items, created_at, completed')
         .eq('completed', false)
         .lt('created_at', oneHourAgo);
 
@@ -148,7 +148,7 @@ export const setupAutoEscalateIncidentMission = () => {
       
       const { data: criticalIncidents } = await supabase
         .from('incidents')
-        .select('*')
+        .select('id, severity, status, created_at, acknowledged_at')
         .eq('severity', 'critical')
         .eq('status', 'open')
         .is('acknowledged_at', null)
@@ -161,7 +161,7 @@ export const setupAutoEscalateIncidentMission = () => {
       
       const { data: incidents } = await supabase
         .from('incidents')
-        .select('*')
+        .select('id, title, severity, status, created_at')
         .eq('severity', 'critical')
         .eq('status', 'open')
         .is('acknowledged_at', null)

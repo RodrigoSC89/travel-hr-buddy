@@ -420,13 +420,18 @@ class NavigationCopilot {
   }
 
   private getMockWeatherData(location: Coordinates): WeatherData {
+    // Add some variance based on location for more realistic testing
+    const latFactor = Math.abs(location.lat) / 90; // 0 to 1
+    const baseTemp = 20 - (latFactor * 30); // Cooler at higher latitudes
+    const windVariance = Math.random() * 10;
+    
     return {
       location,
-      temperature: 20,
-      windSpeed: 10,
-      windDirection: 180,
-      visibility: 10,
-      conditions: 'Clear',
+      temperature: Math.round(baseTemp + (Math.random() * 10 - 5)),
+      windSpeed: 10 + windVariance,
+      windDirection: Math.floor(Math.random() * 360),
+      visibility: 8 + Math.random() * 4,
+      conditions: Math.random() > 0.7 ? 'Partly Cloudy' : 'Clear',
       severity: 'safe'
     };
   }

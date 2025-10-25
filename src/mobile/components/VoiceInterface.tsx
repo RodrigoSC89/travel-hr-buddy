@@ -8,9 +8,54 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
-import { intentParser, Intent } from './intentParser';
-import { localMemory } from './localMemory';
+import { intentParser, Intent } from '../ai/intentParser';
+import { localMemory } from '../ai/localMemory';
 import { toast } from 'sonner';
+
+// Type declarations for Web Speech API
+interface SpeechRecognitionResult {
+  isFinal: boolean;
+  [index: number]: {
+    transcript: string;
+  };
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+}
+
+interface SpeechRecognitionEvent {
+  resultIndex: number;
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  onstart: (() => void) | null;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: {
+      new(): SpeechRecognition;
+    };
+    webkitSpeechRecognition: {
+      new(): SpeechRecognition;
+    };
+  }
+}
 
 interface VoiceInterfaceProps {
   onIntentDetected?: (intent: Intent) => void;
@@ -29,7 +74,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   const [detectedIntent, setDetectedIntent] = useState<Intent | null>(null);
   const [isSupported, setIsSupported] = useState(true);
 
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const synthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   /**
@@ -37,16 +82,16 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    */
   useEffect(() => {
     // Check if speech recognition is supported
-    const SpeechRecognition = (window as any).SpeechRecognition || 
-                             (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionClass = window.SpeechRecognition || 
+                                   window.webkitSpeechRecognition;
     
-    if (!SpeechRecognition) {
+    if (!SpeechRecognitionClass) {
       setIsSupported(false);
       console.warn('Speech recognition not supported in this browser');
       return;
     }
 
-    const recognition = new SpeechRecognition();
+    const recognition = new SpeechRecognitionClass();
     recognition.continuous = false;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
@@ -56,7 +101,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       console.log('Voice recognition started');
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event) => {
       const current = event.resultIndex;
       const transcriptResult = event.results[current][0].transcript;
       
@@ -69,7 +114,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       }
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
       

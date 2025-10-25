@@ -19,19 +19,15 @@ class SQLiteStorage {
 
   /**
    * Initialize SQLite database
+   * Note: Using IndexedDB as universal storage for web and mobile compatibility
    */
   async initialize(): Promise<void> {
     if (this.isInitialized) return;
 
-    // For web compatibility, use IndexedDB as fallback
-    if (typeof window !== 'undefined' && !('sqlitePlugin' in window)) {
-      console.log('SQLite not available, using IndexedDB fallback');
-      this.isInitialized = true;
-      return;
-    }
-
+    // Using IndexedDB for cross-platform compatibility
+    // In production mobile apps, this can be replaced with native SQLite plugin
     this.isInitialized = true;
-    console.log('SQLite storage initialized');
+    console.log('Storage initialized (IndexedDB)');
   }
 
   /**

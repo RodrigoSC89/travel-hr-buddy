@@ -9,6 +9,16 @@ import { SyncQueueItem } from '../types';
 
 type SyncPriority = 'high' | 'medium' | 'low';
 
+interface SyncRecord {
+  id: string;
+  table: string;
+  action: 'create' | 'update' | 'delete';
+  data: Record<string, any>;
+  timestamp: number;
+  synced: boolean;
+  priority: SyncPriority;
+}
+
 interface SyncOptions {
   maxRetries?: number;
   batchSize?: number;
@@ -105,7 +115,7 @@ class SyncQueue {
   /**
    * Sync a single record to Supabase
    */
-  private async syncRecord(record: any): Promise<void> {
+  private async syncRecord(record: SyncRecord): Promise<void> {
     const { table, action, data } = record;
     
     // Type-safe access to dynamic tables
