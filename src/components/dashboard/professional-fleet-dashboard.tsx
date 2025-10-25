@@ -26,6 +26,8 @@ import {
 } from 'lucide-react';
 import { LineChart, Line, AreaChart, Area, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { motion } from 'framer-motion';
+import { ProfessionalHeader } from './professional-header';
+import { ProfessionalKPICard } from './professional-kpi-card';
 
 const vessels = [
   { 
@@ -197,78 +199,52 @@ export function ProfessionalFleetDashboard() {
   const avgFuel = (vessels.reduce((acc, v) => acc + v.fuel, 0) / totalVessels).toFixed(1);
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-4xl font-bold font-playfair bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-            Gestão de Frota
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Monitoramento em tempo real e análise operacional
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="gap-2 px-3 py-1.5">
-            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="font-mono text-xs">Live</span>
-          </Badge>
-          <Button size="sm" className="gap-2">
-            <Navigation className="h-4 w-4" />
-            Rastrear Frota
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-muted/20 min-h-screen">
+      <ProfessionalHeader
+        title="Gestão de Frota"
+        subtitle="Monitoramento em tempo real e análise operacional de todas as embarcações"
+        showLogo={true}
+        showRealTime={true}
+      />
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-blue-500">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total de Embarcações</p>
-                <p className="text-3xl font-bold font-playfair">{totalVessels}</p>
-              </div>
-              <Ship className="h-8 w-8 text-blue-500" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-l-4 border-l-green-500">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Em Operação</p>
-                <p className="text-3xl font-bold font-playfair">{operationalVessels}</p>
-              </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-l-4 border-l-purple-500">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Eficiência Média</p>
-                <p className="text-3xl font-bold font-playfair">{avgEfficiency}%</p>
-              </div>
-              <TrendingUp className="h-8 w-8 text-purple-500" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-l-4 border-l-orange-500">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Combustível Médio</p>
-                <p className="text-3xl font-bold font-playfair">{avgFuel}%</p>
-              </div>
-              <Fuel className="h-8 w-8 text-orange-500" />
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <ProfessionalKPICard
+          title="Total de Embarcações"
+          value={totalVessels.toString()}
+          icon={Ship}
+          color="blue"
+          delay={0}
+        />
+        <ProfessionalKPICard
+          title="Em Operação"
+          value={operationalVessels.toString()}
+          icon={CheckCircle}
+          color="green"
+          change={8.3}
+          trend="status operacional"
+          delay={0.1}
+        />
+        <ProfessionalKPICard
+          title="Eficiência Média"
+          value={avgEfficiency}
+          suffix="%"
+          icon={Gauge}
+          color="purple"
+          change={5.2}
+          trend="performance"
+          delay={0.2}
+        />
+        <ProfessionalKPICard
+          title="Combustível Médio"
+          value={avgFuel}
+          suffix="%"
+          icon={Fuel}
+          color="orange"
+          change={-3.5}
+          trend="nível de reserva"
+          delay={0.3}
+        />
       </div>
 
       {/* Main Content */}

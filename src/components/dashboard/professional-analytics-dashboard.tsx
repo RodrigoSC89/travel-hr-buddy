@@ -39,6 +39,8 @@ import {
   Cell
 } from 'recharts';
 import { motion } from 'framer-motion';
+import { ProfessionalHeader } from './professional-header';
+import { ProfessionalKPICard } from './professional-kpi-card';
 
 const revenueData = [
   { month: 'Jan', revenue: 45000, costs: 28000, profit: 17000, transactions: 450 },
