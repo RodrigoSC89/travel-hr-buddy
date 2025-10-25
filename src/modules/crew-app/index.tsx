@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useSync } from "./hooks/useSync";
+import { SyncStatus } from "./components/SyncStatus";
 
 interface ChecklistItem {
   id: string;
@@ -58,8 +60,17 @@ const CrewApp = () => {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
   const [attendance, setAttendance] = useState<Attendance[]>([]);
-  const [pendingSync, setPendingSync] = useState(0);
   const { toast } = useToast();
+
+  // Use the sync hook
+  const {
+    pendingCount,
+    isSyncing,
+    lastSyncTime,
+    saveLocally,
+    syncToSupabase,
+    clearPending,
+  } = useSync({ autoSync: true, syncInterval: 30000 });
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -74,7 +85,7 @@ const CrewApp = () => {
         title: "Conexão Restaurada",
         description: "Sincronizando dados...",
       });
-      syncData();
+      syncToSupabase(); // Use hook's sync function
     };
     
     const handleOffline = () => {
@@ -93,7 +104,7 @@ const CrewApp = () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
-  }, []);
+  }, [toast, syncToSupabase]);
 
   // Initialize checklists
   useEffect(() => {
@@ -149,8 +160,6 @@ const CrewApp = () => {
       if (savedChecklists) setChecklists(JSON.parse(savedChecklists));
       if (savedReports) setReports(JSON.parse(savedReports));
       if (savedAttendance) setAttendance(JSON.parse(savedAttendance));
-
-      calculatePendingSync();
     } catch (error) {
       console.error("Error loading local data:", error);
     }
@@ -162,12 +171,6 @@ const CrewApp = () => {
     } catch (error) {
       console.error("Error saving local data:", error);
     }
-  };
-
-  const calculatePendingSync = () => {
-    const unsyncedReports = reports.filter(r => !r.synced).length;
-    const unsyncedAttendance = attendance.filter(a => !a.synced).length;
-    setPendingSync(unsyncedReports + unsyncedAttendance);
   };
 
   const toggleChecklistItem = (checklistId: string, itemId: string) => {
@@ -223,7 +226,7 @@ const CrewApp = () => {
     });
   };
 
-  const submitReport = (type: string, title: string, description: string) => {
+  const submitReport = async (type: string, title: string, description: string) => {
     const newReport: Report = {
       id: `report-${Date.now()}`,
       type,
@@ -236,19 +239,17 @@ const CrewApp = () => {
     const updatedReports = [newReport, ...reports];
     setReports(updatedReports);
     saveLocalData("reports", updatedReports);
-    calculatePendingSync();
+
+    // Save to sync queue
+    await saveLocally(newReport, "report");
 
     toast({
       title: "Relatório Salvo",
       description: isOnline ? "Sincronizando..." : "Será sincronizado quando conectar",
     });
-
-    if (isOnline) {
-      syncData();
-    }
   };
 
-  const registerAttendance = () => {
+  const registerAttendance = async () => {
     const newAttendance: Attendance = {
       id: `attendance-${Date.now()}`,
       crewMemberId: "current-user-id",
@@ -261,38 +262,14 @@ const CrewApp = () => {
     const updatedAttendance = [newAttendance, ...attendance];
     setAttendance(updatedAttendance);
     saveLocalData("attendance", updatedAttendance);
-    calculatePendingSync();
+
+    // Save to sync queue
+    await saveLocally(newAttendance, "attendance");
 
     toast({
       title: "Presença Registrada",
       description: new Date().toLocaleString(),
     });
-
-    if (isOnline) {
-      syncData();
-    }
-  };
-
-  const syncData = async () => {
-    if (!isOnline) return;
-
-    // TODO: Replace with actual API implementation in production
-    // Simulate API sync - in production, replace with actual API calls
-    setTimeout(() => {
-      const syncedReports = reports.map(r => ({ ...r, synced: true }));
-      const syncedAttendance = attendance.map(a => ({ ...a, synced: true }));
-
-      setReports(syncedReports);
-      setAttendance(syncedAttendance);
-      saveLocalData("reports", syncedReports);
-      saveLocalData("attendance", syncedAttendance);
-      setPendingSync(0);
-
-      toast({
-        title: "Sincronização Completa",
-        description: "Todos os dados foram enviados",
-      });
-    }, 2000);
   };
 
   return (
@@ -320,9 +297,9 @@ const CrewApp = () => {
                   Offline
                 </Badge>
               )}
-              {pendingSync > 0 && (
+              {pendingCount > 0 && (
                 <Badge variant="secondary">
-                  {pendingSync} pendente(s)
+                  {pendingCount} pendente(s)
                 </Badge>
               )}
             </div>
@@ -339,11 +316,24 @@ const CrewApp = () => {
 
       <div className="max-w-4xl mx-auto p-4">
         <Tabs defaultValue="checklists" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-800">
+          <TabsList className="grid w-full grid-cols-4 bg-slate-800">
             <TabsTrigger value="checklists">Checklists</TabsTrigger>
             <TabsTrigger value="reports">Relatórios</TabsTrigger>
             <TabsTrigger value="attendance">Presença</TabsTrigger>
+            <TabsTrigger value="sync">Sync</TabsTrigger>
           </TabsList>
+
+          {/* Sync Tab - NEW */}
+          <TabsContent value="sync" className="space-y-4">
+            <SyncStatus
+              pendingCount={pendingCount}
+              isSyncing={isSyncing}
+              lastSyncTime={lastSyncTime}
+              isOnline={isOnline}
+              onSync={syncToSupabase}
+              onClear={clearPending}
+            />
+          </TabsContent>
 
           {/* Checklists Tab */}
           <TabsContent value="checklists" className="space-y-4">

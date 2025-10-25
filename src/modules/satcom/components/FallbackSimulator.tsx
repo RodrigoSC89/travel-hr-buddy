@@ -1,70 +1,51 @@
 /**
  * Fallback Simulator Component
  * Simulates and tests fallback scenarios for offline connectivity
- * Patch 142.0
+ * Patch 142.1 - Enhanced with actual simulation controls
  */
 
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PlayCircle, StopCircle, RotateCw, Power } from "lucide-react";
+import { PlayCircle, StopCircle, RotateCw, Power, XCircle, CheckCircle } from "lucide-react";
 import type { SatcomConnection } from "../index";
+import type { SimulationEvent } from "../simulator";
 
 interface FallbackSimulatorProps {
   connections: SatcomConnection[];
+  onDisconnect?: (connectionId: string) => void;
+  onReconnect?: (connectionId: string) => void;
+  simulationEvents?: SimulationEvent[];
+  onClearEvents?: () => void;
 }
 
-export const FallbackSimulator: React.FC<FallbackSimulatorProps> = ({ connections }) => {
-  const [isSimulating, setIsSimulating] = useState(false);
-  const [simulationLog, setSimulationLog] = useState<string[]>([]);
-  const [currentStep, setCurrentStep] = useState(0);
+export const FallbackSimulator: React.FC<FallbackSimulatorProps> = ({ 
+  connections,
+  onDisconnect,
+  onReconnect,
+  simulationEvents = [],
+  onClearEvents,
+}) => {
+  const [selectedConnection, setSelectedConnection] = useState<string | null>(null);
 
-  const simulationSteps = [
-    'Iniciando simulação de fallback...',
-    'Desconectando Starlink Maritime...',
-    'Tentando fallback para Iridium Certus...',
-    'Iridium conectado - modo degradado ativo',
-    'Velocidade reduzida para 700 Kbps',
-    'Sistema operando em modo de emergência',
-  ];
-
-  const startSimulation = () => {
-    setIsSimulating(true);
-    setSimulationLog([]);
-    setCurrentStep(0);
-
-    const interval = setInterval(() => {
-      setCurrentStep((prev) => {
-        if (prev >= simulationSteps.length - 1) {
-          clearInterval(interval);
-          setIsSimulating(false);
-          return prev;
-        }
-        setSimulationLog((log) => [...log, simulationSteps[prev]]);
-        return prev + 1;
-      });
-    }, 1500);
+  const handleDisconnect = () => {
+    if (selectedConnection && onDisconnect) {
+      onDisconnect(selectedConnection);
+    }
   };
 
-  const stopSimulation = () => {
-    setIsSimulating(false);
-    setSimulationLog((log) => [...log, 'Simulação interrompida pelo usuário']);
+  const handleReconnect = () => {
+    if (selectedConnection && onReconnect) {
+      onReconnect(selectedConnection);
+    }
   };
 
-  const resetSimulation = () => {
-    setIsSimulating(false);
-    setSimulationLog([]);
-    setCurrentStep(0);
-  };
-
-  const getPriorityOrder = () => {
-    const priority = [
-      { name: 'Starlink Maritime', score: 10 },
-      { name: 'Iridium Certus 700', score: 8 },
-      { name: 'Inmarsat FleetBroadband', score: 6 },
-    ];
-    return priority;
+  const handleReset = () => {
+    setSelectedConnection(null);
+    if (onClearEvents) {
+      onClearEvents();
+    }
   };
 
   return (
@@ -77,19 +58,37 @@ export const FallbackSimulator: React.FC<FallbackSimulatorProps> = ({ connection
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <div className="text-sm font-medium mb-2">Ordem de Prioridade</div>
+          <div className="text-sm font-medium mb-2">Selecione uma Conexão</div>
           <div className="space-y-2">
-            {getPriorityOrder().map((conn, index) => (
+            {connections.map((conn) => (
               <div
-                key={conn.name}
-                className="flex items-center justify-between p-2 border rounded"
+                key={conn.id}
+                className={`flex items-center justify-between p-3 border rounded cursor-pointer transition-colors ${
+                  selectedConnection === conn.id
+                    ? "border-primary bg-primary/10"
+                    : "hover:bg-accent"
+                }`}
+                onClick={() => setSelectedConnection(conn.id)}
               >
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline">{index + 1}</Badge>
-                  <span className="text-sm">{conn.name}</span>
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`w-3 h-3 rounded-full ${
+                      conn.status === "connected"
+                        ? "bg-green-500"
+                        : conn.status === "degraded"
+                        ? "bg-yellow-500"
+                        : "bg-red-500"
+                    }`}
+                  />
+                  <div>
+                    <span className="text-sm font-medium">{conn.name}</span>
+                    <Badge variant="outline" className="ml-2 text-xs">
+                      {conn.provider}
+                    </Badge>
+                  </div>
                 </div>
-                <span className="text-xs text-muted-foreground">
-                  Score: {conn.score}/10
+                <span className="text-xs text-muted-foreground capitalize">
+                  {conn.status}
                 </span>
               </div>
             ))}
@@ -97,43 +96,48 @@ export const FallbackSimulator: React.FC<FallbackSimulatorProps> = ({ connection
         </div>
 
         <div className="flex gap-2">
-          {!isSimulating ? (
-            <Button onClick={startSimulation} className="flex-1">
-              <PlayCircle className="h-4 w-4 mr-2" />
-              Iniciar Simulação
-            </Button>
-          ) : (
-            <Button onClick={stopSimulation} variant="destructive" className="flex-1">
-              <StopCircle className="h-4 w-4 mr-2" />
-              Parar Simulação
-            </Button>
-          )}
-          <Button onClick={resetSimulation} variant="outline">
+          <Button
+            onClick={handleDisconnect}
+            disabled={!selectedConnection || connections.find(c => c.id === selectedConnection)?.status === "disconnected"}
+            variant="destructive"
+            className="flex-1"
+          >
+            <XCircle className="h-4 w-4 mr-2" />
+            Desconectar
+          </Button>
+          <Button
+            onClick={handleReconnect}
+            disabled={!selectedConnection || connections.find(c => c.id === selectedConnection)?.status === "connected"}
+            variant="default"
+            className="flex-1"
+          >
+            <CheckCircle className="h-4 w-4 mr-2" />
+            Reconectar
+          </Button>
+          <Button onClick={handleReset} variant="outline">
             <RotateCw className="h-4 w-4" />
           </Button>
         </div>
 
-        {simulationLog.length > 0 && (
+        {simulationEvents.length > 0 && (
           <div className="bg-muted rounded-lg p-4 space-y-1">
             <div className="text-xs font-medium mb-2 text-muted-foreground">
               Log de Simulação
             </div>
-            {simulationLog.map((log, index) => (
+            {simulationEvents.map((event, index) => (
               <div key={index} className="text-xs font-mono">
                 <span className="text-muted-foreground">
-                  [{new Date().toLocaleTimeString('pt-BR')}]
+                  [{new Date(event.timestamp).toLocaleTimeString('pt-BR')}]
                 </span>{' '}
-                {log}
+                <span className={
+                  event.type === "disconnect" ? "text-red-500" :
+                  event.type === "fallback_activated" ? "text-orange-500" :
+                  "text-green-500"
+                }>
+                  {event.message}
+                </span>
               </div>
             ))}
-            {isSimulating && (
-              <div className="text-xs font-mono animate-pulse">
-                <span className="text-muted-foreground">
-                  [{new Date().toLocaleTimeString('pt-BR')}]
-                </span>{' '}
-                Processando...
-              </div>
-            )}
           </div>
         )}
 
