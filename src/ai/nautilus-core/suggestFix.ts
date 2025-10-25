@@ -73,7 +73,7 @@ function buildPrompt(findings: Finding[], analysis: AnalysisResult): string {
     `${i + 1}. [${f.severity.toUpperCase()}] ${f.message}\n   Pattern: ${f.pattern}\n   Context: ${f.context || "N/A"}`
   ).join("\n\n");
 
-  return `You are analyzing a CI/CD failure in the Nautilus One project (Travel HR Buddy).
+  return `You are analyzing a CI/CD failure in the Nautilus One project.
 
 **Workflow:** ${analysis.workflowName}
 **Run ID:** ${analysis.workflowRun}

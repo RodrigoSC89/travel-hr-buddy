@@ -162,7 +162,7 @@ export class PEOReport {
         { align: "center" }
       );
       doc.text(
-        "Gerado por Travel HR Buddy - Sistema PEO-DP Inteligente",
+        "Gerado por Nautilus One - Sistema PEO-DP Inteligente",
         pageWidth / 2,
         doc.internal.pageSize.getHeight() - 5,
         { align: "center" }
@@ -244,7 +244,7 @@ export class PEOReport {
     }
 
     sections.push("\n---");
-    sections.push("*Gerado por Travel HR Buddy - Sistema PEO-DP Inteligente*");
+    sections.push("*Gerado por Nautilus One - Sistema PEO-DP Inteligente*");
 
     return sections.join("\n");
   }

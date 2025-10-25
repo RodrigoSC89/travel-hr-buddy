@@ -180,7 +180,7 @@ export const exportPerformancePDF = async (data: PerformanceReportData): Promise
 
       <!-- Footer -->
       <div style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #e5e7eb; text-align: center; color: #9ca3af; font-size: 11px;">
-        <p style="margin: 0;">Sistema Nautilus One - Travel HR Buddy</p>
+        <p style="margin: 0;">Sistema Nautilus One</p>
         <p style="margin: 5px 0 0 0;">PATCH 95.0 - Performance Dashboard Module</p>
         <p style="margin: 5px 0 0 0;">Relatório gerado automaticamente com análise de IA</p>
       </div>

@@ -2,7 +2,7 @@
  * Comprehensive API Key Validation Utility
  * 
  * This utility tests and validates all external API keys and integrations
- * configured in the Nautilus One Travel HR Buddy system.
+ * configured in the Nautilus One system.
  * 
  * Usage:
  *   import { validateAllAPIKeys } from '@/utils/api-key-validator';
