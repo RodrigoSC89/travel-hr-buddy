@@ -113,3 +113,7 @@ src/ai/nautilus-core/memory/memoryDB.json
 # PATCH 83.0 - Diagnostic system artifacts
 dev/logs/*.json
 src/modules/registry.backup.ts
+
+# PATCH 136.0 - Capacitor mobile platforms
+android/
+ios/
