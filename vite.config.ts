@@ -4,6 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { VitePWA } from "vite-plugin-pwa";
+import { createHtmlPlugin } from "vite-plugin-html";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -21,6 +22,32 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(), 
       mode === "development" && componentTagger(),
+      // PATCH 130.0: Preload critical assets
+      createHtmlPlugin({
+        minify: mode === "production",
+        inject: {
+          tags: [
+            // Preload critical fonts
+            {
+              tag: 'link',
+              attrs: {
+                rel: 'preconnect',
+                href: 'https://fonts.googleapis.com',
+              },
+              injectTo: 'head-prepend',
+            },
+            {
+              tag: 'link',
+              attrs: {
+                rel: 'preconnect',
+                href: 'https://fonts.gstatic.com',
+                crossorigin: 'anonymous',
+              },
+              injectTo: 'head-prepend',
+            },
+          ],
+        },
+      }),
       ...(mode === "production" && process.env.SENTRY_AUTH_TOKEN ? [sentryVitePlugin({
         org: process.env.SENTRY_ORG,
         project: process.env.SENTRY_PROJECT,
