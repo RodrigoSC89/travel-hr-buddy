@@ -45,6 +45,19 @@ export const HealthCheckIn = () => {
 
       if (error) throw error;
 
+      // Save to mood history for dashboard
+      const moodHistory = JSON.parse(localStorage.getItem("crew_mood_history") || "[]");
+      moodHistory.push({
+        date: new Date(),
+        stress: formData.stress_level,
+        energy: formData.energy_level,
+        sleep: formData.sleep_quality,
+        mood: formData.mood,
+      });
+      // Keep only last 30 days
+      const last30Days = moodHistory.slice(-30);
+      localStorage.setItem("crew_mood_history", JSON.stringify(last30Days));
+
       toast({
         title: "Check-in registrado",
         description: "Seus dados de bem-estar foram salvos com sucesso",
