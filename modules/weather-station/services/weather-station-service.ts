@@ -10,6 +10,7 @@ import type {
   WeatherLocation,
   CurrentConditions,
   WeatherForecastHour,
+  WeatherSeverity,
 } from "../types";
 
 /**
@@ -174,16 +175,18 @@ export async function saveWeatherData(
 function calculateSeverity(
   current: CurrentConditions,
   forecast: WeatherForecastHour[]
-): string {
+): WeatherSeverity {
   // Check current conditions
   if (current.wind_speed > 25) return "severe";
   if (current.wind_speed > 20) return "high";
   if (current.wind_speed > 15) return "moderate";
 
   // Check forecast for severe conditions
-  const maxWindSpeed = Math.max(...forecast.map((f) => f.wind_speed));
-  if (maxWindSpeed > 25) return "high";
-  if (maxWindSpeed > 20) return "moderate";
+  if (forecast.length > 0) {
+    const maxWindSpeed = Math.max(...forecast.map((f) => f.wind_speed));
+    if (maxWindSpeed > 25) return "high";
+    if (maxWindSpeed > 20) return "moderate";
+  }
 
   // Check visibility
   if (current.visibility < 1) return "high";
