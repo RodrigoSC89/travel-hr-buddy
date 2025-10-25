@@ -6922,6 +6922,159 @@ export type Database = {
           },
         ]
       }
+      workspace_documents: {
+        Row: {
+          channel_id: string | null
+          content: Json | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          title: string
+          updated_at: string | null
+          updated_by: string | null
+          version: number | null
+          yjs_state: string | null
+        }
+        Insert: {
+          channel_id?: string | null
+          content?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          title?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          version?: number | null
+          yjs_state?: string | null
+        }
+        Update: {
+          channel_id?: string | null
+          content?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          title?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          version?: number | null
+          yjs_state?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_documents_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "workspace_channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspace_events: {
+        Row: {
+          channel_id: string | null
+          color: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          end_time: string
+          event_type: string | null
+          id: string
+          is_all_day: boolean | null
+          location: string | null
+          recurrence_rule: string | null
+          start_time: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          channel_id?: string | null
+          color?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_time: string
+          event_type?: string | null
+          id?: string
+          is_all_day?: boolean | null
+          location?: string | null
+          recurrence_rule?: string | null
+          start_time: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          channel_id?: string | null
+          color?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_time?: string
+          event_type?: string | null
+          id?: string
+          is_all_day?: boolean | null
+          location?: string | null
+          recurrence_rule?: string | null
+          start_time?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_events_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "workspace_channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspace_files: {
+        Row: {
+          channel_id: string | null
+          file_name: string
+          file_size: number | null
+          file_type: string | null
+          id: string
+          storage_path: string
+          thumbnail_path: string | null
+          updated_at: string | null
+          uploaded_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          channel_id?: string | null
+          file_name: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          storage_path: string
+          thumbnail_path?: string | null
+          updated_at?: string | null
+          uploaded_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          channel_id?: string | null
+          file_name?: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          storage_path?: string
+          thumbnail_path?: string | null
+          updated_at?: string | null
+          uploaded_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_files_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "workspace_channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workspace_members: {
         Row: {
           channel_id: string | null
