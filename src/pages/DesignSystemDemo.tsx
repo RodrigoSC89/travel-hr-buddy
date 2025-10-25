@@ -11,8 +11,17 @@ import { useTheme } from '@/hooks/useTheme';
 import { theme } from '@/theme';
 import { Moon, Sun, Monitor } from 'lucide-react';
 
-// Example lazy-loaded component
-const LazyExample = lazy(() => import('@/components/ui/AnimatedPage'));
+// Example lazy-loaded component - separate heavy component for demo
+const HeavyDemoComponent = lazy(() => 
+  Promise.resolve({
+    default: () => (
+      <div className="p-6 border rounded-lg">
+        <h3 className="text-xl font-semibold mb-2">Lazy Loaded Component</h3>
+        <p className="text-muted-foreground">This component was loaded on demand.</p>
+      </div>
+    )
+  })
+);
 
 /**
  * Example: Using AnimatedPage for smooth transitions
@@ -36,7 +45,7 @@ export function AnimatedPageExample() {
 export function SuspenseExample() {
   return (
     <Suspense fallback={<ModuleLoader message="Loading module..." />}>
-      <LazyExample />
+      <HeavyDemoComponent />
     </Suspense>
   );
 }
@@ -54,37 +63,50 @@ export function ThemeToggleExample() {
       <div className="flex gap-2 mb-4">
         <button
           onClick={toggleTheme}
-          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2"
         >
-          {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          Toggle Theme
+          {isDark ? (
+            <>
+              <Sun className="h-4 w-4" aria-hidden="true" />
+              <span>Light Mode</span>
+            </>
+          ) : (
+            <>
+              <Moon className="h-4 w-4" aria-hidden="true" />
+              <span>Dark Mode</span>
+            </>
+          )}
         </button>
       </div>
 
       <div className="flex gap-2">
         <button
           onClick={() => setTheme('light')}
+          aria-label="Light theme"
           className={`px-3 py-2 rounded-lg border transition-colors ${
             currentTheme === 'light' ? 'bg-primary text-primary-foreground' : 'bg-card'
           }`}
         >
-          <Sun className="h-4 w-4" />
+          <Sun className="h-4 w-4" aria-hidden="true" />
         </button>
         <button
           onClick={() => setTheme('dark')}
+          aria-label="Dark theme"
           className={`px-3 py-2 rounded-lg border transition-colors ${
             currentTheme === 'dark' ? 'bg-primary text-primary-foreground' : 'bg-card'
           }`}
         >
-          <Moon className="h-4 w-4" />
+          <Moon className="h-4 w-4" aria-hidden="true" />
         </button>
         <button
           onClick={() => setTheme('system')}
+          aria-label="System theme (follow device preference)"
           className={`px-3 py-2 rounded-lg border transition-colors ${
             currentTheme === 'system' ? 'bg-primary text-primary-foreground' : 'bg-card'
           }`}
         >
-          <Monitor className="h-4 w-4" />
+          <Monitor className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
 
@@ -136,8 +158,10 @@ export function DesignTokensExample() {
               <div
                 style={{ backgroundColor: value }}
                 className="h-16 rounded border"
+                role="img"
+                aria-label={`Primary color ${key}: ${value}`}
               />
-              <p className="text-xs mt-1">{key}</p>
+              <p className="text-xs mt-1" aria-hidden="true">{key}</p>
             </div>
           ))}
         </div>
