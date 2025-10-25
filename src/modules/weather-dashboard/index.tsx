@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Cloud, Wind, Thermometer, Droplets } from "lucide-react";
+import { WindyMapEmbed, type WindyOverlay } from "./components/WindyMap";
 
 const WeatherDashboard = () => {
+  const [selectedOverlay, setSelectedOverlay] = useState<WindyOverlay>('wind');
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center gap-3 mb-6">
@@ -67,6 +69,14 @@ const WeatherDashboard = () => {
           </p>
         </CardContent>
       </Card>
+
+      <WindyMapEmbed 
+        latitude={-15}
+        longitude={-45}
+        zoom={4}
+        overlay={selectedOverlay}
+        height={600}
+      />
     </div>
   );
 };
