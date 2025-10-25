@@ -734,6 +734,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Radio",
     lazy: true,
     version: "177.0",
+  },
+
+  "operations.ocean-sonar": {
+    id: "operations.ocean-sonar",
+    name: "Ocean Sonar AI",
+    category: "operations",
+    path: "modules/ocean-sonar",
+    description: "PATCH 180.0 - Bathymetric scanning and depth analysis with AI-powered safe route suggestions and obstacle detection",
+    status: "active",
+    completeness: "100%",
+    route: "/ocean-sonar",
+    icon: "Waves",
+    lazy: true,
+    version: "180.0",
   }
 };
 
