@@ -54,7 +54,11 @@
     "fix:ts-safe": "bash scripts/fix-typescript-safe-mode.sh",
     "diagnostic:scan": "tsx scripts/diagnostic-scanner.ts",
     "diagnostic:fix": "tsx scripts/auto-fix.ts",
-    "diagnostic:full": "npm run diagnostic:scan && npm run diagnostic:fix"
+    "diagnostic:full": "npm run diagnostic:scan && npm run diagnostic:fix",
+    "stress:supabase": "k6 run tests/stress/k6-supabase-stress.js",
+    "stress:ai": "node tests/stress/ai-api-stress.js",
+    "stress:dashboard": "node tests/stress/dashboard-stress.js",
+    "stress:all": "npm run stress:ai && npm run stress:dashboard"
   },
   "engines": {
     "node": "22.x",
