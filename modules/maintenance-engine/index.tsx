@@ -81,13 +81,15 @@ const MaintenanceEngine: React.FC = () => {
 
   const runAIForecast = async () => {
     try {
-      const context = {
-        maintenance_records: maintenanceRecords,
-        predictions: predictions,
-      };
-
-      const analysis = await runAIContext("maintenance-forecast", context);
-      setAiAnalysis(analysis);
+      const response = await runAIContext({
+        module: 'maintenance-forecast',
+        action: 'forecast',
+        context: {
+          maintenance_records: maintenanceRecords,
+          predictions: predictions,
+        }
+      });
+      setAiAnalysis(response.message);
       
       toast({
         title: "AI Forecast Complete",

@@ -101,14 +101,16 @@ const AccessControl: React.FC = () => {
 
   const runAccessAnalysis = async () => {
     try {
-      const context = {
-        access_logs: accessLogs,
-        analytics: analytics,
-        suspicious_access: suspiciousAccess,
-      };
-
-      const analysis = await runAIContext("access-analyzer", context);
-      setAiAnalysis(analysis);
+      const response = await runAIContext({
+        module: 'access-analyzer',
+        action: 'analyze',
+        context: {
+          access_logs: accessLogs,
+          analytics: analytics,
+          suspicious_access: suspiciousAccess,
+        }
+      });
+      setAiAnalysis(response.message);
       
       toast({
         title: "AI Analysis Complete",

@@ -1,5 +1,12 @@
 // PATCH 110.0: Offline Mode Types
 
+export interface Position {
+  lat: number;
+  lng: number;
+  course?: number;
+  speed?: number;
+}
+
 export interface CachedRoute {
   id: string;
   name: string;
@@ -22,15 +29,22 @@ export interface CachedVessel {
   name: string;
   imo_code: string;
   status: string;
-  last_known_position: any;
+  last_known_position: Position | null;
   cached_at: string;
+}
+
+export type PendingActionType = 'create' | 'update' | 'delete';
+
+export interface PendingActionData {
+  id?: string;
+  [key: string]: any;
 }
 
 export interface PendingAction {
   id: string;
-  type: 'create' | 'update' | 'delete';
+  type: PendingActionType;
   table: string;
-  data: any;
+  data: PendingActionData;
   timestamp: string;
   synced: boolean;
 }

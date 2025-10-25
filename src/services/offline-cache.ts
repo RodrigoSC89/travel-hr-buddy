@@ -184,7 +184,7 @@ class OfflineCacheService {
           is_offline: !navigator.onLine,
           last_sync: lastSync,
           pending_actions: pendingActions.length,
-          cached_data_size: 0, // Would need to calculate actual size
+          cached_data_size: 0, // TODO: Implement actual cache size calculation using navigator.storage.estimate()
         });
       };
       request.onerror = () => reject(request.error);
