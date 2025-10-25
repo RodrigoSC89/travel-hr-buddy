@@ -1,8 +1,8 @@
 import React from "react";
-import EnhancedUnifiedDashboard from "@/components/dashboard/enhanced-unified-dashboard";
+import { ExecutiveDashboard } from "@/components/dashboard/executive-dashboard";
 
 const Index = () => {
-  return <EnhancedUnifiedDashboard />;
+  return <ExecutiveDashboard />;
 };
 
 export default Index;
