@@ -88,9 +88,6 @@ export const AuditTrailViewer: React.FC = () => {
       if (filterStatus !== "all") {
         query = query.eq("status", filterStatus);
       }
-      if (filterAction !== "all") {
-        query = query.eq("action", filterAction);
-      }
 
       const { data, error } = await query;
 
