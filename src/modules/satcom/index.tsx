@@ -1,7 +1,7 @@
 /**
  * SATCOM Dashboard - Main Component
  * Monitors satellite communication connectivity (Iridium, Starlink, etc.)
- * Patch 142.1 - Enhanced with fallback simulation and logging
+ * PATCH 171.0 - Enhanced with redundancy engine, fallback management, and alert handling
  */
 
 import React, { useState, useEffect } from "react";
@@ -12,6 +12,15 @@ import { SignalHistory } from "./components/SignalHistory";
 import { FallbackSimulator } from "./components/FallbackSimulator";
 import { FallbackStatus } from "./components/FallbackStatus";
 import { useSatcomMonitor } from "./hooks/useSatcomMonitor";
+
+// Export new PATCH 171.0 modules
+export { satcomStatusMonitor } from "./satcom-status";
+export { linkFallbackManager } from "./linkFallbackManager";
+export { alertHandler } from "./alertHandler";
+export { satcomWatchdogIntegration } from "./watchdog-integration";
+export type { SatcomStatusReport, SatcomHealthStatus } from "./satcom-status";
+export type { FallbackPolicy, FallbackEvent, FallbackState } from "./linkFallbackManager";
+export type { AlertConfig, SatcomAlert } from "./alertHandler";
 
 export interface SatcomConnection {
   id: string;
