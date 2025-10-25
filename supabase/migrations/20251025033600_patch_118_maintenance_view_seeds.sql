@@ -64,8 +64,8 @@ values
     'preventive',
     2000.00
   )
--- Note: ON CONFLICT DO NOTHING ensures idempotency when migration runs multiple times
--- Since id is auto-generated, conflicts only occur on re-runs
+-- Note: ON CONFLICT DO NOTHING is defensive - prevents errors if migration runs multiple times
+-- though conflicts are unlikely with auto-generated UUIDs
 on conflict do nothing;
 
 -- Create helper function to get upcoming maintenance
