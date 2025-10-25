@@ -5,8 +5,20 @@
 
 import { logger } from "@/lib/logger";
 
-// Simple AES256-like encryption simulation (in production, use crypto-js or Web Crypto API)
-const ENCRYPTION_KEY = "crew-ethics-guard-key-2025"; // In production, use env variable
+// Simple AES256-like encryption simulation
+// ⚠️ WARNING: This is a DEMO implementation only
+// In production, use Web Crypto API or crypto-js library
+// TODO: Replace with proper encryption before production deployment
+const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY || "crew-ethics-guard-key-2025";
+
+/**
+ * NOTE: The encryption/decryption functions below are PLACEHOLDERS
+ * They use simple XOR which is NOT secure for production use
+ * 
+ * For production, replace with:
+ * - Web Crypto API: crypto.subtle.encrypt(algorithm, key, data)
+ * - Or crypto-js: CryptoJS.AES.encrypt(data, key).toString()
+ */
 
 /**
  * Anonymize crew member name
@@ -55,20 +67,25 @@ const generateRandomId = (): string => {
 };
 
 /**
- * Encrypt sensitive data using AES256-like simulation
- * In production, use Web Crypto API or crypto-js
+ * Encrypt sensitive data
+ * ⚠️ DEMO IMPLEMENTATION - Replace before production
+ * Currently uses XOR for demonstration purposes only
+ * 
+ * Production implementation should use:
+ * - Web Crypto API for browser-native encryption
+ * - Or crypto-js for cross-browser compatibility
  */
 export const encryptData = (data: string): string => {
   try {
-    // Simple XOR encryption for demo (DO NOT use in production)
-    // In production, use: CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString()
+    // ⚠️ XOR encryption - DEMO ONLY, NOT SECURE
+    // TODO: Replace with proper AES256 before production
     const encrypted = btoa(
       data.split('').map((char, i) => 
         String.fromCharCode(char.charCodeAt(0) ^ ENCRYPTION_KEY.charCodeAt(i % ENCRYPTION_KEY.length))
       ).join('')
     );
     
-    logger.debug("Data encrypted", { originalLength: data.length, encryptedLength: encrypted.length });
+    logger.debug("Data encrypted (DEMO mode)", { originalLength: data.length, encryptedLength: encrypted.length });
     return encrypted;
   } catch (error) {
     logger.error("Encryption failed", error);
@@ -78,11 +95,12 @@ export const encryptData = (data: string): string => {
 
 /**
  * Decrypt sensitive data
+ * ⚠️ DEMO IMPLEMENTATION - Replace before production
  */
 export const decryptData = (encryptedData: string): string => {
   try {
-    // Simple XOR decryption for demo
-    // In production, use: CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY).toString(CryptoJS.enc.Utf8)
+    // ⚠️ XOR decryption - DEMO ONLY, NOT SECURE
+    // TODO: Replace with proper AES256 before production
     const decrypted = atob(encryptedData)
       .split('')
       .map((char, i) =>
@@ -90,7 +108,7 @@ export const decryptData = (encryptedData: string): string => {
       )
       .join('');
     
-    logger.debug("Data decrypted");
+    logger.debug("Data decrypted (DEMO mode)");
     return decrypted;
   } catch (error) {
     logger.error("Decryption failed", error);

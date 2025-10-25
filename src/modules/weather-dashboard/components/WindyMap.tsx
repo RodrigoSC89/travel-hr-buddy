@@ -67,7 +67,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
     // Use IntersectionObserver for lazy loading when component is in viewport
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        if (entries.length > 0 && entries[0].isIntersecting) {
           loadWindyScript();
           observer.disconnect();
         }

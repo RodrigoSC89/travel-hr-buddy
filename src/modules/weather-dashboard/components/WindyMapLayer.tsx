@@ -12,7 +12,6 @@ interface WindyMapLayerProps {
   zoom?: number;
   height?: number;
   defaultOverlay?: WindyOverlay;
-  showControls?: boolean;
 }
 
 /**
@@ -41,7 +40,6 @@ export const WindyMapLayer: React.FC<WindyMapLayerProps> = ({
   zoom = 5,
   height = 500,
   defaultOverlay = 'wind',
-  showControls = true,
 }) => {
   const [currentOverlay, setCurrentOverlay] = React.useState<WindyOverlay>(defaultOverlay);
 

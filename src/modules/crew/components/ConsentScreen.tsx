@@ -110,9 +110,12 @@ export const ConsentScreen: React.FC<ConsentScreenProps> = ({
               <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg">
                 <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
                 <div>
-                  <p className="text-white font-medium">Criptografia AES256</p>
+                  <p className="text-white font-medium">Criptografia de Dados</p>
                   <p className="text-sm text-slate-400">
-                    Todas as notas e comentários são criptografados antes do envio
+                    Notas e comentários são protegidos com criptografia antes do envio
+                  </p>
+                  <p className="text-xs text-orange-400 mt-1">
+                    ⚠️ DEMO: Implementação de produção usará AES256
                   </p>
                 </div>
               </div>
