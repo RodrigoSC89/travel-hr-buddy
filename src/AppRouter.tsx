@@ -30,6 +30,9 @@ const LogsCenter = React.lazy(() => import("@/modules/logs-center/LogsCenter"));
 // 🔹 PATCH 103.0 - Fleet Management
 const FleetManagement = React.lazy(() => import("@/modules/fleet-management"));
 
+// 🔹 PATCH 104.0 - Route Optimizer
+const RouteOptimizer = React.lazy(() => import("@/modules/route-optimizer"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -51,6 +54,7 @@ export default function AppRouter() {
         <Route path="/dashboard/system-watchdog" element={<SystemWatchdog />} />
         <Route path="/dashboard/logs-center" element={<LogsCenter />} />
         <Route path="/fleet-management" element={<FleetManagement />} />
+        <Route path="/route-optimizer" element={<RouteOptimizer />} />
       </Routes>
     </Router>
   );
