@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heart, Activity, Users, TrendingUp, Brain } from "lucide-react";
 import { HealthCheckIn } from "./components/HealthCheckIn";
 import { AIInsights } from "./components/AIInsights";
+import { MoodDashboard } from "./components/MoodDashboard";
 
 const CrewWellbeing = () => {
   return (
@@ -65,6 +66,8 @@ const CrewWellbeing = () => {
         <HealthCheckIn />
         <AIInsights />
       </div>
+      
+      <MoodDashboard />
 
       <Card>
         <CardHeader>
