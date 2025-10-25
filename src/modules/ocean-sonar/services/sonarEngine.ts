@@ -23,6 +23,10 @@ export interface BathymetricData {
 
 export class SonarEngine {
   private static instance: SonarEngine;
+  
+  // Approximate degrees per kilometer at mid-latitudes
+  // Note: This varies by latitude; 1° ≈ 111km at equator, less at poles
+  private static readonly DEGREES_PER_KM = 0.009;
 
   private constructor() {}
 
@@ -51,8 +55,9 @@ export class SonarEngine {
     for (let i = 0; i < gridSize; i++) {
       for (let j = 0; j < gridSize; j++) {
         // Calculate position in grid
-        const latOffset = ((i - gridSize / 2) / gridSize) * radiusKm * 0.009; // ~0.009 deg per km
-        const lonOffset = ((j - gridSize / 2) / gridSize) * radiusKm * 0.009;
+        // Using approximate conversion: ~0.009 degrees per km at mid-latitudes
+        const latOffset = ((i - gridSize / 2) / gridSize) * radiusKm * SonarEngine.DEGREES_PER_KM;
+        const lonOffset = ((j - gridSize / 2) / gridSize) * radiusKm * SonarEngine.DEGREES_PER_KM;
 
         const lat = centerLat + latOffset;
         const lon = centerLon + lonOffset;

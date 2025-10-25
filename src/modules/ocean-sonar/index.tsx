@@ -246,14 +246,19 @@ const OceanSonar: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-20 gap-1 mb-4">
+                {/* Bathymetric Grid - Using flex wrapping for 20x20 grid */}
+                <div className="flex flex-wrap gap-1 mb-4" style={{ maxWidth: '600px' }}>
                   {bathymetricData.readings.map((reading) => {
                     const color = sonarEngine.getDepthColor(reading.depth);
                     return (
                       <div
                         key={reading.id}
-                        className="aspect-square rounded-sm cursor-pointer hover:ring-2 hover:ring-white transition-all"
-                        style={{ backgroundColor: color }}
+                        className="rounded-sm cursor-pointer hover:ring-2 hover:ring-white transition-all"
+                        style={{ 
+                          backgroundColor: color,
+                          width: 'calc(5% - 4px)', // 20 columns
+                          aspectRatio: '1'
+                        }}
                         title={`Depth: ${reading.depth.toFixed(1)}m\nRisk: ${reading.riskLevel}\nTerrain: ${reading.terrain}`}
                       />
                     );
