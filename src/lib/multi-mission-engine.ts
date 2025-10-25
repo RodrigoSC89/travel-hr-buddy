@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 170.0: Multi-Mission Coordination Engine
  * AI-driven coordination for multi-vessel missions

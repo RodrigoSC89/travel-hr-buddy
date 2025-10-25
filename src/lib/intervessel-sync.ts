@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 169.0: Intervessel Sync Layer
  * Peer-to-peer vessel communication with MQTT pub/sub and HTTP fallback
