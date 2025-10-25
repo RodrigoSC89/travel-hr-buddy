@@ -277,7 +277,7 @@ class SystemWatchdog {
     // Tentar carregar módulo dinamicamente
     if (error.module) {
       try {
-        await import(`@/modules/${error.module}`);
+        await import(`@/modules/${error.module}.tsx`);
         return {
           success: true,
           action: 'dynamic_import',
