@@ -720,6 +720,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     route: "/workflow",
     icon: "GitBranch",
     lazy: true,
+  },
+
+  "operations.mission-control": {
+    id: "operations.mission-control",
+    name: "Mission Control Center",
+    category: "operations",
+    path: "modules/mission-control",
+    description: "PATCH 177.0 - Unified tactical operations hub consolidating Fleet, Emergency, Satellite, and Weather monitoring with AI Commander",
+    status: "active",
+    completeness: "100%",
+    route: "/mission-control",
+    icon: "Radio",
+    lazy: true,
+    version: "177.0",
   }
 };
 

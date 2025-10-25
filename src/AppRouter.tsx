@@ -30,6 +30,9 @@ const LogsCenter = React.lazy(() => import("@/modules/logs-center/LogsCenter"));
 // 🔹 PATCH 106.0 - Crew Management
 const CrewManagement = React.lazy(() => import("@/pages/CrewManagement"));
 
+// 🔹 PATCH 177.0 - Mission Control
+const MissionControl = React.lazy(() => import("@/modules/mission-control"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -51,6 +54,7 @@ export default function AppRouter() {
         <Route path="/dashboard/system-watchdog" element={<SystemWatchdog />} />
         <Route path="/dashboard/logs-center" element={<LogsCenter />} />
         <Route path="/crew-management" element={<CrewManagement />} />
+        <Route path="/mission-control" element={<MissionControl />} />
       </Routes>
     </Router>
   );
