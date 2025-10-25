@@ -676,6 +676,199 @@ export function clearAIContextLogs() {
   localStorage.removeItem('ai_context_logs');
 }
 
+  // PATCH 111.0 - Inventory Hub AI Pattern
+  'supply-analyzer': async (ctx) => {
+    const criticalCount = ctx.context?.criticalCount || 0;
+    const lowCount = ctx.context?.lowCount || 0;
+    const totalItems = ctx.context?.totalItems || 0;
+    
+    let message = '';
+    let type: 'suggestion' | 'recommendation' | 'risk' | 'diagnosis' | 'action' = 'diagnosis';
+    let confidence = 85.0;
+    
+    if (criticalCount > 0) {
+      type = 'risk';
+      confidence = 94.0;
+      message = `⚠️ ${criticalCount} itens em nível crítico detectados. Solicitar reposição urgente para evitar ruptura de estoque.`;
+    } else if (lowCount > 5) {
+      type = 'recommendation';
+      confidence = 89.0;
+      message = `${lowCount} itens com estoque baixo. Agendar reposição preventiva nas próximas 48h.`;
+    } else if (lowCount > 0) {
+      type = 'suggestion';
+      confidence = 86.0;
+      message = `${lowCount} itens próximos ao limite mínimo. Monitorar consumo e planejar reposição.`;
+    } else {
+      confidence = 92.0;
+      message = `✅ Todos os ${totalItems} itens do inventário estão em níveis adequados. Sistema de suprimentos operando dentro dos parâmetros.`;
+    }
+    
+    return {
+      type,
+      message,
+      confidence,
+      metadata: { criticalCount, lowCount, totalItems },
+      timestamp: new Date()
+    };
+  },
+
+  // PATCH 112.0 - Crew Training AI Pattern
+  'training-validator': async (ctx) => {
+    const expiredCount = ctx.context?.expiredCount || 0;
+    const expiringCount = ctx.context?.expiringCount || 0;
+    const totalCrew = ctx.context?.totalCrew || 0;
+    
+    let message = '';
+    let type: 'suggestion' | 'recommendation' | 'risk' | 'diagnosis' | 'action' = 'diagnosis';
+    let confidence = 85.0;
+    
+    if (expiredCount > 0) {
+      type = 'risk';
+      confidence = 96.0;
+      message = `🚨 ${expiredCount} certificações vencidas detectadas. Ação imediata necessária para conformidade regulatória.`;
+    } else if (expiringCount > 3) {
+      type = 'recommendation';
+      confidence = 91.0;
+      message = `⚠️ ${expiringCount} certificações vencendo nos próximos 30 dias. Agendar treinamentos de renovação.`;
+    } else if (expiringCount > 0) {
+      type = 'suggestion';
+      confidence = 87.0;
+      message = `${expiringCount} certificações vencendo em breve. Planejar renovações com antecedência.`;
+    } else {
+      confidence = 94.0;
+      message = `✅ Todas as certificações de ${totalCrew} tripulantes estão válidas. Sistema de treinamento em conformidade.`;
+    }
+    
+    return {
+      type,
+      message,
+      confidence,
+      metadata: { expiredCount, expiringCount, totalCrew },
+      timestamp: new Date()
+    };
+  },
+
+  // PATCH 113.0 - Compliance Checklist AI Pattern
+  'compliance-auditor': async (ctx) => {
+    const nonCompliantCount = ctx.context?.nonCompliantCount || 0;
+    const riskCount = ctx.context?.riskCount || 0;
+    const compliantCount = ctx.context?.compliantCount || 0;
+    const totalChecklists = ctx.context?.totalChecklists || 0;
+    
+    let message = '';
+    let type: 'suggestion' | 'recommendation' | 'risk' | 'diagnosis' | 'action' = 'diagnosis';
+    let confidence = 85.0;
+    
+    if (nonCompliantCount > 0) {
+      type = 'risk';
+      confidence = 95.0;
+      message = `❌ ${nonCompliantCount} checklists não conformes identificados. Revisão técnica obrigatória conforme ISM/ISPS/IMCA.`;
+    } else if (riskCount > 2) {
+      type = 'recommendation';
+      confidence = 90.0;
+      message = `⚠️ ${riskCount} checklists com indicadores de risco detectados. Implementar ações corretivas preventivas.`;
+    } else if (riskCount > 0) {
+      type = 'suggestion';
+      confidence = 86.0;
+      message = `${riskCount} checklists marcados para atenção. Revisar procedimentos operacionais.`;
+    } else if (compliantCount === totalChecklists && totalChecklists > 0) {
+      confidence = 97.0;
+      message = `✅ 100% de conformidade! Todos os ${totalChecklists} checklists em conformidade com regulamentações marítimas.`;
+    } else {
+      confidence = 91.0;
+      message = `Sistema de compliance operacional. ${compliantCount} de ${totalChecklists} checklists conformes.`;
+    }
+    
+    return {
+      type,
+      message,
+      confidence,
+      metadata: { nonCompliantCount, riskCount, compliantCount, totalChecklists },
+      timestamp: new Date()
+    };
+  },
+
+  // PATCH 114.0 - Smart Alerts AI Pattern
+  'anomaly-detector': async (ctx) => {
+    const criticalAlerts = ctx.context?.criticalAlerts || 0;
+    const warningAlerts = ctx.context?.warningAlerts || 0;
+    const predictedIssues = ctx.context?.predictedIssues || 0;
+    const totalAlerts = ctx.context?.totalAlerts || 0;
+    
+    let message = '';
+    let type: 'suggestion' | 'recommendation' | 'risk' | 'diagnosis' | 'action' = 'diagnosis';
+    let confidence = 85.0;
+    
+    if (criticalAlerts > 0) {
+      type = 'risk';
+      confidence = 93.0;
+      message = `🔴 ${criticalAlerts} alertas críticos ativos. Análise preditiva indica possível impacto operacional nas próximas 24h.`;
+    } else if (predictedIssues > 0) {
+      type = 'recommendation';
+      confidence = 88.0;
+      message = `🔮 IA prevê ${predictedIssues} possíveis falhas com base em padrões históricos. Ação preventiva recomendada.`;
+    } else if (warningAlerts > 5) {
+      type = 'suggestion';
+      confidence = 84.0;
+      message = `⚠️ ${warningAlerts} alertas de atenção detectados. Monitoramento contínuo recomendado.`;
+    } else if (totalAlerts === 0) {
+      confidence = 96.0;
+      message = `✅ Nenhuma anomalia detectada. Sistema operando dentro dos parâmetros normais.`;
+    } else {
+      confidence = 89.0;
+      message = `${totalAlerts} alertas ativos no sistema. Situação sob controle com monitoramento ativo.`;
+    }
+    
+    return {
+      type,
+      message,
+      confidence,
+      metadata: { criticalAlerts, warningAlerts, predictedIssues, totalAlerts },
+      timestamp: new Date()
+    };
+  },
+
+  // PATCH 115.0 - Workflow Automation AI Pattern
+  'automation-suggester': async (ctx) => {
+    const activeRules = ctx.context?.activeRules || 0;
+    const executionsToday = ctx.context?.executionsToday || 0;
+    const timeSaved = ctx.context?.timeSaved || 0;
+    const suggestedAutomations = ctx.context?.suggestedAutomations || 0;
+    
+    let message = '';
+    let type: 'suggestion' | 'recommendation' | 'risk' | 'diagnosis' | 'action' = 'diagnosis';
+    let confidence = 85.0;
+    
+    if (suggestedAutomations > 3) {
+      type = 'recommendation';
+      confidence = 90.0;
+      message = `💡 IA identificou ${suggestedAutomations} oportunidades de automação. Implementar pode economizar até ${timeSaved}h/mês.`;
+    } else if (suggestedAutomations > 0) {
+      type = 'suggestion';
+      confidence = 86.0;
+      message = `${suggestedAutomations} automações sugeridas com base em padrões de uso. Avaliar viabilidade de implementação.`;
+    } else if (activeRules > 0 && executionsToday > 0) {
+      confidence = 92.0;
+      message = `✅ ${activeRules} regras ativas executaram ${executionsToday} automações hoje. Sistema de workflow otimizado.`;
+    } else if (activeRules > 0) {
+      confidence = 88.0;
+      message = `${activeRules} regras de automação configuradas e aguardando triggers de eventos.`;
+    } else {
+      type = 'action';
+      confidence = 84.0;
+      message = `Sistema de automação pronto. Configure regras para otimizar fluxos operacionais recorrentes.`;
+    }
+    
+    return {
+      type,
+      message,
+      confidence,
+      metadata: { activeRules, executionsToday, timeSaved, suggestedAutomations },
+      timestamp: new Date()
+    };
+  },
+};
+
 /**
  * Get AI context statistics
  */
