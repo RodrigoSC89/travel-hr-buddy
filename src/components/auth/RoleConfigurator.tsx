@@ -14,9 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Shield, 
-  Save, 
   AlertCircle,
-  CheckCircle,
   Eye,
   Edit,
   Trash,
@@ -37,23 +35,23 @@ interface ModulePermission {
 }
 
 const AVAILABLE_ROLES = [
-  { value: 'admin', label: 'Administrador', color: 'bg-red-500' },
-  { value: 'hr_manager', label: 'Gerente RH', color: 'bg-purple-500' },
-  { value: 'manager', label: 'Gerente', color: 'bg-blue-500' },
-  { value: 'operator', label: 'Operador', color: 'bg-green-500' },
-  { value: 'auditor', label: 'Auditor', color: 'bg-yellow-500' },
-  { value: 'viewer', label: 'Visualizador', color: 'bg-gray-500' },
+  { value: "admin", label: "Administrador", color: "bg-red-500" },
+  { value: "hr_manager", label: "Gerente RH", color: "bg-purple-500" },
+  { value: "manager", label: "Gerente", color: "bg-blue-500" },
+  { value: "operator", label: "Operador", color: "bg-green-500" },
+  { value: "auditor", label: "Auditor", color: "bg-yellow-500" },
+  { value: "viewer", label: "Visualizador", color: "bg-gray-500" },
 ];
 
 const AVAILABLE_MODULES = [
-  'fleet-control',
-  'document-hub',
-  'performance-intel',
-  'system-watchdog',
-  'maintenance-planner',
-  'compliance-hub',
-  'crew-management',
-  'route-optimizer',
+  "fleet-control",
+  "document-hub",
+  "performance-intel",
+  "system-watchdog",
+  "maintenance-planner",
+  "compliance-hub",
+  "crew-management",
+  "route-optimizer",
 ];
 
 export const RoleConfigurator: React.FC = () => {
@@ -71,10 +69,10 @@ export const RoleConfigurator: React.FC = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('module_permissions')
-        .select('*')
-        .order('module_name', { ascending: true })
-        .order('role', { ascending: true });
+        .from("module_permissions")
+        .select("*")
+        .order("module_name", { ascending: true })
+        .order("role", { ascending: true });
 
       if (error) {
         console.error("Error loading permissions:", error);
@@ -96,16 +94,16 @@ export const RoleConfigurator: React.FC = () => {
 
   const updatePermission = async (
     permissionId: string,
-    field: keyof Pick<ModulePermission, 'can_read' | 'can_write' | 'can_delete' | 'can_admin'>,
+    field: keyof Pick<ModulePermission, "can_read" | "can_write" | "can_delete" | "can_admin">,
     value: boolean
   ) => {
     try {
       setSaving(true);
       
       const { error } = await supabase
-        .from('module_permissions')
+        .from("module_permissions")
         .update({ [field]: value })
-        .eq('id', permissionId);
+        .eq("id", permissionId);
 
       if (error) {
         console.error("Error updating permission:", error);
@@ -140,7 +138,7 @@ export const RoleConfigurator: React.FC = () => {
       setSaving(true);
       
       const { error } = await supabase
-        .from('module_permissions')
+        .from("module_permissions")
         .insert({
           module_name: moduleName,
           role: role,
@@ -177,10 +175,6 @@ export const RoleConfigurator: React.FC = () => {
     return permissions.find(p => p.module_name === moduleName && p.role === role);
   };
 
-  const getRoleInfo = (roleValue: string) => {
-    return AVAILABLE_ROLES.find(r => r.value === roleValue) || AVAILABLE_ROLES[AVAILABLE_ROLES.length - 1];
-  };
-
   if (loading) {
     return (
       <Card>
@@ -192,7 +186,7 @@ export const RoleConfigurator: React.FC = () => {
   }
 
   return (
-    <RoleGuard requiredRoles={['admin']}>
+    <RoleGuard requiredRoles={["admin"]}>
       <div className="space-y-6">
         <Card>
           <CardHeader>
@@ -272,7 +266,7 @@ export const RoleConfigurator: React.FC = () => {
                                 id={`read-${permission.id}`}
                                 checked={permission.can_read}
                                 onCheckedChange={(checked) =>
-                                  updatePermission(permission.id, 'can_read', checked)
+                                  updatePermission(permission.id, "can_read", checked)
                                 }
                                 disabled={saving}
                               />
@@ -287,7 +281,7 @@ export const RoleConfigurator: React.FC = () => {
                                 id={`write-${permission.id}`}
                                 checked={permission.can_write}
                                 onCheckedChange={(checked) =>
-                                  updatePermission(permission.id, 'can_write', checked)
+                                  updatePermission(permission.id, "can_write", checked)
                                 }
                                 disabled={saving}
                               />
@@ -302,7 +296,7 @@ export const RoleConfigurator: React.FC = () => {
                                 id={`delete-${permission.id}`}
                                 checked={permission.can_delete}
                                 onCheckedChange={(checked) =>
-                                  updatePermission(permission.id, 'can_delete', checked)
+                                  updatePermission(permission.id, "can_delete", checked)
                                 }
                                 disabled={saving}
                               />
@@ -317,7 +311,7 @@ export const RoleConfigurator: React.FC = () => {
                                 id={`admin-${permission.id}`}
                                 checked={permission.can_admin}
                                 onCheckedChange={(checked) =>
-                                  updatePermission(permission.id, 'can_admin', checked)
+                                  updatePermission(permission.id, "can_admin", checked)
                                 }
                                 disabled={saving}
                               />

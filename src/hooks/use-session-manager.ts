@@ -51,7 +51,7 @@ export const useSessionManager = () => {
 
     try {
       setLoading(true);
-      const { data, error } = await supabase.rpc('get_active_sessions');
+      const { data, error } = await supabase.rpc("get_active_sessions");
 
       if (error) {
         console.error("Error loading sessions:", error);
@@ -81,12 +81,12 @@ export const useSessionManager = () => {
       // Detect device info if not provided
       const finalDeviceInfo = deviceInfo || {
         platform: navigator.platform,
-        browser: navigator.userAgent.split(' ').pop() || 'Unknown',
+        browser: navigator.userAgent.split(" ").pop() || "Unknown",
         os: navigator.platform,
-        device_type: /Mobile|Tablet/.test(navigator.userAgent) ? 'mobile' : 'desktop',
+        device_type: /Mobile|Tablet/.test(navigator.userAgent) ? "mobile" : "desktop",
       };
 
-      const { data, error } = await supabase.rpc('create_session_token', {
+      const { data, error } = await supabase.rpc("create_session_token", {
         p_device_info: finalDeviceInfo,
         p_expires_in_hours: expiresInHours,
       });
@@ -119,9 +119,9 @@ export const useSessionManager = () => {
     }
 
     try {
-      const { data, error } = await supabase.rpc('revoke_session_token', {
+      const { data, error } = await supabase.rpc("revoke_session_token", {
         p_token_id: sessionId,
-        p_reason: reason || 'User requested revocation',
+        p_reason: reason || "User requested revocation",
       });
 
       if (error) {
@@ -150,7 +150,7 @@ export const useSessionManager = () => {
       
       await Promise.all(
         otherSessions.map(session =>
-          revokeSession(session.id, 'User revoked all other sessions')
+          revokeSession(session.id, "User revoked all other sessions")
         )
       );
 
@@ -166,7 +166,7 @@ export const useSessionManager = () => {
    */
   const validateSession = useCallback(async (token: string) => {
     try {
-      const { data, error } = await supabase.rpc('validate_session_token', {
+      const { data, error } = await supabase.rpc("validate_session_token", {
         p_token: token,
       });
 
@@ -229,25 +229,25 @@ export const detectDeviceInfo = () => {
   const userAgent = navigator.userAgent;
   
   // Detect browser
-  let browser = 'Unknown';
-  if (userAgent.includes('Chrome')) browser = 'Chrome';
-  else if (userAgent.includes('Firefox')) browser = 'Firefox';
-  else if (userAgent.includes('Safari')) browser = 'Safari';
-  else if (userAgent.includes('Edge')) browser = 'Edge';
-  else if (userAgent.includes('Opera')) browser = 'Opera';
+  let browser = "Unknown";
+  if (userAgent.includes("Chrome")) browser = "Chrome";
+  else if (userAgent.includes("Firefox")) browser = "Firefox";
+  else if (userAgent.includes("Safari")) browser = "Safari";
+  else if (userAgent.includes("Edge")) browser = "Edge";
+  else if (userAgent.includes("Opera")) browser = "Opera";
 
   // Detect OS
-  let os = 'Unknown';
-  if (userAgent.includes('Win')) os = 'Windows';
-  else if (userAgent.includes('Mac')) os = 'macOS';
-  else if (userAgent.includes('Linux')) os = 'Linux';
-  else if (userAgent.includes('Android')) os = 'Android';
-  else if (userAgent.includes('iOS')) os = 'iOS';
+  let os = "Unknown";
+  if (userAgent.includes("Win")) os = "Windows";
+  else if (userAgent.includes("Mac")) os = "macOS";
+  else if (userAgent.includes("Linux")) os = "Linux";
+  else if (userAgent.includes("Android")) os = "Android";
+  else if (userAgent.includes("iOS")) os = "iOS";
 
   // Detect device type
-  let deviceType = 'desktop';
-  if (/Mobile/.test(userAgent)) deviceType = 'mobile';
-  else if (/Tablet/.test(userAgent)) deviceType = 'tablet';
+  let deviceType = "desktop";
+  if (/Mobile/.test(userAgent)) deviceType = "mobile";
+  else if (/Tablet/.test(userAgent)) deviceType = "tablet";
 
   return {
     platform: navigator.platform,

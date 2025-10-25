@@ -53,7 +53,7 @@ export const SessionManagement: React.FC = () => {
   const loadSessions = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase.rpc('get_active_sessions');
+      const { data, error } = await supabase.rpc("get_active_sessions");
 
       if (error) {
         console.error("Error loading sessions:", error);
@@ -77,9 +77,9 @@ export const SessionManagement: React.FC = () => {
     try {
       setRevoking(sessionId);
       
-      const { data, error } = await supabase.rpc('revoke_session_token', {
+      const { data, error } = await supabase.rpc("revoke_session_token", {
         p_token_id: sessionId,
-        p_reason: 'User requested revocation'
+        p_reason: "User requested revocation"
       });
 
       if (error) {
@@ -108,13 +108,13 @@ export const SessionManagement: React.FC = () => {
 
   const getDeviceIcon = (deviceType?: string) => {
     switch (deviceType?.toLowerCase()) {
-      case 'mobile':
-        return <Smartphone className="w-5 h-5" />;
-      case 'tablet':
-        return <Tablet className="w-5 h-5" />;
-      case 'desktop':
-      default:
-        return <Monitor className="w-5 h-5" />;
+    case "mobile":
+      return <Smartphone className="w-5 h-5" />;
+    case "tablet":
+      return <Tablet className="w-5 h-5" />;
+    case "desktop":
+    default:
+      return <Monitor className="w-5 h-5" />;
     }
   };
 
@@ -125,11 +125,11 @@ export const SessionManagement: React.FC = () => {
     const hoursSinceActivity = (now.getTime() - lastActivity.getTime()) / (1000 * 60 * 60);
 
     if (expiresAt < now) {
-      return { label: 'Expirada', variant: 'destructive' as const, icon: XCircle };
+      return { label: "Expirada", variant: "destructive" as const, icon: XCircle };
     } else if (hoursSinceActivity < 1) {
-      return { label: 'Ativa', variant: 'default' as const, icon: CheckCircle };
+      return { label: "Ativa", variant: "default" as const, icon: CheckCircle };
     } else {
-      return { label: 'Inativa', variant: 'secondary' as const, icon: Clock };
+      return { label: "Inativa", variant: "secondary" as const, icon: Clock };
     }
   };
 
@@ -178,7 +178,7 @@ export const SessionManagement: React.FC = () => {
                           <div className="flex-1 space-y-2">
                             <div className="flex items-center gap-2">
                               <h4 className="font-semibold">
-                                {session.device_info?.platform || 'Dispositivo Desconhecido'}
+                                {session.device_info?.platform || "Dispositivo Desconhecido"}
                               </h4>
                               <Badge variant={status.variant} className="flex items-center gap-1">
                                 <StatusIcon className="w-3 h-3" />
@@ -208,10 +208,10 @@ export const SessionManagement: React.FC = () => {
                                 })}
                               </p>
                               <p className="text-xs">
-                                Criada em: {new Date(session.created_at).toLocaleString('pt-BR')}
+                                Criada em: {new Date(session.created_at).toLocaleString("pt-BR")}
                               </p>
                               <p className="text-xs">
-                                Expira em: {new Date(session.expires_at).toLocaleString('pt-BR')}
+                                Expira em: {new Date(session.expires_at).toLocaleString("pt-BR")}
                               </p>
                             </div>
                           </div>
@@ -229,7 +229,7 @@ export const SessionManagement: React.FC = () => {
                               Revogando...
                             </span>
                           ) : (
-                            'Revogar'
+                            "Revogar"
                           )}
                         </Button>
                       </div>
@@ -263,7 +263,7 @@ export const SessionManagementCompact: React.FC = () => {
   useEffect(() => {
     const loadSessionCount = async () => {
       try {
-        const { data, error } = await supabase.rpc('get_active_sessions');
+        const { data, error } = await supabase.rpc("get_active_sessions");
         if (!error && data) {
           setSessionCount(data.length);
         }
@@ -288,7 +288,7 @@ export const SessionManagementCompact: React.FC = () => {
         <div>
           <p className="font-medium">Sessões Ativas</p>
           <p className="text-sm text-muted-foreground">
-            {sessionCount} {sessionCount === 1 ? 'dispositivo conectado' : 'dispositivos conectados'}
+            {sessionCount} {sessionCount === 1 ? "dispositivo conectado" : "dispositivos conectados"}
           </p>
         </div>
       </div>

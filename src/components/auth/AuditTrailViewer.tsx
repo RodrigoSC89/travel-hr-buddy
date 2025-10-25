@@ -46,17 +46,17 @@ interface AccessLog {
   action: string;
   resource_type: string;
   resource_id: string | null;
-  status: 'success' | 'failure' | 'error';
-  details: Record<string, any>;
+  status: "success" | "failure" | "error";
+  details: Record<string, unknown>;
   timestamp: string;
   ip_address?: string;
   user_agent?: string;
 }
 
 const STATUS_CONFIG = {
-  success: { label: 'Sucesso', icon: CheckCircle, color: 'text-green-500' },
-  failure: { label: 'Falha', icon: XCircle, color: 'text-red-500' },
-  error: { label: 'Erro', icon: AlertCircle, color: 'text-yellow-500' },
+  success: { label: "Sucesso", icon: CheckCircle, color: "text-green-500" },
+  failure: { label: "Falha", icon: XCircle, color: "text-red-500" },
+  error: { label: "Erro", icon: AlertCircle, color: "text-yellow-500" },
 };
 
 export const AuditTrailViewer: React.FC = () => {
@@ -65,7 +65,6 @@ export const AuditTrailViewer: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
-  const [filterAction, setFilterAction] = useState<string>("all");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -77,20 +76,20 @@ export const AuditTrailViewer: React.FC = () => {
       setLoading(true);
       
       let query = supabase
-        .from('access_logs')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("access_logs")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(100);
 
       // Apply filters
-      if (filterRole !== 'all') {
-        query = query.eq('user_role', filterRole);
+      if (filterRole !== "all") {
+        query = query.eq("user_role", filterRole);
       }
-      if (filterStatus !== 'all') {
-        query = query.eq('status', filterStatus);
+      if (filterStatus !== "all") {
+        query = query.eq("status", filterStatus);
       }
-      if (filterAction !== 'all') {
-        query = query.eq('action', filterAction);
+      if (filterAction !== "all") {
+        query = query.eq("action", filterAction);
       }
 
       const { data, error } = await query;
@@ -123,7 +122,7 @@ export const AuditTrailViewer: React.FC = () => {
     );
   });
 
-  const getStatusConfig = (status: AccessLog['status']) => {
+  const getStatusConfig = (status: AccessLog["status"]) => {
     return STATUS_CONFIG[status] || STATUS_CONFIG.success;
   };
 
@@ -213,8 +212,8 @@ export const AuditTrailViewer: React.FC = () => {
 
               return (
                 <Card key={log.id} className="border-l-4" style={{
-                  borderLeftColor: log.status === 'success' ? '#22c55e' : 
-                                  log.status === 'failure' ? '#ef4444' : '#eab308'
+                  borderLeftColor: log.status === "success" ? "#22c55e" : 
+                    log.status === "failure" ? "#ef4444" : "#eab308"
                 }}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between gap-4">
@@ -232,8 +231,8 @@ export const AuditTrailViewer: React.FC = () => {
                               </Badge>
                             )}
                             <Badge variant={
-                              log.status === 'success' ? 'default' : 
-                              log.status === 'failure' ? 'destructive' : 'secondary'
+                              log.status === "success" ? "default" : 
+                                log.status === "failure" ? "destructive" : "secondary"
                             }>
                               {statusConfig.label}
                             </Badge>
@@ -297,19 +296,19 @@ export const AuditTrailViewer: React.FC = () => {
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-2xl font-bold text-green-500">
-                  {logs.filter(l => l.status === 'success').length}
+                  {logs.filter(l => l.status === "success").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Sucessos</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-red-500">
-                  {logs.filter(l => l.status === 'failure').length}
+                  {logs.filter(l => l.status === "failure").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Falhas</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-yellow-500">
-                  {logs.filter(l => l.status === 'error').length}
+                  {logs.filter(l => l.status === "error").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Erros</p>
               </div>

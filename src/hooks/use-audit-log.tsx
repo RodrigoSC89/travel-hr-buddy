@@ -5,7 +5,7 @@
  * Hook for automatically logging user actions with role context
  */
 
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -13,7 +13,7 @@ interface LogActionParams {
   action: string;
   resourceType: string;
   resourceId?: string;
-  status?: 'success' | 'failure' | 'error';
+  status?: "success" | "failure" | "error";
   details?: Record<string, any>;
 }
 
@@ -30,7 +30,7 @@ export const useAuditLog = () => {
     action,
     resourceType,
     resourceId,
-    status = 'success',
+    status = "success",
     details = {},
   }: LogActionParams) => {
     if (!user) {
@@ -39,7 +39,7 @@ export const useAuditLog = () => {
     }
 
     try {
-      const { data, error } = await supabase.rpc('log_user_action', {
+      const { data, error } = await supabase.rpc("log_user_action", {
         p_action: action,
         p_resource_type: resourceType,
         p_resource_id: resourceId || null,
@@ -68,7 +68,7 @@ export const useAuditLog = () => {
     resourceId?: string,
     details?: Record<string, any>
   ) => {
-    return logAction({ action, resourceType, resourceId, status: 'success', details });
+    return logAction({ action, resourceType, resourceId, status: "success", details });
   }, [logAction]);
 
   /**
@@ -80,7 +80,7 @@ export const useAuditLog = () => {
     resourceId?: string,
     details?: Record<string, any>
   ) => {
-    return logAction({ action, resourceType, resourceId, status: 'failure', details });
+    return logAction({ action, resourceType, resourceId, status: "failure", details });
   }, [logAction]);
 
   /**
@@ -95,10 +95,10 @@ export const useAuditLog = () => {
   ) => {
     const errorDetails = {
       ...details,
-      error: typeof error === 'string' ? error : error.message,
-      stack: typeof error === 'string' ? undefined : error.stack,
+      error: typeof error === "string" ? error : error.message,
+      stack: typeof error === "string" ? undefined : error.stack,
     };
-    return logAction({ action, resourceType, resourceId, status: 'error', details: errorDetails });
+    return logAction({ action, resourceType, resourceId, status: "error", details: errorDetails });
   }, [logAction]);
 
   return {
@@ -111,16 +111,21 @@ export const useAuditLog = () => {
 
 /**
  * HOC to wrap components with automatic audit logging
+ * Note: For TypeScript compatibility, consider using the useAuditLog hook directly
+ * instead of this HOC in your components.
  */
-export const withAuditLog = <P extends object>(
-  Component: React.ComponentType<P>,
+export const withAuditLog = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Component: React.ComponentType<any>,
   config: {
     action: string;
     resourceType: string;
-    getResourceId?: (props: P) => string | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getResourceId?: (props: any) => string | undefined;
   }
 ) => {
-  return (props: P) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const AuditLogWrapper = (props: any) => {
     const { logAction } = useAuditLog();
 
     React.useEffect(() => {
@@ -129,10 +134,12 @@ export const withAuditLog = <P extends object>(
         action: config.action,
         resourceType: config.resourceType,
         resourceId,
-        status: 'success',
+        status: "success",
       });
-    }, []);
+    }, [logAction, props]);
 
     return <Component {...props} />;
   };
+
+  return AuditLogWrapper;
 };
