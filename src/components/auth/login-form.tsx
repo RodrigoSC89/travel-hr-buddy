@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import nautilusLogo from "@/assets/nautilus-logo.png";
 
 export const LoginForm: React.FC = () => {
   const { signIn } = useAuth();
@@ -56,8 +57,19 @@ export const LoginForm: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Nautilus System</CardTitle>
+        <CardHeader className="text-center space-y-4">
+          <div className="flex justify-center">
+            <div className="w-20 h-20 rounded-xl bg-white flex items-center justify-center shadow-lg p-3">
+              <img 
+                src={nautilusLogo} 
+                alt="Nautilus One Logo" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+            NAUTILUS ONE
+          </CardTitle>
           <CardDescription>
             Sistema Inteligente de Gestão Empresarial
           </CardDescription>

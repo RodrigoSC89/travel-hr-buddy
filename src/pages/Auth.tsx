@@ -19,6 +19,7 @@ import {
   ArrowRight,
   CheckCircle
 } from "lucide-react";
+import nautilusLogo from "@/assets/nautilus-logo.png";
 
 const signInSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -114,12 +115,16 @@ const Auth: React.FC = () => {
         <div className="hidden lg:block space-y-8">
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shadow-lg">
-                <Ship className="h-6 w-6 text-primary-foreground" />
+              <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center shadow-lg p-2">
+                <img 
+                  src={nautilusLogo} 
+                  alt="Nautilus One Logo" 
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-foreground">
-                  NAUTILUS
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                  NAUTILUS ONE
                 </h1>
                 <p className="text-sm text-muted-foreground font-medium">
                   Sistema Corporativo Marítimo
