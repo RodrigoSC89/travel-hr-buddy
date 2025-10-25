@@ -10,7 +10,8 @@ export type UserRole =
   | "supervisor"
   | "coordinator"
   | "manager"
-  | "employee";
+  | "employee"
+  | "auditor";
 
 export type PermissionType = "read" | "write" | "delete" | "manage";
 export type Permission = "users" | "certificates" | "reports" | "system_settings" | "analytics";
@@ -117,7 +118,7 @@ export const usePermissions = () => {
   };
 
   const getRoleDisplayName = (role: UserRole): string => {
-    const roleNames = {
+    const roleNames: Record<UserRole, string> = {
       admin: "Administrador",
       hr_manager: "Gerente de RH",
       hr_analyst: "Analista de RH",
@@ -125,7 +126,8 @@ export const usePermissions = () => {
       supervisor: "Supervisor",
       coordinator: "Coordenador",
       manager: "Gerente",
-      employee: "Funcionário"
+      employee: "Funcionário",
+      auditor: "Auditor"
     };
     return roleNames[role] || "Funcionário";
   };

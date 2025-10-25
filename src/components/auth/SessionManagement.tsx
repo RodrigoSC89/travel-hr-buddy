@@ -17,26 +17,28 @@ import {
   AlertCircle, 
   CheckCircle, 
   XCircle,
-  Clock,
-  MapPin
+  Clock
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+interface DeviceInfo {
+  platform?: string;
+  browser?: string;
+  os?: string;
+  device_type?: string;
+}
+
 interface SessionInfo {
   id: string;
-  device_info: {
-    platform?: string;
-    browser?: string;
-    os?: string;
-    device_type?: string;
-  };
+  device_info: DeviceInfo | null;
   created_at: string;
   last_activity_at: string;
   expires_at: string;
-  ip_address?: string;
+  token: string;
+  revoked: boolean | null;
 }
 
 export const SessionManagement: React.FC = () => {
@@ -65,7 +67,12 @@ export const SessionManagement: React.FC = () => {
         return;
       }
 
-      setSessions(data || []);
+      // Type assertion for device_info
+      const typedSessions = (data || []).map(session => ({
+        ...session,
+        device_info: session.device_info as DeviceInfo | null,
+      }));
+      setSessions(typedSessions);
     } catch (error) {
       console.error("Error loading sessions:", error);
     } finally {
@@ -192,12 +199,6 @@ export const SessionManagement: React.FC = () => {
                               )}
                               {session.device_info?.os && (
                                 <p>Sistema: {session.device_info.os}</p>
-                              )}
-                              {session.ip_address && (
-                                <p className="flex items-center gap-1">
-                                  <MapPin className="w-3 h-3" />
-                                  {session.ip_address}
-                                </p>
                               )}
                               <p className="flex items-center gap-1">
                                 <Clock className="w-3 h-3" />

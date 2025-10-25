@@ -28,10 +28,10 @@ interface ModulePermission {
   id: string;
   module_name: string;
   role: string;
-  can_read: boolean;
-  can_write: boolean;
-  can_delete: boolean;
-  can_admin: boolean;
+  can_read: boolean | null;
+  can_write: boolean | null;
+  can_delete: boolean | null;
+  can_manage: boolean | null;
 }
 
 const AVAILABLE_ROLES = [
@@ -94,7 +94,7 @@ export const RoleConfigurator: React.FC = () => {
 
   const updatePermission = async (
     permissionId: string,
-    field: keyof Pick<ModulePermission, "can_read" | "can_write" | "can_delete" | "can_admin">,
+    field: keyof Pick<ModulePermission, "can_read" | "can_write" | "can_delete" | "can_manage">,
     value: boolean
   ) => {
     try {
@@ -141,11 +141,11 @@ export const RoleConfigurator: React.FC = () => {
         .from("module_permissions")
         .insert({
           module_name: moduleName,
-          role: role,
+          role: role as any,
           can_read: true,
           can_write: false,
           can_delete: false,
-          can_admin: false,
+          can_manage: false,
         });
 
       if (error) {
@@ -264,7 +264,7 @@ export const RoleConfigurator: React.FC = () => {
                             <div className="flex items-center space-x-2">
                               <Switch
                                 id={`read-${permission.id}`}
-                                checked={permission.can_read}
+                                checked={permission.can_read ?? false}
                                 onCheckedChange={(checked) =>
                                   updatePermission(permission.id, "can_read", checked)
                                 }
@@ -279,7 +279,7 @@ export const RoleConfigurator: React.FC = () => {
                             <div className="flex items-center space-x-2">
                               <Switch
                                 id={`write-${permission.id}`}
-                                checked={permission.can_write}
+                                checked={permission.can_write ?? false}
                                 onCheckedChange={(checked) =>
                                   updatePermission(permission.id, "can_write", checked)
                                 }
@@ -294,7 +294,7 @@ export const RoleConfigurator: React.FC = () => {
                             <div className="flex items-center space-x-2">
                               <Switch
                                 id={`delete-${permission.id}`}
-                                checked={permission.can_delete}
+                                checked={permission.can_delete ?? false}
                                 onCheckedChange={(checked) =>
                                   updatePermission(permission.id, "can_delete", checked)
                                 }
@@ -308,16 +308,16 @@ export const RoleConfigurator: React.FC = () => {
 
                             <div className="flex items-center space-x-2">
                               <Switch
-                                id={`admin-${permission.id}`}
-                                checked={permission.can_admin}
+                                id={`manage-${permission.id}`}
+                                checked={permission.can_manage ?? false}
                                 onCheckedChange={(checked) =>
-                                  updatePermission(permission.id, "can_admin", checked)
+                                  updatePermission(permission.id, "can_manage", checked)
                                 }
                                 disabled={saving}
                               />
-                              <Label htmlFor={`admin-${permission.id}`} className="flex items-center gap-2">
+                              <Label htmlFor={`manage-${permission.id}`} className="flex items-center gap-2">
                                 <Settings className="w-4 h-4" />
-                                Administrar
+                                Gerenciar
                               </Label>
                             </div>
                           </div>

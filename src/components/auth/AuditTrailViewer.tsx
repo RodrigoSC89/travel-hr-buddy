@@ -36,26 +36,22 @@ import { RoleGuard } from "./RoleGuard";
 
 interface AccessLog {
   id: string;
-  user_id: string;
-  user_role: string;
-  user_context: {
-    role?: string;
-    timestamp?: string;
-    session_id?: string;
-  };
+  user_id?: string | null;
   action: string;
-  resource_type: string;
-  resource_id: string | null;
-  status: "success" | "failure" | "error";
-  details: Record<string, unknown>;
+  module_accessed: string;
+  result: string;
+  severity: string;
   timestamp: string;
-  ip_address?: string;
-  user_agent?: string;
+  ip_address?: unknown;
+  user_agent?: string | null;
+  details?: Record<string, unknown> | null;
+  created_at: string;
 }
 
-const STATUS_CONFIG = {
+const RESULT_CONFIG: Record<string, { label: string; icon: any; color: string }> = {
   success: { label: "Sucesso", icon: CheckCircle, color: "text-green-500" },
   failure: { label: "Falha", icon: XCircle, color: "text-red-500" },
+  denied: { label: "Negado", icon: XCircle, color: "text-orange-500" },
   error: { label: "Erro", icon: AlertCircle, color: "text-yellow-500" },
 };
 
@@ -82,11 +78,8 @@ export const AuditTrailViewer: React.FC = () => {
         .limit(100);
 
       // Apply filters
-      if (filterRole !== "all") {
-        query = query.eq("user_role", filterRole);
-      }
       if (filterStatus !== "all") {
-        query = query.eq("status", filterStatus);
+        query = query.eq("result", filterStatus);
       }
 
       const { data, error } = await query;
@@ -101,7 +94,12 @@ export const AuditTrailViewer: React.FC = () => {
         return;
       }
 
-      setLogs(data || []);
+      // Type assertion for Json types
+      const typedData = (data || []).map(log => ({
+        ...log,
+        details: log.details as Record<string, unknown> | null,
+      }));
+      setLogs(typedData);
     } catch (error) {
       console.error("Error loading audit logs:", error);
     } finally {
@@ -114,13 +112,12 @@ export const AuditTrailViewer: React.FC = () => {
     const searchLower = searchTerm.toLowerCase();
     return (
       log.action.toLowerCase().includes(searchLower) ||
-      log.resource_type.toLowerCase().includes(searchLower) ||
-      log.user_role?.toLowerCase().includes(searchLower)
+      log.module_accessed.toLowerCase().includes(searchLower)
     );
   });
 
-  const getStatusConfig = (status: AccessLog["status"]) => {
-    return STATUS_CONFIG[status] || STATUS_CONFIG.success;
+  const getResultConfig = (result: string) => {
+    return RESULT_CONFIG[result] || RESULT_CONFIG.success;
   };
 
   if (loading) {
@@ -134,7 +131,7 @@ export const AuditTrailViewer: React.FC = () => {
   }
 
   return (
-    <RoleGuard minRole="auditor">
+    <RoleGuard requiredRoles={["admin", "auditor"]}>
       <div className="space-y-4">
         <Card>
           <CardHeader>
@@ -159,29 +156,15 @@ export const AuditTrailViewer: React.FC = () => {
                 />
               </div>
 
-              <Select value={filterRole} onValueChange={setFilterRole}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Filtrar por função" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todas as funções</SelectItem>
-                  <SelectItem value="admin">Administrador</SelectItem>
-                  <SelectItem value="hr_manager">Gerente RH</SelectItem>
-                  <SelectItem value="manager">Gerente</SelectItem>
-                  <SelectItem value="operator">Operador</SelectItem>
-                  <SelectItem value="auditor">Auditor</SelectItem>
-                  <SelectItem value="viewer">Visualizador</SelectItem>
-                </SelectContent>
-              </Select>
-
               <Select value={filterStatus} onValueChange={setFilterStatus}>
                 <SelectTrigger>
                   <SelectValue placeholder="Filtrar por status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Todos os status</SelectItem>
+                  <SelectItem value="all">Todos os resultados</SelectItem>
                   <SelectItem value="success">Sucesso</SelectItem>
                   <SelectItem value="failure">Falha</SelectItem>
+                  <SelectItem value="denied">Negado</SelectItem>
                   <SelectItem value="error">Erro</SelectItem>
                 </SelectContent>
               </Select>
@@ -204,35 +187,30 @@ export const AuditTrailViewer: React.FC = () => {
             </Card>
           ) : (
             filteredLogs.map((log) => {
-              const statusConfig = getStatusConfig(log.status);
-              const StatusIcon = statusConfig.icon;
+              const resultConfig = getResultConfig(log.result);
+              const ResultIcon = resultConfig.icon;
 
               return (
                 <Card key={log.id} className="border-l-4" style={{
-                  borderLeftColor: log.status === "success" ? "#22c55e" : 
-                    log.status === "failure" ? "#ef4444" : "#eab308"
+                  borderLeftColor: log.result === "success" ? "#22c55e" : 
+                    log.result === "failure" || log.result === "denied" ? "#ef4444" : "#eab308"
                 }}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-start gap-3 flex-1">
-                        <StatusIcon className={`w-5 h-5 mt-0.5 ${statusConfig.color}`} />
+                        <ResultIcon className={`w-5 h-5 mt-0.5 ${resultConfig.color}`} />
                         
                         <div className="flex-1 space-y-2">
                           <div className="flex items-center gap-2 flex-wrap">
                             <h4 className="font-semibold">{log.action}</h4>
-                            <Badge variant="outline">{log.resource_type}</Badge>
-                            {log.user_role && (
-                              <Badge variant="secondary">
-                                <User className="w-3 h-3 mr-1" />
-                                {log.user_role}
-                              </Badge>
-                            )}
+                            <Badge variant="outline">{log.module_accessed}</Badge>
                             <Badge variant={
-                              log.status === "success" ? "default" : 
-                                log.status === "failure" ? "destructive" : "secondary"
+                              log.result === "success" ? "default" : 
+                                log.result === "failure" || log.result === "denied" ? "destructive" : "secondary"
                             }>
-                              {statusConfig.label}
+                              {resultConfig.label}
                             </Badge>
+                            <Badge variant="secondary">{log.severity}</Badge>
                           </div>
 
                           <div className="text-sm text-muted-foreground space-y-1">
@@ -244,27 +222,10 @@ export const AuditTrailViewer: React.FC = () => {
                                   locale: ptBR,
                                 })}
                               </span>
-                              {log.ip_address && (
-                                <span>IP: {log.ip_address}</span>
-                              )}
-                              {log.resource_id && (
-                                <span className="flex items-center gap-1">
-                                  <FileText className="w-3 h-3" />
-                                  ID: {log.resource_id.substring(0, 8)}...
-                                </span>
+                              {log.ip_address !== null && log.ip_address !== undefined && (
+                                <span>IP: {String(log.ip_address)}</span>
                               )}
                             </div>
-
-                            {log.user_context && Object.keys(log.user_context).length > 0 && (
-                              <details className="text-xs">
-                                <summary className="cursor-pointer hover:text-foreground">
-                                  Ver contexto do usuário
-                                </summary>
-                                <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-auto">
-                                  {JSON.stringify(log.user_context, null, 2)}
-                                </pre>
-                              </details>
-                            )}
 
                             {log.details && Object.keys(log.details).length > 0 && (
                               <details className="text-xs">
@@ -290,22 +251,28 @@ export const AuditTrailViewer: React.FC = () => {
         {/* Summary Stats */}
         <Card>
           <CardContent className="p-4">
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-4 gap-4 text-center">
               <div>
                 <p className="text-2xl font-bold text-green-500">
-                  {logs.filter(l => l.status === "success").length}
+                  {logs.filter(l => l.result === "success").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Sucessos</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-red-500">
-                  {logs.filter(l => l.status === "failure").length}
+                  {logs.filter(l => l.result === "failure").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Falhas</p>
               </div>
               <div>
+                <p className="text-2xl font-bold text-orange-500">
+                  {logs.filter(l => l.result === "denied").length}
+                </p>
+                <p className="text-sm text-muted-foreground">Negados</p>
+              </div>
+              <div>
                 <p className="text-2xl font-bold text-yellow-500">
-                  {logs.filter(l => l.status === "error").length}
+                  {logs.filter(l => l.result === "error").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Erros</p>
               </div>

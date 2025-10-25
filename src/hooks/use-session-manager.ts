@@ -9,19 +9,21 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
+interface DeviceInfo {
+  platform?: string;
+  browser?: string;
+  os?: string;
+  device_type?: string;
+}
+
 interface SessionToken {
   id: string;
   token: string;
-  device_info: {
-    platform?: string;
-    browser?: string;
-    os?: string;
-    device_type?: string;
-  };
+  device_info: DeviceInfo | null;
   created_at: string;
   expires_at: string;
   last_activity_at: string;
-  revoked: boolean;
+  revoked: boolean | null;
 }
 
 interface CreateSessionParams {
@@ -58,7 +60,12 @@ export const useSessionManager = () => {
         return;
       }
 
-      setSessions(data || []);
+      // Type assertion for device_info
+      const typedSessions = (data || []).map(session => ({
+        ...session,
+        device_info: session.device_info as DeviceInfo | null,
+      }));
+      setSessions(typedSessions);
     } catch (error) {
       console.error("Error loading sessions:", error);
     } finally {
@@ -198,7 +205,7 @@ export const useSessionManager = () => {
       expired: sessions.filter(s => 
         new Date(s.expires_at) <= new Date()
       ).length,
-      revoked: sessions.filter(s => s.revoked).length,
+      revoked: sessions.filter(s => s.revoked === true).length,
     };
   }, [sessions]);
 

@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 interface LogActionParams {
   action: string;
   resourceType: string;
-  resourceId?: string;
+  resourceId?: string | null;
   status?: "success" | "failure" | "error";
   details?: Record<string, any>;
 }
@@ -42,7 +42,7 @@ export const useAuditLog = () => {
       const { data, error } = await supabase.rpc("log_user_action", {
         p_action: action,
         p_resource_type: resourceType,
-        p_resource_id: resourceId || null,
+        p_resource_id: resourceId ?? undefined,
         p_status: status,
         p_details: details,
       });
@@ -65,7 +65,7 @@ export const useAuditLog = () => {
   const logSuccess = useCallback((
     action: string,
     resourceType: string,
-    resourceId?: string,
+    resourceId?: string | null,
     details?: Record<string, any>
   ) => {
     return logAction({ action, resourceType, resourceId, status: "success", details });
@@ -77,7 +77,7 @@ export const useAuditLog = () => {
   const logFailure = useCallback((
     action: string,
     resourceType: string,
-    resourceId?: string,
+    resourceId?: string | null,
     details?: Record<string, any>
   ) => {
     return logAction({ action, resourceType, resourceId, status: "failure", details });
@@ -90,7 +90,7 @@ export const useAuditLog = () => {
     action: string,
     resourceType: string,
     error: Error | string,
-    resourceId?: string,
+    resourceId?: string | null,
     details?: Record<string, any>
   ) => {
     const errorDetails = {

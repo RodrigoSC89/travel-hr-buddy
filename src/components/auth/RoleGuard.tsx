@@ -59,6 +59,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
   department_manager: 50,
   coordinator: 40,
   supervisor: 30,
+  auditor: 20,
   employee: 10,
 };
 
