@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      access_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          ip_address: unknown
+          module_accessed: string
+          result: string
+          severity: string
+          timestamp: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown
+          module_accessed: string
+          result: string
+          severity?: string
+          timestamp?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown
+          module_accessed?: string
+          result?: string
+          severity?: string
+          timestamp?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ai_insights: {
         Row: {
           actionable: boolean
@@ -4011,6 +4053,42 @@ export type Database = {
           },
         ]
       }
+      module_permissions: {
+        Row: {
+          can_delete: boolean | null
+          can_manage: boolean | null
+          can_read: boolean | null
+          can_write: boolean | null
+          created_at: string
+          id: string
+          module_name: string
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+        }
+        Insert: {
+          can_delete?: boolean | null
+          can_manage?: boolean | null
+          can_read?: boolean | null
+          can_write?: boolean | null
+          created_at?: string
+          id?: string
+          module_name: string
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Update: {
+          can_delete?: boolean | null
+          can_manage?: boolean | null
+          can_read?: boolean | null
+          can_write?: boolean | null
+          created_at?: string
+          id?: string
+          module_name?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       nautilus_conversations: {
         Row: {
           context: Json | null
@@ -5922,6 +6000,45 @@ export type Database = {
           subscription_starts_at?: string | null
           trial_ends_at?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      session_tokens: {
+        Row: {
+          created_at: string
+          device_info: Json | null
+          expires_at: string
+          id: string
+          last_activity_at: string
+          revoked: boolean | null
+          revoked_at: string | null
+          revoked_reason: string | null
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          device_info?: Json | null
+          expires_at: string
+          id?: string
+          last_activity_at?: string
+          revoked?: boolean | null
+          revoked_at?: string | null
+          revoked_reason?: string | null
+          token: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          device_info?: Json | null
+          expires_at?: string
+          id?: string
+          last_activity_at?: string
+          revoked?: boolean | null
+          revoked_at?: string | null
+          revoked_reason?: string | null
+          token?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -7927,6 +8044,14 @@ export type Database = {
       }
       cleanup_old_logs: { Args: never; Returns: undefined }
       create_sample_peotram_audit: { Args: never; Returns: string }
+      create_session_token: {
+        Args: { p_device_info?: Json; p_expires_in_hours?: number }
+        Returns: {
+          expires_at: string
+          token: string
+          token_id: string
+        }[]
+      }
       detect_reservation_conflicts: {
         Args: {
           p_end_date: string
@@ -7948,6 +8073,18 @@ export type Database = {
       generate_next_checklist_date: {
         Args: { frequency: string; last_date?: string }
         Returns: string
+      }
+      get_active_sessions: {
+        Args: never
+        Returns: {
+          created_at: string
+          device_info: Json
+          expires_at: string
+          id: string
+          last_activity_at: string
+          revoked: boolean
+          token: string
+        }[]
       }
       get_current_organization_id: { Args: never; Returns: string }
       get_current_tenant_id: { Args: never; Returns: string }
@@ -8003,6 +8140,16 @@ export type Database = {
           month: string
         }[]
       }
+      log_user_action: {
+        Args: {
+          p_action: string
+          p_details?: Json
+          p_resource_id?: string
+          p_resource_type: string
+          p_status?: string
+        }
+        Returns: string
+      }
       match_mmi_jobs: {
         Args: {
           match_count?: number
@@ -8017,6 +8164,10 @@ export type Database = {
           similarity: number
           title: string
         }[]
+      }
+      revoke_session_token: {
+        Args: { p_reason?: string; p_token_id: string }
+        Returns: boolean
       }
       user_belongs_to_org: {
         Args: { _org_id: string; _user_id: string }
@@ -8041,6 +8192,14 @@ export type Database = {
       user_is_org_admin: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
+      }
+      validate_session_token: {
+        Args: { p_token: string }
+        Returns: {
+          expires_at: string
+          is_valid: boolean
+          user_id: string
+        }[]
       }
     }
     Enums: {
