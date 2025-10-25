@@ -154,8 +154,7 @@ export const DroneTelemetryStream: React.FC<DroneTelemetryStreamProps> = ({
               <div className="space-y-1">
                 <Progress 
                   value={drone.battery} 
-                  className="h-2"
-                  indicatorClassName={getBatteryColor(drone.battery)}
+                  className={`h-2 ${getBatteryColor(drone.battery)}`}
                 />
                 <div className="text-xs font-medium">{drone.battery}%</div>
               </div>

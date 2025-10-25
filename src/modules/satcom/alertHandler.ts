@@ -364,7 +364,7 @@ class AlertHandler {
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.5);
     } catch (error) {
-      logger.warn("[Alert Handler] Could not play alert sound", error);
+      logger.warn(`[Alert Handler] Could not play alert sound: ${error}`);
     }
   }
 

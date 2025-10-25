@@ -296,7 +296,7 @@ class MissionUploader {
       if (result.success) {
         assignedCount++;
       } else {
-        logger.warn(`[Mission Uploader] Failed to assign route ${routeId} to drone ${droneId}:`, result.message);
+        logger.warn(`[Mission Uploader] Failed to assign route ${routeId} to drone ${droneId}: ${result.message}`);
       }
     }
 
