@@ -3,13 +3,13 @@
  * IA autocorretiva que monitora e corrige erros automaticamente
  */
 
-import { logger } from '@/lib/logger';
-import { runAIContext } from '@/ai/kernel';
-import { supabase } from '@/integrations/supabase/client';
+import { logger } from "@/lib/logger";
+import { runAIContext } from "@/ai/kernel";
+import { supabase } from "@/integrations/supabase/client";
 
 interface WatchdogError {
   id: string;
-  type: 'import' | 'runtime' | 'blank_screen' | 'api_failure' | 'logic_error';
+  type: "import" | "runtime" | "blank_screen" | "api_failure" | "logic_error";
   message: string;
   stack?: string;
   module?: string;
@@ -36,12 +36,12 @@ class SystemWatchdog {
    */
   start() {
     if (this.isActive) {
-      logger.warn('[Watchdog] Already running');
+      logger.warn("[Watchdog] Already running");
       return;
     }
 
     this.isActive = true;
-    logger.info('[Watchdog] Starting System Watchdog v2...');
+    logger.info("[Watchdog] Starting System Watchdog v2...");
 
     // Monitorar erros globais
     this.attachErrorHandlers();
@@ -51,7 +51,7 @@ class SystemWatchdog {
       this.performHealthCheck();
     }, 30000); // A cada 30 segundos
 
-    logger.info('[Watchdog] System Watchdog v2 is active');
+    logger.info("[Watchdog] System Watchdog v2 is active");
   }
 
   /**
@@ -66,7 +66,7 @@ class SystemWatchdog {
       this.checkInterval = null;
     }
 
-    logger.info('[Watchdog] System Watchdog stopped');
+    logger.info("[Watchdog] System Watchdog stopped");
   }
 
   /**
@@ -74,19 +74,19 @@ class SystemWatchdog {
    */
   private attachErrorHandlers() {
     // Capturar erros não tratados
-    window.addEventListener('error', (event) => {
+    window.addEventListener("error", (event) => {
       this.handleError({
-        type: 'runtime',
+        type: "runtime",
         message: event.message,
         stack: event.error?.stack,
       });
     });
 
     // Capturar promessas rejeitadas
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener("unhandledrejection", (event) => {
       this.handleError({
-        type: 'runtime',
-        message: event.reason?.message || 'Unhandled Promise Rejection',
+        type: "runtime",
+        message: event.reason?.message || "Unhandled Promise Rejection",
         stack: event.reason?.stack,
       });
     });
@@ -95,8 +95,8 @@ class SystemWatchdog {
     const originalError = console.error;
     console.error = (...args) => {
       this.handleError({
-        type: 'runtime',
-        message: args.join(' '),
+        type: "runtime",
+        message: args.join(" "),
       });
       originalError.apply(console, args);
     };
@@ -108,11 +108,11 @@ class SystemWatchdog {
   private async saveToSupabase(error: WatchdogError) {
     try {
       const { error: dbError } = await supabase
-        .from('watchdog_logs')
+        .from("watchdog_logs")
         .insert({
           error_id: error.id,
           error_type: error.type,
-          severity: error.count >= this.errorThreshold ? 'high' : 'medium',
+          severity: error.count >= this.errorThreshold ? "high" : "medium",
           message: error.message,
           stack_trace: error.stack,
           module_name: error.module,
@@ -124,10 +124,10 @@ class SystemWatchdog {
         });
 
       if (dbError) {
-        logger.error('[Watchdog] Failed to save to Supabase:', dbError);
+        logger.error("[Watchdog] Failed to save to Supabase:", dbError);
       }
     } catch (err) {
-      logger.error('[Watchdog] Error saving to Supabase:', err);
+      logger.error("[Watchdog] Error saving to Supabase:", err);
     }
   }
 
@@ -149,8 +149,8 @@ class SystemWatchdog {
     } else {
       const newError: WatchdogError = {
         id: errorId,
-        type: errorInfo.type || 'runtime',
-        message: errorInfo.message || 'Unknown error',
+        type: errorInfo.type || "runtime",
+        message: errorInfo.message || "Unknown error",
         stack: errorInfo.stack,
         module: errorInfo.module,
         timestamp: new Date(),
@@ -190,8 +190,8 @@ class SystemWatchdog {
     try {
       // Analisar erro com IA
       const aiResponse = await runAIContext({
-        module: 'system.watchdog',
-        action: 'analyze_error',
+        module: "system.watchdog",
+        action: "analyze_error",
         context: {
           error: {
             type: error.type,
@@ -206,25 +206,25 @@ class SystemWatchdog {
       // Determinar estratégia de correção
       let fixResult: AutofixResult = {
         success: false,
-        action: 'none',
-        description: 'No automatic fix available',
+        action: "none",
+        description: "No automatic fix available",
       };
 
       switch (error.type) {
-        case 'import':
-          fixResult = await this.fixImportError(error);
-          break;
-        case 'blank_screen':
-          fixResult = await this.fixBlankScreen(error);
-          break;
-        case 'api_failure':
-          fixResult = await this.fixApiFailure(error);
-          break;
-        case 'logic_error':
-          fixResult = await this.fixLogicError(error);
-          break;
-        default:
-          fixResult = await this.applyGenericFallback(error);
+      case "import":
+        fixResult = await this.fixImportError(error);
+        break;
+      case "blank_screen":
+        fixResult = await this.fixBlankScreen(error);
+        break;
+      case "api_failure":
+        fixResult = await this.fixApiFailure(error);
+        break;
+      case "logic_error":
+        fixResult = await this.fixLogicError(error);
+        break;
+      default:
+        fixResult = await this.applyGenericFallback(error);
       }
 
       if (fixResult.success) {
@@ -232,14 +232,14 @@ class SystemWatchdog {
         
         // Atualizar no Supabase
         await supabase
-          .from('watchdog_logs')
+          .from("watchdog_logs")
           .update({
             resolved_at: new Date().toISOString(),
             resolution_notes: fixResult.description,
             auto_fix_attempted: true,
             auto_fix_success: true,
           })
-          .eq('error_id', error.id);
+          .eq("error_id", error.id);
         
         // Resetar contador após correção
         this.errors.delete(error.id);
@@ -248,22 +248,22 @@ class SystemWatchdog {
         
         // Registrar tentativa falha no Supabase
         await supabase
-          .from('watchdog_logs')
+          .from("watchdog_logs")
           .update({
             auto_fix_attempted: true,
             auto_fix_success: false,
             ai_analysis: { ...fixResult },
           })
-          .eq('error_id', error.id);
+          .eq("error_id", error.id);
       }
 
       return fixResult;
     } catch (err) {
-      logger.error('[Watchdog] Error during autofix attempt:', err);
+      logger.error("[Watchdog] Error during autofix attempt:", err);
       return {
         success: false,
-        action: 'error',
-        description: err instanceof Error ? err.message : 'Unknown error',
+        action: "error",
+        description: err instanceof Error ? err.message : "Unknown error",
       };
     }
   }
@@ -280,13 +280,13 @@ class SystemWatchdog {
         await import(`@/modules/${error.module}.tsx`);
         return {
           success: true,
-          action: 'dynamic_import',
+          action: "dynamic_import",
           description: `Successfully loaded module ${error.module} dynamically`,
         };
       } catch (err) {
         return {
           success: false,
-          action: 'import_fallback',
+          action: "import_fallback",
           description: `Failed to load module: ${err}`,
         };
       }
@@ -294,8 +294,8 @@ class SystemWatchdog {
 
     return {
       success: false,
-      action: 'no_module_info',
-      description: 'Cannot fix import without module information',
+      action: "no_module_info",
+      description: "Cannot fix import without module information",
     };
   }
 
@@ -303,7 +303,7 @@ class SystemWatchdog {
    * Corrige tela em branco
    */
   private async fixBlankScreen(error: WatchdogError): Promise<AutofixResult> {
-    logger.warn('[Watchdog] Attempting to fix blank screen...');
+    logger.warn("[Watchdog] Attempting to fix blank screen...");
 
     // Forçar reload se tela estiver em branco por muito tempo
     const hasContent = document.body.textContent && document.body.textContent.trim().length > 0;
@@ -313,15 +313,15 @@ class SystemWatchdog {
       window.location.reload();
       return {
         success: true,
-        action: 'force_reload',
-        description: 'Forced page reload due to blank screen',
+        action: "force_reload",
+        description: "Forced page reload due to blank screen",
       };
     }
 
     return {
       success: false,
-      action: 'no_blank_screen',
-      description: 'Screen appears to have content',
+      action: "no_blank_screen",
+      description: "Screen appears to have content",
     };
   }
 
@@ -329,13 +329,13 @@ class SystemWatchdog {
    * Corrige falha de API
    */
   private async fixApiFailure(error: WatchdogError): Promise<AutofixResult> {
-    logger.info('[Watchdog] Attempting API failure recovery...');
+    logger.info("[Watchdog] Attempting API failure recovery...");
 
     // Implementar retry com backoff exponencial
     return {
       success: true,
-      action: 'enable_retry',
-      description: 'Enabled automatic retry with exponential backoff for API calls',
+      action: "enable_retry",
+      description: "Enabled automatic retry with exponential backoff for API calls",
     };
   }
 
@@ -343,15 +343,15 @@ class SystemWatchdog {
    * Corrige erro de lógica
    */
   private async fixLogicError(error: WatchdogError): Promise<AutofixResult> {
-    logger.info('[Watchdog] Analyzing logic error...');
+    logger.info("[Watchdog] Analyzing logic error...");
 
     // Gerar sugestão de PR
     const prSuggestion = await this.generatePRSuggestion(error);
 
     return {
       success: false,
-      action: 'pr_suggestion',
-      description: 'Generated PR suggestion for manual review',
+      action: "pr_suggestion",
+      description: "Generated PR suggestion for manual review",
       prUrl: prSuggestion,
     };
   }
@@ -360,7 +360,7 @@ class SystemWatchdog {
    * Aplica fallback genérico
    */
   private async applyGenericFallback(error: WatchdogError): Promise<AutofixResult> {
-    logger.info('[Watchdog] Applying generic fallback...');
+    logger.info("[Watchdog] Applying generic fallback...");
 
     // Limpar cache se erro persistir
     if (error.count > 5) {
@@ -369,13 +369,13 @@ class SystemWatchdog {
         sessionStorage.clear();
         return {
           success: true,
-          action: 'clear_cache',
-          description: 'Cleared browser cache to resolve persistent error',
+          action: "clear_cache",
+          description: "Cleared browser cache to resolve persistent error",
         };
       } catch (err) {
         return {
           success: false,
-          action: 'cache_clear_failed',
+          action: "cache_clear_failed",
           description: `Failed to clear cache: ${err}`,
         };
       }
@@ -383,8 +383,8 @@ class SystemWatchdog {
 
     return {
       success: false,
-      action: 'no_fallback',
-      description: 'No generic fallback available yet',
+      action: "no_fallback",
+      description: "No generic fallback available yet",
     };
   }
 
@@ -393,7 +393,7 @@ class SystemWatchdog {
    */
   private async generatePRSuggestion(error: WatchdogError): Promise<string> {
     // Aqui integraria com GitHub API para criar issue/PR
-    const issueUrl = `https://github.com/nautilus-one/issues/new?title=${encodeURIComponent(`[Watchdog] ${error.message}`)}&body=${encodeURIComponent(error.stack || '')}`;
+    const issueUrl = `https://github.com/nautilus-one/issues/new?title=${encodeURIComponent(`[Watchdog] ${error.message}`)}&body=${encodeURIComponent(error.stack || "")}`;
     return issueUrl;
   }
 

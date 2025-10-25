@@ -10,9 +10,9 @@ import { openai } from "@/lib/ai/openai-client";
 import { getModuleContext, ModuleContext } from "./contexts/moduleContext";
 
 export interface AIEngineRequest {
-  model?: 'gpt-4o-mini' | 'gpt-4o' | 'gpt-3.5-turbo';
+  model?: "gpt-4o-mini" | "gpt-4o" | "gpt-3.5-turbo";
   messages: Array<{
-    role: 'system' | 'user' | 'assistant';
+    role: "system" | "user" | "assistant";
     content: string;
   }>;
   context?: ModuleContext;
@@ -41,14 +41,14 @@ export const runOpenAI = async (request: AIEngineRequest): Promise<AIEngineRespo
     console.warn("⚠️ OpenAI API key not configured. Returning mock response.");
     return {
       content: "AI engine não configurado. Configure VITE_OPENAI_API_KEY para habilitar respostas da IA.",
-      model: 'mock',
+      model: "mock",
       timestamp: new Date()
     };
   }
 
   try {
     const response = await openai.chat.completions.create({
-      model: request.model || 'gpt-4o-mini',
+      model: request.model || "gpt-4o-mini",
       messages: request.messages,
       temperature: request.temperature ?? 0.7,
       max_tokens: request.maxTokens ?? 1000,
@@ -58,11 +58,11 @@ export const runOpenAI = async (request: AIEngineRequest): Promise<AIEngineRespo
     
     // Store context if provided
     if (request.context) {
-      await storeInteraction(request, choice.message.content || '');
+      await storeInteraction(request, choice.message.content || "");
     }
 
     return {
-      content: choice.message.content || '',
+      content: choice.message.content || "",
       usage: response.usage ? {
         promptTokens: response.usage.prompt_tokens,
         completionTokens: response.usage.completion_tokens,
@@ -73,7 +73,7 @@ export const runOpenAI = async (request: AIEngineRequest): Promise<AIEngineRespo
     };
   } catch (error) {
     console.error("Error calling OpenAI API:", error);
-    throw new Error(`AI Engine Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(`AI Engine Error: ${error instanceof Error ? error.message : "Unknown error"}`);
   }
 };
 
@@ -94,10 +94,10 @@ const storeInteraction = async (request: AIEngineRequest, response: string): Pro
       timestamp: new Date().toISOString()
     };
     
-    console.log('AI Interaction stored:', contextData);
+    console.log("AI Interaction stored:", contextData);
     // TODO: Implement Supabase persistence for context history
   } catch (error) {
-    console.warn('Failed to store AI interaction:', error);
+    console.warn("Failed to store AI interaction:", error);
   }
 };
 
@@ -107,7 +107,7 @@ const storeInteraction = async (request: AIEngineRequest, response: string): Pro
 export const generateSystemPrompt = (moduleName: string, context?: Record<string, any>): string => {
   const basePrompt = `Você é um assistente IA especializado no módulo ${moduleName} do sistema Nautilus One.`;
   
-  const contextPrompt = context ? `\n\nContexto adicional:\n${JSON.stringify(context, null, 2)}` : '';
+  const contextPrompt = context ? `\n\nContexto adicional:\n${JSON.stringify(context, null, 2)}` : "";
   
   const behaviorPrompt = `\n\nComportamento esperado:
 - Forneça respostas práticas e acionáveis

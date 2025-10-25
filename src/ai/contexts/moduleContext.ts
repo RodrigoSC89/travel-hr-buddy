@@ -33,7 +33,7 @@ const contextStore = new Map<string, ModuleContext>();
  * Get or create module context
  */
 export const getModuleContext = (moduleName: string, userId?: string): ModuleContext => {
-  const contextKey = `${moduleName}:${userId || 'anonymous'}`;
+  const contextKey = `${moduleName}:${userId || "anonymous"}`;
   
   let context = contextStore.get(contextKey);
   
@@ -69,7 +69,7 @@ export const updateModuleContext = (
   userId: string | undefined, 
   updates: Partial<ModuleContext>
 ): ModuleContext => {
-  const contextKey = `${moduleName}:${userId || 'anonymous'}`;
+  const contextKey = `${moduleName}:${userId || "anonymous"}`;
   const context = getModuleContext(moduleName, userId);
   
   const updatedContext = {
@@ -113,7 +113,7 @@ export const addContextHistory = (
  * Clear module context
  */
 export const clearModuleContext = (moduleName: string, userId?: string): void => {
-  const contextKey = `${moduleName}:${userId || 'anonymous'}`;
+  const contextKey = `${moduleName}:${userId || "anonymous"}`;
   contextStore.delete(contextKey);
 };
 
@@ -146,6 +146,6 @@ export const cleanupOldContexts = (): void => {
 };
 
 // Cleanup old contexts every 30 minutes
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   setInterval(cleanupOldContexts, 30 * 60 * 1000);
 }

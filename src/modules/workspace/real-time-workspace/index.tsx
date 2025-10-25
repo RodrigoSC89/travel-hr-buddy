@@ -77,15 +77,15 @@ const RealTimeWorkspace: React.FC = () => {
     const messagesChannel = supabase
       .channel(`workspace-messages:${selectedChannel.id}`)
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'workspace_messages',
+          event: "INSERT",
+          schema: "public",
+          table: "workspace_messages",
           filter: `channel_id=eq.${selectedChannel.id}`
         },
         (payload) => {
-          logger.info('New message received', { payload });
+          logger.info("New message received", { payload });
           setMessages(prev => [...prev, payload.new as Message]);
         }
       )
@@ -94,11 +94,11 @@ const RealTimeWorkspace: React.FC = () => {
     const presenceChannel = supabase
       .channel(`workspace-presence:${selectedChannel.id}`)
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'workspace_presence',
+          event: "*",
+          schema: "public",
+          table: "workspace_presence",
           filter: `channel_id=eq.${selectedChannel.id}`
         },
         () => {
@@ -108,22 +108,22 @@ const RealTimeWorkspace: React.FC = () => {
       .subscribe();
 
     // Atualizar nossa presença
-    updatePresence(selectedChannel.id, 'online', 'Visualizando workspace');
+    updatePresence(selectedChannel.id, "online", "Visualizando workspace");
 
     return () => {
       supabase.removeChannel(messagesChannel);
       supabase.removeChannel(presenceChannel);
-      updatePresence(selectedChannel.id, 'offline');
+      updatePresence(selectedChannel.id, "offline");
     };
   }, [selectedChannel]);
 
   const loadChannels = async () => {
     try {
       const { data, error } = await supabase
-        .from('workspace_channels')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
+        .from("workspace_channels")
+        .select("*")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setChannels(data || []);
@@ -131,7 +131,7 @@ const RealTimeWorkspace: React.FC = () => {
         setSelectedChannel(data[0]);
       }
     } catch (error) {
-      logger.error('Error loading channels', { error });
+      logger.error("Error loading channels", { error });
       toast({
         title: "Erro ao carregar canais",
         description: "Não foi possível carregar os canais do workspace.",
@@ -145,31 +145,31 @@ const RealTimeWorkspace: React.FC = () => {
   const loadMessages = async (channelId: string) => {
     try {
       const { data, error } = await supabase
-        .from('workspace_messages')
-        .select('*')
-        .eq('channel_id', channelId)
-        .order('created_at', { ascending: true })
+        .from("workspace_messages")
+        .select("*")
+        .eq("channel_id", channelId)
+        .order("created_at", { ascending: true })
         .limit(100);
 
       if (error) throw error;
       setMessages((data || []) as Message[]);
     } catch (error) {
-      logger.error('Error loading messages', { error });
+      logger.error("Error loading messages", { error });
     }
   };
 
   const loadPresence = async (channelId: string) => {
     try {
       const { data, error } = await supabase
-        .from('workspace_presence')
-        .select('*')
-        .eq('channel_id', channelId)
-        .in('status', ['online']);
+        .from("workspace_presence")
+        .select("*")
+        .eq("channel_id", channelId)
+        .in("status", ["online"]);
 
       if (error) throw error;
       setPresence((data || []) as Presence[]);
     } catch (error) {
-      logger.error('Error loading presence', { error });
+      logger.error("Error loading presence", { error });
     }
   };
 
@@ -179,7 +179,7 @@ const RealTimeWorkspace: React.FC = () => {
       if (!user) return;
 
       await supabase
-        .from('workspace_presence')
+        .from("workspace_presence")
         .upsert({
           channel_id: channelId,
           user_id: user.id,
@@ -188,7 +188,7 @@ const RealTimeWorkspace: React.FC = () => {
           updated_at: new Date().toISOString()
         });
     } catch (error) {
-      logger.error('Error updating presence', { error });
+      logger.error("Error updating presence", { error });
     }
   };
 
@@ -198,15 +198,15 @@ const RealTimeWorkspace: React.FC = () => {
     setIsSending(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      if (!user) throw new Error("User not authenticated");
 
       const { error } = await supabase
-        .from('workspace_messages')
+        .from("workspace_messages")
         .insert({
           channel_id: selectedChannel.id,
           user_id: user.id,
           content: newMessage.trim(),
-          message_type: 'text'
+          message_type: "text"
         });
 
       if (error) throw error;
@@ -217,7 +217,7 @@ const RealTimeWorkspace: React.FC = () => {
         description: "Sua mensagem foi enviada com sucesso.",
       });
     } catch (error) {
-      logger.error('Error sending message', { error });
+      logger.error("Error sending message", { error });
       toast({
         title: "Erro ao enviar mensagem",
         description: "Não foi possível enviar a mensagem.",
@@ -296,7 +296,7 @@ const RealTimeWorkspace: React.FC = () => {
                   <div key={message.id} className="flex gap-3">
                     <Avatar className="h-8 w-8">
                       <AvatarFallback>
-                        {message.profiles?.full_name?.[0] || message.profiles?.email?.[0] || '?'}
+                        {message.profiles?.full_name?.[0] || message.profiles?.email?.[0] || "?"}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
@@ -305,7 +305,7 @@ const RealTimeWorkspace: React.FC = () => {
                           Usuário
                         </span>
                         <span className="text-xs text-muted-foreground">
-                          {message.created_at ? new Date(message.created_at).toLocaleTimeString() : ''}
+                          {message.created_at ? new Date(message.created_at).toLocaleTimeString() : ""}
                         </span>
                       </div>
                       <p className="text-sm">{message.content}</p>
@@ -322,7 +322,7 @@ const RealTimeWorkspace: React.FC = () => {
                 placeholder="Digite sua mensagem..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                 disabled={isSending}
               />
               <Button onClick={sendMessage} disabled={isSending || !newMessage.trim()}>

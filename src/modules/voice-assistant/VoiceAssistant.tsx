@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff, Volume2, VolumeX, Loader2 } from "lucide-react";
@@ -9,7 +9,7 @@ import { ConversationHistory } from "./components/ConversationHistory";
 
 export default function VoiceAssistant() {
   const [isActive, setIsActive] = useState(false);
-  const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string; timestamp: Date }>>([]);
+  const [messages, setMessages] = useState<Array<{ role: "user" | "assistant"; content: string; timestamp: Date }>>([]);
   
   const { 
     isListening, 
@@ -28,8 +28,8 @@ export default function VoiceAssistant() {
 
   useEffect(() => {
     if (!speechSupported) {
-      toast.error('Seu navegador não suporta reconhecimento de voz', {
-        description: 'Use Chrome, Edge ou Safari para melhor experiência'
+      toast.error("Seu navegador não suporta reconhecimento de voz", {
+        description: "Use Chrome, Edge ou Safari para melhor experiência"
       });
     }
   }, [speechSupported]);
@@ -41,12 +41,12 @@ export default function VoiceAssistant() {
   }, [transcript]);
 
   const handleUserMessage = async (text: string) => {
-    const userMessage = { role: 'user' as const, content: text, timestamp: new Date() };
+    const userMessage = { role: "user" as const, content: text, timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
 
     // Simular resposta do assistente (integrar com OpenAI depois)
     const response = generateResponse(text);
-    const assistantMessage = { role: 'assistant' as const, content: response, timestamp: new Date() };
+    const assistantMessage = { role: "assistant" as const, content: response, timestamp: new Date() };
     
     setMessages(prev => [...prev, assistantMessage]);
     
@@ -58,20 +58,20 @@ export default function VoiceAssistant() {
   const generateResponse = (input: string): string => {
     const lower = input.toLowerCase();
     
-    if (lower.includes('olá') || lower.includes('oi')) {
-      return 'Olá! Como posso ajudá-lo hoje no Nautilus One?';
+    if (lower.includes("olá") || lower.includes("oi")) {
+      return "Olá! Como posso ajudá-lo hoje no Nautilus One?";
     }
-    if (lower.includes('status') || lower.includes('embarcações')) {
-      return 'Todas as embarcações estão operacionais. A frota está 100% ativa no momento.';
+    if (lower.includes("status") || lower.includes("embarcações")) {
+      return "Todas as embarcações estão operacionais. A frota está 100% ativa no momento.";
     }
-    if (lower.includes('manutenção')) {
-      return 'Há 3 manutenções programadas para esta semana. Deseja ver os detalhes?';
+    if (lower.includes("manutenção")) {
+      return "Há 3 manutenções programadas para esta semana. Deseja ver os detalhes?";
     }
-    if (lower.includes('relatório') || lower.includes('report')) {
-      return 'Posso gerar relatórios de operações, manutenção, compliance e performance. Qual relatório você precisa?';
+    if (lower.includes("relatório") || lower.includes("report")) {
+      return "Posso gerar relatórios de operações, manutenção, compliance e performance. Qual relatório você precisa?";
     }
     
-    return 'Entendi. Posso ajudá-lo com informações sobre frotas, manutenções, relatórios e operações do Nautilus One.';
+    return "Entendi. Posso ajudá-lo com informações sobre frotas, manutenções, relatórios e operações do Nautilus One.";
   };
 
   const toggleAssistant = () => {
@@ -83,8 +83,8 @@ export default function VoiceAssistant() {
       if (speechSupported) {
         startListening();
         setIsActive(true);
-        toast.success('Assistente ativado', {
-          description: 'Pode começar a falar'
+        toast.success("Assistente ativado", {
+          description: "Pode começar a falar"
         });
       }
     }
@@ -139,20 +139,20 @@ export default function VoiceAssistant() {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Estado</span>
-              <span className={`text-sm font-medium ${isActive ? 'text-success' : 'text-muted-foreground'}`}>
-                {isActive ? 'Ativo' : 'Inativo'}
+              <span className={`text-sm font-medium ${isActive ? "text-success" : "text-muted-foreground"}`}>
+                {isActive ? "Ativo" : "Inativo"}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Escutando</span>
-              <span className={`text-sm font-medium ${isListening ? 'text-primary' : 'text-muted-foreground'}`}>
-                {isListening ? 'Sim' : 'Não'}
+              <span className={`text-sm font-medium ${isListening ? "text-primary" : "text-muted-foreground"}`}>
+                {isListening ? "Sim" : "Não"}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Falando</span>
-              <span className={`text-sm font-medium ${isSpeaking ? 'text-primary' : 'text-muted-foreground'}`}>
-                {isSpeaking ? 'Sim' : 'Não'}
+              <span className={`text-sm font-medium ${isSpeaking ? "text-primary" : "text-muted-foreground"}`}>
+                {isSpeaking ? "Sim" : "Não"}
               </span>
             </div>
           </div>

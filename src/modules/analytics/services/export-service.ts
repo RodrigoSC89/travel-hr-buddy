@@ -2,9 +2,9 @@
  * PATCH 101.0 - Export Service for PDF and CSV
  */
 
-import { ChartData } from '../types';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { ChartData } from "../types";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 class ExportService {
   async exportToPDF(
@@ -25,21 +25,21 @@ class ExportService {
 
     if (metrics && metrics.length > 0) {
       doc.setFontSize(14);
-      doc.text('Key Performance Indicators', 20, yPosition);
+      doc.text("Key Performance Indicators", 20, yPosition);
       yPosition += 10;
 
       const tableData = metrics.map(m => [
         m.name,
         `${m.value} ${m.unit}`,
-        `${m.change > 0 ? '+' : ''}${m.change}%`,
+        `${m.change > 0 ? "+" : ""}${m.change}%`,
         m.trend
       ]);
 
       (doc as any).autoTable({
         startY: yPosition,
-        head: [['Metric', 'Value', 'Change', 'Trend']],
+        head: [["Metric", "Value", "Change", "Trend"]],
         body: tableData,
-        theme: 'grid',
+        theme: "grid",
         styles: { fontSize: 9 },
         headStyles: { fillColor: [41, 128, 185] }
       });
@@ -57,25 +57,25 @@ class ExportService {
   ): Promise<void> {
     let csvContent = `${title}\n`;
     csvContent += `Generated: ${new Date().toLocaleString()}\n\n`;
-    csvContent += headers.join(',') + '\n';
+    csvContent += headers.join(",") + "\n";
 
     data.forEach(row => {
       const values = headers.map(header => {
-        const value = row[header] !== undefined ? row[header] : '';
-        return typeof value === 'string' && value.includes(',')
-          ? `"${value.replace(/"/g, '""')}"`
+        const value = row[header] !== undefined ? row[header] : "";
+        return typeof value === "string" && value.includes(",")
+          ? `"${value.replace(/"/g, "\"\"")}"`
           : value;
       });
-      csvContent += values.join(',') + '\n';
+      csvContent += values.join(",") + "\n";
     });
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     
-    link.setAttribute('href', url);
-    link.setAttribute('download', `analytics-export-${Date.now()}.csv`);
-    link.style.visibility = 'hidden';
+    link.setAttribute("href", url);
+    link.setAttribute("download", `analytics-export-${Date.now()}.csv`);
+    link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

@@ -2,16 +2,16 @@
  * PATCH 100.0 - Rate Limiting Service
  */
 
-import { RateLimitConfig } from '../types';
+import { RateLimitConfig } from "../types";
 
 class RateLimiterService {
   private limits: Map<string, RateLimitConfig> = new Map();
 
   constructor() {
     // Default rate limits
-    this.setLimit('/api/auth', 100, 60000); // 100 requests per minute
-    this.setLimit('/api/documents', 50, 60000); // 50 requests per minute
-    this.setLimit('/api/analytics', 30, 60000); // 30 requests per minute
+    this.setLimit("/api/auth", 100, 60000); // 100 requests per minute
+    this.setLimit("/api/documents", 50, 60000); // 50 requests per minute
+    this.setLimit("/api/analytics", 30, 60000); // 30 requests per minute
   }
 
   setLimit(endpoint: string, maxRequests: number, windowMs: number) {

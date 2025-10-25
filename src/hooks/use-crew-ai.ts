@@ -93,10 +93,10 @@ export const useCrewAI = () => {
 
           const descMap = {
             training: `${member.full_name} precisa de treinamento atualizado em operações marítimas modernas`,
-            rotation: `Recomendada rotação para balancear experiência na frota`,
-            promotion: `Performance consistente qualifica para próximo nível hierárquico`,
-            certificate: `Certificação STCW expira em 60 dias, renovação necessária`,
-            performance: `Revisão trimestral de desempenho aguardando conclusão`,
+            rotation: "Recomendada rotação para balancear experiência na frota",
+            promotion: "Performance consistente qualifica para próximo nível hierárquico",
+            certificate: "Certificação STCW expira em 60 dias, renovação necessária",
+            performance: "Revisão trimestral de desempenho aguardando conclusão",
           };
 
           return {
@@ -109,10 +109,10 @@ export const useCrewAI = () => {
             actionRequired: type === "certificate" 
               ? "Agendar renovação imediatamente"
               : type === "training"
-              ? "Inscrever em curso especializado"
-              : type === "promotion"
-              ? "Iniciar processo de avaliação"
-              : "Revisar e planejar",
+                ? "Inscrever em curso especializado"
+                : type === "promotion"
+                  ? "Iniciar processo de avaliação"
+                  : "Revisar e planejar",
             deadline: type === "certificate" 
               ? new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString()
               : undefined,

@@ -15,7 +15,7 @@ describe("Compliance Hub - Configuration", () => {
   describe("validateFile", () => {
     it("should accept valid PDF file", () => {
       const file = new File(["content"], "test.pdf", { type: "application/pdf" });
-      Object.defineProperty(file, 'size', { value: 1024 * 1024 }); // 1MB
+      Object.defineProperty(file, "size", { value: 1024 * 1024 }); // 1MB
       
       const result = validateFile(file);
       expect(result.valid).toBe(true);
@@ -24,7 +24,7 @@ describe("Compliance Hub - Configuration", () => {
 
     it("should reject oversized file", () => {
       const file = new File(["content"], "large.pdf", { type: "application/pdf" });
-      Object.defineProperty(file, 'size', { value: 15 * 1024 * 1024 }); // 15MB
+      Object.defineProperty(file, "size", { value: 15 * 1024 * 1024 }); // 15MB
       
       const result = validateFile(file);
       expect(result.valid).toBe(false);
@@ -33,7 +33,7 @@ describe("Compliance Hub - Configuration", () => {
 
     it("should reject invalid file type", () => {
       const file = new File(["content"], "test.exe", { type: "application/x-msdownload" });
-      Object.defineProperty(file, 'size', { value: 1024 });
+      Object.defineProperty(file, "size", { value: 1024 });
       
       const result = validateFile(file);
       expect(result.valid).toBe(false);

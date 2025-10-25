@@ -37,10 +37,10 @@ export const analyzeIncident = async (
   try {
     const contextInfo = additionalContext ? `
 Contexto adicional:
-- Embarcação: ${additionalContext.vessel || 'N/A'}
-- Local: ${additionalContext.location || 'N/A'}
-- Severidade inicial: ${additionalContext.severity || 'N/A'}
-- Tags: ${additionalContext.tags?.join(', ') || 'N/A'}` : '';
+- Embarcação: ${additionalContext.vessel || "N/A"}
+- Local: ${additionalContext.location || "N/A"}
+- Severidade inicial: ${additionalContext.severity || "N/A"}
+- Tags: ${additionalContext.tags?.join(", ") || "N/A"}` : "";
 
     const prompt = `Analise o seguinte incidente marítimo e forneça um diagnóstico detalhado:
 
@@ -65,14 +65,14 @@ Critérios para riskLevel:
 - crítico: Risco grave à segurança ou operação`;
 
     const response = await runOpenAI({
-      model: 'gpt-4o-mini',
+      model: "gpt-4o-mini",
       messages: [
         {
-          role: 'system',
-          content: 'Você é um especialista em análise de incidentes marítimos, com conhecimento profundo em normas IMCA, ISM, ISPS e NORMAM. Responda sempre em formato JSON válido.'
+          role: "system",
+          content: "Você é um especialista em análise de incidentes marítimos, com conhecimento profundo em normas IMCA, ISM, ISPS e NORMAM. Responda sempre em formato JSON válido."
         },
         {
-          role: 'user',
+          role: "user",
           content: prompt
         }
       ],
@@ -84,7 +84,7 @@ Critérios para riskLevel:
     const analysis = parseAnalysisResponse(response.content);
     return analysis;
   } catch (error) {
-    console.error('Error analyzing incident with AI:', error);
+    console.error("Error analyzing incident with AI:", error);
     
     // Fallback analysis
     return generateFallbackAnalysis(incidentDescription, additionalContext);
@@ -99,17 +99,17 @@ const parseAnalysisResponse = (responseText: string): IncidentAnalysis => {
     // Try to extract JSON from response
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      throw new Error('No JSON found in response');
+      throw new Error("No JSON found in response");
     }
 
     const parsed = JSON.parse(jsonMatch[0]);
     
     // Validate and structure the response
     return {
-      probableCause: parsed.probableCause || 'Causa indeterminada',
+      probableCause: parsed.probableCause || "Causa indeterminada",
       suggestedActions: Array.isArray(parsed.suggestedActions) 
         ? parsed.suggestedActions.slice(0, 5) 
-        : ['Investigar causa raiz', 'Documentar ocorrência', 'Notificar autoridades competentes'],
+        : ["Investigar causa raiz", "Documentar ocorrência", "Notificar autoridades competentes"],
       riskLevel: validateRiskLevel(parsed.riskLevel),
       preventiveMeasures: Array.isArray(parsed.preventiveMeasures) 
         ? parsed.preventiveMeasures.slice(0, 3)
@@ -117,12 +117,12 @@ const parseAnalysisResponse = (responseText: string): IncidentAnalysis => {
       complianceReferences: Array.isArray(parsed.complianceReferences)
         ? parsed.complianceReferences.slice(0, 3)
         : undefined,
-      confidence: typeof parsed.confidence === 'number' 
+      confidence: typeof parsed.confidence === "number" 
         ? Math.max(0, Math.min(1, parsed.confidence))
         : 0.7
     };
   } catch (error) {
-    console.error('Error parsing analysis response:', error);
+    console.error("Error parsing analysis response:", error);
     throw error;
   }
 };
@@ -131,8 +131,8 @@ const parseAnalysisResponse = (responseText: string): IncidentAnalysis => {
  * Validate risk level value
  */
 const validateRiskLevel = (level: any): SGSORiskLevel => {
-  const validLevels: SGSORiskLevel[] = ['baixo', 'moderado', 'alto', 'crítico'];
-  return validLevels.includes(level) ? level : 'moderado';
+  const validLevels: SGSORiskLevel[] = ["baixo", "moderado", "alto", "crítico"];
+  return validLevels.includes(level) ? level : "moderado";
 };
 
 /**
@@ -144,35 +144,35 @@ const generateFallbackAnalysis = (
 ): IncidentAnalysis => {
   // Simple keyword-based risk assessment
   const lowerDesc = description.toLowerCase();
-  let riskLevel: SGSORiskLevel = 'moderado';
+  let riskLevel: SGSORiskLevel = "moderado";
   
-  if (lowerDesc.includes('crítico') || lowerDesc.includes('grave') || lowerDesc.includes('emergência')) {
-    riskLevel = 'crítico';
-  } else if (lowerDesc.includes('alto') || lowerDesc.includes('urgente') || lowerDesc.includes('falha')) {
-    riskLevel = 'alto';
-  } else if (lowerDesc.includes('baixo') || lowerDesc.includes('menor') || lowerDesc.includes('leve')) {
-    riskLevel = 'baixo';
+  if (lowerDesc.includes("crítico") || lowerDesc.includes("grave") || lowerDesc.includes("emergência")) {
+    riskLevel = "crítico";
+  } else if (lowerDesc.includes("alto") || lowerDesc.includes("urgente") || lowerDesc.includes("falha")) {
+    riskLevel = "alto";
+  } else if (lowerDesc.includes("baixo") || lowerDesc.includes("menor") || lowerDesc.includes("leve")) {
+    riskLevel = "baixo";
   }
 
   return {
-    probableCause: 'Análise detalhada requer revisão manual. Configure a chave da API OpenAI para análise automatizada.',
+    probableCause: "Análise detalhada requer revisão manual. Configure a chave da API OpenAI para análise automatizada.",
     suggestedActions: [
-      'Realizar investigação preliminar',
-      'Coletar evidências e depoimentos',
-      'Documentar todos os detalhes do incidente',
-      'Notificar partes interessadas',
-      'Implementar medidas corretivas imediatas se necessário'
+      "Realizar investigação preliminar",
+      "Coletar evidências e depoimentos",
+      "Documentar todos os detalhes do incidente",
+      "Notificar partes interessadas",
+      "Implementar medidas corretivas imediatas se necessário"
     ],
     riskLevel,
     preventiveMeasures: [
-      'Revisar procedimentos operacionais',
-      'Realizar treinamento adicional da equipe',
-      'Implementar verificações preventivas'
+      "Revisar procedimentos operacionais",
+      "Realizar treinamento adicional da equipe",
+      "Implementar verificações preventivas"
     ],
     complianceReferences: [
-      'ISM Code 9.1 - Análise de incidentes',
-      'IMCA M109 - DP Incident Reporting',
-      'NORMAM-01 - Segurança marítima'
+      "ISM Code 9.1 - Análise de incidentes",
+      "IMCA M109 - DP Incident Reporting",
+      "NORMAM-01 - Segurança marítima"
     ],
     confidence: 0.5
   };
@@ -187,7 +187,7 @@ export const storeIncidentAnalysis = async (
 ): Promise<boolean> => {
   try {
     const { error } = await supabase
-      .from('dp_incidents')
+      .from("dp_incidents")
       .update({
         gpt_analysis: JSON.stringify({
           probableCause: analysis.probableCause,
@@ -200,16 +200,16 @@ export const storeIncidentAnalysis = async (
         }),
         sgso_risk_level: analysis.riskLevel
       })
-      .eq('id', incidentId);
+      .eq("id", incidentId);
 
     if (error) {
-      console.error('Error storing incident analysis:', error);
+      console.error("Error storing incident analysis:", error);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Error in storeIncidentAnalysis:', error);
+    console.error("Error in storeIncidentAnalysis:", error);
     return false;
   }
 };
@@ -222,22 +222,22 @@ export const getIncidentAnalysis = async (
 ): Promise<IncidentAnalysis | null> => {
   try {
     const { data, error } = await supabase
-      .from('dp_incidents')
-      .select('gpt_analysis')
-      .eq('id', incidentId)
+      .from("dp_incidents")
+      .select("gpt_analysis")
+      .eq("id", incidentId)
       .single();
 
     if (error || !data?.gpt_analysis) {
       return null;
     }
 
-    const parsed = typeof data.gpt_analysis === 'string' 
+    const parsed = typeof data.gpt_analysis === "string" 
       ? JSON.parse(data.gpt_analysis)
       : data.gpt_analysis;
 
     return parsed as IncidentAnalysis;
   } catch (error) {
-    console.error('Error getting incident analysis:', error);
+    console.error("Error getting incident analysis:", error);
     return null;
   }
 };

@@ -11,7 +11,7 @@ import { ExpenseChart } from "./components/ExpenseChart";
 import { InvoiceManager } from "./components/InvoiceManager";
 
 export default function FinanceHub() {
-  const [selectedPeriod, setSelectedPeriod] = useState<'month' | 'quarter' | 'year'>('month');
+  const [selectedPeriod, setSelectedPeriod] = useState<"month" | "quarter" | "year">("month");
 
   // Mock data - substituir por dados reais da tabela financial_transactions quando criada
   const financialSummary = {
@@ -21,27 +21,27 @@ export default function FinanceHub() {
     total: 735000,
     transactions: [
       {
-        id: '1',
-        type: 'income' as const,
+        id: "1",
+        type: "income" as const,
         amount: 120000,
-        description: 'Contrato de Transporte - Cliente A',
-        category: 'Operações',
+        description: "Contrato de Transporte - Cliente A",
+        category: "Operações",
         transaction_date: new Date().toISOString()
       },
       {
-        id: '2',
-        type: 'expense' as const,
+        id: "2",
+        type: "expense" as const,
         amount: 45000,
-        description: 'Combustível - Janeiro',
-        category: 'Combustível',
+        description: "Combustível - Janeiro",
+        category: "Combustível",
         transaction_date: new Date(Date.now() - 86400000).toISOString()
       },
       {
-        id: '3',
-        type: 'expense' as const,
+        id: "3",
+        type: "expense" as const,
         amount: 32000,
-        description: 'Manutenção Preventiva',
-        category: 'Manutenção',
+        description: "Manutenção Preventiva",
+        category: "Manutenção",
         transaction_date: new Date(Date.now() - 172800000).toISOString()
       }
     ]
@@ -56,22 +56,22 @@ export default function FinanceHub() {
         </div>
         <div className="flex gap-2">
           <Button
-            variant={selectedPeriod === 'month' ? 'default' : 'outline'}
-            onClick={() => setSelectedPeriod('month')}
+            variant={selectedPeriod === "month" ? "default" : "outline"}
+            onClick={() => setSelectedPeriod("month")}
             size="sm"
           >
             Mês
           </Button>
           <Button
-            variant={selectedPeriod === 'quarter' ? 'default' : 'outline'}
-            onClick={() => setSelectedPeriod('quarter')}
+            variant={selectedPeriod === "quarter" ? "default" : "outline"}
+            onClick={() => setSelectedPeriod("quarter")}
             size="sm"
           >
             Trimestre
           </Button>
           <Button
-            variant={selectedPeriod === 'year' ? 'default' : 'outline'}
-            onClick={() => setSelectedPeriod('year')}
+            variant={selectedPeriod === "year" ? "default" : "outline"}
+            onClick={() => setSelectedPeriod("year")}
             size="sm"
           >
             Ano
@@ -88,7 +88,7 @@ export default function FinanceHub() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-success">
-              R$ {financialSummary.income.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              R$ {financialSummary.income.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
           </CardContent>
         </Card>
@@ -100,7 +100,7 @@ export default function FinanceHub() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-destructive">
-              R$ {financialSummary.expenses.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              R$ {financialSummary.expenses.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
           </CardContent>
         </Card>
@@ -112,7 +112,7 @@ export default function FinanceHub() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              R$ {financialSummary.balance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              R$ {financialSummary.balance.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
           </CardContent>
         </Card>

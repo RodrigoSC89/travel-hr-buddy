@@ -6,7 +6,7 @@ export interface WatchdogLog {
   id: string;
   error_id: string;
   error_type: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
   stack_trace?: string;
   context?: any;
@@ -68,8 +68,8 @@ export const useWatchdogLogs = () => {
 
   const stats = {
     total: logs?.length || 0,
-    critical: logs?.filter(l => l.severity === 'critical' && !l.resolved_at).length || 0,
-    high: logs?.filter(l => l.severity === 'high' && !l.resolved_at).length || 0,
+    critical: logs?.filter(l => l.severity === "critical" && !l.resolved_at).length || 0,
+    high: logs?.filter(l => l.severity === "high" && !l.resolved_at).length || 0,
     resolved: logs?.filter(l => l.resolved_at).length || 0,
     autoFixed: logs?.filter(l => l.auto_fix_success).length || 0,
   };

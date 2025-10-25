@@ -1,16 +1,16 @@
 // PATCH 110.0: Offline Cache Service using IndexedDB
-import type { CachedRoute, CachedCrewMember, CachedVessel, PendingAction, OfflineStatus } from '@/types/offline';
+import type { CachedRoute, CachedCrewMember, CachedVessel, PendingAction, OfflineStatus } from "@/types/offline";
 
-const DB_NAME = 'maritime_offline_db';
+const DB_NAME = "maritime_offline_db";
 const DB_VERSION = 1;
 
 // Store names
 const STORES = {
-  ROUTES: 'routes',
-  CREW: 'crew',
-  VESSELS: 'vessels',
-  PENDING_ACTIONS: 'pending_actions',
-  CONFIG: 'config',
+  ROUTES: "routes",
+  CREW: "crew",
+  VESSELS: "vessels",
+  PENDING_ACTIONS: "pending_actions",
+  CONFIG: "config",
 };
 
 class OfflineCacheService {
@@ -31,30 +31,30 @@ class OfflineCacheService {
 
         // Create object stores
         if (!db.objectStoreNames.contains(STORES.ROUTES)) {
-          db.createObjectStore(STORES.ROUTES, { keyPath: 'id' });
+          db.createObjectStore(STORES.ROUTES, { keyPath: "id" });
         }
         if (!db.objectStoreNames.contains(STORES.CREW)) {
-          db.createObjectStore(STORES.CREW, { keyPath: 'id' });
+          db.createObjectStore(STORES.CREW, { keyPath: "id" });
         }
         if (!db.objectStoreNames.contains(STORES.VESSELS)) {
-          db.createObjectStore(STORES.VESSELS, { keyPath: 'id' });
+          db.createObjectStore(STORES.VESSELS, { keyPath: "id" });
         }
         if (!db.objectStoreNames.contains(STORES.PENDING_ACTIONS)) {
           const actionStore = db.createObjectStore(STORES.PENDING_ACTIONS, { 
-            keyPath: 'id', 
+            keyPath: "id", 
             autoIncrement: true 
           });
-          actionStore.createIndex('synced', 'synced', { unique: false });
-          actionStore.createIndex('timestamp', 'timestamp', { unique: false });
+          actionStore.createIndex("synced", "synced", { unique: false });
+          actionStore.createIndex("timestamp", "timestamp", { unique: false });
         }
         if (!db.objectStoreNames.contains(STORES.CONFIG)) {
-          db.createObjectStore(STORES.CONFIG, { keyPath: 'key' });
+          db.createObjectStore(STORES.CONFIG, { keyPath: "key" });
         }
       };
     });
   }
 
-  private async getStore(storeName: string, mode: IDBTransactionMode = 'readonly'): Promise<IDBObjectStore> {
+  private async getStore(storeName: string, mode: IDBTransactionMode = "readonly"): Promise<IDBObjectStore> {
     if (!this.db) {
       await this.initialize();
     }
@@ -64,7 +64,7 @@ class OfflineCacheService {
 
   // Routes
   async cacheRoutes(routes: CachedRoute[]): Promise<void> {
-    const store = await this.getStore(STORES.ROUTES, 'readwrite');
+    const store = await this.getStore(STORES.ROUTES, "readwrite");
     const timestamp = new Date().toISOString();
     
     for (const route of routes) {
@@ -84,7 +84,7 @@ class OfflineCacheService {
 
   // Crew
   async cacheCrew(crew: CachedCrewMember[]): Promise<void> {
-    const store = await this.getStore(STORES.CREW, 'readwrite');
+    const store = await this.getStore(STORES.CREW, "readwrite");
     const timestamp = new Date().toISOString();
     
     for (const member of crew) {
@@ -104,7 +104,7 @@ class OfflineCacheService {
 
   // Vessels
   async cacheVessels(vessels: CachedVessel[]): Promise<void> {
-    const store = await this.getStore(STORES.VESSELS, 'readwrite');
+    const store = await this.getStore(STORES.VESSELS, "readwrite");
     const timestamp = new Date().toISOString();
     
     for (const vessel of vessels) {
@@ -123,8 +123,8 @@ class OfflineCacheService {
   }
 
   // Pending Actions
-  async addPendingAction(action: Omit<PendingAction, 'id'>): Promise<void> {
-    const store = await this.getStore(STORES.PENDING_ACTIONS, 'readwrite');
+  async addPendingAction(action: Omit<PendingAction, "id">): Promise<void> {
+    const store = await this.getStore(STORES.PENDING_ACTIONS, "readwrite");
     const pendingAction = {
       ...action,
       timestamp: new Date().toISOString(),
@@ -136,7 +136,7 @@ class OfflineCacheService {
   async getPendingActions(): Promise<PendingAction[]> {
     const store = await this.getStore(STORES.PENDING_ACTIONS);
     return new Promise((resolve, reject) => {
-      const index = store.index('synced');
+      const index = store.index("synced");
       const request = index.getAll(false as any);
       request.onsuccess = () => resolve(request.result as PendingAction[]);
       request.onerror = () => reject(request.error);
@@ -144,7 +144,7 @@ class OfflineCacheService {
   }
 
   async markActionSynced(id: string | number): Promise<void> {
-    const store = await this.getStore(STORES.PENDING_ACTIONS, 'readwrite');
+    const store = await this.getStore(STORES.PENDING_ACTIONS, "readwrite");
     return new Promise((resolve, reject) => {
       const request = store.get(id);
       request.onsuccess = () => {
@@ -163,7 +163,7 @@ class OfflineCacheService {
   }
 
   async clearPendingActions(): Promise<void> {
-    const store = await this.getStore(STORES.PENDING_ACTIONS, 'readwrite');
+    const store = await this.getStore(STORES.PENDING_ACTIONS, "readwrite");
     return new Promise((resolve, reject) => {
       const request = store.clear();
       request.onsuccess = () => resolve();
@@ -177,7 +177,7 @@ class OfflineCacheService {
     const pendingActions = await this.getPendingActions();
     
     return new Promise((resolve, reject) => {
-      const request = store.get('last_sync');
+      const request = store.get("last_sync");
       request.onsuccess = () => {
         const lastSync = request.result?.value || null;
         resolve({
@@ -192,9 +192,9 @@ class OfflineCacheService {
   }
 
   async updateLastSync(): Promise<void> {
-    const store = await this.getStore(STORES.CONFIG, 'readwrite');
+    const store = await this.getStore(STORES.CONFIG, "readwrite");
     const timestamp = new Date().toISOString();
-    store.put({ key: 'last_sync', value: timestamp });
+    store.put({ key: "last_sync", value: timestamp });
   }
 
   // Clear all cache
@@ -210,7 +210,7 @@ class OfflineCacheService {
     ];
 
     for (const storeName of stores) {
-      const store = await this.getStore(storeName, 'readwrite');
+      const store = await this.getStore(storeName, "readwrite");
       await new Promise<void>((resolve, reject) => {
         const request = store.clear();
         request.onsuccess = () => resolve();

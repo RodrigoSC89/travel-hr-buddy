@@ -11,11 +11,11 @@ interface EmergencyContactsProps {
 export function EmergencyContacts({ contacts }: EmergencyContactsProps) {
   const getContactIcon = (type: string) => {
     switch (type) {
-      case 'phone': return <Phone className="h-4 w-4" />;
-      case 'radio': return <Radio className="h-4 w-4" />;
-      case 'satellite': return <Satellite className="h-4 w-4" />;
-      case 'email': return <Mail className="h-4 w-4" />;
-      default: return <Phone className="h-4 w-4" />;
+    case "phone": return <Phone className="h-4 w-4" />;
+    case "radio": return <Radio className="h-4 w-4" />;
+    case "satellite": return <Satellite className="h-4 w-4" />;
+    case "email": return <Mail className="h-4 w-4" />;
+    default: return <Phone className="h-4 w-4" />;
     }
   };
 

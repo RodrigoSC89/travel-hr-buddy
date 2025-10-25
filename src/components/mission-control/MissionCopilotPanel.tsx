@@ -31,7 +31,7 @@ import {
 
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
 }
@@ -53,7 +53,7 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
   const { toast } = useToast();
   
-  const { ask, loading, error, clearError } = useAIAssistant('mission-control', {
+  const { ask, loading, error, clearError } = useAIAssistant("mission-control", {
     additionalContext: missionStatus
   });
 
@@ -62,8 +62,8 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
     if (messages.length === 0) {
       setMessages([{
         id: `msg-${Date.now()}`,
-        role: 'assistant',
-        content: '🚢 Olá! Sou o Mission Copilot, seu assistente operacional. Como posso ajudar com o controle da missão atual?',
+        role: "assistant",
+        content: "🚢 Olá! Sou o Mission Copilot, seu assistente operacional. Como posso ajudar com o controle da missão atual?",
         timestamp: new Date()
       }]);
     }
@@ -85,7 +85,7 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
 
     const userMessage: Message = {
       id: `msg-${Date.now()}-user`,
-      role: 'user',
+      role: "user",
       content: input,
       timestamp: new Date()
     };
@@ -98,14 +98,14 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
       
       const assistantMessage: Message = {
         id: `msg-${Date.now()}-assistant`,
-        role: 'assistant',
+        role: "assistant",
         content: response,
         timestamp: new Date()
       };
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (err) {
-      console.error('Error asking AI assistant:', err);
+      console.error("Error asking AI assistant:", err);
     }
   };
 
@@ -113,25 +113,25 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
     let question = "";
     
     switch (action) {
-      case "status":
-        question = "Qual é o status atual da missão? Há algum ponto de atenção?";
-        break;
-      case "start-mission":
-        question = "O que preciso verificar antes de iniciar uma nova missão?";
-        if (onAction) onAction('start-mission');
-        break;
-      case "stop-mission":
-        question = "Quais são os procedimentos para encerrar a missão atual?";
-        if (onAction) onAction('stop-mission');
-        break;
-      case "create-log":
-        question = "Que informações são importantes para registrar em um log de missão?";
-        if (onAction) onAction('create-log');
-        break;
-      case "send-alert":
-        question = "Em quais situações devo enviar um alerta operacional?";
-        if (onAction) onAction('send-alert');
-        break;
+    case "status":
+      question = "Qual é o status atual da missão? Há algum ponto de atenção?";
+      break;
+    case "start-mission":
+      question = "O que preciso verificar antes de iniciar uma nova missão?";
+      if (onAction) onAction("start-mission");
+      break;
+    case "stop-mission":
+      question = "Quais são os procedimentos para encerrar a missão atual?";
+      if (onAction) onAction("stop-mission");
+      break;
+    case "create-log":
+      question = "Que informações são importantes para registrar em um log de missão?";
+      if (onAction) onAction("create-log");
+      break;
+    case "send-alert":
+      question = "Em quais situações devo enviar um alerta operacional?";
+      if (onAction) onAction("send-alert");
+      break;
     }
 
     if (question) {
@@ -145,9 +145,9 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
     
     try {
       const summaryPrompt = `Gere um resumo executivo da missão atual com base nestes dados:
-        - Status: ${missionStatus?.active ? 'Ativa' : 'Inativa'}
-        - Nome: ${missionStatus?.name || 'Não especificado'}
-        - Início: ${missionStatus?.startTime || 'Não especificado'}
+        - Status: ${missionStatus?.active ? "Ativa" : "Inativa"}
+        - Nome: ${missionStatus?.name || "Não especificado"}
+        - Início: ${missionStatus?.startTime || "Não especificado"}
         - Incidentes: ${missionStatus?.incidents || 0}
         - Alertas: ${missionStatus?.alerts || 0}
         
@@ -161,7 +161,7 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
       
       const summaryMessage: Message = {
         id: `msg-${Date.now()}-summary`,
-        role: 'assistant',
+        role: "assistant",
         content: `📊 **RESUMO DA MISSÃO**\n\n${summary}`,
         timestamp: new Date()
       };
@@ -173,7 +173,7 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
         description: "O resumo da missão foi gerado com sucesso."
       });
     } catch (err) {
-      console.error('Error generating summary:', err);
+      console.error("Error generating summary:", err);
     } finally {
       setIsGeneratingSummary(false);
     }
@@ -208,7 +208,7 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
             <Button
               size="sm"
               variant="outline"
-              onClick={() => handleSuggestedAction('status')}
+              onClick={() => handleSuggestedAction("status")}
               disabled={loading}
             >
               <AlertCircle className="h-4 w-4 mr-1" />
@@ -217,7 +217,7 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
             <Button
               size="sm"
               variant="outline"
-              onClick={() => handleSuggestedAction('start-mission')}
+              onClick={() => handleSuggestedAction("start-mission")}
               disabled={loading}
             >
               <PlayCircle className="h-4 w-4 mr-1" />
@@ -226,7 +226,7 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
             <Button
               size="sm"
               variant="outline"
-              onClick={() => handleSuggestedAction('stop-mission')}
+              onClick={() => handleSuggestedAction("stop-mission")}
               disabled={loading}
             >
               <StopCircle className="h-4 w-4 mr-1" />
@@ -235,7 +235,7 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
             <Button
               size="sm"
               variant="outline"
-              onClick={() => handleSuggestedAction('create-log')}
+              onClick={() => handleSuggestedAction("create-log")}
               disabled={loading}
             >
               <FileWarning className="h-4 w-4 mr-1" />
@@ -252,18 +252,18 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
                   className={`max-w-[80%] rounded-lg p-3 ${
-                    message.role === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted'
+                    message.role === "user"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                   <p className="text-xs opacity-70 mt-1">
-                    {message.timestamp.toLocaleTimeString('pt-BR')}
+                    {message.timestamp.toLocaleTimeString("pt-BR")}
                   </p>
                 </div>
               </div>
@@ -285,7 +285,7 @@ export default function MissionCopilotPanel({ missionStatus, onAction }: Mission
               placeholder="Faça uma pergunta sobre a missão..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               disabled={loading}
             />
             <Button 

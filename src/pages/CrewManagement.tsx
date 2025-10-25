@@ -267,186 +267,186 @@ export default function CrewManagement() {
         <TabsContent value="list" className="space-y-6 mt-6">
           {/* Filters and Actions */}
           <Card>
-        <CardHeader>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <CardTitle>Tripulação</CardTitle>
-              <CardDescription>
+            <CardHeader>
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                  <CardTitle>Tripulação</CardTitle>
+                  <CardDescription>
                 Gerencie informações da tripulação e certificações
-              </CardDescription>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline">
-                <Download className="h-4 w-4 mr-2" />
+                  </CardDescription>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline">
+                    <Download className="h-4 w-4 mr-2" />
                 Exportar
-              </Button>
-              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button>
-                    <UserPlus className="h-4 w-4 mr-2" />
+                  </Button>
+                  <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button>
+                        <UserPlus className="h-4 w-4 mr-2" />
                     Novo Tripulante
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl">
-                  <DialogHeader>
-                    <DialogTitle>Adicionar Novo Tripulante</DialogTitle>
-                    <DialogDescription>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl">
+                      <DialogHeader>
+                        <DialogTitle>Adicionar Novo Tripulante</DialogTitle>
+                        <DialogDescription>
                       Preencha as informações do novo membro da tripulação
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Nome Completo</Label>
-                      <Input id="name" placeholder="Nome do tripulante" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="position">Posição</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione a posição" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="commander">Comandante</SelectItem>
-                          <SelectItem value="chief_engineer">Chefe de Máquinas</SelectItem>
-                          <SelectItem value="deck_officer">Oficial de Convés</SelectItem>
-                          <SelectItem value="engineer">Engenheiro</SelectItem>
-                          <SelectItem value="sailor">Marinheiro</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="nationality">Nacionalidade</Label>
-                      <Input id="nationality" placeholder="Nacionalidade" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="passport">Número do Passaporte</Label>
-                      <Input id="passport" placeholder="Número do passaporte" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Telefone</Label>
-                      <Input id="phone" placeholder="Telefone de contato" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="Email" />
-                    </div>
-                  </div>
-                  <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="name">Nome Completo</Label>
+                          <Input id="name" placeholder="Nome do tripulante" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="position">Posição</Label>
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione a posição" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="commander">Comandante</SelectItem>
+                              <SelectItem value="chief_engineer">Chefe de Máquinas</SelectItem>
+                              <SelectItem value="deck_officer">Oficial de Convés</SelectItem>
+                              <SelectItem value="engineer">Engenheiro</SelectItem>
+                              <SelectItem value="sailor">Marinheiro</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="nationality">Nacionalidade</Label>
+                          <Input id="nationality" placeholder="Nacionalidade" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="passport">Número do Passaporte</Label>
+                          <Input id="passport" placeholder="Número do passaporte" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="phone">Telefone</Label>
+                          <Input id="phone" placeholder="Telefone de contato" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email">Email</Label>
+                          <Input id="email" type="email" placeholder="Email" />
+                        </div>
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                       Cancelar
-                    </Button>
-                    <Button>Adicionar Tripulante</Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {/* Search and Filters */}
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Buscar por nome, posição ou ID..."
-                  className="pl-8"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+                        </Button>
+                        <Button>Adicionar Tripulante</Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </div>
-            </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="active">Ativo</SelectItem>
-                <SelectItem value="shore_leave">Licença Terra</SelectItem>
-                <SelectItem value="medical_leave">Licença Médica</SelectItem>
-                <SelectItem value="inactive">Inativo</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={vesselFilter} onValueChange={setVesselFilter}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Embarcação" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas</SelectItem>
-                {vessels.map((vessel) => (
-                  <SelectItem key={vessel.id} value={vessel.id}>
-                    {vessel.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+            </CardHeader>
+            <CardContent>
+              {/* Search and Filters */}
+              <div className="flex flex-col md:flex-row gap-4 mb-6">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Buscar por nome, posição ou ID..."
+                      className="pl-8"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos</SelectItem>
+                    <SelectItem value="active">Ativo</SelectItem>
+                    <SelectItem value="shore_leave">Licença Terra</SelectItem>
+                    <SelectItem value="medical_leave">Licença Médica</SelectItem>
+                    <SelectItem value="inactive">Inativo</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={vesselFilter} onValueChange={setVesselFilter}>
+                  <SelectTrigger className="w-48">
+                    <SelectValue placeholder="Embarcação" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todas</SelectItem>
+                    {vessels.map((vessel) => (
+                      <SelectItem key={vessel.id} value={vessel.id}>
+                        {vessel.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-          {/* Crew Members Table */}
-          <div className="space-y-3">
-            {filteredCrewMembers.map((member) => (
-              <div
-                key={member.id}
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className={`w-3 h-3 rounded-full ${getStatusColor(member.status)}`}></div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-medium">{member.full_name}</h4>
-                      {member.rank && (
-                        <Badge variant="outline" className="text-xs">
-                          {member.rank}
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span>{member.position}</span>
-                      <span>•</span>
-                      <span>ID: {member.employee_id}</span>
-                      <span>•</span>
-                      <span>{member.nationality}</span>
-                      {member.vessel_id && (
-                        <>
+              {/* Crew Members Table */}
+              <div className="space-y-3">
+                {filteredCrewMembers.map((member) => (
+                  <div
+                    key={member.id}
+                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className={`w-3 h-3 rounded-full ${getStatusColor(member.status)}`}></div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-medium">{member.full_name}</h4>
+                          {member.rank && (
+                            <Badge variant="outline" className="text-xs">
+                              {member.rank}
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <span>{member.position}</span>
                           <span>•</span>
-                          <span>{getVesselName(member.vessel_id)}</span>
-                        </>
+                          <span>ID: {member.employee_id}</span>
+                          <span>•</span>
+                          <span>{member.nationality}</span>
+                          {member.vessel_id && (
+                            <>
+                              <span>•</span>
+                              <span>{getVesselName(member.vessel_id)}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary">
+                        {getStatusLabel(member.status)}
+                      </Badge>
+                      {member.experience_years && (
+                        <div className="text-sm text-muted-foreground">
+                          {member.experience_years} anos exp.
+                        </div>
                       )}
+                      <Button variant="ghost" size="sm">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <Shield className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary">
-                    {getStatusLabel(member.status)}
-                  </Badge>
-                  {member.experience_years && (
-                    <div className="text-sm text-muted-foreground">
-                      {member.experience_years} anos exp.
-                    </div>
-                  )}
-                  <Button variant="ghost" size="sm">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <Shield className="h-4 w-4" />
-                  </Button>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {filteredCrewMembers.length === 0 && (
-            <div className="text-center py-8">
-              <Users className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Nenhum tripulante encontrado</h3>
-              <p className="text-muted-foreground">
+              {filteredCrewMembers.length === 0 && (
+                <div className="text-center py-8">
+                  <Users className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Nenhum tripulante encontrado</h3>
+                  <p className="text-muted-foreground">
                 Tente ajustar os filtros ou adicione novos tripulantes
-              </p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="ai-insights" className="space-y-6 mt-6">

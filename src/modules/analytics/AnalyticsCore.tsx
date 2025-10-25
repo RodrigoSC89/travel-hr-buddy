@@ -10,10 +10,10 @@ import { BarChart3, TrendingUp, TrendingDown, Activity, Download, Brain, Databas
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { dataCollector } from './services/data-collector';
-import { aiInsightsService } from './services/ai-insights';
-import { exportService } from './services/export-service';
-import { KPIMetric, AIInsight, DataSource } from './types';
+import { dataCollector } from "./services/data-collector";
+import { aiInsightsService } from "./services/ai-insights";
+import { exportService } from "./services/export-service";
+import { KPIMetric, AIInsight, DataSource } from "./types";
 
 const AnalyticsCore = () => {
   const { toast } = useToast();
@@ -69,10 +69,10 @@ const AnalyticsCore = () => {
       const downtimeData = await dataCollector.collectDowntimeVsEfficiency();
 
       await exportService.exportToPDF(
-        'Analytics Report',
+        "Analytics Report",
         [
-          { name: 'Consumption vs Performance', data: consumptionData },
-          { name: 'Downtime vs Efficiency', data: downtimeData }
+          { name: "Consumption vs Performance", data: consumptionData },
+          { name: "Downtime vs Efficiency", data: downtimeData }
         ],
         metrics
       );
@@ -98,9 +98,9 @@ const AnalyticsCore = () => {
 
     try {
       await exportService.exportToCSV(
-        'KPI Metrics Export',
+        "KPI Metrics Export",
         metrics,
-        ['name', 'value', 'unit', 'trend', 'change', 'category']
+        ["name", "value", "unit", "trend", "change", "category"]
       );
 
       toast({
@@ -118,12 +118,12 @@ const AnalyticsCore = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'down':
-        return <TrendingDown className="h-4 w-4 text-red-500" />;
-      default:
-        return <Activity className="h-4 w-4 text-gray-500" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "down":
+      return <TrendingDown className="h-4 w-4 text-red-500" />;
+    default:
+      return <Activity className="h-4 w-4 text-gray-500" />;
     }
   };
 
@@ -171,7 +171,7 @@ const AnalyticsCore = () => {
             <CardContent>
               <div className="text-2xl font-bold">{source.recordCount.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">
-                {source.isConnected ? 'Connected' : 'Disconnected'}
+                {source.isConnected ? "Connected" : "Disconnected"}
               </p>
             </CardContent>
           </Card>
@@ -247,7 +247,7 @@ const AnalyticsCore = () => {
                     </div>
                     <div className="flex items-center gap-2 mt-2">
                       <Badge variant={metric.change < 0 ? "default" : "secondary"}>
-                        {metric.change > 0 ? '+' : ''}{metric.change}%
+                        {metric.change > 0 ? "+" : ""}{metric.change}%
                       </Badge>
                       <span className="text-xs text-muted-foreground capitalize">
                         {metric.category}
@@ -271,7 +271,7 @@ const AnalyticsCore = () => {
               </div>
               <Button onClick={handleGenerateInsights} disabled={isLoadingInsights}>
                 <Brain className="h-4 w-4 mr-2" />
-                {isLoadingInsights ? 'Generating...' : 'Generate Insights'}
+                {isLoadingInsights ? "Generating..." : "Generate Insights"}
               </Button>
             </CardHeader>
             <CardContent>

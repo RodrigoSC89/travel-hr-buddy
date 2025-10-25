@@ -5,7 +5,7 @@ import { Satellite, Signal, Battery, Thermometer } from "lucide-react";
 interface SatelliteData {
   id: string;
   name: string;
-  status: 'active' | 'standby' | 'offline';
+  status: "active" | "standby" | "offline";
   signalStrength: number;
   battery: number;
   temperature: number;
@@ -19,17 +19,17 @@ interface SatelliteStatusProps {
 export function SatelliteStatus({ satellites }: SatelliteStatusProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'default';
-      case 'standby': return 'secondary';
-      case 'offline': return 'destructive';
-      default: return 'secondary';
+    case "active": return "default";
+    case "standby": return "secondary";
+    case "offline": return "destructive";
+    default: return "secondary";
     }
   };
 
   const getSignalColor = (strength: number) => {
-    if (strength >= 80) return 'text-success';
-    if (strength >= 50) return 'text-warning';
-    return 'text-destructive';
+    if (strength >= 80) return "text-success";
+    if (strength >= 50) return "text-warning";
+    return "text-destructive";
   };
 
   return (
@@ -77,7 +77,7 @@ export function SatelliteStatus({ satellites }: SatelliteStatusProps) {
 
               <div className="pt-2 border-t">
                 <p className="text-xs text-muted-foreground">
-                  Último contato: {new Date(satellite.lastContact).toLocaleString('pt-BR')}
+                  Último contato: {new Date(satellite.lastContact).toLocaleString("pt-BR")}
                 </p>
               </div>
             </div>

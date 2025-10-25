@@ -201,7 +201,7 @@ Generated: ${new Date(result.timestamp).toLocaleString()}
 TOTAL ISSUES: ${result.issuesFound}
 
 💡 RECOMMENDATIONS:
-${result.recommendations.map((rec, i) => `${i + 1}. ${rec}`).join('\n')}
+${result.recommendations.map((rec, i) => `${i + 1}. ${rec}`).join("\n")}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 `;

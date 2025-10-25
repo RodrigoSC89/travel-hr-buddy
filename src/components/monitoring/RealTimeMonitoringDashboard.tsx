@@ -3,14 +3,14 @@
  * Live metrics visualization with performance, errors, and analytics
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Activity, AlertTriangle, TrendingUp, Users, Zap } from 'lucide-react';
-import { performanceMonitor, WebVitalMetric, PerformanceSnapshot } from '@/lib/monitoring/performance-monitor';
-import { errorTracker, TrackedError } from '@/lib/monitoring/error-tracker';
-import { userAnalytics } from '@/lib/monitoring/user-analytics';
+import React, { useState, useEffect } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Activity, AlertTriangle, TrendingUp, Users, Zap } from "lucide-react";
+import { performanceMonitor, WebVitalMetric, PerformanceSnapshot } from "@/lib/monitoring/performance-monitor";
+import { errorTracker, TrackedError } from "@/lib/monitoring/error-tracker";
+import { userAnalytics } from "@/lib/monitoring/user-analytics";
 
 export default function RealTimeMonitoringDashboard() {
   const [perfSnapshot, setPerfSnapshot] = useState<PerformanceSnapshot | null>(null);
@@ -57,25 +57,25 @@ export default function RealTimeMonitoringDashboard() {
 
   const getRatingColor = (rating: string) => {
     switch (rating) {
-      case 'good': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      case 'needs-improvement': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'poor': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      default: return 'bg-muted text-muted-foreground';
+    case "good": return "bg-green-500/20 text-green-400 border-green-500/30";
+    case "needs-improvement": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    case "poor": return "bg-red-500/20 text-red-400 border-red-500/30";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      case 'high': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-      case 'medium': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'low': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      default: return 'bg-muted text-muted-foreground';
+    case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
+    case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
+    case "medium": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    case "low": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const formatValue = (metric: WebVitalMetric) => {
-    if (metric.name === 'CLS') {
+    if (metric.name === "CLS") {
       return metric.value.toFixed(3);
     }
     return `${Math.round(metric.value)}ms`;
@@ -152,7 +152,7 @@ export default function RealTimeMonitoringDashboard() {
                     .map((resource, idx) => (
                       <div key={idx} className="flex justify-between items-center p-2 rounded bg-muted/50">
                         <div className="flex-1 truncate">
-                          <span className="text-xs font-mono">{resource.name.split('/').pop()}</span>
+                          <span className="text-xs font-mono">{resource.name.split("/").pop()}</span>
                           <span className="text-xs text-muted-foreground ml-2">({resource.type})</span>
                         </div>
                         <Badge variant="outline">{Math.round(resource.duration)}ms</Badge>

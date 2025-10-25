@@ -54,7 +54,7 @@ interface ChartData {
   label?: string;
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
 const PerformanceDashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
@@ -77,7 +77,7 @@ const PerformanceDashboard: React.FC = () => {
     setIsLoading(true);
     try {
       // Log dashboard access
-      console.log('[Performance Dashboard] Loading data', {
+      console.log("[Performance Dashboard] Loading data", {
         period: selectedPeriod,
         vessel: selectedVessel,
         missionType: selectedMissionType,
@@ -104,25 +104,25 @@ const PerformanceDashboard: React.FC = () => {
       };
 
       const simulatedFuelData: ChartData[] = [
-        { name: 'Missão A', value: 95.2, label: 'Otimizado' },
-        { name: 'Missão B', value: 89.8, label: 'Normal' },
-        { name: 'Missão C', value: 92.4, label: 'Otimizado' },
-        { name: 'Missão D', value: 88.1, label: 'Normal' },
-        { name: 'Missão E', value: 96.7, label: 'Excelente' },
+        { name: "Missão A", value: 95.2, label: "Otimizado" },
+        { name: "Missão B", value: 89.8, label: "Normal" },
+        { name: "Missão C", value: 92.4, label: "Otimizado" },
+        { name: "Missão D", value: 88.1, label: "Normal" },
+        { name: "Missão E", value: 96.7, label: "Excelente" },
       ];
 
       const simulatedProductivityData: ChartData[] = [
-        { name: 'Semana 1', value: 145 },
-        { name: 'Semana 2', value: 162 },
-        { name: 'Semana 3', value: 158 },
-        { name: 'Semana 4', value: 171 },
+        { name: "Semana 1", value: 145 },
+        { name: "Semana 2", value: 162 },
+        { name: "Semana 3", value: 158 },
+        { name: "Semana 4", value: 171 },
       ];
 
       const simulatedDowntimeData: ChartData[] = [
-        { name: 'Manutenção', value: 45 },
-        { name: 'Clima', value: 18 },
-        { name: 'Operacional', value: 12 },
-        { name: 'Técnico', value: 25 },
+        { name: "Manutenção", value: 45 },
+        { name: "Clima", value: 18 },
+        { name: "Operacional", value: 12 },
+        { name: "Técnico", value: 25 },
       ];
 
       setMetrics(simulatedMetrics);
@@ -132,8 +132,8 @@ const PerformanceDashboard: React.FC = () => {
 
       // Get AI performance analysis
       const aiResponse = await runAIContext({
-        module: 'operations.performance',
-        action: 'analyze',
+        module: "operations.performance",
+        action: "analyze",
         context: {
           metrics: simulatedMetrics,
           period: selectedPeriod
@@ -146,7 +146,7 @@ const PerformanceDashboard: React.FC = () => {
       const status = getPerformanceStatus(simulatedMetrics);
       setPerformanceStatus(status);
 
-      console.log('[Performance Dashboard] Data loaded successfully', {
+      console.log("[Performance Dashboard] Data loaded successfully", {
         metricsCount: Object.keys(simulatedMetrics).length,
         aiConfidence: aiResponse.confidence,
         status
@@ -158,7 +158,7 @@ const PerformanceDashboard: React.FC = () => {
       });
 
     } catch (error) {
-      console.error('[Performance Dashboard] Error loading data:', error);
+      console.error("[Performance Dashboard] Error loading data:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados de performance",
@@ -195,12 +195,12 @@ const PerformanceDashboard: React.FC = () => {
         description: "Relatório de performance exportado com sucesso",
       });
 
-      console.log('[Performance Dashboard] PDF exported', {
+      console.log("[Performance Dashboard] PDF exported", {
         timestamp: new Date().toISOString()
       });
 
     } catch (error) {
-      console.error('[Performance Dashboard] PDF export error:', error);
+      console.error("[Performance Dashboard] PDF export error:", error);
       toast({
         title: "Erro",
         description: "Falha ao gerar PDF",
@@ -236,7 +236,7 @@ const PerformanceDashboard: React.FC = () => {
         </div>
         <div className="flex gap-2">
           <Button onClick={loadPerformanceData} variant="outline" disabled={isLoading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
           <Button onClick={handleExportPDF} disabled={isLoading || !metrics}>

@@ -7,7 +7,7 @@ export interface WorkspaceMember {
   name: string;
   email: string;
   avatar?: string;
-  status: 'online' | 'offline' | 'away';
+  status: "online" | "offline" | "away";
   lastSeen?: Date;
 }
 
@@ -44,7 +44,7 @@ export interface CalendarEvent {
 
 export interface Notification {
   id: string;
-  type: 'mention' | 'message' | 'file' | 'event' | 'system';
+  type: "mention" | "message" | "file" | "event" | "system";
   title: string;
   message: string;
   timestamp: Date;

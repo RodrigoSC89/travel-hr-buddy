@@ -9,7 +9,7 @@ const SatelliteTracker = () => {
     {
       id: "sat-1",
       name: "Inmarsat-5 F4",
-      status: 'active' as const,
+      status: "active" as const,
       signalStrength: 92,
       battery: 87,
       temperature: 22,
@@ -18,7 +18,7 @@ const SatelliteTracker = () => {
     {
       id: "sat-2",
       name: "Iridium NEXT 124",
-      status: 'active' as const,
+      status: "active" as const,
       signalStrength: 85,
       battery: 91,
       temperature: 21,
@@ -27,7 +27,7 @@ const SatelliteTracker = () => {
     {
       id: "sat-3",
       name: "Globalstar M093",
-      status: 'standby' as const,
+      status: "standby" as const,
       signalStrength: 45,
       battery: 68,
       temperature: 24,
@@ -36,7 +36,7 @@ const SatelliteTracker = () => {
     {
       id: "sat-4",
       name: "Thuraya 3",
-      status: 'offline' as const,
+      status: "offline" as const,
       signalStrength: 0,
       battery: 52,
       temperature: 26,
@@ -49,25 +49,25 @@ const SatelliteTracker = () => {
       region: "Atlântico Norte",
       coverage: 95,
       satellites: 3,
-      quality: 'excellent' as const,
+      quality: "excellent" as const,
     },
     {
       region: "Atlântico Sul",
       coverage: 88,
       satellites: 2,
-      quality: 'good' as const,
+      quality: "good" as const,
     },
     {
       region: "Pacífico",
       coverage: 72,
       satellites: 2,
-      quality: 'fair' as const,
+      quality: "fair" as const,
     },
     {
       region: "Índico",
       coverage: 45,
       satellites: 1,
-      quality: 'poor' as const,
+      quality: "poor" as const,
     },
   ];
 

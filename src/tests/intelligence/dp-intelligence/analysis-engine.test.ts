@@ -46,18 +46,18 @@ const generateRecommendations = (type: string, riskScore: number) => {
   }
 
   switch (type) {
-    case "collision":
-      recommendations.push("Assess structural damage");
-      recommendations.push("Check for injuries");
-      break;
-    case "fire":
-      recommendations.push("Activate fire suppression system");
-      recommendations.push("Evacuate affected areas");
-      break;
-    case "equipment_failure":
-      recommendations.push("Switch to backup systems");
-      recommendations.push("Schedule maintenance inspection");
-      break;
+  case "collision":
+    recommendations.push("Assess structural damage");
+    recommendations.push("Check for injuries");
+    break;
+  case "fire":
+    recommendations.push("Activate fire suppression system");
+    recommendations.push("Evacuate affected areas");
+    break;
+  case "equipment_failure":
+    recommendations.push("Switch to backup systems");
+    recommendations.push("Schedule maintenance inspection");
+    break;
   }
 
   return recommendations;

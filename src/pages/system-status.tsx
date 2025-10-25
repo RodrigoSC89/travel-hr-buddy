@@ -12,19 +12,19 @@
  * - Telemetry metrics
  */
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { CheckCircle, XCircle, AlertCircle, Activity, Database, Code, TestTube, LineChart } from 'lucide-react';
-import { getAIContextStats } from '@/ai/kernel';
-import { MODULE_REGISTRY } from '@/modules/registry';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { CheckCircle, XCircle, AlertCircle, Activity, Database, Code, TestTube, LineChart } from "lucide-react";
+import { getAIContextStats } from "@/ai/kernel";
+import { MODULE_REGISTRY } from "@/modules/registry";
 
 interface ModuleStatus {
   id: string;
   name: string;
   category: string;
-  status: 'operational' | 'warning' | 'error';
+  status: "operational" | "warning" | "error";
   aiEnabled: boolean;
 }
 
@@ -32,7 +32,7 @@ interface SystemMetrics {
   totalModules: number;
   operationalModules: number;
   modulesWithAI: number;
-  buildStatus: 'success' | 'warning' | 'error';
+  buildStatus: "success" | "warning" | "error";
   testCoverage: number;
   logsActive: boolean;
   telemetryActive: boolean;
@@ -44,7 +44,7 @@ export default function SystemStatusPage() {
     totalModules: 0,
     operationalModules: 0,
     modulesWithAI: 0,
-    buildStatus: 'success',
+    buildStatus: "success",
     testCoverage: 42.5, // Based on implementation
     logsActive: true,
     telemetryActive: true,
@@ -61,21 +61,21 @@ export default function SystemStatusPage() {
       id: module.id,
       name: module.name,
       category: module.category,
-      status: module.status === 'active' ? 'operational' : 'warning',
+      status: module.status === "active" ? "operational" : "warning",
       aiEnabled: true // All modules have AI in PATCH 74.0
     }));
     
     setModuleStatuses(statuses);
     
     // Calculate metrics
-    const operational = statuses.filter(m => m.status === 'operational').length;
+    const operational = statuses.filter(m => m.status === "operational").length;
     const withAI = statuses.filter(m => m.aiEnabled).length;
     
     setMetrics({
       totalModules: statuses.length,
       operationalModules: operational,
       modulesWithAI: withAI,
-      buildStatus: 'success',
+      buildStatus: "success",
       testCoverage: 42.5,
       logsActive: true,
       telemetryActive: true,
@@ -89,28 +89,28 @@ export default function SystemStatusPage() {
   
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'operational':
-      case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'warning':
-        return <AlertCircle className="h-5 w-5 text-yellow-500" />;
-      case 'error':
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      default:
-        return <Activity className="h-5 w-5 text-gray-500" />;
+    case "operational":
+    case "success":
+      return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "warning":
+      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+    case "error":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    default:
+      return <Activity className="h-5 w-5 text-gray-500" />;
     }
   };
   
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      operational: 'default',
-      success: 'default',
-      warning: 'secondary',
-      error: 'destructive'
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      operational: "default",
+      success: "default",
+      warning: "secondary",
+      error: "destructive"
     };
     
     return (
-      <Badge variant={variants[status] || 'outline'}>
+      <Badge variant={variants[status] || "outline"}>
         {status.toUpperCase()}
       </Badge>
     );
@@ -211,16 +211,16 @@ export default function SystemStatusPage() {
           <div className="space-y-2">
             {[
               { item: `Módulos (${metrics.totalModules}/${metrics.totalModules})`, status: true },
-              { item: 'IA embarcada', status: metrics.modulesWithAI === metrics.totalModules },
-              { item: 'Navegação e rotas', status: true },
-              { item: 'Build no Vercel', status: metrics.buildStatus === 'success' },
-              { item: 'Logs e observabilidade', status: metrics.logsActive },
-              { item: 'Painel de status técnico', status: true },
-              { item: 'Testes automatizados (mínimo 40%)', status: metrics.testCoverage >= 40 },
-              { item: 'Auditoria técnica semanal', status: true },
-              { item: 'Telemetria e métricas', status: metrics.telemetryActive },
-              { item: 'Exportação de relatórios', status: true },
-              { item: 'Modo de produção', status: metrics.productionReady }
+              { item: "IA embarcada", status: metrics.modulesWithAI === metrics.totalModules },
+              { item: "Navegação e rotas", status: true },
+              { item: "Build no Vercel", status: metrics.buildStatus === "success" },
+              { item: "Logs e observabilidade", status: metrics.logsActive },
+              { item: "Painel de status técnico", status: true },
+              { item: "Testes automatizados (mínimo 40%)", status: metrics.testCoverage >= 40 },
+              { item: "Auditoria técnica semanal", status: true },
+              { item: "Telemetria e métricas", status: metrics.telemetryActive },
+              { item: "Exportação de relatórios", status: true },
+              { item: "Modo de produção", status: metrics.productionReady }
             ].map((check, idx) => (
               <div key={idx} className="flex items-center gap-2 p-2 rounded hover:bg-muted">
                 {check.status ? (
@@ -228,11 +228,11 @@ export default function SystemStatusPage() {
                 ) : (
                   <XCircle className="h-4 w-4 text-red-500" />
                 )}
-                <span className={check.status ? 'text-foreground' : 'text-muted-foreground'}>
+                <span className={check.status ? "text-foreground" : "text-muted-foreground"}>
                   {check.item}
                 </span>
-                <Badge variant={check.status ? 'default' : 'secondary'} className="ml-auto">
-                  {check.status ? '✅ Completo' : '⚠️ Pendente'}
+                <Badge variant={check.status ? "default" : "secondary"} className="ml-auto">
+                  {check.status ? "✅ Completo" : "⚠️ Pendente"}
                 </Badge>
               </div>
             ))}
@@ -298,7 +298,7 @@ export default function SystemStatusPage() {
           <div className="space-y-4">
             {Array.from(new Set(moduleStatuses.map(m => m.category))).map(category => {
               const categoryModules = moduleStatuses.filter(m => m.category === category);
-              const operational = categoryModules.filter(m => m.status === 'operational').length;
+              const operational = categoryModules.filter(m => m.status === "operational").length;
               
               return (
                 <div key={category}>
@@ -340,9 +340,9 @@ export default function SystemStatusPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              {getStatusIcon(metrics.logsActive ? 'operational' : 'error')}
+              {getStatusIcon(metrics.logsActive ? "operational" : "error")}
               <span className="text-sm">
-                {metrics.logsActive ? 'Ativos' : 'Inativos'}
+                {metrics.logsActive ? "Ativos" : "Inativos"}
               </span>
             </div>
           </CardContent>
@@ -357,9 +357,9 @@ export default function SystemStatusPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              {getStatusIcon(metrics.telemetryActive ? 'operational' : 'error')}
+              {getStatusIcon(metrics.telemetryActive ? "operational" : "error")}
               <span className="text-sm">
-                {metrics.telemetryActive ? 'Monitorando' : 'Inativo'}
+                {metrics.telemetryActive ? "Monitorando" : "Inativo"}
               </span>
             </div>
           </CardContent>
@@ -374,7 +374,7 @@ export default function SystemStatusPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              {getStatusIcon(metrics.testCoverage >= 40 ? 'operational' : 'warning')}
+              {getStatusIcon(metrics.testCoverage >= 40 ? "operational" : "warning")}
               <span className="text-sm">
                 {metrics.testCoverage}% cobertura
               </span>

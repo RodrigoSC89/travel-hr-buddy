@@ -5,55 +5,55 @@
  * Provides utilities for managing light/dark theme with localStorage persistence
  */
 
-export type Theme = 'light' | 'dark' | 'system';
+export type Theme = "light" | "dark" | "system";
 
-const STORAGE_KEY = 'theme-preference';
+const STORAGE_KEY = "theme-preference";
 
 /**
  * Get the current theme preference from localStorage
  */
 export const getStoredTheme = (): Theme => {
-  if (typeof window === 'undefined') return 'system';
+  if (typeof window === "undefined") return "system";
   
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === 'light' || stored === 'dark' || stored === 'system') {
+    if (stored === "light" || stored === "dark" || stored === "system") {
       return stored;
     }
   } catch (error) {
-    console.warn('Failed to get stored theme:', error);
+    console.warn("Failed to get stored theme:", error);
   }
   
-  return 'system';
+  return "system";
 };
 
 /**
  * Store theme preference in localStorage
  */
 export const setStoredTheme = (theme: Theme): void => {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
   
   try {
     localStorage.setItem(STORAGE_KEY, theme);
   } catch (error) {
-    console.warn('Failed to store theme:', error);
+    console.warn("Failed to store theme:", error);
   }
 };
 
 /**
  * Get system color scheme preference
  */
-export const getSystemTheme = (): 'light' | 'dark' => {
-  if (typeof window === 'undefined') return 'light';
+export const getSystemTheme = (): "light" | "dark" => {
+  if (typeof window === "undefined") return "light";
   
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 };
 
 /**
  * Get the effective theme (resolves 'system' to actual theme)
  */
-export const getEffectiveTheme = (theme: Theme): 'light' | 'dark' => {
-  if (theme === 'system') {
+export const getEffectiveTheme = (theme: Theme): "light" | "dark" => {
+  if (theme === "system") {
     return getSystemTheme();
   }
   return theme;
@@ -62,15 +62,15 @@ export const getEffectiveTheme = (theme: Theme): 'light' | 'dark' => {
 /**
  * Apply theme to document root
  */
-export const applyTheme = (theme: 'light' | 'dark'): void => {
-  if (typeof window === 'undefined') return;
+export const applyTheme = (theme: "light" | "dark"): void => {
+  if (typeof window === "undefined") return;
   
   const root = document.documentElement;
   
-  if (theme === 'dark') {
-    root.classList.add('dark');
+  if (theme === "dark") {
+    root.classList.add("dark");
   } else {
-    root.classList.remove('dark');
+    root.classList.remove("dark");
   }
 };
 
@@ -79,17 +79,17 @@ export const applyTheme = (theme: 'light' | 'dark'): void => {
  * Call this in your app entry point
  */
 export const initializeTheme = (): void => {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
   
   const storedTheme = getStoredTheme();
   const effectiveTheme = getEffectiveTheme(storedTheme);
   applyTheme(effectiveTheme);
   
   // Listen for system theme changes
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const handleChange = () => {
     const currentTheme = getStoredTheme();
-    if (currentTheme === 'system') {
+    if (currentTheme === "system") {
       const newEffectiveTheme = getSystemTheme();
       applyTheme(newEffectiveTheme);
     }
@@ -97,7 +97,7 @@ export const initializeTheme = (): void => {
   
   // Modern browsers
   if (mediaQuery.addEventListener) {
-    mediaQuery.addEventListener('change', handleChange);
+    mediaQuery.addEventListener("change", handleChange);
   } else {
     // Legacy browsers
     mediaQuery.addListener(handleChange);
@@ -110,7 +110,7 @@ export const initializeTheme = (): void => {
 export const toggleTheme = (): Theme => {
   const currentTheme = getStoredTheme();
   const effectiveTheme = getEffectiveTheme(currentTheme);
-  const newTheme: 'light' | 'dark' = effectiveTheme === 'light' ? 'dark' : 'light';
+  const newTheme: "light" | "dark" = effectiveTheme === "light" ? "dark" : "light";
   
   setStoredTheme(newTheme);
   applyTheme(newTheme);
@@ -138,6 +138,6 @@ export const getCurrentTheme = (): Theme => {
  * Check if dark mode is currently active
  */
 export const isDarkMode = (): boolean => {
-  if (typeof window === 'undefined') return false;
-  return document.documentElement.classList.contains('dark');
+  if (typeof window === "undefined") return false;
+  return document.documentElement.classList.contains("dark");
 };

@@ -11,17 +11,17 @@
  * - Supabase integration for storage
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { FileText, Upload, Eye, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/lib/logger';
-import { runAIContext } from '@/ai';
-import { parsePdf } from '@/lib/pdf';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { FileText, Upload, Eye, AlertCircle, CheckCircle, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
+import { runAIContext } from "@/ai";
+import { parsePdf } from "@/lib/pdf";
 
 interface Document {
   id: string;
@@ -36,25 +36,25 @@ export default function DocumentHub() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [previewContent, setPreviewContent] = useState<string>('');
-  const [aiInsight, setAiInsight] = useState<string>('');
+  const [previewContent, setPreviewContent] = useState<string>("");
+  const [aiInsight, setAiInsight] = useState<string>("");
 
   useEffect(() => {
-    logger.info('Document Hub initialized');
+    logger.info("Document Hub initialized");
     loadDocuments();
   }, []);
 
   const loadDocuments = async () => {
     try {
-      logger.info('Loading document history');
+      logger.info("Loading document history");
       const { data, error } = await supabase
-        .from('documents')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("documents")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) {
-        logger.warn('Failed to load documents from Supabase', { error: error.message });
+        logger.warn("Failed to load documents from Supabase", { error: error.message });
         // Continue with empty state rather than failing
         return;
       }
@@ -62,17 +62,17 @@ export default function DocumentHub() {
       if (data) {
         const mappedDocs = data.map((doc: any) => ({
           id: doc.id,
-          name: doc.name || 'Unnamed Document',
-          type: doc.type || 'unknown',
+          name: doc.name || "Unnamed Document",
+          type: doc.type || "unknown",
           size: doc.size || 0,
           uploadedAt: doc.created_at,
           aiAnalysis: doc.ai_analysis,
         }));
         setDocuments(mappedDocs);
-        logger.info('Documents loaded successfully', { count: mappedDocs.length });
+        logger.info("Documents loaded successfully", { count: mappedDocs.length });
       }
     } catch (error) {
-      logger.error('Error loading documents', error);
+      logger.error("Error loading documents", error);
     }
   };
 
@@ -81,23 +81,23 @@ export default function DocumentHub() {
     if (!file) return;
 
     // Validate file type
-    const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const validTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
     if (!validTypes.includes(file.type)) {
-      toast.error('Tipo de arquivo inválido. Use PDF ou DOCX.');
-      logger.warn('Invalid file type selected', { type: file.type });
+      toast.error("Tipo de arquivo inválido. Use PDF ou DOCX.");
+      logger.warn("Invalid file type selected", { type: file.type });
       return;
     }
 
     // Validate file size (10MB limit)
     const maxSize = 10 * 1024 * 1024;
     if (file.size > maxSize) {
-      toast.error('Arquivo muito grande. Limite: 10MB.');
-      logger.warn('File too large', { size: file.size });
+      toast.error("Arquivo muito grande. Limite: 10MB.");
+      logger.warn("File too large", { size: file.size });
       return;
     }
 
     setSelectedFile(file);
-    logger.info('File selected', { name: file.name, type: file.type, size: file.size });
+    logger.info("File selected", { name: file.name, type: file.type, size: file.size });
     
     // Generate preview
     generatePreview(file);
@@ -105,47 +105,47 @@ export default function DocumentHub() {
 
   const generatePreview = async (file: File) => {
     try {
-      if (file.type === 'application/pdf') {
+      if (file.type === "application/pdf") {
         const parsed = await parsePdf(file);
         setPreviewContent(parsed.content);
-        logger.info('PDF preview generated', { fileName: file.name });
+        logger.info("PDF preview generated", { fileName: file.name });
       } else {
-        setPreviewContent('Preview disponível após upload');
-        logger.info('DOCX preview placeholder set', { fileName: file.name });
+        setPreviewContent("Preview disponível após upload");
+        logger.info("DOCX preview placeholder set", { fileName: file.name });
       }
     } catch (error) {
-      logger.error('Error generating preview', error);
-      setPreviewContent('Erro ao gerar preview');
+      logger.error("Error generating preview", error);
+      setPreviewContent("Erro ao gerar preview");
     }
   };
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      toast.error('Selecione um arquivo primeiro');
+      toast.error("Selecione um arquivo primeiro");
       return;
     }
 
     setUploading(true);
-    logger.info('Starting document upload', { fileName: selectedFile.name });
+    logger.info("Starting document upload", { fileName: selectedFile.name });
 
     try {
       // Upload to Supabase Storage
       const fileName = `${Date.now()}-${selectedFile.name}`;
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('documents')
+        .from("documents")
         .upload(fileName, selectedFile);
 
       if (uploadError) {
         throw uploadError;
       }
 
-      logger.info('File uploaded to storage', { fileName });
+      logger.info("File uploaded to storage", { fileName });
 
       // Get AI analysis
-      logger.info('Requesting AI analysis');
+      logger.info("Requesting AI analysis");
       const aiResponse = await runAIContext({
-        module: 'document-ai',
-        action: 'analyze',
+        module: "document-ai",
+        action: "analyze",
         context: {
           fileName: selectedFile.name,
           fileType: selectedFile.type,
@@ -154,11 +154,11 @@ export default function DocumentHub() {
       });
 
       setAiInsight(aiResponse.message);
-      logger.info('AI analysis completed', { confidence: aiResponse.confidence });
+      logger.info("AI analysis completed", { confidence: aiResponse.confidence });
 
       // Store document metadata
       const { error: dbError } = await supabase
-        .from('documents')
+        .from("documents")
         .insert({
           name: selectedFile.name,
           type: selectedFile.type,
@@ -168,22 +168,22 @@ export default function DocumentHub() {
         });
 
       if (dbError) {
-        logger.warn('Failed to store document metadata', { error: dbError.message });
+        logger.warn("Failed to store document metadata", { error: dbError.message });
       } else {
-        logger.info('Document metadata stored successfully');
+        logger.info("Document metadata stored successfully");
       }
 
-      toast.success('Documento enviado com sucesso!');
+      toast.success("Documento enviado com sucesso!");
       
       // Reload documents
       await loadDocuments();
       
       // Reset form
       setSelectedFile(null);
-      setPreviewContent('');
+      setPreviewContent("");
     } catch (error) {
-      logger.error('Error uploading document', error);
-      toast.error('Erro ao enviar documento');
+      logger.error("Error uploading document", error);
+      toast.error("Erro ao enviar documento");
     } finally {
       setUploading(false);
     }

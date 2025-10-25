@@ -17,14 +17,14 @@ import { logsEngine } from "@/lib/monitoring/LogsEngine";
 export interface LogAnalysisResult {
   anomalies: Anomaly[];
   recommendations: Recommendation[];
-  overallHealth: 'healthy' | 'warning' | 'critical';
+  overallHealth: "healthy" | "warning" | "critical";
   analyzedAt: string;
 }
 
 export interface Anomaly {
   id: string;
-  type: 'recurring_failure' | 'auth_error' | 'module_instability' | 'performance_degradation';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "recurring_failure" | "auth_error" | "module_instability" | "performance_degradation";
+  severity: "low" | "medium" | "high" | "critical";
   description: string;
   affectedModule?: string;
   frequency: number;
@@ -42,7 +42,7 @@ export interface Recommendation {
   autoFixScript?: string;
   manualSteps?: string[];
   confidence: number;
-  estimatedImpact: 'low' | 'medium' | 'high';
+  estimatedImpact: "low" | "medium" | "high";
 }
 
 export interface AutoFixResult {
@@ -65,10 +65,10 @@ export const analyzeSystemLogs = async (
     
     // Fetch logs from database for longer history
     const { data: dbLogs, error } = await supabase
-      .from('system_logs')
-      .select('*')
-      .gte('created_at', new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString())
-      .order('created_at', { ascending: false })
+      .from("system_logs")
+      .select("*")
+      .gte("created_at", new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString())
+      .order("created_at", { ascending: false })
       .limit(1000);
 
     const allLogs = [...logs, ...(dbLogs || [])];
@@ -77,7 +77,7 @@ export const analyzeSystemLogs = async (
       return {
         anomalies: [],
         recommendations: [],
-        overallHealth: 'healthy',
+        overallHealth: "healthy",
         analyzedAt: new Date().toISOString()
       };
     }
@@ -98,7 +98,7 @@ export const analyzeSystemLogs = async (
       analyzedAt: new Date().toISOString()
     };
   } catch (error) {
-    console.error('Error analyzing system logs:', error);
+    console.error("Error analyzing system logs:", error);
     throw error;
   }
 };
@@ -110,10 +110,10 @@ const detectAnomalies = (logs: any[]): Anomaly[] => {
   const anomalies: Anomaly[] = [];
   
   // Group logs by type and message pattern
-  const errorLogs = logs.filter(log => log.level === 'error' || log.severity === 'error');
+  const errorLogs = logs.filter(log => log.level === "error" || log.severity === "error");
   const authLogs = logs.filter(log => 
-    log.message?.toLowerCase().includes('auth') || 
-    log.message?.toLowerCase().includes('unauthorized')
+    log.message?.toLowerCase().includes("auth") || 
+    log.message?.toLowerCase().includes("unauthorized")
   );
   
   // Detect recurring failures
@@ -122,8 +122,8 @@ const detectAnomalies = (logs: any[]): Anomaly[] => {
     if (group.length >= 3) {
       anomalies.push({
         id: `anomaly-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        type: 'recurring_failure',
-        severity: group.length > 10 ? 'high' : 'medium',
+        type: "recurring_failure",
+        severity: group.length > 10 ? "high" : "medium",
         description: `Falha recorrente detectada: ${pattern}`,
         frequency: group.length,
         firstSeen: group[group.length - 1].timestamp || group[group.length - 1].created_at,
@@ -138,8 +138,8 @@ const detectAnomalies = (logs: any[]): Anomaly[] => {
   if (authLogs.length > 5) {
     anomalies.push({
       id: `anomaly-auth-${Date.now()}`,
-      type: 'auth_error',
-      severity: authLogs.length > 20 ? 'critical' : 'medium',
+      type: "auth_error",
+      severity: authLogs.length > 20 ? "critical" : "medium",
       description: `${authLogs.length} erros de autenticação detectados`,
       frequency: authLogs.length,
       firstSeen: authLogs[authLogs.length - 1].timestamp || authLogs[authLogs.length - 1].created_at,
@@ -153,8 +153,8 @@ const detectAnomalies = (logs: any[]): Anomaly[] => {
     if (errors.length > 5) {
       anomalies.push({
         id: `anomaly-module-${module}-${Date.now()}`,
-        type: 'module_instability',
-        severity: errors.length > 15 ? 'high' : 'medium',
+        type: "module_instability",
+        severity: errors.length > 15 ? "high" : "medium",
         description: `Módulo ${module} apresenta instabilidade`,
         affectedModule: module,
         frequency: errors.length,
@@ -181,13 +181,13 @@ const generateRecommendations = async (
   try {
     const anomalyDescriptions = anomalies.map((a, idx) => 
       `${idx + 1}. [${a.severity.toUpperCase()}] ${a.type}: ${a.description} (${a.frequency}x)`
-    ).join('\n');
+    ).join("\n");
 
     const recentErrors = logs
-      .filter(log => log.level === 'error')
+      .filter(log => log.level === "error")
       .slice(0, 10)
       .map(log => `- ${log.message || log.error}`)
-      .join('\n');
+      .join("\n");
 
     const prompt = `Analise as seguintes anomalias detectadas no sistema e forneça recomendações práticas:
 
@@ -220,14 +220,14 @@ Regras:
 - confidence alto (>0.8) apenas para soluções bem estabelecidas`;
 
     const response = await runOpenAI({
-      model: 'gpt-4o-mini',
+      model: "gpt-4o-mini",
       messages: [
         {
-          role: 'system',
-          content: 'Você é um especialista em diagnóstico e correção de sistemas. Sempre retorne JSON válido.'
+          role: "system",
+          content: "Você é um especialista em diagnóstico e correção de sistemas. Sempre retorne JSON válido."
         },
         {
-          role: 'user',
+          role: "user",
           content: prompt
         }
       ],
@@ -237,7 +237,7 @@ Regras:
 
     return parseRecommendationsResponse(response.content, anomalies);
   } catch (error) {
-    console.error('Error generating recommendations:', error);
+    console.error("Error generating recommendations:", error);
     // Return fallback recommendations
     return generateFallbackRecommendations(anomalies);
   }
@@ -253,7 +253,7 @@ const parseRecommendationsResponse = (
   try {
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      throw new Error('No JSON found in response');
+      throw new Error("No JSON found in response");
     }
 
     const parsed = JSON.parse(jsonMatch[0]);
@@ -266,13 +266,13 @@ const parseRecommendationsResponse = (
       autoFixAvailable: rec.autoFixAvailable === true,
       autoFixScript: rec.autoFixScript,
       manualSteps: Array.isArray(rec.manualSteps) ? rec.manualSteps : [],
-      confidence: typeof rec.confidence === 'number' ? rec.confidence : 0.6,
-      estimatedImpact: ['low', 'medium', 'high'].includes(rec.estimatedImpact) 
+      confidence: typeof rec.confidence === "number" ? rec.confidence : 0.6,
+      estimatedImpact: ["low", "medium", "high"].includes(rec.estimatedImpact) 
         ? rec.estimatedImpact 
-        : 'medium'
+        : "medium"
     }));
   } catch (error) {
-    console.error('Error parsing recommendations:', error);
+    console.error("Error parsing recommendations:", error);
     return [];
   }
 };
@@ -288,13 +288,13 @@ const generateFallbackRecommendations = (anomalies: Anomaly[]): Recommendation[]
     description: `Requer análise manual: ${anomaly.description}`,
     autoFixAvailable: false,
     manualSteps: [
-      'Revisar logs detalhados',
-      'Identificar causa raiz',
-      'Implementar correção apropriada',
-      'Monitorar após correção'
+      "Revisar logs detalhados",
+      "Identificar causa raiz",
+      "Implementar correção apropriada",
+      "Monitorar após correção"
     ],
     confidence: 0.5,
-    estimatedImpact: anomaly.severity === 'critical' || anomaly.severity === 'high' ? 'high' : 'medium'
+    estimatedImpact: anomaly.severity === "critical" || anomaly.severity === "high" ? "high" : "medium"
   }));
 };
 
@@ -306,7 +306,7 @@ export const previewAutoFix = async (
   recommendation: Recommendation
 ): Promise<string> => {
   if (!recommendation.autoFixAvailable || !recommendation.autoFixScript) {
-    return 'Auto-fix não disponível para esta recomendação';
+    return "Auto-fix não disponível para esta recomendação";
   }
 
   return `PREVIEW MODE - Auto-fix Script:
@@ -326,7 +326,7 @@ export const storeAutoFixHistory = async (
 ): Promise<boolean> => {
   try {
     const { error } = await supabase
-      .from('autofix_history')
+      .from("autofix_history")
       .insert({
         anomaly_id: result.anomalyId,
         applied_fix: result.appliedFix,
@@ -336,13 +336,13 @@ export const storeAutoFixHistory = async (
       });
 
     if (error) {
-      console.error('Error storing autofix history:', error);
+      console.error("Error storing autofix history:", error);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Error in storeAutoFixHistory:', error);
+    console.error("Error in storeAutoFixHistory:", error);
     return false;
   }
 };
@@ -353,7 +353,7 @@ const groupByPattern = (logs: any[]): Map<string, any[]> => {
   const patterns = new Map<string, any[]>();
   
   logs.forEach(log => {
-    const message = log.message || log.error || '';
+    const message = log.message || log.error || "";
     // Simple pattern extraction (first 50 chars)
     const pattern = message.substring(0, 50).trim();
     
@@ -382,17 +382,17 @@ const groupByModule = (logs: any[]): Map<string, any[]> => {
 };
 
 const extractModule = (log: any): string => {
-  return log.module || log.component || log.source || 'unknown';
+  return log.module || log.component || log.source || "unknown";
 };
 
-const calculateOverallHealth = (anomalies: Anomaly[]): 'healthy' | 'warning' | 'critical' => {
-  if (anomalies.length === 0) return 'healthy';
+const calculateOverallHealth = (anomalies: Anomaly[]): "healthy" | "warning" | "critical" => {
+  if (anomalies.length === 0) return "healthy";
   
-  const hasCritical = anomalies.some(a => a.severity === 'critical');
-  const hasMultipleHigh = anomalies.filter(a => a.severity === 'high').length > 2;
+  const hasCritical = anomalies.some(a => a.severity === "critical");
+  const hasMultipleHigh = anomalies.filter(a => a.severity === "high").length > 2;
   
-  if (hasCritical || hasMultipleHigh) return 'critical';
-  if (anomalies.some(a => a.severity === 'high')) return 'warning';
+  if (hasCritical || hasMultipleHigh) return "critical";
+  if (anomalies.some(a => a.severity === "high")) return "warning";
   
-  return anomalies.length > 5 ? 'warning' : 'healthy';
+  return anomalies.length > 5 ? "warning" : "healthy";
 };

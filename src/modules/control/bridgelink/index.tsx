@@ -1,3 +1,3 @@
-import BridgeLinkDashboard from '@/components/bridgelink/BridgeLinkDashboard';
+import BridgeLinkDashboard from "@/components/bridgelink/BridgeLinkDashboard";
 
 export default BridgeLinkDashboard;

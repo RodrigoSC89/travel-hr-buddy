@@ -44,10 +44,10 @@ export function CurrentWeatherDashboard({
             {conditions.wind_speed > 25
               ? "Severe"
               : conditions.wind_speed > 20
-              ? "High Winds"
-              : conditions.wind_speed > 15
-              ? "Moderate"
-              : "Normal"}
+                ? "High Winds"
+                : conditions.wind_speed > 15
+                  ? "Moderate"
+                  : "Normal"}
           </Badge>
         </div>
       </CardHeader>

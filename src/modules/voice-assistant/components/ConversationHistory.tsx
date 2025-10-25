@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 interface Message {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
 }
@@ -32,31 +32,31 @@ export function ConversationHistory({ messages }: ConversationHistoryProps) {
                 <div
                   key={index}
                   className={`flex gap-3 ${
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
+                    message.role === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
-                  {message.role === 'assistant' && (
+                  {message.role === "assistant" && (
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                       <Bot className="h-4 w-4 text-primary-foreground" />
                     </div>
                   )}
                   <div
                     className={`max-w-[70%] rounded-lg p-3 ${
-                      message.role === 'user'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-accent'
+                      message.role === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-accent"
                     }`}
                   >
                     <p className="text-sm">{message.content}</p>
                     <p className={`text-xs mt-1 ${
-                      message.role === 'user' 
-                        ? 'text-primary-foreground/70' 
-                        : 'text-muted-foreground'
+                      message.role === "user" 
+                        ? "text-primary-foreground/70" 
+                        : "text-muted-foreground"
                     }`}>
                       {format(message.timestamp, "HH:mm", { locale: ptBR })}
                     </p>
                   </div>
-                  {message.role === 'user' && (
+                  {message.role === "user" && (
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent flex items-center justify-center">
                       <User className="h-4 w-4" />
                     </div>

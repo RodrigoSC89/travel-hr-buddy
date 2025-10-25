@@ -40,21 +40,21 @@ describe("DPStatusBoard Component", () => {
   it("should render within a card component", () => {
     const { container } = render(<DPStatusBoard />);
     
-    const card = container.querySelector('[class*="card"]');
+    const card = container.querySelector("[class*=\"card\"]");
     expect(card).toBeTruthy();
   });
 
   it("should display the anchor icon", () => {
     const { container } = render(<DPStatusBoard />);
     
-    const svg = container.querySelector('svg');
+    const svg = container.querySelector("svg");
     expect(svg).toBeTruthy();
   });
 
   it("should have grid layout for metrics", () => {
     const { container } = render(<DPStatusBoard />);
     
-    const gridContainer = container.querySelector('.grid.grid-cols-3');
+    const gridContainer = container.querySelector(".grid.grid-cols-3");
     expect(gridContainer).toBeTruthy();
   });
 });

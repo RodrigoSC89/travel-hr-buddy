@@ -43,11 +43,11 @@ const MaintenanceEngine: React.FC = () => {
       
       // Load maintenance dashboard view (may not exist yet)
       let query = supabase
-        .from('maintenance_dashboard' as any)
-        .select('*');
+        .from("maintenance_dashboard" as any)
+        .select("*");
 
-      if (selectedVessel !== 'all') {
-        query = query.eq('vessel_id', selectedVessel);
+      if (selectedVessel !== "all") {
+        query = query.eq("vessel_id", selectedVessel);
       }
 
       const { data, error } = await query;
@@ -58,17 +58,17 @@ const MaintenanceEngine: React.FC = () => {
 
       // Load predictions (RPC may not exist yet)
       const { data: predictionsData, error: predictionsError } = await (supabase as any)
-        .rpc('get_maintenance_predictions', { 
-          vessel_uuid: selectedVessel === 'all' ? null : selectedVessel 
+        .rpc("get_maintenance_predictions", { 
+          vessel_uuid: selectedVessel === "all" ? null : selectedVessel 
         });
 
       if (predictionsError) {
-        console.error('Error loading predictions:', predictionsError);
+        console.error("Error loading predictions:", predictionsError);
       } else {
         setPredictions((predictionsData as any) || []);
       }
     } catch (error) {
-      console.error('Error loading maintenance data:', error);
+      console.error("Error loading maintenance data:", error);
       toast({
         title: "Error",
         description: "Failed to load maintenance data",
@@ -82,8 +82,8 @@ const MaintenanceEngine: React.FC = () => {
   const runAIForecast = async () => {
     try {
       const response = await runAIContext({
-        module: 'maintenance-forecast',
-        action: 'forecast',
+        module: "maintenance-forecast",
+        action: "forecast",
         context: {
           maintenance_records: maintenanceRecords,
           predictions: predictions,
@@ -96,7 +96,7 @@ const MaintenanceEngine: React.FC = () => {
         description: "Maintenance predictions generated successfully",
       });
     } catch (error) {
-      console.error('Error running AI forecast:', error);
+      console.error("Error running AI forecast:", error);
       toast({
         title: "Error",
         description: "Failed to generate AI forecast",
@@ -148,9 +148,9 @@ const MaintenanceEngine: React.FC = () => {
 
   const stats = {
     total: maintenanceRecords.length,
-    overdue: maintenanceRecords.filter(r => r.urgency_status === 'overdue').length,
-    urgent: maintenanceRecords.filter(r => r.urgency_status === 'urgent').length,
-    forecasted: maintenanceRecords.filter(r => r.status === 'forecasted').length,
+    overdue: maintenanceRecords.filter(r => r.urgency_status === "overdue").length,
+    urgent: maintenanceRecords.filter(r => r.urgency_status === "urgent").length,
+    forecasted: maintenanceRecords.filter(r => r.status === "forecasted").length,
   };
 
   if (loading) {
@@ -278,7 +278,7 @@ const MaintenanceEngine: React.FC = () => {
                       <div className="text-right">
                         <div className="text-sm text-muted-foreground">
                           <Calendar className="inline mr-1 h-3 w-3" />
-                          Due: {record.next_due ? new Date(record.next_due).toLocaleDateString() : 'Not scheduled'}
+                          Due: {record.next_due ? new Date(record.next_due).toLocaleDateString() : "Not scheduled"}
                         </div>
                         <div className="text-sm font-medium mt-1">
                           {record.days_until_due > 0 
@@ -294,7 +294,7 @@ const MaintenanceEngine: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="overdue" className="space-y-4">
-              {maintenanceRecords.filter(r => r.urgency_status === 'overdue').map((record) => (
+              {maintenanceRecords.filter(r => r.urgency_status === "overdue").map((record) => (
                 <Card key={record.id} className="hover:bg-accent border-red-200">
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between">
@@ -318,7 +318,7 @@ const MaintenanceEngine: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="urgent" className="space-y-4">
-              {maintenanceRecords.filter(r => r.urgency_status === 'urgent').map((record) => (
+              {maintenanceRecords.filter(r => r.urgency_status === "urgent").map((record) => (
                 <Card key={record.id} className="hover:bg-accent border-orange-200">
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between">
@@ -342,7 +342,7 @@ const MaintenanceEngine: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="forecasted" className="space-y-4">
-              {maintenanceRecords.filter(r => r.status === 'forecasted').map((record) => (
+              {maintenanceRecords.filter(r => r.status === "forecasted").map((record) => (
                 <Card key={record.id} className="hover:bg-accent border-blue-200">
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between">

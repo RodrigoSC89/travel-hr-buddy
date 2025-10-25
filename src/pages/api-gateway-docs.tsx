@@ -15,83 +15,83 @@ import {
 const API_BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/api-gateway`;
 
 export default function APIGatewayDocs() {
-  const [testEndpoint, setTestEndpoint] = useState('weather');
-  const [testParams, setTestParams] = useState('location=Santos');
+  const [testEndpoint, setTestEndpoint] = useState("weather");
+  const [testParams, setTestParams] = useState("location=Santos");
   const [testResult, setTestResult] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const endpoints = [
     {
-      name: 'Weather API',
-      path: '/weather',
-      method: 'GET',
+      name: "Weather API",
+      path: "/weather",
+      method: "GET",
       icon: Cloud,
-      description: 'Get weather information for a location',
+      description: "Get weather information for a location",
       params: [
-        { name: 'location', type: 'string', required: false, default: 'Santos, Brazil' }
+        { name: "location", type: "string", required: false, default: "Santos, Brazil" }
       ],
       example: `${API_BASE_URL}/weather?location=Santos`,
       response: {
-        location: 'Santos, Brazil',
+        location: "Santos, Brazil",
         temperature: 24,
         humidity: 75,
         wind_speed: 12,
-        conditions: 'Sunny'
+        conditions: "Sunny"
       }
     },
     {
-      name: 'Satellite Tracking',
-      path: '/satellite',
-      method: 'GET',
+      name: "Satellite Tracking",
+      path: "/satellite",
+      method: "GET",
       icon: Satellite,
-      description: 'Track vessel position via satellite',
+      description: "Track vessel position via satellite",
       params: [
-        { name: 'vessel_id', type: 'string', required: false }
+        { name: "vessel_id", type: "string", required: false }
       ],
       example: `${API_BASE_URL}/satellite?vessel_id=NAV-001`,
       response: {
-        vessel_id: 'NAV-001',
+        vessel_id: "NAV-001",
         position: { latitude: -23.96, longitude: -46.33 },
         speed: 12,
         heading: 180
       }
     },
     {
-      name: 'AIS (Vessel Traffic)',
-      path: '/ais',
-      method: 'GET',
+      name: "AIS (Vessel Traffic)",
+      path: "/ais",
+      method: "GET",
       icon: Anchor,
-      description: 'Get AIS data for vessels in an area',
+      description: "Get AIS data for vessels in an area",
       params: [
-        { name: 'area', type: 'string', required: false, default: 'Santos Port' }
+        { name: "area", type: "string", required: false, default: "Santos Port" }
       ],
       example: `${API_BASE_URL}/ais?area=Santos%20Port`,
       response: {
-        area: 'Santos Port',
+        area: "Santos Port",
         vessels_detected: 12,
         vessels: []
       }
     },
     {
-      name: 'Logistics',
-      path: '/logistics',
-      method: 'POST',
+      name: "Logistics",
+      path: "/logistics",
+      method: "POST",
       icon: Package,
-      description: 'Logistics operations and cargo tracking',
+      description: "Logistics operations and cargo tracking",
       params: [
-        { name: 'operation', type: 'string', required: true },
-        { name: 'data', type: 'object', required: true }
+        { name: "operation", type: "string", required: true },
+        { name: "data", type: "object", required: true }
       ],
       example: `${API_BASE_URL}/logistics`,
       body: {
-        operation: 'track_cargo',
-        data: { cargo_id: 'CARGO-123' }
+        operation: "track_cargo",
+        data: { cargo_id: "CARGO-123" }
       },
       response: {
-        cargo_id: 'CARGO-123',
-        status: 'In Transit',
-        location: 'Santos Port'
+        cargo_id: "CARGO-123",
+        status: "In Transit",
+        location: "Santos Port"
       }
     }
   ];
@@ -102,14 +102,14 @@ export default function APIGatewayDocs() {
       const { data: { session } } = await supabase.auth.getSession();
       
       const headers: Record<string, string> = {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       };
 
       if (session?.access_token) {
-        headers['Authorization'] = `Bearer ${session.access_token}`;
+        headers["Authorization"] = `Bearer ${session.access_token}`;
       }
 
-      const url = `${API_BASE_URL}/${testEndpoint}${testParams ? `?${testParams}` : ''}`;
+      const url = `${API_BASE_URL}/${testEndpoint}${testParams ? `?${testParams}` : ""}`;
       
       const response = await fetch(url, { headers });
       const data = await response.json();
@@ -121,8 +121,8 @@ export default function APIGatewayDocs() {
         description: `Status: ${response.status}`,
       });
     } catch (error) {
-      console.error('API test error:', error);
-      setTestResult({ error: error instanceof Error ? error.message : 'Unknown error' });
+      console.error("API test error:", error);
+      setTestResult({ error: error instanceof Error ? error.message : "Unknown error" });
       toast({
         title: "API Error",
         description: "Failed to call API endpoint",
@@ -233,7 +233,7 @@ export default function APIGatewayDocs() {
                               <Icon className="w-5 h-5 text-primary" />
                               <h3 className="font-semibold">{endpoint.name}</h3>
                             </div>
-                            <Badge variant={endpoint.method === 'GET' ? 'default' : 'secondary'}>
+                            <Badge variant={endpoint.method === "GET" ? "default" : "secondary"}>
                               {endpoint.method}
                             </Badge>
                           </div>
@@ -258,7 +258,7 @@ export default function APIGatewayDocs() {
                                     <code className="bg-muted px-2 py-1 rounded">{param.name}</code>
                                     <Badge variant="outline" className="text-xs">{param.type}</Badge>
                                     {param.required && <Badge variant="destructive" className="text-xs">Required</Badge>}
-                                    {'default' in param && param.default && (
+                                    {"default" in param && param.default && (
                                       <span className="text-muted-foreground">Default: {param.default}</span>
                                     )}
                                   </div>
@@ -337,7 +337,7 @@ export default function APIGatewayDocs() {
               <div className="border-t pt-4">
                 <h3 className="font-semibold mb-2">Example: Authenticated Request</h3>
                 <pre className="p-3 bg-muted rounded text-sm overflow-x-auto">
-{`fetch('${API_BASE_URL}/weather?location=Santos', {
+                  {`fetch('${API_BASE_URL}/weather?location=Santos', {
   headers: {
     'Authorization': 'Bearer YOUR_JWT_TOKEN',
     'Content-Type': 'application/json'

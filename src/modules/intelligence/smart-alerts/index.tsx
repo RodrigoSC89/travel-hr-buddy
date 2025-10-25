@@ -74,11 +74,11 @@ const SmartAlerts = () => {
       setLoading(true);
       
       let query = supabase
-        .from('active_alerts_dashboard' as any)
-        .select('*');
+        .from("active_alerts_dashboard" as any)
+        .select("*");
       
       if (!showResolved) {
-        query = query.eq('resolved', false);
+        query = query.eq("resolved", false);
       }
 
       const { data, error } = await query;
@@ -89,9 +89,9 @@ const SmartAlerts = () => {
       const alertsWithDetails = await Promise.all(
         (data || []).map(async (alert: any) => {
           const { data: fullAlert } = await supabase
-            .from('smart_alerts' as any)
-            .select('recommended_actions, affected_systems')
-            .eq('id', alert.id)
+            .from("smart_alerts" as any)
+            .select("recommended_actions, affected_systems")
+            .eq("id", alert.id)
             .single();
           
           return {
@@ -104,7 +104,7 @@ const SmartAlerts = () => {
 
       setAlerts(alertsWithDetails as any);
     } catch (error) {
-      console.error('Error loading smart alerts:', error);
+      console.error("Error loading smart alerts:", error);
       toast({
         title: "Error",
         description: "Failed to load smart alerts",
@@ -117,13 +117,13 @@ const SmartAlerts = () => {
 
   const loadAIInsights = async () => {
     try {
-      const criticalAlerts = alerts.filter(a => a.level === 'critical' && !a.resolved).length;
-      const warningAlerts = alerts.filter(a => a.level === 'warning' && !a.resolved).length;
+      const criticalAlerts = alerts.filter(a => a.level === "critical" && !a.resolved).length;
+      const warningAlerts = alerts.filter(a => a.level === "warning" && !a.resolved).length;
       const predictedIssues = alerts.filter(a => a.predicted && !a.resolved).length;
       
       const response = await runAIContext({
-        module: 'anomaly-detector',
-        action: 'detect',
+        module: "anomaly-detector",
+        action: "detect",
         context: { 
           criticalAlerts,
           warningAlerts,
@@ -136,16 +136,16 @@ const SmartAlerts = () => {
         setAiInsight(response.message);
       }
     } catch (error) {
-      console.error('Error loading AI insights:', error);
+      console.error("Error loading AI insights:", error);
     }
   };
 
   const handleAcknowledge = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('smart_alerts' as any)
+        .from("smart_alerts" as any)
         .update({ acknowledged: true } as any)
-        .eq('id', alertId);
+        .eq("id", alertId);
 
       if (error) throw error;
 
@@ -156,7 +156,7 @@ const SmartAlerts = () => {
 
       loadSmartAlerts();
     } catch (error) {
-      console.error('Error acknowledging alert:', error);
+      console.error("Error acknowledging alert:", error);
       toast({
         title: "Error",
         description: "Failed to acknowledge alert",
@@ -168,9 +168,9 @@ const SmartAlerts = () => {
   const handleResolve = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('smart_alerts' as any)
+        .from("smart_alerts" as any)
         .update({ resolved: true, acknowledged: true } as any)
-        .eq('id', alertId);
+        .eq("id", alertId);
 
       if (error) throw error;
 
@@ -181,7 +181,7 @@ const SmartAlerts = () => {
 
       loadSmartAlerts();
     } catch (error) {
-      console.error('Error resolving alert:', error);
+      console.error("Error resolving alert:", error);
       toast({
         title: "Error",
         description: "Failed to resolve alert",
@@ -198,20 +198,20 @@ const SmartAlerts = () => {
     }
 
     switch (level) {
-      case 'critical':
-        return <Badge variant="destructive" className="flex items-center gap-1">
-          <AlertTriangle className="h-3 w-3" /> Critical
-        </Badge>;
-      case 'warning':
-        return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
-          <AlertTriangle className="h-3 w-3" /> Warning
-        </Badge>;
-      case 'info':
-        return <Badge variant="secondary" className="flex items-center gap-1">
-          <Info className="h-3 w-3" /> Info
-        </Badge>;
-      default:
-        return <Badge variant="outline">{level}</Badge>;
+    case "critical":
+      return <Badge variant="destructive" className="flex items-center gap-1">
+        <AlertTriangle className="h-3 w-3" /> Critical
+      </Badge>;
+    case "warning":
+      return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
+        <AlertTriangle className="h-3 w-3" /> Warning
+      </Badge>;
+    case "info":
+      return <Badge variant="secondary" className="flex items-center gap-1">
+        <Info className="h-3 w-3" /> Info
+      </Badge>;
+    default:
+      return <Badge variant="outline">{level}</Badge>;
     }
   };
 
@@ -228,8 +228,8 @@ const SmartAlerts = () => {
   const modules = Array.from(new Set(alerts.map(a => a.source_module)));
 
   const totalAlerts = alerts.filter(a => !a.resolved).length;
-  const criticalCount = alerts.filter(a => a.level === 'critical' && !a.resolved).length;
-  const warningCount = alerts.filter(a => a.level === 'warning' && !a.resolved).length;
+  const criticalCount = alerts.filter(a => a.level === "critical" && !a.resolved).length;
+  const warningCount = alerts.filter(a => a.level === "warning" && !a.resolved).length;
   const predictiveCount = alerts.filter(a => a.predicted && !a.resolved).length;
 
   return (
@@ -250,7 +250,7 @@ const SmartAlerts = () => {
             {showResolved ? "Hide" : "Show"} Resolved
           </Button>
           <Button onClick={loadSmartAlerts} disabled={loading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </Button>
         </div>
@@ -383,7 +383,7 @@ const SmartAlerts = () => {
               </div>
             ) : (
               filteredAlerts.map((alert) => (
-                <Card key={alert.id} className={`hover:bg-accent/50 transition-colors ${alert.resolved ? 'opacity-60' : ''}`}>
+                <Card key={alert.id} className={`hover:bg-accent/50 transition-colors ${alert.resolved ? "opacity-60" : ""}`}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
@@ -406,7 +406,7 @@ const SmartAlerts = () => {
                         <h3 className="font-semibold text-lg mb-2">{alert.message}</h3>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-muted-foreground mb-2">
                           <div>
-                            <span className="font-medium">Time:</span>{' '}
+                            <span className="font-medium">Time:</span>{" "}
                             {formatDistance(new Date(alert.timestamp), new Date(), { addSuffix: true })}
                           </div>
                           {alert.confidence_score && (

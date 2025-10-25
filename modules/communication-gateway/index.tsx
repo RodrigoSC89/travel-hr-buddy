@@ -22,10 +22,10 @@ import { toast } from "@/hooks/use-toast";
 
 interface SatcomStatus {
   connected: boolean;
-  signal_strength: 'high' | 'medium' | 'low' | 'offline';
+  signal_strength: "high" | "medium" | "low" | "offline";
   last_contact: string;
   data_usage: number;
-  mode: 'online' | 'offline';
+  mode: "online" | "offline";
 }
 
 interface AISVessel {
@@ -47,47 +47,47 @@ interface AISVessel {
 const CommunicationGateway: React.FC = () => {
   const [satcomStatus, setSatcomStatus] = useState<SatcomStatus>({
     connected: true,
-    signal_strength: 'high',
+    signal_strength: "high",
     last_contact: new Date().toISOString(),
     data_usage: 67.5,
-    mode: 'online',
+    mode: "online",
   });
 
   const [nearbyVessels, setNearbyVessels] = useState<AISVessel[]>([
     {
-      id: '1',
-      name: 'MV Pacific Star',
-      imo_code: 'IMO9876543',
-      mmsi: '123456789',
+      id: "1",
+      name: "MV Pacific Star",
+      imo_code: "IMO9876543",
+      mmsi: "123456789",
       position: { lat: -23.5505, lng: -46.6333 },
       course: 180,
       speed: 12.5,
       distance: 5.2,
-      vessel_type: 'Cargo Ship',
+      vessel_type: "Cargo Ship",
       last_update: new Date().toISOString(),
     },
     {
-      id: '2',
-      name: 'SS Ocean Pearl',
-      imo_code: 'IMO9123456',
-      mmsi: '987654321',
+      id: "2",
+      name: "SS Ocean Pearl",
+      imo_code: "IMO9123456",
+      mmsi: "987654321",
       position: { lat: -23.5400, lng: -46.6200 },
       course: 90,
       speed: 10.0,
       distance: 8.7,
-      vessel_type: 'Tanker',
+      vessel_type: "Tanker",
       last_update: new Date().toISOString(),
     },
     {
-      id: '3',
-      name: 'RV Atlantic Explorer',
-      imo_code: 'IMO9234567',
-      mmsi: '456789123',
+      id: "3",
+      name: "RV Atlantic Explorer",
+      imo_code: "IMO9234567",
+      mmsi: "456789123",
       position: { lat: -23.5600, lng: -46.6400 },
       course: 45,
       speed: 8.3,
       distance: 12.1,
-      vessel_type: 'Research Vessel',
+      vessel_type: "Research Vessel",
       last_update: new Date().toISOString(),
     },
   ]);
@@ -97,8 +97,8 @@ const CommunicationGateway: React.FC = () => {
     setSatcomStatus({
       ...satcomStatus,
       connected: newStatus,
-      signal_strength: newStatus ? 'high' : 'offline',
-      mode: newStatus ? 'online' : 'offline',
+      signal_strength: newStatus ? "high" : "offline",
+      mode: newStatus ? "online" : "offline",
     });
 
     toast({
@@ -113,8 +113,8 @@ const CommunicationGateway: React.FC = () => {
     setSatcomStatus({
       ...satcomStatus,
       connected: false,
-      signal_strength: 'offline',
-      mode: 'offline',
+      signal_strength: "offline",
+      mode: "offline",
     });
 
     toast({
@@ -126,16 +126,16 @@ const CommunicationGateway: React.FC = () => {
 
   const getSignalIcon = (strength: string) => {
     switch (strength) {
-      case 'high':
-        return <SignalHigh className="h-5 w-5 text-green-600" />;
-      case 'medium':
-        return <SignalMedium className="h-5 w-5 text-yellow-600" />;
-      case 'low':
-        return <SignalLow className="h-5 w-5 text-orange-600" />;
-      case 'offline':
-        return <AlertCircle className="h-5 w-5 text-red-600" />;
-      default:
-        return <SignalHigh className="h-5 w-5" />;
+    case "high":
+      return <SignalHigh className="h-5 w-5 text-green-600" />;
+    case "medium":
+      return <SignalMedium className="h-5 w-5 text-yellow-600" />;
+    case "low":
+      return <SignalLow className="h-5 w-5 text-orange-600" />;
+    case "offline":
+      return <AlertCircle className="h-5 w-5 text-red-600" />;
+    default:
+      return <SignalHigh className="h-5 w-5" />;
     }
   };
 
@@ -169,7 +169,7 @@ const CommunicationGateway: React.FC = () => {
               <div className="flex items-center gap-2">
                 {getSignalIcon(satcomStatus.signal_strength)}
                 <span className="text-2xl font-bold">
-                  {satcomStatus.connected ? 'Online' : 'Offline'}
+                  {satcomStatus.connected ? "Online" : "Offline"}
                 </span>
               </div>
               {getSignalBadge(satcomStatus.signal_strength)}
@@ -224,7 +224,7 @@ const CommunicationGateway: React.FC = () => {
                     variant={satcomStatus.connected ? "destructive" : "default"}
                     onClick={toggleSatcomConnection}
                   >
-                    {satcomStatus.connected ? 'Disconnect' : 'Connect'}
+                    {satcomStatus.connected ? "Disconnect" : "Connect"}
                   </Button>
                 </div>
               </div>
@@ -240,8 +240,8 @@ const CommunicationGateway: React.FC = () => {
                         <h3 className="font-semibold text-lg">Connection Status</h3>
                         <p className="text-sm text-muted-foreground">
                           {satcomStatus.connected 
-                            ? 'Satellite link established' 
-                            : 'No satellite connection'}
+                            ? "Satellite link established" 
+                            : "No satellite connection"}
                         </p>
                       </div>
                     </div>
@@ -270,7 +270,7 @@ const CommunicationGateway: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Mode</p>
-                      <Badge variant={satcomStatus.mode === 'online' ? 'default' : 'secondary'} className="mt-1">
+                      <Badge variant={satcomStatus.mode === "online" ? "default" : "secondary"} className="mt-1">
                         {satcomStatus.mode}
                       </Badge>
                     </div>

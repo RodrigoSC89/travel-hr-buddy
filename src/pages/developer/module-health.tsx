@@ -3,24 +3,24 @@
  * Interface para visualizar e executar checklist de módulos
  */
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Play, Download, RefreshCw, AlertTriangle, CheckCircle2, Clock, BarChart3 } from 'lucide-react';
-import { runModuleHealthCheck, saveReport, type ModuleCheckResult } from '@/ai/module-checker';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Play, Download, RefreshCw, AlertTriangle, CheckCircle2, Clock, BarChart3 } from "lucide-react";
+import { runModuleHealthCheck, saveReport, type ModuleCheckResult } from "@/ai/module-checker";
+import { toast } from "sonner";
 
 export default function ModuleHealthDashboard() {
   const [isRunning, setIsRunning] = useState(false);
   const [results, setResults] = useState<ModuleCheckResult[]>([]);
-  const [report, setReport] = useState<string>('');
+  const [report, setReport] = useState<string>("");
 
   const runCheck = async () => {
     setIsRunning(true);
-    toast.info('Iniciando checklist de módulos...');
+    toast.info("Iniciando checklist de módulos...");
 
     try {
       const checkResults = await runModuleHealthCheck();
@@ -31,45 +31,45 @@ export default function ModuleHealthDashboard() {
 
       toast.success(`Checklist completo! ${checkResults.length} módulos testados.`);
     } catch (error) {
-      toast.error('Erro ao executar checklist');
-      console.error('[Module Health] Error:', error);
+      toast.error("Erro ao executar checklist");
+      console.error("[Module Health] Error:", error);
     } finally {
       setIsRunning(false);
     }
   };
 
   const downloadReport = () => {
-    const blob = new Blob([report], { type: 'text/markdown' });
+    const blob = new Blob([report], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `nautilus_module_health_${new Date().toISOString().split('T')[0]}.md`;
+    a.download = `nautilus_module_health_${new Date().toISOString().split("T")[0]}.md`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success('Relatório baixado!');
+    toast.success("Relatório baixado!");
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'ready': return 'bg-green-500';
-      case 'partial': return 'bg-yellow-500';
-      case 'failed': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "ready": return "bg-green-500";
+    case "partial": return "bg-yellow-500";
+    case "failed": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'ready': return <CheckCircle2 className="h-4 w-4" />;
-      case 'partial': return <AlertTriangle className="h-4 w-4" />;
-      case 'failed': return <AlertTriangle className="h-4 w-4" />;
-      default: return <Clock className="h-4 w-4" />;
+    case "ready": return <CheckCircle2 className="h-4 w-4" />;
+    case "partial": return <AlertTriangle className="h-4 w-4" />;
+    case "failed": return <AlertTriangle className="h-4 w-4" />;
+    default: return <Clock className="h-4 w-4" />;
     }
   };
 
-  const readyCount = results.filter(r => r.status === 'ready').length;
-  const partialCount = results.filter(r => r.status === 'partial').length;
-  const failedCount = results.filter(r => r.status === 'failed').length;
+  const readyCount = results.filter(r => r.status === "ready").length;
+  const partialCount = results.filter(r => r.status === "partial").length;
+  const failedCount = results.filter(r => r.status === "failed").length;
 
   return (
     <div className="container mx-auto p-6 space-y-6">

@@ -14,12 +14,12 @@ export interface ForecastPrediction {
   module: string;
   status: string;
   probability?: number;
-  trend?: 'stable' | 'degrading' | 'improving';
+  trend?: "stable" | "degrading" | "improving";
   timeframe?: string;
 }
 
 export interface ForecastConfig {
-  model: 'ARIMA' | 'Prophet' | 'LSTM';
+  model: "ARIMA" | "Prophet" | "LSTM";
   interval: number;
   historicalDays: number;
 }

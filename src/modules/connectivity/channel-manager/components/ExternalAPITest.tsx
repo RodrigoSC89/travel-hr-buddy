@@ -22,8 +22,8 @@ export function ExternalAPITest() {
       
       const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
         headers: {
-          'Authorization': `Bearer ${session?.access_token}`,
-          'Content-Type': 'application/json'
+          "Authorization": `Bearer ${session?.access_token}`,
+          "Content-Type": "application/json"
         }
       });
 
@@ -73,11 +73,11 @@ export function ExternalAPITest() {
         </CardHeader>
         <CardContent className="space-y-3">
           <Button 
-            onClick={() => callExternalAPI('weather?location=Santos', setWeatherData)}
+            onClick={() => callExternalAPI("weather?location=Santos", setWeatherData)}
             disabled={isLoading}
             className="w-full"
           >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
             Fetch Weather Data
           </Button>
 
@@ -132,11 +132,11 @@ export function ExternalAPITest() {
         </CardHeader>
         <CardContent className="space-y-3">
           <Button 
-            onClick={() => callExternalAPI('satellite?vessel_id=NAV-001', setSatelliteData)}
+            onClick={() => callExternalAPI("satellite?vessel_id=NAV-001", setSatelliteData)}
             disabled={isLoading}
             className="w-full"
           >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
             Fetch Satellite Data
           </Button>
 
@@ -193,11 +193,11 @@ export function ExternalAPITest() {
         </CardHeader>
         <CardContent className="space-y-3">
           <Button 
-            onClick={() => callExternalAPI('ais?area=Santos%20Port', setAisData)}
+            onClick={() => callExternalAPI("ais?area=Santos%20Port", setAisData)}
             disabled={isLoading}
             className="w-full"
           >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
             Fetch AIS Data
           </Button>
 

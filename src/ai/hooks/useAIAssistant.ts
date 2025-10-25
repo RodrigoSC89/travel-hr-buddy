@@ -13,14 +13,14 @@
  * ```
  */
 
-import { useState, useCallback } from 'react';
-import { runOpenAI, generateSystemPrompt } from '../engine';
-import { getModuleContext, addContextHistory } from '../contexts/moduleContext';
+import { useState, useCallback } from "react";
+import { runOpenAI, generateSystemPrompt } from "../engine";
+import { getModuleContext, addContextHistory } from "../contexts/moduleContext";
 
 export interface AIAssistantOptions {
   userId?: string;
   additionalContext?: Record<string, any>;
-  model?: 'gpt-4o-mini' | 'gpt-4o' | 'gpt-3.5-turbo';
+  model?: "gpt-4o-mini" | "gpt-4o" | "gpt-3.5-turbo";
   temperature?: number;
 }
 
@@ -55,8 +55,8 @@ export const useAIAssistant = (
       const systemPrompt = generateSystemPrompt(moduleName, options.additionalContext);
       
       const messages = [
-        { role: 'system' as const, content: systemPrompt },
-        { role: 'user' as const, content: input }
+        { role: "system" as const, content: systemPrompt },
+        { role: "user" as const, content: input }
       ];
       
       // Add conversation history if available
@@ -65,18 +65,18 @@ export const useAIAssistant = (
         recentHistory.forEach((entry) => {
           if (entry.action && entry.result) {
             messages.push(
-              { role: 'user' as const, content: entry.action },
-              { role: 'assistant' as const, content: entry.result }
+              { role: "user" as const, content: entry.action },
+              { role: "assistant" as const, content: entry.result }
             );
           }
         });
         // Add current query after history
-        messages.push({ role: 'user' as const, content: input });
+        messages.push({ role: "user" as const, content: input });
       }
       
       // Call AI engine
       const aiResponse = await runOpenAI({
-        model: options.model || 'gpt-4o-mini',
+        model: options.model || "gpt-4o-mini",
         messages,
         context,
         temperature: options.temperature ?? 0.7,
@@ -97,7 +97,7 @@ export const useAIAssistant = (
       setResponse(aiResponse.content);
       return aiResponse.content;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido ao processar sua pergunta';
+      const errorMessage = err instanceof Error ? err.message : "Erro desconhecido ao processar sua pergunta";
       setError(errorMessage);
       throw err;
     } finally {

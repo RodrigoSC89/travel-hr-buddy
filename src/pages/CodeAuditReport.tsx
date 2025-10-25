@@ -57,7 +57,7 @@ export default function CodeAuditReport() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `code-audit-${new Date().toISOString().split('T')[0]}.txt`;
+    a.download = `code-audit-${new Date().toISOString().split("T")[0]}.txt`;
     a.click();
     URL.revokeObjectURL(url);
 

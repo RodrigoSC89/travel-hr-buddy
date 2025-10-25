@@ -1,22 +1,22 @@
-import { describe, it, expect } from 'vitest';
-import { mockIncident, mockSAROperation, mockVessel } from '../../shared/mock-factories';
+import { describe, it, expect } from "vitest";
+import { mockIncident, mockSAROperation, mockVessel } from "../../shared/mock-factories";
 
-describe('SAR (Search and Rescue) Operations', () => {
-  describe('SAR Initiation', () => {
-    it('should initiate SAR operation for critical incident', () => {
+describe("SAR (Search and Rescue) Operations", () => {
+  describe("SAR Initiation", () => {
+    it("should initiate SAR operation for critical incident", () => {
       // Arrange
-      const incident = mockIncident({ severity: 'critical', type: 'man_overboard' });
+      const incident = mockIncident({ severity: "critical", type: "man_overboard" });
       
       // Act
       const sarOperation = initiateSAR(incident);
       
       // Assert
       expect(sarOperation.incident_id).toBe(incident.id);
-      expect(sarOperation.status).toBe('in_progress');
+      expect(sarOperation.status).toBe("in_progress");
       expect(sarOperation.search_area).toBeDefined();
     });
 
-    it('should calculate search area based on incident location and time', () => {
+    it("should calculate search area based on incident location and time", () => {
       // Arrange
       const incident = mockIncident({
         location: { lat: -23.5505, lng: -46.6333 },
@@ -32,14 +32,14 @@ describe('SAR (Search and Rescue) Operations', () => {
     });
   });
 
-  describe('Resource Deployment', () => {
-    it('should deploy appropriate vessels for SAR operation', () => {
+  describe("Resource Deployment", () => {
+    it("should deploy appropriate vessels for SAR operation", () => {
       // Arrange
       const sarOperation = mockSAROperation();
       const availableVessels = [
-        mockVessel({ type: 'Support Vessel', status: 'operational' }),
-        mockVessel({ type: 'Rescue Boat', status: 'operational' }),
-        mockVessel({ type: 'Supply Vessel', status: 'maintenance' }),
+        mockVessel({ type: "Support Vessel", status: "operational" }),
+        mockVessel({ type: "Rescue Boat", status: "operational" }),
+        mockVessel({ type: "Supply Vessel", status: "maintenance" }),
       ];
       
       // Act
@@ -47,14 +47,14 @@ describe('SAR (Search and Rescue) Operations', () => {
       
       // Assert
       expect(deployedVessels.length).toBe(2); // Only operational vessels
-      expect(deployedVessels.every(v => v.status === 'operational')).toBe(true);
+      expect(deployedVessels.every(v => v.status === "operational")).toBe(true);
     });
   });
 
-  describe('SAR Progress Tracking', () => {
-    it('should update SAR status based on progress', () => {
+  describe("SAR Progress Tracking", () => {
+    it("should update SAR status based on progress", () => {
       // Arrange
-      const sarOperation = mockSAROperation({ status: 'in_progress' });
+      const sarOperation = mockSAROperation({ status: "in_progress" });
       
       // Act
       const updatedOperation = updateSARProgress(sarOperation, {
@@ -64,19 +64,19 @@ describe('SAR (Search and Rescue) Operations', () => {
       
       // Assert
       expect(updatedOperation.search_coverage).toBe(75);
-      expect(updatedOperation.status).toBe('in_progress');
+      expect(updatedOperation.status).toBe("in_progress");
     });
 
-    it('should mark SAR as successful when target found', () => {
+    it("should mark SAR as successful when target found", () => {
       // Arrange
-      const sarOperation = mockSAROperation({ status: 'in_progress' });
+      const sarOperation = mockSAROperation({ status: "in_progress" });
       
       // Act
       const completedOperation = completeSAR(sarOperation, { success: true });
       
       // Assert
-      expect(completedOperation.status).toBe('completed');
-      expect(completedOperation.outcome).toBe('success');
+      expect(completedOperation.status).toBe("completed");
+      expect(completedOperation.outcome).toBe("success");
     });
   });
 });
@@ -85,7 +85,7 @@ describe('SAR (Search and Rescue) Operations', () => {
 function initiateSAR(incident: any) {
   return mockSAROperation({
     incident_id: incident.id,
-    status: 'in_progress',
+    status: "in_progress",
     search_area: calculateSearchArea(incident),
   });
 }
@@ -99,12 +99,12 @@ function calculateSearchArea(incident: any) {
   return {
     center: incident.location,
     radius,
-    unit: 'nautical_miles',
+    unit: "nautical_miles",
   };
 }
 
 function deployVesselsForSAR(sarOperation: any, vessels: any[]) {
-  return vessels.filter(v => v.status === 'operational');
+  return vessels.filter(v => v.status === "operational");
 }
 
 function updateSARProgress(sarOperation: any, progress: any) {
@@ -118,8 +118,8 @@ function updateSARProgress(sarOperation: any, progress: any) {
 function completeSAR(sarOperation: any, result: any) {
   return {
     ...sarOperation,
-    status: 'completed',
-    outcome: result.success ? 'success' : 'unsuccessful',
+    status: "completed",
+    outcome: result.success ? "success" : "unsuccessful",
     completed_at: new Date().toISOString(),
   };
 }

@@ -62,15 +62,15 @@ export const exportPerformancePDF = async (data: PerformanceReportData): Promise
           ${periodLabel} | ${vesselLabel} | ${missionLabel}
         </p>
         <p style="color: #999; margin: 5px 0 0 0; font-size: 12px;">
-          Gerado em: ${new Date().toLocaleString('pt-BR')}
+          Gerado em: ${new Date().toLocaleString("pt-BR")}
         </p>
       </div>
 
       <!-- Performance Status -->
-      <div style="background-color: ${performanceStatus === 'optimal' ? '#dcfce7' : performanceStatus === 'average' ? '#fef3c7' : '#fee2e2'}; 
-                  border-left: 4px solid ${performanceStatus === 'optimal' ? '#16a34a' : performanceStatus === 'average' ? '#ca8a04' : '#dc2626'}; 
+      <div style="background-color: ${performanceStatus === "optimal" ? "#dcfce7" : performanceStatus === "average" ? "#fef3c7" : "#fee2e2"}; 
+                  border-left: 4px solid ${performanceStatus === "optimal" ? "#16a34a" : performanceStatus === "average" ? "#ca8a04" : "#dc2626"}; 
                   padding: 15px; margin-bottom: 20px; border-radius: 4px;">
-        <h3 style="margin: 0 0 10px 0; color: ${performanceStatus === 'optimal' ? '#16a34a' : performanceStatus === 'average' ? '#ca8a04' : '#dc2626'}; font-size: 18px;">
+        <h3 style="margin: 0 0 10px 0; color: ${performanceStatus === "optimal" ? "#16a34a" : performanceStatus === "average" ? "#ca8a04" : "#dc2626"}; font-size: 18px;">
           Status da Performance: ${statusLabel}
         </h3>
         <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.6;">
@@ -122,12 +122,12 @@ export const exportPerformancePDF = async (data: PerformanceReportData): Promise
           </thead>
           <tbody>
             ${fuelData.map((item, index) => `
-              <tr style="${index % 2 === 0 ? 'background-color: #f9fafb;' : ''}">
+              <tr style="${index % 2 === 0 ? "background-color: #f9fafb;" : ""}">
                 <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-size: 13px;">${item.name}</td>
                 <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right; font-size: 13px; font-weight: 600;">${item.value}%</td>
-                <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-size: 13px;">${item.label || 'Normal'}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-size: 13px;">${item.label || "Normal"}</td>
               </tr>
-            `).join('')}
+            `).join("")}
           </tbody>
         </table>
       </div>
@@ -146,11 +146,11 @@ export const exportPerformancePDF = async (data: PerformanceReportData): Promise
           </thead>
           <tbody>
             ${productivityData.map((item, index) => `
-              <tr style="${index % 2 === 0 ? 'background-color: #f9fafb;' : ''}">
+              <tr style="${index % 2 === 0 ? "background-color: #f9fafb;" : ""}">
                 <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-size: 13px;">${item.name}</td>
                 <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right; font-size: 13px; font-weight: 600;">${item.value}h</td>
               </tr>
-            `).join('')}
+            `).join("")}
           </tbody>
         </table>
       </div>
@@ -169,11 +169,11 @@ export const exportPerformancePDF = async (data: PerformanceReportData): Promise
           </thead>
           <tbody>
             ${downtimeData.map((item, index) => `
-              <tr style="${index % 2 === 0 ? 'background-color: #f9fafb;' : ''}">
+              <tr style="${index % 2 === 0 ? "background-color: #f9fafb;" : ""}">
                 <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; font-size: 13px;">${item.name}</td>
                 <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right; font-size: 13px; font-weight: 600;">${item.value}%</td>
               </tr>
-            `).join('')}
+            `).join("")}
           </tbody>
         </table>
       </div>
@@ -190,10 +190,10 @@ export const exportPerformancePDF = async (data: PerformanceReportData): Promise
   // Configure PDF options
   const options = {
     margin: [10, 10, 10, 10] as [number, number, number, number],
-    filename: `performance-report-${new Date().toISOString().split('T')[0]}.pdf`,
-    image: { type: 'jpeg' as const, quality: 0.98 },
+    filename: `performance-report-${new Date().toISOString().split("T")[0]}.pdf`,
+    image: { type: "jpeg" as const, quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const }
+    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" as const }
   };
 
   // Generate and download PDF

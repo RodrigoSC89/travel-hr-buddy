@@ -1,8 +1,8 @@
 // PATCH 107.0: Predictive Maintenance Types
 
-export type MaintenanceStatus = 'ok' | 'scheduled' | 'overdue' | 'forecasted';
-export type MaintenancePriority = 'low' | 'normal' | 'high' | 'critical';
-export type MaintenanceType = 'preventive' | 'corrective' | 'predictive' | 'condition_based';
+export type MaintenanceStatus = "ok" | "scheduled" | "overdue" | "forecasted";
+export type MaintenancePriority = "low" | "normal" | "high" | "critical";
+export type MaintenanceType = "preventive" | "corrective" | "predictive" | "condition_based";
 
 export interface MaintenanceRecord {
   id: string;
@@ -32,7 +32,7 @@ export interface MaintenanceDashboardView {
   forecasted_issue?: string;
   vessel_name: string;
   imo_code: string;
-  urgency_status: 'overdue' | 'urgent' | 'upcoming' | 'ok';
+  urgency_status: "overdue" | "urgent" | "upcoming" | "ok";
   days_until_due: number;
 }
 

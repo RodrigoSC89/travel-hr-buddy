@@ -1,11 +1,11 @@
-import React, { ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '@/contexts/AuthContext';
-import { TenantProvider } from '@/contexts/TenantContext';
-import { OrganizationProvider } from '@/contexts/OrganizationContext';
-import { vi, beforeEach, afterEach } from 'vitest';
+import React, { ReactElement } from "react";
+import { render, RenderOptions } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { TenantProvider } from "@/contexts/TenantContext";
+import { OrganizationProvider } from "@/contexts/OrganizationContext";
+import { vi, beforeEach, afterEach } from "vitest";
 
 /**
  * Create a new QueryClient for each test to ensure isolation
@@ -52,7 +52,7 @@ export const AllTheProviders = ({ children }: AllTheProvidersProps) => {
  */
 export const renderWithProviders = (
   ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>,
+  options?: Omit<RenderOptions, "wrapper">,
 ) => {
   return render(ui, { wrapper: AllTheProviders, ...options });
 };
@@ -61,14 +61,14 @@ export const renderWithProviders = (
  * Wait for all loading states to finish
  */
 export const waitForLoadingToFinish = async () => {
-  const { findByTestId, queryByTestId } = await import('@testing-library/react');
+  const { findByTestId, queryByTestId } = await import("@testing-library/react");
   
   // Wait for any loading spinners to disappear
   await new Promise(resolve => setTimeout(resolve, 100));
   
   return new Promise<void>((resolve) => {
     const checkLoading = () => {
-      const loadingElements = document.querySelectorAll('[data-loading="true"]');
+      const loadingElements = document.querySelectorAll("[data-loading=\"true\"]");
       if (loadingElements.length === 0) {
         resolve();
       } else {
@@ -99,7 +99,7 @@ export const createMockSupabaseClient = () => ({
   storage: {
     from: vi.fn(() => ({
       upload: vi.fn().mockResolvedValue({ data: null, error: null }),
-      getPublicUrl: vi.fn().mockReturnValue({ data: { publicUrl: 'mock-url' } }),
+      getPublicUrl: vi.fn().mockReturnValue({ data: { publicUrl: "mock-url" } }),
     })),
   },
 });
@@ -108,11 +108,11 @@ export const createMockSupabaseClient = () => ({
  * Create mock user for authentication tests
  */
 export const createMockUser = (overrides = {}) => ({
-  id: 'test-user-id',
-  email: 'test@nautilus.com',
+  id: "test-user-id",
+  email: "test@nautilus.com",
   user_metadata: {
-    name: 'Test User',
-    role: 'operator',
+    name: "Test User",
+    role: "operator",
   },
   ...overrides,
 });
@@ -121,8 +121,8 @@ export const createMockUser = (overrides = {}) => ({
  * Create mock session for authentication tests
  */
 export const createMockSession = (userOverrides = {}) => ({
-  access_token: 'mock-access-token',
-  refresh_token: 'mock-refresh-token',
+  access_token: "mock-access-token",
+  refresh_token: "mock-refresh-token",
   expires_at: Date.now() + 3600000,
   user: createMockUser(userOverrides),
 });
@@ -162,4 +162,4 @@ export const resetAllMocks = () => {
 };
 
 // Re-export testing library utilities
-export * from '@testing-library/react';
+export * from "@testing-library/react";

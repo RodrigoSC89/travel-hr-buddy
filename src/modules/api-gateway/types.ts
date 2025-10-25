@@ -6,8 +6,8 @@ export interface ApiRoute {
   id: string;
   service: string;
   path: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-  status: 'active' | 'inactive' | 'error';
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  status: "active" | "inactive" | "error";
   requestCount: number;
   avgLatency: number;
   lastError?: string;
@@ -48,7 +48,7 @@ export interface WebhookLog {
   id: string;
   webhookId: string;
   event: string;
-  status: 'success' | 'failure';
+  status: "success" | "failure";
   statusCode?: number;
   responseTime: number;
   error?: string;

@@ -172,9 +172,9 @@ class LogsEngine {
 
     try {
       // Store in localStorage as primary storage since system_logs table doesn't exist yet
-      const storedLogs = JSON.parse(localStorage.getItem('nautilus_system_logs') || '[]');
+      const storedLogs = JSON.parse(localStorage.getItem("nautilus_system_logs") || "[]");
       const combinedLogs = [...storedLogs, ...logsToFlush].slice(-1000); // Keep last 1000
-      localStorage.setItem('nautilus_system_logs', JSON.stringify(combinedLogs));
+      localStorage.setItem("nautilus_system_logs", JSON.stringify(combinedLogs));
       
       // Optional: Could be adapted to use ai_insights or another table if needed
       // For now, keeping logs client-side until proper table is created

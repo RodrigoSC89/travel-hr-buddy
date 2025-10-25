@@ -8,7 +8,7 @@ export interface Coordinates {
   lng: number;
 }
 
-export type RouteStatus = 'planned' | 'active' | 'completed' | 'cancelled' | 'delayed';
+export type RouteStatus = "planned" | "active" | "completed" | "cancelled" | "delayed";
 
 export interface Route {
   id: string;
@@ -54,14 +54,14 @@ export interface WeatherWaypoint {
 }
 
 export interface WeatherAlert {
-  severity: 'low' | 'moderate' | 'high' | 'severe';
+  severity: "low" | "moderate" | "high" | "severe";
   type: string;
   description: string;
   affected_area: Coordinates[];
 }
 
 export interface GeoJSONLineString {
-  type: 'LineString';
+  type: "LineString";
   coordinates: [number, number][]; // [lng, lat]
 }
 

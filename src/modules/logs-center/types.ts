@@ -3,7 +3,7 @@
  * Type definitions for the centralized logging system
  */
 
-export type LogLevel = 'info' | 'warn' | 'error';
+export type LogLevel = "info" | "warn" | "error";
 
 export interface LogEntry {
   id: string;

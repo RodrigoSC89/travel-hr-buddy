@@ -2,7 +2,7 @@
  * PATCH 100.0 - Webhook Manager Service
  */
 
-import { Webhook, WebhookLog } from '../types';
+import { Webhook, WebhookLog } from "../types";
 
 class WebhookManagerService {
   private webhooks: Map<string, Webhook> = new Map();
@@ -10,9 +10,9 @@ class WebhookManagerService {
 
   constructor() {
     // Initialize with demo webhooks
-    this.createWebhook('Document Upload Notification', 'https://example.com/webhooks/documents', ['document.uploaded', 'document.updated']);
-    this.createWebhook('User Activity Alert', 'https://example.com/webhooks/users', ['user.login', 'user.logout']);
-    this.createWebhook('System Events', 'https://example.com/webhooks/system', ['system.error', 'system.warning']);
+    this.createWebhook("Document Upload Notification", "https://example.com/webhooks/documents", ["document.uploaded", "document.updated"]);
+    this.createWebhook("User Activity Alert", "https://example.com/webhooks/users", ["user.login", "user.logout"]);
+    this.createWebhook("System Events", "https://example.com/webhooks/system", ["system.error", "system.warning"]);
   }
 
   createWebhook(name: string, url: string, events: string[]): Webhook {
@@ -50,7 +50,7 @@ class WebhookManagerService {
           id: this.generateId(),
           webhookId: webhook.id,
           event,
-          status: 'success',
+          status: "success",
           statusCode: 200,
           responseTime,
           timestamp: new Date()
@@ -63,10 +63,10 @@ class WebhookManagerService {
           id: this.generateId(),
           webhookId: webhook.id,
           event,
-          status: 'failure',
+          status: "failure",
           statusCode: 500,
           responseTime,
-          error: error instanceof Error ? error.message : 'Unknown error',
+          error: error instanceof Error ? error.message : "Unknown error",
           timestamp: new Date()
         });
       }
@@ -79,7 +79,7 @@ class WebhookManagerService {
     
     // Simulate occasional failures (10% chance)
     if (Math.random() < 0.1) {
-      throw new Error('Network timeout');
+      throw new Error("Network timeout");
     }
   }
 

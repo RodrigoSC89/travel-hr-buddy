@@ -3,13 +3,13 @@
  * Extended health monitoring with Supabase, AI, Routes, and Build checks
  */
 
-import { logger } from '@/lib/logger';
-import { runAIContext } from '@/ai/kernel';
-import { supabase } from '@/integrations/supabase/client';
+import { logger } from "@/lib/logger";
+import { runAIContext } from "@/ai/kernel";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface HealthCheckResult {
   service: string;
-  status: 'online' | 'offline' | 'degraded';
+  status: "online" | "offline" | "degraded";
   latency?: number;
   message?: string;
   timestamp: Date;
@@ -17,7 +17,7 @@ export interface HealthCheckResult {
 
 export interface WatchdogEvent {
   id: string;
-  type: 'error' | 'warning' | 'info' | 'success';
+  type: "error" | "warning" | "info" | "success";
   service: string;
   message: string;
   timestamp: Date;
@@ -34,7 +34,7 @@ class WatchdogService {
    * Start watchdog monitoring
    */
   start() {
-    logger.info('[Watchdog Service] Starting enhanced monitoring...');
+    logger.info("[Watchdog Service] Starting enhanced monitoring...");
     
     // Run initial health check
     this.runFullHealthCheck();
@@ -44,7 +44,7 @@ class WatchdogService {
       this.runFullHealthCheck();
     }, this.checkIntervalMs);
     
-    logger.info('[Watchdog Service] Monitoring active');
+    logger.info("[Watchdog Service] Monitoring active");
   }
 
   /**
@@ -55,7 +55,7 @@ class WatchdogService {
       clearInterval(this.healthCheckInterval);
       this.healthCheckInterval = null;
     }
-    logger.info('[Watchdog Service] Monitoring stopped');
+    logger.info("[Watchdog Service] Monitoring stopped");
   }
 
   /**
@@ -74,16 +74,16 @@ class WatchdogService {
     results.push(await this.checkRouting());
 
     // Log results
-    const failedServices = results.filter(r => r.status === 'offline');
+    const failedServices = results.filter(r => r.status === "offline");
     if (failedServices.length > 0) {
       this.addEvent({
-        type: 'error',
-        service: 'health-check',
-        message: `${failedServices.length} service(s) offline: ${failedServices.map(s => s.service).join(', ')}`,
+        type: "error",
+        service: "health-check",
+        message: `${failedServices.length} service(s) offline: ${failedServices.map(s => s.service).join(", ")}`,
         metadata: { results }
       });
     } else {
-      logger.info('[Watchdog Service] All services healthy');
+      logger.info("[Watchdog Service] All services healthy");
     }
 
     return results;
@@ -96,18 +96,18 @@ class WatchdogService {
     const startTime = Date.now();
     try {
       // Use a simple query that doesn't expose user data
-      const { error } = await (supabase.rpc as any)('health_check').single();
+      const { error } = await (supabase.rpc as any)("health_check").single();
       const latency = Date.now() - startTime;
 
       if (error) {
         // Fallback to a simple connection test if health_check RPC doesn't exist
-        const { error: fallbackError } = await supabase.from('profiles').select('count').limit(1).single();
+        const { error: fallbackError } = await supabase.from("profiles").select("count").limit(1).single();
         const fallbackLatency = Date.now() - startTime;
         
         if (fallbackError) {
           return {
-            service: 'supabase',
-            status: 'offline',
+            service: "supabase",
+            status: "offline",
             latency: fallbackLatency,
             message: fallbackError.message,
             timestamp: new Date()
@@ -115,25 +115,25 @@ class WatchdogService {
         }
 
         return {
-          service: 'supabase',
-          status: 'online',
+          service: "supabase",
+          status: "online",
           latency: fallbackLatency,
           timestamp: new Date()
         };
       }
 
       return {
-        service: 'supabase',
-        status: 'online',
+        service: "supabase",
+        status: "online",
         latency,
         timestamp: new Date()
       };
     } catch (err) {
       return {
-        service: 'supabase',
-        status: 'offline',
+        service: "supabase",
+        status: "offline",
         latency: Date.now() - startTime,
-        message: err instanceof Error ? err.message : 'Unknown error',
+        message: err instanceof Error ? err.message : "Unknown error",
         timestamp: new Date()
       };
     }
@@ -146,25 +146,25 @@ class WatchdogService {
     const startTime = Date.now();
     try {
       const response = await runAIContext({
-        module: 'system.watchdog',
-        action: 'ping',
+        module: "system.watchdog",
+        action: "ping",
         context: { test: true }
       });
 
       const latency = Date.now() - startTime;
 
       return {
-        service: 'ai-service',
-        status: response ? 'online' : 'degraded',
+        service: "ai-service",
+        status: response ? "online" : "degraded",
         latency,
         timestamp: new Date()
       };
     } catch (err) {
       return {
-        service: 'ai-service',
-        status: 'offline',
+        service: "ai-service",
+        status: "offline",
         latency: Date.now() - startTime,
-        message: err instanceof Error ? err.message : 'AI service unreachable',
+        message: err instanceof Error ? err.message : "AI service unreachable",
         timestamp: new Date()
       };
     }
@@ -179,18 +179,18 @@ class WatchdogService {
       const currentPath = window.location.pathname;
       // More robust route validation - check if we're on a known route or have content
       const hasContent = document.body && document.body.children.length > 0;
-      const isRootPath = currentPath === '/';
-      const hasRouteIndicator = document.querySelector('[data-route-active]') !== null || 
-                                document.querySelector('[role="main"]') !== null ||
-                                document.querySelector('main') !== null;
+      const isRootPath = currentPath === "/";
+      const hasRouteIndicator = document.querySelector("[data-route-active]") !== null || 
+                                document.querySelector("[role=\"main\"]") !== null ||
+                                document.querySelector("main") !== null;
       
       const isValidRoute = isRootPath || (hasContent && hasRouteIndicator);
       const latency = Date.now() - startTime;
 
       if (!isValidRoute) {
         return {
-          service: 'routing',
-          status: 'degraded',
+          service: "routing",
+          status: "degraded",
           latency,
           message: `Route ${currentPath} may be invalid or not fully loaded`,
           timestamp: new Date()
@@ -198,17 +198,17 @@ class WatchdogService {
       }
 
       return {
-        service: 'routing',
-        status: 'online',
+        service: "routing",
+        status: "online",
         latency,
         timestamp: new Date()
       };
     } catch (err) {
       return {
-        service: 'routing',
-        status: 'offline',
+        service: "routing",
+        status: "offline",
         latency: Date.now() - startTime,
-        message: err instanceof Error ? err.message : 'Routing check failed',
+        message: err instanceof Error ? err.message : "Routing check failed",
         timestamp: new Date()
       };
     }
@@ -223,8 +223,8 @@ class WatchdogService {
     try {
       // Log restart attempt
       this.addEvent({
-        type: 'info',
-        service: 'auto-heal',
+        type: "info",
+        service: "auto-heal",
         message: `Restarting module: ${moduleName}`,
         metadata: { module: moduleName }
       });
@@ -234,8 +234,8 @@ class WatchdogService {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       this.addEvent({
-        type: 'success',
-        service: 'auto-heal',
+        type: "success",
+        service: "auto-heal",
         message: `Module ${moduleName} restarted successfully`,
         metadata: { module: moduleName }
       });
@@ -243,8 +243,8 @@ class WatchdogService {
       return true;
     } catch (err) {
       this.addEvent({
-        type: 'error',
-        service: 'auto-heal',
+        type: "error",
+        service: "auto-heal",
         message: `Failed to restart module ${moduleName}: ${err}`,
         metadata: { module: moduleName, error: err }
       });
@@ -256,7 +256,7 @@ class WatchdogService {
    * Clear cache for a module
    */
   async clearCache(moduleName?: string): Promise<boolean> {
-    logger.info(`[Watchdog Service] Clearing cache${moduleName ? ` for ${moduleName}` : ''}`);
+    logger.info(`[Watchdog Service] Clearing cache${moduleName ? ` for ${moduleName}` : ""}`);
     
     try {
       if (moduleName) {
@@ -271,17 +271,17 @@ class WatchdogService {
       }
 
       this.addEvent({
-        type: 'success',
-        service: 'auto-heal',
-        message: `Cache cleared${moduleName ? ` for ${moduleName}` : ''}`,
+        type: "success",
+        service: "auto-heal",
+        message: `Cache cleared${moduleName ? ` for ${moduleName}` : ""}`,
         metadata: { module: moduleName }
       });
 
       return true;
     } catch (err) {
       this.addEvent({
-        type: 'error',
-        service: 'auto-heal',
+        type: "error",
+        service: "auto-heal",
         message: `Failed to clear cache: ${err}`,
         metadata: { module: moduleName, error: err }
       });
@@ -299,8 +299,8 @@ class WatchdogService {
     
     try {
       this.addEvent({
-        type: 'info',
-        service: 'auto-heal',
+        type: "info",
+        service: "auto-heal",
         message: `Rebuilding route: ${route}`,
         metadata: { route }
       });
@@ -311,8 +311,8 @@ class WatchdogService {
       window.location.href = route;
 
       this.addEvent({
-        type: 'success',
-        service: 'auto-heal',
+        type: "success",
+        service: "auto-heal",
         message: `Route ${route} rebuilt successfully`,
         metadata: { route }
       });
@@ -320,8 +320,8 @@ class WatchdogService {
       return true;
     } catch (err) {
       this.addEvent({
-        type: 'error',
-        service: 'auto-heal',
+        type: "error",
+        service: "auto-heal",
         message: `Failed to rebuild route ${route}: ${err}`,
         metadata: { route, error: err }
       });
@@ -333,37 +333,37 @@ class WatchdogService {
    * Run AI-based system diagnosis
    */
   async runDiagnosis(): Promise<string> {
-    logger.info('[Watchdog Service] Running AI diagnosis...');
+    logger.info("[Watchdog Service] Running AI diagnosis...");
     
     try {
       // Get console errors from last 5 minutes
       const recentEvents = this.getRecentEvents(5);
-      const errors = recentEvents.filter(e => e.type === 'error');
+      const errors = recentEvents.filter(e => e.type === "error");
 
       const aiResponse = await runAIContext({
-        module: 'system.watchdog',
-        action: 'system-diagnosis',
+        module: "system.watchdog",
+        action: "system-diagnosis",
         context: {
           errors: errors.map(e => ({ message: e.message, service: e.service })),
           timestamp: new Date().toISOString()
         }
       });
 
-      const diagnosis = aiResponse?.message || 'System appears healthy';
+      const diagnosis = aiResponse?.message || "System appears healthy";
 
       this.addEvent({
-        type: 'info',
-        service: 'diagnosis',
+        type: "info",
+        service: "diagnosis",
         message: `AI Diagnosis completed: ${diagnosis}`,
         metadata: { aiResponse }
       });
 
       return diagnosis;
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Diagnosis failed';
+      const errorMsg = err instanceof Error ? err.message : "Diagnosis failed";
       this.addEvent({
-        type: 'error',
-        service: 'diagnosis',
+        type: "error",
+        service: "diagnosis",
         message: `AI Diagnosis failed: ${errorMsg}`,
         metadata: { error: err }
       });
@@ -374,7 +374,7 @@ class WatchdogService {
   /**
    * Add event to history
    */
-  private addEvent(event: Omit<WatchdogEvent, 'id' | 'timestamp'>) {
+  private addEvent(event: Omit<WatchdogEvent, "id" | "timestamp">) {
     const newEvent: WatchdogEvent = {
       ...event,
       id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
@@ -390,7 +390,7 @@ class WatchdogService {
 
     // Log to Supabase (fire and forget)
     this.logToSupabase(newEvent).catch(err => 
-      logger.error('[Watchdog Service] Failed to log event to Supabase:', err)
+      logger.error("[Watchdog Service] Failed to log event to Supabase:", err)
     );
   }
 
@@ -399,7 +399,7 @@ class WatchdogService {
    */
   private async logToSupabase(event: WatchdogEvent) {
     try {
-      await (supabase.from as any)('watchdog_events').insert({
+      await (supabase.from as any)("watchdog_events").insert({
         event_id: event.id,
         event_type: event.type,
         service_name: event.service,
@@ -409,7 +409,7 @@ class WatchdogService {
       });
     } catch (err) {
       // Silently fail - don't want logging errors to cascade
-      logger.warn('[Watchdog Service] Could not log to Supabase:', err as any);
+      logger.warn("[Watchdog Service] Could not log to Supabase:", err as any);
     }
   }
 
@@ -441,7 +441,7 @@ class WatchdogService {
     return {
       isRunning: this.healthCheckInterval !== null,
       totalEvents: this.events.length,
-      recentErrors: this.events.filter(e => e.type === 'error').length,
+      recentErrors: this.events.filter(e => e.type === "error").length,
       lastCheck: this.events[0]?.timestamp || null
     };
   }

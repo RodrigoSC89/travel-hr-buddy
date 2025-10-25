@@ -19,18 +19,18 @@ interface RouteListProps {
 export function RouteList({ routes, onSelectRoute }: RouteListProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "planned":
-        return "bg-blue-500/20 text-blue-300 border-blue-500/30";
-      case "active":
-        return "bg-green-500/20 text-green-300 border-green-500/30";
-      case "completed":
-        return "bg-gray-500/20 text-gray-300 border-gray-500/30";
-      case "cancelled":
-        return "bg-red-500/20 text-red-300 border-red-500/30";
-      case "delayed":
-        return "bg-yellow-500/20 text-yellow-300 border-yellow-500/30";
-      default:
-        return "bg-gray-500/20 text-gray-300 border-gray-500/30";
+    case "planned":
+      return "bg-blue-500/20 text-blue-300 border-blue-500/30";
+    case "active":
+      return "bg-green-500/20 text-green-300 border-green-500/30";
+    case "completed":
+      return "bg-gray-500/20 text-gray-300 border-gray-500/30";
+    case "cancelled":
+      return "bg-red-500/20 text-red-300 border-red-500/30";
+    case "delayed":
+      return "bg-yellow-500/20 text-yellow-300 border-yellow-500/30";
+    default:
+      return "bg-gray-500/20 text-gray-300 border-gray-500/30";
     }
   };
 

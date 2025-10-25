@@ -2,16 +2,16 @@
  * PATCH 100.0 - API Key Management Service
  */
 
-import { ApiKey } from '../types';
+import { ApiKey } from "../types";
 
 class ApiKeyManagerService {
   private keys: Map<string, ApiKey> = new Map();
 
   constructor() {
     // Initialize with demo keys
-    this.createKey('Production API Key', ['*'], 365);
-    this.createKey('Development API Key', ['documents', 'analytics'], 180);
-    this.createKey('Limited Access Key', ['auth', 'profile'], 30);
+    this.createKey("Production API Key", ["*"], 365);
+    this.createKey("Development API Key", ["documents", "analytics"], 180);
+    this.createKey("Limited Access Key", ["auth", "profile"], 30);
   }
 
   createKey(name: string, scope: string[], expiresInDays?: number): ApiKey {
@@ -52,14 +52,14 @@ class ApiKeyManagerService {
     for (const key of this.keys.values()) {
       if (key.key === apiKey) {
         if (!key.isActive) {
-          return { valid: false, error: 'API key is inactive' };
+          return { valid: false, error: "API key is inactive" };
         }
 
         if (key.expiresAt && key.expiresAt < new Date()) {
-          return { valid: false, error: 'API key has expired' };
+          return { valid: false, error: "API key has expired" };
         }
 
-        if (service && !key.scope.includes('*') && !key.scope.includes(service)) {
+        if (service && !key.scope.includes("*") && !key.scope.includes(service)) {
           return { valid: false, error: `API key does not have access to ${service}` };
         }
 
@@ -68,7 +68,7 @@ class ApiKeyManagerService {
       }
     }
 
-    return { valid: false, error: 'Invalid API key' };
+    return { valid: false, error: "Invalid API key" };
   }
 
   getAllKeys(): ApiKey[] {
@@ -88,8 +88,8 @@ class ApiKeyManagerService {
   }
 
   private generateApiKey(): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let key = 'sk_';
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let key = "sk_";
     for (let i = 0; i < 32; i++) {
       key += chars.charAt(Math.floor(Math.random() * chars.length));
     }

@@ -170,7 +170,7 @@ function generateRecommendedActions(
     ]
   };
 
-  let actions = [...baseActions[type]];
+  const actions = [...baseActions[type]];
 
   // Add severity-specific actions
   if (severity === "critical") {
@@ -254,7 +254,7 @@ Seja objetivo e técnico.`;
 • Perda de comunicação
 
 ✅ AÇÕES PRIORITÁRIAS:
-${protocolResult.recommendedActions.slice(0, 3).map((action: string) => `• ${action}`).join('\n')}
+${protocolResult.recommendedActions.slice(0, 3).map((action: string) => `• ${action}`).join("\n")}
 
 🛠️ RECURSOS NECESSÁRIOS:
 • Equipe de resposta treinada

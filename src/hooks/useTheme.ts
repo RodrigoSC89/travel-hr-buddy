@@ -4,7 +4,7 @@
  * PATCH 129.0 - Dark Mode + Config Persistente
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 import {
   Theme,
   getCurrentTheme,
@@ -12,11 +12,11 @@ import {
   getEffectiveTheme,
   isDarkMode as checkIsDarkMode,
   initializeTheme,
-} from '@/lib/theme/theme-utils';
+} from "@/lib/theme/theme-utils";
 
 interface UseThemeReturn {
   theme: Theme;
-  effectiveTheme: 'light' | 'dark';
+  effectiveTheme: "light" | "dark";
   isDark: boolean;
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
@@ -56,22 +56,22 @@ export function useTheme(): UseThemeReturn {
   // Toggle theme
   const toggleTheme = useCallback(() => {
     const currentEffective = getEffectiveTheme(theme);
-    const newTheme: Theme = currentEffective === 'light' ? 'dark' : 'light';
+    const newTheme: Theme = currentEffective === "light" ? "dark" : "light";
     setTheme(newTheme);
   }, [theme, setTheme]);
 
   // Listen for system theme changes
   useEffect(() => {
-    if (theme !== 'system') return;
+    if (theme !== "system") return;
 
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = () => {
       setIsDark(checkIsDarkMode());
     };
 
     if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
     } else {
       // Legacy browsers
       mediaQuery.addListener(handleChange);

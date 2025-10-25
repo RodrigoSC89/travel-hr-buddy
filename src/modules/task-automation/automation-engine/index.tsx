@@ -82,15 +82,15 @@ const AutomationEngine = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('automation_dashboard' as any)
-        .select('*')
-        .order('priority', { ascending: false });
+        .from("automation_dashboard" as any)
+        .select("*")
+        .order("priority", { ascending: false });
 
       if (error) throw error;
 
       setRules((data || []) as any);
     } catch (error) {
-      console.error('Error loading workflow rules:', error);
+      console.error("Error loading workflow rules:", error);
       toast({
         title: "Error",
         description: "Failed to load workflow rules",
@@ -104,13 +104,13 @@ const AutomationEngine = () => {
   const loadSuggestions = async () => {
     try {
       const { data, error } = await supabase
-        .rpc('suggest_automation_opportunities' as any);
+        .rpc("suggest_automation_opportunities" as any);
 
       if (error) throw error;
 
       setSuggestions((data || []) as any);
     } catch (error) {
-      console.error('Error loading suggestions:', error);
+      console.error("Error loading suggestions:", error);
     }
   };
 
@@ -121,8 +121,8 @@ const AutomationEngine = () => {
       const timeSaved = rules.reduce((sum, r) => sum + r.time_saved_minutes, 0) / 60;
       
       const response = await runAIContext({
-        module: 'automation-suggester',
-        action: 'suggest',
+        module: "automation-suggester",
+        action: "suggest",
         context: { 
           activeRules,
           executionsToday,
@@ -135,27 +135,27 @@ const AutomationEngine = () => {
         setAiInsight(response.message);
       }
     } catch (error) {
-      console.error('Error loading AI insights:', error);
+      console.error("Error loading AI insights:", error);
     }
   };
 
   const handleToggleRule = async (ruleId: string, currentEnabled: boolean) => {
     try {
       const { error } = await supabase
-        .from('workflow_rules' as any)
+        .from("workflow_rules" as any)
         .update({ enabled: !currentEnabled } as any)
-        .eq('id', ruleId);
+        .eq("id", ruleId);
 
       if (error) throw error;
 
       toast({
         title: "Success",
-        description: `Rule ${currentEnabled ? 'disabled' : 'enabled'}`,
+        description: `Rule ${currentEnabled ? "disabled" : "enabled"}`,
       });
 
       loadWorkflowRules();
     } catch (error) {
-      console.error('Error toggling rule:', error);
+      console.error("Error toggling rule:", error);
       toast({
         title: "Error",
         description: "Failed to update rule",
@@ -217,7 +217,7 @@ const AutomationEngine = () => {
           </div>
         </div>
         <Button onClick={loadWorkflowRules} disabled={loading}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
@@ -473,7 +473,7 @@ const AutomationEngine = () => {
                       <div className="flex flex-col items-end gap-2 ml-4">
                         <div className="flex items-center gap-2">
                           <span className="text-sm text-muted-foreground">
-                            {rule.enabled ? 'Active' : 'Paused'}
+                            {rule.enabled ? "Active" : "Paused"}
                           </span>
                           <Switch
                             checked={rule.enabled}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 export function useVoiceSynthesis() {
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -6,7 +6,7 @@ export function useVoiceSynthesis() {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
 
   useEffect(() => {
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       setIsSupported(true);
       
       const loadVoices = () => {
@@ -25,7 +25,7 @@ export function useVoiceSynthesis() {
     }
   }, []);
 
-  const speak = useCallback((text: string, lang: string = 'pt-BR') => {
+  const speak = useCallback((text: string, lang: string = "pt-BR") => {
     if (!isSupported) return;
 
     window.speechSynthesis.cancel();
@@ -37,7 +37,7 @@ export function useVoiceSynthesis() {
     utterance.volume = 1.0;
 
     // Selecionar voz em português se disponível
-    const ptVoice = voices.find(voice => voice.lang.startsWith('pt'));
+    const ptVoice = voices.find(voice => voice.lang.startsWith("pt"));
     if (ptVoice) {
       utterance.voice = ptVoice;
     }

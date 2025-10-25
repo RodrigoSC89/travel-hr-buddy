@@ -3,18 +3,18 @@
  * Tests for performance KPIs, AI analysis, and PDF export
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getPerformanceStatus, getPerformanceAnalysis, comparePerformance, calculateKPIScore } from '@/lib/insights/performance';
-import { runAIContext } from '@/ai/kernel';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { getPerformanceStatus, getPerformanceAnalysis, comparePerformance, calculateKPIScore } from "@/lib/insights/performance";
+import { runAIContext } from "@/ai/kernel";
 
 // Mock AI kernel
-vi.mock('@/ai/kernel', () => ({
+vi.mock("@/ai/kernel", () => ({
   runAIContext: vi.fn(),
 }));
 
-describe('Performance Dashboard Module', () => {
-  describe('getPerformanceStatus', () => {
-    it('should return optimal status for excellent metrics', () => {
+describe("Performance Dashboard Module", () => {
+  describe("getPerformanceStatus", () => {
+    it("should return optimal status for excellent metrics", () => {
       const metrics = {
         fuelEfficiency: 95,
         navigationHours: 160,
@@ -24,10 +24,10 @@ describe('Performance Dashboard Module', () => {
       };
 
       const status = getPerformanceStatus(metrics);
-      expect(status).toBe('optimal');
+      expect(status).toBe("optimal");
     });
 
-    it('should return average status for moderate metrics', () => {
+    it("should return average status for moderate metrics", () => {
       const metrics = {
         fuelEfficiency: 80,
         navigationHours: 150,
@@ -37,10 +37,10 @@ describe('Performance Dashboard Module', () => {
       };
 
       const status = getPerformanceStatus(metrics);
-      expect(status).toBe('average');
+      expect(status).toBe("average");
     });
 
-    it('should return critical status for poor metrics', () => {
+    it("should return critical status for poor metrics", () => {
       const metrics = {
         fuelEfficiency: 60,
         navigationHours: 100,
@@ -50,10 +50,10 @@ describe('Performance Dashboard Module', () => {
       };
 
       const status = getPerformanceStatus(metrics);
-      expect(status).toBe('critical');
+      expect(status).toBe("critical");
     });
 
-    it('should handle edge case with all threshold values', () => {
+    it("should handle edge case with all threshold values", () => {
       const metrics = {
         fuelEfficiency: 90,
         navigationHours: 160,
@@ -63,12 +63,12 @@ describe('Performance Dashboard Module', () => {
       };
 
       const status = getPerformanceStatus(metrics);
-      expect(status).toBe('optimal');
+      expect(status).toBe("optimal");
     });
   });
 
-  describe('getPerformanceAnalysis', () => {
-    it('should provide detailed analysis for optimal performance', () => {
+  describe("getPerformanceAnalysis", () => {
+    it("should provide detailed analysis for optimal performance", () => {
       const metrics = {
         fuelEfficiency: 95,
         navigationHours: 160,
@@ -79,14 +79,14 @@ describe('Performance Dashboard Module', () => {
 
       const analysis = getPerformanceAnalysis(metrics);
       
-      expect(analysis.status).toBe('optimal');
+      expect(analysis.status).toBe("optimal");
       expect(analysis.issues).toHaveLength(0);
       expect(analysis.recommendations).toHaveLength(0);
       expect(analysis.metrics).toEqual(metrics);
       expect(analysis.timestamp).toBeDefined();
     });
 
-    it('should identify issues and provide recommendations for poor performance', () => {
+    it("should identify issues and provide recommendations for poor performance", () => {
       const metrics = {
         fuelEfficiency: 70,
         navigationHours: 120,
@@ -97,17 +97,17 @@ describe('Performance Dashboard Module', () => {
 
       const analysis = getPerformanceAnalysis(metrics);
       
-      expect(analysis.status).toBe('critical');
+      expect(analysis.status).toBe("critical");
       expect(analysis.issues.length).toBeGreaterThan(0);
       expect(analysis.recommendations.length).toBeGreaterThan(0);
-      expect(analysis.issues).toContain('Eficiência de combustível abaixo do esperado');
-      expect(analysis.issues).toContain('Produtividade abaixo da meta');
-      expect(analysis.issues).toContain('Downtime acima do aceitável');
+      expect(analysis.issues).toContain("Eficiência de combustível abaixo do esperado");
+      expect(analysis.issues).toContain("Produtividade abaixo da meta");
+      expect(analysis.issues).toContain("Downtime acima do aceitável");
     });
   });
 
-  describe('comparePerformance', () => {
-    it('should correctly identify improving trends', () => {
+  describe("comparePerformance", () => {
+    it("should correctly identify improving trends", () => {
       const currentMetrics = {
         fuelEfficiency: 95,
         navigationHours: 160,
@@ -126,15 +126,15 @@ describe('Performance Dashboard Module', () => {
 
       const trends = comparePerformance(currentMetrics, historicalMetrics);
 
-      expect(trends.fuelEfficiency.trend).toBe('improving');
+      expect(trends.fuelEfficiency.trend).toBe("improving");
       expect(trends.fuelEfficiency.change).toBe(10);
-      expect(trends.productivity.trend).toBe('improving');
+      expect(trends.productivity.trend).toBe("improving");
       expect(trends.productivity.change).toBe(10);
-      expect(trends.downtime.trend).toBe('improving');
+      expect(trends.downtime.trend).toBe("improving");
       expect(trends.downtime.change).toBe(-3);
     });
 
-    it('should correctly identify declining trends', () => {
+    it("should correctly identify declining trends", () => {
       const currentMetrics = {
         fuelEfficiency: 75,
         navigationHours: 130,
@@ -153,14 +153,14 @@ describe('Performance Dashboard Module', () => {
 
       const trends = comparePerformance(currentMetrics, historicalMetrics);
 
-      expect(trends.fuelEfficiency.trend).toBe('declining');
-      expect(trends.productivity.trend).toBe('declining');
-      expect(trends.downtime.trend).toBe('declining');
+      expect(trends.fuelEfficiency.trend).toBe("declining");
+      expect(trends.productivity.trend).toBe("declining");
+      expect(trends.downtime.trend).toBe("declining");
     });
   });
 
-  describe('calculateKPIScore', () => {
-    it('should calculate high score for excellent metrics', () => {
+  describe("calculateKPIScore", () => {
+    it("should calculate high score for excellent metrics", () => {
       const metrics = {
         fuelEfficiency: 95,
         navigationHours: 160,
@@ -175,7 +175,7 @@ describe('Performance Dashboard Module', () => {
       expect(score).toBeLessThanOrEqual(100);
     });
 
-    it('should calculate low score for poor metrics', () => {
+    it("should calculate low score for poor metrics", () => {
       const metrics = {
         fuelEfficiency: 60,
         navigationHours: 100,
@@ -190,7 +190,7 @@ describe('Performance Dashboard Module', () => {
       expect(score).toBeGreaterThanOrEqual(0);
     });
 
-    it('should calculate medium score for average metrics', () => {
+    it("should calculate medium score for average metrics", () => {
       const metrics = {
         fuelEfficiency: 80,
         navigationHours: 140,
@@ -205,7 +205,7 @@ describe('Performance Dashboard Module', () => {
       expect(score).toBeLessThanOrEqual(90);
     });
 
-    it('should handle extreme downtime correctly', () => {
+    it("should handle extreme downtime correctly", () => {
       const metrics = {
         fuelEfficiency: 90,
         navigationHours: 150,
@@ -221,15 +221,15 @@ describe('Performance Dashboard Module', () => {
     });
   });
 
-  describe('AI Performance Analysis Integration', () => {
+  describe("AI Performance Analysis Integration", () => {
     beforeEach(() => {
       vi.clearAllMocks();
     });
 
-    it('should call AI context with performance module', async () => {
+    it("should call AI context with performance module", async () => {
       const mockResponse = {
-        type: 'diagnosis' as const,
-        message: 'Performance operacional estável. KPIs dentro dos parâmetros esperados.',
+        type: "diagnosis" as const,
+        message: "Performance operacional estável. KPIs dentro dos parâmetros esperados.",
         confidence: 92.0,
         timestamp: new Date(),
       };
@@ -245,36 +245,36 @@ describe('Performance Dashboard Module', () => {
       };
 
       const result = await runAIContext({
-        module: 'operations.performance',
-        action: 'analyze',
-        context: { metrics, period: '7' },
+        module: "operations.performance",
+        action: "analyze",
+        context: { metrics, period: "7" },
       });
 
       expect(runAIContext).toHaveBeenCalledWith({
-        module: 'operations.performance',
-        action: 'analyze',
-        context: { metrics, period: '7' },
+        module: "operations.performance",
+        action: "analyze",
+        context: { metrics, period: "7" },
       });
 
-      expect(result.message).toBe('Performance operacional estável. KPIs dentro dos parâmetros esperados.');
+      expect(result.message).toBe("Performance operacional estável. KPIs dentro dos parâmetros esperados.");
       expect(result.confidence).toBe(92.0);
     });
 
-    it('should handle AI context errors gracefully', async () => {
-      vi.mocked(runAIContext).mockRejectedValue(new Error('AI service unavailable'));
+    it("should handle AI context errors gracefully", async () => {
+      vi.mocked(runAIContext).mockRejectedValue(new Error("AI service unavailable"));
 
       await expect(
         runAIContext({
-          module: 'operations.performance',
-          action: 'analyze',
+          module: "operations.performance",
+          action: "analyze",
           context: {},
         })
-      ).rejects.toThrow('AI service unavailable');
+      ).rejects.toThrow("AI service unavailable");
     });
   });
 
-  describe('Data Consistency Tests', () => {
-    it('should ensure all metrics are non-negative', () => {
+  describe("Data Consistency Tests", () => {
+    it("should ensure all metrics are non-negative", () => {
       const metrics = {
         fuelEfficiency: 94.2,
         navigationHours: 156,
@@ -290,7 +290,7 @@ describe('Performance Dashboard Module', () => {
       expect(metrics.totalMissions).toBeGreaterThanOrEqual(0);
     });
 
-    it('should ensure metrics are within reasonable ranges', () => {
+    it("should ensure metrics are within reasonable ranges", () => {
       const metrics = {
         fuelEfficiency: 94.2,
         navigationHours: 156,
@@ -305,8 +305,8 @@ describe('Performance Dashboard Module', () => {
     });
   });
 
-  describe('PDF Export Simulation', () => {
-    it('should prepare data structure for PDF export', () => {
+  describe("PDF Export Simulation", () => {
+    it("should prepare data structure for PDF export", () => {
       const metrics = {
         fuelEfficiency: 94.2,
         navigationHours: 156,
@@ -316,18 +316,18 @@ describe('Performance Dashboard Module', () => {
       };
 
       const fuelData = [
-        { name: 'Missão A', value: 95.2, label: 'Otimizado' },
-        { name: 'Missão B', value: 89.8, label: 'Normal' },
+        { name: "Missão A", value: 95.2, label: "Otimizado" },
+        { name: "Missão B", value: 89.8, label: "Normal" },
       ];
 
       const productivityData = [
-        { name: 'Semana 1', value: 145 },
-        { name: 'Semana 2', value: 162 },
+        { name: "Semana 1", value: 145 },
+        { name: "Semana 2", value: 162 },
       ];
 
       const downtimeData = [
-        { name: 'Manutenção', value: 45 },
-        { name: 'Clima', value: 18 },
+        { name: "Manutenção", value: 45 },
+        { name: "Clima", value: 18 },
       ];
 
       const reportData = {
@@ -335,11 +335,11 @@ describe('Performance Dashboard Module', () => {
         fuelData,
         productivityData,
         downtimeData,
-        aiInsight: 'Performance operacional estável.',
-        performanceStatus: 'optimal',
-        period: '7',
-        vessel: 'all',
-        missionType: 'all',
+        aiInsight: "Performance operacional estável.",
+        performanceStatus: "optimal",
+        period: "7",
+        vessel: "all",
+        missionType: "all",
       };
 
       expect(reportData.metrics).toBeDefined();
@@ -347,7 +347,7 @@ describe('Performance Dashboard Module', () => {
       expect(reportData.productivityData).toHaveLength(2);
       expect(reportData.downtimeData).toHaveLength(2);
       expect(reportData.aiInsight).toBeDefined();
-      expect(reportData.performanceStatus).toBe('optimal');
+      expect(reportData.performanceStatus).toBe("optimal");
     });
   });
 });

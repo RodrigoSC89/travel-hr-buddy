@@ -50,24 +50,24 @@ export function meetsWCAGAA(foreground: string, background: string): boolean {
  */
 export const highContrastPairs = {
   green: {
-    background: '#1F5133',
-    foreground: '#E8FFF0',
-    name: 'Verde Marítimo'
+    background: "#1F5133",
+    foreground: "#E8FFF0",
+    name: "Verde Marítimo"
   },
   blue: {
-    background: '#123B64',
-    foreground: '#E2F0FF',
-    name: 'Azul Oceânico'
+    background: "#123B64",
+    foreground: "#E2F0FF",
+    name: "Azul Oceânico"
   },
   purple: {
-    background: '#3B2E56',
-    foreground: '#F3EFFF',
-    name: 'Roxo Profundo'
+    background: "#3B2E56",
+    foreground: "#F3EFFF",
+    name: "Roxo Profundo"
   },
   orange: {
-    background: '#583215',
-    foreground: '#FFF5E8',
-    name: 'Laranja Náutico'
+    background: "#583215",
+    foreground: "#FFF5E8",
+    name: "Laranja Náutico"
   }
 };
 
@@ -83,7 +83,7 @@ export function generateMetricAriaLabel(
   let label = `${title}: ${value}`;
   if (unit) label += ` ${unit}`;
   if (change !== undefined) {
-    const direction = change > 0 ? 'aumento' : 'diminuição';
+    const direction = change > 0 ? "aumento" : "diminuição";
     label += `, ${Math.abs(change)}% de ${direction}`;
   }
   return label;

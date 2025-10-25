@@ -3,5 +3,5 @@
  * Centralized technical logs with filtering, AI audit, and PDF export
  */
 
-export { default as LogsCenter } from './LogsCenter';
-export * from './types';
+export { default as LogsCenter } from "./LogsCenter";
+export * from "./types";

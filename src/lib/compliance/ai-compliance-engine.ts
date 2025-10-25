@@ -42,7 +42,7 @@ export async function runComplianceAudit(data: any) {
   if (!session) await initComplianceEngine();
   
   // Handle both array and object inputs
-  let inputArray = Array.isArray(data) ? data : convertIncidentDataToArray(data);
+  const inputArray = Array.isArray(data) ? data : convertIncidentDataToArray(data);
   
   const input = new ort.Tensor("float32", Float32Array.from(inputArray), [1, inputArray.length]);
   const results = await session!.run({ input });

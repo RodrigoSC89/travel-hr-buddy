@@ -4,9 +4,9 @@
  * React hook for component-level performance monitoring
  */
 
-import { useEffect, useState, useRef } from 'react';
-import { performanceMonitor, WebVitalMetric } from '@/lib/monitoring/performance-monitor';
-import { logger } from '@/lib/logger';
+import { useEffect, useState, useRef } from "react";
+import { performanceMonitor, WebVitalMetric } from "@/lib/monitoring/performance-monitor";
+import { logger } from "@/lib/logger";
 
 export interface ComponentPerformance {
   renderTime: number;

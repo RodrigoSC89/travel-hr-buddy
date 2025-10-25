@@ -2,8 +2,8 @@
  * PATCH 102.0 - Collaboration Service
  */
 
-import { WorkspaceMember, ChatMessage, UploadedFile, CalendarEvent, Notification } from '../types';
-import { supabase } from '@/integrations/supabase/client';
+import { WorkspaceMember, ChatMessage, UploadedFile, CalendarEvent, Notification } from "../types";
+import { supabase } from "@/integrations/supabase/client";
 
 class CollaborationService {
   private members: Map<string, WorkspaceMember> = new Map();
@@ -19,10 +19,10 @@ class CollaborationService {
   private initializeDemoData() {
     // Initialize with demo members
     const demoMembers: WorkspaceMember[] = [
-      { id: '1', name: 'Ana Silva', email: 'ana@example.com', status: 'online' },
-      { id: '2', name: 'Carlos Santos', email: 'carlos@example.com', status: 'online' },
-      { id: '3', name: 'Maria Oliveira', email: 'maria@example.com', status: 'away' },
-      { id: '4', name: 'João Costa', email: 'joao@example.com', status: 'offline' }
+      { id: "1", name: "Ana Silva", email: "ana@example.com", status: "online" },
+      { id: "2", name: "Carlos Santos", email: "carlos@example.com", status: "online" },
+      { id: "3", name: "Maria Oliveira", email: "maria@example.com", status: "away" },
+      { id: "4", name: "João Costa", email: "joao@example.com", status: "offline" }
     ];
 
     demoMembers.forEach(member => this.members.set(member.id, member));
@@ -30,17 +30,17 @@ class CollaborationService {
     // Initialize demo messages
     this.messages = [
       {
-        id: '1',
-        userId: '1',
-        userName: 'Ana Silva',
-        content: 'Welcome to the collaborative workspace!',
+        id: "1",
+        userId: "1",
+        userName: "Ana Silva",
+        content: "Welcome to the collaborative workspace!",
         timestamp: new Date(Date.now() - 3600000)
       },
       {
-        id: '2',
-        userId: '2',
-        userName: 'Carlos Santos',
-        content: 'Looking forward to working together',
+        id: "2",
+        userId: "2",
+        userName: "Carlos Santos",
+        content: "Looking forward to working together",
         timestamp: new Date(Date.now() - 1800000)
       }
     ];
@@ -48,14 +48,14 @@ class CollaborationService {
 
   // Members management
   getOnlineMembers(): WorkspaceMember[] {
-    return Array.from(this.members.values()).filter(m => m.status === 'online');
+    return Array.from(this.members.values()).filter(m => m.status === "online");
   }
 
   getAllMembers(): WorkspaceMember[] {
     return Array.from(this.members.values());
   }
 
-  updateMemberStatus(userId: string, status: WorkspaceMember['status']) {
+  updateMemberStatus(userId: string, status: WorkspaceMember["status"]) {
     const member = this.members.get(userId);
     if (member) {
       member.status = status;
@@ -69,7 +69,7 @@ class CollaborationService {
     const message: ChatMessage = {
       id: this.generateId(),
       userId,
-      userName: member?.name || 'Unknown',
+      userName: member?.name || "Unknown",
       userAvatar: member?.avatar,
       content,
       timestamp: new Date()
@@ -78,7 +78,7 @@ class CollaborationService {
     this.messages.push(message);
     
     // Trigger notification for other users
-    this.createNotification('message', 'New Message', content, userId);
+    this.createNotification("message", "New Message", content, userId);
 
     return message;
   }
@@ -101,7 +101,7 @@ class CollaborationService {
     this.files.push(uploadedFile);
     
     // Trigger notification
-    this.createNotification('file', 'File Uploaded', `${file.name} was uploaded`, uploadedBy);
+    this.createNotification("file", "File Uploaded", `${file.name} was uploaded`, uploadedBy);
 
     return uploadedFile;
   }
@@ -111,7 +111,7 @@ class CollaborationService {
   }
 
   // Calendar integration
-  createEvent(event: Omit<CalendarEvent, 'id'>): CalendarEvent {
+  createEvent(event: Omit<CalendarEvent, "id">): CalendarEvent {
     const newEvent: CalendarEvent = {
       id: this.generateId(),
       ...event
@@ -121,7 +121,7 @@ class CollaborationService {
     
     // Notify attendees
     event.attendees.forEach(attendeeId => {
-      this.createNotification('event', 'New Event', event.title, attendeeId);
+      this.createNotification("event", "New Event", event.title, attendeeId);
     });
 
     return newEvent;
@@ -137,7 +137,7 @@ class CollaborationService {
 
   // Notifications
   private createNotification(
-    type: Notification['type'],
+    type: Notification["type"],
     title: string,
     message: string,
     userId: string

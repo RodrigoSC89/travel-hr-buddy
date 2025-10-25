@@ -26,7 +26,7 @@ export const querySimilarJobs = async (
     const embedding = await generateEmbedding(input);
 
     // Query similar jobs using the database function
-  const { data, error } = await supabase.rpc("match_mmi_jobs", {
+    const { data, error } = await supabase.rpc("match_mmi_jobs", {
       query_embedding: embedding as any,
       match_threshold: matchThreshold,
       match_count: matchCount,

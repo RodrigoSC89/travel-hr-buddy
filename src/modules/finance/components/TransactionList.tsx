@@ -5,7 +5,7 @@ import { ptBR } from "date-fns/locale";
 
 interface Transaction {
   id: string;
-  type: 'income' | 'expense';
+  type: "income" | "expense";
   amount: number;
   description: string;
   category: string;
@@ -36,14 +36,14 @@ export function TransactionList({ transactions }: TransactionListProps) {
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                <Badge variant={transaction.type === 'income' ? 'default' : 'destructive'}>
+                <Badge variant={transaction.type === "income" ? "default" : "destructive"}>
                   {transaction.category}
                 </Badge>
                 <span className={`text-lg font-bold ${
-                  transaction.type === 'income' ? 'text-success' : 'text-destructive'
+                  transaction.type === "income" ? "text-success" : "text-destructive"
                 }`}>
-                  {transaction.type === 'income' ? '+' : '-'} 
-                  R$ {Number(transaction.amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  {transaction.type === "income" ? "+" : "-"} 
+                  R$ {Number(transaction.amount).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                 </span>
               </div>
             </div>

@@ -32,7 +32,7 @@ export interface ChecklistHistory {
 export interface AutoFillResult {
   items: ChecklistItem[];
   confidence: number;
-  source: 'ai' | 'pattern' | 'manual';
+  source: "ai" | "pattern" | "manual";
   suggestions: string[];
 }
 
@@ -57,8 +57,8 @@ export const autoFillChecklist = async (
       return {
         items: currentItems,
         confidence: 0,
-        source: 'manual',
-        suggestions: ['Sem histórico disponível para este tipo de checklist.']
+        source: "manual",
+        suggestions: ["Sem histórico disponível para este tipo de checklist."]
       };
     }
 
@@ -72,7 +72,7 @@ export const autoFillChecklist = async (
 
     return aiResult;
   } catch (error) {
-    console.error('Error in autoFillChecklist:', error);
+    console.error("Error in autoFillChecklist:", error);
     
     // Fallback to pattern-based completion
     return generatePatternBasedCompletions(currentItems, []);
@@ -88,33 +88,33 @@ const fetchChecklistHistory = async (
 ): Promise<ChecklistHistory[]> => {
   try {
     let query = supabase
-      .from('checklist_completions')
-      .select('*')
-      .eq('checklist_type', checklistType)
-      .order('completed_at', { ascending: false })
+      .from("checklist_completions")
+      .select("*")
+      .eq("checklist_type", checklistType)
+      .order("completed_at", { ascending: false })
       .limit(10);
 
     if (vessel) {
-      query = query.eq('vessel', vessel);
+      query = query.eq("vessel", vessel);
     }
 
     const { data, error } = await query;
 
     if (error) {
-      console.error('Error fetching checklist history:', error);
+      console.error("Error fetching checklist history:", error);
       return [];
     }
 
     return (data || []).map(item => ({
       id: item.id,
       checklistType: item.checklist_type,
-      items: typeof item.items === 'string' ? JSON.parse(item.items) : item.items,
+      items: typeof item.items === "string" ? JSON.parse(item.items) : item.items,
       completedAt: item.completed_at,
       vessel: item.vessel,
       user: item.user_id
     }));
   } catch (error) {
-    console.error('Error in fetchChecklistHistory:', error);
+    console.error("Error in fetchChecklistHistory:", error);
     return [];
   }
 };
@@ -130,11 +130,11 @@ const generateAICompletions = async (
 ): Promise<AutoFillResult> => {
   try {
     const historyContext = history.slice(0, 5).map((h, idx) => `
-Histórico ${idx + 1} (${new Date(h.completedAt).toLocaleDateString('pt-BR')}):
-${h.items.map(item => `- ${item.label}: ${item.value || (item.checked ? 'Sim' : 'Não')} ${item.notes ? `(${item.notes})` : ''}`).join('\n')}`
-    ).join('\n\n');
+Histórico ${idx + 1} (${new Date(h.completedAt).toLocaleDateString("pt-BR")}):
+${h.items.map(item => `- ${item.label}: ${item.value || (item.checked ? "Sim" : "Não")} ${item.notes ? `(${item.notes})` : ""}`).join("\n")}`
+    ).join("\n\n");
 
-    const itemsList = currentItems.map(item => `- ${item.label}`).join('\n');
+    const itemsList = currentItems.map(item => `- ${item.label}`).join("\n");
 
     const prompt = `Com base no histórico de preenchimento de checklists similares, preencha o checklist do tipo "${checklistType}" de forma inteligente.
 
@@ -145,8 +145,8 @@ HISTÓRICO DE PREENCHIMENTOS ANTERIORES:
 ${historyContext}
 
 CONTEXTO ADICIONAL:
-- Embarcação: ${context?.vessel || 'N/A'}
-- Data: ${context?.date || new Date().toLocaleDateString('pt-BR')}
+- Embarcação: ${context?.vessel || "N/A"}
+- Data: ${context?.date || new Date().toLocaleDateString("pt-BR")}
 
 Retorne um JSON com os itens preenchidos no formato:
 {
@@ -171,14 +171,14 @@ Regras:
 - Confidence alto (>0.8) apenas para padrões muito consistentes`;
 
     const response = await runOpenAI({
-      model: 'gpt-4o-mini',
+      model: "gpt-4o-mini",
       messages: [
         {
-          role: 'system',
-          content: 'Você é um especialista em compliance marítimo e preenchimento de checklists. Sempre retorne JSON válido.'
+          role: "system",
+          content: "Você é um especialista em compliance marítimo e preenchimento de checklists. Sempre retorne JSON válido."
         },
         {
-          role: 'user',
+          role: "user",
           content: prompt
         }
       ],
@@ -189,7 +189,7 @@ Regras:
     const result = parseAICompletionResponse(response.content, currentItems);
     return result;
   } catch (error) {
-    console.error('Error generating AI completions:', error);
+    console.error("Error generating AI completions:", error);
     throw error;
   }
 };
@@ -204,7 +204,7 @@ const parseAICompletionResponse = (
   try {
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      throw new Error('No JSON found in response');
+      throw new Error("No JSON found in response");
     }
 
     const parsed = JSON.parse(jsonMatch[0]);
@@ -229,16 +229,16 @@ const parseAICompletionResponse = (
 
     return {
       items: mergedItems,
-      confidence: typeof parsed.confidence === 'number' 
+      confidence: typeof parsed.confidence === "number" 
         ? Math.max(0, Math.min(1, parsed.confidence))
         : 0.6,
-      source: 'ai',
+      source: "ai",
       suggestions: Array.isArray(parsed.suggestions) 
         ? parsed.suggestions.slice(0, 5)
         : []
     };
   } catch (error) {
-    console.error('Error parsing AI completion response:', error);
+    console.error("Error parsing AI completion response:", error);
     throw error;
   }
 };
@@ -254,10 +254,10 @@ const generatePatternBasedCompletions = (
     return {
       items,
       confidence: 0,
-      source: 'manual',
+      source: "manual",
       suggestions: [
-        'Configure a chave da API OpenAI para preenchimento automático inteligente',
-        'Ou complete manualmente para criar histórico de padrões'
+        "Configure a chave da API OpenAI para preenchimento automático inteligente",
+        "Ou complete manualmente para criar histórico de padrões"
       ]
     };
   }
@@ -286,10 +286,10 @@ const generatePatternBasedCompletions = (
   return {
     items: patternItems,
     confidence: history.length > 5 ? 0.7 : 0.5,
-    source: 'pattern',
+    source: "pattern",
     suggestions: [
-      'Preenchimento baseado em padrões históricos',
-      'Revise os valores sugeridos antes de confirmar'
+      "Preenchimento baseado em padrões históricos",
+      "Revise os valores sugeridos antes de confirmar"
     ]
   };
 };
@@ -333,7 +333,7 @@ export const saveChecklistCompletion = async (
 ): Promise<boolean> => {
   try {
     const { error } = await supabase
-      .from('checklist_completions')
+      .from("checklist_completions")
       .insert({
         checklist_type: checklistType,
         items: JSON.stringify(items),
@@ -343,13 +343,13 @@ export const saveChecklistCompletion = async (
       });
 
     if (error) {
-      console.error('Error saving checklist completion:', error);
+      console.error("Error saving checklist completion:", error);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Error in saveChecklistCompletion:', error);
+    console.error("Error in saveChecklistCompletion:", error);
     return false;
   }
 };

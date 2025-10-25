@@ -3,9 +3,9 @@
  * Centralized module loading with lazy loading support
  */
 
-import { lazy, ComponentType } from 'react';
-import { MODULE_REGISTRY, ModuleDefinition } from './registry';
-import { logger } from '@/lib/logger';
+import { lazy, ComponentType } from "react";
+import { MODULE_REGISTRY, ModuleDefinition } from "./registry";
+import { logger } from "@/lib/logger";
 
 /**
  * Load module component dynamically
@@ -18,7 +18,7 @@ export function loadModule(moduleId: string): ComponentType<any> {
     throw new Error(`Module ${moduleId} not found in registry`);
   }
 
-  if (module.status === 'deprecated') {
+  if (module.status === "deprecated") {
     logger.warn(`Loading deprecated module: ${moduleId}`);
   }
 
