@@ -1,7 +1,7 @@
 /**
  * SATCOM Dashboard - Main Component
  * Monitors satellite communication connectivity (Iridium, Starlink, etc.)
- * Patch 142.0
+ * Patch 142.1 - Enhanced with fallback simulation and logging
  */
 
 import React, { useState, useEffect } from "react";
@@ -10,6 +10,8 @@ import { Satellite, Radio, TrendingUp, AlertTriangle } from "lucide-react";
 import { SatcomStatus } from "./components/SatcomStatus";
 import { SignalHistory } from "./components/SignalHistory";
 import { FallbackSimulator } from "./components/FallbackSimulator";
+import { FallbackStatus } from "./components/FallbackStatus";
+import { useSatcomMonitor } from "./hooks/useSatcomMonitor";
 
 export interface SatcomConnection {
   id: string;
@@ -93,9 +95,25 @@ const SatcomDashboard = () => {
     last30d: 99.2,
   });
 
+  // Use the SATCOM monitor hook
+  const {
+    connections: monitoredConnections,
+    primaryConnection,
+    fallbackConnection,
+    isFallbackActive,
+    simulationEvents,
+    simulateConnectionLoss,
+    simulateReconnection,
+    clearEvents,
+  } = useSatcomMonitor({
+    connections,
+    onConnectionUpdate: setConnections,
+    vesselId: "vessel-001",
+  });
+
   // Calculate active connections
-  const activeConnections = connections.filter(c => c.status === 'connected').length;
-  const averageSignal = connections.reduce((acc, c) => acc + c.signalStrength, 0) / connections.length;
+  const activeConnections = monitoredConnections.filter(c => c.status === 'connected').length;
+  const averageSignal = monitoredConnections.reduce((acc, c) => acc + c.signalStrength, 0) / monitoredConnections.length;
 
   // Simulate real-time updates (in production, this would come from WebSocket/API)
   useEffect(() => {
@@ -168,11 +186,24 @@ const SatcomDashboard = () => {
         </Card>
       </div>
 
-      <SatcomStatus connections={connections} />
+      <SatcomStatus connections={monitoredConnections} />
+
+      {/* New Fallback Status Component */}
+      <FallbackStatus
+        primaryConnection={primaryConnection}
+        fallbackConnection={fallbackConnection}
+        isFallbackActive={isFallbackActive}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <SignalHistory events={signalHistory} />
-        <FallbackSimulator connections={connections} />
+        <FallbackSimulator 
+          connections={monitoredConnections}
+          onDisconnect={simulateConnectionLoss}
+          onReconnect={simulateReconnection}
+          simulationEvents={simulationEvents}
+          onClearEvents={clearEvents}
+        />
       </div>
 
       <Card>
