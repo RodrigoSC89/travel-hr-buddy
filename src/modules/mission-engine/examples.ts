@@ -25,7 +25,7 @@ export const setupAutoCompleteChecklistMission = () => {
         const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
         
         const { data: overdueChecklists } = await supabase
-          .from('checklists')
+          .from('checklists' as any)
           .select('id, title, items, created_at, completed')
           .eq('completed', false)
           .lt('created_at', oneHourAgo);
@@ -41,7 +41,7 @@ export const setupAutoCompleteChecklistMission = () => {
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
       
       const { data: overdueChecklists } = await supabase
-        .from('checklists')
+        .from('checklists' as any)
         .select('id, title, items, created_at, completed')
         .eq('completed', false)
         .lt('created_at', oneHourAgo);
@@ -49,7 +49,7 @@ export const setupAutoCompleteChecklistMission = () => {
       if (!overdueChecklists || overdueChecklists.length === 0) return;
 
       // Create mission for each overdue checklist
-      for (const checklist of overdueChecklists) {
+      for (const checklist of overdueChecklists as any[]) {
         const missionId = `auto-complete-${checklist.id}`;
         
         missionEngine.defineMission({
@@ -83,7 +83,7 @@ export const setupAutoCompleteChecklistMission = () => {
 
                 // Update checklist
                 const { error } = await supabase
-                  .from('checklists')
+                  .from('checklists' as any)
                   .update({
                     items: completedItems,
                     completed: true,
@@ -104,7 +104,7 @@ export const setupAutoCompleteChecklistMission = () => {
               action: async () => {
                 // Log the auto-completion for audit trail
                 await supabase
-                  .from('system_logs')
+                  .from('system_logs' as any)
                   .insert({
                     action: 'auto_complete_checklist',
                     entity_type: 'checklist',
@@ -147,7 +147,7 @@ export const setupAutoEscalateIncidentMission = () => {
       const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString();
       
       const { data: criticalIncidents } = await supabase
-        .from('incidents')
+        .from('incidents' as any)
         .select('id, severity, status, created_at, acknowledged_at')
         .eq('severity', 'critical')
         .eq('status', 'open')
@@ -160,7 +160,7 @@ export const setupAutoEscalateIncidentMission = () => {
       const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString();
       
       const { data: incidents } = await supabase
-        .from('incidents')
+        .from('incidents' as any)
         .select('id, title, severity, status, created_at')
         .eq('severity', 'critical')
         .eq('status', 'open')
@@ -169,7 +169,7 @@ export const setupAutoEscalateIncidentMission = () => {
 
       if (!incidents || incidents.length === 0) return;
 
-      for (const incident of incidents) {
+      for (const incident of incidents as any[]) {
         const missionId = `escalate-${incident.id}`;
         
         missionEngine.defineMission({
@@ -181,7 +181,7 @@ export const setupAutoEscalateIncidentMission = () => {
               name: 'Update incident status to escalated',
               action: async () => {
                 await supabase
-                  .from('incidents')
+                  .from('incidents' as any)
                   .update({
                     status: 'escalated',
                     escalated_at: new Date().toISOString(),
@@ -205,7 +205,7 @@ export const setupAutoEscalateIncidentMission = () => {
               name: 'Log escalation event',
               action: async () => {
                 await supabase
-                  .from('system_logs')
+                  .from('system_logs' as any)
                   .insert({
                     action: 'auto_escalate_incident',
                     entity_type: 'incident',

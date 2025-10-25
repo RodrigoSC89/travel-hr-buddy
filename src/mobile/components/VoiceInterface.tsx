@@ -12,49 +12,17 @@ import { intentParser, Intent } from '../ai/intentParser';
 import { localMemory } from '../ai/localMemory';
 import { toast } from 'sonner';
 
-// Type declarations for Web Speech API
-interface SpeechRecognitionResult {
-  isFinal: boolean;
-  [index: number]: {
-    transcript: string;
-  };
-}
-
-interface SpeechRecognitionResultList {
-  [index: number]: SpeechRecognitionResult;
-  length: number;
-}
-
-interface SpeechRecognitionEvent {
-  resultIndex: number;
-  results: SpeechRecognitionResultList;
-}
-
-interface SpeechRecognitionErrorEvent {
-  error: string;
-}
-
-interface SpeechRecognition extends EventTarget {
+// Type declarations for Web Speech API - using any to avoid conflicts with browser types
+interface VoiceSpeechRecognition {
   continuous: boolean;
   interimResults: boolean;
   lang: string;
   start(): void;
   stop(): void;
   onstart: (() => void) | null;
-  onresult: ((event: SpeechRecognitionEvent) => void) | null;
-  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onresult: ((event: any) => void) | null;
+  onerror: ((event: any) => void) | null;
   onend: (() => void) | null;
-}
-
-declare global {
-  interface Window {
-    SpeechRecognition: {
-      new(): SpeechRecognition;
-    };
-    webkitSpeechRecognition: {
-      new(): SpeechRecognition;
-    };
-  }
 }
 
 interface VoiceInterfaceProps {
@@ -74,7 +42,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   const [detectedIntent, setDetectedIntent] = useState<Intent | null>(null);
   const [isSupported, setIsSupported] = useState(true);
 
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<VoiceSpeechRecognition | null>(null);
   const synthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   /**
@@ -82,8 +50,8 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    */
   useEffect(() => {
     // Check if speech recognition is supported
-    const SpeechRecognitionClass = window.SpeechRecognition || 
-                                   window.webkitSpeechRecognition;
+    const SpeechRecognitionClass = (window as any).SpeechRecognition || 
+                                   (window as any).webkitSpeechRecognition;
     
     if (!SpeechRecognitionClass) {
       setIsSupported(false);
@@ -91,7 +59,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       return;
     }
 
-    const recognition = new SpeechRecognitionClass();
+    const recognition: VoiceSpeechRecognition = new SpeechRecognitionClass();
     recognition.continuous = false;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
@@ -101,7 +69,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       console.log('Voice recognition started');
     };
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: any) => {
       const current = event.resultIndex;
       const transcriptResult = event.results[current][0].transcript;
       
@@ -114,7 +82,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       }
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
       
