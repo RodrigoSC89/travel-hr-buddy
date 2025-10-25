@@ -36,6 +36,21 @@ const RouteOptimizer = React.lazy(() => import("../modules/route-optimizer"));
 // 🔹 PATCH 105.0 - Weather Station
 const WeatherStation = React.lazy(() => import("../modules/weather-station"));
 
+// 🔹 PATCH 106.0 - Crew Management
+const CrewManagement = React.lazy(() => import("@/pages/CrewManagement"));
+
+// 🔹 PATCH 107.0 - Predictive Maintenance Engine
+const MaintenanceEngine = React.lazy(() => import("../modules/maintenance-engine"));
+
+// 🔹 PATCH 108.0 - Security & Access Control
+const AccessControl = React.lazy(() => import("../modules/access-control"));
+
+// 🔹 PATCH 109.0 - SATCOM & AIS Integrations
+const CommunicationGateway = React.lazy(() => import("../modules/communication-gateway"));
+
+// 🔹 PATCH 110.0 - Offline Mode + Local Cache
+const OfflineCache = React.lazy(() => import("../modules/offline-cache"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -59,6 +74,11 @@ export default function AppRouter() {
         <Route path="/fleet-management" element={<FleetManagement />} />
         <Route path="/route-optimizer" element={<RouteOptimizer />} />
         <Route path="/weather-station" element={<WeatherStation />} />
+        <Route path="/crew-management" element={<CrewManagement />} />
+        <Route path="/maintenance-engine" element={<MaintenanceEngine />} />
+        <Route path="/access-control" element={<AccessControl />} />
+        <Route path="/communication-gateway" element={<CommunicationGateway />} />
+        <Route path="/offline-cache" element={<OfflineCache />} />
       </Routes>
     </Router>
   );
