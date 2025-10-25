@@ -3,7 +3,7 @@
  * PATCH 104.0
  */
 
-import { supabase } from "@/services/supabase";
+import { supabase } from "../../../src/integrations/supabase/client";
 import type { Route, RouteOptimizationRequest, Coordinates } from "../types";
 import { generateRouteWaypoints, fetchRouteWeatherForecast } from "./weather-service";
 import { generateAIRouteRecommendation } from "./ai-service";
@@ -22,7 +22,7 @@ export async function fetchRoutes(): Promise<Route[]> {
     throw new Error(`Failed to fetch routes: ${error.message}`);
   }
 
-  return (data as Route[]) || [];
+  return (data as unknown as Route[]) || [];
 }
 
 /**
@@ -40,7 +40,7 @@ export async function fetchVesselRoutes(vesselId: string): Promise<Route[]> {
     throw new Error(`Failed to fetch vessel routes: ${error.message}`);
   }
 
-  return (data as Route[]) || [];
+  return (data as unknown as Route[]) || [];
 }
 
 /**
@@ -58,7 +58,7 @@ export async function fetchRouteById(id: string): Promise<Route | null> {
     return null;
   }
 
-  return data as Route;
+  return data as unknown as Route;
 }
 
 /**
@@ -155,7 +155,7 @@ export async function optimizeRoute(
         weather_forecast: { waypoints: weatherForecast },
         route_geometry: routeGeometry,
         ai_recommendation: aiRecommendation,
-      },
+      } as any,
     ])
     .select()
     .single();
@@ -165,7 +165,7 @@ export async function optimizeRoute(
     throw new Error(`Failed to create route: ${error.message}`);
   }
 
-  return data as Route;
+  return data as unknown as Route;
 }
 
 /**
@@ -177,7 +177,7 @@ export async function updateRouteStatus(
 ): Promise<void> {
   const { error } = await supabase
     .from("routes")
-    .update({ status })
+    .update({ status } as any)
     .eq("id", routeId);
 
   if (error) {

@@ -28,13 +28,13 @@ const SystemWatchdog = React.lazy(() => import("@/pages/dashboard/system-watchdo
 const LogsCenter = React.lazy(() => import("@/modules/logs-center/LogsCenter"));
 
 // 🔹 PATCH 103.0 - Fleet Management
-const FleetManagement = React.lazy(() => import("@/modules/fleet-management"));
+const FleetManagement = React.lazy(() => import("../modules/fleet-management"));
 
 // 🔹 PATCH 104.0 - Route Optimizer
-const RouteOptimizer = React.lazy(() => import("@/modules/route-optimizer"));
+const RouteOptimizer = React.lazy(() => import("../modules/route-optimizer"));
 
 // 🔹 PATCH 105.0 - Weather Station
-const WeatherStation = React.lazy(() => import("@/modules/weather-station"));
+const WeatherStation = React.lazy(() => import("../modules/weather-station"));
 
 export default function AppRouter() {
   return (

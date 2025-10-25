@@ -3,7 +3,7 @@
  * PATCH 103.0
  */
 
-import { supabase } from "@/services/supabase";
+import { supabase } from "../../../src/integrations/supabase/client";
 import type { Vessel, VesselFilter } from "../types";
 
 /**
@@ -33,7 +33,7 @@ export async function fetchVessels(filter?: VesselFilter): Promise<Vessel[]> {
     throw new Error(`Failed to fetch vessels: ${error.message}`);
   }
 
-  return (data as Vessel[]) || [];
+  return (data as unknown as Vessel[]) || [];
 }
 
 /**
@@ -51,7 +51,7 @@ export async function fetchVesselById(id: string): Promise<Vessel | null> {
     return null;
   }
 
-  return data as Vessel;
+  return data as unknown as Vessel;
 }
 
 /**
@@ -67,8 +67,8 @@ export async function updateVesselPosition(
       last_known_position: {
         ...position,
         timestamp: new Date().toISOString(),
-      },
-    })
+      } as any,
+    } as any)
     .eq("id", vesselId);
 
   if (error) {
@@ -113,7 +113,7 @@ export async function updateVesselStatus(
 export async function createVessel(vessel: Partial<Vessel>): Promise<Vessel> {
   const { data, error } = await supabase
     .from("vessels")
-    .insert([vessel])
+    .insert([vessel as any])
     .select()
     .single();
 
@@ -122,7 +122,7 @@ export async function createVessel(vessel: Partial<Vessel>): Promise<Vessel> {
     throw new Error(`Failed to create vessel: ${error.message}`);
   }
 
-  return data as Vessel;
+  return data as unknown as Vessel;
 }
 
 /**
@@ -144,7 +144,7 @@ export async function deleteVessel(vesselId: string): Promise<void> {
  * Subscribe to vessel updates (real-time)
  */
 export function subscribeToVesselUpdates(
-  callback: (payload: { new: Vessel; old?: Vessel }) => void
+  callback: (payload: any) => void
 ) {
   return supabase
     .channel("vessels-changes")
@@ -152,7 +152,7 @@ export function subscribeToVesselUpdates(
       "postgres_changes",
       { event: "*", schema: "public", table: "vessels" },
       (payload) => {
-        callback(payload as { new: Vessel; old?: Vessel });
+        callback(payload as any);
       }
     )
     .subscribe();
