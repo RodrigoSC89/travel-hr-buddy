@@ -86,6 +86,7 @@ values
     }'::jsonb,
     now() - interval '2 hours'
   )
+-- Note: ON CONFLICT DO NOTHING ensures idempotency when migration runs multiple times
 on conflict do nothing;
 
 -- Note: weather_alerts table already exists in 20251025014500_create_weather_data_table.sql

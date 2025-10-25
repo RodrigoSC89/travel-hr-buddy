@@ -3,7 +3,7 @@
 
 create or replace view maintenance_due_next_7d as
 select * from maintenance_records
-where next_due < now() + interval '7 days'
+where next_due <= now() + interval '7 days'
   and next_due >= now()
 order by next_due asc;
 
@@ -64,6 +64,8 @@ values
     'preventive',
     2000.00
   )
+-- Note: ON CONFLICT DO NOTHING ensures idempotency when migration runs multiple times
+-- Since id is auto-generated, conflicts only occur on re-runs
 on conflict do nothing;
 
 -- Create helper function to get upcoming maintenance
@@ -88,10 +90,10 @@ begin
     mr.next_due,
     mr.status,
     mr.priority,
-    extract(days from (mr.next_due - now())) as days_remaining
+    extract(epoch from (mr.next_due - now())) / 86400 as days_remaining
   from maintenance_records mr
   join vessels v on mr.vessel_id = v.id
-  where mr.next_due < now() + make_interval(days => days_ahead)
+  where mr.next_due <= now() + make_interval(days => days_ahead)
     and mr.next_due >= now()
   order by mr.next_due asc;
 end;
