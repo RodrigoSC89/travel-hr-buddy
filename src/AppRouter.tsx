@@ -27,6 +27,9 @@ const SystemWatchdog = React.lazy(() => import("@/pages/dashboard/system-watchdo
 // 🔹 PATCH 94.0 - Logs Center
 const LogsCenter = React.lazy(() => import("@/modules/logs-center/LogsCenter"));
 
+// 🔹 PATCH 103.0 - Fleet Management
+const FleetManagement = React.lazy(() => import("@/modules/fleet-management"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -47,6 +50,7 @@ export default function AppRouter() {
         <Route path="/system-status" element={<SystemStatus />} />
         <Route path="/dashboard/system-watchdog" element={<SystemWatchdog />} />
         <Route path="/dashboard/logs-center" element={<LogsCenter />} />
+        <Route path="/fleet-management" element={<FleetManagement />} />
       </Routes>
     </Router>
   );
