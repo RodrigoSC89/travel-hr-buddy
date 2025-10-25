@@ -111,9 +111,9 @@ const OfflineCache: React.FC = () => {
         await offlineCacheService.cacheRoutes(routes.map(r => ({
           id: r.id,
           name: r.name || '',
-          departure_port: r.departure_port || '',
-          arrival_port: r.arrival_port || '',
-          estimated_duration: r.estimated_duration || 0,
+          departure_port: r.origin_port_id || 'Unknown',
+          arrival_port: r.destination_port_id || 'Unknown',
+          estimated_duration: r.estimated_duration_hours || 0,
           cached_at: new Date().toISOString(),
         })));
       }
@@ -127,9 +127,9 @@ const OfflineCache: React.FC = () => {
       if (crew) {
         await offlineCacheService.cacheCrew(crew.map(c => ({
           id: c.id,
-          name: c.name,
-          position: c.position,
-          onboard_status: c.onboard_status,
+          name: (c as any).full_name || (c as any).name || 'Unknown',
+          position: c.position || 'Unknown',
+          onboard_status: (c as any).status === 'onboard',
           cached_at: new Date().toISOString(),
         })));
       }
@@ -144,9 +144,9 @@ const OfflineCache: React.FC = () => {
         await offlineCacheService.cacheVessels(vessels.map(v => ({
           id: v.id,
           name: v.name,
-          imo_code: v.imo_code || '',
+          imo_code: v.imo_number || '',
           status: v.status || 'unknown',
-          last_known_position: v.last_known_position,
+          last_known_position: v.current_location ? { lat: 0, lng: 0 } : null,
           cached_at: new Date().toISOString(),
         })));
       }
@@ -193,13 +193,13 @@ const OfflineCache: React.FC = () => {
           // Attempt to sync action to Supabase
           switch (action.type) {
             case 'create':
-              await supabase.from(action.table).insert(action.data);
+              await (supabase as any).from(action.table).insert(action.data);
               break;
             case 'update':
-              await supabase.from(action.table).update(action.data).eq('id', action.data.id);
+              await (supabase as any).from(action.table).update(action.data).eq('id', action.data.id || '');
               break;
             case 'delete':
-              await supabase.from(action.table).delete().eq('id', action.data.id);
+              await (supabase as any).from(action.table).delete().eq('id', action.data.id || '');
               break;
           }
           

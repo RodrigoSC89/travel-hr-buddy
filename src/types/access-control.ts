@@ -2,7 +2,7 @@
 
 export type AccessResult = 'success' | 'failure' | 'denied' | 'error';
 export type LogSeverity = 'info' | 'warning' | 'critical';
-export type UserRole = 'admin' | 'operator' | 'viewer' | 'auditor';
+export type UserRoleType = 'admin' | 'operator' | 'viewer' | 'auditor';
 
 export interface AccessLog {
   id: string;
@@ -21,7 +21,7 @@ export interface AccessLog {
 export interface UserRole {
   id: string;
   user_id: string;
-  role: UserRole;
+  role: UserRoleType;
   permissions: Record<string, string[]>;
   created_at: string;
   updated_at: string;

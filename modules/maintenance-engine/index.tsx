@@ -41,9 +41,9 @@ const MaintenanceEngine: React.FC = () => {
     try {
       setLoading(true);
       
-      // Load maintenance dashboard view
+      // Load maintenance dashboard view (may not exist yet)
       let query = supabase
-        .from('maintenance_dashboard')
+        .from('maintenance_dashboard' as any)
         .select('*');
 
       if (selectedVessel !== 'all') {
@@ -54,10 +54,10 @@ const MaintenanceEngine: React.FC = () => {
 
       if (error) throw error;
 
-      setMaintenanceRecords(data || []);
+      setMaintenanceRecords((data as any) || []);
 
-      // Load predictions
-      const { data: predictionsData, error: predictionsError } = await supabase
+      // Load predictions (RPC may not exist yet)
+      const { data: predictionsData, error: predictionsError } = await (supabase as any)
         .rpc('get_maintenance_predictions', { 
           vessel_uuid: selectedVessel === 'all' ? null : selectedVessel 
         });
@@ -65,7 +65,7 @@ const MaintenanceEngine: React.FC = () => {
       if (predictionsError) {
         console.error('Error loading predictions:', predictionsError);
       } else {
-        setPredictions(predictionsData || []);
+        setPredictions((predictionsData as any) || []);
       }
     } catch (error) {
       console.error('Error loading maintenance data:', error);

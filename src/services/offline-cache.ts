@@ -137,8 +137,8 @@ class OfflineCacheService {
     const store = await this.getStore(STORES.PENDING_ACTIONS);
     return new Promise((resolve, reject) => {
       const index = store.index('synced');
-      const request = index.getAll(false);
-      request.onsuccess = () => resolve(request.result);
+      const request = index.getAll(false as any);
+      request.onsuccess = () => resolve(request.result as PendingAction[]);
       request.onerror = () => reject(request.error);
     });
   }

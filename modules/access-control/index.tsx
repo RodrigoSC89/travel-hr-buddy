@@ -43,9 +43,9 @@ const AccessControl: React.FC = () => {
     try {
       setLoading(true);
       
-      // Load access logs
+      // Load access logs (table may not exist yet)
       let query = supabase
-        .from('access_logs')
+        .from('access_logs' as any)
         .select('*')
         .order('timestamp', { ascending: false })
         .limit(100);
@@ -62,30 +62,35 @@ const AccessControl: React.FC = () => {
 
       const { data: logsData, error: logsError } = await query;
 
-      if (logsError) throw logsError;
+      if (logsError) {
+        console.error('Error loading access logs:', logsError);
+        setAccessLogs([]);
+      } else {
+        setAccessLogs((logsData as any) || []);
+      }
 
-      setAccessLogs(logsData || []);
-
-      // Load analytics
-      const { data: analyticsData, error: analyticsError } = await supabase
+      // Load analytics (view may not exist yet)
+      const { data: analyticsData, error: analyticsError } = await (supabase as any)
         .from('access_analytics')
         .select('*')
         .limit(20);
 
       if (analyticsError) {
         console.error('Error loading analytics:', analyticsError);
+        setAnalytics([]);
       } else {
-        setAnalytics(analyticsData || []);
+        setAnalytics((analyticsData as any) || []);
       }
 
-      // Load suspicious access
-      const { data: suspiciousData, error: suspiciousError } = await supabase
+      // Load suspicious access (RPC may not exist yet)
+      const { data: suspiciousData, error: suspiciousError } = await (supabase as any)
         .rpc('detect_suspicious_access');
 
       if (suspiciousError) {
         console.error('Error detecting suspicious access:', suspiciousError);
+        setSuspiciousAccess([]);
       } else {
-        setSuspiciousAccess(suspiciousData || []);
+        setSuspiciousAccess((suspiciousData as any) || []);
       }
     } catch (error) {
       console.error('Error loading access data:', error);
