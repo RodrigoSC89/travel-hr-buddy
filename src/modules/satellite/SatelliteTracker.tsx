@@ -1,10 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Satellite, Signal, MapPin, Activity } from "lucide-react";
+import { Satellite, Signal, MapPin, Activity, Ship } from "lucide-react";
 import { SatelliteStatus } from "./components/SatelliteStatus";
 import { CoverageMap } from "./components/CoverageMap";
+import { AISMarker, AISMapOverlay } from "./components/AISMarker";
+import { aisClient, type VesselPosition } from "@/lib/aisClient";
 
 const SatelliteTracker = () => {
+  const [vessels, setVessels] = useState<VesselPosition[]>([]);
+  const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
+  const [isLoadingVessels, setIsLoadingVessels] = useState(false);
+
+  // Fetch AIS data on component mount
+  useEffect(() => {
+    const fetchVessels = async () => {
+      setIsLoadingVessels(true);
+      try {
+        // Default area: Atlantic Ocean
+        const vesselData = await aisClient.getVesselsInArea({
+          minLat: -30,
+          maxLat: 50,
+          minLon: -60,
+          maxLon: 20,
+        });
+        setVessels(vesselData);
+      } catch (error) {
+        console.error('Error fetching AIS data:', error);
+      } finally {
+        setIsLoadingVessels(false);
+      }
+    };
+
+    fetchVessels();
+    // Refresh every 5 minutes
+    const interval = setInterval(fetchVessels, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
   const satelliteData = [
     {
       id: "sat-1",
@@ -78,7 +109,7 @@ const SatelliteTracker = () => {
         <h1 className="text-3xl font-bold">Rastreador de Satélites</h1>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Satélites Ativos</CardTitle>
@@ -122,9 +153,34 @@ const SatelliteTracker = () => {
             <p className="text-xs text-muted-foreground">Últimos 30 dias</p>
           </CardContent>
         </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Embarcações AIS</CardTitle>
+            <Ship className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{vessels.length}</div>
+            <p className="text-xs text-muted-foreground">
+              {isLoadingVessels ? 'Carregando...' : 'Rastreadas'}
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       <SatelliteStatus satellites={satelliteData} />
+
+      <AISMarker 
+        vessels={vessels} 
+        onVesselClick={setSelectedVessel}
+      />
+
+      {selectedVessel && (
+        <AISMapOverlay 
+          vessel={selectedVessel}
+          onClose={() => setSelectedVessel(null)}
+        />
+      )}
 
       <CoverageMap coverageData={coverageData} />
     </div>
