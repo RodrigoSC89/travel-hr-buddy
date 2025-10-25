@@ -13,8 +13,10 @@ import { Badge } from '@/components/ui/badge';
 import { Navigation, MapPin, Route, Anchor } from 'lucide-react';
 
 // Set Mapbox access token (in production, use env variable)
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || 'pk.demo';
-mapboxgl.accessToken = MAPBOX_TOKEN;
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
+if (MAPBOX_TOKEN) {
+  mapboxgl.accessToken = MAPBOX_TOKEN;
+}
 
 export interface RoutePoint {
   longitude: number;
@@ -55,7 +57,7 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
 
   // Initialize map
   useEffect(() => {
-    if (!mapContainer.current || map.current) return;
+    if (!mapContainer.current || map.current || !MAPBOX_TOKEN) return;
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -75,6 +77,8 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
     });
 
     return () => {
+      markersRef.current.forEach(marker => marker.remove());
+      markersRef.current = [];
       map.current?.remove();
     };
   }, []);
@@ -174,7 +178,7 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
     if (livePosition) {
       const el = document.createElement('div');
       el.className = 'live-position-marker';
-      el.innerHTML = '📍';
+      el.innerHTML = '<span role="img" aria-label="Current position">📍</span>';
       el.style.fontSize = '24px';
 
       const marker = new mapboxgl.Marker(el)
@@ -248,11 +252,36 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div
-            ref={mapContainer}
-            className="w-full rounded-lg overflow-hidden"
-            style={{ height: '600px' }}
-          />
+          {!MAPBOX_TOKEN ? (
+            <div 
+              className="w-full rounded-lg bg-muted flex items-center justify-center"
+              style={{ height: '600px' }}
+            >
+              <div className="text-center space-y-4 p-8">
+                <Navigation className="h-16 w-16 mx-auto text-muted-foreground" />
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Mapbox Token Necessário
+                  </h3>
+                  <p className="text-sm text-muted-foreground max-w-md">
+                    Configure a variável de ambiente VITE_MAPBOX_TOKEN para habilitar 
+                    o mapa de navegação. Obtenha uma chave gratuita em mapbox.com
+                  </p>
+                </div>
+                <div className="pt-4">
+                  <Badge variant="outline" className="text-xs">
+                    Modo de Desenvolvimento
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div
+              ref={mapContainer}
+              className="w-full rounded-lg overflow-hidden"
+              style={{ height: '600px' }}
+            />
+          )}
         </CardContent>
       </Card>
 

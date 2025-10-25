@@ -89,7 +89,7 @@ const RoutePlanner = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {selectedRoute ? (selectedRoute.distance! / 1852).toFixed(0) : '0'} nm
+              {selectedRoute ? ((selectedRoute.distance ?? 0) / 1852).toFixed(0) : '0'} nm
             </div>
             <p className="text-xs text-muted-foreground">Rota planejada</p>
           </CardContent>
@@ -116,7 +116,7 @@ const RoutePlanner = () => {
           <CardContent>
             <div className="text-2xl font-bold text-green-500">
               {selectedRoute && alternativeRoute
-                ? `${(((alternativeRoute.distance! - selectedRoute.distance!) / 1852)).toFixed(0)} nm`
+                ? `${((((alternativeRoute.distance ?? 0) - (selectedRoute.distance ?? 0)) / 1852)).toFixed(0)} nm`
                 : '0 nm'}
             </div>
             <p className="text-xs text-muted-foreground">vs. rota alternativa</p>
