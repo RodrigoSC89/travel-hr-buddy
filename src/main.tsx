@@ -5,7 +5,11 @@ import App from "./App.tsx";
 import "./index.css";
 import "../sentry.client.config";
 import { logger } from "@/lib/logger";
+import { initializeTheme } from "@/lib/theme/theme-utils";
 // import { initFailoverSystem } from "@/lib/failover/failover-core";
+
+// PATCH 129.0: Initialize theme before rendering
+initializeTheme();
 
 // Iniciar monitor de failover na inicialização
 // initFailoverSystem(); // Desabilitado temporariamente - sem heartbeats configurados
