@@ -225,6 +225,333 @@ export type Database = {
           },
         ]
       }
+      analytics_dashboards: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_default: boolean | null
+          is_public: boolean | null
+          layout: Json | null
+          name: string
+          organization_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean | null
+          is_public?: boolean | null
+          layout?: Json | null
+          name: string
+          organization_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean | null
+          is_public?: boolean | null
+          layout?: Json | null
+          name?: string
+          organization_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_dashboards_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_events: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country_code: string | null
+          created_at: string | null
+          device_type: string | null
+          event_category: string | null
+          event_name: string
+          id: string
+          ip_address: unknown
+          organization_id: string | null
+          os: string | null
+          page_url: string | null
+          properties: Json | null
+          referrer: string | null
+          session_id: string | null
+          timestamp: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country_code?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          event_category?: string | null
+          event_name: string
+          id?: string
+          ip_address?: unknown
+          organization_id?: string | null
+          os?: string | null
+          page_url?: string | null
+          properties?: Json | null
+          referrer?: string | null
+          session_id?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country_code?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          event_category?: string | null
+          event_name?: string
+          id?: string
+          ip_address?: unknown
+          organization_id?: string | null
+          os?: string | null
+          page_url?: string | null
+          properties?: Json | null
+          referrer?: string | null
+          session_id?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_insights: {
+        Row: {
+          action_taken: boolean | null
+          action_taken_at: string | null
+          confidence: number | null
+          content: string
+          created_at: string | null
+          data_reference: Json | null
+          expires_at: string | null
+          id: string
+          insight_type: string
+          is_actionable: boolean | null
+          organization_id: string | null
+          priority: string | null
+          title: string
+        }
+        Insert: {
+          action_taken?: boolean | null
+          action_taken_at?: string | null
+          confidence?: number | null
+          content: string
+          created_at?: string | null
+          data_reference?: Json | null
+          expires_at?: string | null
+          id?: string
+          insight_type: string
+          is_actionable?: boolean | null
+          organization_id?: string | null
+          priority?: string | null
+          title: string
+        }
+        Update: {
+          action_taken?: boolean | null
+          action_taken_at?: string | null
+          confidence?: number | null
+          content?: string
+          created_at?: string | null
+          data_reference?: Json | null
+          expires_at?: string | null
+          id?: string
+          insight_type?: string
+          is_actionable?: boolean | null
+          organization_id?: string | null
+          priority?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_insights_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_metrics: {
+        Row: {
+          aggregation_type: string | null
+          created_at: string | null
+          dimensions: Json | null
+          id: string
+          metric_name: string
+          metric_unit: string | null
+          metric_value: number
+          organization_id: string | null
+          period_end: string
+          period_start: string
+          updated_at: string | null
+        }
+        Insert: {
+          aggregation_type?: string | null
+          created_at?: string | null
+          dimensions?: Json | null
+          id?: string
+          metric_name: string
+          metric_unit?: string | null
+          metric_value: number
+          organization_id?: string | null
+          period_end: string
+          period_start: string
+          updated_at?: string | null
+        }
+        Update: {
+          aggregation_type?: string | null
+          created_at?: string | null
+          dimensions?: Json | null
+          id?: string
+          metric_name?: string
+          metric_unit?: string | null
+          metric_value?: number
+          organization_id?: string | null
+          period_end?: string
+          period_start?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_reports: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          file_size: number | null
+          file_url: string | null
+          format: string
+          id: string
+          name: string
+          organization_id: string | null
+          parameters: Json | null
+          report_type: string
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          format: string
+          id?: string
+          name: string
+          organization_id?: string | null
+          parameters?: Json | null
+          report_type: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          format?: string
+          id?: string
+          name?: string
+          organization_id?: string | null
+          parameters?: Json | null
+          report_type?: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_reports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_widgets: {
+        Row: {
+          config: Json | null
+          created_at: string | null
+          dashboard_id: string | null
+          data_source: string | null
+          id: string
+          position: Json | null
+          query_config: Json | null
+          title: string
+          updated_at: string | null
+          widget_type: string
+        }
+        Insert: {
+          config?: Json | null
+          created_at?: string | null
+          dashboard_id?: string | null
+          data_source?: string | null
+          id?: string
+          position?: Json | null
+          query_config?: Json | null
+          title: string
+          updated_at?: string | null
+          widget_type: string
+        }
+        Update: {
+          config?: Json | null
+          created_at?: string | null
+          dashboard_id?: string | null
+          data_source?: string | null
+          id?: string
+          position?: Json | null
+          query_config?: Json | null
+          title?: string
+          updated_at?: string | null
+          widget_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_widgets_dashboard_id_fkey"
+            columns: ["dashboard_id"]
+            isOneToOne: false
+            referencedRelation: "analytics_dashboards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_center_logs: {
         Row: {
           action: string
