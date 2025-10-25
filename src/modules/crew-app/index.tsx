@@ -276,7 +276,8 @@ const CrewApp = () => {
   const syncData = async () => {
     if (!isOnline) return;
 
-    // Simulate API sync
+    // TODO: Replace with actual API implementation in production
+    // Simulate API sync - in production, replace with actual API calls
     setTimeout(() => {
       const syncedReports = reports.map(r => ({ ...r, synced: true }));
       const syncedAttendance = attendance.map(a => ({ ...a, synced: true }));

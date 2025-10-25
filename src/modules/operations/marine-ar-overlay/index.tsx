@@ -35,6 +35,9 @@ const MarineAROverlay = () => {
   const [selectedMarker, setSelectedMarker] = useState<MarkerData | null>(null);
   const { toast } = useToast();
 
+  // Constants
+  const MARKER_CLICK_TOLERANCE = 5; // Percentage tolerance for marker click detection
+
   // Mock sensor data - in production, this would come from real sensors
   const [markers, setMarkers] = useState<MarkerData[]>([
     {
@@ -289,6 +292,7 @@ const MarineAROverlay = () => {
           <Card className="lg:col-span-2">
             <CardContent className="p-0">
               <div className="relative aspect-video bg-slate-900 rounded-lg overflow-hidden">
+                {/* Video element is hidden as Canvas renders the overlay - the canvas draws the video frame */}
                 <video
                   ref={videoRef}
                   autoPlay
@@ -307,7 +311,7 @@ const MarineAROverlay = () => {
                     
                     // Find clicked marker
                     const clickedMarker = markers.find(m => 
-                      Math.abs(m.x - x) < 5 && Math.abs(m.y - y) < 5
+                      Math.abs(m.x - x) < MARKER_CLICK_TOLERANCE && Math.abs(m.y - y) < MARKER_CLICK_TOLERANCE
                     );
                     
                     if (clickedMarker) {

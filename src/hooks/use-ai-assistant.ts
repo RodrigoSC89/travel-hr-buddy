@@ -45,9 +45,16 @@ export const useAIAssistant = (type: "crew" | "general") => {
       const db = await openDB();
       const transaction = db.transaction([STORE_NAME], "readwrite");
       const store = transaction.objectStore(STORE_NAME);
-      await store.put({ id: key, data, timestamp: Date.now() });
+      
+      // Wrap in Promise to ensure proper transaction completion
+      return new Promise<void>((resolve, reject) => {
+        const request = store.put({ id: key, data, timestamp: Date.now() });
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+      });
     } catch (error) {
       console.error("Failed to cache context:", error);
+      throw error;
     }
   }, [openDB]);
 
@@ -113,32 +120,45 @@ export const useAIAssistant = (type: "crew" | "general") => {
       }
 
       // Online mode - make actual AI call
-      const response = await fetch("/api/ai/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [...messages, userMessage],
-          context: options.context || type,
-        }),
-      });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
-      if (!response.ok) throw new Error("AI request failed");
+      try {
+        const response = await fetch("/api/ai/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [...messages, userMessage],
+            context: options.context || type,
+          }),
+          signal: controller.signal,
+        });
 
-      const data = await response.json();
-      const assistantMessage: AIAssistantMessage = {
-        id: `assistant-${Date.now()}`,
-        role: "assistant",
-        content: data.message,
-        timestamp: new Date(),
-      };
+        clearTimeout(timeoutId);
 
-      // Cache the response for offline use
-      if (cacheEnabled) {
-        await cacheContext(`${type}-${content}`, data.message);
+        if (!response.ok) {
+          throw new Error(`AI request failed: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const assistantMessage: AIAssistantMessage = {
+          id: `assistant-${Date.now()}`,
+          role: "assistant",
+          content: data.message,
+          timestamp: new Date(),
+        };
+
+        // Cache the response for offline use
+        if (cacheEnabled) {
+          await cacheContext(`${type}-${content}`, data.message);
+        }
+
+        setMessages(prev => [...prev, assistantMessage]);
+        return assistantMessage;
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        throw fetchError;
       }
-
-      setMessages(prev => [...prev, assistantMessage]);
-      return assistantMessage;
 
     } catch (error) {
       console.error("AI Assistant error:", error);

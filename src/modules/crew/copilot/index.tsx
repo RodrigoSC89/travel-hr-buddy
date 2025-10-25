@@ -21,7 +21,8 @@ import { cn } from "@/lib/utils";
 
 const TripulantCopilot = () => {
   const [input, setInput] = useState("");
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // Initialize with a safer default, handling cases where navigator.onLine might be undefined
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' && navigator.onLine !== false);
   const { messages, isProcessing, sendMessage, clearMessages, quickAction } = 
     useAIAssistant("crew");
   const scrollRef = useRef<HTMLDivElement>(null);

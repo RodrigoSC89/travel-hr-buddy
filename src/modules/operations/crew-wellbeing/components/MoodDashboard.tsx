@@ -37,6 +37,14 @@ interface MoodData {
 export const MoodDashboard = () => {
   const [moodHistory, setMoodHistory] = useState<MoodData[]>([]);
 
+  // Constants for trend calculation
+  const RECENT_DAYS = 3;
+  const COMPARISON_DAYS = 6;
+  const MIN_HISTORY_FOR_TREND = 2;
+
+  // Helper function to invert stress (higher stress = lower score)
+  const invertStress = (stress: number) => 100 - stress;
+
   useEffect(() => {
     // Load mood history from localStorage
     const saved = localStorage.getItem("crew_mood_history");
@@ -72,9 +80,9 @@ export const MoodDashboard = () => {
   };
 
   const calculateTrend = (key: keyof Omit<MoodData, "date">) => {
-    if (moodHistory.length < 2) return 0;
-    const recent = moodHistory.slice(-3);
-    const older = moodHistory.slice(-6, -3);
+    if (moodHistory.length < MIN_HISTORY_FOR_TREND) return 0;
+    const recent = moodHistory.slice(-RECENT_DAYS);
+    const older = moodHistory.slice(-COMPARISON_DAYS, -RECENT_DAYS);
     
     const recentAvg = recent.reduce((acc, curr) => acc + curr[key], 0) / recent.length;
     const olderAvg = older.reduce((acc, curr) => acc + curr[key], 0) / older.length;
@@ -117,7 +125,7 @@ export const MoodDashboard = () => {
       },
       {
         label: "Estresse",
-        data: moodHistory.map(d => 100 - d.stress), // Inverted so higher is better
+        data: moodHistory.map(d => invertStress(d.stress)),
         borderColor: "#ef4444",
         backgroundColor: "rgba(239, 68, 68, 0.1)",
         fill: true,
@@ -202,13 +210,13 @@ export const MoodDashboard = () => {
               {getStatusBadge(calculateAverage("sleep"))}
             </div>
 
-            <div className={`p-4 rounded-lg ${getStatusColor(100 - calculateAverage("stress"))}`}>
+            <div className={`p-4 rounded-lg ${getStatusColor(invertStress(calculateAverage("stress")))}`}>
               <p className="text-xs text-muted-foreground mb-1">Controle de Estresse</p>
               <div className="flex items-center justify-between">
-                <p className="text-2xl font-bold">{(100 - calculateAverage("stress")).toFixed(0)}%</p>
+                <p className="text-2xl font-bold">{invertStress(calculateAverage("stress")).toFixed(0)}%</p>
                 {getTrendIcon(-calculateTrend("stress"))}
               </div>
-              {getStatusBadge(100 - calculateAverage("stress"))}
+              {getStatusBadge(invertStress(calculateAverage("stress")))}
             </div>
           </div>
 
