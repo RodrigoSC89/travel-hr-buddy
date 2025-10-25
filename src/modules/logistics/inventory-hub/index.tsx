@@ -61,7 +61,7 @@ const InventoryHub = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('inventory_items')
+        .from('inventory_items' as any)
         .select(`
           *,
           vessels (
@@ -74,13 +74,13 @@ const InventoryHub = () => {
 
       if (error) throw error;
 
-      const processedData = data?.map(item => ({
+      const processedData = (data as any)?.map((item: any) => ({
         ...item,
         vessel_name: item.vessels?.name || 'Unassigned',
         stock_status: getStockStatus(item.quantity, item.min_threshold)
       })) || [];
 
-      setItems(processedData);
+      setItems(processedData as any);
     } catch (error) {
       console.error('Error loading inventory:', error);
       toast({
@@ -264,7 +264,7 @@ const InventoryHub = () => {
                 <SelectItem value="all">All Vessels</SelectItem>
                 <SelectItem value="unassigned">Unassigned</SelectItem>
                 {vessels.map(vessel => (
-                  <SelectItem key={vessel} value={vessel}>{vessel}</SelectItem>
+                  <SelectItem key={vessel} value={vessel || ''}>{vessel}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

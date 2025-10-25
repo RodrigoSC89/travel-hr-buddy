@@ -74,7 +74,7 @@ const SmartAlerts = () => {
       setLoading(true);
       
       let query = supabase
-        .from('active_alerts_dashboard')
+        .from('active_alerts_dashboard' as any)
         .select('*');
       
       if (!showResolved) {
@@ -87,22 +87,22 @@ const SmartAlerts = () => {
 
       // Fetch full details for alerts with actions
       const alertsWithDetails = await Promise.all(
-        (data || []).map(async (alert) => {
+        (data || []).map(async (alert: any) => {
           const { data: fullAlert } = await supabase
-            .from('smart_alerts')
+            .from('smart_alerts' as any)
             .select('recommended_actions, affected_systems')
             .eq('id', alert.id)
             .single();
           
           return {
             ...alert,
-            recommended_actions: fullAlert?.recommended_actions || [],
-            affected_systems: fullAlert?.affected_systems || []
+            recommended_actions: (fullAlert as any)?.recommended_actions || [],
+            affected_systems: (fullAlert as any)?.affected_systems || []
           };
         })
       );
 
-      setAlerts(alertsWithDetails);
+      setAlerts(alertsWithDetails as any);
     } catch (error) {
       console.error('Error loading smart alerts:', error);
       toast({
@@ -143,8 +143,8 @@ const SmartAlerts = () => {
   const handleAcknowledge = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('smart_alerts')
-        .update({ acknowledged: true })
+        .from('smart_alerts' as any)
+        .update({ acknowledged: true } as any)
         .eq('id', alertId);
 
       if (error) throw error;
@@ -168,8 +168,8 @@ const SmartAlerts = () => {
   const handleResolve = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('smart_alerts')
-        .update({ resolved: true, acknowledged: true })
+        .from('smart_alerts' as any)
+        .update({ resolved: true, acknowledged: true } as any)
         .eq('id', alertId);
 
       if (error) throw error;

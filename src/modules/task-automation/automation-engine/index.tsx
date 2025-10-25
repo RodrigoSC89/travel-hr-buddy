@@ -82,13 +82,13 @@ const AutomationEngine = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('automation_dashboard')
+        .from('automation_dashboard' as any)
         .select('*')
         .order('priority', { ascending: false });
 
       if (error) throw error;
 
-      setRules(data || []);
+      setRules((data || []) as any);
     } catch (error) {
       console.error('Error loading workflow rules:', error);
       toast({
@@ -104,11 +104,11 @@ const AutomationEngine = () => {
   const loadSuggestions = async () => {
     try {
       const { data, error } = await supabase
-        .rpc('suggest_automation_opportunities');
+        .rpc('suggest_automation_opportunities' as any);
 
       if (error) throw error;
 
-      setSuggestions(data || []);
+      setSuggestions((data || []) as any);
     } catch (error) {
       console.error('Error loading suggestions:', error);
     }
@@ -142,8 +142,8 @@ const AutomationEngine = () => {
   const handleToggleRule = async (ruleId: string, currentEnabled: boolean) => {
     try {
       const { error } = await supabase
-        .from('workflow_rules')
-        .update({ enabled: !currentEnabled })
+        .from('workflow_rules' as any)
+        .update({ enabled: !currentEnabled } as any)
         .eq('id', ruleId);
 
       if (error) throw error;

@@ -72,29 +72,29 @@ const ComplianceChecklist = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('compliance_dashboard')
+        .from('compliance_dashboard' as any)
         .select('*');
 
       if (error) throw error;
 
       // Also fetch full details for records with findings/recommendations
       const recordsWithDetails = await Promise.all(
-        (data || []).map(async (record) => {
+        (data || []).map(async (record: any) => {
           const { data: fullRecord } = await supabase
-            .from('compliance_records')
+            .from('compliance_records' as any)
             .select('findings, recommendations')
             .eq('id', record.id)
             .single();
           
           return {
             ...record,
-            findings: fullRecord?.findings || [],
-            recommendations: fullRecord?.recommendations || []
+            findings: (fullRecord as any)?.findings || [],
+            recommendations: (fullRecord as any)?.recommendations || []
           };
         })
       );
 
-      setRecords(recordsWithDetails);
+      setRecords(recordsWithDetails as any);
     } catch (error) {
       console.error('Error loading compliance records:', error);
       toast({
