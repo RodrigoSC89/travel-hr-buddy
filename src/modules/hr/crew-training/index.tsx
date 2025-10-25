@@ -41,7 +41,7 @@ interface TrainingRecord {
   provider: string | null;
   certificate_number: string | null;
   training_type: string | null;
-  status: 'valid' | 'expired' | 'expiring_soon' | 'pending';
+  status: "valid" | "expired" | "expiring_soon" | "pending";
   notes: string | null;
   crew_name?: string;
   crew_position?: string;
@@ -69,14 +69,14 @@ const CrewTraining = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('training_expiry_status' as any)
-        .select('*');
+        .from("training_expiry_status" as any)
+        .select("*");
 
       if (error) throw error;
 
       setRecords((data || []) as any);
     } catch (error) {
-      console.error('Error loading training records:', error);
+      console.error("Error loading training records:", error);
       toast({
         title: "Error",
         description: "Failed to load training records",
@@ -89,12 +89,12 @@ const CrewTraining = () => {
 
   const loadAIInsights = async () => {
     try {
-      const expiredCount = records.filter(r => r.status === 'expired').length;
-      const expiringCount = records.filter(r => r.status === 'expiring_soon').length;
+      const expiredCount = records.filter(r => r.status === "expired").length;
+      const expiringCount = records.filter(r => r.status === "expiring_soon").length;
       
       const response = await runAIContext({
-        module: 'training-validator',
-        action: 'validate',
+        module: "training-validator",
+        action: "validate",
         context: { 
           expiredCount,
           expiringCount,
@@ -106,30 +106,30 @@ const CrewTraining = () => {
         setAiInsight(response.message);
       }
     } catch (error) {
-      console.error('Error loading AI insights:', error);
+      console.error("Error loading AI insights:", error);
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'expired':
-        return <Badge variant="destructive" className="flex items-center gap-1">
-          <AlertTriangle className="h-3 w-3" /> Expired
-        </Badge>;
-      case 'expiring_soon':
-        return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
-          <Clock className="h-3 w-3" /> Expiring Soon
-        </Badge>;
-      case 'valid':
-        return <Badge variant="secondary" className="flex items-center gap-1 text-green-600">
-          <CheckCircle className="h-3 w-3" /> Valid
-        </Badge>;
-      case 'pending':
-        return <Badge variant="outline" className="flex items-center gap-1">
-          <Clock className="h-3 w-3" /> Pending
-        </Badge>;
-      default:
-        return <Badge variant="outline">Unknown</Badge>;
+    case "expired":
+      return <Badge variant="destructive" className="flex items-center gap-1">
+        <AlertTriangle className="h-3 w-3" /> Expired
+      </Badge>;
+    case "expiring_soon":
+      return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
+        <Clock className="h-3 w-3" /> Expiring Soon
+      </Badge>;
+    case "valid":
+      return <Badge variant="secondary" className="flex items-center gap-1 text-green-600">
+        <CheckCircle className="h-3 w-3" /> Valid
+      </Badge>;
+    case "pending":
+      return <Badge variant="outline" className="flex items-center gap-1">
+        <Clock className="h-3 w-3" /> Pending
+      </Badge>;
+    default:
+      return <Badge variant="outline">Unknown</Badge>;
     }
   };
 
@@ -147,10 +147,10 @@ const CrewTraining = () => {
   const types = Array.from(new Set(records.map(r => r.training_type).filter(Boolean)));
 
   const totalRecords = records.length;
-  const expiredCount = records.filter(r => r.status === 'expired').length;
-  const expiringCount = records.filter(r => r.status === 'expiring_soon').length;
-  const validCount = records.filter(r => r.status === 'valid').length;
-  const complianceRate = totalRecords > 0 ? ((validCount / totalRecords) * 100).toFixed(1) : '0';
+  const expiredCount = records.filter(r => r.status === "expired").length;
+  const expiringCount = records.filter(r => r.status === "expiring_soon").length;
+  const validCount = records.filter(r => r.status === "valid").length;
+  const complianceRate = totalRecords > 0 ? ((validCount / totalRecords) * 100).toFixed(1) : "0";
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -163,7 +163,7 @@ const CrewTraining = () => {
           </div>
         </div>
         <Button onClick={loadTrainingRecords} disabled={loading}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
@@ -316,18 +316,18 @@ const CrewTraining = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground mb-2">
                           <div>
-                            <span className="font-medium">Crew Member:</span> {record.crew_name || 'N/A'}
+                            <span className="font-medium">Crew Member:</span> {record.crew_name || "N/A"}
                           </div>
                           <div>
-                            <span className="font-medium">Position:</span> {record.crew_position || 'N/A'}
+                            <span className="font-medium">Position:</span> {record.crew_position || "N/A"}
                           </div>
                           <div>
-                            <span className="font-medium">Completion:</span>{' '}
-                            {record.completion_date ? format(new Date(record.completion_date), 'PP') : 'Pending'}
+                            <span className="font-medium">Completion:</span>{" "}
+                            {record.completion_date ? format(new Date(record.completion_date), "PP") : "Pending"}
                           </div>
                           <div>
-                            <span className="font-medium">Expires:</span>{' '}
-                            {record.expires_at ? format(new Date(record.expires_at), 'PP') : 'N/A'}
+                            <span className="font-medium">Expires:</span>{" "}
+                            {record.expires_at ? format(new Date(record.expires_at), "PP") : "N/A"}
                           </div>
                           {record.provider && (
                             <div>
@@ -340,12 +340,12 @@ const CrewTraining = () => {
                             </div>
                           )}
                         </div>
-                        {record.status === 'expired' && record.days_expired && (
+                        {record.status === "expired" && record.days_expired && (
                           <p className="text-xs text-destructive font-medium">
                             Expired {record.days_expired} days ago
                           </p>
                         )}
-                        {record.status === 'expiring_soon' && record.days_until_expiry && (
+                        {record.status === "expiring_soon" && record.days_until_expiry && (
                           <p className="text-xs text-orange-600 font-medium">
                             Expires in {record.days_until_expiry} days
                           </p>

@@ -1,18 +1,18 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { performance } from 'perf_hooks';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { performance } from "perf_hooks";
 
-describe('Performance: Map Component', () => {
+describe("Performance: Map Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should render map with 100 markers in under 500ms', async () => {
+  it("should render map with 100 markers in under 500ms", async () => {
     // Arrange
     const markers = Array.from({ length: 100 }, (_, i) => ({
       id: `marker-${i}`,
       lat: -23.5505 + (Math.random() - 0.5) * 0.1,
       lng: -46.6333 + (Math.random() - 0.5) * 0.1,
-      type: 'vessel',
+      type: "vessel",
     }));
 
     // Act
@@ -33,7 +33,7 @@ describe('Performance: Map Component', () => {
     expect(renderTime).toBeLessThan(500); // Should render in less than 500ms
   });
 
-  it('should update marker positions efficiently', async () => {
+  it("should update marker positions efficiently", async () => {
     // Arrange
     const initialMarkers = Array.from({ length: 50 }, (_, i) => ({
       id: `vessel-${i}`,
@@ -58,7 +58,7 @@ describe('Performance: Map Component', () => {
     expect(updatedMarkers[0].lat).not.toBe(initialMarkers[0].lat);
   });
 
-  it('should handle map zoom without lag', async () => {
+  it("should handle map zoom without lag", async () => {
     // Arrange
     const currentZoom = 10;
     const targetZoom = 15;
@@ -82,7 +82,7 @@ describe('Performance: Map Component', () => {
     expect(zoomTime).toBeLessThan(200); // Zoom animation should be smooth
   });
 
-  it('should efficiently cluster nearby markers', async () => {
+  it("should efficiently cluster nearby markers", async () => {
     // Arrange
     const markers = Array.from({ length: 500 }, (_, i) => ({
       id: `marker-${i}`,
@@ -116,7 +116,7 @@ describe('Performance: Map Component', () => {
     expect(clusterTime).toBeLessThan(100); // Clustering should be fast
   });
 
-  it('should maintain 60fps during real-time updates', async () => {
+  it("should maintain 60fps during real-time updates", async () => {
     // Arrange
     const TARGET_FPS = 60;
     const FRAME_TIME = 1000 / TARGET_FPS; // ~16.67ms per frame

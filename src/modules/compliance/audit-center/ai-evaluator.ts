@@ -117,9 +117,9 @@ export function fallbackEvaluation(
     warningCount > 0 ? `${warningCount} warning(s) require attention. ` : ""
   }${
     compliance >= 95 ? "Excellent compliance status maintained." : 
-    compliance >= 85 ? "Good compliance, minor improvements needed." :
-    compliance >= 75 ? "Acceptable compliance, corrective actions required." :
-    "Critical compliance level, immediate action required."
+      compliance >= 85 ? "Good compliance, minor improvements needed." :
+        compliance >= 75 ? "Acceptable compliance, corrective actions required." :
+          "Critical compliance level, immediate action required."
   }`;
 
   return {

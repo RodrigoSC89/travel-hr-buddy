@@ -184,8 +184,8 @@ export const useLogisticsAI = () => {
           recommendation: gap > 0 
             ? `Reabastecer ${gap} unidades` 
             : gap < -100 
-            ? `Reduzir estoque em ${Math.abs(gap)} unidades`
-            : "Nível adequado",
+              ? `Reduzir estoque em ${Math.abs(gap)} unidades`
+              : "Nível adequado",
           priority: Math.abs(gap) > 150 ? "high" : Math.abs(gap) > 50 ? "medium" : "low",
         };
       });

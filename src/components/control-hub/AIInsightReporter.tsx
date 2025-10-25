@@ -21,7 +21,7 @@ export default function AIInsightReporter() {
       setError(null);
       
       // Simulated API call for now - replace with actual endpoint
-      const response = await fetch('/api/insights');
+      const response = await fetch("/api/insights");
       if (response.ok) {
         const data = await response.json();
         setInsights(data);

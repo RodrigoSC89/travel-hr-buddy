@@ -98,23 +98,23 @@ const moduleGroups: GroupInfo[] = [
 
 const getStatusIcon = (status: ModuleStatus) => {
   switch (status) {
-    case "complete":
-      return <CheckCircle className="h-5 w-5 text-green-500" />;
-    case "partial":
-      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
-    case "incomplete":
-      return <XCircle className="h-5 w-5 text-red-500" />;
+  case "complete":
+    return <CheckCircle className="h-5 w-5 text-green-500" />;
+  case "partial":
+    return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+  case "incomplete":
+    return <XCircle className="h-5 w-5 text-red-500" />;
   }
 };
 
 const getStatusBadge = (status: ModuleStatus) => {
   switch (status) {
-    case "complete":
-      return <Badge className="bg-green-500/10 text-green-500 border-green-500/20">✅ Completo</Badge>;
-    case "partial":
-      return <Badge className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">🟡 Parcial</Badge>;
-    case "incomplete":
-      return <Badge className="bg-red-500/10 text-red-500 border-red-500/20">🔴 Incompleto</Badge>;
+  case "complete":
+    return <Badge className="bg-green-500/10 text-green-500 border-green-500/20">✅ Completo</Badge>;
+  case "partial":
+    return <Badge className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">🟡 Parcial</Badge>;
+  case "incomplete":
+    return <Badge className="bg-red-500/10 text-red-500 border-red-500/20">🔴 Incompleto</Badge>;
   }
 };
 

@@ -5,26 +5,26 @@ import { FileText, Download, Eye } from "lucide-react";
 
 export function InvoiceManager() {
   const invoices = [
-    { id: '1', number: 'INV-2024-001', date: '2024-01-15', amount: 45000, status: 'paid' },
-    { id: '2', number: 'INV-2024-002', date: '2024-01-20', amount: 32000, status: 'pending' },
-    { id: '3', number: 'INV-2024-003', date: '2024-01-25', amount: 28000, status: 'overdue' },
+    { id: "1", number: "INV-2024-001", date: "2024-01-15", amount: 45000, status: "paid" },
+    { id: "2", number: "INV-2024-002", date: "2024-01-20", amount: 32000, status: "pending" },
+    { id: "3", number: "INV-2024-003", date: "2024-01-25", amount: 28000, status: "overdue" },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'paid': return 'default';
-      case 'pending': return 'secondary';
-      case 'overdue': return 'destructive';
-      default: return 'secondary';
+    case "paid": return "default";
+    case "pending": return "secondary";
+    case "overdue": return "destructive";
+    default: return "secondary";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'paid': return 'Paga';
-      case 'pending': return 'Pendente';
-      case 'overdue': return 'Vencida';
-      default: return status;
+    case "paid": return "Paga";
+    case "pending": return "Pendente";
+    case "overdue": return "Vencida";
+    default: return status;
     }
   };
 
@@ -56,7 +56,7 @@ export function InvoiceManager() {
                   {getStatusLabel(invoice.status)}
                 </Badge>
                 <span className="text-lg font-bold">
-                  R$ {invoice.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  R$ {invoice.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                 </span>
                 <div className="flex gap-2">
                   <Button size="sm" variant="outline">

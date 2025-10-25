@@ -40,8 +40,8 @@ const OfflineCache: React.FC = () => {
     setupEventListeners();
     
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -51,7 +51,7 @@ const OfflineCache: React.FC = () => {
       await offlineCacheService.initialize();
       await loadOfflineStatus();
     } catch (error) {
-      console.error('Error initializing offline mode:', error);
+      console.error("Error initializing offline mode:", error);
       toast({
         title: "Error",
         description: "Failed to initialize offline mode",
@@ -63,8 +63,8 @@ const OfflineCache: React.FC = () => {
   };
 
   const setupEventListeners = () => {
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
   };
 
   const handleOnline = async () => {
@@ -93,7 +93,7 @@ const OfflineCache: React.FC = () => {
       setOfflineStatus(status);
       setPendingActions(actions);
     } catch (error) {
-      console.error('Error loading offline status:', error);
+      console.error("Error loading offline status:", error);
     }
   };
 
@@ -103,16 +103,16 @@ const OfflineCache: React.FC = () => {
       
       // Cache routes
       const { data: routes } = await supabase
-        .from('routes')
-        .select('*')
+        .from("routes")
+        .select("*")
         .limit(50);
       
       if (routes) {
         await offlineCacheService.cacheRoutes(routes.map(r => ({
           id: r.id,
-          name: r.name || '',
-          departure_port: r.origin_port_id || 'Unknown',
-          arrival_port: r.destination_port_id || 'Unknown',
+          name: r.name || "",
+          departure_port: r.origin_port_id || "Unknown",
+          arrival_port: r.destination_port_id || "Unknown",
           estimated_duration: r.estimated_duration_hours || 0,
           cached_at: new Date().toISOString(),
         })));
@@ -120,32 +120,32 @@ const OfflineCache: React.FC = () => {
 
       // Cache crew
       const { data: crew } = await supabase
-        .from('crew_members')
-        .select('*')
+        .from("crew_members")
+        .select("*")
         .limit(100);
       
       if (crew) {
         await offlineCacheService.cacheCrew(crew.map(c => ({
           id: c.id,
-          name: (c as any).full_name || (c as any).name || 'Unknown',
-          position: c.position || 'Unknown',
-          onboard_status: (c as any).status === 'onboard',
+          name: (c as any).full_name || (c as any).name || "Unknown",
+          position: c.position || "Unknown",
+          onboard_status: (c as any).status === "onboard",
           cached_at: new Date().toISOString(),
         })));
       }
 
       // Cache vessels
       const { data: vessels } = await supabase
-        .from('vessels')
-        .select('*')
+        .from("vessels")
+        .select("*")
         .limit(50);
       
       if (vessels) {
         await offlineCacheService.cacheVessels(vessels.map(v => ({
           id: v.id,
           name: v.name,
-          imo_code: v.imo_number || '',
-          status: v.status || 'unknown',
+          imo_code: v.imo_number || "",
+          status: v.status || "unknown",
           last_known_position: v.current_location ? { lat: 0, lng: 0 } : null,
           cached_at: new Date().toISOString(),
         })));
@@ -159,7 +159,7 @@ const OfflineCache: React.FC = () => {
         description: "Local data cache refreshed successfully",
       });
     } catch (error) {
-      console.error('Error caching data:', error);
+      console.error("Error caching data:", error);
       toast({
         title: "Error",
         description: "Failed to update cache",
@@ -177,7 +177,7 @@ const OfflineCache: React.FC = () => {
         description: "Cannot sync while offline",
         variant: "destructive",
       });
-      return { success: false, synced_actions: 0, failed_actions: 0, errors: ['Offline'] };
+      return { success: false, synced_actions: 0, failed_actions: 0, errors: ["Offline"] };
     }
 
     try {
@@ -192,15 +192,15 @@ const OfflineCache: React.FC = () => {
         try {
           // Attempt to sync action to Supabase
           switch (action.type) {
-            case 'create':
-              await (supabase as any).from(action.table).insert(action.data);
-              break;
-            case 'update':
-              await (supabase as any).from(action.table).update(action.data).eq('id', action.data.id || '');
-              break;
-            case 'delete':
-              await (supabase as any).from(action.table).delete().eq('id', action.data.id || '');
-              break;
+          case "create":
+            await (supabase as any).from(action.table).insert(action.data);
+            break;
+          case "update":
+            await (supabase as any).from(action.table).update(action.data).eq("id", action.data.id || "");
+            break;
+          case "delete":
+            await (supabase as any).from(action.table).delete().eq("id", action.data.id || "");
+            break;
           }
           
           await offlineCacheService.markActionSynced(action.id);
@@ -208,7 +208,7 @@ const OfflineCache: React.FC = () => {
         } catch (error) {
           failed++;
           errors.push(`Failed to sync ${action.type} on ${action.table}`);
-          console.error('Sync error:', error);
+          console.error("Sync error:", error);
         }
       }
 
@@ -236,13 +236,13 @@ const OfflineCache: React.FC = () => {
 
       return result;
     } catch (error) {
-      console.error('Error syncing:', error);
+      console.error("Error syncing:", error);
       toast({
         title: "Error",
         description: "Failed to sync pending actions",
         variant: "destructive",
       });
-      return { success: false, synced_actions: 0, failed_actions: 0, errors: ['Sync failed'] };
+      return { success: false, synced_actions: 0, failed_actions: 0, errors: ["Sync failed"] };
     } finally {
       setSyncing(false);
     }
@@ -258,7 +258,7 @@ const OfflineCache: React.FC = () => {
         description: "All offline data has been removed",
       });
     } catch (error) {
-      console.error('Error clearing cache:', error);
+      console.error("Error clearing cache:", error);
       toast({
         title: "Error",
         description: "Failed to clear cache",
@@ -276,7 +276,7 @@ const OfflineCache: React.FC = () => {
       />
 
       {/* Status Banner */}
-      <Card className={`mb-6 ${isOnline ? 'border-green-200 bg-green-50' : 'border-orange-200 bg-orange-50'}`}>
+      <Card className={`mb-6 ${isOnline ? "border-green-200 bg-green-50" : "border-orange-200 bg-orange-50"}`}>
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -298,8 +298,8 @@ const OfflineCache: React.FC = () => {
                 </>
               )}
             </div>
-            <Badge variant={isOnline ? 'default' : 'secondary'} className="text-lg px-4 py-2">
-              {isOnline ? 'Online' : 'Offline'}
+            <Badge variant={isOnline ? "default" : "secondary"} className="text-lg px-4 py-2">
+              {isOnline ? "Online" : "Offline"}
             </Badge>
           </div>
         </CardContent>
@@ -315,7 +315,7 @@ const OfflineCache: React.FC = () => {
             <div className="text-lg font-bold">
               {offlineStatus.last_sync 
                 ? new Date(offlineStatus.last_sync).toLocaleString()
-                : 'Never'}
+                : "Never"}
             </div>
             <p className="text-xs text-muted-foreground">Last successful synchronization</p>
           </CardContent>
@@ -339,7 +339,7 @@ const OfflineCache: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-600">
-              {isOnline ? 'Active' : 'In Use'}
+              {isOnline ? "Active" : "In Use"}
             </div>
             <p className="text-xs text-muted-foreground">Local data available</p>
           </CardContent>
@@ -375,7 +375,7 @@ const OfflineCache: React.FC = () => {
                     onClick={syncPendingActions}
                     disabled={!isOnline || syncing || pendingActions.length === 0}
                   >
-                    <RefreshCw className={`mr-2 h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`mr-2 h-4 w-4 ${syncing ? "animate-spin" : ""}`} />
                     Sync Now
                   </Button>
                 </div>

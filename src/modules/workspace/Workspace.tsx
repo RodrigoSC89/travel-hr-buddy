@@ -13,8 +13,8 @@ import { Users, MessageSquare, FileText, Calendar, Upload, Send, Bell } from "lu
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { collaborationService } from './services/collaboration-service';
-import { WorkspaceMember, ChatMessage, UploadedFile, CalendarEvent, Notification } from './types';
+import { collaborationService } from "./services/collaboration-service";
+import { WorkspaceMember, ChatMessage, UploadedFile, CalendarEvent, Notification } from "./types";
 
 const Workspace = () => {
   const { toast } = useToast();
@@ -78,8 +78,8 @@ const Workspace = () => {
 
   const handleCreateEvent = () => {
     const event = collaborationService.createEvent({
-      title: 'Team Meeting',
-      description: 'Weekly sync meeting',
+      title: "Team Meeting",
+      description: "Weekly sync meeting",
       startTime: new Date(Date.now() + 86400000),
       endTime: new Date(Date.now() + 90000000),
       attendees: onlineMembers.map(m => m.id),
@@ -96,19 +96,19 @@ const Workspace = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "online":
-        return "bg-green-500";
-      case "away":
-        return "bg-yellow-500";
-      default:
-        return "bg-gray-500";
+    case "online":
+      return "bg-green-500";
+    case "away":
+      return "bg-yellow-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const formatFileSize = (bytes: number): string => {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / 1048576).toFixed(1) + ' MB';
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / 1048576).toFixed(1) + " MB";
   };
 
   return (
@@ -204,7 +204,7 @@ const Workspace = () => {
               </div>
               <div className="flex justify-between items-center mt-4">
                 <span className="text-sm text-muted-foreground">
-                  {onlineMembers.length} {onlineMembers.length === 1 ? 'person' : 'people'} editing
+                  {onlineMembers.length} {onlineMembers.length === 1 ? "person" : "people"} editing
                 </span>
                 <Button size="sm">Save Changes</Button>
               </div>
@@ -326,7 +326,7 @@ const Workspace = () => {
                   placeholder="Type a message..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                 />
                 <Button size="icon" onClick={handleSendMessage}>
                   <Send className="h-4 w-4" />

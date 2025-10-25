@@ -74,9 +74,9 @@ export async function fetchRouteWeatherForecast(
       fetchWeatherForLocation(waypoint).then((forecast) =>
         forecast
           ? {
-              ...forecast,
-              distance_from_origin: index * 100, // Approximate distance in nm
-            }
+            ...forecast,
+            distance_from_origin: index * 100, // Approximate distance in nm
+          }
           : null
       )
     )

@@ -19,16 +19,16 @@ interface WeatherAlertsListProps {
 export function WeatherAlertsList({ alerts, onAcknowledge }: WeatherAlertsListProps) {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "severe":
-        return "bg-red-500/20 text-red-300 border-red-500/30";
-      case "high":
-        return "bg-orange-500/20 text-orange-300 border-orange-500/30";
-      case "moderate":
-        return "bg-yellow-500/20 text-yellow-300 border-yellow-500/30";
-      case "low":
-        return "bg-blue-500/20 text-blue-300 border-blue-500/30";
-      default:
-        return "bg-gray-500/20 text-gray-300 border-gray-500/30";
+    case "severe":
+      return "bg-red-500/20 text-red-300 border-red-500/30";
+    case "high":
+      return "bg-orange-500/20 text-orange-300 border-orange-500/30";
+    case "moderate":
+      return "bg-yellow-500/20 text-yellow-300 border-yellow-500/30";
+    case "low":
+      return "bg-blue-500/20 text-blue-300 border-blue-500/30";
+    default:
+      return "bg-gray-500/20 text-gray-300 border-gray-500/30";
     }
   };
 

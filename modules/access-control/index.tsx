@@ -45,25 +45,25 @@ const AccessControl: React.FC = () => {
       
       // Load access logs (table may not exist yet)
       let query = supabase
-        .from('access_logs' as any)
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("access_logs" as any)
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(100);
 
       if (filters.module) {
-        query = query.eq('module_accessed', filters.module);
+        query = query.eq("module_accessed", filters.module);
       }
       if (filters.result) {
-        query = query.eq('result', filters.result);
+        query = query.eq("result", filters.result);
       }
       if (filters.severity) {
-        query = query.eq('severity', filters.severity);
+        query = query.eq("severity", filters.severity);
       }
 
       const { data: logsData, error: logsError } = await query;
 
       if (logsError) {
-        console.error('Error loading access logs:', logsError);
+        console.error("Error loading access logs:", logsError);
         setAccessLogs([]);
       } else {
         setAccessLogs((logsData as any) || []);
@@ -71,12 +71,12 @@ const AccessControl: React.FC = () => {
 
       // Load analytics (view may not exist yet)
       const { data: analyticsData, error: analyticsError } = await (supabase as any)
-        .from('access_analytics')
-        .select('*')
+        .from("access_analytics")
+        .select("*")
         .limit(20);
 
       if (analyticsError) {
-        console.error('Error loading analytics:', analyticsError);
+        console.error("Error loading analytics:", analyticsError);
         setAnalytics([]);
       } else {
         setAnalytics((analyticsData as any) || []);
@@ -84,16 +84,16 @@ const AccessControl: React.FC = () => {
 
       // Load suspicious access (RPC may not exist yet)
       const { data: suspiciousData, error: suspiciousError } = await (supabase as any)
-        .rpc('detect_suspicious_access');
+        .rpc("detect_suspicious_access");
 
       if (suspiciousError) {
-        console.error('Error detecting suspicious access:', suspiciousError);
+        console.error("Error detecting suspicious access:", suspiciousError);
         setSuspiciousAccess([]);
       } else {
         setSuspiciousAccess((suspiciousData as any) || []);
       }
     } catch (error) {
-      console.error('Error loading access data:', error);
+      console.error("Error loading access data:", error);
       toast({
         title: "Error",
         description: "Failed to load access control data",
@@ -107,8 +107,8 @@ const AccessControl: React.FC = () => {
   const runAccessAnalysis = async () => {
     try {
       const response = await runAIContext({
-        module: 'access-analyzer',
-        action: 'analyze',
+        module: "access-analyzer",
+        action: "analyze",
         context: {
           access_logs: accessLogs,
           analytics: analytics,
@@ -122,7 +122,7 @@ const AccessControl: React.FC = () => {
         description: "Access pattern analysis generated successfully",
       });
     } catch (error) {
-      console.error('Error running AI analysis:', error);
+      console.error("Error running AI analysis:", error);
       toast({
         title: "Error",
         description: "Failed to generate AI analysis",
@@ -160,8 +160,8 @@ const AccessControl: React.FC = () => {
 
   const stats = {
     total: accessLogs.length,
-    success: accessLogs.filter(l => l.result === 'success').length,
-    failed: accessLogs.filter(l => l.result === 'failure' || l.result === 'denied').length,
+    success: accessLogs.filter(l => l.result === "success").length,
+    failed: accessLogs.filter(l => l.result === "failure" || l.result === "denied").length,
     suspicious: suspiciousAccess.length,
   };
 

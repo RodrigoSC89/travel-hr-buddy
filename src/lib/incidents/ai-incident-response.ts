@@ -43,5 +43,5 @@ export async function handleIncident(event: { type?: string; description?: strin
 function getRecommendation(level: string, type: string) {
   if (level === "Conforme") return "Nenhuma ação necessária. Manter monitoramento.";
   if (level === "Risco") return `Verificar sistemas de suporte relacionados (${type}). Reavaliar ASOG.`;
-  return `Executar resposta imediata. Acionar protocolo ISM/ISPS e registrar no Control Hub.`;
+  return "Executar resposta imediata. Acionar protocolo ISM/ISPS e registrar no Control Hub.";
 }

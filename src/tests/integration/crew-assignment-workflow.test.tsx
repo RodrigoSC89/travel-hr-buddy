@@ -1,18 +1,18 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { mockCrew, mockVessel, createMany } from '../shared/mock-factories';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { mockCrew, mockVessel, createMany } from "../shared/mock-factories";
 
-describe('Integration: Crew Assignment Workflow', () => {
+describe("Integration: Crew Assignment Workflow", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should complete full crew assignment workflow', async () => {
+  it("should complete full crew assignment workflow", async () => {
     // Arrange
     const vessel = mockVessel({ crew_capacity: 20 });
-    const crew = mockCrew({ status: 'available' });
+    const crew = mockCrew({ status: "available" });
 
     // Act - Check availability
-    const isAvailable = crew.status === 'available';
+    const isAvailable = crew.status === "available";
     expect(isAvailable).toBe(true);
 
     // Act - Check vessel capacity  
@@ -25,19 +25,19 @@ describe('Integration: Crew Assignment Workflow', () => {
       vessel_id: vessel.id,
       assigned_at: new Date(),
       rank: crew.rank,
-      status: 'active',
+      status: "active",
     };
 
     // Assert
     expect(assignment.crew_id).toBe(crew.id);
     expect(assignment.vessel_id).toBe(vessel.id);
-    expect(assignment.status).toBe('active');
+    expect(assignment.status).toBe("active");
   });
 
-  it('should handle crew rotation scheduling', async () => {
+  it("should handle crew rotation scheduling", async () => {
     // Arrange
-    const onDutyCrew = createMany(mockCrew, 5, { status: 'on_duty' });
-    const offDutyCrew = createMany(mockCrew, 5, { status: 'off_duty' });
+    const onDutyCrew = createMany(mockCrew, 5, { status: "on_duty" });
+    const offDutyCrew = createMany(mockCrew, 5, { status: "off_duty" });
 
     // Act - Schedule rotation
     const rotation = {
@@ -52,12 +52,12 @@ describe('Integration: Crew Assignment Workflow', () => {
     expect(rotation.scheduled_date.getTime()).toBeGreaterThan(Date.now());
   });
 
-  it('should validate crew certifications before assignment', async () => {
+  it("should validate crew certifications before assignment", async () => {
     // Arrange
     const crew = mockCrew({ 
-      certifications: ['STCW', 'HUET', 'Medical First Aid']
+      certifications: ["STCW", "HUET", "Medical First Aid"]
     });
-    const requiredCerts = ['STCW', 'HUET'];
+    const requiredCerts = ["STCW", "HUET"];
 
     // Act
     const hasAllCertifications = requiredCerts.every(cert => 
@@ -68,12 +68,12 @@ describe('Integration: Crew Assignment Workflow', () => {
     expect(hasAllCertifications).toBe(true);
   });
 
-  it('should reject assignment when certifications are missing', async () => {
+  it("should reject assignment when certifications are missing", async () => {
     // Arrange
     const crew = mockCrew({ 
-      certifications: ['STCW']
+      certifications: ["STCW"]
     });
-    const requiredCerts = ['STCW', 'HUET', 'Advanced Fire Fighting'];
+    const requiredCerts = ["STCW", "HUET", "Advanced Fire Fighting"];
 
     // Act
     const hasAllCertifications = requiredCerts.every(cert => 
@@ -84,15 +84,15 @@ describe('Integration: Crew Assignment Workflow', () => {
     expect(hasAllCertifications).toBe(false);
   });
 
-  it('should track crew work hours and enforce limits', async () => {
+  it("should track crew work hours and enforce limits", async () => {
     // Arrange
     const crew = mockCrew();
     const workLog = [
-      { date: '2025-01-20', hours: 8 },
-      { date: '2025-01-21', hours: 10 },
-      { date: '2025-01-22', hours: 9 },
-      { date: '2025-01-23', hours: 11 },
-      { date: '2025-01-24', hours: 8 },
+      { date: "2025-01-20", hours: 8 },
+      { date: "2025-01-21", hours: 10 },
+      { date: "2025-01-22", hours: 9 },
+      { date: "2025-01-23", hours: 11 },
+      { date: "2025-01-24", hours: 8 },
     ];
 
     // Act - Calculate total hours in 5 days
@@ -106,10 +106,10 @@ describe('Integration: Crew Assignment Workflow', () => {
     expect(totalHours).toBeLessThanOrEqual(MAX_WEEKLY_HOURS);
   });
 
-  it('should handle emergency crew replacement', async () => {
+  it("should handle emergency crew replacement", async () => {
     // Arrange
-    const currentCrew = mockCrew({ status: 'sick_leave' });
-    const replacementCrew = mockCrew({ status: 'available', rank: currentCrew.rank });
+    const currentCrew = mockCrew({ status: "sick_leave" });
+    const replacementCrew = mockCrew({ status: "available", rank: currentCrew.rank });
     const vessel = mockVessel();
 
     // Act - Replace crew member
@@ -117,20 +117,20 @@ describe('Integration: Crew Assignment Workflow', () => {
       original_crew_id: currentCrew.id,
       replacement_crew_id: replacementCrew.id,
       vessel_id: vessel.id,
-      reason: 'sick_leave',
+      reason: "sick_leave",
       replaced_at: new Date(),
     };
 
     // Assert
     expect(replacement.original_crew_id).toBe(currentCrew.id);
     expect(replacement.replacement_crew_id).toBe(replacementCrew.id);
-    expect(replacement.reason).toBe('sick_leave');
+    expect(replacement.reason).toBe("sick_leave");
   });
 
-  it('should support bulk crew assignments', async () => {
+  it("should support bulk crew assignments", async () => {
     // Arrange
     const vessel = mockVessel({ crew_capacity: 50 });
-    const crewMembers = createMany(mockCrew, 20, { status: 'available' });
+    const crewMembers = createMany(mockCrew, 20, { status: "available" });
 
     // Act - Bulk assign
     const assignments = crewMembers.map((crew: any) => ({

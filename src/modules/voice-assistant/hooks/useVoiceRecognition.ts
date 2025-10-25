@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 // Web Speech API types
 interface SpeechRecognitionEvent extends Event {
@@ -38,7 +38,7 @@ interface ISpeechRecognition extends EventTarget {
 
 export function useVoiceRecognition() {
   const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState('');
+  const [transcript, setTranscript] = useState("");
   const [recognition, setRecognition] = useState<ISpeechRecognition | null>(null);
   const [isSupported, setIsSupported] = useState(false);
 
@@ -55,7 +55,7 @@ export function useVoiceRecognition() {
     const recognitionInstance = new SpeechRecognition();
     recognitionInstance.continuous = true;
     recognitionInstance.interimResults = false;
-    recognitionInstance.lang = 'pt-BR';
+    recognitionInstance.lang = "pt-BR";
 
     recognitionInstance.onresult = (event: SpeechRecognitionEvent) => {
       const lastResult = event.results[event.results.length - 1];
@@ -66,7 +66,7 @@ export function useVoiceRecognition() {
     };
 
     recognitionInstance.onerror = (event: Event) => {
-      console.error('Speech recognition error:', event);
+      console.error("Speech recognition error:", event);
       setIsListening(false);
     };
 
@@ -88,9 +88,9 @@ export function useVoiceRecognition() {
       try {
         recognition.start();
         setIsListening(true);
-        setTranscript('');
+        setTranscript("");
       } catch (error) {
-        console.error('Error starting recognition:', error);
+        console.error("Error starting recognition:", error);
       }
     }
   }, [recognition, isListening]);

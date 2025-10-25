@@ -52,11 +52,11 @@ export default function NautilusOS() {
       </header>
 
       {/* Main content */}
-      <main className={`p-4 relative z-10 h-[calc(100vh-73px)] overflow-auto`}>
+      <main className={"p-4 relative z-10 h-[calc(100vh-73px)] overflow-auto"}>
         <div className={`grid gap-4 ${
           activeApps.length === 1 ? "grid-cols-1" :
-          activeApps.length === 2 ? "grid-cols-1 md:grid-cols-2" :
-          "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            activeApps.length === 2 ? "grid-cols-1 md:grid-cols-2" :
+              "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
         }`}>
           {activeApps.map((appId) => (
             <AppWindow

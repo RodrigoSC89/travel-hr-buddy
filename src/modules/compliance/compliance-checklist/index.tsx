@@ -72,8 +72,8 @@ const ComplianceChecklist = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('compliance_dashboard' as any)
-        .select('*');
+        .from("compliance_dashboard" as any)
+        .select("*");
 
       if (error) throw error;
 
@@ -81,9 +81,9 @@ const ComplianceChecklist = () => {
       const recordsWithDetails = await Promise.all(
         (data || []).map(async (record: any) => {
           const { data: fullRecord } = await supabase
-            .from('compliance_records' as any)
-            .select('findings, recommendations')
-            .eq('id', record.id)
+            .from("compliance_records" as any)
+            .select("findings, recommendations")
+            .eq("id", record.id)
             .single();
           
           return {
@@ -96,7 +96,7 @@ const ComplianceChecklist = () => {
 
       setRecords(recordsWithDetails as any);
     } catch (error) {
-      console.error('Error loading compliance records:', error);
+      console.error("Error loading compliance records:", error);
       toast({
         title: "Error",
         description: "Failed to load compliance records",
@@ -109,18 +109,18 @@ const ComplianceChecklist = () => {
 
   const loadAIInsights = async () => {
     try {
-      const nonCompliantCount = records.filter(r => r.risk_level === 'non_compliant').length;
-      const riskCount = records.filter(r => r.risk_level === 'major_risk' || r.risk_level === 'minor_risk').length;
-      const compliantCount = records.filter(r => r.risk_level === 'compliant').length;
+      const nonCompliantCount = records.filter(r => r.risk_level === "non_compliant").length;
+      const riskCount = records.filter(r => r.risk_level === "major_risk" || r.risk_level === "minor_risk").length;
+      const compliantCount = records.filter(r => r.risk_level === "compliant").length;
       
       const response = await runAIContext({
-        module: 'compliance-auditor',
-        action: 'audit',
+        module: "compliance-auditor",
+        action: "audit",
         context: { 
           nonCompliantCount,
           riskCount,
           compliantCount,
-          totalChecklists: records.filter(r => r.completion_status === 'completed').length
+          totalChecklists: records.filter(r => r.completion_status === "completed").length
         }
       });
       
@@ -128,49 +128,49 @@ const ComplianceChecklist = () => {
         setAiInsight(response.message);
       }
     } catch (error) {
-      console.error('Error loading AI insights:', error);
+      console.error("Error loading AI insights:", error);
     }
   };
 
   const getRiskBadge = (risk: string | null) => {
     switch (risk) {
-      case 'non_compliant':
-        return <Badge variant="destructive" className="flex items-center gap-1">
-          <XCircle className="h-3 w-3" /> Non-Compliant
-        </Badge>;
-      case 'major_risk':
-        return <Badge variant="destructive" className="flex items-center gap-1 bg-orange-600">
-          <AlertTriangle className="h-3 w-3" /> Major Risk
-        </Badge>;
-      case 'minor_risk':
-        return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
-          <AlertCircle className="h-3 w-3" /> Minor Risk
-        </Badge>;
-      case 'compliant':
-        return <Badge variant="secondary" className="flex items-center gap-1 text-green-600">
-          <CheckCircle className="h-3 w-3" /> Compliant
-        </Badge>;
-      default:
-        return <Badge variant="outline">Not Assessed</Badge>;
+    case "non_compliant":
+      return <Badge variant="destructive" className="flex items-center gap-1">
+        <XCircle className="h-3 w-3" /> Non-Compliant
+      </Badge>;
+    case "major_risk":
+      return <Badge variant="destructive" className="flex items-center gap-1 bg-orange-600">
+        <AlertTriangle className="h-3 w-3" /> Major Risk
+      </Badge>;
+    case "minor_risk":
+      return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
+        <AlertCircle className="h-3 w-3" /> Minor Risk
+      </Badge>;
+    case "compliant":
+      return <Badge variant="secondary" className="flex items-center gap-1 text-green-600">
+        <CheckCircle className="h-3 w-3" /> Compliant
+      </Badge>;
+    default:
+      return <Badge variant="outline">Not Assessed</Badge>;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <Badge variant="secondary">Completed</Badge>;
-      case 'pending_review':
-        return <Badge variant="outline" className="text-orange-600 border-orange-600">
+    case "completed":
+      return <Badge variant="secondary">Completed</Badge>;
+    case "pending_review":
+      return <Badge variant="outline" className="text-orange-600 border-orange-600">
           Pending Review
-        </Badge>;
-      case 'approved':
-        return <Badge variant="secondary" className="text-green-600">
+      </Badge>;
+    case "approved":
+      return <Badge variant="secondary" className="text-green-600">
           Approved
-        </Badge>;
-      case 'in_progress':
-        return <Badge variant="outline">In Progress</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+      </Badge>;
+    case "in_progress":
+      return <Badge variant="outline">In Progress</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
@@ -187,13 +187,13 @@ const ComplianceChecklist = () => {
 
   const types = Array.from(new Set(records.map(r => r.checklist_type)));
 
-  const totalRecords = records.filter(r => r.completion_status === 'completed').length;
-  const nonCompliantCount = records.filter(r => r.risk_level === 'non_compliant').length;
-  const atRiskCount = records.filter(r => r.risk_level === 'major_risk' || r.risk_level === 'minor_risk').length;
-  const compliantCount = records.filter(r => r.risk_level === 'compliant').length;
+  const totalRecords = records.filter(r => r.completion_status === "completed").length;
+  const nonCompliantCount = records.filter(r => r.risk_level === "non_compliant").length;
+  const atRiskCount = records.filter(r => r.risk_level === "major_risk" || r.risk_level === "minor_risk").length;
+  const compliantCount = records.filter(r => r.risk_level === "compliant").length;
   const avgScore = records.length > 0 
     ? (records.reduce((sum, r) => sum + (r.compliance_score || 0), 0) / records.filter(r => r.compliance_score).length).toFixed(1)
-    : '0';
+    : "0";
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -206,7 +206,7 @@ const ComplianceChecklist = () => {
           </div>
         </div>
         <Button onClick={loadComplianceRecords} disabled={loading}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
@@ -377,7 +377,7 @@ const ComplianceChecklist = () => {
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-muted-foreground">
                           <div>
-                            <span className="font-medium">Vessel:</span> {record.vessel_name || 'All Vessels'}
+                            <span className="font-medium">Vessel:</span> {record.vessel_name || "All Vessels"}
                           </div>
                           {record.compliance_score !== null && (
                             <div>
@@ -386,8 +386,8 @@ const ComplianceChecklist = () => {
                           )}
                           {record.completed_at && (
                             <div>
-                              <span className="font-medium">Completed:</span>{' '}
-                              {format(new Date(record.completed_at), 'PP')}
+                              <span className="font-medium">Completed:</span>{" "}
+                              {format(new Date(record.completed_at), "PP")}
                             </div>
                           )}
                           {record.analyzed_by_ai && (

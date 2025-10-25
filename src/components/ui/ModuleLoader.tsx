@@ -4,7 +4,7 @@
  * PATCH 128.0 - Suspense, Loaders & Lazy Loading
  */
 
-import { Loader2 } from 'lucide-react';
+import { Loader2 } from "lucide-react";
 
 interface ModuleLoaderProps {
   message?: string;
@@ -26,12 +26,12 @@ interface ModuleLoaderProps {
  * ```
  */
 export const ModuleLoader = ({ 
-  message = 'Carregando módulo...', 
+  message = "Carregando módulo...", 
   fullScreen = true 
 }: ModuleLoaderProps) => {
   const containerClasses = fullScreen
-    ? 'flex justify-center items-center h-screen bg-background'
-    : 'flex justify-center items-center h-full py-8';
+    ? "flex justify-center items-center h-screen bg-background"
+    : "flex justify-center items-center h-full py-8";
 
   return (
     <div className={containerClasses}>

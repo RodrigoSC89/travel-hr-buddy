@@ -2,7 +2,7 @@
  * PATCH 100.0 - API Proxy Router Service
  */
 
-import { ApiRoute, MonitoringStats } from '../types';
+import { ApiRoute, MonitoringStats } from "../types";
 
 class ApiProxyRouterService {
   private routes: Map<string, ApiRoute> = new Map();
@@ -16,22 +16,22 @@ class ApiProxyRouterService {
 
   constructor() {
     // Initialize with demo routes
-    this.registerRoute('auth', '/api/auth', 'POST');
-    this.registerRoute('fleet', '/api/fleet', 'GET');
-    this.registerRoute('documents', '/api/documents', 'POST');
-    this.registerRoute('analytics', '/api/analytics', 'GET');
-    this.registerRoute('missions', '/api/missions', 'GET');
-    this.registerRoute('finance', '/api/finance', 'GET');
-    this.registerRoute('logs', '/api/logs', 'GET');
+    this.registerRoute("auth", "/api/auth", "POST");
+    this.registerRoute("fleet", "/api/fleet", "GET");
+    this.registerRoute("documents", "/api/documents", "POST");
+    this.registerRoute("analytics", "/api/analytics", "GET");
+    this.registerRoute("missions", "/api/missions", "GET");
+    this.registerRoute("finance", "/api/finance", "GET");
+    this.registerRoute("logs", "/api/logs", "GET");
   }
 
-  registerRoute(service: string, path: string, method: ApiRoute['method']): ApiRoute {
+  registerRoute(service: string, path: string, method: ApiRoute["method"]): ApiRoute {
     const route: ApiRoute = {
       id: this.generateId(),
       service,
       path,
       method,
-      status: 'active',
+      status: "active",
       requestCount: Math.floor(Math.random() * 10000),
       avgLatency: Math.floor(Math.random() * 300) + 50
     };
@@ -47,7 +47,7 @@ class ApiProxyRouterService {
       throw new Error(`Service ${service} not found`);
     }
 
-    if (route.status !== 'active') {
+    if (route.status !== "active") {
       throw new Error(`Service ${service} is ${route.status}`);
     }
 
@@ -65,7 +65,7 @@ class ApiProxyRouterService {
     } catch (error) {
       const latency = Date.now() - startTime;
       this.updateRouteStats(route, latency, false);
-      route.lastError = error instanceof Error ? error.message : 'Unknown error';
+      route.lastError = error instanceof Error ? error.message : "Unknown error";
       route.lastErrorTime = new Date();
       throw error;
     } finally {
@@ -74,7 +74,7 @@ class ApiProxyRouterService {
   }
 
   async checkEndpointStatus(path: string): Promise<{
-    status: 'healthy' | 'degraded' | 'down';
+    status: "healthy" | "degraded" | "down";
     latency: number;
     error?: string;
   }> {
@@ -87,16 +87,16 @@ class ApiProxyRouterService {
       const latency = Date.now() - startTime;
       
       if (latency > 1000) {
-        return { status: 'degraded', latency };
+        return { status: "degraded", latency };
       }
       
-      return { status: 'healthy', latency };
+      return { status: "healthy", latency };
     } catch (error) {
       const latency = Date.now() - startTime;
       return {
-        status: 'down',
+        status: "down",
         latency,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : "Unknown error"
       };
     }
   }
@@ -107,12 +107,12 @@ class ApiProxyRouterService {
     
     // Simulate occasional errors (5% chance)
     if (Math.random() < 0.05) {
-      throw new Error('Internal Server Error');
+      throw new Error("Internal Server Error");
     }
 
     return new Response(JSON.stringify({ success: true, data: {} }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { "Content-Type": "application/json" }
     });
   }
 
@@ -129,11 +129,11 @@ class ApiProxyRouterService {
     );
 
     if (!success) {
-      route.status = 'error';
+      route.status = "error";
     }
 
     // Calculate error rate
-    const totalErrors = Array.from(this.routes.values()).filter(r => r.status === 'error').length;
+    const totalErrors = Array.from(this.routes.values()).filter(r => r.status === "error").length;
     this.stats.errorRate = (totalErrors / this.routes.size) * 100;
     this.stats.timestamp = new Date();
   }

@@ -3,4 +3,4 @@
  * Intelligent workflow automation and management
  */
 
-export { default as SmartWorkflow } from './SmartWorkflow';
+export { default as SmartWorkflow } from "./SmartWorkflow";

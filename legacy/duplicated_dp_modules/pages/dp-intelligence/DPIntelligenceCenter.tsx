@@ -162,17 +162,17 @@ Identifique:
 
   const getStatusColor = (status: DPLog["status"]) => {
     switch (status) {
-      case "critical": return "destructive";
-      case "warning": return "default";
-      default: return "outline";
+    case "critical": return "destructive";
+    case "warning": return "default";
+    default: return "outline";
     }
   };
 
   const getStatusIcon = (status: DPLog["status"]) => {
     switch (status) {
-      case "critical": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      default: return <Activity className="h-4 w-4 text-green-500" />;
+    case "critical": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    default: return <Activity className="h-4 w-4 text-green-500" />;
     }
   };
 

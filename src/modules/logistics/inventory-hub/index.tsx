@@ -40,7 +40,7 @@ interface InventoryItem {
   last_updated: string;
   notes: string | null;
   vessel_name?: string;
-  stock_status?: 'critical_low' | 'low' | 'sufficient';
+  stock_status?: "critical_low" | "low" | "sufficient";
 }
 
 const InventoryHub = () => {
@@ -61,7 +61,7 @@ const InventoryHub = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('inventory_items' as any)
+        .from("inventory_items" as any)
         .select(`
           *,
           vessels (
@@ -69,20 +69,20 @@ const InventoryHub = () => {
             imo_code
           )
         `)
-        .order('critical', { ascending: false })
-        .order('quantity', { ascending: true });
+        .order("critical", { ascending: false })
+        .order("quantity", { ascending: true });
 
       if (error) throw error;
 
       const processedData = (data as any)?.map((item: any) => ({
         ...item,
-        vessel_name: item.vessels?.name || 'Unassigned',
+        vessel_name: item.vessels?.name || "Unassigned",
         stock_status: getStockStatus(item.quantity, item.min_threshold)
       })) || [];
 
       setItems(processedData as any);
     } catch (error) {
-      console.error('Error loading inventory:', error);
+      console.error("Error loading inventory:", error);
       toast({
         title: "Error",
         description: "Failed to load inventory items",
@@ -96,37 +96,37 @@ const InventoryHub = () => {
   const loadAIInsights = async () => {
     try {
       const response = await runAIContext({
-        module: 'supply-analyzer',
-        action: 'analyze',
-        context: { type: 'inventory-overview' }
+        module: "supply-analyzer",
+        action: "analyze",
+        context: { type: "inventory-overview" }
       });
       
       if (response.message) {
         setAiInsight(response.message);
       }
     } catch (error) {
-      console.error('Error loading AI insights:', error);
+      console.error("Error loading AI insights:", error);
     }
   };
 
-  const getStockStatus = (quantity: number, threshold: number): 'critical_low' | 'low' | 'sufficient' => {
-    if (quantity <= threshold) return 'critical_low';
-    if (quantity <= threshold * 1.5) return 'low';
-    return 'sufficient';
+  const getStockStatus = (quantity: number, threshold: number): "critical_low" | "low" | "sufficient" => {
+    if (quantity <= threshold) return "critical_low";
+    if (quantity <= threshold * 1.5) return "low";
+    return "sufficient";
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'critical_low':
-        return <Badge variant="destructive" className="flex items-center gap-1">
-          <AlertTriangle className="h-3 w-3" /> Critical
-        </Badge>;
-      case 'low':
-        return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
-          <TrendingDown className="h-3 w-3" /> Low
-        </Badge>;
-      default:
-        return <Badge variant="secondary">Sufficient</Badge>;
+    case "critical_low":
+      return <Badge variant="destructive" className="flex items-center gap-1">
+        <AlertTriangle className="h-3 w-3" /> Critical
+      </Badge>;
+    case "low":
+      return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
+        <TrendingDown className="h-3 w-3" /> Low
+      </Badge>;
+    default:
+      return <Badge variant="secondary">Sufficient</Badge>;
     }
   };
 
@@ -145,8 +145,8 @@ const InventoryHub = () => {
   const categories = Array.from(new Set(items.map(i => i.category).filter(Boolean)));
   const vessels = Array.from(new Set(items.map(i => i.vessel_name).filter(Boolean)));
 
-  const criticalCount = items.filter(i => i.stock_status === 'critical_low').length;
-  const lowCount = items.filter(i => i.stock_status === 'low').length;
+  const criticalCount = items.filter(i => i.stock_status === "critical_low").length;
+  const lowCount = items.filter(i => i.stock_status === "low").length;
   const totalItems = items.length;
 
   return (
@@ -160,7 +160,7 @@ const InventoryHub = () => {
           </div>
         </div>
         <Button onClick={loadInventoryItems} disabled={loading}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
@@ -264,7 +264,7 @@ const InventoryHub = () => {
                 <SelectItem value="all">All Vessels</SelectItem>
                 <SelectItem value="unassigned">Unassigned</SelectItem>
                 {vessels.map(vessel => (
-                  <SelectItem key={vessel} value={vessel || ''}>{vessel}</SelectItem>
+                  <SelectItem key={vessel} value={vessel || ""}>{vessel}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -304,7 +304,7 @@ const InventoryHub = () => {
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="font-semibold">{item.name}</h3>
-                          {getStatusBadge(item.stock_status || 'sufficient')}
+                          {getStatusBadge(item.stock_status || "sufficient")}
                           {item.critical && (
                             <Badge variant="outline" className="text-xs">Critical Item</Badge>
                           )}
@@ -317,7 +317,7 @@ const InventoryHub = () => {
                             <span className="font-medium">Min Threshold:</span> {item.min_threshold} {item.unit}
                           </div>
                           <div>
-                            <span className="font-medium">Category:</span> {item.category || 'N/A'}
+                            <span className="font-medium">Category:</span> {item.category || "N/A"}
                           </div>
                           <div>
                             <span className="font-medium">Vessel:</span> {item.vessel_name}

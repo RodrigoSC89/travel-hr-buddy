@@ -77,35 +77,35 @@ export default function ForecastDashboard() {
 
   const getLevelColor = () => {
     switch (forecast.level) {
-      case "OK":
-        return "text-green-400";
-      case "Risco":
-        return "text-yellow-400";
-      case "Crítico":
-        return "text-red-500";
-      case "Sem Dados":
-        return "text-gray-400";
-      case "Erro":
-        return "text-orange-400";
-      default:
-        return "text-blue-400";
+    case "OK":
+      return "text-green-400";
+    case "Risco":
+      return "text-yellow-400";
+    case "Crítico":
+      return "text-red-500";
+    case "Sem Dados":
+      return "text-gray-400";
+    case "Erro":
+      return "text-orange-400";
+    default:
+      return "text-blue-400";
     }
   };
 
   const getLevelIcon = () => {
     switch (forecast.level) {
-      case "OK":
-        return "🟢";
-      case "Risco":
-        return "🟡";
-      case "Crítico":
-        return "🔴";
-      case "Sem Dados":
-        return "⚪";
-      case "Erro":
-        return "⚠️";
-      default:
-        return "⏳";
+    case "OK":
+      return "🟢";
+    case "Risco":
+      return "🟡";
+    case "Crítico":
+      return "🔴";
+    case "Sem Dados":
+      return "⚪";
+    case "Erro":
+      return "⚠️";
+    default:
+      return "⏳";
     }
   };
 

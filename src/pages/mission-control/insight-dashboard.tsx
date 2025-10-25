@@ -53,7 +53,7 @@ export default function InsightDashboard() {
   const updateTimeSeriesData = (newMetrics: any) => {
     setTimeSeriesData(prev => {
       const updated = [...prev, {
-        time: new Date().toLocaleTimeString('pt-BR'),
+        time: new Date().toLocaleTimeString("pt-BR"),
         cpu: newMetrics.cpu_usage,
         memory: newMetrics.memory_usage,
         fps: newMetrics.fps,
@@ -66,7 +66,7 @@ export default function InsightDashboard() {
   const generateAIReport = async () => {
     setIsGenerating(true);
     try {
-      const { data, error } = await supabase.functions.invoke('generate-insight-report', {
+      const { data, error } = await supabase.functions.invoke("generate-insight-report", {
         body: {
           metrics,
           systemStatus,
@@ -96,7 +96,7 @@ export default function InsightDashboard() {
   const downloadReport = () => {
     const reportContent = `
 NAUTILUS ONE - RELATÓRIO OPERACIONAL
-Data: ${new Date().toLocaleString('pt-BR')}
+Data: ${new Date().toLocaleString("pt-BR")}
 
 === MÉTRICAS DO SISTEMA ===
 CPU: ${metrics?.cpu_usage?.toFixed(1)}%
@@ -113,17 +113,17 @@ Offline: ${systemStatus?.offline}
 Saúde Geral: ${systemStatus?.health}
 
 === ANÁLISE IA ===
-${aiReport || 'Nenhuma análise gerada ainda'}
+${aiReport || "Nenhuma análise gerada ainda"}
 
 === LOGS RECENTES ===
 ${logs.slice(0, 10).map(log => 
-  `[${log.level.toUpperCase()}] ${log.timestamp} - ${log.category}: ${log.message}`
-).join('\n')}
+    `[${log.level.toUpperCase()}] ${log.timestamp} - ${log.category}: ${log.message}`
+  ).join("\n")}
     `;
 
-    const blob = new Blob([reportContent], { type: 'text/plain' });
+    const blob = new Blob([reportContent], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `nautilus-report-${Date.now()}.txt`;
     a.click();
@@ -143,18 +143,18 @@ ${logs.slice(0, 10).map(log =>
   };
 
   // Chart colors
-  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+  const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
 
   // Module status distribution
   const moduleStatusData = systemStatus ? [
-    { name: 'Ativos', value: systemStatus.active, color: '#10b981' },
-    { name: 'Degradados', value: systemStatus.degraded, color: '#f59e0b' },
-    { name: 'Offline', value: systemStatus.offline, color: '#ef4444' }
+    { name: "Ativos", value: systemStatus.active, color: "#10b981" },
+    { name: "Degradados", value: systemStatus.degraded, color: "#f59e0b" },
+    { name: "Offline", value: systemStatus.offline, color: "#ef4444" }
   ] : [];
 
   // Error distribution by category
   const errorsByCategory = logs.reduce((acc, log) => {
-    if (log.level === 'error' || log.level === 'critical') {
+    if (log.level === "error" || log.level === "critical") {
       acc[log.category] = (acc[log.category] || 0) + 1;
     }
     return acc;
@@ -358,8 +358,8 @@ ${logs.slice(0, 10).map(log =>
                             <div className="flex items-center gap-2 mb-1">
                               <span className="font-medium">{module.name}</span>
                               <Badge variant={
-                                module.status === 'active' ? 'default' :
-                                module.status === 'degraded' ? 'secondary' : 'destructive'
+                                module.status === "active" ? "default" :
+                                  module.status === "degraded" ? "secondary" : "destructive"
                               }>
                                 {module.status}
                               </Badge>
@@ -369,17 +369,17 @@ ${logs.slice(0, 10).map(log =>
                                 <Clock className="w-3 h-3" />
                                 {module.responseTime}ms
                               </span>
-                              <span>{new Date(module.lastCheck).toLocaleString('pt-BR')}</span>
+                              <span>{new Date(module.lastCheck).toLocaleString("pt-BR")}</span>
                             </div>
                             {module.errors.length > 0 && (
                               <div className="mt-2 text-xs text-red-500">
-                                {module.errors.join(', ')}
+                                {module.errors.join(", ")}
                               </div>
                             )}
                           </div>
                           <Activity className={`w-5 h-5 ${
-                            module.status === 'active' ? 'text-green-500' :
-                            module.status === 'degraded' ? 'text-yellow-500' : 'text-red-500'
+                            module.status === "active" ? "text-green-500" :
+                              module.status === "degraded" ? "text-yellow-500" : "text-red-500"
                           }`} />
                         </div>
                       </CardContent>
@@ -404,14 +404,14 @@ ${logs.slice(0, 10).map(log =>
                     <div key={idx} className="p-3 border rounded-lg text-sm">
                       <div className="flex items-center justify-between mb-1">
                         <Badge variant={
-                          log.level === 'critical' ? 'destructive' :
-                          log.level === 'error' ? 'destructive' :
-                          log.level === 'warning' ? 'secondary' : 'outline'
+                          log.level === "critical" ? "destructive" :
+                            log.level === "error" ? "destructive" :
+                              log.level === "warning" ? "secondary" : "outline"
                         }>
                           {log.level}
                         </Badge>
                         <span className="text-xs text-muted-foreground">
-                          {new Date(log.timestamp).toLocaleString('pt-BR')}
+                          {new Date(log.timestamp).toLocaleString("pt-BR")}
                         </span>
                       </div>
                       <div className="font-medium">[{log.category}] {log.message}</div>

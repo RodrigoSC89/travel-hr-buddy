@@ -32,7 +32,7 @@ export function ResponseProtocol({ emergencyType, steps, onStepComplete }: Respo
             <div
               key={step.id}
               className={`flex items-start gap-3 p-3 rounded-lg border ${
-                step.completed ? 'bg-accent/30' : 'bg-background'
+                step.completed ? "bg-accent/30" : "bg-background"
               }`}
             >
               <div className="flex-shrink-0 mt-1">

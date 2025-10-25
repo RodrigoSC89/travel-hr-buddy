@@ -37,7 +37,7 @@ export const PWAStatus: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = React.useState<{
     prompt: () => void;
     userChoice: Promise<{ outcome: string }>;
-  } | null>(null);
+      } | null>(null);
 
   // Check if app is installable
   React.useEffect(() => {

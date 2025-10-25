@@ -164,21 +164,21 @@ class AutonomyEngine {
 
     try {
       switch (action.action) {
-        case "restart":
-          success = await this.restartModule(action.moduleId);
-          break;
-        case "cache-clear":
-          success = await this.clearCache(action.moduleId);
-          break;
-        case "reconnect-ai":
-          success = await this.reconnectAI(action.moduleId);
-          break;
-        case "hotfix":
-          success = await this.applyHotfix(action.moduleId);
-          break;
-        case "fallback":
-          success = await this.activateFallback(action.moduleId);
-          break;
+      case "restart":
+        success = await this.restartModule(action.moduleId);
+        break;
+      case "cache-clear":
+        success = await this.clearCache(action.moduleId);
+        break;
+      case "reconnect-ai":
+        success = await this.reconnectAI(action.moduleId);
+        break;
+      case "hotfix":
+        success = await this.applyHotfix(action.moduleId);
+        break;
+      case "fallback":
+        success = await this.activateFallback(action.moduleId);
+        break;
       }
 
       const duration = performance.now() - startTime;

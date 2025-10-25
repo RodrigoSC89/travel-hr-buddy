@@ -71,7 +71,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         onClick={isDisabled ? undefined : onClick}
         role="button"
         tabIndex={0}
-        aria-label={ariaLabel || label || (typeof children === 'string' ? children : 'Botão Nautilus')}
+        aria-label={ariaLabel || label || (typeof children === "string" ? children : "Botão Nautilus")}
         {...props}
       >
         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

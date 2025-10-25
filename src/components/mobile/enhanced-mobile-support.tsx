@@ -96,7 +96,7 @@ export const EnhancedMobileSupport: React.FC = () => {
   const [installPrompt, setInstallPrompt] = useState<{
     prompt: () => void;
     userChoice: Promise<{ outcome: string }>;
-  } | null>(null);
+      } | null>(null);
   
   const isMobile = useIsMobile();
   const { toast } = useToast();

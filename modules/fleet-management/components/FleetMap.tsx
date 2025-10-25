@@ -83,12 +83,12 @@ export function FleetMap({
         vessel.status === "critical"
           ? "#ef4444"
           : vessel.status === "maintenance"
-          ? "#f59e0b"
-          : vessel.maintenance_status === "urgent"
-          ? "#f97316"
-          : vessel.maintenance_status === "critical"
-          ? "#dc2626"
-          : "#22c55e";
+            ? "#f59e0b"
+            : vessel.maintenance_status === "urgent"
+              ? "#f97316"
+              : vessel.maintenance_status === "critical"
+                ? "#dc2626"
+                : "#22c55e";
 
       // Create marker element
       const el = document.createElement("div");

@@ -3,9 +3,9 @@
  * Dashboard route for system monitoring
  */
 
-import React, { Suspense } from 'react';
-import { SystemWatchdog } from '@/modules/system-watchdog';
-import { Loader2 } from 'lucide-react';
+import React, { Suspense } from "react";
+import { SystemWatchdog } from "@/modules/system-watchdog";
+import { Loader2 } from "lucide-react";
 
 export default function SystemWatchdogPage() {
   return (

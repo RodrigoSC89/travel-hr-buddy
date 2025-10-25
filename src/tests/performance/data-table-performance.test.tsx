@@ -1,13 +1,13 @@
-import { describe, it, expect, vi } from 'vitest';
-import { performance } from 'perf_hooks';
+import { describe, it, expect, vi } from "vitest";
+import { performance } from "perf_hooks";
 
-describe('Performance: Data Table', () => {
-  it('should render 1000 rows in under 1 second', async () => {
+describe("Performance: Data Table", () => {
+  it("should render 1000 rows in under 1 second", async () => {
     // Arrange
     const rows = Array.from({ length: 1000 }, (_, i) => ({
       id: `row-${i}`,
       name: `Item ${i}`,
-      status: i % 2 === 0 ? 'active' : 'inactive',
+      status: i % 2 === 0 ? "active" : "inactive",
       value: Math.random() * 1000,
       timestamp: new Date(),
     }));
@@ -29,7 +29,7 @@ describe('Performance: Data Table', () => {
     expect(renderTime).toBeLessThan(1000); // Should render in under 1 second
   });
 
-  it('should sort 5000 rows efficiently', async () => {
+  it("should sort 5000 rows efficiently", async () => {
     // Arrange
     const rows = Array.from({ length: 5000 }, (_, i) => ({
       id: i,
@@ -48,18 +48,18 @@ describe('Performance: Data Table', () => {
     expect(sortTime).toBeLessThan(200); // Should sort in under 200ms
   });
 
-  it('should filter 10000 rows quickly', async () => {
+  it("should filter 10000 rows quickly", async () => {
     // Arrange
     const rows = Array.from({ length: 10000 }, (_, i) => ({
       id: i,
-      status: i % 3 === 0 ? 'active' : 'inactive',
-      category: i % 5 === 0 ? 'important' : 'normal',
+      status: i % 3 === 0 ? "active" : "inactive",
+      category: i % 5 === 0 ? "important" : "normal",
     }));
 
     // Act
     const startTime = performance.now();
     const filtered = rows.filter(row => 
-      row.status === 'active' && row.category === 'important'
+      row.status === "active" && row.category === "important"
     );
     const endTime = performance.now();
     const filterTime = endTime - startTime;
@@ -70,7 +70,7 @@ describe('Performance: Data Table', () => {
     expect(filterTime).toBeLessThan(100); // Should filter in under 100ms
   });
 
-  it('should paginate large datasets without lag', async () => {
+  it("should paginate large datasets without lag", async () => {
     // Arrange
     const totalRows = 50000;
     const pageSize = 50;
@@ -97,7 +97,7 @@ describe('Performance: Data Table', () => {
     expect(paginationTime).toBeLessThan(50); // Should paginate instantly
   });
 
-  it('should handle virtual scrolling efficiently', async () => {
+  it("should handle virtual scrolling efficiently", async () => {
     // Arrange
     const totalRows = 100000;
     const visibleRows = 20;
@@ -120,7 +120,7 @@ describe('Performance: Data Table', () => {
     expect(scrollTime).toBeLessThan(16); // Must be under one frame (60fps)
   });
 
-  it('should update cell values without re-rendering entire table', async () => {
+  it("should update cell values without re-rendering entire table", async () => {
     // Arrange
     const rows = Array.from({ length: 1000 }, (_, i) => ({
       id: i,

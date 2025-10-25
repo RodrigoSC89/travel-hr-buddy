@@ -3,8 +3,8 @@
  * Type definitions for ControlHub 2.0 module
  */
 
-import { ForecastData } from './forecast';
-import { AIAdvice } from './ai';
+import { ForecastData } from "./forecast";
+import { AIAdvice } from "./ai";
 
 export interface ControlHubData {
   forecast: ForecastData | null;
@@ -16,26 +16,26 @@ export interface ControlHubData {
 export interface Alert {
   id: string;
   title: string;
-  severity: 'info' | 'warning' | 'error' | 'critical';
+  severity: "info" | "warning" | "error" | "critical";
   message: string;
   timestamp: string;
   acknowledged?: boolean;
 }
 
 export interface SystemStatus {
-  overall: 'healthy' | 'degraded' | 'critical';
+  overall: "healthy" | "degraded" | "critical";
   modules: ModuleStatus[];
 }
 
 export interface ModuleStatus {
   name: string;
-  status: 'online' | 'offline' | 'degraded';
+  status: "online" | "offline" | "degraded";
   lastUpdate?: string;
 }
 
 export interface AnomalyData {
   title: string;
-  risk: 'low' | 'medium' | 'high' | 'critical';
-  trend: 'up' | 'down' | 'stable';
+  risk: "low" | "medium" | "high" | "critical";
+  trend: "up" | "down" | "stable";
   description?: string;
 }

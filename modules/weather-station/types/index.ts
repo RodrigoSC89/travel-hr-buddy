@@ -8,7 +8,7 @@ export interface WeatherLocation {
   lng: number;
 }
 
-export type WeatherSeverity = 'none' | 'low' | 'moderate' | 'high' | 'severe';
+export type WeatherSeverity = "none" | "low" | "moderate" | "high" | "severe";
 
 export interface CurrentConditions {
   temperature: number;

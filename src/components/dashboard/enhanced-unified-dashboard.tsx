@@ -568,8 +568,8 @@ const EnhancedUnifiedDashboard = () => {
                       <div className="flex items-center gap-3">
                         <div className={`w-3 h-3 rounded-full shadow-lg ${
                           item.status === "success" ? "bg-emerald-500 shadow-emerald-500/50" :
-                          item.status === "warning" ? "bg-amber-500 shadow-amber-500/50" : 
-                          "bg-red-500 shadow-red-500/50"
+                            item.status === "warning" ? "bg-amber-500 shadow-amber-500/50" : 
+                              "bg-red-500 shadow-red-500/50"
                         }`} />
                         <span className="text-sm font-semibold text-foreground">{item.metric}</span>
                       </div>
@@ -637,51 +637,51 @@ const EnhancedUnifiedDashboard = () => {
                   >
                     <Card className="group relative hover:shadow-glow transition-all duration-500 cursor-pointer border-0 overflow-hidden bg-card/50 backdrop-blur-sm h-full"
                     >
-                    {/* Gradient Overlay */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                      {/* Gradient Overlay */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
                     
-                    {/* Corner Accent */}
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-transparent to-azure-500/5 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                      {/* Corner Accent */}
+                      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-transparent to-azure-500/5 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity" />
                     
-                    <CardContent className="relative p-6 space-y-4">
-                      {/* Header */}
-                      <div className="flex items-start justify-between">
-                        <div className={`p-4 rounded-2xl bg-gradient-to-br ${action.color} text-white shadow-soft group-hover:shadow-glow group-hover:scale-110 transition-all duration-500`}>
-                          <action.icon className="w-7 h-7" />
-                        </div>
-                        <Badge 
-                          variant="secondary" 
-                          className="backdrop-blur-sm bg-azure-50/80 border-azure-200 text-azure-700 font-semibold"
-                        >
-                          {action.count}
-                        </Badge>
-                      </div>
-
-                      {/* Content */}
-                      <div className="space-y-3">
-                        <div>
-                          <h3 className="font-bold text-lg mb-1 group-hover:text-azure-600 transition-colors">
-                            {action.title}
-                          </h3>
-                          <p className="text-sm text-muted-foreground leading-relaxed">
-                            {action.description}
-                          </p>
+                      <CardContent className="relative p-6 space-y-4">
+                        {/* Header */}
+                        <div className="flex items-start justify-between">
+                          <div className={`p-4 rounded-2xl bg-gradient-to-br ${action.color} text-white shadow-soft group-hover:shadow-glow group-hover:scale-110 transition-all duration-500`}>
+                            <action.icon className="w-7 h-7" />
+                          </div>
+                          <Badge 
+                            variant="secondary" 
+                            className="backdrop-blur-sm bg-azure-50/80 border-azure-200 text-azure-700 font-semibold"
+                          >
+                            {action.count}
+                          </Badge>
                         </div>
 
-                        {/* Metrics */}
-                        <div className="space-y-2 pt-2 border-t border-border/50">
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="font-medium text-foreground">{action.subtitle}</span>
-                            <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-azure-600 group-hover:translate-x-1 transition-all" />
+                        {/* Content */}
+                        <div className="space-y-3">
+                          <div>
+                            <h3 className="font-bold text-lg mb-1 group-hover:text-azure-600 transition-colors">
+                              {action.title}
+                            </h3>
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                              {action.description}
+                            </p>
                           </div>
-                          <div className="flex items-center gap-2 text-xs bg-gradient-to-r from-azure-50 to-transparent p-2.5 rounded-lg border border-azure-100">
-                            <Zap className="w-3 h-3 text-azure-600" />
-                            <span className="font-medium text-azure-700">{action.metric}</span>
+
+                          {/* Metrics */}
+                          <div className="space-y-2 pt-2 border-t border-border/50">
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="font-medium text-foreground">{action.subtitle}</span>
+                              <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-azure-600 group-hover:translate-x-1 transition-all" />
+                            </div>
+                            <div className="flex items-center gap-2 text-xs bg-gradient-to-r from-azure-50 to-transparent p-2.5 rounded-lg border border-azure-100">
+                              <Zap className="w-3 h-3 text-azure-600" />
+                              <span className="font-medium text-azure-700">{action.metric}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
                   </Link>
                 ))}
               </div>
@@ -727,11 +727,11 @@ const EnhancedUnifiedDashboard = () => {
                   <XAxis 
                     dataKey="time" 
                     stroke="hsl(var(--muted-foreground))" 
-                    style={{ fontSize: '12px', fontWeight: 500 }}
+                    style={{ fontSize: "12px", fontWeight: 500 }}
                   />
                   <YAxis 
                     stroke="hsl(var(--muted-foreground))" 
-                    style={{ fontSize: '12px', fontWeight: 500 }}
+                    style={{ fontSize: "12px", fontWeight: 500 }}
                   />
                   <Tooltip 
                     contentStyle={{ 
@@ -888,13 +888,13 @@ const EnhancedUnifiedDashboard = () => {
                             className={`text-xs ${
                               alert.priority === "high" 
                                 ? "border-red-200 bg-red-50 text-red-700" :
-                              alert.priority === "medium" 
-                                ? "border-amber-200 bg-amber-50 text-amber-700" :
-                                "border-gray-200 bg-gray-50 text-gray-700"
+                                alert.priority === "medium" 
+                                  ? "border-amber-200 bg-amber-50 text-amber-700" :
+                                  "border-gray-200 bg-gray-50 text-gray-700"
                             }`}
                           >
                             {alert.priority === "high" ? "🔴 Alta" : 
-                             alert.priority === "medium" ? "🟡 Média" : "⚪ Baixa"}
+                              alert.priority === "medium" ? "🟡 Média" : "⚪ Baixa"}
                           </Badge>
                         </div>
                       </div>

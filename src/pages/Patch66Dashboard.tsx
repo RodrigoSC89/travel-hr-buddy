@@ -211,45 +211,45 @@ export default function Patch66Dashboard() {
                 </div>
               ) : (
                 filteredGroups.map((group) => (
-                <Card 
-                  key={group.name}
-                  className="p-5 bg-card/50 hover:bg-card/80 transition-colors border-l-4"
-                  style={{ borderLeftColor: `hsl(var(--${group.color}))` }}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="text-4xl">{group.icon}</div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold capitalize">{group.name}</h3>
-                        <Badge variant="secondary">
-                          {group.modules.length} {group.modules.length === 1 ? 'módulo' : 'módulos'}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        {group.description}
-                      </p>
-                      {group.modules.length > 0 ? (
-                        <div className="flex flex-wrap gap-2">
-                          {group.modules.map((module) => (
-                            <Badge 
-                              key={module} 
-                              variant="outline"
-                              className="font-mono text-xs"
-                            >
-                              {module}
-                            </Badge>
-                          ))}
+                  <Card 
+                    key={group.name}
+                    className="p-5 bg-card/50 hover:bg-card/80 transition-colors border-l-4"
+                    style={{ borderLeftColor: `hsl(var(--${group.color}))` }}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="text-4xl">{group.icon}</div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-xl font-bold capitalize">{group.name}</h3>
+                          <Badge variant="secondary">
+                            {group.modules.length} {group.modules.length === 1 ? "módulo" : "módulos"}
+                          </Badge>
                         </div>
-                      ) : (
-                        <p className="text-xs text-muted-foreground italic">
-                          Aguardando migração de módulos
+                        <p className="text-sm text-muted-foreground mb-3">
+                          {group.description}
                         </p>
-                      )}
+                        {group.modules.length > 0 ? (
+                          <div className="flex flex-wrap gap-2">
+                            {group.modules.map((module) => (
+                              <Badge 
+                                key={module} 
+                                variant="outline"
+                                className="font-mono text-xs"
+                              >
+                                {module}
+                              </Badge>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-xs text-muted-foreground italic">
+                          Aguardando migração de módulos
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              ))
-            )}
+                  </Card>
+                ))
+              )}
             </div>
           </ScrollArea>
         </Card>

@@ -3,10 +3,10 @@
  * Generates routes automatically from MODULE_REGISTRY
  */
 
-import { ComponentType } from 'react';
-import { loadModule } from '@/modules/loader';
-import { MODULE_REGISTRY, ModuleDefinition } from '@/modules/registry';
-import { logger } from '@/lib/logger';
+import { ComponentType } from "react";
+import { loadModule } from "@/modules/loader";
+import { MODULE_REGISTRY, ModuleDefinition } from "@/modules/registry";
+import { logger } from "@/lib/logger";
 
 export interface ModuleRoute {
   id: string;
@@ -30,7 +30,7 @@ export function getModuleRoutes(): ModuleRoute[] {
       }
 
       // Skip deprecated modules unless explicitly enabled
-      if (module.status === 'deprecated') {
+      if (module.status === "deprecated") {
         logger.warn(`Skipping deprecated module route: ${id}`);
         continue;
       }
@@ -50,7 +50,7 @@ export function getModuleRoutes(): ModuleRoute[] {
     logger.info(`Loaded ${routes.length} module routes from registry`);
     return routes;
   } catch (error) {
-    logger.error('Failed to generate module routes', error);
+    logger.error("Failed to generate module routes", error);
     return [];
   }
 }
@@ -80,7 +80,7 @@ export function validateModuleRoutes(): {
   valid: string[];
   invalid: string[];
   total: number;
-} {
+  } {
   const valid: string[] = [];
   const invalid: string[] = [];
 

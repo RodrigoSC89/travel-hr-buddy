@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 interface Transaction {
-  type: 'income' | 'expense';
+  type: "income" | "expense";
   amount: number;
   transaction_date: string;
   category: string;
@@ -18,7 +18,7 @@ export function ExpenseChart({ transactions }: ExpenseChartProps) {
     if (!acc[t.category]) {
       acc[t.category] = { category: t.category, income: 0, expense: 0 };
     }
-    if (t.type === 'income') {
+    if (t.type === "income") {
       acc[t.category].income += Number(t.amount);
     } else {
       acc[t.category].expense += Number(t.amount);
@@ -40,7 +40,7 @@ export function ExpenseChart({ transactions }: ExpenseChartProps) {
             <XAxis dataKey="category" />
             <YAxis />
             <Tooltip 
-              formatter={(value: number) => `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}
+              formatter={(value: number) => `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
             />
             <Legend />
             <Bar dataKey="income" fill="hsl(var(--success))" name="Receitas" />

@@ -1,8 +1,8 @@
 // PATCH 108.0: Security & Access Control Types
 
-export type AccessResult = 'success' | 'failure' | 'denied' | 'error';
-export type LogSeverity = 'info' | 'warning' | 'critical';
-export type UserRoleType = 'admin' | 'operator' | 'viewer' | 'auditor';
+export type AccessResult = "success" | "failure" | "denied" | "error";
+export type LogSeverity = "info" | "warning" | "critical";
+export type UserRoleType = "admin" | "operator" | "viewer" | "auditor";
 
 export interface AccessLog {
   id: string;

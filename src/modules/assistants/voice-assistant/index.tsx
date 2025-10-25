@@ -54,7 +54,7 @@ const VoiceAssistant: React.FC = () => {
     recognitionRef.current = new SpeechRecognition();
     recognitionRef.current.continuous = true;
     recognitionRef.current.interimResults = true;
-    recognitionRef.current.lang = 'pt-BR';
+    recognitionRef.current.lang = "pt-BR";
 
     recognitionRef.current.onresult = (event: any) => {
       const current = event.resultIndex;
@@ -70,9 +70,9 @@ const VoiceAssistant: React.FC = () => {
     };
 
     recognitionRef.current.onerror = (event: any) => {
-      logger.error('Speech recognition error', { error: event.error });
+      logger.error("Speech recognition error", { error: event.error });
       
-      if (event.error === 'no-speech') {
+      if (event.error === "no-speech") {
         toast({
           title: "Nenhuma fala detectada",
           description: "Tente falar mais alto ou verificar seu microfone.",
@@ -89,7 +89,7 @@ const VoiceAssistant: React.FC = () => {
         try {
           recognitionRef.current?.start();
         } catch (error) {
-          logger.error('Error restarting recognition', { error });
+          logger.error("Error restarting recognition", { error });
         }
       }
     };
@@ -125,7 +125,7 @@ const VoiceAssistant: React.FC = () => {
           description: "Estou ouvindo. Fale seu comando.",
         });
       } catch (error) {
-        logger.error('Error starting recognition', { error });
+        logger.error("Error starting recognition", { error });
         toast({
           title: "Erro ao iniciar",
           description: "Não foi possível iniciar o reconhecimento de voz.",
@@ -136,7 +136,7 @@ const VoiceAssistant: React.FC = () => {
   };
 
   const processCommand = async (command: string) => {
-    logger.info('Processing voice command', { command });
+    logger.info("Processing voice command", { command });
 
     const lowerCommand = command.toLowerCase();
     let response = "";
@@ -146,17 +146,17 @@ const VoiceAssistant: React.FC = () => {
     if (lowerCommand.includes("dashboard") || lowerCommand.includes("painel")) {
       action = "navigate_dashboard";
       response = "Abrindo dashboard principal...";
-      setTimeout(() => window.location.href = '/dashboard', 1000);
+      setTimeout(() => window.location.href = "/dashboard", 1000);
     } 
     else if (lowerCommand.includes("relatório") || lowerCommand.includes("relatorio")) {
       action = "navigate_reports";
       response = "Abrindo central de relatórios...";
-      setTimeout(() => window.location.href = '/reports', 1000);
+      setTimeout(() => window.location.href = "/reports", 1000);
     }
     else if (lowerCommand.includes("frota") || lowerCommand.includes("embarcações")) {
       action = "navigate_fleet";
       response = "Abrindo gestão de frota...";
-      setTimeout(() => window.location.href = '/fleet', 1000);
+      setTimeout(() => window.location.href = "/fleet", 1000);
     }
     else if (lowerCommand.includes("status") || lowerCommand.includes("situação")) {
       action = "query_status";
@@ -169,7 +169,7 @@ const VoiceAssistant: React.FC = () => {
     else if (lowerCommand.includes("tripulação") || lowerCommand.includes("crew")) {
       action = "navigate_crew";
       response = "Abrindo gestão de tripulação...";
-      setTimeout(() => window.location.href = '/crew', 1000);
+      setTimeout(() => window.location.href = "/crew", 1000);
     }
     else {
       response = `Recebi o comando: ${command}. Ainda estou aprendendo a executar essa ação.`;
@@ -188,7 +188,7 @@ const VoiceAssistant: React.FC = () => {
     // Falar resposta
     speak(response);
 
-    logger.info('Command processed', { command: newCommand });
+    logger.info("Command processed", { command: newCommand });
   };
 
   const speak = (text: string) => {
@@ -197,7 +197,7 @@ const VoiceAssistant: React.FC = () => {
     synthRef.current.cancel(); // Cancelar falas anteriores
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'pt-BR';
+    utterance.lang = "pt-BR";
     utterance.volume = volume;
     utterance.rate = 1.0;
     utterance.pitch = 1.0;

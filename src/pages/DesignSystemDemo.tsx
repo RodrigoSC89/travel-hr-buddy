@@ -4,12 +4,12 @@
  * PATCH 126.0-130.0
  */
 
-import React, { Suspense, lazy } from 'react';
-import AnimatedPage from '@/components/ui/AnimatedPage';
-import { ModuleLoader, CompactLoader, SkeletonLoader } from '@/components/ui/ModuleLoader';
-import { useTheme } from '@/hooks/useTheme';
-import { theme } from '@/theme';
-import { Moon, Sun, Monitor } from 'lucide-react';
+import React, { Suspense, lazy } from "react";
+import AnimatedPage from "@/components/ui/AnimatedPage";
+import { ModuleLoader, CompactLoader, SkeletonLoader } from "@/components/ui/ModuleLoader";
+import { useTheme } from "@/hooks/useTheme";
+import { theme } from "@/theme";
+import { Moon, Sun, Monitor } from "lucide-react";
 
 // Example lazy-loaded component - separate heavy component for demo
 const HeavyDemoComponent = lazy(() => 
@@ -63,7 +63,7 @@ export function ThemeToggleExample() {
       <div className="flex gap-2 mb-4">
         <button
           onClick={toggleTheme}
-          aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+          aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
           className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2"
         >
           {isDark ? (
@@ -82,28 +82,28 @@ export function ThemeToggleExample() {
 
       <div className="flex gap-2">
         <button
-          onClick={() => setTheme('light')}
+          onClick={() => setTheme("light")}
           aria-label="Light theme"
           className={`px-3 py-2 rounded-lg border transition-colors ${
-            currentTheme === 'light' ? 'bg-primary text-primary-foreground' : 'bg-card'
+            currentTheme === "light" ? "bg-primary text-primary-foreground" : "bg-card"
           }`}
         >
           <Sun className="h-4 w-4" aria-hidden="true" />
         </button>
         <button
-          onClick={() => setTheme('dark')}
+          onClick={() => setTheme("dark")}
           aria-label="Dark theme"
           className={`px-3 py-2 rounded-lg border transition-colors ${
-            currentTheme === 'dark' ? 'bg-primary text-primary-foreground' : 'bg-card'
+            currentTheme === "dark" ? "bg-primary text-primary-foreground" : "bg-card"
           }`}
         >
           <Moon className="h-4 w-4" aria-hidden="true" />
         </button>
         <button
-          onClick={() => setTheme('system')}
+          onClick={() => setTheme("system")}
           aria-label="System theme (follow device preference)"
           className={`px-3 py-2 rounded-lg border transition-colors ${
-            currentTheme === 'system' ? 'bg-primary text-primary-foreground' : 'bg-card'
+            currentTheme === "system" ? "bg-primary text-primary-foreground" : "bg-card"
           }`}
         >
           <Monitor className="h-4 w-4" aria-hidden="true" />
@@ -111,7 +111,7 @@ export function ThemeToggleExample() {
       </div>
 
       <p className="text-sm text-muted-foreground mt-4">
-        Current theme: {currentTheme} ({isDark ? 'dark' : 'light'} mode)
+        Current theme: {currentTheme} ({isDark ? "dark" : "light"} mode)
       </p>
     </div>
   );
@@ -126,10 +126,10 @@ export function DesignTokensExample() {
       <div>
         <h3 className="text-2xl font-heading font-bold mb-2">Typography Tokens</h3>
         <div className="space-y-2">
-          <p style={{ fontSize: theme.fontSize['5xl'], fontWeight: theme.fontWeight.bold }}>
+          <p style={{ fontSize: theme.fontSize["5xl"], fontWeight: theme.fontWeight.bold }}>
             Heading 1
           </p>
-          <p style={{ fontSize: theme.fontSize['2xl'], fontWeight: theme.fontWeight.semibold }}>
+          <p style={{ fontSize: theme.fontSize["2xl"], fontWeight: theme.fontWeight.semibold }}>
             Heading 2
           </p>
           <p style={{ fontSize: theme.fontSize.base }}>

@@ -16,8 +16,8 @@ export default function ComplianceDashboard() {
 
   const icon =
     status.complianceLevel === "Conforme" ? <CheckCircle className="text-green-400" /> :
-    status.complianceLevel === "Risco" ? <AlertTriangle className="text-yellow-400" /> :
-    <XCircle className="text-red-400" />;
+      status.complianceLevel === "Risco" ? <AlertTriangle className="text-yellow-400" /> :
+        <XCircle className="text-red-400" />;
 
   return (
     <Card>

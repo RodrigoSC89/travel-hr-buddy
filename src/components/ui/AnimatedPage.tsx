@@ -4,8 +4,8 @@
  * PATCH 127.0 - Transições com Framer Motion
  */
 
-import { motion } from 'framer-motion';
-import { ReactNode } from 'react';
+import { motion } from "framer-motion";
+import { ReactNode } from "react";
 
 interface AnimatedPageProps {
   children: ReactNode;
@@ -34,7 +34,7 @@ const pageVariants = {
  */
 const pageTransition = {
   duration: 0.3,
-  ease: 'easeOut',
+  ease: "easeOut",
 };
 
 /**
@@ -48,7 +48,7 @@ const pageTransition = {
  * </AnimatedPage>
  * ```
  */
-export default function AnimatedPage({ children, className = '' }: AnimatedPageProps) {
+export default function AnimatedPage({ children, className = "" }: AnimatedPageProps) {
   return (
     <motion.div
       initial="initial"
@@ -112,8 +112,8 @@ interface AnimatedPageWithPresetProps extends AnimatedPageProps {
 
 export function AnimatedPageWithPreset({ 
   children, 
-  className = '', 
-  preset = 'fade' 
+  className = "", 
+  preset = "fade" 
 }: AnimatedPageWithPresetProps) {
   return (
     <motion.div

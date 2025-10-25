@@ -118,8 +118,8 @@ class SystemWatchdog {
         
         const status: "active" | "degraded" | "offline" = 
           moduleElement ? "active" : 
-          responseTime > 3000 ? "degraded" : 
-          "offline";
+            responseTime > 3000 ? "degraded" : 
+              "offline";
         
         this.updateModuleStatus(id, {
           status,
@@ -158,7 +158,7 @@ class SystemWatchdog {
         metric_unit: "ms",
         category: "health_check",
         status: this.getSystemStatus().health === "healthy" ? "healthy" : 
-                this.getSystemStatus().health === "degraded" ? "warning" : "critical",
+          this.getSystemStatus().health === "degraded" ? "warning" : "critical",
         recorded_at: timestamp
       });
     } catch (error) {

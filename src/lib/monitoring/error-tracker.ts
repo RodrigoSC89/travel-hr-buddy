@@ -5,8 +5,8 @@
 
 import { logger } from "@/lib/logger";
 
-export type ErrorCategory = 'network' | 'runtime' | 'syntax' | 'resource' | 'unknown';
-export type ErrorSeverity = 'low' | 'medium' | 'high' | 'critical';
+export type ErrorCategory = "network" | "runtime" | "syntax" | "resource" | "unknown";
+export type ErrorSeverity = "low" | "medium" | "high" | "critical";
 
 export interface ErrorContext {
   userId?: string;
@@ -38,12 +38,12 @@ class ErrorTracker {
    * Initialize error tracking
    */
   initialize(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // Global error handler
-    window.addEventListener('error', (event) => {
+    window.addEventListener("error", (event) => {
       this.captureError(event.error || new Error(event.message), {
-        type: 'global',
+        type: "global",
         filename: event.filename,
         lineno: event.lineno,
         colno: event.colno,
@@ -51,33 +51,33 @@ class ErrorTracker {
     });
 
     // Unhandled promise rejection handler
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener("unhandledrejection", (event) => {
       this.captureError(
-        new Error(event.reason?.message || 'Unhandled Promise Rejection'),
-        { type: 'unhandled-rejection', reason: event.reason }
+        new Error(event.reason?.message || "Unhandled Promise Rejection"),
+        { type: "unhandled-rejection", reason: event.reason }
       );
     });
 
     // Resource error handler
-    window.addEventListener('error', (event) => {
+    window.addEventListener("error", (event) => {
       if (event.target && (event.target as HTMLElement).tagName) {
-        this.captureError(new Error('Resource loading failed'), {
-          category: 'resource',
+        this.captureError(new Error("Resource loading failed"), {
+          category: "resource",
           element: (event.target as HTMLElement).tagName,
           src: (event.target as any).src || (event.target as any).href,
         });
       }
     }, true);
 
-    logger.info('Error tracking initialized');
+    logger.info("Error tracking initialized");
   }
 
   /**
    * Capture and categorize error
    */
   captureError(error: Error | string, context: ErrorContext = {}): string {
-    const errorMessage = typeof error === 'string' ? error : error.message;
-    const errorStack = typeof error === 'string' ? undefined : error.stack;
+    const errorMessage = typeof error === "string" ? error : error.message;
+    const errorStack = typeof error === "string" ? undefined : error.stack;
     
     const category = this.categorizeError(error, context);
     const severity = this.determineSeverity(category, errorMessage);
@@ -113,7 +113,7 @@ class ErrorTracker {
       this.listeners.forEach(listener => listener(trackedError));
 
       // Log based on severity
-      if (severity === 'critical' || severity === 'high') {
+      if (severity === "critical" || severity === "high") {
         logger.error(`[${category.toUpperCase()}] ${errorMessage}`, error, context);
       } else {
         logger.warn(`[${category.toUpperCase()}] ${errorMessage}`, context);
@@ -133,29 +133,29 @@ class ErrorTracker {
    * Categorize error type
    */
   private categorizeError(error: Error | string, context: ErrorContext): ErrorCategory {
-    const message = typeof error === 'string' ? error : error.message;
+    const message = typeof error === "string" ? error : error.message;
     
     if (context.category) {
       return context.category as ErrorCategory;
     }
 
-    if (message.includes('fetch') || message.includes('network') || message.includes('NetworkError')) {
-      return 'network';
+    if (message.includes("fetch") || message.includes("network") || message.includes("NetworkError")) {
+      return "network";
     }
 
-    if (message.includes('SyntaxError') || message.includes('parsing')) {
-      return 'syntax';
+    if (message.includes("SyntaxError") || message.includes("parsing")) {
+      return "syntax";
     }
 
-    if (message.includes('Resource') || message.includes('loading')) {
-      return 'resource';
+    if (message.includes("Resource") || message.includes("loading")) {
+      return "resource";
     }
 
-    if (typeof error !== 'string' && error.name === 'TypeError') {
-      return 'runtime';
+    if (typeof error !== "string" && error.name === "TypeError") {
+      return "runtime";
     }
 
-    return 'unknown';
+    return "unknown";
   }
 
   /**
@@ -163,22 +163,22 @@ class ErrorTracker {
    */
   private determineSeverity(category: ErrorCategory, message: string): ErrorSeverity {
     // Critical errors
-    if (message.includes('authentication') || message.includes('security')) {
-      return 'critical';
+    if (message.includes("authentication") || message.includes("security")) {
+      return "critical";
     }
 
     // High severity
-    if (category === 'runtime' || message.includes('crash')) {
-      return 'high';
+    if (category === "runtime" || message.includes("crash")) {
+      return "high";
     }
 
     // Medium severity
-    if (category === 'network' || category === 'syntax') {
-      return 'medium';
+    if (category === "network" || category === "syntax") {
+      return "medium";
     }
 
     // Low severity
-    return 'low';
+    return "low";
   }
 
   /**
@@ -193,12 +193,12 @@ class ErrorTracker {
    * Send error to Sentry
    */
   private sendToSentry(trackedError: TrackedError, originalError: Error | string): void {
-    if (import.meta.env.PROD && typeof window !== 'undefined') {
+    if (import.meta.env.PROD && typeof window !== "undefined") {
       try {
         const Sentry = (window as any).Sentry;
         if (Sentry) {
           Sentry.captureException(
-            typeof originalError === 'string' ? new Error(originalError) : originalError,
+            typeof originalError === "string" ? new Error(originalError) : originalError,
             {
               level: this.mapSeverityToSentryLevel(trackedError.severity),
               tags: {
@@ -223,10 +223,10 @@ class ErrorTracker {
    */
   private mapSeverityToSentryLevel(severity: ErrorSeverity): string {
     const map: Record<ErrorSeverity, string> = {
-      low: 'info',
-      medium: 'warning',
-      high: 'error',
-      critical: 'fatal',
+      low: "info",
+      medium: "warning",
+      high: "error",
+      critical: "fatal",
     };
     return map[severity];
   }
@@ -254,8 +254,8 @@ class ErrorTracker {
     return {
       total: errors.reduce((sum, e) => sum + e.count, 0),
       unique: errors.length,
-      byCategory: this.groupBy(errors, 'category'),
-      bySeverity: this.groupBy(errors, 'severity'),
+      byCategory: this.groupBy(errors, "category"),
+      bySeverity: this.groupBy(errors, "severity"),
       errorRate: this.errorRate.length, // Errors per hour
       recent: errors.slice(-10).reverse(),
     };

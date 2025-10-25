@@ -45,7 +45,7 @@ export function SmartHeader() {
           size="icon"
           className="relative rounded-full hover:bg-zinc-700 dark:hover:bg-zinc-800 transition-colors"
           title="Notificações"
-          aria-label={`Notificações${notificationCount > 0 ? ` - ${notificationCount} novas` : ''}`}
+          aria-label={`Notificações${notificationCount > 0 ? ` - ${notificationCount} novas` : ""}`}
         >
           <Bell className="w-5 h-5" />
           {notificationCount > 0 && (

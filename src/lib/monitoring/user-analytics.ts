@@ -40,23 +40,23 @@ class UserAnalytics {
    * Initialize analytics tracking
    */
   initialize(userId?: string): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // Create or restore session
     this.session = this.createSession(userId);
 
     // Track page visibility
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        this.trackEvent('page_hidden', 'engagement');
+        this.trackEvent("page_hidden", "engagement");
       } else {
-        this.trackEvent('page_visible', 'engagement');
+        this.trackEvent("page_visible", "engagement");
         this.updateSessionActivity();
       }
     });
 
     // Track page beforeunload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener("beforeunload", () => {
       this.endCurrentPageView();
       this.saveSession();
     });
@@ -64,7 +64,7 @@ class UserAnalytics {
     // Track navigation
     this.trackPageView(window.location.pathname, document.title);
 
-    logger.info('User analytics initialized', { sessionId: this.session.id });
+    logger.info("User analytics initialized", { sessionId: this.session.id });
   }
 
   /**
@@ -106,7 +106,7 @@ class UserAnalytics {
       this.events.shift();
     }
 
-    logger.debug('Event tracked', event);
+    logger.debug("Event tracked", event);
   }
 
   /**
@@ -129,7 +129,7 @@ class UserAnalytics {
     this.session.pageViews++;
     this.updateSessionActivity();
 
-    logger.debug('Page view tracked', { path, title });
+    logger.debug("Page view tracked", { path, title });
   }
 
   /**
@@ -145,7 +145,7 @@ class UserAnalytics {
    * Track feature usage
    */
   trackFeatureUsage(feature: string, action: string, metadata?: Record<string, any>): void {
-    this.trackEvent(`feature_${action}`, 'feature_usage', {
+    this.trackEvent(`feature_${action}`, "feature_usage", {
       feature,
       ...metadata,
     });
@@ -155,7 +155,7 @@ class UserAnalytics {
    * Track user interaction
    */
   trackInteraction(element: string, action: string, metadata?: Record<string, any>): void {
-    this.trackEvent(`${element}_${action}`, 'interaction', metadata);
+    this.trackEvent(`${element}_${action}`, "interaction", metadata);
   }
 
   /**
@@ -234,9 +234,9 @@ class UserAnalytics {
    */
   getFeatureUsage(): Record<string, number> {
     return this.events
-      .filter(e => e.category === 'feature_usage')
+      .filter(e => e.category === "feature_usage")
       .reduce((acc, event) => {
-        const feature = event.properties?.feature || 'unknown';
+        const feature = event.properties?.feature || "unknown";
         acc[feature] = (acc[feature] || 0) + 1;
         return acc;
       }, {} as Record<string, number>);
@@ -246,11 +246,11 @@ class UserAnalytics {
    * Save session to localStorage
    */
   private saveSession(): void {
-    if (this.session && typeof window !== 'undefined') {
+    if (this.session && typeof window !== "undefined") {
       try {
-        localStorage.setItem('nautilus_session', JSON.stringify(this.session));
+        localStorage.setItem("nautilus_session", JSON.stringify(this.session));
       } catch (error) {
-        logger.warn('Failed to save session', { error: String(error) });
+        logger.warn("Failed to save session", { error: String(error) });
       }
     }
   }
@@ -269,8 +269,8 @@ class UserAnalytics {
     this.events = [];
     this.pageViews = [];
     this.currentPage = null;
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('nautilus_session');
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("nautilus_session");
     }
   }
 }

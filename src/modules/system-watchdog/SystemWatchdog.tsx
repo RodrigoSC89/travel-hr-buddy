@@ -3,11 +3,11 @@
  * Real-time system monitoring dashboard with AI diagnostics
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Activity, 
   AlertCircle, 
@@ -20,15 +20,15 @@ import {
   Brain,
   Route as RouteIcon,
   Shield
-} from 'lucide-react';
-import { watchdogService, HealthCheckResult, WatchdogEvent } from './watchdog-service';
-import { logger } from '@/lib/logger';
+} from "lucide-react";
+import { watchdogService, HealthCheckResult, WatchdogEvent } from "./watchdog-service";
+import { logger } from "@/lib/logger";
 
 export default function SystemWatchdog() {
   const [healthResults, setHealthResults] = useState<HealthCheckResult[]>([]);
   const [recentEvents, setRecentEvents] = useState<WatchdogEvent[]>([]);
   const [isRunningDiagnosis, setIsRunningDiagnosis] = useState(false);
-  const [diagnosisResult, setDiagnosisResult] = useState<string>('');
+  const [diagnosisResult, setDiagnosisResult] = useState<string>("");
   const [isAutoRefresh, setIsAutoRefresh] = useState(true);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function SystemWatchdog() {
       const results = await watchdogService.runFullHealthCheck();
       setHealthResults(results);
     } catch (err) {
-      logger.error('[SystemWatchdog] Failed to load health status:', err);
+      logger.error("[SystemWatchdog] Failed to load health status:", err);
     }
   };
 
@@ -73,8 +73,8 @@ export default function SystemWatchdog() {
       const result = await watchdogService.runDiagnosis();
       setDiagnosisResult(result);
     } catch (err) {
-      setDiagnosisResult('Failed to run diagnosis');
-      logger.error('[SystemWatchdog] Diagnosis error:', err);
+      setDiagnosisResult("Failed to run diagnosis");
+      logger.error("[SystemWatchdog] Diagnosis error:", err);
     } finally {
       setIsRunningDiagnosis(false);
       loadRecentEvents();
@@ -88,48 +88,48 @@ export default function SystemWatchdog() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'online':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'degraded':
-        return <AlertCircle className="h-5 w-5 text-yellow-500" />;
-      case 'offline':
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      default:
-        return <Clock className="h-5 w-5 text-gray-500" />;
+    case "online":
+      return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "degraded":
+      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+    case "offline":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    default:
+      return <Clock className="h-5 w-5 text-gray-500" />;
     }
   };
 
   const getServiceIcon = (service: string) => {
     switch (service) {
-      case 'supabase':
-        return <Database className="h-5 w-5" />;
-      case 'ai-service':
-        return <Brain className="h-5 w-5" />;
-      case 'routing':
-        return <RouteIcon className="h-5 w-5" />;
-      default:
-        return <Shield className="h-5 w-5" />;
+    case "supabase":
+      return <Database className="h-5 w-5" />;
+    case "ai-service":
+      return <Brain className="h-5 w-5" />;
+    case "routing":
+      return <RouteIcon className="h-5 w-5" />;
+    default:
+      return <Shield className="h-5 w-5" />;
     }
   };
 
   const getEventBadgeVariant = (type: string): "default" | "destructive" | "outline" | "secondary" => {
     switch (type) {
-      case 'error':
-        return 'destructive';
-      case 'warning':
-        return 'outline';
-      case 'success':
-        return 'default';
-      default:
-        return 'secondary';
+    case "error":
+      return "destructive";
+    case "warning":
+      return "outline";
+    case "success":
+      return "default";
+    default:
+      return "secondary";
     }
   };
 
-  const overallStatus = healthResults.every(r => r.status === 'online') 
-    ? 'online' 
-    : healthResults.some(r => r.status === 'offline') 
-    ? 'offline' 
-    : 'degraded';
+  const overallStatus = healthResults.every(r => r.status === "online") 
+    ? "online" 
+    : healthResults.some(r => r.status === "offline") 
+      ? "offline" 
+      : "degraded";
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -150,8 +150,8 @@ export default function SystemWatchdog() {
             size="sm"
             onClick={() => setIsAutoRefresh(!isAutoRefresh)}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${isAutoRefresh ? 'animate-spin' : ''}`} />
-            {isAutoRefresh ? 'Auto-Refresh On' : 'Auto-Refresh Off'}
+            <RefreshCw className={`h-4 w-4 mr-2 ${isAutoRefresh ? "animate-spin" : ""}`} />
+            {isAutoRefresh ? "Auto-Refresh On" : "Auto-Refresh Off"}
           </Button>
           <Button
             variant="outline"
@@ -179,16 +179,16 @@ export default function SystemWatchdog() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-2xl font-bold">
-                {overallStatus === 'online' && 'All Systems Operational'}
-                {overallStatus === 'degraded' && 'Some Services Degraded'}
-                {overallStatus === 'offline' && 'Critical Services Offline'}
+                {overallStatus === "online" && "All Systems Operational"}
+                {overallStatus === "degraded" && "Some Services Degraded"}
+                {overallStatus === "offline" && "Critical Services Offline"}
               </p>
               <p className="text-sm text-muted-foreground mt-1">
-                Last checked: {healthResults[0]?.timestamp.toLocaleTimeString() || 'Never'}
+                Last checked: {healthResults[0]?.timestamp.toLocaleTimeString() || "Never"}
               </p>
             </div>
             <Badge 
-              variant={overallStatus === 'online' ? 'default' : 'destructive'}
+              variant={overallStatus === "online" ? "default" : "destructive"}
               className="text-lg px-4 py-2"
             >
               {overallStatus.toUpperCase()}
@@ -215,7 +215,7 @@ export default function SystemWatchdog() {
                 <div className="flex items-center gap-3">
                   {getServiceIcon(result.service)}
                   <div>
-                    <p className="font-medium capitalize">{result.service.replace('-', ' ')}</p>
+                    <p className="font-medium capitalize">{result.service.replace("-", " ")}</p>
                     {result.message && (
                       <p className="text-sm text-muted-foreground">{result.message}</p>
                     )}
@@ -254,7 +254,7 @@ export default function SystemWatchdog() {
               className="flex-1"
             >
               <Zap className="h-4 w-4 mr-2" />
-              {isRunningDiagnosis ? 'Running Diagnosis...' : 'Run Diagnostic Now'}
+              {isRunningDiagnosis ? "Running Diagnosis..." : "Run Diagnostic Now"}
             </Button>
             <Button
               variant="outline"

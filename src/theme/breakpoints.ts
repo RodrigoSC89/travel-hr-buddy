@@ -7,24 +7,24 @@
  * Breakpoint values in pixels
  */
 export const breakpoints = {
-  xs: '320px',   // Extra small devices (small phones)
-  sm: '640px',   // Small devices (phones)
-  md: '768px',   // Medium devices (tablets)
-  lg: '1024px',  // Large devices (desktops)
-  xl: '1280px',  // Extra large devices (large desktops)
-  '2xl': '1536px', // 2X large devices (larger desktops)
+  xs: "320px",   // Extra small devices (small phones)
+  sm: "640px",   // Small devices (phones)
+  md: "768px",   // Medium devices (tablets)
+  lg: "1024px",  // Large devices (desktops)
+  xl: "1280px",  // Extra large devices (large desktops)
+  "2xl": "1536px", // 2X large devices (larger desktops)
 } as const;
 
 /**
  * Container max widths for each breakpoint
  */
 export const containerMaxWidth = {
-  xs: '100%',
-  sm: '640px',
-  md: '768px',
-  lg: '1024px',
-  xl: '1280px',
-  '2xl': '1400px',
+  xs: "100%",
+  sm: "640px",
+  md: "768px",
+  lg: "1024px",
+  xl: "1280px",
+  "2xl": "1400px",
 } as const;
 
 /**
@@ -36,7 +36,7 @@ export const gridColumns = {
   md: 8,   // 8 columns on tablets
   lg: 12,  // 12 columns on desktop
   xl: 12,  // 12 columns on large desktop
-  '2xl': 12, // 12 columns on extra large
+  "2xl": 12, // 12 columns on extra large
 } as const;
 
 /**
@@ -68,7 +68,7 @@ export const mediaQueryMax = (breakpoint: keyof typeof breakpoints): string => {
  * @returns Boolean indicating if viewport matches
  */
 export const matchesBreakpoint = (breakpoint: keyof typeof breakpoints): boolean => {
-  if (typeof window === 'undefined') return false;
+  if (typeof window === "undefined") return false;
   return window.matchMedia(`(min-width: ${breakpoints[breakpoint]})`).matches;
 };
 

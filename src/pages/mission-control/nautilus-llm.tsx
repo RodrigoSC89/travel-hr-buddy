@@ -30,7 +30,7 @@ import { ModuleHeader } from "@/components/ui/module-header";
 
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
   confidenceScore?: number;
@@ -43,7 +43,7 @@ const NautilusLLM: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [mode, setMode] = useState<NautilusMode>('safe');
+  const [mode, setMode] = useState<NautilusMode>("safe");
   const [stats, setStats] = useState({
     totalRequests: 0,
     averageConfidence: 0,
@@ -67,7 +67,7 @@ const NautilusLLM: React.FC = () => {
 
     const userMessage: Message = {
       id: crypto.randomUUID(),
-      role: 'user',
+      role: "user",
       content: prompt,
       timestamp: new Date()
     };
@@ -84,7 +84,7 @@ const NautilusLLM: React.FC = () => {
 
       const assistantMessage: Message = {
         id: response.sessionId,
-        role: 'assistant',
+        role: "assistant",
         content: response.response,
         timestamp: new Date(),
         confidenceScore: response.confidenceScore,
@@ -111,7 +111,7 @@ const NautilusLLM: React.FC = () => {
     
     const userMessage: Message = {
       id: crypto.randomUUID(),
-      role: 'user',
+      role: "user",
       content: `[Comando Rápido: ${command}]`,
       timestamp: new Date()
     };
@@ -123,7 +123,7 @@ const NautilusLLM: React.FC = () => {
 
       const assistantMessage: Message = {
         id: response.sessionId,
-        role: 'assistant',
+        role: "assistant",
         content: response.response,
         timestamp: new Date(),
         confidenceScore: response.confidenceScore,
@@ -146,10 +146,10 @@ const NautilusLLM: React.FC = () => {
   };
 
   const quickCommands = [
-    { id: 'status', label: 'Status Geral', icon: Activity },
-    { id: 'diagnostico', label: 'Diagnóstico', icon: Shield },
-    { id: 'resumo', label: 'Resumo 10min', icon: Clock },
-    { id: 'modulos-lentos', label: 'Módulos Lentos', icon: AlertTriangle },
+    { id: "status", label: "Status Geral", icon: Activity },
+    { id: "diagnostico", label: "Diagnóstico", icon: Shield },
+    { id: "resumo", label: "Resumo 10min", icon: Clock },
+    { id: "modulos-lentos", label: "Módulos Lentos", icon: AlertTriangle },
   ];
 
   return (
@@ -239,14 +239,14 @@ const NautilusLLM: React.FC = () => {
                     <div
                       key={msg.id}
                       className={`flex flex-col gap-2 ${
-                        msg.role === 'user' ? 'items-end' : 'items-start'
+                        msg.role === "user" ? "items-end" : "items-start"
                       }`}
                     >
                       <div
                         className={`max-w-[80%] rounded-lg p-3 ${
-                          msg.role === 'user'
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-muted'
+                          msg.role === "user"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted"
                         }`}
                       >
                         <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -287,7 +287,7 @@ const NautilusLLM: React.FC = () => {
                 placeholder="Digite sua pergunta ou comando..."
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 disabled={isLoading}
               />
               <Button onClick={handleSend} disabled={isLoading || !prompt.trim()}>

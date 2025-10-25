@@ -3,10 +3,10 @@
  * Simulates concurrent users to test system performance under load
  */
 
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
 
-describe('Load Testing - Concurrent Users', () => {
-  const BASE_URL = 'http://localhost:5173';
+describe("Load Testing - Concurrent Users", () => {
+  const BASE_URL = "http://localhost:5173";
   const CONCURRENT_USERS = 50;
   const REQUEST_DURATION_THRESHOLD = 2000; // 2 seconds
 
@@ -15,10 +15,10 @@ describe('Load Testing - Concurrent Users', () => {
   });
 
   afterAll(() => {
-    console.log('Load test completed');
+    console.log("Load test completed");
   });
 
-  it('should handle 50 concurrent GET requests to dashboard', async () => {
+  it("should handle 50 concurrent GET requests to dashboard", async () => {
     const startTime = Date.now();
     const requests = Array.from({ length: CONCURRENT_USERS }, () =>
       fetch(`${BASE_URL}/`).then(res => ({
@@ -35,7 +35,7 @@ describe('Load Testing - Concurrent Users', () => {
     expect(avgResponseTime).toBeLessThan(REQUEST_DURATION_THRESHOLD);
   }, 30000);
 
-  it('should maintain performance with sustained load', async () => {
+  it("should maintain performance with sustained load", async () => {
     const DURATION = 5000; // 5 seconds
     const REQUESTS_PER_SECOND = 10;
     const startTime = Date.now();
@@ -64,7 +64,7 @@ describe('Load Testing - Concurrent Users', () => {
     expect(p95).toBeLessThan(2000);
   }, 30000);
 
-  it('should handle spike in traffic gracefully', async () => {
+  it("should handle spike in traffic gracefully", async () => {
     // Baseline: 10 requests
     const baselineStart = Date.now();
     const baseline = await Promise.all(
@@ -86,7 +86,7 @@ describe('Load Testing - Concurrent Users', () => {
     expect(degradationRatio).toBeLessThan(15); // Should not degrade more than 15x
   }, 30000);
 
-  it('should recover after load spike', async () => {
+  it("should recover after load spike", async () => {
     // Create spike
     await Promise.all(
       Array.from({ length: 100 }, () => fetch(`${BASE_URL}/`))
@@ -106,7 +106,7 @@ describe('Load Testing - Concurrent Users', () => {
     expect(recoveryTime).toBeLessThan(2000);
   }, 30000);
 
-  it('should maintain data consistency under concurrent writes', async () => {
+  it("should maintain data consistency under concurrent writes", async () => {
     const testData = { timestamp: Date.now(), value: Math.random() };
     
     // Simulate concurrent writes to localStorage

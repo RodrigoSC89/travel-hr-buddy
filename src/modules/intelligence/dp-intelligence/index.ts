@@ -10,11 +10,11 @@
  */
 
 // Main Components
-export { default as DPIntelligenceCenter } from './components/DPIntelligenceCenter';
-export { default as DPAIAnalyzer } from './components/DPAIAnalyzer';
-export { default as DPIntelligenceDashboard } from './components/DPIntelligenceDashboard';
-export { default as DPOverview } from './components/DPOverview';
-export { default as DPRealtime } from './components/DPRealtime';
+export { default as DPIntelligenceCenter } from "./components/DPIntelligenceCenter";
+export { default as DPAIAnalyzer } from "./components/DPAIAnalyzer";
+export { default as DPIntelligenceDashboard } from "./components/DPIntelligenceDashboard";
+export { default as DPOverview } from "./components/DPOverview";
+export { default as DPRealtime } from "./components/DPRealtime";
 
 // Re-export default as main entry point
-export { default } from './components/DPIntelligenceCenter';
+export { default } from "./components/DPIntelligenceCenter";

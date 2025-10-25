@@ -54,14 +54,14 @@ describe("DPSyncDashboard Component", () => {
   it("should render the Brain icon", () => {
     const { container } = render(<DPSyncDashboard />);
     
-    const svg = container.querySelector('svg');
+    const svg = container.querySelector("svg");
     expect(svg).toBeTruthy();
   });
 
   it("should render within a card component", () => {
     const { container } = render(<DPSyncDashboard />);
     
-    const card = container.querySelector('[class*="card"]');
+    const card = container.querySelector("[class*=\"card\"]");
     expect(card).toBeTruthy();
   });
 

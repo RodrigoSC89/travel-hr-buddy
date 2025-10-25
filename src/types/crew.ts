@@ -1,7 +1,7 @@
 // PATCH 106.0: Crew Management Types
 
-export type HealthStatus = 'fit' | 'restricted' | 'unfit' | 'under_review';
-export type ReadinessStatus = 'ready' | 'not_ready' | 'unknown';
+export type HealthStatus = "fit" | "restricted" | "unfit" | "under_review";
+export type ReadinessStatus = "ready" | "not_ready" | "unknown";
 
 export interface CrewMember {
   id: string;

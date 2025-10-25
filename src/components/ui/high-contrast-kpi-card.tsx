@@ -38,16 +38,16 @@ const KPICard = ({
 }: KPICardProps) => {
   const getVariantClass = () => {
     switch (variant) {
-      case "green":
-        return "card-high-contrast-green";
-      case "blue":
-        return "card-high-contrast-blue";
-      case "purple":
-        return "card-high-contrast-purple";
-      case "orange":
-        return "card-high-contrast-orange";
-      default:
-        return "";
+    case "green":
+      return "card-high-contrast-green";
+    case "blue":
+      return "card-high-contrast-blue";
+    case "purple":
+      return "card-high-contrast-purple";
+    case "orange":
+      return "card-high-contrast-orange";
+    default:
+      return "";
     }
   };
 
@@ -85,7 +85,7 @@ const KPICard = ({
               <Badge
                 variant={status === "up" ? "default" : "destructive"}
                 className="gap-1"
-                aria-label={`Mudança: ${change > 0 ? '+' : ''}${change}%`}
+                aria-label={`Mudança: ${change > 0 ? "+" : ""}${change}%`}
               >
                 {getTrendIcon()}
                 {change > 0 ? "+" : ""}

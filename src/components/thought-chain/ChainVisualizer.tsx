@@ -13,27 +13,27 @@ interface ChainVisualizerProps {
 export const ChainVisualizer: React.FC<ChainVisualizerProps> = ({ steps, className }) => {
   const getStatusIcon = (status: ChainStep["status"]) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "processing":
-        return <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />;
-      case "error":
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      default:
-        return <Circle className="h-5 w-5 text-muted-foreground" />;
+    case "completed":
+      return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "processing":
+      return <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />;
+    case "error":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    default:
+      return <Circle className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
   const getStatusColor = (status: ChainStep["status"]) => {
     switch (status) {
-      case "completed":
-        return "bg-green-500/20 border-green-500/50";
-      case "processing":
-        return "bg-blue-500/20 border-blue-500/50 animate-pulse";
-      case "error":
-        return "bg-red-500/20 border-red-500/50";
-      default:
-        return "bg-muted border-muted-foreground/20";
+    case "completed":
+      return "bg-green-500/20 border-green-500/50";
+    case "processing":
+      return "bg-blue-500/20 border-blue-500/50 animate-pulse";
+    case "error":
+      return "bg-red-500/20 border-red-500/50";
+    default:
+      return "bg-muted border-muted-foreground/20";
     }
   };
 

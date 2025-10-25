@@ -33,7 +33,7 @@ export interface CachedVessel {
   cached_at: string;
 }
 
-export type PendingActionType = 'create' | 'update' | 'delete';
+export type PendingActionType = "create" | "update" | "delete";
 
 export interface PendingActionData {
   id?: string;

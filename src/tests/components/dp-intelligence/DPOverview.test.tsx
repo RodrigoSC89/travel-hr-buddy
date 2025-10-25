@@ -32,7 +32,7 @@ describe("DPOverview Component", () => {
     const { container } = render(<DPOverview />);
     
     // Check that the component renders inside a card
-    const card = container.querySelector('[class*="card"]');
+    const card = container.querySelector("[class*=\"card\"]");
     expect(card).toBeTruthy();
   });
 });

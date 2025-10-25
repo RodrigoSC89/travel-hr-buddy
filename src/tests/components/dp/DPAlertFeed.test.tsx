@@ -40,14 +40,14 @@ describe("DPAlertFeed Component", () => {
   it("should render within a card component", () => {
     const { container } = render(<DPAlertFeed />);
     
-    const card = container.querySelector('[class*="card"]');
+    const card = container.querySelector("[class*=\"card\"]");
     expect(card).toBeTruthy();
   });
 
   it("should display the AlertTriangle icon", () => {
     const { container } = render(<DPAlertFeed />);
     
-    const svg = container.querySelector('svg');
+    const svg = container.querySelector("svg");
     expect(svg).toBeTruthy();
   });
 

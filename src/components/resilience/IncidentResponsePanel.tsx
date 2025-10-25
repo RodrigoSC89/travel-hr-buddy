@@ -71,8 +71,8 @@ export default function IncidentResponsePanel() {
                     i.level === "Não Conforme" 
                       ? "text-red-400" 
                       : i.level === "Risco" 
-                      ? "text-yellow-400" 
-                      : "text-green-400"
+                        ? "text-yellow-400" 
+                        : "text-green-400"
                   }`}>
                     {i.level} ({(i.score * 100).toFixed(1)}%)
                   </p>

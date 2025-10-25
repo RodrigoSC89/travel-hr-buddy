@@ -34,7 +34,7 @@ export function applyTemplate(content: string): string {
   matches.forEach((tag) => {
     const field = tag.replace("{{", "").replace("}}", "").trim();
     const value = prompt(`Preencha o campo: ${field}`);
-    filled = filled.replace(new RegExp(tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), value || "");
+    filled = filled.replace(new RegExp(tag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"), value || "");
   });
 
   return filled;

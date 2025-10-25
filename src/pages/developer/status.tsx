@@ -69,9 +69,9 @@ export default function DeveloperStatus() {
 
   const getStatusIcon = (status: ModuleStatus) => {
     switch (status) {
-      case "complete": return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "partial": return <AlertCircle className="h-5 w-5 text-yellow-500" />;
-      case "missing": return <XCircle className="h-5 w-5 text-red-500" />;
+    case "complete": return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "partial": return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+    case "missing": return <XCircle className="h-5 w-5 text-red-500" />;
     }
   };
 
@@ -257,11 +257,11 @@ export default function DeveloperStatus() {
                   {/* Indicators */}
                   <div className="flex items-center gap-4 text-sm">
                     <div className="flex items-center gap-2">
-                      <CheckCircle className={`h-4 w-4 ${module.hasTests ? 'text-green-500' : 'text-gray-400'}`} />
+                      <CheckCircle className={`h-4 w-4 ${module.hasTests ? "text-green-500" : "text-gray-400"}`} />
                       <span>Tests</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <FileText className={`h-4 w-4 ${module.hasDocs ? 'text-green-500' : 'text-gray-400'}`} />
+                      <FileText className={`h-4 w-4 ${module.hasDocs ? "text-green-500" : "text-gray-400"}`} />
                       <span>Documentation</span>
                     </div>
                     <Button variant="ghost" size="sm" className="ml-auto gap-2">

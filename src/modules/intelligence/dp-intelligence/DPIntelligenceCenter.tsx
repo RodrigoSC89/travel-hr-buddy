@@ -8,4 +8,4 @@
  * @since PATCH 90.0
  */
 
-export { default } from './components/DPIntelligenceCenter';
+export { default } from "./components/DPIntelligenceCenter";

@@ -3,20 +3,20 @@
  * Centralized technical logs with filtering, AI audit, and PDF export
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Download, Brain, ChevronDown, Filter, AlertCircle, AlertTriangle, Info } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { runAIContext } from '@/ai/kernel';
-import { exportLogsAsPDF } from '@/lib/logger/exportToPDF';
-import { toast } from 'sonner';
-import type { LogEntry, LogLevel, LogFilter } from './types';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Download, Brain, ChevronDown, Filter, AlertCircle, AlertTriangle, Info } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { runAIContext } from "@/ai/kernel";
+import { exportLogsAsPDF } from "@/lib/logger/exportToPDF";
+import { toast } from "sonner";
+import type { LogEntry, LogLevel, LogFilter } from "./types";
 
 export default function LogsCenter() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -40,16 +40,16 @@ export default function LogsCenter() {
     try {
       setLoading(true);
       const { data, error } = await (supabase as any)
-        .from('logs')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("logs")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(100);
 
       if (error) throw error;
       setLogs(data || []);
     } catch (error) {
-      console.error('Error fetching logs:', error);
-      toast.error('Erro ao carregar logs');
+      console.error("Error fetching logs:", error);
+      toast.error("Erro ao carregar logs");
     } finally {
       setLoading(false);
     }
@@ -82,10 +82,10 @@ export default function LogsCenter() {
   const handleExportPDF = async () => {
     try {
       await exportLogsAsPDF(filteredLogs);
-      toast.success('PDF exportado com sucesso!');
+      toast.success("PDF exportado com sucesso!");
     } catch (error) {
-      console.error('Error exporting PDF:', error);
-      toast.error('Erro ao exportar PDF');
+      console.error("Error exporting PDF:", error);
+      toast.error("Erro ao exportar PDF");
     }
   };
 
@@ -94,11 +94,11 @@ export default function LogsCenter() {
       setAiLoading(true);
 
       // Analyze logs with AI
-      const errorLogs = filteredLogs.filter((log) => log.level === 'error');
-      const warnLogs = filteredLogs.filter((log) => log.level === 'warn');
+      const errorLogs = filteredLogs.filter((log) => log.level === "error");
+      const warnLogs = filteredLogs.filter((log) => log.level === "warn");
 
       const aiResponse = await runAIContext({
-        module: 'log-audit',
+        module: "log-audit",
         context: {
           totalLogs: filteredLogs.length,
           errorCount: errorLogs.length,
@@ -122,8 +122,8 @@ export default function LogsCenter() {
         { duration: 8000 }
       );
     } catch (error) {
-      console.error('Error running AI diagnostic:', error);
-      toast.error('Erro ao executar diagnóstico de IA');
+      console.error("Error running AI diagnostic:", error);
+      toast.error("Erro ao executar diagnóstico de IA");
     } finally {
       setAiLoading(false);
     }
@@ -131,25 +131,25 @@ export default function LogsCenter() {
 
   const getLevelIcon = (level: LogLevel) => {
     switch (level) {
-      case 'error':
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      case 'warn':
-        return <AlertTriangle className="h-4 w-4 text-amber-500" />;
-      case 'info':
-      default:
-        return <Info className="h-4 w-4 text-blue-500" />;
+    case "error":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    case "warn":
+      return <AlertTriangle className="h-4 w-4 text-amber-500" />;
+    case "info":
+    default:
+      return <Info className="h-4 w-4 text-blue-500" />;
     }
   };
 
   const getLevelBadgeVariant = (level: LogLevel): "default" | "destructive" | "secondary" => {
     switch (level) {
-      case 'error':
-        return 'destructive';
-      case 'warn':
-        return 'secondary';
-      case 'info':
-      default:
-        return 'default';
+    case "error":
+      return "destructive";
+    case "warn":
+      return "secondary";
+    case "info":
+    default:
+      return "default";
     }
   };
 
@@ -171,15 +171,15 @@ export default function LogsCenter() {
             <div className="flex-1 min-w-[200px]">
               <Input
                 placeholder="Buscar logs..."
-                value={filters.search || ''}
+                value={filters.search || ""}
                 onChange={(e) => setFilters({ ...filters, search: e.target.value })}
               />
             </div>
 
             <Select
-              value={filters.level || 'all'}
+              value={filters.level || "all"}
               onValueChange={(value) =>
-                setFilters({ ...filters, level: value === 'all' ? undefined : (value as LogLevel) })
+                setFilters({ ...filters, level: value === "all" ? undefined : (value as LogLevel) })
               }
             >
               <SelectTrigger className="w-[150px]">
@@ -196,7 +196,7 @@ export default function LogsCenter() {
             <Input
               placeholder="Origem..."
               className="w-[200px]"
-              value={filters.origin || ''}
+              value={filters.origin || ""}
               onChange={(e) => setFilters({ ...filters, origin: e.target.value })}
             />
 
@@ -218,7 +218,7 @@ export default function LogsCenter() {
             </Button>
             <Button variant="secondary" onClick={handleAIDiagnostic} disabled={aiLoading || filteredLogs.length === 0}>
               <Brain className="mr-2 h-4 w-4" />
-              {aiLoading ? 'Analisando...' : 'Executar Diagnóstico com IA'}
+              {aiLoading ? "Analisando..." : "Executar Diagnóstico com IA"}
             </Button>
           </div>
 
@@ -228,13 +228,13 @@ export default function LogsCenter() {
               Total: <strong>{filteredLogs.length}</strong>
             </div>
             <div>
-              Info: <strong>{filteredLogs.filter((l) => l.level === 'info').length}</strong>
+              Info: <strong>{filteredLogs.filter((l) => l.level === "info").length}</strong>
             </div>
             <div>
-              Warn: <strong>{filteredLogs.filter((l) => l.level === 'warn').length}</strong>
+              Warn: <strong>{filteredLogs.filter((l) => l.level === "warn").length}</strong>
             </div>
             <div>
-              Error: <strong>{filteredLogs.filter((l) => l.level === 'error').length}</strong>
+              Error: <strong>{filteredLogs.filter((l) => l.level === "error").length}</strong>
             </div>
           </div>
 
@@ -269,7 +269,7 @@ export default function LogsCenter() {
                             </div>
                           </TableCell>
                           <TableCell className="text-sm">
-                            {new Date(log.timestamp).toLocaleString('pt-BR')}
+                            {new Date(log.timestamp).toLocaleString("pt-BR")}
                           </TableCell>
                           <TableCell className="text-sm font-mono">{log.origin}</TableCell>
                           <TableCell className="text-sm">{log.message}</TableCell>
@@ -284,7 +284,7 @@ export default function LogsCenter() {
                               >
                                 <ChevronDown
                                   className={`h-4 w-4 transition-transform ${
-                                    expandedLog === log.id ? 'rotate-180' : ''
+                                    expandedLog === log.id ? "rotate-180" : ""
                                   }`}
                                 />
                               </Button>
@@ -307,7 +307,7 @@ export default function LogsCenter() {
                                   </div>
                                 )}
                                 <div className="text-xs text-muted-foreground">
-                                  Criado em: {new Date(log.created_at).toLocaleString('pt-BR')}
+                                  Criado em: {new Date(log.created_at).toLocaleString("pt-BR")}
                                 </div>
                               </div>
                             </TableCell>

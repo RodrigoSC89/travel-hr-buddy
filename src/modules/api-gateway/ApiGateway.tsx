@@ -13,10 +13,10 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { apiProxyRouter } from './services/api-proxy-router';
-import { rateLimiter } from './services/rate-limiter';
-import { apiKeyManager } from './services/api-key-manager';
-import { webhookManager } from './services/webhook-manager';
+import { apiProxyRouter } from "./services/api-proxy-router";
+import { rateLimiter } from "./services/rate-limiter";
+import { apiKeyManager } from "./services/api-key-manager";
+import { webhookManager } from "./services/webhook-manager";
 
 const ApiGateway = () => {
   const { toast } = useToast();
@@ -44,12 +44,12 @@ const ApiGateway = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "active":
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case "error":
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      default:
-        return <Activity className="h-4 w-4 text-gray-500" />;
+    case "active":
+      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+    case "error":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    default:
+      return <Activity className="h-4 w-4 text-gray-500" />;
     }
   };
 
@@ -70,7 +70,7 @@ const ApiGateway = () => {
     });
 
     try {
-      await apiProxyRouter.proxyRequest(route.service, '/test');
+      await apiProxyRouter.proxyRequest(route.service, "/test");
       toast({
         title: "Success",
         description: `Endpoint ${route.service} is working correctly`,
@@ -102,7 +102,7 @@ const ApiGateway = () => {
       return;
     }
 
-    const key = apiKeyManager.createKey(newKeyName, ['*'], 365);
+    const key = apiKeyManager.createKey(newKeyName, ["*"], 365);
     setApiKeys(apiKeyManager.getAllKeys());
     setNewKeyName("");
     setShowCreateKeyDialog(false);
@@ -140,7 +140,7 @@ const ApiGateway = () => {
       return;
     }
 
-    webhookManager.createWebhook(newWebhookName, newWebhookUrl, ['*']);
+    webhookManager.createWebhook(newWebhookName, newWebhookUrl, ["*"]);
     setWebhooks(webhookManager.getAllWebhooks());
     setNewWebhookName("");
     setNewWebhookUrl("");
@@ -167,7 +167,7 @@ const ApiGateway = () => {
       description: "Sending test event..."
     });
 
-    await webhookManager.triggerWebhook('test.event', { test: true });
+    await webhookManager.triggerWebhook("test.event", { test: true });
     
     toast({
       title: "Test Complete",
@@ -571,7 +571,7 @@ const ApiGateway = () => {
                       <div>
                         <span className="text-muted-foreground">Last triggered: </span>
                         <span className="font-semibold">
-                          {webhook.lastTriggered ? webhook.lastTriggered.toLocaleTimeString() : 'Never'}
+                          {webhook.lastTriggered ? webhook.lastTriggered.toLocaleTimeString() : "Never"}
                         </span>
                       </div>
                     </div>
@@ -586,7 +586,7 @@ const ApiGateway = () => {
                     {webhookManager.getLogs(selectedWebhook, 10).map((log) => (
                       <div key={log.id} className="flex items-center justify-between p-3 border rounded text-sm">
                         <div className="flex items-center gap-3">
-                          {log.status === 'success' ? (
+                          {log.status === "success" ? (
                             <CheckCircle2 className="h-4 w-4 text-green-500" />
                           ) : (
                             <AlertCircle className="h-4 w-4 text-red-500" />

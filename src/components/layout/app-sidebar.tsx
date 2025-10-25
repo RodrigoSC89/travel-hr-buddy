@@ -718,7 +718,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { canAccessModule, hasPermission, getRoleDisplayName, userRole } = usePermissions();
-const { handleNavigation } = useSidebarActions();
+  const { handleNavigation } = useSidebarActions();
   const { currentBranding } = useOrganization();
   const logoSrc = currentBranding?.logo_url || nautilusLogo;
   // Build a de-duplicated navigation list once
@@ -777,7 +777,7 @@ const { handleNavigation } = useSidebarActions();
   };
 
   // Determinar se o grupo de navegação principal deve estar aberto
-const isMainGroupOpen = dedupedNav.some(item => 
+  const isMainGroupOpen = dedupedNav.some(item => 
     item.items ? item.items.some(subItem => isItemActive(subItem.url ?? "")) : isItemActive(item.url ?? "")
   );
 

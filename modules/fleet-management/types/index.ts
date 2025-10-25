@@ -11,8 +11,8 @@ export interface VesselPosition {
   timestamp?: string;
 }
 
-export type VesselStatus = 'active' | 'maintenance' | 'inactive' | 'critical';
-export type MaintenanceStatus = 'ok' | 'scheduled' | 'urgent' | 'critical';
+export type VesselStatus = "active" | "maintenance" | "inactive" | "critical";
+export type MaintenanceStatus = "ok" | "scheduled" | "urgent" | "critical";
 
 export interface Vessel {
   id: string;
@@ -40,8 +40,8 @@ export interface VesselAlert {
   id: string;
   vessel_id: string;
   vessel_name: string;
-  alert_type: 'maintenance' | 'position' | 'safety' | 'critical';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  alert_type: "maintenance" | "position" | "safety" | "critical";
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
   timestamp: string;
 }

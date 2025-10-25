@@ -269,7 +269,7 @@ export function fallbackComplianceEvaluation(
       "Create action plan for warning items",
       "Update compliance documentation"
     ],
-    summary: `Compliance check completed with ${complianceScore.toFixed(1)}% conformity. ${failItems > 0 ? 'Immediate action required for failed items.' : 'Good compliance status.'}`,
+    summary: `Compliance check completed with ${complianceScore.toFixed(1)}% conformity. ${failItems > 0 ? "Immediate action required for failed items." : "Good compliance status."}`,
     confidence: 75
   };
 }

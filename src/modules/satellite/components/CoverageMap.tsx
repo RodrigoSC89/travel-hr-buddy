@@ -6,7 +6,7 @@ interface Coverage {
   region: string;
   coverage: number;
   satellites: number;
-  quality: 'excellent' | 'good' | 'fair' | 'poor';
+  quality: "excellent" | "good" | "fair" | "poor";
 }
 
 interface CoverageMapProps {
@@ -16,21 +16,21 @@ interface CoverageMapProps {
 export function CoverageMap({ coverageData }: CoverageMapProps) {
   const getQualityColor = (quality: string) => {
     switch (quality) {
-      case 'excellent': return 'default';
-      case 'good': return 'default';
-      case 'fair': return 'secondary';
-      case 'poor': return 'destructive';
-      default: return 'secondary';
+    case "excellent": return "default";
+    case "good": return "default";
+    case "fair": return "secondary";
+    case "poor": return "destructive";
+    default: return "secondary";
     }
   };
 
   const getQualityLabel = (quality: string) => {
     switch (quality) {
-      case 'excellent': return 'Excelente';
-      case 'good': return 'Boa';
-      case 'fair': return 'Regular';
-      case 'poor': return 'Fraca';
-      default: return quality;
+    case "excellent": return "Excelente";
+    case "good": return "Boa";
+    case "fair": return "Regular";
+    case "poor": return "Fraca";
+    default: return quality;
     }
   };
 

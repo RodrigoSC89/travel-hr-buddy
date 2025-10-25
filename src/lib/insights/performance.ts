@@ -77,11 +77,11 @@ export const getPerformanceStatus = (metrics: PerformanceMetrics): string => {
 
   // Classify status
   if (percentage >= 85) {
-    return 'optimal';
+    return "optimal";
   } else if (percentage >= 60) {
-    return 'average';
+    return "average";
   } else {
-    return 'critical';
+    return "critical";
   }
 };
 
@@ -98,23 +98,23 @@ export const getPerformanceAnalysis = (metrics: PerformanceMetrics) => {
 
   // Analyze fuel efficiency
   if (metrics.fuelEfficiency < THRESHOLDS.average.fuelEfficiency) {
-    issues.push('Eficiência de combustível abaixo do esperado');
-    recommendations.push('Revisar rotas e velocidade de cruzeiro');
-    recommendations.push('Verificar manutenção dos motores');
+    issues.push("Eficiência de combustível abaixo do esperado");
+    recommendations.push("Revisar rotas e velocidade de cruzeiro");
+    recommendations.push("Verificar manutenção dos motores");
   }
 
   // Analyze productivity
   if (metrics.productivity < THRESHOLDS.average.productivity) {
-    issues.push('Produtividade abaixo da meta');
-    recommendations.push('Otimizar distribuição de tarefas');
-    recommendations.push('Revisar cronogramas de missões');
+    issues.push("Produtividade abaixo da meta");
+    recommendations.push("Otimizar distribuição de tarefas");
+    recommendations.push("Revisar cronogramas de missões");
   }
 
   // Analyze downtime
   if (metrics.downtime > THRESHOLDS.average.downtime) {
-    issues.push('Downtime acima do aceitável');
-    recommendations.push('Implementar manutenção preventiva');
-    recommendations.push('Revisar causas de paradas não programadas');
+    issues.push("Downtime acima do aceitável");
+    recommendations.push("Implementar manutenção preventiva");
+    recommendations.push("Revisar causas de paradas não programadas");
   }
 
   return {
@@ -138,11 +138,11 @@ export const comparePerformance = (
   historicalMetrics: PerformanceMetrics
 ) => {
   const getTrend = (current: number, previous: number, lowerIsBetter = false) => {
-    if (current === previous) return 'stable';
+    if (current === previous) return "stable";
     if (lowerIsBetter) {
-      return current < previous ? 'improving' : 'declining';
+      return current < previous ? "improving" : "declining";
     }
-    return current > previous ? 'improving' : 'declining';
+    return current > previous ? "improving" : "declining";
   };
 
   const trends = {

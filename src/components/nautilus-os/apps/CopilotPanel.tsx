@@ -22,8 +22,8 @@ export function CopilotPanel() {
             suggestion.type === "success"
               ? "bg-success/10 border-success/30"
               : suggestion.type === "warning"
-              ? "bg-warning/10 border-warning/30"
-              : "bg-primary/10 border-primary/30"
+                ? "bg-warning/10 border-warning/30"
+                : "bg-primary/10 border-primary/30"
           }`}
         >
           <suggestion.icon className="h-4 w-4 mt-0.5 flex-shrink-0" />

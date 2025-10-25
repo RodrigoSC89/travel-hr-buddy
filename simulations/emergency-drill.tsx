@@ -9,18 +9,18 @@
  * - 🚨 Extreme weather alert
  */
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, Flame, Radio, FileWarning, CloudRain, CheckCircle } from 'lucide-react';
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { AlertTriangle, Flame, Radio, FileWarning, CloudRain, CheckCircle } from "lucide-react";
 
 // Emergency scenario types
 export type EmergencyScenario = 
-  | 'engine_fire'
-  | 'crew_missing'
-  | 'ism_failure'
-  | 'weather_alert';
+  | "engine_fire"
+  | "crew_missing"
+  | "ism_failure"
+  | "weather_alert";
 
 // AI Response structure
 interface AIEmergencyResponse {
@@ -44,28 +44,28 @@ const SCENARIOS: Record<EmergencyScenario, {
   description: string;
 }> = {
   engine_fire: {
-    title: 'Incêndio em Sala de Máquinas',
+    title: "Incêndio em Sala de Máquinas",
     icon: Flame,
-    color: 'text-red-500',
-    description: 'Detecção de fogo no compartimento principal de máquinas'
+    color: "text-red-500",
+    description: "Detecção de fogo no compartimento principal de máquinas"
   },
   crew_missing: {
-    title: 'Falta de Sinal de Tripulante',
+    title: "Falta de Sinal de Tripulante",
     icon: Radio,
-    color: 'text-orange-500',
-    description: 'Perda de sinal de localização de tripulante crítico'
+    color: "text-orange-500",
+    description: "Perda de sinal de localização de tripulante crítico"
   },
   ism_failure: {
-    title: 'Falha de Checklist ISM',
+    title: "Falha de Checklist ISM",
     icon: FileWarning,
-    color: 'text-yellow-500',
-    description: 'Não conformidade em checklist obrigatório ISM'
+    color: "text-yellow-500",
+    description: "Não conformidade em checklist obrigatório ISM"
   },
   weather_alert: {
-    title: 'Alerta Meteorológico Extremo',
+    title: "Alerta Meteorológico Extremo",
     icon: CloudRain,
-    color: 'text-blue-500',
-    description: 'Previsão de condições meteorológicas extremas'
+    color: "text-blue-500",
+    description: "Previsão de condições meteorológicas extremas"
   }
 };
 
@@ -84,57 +84,57 @@ async function simulateAIResponse(scenario: EmergencyScenario): Promise<AIEmerge
   // Generate scenario-specific responses
   const responses: Record<EmergencyScenario, Partial<AIEmergencyResponse>> = {
     engine_fire: {
-      evacuation_plan: 'Evacuação imediata da sala de máquinas via saída de emergência B. Isolamento do compartimento. Ativação do sistema de supressão automático CO2.',
-      shift_reconfiguration: 'Redirecionar equipe auxiliar para monitoramento de energia. Ativar gerador de backup. Escalação de engenheiro sênior para comando.',
-      maintenance_priority: 'Prioridade CRÍTICA: Inspeção completa do sistema de supressão após contenção. Verificação de sensores de fumaça.',
+      evacuation_plan: "Evacuação imediata da sala de máquinas via saída de emergência B. Isolamento do compartimento. Ativação do sistema de supressão automático CO2.",
+      shift_reconfiguration: "Redirecionar equipe auxiliar para monitoramento de energia. Ativar gerador de backup. Escalação de engenheiro sênior para comando.",
+      maintenance_priority: "Prioridade CRÍTICA: Inspeção completa do sistema de supressão após contenção. Verificação de sensores de fumaça.",
       actions: [
-        'Ativar alarme geral',
-        'Evacuar compartimento',
-        'Isolar sistema de combustível',
-        'Ativar supressão CO2',
-        'Notificar autoridades marítimas',
-        'Preparar relatório de incidente'
+        "Ativar alarme geral",
+        "Evacuar compartimento",
+        "Isolar sistema de combustível",
+        "Ativar supressão CO2",
+        "Notificar autoridades marítimas",
+        "Preparar relatório de incidente"
       ],
       confidence: 97.2
     },
     crew_missing: {
-      evacuation_plan: 'Iniciar protocolo de busca e resgate (SAR). Divisão da tripulação em equipes de busca. Verificação de últimos locais conhecidos via sistema de rastreamento.',
-      shift_reconfiguration: 'Redistribuição temporária de responsabilidades. Ativação de tripulante de standby. Notificação ao gestor de turno.',
-      express_audit: 'Auditoria expressa de protocolos de segurança pessoal. Verificação de equipamentos de comunicação e localização.',
+      evacuation_plan: "Iniciar protocolo de busca e resgate (SAR). Divisão da tripulação em equipes de busca. Verificação de últimos locais conhecidos via sistema de rastreamento.",
+      shift_reconfiguration: "Redistribuição temporária de responsabilidades. Ativação de tripulante de standby. Notificação ao gestor de turno.",
+      express_audit: "Auditoria expressa de protocolos de segurança pessoal. Verificação de equipamentos de comunicação e localização.",
       actions: [
-        'Ativar protocolo SAR',
-        'Verificar última posição conhecida',
-        'Formar equipes de busca',
-        'Checar áreas restritas',
-        'Contactar autoridades se necessário',
-        'Documentar timeline'
+        "Ativar protocolo SAR",
+        "Verificar última posição conhecida",
+        "Formar equipes de busca",
+        "Checar áreas restritas",
+        "Contactar autoridades se necessário",
+        "Documentar timeline"
       ],
       confidence: 94.5
     },
     ism_failure: {
-      express_audit: 'Auditoria completa do checklist ISM falho. Identificação de itens não conformes. Verificação de certificações e treinamentos requeridos.',
-      shift_reconfiguration: 'Designar oficial qualificado para revisão e correção. Suspensão temporária de operação afetada se necessário.',
+      express_audit: "Auditoria completa do checklist ISM falho. Identificação de itens não conformes. Verificação de certificações e treinamentos requeridos.",
+      shift_reconfiguration: "Designar oficial qualificado para revisão e correção. Suspensão temporária de operação afetada se necessário.",
       actions: [
-        'Identificar itens não conformes',
-        'Revisar requisitos ISM',
-        'Verificar certificações',
-        'Corrigir não conformidades',
-        'Re-executar checklist',
-        'Registrar ações corretivas'
+        "Identificar itens não conformes",
+        "Revisar requisitos ISM",
+        "Verificar certificações",
+        "Corrigir não conformidades",
+        "Re-executar checklist",
+        "Registrar ações corretivas"
       ],
       confidence: 96.8
     },
     weather_alert: {
-      evacuation_plan: 'Preparação para condições adversas. Assegurar equipamentos. Verificar rotas alternativas. Considerar adiamento ou desvio de rota.',
-      shift_reconfiguration: 'Reforçar turno de convés. Ativar protocolo de clima severo. Preparar equipe de emergência.',
-      maintenance_priority: 'Prioridade ALTA: Verificação de sistema de ancoragem. Inspeção de equipamentos de convés. Teste de sistemas de navegação.',
+      evacuation_plan: "Preparação para condições adversas. Assegurar equipamentos. Verificar rotas alternativas. Considerar adiamento ou desvio de rota.",
+      shift_reconfiguration: "Reforçar turno de convés. Ativar protocolo de clima severo. Preparar equipe de emergência.",
+      maintenance_priority: "Prioridade ALTA: Verificação de sistema de ancoragem. Inspeção de equipamentos de convés. Teste de sistemas de navegação.",
       actions: [
-        'Monitorar previsão contínua',
-        'Avaliar rota atual',
-        'Preparar embarcação',
-        'Verificar suprimentos de emergência',
-        'Briefing de segurança para tripulação',
-        'Estabelecer comunicação com autoridades'
+        "Monitorar previsão contínua",
+        "Avaliar rota atual",
+        "Preparar embarcação",
+        "Verificar suprimentos de emergência",
+        "Briefing de segurança para tripulação",
+        "Estabelecer comunicação com autoridades"
       ],
       confidence: 95.1
     }
@@ -174,11 +174,11 @@ export function EmergencyDrillSimulator() {
       setSimulationHistory(prev => [aiResponse, ...prev]);
       
       // Store log in localStorage for audit
-      const logs = JSON.parse(localStorage.getItem('emergency_drill_logs') || '[]');
+      const logs = JSON.parse(localStorage.getItem("emergency_drill_logs") || "[]");
       logs.push(aiResponse.log);
-      localStorage.setItem('emergency_drill_logs', JSON.stringify(logs));
+      localStorage.setItem("emergency_drill_logs", JSON.stringify(logs));
     } catch (error) {
-      console.error('Simulation error:', error);
+      console.error("Simulation error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -252,7 +252,7 @@ export function EmergencyDrillSimulator() {
             <Card 
               key={scenarioKey}
               className={`cursor-pointer transition-all hover:shadow-lg ${
-                selectedScenario === scenarioKey ? 'ring-2 ring-primary' : ''
+                selectedScenario === scenarioKey ? "ring-2 ring-primary" : ""
               }`}
               onClick={() => !isLoading && runSimulation(scenarioKey)}
             >
@@ -274,7 +274,7 @@ export function EmergencyDrillSimulator() {
                     runSimulation(scenarioKey);
                   }}
                 >
-                  {isLoading && selectedScenario === scenarioKey ? 'Simulando...' : 'Simular'}
+                  {isLoading && selectedScenario === scenarioKey ? "Simulando..." : "Simular"}
                 </Button>
               </CardContent>
             </Card>

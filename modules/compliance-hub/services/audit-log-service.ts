@@ -187,7 +187,7 @@ export async function exportAuditLogs(
     Logger.info("Exporting audit logs", { filters });
 
     // Fetch logs based on filters
-    let logs: AuditLog[] = [];
+    const logs: AuditLog[] = [];
     // In real implementation, fetch from Supabase with filters
 
     if (logs.length === 0) {

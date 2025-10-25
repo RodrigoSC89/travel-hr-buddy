@@ -18,8 +18,8 @@ export function LogsViewer() {
             log.level === "error"
               ? "bg-destructive/10 border-destructive/30"
               : log.level === "warning"
-              ? "bg-warning/10 border-warning/30"
-              : "bg-primary/5 border-border/30"
+                ? "bg-warning/10 border-warning/30"
+                : "bg-primary/5 border-border/30"
           }`}
         >
           <log.icon className="h-3 w-3 mt-0.5 flex-shrink-0" />

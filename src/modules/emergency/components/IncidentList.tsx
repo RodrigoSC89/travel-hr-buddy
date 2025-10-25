@@ -12,22 +12,22 @@ interface IncidentListProps {
 export function IncidentList({ incidents, onSelectIncident }: IncidentListProps) {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'destructive';
-      case 'high': return 'destructive';
-      case 'medium': return 'secondary';
-      case 'low': return 'default';
-      default: return 'default';
+    case "critical": return "destructive";
+    case "high": return "destructive";
+    case "medium": return "secondary";
+    case "low": return "default";
+    default: return "default";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'reported': return 'secondary';
-      case 'active': return 'default';
-      case 'responding': return 'default';
-      case 'resolved': return 'default';
-      case 'cancelled': return 'secondary';
-      default: return 'secondary';
+    case "reported": return "secondary";
+    case "active": return "default";
+    case "responding": return "default";
+    case "resolved": return "default";
+    case "cancelled": return "secondary";
+    default: return "secondary";
     }
   };
 
@@ -81,7 +81,7 @@ export function IncidentList({ incidents, onSelectIncident }: IncidentListProps)
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span>{new Date(incident.timestamp).toLocaleTimeString('pt-BR')}</span>
+                    <span>{new Date(incident.timestamp).toLocaleTimeString("pt-BR")}</span>
                   </div>
                 </div>
               </div>

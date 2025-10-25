@@ -1,11 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
-describe('Edge Cases: Network Errors', () => {
+describe("Edge Cases: Network Errors", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should handle timeout errors gracefully', async () => {
+  it("should handle timeout errors gracefully", async () => {
     // Arrange
     const fetchWithTimeout = async (url: string, timeout: number = 5000) => {
       const controller = new AbortController();
@@ -16,8 +16,8 @@ describe('Edge Cases: Network Errors', () => {
         clearTimeout(timeoutId);
         return response;
       } catch (error: any) {
-        if (error.name === 'AbortError') {
-          throw new Error('Request timeout');
+        if (error.name === "AbortError") {
+          throw new Error("Request timeout");
         }
         throw error;
       }
@@ -27,11 +27,11 @@ describe('Edge Cases: Network Errors', () => {
     await expect(async () => {
       const controller = new AbortController();
       controller.abort();
-      await fetch('https://api.example.com/data', { signal: controller.signal });
+      await fetch("https://api.example.com/data", { signal: controller.signal });
     }).rejects.toThrow();
   });
 
-  it('should retry failed requests with exponential backoff', async () => {
+  it("should retry failed requests with exponential backoff", async () => {
     // Arrange
     let attempts = 0;
     const maxRetries = 3;
@@ -43,9 +43,9 @@ describe('Edge Cases: Network Errors', () => {
         try {
           // Simulate fetch
           if (attempts < 3) {
-            throw new Error('Network error');
+            throw new Error("Network error");
           }
-          return { success: true, data: 'Success' };
+          return { success: true, data: "Success" };
         } catch (error) {
           if (i === maxRetries - 1) throw error;
           const delay = baseDelay * Math.pow(2, i);
@@ -55,14 +55,14 @@ describe('Edge Cases: Network Errors', () => {
     };
 
     // Act
-    const result = await retryFetch('https://api.example.com/data');
+    const result = await retryFetch("https://api.example.com/data");
 
     // Assert
     expect(attempts).toBe(3);
     expect(result.success).toBe(true);
   });
 
-  it('should handle offline mode', async () => {
+  it("should handle offline mode", async () => {
     // Arrange
     const isOnline = navigator.onLine;
     const offlineQueue: any[] = [];
@@ -76,14 +76,14 @@ describe('Edge Cases: Network Errors', () => {
     };
 
     // Act
-    const request = { url: '/api/data', method: 'POST', data: { test: true } };
+    const request = { url: "/api/data", method: "POST", data: { test: true } };
     const result = queueRequest(request);
 
     // Assert - This will queue or not depending on actual network status
-    expect(typeof result.queued).toBe('boolean');
+    expect(typeof result.queued).toBe("boolean");
   });
 
-  it('should handle 429 rate limit errors', async () => {
+  it("should handle 429 rate limit errors", async () => {
     // Arrange
     const handle429Error = (retryAfter: number) => {
       return {
@@ -99,10 +99,10 @@ describe('Edge Cases: Network Errors', () => {
     // Assert
     expect(error.shouldRetry).toBe(true);
     expect(error.retryAfter).toBe(60000);
-    expect(error.message).toContain('60 seconds');
+    expect(error.message).toContain("60 seconds");
   });
 
-  it('should handle malformed JSON responses', async () => {
+  it("should handle malformed JSON responses", async () => {
     // Arrange
     const parseResponse = async (response: string) => {
       try {
@@ -110,33 +110,33 @@ describe('Edge Cases: Network Errors', () => {
       } catch (error) {
         return {
           error: true,
-          message: 'Invalid JSON response',
+          message: "Invalid JSON response",
           raw: response,
         };
       }
     };
 
     // Act
-    const result = await parseResponse('{ invalid json }');
+    const result = await parseResponse("{ invalid json }");
 
     // Assert
     expect(result.error).toBe(true);
-    expect(result.message).toBe('Invalid JSON response');
-    expect(result.raw).toBe('{ invalid json }');
+    expect(result.message).toBe("Invalid JSON response");
+    expect(result.raw).toBe("{ invalid json }");
   });
 
-  it('should handle network connectivity changes', async () => {
+  it("should handle network connectivity changes", async () => {
     // Arrange
     const connectionStates: string[] = [];
     
     const handleOnline = () => {
-      connectionStates.push('online');
-      return { status: 'online', timestamp: Date.now() };
+      connectionStates.push("online");
+      return { status: "online", timestamp: Date.now() };
     };
 
     const handleOffline = () => {
-      connectionStates.push('offline');
-      return { status: 'offline', timestamp: Date.now() };
+      connectionStates.push("offline");
+      return { status: "offline", timestamp: Date.now() };
     };
 
     // Act
@@ -145,29 +145,29 @@ describe('Edge Cases: Network Errors', () => {
     const backOnline = handleOnline();
 
     // Assert
-    expect(connectionStates).toEqual(['online', 'offline', 'online']);
-    expect(online.status).toBe('online');
-    expect(offline.status).toBe('offline');
+    expect(connectionStates).toEqual(["online", "offline", "online"]);
+    expect(online.status).toBe("online");
+    expect(offline.status).toBe("offline");
   });
 
-  it('should handle CORS errors', async () => {
+  it("should handle CORS errors", async () => {
     // Arrange
     const handleCORSError = (error: any) => {
       const isCORSError = 
-        error.message.includes('CORS') || 
-        error.message.includes('cross-origin');
+        error.message.includes("CORS") || 
+        error.message.includes("cross-origin");
       
       return {
         isCORSError,
         message: isCORSError 
-          ? 'Cross-origin request blocked. Check server CORS configuration.'
+          ? "Cross-origin request blocked. Check server CORS configuration."
           : error.message,
       };
     };
 
     // Act
-    const corsError = handleCORSError(new Error('CORS policy blocked request'));
-    const otherError = handleCORSError(new Error('Network timeout'));
+    const corsError = handleCORSError(new Error("CORS policy blocked request"));
+    const otherError = handleCORSError(new Error("Network timeout"));
 
     // Assert
     expect(corsError.isCORSError).toBe(true);

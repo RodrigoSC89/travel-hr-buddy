@@ -6,9 +6,9 @@
 import { logger } from "@/lib/logger";
 
 export interface WebVitalMetric {
-  name: 'LCP' | 'FID' | 'CLS' | 'TTFB' | 'FCP' | 'INP';
+  name: "LCP" | "FID" | "CLS" | "TTFB" | "FCP" | "INP";
   value: number;
-  rating: 'good' | 'needs-improvement' | 'poor';
+  rating: "good" | "needs-improvement" | "poor";
   timestamp: number;
 }
 
@@ -43,13 +43,13 @@ class PerformanceMonitor {
    * Initialize performance monitoring
    */
   initialize(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     this.trackWebVitals();
     this.trackResources();
     this.trackLongTasks();
     
-    logger.info('Performance monitoring initialized');
+    logger.info("Performance monitoring initialized");
   }
 
   /**
@@ -57,9 +57,9 @@ class PerformanceMonitor {
    */
   private trackWebVitals(): void {
     // Largest Contentful Paint (LCP)
-    this.observeMetric('largest-contentful-paint', (entry: any) => {
+    this.observeMetric("largest-contentful-paint", (entry: any) => {
       const metric: WebVitalMetric = {
-        name: 'LCP',
+        name: "LCP",
         value: entry.renderTime || entry.loadTime,
         rating: this.rateLCP(entry.renderTime || entry.loadTime),
         timestamp: Date.now(),
@@ -68,9 +68,9 @@ class PerformanceMonitor {
     });
 
     // First Input Delay (FID) - using INP as replacement
-    this.observeMetric('first-input', (entry: any) => {
+    this.observeMetric("first-input", (entry: any) => {
       const metric: WebVitalMetric = {
-        name: 'FID',
+        name: "FID",
         value: entry.processingStart - entry.startTime,
         rating: this.rateFID(entry.processingStart - entry.startTime),
         timestamp: Date.now(),
@@ -80,11 +80,11 @@ class PerformanceMonitor {
 
     // Cumulative Layout Shift (CLS)
     let clsValue = 0;
-    this.observeMetric('layout-shift', (entry: any) => {
+    this.observeMetric("layout-shift", (entry: any) => {
       if (!entry.hadRecentInput) {
         clsValue += entry.value;
         const metric: WebVitalMetric = {
-          name: 'CLS',
+          name: "CLS",
           value: clsValue,
           rating: this.rateCLS(clsValue),
           timestamp: Date.now(),
@@ -97,7 +97,7 @@ class PerformanceMonitor {
     if (performance.timing) {
       const ttfb = performance.timing.responseStart - performance.timing.requestStart;
       const metric: WebVitalMetric = {
-        name: 'TTFB',
+        name: "TTFB",
         value: ttfb,
         rating: this.rateTTFB(ttfb),
         timestamp: Date.now(),
@@ -106,10 +106,10 @@ class PerformanceMonitor {
     }
 
     // First Contentful Paint (FCP)
-    this.observeMetric('paint', (entry: any) => {
-      if (entry.name === 'first-contentful-paint') {
+    this.observeMetric("paint", (entry: any) => {
+      if (entry.name === "first-contentful-paint") {
         const metric: WebVitalMetric = {
-          name: 'FCP',
+          name: "FCP",
           value: entry.startTime,
           rating: this.rateFCP(entry.startTime),
           timestamp: Date.now(),
@@ -123,7 +123,7 @@ class PerformanceMonitor {
    * Track resource loading performance
    */
   private trackResources(): void {
-    this.observeMetric('resource', (entry: any) => {
+    this.observeMetric("resource", (entry: any) => {
       const resource: ResourceTiming = {
         name: entry.name,
         duration: entry.duration,
@@ -133,7 +133,7 @@ class PerformanceMonitor {
 
       // Log slow resources
       if (resource.duration > 1000) {
-        logger.warn('Slow resource detected', resource);
+        logger.warn("Slow resource detected", resource);
       }
     });
   }
@@ -145,17 +145,17 @@ class PerformanceMonitor {
     try {
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          logger.warn('Long task detected', {
+          logger.warn("Long task detected", {
             duration: entry.duration,
             startTime: entry.startTime,
           });
         }
       });
-      observer.observe({ entryTypes: ['longtask'] });
+      observer.observe({ entryTypes: ["longtask"] });
       this.observers.push(observer);
     } catch (error) {
       // Long task API not supported
-      logger.debug('Long task monitoring not supported');
+      logger.debug("Long task monitoring not supported");
     }
   }
 
@@ -195,7 +195,7 @@ class PerformanceMonitor {
   getSnapshot(): PerformanceSnapshot {
     const resources: ResourceTiming[] = [];
     
-    performance.getEntriesByType('resource').forEach((entry: any) => {
+    performance.getEntriesByType("resource").forEach((entry: any) => {
       resources.push({
         name: entry.name,
         duration: entry.duration,
@@ -239,34 +239,34 @@ class PerformanceMonitor {
   /**
    * Rating functions for Web Vitals
    */
-  private rateLCP(value: number): 'good' | 'needs-improvement' | 'poor' {
-    if (value <= 2500) return 'good';
-    if (value <= 4000) return 'needs-improvement';
-    return 'poor';
+  private rateLCP(value: number): "good" | "needs-improvement" | "poor" {
+    if (value <= 2500) return "good";
+    if (value <= 4000) return "needs-improvement";
+    return "poor";
   }
 
-  private rateFID(value: number): 'good' | 'needs-improvement' | 'poor' {
-    if (value <= 100) return 'good';
-    if (value <= 300) return 'needs-improvement';
-    return 'poor';
+  private rateFID(value: number): "good" | "needs-improvement" | "poor" {
+    if (value <= 100) return "good";
+    if (value <= 300) return "needs-improvement";
+    return "poor";
   }
 
-  private rateCLS(value: number): 'good' | 'needs-improvement' | 'poor' {
-    if (value <= 0.1) return 'good';
-    if (value <= 0.25) return 'needs-improvement';
-    return 'poor';
+  private rateCLS(value: number): "good" | "needs-improvement" | "poor" {
+    if (value <= 0.1) return "good";
+    if (value <= 0.25) return "needs-improvement";
+    return "poor";
   }
 
-  private rateTTFB(value: number): 'good' | 'needs-improvement' | 'poor' {
-    if (value <= 600) return 'good';
-    if (value <= 1500) return 'needs-improvement';
-    return 'poor';
+  private rateTTFB(value: number): "good" | "needs-improvement" | "poor" {
+    if (value <= 600) return "good";
+    if (value <= 1500) return "needs-improvement";
+    return "poor";
   }
 
-  private rateFCP(value: number): 'good' | 'needs-improvement' | 'poor' {
-    if (value <= 1800) return 'good';
-    if (value <= 3000) return 'needs-improvement';
-    return 'poor';
+  private rateFCP(value: number): "good" | "needs-improvement" | "poor" {
+    if (value <= 1800) return "good";
+    if (value <= 3000) return "needs-improvement";
+    return "poor";
   }
 
   /**

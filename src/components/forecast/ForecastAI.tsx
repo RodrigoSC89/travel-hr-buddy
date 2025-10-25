@@ -85,27 +85,27 @@ export default function ForecastAI() {
 
   const getStatusIcon = () => {
     switch (status) {
-      case "success":
-        return <CheckCircle className="text-green-500" aria-hidden="true" />;
-      case "error":
-        return <XCircle className="text-red-500" aria-hidden="true" />;
-      case "offline":
-        return <AlertTriangle className="text-yellow-500" aria-hidden="true" />;
-      default:
-        return <Brain className="text-purple-400 animate-pulse" aria-hidden="true" />;
+    case "success":
+      return <CheckCircle className="text-green-500" aria-hidden="true" />;
+    case "error":
+      return <XCircle className="text-red-500" aria-hidden="true" />;
+    case "offline":
+      return <AlertTriangle className="text-yellow-500" aria-hidden="true" />;
+    default:
+      return <Brain className="text-purple-400 animate-pulse" aria-hidden="true" />;
     }
   };
 
   const getStatusMessage = () => {
     switch (status) {
-      case "success":
-        return "Modelo ativo";
-      case "error":
-        return "Erro no modelo";
-      case "offline":
-        return "Modo offline (fallback)";
-      default:
-        return "Carregando modelo";
+    case "success":
+      return "Modelo ativo";
+    case "error":
+      return "Erro no modelo";
+    case "offline":
+      return "Modo offline (fallback)";
+    default:
+      return "Carregando modelo";
     }
   };
 
@@ -174,8 +174,8 @@ export default function ForecastAI() {
                     prediction.confidence >= 0.8
                       ? "bg-green-500"
                       : prediction.confidence >= 0.5
-                      ? "bg-yellow-500"
-                      : "bg-red-500"
+                        ? "bg-yellow-500"
+                        : "bg-red-500"
                   }`}
                   style={{ width: `${prediction.confidence * 100}%` }}
                 />

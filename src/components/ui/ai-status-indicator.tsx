@@ -27,8 +27,8 @@ export const AIStatusIndicator: React.FC<AIStatusIndicatorProps> = ({
   };
 
   const getModelIcon = (modelName: string) => {
-    if (modelName === 'cache') return Database;
-    if (modelName.includes('gpt')) return Brain;
+    if (modelName === "cache") return Database;
+    if (modelName.includes("gpt")) return Brain;
     return Zap;
   };
 

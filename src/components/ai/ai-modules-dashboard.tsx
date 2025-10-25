@@ -22,40 +22,40 @@ export const AIModulesDashboard = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "healthy":
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case "degraded":
-        return <AlertCircle className="h-5 w-5 text-yellow-500" />;
-      case "offline":
-        return <AlertCircle className="h-5 w-5 text-red-500" />;
-      default:
-        return <Activity className="h-5 w-5 text-gray-500" />;
+    case "healthy":
+      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+    case "degraded":
+      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+    case "offline":
+      return <AlertCircle className="h-5 w-5 text-red-500" />;
+    default:
+      return <Activity className="h-5 w-5 text-gray-500" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "healthy":
-        return "bg-green-500/10 text-green-500 border-green-500/20";
-      case "degraded":
-        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
-      case "offline":
-        return "bg-red-500/10 text-red-500 border-red-500/20";
-      default:
-        return "bg-gray-500/10 text-gray-500 border-gray-500/20";
+    case "healthy":
+      return "bg-green-500/10 text-green-500 border-green-500/20";
+    case "degraded":
+      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+    case "offline":
+      return "bg-red-500/10 text-red-500 border-red-500/20";
+    default:
+      return "bg-gray-500/10 text-gray-500 border-gray-500/20";
     }
   };
 
   const getOverallHealthColor = () => {
     switch (overallHealth) {
-      case "healthy":
-        return "text-green-500";
-      case "degraded":
-        return "text-yellow-500";
-      case "critical":
-        return "text-red-500";
-      default:
-        return "text-gray-500";
+    case "healthy":
+      return "text-green-500";
+    case "degraded":
+      return "text-yellow-500";
+    case "critical":
+      return "text-red-500";
+    default:
+      return "text-gray-500";
     }
   };
 
@@ -158,7 +158,7 @@ export const AIModulesDashboard = () => {
 
               {/* Last Check */}
               <div className="text-xs text-muted-foreground pt-2 border-t">
-                Última verificação: {new Date(module.lastCheck).toLocaleString('pt-BR')}
+                Última verificação: {new Date(module.lastCheck).toLocaleString("pt-BR")}
               </div>
             </CardContent>
           </Card>

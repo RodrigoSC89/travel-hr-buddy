@@ -3,13 +3,13 @@
  * Gerencia snapshots do estado do sistema para a IA
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface SystemContextSnapshot {
   contextId: string;
   summary: string;
   systemStatus: {
-    health: 'operational' | 'degraded' | 'critical';
+    health: "operational" | "degraded" | "critical";
     uptime: number;
     timestamp: string;
   };
@@ -18,7 +18,7 @@ export interface SystemContextSnapshot {
     type: string;
     message: string;
     timestamp: string;
-    severity: 'info' | 'warning' | 'error';
+    severity: "info" | "warning" | "error";
   }>;
   performanceMetrics: {
     avgResponseTime?: number;
@@ -30,21 +30,21 @@ export interface SystemContextSnapshot {
 /**
  * Obter snapshot de contexto atual do sistema
  */
-export async function getContextSnapshot(contextId: string = 'global'): Promise<SystemContextSnapshot> {
+export async function getContextSnapshot(contextId: string = "global"): Promise<SystemContextSnapshot> {
   try {
     const { data, error } = await supabase
-      .from('system_context_snapshots')
-      .select('*')
-      .eq('context_id', contextId)
+      .from("system_context_snapshots")
+      .select("*")
+      .eq("context_id", contextId)
       .single();
 
     if (error || !data) {
       // Retornar contexto padrão se não existir
       return {
         contextId,
-        summary: 'Sistema operacional normal. Nenhum alerta crítico.',
+        summary: "Sistema operacional normal. Nenhum alerta crítico.",
         systemStatus: {
-          health: 'operational',
+          health: "operational",
           uptime: performance.now(),
           timestamp: new Date().toISOString()
         },
@@ -56,7 +56,7 @@ export async function getContextSnapshot(contextId: string = 'global'): Promise<
 
     return {
       contextId: data.context_id,
-      summary: data.summary || '',
+      summary: data.summary || "",
       systemStatus: data.system_status as any,
       activeModules: data.active_modules as string[],
       recentEvents: data.recent_events as any[],
@@ -64,7 +64,7 @@ export async function getContextSnapshot(contextId: string = 'global'): Promise<
     };
 
   } catch (error) {
-    console.error('Error fetching context snapshot:', error);
+    console.error("Error fetching context snapshot:", error);
     throw error;
   }
 }
@@ -75,7 +75,7 @@ export async function getContextSnapshot(contextId: string = 'global'): Promise<
 export async function updateContextSnapshot(snapshot: Partial<SystemContextSnapshot> & { contextId: string }) {
   try {
     const { error } = await supabase
-      .from('system_context_snapshots')
+      .from("system_context_snapshots")
       .upsert({
         context_id: snapshot.contextId,
         summary: snapshot.summary,
@@ -87,12 +87,12 @@ export async function updateContextSnapshot(snapshot: Partial<SystemContextSnaps
       });
 
     if (error) {
-      console.error('Error updating context snapshot:', error);
+      console.error("Error updating context snapshot:", error);
       throw error;
     }
 
   } catch (error) {
-    console.error('Error in updateContextSnapshot:', error);
+    console.error("Error in updateContextSnapshot:", error);
     throw error;
   }
 }
@@ -104,9 +104,9 @@ export async function addRecentEvent(
   event: {
     type: string;
     message: string;
-    severity: 'info' | 'warning' | 'error';
+    severity: "info" | "warning" | "error";
   },
-  contextId: string = 'global'
+  contextId: string = "global"
 ) {
   try {
     const currentSnapshot = await getContextSnapshot(contextId);
@@ -125,7 +125,7 @@ export async function addRecentEvent(
     });
 
   } catch (error) {
-    console.error('Error adding recent event:', error);
+    console.error("Error adding recent event:", error);
   }
 }
 
@@ -138,7 +138,7 @@ export async function updatePerformanceMetrics(
     errorRate?: number;
     throughput?: number;
   },
-  contextId: string = 'global'
+  contextId: string = "global"
 ) {
   try {
     await updateContextSnapshot({
@@ -146,6 +146,6 @@ export async function updatePerformanceMetrics(
       performanceMetrics: metrics
     });
   } catch (error) {
-    console.error('Error updating performance metrics:', error);
+    console.error("Error updating performance metrics:", error);
   }
 }
