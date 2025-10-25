@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { 
   LayoutDashboard, 
   TrendingUp, 
@@ -630,11 +630,13 @@ const EnhancedUnifiedDashboard = () => {
             <CardContent className="relative p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {quickActions.map((action, index) => (
-                  <Card 
+                  <Link 
                     key={index} 
-                    className="group relative hover:shadow-glow transition-all duration-500 cursor-pointer border-0 overflow-hidden bg-card/50 backdrop-blur-sm"
-                    onClick={() => navigate(action.path)}
+                    to={action.path}
+                    className="block"
                   >
+                    <Card className="group relative hover:shadow-glow transition-all duration-500 cursor-pointer border-0 overflow-hidden bg-card/50 backdrop-blur-sm h-full"
+                    >
                     {/* Gradient Overlay */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
                     
@@ -680,6 +682,7 @@ const EnhancedUnifiedDashboard = () => {
                       </div>
                     </CardContent>
                   </Card>
+                  </Link>
                 ))}
               </div>
             </CardContent>
