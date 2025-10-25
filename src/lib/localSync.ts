@@ -146,10 +146,12 @@ class LocalSyncManager {
 
       const transaction = this.db.transaction(['syncQueue'], 'readonly');
       const store = transaction.objectStore('syncQueue');
-      const index = store.index('synced');
 
-      const request = index.getAll(false);
-      request.onsuccess = () => resolve(request.result || []);
+      const request = store.getAll();
+      request.onsuccess = () => {
+        const records = (request.result || []).filter((r: OfflineRecord) => !r.synced);
+        resolve(records);
+      };
       request.onerror = () => reject(request.error);
     });
   }
@@ -220,13 +222,15 @@ class LocalSyncManager {
 
       const transaction = this.db.transaction(['syncQueue'], 'readwrite');
       const store = transaction.objectStore('syncQueue');
-      const index = store.index('synced');
 
-      const request = index.openCursor(true);
+      const request = store.openCursor();
       request.onsuccess = (event) => {
         const cursor = (event.target as IDBRequest).result;
         if (cursor) {
-          cursor.delete();
+          const record = cursor.value as OfflineRecord;
+          if (record.synced) {
+            cursor.delete();
+          }
           cursor.continue();
         } else {
           resolve();
@@ -250,10 +254,12 @@ class LocalSyncManager {
 
       const transaction = this.db.transaction(['syncQueue'], 'readonly');
       const store = transaction.objectStore('syncQueue');
-      const index = store.index('synced');
 
-      const request = index.count(false);
-      request.onsuccess = () => resolve(request.result);
+      const request = store.getAll();
+      request.onsuccess = () => {
+        const records = (request.result || []).filter((r: OfflineRecord) => !r.synced);
+        resolve(records.length);
+      };
       request.onerror = () => reject(request.error);
     });
   }

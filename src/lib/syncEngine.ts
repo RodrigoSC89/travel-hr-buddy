@@ -88,15 +88,18 @@ class SyncEngine {
   private async syncRecord(record: OfflineRecord): Promise<void> {
     const { table, action, data } = record;
 
+    // Type cast to bypass TypeScript's type-safe supabase client for dynamic tables
+    const supabaseAny = supabase as any;
+
     switch (action) {
       case 'create':
-        const { error: createError } = await supabase.from(table).insert(data);
+        const { error: createError } = await supabaseAny.from(table).insert(data);
         if (createError) throw createError;
         break;
 
       case 'update':
         const { id, ...updateData } = data;
-        const { error: updateError } = await supabase
+        const { error: updateError } = await supabaseAny
           .from(table)
           .update(updateData)
           .eq('id', id);
@@ -104,7 +107,7 @@ class SyncEngine {
         break;
 
       case 'delete':
-        const { error: deleteError } = await supabase
+        const { error: deleteError } = await supabaseAny
           .from(table)
           .delete()
           .eq('id', data.id);
