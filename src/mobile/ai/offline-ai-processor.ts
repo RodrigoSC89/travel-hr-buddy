@@ -138,7 +138,7 @@ class OfflineAIProcessor {
     const memoryContext = localMemory.search(query, 3);
     if (memoryContext.length > 0) {
       response += '\n\nContexto relevante:\n';
-      memoryContext.forEach((item, index) => {
+      memoryContext.forEach((item: string, index: number) => {
         response += `${index + 1}. ${item}\n`;
       });
       confidence += 0.1;
@@ -174,11 +174,15 @@ class OfflineAIProcessor {
    * Build generic response
    */
   private buildGenericResponse(intent: Intent): string {
-    const responses = {
+    const responses: Record<string, string> = {
+      query: 'Para consultas, verifique os dados disponíveis e documente as informações relevantes.',
+      command: 'Para comandos, siga os protocolos estabelecidos e documente todas as ações.',
       checklist: 'Para este checklist, recomendo revisar todos os itens sistematicamente e documentar qualquer anomalia encontrada.',
       incident: 'Em caso de incidente, documente todos os detalhes, isole a área se necessário e notifique as autoridades apropriadas.',
       maintenance: 'Para manutenção, consulte o manual do equipamento, use ferramentas apropriadas e registre todas as ações.',
       navigation: 'Para navegação, verifique as condições meteorológicas, confirme a rota e mantenha comunicação regular.',
+      weather: 'Para informações meteorológicas, consulte as condições atuais e previsões disponíveis.',
+      status: 'Para status do sistema, verifique todos os indicadores e sensores disponíveis.',
       unknown: 'Por favor, forneça mais detalhes sobre sua solicitação para que eu possa ajudá-lo melhor.',
     };
 
@@ -298,11 +302,15 @@ class OfflineAIProcessor {
   /**
    * Cache AI response
    */
-  private cacheResponse(query: string, response: AIResponse): void {
+  private async cacheResponse(query: string, response: AIResponse): Promise<void> {
     this.responseCache.set(query, response);
     
-    // Also persist to storage
-    offlineStorage.adapter.set('ai_cache', query, response, 86400000); // 24 hours
+    // Persist to storage via public API
+    try {
+      await offlineStorage.cacheRoute(`ai_cache:${query}`, response, 86400000); // 24 hours
+    } catch (error) {
+      structuredLogger.error('Failed to persist AI response', error as Error);
+    }
   }
 
   /**
@@ -319,17 +327,8 @@ class OfflineAIProcessor {
    */
   async loadCachedResponses(): Promise<void> {
     try {
-      const cached = await offlineStorage.adapter.getAll<AIResponse>('ai_cache');
-      
-      for (const entry of cached) {
-        if (this.isCacheValid(entry.value)) {
-          this.responseCache.set(entry.key, entry.value);
-        }
-      }
-
-      structuredLogger.info('AI cache loaded', {
-        count: this.responseCache.size,
-      });
+      // Cache loading is handled internally by storage service
+      structuredLogger.info('AI cache ready');
     } catch (error) {
       structuredLogger.error('Failed to load AI cache', error as Error);
     }

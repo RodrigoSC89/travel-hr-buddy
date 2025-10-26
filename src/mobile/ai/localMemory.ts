@@ -96,6 +96,23 @@ class LocalMemory {
   }
 
   /**
+   * Search for relevant content (for AI context)
+   */
+  search(query: string, limit: number = 10): string[] {
+    // Simple synchronous search in memory
+    // In production, this could be async and search indexed data
+    const lowerQuery = query.toLowerCase();
+    const results: string[] = [];
+    
+    // This is a placeholder - in real implementation, would search cached data
+    if (this.context.recentActivity) {
+      results.push(...this.context.recentActivity.slice(0, limit));
+    }
+    
+    return results;
+  }
+
+  /**
    * Clear all history
    */
   async clearHistory(): Promise<void> {

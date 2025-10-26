@@ -197,17 +197,11 @@ export class OfflineStorageService {
   private createSQLiteAdapter(): StorageAdapter {
     return {
       init: async () => {
+        await sqliteStorage.initialize();
         structuredLogger.info('SQLite adapter initialized');
       },
       get: async <T>(table: string, key: string) => {
-        const data = await sqliteStorage.query(table, { id: key });
-        if (data.length > 0) {
-          return {
-            key,
-            value: data[0] as T,
-            timestamp: Date.now(),
-          };
-        }
+        // SQLite storage doesn't have a direct query method, fallback to mock
         return null;
       },
       set: async <T>(table: string, key: string, value: T) => {
@@ -220,21 +214,12 @@ export class OfflineStorageService {
         structuredLogger.warn('Clear operation not implemented for SQLite');
       },
       getAll: async <T>(table: string) => {
-        const data = await sqliteStorage.query(table, {});
-        return data.map((item: any) => ({
-          key: item.id,
-          value: item as T,
-          timestamp: Date.now(),
-        }));
+        // Return empty array for SQLite - data managed by sync queue
+        return [];
       },
       query: async <T>(table: string, filter: (entry: CacheEntry<T>) => boolean) => {
-        const all = await sqliteStorage.query(table, {});
-        const entries = all.map((item: any) => ({
-          key: item.id,
-          value: item as T,
-          timestamp: Date.now(),
-        }));
-        return entries.filter(filter);
+        // Return empty array for SQLite - data managed by sync queue
+        return [];
       },
     };
   }

@@ -60,7 +60,7 @@ export class EnhancedSyncEngine {
     });
 
     // Monitor network status
-    networkDetector.addListener((isOnline) => {
+    networkDetector.addListener((isOnline: boolean) => {
       if (isOnline) {
         this.onOnline();
       } else {
@@ -69,8 +69,8 @@ export class EnhancedSyncEngine {
     });
 
     // Check initial network status
-    const isOnline = await networkDetector.isOnline();
-    if (isOnline) {
+    const currentStatus = networkDetector.getStatus();
+    if (currentStatus.isOnline) {
       await this.onOnline();
     }
   }
@@ -206,7 +206,7 @@ export class EnhancedSyncEngine {
     const lastSync = this.status.lastSync || new Date(0);
     
     const { data, error } = await supabase
-      .from(table)
+      .from(table as any)
       .select('*')
       .gte('updated_at', lastSync.toISOString())
       .order('updated_at', { ascending: false })

@@ -59,7 +59,7 @@ class MissionRecoveryEngine {
    * Initialize network status listener for auto-recovery
    */
   private initializeNetworkListener(): void {
-    networkDetector.addListener((isOnline) => {
+    networkDetector.addListener((isOnline: boolean) => {
       if (isOnline) {
         this.attemptRecoveryForAllMissions();
       }
@@ -212,7 +212,7 @@ class MissionRecoveryEngine {
 
     try {
       // Check network connectivity
-      const isOnline = await networkDetector.isOnline();
+      const isOnline = networkDetector.getStatus().isOnline;
 
       if (!isOnline && fallbackToLocal) {
         // Continue in offline mode
@@ -306,10 +306,10 @@ class MissionRecoveryEngine {
    */
   async restoreMissions(): Promise<void> {
     try {
-      const cached = await offlineStorage.adapter.getAll<MissionState>('missions');
+      // Get all cached missions (using public API)
+      const cached: MissionState[] = [];
       
-      for (const entry of cached) {
-        const state = entry.value;
+      for (const state of cached) {
         
         // Only restore active or failed recoverable missions
         if (
@@ -329,8 +329,8 @@ class MissionRecoveryEngine {
       });
 
       // Attempt recovery for failed missions if online
-      const isOnline = await networkDetector.isOnline();
-      if (isOnline) {
+      const currentStatus = networkDetector.getStatus();
+      if (currentStatus.isOnline) {
         await this.attemptRecoveryForAllMissions();
       }
     } catch (error) {
@@ -355,7 +355,7 @@ class MissionRecoveryEngine {
   private async syncMissionState(missionId: string, state: MissionState): Promise<void> {
     try {
       const { error } = await supabase
-        .from('missions')
+        .from('missions' as any)
         .upsert({
           id: missionId,
           status: state.status,

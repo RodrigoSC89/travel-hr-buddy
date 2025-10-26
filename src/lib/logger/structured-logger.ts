@@ -148,17 +148,15 @@ class StructuredLogger {
         error: console.error,
       }[entry.level];
 
-      const parts = [`${emoji} [${entry.level.toUpperCase()}] ${entry.message}`];
+      consoleMethod(`${emoji} [${entry.level.toUpperCase()}] ${entry.message}`);
       
       if (entry.context) {
-        parts.push('\nContext:', entry.context);
+        consoleMethod('Context:', JSON.stringify(entry.context, null, 2));
       }
       
       if (entry.error) {
-        parts.push('\nError:', entry.error);
+        consoleMethod('Error:', JSON.stringify(entry.error, null, 2));
       }
-
-      consoleMethod.apply(console, parts);
     } else {
       // In production, use structured JSON format for log aggregation
       // Only for errors and warnings

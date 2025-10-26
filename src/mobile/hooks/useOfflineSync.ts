@@ -124,7 +124,7 @@ export const useOfflineSync = (): UseOfflineSyncResult => {
     });
 
     // Subscribe to network status
-    const unsubscribeNetwork = networkDetector.addListener((isOnline) => {
+    const unsubscribeNetwork = networkDetector.addListener((isOnline: boolean) => {
       setState((prev) => ({ ...prev, isOnline }));
       
       // Auto-sync when connection restored

@@ -5,8 +5,19 @@
  * with encrypted token persistence
  */
 
-import { Preferences } from '@capacitor/preferences';
-import { BiometricAuth, BiometryType } from '@capacitor-community/biometric-auth';
+// Capacitor imports with fallbacks for web
+const Preferences = typeof window !== 'undefined' && (window as any).Capacitor?.Plugins?.Preferences || {
+  set: async (opts: any) => localStorage.setItem(opts.key, opts.value),
+  get: async (opts: any) => ({ value: localStorage.getItem(opts.key) }),
+  remove: async (opts: any) => localStorage.removeItem(opts.key),
+};
+
+const BiometricAuth = typeof window !== 'undefined' && (window as any).Capacitor?.Plugins?.BiometricAuth || {
+  checkBiometry: async () => ({ isAvailable: false, biometryType: 'none' as BiometryType }),
+  authenticate: async (opts: any) => Promise.reject(new Error('Biometric auth not available')),
+};
+
+type BiometryType = 'none' | 'touchId' | 'faceId' | 'fingerprintAuthentication' | 'faceAuthentication' | 'irisAuthentication';
 import { structuredLogger } from '@/lib/logger/structured-logger';
 import { supabase } from '@/integrations/supabase/client';
 

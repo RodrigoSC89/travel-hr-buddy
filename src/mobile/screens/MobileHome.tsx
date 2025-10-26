@@ -41,7 +41,7 @@ export const MobileHome: React.FC = () => {
     });
 
     // Monitor network status
-    const unsubscribeNetwork = networkDetector.addListener((online) => {
+    const unsubscribeNetwork = networkDetector.addListener((online: boolean) => {
       setIsOnline(online);
     });
 

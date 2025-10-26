@@ -85,6 +85,27 @@ class NetworkDetector {
   }
 
   /**
+   * Add listener (alias for onChange for consistency)
+   */
+  public addListener(callback: (isOnline: boolean) => void): () => void {
+    const wrappedCallback: NetworkChangeCallback = (status) => {
+      callback(status.isOnline);
+    };
+    this.listeners.push(wrappedCallback);
+    
+    return () => {
+      this.listeners = this.listeners.filter(cb => cb !== wrappedCallback);
+    };
+  }
+
+  /**
+   * Check if currently online
+   */
+  public async isOnline(): Promise<boolean> {
+    return this.currentStatus.isOnline;
+  }
+
+  /**
    * Notify all listeners
    */
   private notifyListeners(status: NetworkStatus): void {
