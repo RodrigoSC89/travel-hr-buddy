@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { 
   Waves, 
   Brain, 
@@ -9,12 +10,17 @@ import {
   CheckCircle, 
   Navigation,
   Activity,
-  MapPin
+  MapPin,
+  Download,
+  Save,
+  FolderOpen
 } from "lucide-react";
 import SonarEngine, { BathymetricData, SonarReading } from "./services/sonarEngine";
+import BathymetryExporter from "./services/bathymetryExporter";
 
 /**
  * PATCH 180.0 - Sonar AI & Bathymetric Scanner
+ * PATCH 183.0 - Enhanced with export and offline capabilities
  * 
  * Features:
  * - Real-time bathymetric scanning simulation
@@ -22,20 +28,29 @@ import SonarEngine, { BathymetricData, SonarReading } from "./services/sonarEngi
  * - Color-coded depth visualization
  * - Safe route suggestions
  * - Obstacle detection and warnings
+ * - GeoJSON and PNG export
+ * - Offline data caching
  */
 
 const OceanSonar: React.FC = () => {
   const [sonarEngine] = useState(() => SonarEngine.getInstance());
+  const [exporter] = useState(() => new BathymetryExporter());
   const [isScanning, setIsScanning] = useState(false);
   const [bathymetricData, setBathymetricData] = useState<BathymetricData | null>(null);
   const [centerLat, setCenterLat] = useState(-23.5505); // São Paulo Bay (example)
   const [centerLon, setCenterLon] = useState(-46.6333);
   const [radiusKm, setRadiusKm] = useState(50);
+  const [hasCachedData, setHasCachedData] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState<{
     recommendation: string;
     safePath: { lat: number; lon: number }[];
     warnings: string[];
   } | null>(null);
+
+  // Check for cached data on mount
+  useEffect(() => {
+    setHasCachedData(exporter.hasCachedData());
+  }, [exporter]);
 
   const startScan = () => {
     setIsScanning(true);
@@ -45,6 +60,10 @@ const OceanSonar: React.FC = () => {
     setTimeout(() => {
       const data = sonarEngine.generateBathymetricData(centerLat, centerLon, radiusKm);
       setBathymetricData(data);
+      
+      // Save to cache (PATCH 183.0)
+      exporter.saveToCache(data);
+      setHasCachedData(true);
       
       // Generate AI analysis
       const analysis = sonarEngine.analyzeSafeRoute(data, centerLat + 0.1, centerLon + 0.1);
@@ -73,6 +92,35 @@ const OceanSonar: React.FC = () => {
       case 'danger':
         return <AlertTriangle className="w-4 h-4" />;
     }
+  };
+
+  // PATCH 183.0 - Export handlers
+  const handleExportGeoJSON = () => {
+    if (!bathymetricData) return;
+    exporter.downloadGeoJSON(bathymetricData, `bathymetry-${Date.now()}.geojson`);
+  };
+
+  const handleExportPNG = async () => {
+    if (!bathymetricData) return;
+    try {
+      await exporter.downloadPNG(bathymetricData, `bathymetry-${Date.now()}.png`, 1200, 1200);
+    } catch (error) {
+      console.error('Failed to export PNG:', error);
+    }
+  };
+
+  const handleLoadFromCache = () => {
+    const cachedData = exporter.loadFromCache();
+    if (cachedData) {
+      setBathymetricData(cachedData);
+      const analysis = sonarEngine.analyzeSafeRoute(cachedData, centerLat + 0.1, centerLon + 0.1);
+      setAiAnalysis(analysis);
+    }
+  };
+
+  const handleClearCache = () => {
+    exporter.clearCache();
+    setHasCachedData(false);
   };
 
   return (
@@ -147,23 +195,81 @@ const OceanSonar: React.FC = () => {
                 />
               </div>
             </div>
-            <Button
-              onClick={startScan}
-              disabled={isScanning}
-              className="mt-4 bg-cyan-600 hover:bg-cyan-700"
-            >
-              {isScanning ? (
-                <>
-                  <Activity className="w-4 h-4 mr-2 animate-spin" />
-                  Scanning Ocean Floor...
-                </>
-              ) : (
-                <>
-                  <Waves className="w-4 h-4 mr-2" />
-                  Start Bathymetric Scan
-                </>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button
+                onClick={startScan}
+                disabled={isScanning}
+                className="bg-cyan-600 hover:bg-cyan-700"
+              >
+                {isScanning ? (
+                  <>
+                    <Activity className="w-4 h-4 mr-2 animate-spin" />
+                    Scanning Ocean Floor...
+                  </>
+                ) : (
+                  <>
+                    <Waves className="w-4 h-4 mr-2" />
+                    Start Bathymetric Scan
+                  </>
+                )}
+              </Button>
+              
+              {/* PATCH 183.0 - Cache controls */}
+              {hasCachedData && (
+                <Button
+                  onClick={handleLoadFromCache}
+                  variant="outline"
+                  className="border-zinc-600"
+                  disabled={isScanning}
+                >
+                  <FolderOpen className="w-4 h-4 mr-2" />
+                  Load from Cache
+                </Button>
               )}
-            </Button>
+            </div>
+
+            {/* PATCH 183.0 - Export buttons */}
+            {bathymetricData && (
+              <div className="mt-4 border-t border-zinc-700 pt-4">
+                <div className="text-sm text-zinc-400 mb-2">Export Options (PATCH 183.0):</div>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    onClick={handleExportGeoJSON}
+                    variant="outline"
+                    className="border-zinc-600"
+                    size="sm"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Export GeoJSON
+                  </Button>
+                  <Button
+                    onClick={handleExportPNG}
+                    variant="outline"
+                    className="border-zinc-600"
+                    size="sm"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Export PNG
+                  </Button>
+                  {hasCachedData && (
+                    <Button
+                      onClick={handleClearCache}
+                      variant="outline"
+                      className="border-zinc-600"
+                      size="sm"
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      Clear Cache
+                    </Button>
+                  )}
+                </div>
+                {hasCachedData && (
+                  <Badge className="mt-2 bg-green-500/20 text-green-400 border-green-500/30">
+                    Data cached for offline use
+                  </Badge>
+                )}
+              </div>
+            )}
           </CardContent>
         </Card>
 
