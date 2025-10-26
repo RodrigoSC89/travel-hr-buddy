@@ -1609,6 +1609,57 @@ export type Database = {
           },
         ]
       }
+      cognitive_feedback: {
+        Row: {
+          after_state: Json | null
+          applied: boolean | null
+          before_state: Json | null
+          context: Json | null
+          correction_type: string | null
+          created_at: string | null
+          decision_id: string
+          id: string
+          impact_score: number | null
+          module_name: string | null
+          operator_action: string | null
+          operator_id: string | null
+          reason: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          after_state?: Json | null
+          applied?: boolean | null
+          before_state?: Json | null
+          context?: Json | null
+          correction_type?: string | null
+          created_at?: string | null
+          decision_id: string
+          id?: string
+          impact_score?: number | null
+          module_name?: string | null
+          operator_action?: string | null
+          operator_id?: string | null
+          reason?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          after_state?: Json | null
+          applied?: boolean | null
+          before_state?: Json | null
+          context?: Json | null
+          correction_type?: string | null
+          created_at?: string | null
+          decision_id?: string
+          id?: string
+          impact_score?: number | null
+          module_name?: string | null
+          operator_action?: string | null
+          operator_id?: string | null
+          reason?: string | null
+          timestamp?: string | null
+        }
+        Relationships: []
+      }
       communication_channels: {
         Row: {
           created_at: string
@@ -3309,6 +3360,42 @@ export type Database = {
         }
         Relationships: []
       }
+      global_knowledge: {
+        Row: {
+          aggregated_data: Json
+          confidence_score: number | null
+          created_at: string | null
+          id: string
+          knowledge_type: string
+          performance_metrics: Json | null
+          source_count: number | null
+          updated_at: string | null
+          version: number | null
+        }
+        Insert: {
+          aggregated_data: Json
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          knowledge_type: string
+          performance_metrics?: Json | null
+          source_count?: number | null
+          updated_at?: string | null
+          version?: number | null
+        }
+        Update: {
+          aggregated_data?: Json
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          knowledge_type?: string
+          performance_metrics?: Json | null
+          source_count?: number | null
+          updated_at?: string | null
+          version?: number | null
+        }
+        Relationships: []
+      }
       help_center_analytics: {
         Row: {
           action_type: string
@@ -3608,6 +3695,69 @@ export type Database = {
           type?: string
           updated_at?: string
           views?: number | null
+        }
+        Relationships: []
+      }
+      learning_events: {
+        Row: {
+          context: Json
+          created_at: string | null
+          event_type: string
+          id: string
+          metadata: Json | null
+          module_name: string | null
+          timestamp: string | null
+          user_id: string | null
+        }
+        Insert: {
+          context?: Json
+          created_at?: string | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          module_name?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          context?: Json
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          module_name?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      local_knowledge: {
+        Row: {
+          content: Json
+          created_at: string | null
+          id: string
+          knowledge_type: string
+          last_sync: string | null
+          updated_at: string | null
+          version: number | null
+        }
+        Insert: {
+          content: Json
+          created_at?: string | null
+          id?: string
+          knowledge_type: string
+          last_sync?: string | null
+          updated_at?: string | null
+          version?: number | null
+        }
+        Update: {
+          content?: Json
+          created_at?: string | null
+          id?: string
+          knowledge_type?: string
+          last_sync?: string | null
+          updated_at?: string | null
+          version?: number | null
         }
         Relationships: []
       }
@@ -6374,6 +6524,36 @@ export type Database = {
           },
         ]
       }
+      tenant_modules: {
+        Row: {
+          config: Json | null
+          created_at: string | null
+          enabled: boolean | null
+          id: string
+          module_name: string
+          tenant_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          config?: Json | null
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          module_name: string
+          tenant_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          config?: Json | null
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          module_name?: string
+          tenant_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       tenant_subscriptions: {
         Row: {
           amount: number
@@ -7207,6 +7387,7 @@ export type Database = {
           current_port_id: string | null
           draft: number | null
           eta: string | null
+          flag: string | null
           flag_state: string
           fuel_capacity: number | null
           gross_tonnage: number | null
@@ -7214,6 +7395,7 @@ export type Database = {
           imo_number: string | null
           last_maintenance_date: string | null
           length: number | null
+          metadata: Json | null
           name: string
           next_maintenance_date: string | null
           next_port: string | null
@@ -7232,6 +7414,7 @@ export type Database = {
           current_port_id?: string | null
           draft?: number | null
           eta?: string | null
+          flag?: string | null
           flag_state: string
           fuel_capacity?: number | null
           gross_tonnage?: number | null
@@ -7239,6 +7422,7 @@ export type Database = {
           imo_number?: string | null
           last_maintenance_date?: string | null
           length?: number | null
+          metadata?: Json | null
           name: string
           next_maintenance_date?: string | null
           next_port?: string | null
@@ -7257,6 +7441,7 @@ export type Database = {
           current_port_id?: string | null
           draft?: number | null
           eta?: string | null
+          flag?: string | null
           flag_state?: string
           fuel_capacity?: number | null
           gross_tonnage?: number | null
@@ -7264,6 +7449,7 @@ export type Database = {
           imo_number?: string | null
           last_maintenance_date?: string | null
           length?: number | null
+          metadata?: Json | null
           name?: string
           next_maintenance_date?: string | null
           next_port?: string | null
