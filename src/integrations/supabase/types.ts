@@ -171,6 +171,57 @@ export type Database = {
           },
         ]
       }
+      ai_performance_metrics: {
+        Row: {
+          approval_count: number | null
+          avg_confidence: number | null
+          correction_count: number | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          metric_name: string
+          metric_value: number
+          module_name: string
+          period_end: string
+          period_start: string
+          rejection_count: number | null
+          success_rate: number | null
+          tenant_id: string | null
+        }
+        Insert: {
+          approval_count?: number | null
+          avg_confidence?: number | null
+          correction_count?: number | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          metric_name: string
+          metric_value: number
+          module_name: string
+          period_end: string
+          period_start: string
+          rejection_count?: number | null
+          success_rate?: number | null
+          tenant_id?: string | null
+        }
+        Update: {
+          approval_count?: number | null
+          avg_confidence?: number | null
+          correction_count?: number | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          metric_name?: string
+          metric_value?: number
+          module_name?: string
+          period_end?: string
+          period_start?: string
+          rejection_count?: number | null
+          success_rate?: number | null
+          tenant_id?: string | null
+        }
+        Relationships: []
+      }
       ai_reports: {
         Row: {
           content: string
@@ -221,72 +272,63 @@ export type Database = {
       }
       ai_suggestions: {
         Row: {
-          action_data: Json | null
+          applied_at: string | null
+          applied_by: string | null
+          confidence: number | null
           created_at: string | null
-          description: string
+          effectiveness_score: number | null
+          expected_impact: string | null
+          expires_at: string | null
           id: string
-          is_acted_upon: boolean | null
-          is_dismissed: boolean | null
-          is_read: boolean | null
-          organization_id: string | null
-          priority: number | null
+          issue_description: string
+          metadata: Json | null
+          module_name: string
+          severity: string
+          status: string | null
+          suggestion_text: string
+          suggestion_type: string
           tenant_id: string | null
-          title: string
-          type: string
-          updated_at: string | null
-          user_id: string | null
-          valid_until: string | null
+          vessel_id: string | null
         }
         Insert: {
-          action_data?: Json | null
+          applied_at?: string | null
+          applied_by?: string | null
+          confidence?: number | null
           created_at?: string | null
-          description: string
+          effectiveness_score?: number | null
+          expected_impact?: string | null
+          expires_at?: string | null
           id?: string
-          is_acted_upon?: boolean | null
-          is_dismissed?: boolean | null
-          is_read?: boolean | null
-          organization_id?: string | null
-          priority?: number | null
+          issue_description: string
+          metadata?: Json | null
+          module_name: string
+          severity: string
+          status?: string | null
+          suggestion_text: string
+          suggestion_type: string
           tenant_id?: string | null
-          title: string
-          type: string
-          updated_at?: string | null
-          user_id?: string | null
-          valid_until?: string | null
+          vessel_id?: string | null
         }
         Update: {
-          action_data?: Json | null
+          applied_at?: string | null
+          applied_by?: string | null
+          confidence?: number | null
           created_at?: string | null
-          description?: string
+          effectiveness_score?: number | null
+          expected_impact?: string | null
+          expires_at?: string | null
           id?: string
-          is_acted_upon?: boolean | null
-          is_dismissed?: boolean | null
-          is_read?: boolean | null
-          organization_id?: string | null
-          priority?: number | null
+          issue_description?: string
+          metadata?: Json | null
+          module_name?: string
+          severity?: string
+          status?: string | null
+          suggestion_text?: string
+          suggestion_type?: string
           tenant_id?: string | null
-          title?: string
-          type?: string
-          updated_at?: string | null
-          user_id?: string | null
-          valid_until?: string | null
+          vessel_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "ai_suggestions_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ai_suggestions_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "saas_tenants"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       alert_votes: {
         Row: {
@@ -1779,6 +1821,84 @@ export type Database = {
           },
         ]
       }
+      context_snapshots: {
+        Row: {
+          context_data: Json
+          context_type: string
+          created_at: string | null
+          id: string
+          source_module: string
+          sync_status: string | null
+          tenant_id: string | null
+          updated_at: string | null
+          version: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          context_data?: Json
+          context_type: string
+          created_at?: string | null
+          id?: string
+          source_module: string
+          sync_status?: string | null
+          tenant_id?: string | null
+          updated_at?: string | null
+          version?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          context_data?: Json
+          context_type?: string
+          created_at?: string | null
+          id?: string
+          source_module?: string
+          sync_status?: string | null
+          tenant_id?: string | null
+          updated_at?: string | null
+          version?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
+      context_sync_logs: {
+        Row: {
+          action: string
+          context_type: string
+          created_at: string | null
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          source_module: string
+          success: boolean | null
+          sync_duration_ms: number | null
+          target_modules: string[] | null
+        }
+        Insert: {
+          action: string
+          context_type: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          source_module: string
+          success?: boolean | null
+          sync_duration_ms?: number | null
+          target_modules?: string[] | null
+        }
+        Update: {
+          action?: string
+          context_type?: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          source_module?: string
+          success?: boolean | null
+          sync_duration_ms?: number | null
+          target_modules?: string[] | null
+        }
+        Relationships: []
+      }
       conversation_participants: {
         Row: {
           conversation_id: string
@@ -1914,6 +2034,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      copilot_sessions: {
+        Row: {
+          context: Json | null
+          created_at: string | null
+          id: string
+          messages: Json | null
+          metadata: Json | null
+          recommendations: Json | null
+          session_name: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string | null
+          id?: string
+          messages?: Json | null
+          metadata?: Json | null
+          recommendations?: Json | null
+          session_name?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string | null
+          id?: string
+          messages?: Json | null
+          metadata?: Json | null
+          recommendations?: Json | null
+          session_name?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       crew_ai_insights: {
         Row: {
@@ -3046,6 +3205,96 @@ export type Database = {
         }
         Relationships: []
       }
+      decision_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string | null
+          decision_id: string
+          id: string
+          metadata: Json | null
+          new_status: string
+          previous_status: string
+          reason: string | null
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string | null
+          decision_id: string
+          id?: string
+          metadata?: Json | null
+          new_status: string
+          previous_status: string
+          reason?: string | null
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string | null
+          decision_id?: string
+          id?: string
+          metadata?: Json | null
+          new_status?: string
+          previous_status?: string
+          reason?: string | null
+        }
+        Relationships: []
+      }
+      distributed_decisions: {
+        Row: {
+          approved_by: string | null
+          confidence: number | null
+          context: Json
+          created_at: string | null
+          decision_level: string
+          decision_status: string | null
+          decision_type: string
+          escalation_reason: string | null
+          executed_at: string | null
+          id: string
+          outcome: string | null
+          priority: string
+          simulation_result: Json | null
+          tenant_id: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          approved_by?: string | null
+          confidence?: number | null
+          context?: Json
+          created_at?: string | null
+          decision_level: string
+          decision_status?: string | null
+          decision_type: string
+          escalation_reason?: string | null
+          executed_at?: string | null
+          id?: string
+          outcome?: string | null
+          priority: string
+          simulation_result?: Json | null
+          tenant_id?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          approved_by?: string | null
+          confidence?: number | null
+          context?: Json
+          created_at?: string | null
+          decision_level?: string
+          decision_status?: string | null
+          decision_type?: string
+          escalation_reason?: string | null
+          executed_at?: string | null
+          id?: string
+          outcome?: string | null
+          priority?: string
+          simulation_result?: Json | null
+          tenant_id?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
       emergency_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -3348,6 +3597,63 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      feedback_events: {
+        Row: {
+          ai_decision_id: string | null
+          confidence: number | null
+          corrected_decision: string | null
+          created_at: string | null
+          feedback_category: string
+          feedback_type: string
+          id: string
+          learning_applied: boolean | null
+          metadata: Json | null
+          module_name: string
+          original_decision: string | null
+          processed: boolean | null
+          reason: string | null
+          source: string
+          tenant_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          ai_decision_id?: string | null
+          confidence?: number | null
+          corrected_decision?: string | null
+          created_at?: string | null
+          feedback_category: string
+          feedback_type: string
+          id?: string
+          learning_applied?: boolean | null
+          metadata?: Json | null
+          module_name: string
+          original_decision?: string | null
+          processed?: boolean | null
+          reason?: string | null
+          source: string
+          tenant_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          ai_decision_id?: string | null
+          confidence?: number | null
+          corrected_decision?: string | null
+          created_at?: string | null
+          feedback_category?: string
+          feedback_type?: string
+          id?: string
+          learning_applied?: boolean | null
+          metadata?: Json | null
+          module_name?: string
+          original_decision?: string | null
+          processed?: boolean | null
+          reason?: string | null
+          source?: string
+          tenant_id?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -3835,6 +4141,57 @@ export type Database = {
           type?: string
           updated_at?: string
           views?: number | null
+        }
+        Relationships: []
+      }
+      learning_adjustments: {
+        Row: {
+          applied_by: string | null
+          approved_by: string | null
+          confidence: number | null
+          created_at: string | null
+          id: string
+          impact: string | null
+          metadata: Json | null
+          module_name: string
+          new_value: number
+          old_value: number
+          parameter_name: string
+          reason: string
+          rollback_at: string | null
+          tenant_id: string | null
+        }
+        Insert: {
+          applied_by?: string | null
+          approved_by?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          impact?: string | null
+          metadata?: Json | null
+          module_name: string
+          new_value: number
+          old_value: number
+          parameter_name: string
+          reason: string
+          rollback_at?: string | null
+          tenant_id?: string | null
+        }
+        Update: {
+          applied_by?: string | null
+          approved_by?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          impact?: string | null
+          metadata?: Json | null
+          module_name?: string
+          new_value?: number
+          old_value?: number
+          parameter_name?: string
+          reason?: string
+          rollback_at?: string | null
+          tenant_id?: string | null
         }
         Relationships: []
       }
@@ -4392,6 +4749,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      module_health: {
+        Row: {
+          cpu_usage: number | null
+          created_at: string | null
+          error_count: number | null
+          health_score: number | null
+          id: string
+          last_check_at: string | null
+          last_error: string | null
+          memory_usage: number | null
+          metadata: Json | null
+          module_name: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          cpu_usage?: number | null
+          created_at?: string | null
+          error_count?: number | null
+          health_score?: number | null
+          id?: string
+          last_check_at?: string | null
+          last_error?: string | null
+          memory_usage?: number | null
+          metadata?: Json | null
+          module_name: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          cpu_usage?: number | null
+          created_at?: string | null
+          error_count?: number | null
+          health_score?: number | null
+          id?: string
+          last_check_at?: string | null
+          last_error?: string | null
+          memory_usage?: number | null
+          metadata?: Json | null
+          module_name?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       module_permissions: {
         Row: {
@@ -6581,6 +6983,48 @@ export type Database = {
           recorded_at?: string
           unit?: string | null
           value?: number
+        }
+        Relationships: []
+      }
+      system_observations: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string
+          metadata: Json | null
+          module_name: string
+          observation_type: string
+          resolved: boolean | null
+          resolved_at: string | null
+          severity: string
+          tenant_id: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message: string
+          metadata?: Json | null
+          module_name: string
+          observation_type: string
+          resolved?: boolean | null
+          resolved_at?: string | null
+          severity: string
+          tenant_id?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string
+          metadata?: Json | null
+          module_name?: string
+          observation_type?: string
+          resolved?: boolean | null
+          resolved_at?: string | null
+          severity?: string
+          tenant_id?: string | null
+          vessel_id?: string | null
         }
         Relationships: []
       }
