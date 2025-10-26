@@ -207,7 +207,13 @@ class KnowledgeSync {
     for (const snapshot of snapshots) {
       try {
         // Aggregate with existing global knowledge
-        const { data: existingGlobal } = await supabase
+        const { data: existingGlobal } = await (supabase as any)
+          .from('global_knowledge')
+          .select('*')
+          .eq('module_name', snapshot.module_name)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
           .from('global_knowledge')
           .select('*')
           .eq('module_name', snapshot.module_name)
@@ -224,7 +230,7 @@ class KnowledgeSync {
             (existingGlobal.aggregated_data || {}) as Record<string, any>,
             snapshot.usage_data
           );
-          sourceCount = existingGlobal.source_count + 1;
+          sourceCount = (existingGlobal.source_count ?? 0) + 1;
         }
 
         // Calculate confidence score
@@ -242,9 +248,9 @@ class KnowledgeSync {
           },
         };
 
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('global_knowledge')
-          .insert(globalKnowledge);
+          .insert([globalKnowledge]);
 
         if (error) {
           logger.error("[KnowledgeSync] Failed to sync to global", {
@@ -280,7 +286,13 @@ class KnowledgeSync {
     for (const module of modules) {
       try {
         // Get local snapshot
-        const { data: localData } = await supabase
+        const { data: localData } = await (supabase as any)
+          .from('local_knowledge')
+          .select('*')
+          .eq('module_name', module)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
           .from('local_knowledge')
           .select('*')
           .eq('module_name', module)
@@ -289,7 +301,13 @@ class KnowledgeSync {
           .single();
 
         // Get global knowledge
-        const { data: globalData } = await supabase
+        const { data: globalData } = await (supabase as any)
+          .from('global_knowledge')
+          .select('*')
+          .eq('module_name', module)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
           .from('global_knowledge')
           .select('*')
           .eq('module_name', module)
@@ -346,7 +364,13 @@ class KnowledgeSync {
       if (drift.significance === 'low') {
         try {
           // Get global knowledge
-          const { data: globalData } = await supabase
+          const { data: globalData } = await (supabase as any)
+            .from('global_knowledge')
+            .select('*')
+            .eq('module_name', drift.module)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
             .from('global_knowledge')
             .select('*')
             .eq('module_name', drift.module)

@@ -77,21 +77,24 @@ class PredictiveEngine {
   private async fetchTrainingData(): Promise<TrainingData> {
     try {
       // Fetch watchdog logs (last 30 days)
-      const { data: watchdogLogs } = await supabase
+      const { data: watchdogLogs } = await (supabase as any)
+        .from('watchdog_logs')
+        .select('*')
+        .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
         .from('watchdog_logs')
         .select('*')
         .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
         .order('created_at', { ascending: false });
 
       // Fetch usage statistics
-      const { data: usageStats } = await supabase
+      const { data: usageStats } = await (supabase as any)
         .from('system_metrics')
         .select('*')
-        .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
-        .order('created_at', { ascending: false });
+        .gte('recorded_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        .order('recorded_at', { ascending: false });
 
       // Fetch past incidents
-      const { data: incidentPatterns } = await supabase
+      const { data: incidentPatterns } = await (supabase as any)
         .from('incidents')
         .select('*')
         .gte('created_at', new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString())
@@ -153,7 +156,7 @@ class PredictiveEngine {
    */
   private async updateModelParameters(patterns: Record<string, any>): Promise<void> {
     try {
-      await supabase
+      await (supabase as any)
         .from('ai_model_config')
         .upsert({
           model_name: 'predictive_engine',
@@ -218,14 +221,24 @@ class PredictiveEngine {
   private async fetchModuleMetrics(moduleName: string): Promise<PredictiveMetrics> {
     try {
       // Fetch recent errors
-      const { data: errors, count: errorCount } = await supabase
+      const { data: errors, count: errorCount } = await (supabase as any)
+        .from('watchdog_logs')
+        .select('*', { count: 'exact' })
+        .eq('module_name', moduleName)
+        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
         .from('watchdog_logs')
         .select('*', { count: 'exact' })
         .eq('module_name', moduleName)
         .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
       // Fetch recent incidents
-      const { data: incidents } = await supabase
+      const { data: incidents } = await (supabase as any)
+        .from('incidents')
+        .select('*')
+        .eq('module', moduleName)
+        .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+        .order('created_at', { ascending: false })
+        .limit(1);
         .from('incidents')
         .select('*')
         .eq('module', moduleName)
@@ -234,23 +247,23 @@ class PredictiveEngine {
         .limit(1);
 
       // Fetch usage stats
-      const { data: usageStats } = await supabase
+      const { data: usageStats } = await (supabase as any)
         .from('system_metrics')
         .select('*')
-        .eq('module_name', moduleName)
-        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
-        .order('created_at', { ascending: false });
+        .eq('metric_name', moduleName)
+        .gte('recorded_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+        .order('recorded_at', { ascending: false });
 
       // Calculate metrics
       const totalIncidents = incidents?.length || 0;
-      const avgResponseTime = usageStats?.reduce((sum, stat) => sum + (stat.response_time || 0), 0) / (usageStats?.length || 1);
+      const avgResponseTime = (usageStats as any[])?.reduce((sum, stat: any) => sum + (stat.response_time || 0), 0) / ((usageStats as any[])?.length || 1);
       const errorRate = (errorCount || 0) / Math.max(usageStats?.length || 1, 1);
       
       // Determine usage pattern
       let usagePattern: 'stable' | 'increasing' | 'decreasing' | 'volatile' = 'stable';
-      if (usageStats && usageStats.length > 5) {
-        const recentAvg = usageStats.slice(0, 5).reduce((sum, s) => sum + (s.request_count || 0), 0) / 5;
-        const olderAvg = usageStats.slice(5).reduce((sum, s) => sum + (s.request_count || 0), 0) / Math.max(usageStats.length - 5, 1);
+      if (usageStats && (usageStats as any[]).length > 5) {
+        const recentAvg = (usageStats as any[]).slice(0, 5).reduce((sum, s: any) => sum + (s.request_count || 0), 0) / 5;
+        const olderAvg = (usageStats as any[]).slice(5).reduce((sum, s: any) => sum + (s.request_count || 0), 0) / Math.max((usageStats as any[]).length - 5, 1);
         const change = (recentAvg - olderAvg) / Math.max(olderAvg, 1);
         
         if (Math.abs(change) > 0.5) usagePattern = 'volatile';
@@ -385,7 +398,7 @@ class PredictiveEngine {
    */
   private async savePrediction(prediction: ModuleRiskScore): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('predictive_events')
         .insert({
           module_name: prediction.moduleName,
@@ -413,7 +426,7 @@ class PredictiveEngine {
 
     try {
       // Fetch list of active modules
-      const { data: modules } = await supabase
+      const { data: modules } = await (supabase as any)
         .from('system_metrics')
         .select('module_name')
         .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());

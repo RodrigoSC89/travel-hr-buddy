@@ -218,7 +218,7 @@ class EvoAIConnector {
     });
 
     // Generate insights for frequent patterns
-    patterns.forEach((count, category) => {
+    patterns.forEach((count: number, category: string) => {
       if (count > 5) {
         insights.push({
           category: 'user_feedback',
@@ -288,7 +288,7 @@ class EvoAIConnector {
     }, {} as Record<string, number>);
 
     // Identify frequently adjusted parameters
-    Object.entries(paramAdjustments).forEach(([param, count]) => {
+    Object.entries(paramAdjustments).forEach(([param, count]: [string, number]) => {
       if (count > 10) {
         insights.push({
           category: 'adaptation',
@@ -321,8 +321,10 @@ class EvoAIConnector {
       .lt('recorded_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
     // Calculate scores (simplified)
-    const recentAvg = recentMetrics?.reduce((sum, m) => sum + (m.value ?? 0.5), 0) / Math.max(recentMetrics?.length || 1, 1);
-    const oldAvg = oldMetrics?.reduce((sum, m) => sum + (m.value ?? 0.5), 0) / Math.max(oldMetrics?.length || 1, 1);
+    const recentArray = (recentMetrics ?? []) as any[];
+    const oldArray = (oldMetrics ?? []) as any[];
+    const recentAvg = recentArray.reduce((sum, m: any) => sum + (m.value ?? 0.5), 0) / Math.max(recentArray.length || 1, 1);
+    const oldAvg = oldArray.reduce((sum, m: any) => sum + (m.value ?? 0.5), 0) / Math.max(oldArray.length || 1, 1);
 
     const trend = recentAvg > oldAvg * 1.05 ? 'improving' : recentAvg < oldAvg * 0.95 ? 'degrading' : 'stable';
 

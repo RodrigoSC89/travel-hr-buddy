@@ -137,7 +137,8 @@ class MissionSimulationCore {
       const predictions = await this.generatePredictions(blueprint);
 
       // Save to Supabase
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
+        .from('simulated_missions')
         .from('simulated_missions')
         .insert({
           name: blueprint.name,
@@ -188,7 +189,8 @@ class MissionSimulationCore {
       }
 
       // Update status to running
-      await supabase
+      await (supabase as any)
+        .from('simulated_missions')
         .from('simulated_missions')
         .update({ status: 'running' })
         .eq('id', simulationId);
@@ -199,7 +201,8 @@ class MissionSimulationCore {
       const outcome = await this.executeSimulation(blueprint);
 
       // Update status and save outcome
-      await supabase
+      await (supabase as any)
+        .from('simulated_missions')
         .from('simulated_missions')
         .update({
           status: outcome.success ? 'completed' : 'failed',
@@ -227,7 +230,8 @@ class MissionSimulationCore {
     } catch (error) {
       logger.error("[MissionSimulationCore] Simulation failed", { error });
       
-      await supabase
+      await (supabase as any)
+        .from('simulated_missions')
         .from('simulated_missions')
         .update({ status: 'failed' })
         .eq('id', simulationId);
@@ -481,7 +485,8 @@ class MissionSimulationCore {
    */
   async getSimulation(simulationId: string): Promise<SimulationBlueprint | null> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
+        .from('simulated_missions')
         .from('simulated_missions')
         .select('*')
         .eq('id', simulationId)
@@ -518,7 +523,8 @@ class MissionSimulationCore {
    */
   async listSimulations(): Promise<any[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
+        .from('simulated_missions')
         .from('simulated_missions')
         .select('*')
         .order('created_at', { ascending: false });
@@ -539,7 +545,8 @@ class MissionSimulationCore {
    */
   async deleteSimulation(simulationId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
+        .from('simulated_missions')
         .from('simulated_missions')
         .delete()
         .eq('id', simulationId);

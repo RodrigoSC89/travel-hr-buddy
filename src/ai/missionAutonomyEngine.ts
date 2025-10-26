@@ -564,7 +564,8 @@ class MissionAutonomyEngine {
    */
   async getAuditLogs(limit: number = 100): Promise<AutonomyAction[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
+        .from('autonomy_actions')
         .from('autonomy_actions')
         .select('*')
         .order('created_at', { ascending: false })
@@ -572,7 +573,7 @@ class MissionAutonomyEngine {
 
       if (error) throw error;
 
-      return (data || []).map(d => ({
+      return (data || []).map((d: any) => ({
         id: d.id,
         action_type: d.action_type,
         decision_level: d.decision_level,

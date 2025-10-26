@@ -110,7 +110,7 @@ class ManualOverrideSystem {
 
       if (error) throw error;
 
-      return (data || []).map(d => ({
+      return (data || []).map((d: any) => ({
         id: d.id,
         moduleName: d.module_name,
         enabled: d.enabled,
@@ -144,7 +144,7 @@ class ManualOverrideSystem {
 
       if (error) throw error;
 
-      return (data || []).map(d => ({
+      return (data || []).map((d: any) => ({
         id: d.id,
         moduleName: d.module_name,
         enabled: d.enabled,
