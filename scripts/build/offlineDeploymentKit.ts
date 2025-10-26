@@ -1,11 +1,11 @@
 /**
  * Offline Deployment Kit Builder - PATCH 224
  * 
- * Gera pacotes offline autônomos do Nautilus
- * Inclui: Build Vite, DB local, AI embarcada
- * Formatos: .zip, .usb, .iso, Docker
+ * Generates autonomous offline Nautilus packages
+ * Includes: Vite build, local DB, embedded AI
+ * Formats: .zip, .usb, .iso, Docker
  * 
- * @module tools/build/offlineDeploymentKit
+ * @module scripts/build/offlineDeploymentKit
  */
 
 import * as fs from 'fs';
@@ -73,7 +73,7 @@ class OfflineDeploymentBuilder {
   private readonly EXPORT_DIR = 'exports';
 
   /**
-   * Constrói o pacote de deployment
+   * Builds the deployment package
    */
   async build(config: DeploymentConfig): Promise<BuildResult> {
     const startTime = Date.now();
@@ -142,7 +142,7 @@ class OfflineDeploymentBuilder {
   }
 
   /**
-   * Build da aplicação Vite
+   * Builds the Vite application
    */
   private async buildViteApp(): Promise<void> {
     try {
@@ -156,7 +156,7 @@ class OfflineDeploymentBuilder {
   }
 
   /**
-   * Prepara database para uso offline
+   * Prepares database for offline use
    */
   private async prepareDatabaseOffline(
     dbType: DatabaseType,
@@ -189,7 +189,7 @@ class OfflineDeploymentBuilder {
   }
 
   /**
-   * Empacota modelos de AI
+   * Packages AI models
    */
   private async packageAIModels(
     modelIds: string[],
@@ -234,7 +234,7 @@ class OfflineDeploymentBuilder {
   }
 
   /**
-   * Gera o manifest do deployment
+   * Generates the deployment manifest
    */
   private generateManifest(
     config: DeploymentConfig,
@@ -279,7 +279,7 @@ class OfflineDeploymentBuilder {
   }
 
   /**
-   * Cria o pacote no formato especificado
+   * Creates the package in the specified format
    */
   private async createPackage(
     config: DeploymentConfig,
@@ -312,7 +312,7 @@ class OfflineDeploymentBuilder {
   }
 
   /**
-   * Cria pacote ZIP
+   * Creates ZIP package
    */
   private createZipPackage(sourceDir: string, filename: string): string {
     const outputPath = path.join(sourceDir, `${filename}.zip`);
@@ -325,7 +325,7 @@ class OfflineDeploymentBuilder {
   }
 
   /**
-   * Cria pacote USB
+   * Creates USB package
    */
   private createUSBPackage(sourceDir: string, filename: string): string {
     const outputPath = path.join(sourceDir, `${filename}.usb.img`);
@@ -338,7 +338,7 @@ class OfflineDeploymentBuilder {
   }
 
   /**
-   * Cria imagem ISO
+   * Creates ISO image
    */
   private createISOPackage(sourceDir: string, filename: string): string {
     const outputPath = path.join(sourceDir, `${filename}.iso`);
@@ -351,7 +351,7 @@ class OfflineDeploymentBuilder {
   }
 
   /**
-   * Cria pacote Docker
+   * Creates Docker package
    */
   private createDockerPackage(sourceDir: string, filename: string): string {
     const dockerDir = path.join(sourceDir, 'docker');
@@ -390,7 +390,7 @@ services:
     return dockerDir;
   }
 
-  // Métodos auxiliares
+  // Helper methods
 
   private ensureDirectory(dir: string): void {
     if (!fs.existsSync(dir)) {
