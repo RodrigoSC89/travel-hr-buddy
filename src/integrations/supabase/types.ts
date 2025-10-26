@@ -56,6 +56,59 @@ export type Database = {
         }
         Relationships: []
       }
+      adaptive_parameters: {
+        Row: {
+          auto_adjust: boolean | null
+          baseline_value: number
+          created_at: string | null
+          current_value: number
+          id: string
+          last_adjusted_at: string | null
+          module_name: string
+          parameter_name: string
+          tenant_id: string | null
+          threshold_percent: number | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          auto_adjust?: boolean | null
+          baseline_value: number
+          created_at?: string | null
+          current_value: number
+          id?: string
+          last_adjusted_at?: string | null
+          module_name: string
+          parameter_name: string
+          tenant_id?: string | null
+          threshold_percent?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          auto_adjust?: boolean | null
+          baseline_value?: number
+          created_at?: string | null
+          current_value?: number
+          id?: string
+          last_adjusted_at?: string | null
+          module_name?: string
+          parameter_name?: string
+          tenant_id?: string | null
+          threshold_percent?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "adaptive_parameters_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_insights: {
         Row: {
           actionable: boolean
@@ -3214,6 +3267,48 @@ export type Database = {
         }
         Relationships: []
       }
+      evolution_insights: {
+        Row: {
+          category: string
+          created_at: string | null
+          cycle_id: string
+          evolution_score: number | null
+          frequency: number
+          generated_at: string | null
+          id: string
+          impact: string
+          pattern: string
+          recommendation: string
+          tenant_id: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          cycle_id: string
+          evolution_score?: number | null
+          frequency: number
+          generated_at?: string | null
+          id?: string
+          impact: string
+          pattern: string
+          recommendation: string
+          tenant_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          cycle_id?: string
+          evolution_score?: number | null
+          frequency?: number
+          generated_at?: string | null
+          id?: string
+          impact?: string
+          pattern?: string
+          recommendation?: string
+          tenant_id?: string | null
+        }
+        Relationships: []
+      }
       expenses: {
         Row: {
           amount: number
@@ -3311,6 +3406,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      fine_tune_requests: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          deviation_percent: number | null
+          id: string
+          module_name: string
+          request_id: string
+          requested_at: string | null
+          result: Json | null
+          status: string | null
+          tenant_id: string | null
+          training_data: Json | null
+          trigger_reason: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          deviation_percent?: number | null
+          id?: string
+          module_name: string
+          request_id: string
+          requested_at?: string | null
+          result?: Json | null
+          status?: string | null
+          tenant_id?: string | null
+          training_data?: Json | null
+          trigger_reason: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          deviation_percent?: number | null
+          id?: string
+          module_name?: string
+          request_id?: string
+          requested_at?: string | null
+          result?: Json | null
+          status?: string | null
+          tenant_id?: string | null
+          training_data?: Json | null
+          trigger_reason?: string
+        }
+        Relationships: []
       }
       flight_price_history: {
         Row: {
@@ -4203,6 +4343,56 @@ export type Database = {
           },
         ]
       }
+      metric_history: {
+        Row: {
+          adjustment_triggered: boolean | null
+          created_at: string | null
+          deviation_percent: number | null
+          id: string
+          module_name: string
+          parameter_name: string
+          performance_score: number | null
+          tenant_id: string | null
+          timestamp: string | null
+          value: number
+          vessel_id: string | null
+        }
+        Insert: {
+          adjustment_triggered?: boolean | null
+          created_at?: string | null
+          deviation_percent?: number | null
+          id?: string
+          module_name: string
+          parameter_name: string
+          performance_score?: number | null
+          tenant_id?: string | null
+          timestamp?: string | null
+          value: number
+          vessel_id?: string | null
+        }
+        Update: {
+          adjustment_triggered?: boolean | null
+          created_at?: string | null
+          deviation_percent?: number | null
+          id?: string
+          module_name?: string
+          parameter_name?: string
+          performance_score?: number | null
+          tenant_id?: string | null
+          timestamp?: string | null
+          value?: number
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "metric_history_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       module_permissions: {
         Row: {
           can_delete: boolean | null
@@ -5045,6 +5235,59 @@ export type Database = {
         }
         Relationships: []
       }
+      parameter_adjustments: {
+        Row: {
+          adjusted_by: string | null
+          created_at: string | null
+          delta_percent: number
+          id: string
+          impact_score: number | null
+          module_name: string
+          new_value: number
+          old_value: number
+          parameter_name: string
+          reason: string | null
+          tenant_id: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          adjusted_by?: string | null
+          created_at?: string | null
+          delta_percent: number
+          id?: string
+          impact_score?: number | null
+          module_name: string
+          new_value: number
+          old_value: number
+          parameter_name: string
+          reason?: string | null
+          tenant_id?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          adjusted_by?: string | null
+          created_at?: string | null
+          delta_percent?: number
+          id?: string
+          impact_score?: number | null
+          module_name?: string
+          new_value?: number
+          old_value?: number
+          parameter_name?: string
+          reason?: string | null
+          tenant_id?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parameter_adjustments_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peotram_ai_analysis: {
         Row: {
           ai_model_used: string
@@ -5454,6 +5697,45 @@ export type Database = {
           recorded_at?: string
           status?: string
           target_value?: number | null
+        }
+        Relationships: []
+      }
+      performance_scores: {
+        Row: {
+          adaptation_score: number | null
+          created_at: string | null
+          id: string
+          module_name: string
+          overall_score: number
+          prediction_score: number | null
+          tactical_score: number | null
+          tenant_id: string | null
+          timestamp: string | null
+          trend: string | null
+        }
+        Insert: {
+          adaptation_score?: number | null
+          created_at?: string | null
+          id?: string
+          module_name: string
+          overall_score: number
+          prediction_score?: number | null
+          tactical_score?: number | null
+          tenant_id?: string | null
+          timestamp?: string | null
+          trend?: string | null
+        }
+        Update: {
+          adaptation_score?: number | null
+          created_at?: string | null
+          id?: string
+          module_name?: string
+          overall_score?: number
+          prediction_score?: number | null
+          tactical_score?: number | null
+          tenant_id?: string | null
+          timestamp?: string | null
+          trend?: string | null
         }
         Relationships: []
       }
@@ -6341,6 +6623,62 @@ export type Database = {
         }
         Relationships: []
       }
+      tactical_decisions: {
+        Row: {
+          action_taken: string
+          context: Json | null
+          created_at: string | null
+          decision_id: string
+          executed_at: string | null
+          id: string
+          module_name: string
+          override_by: string | null
+          priority: string
+          success: boolean | null
+          tenant_id: string | null
+          trigger_type: string
+          vessel_id: string | null
+        }
+        Insert: {
+          action_taken: string
+          context?: Json | null
+          created_at?: string | null
+          decision_id: string
+          executed_at?: string | null
+          id?: string
+          module_name: string
+          override_by?: string | null
+          priority: string
+          success?: boolean | null
+          tenant_id?: string | null
+          trigger_type: string
+          vessel_id?: string | null
+        }
+        Update: {
+          action_taken?: string
+          context?: Json | null
+          created_at?: string | null
+          decision_id?: string
+          executed_at?: string | null
+          id?: string
+          module_name?: string
+          override_by?: string | null
+          priority?: string
+          success?: boolean | null
+          tenant_id?: string | null
+          trigger_type?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tactical_decisions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenant_audit_logs: {
         Row: {
           action: string
@@ -6758,6 +7096,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      training_deltas: {
+        Row: {
+          baseline_value: number | null
+          confidence: number | null
+          created_at: string | null
+          current_value: number | null
+          cycle_id: string
+          delta_value: number | null
+          deltas: Json | null
+          id: string
+          metric_name: string
+          module_name: string
+          source: string
+          tenant_id: string | null
+        }
+        Insert: {
+          baseline_value?: number | null
+          confidence?: number | null
+          created_at?: string | null
+          current_value?: number | null
+          cycle_id: string
+          delta_value?: number | null
+          deltas?: Json | null
+          id?: string
+          metric_name: string
+          module_name: string
+          source: string
+          tenant_id?: string | null
+        }
+        Update: {
+          baseline_value?: number | null
+          confidence?: number | null
+          created_at?: string | null
+          current_value?: number | null
+          cycle_id?: string
+          delta_value?: number | null
+          deltas?: Json | null
+          id?: string
+          metric_name?: string
+          module_name?: string
+          source?: string
+          tenant_id?: string | null
+        }
+        Relationships: []
       }
       travel_predictions: {
         Row: {
