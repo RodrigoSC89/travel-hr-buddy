@@ -116,13 +116,14 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     id: "operations.fleet",
     name: "Fleet Management",
     category: "operations",
-    path: "modules/operations/fleet",
-    description: "Manage fleet and vessels",
-    status: "incomplete", // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
-    completeness: "partial",
+    path: "modules/fleet",
+    description: "PATCH 191.0 - Unified fleet management with vessel tracking, maintenance scheduling, crew assignments, and route management. Integrated with Supabase tables: vessels, maintenance, routes, crew_assignments",
+    status: "active", // PATCH 191.0 – Consolidated from operations/fleet and operations/maritime-system
+    completeness: "100%",
     route: "/fleet",
     icon: "Ship",
     lazy: true,
+    version: "191.0",
   },
 
   "operations.performance": {
@@ -153,15 +154,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
 
   "operations.maritime-system": {
     id: "operations.maritime-system",
-    name: "Maritime System",
+    name: "Maritime Operations",
     category: "operations",
-    path: "modules/operations/maritime-system/MaritimeSystem",
-    description: "Maritime operations management",
-    status: "active", // PATCH 96.0 – Has route in AppRouter at /maritime
+    path: "pages/Maritime",
+    description: "PATCH 191.0 - Maritime-specific operations: checklists, certifications, IoT sensors, predictive maintenance, and crew rotation. Built on top of unified fleet management (operations.fleet)",
+    status: "active", // PATCH 191.0 – Specialized maritime operations using fleet as base
     completeness: "100%",
     route: "/maritime",
-    icon: "Ship",
+    icon: "Anchor",
     lazy: true,
+    version: "191.0",
+    dependencies: ["operations.fleet"],
   },
 
   "operations.dashboard": {

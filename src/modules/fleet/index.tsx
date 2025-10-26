@@ -18,8 +18,28 @@ import {
   Plus
 } from "lucide-react";
 
-// Consolidated Fleet Management Module
-// Unified from operations/fleet and operations/maritime-system
+/**
+ * PATCH 191.0 - Unified Fleet Management Module
+ * 
+ * Consolidated from operations/fleet and operations/maritime-system
+ * 
+ * Core fleet management functionality:
+ * - Vessel tracking and monitoring
+ * - Maintenance scheduling and records
+ * - Crew assignments
+ * - Route management
+ * - Fleet analytics
+ * 
+ * Database Integration:
+ * - vessels: Vessel information, status, location
+ * - maintenance: Maintenance records and scheduling
+ * - crew_assignments: Crew-to-vessel assignments
+ * - routes: Voyage planning and route management
+ * 
+ * Related Modules:
+ * - /maritime: Specialized maritime operations (checklists, certifications, IoT)
+ * - /mission-control: Tactical operations hub
+ */
 
 interface VesselData {
   id: string;
