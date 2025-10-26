@@ -78,30 +78,30 @@ export const useFinanceData = () => {
         .limit(100);
 
       if (transactionsError) throw transactionsError;
-      setTransactions(transactionsData || []);
+      setTransactions((transactionsData as any[]) || []);
 
       // Load categories
       const { data: categoriesData, error: categoriesError } = await supabase
-        .from('budget_categories')
+        .from('budget_categories' as any)
         .select('*')
         .eq('is_active', true)
         .order('display_order');
 
       if (categoriesError) throw categoriesError;
-      setCategories(categoriesData || []);
+      setCategories((categoriesData as any[]) || []);
 
       // Load invoices
       const { data: invoicesData, error: invoicesError } = await supabase
-        .from('invoices')
+        .from('invoices' as any)
         .select('*')
         .order('issue_date', { ascending: false })
         .limit(50);
 
       if (invoicesError) throw invoicesError;
-      setInvoices(invoicesData || []);
+      setInvoices((invoicesData as any[]) || []);
 
       // Calculate summary
-      calculateSummary(transactionsData || [], invoicesData || []);
+      calculateSummary((transactionsData as any[]) || [], (invoicesData as any[]) || []);
 
     } catch (err: any) {
       console.error('Error loading financial data:', err);
@@ -152,7 +152,7 @@ export const useFinanceData = () => {
     try {
       const { data, error } = await supabase
         .from('financial_transactions')
-        .insert([transaction])
+        .insert([transaction as any])
         .select()
         .single();
 
@@ -210,8 +210,8 @@ export const useFinanceData = () => {
   const createInvoice = async (invoice: Partial<Invoice>) => {
     try {
       const { data, error } = await supabase
-        .from('invoices')
-        .insert([invoice])
+        .from('invoices' as any)
+        .insert([invoice as any])
         .select()
         .single();
 
@@ -239,8 +239,8 @@ export const useFinanceData = () => {
   const updateInvoice = async (id: string, updates: Partial<Invoice>) => {
     try {
       const { data, error } = await supabase
-        .from('invoices')
-        .update(updates)
+        .from('invoices' as any)
+        .update(updates as any)
         .eq('id', id)
         .select()
         .single();

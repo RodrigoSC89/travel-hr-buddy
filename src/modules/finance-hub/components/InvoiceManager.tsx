@@ -64,9 +64,11 @@ export const InvoiceManager = () => {
       const invoiceNumber = `INV-${Date.now()}`;
       await createInvoice({
         ...formData,
+        invoice_type: formData.invoice_type as 'sales' | 'purchase' | 'expense',
         invoice_number: invoiceNumber,
-        status: 'draft'
-      });
+        status: 'draft',
+        issue_date: new Date().toISOString()
+      } as Partial<Invoice>);
       setIsCreateOpen(false);
       resetForm();
     } catch (error) {

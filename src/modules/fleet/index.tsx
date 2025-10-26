@@ -89,31 +89,31 @@ const FleetModule = () => {
       if (vesselsError) {
         console.error('Error loading vessels:', vesselsError);
       } else {
-        setVessels(vesselsData || []);
+        setVessels((vesselsData as any[]) || []);
       }
 
       // Load maintenance records
       const { data: maintenanceData, error: maintenanceError } = await supabase
-        .from('maintenance')
+        .from('maintenance' as any)
         .select('*')
         .order('scheduled_date', { ascending: false });
 
       if (maintenanceError) {
         console.error('Error loading maintenance:', maintenanceError);
       } else {
-        setMaintenance(maintenanceData || []);
+        setMaintenance((maintenanceData as any[]) || []);
       }
 
       // Load crew assignments
       const { data: crewData, error: crewError } = await supabase
-        .from('crew_assignments')
+        .from('crew_assignments' as any)
         .select('*')
-        .order('assigned_date', { ascending: false });
+        .order('start_date', { ascending: false });
 
       if (crewError) {
         console.error('Error loading crew assignments:', crewError);
       } else {
-        setCrewAssignments(crewData || []);
+        setCrewAssignments((crewData as any[]) || []);
       }
 
     } catch (error) {

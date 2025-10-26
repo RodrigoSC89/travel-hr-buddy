@@ -46,21 +46,21 @@ export const usePerformanceData = (period: number = 7) => {
       
       // Load fleet logs (if table exists)
       const { data: fleetLogs, error: fleetError } = await supabase
-        .from('fleet_logs')
+        .from('fleet_logs' as any)
         .select('*')
         .gte('created_at', startDate.toISOString())
         .order('created_at', { ascending: false });
 
       // Load mission activities
       const { data: missions, error: missionsError } = await supabase
-        .from('mission_activities')
+        .from('mission_activities' as any)
         .select('*')
         .gte('created_at', startDate.toISOString())
         .order('created_at', { ascending: false });
 
       // Load fuel usage
       const { data: fuelUsage, error: fuelError } = await supabase
-        .from('fuel_usage')
+        .from('fuel_usage' as any)
         .select('*')
         .gte('recorded_at', startDate.toISOString())
         .order('recorded_at', { ascending: false });
