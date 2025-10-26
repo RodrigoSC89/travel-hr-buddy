@@ -319,7 +319,9 @@ class OfflineDeploymentKit {
 
     for (const model of models) {
       const modelPath = path.join(aiDir, model.name);
-      // Create placeholder file (in production, copy actual model)
+      // TODO: In production, copy actual model files from source directory
+      // For now, create placeholder files for development/testing only
+      // Real implementation should use: fs.copyFileSync(sourceModelPath, modelPath);
       fs.writeFileSync(modelPath, Buffer.alloc(model.size));
       modelsList.push(model.name);
     }
@@ -439,7 +441,7 @@ class OfflineDeploymentKit {
         await this.createUSBImage(this.buildDir, outputPath);
         break;
       case 'iso':
-        await this.createISOImage(this.buildDir, outputPath);
+        await this.createISOZipPackage(this.buildDir, outputPath);
         break;
     }
 
@@ -448,10 +450,15 @@ class OfflineDeploymentKit {
 
   /**
    * Create ZIP package
+   * Note: In production, consider using the 'archiver' npm package for safer ZIP creation
    */
   private async createZipPackage(sourceDir: string, outputPath: string): Promise<void> {
     try {
-      execSync(`cd ${sourceDir} && zip -r ${outputPath} .`, { stdio: 'inherit' });
+      // Escape paths to prevent command injection
+      const escapedSourceDir = sourceDir.replace(/["'$`\\]/g, '\\$&');
+      const escapedOutputPath = outputPath.replace(/["'$`\\]/g, '\\$&');
+      
+      execSync(`cd "${escapedSourceDir}" && zip -r "${escapedOutputPath}" .`, { stdio: 'inherit' });
       console.log('[DeploymentKit] ZIP package created');
     } catch (error) {
       throw new Error(`Failed to create ZIP package: ${error}`);
@@ -473,8 +480,14 @@ class OfflineDeploymentKit {
     const autorun = `[autorun]\nopen=start.bat\nicon=icon.ico`;
     fs.writeFileSync(path.join(usbDir, 'autorun.inf'), autorun);
 
-    // Create start script
-    const startScript = `@echo off\nstart chrome.exe --app=file:///%CD%/app/index.html`;
+    // Create start script with fallback browsers
+    const startScript = `@echo off
+echo Starting Nautilus...
+where chrome.exe >nul 2>&1 && start chrome.exe --app=file:///%CD%/app/index.html && exit
+where msedge.exe >nul 2>&1 && start msedge.exe --app=file:///%CD%/app/index.html && exit
+where firefox.exe >nul 2>&1 && start firefox.exe -url file:///%CD%/app/index.html && exit
+echo No suitable browser found. Please open app/index.html manually.
+pause`;
     fs.writeFileSync(path.join(usbDir, 'start.bat'), startScript);
 
     // Create ZIP of USB contents
@@ -487,13 +500,18 @@ class OfflineDeploymentKit {
   }
 
   /**
-   * Create ISO image
+   * Create ISO image (currently creates ZIP package)
+   * Note: True ISO creation requires system tools like mkisofs or genisoimage
+   * TODO: Implement actual ISO creation with proper error handling:
+   * - Check for mkisofs/genisoimage availability
+   * - Use proper ISO 9660 filesystem format
+   * - Add bootable sector if needed
    */
-  private async createISOImage(sourceDir: string, outputPath: string): Promise<void> {
-    // Note: ISO creation typically requires mkisofs or genisoimage
-    // For simplicity, we'll create a ZIP and rename
+  private async createISOZipPackage(sourceDir: string, outputPath: string): Promise<void> {
+    // For now, create a ZIP package as a fallback
     await this.createZipPackage(sourceDir, outputPath.replace('.iso', '.zip'));
-    console.log('[DeploymentKit] ISO image created (as ZIP)');
+    console.log('[DeploymentKit] ISO package created (as ZIP format)');
+    console.log('[DeploymentKit] Warning: True ISO format not yet implemented');
     console.log('[DeploymentKit] Note: Use mkisofs or genisoimage for true ISO creation');
   }
 
@@ -563,12 +581,14 @@ class OfflineDeploymentKit {
 
   /**
    * Helper: Calculate checksum
+   * TODO: In production, implement proper SHA-256 hash for integrity verification
+   * Consider using the 'crypto' module: crypto.createHash('sha256').update(data).digest('hex')
    */
   private calculateChecksum(dirPath: string): string {
-    // Simplified checksum - in production use proper hash
+    // Simplified checksum for development - NOT cryptographically secure
     const size = this.getDirectorySize(dirPath);
     const timestamp = Date.now();
-    return `${size}-${timestamp}`;
+    return `dev-${size}-${timestamp}`;
   }
 
   /**
