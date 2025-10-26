@@ -748,6 +748,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Waves",
     lazy: true,
     version: "180.0",
+  },
+
+  "operations.underwater-drone": {
+    id: "operations.underwater-drone",
+    name: "Underwater Drone Control",
+    category: "operations",
+    path: "modules/underwater-drone",
+    description: "PATCH 181.0 - ROV/AUV control system with 3D movement logic, telemetry monitoring (depth, orientation, temperature), and mission waypoint navigation",
+    status: "active",
+    completeness: "100%",
+    route: "/underwater-drone",
+    icon: "Anchor",
+    lazy: true,
+    version: "181.0",
   }
 };
 
