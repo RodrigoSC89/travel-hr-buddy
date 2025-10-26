@@ -1,0 +1,65 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "clear": "Clear"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "reports": "Reports",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout",
+    "help": "Help"
+  },
+  "ai": {
+    "cognitive_feedback": "Cognitive Feedback",
+    "weekly_report": "Weekly Report",
+    "insights": "Insights",
+    "patterns": "Patterns",
+    "acceptance_rate": "Acceptance Rate",
+    "rejection_rate": "Rejection Rate",
+    "module_performance": "Module Performance"
+  },
+  "maritime": {
+    "vessel": "Vessel",
+    "fleet": "Fleet",
+    "compliance": "Compliance",
+    "mission_control": "Mission Control",
+    "logs_center": "Logs Center",
+    "notifications": "Notifications"
+  },
+  "units": {
+    "distance": "Distance",
+    "temperature": "Temperature",
+    "volume": "Volume",
+    "kilometers": "Kilometers",
+    "miles": "Miles",
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "liters": "Liters",
+    "gallons": "Gallons"
+  },
+  "time": {
+    "timezone": "Timezone",
+    "date": "Date",
+    "time": "Time",
+    "datetime": "Date & Time"
+  }
+}
