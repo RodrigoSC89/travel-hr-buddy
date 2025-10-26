@@ -741,13 +741,13 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "Ocean Sonar AI",
     category: "operations",
     path: "modules/ocean-sonar",
-    description: "PATCH 180.0 - Bathymetric scanning and depth analysis with AI-powered safe route suggestions and obstacle detection",
+    description: "PATCH 180.0/183.0 - Bathymetric scanning with AI-powered analysis, export to GeoJSON/PNG, and offline caching support",
     status: "active",
     completeness: "100%",
     route: "/ocean-sonar",
     icon: "Waves",
     lazy: true,
-    version: "180.0",
+    version: "183.0",
   },
 
   "operations.underwater-drone": {
