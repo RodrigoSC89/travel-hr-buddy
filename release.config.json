@@ -1,0 +1,170 @@
+{
+  "version": "1.0.0",
+  "name": "travel-hr-buddy",
+  "codename": "nautilus-one",
+  "versioningStrategy": "semver",
+  
+  "environments": {
+    "development": {
+      "name": "Development",
+      "domain": "dev.nautilus-one.com",
+      "supabase": {
+        "projectRef": "${SUPABASE_DEV_PROJECT_REF}",
+        "anonKey": "${SUPABASE_DEV_ANON_KEY}",
+        "serviceRoleKey": "${SUPABASE_DEV_SERVICE_KEY}",
+        "schema": "public"
+      },
+      "features": {
+        "debugMode": true,
+        "analytics": false,
+        "errorTracking": true,
+        "performanceMonitoring": false
+      },
+      "deployment": {
+        "provider": "vercel",
+        "branch": "develop",
+        "autoDeployOn": ["push"]
+      }
+    },
+    
+    "staging": {
+      "name": "Staging",
+      "domain": "staging.nautilus-one.com",
+      "supabase": {
+        "projectRef": "${SUPABASE_STAGING_PROJECT_REF}",
+        "anonKey": "${SUPABASE_STAGING_ANON_KEY}",
+        "serviceRoleKey": "${SUPABASE_STAGING_SERVICE_KEY}",
+        "schema": "public"
+      },
+      "features": {
+        "debugMode": false,
+        "analytics": true,
+        "errorTracking": true,
+        "performanceMonitoring": true
+      },
+      "deployment": {
+        "provider": "vercel",
+        "branch": "staging",
+        "autoDeployOn": ["push", "pull_request"],
+        "requiresApproval": false
+      }
+    },
+    
+    "production": {
+      "name": "Production",
+      "domain": "app.nautilus-one.com",
+      "supabase": {
+        "projectRef": "${SUPABASE_PROD_PROJECT_REF}",
+        "anonKey": "${SUPABASE_PROD_ANON_KEY}",
+        "serviceRoleKey": "${SUPABASE_PROD_SERVICE_KEY}",
+        "schema": "public"
+      },
+      "features": {
+        "debugMode": false,
+        "analytics": true,
+        "errorTracking": true,
+        "performanceMonitoring": true
+      },
+      "deployment": {
+        "provider": "vercel",
+        "branch": "main",
+        "autoDeployOn": ["release"],
+        "requiresApproval": true,
+        "approvers": ["admin"]
+      }
+    }
+  },
+  
+  "clients": {
+    "default": {
+      "name": "Default Client",
+      "domain": "app.nautilus-one.com",
+      "environment": "production",
+      "tenantId": "default"
+    },
+    "demo": {
+      "name": "Demo Client",
+      "domain": "demo.nautilus-one.com",
+      "environment": "production",
+      "tenantId": "demo"
+    }
+  },
+  
+  "tenantIsolation": {
+    "strategy": "tenant_id",
+    "rlsEnabled": true,
+    "crossTenantAccessAllowed": false
+  },
+  
+  "versioning": {
+    "major": {
+      "incrementOn": ["breaking_changes", "major_features"],
+      "changelog": "BREAKING_CHANGES.md"
+    },
+    "minor": {
+      "incrementOn": ["new_features", "enhancements"],
+      "changelog": "FEATURES.md"
+    },
+    "patch": {
+      "incrementOn": ["bug_fixes", "improvements"],
+      "changelog": "FIXES.md"
+    }
+  },
+  
+  "cicd": {
+    "buildCommand": "npm run build",
+    "testCommand": "npm run test",
+    "lintCommand": "npm run lint",
+    "typeCheckCommand": "npm run type-check",
+    "
+Command": "npm run build",
+    "deploymentChecks": {
+      "runTests": true,
+      "runLint": true,
+      "runTypeCheck": true,
+      "checkBuildSize": true,
+      "maxBuildSizeMB": 50
+    },
+    "notifications": {
+      "slack": {
+        "enabled": true,
+        "webhook": "${SLACK_WEBHOOK_URL}",
+        "channels": {
+          "success": "#deployments-success",
+          "failure": "#deployments-failure"
+        }
+      },
+      "email": {
+        "enabled": false,
+        "recipients": []
+      }
+    }
+  },
+  
+  "changelog": {
+    "autoGenerate": true,
+    "format": "markdown",
+    "outputPath": "CHANGELOG.md",
+    "groupByType": true,
+    "includeCommits": true,
+    "template": "conventional"
+  },
+  
+  "security": {
+    "secretsManagement": "github_secrets",
+    "envEncryption": true,
+    "auditLogs": true
+  },
+  
+  "monitoring": {
+    "sentry": {
+      "enabled": true,
+      "dsn": "${SENTRY_DSN}",
+      "tracesSampleRate": 0.1
+    },
+    "analytics": {
+      "enabled": true,
+      "provider": "custom"
+    }
+  }
+}
