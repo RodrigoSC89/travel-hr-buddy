@@ -9,6 +9,7 @@
  * - contexts: Module context management (PATCH 131.0)
  * - hooks: React hooks for AI integration (PATCH 131.0)
  * - services: AI-powered services (PATCH 133.0, 134.0, 135.0)
+ * - collective: Collective Intelligence System (PATCH 216-220)
  * 
  * @module ai
  * @updated 2025-01-24
@@ -116,3 +117,35 @@ export {
   type FeedbackInsight,
   type EvolutionReport
 } from "./evoAIConnector";
+
+// PATCH 217 - Distributed Decision Core
+export {
+  distributedDecisionCore,
+  type DecisionLevel,
+  type DecisionStatus,
+  type DecisionContext,
+  type Decision,
+  type SimulationResult,
+  type DecisionRule as DistributedDecisionRule
+} from "./distributedDecisionCore";
+
+// PATCH 218 - Conscious Core
+export {
+  consciousCore,
+  type ObservationType,
+  type Severity,
+  type SystemObservation,
+  type ModuleHealth,
+  type SystemState
+} from "./consciousCore";
+
+// PATCH 219 - Collective Loop Engine
+export {
+  collectiveLoopEngine,
+  type FeedbackType,
+  type FeedbackCategory,
+  type FeedbackEvent,
+  type AIMetrics,
+  type LearningAdjustment,
+  type FeedbackSummary
+} from "./feedback/collectiveLoop";
