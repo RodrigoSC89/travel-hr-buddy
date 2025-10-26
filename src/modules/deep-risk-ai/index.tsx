@@ -6,7 +6,7 @@
  * - Multi-factor risk scoring
  * - AI-powered insights and recommendations
  * - Predictive analysis
- * - PDF report generation
+ * - JSON report export
  */
 
 import React, { useState } from "react";
@@ -109,7 +109,10 @@ const DeepRiskAI: React.FC = () => {
     else if (factors.sonarQuality < 70) commRisk += 20;
     else if (factors.sonarQuality < 85) commRisk += 10;
 
-    const overall = Math.min(100, (envRisk + mechRisk + opRisk + commRisk) / 1.4);
+    // Scaling factor to normalize combined risks to 0-100 range
+    // Average of 4 categories with weighted importance
+    const RISK_NORMALIZATION_FACTOR = 1.4;
+    const overall = Math.min(100, (envRisk + mechRisk + opRisk + commRisk) / RISK_NORMALIZATION_FACTOR);
     
     let level: RiskScore['level'];
     if (overall < 15) level = 'minimal';
