@@ -249,12 +249,13 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add CHANGELOG.md
-          git diff --staged --quiet || git commit -m "chore: update CHANGELOG.md [skip ci]"
           
-          # Push using GitHub token
+          # Check if there are changes to commit
           if git diff --staged --quiet; then
-            echo "No changes to push"
+            echo "No changes to commit"
           else
+            # Commit and push the changes
+            git commit -m "chore: update CHANGELOG.md [skip ci]"
             git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || echo "Push failed, continuing..."
           fi
 
