@@ -288,7 +288,7 @@ class EvoAIConnector {
     }, {} as Record<string, number>);
 
     // Identify frequently adjusted parameters
-    Object.entries(paramAdjustments).forEach(([param, count]: [string, number]) => {
+    (Object.entries(paramAdjustments) as Array<[string, number]>).forEach(([param, count]) => {
       if (count > 10) {
         insights.push({
           category: 'adaptation',

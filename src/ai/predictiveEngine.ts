@@ -165,7 +165,7 @@ class PredictiveEngine {
           updated_at: new Date().toISOString(),
         });
     } catch (error) {
-      logger.warn('[PredictiveEngine] Failed to save model parameters:', error);
+      logger.warn('[PredictiveEngine] Failed to save model parameters:', error as any);
     }
   }
 
@@ -226,19 +226,9 @@ class PredictiveEngine {
         .select('*', { count: 'exact' })
         .eq('module_name', moduleName)
         .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
-        .from('watchdog_logs')
-        .select('*', { count: 'exact' })
-        .eq('module_name', moduleName)
-        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
       // Fetch recent incidents
       const { data: incidents } = await (supabase as any)
-        .from('incidents')
-        .select('*')
-        .eq('module', moduleName)
-        .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-        .order('created_at', { ascending: false })
-        .limit(1);
         .from('incidents')
         .select('*')
         .eq('module', moduleName)
@@ -428,8 +418,8 @@ class PredictiveEngine {
       // Fetch list of active modules
       const { data: modules } = await (supabase as any)
         .from('system_metrics')
-        .select('module_name')
-        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+        .select('metric_name')
+        .gte('recorded_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
       const uniqueModules = [...new Set(modules?.map(m => m.module_name) || [])];
 
@@ -450,7 +440,7 @@ class PredictiveEngine {
    */
   async getRecentPredictions(limit = 50): Promise<any[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('predictive_events')
         .select('*')
         .order('predicted_at', { ascending: false })

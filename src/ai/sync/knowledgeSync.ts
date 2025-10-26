@@ -172,9 +172,9 @@ class KnowledgeSync {
         };
 
         // Save to Supabase
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('local_knowledge')
-          .insert(snapshot);
+          .insert([snapshot]);
 
         if (error) {
           logger.error("[KnowledgeSync] Failed to save snapshot", {
@@ -208,12 +208,6 @@ class KnowledgeSync {
       try {
         // Aggregate with existing global knowledge
         const { data: existingGlobal } = await (supabase as any)
-          .from('global_knowledge')
-          .select('*')
-          .eq('module_name', snapshot.module_name)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .single();
           .from('global_knowledge')
           .select('*')
           .eq('module_name', snapshot.module_name)
@@ -293,21 +287,9 @@ class KnowledgeSync {
           .order('created_at', { ascending: false })
           .limit(1)
           .single();
-          .from('local_knowledge')
-          .select('*')
-          .eq('module_name', module)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .single();
 
         // Get global knowledge
         const { data: globalData } = await (supabase as any)
-          .from('global_knowledge')
-          .select('*')
-          .eq('module_name', module)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .single();
           .from('global_knowledge')
           .select('*')
           .eq('module_name', module)
@@ -365,12 +347,6 @@ class KnowledgeSync {
         try {
           // Get global knowledge
           const { data: globalData } = await (supabase as any)
-            .from('global_knowledge')
-            .select('*')
-            .eq('module_name', drift.module)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .single();
             .from('global_knowledge')
             .select('*')
             .eq('module_name', drift.module)

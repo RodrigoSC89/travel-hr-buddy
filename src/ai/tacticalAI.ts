@@ -89,7 +89,7 @@ class TacticalAI {
         name: 'Enable Fallback on Downtime Prediction',
         condition: (ctx) => {
           return ctx.prediction?.forecastEvent === 'downtime' &&
-                 ctx.prediction.riskScore >= 60;
+                 (ctx.prediction?.riskScore ?? 0) >= 60;
         },
         action: 'enable_fallback',
         priority: 'high',
@@ -132,7 +132,7 @@ class TacticalAI {
         name: 'Clear Cache on Multiple Errors',
         condition: (ctx) => {
           return ctx.watchdogAlerts.length > 5 &&
-                 ctx.prediction?.riskScore > 40;
+                 (ctx.prediction?.riskScore ?? 0) > 40;
         },
         action: 'clear_cache',
         priority: 'medium',
@@ -246,12 +246,12 @@ class TacticalAI {
     const watchdogAlerts: any[] = []; // Would fetch from watchdog
 
     // Get active modules
-    const { data: activeModulesData } = await supabase
+    const { data: activeModulesData } = await (supabase as any)
       .from('system_metrics')
-      .select('module_name')
-      .gte('created_at', new Date(Date.now() - 5 * 60 * 1000).toISOString());
+      .select('metric_name')
+      .gte('recorded_at', new Date(Date.now() - 5 * 60 * 1000).toISOString());
     
-    const activeModules = [...new Set(activeModulesData?.map(m => m.module_name) || [])];
+    const activeModules = [...new Set(((activeModulesData as any[]) || []).map((m: any) => String(m.metric_name)))] as string[];
 
     // Calculate system load (simplified)
     const systemLoad = Math.min(watchdogStats.totalErrors / 10, 1);
@@ -265,7 +265,7 @@ class TacticalAI {
       .order('created_at', { ascending: false })
       .limit(10);
 
-    const recentDecisions: TacticalDecision[] = (recentDecisionsData || []).map(d => ({
+    const recentDecisions: TacticalDecision[] = (((recentDecisionsData as any[]) || []).map((d: any) => ({
       id: d.id,
       timestamp: new Date(d.created_at),
       moduleName: d.module_name,
@@ -277,7 +277,7 @@ class TacticalAI {
       success: d.success,
       error: d.error,
       manualOverride: d.manual_override,
-    }));
+    })) as TacticalDecision[];
 
     return {
       moduleName,
