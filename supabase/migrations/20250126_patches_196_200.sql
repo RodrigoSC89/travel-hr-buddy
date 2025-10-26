@@ -292,9 +292,4 @@ GRANT ALL ON tenant_modules TO authenticated;
 GRANT ALL ON local_knowledge TO authenticated;
 GRANT ALL ON global_knowledge TO authenticated;
 
-GRANT USAGE ON SEQUENCE learning_events_id_seq TO authenticated;
-GRANT USAGE ON SEQUENCE tenants_id_seq TO authenticated;
-GRANT USAGE ON SEQUENCE tenant_users_id_seq TO authenticated;
-GRANT USAGE ON SEQUENCE tenant_modules_id_seq TO authenticated;
-GRANT USAGE ON SEQUENCE local_knowledge_id_seq TO authenticated;
-GRANT USAGE ON SEQUENCE global_knowledge_id_seq TO authenticated;
+-- Note: Tables use UUID primary keys with gen_random_uuid(), so no sequences to grant
