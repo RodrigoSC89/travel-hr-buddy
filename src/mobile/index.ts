@@ -1,6 +1,6 @@
 /**
  * Nautilus One Mobile App - Main Export
- * Patches 161.0 - 165.0
+ * Patches 161.0 - 165.0, 187.0
  */
 
 // PATCH 161.0 - Mobile MVP
@@ -27,3 +27,8 @@ export { localMemory } from './ai/localMemory';
 export { intentParser } from './ai/intentParser';
 export { VoiceInterface } from './components/VoiceInterface';
 export type { Intent } from './ai/intentParser';
+
+// PATCH 187.0 - Enhanced Mobile Features
+export { EnhancedSyncEngine, enhancedSyncEngine } from './services/enhanced-sync-engine';
+export { BiometricAuthService, biometricAuthService } from './services/biometric-auth';
+export { MobileHome, MobileMissions, MobileLogs } from './screens';
