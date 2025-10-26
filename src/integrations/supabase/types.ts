@@ -3611,223 +3611,6 @@ export type Database = {
         }
         Relationships: []
       }
-      learning_events: {
-        Row: {
-          id: string
-          event_type: string
-          module_name: string
-          user_id: string | null
-          tenant_id: string | null
-          event_data: Json
-          context: Json
-          outcome: string | null
-          timestamp: string
-          metadata: Json | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          event_type: string
-          module_name: string
-          user_id?: string | null
-          tenant_id?: string | null
-          event_data: Json
-          context: Json
-          outcome?: string | null
-          timestamp?: string
-          metadata?: Json | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          event_type?: string
-          module_name?: string
-          user_id?: string | null
-          tenant_id?: string | null
-          event_data?: Json
-          context?: Json
-          outcome?: string | null
-          timestamp?: string
-          metadata?: Json | null
-          created_at?: string
-        }
-        Relationships: []
-      }
-      local_knowledge: {
-        Row: {
-          id: string
-          snapshot_date: string
-          module_name: string
-          usage_data: Json
-          model_state: Json | null
-          performance_metrics: Json | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          snapshot_date: string
-          module_name: string
-          usage_data: Json
-          model_state?: Json | null
-          performance_metrics?: Json | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          snapshot_date?: string
-          module_name?: string
-          usage_data?: Json
-          model_state?: Json | null
-          performance_metrics?: Json | null
-          created_at?: string
-        }
-        Relationships: []
-      }
-      global_knowledge: {
-        Row: {
-          id: string
-          sync_date: string
-          module_name: string
-          aggregated_data: Json
-          confidence_score: number
-          source_count: number
-          metadata: Json | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          sync_date: string
-          module_name: string
-          aggregated_data: Json
-          confidence_score?: number
-          source_count?: number
-          metadata?: Json | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          sync_date?: string
-          module_name?: string
-          aggregated_data?: Json
-          confidence_score?: number
-          source_count?: number
-          metadata?: Json | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      tenants: {
-        Row: {
-          id: string
-          name: string
-          slug: string
-          subdomain: string | null
-          settings: Json | null
-          status: string
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          name: string
-          slug: string
-          subdomain?: string | null
-          settings?: Json | null
-          status?: string
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          name?: string
-          slug?: string
-          subdomain?: string | null
-          settings?: Json | null
-          status?: string
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      tenant_users: {
-        Row: {
-          id: string
-          tenant_id: string
-          user_id: string
-          role: string
-          permissions: Json | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          tenant_id: string
-          user_id: string
-          role: string
-          permissions?: Json | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          tenant_id?: string
-          user_id?: string
-          role?: string
-          permissions?: Json | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tenant_users_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "tenants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      tenant_modules: {
-        Row: {
-          id: string
-          tenant_id: string
-          module_name: string
-          enabled: boolean
-          config: Json | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          tenant_id: string
-          module_name: string
-          enabled?: boolean
-          config?: Json | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          tenant_id?: string
-          module_name?: string
-          enabled?: boolean
-          config?: Json | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tenant_modules_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "tenants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       logs: {
         Row: {
           created_at: string
@@ -6727,11 +6510,15 @@ export type Database = {
           display_name: string | null
           id: string
           invited_at: string | null
+          invited_by: string | null
           job_title: string | null
           joined_at: string | null
           last_active_at: string | null
+          last_seen_at: string | null
           metadata: Json | null
           permissions: Json | null
+          phone: string | null
+          preferences: Json | null
           role: string
           status: string
           tenant_id: string
@@ -6745,11 +6532,15 @@ export type Database = {
           display_name?: string | null
           id?: string
           invited_at?: string | null
+          invited_by?: string | null
           job_title?: string | null
           joined_at?: string | null
           last_active_at?: string | null
+          last_seen_at?: string | null
           metadata?: Json | null
           permissions?: Json | null
+          phone?: string | null
+          preferences?: Json | null
           role?: string
           status?: string
           tenant_id: string
@@ -6763,11 +6554,15 @@ export type Database = {
           display_name?: string | null
           id?: string
           invited_at?: string | null
+          invited_by?: string | null
           job_title?: string | null
           joined_at?: string | null
           last_active_at?: string | null
+          last_seen_at?: string | null
           metadata?: Json | null
           permissions?: Json | null
+          phone?: string | null
+          preferences?: Json | null
           role?: string
           status?: string
           tenant_id?: string
@@ -8570,4 +8365,4 @@ export const Constants = {
       ],
     },
   },
-} as const;
+} as const
