@@ -149,3 +149,19 @@ export {
   type LearningAdjustment,
   type FeedbackSummary
 } from "./feedback/collectiveLoop";
+
+// PATCH 223 - Edge AI Core
+export {
+  edgeAICore,
+  analyzeRoute,
+  detectFailure,
+  classifyIncident,
+  type AIBackend,
+  type ModelFormat,
+  type InferenceTask,
+  type ModelMetadata,
+  type InferenceRequest,
+  type InferenceResult,
+  type BackendCapabilities,
+  type PerformanceMetrics
+} from "./edge/edgeAICore";

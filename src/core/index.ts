@@ -82,3 +82,40 @@ export async function shutdownCollectiveIntelligence(): Promise<void> {
     throw error;
   }
 }
+
+// PATCH 221: Cognitive Clone Manager
+export {
+  cognitiveCloneManager,
+  type ModuleState,
+  type LLMContext,
+  type CognitiveSnapshot,
+  type CloneInstance,
+  type CloneExportData
+} from './clones/cognitiveClone';
+
+// PATCH 222: Adaptive UI Engine
+export {
+  adaptiveUIEngine,
+  useAdaptiveUI,
+  type DeviceType,
+  type NetworkQuality,
+  type UIMode,
+  type ComponentWeight,
+  type NetworkMetrics,
+  type DeviceCapabilities,
+  type MissionContext,
+  type AdaptiveUIConfig
+} from './adaptiveUI';
+
+// PATCH 225: Mirror Instance Controller
+export {
+  instanceController,
+  type SyncOperation,
+  type InstanceStatus,
+  type SyncPriority,
+  type MirrorInstance,
+  type SyncConfig,
+  type SyncResult,
+  type HeartbeatData,
+  type TelemetryData
+} from './mirrors/instanceController';
