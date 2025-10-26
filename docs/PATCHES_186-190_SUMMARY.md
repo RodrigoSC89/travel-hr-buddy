@@ -203,10 +203,10 @@
 - **DevOps Team**: Monitoring active
 
 ### Documentation
-- 📚 API docs: `/docs/api`
+- 📚 Implementation: `/docs/PATCHES_186-190_SUMMARY.md`
 - 🔒 Security: `/docs/RELEASE_CHECKLIST.md`
-- 📱 Mobile: `/src/mobile/README.md`
-- 🛠️ Operations: `/docs/ops`
+- 📱 Mobile: `/src/mobile/` (see index.ts for exports)
+- 🛠️ Supabase: `/supabase/migrations/`
 
 ---
 
