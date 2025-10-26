@@ -233,7 +233,7 @@ class MissionAutonomyEngine {
     risk_score: number
   ): Promise<AutonomyAction> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('autonomy_actions')
         .insert({
           action_type,
@@ -459,7 +459,7 @@ class MissionAutonomyEngine {
    */
   private async getAction(actionId: string): Promise<AutonomyAction | null> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('autonomy_actions')
         .select('*')
         .eq('id', actionId)
@@ -494,7 +494,7 @@ class MissionAutonomyEngine {
    */
   private async updateAction(action: AutonomyAction): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('autonomy_actions')
         .update({
           status: action.status,

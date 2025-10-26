@@ -311,14 +311,14 @@ class EvoAIConnector {
     const { data: recentMetrics } = await supabase
       .from('system_metrics')
       .select('*')
-      .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-      .order('created_at', { ascending: false });
+      .gte('recorded_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+      .order('recorded_at', { ascending: false });
 
     const { data: oldMetrics } = await supabase
       .from('system_metrics')
       .select('*')
-      .gte('created_at', new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString())
-      .lt('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+      .gte('recorded_at', new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString())
+      .lt('recorded_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
     // Calculate scores (simplified)
     const recentAvg = recentMetrics?.reduce((sum, m) => sum + (m.value ?? 0.5), 0) / Math.max(recentMetrics?.length || 1, 1);
@@ -493,25 +493,30 @@ class EvoAIConnector {
         .limit(1)
         .single();
 
+      const trainingDeltas = (deltasData?.deltas as unknown as TrainingDelta[]) || [];
+      const performanceScore: PerformanceScore = {
+        overall: performanceData.overall_score,
+        prediction: performanceData.prediction_score ?? 0,
+        adaptation: performanceData.adaptation_score ?? 0,
+        tactical: performanceData.tactical_score ?? 0,
+        timestamp: new Date(performanceData.timestamp ?? new Date().toISOString()),
+        trend: (performanceData.trend ?? 'stable') as PerformanceScore['trend'],
+      };
+
+      const insights: FeedbackInsight[] = (insightsData || []).map(i => ({
+        category: i.category,
+        pattern: i.pattern,
+        frequency: i.frequency,
+        impact: (i.impact as FeedbackInsight['impact']) ?? 'low',
+        recommendation: i.recommendation,
+      }));
+
       return {
-        trainingDeltas: deltasData?.deltas || [],
-        performanceScore: {
-          overall: performanceData.overall_score,
-          prediction: performanceData.prediction_score,
-          adaptation: performanceData.adaptation_score,
-          tactical: performanceData.tactical_score,
-          timestamp: new Date(performanceData.timestamp),
-          trend: performanceData.trend,
-        },
-        insights: (insightsData || []).map(i => ({
-          category: i.category,
-          pattern: i.pattern,
-          frequency: i.frequency,
-          impact: i.impact,
-          recommendation: i.recommendation,
-        })),
-        evolutionScore: performanceData.evolution_score,
-        generatedAt: new Date(performanceData.timestamp),
+        trainingDeltas,
+        performanceScore,
+        insights,
+        evolutionScore: this.calculateEvolutionScore(performanceScore, insights),
+        generatedAt: new Date(performanceData.timestamp ?? new Date().toISOString()),
       };
     } catch (error) {
       logger.error('[EvoAI] Failed to fetch latest report:', error);

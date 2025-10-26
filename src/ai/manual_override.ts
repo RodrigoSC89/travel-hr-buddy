@@ -60,15 +60,15 @@ class ManualOverrideSystem {
     tacticalAI.setManualOverride(moduleName, false);
 
     // Update database
-    await supabase
-      .from('manual_overrides')
-      .update({
-        enabled: false,
-        disabled_at: new Date().toISOString(),
-        disabled_by: userId,
-      })
-      .eq('module_name', moduleName)
-      .eq('enabled', true);
+      await (supabase as any)
+        .from('manual_overrides')
+        .update({
+          enabled: false,
+          disabled_at: new Date().toISOString(),
+          disabled_by: userId,
+        })
+        .eq('module_name', moduleName)
+        .eq('enabled', true);
   }
 
   /**
@@ -76,7 +76,7 @@ class ManualOverrideSystem {
    */
   async isOverrideActive(moduleName: string): Promise<boolean> {
     try {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from('manual_overrides')
         .select('*')
         .eq('module_name', moduleName)
@@ -102,7 +102,7 @@ class ManualOverrideSystem {
    */
   async getActiveOverrides(): Promise<ManualOverride[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('manual_overrides')
         .select('*')
         .eq('enabled', true)
@@ -130,7 +130,7 @@ class ManualOverrideSystem {
    */
   async getOverrideHistory(moduleName?: string, limit = 50): Promise<ManualOverride[]> {
     try {
-      let query = supabase
+      let query = (supabase as any)
         .from('manual_overrides')
         .select('*')
         .order('created_at', { ascending: false })
@@ -164,7 +164,7 @@ class ManualOverrideSystem {
    */
   private async saveOverride(override: ManualOverride): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('manual_overrides')
         .insert({
           id: override.id,
@@ -196,7 +196,7 @@ class ManualOverrideSystem {
    */
   async cleanupExpiredOverrides(): Promise<void> {
     try {
-      const { data: expired } = await supabase
+      const { data: expired } = await (supabase as any)
         .from('manual_overrides')
         .select('module_name')
         .eq('enabled', true)

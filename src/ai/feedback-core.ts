@@ -469,7 +469,7 @@ class CognitiveFeedbackCore {
           .single();
 
         if (!error && data) {
-          const insights = await this.generateInsights(data.module_name, 30);
+          const insights = await this.generateInsights(data.module_name || undefined, 30);
           
           if (insights.length > 0) {
             // Update the feedback entry with the best insight
