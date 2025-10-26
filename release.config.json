@@ -116,8 +116,6 @@
     "testCommand": "npm run test",
     "lintCommand": "npm run lint",
     "typeCheckCommand": "npm run type-check",
-    "
-Command": "npm run build",
     "deploymentChecks": {
       "runTests": true,
       "runLint": true,

@@ -249,8 +249,14 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add CHANGELOG.md
-          git commit -m "chore: update CHANGELOG.md [skip ci]" || echo "No changes to commit"
-          git push || echo "No changes to push"
+          git diff --staged --quiet || git commit -m "chore: update CHANGELOG.md [skip ci]"
+          
+          # Push using GitHub token
+          if git diff --staged --quiet; then
+            echo "No changes to push"
+          else
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || echo "Push failed, continuing..."
+          fi
 
       - name: Deploy to Vercel (Production)
         uses: amondnet/vercel-action@v25
@@ -330,7 +336,7 @@ jobs:
         continue-on-error: true
 
       - name: Run Snyk security scan
-        uses: snyk/actions/node@master
+        uses: snyk/actions/node@0.4.0
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
