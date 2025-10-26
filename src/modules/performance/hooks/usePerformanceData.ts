@@ -158,7 +158,7 @@ export const usePerformanceData = (period: number = 7) => {
     );
 
     // Productivity by day
-    const missionsBy Day = new Map<string, { total: number; completed: number }>();
+    const missionsByDay = new Map<string, { total: number; completed: number }>();
     missions.forEach(mission => {
       const day = new Date(mission.created_at).toLocaleDateString();
       const current = missionsByDay.get(day) || { total: 0, completed: 0 };
