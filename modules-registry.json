@@ -1,0 +1,148 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-10-26T03:00:00.000Z",
+  "modules": [
+    {
+      "id": "fleet",
+      "name": "Fleet Management",
+      "path": "/modules/fleet",
+      "route": "/fleet",
+      "status": "active",
+      "category": "operations",
+      "description": "Unified fleet and maritime operations management",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "191.0",
+      "lastModified": "2025-10-26"
+    },
+    {
+      "id": "finance-hub",
+      "name": "Finance Hub",
+      "path": "/modules/finance-hub",
+      "route": "/finance-hub",
+      "status": "active",
+      "category": "finance",
+      "description": "Complete financial management with real-time data",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "192.0",
+      "lastModified": "2025-10-26"
+    },
+    {
+      "id": "performance",
+      "name": "Performance Dashboard",
+      "path": "/modules/performance",
+      "route": "/performance",
+      "status": "active",
+      "category": "analytics",
+      "description": "Operational KPIs and AI-powered performance analysis",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "193.0",
+      "lastModified": "2025-10-26"
+    },
+    {
+      "id": "crew",
+      "name": "Crew Management",
+      "path": "/modules/operations/crew",
+      "route": "/crew",
+      "status": "active",
+      "category": "hr",
+      "description": "Crew member management and assignments",
+      "hasDatabase": true,
+      "hasMockData": true,
+      "version": "66.0"
+    },
+    {
+      "id": "documents",
+      "name": "Documents AI",
+      "path": "/modules/documents/documents-ai",
+      "route": "/documents",
+      "status": "active",
+      "category": "documents",
+      "description": "AI-powered document management",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "1.0"
+    },
+    {
+      "id": "maritime",
+      "name": "Maritime System",
+      "path": "/modules/fleet",
+      "route": "/maritime",
+      "status": "deprecated",
+      "category": "operations",
+      "description": "Consolidated into Fleet module",
+      "hasDatabase": false,
+      "hasMockData": false,
+      "deprecatedIn": "191.0",
+      "replacedBy": "fleet"
+    },
+    {
+      "id": "maritime-supremo",
+      "name": "Maritime Supremo",
+      "path": "/modules/fleet",
+      "route": "/maritime-supremo",
+      "status": "deprecated",
+      "category": "operations",
+      "description": "Consolidated into Fleet module",
+      "hasDatabase": false,
+      "hasMockData": false,
+      "deprecatedIn": "191.0",
+      "replacedBy": "fleet"
+    }
+  ],
+  "routes": [
+    {
+      "path": "/fleet",
+      "module": "fleet",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/modules/fleet",
+      "module": "fleet",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/finance-hub",
+      "module": "finance-hub",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/performance",
+      "module": "performance",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/crew",
+      "module": "crew",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/maritime",
+      "module": "fleet",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/fleet"
+    },
+    {
+      "path": "/maritime-supremo",
+      "module": "fleet",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/fleet"
+    }
+  ],
+  "statistics": {
+    "totalModules": 5,
+    "activeModules": 5,
+    "deprecatedModules": 2,
+    "modulesWithRealData": 3,
+    "modulesWithMockData": 1
+  }
+}
