@@ -256,7 +256,9 @@ jobs:
           else
             # Commit and push the changes
             git commit -m "chore: update CHANGELOG.md [skip ci]"
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} || echo "Push failed, continuing..."
+            # Extract branch name from ref (e.g., refs/heads/main -> main)
+            BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:"${BRANCH_NAME}" || echo "Push failed, continuing..."
           fi
 
       - name: Deploy to Vercel (Production)
