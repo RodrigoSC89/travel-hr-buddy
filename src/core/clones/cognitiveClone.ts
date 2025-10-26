@@ -10,8 +10,6 @@
 
 import { Logger } from "@/lib/utils/logger";
 
-const logger = new Logger("CognitiveClone");
-
 // Clone configuration snapshot
 export interface CloneSnapshot {
   id: string;
@@ -79,7 +77,7 @@ export class CognitiveCloneManager {
    * Create a snapshot of current system configuration
    */
   async createSnapshot(name: string, modules: ModuleConfig[], context: CloneContext): Promise<CloneSnapshot> {
-    logger.info(`Creating snapshot: ${name}`);
+    Logger.info(`Creating snapshot: ${name}`, undefined, "CognitiveClone");
 
     const snapshot: CloneSnapshot = {
       id: this.generateCloneId(),
@@ -93,7 +91,7 @@ export class CognitiveCloneManager {
     };
 
     this.clones.set(snapshot.id, snapshot);
-    logger.info(`Snapshot created: ${snapshot.id}`);
+    Logger.info(`Snapshot created: ${snapshot.id}`, undefined, "CognitiveClone");
 
     return snapshot;
   }
@@ -102,7 +100,7 @@ export class CognitiveCloneManager {
    * Clone a Nautilus instance remotely
    */
   async cloneInstance(snapshotId: string, targetLocation: "local" | "remote", userId: string): Promise<string> {
-    logger.info(`Cloning instance from snapshot: ${snapshotId} to ${targetLocation}`);
+    Logger.info(`Cloning instance from snapshot: ${snapshotId} to ${targetLocation}`, undefined, "CognitiveClone");
 
     const snapshot = this.clones.get(snapshotId);
     if (!snapshot) {
@@ -128,7 +126,7 @@ export class CognitiveCloneManager {
     // Persist to local storage for offline access
     await this.persistClone(registryEntry);
 
-    logger.info(`Clone created: ${cloneId}`);
+    Logger.info(`Clone created: ${cloneId}`, undefined, "CognitiveClone");
     return cloneId;
   }
 
@@ -159,7 +157,7 @@ export class CognitiveCloneManager {
     entry.updatedAt = new Date().toISOString();
     
     await this.persistClone(entry);
-    logger.info(`Clone status updated: ${cloneId} -> ${status}`);
+    Logger.info(`Clone status updated: ${cloneId} -> ${status}`, undefined, "CognitiveClone");
   }
 
   /**
@@ -169,9 +167,9 @@ export class CognitiveCloneManager {
     try {
       const key = `nautilus_clone_${entry.cloneId}`;
       localStorage.setItem(key, JSON.stringify(entry));
-      logger.debug(`Clone persisted to local storage: ${entry.cloneId}`);
+      Logger.debug(`Clone persisted to local storage: ${entry.cloneId}`, undefined, "CognitiveClone");
     } catch (error) {
-      logger.error(`Failed to persist clone: ${error}`);
+      Logger.error(`Failed to persist clone: ${error}`, error, "CognitiveClone");
       throw error;
     }
   }
@@ -191,10 +189,10 @@ export class CognitiveCloneManager {
       const entry: CloneRegistryEntry = JSON.parse(data);
       this.registry.set(cloneId, entry);
       
-      logger.info(`Clone loaded from local storage: ${cloneId}`);
+      Logger.info(`Clone loaded from local storage: ${cloneId}`, undefined, "CognitiveClone");
       return entry;
     } catch (error) {
-      logger.error(`Failed to load clone: ${error}`);
+      Logger.error(`Failed to load clone: ${error}`, error, "CognitiveClone");
       return null;
     }
   }
@@ -208,7 +206,7 @@ export class CognitiveCloneManager {
     const key = `nautilus_clone_${cloneId}`;
     localStorage.removeItem(key);
     
-    logger.info(`Clone deleted: ${cloneId}`);
+    Logger.info(`Clone deleted: ${cloneId}`, undefined, "CognitiveClone");
   }
 
   /**
@@ -227,7 +225,7 @@ export class CognitiveCloneManager {
     };
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
-    logger.info(`Clone exported: ${cloneId}`);
+    Logger.info(`Clone exported: ${cloneId}`, undefined, "CognitiveClone");
     
     return blob;
   }
@@ -249,10 +247,10 @@ export class CognitiveCloneManager {
       this.registry.set(newCloneId, entry);
       await this.persistClone(entry);
 
-      logger.info(`Clone imported: ${newCloneId}`);
+      Logger.info(`Clone imported: ${newCloneId}`, undefined, "CognitiveClone");
       return newCloneId;
     } catch (error) {
-      logger.error(`Failed to import clone: ${error}`);
+      Logger.error(`Failed to import clone: ${error}`, error, "CognitiveClone");
       throw new Error("Invalid clone data");
     }
   }
@@ -287,7 +285,7 @@ export class CognitiveCloneManager {
       throw new Error(`Clone not found: ${cloneId}`);
     }
 
-    logger.info(`Syncing clone: ${cloneId}`);
+    Logger.info(`Syncing clone: ${cloneId}`, undefined, "CognitiveClone");
     
     try {
       entry.snapshot.status = "syncing";
@@ -306,11 +304,11 @@ export class CognitiveCloneManager {
       entry.updatedAt = new Date().toISOString();
       
       await this.persistClone(entry);
-      logger.info(`Clone synced successfully: ${cloneId}`);
+      Logger.info(`Clone synced successfully: ${cloneId}`, undefined, "CognitiveClone");
     } catch (error) {
       entry.syncStatus.errors.push(`Sync failed: ${error}`);
       entry.snapshot.status = "error";
-      logger.error(`Clone sync failed: ${error}`);
+      Logger.error(`Clone sync failed: ${error}`, error, "CognitiveClone");
       throw error;
     }
   }

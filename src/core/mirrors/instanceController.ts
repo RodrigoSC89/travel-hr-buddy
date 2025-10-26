@@ -11,7 +11,7 @@
 import { Logger } from "@/lib/utils/logger";
 import type { CloneRegistryEntry } from "../clones/cognitiveClone";
 
-const logger = new Logger("InstanceController");
+
 
 // Instance status
 export type InstanceStatus = "active" | "inactive" | "syncing" | "error" | "offline" | "unknown";
@@ -116,7 +116,7 @@ export class InstanceController {
    * Register a new instance
    */
   registerInstance(info: InstanceInfo): void {
-    logger.info(`Registering instance: ${info.name} (${info.id})`);
+    Logger.info(`Registering instance: ${info.name} (${info.id})`);
     this.instances.set(info.id, info);
     
     // Update last seen
@@ -129,7 +129,7 @@ export class InstanceController {
   unregisterInstance(instanceId: string): void {
     const instance = this.instances.get(instanceId);
     if (instance) {
-      logger.info(`Unregistering instance: ${instance.name}`);
+      Logger.info(`Unregistering instance: ${instance.name}`);
       this.instances.delete(instanceId);
     }
   }
@@ -169,7 +169,7 @@ export class InstanceController {
     if (instance) {
       instance.status = status;
       instance.lastSeen = new Date().toISOString();
-      logger.debug(`Instance status updated: ${instanceId} -> ${status}`);
+      Logger.debug(`Instance status updated: ${instanceId} -> ${status}`);
     }
   }
 
@@ -244,7 +244,7 @@ export class InstanceController {
     };
 
     this.syncOperations.set(operationId, operation);
-    logger.info(`Sync operation created: ${operationId} for instance ${instanceId}`);
+    Logger.info(`Sync operation created: ${operationId} for instance ${instanceId}`);
 
     // Start operation
     this.executeSyncOperation(operationId);
@@ -275,7 +275,7 @@ export class InstanceController {
     const startTime = Date.now();
 
     try {
-      logger.info(`Starting sync operation: ${operationId}`);
+      Logger.info(`Starting sync operation: ${operationId}`);
 
       // Simulate sync process
       for (const dataType of operation.dataTypes) {
@@ -306,7 +306,7 @@ export class InstanceController {
         errors: []
       });
 
-      logger.info(`Sync operation completed: ${operationId} in ${duration}ms`);
+      Logger.info(`Sync operation completed: ${operationId} in ${duration}ms`);
     } catch (error) {
       operation.status = "failed";
       operation.error = String(error);
@@ -327,7 +327,7 @@ export class InstanceController {
         errors: [String(error)]
       });
 
-      logger.error(`Sync operation failed: ${operationId} - ${error}`);
+      Logger.error(`Sync operation failed: ${operationId} - ${error}`);
     }
   }
 
@@ -339,7 +339,7 @@ export class InstanceController {
     dataType: DataType,
     operation: SyncOperation
   ): Promise<void> {
-    logger.debug(`Syncing ${dataType} for instance ${instance.id}`);
+    Logger.debug(`Syncing ${dataType} for instance ${instance.id}`);
 
     // Simulate data transfer
     const dataSize = this.estimateDataSize(dataType);
@@ -353,7 +353,7 @@ export class InstanceController {
       operation.progress = Math.floor((operation.bytesTransferred / dataSize) * 100);
     }
 
-    logger.debug(`Synced ${dataType}: ${dataSize} bytes`);
+    Logger.debug(`Synced ${dataType}: ${dataSize} bytes`);
   }
 
   /**
@@ -377,7 +377,7 @@ export class InstanceController {
    * Force push data to instance
    */
   async forcePush(instanceId: string, dataTypes: DataType[]): Promise<string> {
-    logger.info(`Force pushing data to instance: ${instanceId}`);
+    Logger.info(`Force pushing data to instance: ${instanceId}`);
     return this.createSyncOperation(instanceId, "push", dataTypes, "high");
   }
 
@@ -385,7 +385,7 @@ export class InstanceController {
    * Force pull data from instance
    */
   async forcePull(instanceId: string, dataTypes: DataType[]): Promise<string> {
-    logger.info(`Force pulling data from instance: ${instanceId}`);
+    Logger.info(`Force pulling data from instance: ${instanceId}`);
     return this.createSyncOperation(instanceId, "pull", dataTypes, "high");
   }
 
@@ -417,7 +417,7 @@ export class InstanceController {
     if (operation && operation.status === "in-progress") {
       operation.status = "failed";
       operation.error = "Cancelled by user";
-      logger.info(`Sync operation cancelled: ${operationId}`);
+      Logger.info(`Sync operation cancelled: ${operationId}`);
     }
   }
 
@@ -497,7 +497,7 @@ export class InstanceController {
       const timeSinceLastSeen = now - lastSeen;
 
       if (timeSinceLastSeen > timeout && instance.status !== "offline") {
-        logger.warn(`Instance ${id} appears offline (last seen ${timeSinceLastSeen}ms ago)`);
+        Logger.warn(`Instance ${id} appears offline (last seen ${timeSinceLastSeen}ms ago)`);
         instance.status = "offline";
       }
     }
@@ -526,7 +526,7 @@ export class InstanceController {
    */
   clearLogs(): void {
     this.syncLogs = [];
-    logger.info('Sync logs cleared');
+    Logger.info('Sync logs cleared');
   }
 
   /**

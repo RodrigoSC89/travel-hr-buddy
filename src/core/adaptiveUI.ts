@@ -10,7 +10,7 @@
 
 import { Logger } from "@/lib/utils/logger";
 
-const logger = new Logger("AdaptiveUI");
+
 
 // Device types
 export type DeviceType = "mobile" | "tablet" | "desktop" | "console" | "unknown";
@@ -102,7 +102,7 @@ export class AdaptiveUIEngine {
     if ('connection' in navigator) {
       this.networkObserver = (navigator as any).connection;
       this.networkObserver?.addEventListener('change', () => {
-        logger.info('Network status changed, reconfiguring UI');
+        Logger.info('Network status changed, reconfiguring UI');
         this.reconfigure();
       });
     }
@@ -111,7 +111,7 @@ export class AdaptiveUIEngine {
     window.addEventListener('resize', () => {
       const newDevice = this.detectDevice();
       if (newDevice.type !== this.getCurrentDeviceType()) {
-        logger.info('Device type changed, reconfiguring UI');
+        Logger.info('Device type changed, reconfiguring UI');
         this.reconfigure();
       }
     });
@@ -341,7 +341,7 @@ export class AdaptiveUIEngine {
    * Reconfigure UI based on current context
    */
   async reconfigure(operation?: OperationalContext): Promise<UIConfiguration> {
-    logger.info('Reconfiguring UI...');
+    Logger.info('Reconfiguring UI...');
 
     const device = this.detectDevice();
     const network = await this.measureNetwork();
@@ -375,7 +375,7 @@ export class AdaptiveUIEngine {
     }
 
     this.currentConfig = newConfig;
-    logger.info(`UI reconfigured to mode: ${mode}`);
+    Logger.info(`UI reconfigured to mode: ${mode}`);
 
     return newConfig;
   }
@@ -427,7 +427,7 @@ export class AdaptiveUIEngine {
    * Force UI mode (override automatic detection)
    */
   forceMode(mode: UIMode): void {
-    logger.info(`Forcing UI mode to: ${mode}`);
+    Logger.info(`Forcing UI mode to: ${mode}`);
     this.currentConfig.mode = mode;
     this.currentConfig.performanceMode = mode === "minimal" || mode === "reduced";
     this.currentConfig.offlineMode = mode === "offline";

@@ -11,7 +11,7 @@
 
 import { Logger } from "@/lib/utils/logger";
 
-const logger = new Logger("EdgeAICore");
+
 
 // Model formats supported
 export type ModelFormat = "ggml" | "onnx-lite" | "onnx" | "tflite" | "wasm";
@@ -104,7 +104,7 @@ export class EdgeAICore {
    * Initialize inference engine and detect GPU capabilities
    */
   private async initializeEngine(): Promise<void> {
-    logger.info('Initializing Edge AI engine...');
+    Logger.info('Initializing Edge AI engine...');
 
     // Check for WebGPU support
     if ('gpu' in navigator) {
@@ -113,11 +113,11 @@ export class EdgeAICore {
         if (adapter) {
           this.inferenceEngine = "webgpu";
           this.gpuCapabilities = await this.detectGPUCapabilities(adapter);
-          logger.info('WebGPU available, using GPU acceleration');
+          Logger.info('WebGPU available, using GPU acceleration');
           return;
         }
       } catch (error) {
-        logger.warn('WebGPU initialization failed, falling back');
+        Logger.warn('WebGPU initialization failed, falling back');
       }
     }
 
@@ -126,17 +126,17 @@ export class EdgeAICore {
     const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
     if (gl) {
       this.inferenceEngine = "webgl";
-      logger.info('WebGL available, using GPU acceleration');
+      Logger.info('WebGL available, using GPU acceleration');
       return;
     }
 
     // Fallback to WASM or CPU
     if (typeof WebAssembly !== 'undefined') {
       this.inferenceEngine = "wasm";
-      logger.info('WebAssembly available, using WASM acceleration');
+      Logger.info('WebAssembly available, using WASM acceleration');
     } else {
       this.inferenceEngine = "cpu";
-      logger.warn('No GPU or WASM support, using CPU inference');
+      Logger.warn('No GPU or WASM support, using CPU inference');
     }
   }
 
@@ -160,7 +160,7 @@ export class EdgeAICore {
    * Register a model for use
    */
   registerModel(metadata: ModelMetadata): void {
-    logger.info(`Registering model: ${metadata.name} (${metadata.format})`);
+    Logger.info(`Registering model: ${metadata.name} (${metadata.format})`);
     this.models.set(metadata.id, metadata);
     this.modelStatus.set(metadata.id, "unloaded");
   }
@@ -175,7 +175,7 @@ export class EdgeAICore {
     }
 
     this.modelStatus.set(modelId, "loading");
-    logger.info(`Loading model: ${metadata.name}`);
+    Logger.info(`Loading model: ${metadata.name}`);
 
     try {
       // In real implementation, this would load the actual model
@@ -191,10 +191,10 @@ export class EdgeAICore {
 
       this.loadedModels.set(modelId, model);
       this.modelStatus.set(modelId, "loaded");
-      logger.info(`Model loaded successfully: ${metadata.name}`);
+      Logger.info(`Model loaded successfully: ${metadata.name}`);
     } catch (error) {
       this.modelStatus.set(modelId, "error");
-      logger.error(`Failed to load model: ${error}`);
+      Logger.error(`Failed to load model: ${error}`);
       throw error;
     }
   }
@@ -210,7 +210,7 @@ export class EdgeAICore {
 
     this.loadedModels.delete(modelId);
     this.modelStatus.set(modelId, "unloaded");
-    logger.info(`Model unloaded: ${metadata.name}`);
+    Logger.info(`Model unloaded: ${metadata.name}`);
   }
 
   /**
@@ -233,7 +233,7 @@ export class EdgeAICore {
     const startTime = performance.now();
 
     try {
-      logger.debug(`Running inference on model: ${metadata.name}`);
+      Logger.debug(`Running inference on model: ${metadata.name}`);
 
       // Simulate inference based on engine type
       let output: Float32Array;
@@ -278,7 +278,7 @@ export class EdgeAICore {
       });
 
       this.modelStatus.set(modelId, "loaded");
-      logger.debug(`Inference completed in ${latency.toFixed(2)}ms`);
+      Logger.debug(`Inference completed in ${latency.toFixed(2)}ms`);
 
       return result;
     } catch (error) {
@@ -298,7 +298,7 @@ export class EdgeAICore {
       });
 
       this.modelStatus.set(modelId, "error");
-      logger.error(`Inference failed: ${error}`);
+      Logger.error(`Inference failed: ${error}`);
       throw error;
     }
   }
@@ -455,7 +455,7 @@ export class EdgeAICore {
    */
   clearLogs(): void {
     this.logs = [];
-    logger.info('Inference logs cleared');
+    Logger.info('Inference logs cleared');
   }
 
   /**
