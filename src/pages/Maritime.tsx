@@ -39,6 +39,20 @@ import { PredictiveMaintenanceSystem } from "../components/maritime/predictive-m
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * PATCH 191.0 - Maritime Operations Module
+ * 
+ * Specialized maritime operations focused on:
+ * - Compliance checklists and certifications
+ * - IoT sensor integration and monitoring
+ * - Predictive maintenance systems
+ * - Crew rotation and scheduling
+ * - QR equipment management
+ * 
+ * Built on top of unified Fleet Management (see: /fleet or src/modules/fleet)
+ * Shares database tables: vessels, maintenance, routes, crew_assignments
+ */
+
 interface DashboardStats {
   totalVessels: number;
   activeCrew: number;

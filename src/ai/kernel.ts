@@ -484,10 +484,10 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
     };
   },
   
-  "features.maritime-system": async (ctx) => {
+  "operations.maritime-system": async (ctx) => {
     return {
       type: "recommendation",
-      message: "Sistema marítimo atualizado. Sincronizar com autoridades portuárias.",
+      message: "Sistema marítimo atualizado. Sincronizar com autoridades portuárias e verificar checklists de conformidade.",
       confidence: 91.5,
       timestamp: new Date()
     };
