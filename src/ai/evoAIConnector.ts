@@ -321,8 +321,8 @@ class EvoAIConnector {
       .lt('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
     // Calculate scores (simplified)
-    const recentAvg = recentMetrics?.reduce((sum, m) => sum + (m.performance_score || 0.5), 0) / Math.max(recentMetrics?.length || 1, 1);
-    const oldAvg = oldMetrics?.reduce((sum, m) => sum + (m.performance_score || 0.5), 0) / Math.max(oldMetrics?.length || 1, 1);
+    const recentAvg = recentMetrics?.reduce((sum, m) => sum + (m.value ?? 0.5), 0) / Math.max(recentMetrics?.length || 1, 1);
+    const oldAvg = oldMetrics?.reduce((sum, m) => sum + (m.value ?? 0.5), 0) / Math.max(oldMetrics?.length || 1, 1);
 
     const trend = recentAvg > oldAvg * 1.05 ? 'improving' : recentAvg < oldAvg * 0.95 ? 'degrading' : 'stable';
 
@@ -378,29 +378,37 @@ class EvoAIConnector {
    */
   private async saveEvolutionReport(report: EvolutionReport): Promise<void> {
     try {
-      // Save training deltas
-      await supabase
+      // Correlate records with a cycle id
+      const cycleId = (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2));
+
+      // Save training deltas snapshot
+      await (supabase as any)
         .from('training_deltas')
         .insert({
+          cycle_id: cycleId,
+          module_name: 'evo_ai',
+          metric_name: 'composite',
+          source: 'evo_ai_connector',
           deltas: report.trainingDeltas,
-          generated_at: report.generatedAt.toISOString(),
+          created_at: new Date().toISOString(),
         });
 
       // Save performance score
-      await supabase
+      await (supabase as any)
         .from('performance_scores')
         .insert({
+          module_name: 'evo_ai',
           overall_score: report.performanceScore.overall,
           prediction_score: report.performanceScore.prediction,
           adaptation_score: report.performanceScore.adaptation,
           tactical_score: report.performanceScore.tactical,
           trend: report.performanceScore.trend,
-          evolution_score: report.evolutionScore,
           timestamp: report.performanceScore.timestamp.toISOString(),
         });
 
       // Save insights
       const insightRecords = report.insights.map(i => ({
+        cycle_id: cycleId,
         category: i.category,
         pattern: i.pattern,
         frequency: i.frequency,
@@ -410,7 +418,7 @@ class EvoAIConnector {
       }));
 
       if (insightRecords.length > 0) {
-        await supabase.from('evolution_insights').insert(insightRecords);
+        await (supabase as any).from('evolution_insights').insert(insightRecords);
       }
 
       logger.info('[EvoAI] Evolution report saved');
@@ -438,11 +446,13 @@ class EvoAIConnector {
 
     try {
       // Save fine-tune request
-      await supabase
+      await (supabase as any)
         .from('fine_tune_requests')
         .insert({
-          evolution_score: report.evolutionScore,
-          pattern_deviation: await this.calculatePatternDeviation(report.insights),
+          module_name: 'evo_ai',
+          request_id: (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2)),
+          trigger_reason: 'pattern_deviation_exceeded',
+          deviation_percent: await this.calculatePatternDeviation(report.insights),
           training_data: {
             deltas: report.trainingDeltas,
             insights: report.insights,

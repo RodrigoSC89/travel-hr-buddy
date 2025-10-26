@@ -93,9 +93,9 @@ class CognitiveFeedbackCore {
         created_at: new Date().toISOString(),
       };
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('cognitive_feedback')
-        .insert(entry)
+        .insert([entry])
         .select()
         .single();
 
@@ -130,7 +130,7 @@ class CognitiveFeedbackCore {
     }
   ): Promise<boolean> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('cognitive_feedback')
         .update(update)
         .eq('id', feedbackId);
@@ -189,7 +189,7 @@ class CognitiveFeedbackCore {
       }
 
       // Analyze patterns
-      const patterns = this.analyzePatterns(data || []);
+      const patterns = this.analyzePatterns((data || []) as unknown as CognitiveFeedbackEntry[]);
       
       // Update cache
       this.patternCache.set(cacheKey, patterns);
@@ -397,8 +397,9 @@ class CognitiveFeedbackCore {
       // Module performance
       const modulePerformance: Record<string, any> = {};
       data.forEach(entry => {
-        if (!modulePerformance[entry.module_name]) {
-          modulePerformance[entry.module_name] = {
+        const moduleKey = entry.module_name || 'unknown';
+        if (!modulePerformance[moduleKey]) {
+          modulePerformance[moduleKey] = {
             total: 0,
             accepted: 0,
             rejected: 0,
@@ -406,12 +407,12 @@ class CognitiveFeedbackCore {
           };
         }
         
-        modulePerformance[entry.module_name].total++;
+        modulePerformance[moduleKey].total++;
         if (entry.operator_action === 'accepted') {
-          modulePerformance[entry.module_name].accepted++;
+          modulePerformance[moduleKey].accepted++;
         }
         if (entry.operator_action === 'rejected') {
-          modulePerformance[entry.module_name].rejected++;
+          modulePerformance[moduleKey].rejected++;
         }
       });
 
@@ -472,7 +473,7 @@ class CognitiveFeedbackCore {
           
           if (insights.length > 0) {
             // Update the feedback entry with the best insight
-            await supabase
+            await (supabase as any)
               .from('cognitive_feedback')
               .update({
                 insight_generated: insights[0].insight,

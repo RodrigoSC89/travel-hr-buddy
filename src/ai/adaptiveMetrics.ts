@@ -235,10 +235,10 @@ class AdaptiveMetricsEngine {
         .order('timestamp', { ascending: false })
         .limit(this.historySize);
 
-      return (data || []).map(d => ({
-        timestamp: new Date(d.timestamp),
-        value: d.value,
-        performance: d.performance_score,
+      return (data || []).map((d: any) => ({
+        timestamp: d.timestamp ? new Date(d.timestamp) : new Date(),
+        value: d.value as number,
+        performance: (d.performance_score ?? 0) as number,
       }));
     } catch (error) {
       logger.error(`[AdaptiveMetrics] Failed to fetch history for ${paramName}:`, error);
@@ -322,12 +322,9 @@ class AdaptiveMetricsEngine {
         .from('adaptive_parameters')
         .upsert({
           parameter_name: param.name,
+          module_name: 'adaptive_metrics',
           current_value: param.currentValue,
-          default_value: param.defaultValue,
-          min_value: param.minValue,
-          max_value: param.maxValue,
-          unit: param.unit,
-          adjustment_count: param.adjustmentCount,
+          baseline_value: param.defaultValue,
           updated_at: param.lastAdjusted.toISOString(),
         });
 
@@ -352,9 +349,11 @@ class AdaptiveMetricsEngine {
         .from('parameter_adjustments')
         .insert({
           parameter_name: paramName,
+          module_name: 'adaptive_metrics',
           old_value: oldValue,
           new_value: newValue,
-          adjusted_at: new Date().toISOString(),
+          delta_percent: oldValue === 0 ? 0 : ((newValue - oldValue) / oldValue) * 100,
+          created_at: new Date().toISOString(),
         });
     } catch (error) {
       logger.error('[AdaptiveMetrics] Failed to track adjustment:', error);
@@ -373,6 +372,7 @@ class AdaptiveMetricsEngine {
       await supabase
         .from('metric_history')
         .insert({
+          module_name: 'adaptive_metrics',
           parameter_name: paramName,
           value,
           performance_score: Math.max(0, Math.min(1, performanceScore)),
