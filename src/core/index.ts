@@ -17,33 +17,68 @@ export { contextMesh } from './context/contextMesh';
 export type { ContextType, SyncStatus, ContextMessage, ContextSubscription } from './context/contextMesh';
 
 /**
- * Initialize all collective intelligence systems
+ * Initialize all collective intelligence systems with error handling
+ * @throws Error if any component fails to initialize
  */
 export async function initializeCollectiveIntelligence(): Promise<void> {
-  const { contextMesh } = await import('./context/contextMesh');
-  const { distributedDecisionCore } = await import('../ai/distributedDecisionCore');
-  const { consciousCore } = await import('../ai/consciousCore');
-  const { collectiveLoopEngine } = await import('../ai/feedback/collectiveLoop');
+  try {
+    const { contextMesh } = await import('./context/contextMesh');
+    const { distributedDecisionCore } = await import('../ai/distributedDecisionCore');
+    const { consciousCore } = await import('../ai/consciousCore');
+    const { collectiveLoopEngine } = await import('../ai/feedback/collectiveLoop');
 
-  await contextMesh.initialize();
-  await distributedDecisionCore.initialize();
-  await consciousCore.initialize();
-  await collectiveLoopEngine.initialize();
+    // Initialize in order with error handling for each
+    try {
+      await contextMesh.initialize();
+    } catch (error) {
+      console.error('[CollectiveIntelligence] Failed to initialize context mesh:', error);
+      throw new Error('Context mesh initialization failed');
+    }
 
-  // Start monitoring and processing
-  consciousCore.startMonitoring();
-  collectiveLoopEngine.startProcessing();
+    try {
+      await distributedDecisionCore.initialize();
+    } catch (error) {
+      console.error('[CollectiveIntelligence] Failed to initialize decision core:', error);
+      throw new Error('Decision core initialization failed');
+    }
+
+    try {
+      await consciousCore.initialize();
+    } catch (error) {
+      console.error('[CollectiveIntelligence] Failed to initialize conscious core:', error);
+      throw new Error('Conscious core initialization failed');
+    }
+
+    try {
+      await collectiveLoopEngine.initialize();
+    } catch (error) {
+      console.error('[CollectiveIntelligence] Failed to initialize collective loop:', error);
+      throw new Error('Collective loop initialization failed');
+    }
+
+    // Start monitoring and processing
+    consciousCore.startMonitoring();
+    collectiveLoopEngine.startProcessing();
+  } catch (error) {
+    console.error('[CollectiveIntelligence] Initialization failed:', error);
+    throw error;
+  }
 }
 
 /**
  * Shutdown all collective intelligence systems
  */
-export function shutdownCollectiveIntelligence(): void {
-  const { contextMesh } = require('./context/contextMesh');
-  const { consciousCore } = require('../ai/consciousCore');
-  const { collectiveLoopEngine } = require('../ai/feedback/collectiveLoop');
+export async function shutdownCollectiveIntelligence(): Promise<void> {
+  try {
+    const { contextMesh } = await import('./context/contextMesh');
+    const { consciousCore } = await import('../ai/consciousCore');
+    const { collectiveLoopEngine } = await import('../ai/feedback/collectiveLoop');
 
-  consciousCore.stopMonitoring();
-  collectiveLoopEngine.stopProcessing();
-  contextMesh.shutdown();
+    consciousCore.stopMonitoring();
+    collectiveLoopEngine.stopProcessing();
+    contextMesh.shutdown();
+  } catch (error) {
+    console.error('[CollectiveIntelligence] Shutdown failed:', error);
+    throw error;
+  }
 }
