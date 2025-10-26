@@ -73,3 +73,46 @@ export {
   type Recommendation,
   type AutoFixResult
 } from "./services/logsAnalyzer";
+
+// PATCH 206.0 - Predictive Engine
+export {
+  predictiveEngine,
+  type ModuleRiskScore,
+  type PredictiveMetrics,
+  type TrainingData,
+  type ForecastEvent,
+  type RiskLevel
+} from "./predictiveEngine";
+
+// PATCH 207.0 - Tactical AI Core
+export {
+  tacticalAI,
+  type TacticalDecision,
+  type TacticalAction,
+  type DecisionPriority,
+  type DecisionRule,
+  type TacticalContext
+} from "./tacticalAI";
+
+// PATCH 207.0 - Manual Override System
+export {
+  manualOverrideSystem,
+  type ManualOverride
+} from "./manual_override";
+
+// PATCH 208.0 - Adaptive Metrics Engine
+export {
+  adaptiveMetricsEngine,
+  type AdaptiveParameter,
+  type MetricHistory,
+  type ParameterConfig
+} from "./adaptiveMetrics";
+
+// PATCH 209.0 - Evolution AI Connector
+export {
+  evoAIConnector,
+  type TrainingDelta,
+  type PerformanceScore,
+  type FeedbackInsight,
+  type EvolutionReport
+} from "./evoAIConnector";
