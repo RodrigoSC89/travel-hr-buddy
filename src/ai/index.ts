@@ -116,3 +116,6 @@ export {
   type FeedbackInsight,
   type EvolutionReport
 } from "./evoAIConnector";
+
+// PATCH 223.0 - Edge AI Operations Core
+export * from "./edge";
