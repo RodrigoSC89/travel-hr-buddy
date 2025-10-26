@@ -11,8 +11,6 @@
 import { Logger } from "@/lib/utils/logger";
 import type { CloneRegistryEntry } from "../clones/cognitiveClone";
 
-
-
 // Instance status
 export type InstanceStatus = "active" | "inactive" | "syncing" | "error" | "offline" | "unknown";
 

@@ -10,8 +10,6 @@
 
 import { Logger } from "@/lib/utils/logger";
 
-
-
 // Device types
 export type DeviceType = "mobile" | "tablet" | "desktop" | "console" | "unknown";
 

@@ -11,8 +11,6 @@
 
 import { Logger } from "@/lib/utils/logger";
 
-
-
 // Model formats supported
 export type ModelFormat = "ggml" | "onnx-lite" | "onnx" | "tflite" | "wasm";
 
