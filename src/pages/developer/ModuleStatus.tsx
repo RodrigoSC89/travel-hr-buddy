@@ -35,7 +35,7 @@ const moduleGroups: GroupInfo[] = [
     color: "blue",
     modules: [
       { name: "crew", path: "operations/crew", status: "complete", description: "Gerenciamento de tripulação", tests: 12, coverage: 85, lastUpdate: "2025-10-23" },
-      { name: "fleet", path: "operations/fleet", status: "complete", description: "Gestão de frota", tests: 8, coverage: 72, lastUpdate: "2025-10-23" },
+      { name: "fleet", path: "modules/fleet", status: "complete", description: "PATCH 191.0 - Gestão de frota unificada", tests: 8, coverage: 72, lastUpdate: "2025-10-26" },
       { name: "feedback", path: "operations/feedback", status: "partial", description: "Sistema de feedback", tests: 4, coverage: 45, lastUpdate: "2025-10-20" },
       { name: "performance", path: "operations/performance", status: "complete", description: "Performance analytics", tests: 15, coverage: 88, lastUpdate: "2025-10-22" },
       { name: "crew-wellbeing", path: "operations/crew-wellbeing", status: "partial", description: "Bem-estar da tripulação", tests: 6, coverage: 60, lastUpdate: "2025-10-21" }
