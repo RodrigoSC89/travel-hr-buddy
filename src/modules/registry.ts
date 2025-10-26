@@ -790,6 +790,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Bot",
     lazy: true,
     version: "184.0",
+  },
+
+  "intelligence.deep-risk-ai": {
+    id: "intelligence.deep-risk-ai",
+    name: "Deep Sea Risk Analysis AI",
+    category: "intelligence",
+    path: "modules/deep-risk-ai",
+    description: "PATCH 185.0 - AI-powered deep sea risk analysis with multi-factor scoring (pressure, temperature, sonar), predictive insights, and JSON report export",
+    status: "active",
+    completeness: "100%",
+    route: "/deep-risk-ai",
+    icon: "Brain",
+    lazy: true,
+    version: "185.0",
   }
 };
 
