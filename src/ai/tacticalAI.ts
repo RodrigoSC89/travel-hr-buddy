@@ -277,7 +277,7 @@ class TacticalAI {
       success: d.success,
       error: d.error,
       manualOverride: d.manual_override,
-    })) as TacticalDecision[];
+    }))) as TacticalDecision[];
 
     return {
       moduleName,
