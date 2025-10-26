@@ -762,6 +762,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Anchor",
     lazy: true,
     version: "181.0",
+  },
+
+  "intelligence.sonar-ai": {
+    id: "intelligence.sonar-ai",
+    name: "Sonar AI Enhancement",
+    category: "intelligence",
+    path: "modules/sonar-ai",
+    description: "PATCH 182.0 - Enhanced sonar AI with real-time data analysis, risk interpreter for anomaly/obstacle detection, and bathymetric depth map with AI reports",
+    status: "active",
+    completeness: "100%",
+    route: "/sonar-ai",
+    icon: "Radar",
+    lazy: true,
+    version: "182.0",
   }
 };
 
