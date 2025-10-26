@@ -63,21 +63,34 @@ export const VesselProvider: React.FC<VesselProviderProps> = ({
         throw fetchError;
       }
 
-      setAllVessels(data || []);
+      // Map Supabase schema to Vessel interface
+      const mappedVessels: Vessel[] = (data || []).map(v => ({
+        id: v.id,
+        name: v.name,
+        type: v.vessel_type || 'unknown',
+        imo_number: v.imo_number || undefined,
+        flag: v.flag || undefined,
+        status: (v.status as 'active' | 'inactive' | 'maintenance') || 'active',
+        metadata: (v.metadata as Record<string, any>) || {},
+        created_at: v.created_at || undefined,
+        updated_at: v.updated_at || undefined,
+      }));
+
+      setAllVessels(mappedVessels);
       
       // Set default vessel if specified and not already set
       if (defaultVesselId && !currentVessel) {
-        const defaultVessel = data?.find(v => v.id === defaultVesselId);
+        const defaultVessel = mappedVessels.find(v => v.id === defaultVesselId);
         if (defaultVessel) {
           setCurrentVesselState(defaultVessel);
           saveVesselToStorage(defaultVessel.id);
         }
-      } else if (!currentVessel && data && data.length > 0) {
+      } else if (!currentVessel && mappedVessels.length > 0) {
         // Load from storage or select first vessel
         const storedVesselId = loadVesselFromStorage();
         const vessel = storedVesselId 
-          ? data.find(v => v.id === storedVesselId) 
-          : data[0];
+          ? mappedVessels.find(v => v.id === storedVesselId) 
+          : mappedVessels[0];
         
         if (vessel) {
           setCurrentVesselState(vessel);
