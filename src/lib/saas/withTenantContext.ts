@@ -116,7 +116,7 @@ export function createTenantClient() {
 
   return {
     from: (table: string) => {
-      const baseQuery = supabase.from(table);
+      const baseQuery = (supabase as any).from(table);
       
       // Automatically add tenant_id filter if table has tenant_id column
       return {

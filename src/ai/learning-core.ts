@@ -294,7 +294,7 @@ class LearningCore {
         total_events: events.length,
         event_types: eventTypeCounts,
         patterns,
-        events,
+        events: events as LearningEvent[],
       };
 
       logger.info("[LearningCore] Training data generated", {

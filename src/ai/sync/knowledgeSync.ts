@@ -221,7 +221,7 @@ class KnowledgeSync {
         if (existingGlobal) {
           // Merge with existing data
           aggregatedData = this.mergeUsageData(
-            existingGlobal.aggregated_data,
+            (existingGlobal.aggregated_data || {}) as Record<string, any>,
             snapshot.usage_data
           );
           sourceCount = existingGlobal.source_count + 1;
@@ -300,14 +300,15 @@ class KnowledgeSync {
         if (!localData || !globalData) continue;
 
         // Compare metrics
-        const localMetrics = localData.performance_metrics || {};
-        const globalMetrics = globalData.aggregated_data?.performance || {};
+        const localMetrics = (localData.performance_metrics || {}) as Record<string, any>;
+        const aggregatedData = (globalData.aggregated_data || {}) as Record<string, any>;
+        const globalMetrics = (aggregatedData.performance || {}) as Record<string, any>;
 
         for (const metric in localMetrics) {
           if (!globalMetrics[metric]) continue;
 
-          const localValue = localMetrics[metric];
-          const globalValue = globalMetrics[metric];
+          const localValue = localMetrics[metric] as number;
+          const globalValue = globalMetrics[metric] as number;
           const driftPercentage = Math.abs((localValue - globalValue) / globalValue) * 100;
 
           if (driftPercentage > 20) {
