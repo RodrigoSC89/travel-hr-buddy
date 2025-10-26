@@ -75,11 +75,11 @@ export function DynamicNavigation({ className }: DynamicNavigationProps) {
 
   const getStatusIcon = (module: ModuleDefinition) => {
     if (module.completeness === "100%") {
-      return <CheckCircle className="w-3 h-3 text-green-400" title="Complete" />;
+      return <CheckCircle className="w-3 h-3 text-green-400" />;
     } else if (module.completeness === "partial") {
-      return <AlertCircle className="w-3 h-3 text-yellow-400" title="Partial" />;
+      return <AlertCircle className="w-3 h-3 text-yellow-400" />;
     } else if (module.completeness === "broken" || module.status === "incomplete") {
-      return <XCircle className="w-3 h-3 text-red-400" title="Incomplete" />;
+      return <XCircle className="w-3 h-3 text-red-400" />;
     }
     return null;
   };
