@@ -20,6 +20,10 @@ export interface AISystemConfig {
 
 class AISystem {
   private isInitialized = false;
+  private healthCheckInterval: NodeJS.Timeout | null = null;
+  private readonly HEALTH_CHECK_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+  private readonly CRITICAL_ERROR_THRESHOLD = 5;
+  private readonly QUEUE_LENGTH_THRESHOLD = 20;
   private config: AISystemConfig = {
     enablePredictive: true,
     enableTactical: true,
@@ -92,6 +96,12 @@ class AISystem {
 
     logger.info('[AISystem] Shutting down AI System...');
 
+    // Clear health check interval
+    if (this.healthCheckInterval) {
+      clearInterval(this.healthCheckInterval);
+      this.healthCheckInterval = null;
+    }
+
     if (this.config.enableWatchdog) {
       systemWatchdog.stop();
     }
@@ -116,9 +126,9 @@ class AISystem {
    * Schedule periodic health check
    */
   private scheduleHealthCheck(): void {
-    setInterval(() => {
+    this.healthCheckInterval = setInterval(() => {
       this.performHealthCheck();
-    }, 5 * 60 * 1000); // Every 5 minutes
+    }, this.HEALTH_CHECK_INTERVAL_MS);
   }
 
   /**
@@ -128,23 +138,33 @@ class AISystem {
     if (!this.isInitialized) return;
 
     try {
-      const health = {
-        watchdog: systemWatchdog.getStats(),
-        tactical: tacticalAI.getStats(),
-        adaptive: adaptiveMetricsEngine.getStats(),
-        evolution: evoAIConnector.getStats(),
+      const health: any = {
         timestamp: new Date().toISOString(),
       };
+
+      // Only get stats for enabled engines
+      if (this.config.enableWatchdog) {
+        health.watchdog = systemWatchdog.getStats();
+      }
+      if (this.config.enableTactical) {
+        health.tactical = tacticalAI.getStats();
+      }
+      if (this.config.enableAdaptive) {
+        health.adaptive = adaptiveMetricsEngine.getStats();
+      }
+      if (this.config.enableEvolution) {
+        health.evolution = evoAIConnector.getStats();
+      }
 
       logger.info('[AISystem] Health check:', health);
 
       // Check for any critical issues
-      if (health.watchdog.criticalErrors > 5) {
-        logger.warn('[AISystem] High number of critical errors detected');
+      if (health.watchdog && health.watchdog.criticalErrors > this.CRITICAL_ERROR_THRESHOLD) {
+        logger.warn(`[AISystem] High number of critical errors detected: ${health.watchdog.criticalErrors}`);
       }
 
-      if (health.tactical.queueLength > 20) {
-        logger.warn('[AISystem] Tactical decision queue is backing up');
+      if (health.tactical && health.tactical.queueLength > this.QUEUE_LENGTH_THRESHOLD) {
+        logger.warn(`[AISystem] Tactical decision queue is backing up: ${health.tactical.queueLength} items`);
       }
     } catch (error) {
       logger.error('[AISystem] Health check failed:', error);
