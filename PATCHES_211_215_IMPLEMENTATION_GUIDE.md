@@ -173,9 +173,16 @@ const pending = missionAutonomyEngine.getPendingApprovals();
   4. **Satellite Data**: Raw telemetry feeds
   5. **Alerts**: System alerts and warnings
 - Auto-sync toggle
-- PDF export (placeholder)
+- PDF export (placeholder - requires jspdf integration for charts/tables export)
 - Real-time data refresh (30s interval)
 - Sync status cards
+
+**PDF Export Implementation:**
+To implement PDF export, integrate `jspdf` and `html2canvas`:
+```bash
+npm install jspdf html2canvas
+```
+Then capture dashboard elements and generate PDF in the `exportToPDF()` function.
 
 **Route:** `/telemetry`
 
@@ -304,15 +311,20 @@ private readonly SYNC_INTERVAL = 60000; // 1 minute
 ```
 
 ### Autonomy Risk Thresholds
+**Note:** The code uses 0-1 scale (0.0 to 1.0) for risk scores internally. The mission-core.ts reference to "0-10 scale" is for mission risk factors which are normalized during processing.
+
 Edit `src/ai/missionAutonomyEngine.ts`:
 ```typescript
-private riskThreshold = 7; // 0-10 scale
+// Risk scores are 0-1 (0.0 = no risk, 1.0 = maximum risk)
+// Thresholds are configured per decision rule
 ```
 
 ### Speech Recognition Language
 Edit `src/assistants/neuralCopilot.ts`:
 ```typescript
-this.speechRecognition.lang = 'pt-BR'; // Change as needed
+// Configure language in the initializeSpeechAPIs() method
+this.speechRecognition.lang = 'pt-BR'; // Options: 'en-US', 'es-ES', etc.
+// Or make it configurable via user settings
 ```
 
 ---
@@ -329,11 +341,26 @@ this.speechRecognition.lang = 'pt-BR'; // Change as needed
 2. Update `fetchAISData()` in `satelliteSyncEngine.ts`
 3. Replace mock data with actual API calls
 
-### OpenAI GPT-4o-mini
+### OpenAI API (gpt-4o-mini model)
 1. Get API key from https://platform.openai.com/
 2. Install OpenAI SDK: `npm install openai`
 3. Update `generateResponse()` in `neuralCopilot.ts`
-4. Replace mock logic with actual API calls
+4. Use model name: `gpt-4o-mini` (official OpenAI model identifier)
+5. Replace mock logic with actual API calls
+
+Example integration:
+```typescript
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const completion = await openai.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: session.messages,
+});
+```
 
 ---
 
@@ -400,8 +427,23 @@ npm run type-check
 ## 📝 Notes
 
 - All external API integrations are mocked and ready for actual implementation
-- Webhook URL for autonomy notifications needs to be configured
-- PDF export functionality is a placeholder for future implementation
+- **Webhook Configuration:** Set webhook URL via environment variable or in-app settings:
+  ```typescript
+  // In your app initialization or settings
+  missionAutonomyEngine.setWebhookUrl(process.env.AUTONOMY_WEBHOOK_URL || 'https://your-webhook-endpoint.com/autonomy');
+  ```
+  Webhook payload format:
+  ```typescript
+  {
+    action_id: string,
+    action_type: string,
+    priority: 'low' | 'medium' | 'high' | 'critical',
+    message: string,
+    context: Record<string, any>,
+    timestamp: Date
+  }
+  ```
+- PDF export functionality is a placeholder - requires jspdf/html2canvas integration
 - Map visualization requires Mapbox or Leaflet integration
 - Voice features require HTTPS for Web Speech API to work in browsers
 
