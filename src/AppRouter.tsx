@@ -39,6 +39,10 @@ const OceanSonar = React.lazy(() => import("@/modules/ocean-sonar"));
 // 🔹 PATCH 191.0 - Fleet Management
 const FleetManagement = React.lazy(() => import("@/modules/fleet"));
 
+// 🔹 PATCH 211.0-215.0 - Mission Simulation, Telemetry & AI
+const SimulationPage = React.lazy(() => import("@/pages/SimulationPage"));
+const TelemetryPage = React.lazy(() => import("@/pages/TelemetryPage"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -63,6 +67,8 @@ export default function AppRouter() {
         <Route path="/mission-control" element={<MissionControl />} />
         <Route path="/ocean-sonar" element={<OceanSonar />} />
         <Route path="/fleet" element={<FleetManagement />} />
+        <Route path="/simulation" element={<SimulationPage />} />
+        <Route path="/telemetry" element={<TelemetryPage />} />
       </Routes>
     </Router>
   );
