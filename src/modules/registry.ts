@@ -776,6 +776,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Radar",
     lazy: true,
     version: "182.0",
+  },
+
+  "operations.auto-sub": {
+    id: "operations.auto-sub",
+    name: "AutoSub Mission Planner",
+    category: "operations",
+    path: "modules/auto-sub",
+    description: "PATCH 184.0 - Autonomous mission planning system with area definition, environmental parameters, automated waypoint generation, and real-time feedback loop",
+    status: "active",
+    completeness: "100%",
+    route: "/auto-sub",
+    icon: "Bot",
+    lazy: true,
+    version: "184.0",
   }
 };
 
