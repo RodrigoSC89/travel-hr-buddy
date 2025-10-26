@@ -1,0 +1,65 @@
+{
+  "common": {
+    "welcome": "Bienvenido",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "submit": "Enviar",
+    "clear": "Limpiar"
+  },
+  "navigation": {
+    "dashboard": "Panel",
+    "reports": "Informes",
+    "settings": "Configuración",
+    "profile": "Perfil",
+    "logout": "Cerrar Sesión",
+    "help": "Ayuda"
+  },
+  "ai": {
+    "cognitive_feedback": "Retroalimentación Cognitiva",
+    "weekly_report": "Informe Semanal",
+    "insights": "Perspectivas",
+    "patterns": "Patrones",
+    "acceptance_rate": "Tasa de Aceptación",
+    "rejection_rate": "Tasa de Rechazo",
+    "module_performance": "Rendimiento del Módulo"
+  },
+  "maritime": {
+    "vessel": "Embarcación",
+    "fleet": "Flota",
+    "compliance": "Cumplimiento",
+    "mission_control": "Control de Misión",
+    "logs_center": "Centro de Registros",
+    "notifications": "Notificaciones"
+  },
+  "units": {
+    "distance": "Distancia",
+    "temperature": "Temperatura",
+    "volume": "Volumen",
+    "kilometers": "Kilómetros",
+    "miles": "Millas",
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "liters": "Litros",
+    "gallons": "Galones"
+  },
+  "time": {
+    "timezone": "Zona Horaria",
+    "date": "Fecha",
+    "time": "Hora",
+    "datetime": "Fecha y Hora"
+  }
+}
