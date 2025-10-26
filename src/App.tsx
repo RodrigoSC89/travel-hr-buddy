@@ -142,7 +142,8 @@ const CrewDossierPage = React.lazy(() => import("@/pages/CrewDossier"));
 // New Module Imports - PATCH 66.0 Updated Paths
 const CrewModule = React.lazy(() => import("@/modules/operations/crew"));
 const FeedbackModule = React.lazy(() => import("@/modules/operations/feedback"));
-const FleetModule = React.lazy(() => import("@/modules/operations/fleet"));
+// PATCH 191.0: Consolidated Fleet Module
+const FleetModule = React.lazy(() => import("@/modules/fleet"));
 const PerformanceModule = React.lazy(() => import("@/modules/operations/performance"));
 const ReportsModule = React.lazy(() => import("@/modules/compliance/reports"));
 const RealTimeWorkspace = React.lazy(() => import("@/modules/workspace/real-time-workspace"));
@@ -295,8 +296,11 @@ function App() {
                       <Route path="/hr" element={<HumanResources />} />
                       <Route path="/communication" element={<Communication />} />
                       <Route path="/intelligence" element={<Intelligence />} />
-                      <Route path="/maritime" element={<Maritime />} />
-                      <Route path="/maritime-supremo" element={<MaritimeSupremo />} />
+                      {/* PATCH 191.0: Deprecated - Consolidated into /modules/fleet */}
+                      {/* <Route path="/maritime" element={<Maritime />} /> */}
+                      {/* <Route path="/maritime-supremo" element={<MaritimeSupremo />} /> */}
+                      <Route path="/maritime" element={<FleetModule />} />
+                      <Route path="/maritime-supremo" element={<FleetModule />} />
                       <Route path="/nautilus-one" element={<NautilusOne />} />
                       <Route path="/forecast" element={<ForecastPage />} />
                       <Route path="/forecast/global" element={<ForecastGlobal />} />
@@ -402,7 +406,9 @@ function App() {
                       {/* New Module Routes */}
                       <Route path="/crew" element={<CrewModule />} />
                       <Route path="/feedback" element={<FeedbackModule />} />
+                      {/* PATCH 191.0: Consolidated Fleet Module */}
                       <Route path="/fleet" element={<FleetModule />} />
+                      <Route path="/modules/fleet" element={<FleetModule />} />
                       <Route path="/performance" element={<PerformanceModule />} />
                       <Route path="/reports-module" element={<ReportsModule />} />
                       <Route path="/real-time-workspace" element={<RealTimeWorkspace />} />

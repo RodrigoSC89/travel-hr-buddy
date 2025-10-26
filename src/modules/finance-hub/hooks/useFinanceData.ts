@@ -1,0 +1,286 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+export interface FinancialTransaction {
+  id: string;
+  transaction_type: 'income' | 'expense' | 'transfer' | 'adjustment';
+  category_id?: string;
+  amount: number;
+  currency: string;
+  description?: string;
+  transaction_date: string;
+  payment_method?: string;
+  vendor_supplier?: string;
+  status: string;
+  created_at: string;
+}
+
+export interface BudgetCategory {
+  id: string;
+  name: string;
+  category_type: 'income' | 'expense' | 'both';
+  description?: string;
+  budget_allocated?: number;
+  budget_period?: string;
+  color?: string;
+  icon?: string;
+  is_active: boolean;
+}
+
+export interface Invoice {
+  id: string;
+  invoice_number: string;
+  invoice_type: 'sales' | 'purchase' | 'expense' | 'credit_note' | 'debit_note';
+  status: string;
+  issue_date: string;
+  due_date?: string;
+  paid_date?: string;
+  vendor_supplier?: string;
+  customer_name?: string;
+  subtotal: number;
+  tax_amount: number;
+  discount_amount: number;
+  total_amount: number;
+  currency: string;
+  created_at: string;
+}
+
+export interface FinancialSummary {
+  totalIncome: number;
+  totalExpenses: number;
+  netProfit: number;
+  pendingInvoices: number;
+  overdueInvoices: number;
+  transactionCount: number;
+}
+
+export const useFinanceData = () => {
+  const { toast } = useToast();
+  const [transactions, setTransactions] = useState<FinancialTransaction[]>([]);
+  const [categories, setCategories] = useState<BudgetCategory[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [summary, setSummary] = useState<FinancialSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load all financial data
+  const loadFinancialData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Load transactions
+      const { data: transactionsData, error: transactionsError } = await supabase
+        .from('financial_transactions')
+        .select('*')
+        .order('transaction_date', { ascending: false })
+        .limit(100);
+
+      if (transactionsError) throw transactionsError;
+      setTransactions(transactionsData || []);
+
+      // Load categories
+      const { data: categoriesData, error: categoriesError } = await supabase
+        .from('budget_categories')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order');
+
+      if (categoriesError) throw categoriesError;
+      setCategories(categoriesData || []);
+
+      // Load invoices
+      const { data: invoicesData, error: invoicesError } = await supabase
+        .from('invoices')
+        .select('*')
+        .order('issue_date', { ascending: false })
+        .limit(50);
+
+      if (invoicesError) throw invoicesError;
+      setInvoices(invoicesData || []);
+
+      // Calculate summary
+      calculateSummary(transactionsData || [], invoicesData || []);
+
+    } catch (err: any) {
+      console.error('Error loading financial data:', err);
+      setError(err.message);
+      toast({
+        title: "Error",
+        description: "Failed to load financial data. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Calculate financial summary
+  const calculateSummary = (
+    transactionsData: FinancialTransaction[],
+    invoicesData: Invoice[]
+  ) => {
+    const totalIncome = transactionsData
+      .filter(t => t.transaction_type === 'income' && t.status === 'completed')
+      .reduce((sum, t) => sum + Number(t.amount), 0);
+
+    const totalExpenses = transactionsData
+      .filter(t => t.transaction_type === 'expense' && t.status === 'completed')
+      .reduce((sum, t) => sum + Number(t.amount), 0);
+
+    const pendingInvoices = invoicesData.filter(
+      i => i.status === 'pending' || i.status === 'sent'
+    ).length;
+
+    const overdueInvoices = invoicesData.filter(
+      i => i.status === 'overdue'
+    ).length;
+
+    setSummary({
+      totalIncome,
+      totalExpenses,
+      netProfit: totalIncome - totalExpenses,
+      pendingInvoices,
+      overdueInvoices,
+      transactionCount: transactionsData.length
+    });
+  };
+
+  // Create new transaction
+  const createTransaction = async (transaction: Partial<FinancialTransaction>) => {
+    try {
+      const { data, error } = await supabase
+        .from('financial_transactions')
+        .insert([transaction])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Transaction created successfully"
+      });
+
+      await loadFinancialData();
+      return data;
+    } catch (err: any) {
+      console.error('Error creating transaction:', err);
+      toast({
+        title: "Error",
+        description: "Failed to create transaction",
+        variant: "destructive"
+      });
+      throw err;
+    }
+  };
+
+  // Update transaction
+  const updateTransaction = async (id: string, updates: Partial<FinancialTransaction>) => {
+    try {
+      const { data, error } = await supabase
+        .from('financial_transactions')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Transaction updated successfully"
+      });
+
+      await loadFinancialData();
+      return data;
+    } catch (err: any) {
+      console.error('Error updating transaction:', err);
+      toast({
+        title: "Error",
+        description: "Failed to update transaction",
+        variant: "destructive"
+      });
+      throw err;
+    }
+  };
+
+  // Create new invoice
+  const createInvoice = async (invoice: Partial<Invoice>) => {
+    try {
+      const { data, error } = await supabase
+        .from('invoices')
+        .insert([invoice])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Invoice created successfully"
+      });
+
+      await loadFinancialData();
+      return data;
+    } catch (err: any) {
+      console.error('Error creating invoice:', err);
+      toast({
+        title: "Error",
+        description: "Failed to create invoice",
+        variant: "destructive"
+      });
+      throw err;
+    }
+  };
+
+  // Update invoice
+  const updateInvoice = async (id: string, updates: Partial<Invoice>) => {
+    try {
+      const { data, error } = await supabase
+        .from('invoices')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Invoice updated successfully"
+      });
+
+      await loadFinancialData();
+      return data;
+    } catch (err: any) {
+      console.error('Error updating invoice:', err);
+      toast({
+        title: "Error",
+        description: "Failed to update invoice",
+        variant: "destructive"
+      });
+      throw err;
+    }
+  };
+
+  // Load data on mount
+  useEffect(() => {
+    loadFinancialData();
+  }, []);
+
+  return {
+    transactions,
+    categories,
+    invoices,
+    summary,
+    loading,
+    error,
+    refreshData: loadFinancialData,
+    createTransaction,
+    updateTransaction,
+    createInvoice,
+    updateInvoice
+  };
+};
