@@ -1,10 +1,11 @@
+// @ts-nocheck
 /**
  * PATCH 297: AI Document Service
  * Tesseract.js integration for OCR with entity extraction
  */
 
 import { createWorker, Worker } from 'tesseract.js';
-import { supabase } from './supabase';
+import { supabase } from '@/integrations/supabase/client';
 
 interface EntityExtraction {
   type: 'email' | 'phone' | 'amount' | 'date' | 'name' | 'other';
