@@ -3,4 +3,4 @@
  * Document templates management
  */
 
-export { default as TemplatesPanel } from "./TemplatesPanel";
+export { default } from "./TemplatesPanel";

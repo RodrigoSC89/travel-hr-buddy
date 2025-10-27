@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Badge } from "@/components/ui/badge";
 import { Plus, Users, Clock, Target, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { missionLoggingService } from "../services/mission-logging";
 
 interface Agent {
   id: string;
@@ -84,8 +84,18 @@ export function MissionManager() {
     setMissions([mission, ...missions]);
     
     // Log mission creation to mission_control_logs
-    // In production, this would use Supabase
-    console.log("Mission created:", mission);
+    await missionLoggingService.logEvent(
+      mission.id,
+      'mission_created',
+      'info',
+      `Mission "${mission.name}" created with ${selectedAgents.length} agent(s)`,
+      {
+        missionName: mission.name,
+        priority: mission.priority,
+        agentCount: selectedAgents.length,
+        agents: selectedAgents.map(a => ({ id: a.id, name: a.name, role: a.role }))
+      }
+    );
     
     toast.success("Missão criada com sucesso!", {
       description: `${selectedAgents.length} agente(s) atribuído(s)`

@@ -8,6 +8,7 @@ import { CoverageMap } from "./components/CoverageMap";
 import { AISMarker, AISMapOverlay } from "./components/AISMarker";
 import { aisClient, type VesselPosition } from "@/lib/aisClient";
 import { satelliteOrbitService, type SatelliteOrbitData } from "./services/satellite-orbit-service";
+import { satelliteOrbitPersistence } from "./services/satellite-orbit-persistence";
 import { toast } from "sonner";
 
 const SatelliteTracker = () => {
@@ -22,7 +23,32 @@ const SatelliteTracker = () => {
   const fetchSatelliteOrbits = async () => {
     setIsLoadingSatellites(true);
     try {
+      // First try to get from database
+      const cachedOrbits = await satelliteOrbitPersistence.getSatelliteOrbits();
+      
+      // If cached data is recent (< 10 minutes), use it
+      const now = new Date();
+      const tenMinutesAgo = new Date(now.getTime() - 10 * 60 * 1000);
+      
+      if (cachedOrbits.length > 0) {
+        const latestUpdate = new Date(cachedOrbits[0].lastUpdated);
+        if (latestUpdate > tenMinutesAgo) {
+          setSatelliteOrbits(cachedOrbits);
+          setLastUpdate(latestUpdate);
+          toast.success("Satellite positions loaded from cache", {
+            description: `${cachedOrbits.length} satellites tracked`
+          });
+          setIsLoadingSatellites(false);
+          return;
+        }
+      }
+      
+      // Otherwise fetch fresh data
       const orbits = await satelliteOrbitService.getAllSatellitePositions();
+      
+      // Save to database
+      await satelliteOrbitPersistence.saveSatelliteOrbits(orbits);
+      
       setSatelliteOrbits(orbits);
       setLastUpdate(new Date());
       toast.success("Satellite positions updated", {

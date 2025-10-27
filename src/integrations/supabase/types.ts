@@ -3522,6 +3522,62 @@ export type Database = {
         }
         Relationships: []
       }
+      document_templates: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean | null
+          metadata: Json | null
+          name: string
+          organization_id: string | null
+          tags: string[] | null
+          updated_at: string
+          user_id: string
+          variables: string[] | null
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          metadata?: Json | null
+          name: string
+          organization_id?: string | null
+          tags?: string[] | null
+          updated_at?: string
+          user_id: string
+          variables?: string[] | null
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          metadata?: Json | null
+          name?: string
+          organization_id?: string | null
+          tags?: string[] | null
+          updated_at?: string
+          user_id?: string
+          variables?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_templates_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       emergency_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -5353,6 +5409,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mission_control_logs: {
+        Row: {
+          created_at: string
+          event_data: Json | null
+          event_type: string
+          id: string
+          message: string | null
+          mission_id: string
+          severity: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          message?: string | null
+          mission_id: string
+          severity?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          message?: string | null
+          mission_id?: string
+          severity?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       module_health: {
         Row: {
@@ -7539,6 +7628,57 @@ export type Database = {
           subscription_starts_at?: string | null
           trial_ends_at?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      satellite_orbits: {
+        Row: {
+          altitude: number
+          created_at: string
+          eccentricity: number | null
+          id: string
+          inclination: number | null
+          last_updated: string
+          latitude: number
+          longitude: number
+          name: string
+          norad_id: number
+          orbital_period: number | null
+          tle_line1: string | null
+          tle_line2: string | null
+          velocity: number
+        }
+        Insert: {
+          altitude: number
+          created_at?: string
+          eccentricity?: number | null
+          id?: string
+          inclination?: number | null
+          last_updated?: string
+          latitude: number
+          longitude: number
+          name: string
+          norad_id: number
+          orbital_period?: number | null
+          tle_line1?: string | null
+          tle_line2?: string | null
+          velocity: number
+        }
+        Update: {
+          altitude?: number
+          created_at?: string
+          eccentricity?: number | null
+          id?: string
+          inclination?: number | null
+          last_updated?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          norad_id?: number
+          orbital_period?: number | null
+          tle_line1?: string | null
+          tle_line2?: string | null
+          velocity?: number
         }
         Relationships: []
       }
