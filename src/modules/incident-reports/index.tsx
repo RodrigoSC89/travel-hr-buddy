@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,50 +15,56 @@ import {
   Plus,
   AlertCircle
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { CreateIncidentDialog } from "./components/CreateIncidentDialog";
+import { IncidentDetailDialog } from "./components/IncidentDetailDialog";
 
 interface Incident {
   id: string;
+  incident_number: string;
   title: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   category: string;
-  status: 'reported' | 'investigating' | 'action_required' | 'resolved' | 'closed';
-  reported_date: string;
+  status: 'pending' | 'under_analysis' | 'resolved' | 'closed';
+  incident_date: string;
   impact_level: string;
+  description?: string;
 }
 
 const IncidentReports = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
+  const { toast } = useToast();
 
-  // Mock data
-  const incidents: Incident[] = [
-    {
-      id: '1',
-      title: 'Equipment Malfunction - Main Engine',
-      severity: 'high',
-      category: 'Equipment',
-      status: 'investigating',
-      reported_date: '2025-10-26',
-      impact_level: 'major'
-    },
-    {
-      id: '2',
-      title: 'Safety Protocol Violation',
-      severity: 'medium',
-      category: 'Safety',
-      status: 'action_required',
-      reported_date: '2025-10-25',
-      impact_level: 'moderate'
-    },
-    {
-      id: '3',
-      title: 'Minor Personnel Injury',
-      severity: 'low',
-      category: 'Personnel',
-      status: 'resolved',
-      reported_date: '2025-10-24',
-      impact_level: 'minor'
+  useEffect(() => {
+    fetchIncidents();
+  }, []);
+
+  const fetchIncidents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('incident_reports')
+        .select('*')
+        .order('incident_date', { ascending: false });
+
+      if (error) throw error;
+
+      setIncidents(data || []);
+    } catch (error) {
+      console.error('Error fetching incidents:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load incidents',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -74,12 +80,28 @@ const IncidentReports = () => {
     switch (status) {
       case 'closed': return 'text-gray-600';
       case 'resolved': return 'text-green-600';
-      case 'action_required': return 'text-orange-600';
-      case 'investigating': return 'text-blue-600';
-      case 'reported': return 'text-yellow-600';
+      case 'under_analysis': return 'text-blue-600';
+      case 'pending': return 'text-yellow-600';
       default: return 'text-gray-600';
     }
   };
+
+  const stats = {
+    total: incidents.length,
+    open: incidents.filter((i) => i.status === 'pending' || i.status === 'under_analysis').length,
+    resolved: incidents.filter((i) => i.status === 'resolved' || i.status === 'closed').length,
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+          <div className="h-64 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -91,7 +113,7 @@ const IncidentReports = () => {
             <p className="text-muted-foreground">Complete incident management system</p>
           </div>
         </div>
-        <Button>
+        <Button onClick={() => setShowCreateDialog(true)}>
           <Plus className="mr-2 h-4 w-4" />
           New Incident
         </Button>
@@ -104,7 +126,7 @@ const IncidentReports = () => {
             <AlertOctagon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">147</div>
+            <div className="text-2xl font-bold">{stats.total}</div>
             <p className="text-xs text-muted-foreground">This year</p>
           </CardContent>
         </Card>
@@ -115,7 +137,7 @@ const IncidentReports = () => {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8</div>
+            <div className="text-2xl font-bold">{stats.open}</div>
             <p className="text-xs text-muted-foreground">Under investigation</p>
           </CardContent>
         </Card>
@@ -126,8 +148,10 @@ const IncidentReports = () => {
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">139</div>
-            <p className="text-xs text-muted-foreground">94.6% resolution</p>
+            <div className="text-2xl font-bold">{stats.resolved}</div>
+            <p className="text-xs text-muted-foreground">
+              {stats.total > 0 ? ((stats.resolved / stats.total) * 100).toFixed(1) : 0}% resolution
+            </p>
           </CardContent>
         </Card>
         
@@ -159,8 +183,12 @@ const IncidentReports = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {incidents.map(incident => (
-                  <div key={incident.id} className="flex items-center justify-between p-4 border rounded-lg">
+                {incidents.slice(0, 10).map(incident => (
+                  <div 
+                    key={incident.id} 
+                    className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-muted/50"
+                    onClick={() => setSelectedIncident(incident)}
+                  >
                     <div className="flex items-center gap-4 flex-1">
                       <div className={`w-2 h-12 rounded ${getSeverityColor(incident.severity)}`} />
                       <div className="flex-1">
@@ -168,7 +196,9 @@ const IncidentReports = () => {
                         <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
                           <Badge variant="outline">{incident.category}</Badge>
                           <span>•</span>
-                          <span>{new Date(incident.reported_date).toLocaleDateString()}</span>
+                          <span>{new Date(incident.incident_date).toLocaleDateString()}</span>
+                          <span>•</span>
+                          <span>{incident.incident_number}</span>
                         </div>
                       </div>
                     </div>
@@ -313,6 +343,21 @@ const IncidentReports = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Dialogs */}
+      <CreateIncidentDialog
+        open={showCreateDialog}
+        onOpenChange={setShowCreateDialog}
+        onSuccess={fetchIncidents}
+      />
+
+      {selectedIncident && (
+        <IncidentDetailDialog
+          incident={selectedIncident}
+          open={!!selectedIncident}
+          onOpenChange={(open) => !open && setSelectedIncident(null)}
+        />
+      )}
     </div>
   );
 };
