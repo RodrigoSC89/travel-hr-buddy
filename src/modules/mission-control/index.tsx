@@ -16,6 +16,7 @@ import {
 import { AICommander } from "./components/AICommander";
 import { KPIDashboard } from "./components/KPIDashboard";
 import { SystemLogs } from "./components/SystemLogs";
+import { MissionPlanner } from "./components/MissionPlanner";
 
 /**
  * PATCH 177.0 - Mission Control Consolidation & AI Commander
@@ -181,8 +182,9 @@ const MissionControl: React.FC = () => {
 
         {/* Detailed Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-zinc-800/50">
+          <TabsList className="grid w-full grid-cols-6 bg-zinc-800/50">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="missions">Missions</TabsTrigger>
             <TabsTrigger value="fleet">Fleet</TabsTrigger>
             <TabsTrigger value="emergency">Emergency</TabsTrigger>
             <TabsTrigger value="satellite">Satellite</TabsTrigger>
@@ -216,6 +218,10 @@ const MissionControl: React.FC = () => {
             </Card>
 
             <SystemLogs />
+          </TabsContent>
+
+          <TabsContent value="missions" className="mt-4">
+            <MissionPlanner />
           </TabsContent>
 
           <TabsContent value="fleet" className="mt-4">
