@@ -40,7 +40,11 @@ interface CourseEnrollment {
 }
 
 export default function EmployeePortalTraining() {
-  const { data: { user } } = supabase.auth.useSession();
+  const [user, setUser] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+  }, []);
 
   // Fetch user certificates
   const { data: certificates = [] } = useQuery<Certificate[]>({
@@ -76,8 +80,18 @@ export default function EmployeePortalTraining() {
     enabled: !!user
   });
 
+  interface Course {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    difficulty_level: string;
+    duration_hours: number;
+    is_published: boolean;
+  }
+
   // Fetch available courses
-  const { data: availableCourses = [] } = useQuery({
+  const { data: availableCourses = [] } = useQuery<Course[]>({
     queryKey: ["available-courses"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -104,7 +118,16 @@ export default function EmployeePortalTraining() {
       });
 
     if (error) {
-      console.error("Enrollment error:", error);
+      toast({
+        title: "Erro na matrícula",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Matrícula realizada",
+        description: "Você foi matriculado no curso com sucesso"
+      });
     }
   };
 
@@ -269,7 +292,7 @@ export default function EmployeePortalTraining() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {availableCourses.map((course: any) => (
+            {availableCourses.map((course) => (
               <Card key={course.id}>
                 <CardContent className="pt-6">
                   <div className="space-y-3">

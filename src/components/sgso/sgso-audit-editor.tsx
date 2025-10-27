@@ -158,10 +158,10 @@ export default function SGSOAuditEditor() {
 
       // Reset form
       setAuditResults([]);
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Erro ao salvar",
-        description: error.message,
+        description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive"
       });
     } finally {
@@ -214,7 +214,7 @@ export default function SGSOAuditEditor() {
     const nonCompliant = auditResults.filter(r => r.status === "non_compliant").length;
     const partial = auditResults.filter(r => r.status === "partial").length;
     
-    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    const finalY = ((doc as any).lastAutoTable?.finalY || 100) + 10;
     doc.text("Resumo:", 14, finalY);
     doc.text(`Conformes: ${compliant}`, 14, finalY + 6);
     doc.text(`Não Conformes: ${nonCompliant}`, 14, finalY + 12);
@@ -369,7 +369,9 @@ export default function SGSOAuditEditor() {
                       <Label>Status</Label>
                       <Select 
                         value={result.status}
-                        onValueChange={(value) => handleUpdateResult(index, { status: value as any })}
+                        onValueChange={(value) => handleUpdateResult(index, { 
+                          status: value as "compliant" | "non_compliant" | "partial" | "not_applicable" 
+                        })}
                       >
                         <SelectTrigger>
                           <SelectValue />
