@@ -115,11 +115,17 @@ CREATE POLICY "Users can view vessel inference logs"
 CREATE TABLE vessel_performance_metrics (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   vessel_id UUID REFERENCES vessels(id) ON DELETE CASCADE,
-  positioning_accuracy NUMERIC,
-  fuel_efficiency NUMERIC,
-  thruster_performance NUMERIC,
-  sensor_health NUMERIC,
-  recorded_at TIMESTAMPTZ DEFAULT NOW()
+  positioning_accuracy NUMERIC CHECK (positioning_accuracy >= 0 AND positioning_accuracy <= 100), -- Percentage (0-100)
+  fuel_efficiency NUMERIC CHECK (fuel_efficiency >= 0 AND fuel_efficiency <= 100), -- Percentage (0-100)
+  thruster_performance NUMERIC CHECK (thruster_performance >= 0 AND thruster_performance <= 100), -- Percentage (0-100)
+  sensor_health NUMERIC CHECK (sensor_health >= 0 AND sensor_health <= 100), -- Percentage (0-100)
+  recorded_at TIMESTAMPTZ DEFAULT NOW(),
+  
+  -- Metadata
+  COMMENT ON COLUMN positioning_accuracy IS 'DP positioning accuracy as percentage (0-100)',
+  COMMENT ON COLUMN fuel_efficiency IS 'Fuel consumption efficiency rating as percentage (0-100)',
+  COMMENT ON COLUMN thruster_performance IS 'Overall thruster system performance as percentage (0-100)',
+  COMMENT ON COLUMN sensor_health IS 'Sensor system health status as percentage (0-100)'
 );
 
 CREATE INDEX idx_vessel_performance_metrics_vessel ON vessel_performance_metrics(vessel_id);

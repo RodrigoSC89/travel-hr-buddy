@@ -270,12 +270,44 @@ try {
 
 ## Security Best Practices
 
-1. **Never expose client secrets** in frontend code (they're only used server-side)
+1. **Handle client secrets carefully**: In production, OAuth token exchange should be done server-side. The current implementation uses client secrets in environment variables for development convenience. For production:
+   - Implement a backend OAuth proxy/handler
+   - Never expose VITE_*_CLIENT_SECRET variables in production builds
+   - Use server-side API routes to handle token exchange
+   - Store client secrets only on the server
 2. **Use HTTPS** in production for all OAuth flows
 3. **Rotate credentials** periodically
 4. **Monitor logs** for suspicious activity
 5. **Implement rate limiting** on OAuth endpoints
 6. **Validate redirect URIs** strictly
+
+### Production Architecture Recommendation
+
+For production deployments, implement a server-side OAuth handler:
+
+```typescript
+// Backend API endpoint: POST /api/oauth/exchange
+export async function exchangeOAuthCode(provider: string, code: string) {
+  // Client secret is only on server, never exposed to frontend
+  const config = getServerOAuthConfig(provider);
+  
+  const response = await fetch(config.tokenUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: config.clientId,
+      client_secret: config.clientSecret, // Only available server-side
+      code,
+      grant_type: 'authorization_code',
+      redirect_uri: config.redirectUri
+    })
+  });
+  
+  return await response.json();
+}
+```
+
+Then update the frontend OAuthService to call this backend endpoint instead of exchanging tokens directly.
 
 ## Testing
 
