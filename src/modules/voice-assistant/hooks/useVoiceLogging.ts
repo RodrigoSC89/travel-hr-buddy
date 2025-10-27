@@ -134,16 +134,6 @@ export function useVoiceLogging() {
 
       if (error) throw error;
 
-      // Update conversation message count
-      // Note: If RPC function doesn't exist, this will silently fail
-      // Consider creating a PostgreSQL function: increment_conversation_messages(conversation_id uuid)
-      await supabase.rpc('increment_conversation_messages', {
-        conversation_id: conversationId
-      }).catch(() => {
-        // Silently handle if function doesn't exist
-        // Manual increment would require fetching current count
-      });
-
       return data;
     } catch (error) {
       console.error('Error logging message:', error);
