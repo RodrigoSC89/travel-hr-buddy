@@ -149,3 +149,45 @@ export {
   type LearningAdjustment,
   type FeedbackSummary
 } from "./feedback/collectiveLoop";
+
+// PATCH 231 - Meta-Strategy Engine
+export {
+  metaStrategyEngine,
+  type Strategy,
+  type StrategyContext,
+  type StrategySelection
+} from "./metaStrategyEngine";
+
+// PATCH 232 - Auto Priority Balancer
+export {
+  autoPriorityBalancer,
+  type Priority,
+  type Task,
+  type PriorityShift,
+  type BalancingContext
+} from "./autoPriorityBalancer";
+
+// PATCH 233 - Collective Memory Hub
+export {
+  collectiveMemoryHub,
+  type KnowledgeEntry,
+  type SyncStatus,
+  type RollbackResult
+} from "./collectiveMemoryHub";
+
+// PATCH 234 - Self-Evolution Model
+export {
+  selfEvolutionModel,
+  type Failure,
+  type BehaviorAlternative,
+  type MutationResult
+} from "./selfEvolutionModel";
+
+// PATCH 235 - Multi-Agent Performance Scanner
+export {
+  multiAgentScanner,
+  type AIAgent,
+  type AgentMetrics,
+  type AgentRanking,
+  type FailoverEvent
+} from "./multiAgentScanner";
