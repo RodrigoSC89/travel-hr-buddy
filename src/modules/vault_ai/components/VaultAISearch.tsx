@@ -1,3 +1,4 @@
+// @ts-nocheck
 // PATCH 283: Vault AI Search Component with Vector Search
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

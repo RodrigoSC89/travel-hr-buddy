@@ -307,6 +307,62 @@ export type Database = {
           },
         ]
       }
+      ai_document_templates: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          is_favorite: boolean | null
+          is_private: boolean | null
+          organization_id: string | null
+          pdf_settings: Json | null
+          tags: string[] | null
+          template_type: string
+          title: string
+          updated_at: string | null
+          user_id: string | null
+          variables: Json | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          is_private?: boolean | null
+          organization_id?: string | null
+          pdf_settings?: Json | null
+          tags?: string[] | null
+          template_type: string
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+          variables?: Json | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          is_private?: boolean | null
+          organization_id?: string | null
+          pdf_settings?: Json | null
+          tags?: string[] | null
+          template_type?: string
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+          variables?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_document_templates_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_documents: {
         Row: {
           created_at: string
@@ -1924,6 +1980,41 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "channel_messages_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "communication_channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channel_status_log: {
+        Row: {
+          channel_id: string
+          created_at: string | null
+          id: string
+          message: string
+          status: string
+          timestamp: string
+        }
+        Insert: {
+          channel_id: string
+          created_at?: string | null
+          id?: string
+          message: string
+          status: string
+          timestamp?: string
+        }
+        Update: {
+          channel_id?: string
+          created_at?: string | null
+          id?: string
+          message?: string
+          status?: string
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_status_log_channel_id_fkey"
             columns: ["channel_id"]
             isOneToOne: false
             referencedRelation: "communication_channels"
@@ -3962,6 +4053,75 @@ export type Database = {
         }
         Relationships: []
       }
+      employee_notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      employee_requests: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          request_type: string
+          status: string
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          request_type: string
+          status?: string
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          request_type?: string
+          status?: string
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       employees: {
         Row: {
           contract_end: string | null
@@ -5300,6 +5460,149 @@ export type Database = {
           },
         ]
       }
+      logistics_shipments: {
+        Row: {
+          actual_delivery: string | null
+          carrier: string
+          created_at: string | null
+          current_location: string | null
+          destination: string
+          estimated_delivery: string | null
+          id: string
+          metadata: Json | null
+          notes: string | null
+          order_id: string | null
+          organization_id: string | null
+          origin: string
+          shipped_at: string | null
+          status: string
+          tracking_number: string
+          updated_at: string | null
+          volume_m3: number | null
+          weight_kg: number | null
+        }
+        Insert: {
+          actual_delivery?: string | null
+          carrier: string
+          created_at?: string | null
+          current_location?: string | null
+          destination: string
+          estimated_delivery?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          order_id?: string | null
+          organization_id?: string | null
+          origin: string
+          shipped_at?: string | null
+          status?: string
+          tracking_number: string
+          updated_at?: string | null
+          volume_m3?: number | null
+          weight_kg?: number | null
+        }
+        Update: {
+          actual_delivery?: string | null
+          carrier?: string
+          created_at?: string | null
+          current_location?: string | null
+          destination?: string
+          estimated_delivery?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          order_id?: string | null
+          organization_id?: string | null
+          origin?: string
+          shipped_at?: string | null
+          status?: string
+          tracking_number?: string
+          updated_at?: string | null
+          volume_m3?: number | null
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logistics_shipments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "logistics_supply_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "logistics_shipments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      logistics_suppliers: {
+        Row: {
+          address: string | null
+          contact_person: string | null
+          country: string | null
+          created_at: string | null
+          delivery_time_days: number | null
+          email: string | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          organization_id: string | null
+          payment_terms: string | null
+          phone: string | null
+          rating: number | null
+          supplier_code: string
+          supplier_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          contact_person?: string | null
+          country?: string | null
+          created_at?: string | null
+          delivery_time_days?: number | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          organization_id?: string | null
+          payment_terms?: string | null
+          phone?: string | null
+          rating?: number | null
+          supplier_code: string
+          supplier_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          contact_person?: string | null
+          country?: string | null
+          created_at?: string | null
+          delivery_time_days?: number | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          organization_id?: string | null
+          payment_terms?: string | null
+          phone?: string | null
+          rating?: number | null
+          supplier_code?: string
+          supplier_name?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logistics_suppliers_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       logistics_supply_orders: {
         Row: {
           actual_delivery_date: string | null
@@ -5947,6 +6250,193 @@ export type Database = {
           {
             foreignKeyName: "mission_logs_mission_id_fkey"
             columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mission_resources: {
+        Row: {
+          allocated_at: string | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          mission_id: string | null
+          notes: string | null
+          quantity: number
+          released_at: string | null
+          resource_name: string
+          resource_type: string
+          status: string
+        }
+        Insert: {
+          allocated_at?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          mission_id?: string | null
+          notes?: string | null
+          quantity?: number
+          released_at?: string | null
+          resource_name: string
+          resource_type: string
+          status?: string
+        }
+        Update: {
+          allocated_at?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          mission_id?: string | null
+          notes?: string | null
+          quantity?: number
+          released_at?: string | null
+          resource_name?: string
+          resource_type?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mission_resources_mission_id_fkey"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "missions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mission_timeline: {
+        Row: {
+          actual_date: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          milestone_name: string
+          mission_id: string | null
+          notification_sent: boolean | null
+          responsible_user_id: string | null
+          scheduled_date: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          actual_date?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          milestone_name: string
+          mission_id?: string | null
+          notification_sent?: boolean | null
+          responsible_user_id?: string | null
+          scheduled_date: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          actual_date?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          milestone_name?: string
+          mission_id?: string | null
+          notification_sent?: boolean | null
+          responsible_user_id?: string | null
+          scheduled_date?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mission_timeline_mission_id_fkey"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "missions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      missions: {
+        Row: {
+          actual_end: string | null
+          actual_start: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          end_date: string | null
+          id: string
+          metadata: Json | null
+          mission_code: string
+          mission_name: string
+          mission_type: string
+          notes: string | null
+          objectives: string[] | null
+          organization_id: string | null
+          priority: string
+          progress_percent: number | null
+          start_date: string | null
+          status: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          actual_end?: string | null
+          actual_start?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          metadata?: Json | null
+          mission_code: string
+          mission_name: string
+          mission_type: string
+          notes?: string | null
+          objectives?: string[] | null
+          organization_id?: string | null
+          priority?: string
+          progress_percent?: number | null
+          start_date?: string | null
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          actual_end?: string | null
+          actual_start?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          metadata?: Json | null
+          mission_code?: string
+          mission_name?: string
+          mission_type?: string
+          notes?: string | null
+          objectives?: string[] | null
+          organization_id?: string | null
+          priority?: string
+          progress_percent?: number | null
+          start_date?: string | null
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "missions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "missions_vessel_id_fkey"
+            columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
             referencedColumns: ["id"]
@@ -9817,6 +10307,107 @@ export type Database = {
         }
         Relationships: []
       }
+      vault_documents: {
+        Row: {
+          category: string
+          content: string
+          created_at: string | null
+          embedding: string | null
+          file_size: number | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          is_archived: boolean | null
+          metadata: Json | null
+          organization_id: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          user_id: string | null
+          version: number | null
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string | null
+          embedding?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_archived?: boolean | null
+          metadata?: Json | null
+          organization_id?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+          version?: number | null
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string | null
+          embedding?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_archived?: boolean | null
+          metadata?: Json | null
+          organization_id?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+          version?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vault_documents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vault_search_logs: {
+        Row: {
+          created_at: string | null
+          id: string
+          query: string
+          results: Json | null
+          results_count: number | null
+          search_duration_ms: number | null
+          search_type: string
+          similarity_scores: number[] | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          query: string
+          results?: Json | null
+          results_count?: number | null
+          search_duration_ms?: number | null
+          search_type?: string
+          similarity_scores?: number[] | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          query?: string
+          results?: Json | null
+          results_count?: number | null
+          search_duration_ms?: number | null
+          search_type?: string
+          similarity_scores?: number[] | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       vessel_certificates: {
         Row: {
           category: string
@@ -10168,6 +10759,51 @@ export type Database = {
           total_messages?: number | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      voice_logs: {
+        Row: {
+          action_taken: string | null
+          audio_duration_ms: number | null
+          command_text: string
+          created_at: string | null
+          error_message: string | null
+          id: string
+          intent_detected: string | null
+          metadata: Json | null
+          response_text: string | null
+          success: boolean | null
+          transcription_confidence: number | null
+          user_id: string | null
+        }
+        Insert: {
+          action_taken?: string | null
+          audio_duration_ms?: number | null
+          command_text: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          intent_detected?: string | null
+          metadata?: Json | null
+          response_text?: string | null
+          success?: boolean | null
+          transcription_confidence?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          action_taken?: string | null
+          audio_duration_ms?: number | null
+          command_text?: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          intent_detected?: string | null
+          metadata?: Json | null
+          response_text?: string | null
+          success?: boolean | null
+          transcription_confidence?: number | null
+          user_id?: string | null
         }
         Relationships: []
       }
