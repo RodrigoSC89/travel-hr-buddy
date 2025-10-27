@@ -58,7 +58,7 @@ src/modules/finance-hub/
 
 #### Como Usar
 
-1. **Acessar o módulo**: Navigate to `/finance-hub` in the application
+1. **Acessar o módulo**: Navegue para `/finance-hub` na aplicação
 2. **Visualizar dados**: Veja transações, faturas e categorias em tempo real
 3. **Exportar relatórios**: Use a aba "Reports" para exportar em PDF ou CSV
 4. **Criar transações**: Use o hook `useFinanceData` para adicionar novos dados
@@ -553,12 +553,13 @@ export class GitHubIntegration {
 
 ##### 4. Schema de Integrações
 ```sql
+-- Note: Tokens should be encrypted at application level or using Supabase Vault
 CREATE TABLE integrations (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid REFERENCES auth.users(id),
   provider text NOT NULL CHECK (provider IN ('slack', 'github', 'trello')),
-  access_token text NOT NULL ENCRYPTED,
-  refresh_token text ENCRYPTED,
+  access_token text NOT NULL, -- Encrypt at application level
+  refresh_token text, -- Encrypt at application level
   expires_at timestamptz,
   configuration jsonb DEFAULT '{}',
   is_active boolean DEFAULT true,
