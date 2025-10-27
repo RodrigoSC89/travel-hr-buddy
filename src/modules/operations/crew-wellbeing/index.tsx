@@ -8,6 +8,8 @@ import { HealthCheckIn } from "./components/HealthCheckIn";
 import { AIInsights } from "./components/AIInsights";
 import { MoodDashboard } from "./components/MoodDashboard";
 import { HealthCheckin } from "./components/HealthCheckin";
+import { HealthCheckInForm } from "./components/HealthCheckInForm";
+import { HealthMetricsDashboard } from "./components/HealthMetricsDashboard";
 
 const CrewWellbeing = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -67,11 +69,22 @@ const CrewWellbeing = () => {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="checkin">Health Check-in</TabsTrigger>
+          <TabsTrigger value="dashboard">My Health Dashboard</TabsTrigger>
           <TabsTrigger value="alerts">Alerts</TabsTrigger>
           <TabsTrigger value="support">Support</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
+          <HealthMetricsDashboard />
+        </TabsContent>
+
+        <TabsContent value="checkin" className="space-y-6">
+          <HealthCheckInForm onSuccess={() => setActiveTab('dashboard')} />
+        </TabsContent>
+
+        <TabsContent value="dashboard" className="space-y-6">
+          <HealthMetricsDashboard />
+        </TabsContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
