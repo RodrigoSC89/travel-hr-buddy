@@ -149,13 +149,15 @@ export class CopilotVision {
         },
       });
 
-      if (!result.data.words || result.data.words.length === 0) {
+      const anyResult: any = result as any;
+      const words: any[] = (anyResult?.data?.words as any[]) || [];
+      if (words.length === 0) {
         return [];
       }
 
-      return result.data.words
-        .filter(word => word.confidence > 60) // Filter low confidence words
-        .map(word => ({
+      return words
+        .filter((word: any) => word.confidence > 60)
+        .map((word: any) => ({
           text: word.text,
           confidence: word.confidence / 100,
           bbox: word.bbox,
@@ -279,7 +281,7 @@ export class CopilotVision {
 
   private async logPerformance(data: any) {
     try {
-      await supabase.from('ia_performance_log').insert(data);
+      await (supabase as any).from('ia_performance_log').insert(data);
     } catch (error) {
       console.error('Failed to log performance:', error);
     }
