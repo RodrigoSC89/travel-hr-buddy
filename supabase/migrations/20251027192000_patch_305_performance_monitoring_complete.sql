@@ -115,9 +115,8 @@ CREATE POLICY "Admins can manage thresholds"
   ON public.performance_thresholds FOR ALL
   TO authenticated
   USING (
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'manager')
-    )
+    auth.jwt() ->> 'role' IN ('admin', 'manager') OR
+    auth.jwt() -> 'user_metadata' ->> 'role' IN ('admin', 'manager')
   );
 
 -- Update triggers

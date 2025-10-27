@@ -69,9 +69,7 @@ export const ChannelManager: React.FC = () => {
     }
   };
 
-  const setupRealtimeSubscription = () => {
-    const { data: { user } } = supabase.auth.getUser();
-    
+  const setupRealtimeSubscription = async () => {
     // Subscribe to channel updates
     realtimeChannelRef.current = supabase
       .channel('channel-manager-realtime')

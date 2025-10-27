@@ -127,14 +127,14 @@ export const ChannelMessages: React.FC<ChannelMessagesProps> = ({ channel }) => 
   };
 
   const scrollToBottom = () => {
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       if (scrollAreaRef.current) {
         const scrollElement = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
         if (scrollElement) {
           scrollElement.scrollTop = scrollElement.scrollHeight;
         }
       }
-    }, 100);
+    });
   };
 
   return (
