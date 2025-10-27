@@ -151,7 +151,8 @@ const RealTimeWorkspace = React.lazy(() => import("@/modules/workspace/real-time
 const ChannelManager = React.lazy(() => import("@/modules/connectivity/channel-manager"));
 const TrainingAcademy = React.lazy(() => import("@/modules/hr/training-academy"));
 const MaintenancePlanner = React.lazy(() => import("@/modules/maintenance-planner"));
-const MissionLogs = React.lazy(() => import("@/modules/emergency/mission-logs"));
+const MissionLogs = React.lazy(() => import("@/pages/MissionLogsPage"));
+const TravelManagementPage = React.lazy(() => import("@/pages/TravelManagementPage"));
 const IncidentReports = React.lazy(() => import("@/modules/incident-reports"));
 const FuelOptimizer = React.lazy(() => import("@/modules/logistics/fuel-optimizer"));
 const WeatherDashboard = React.lazy(() => import("@/modules/weather-dashboard"));
@@ -417,6 +418,7 @@ function App() {
                       <Route path="/training-academy" element={<TrainingAcademy />} />
                       <Route path="/maintenance-planner" element={<MaintenancePlanner />} />
                       <Route path="/mission-logs" element={<MissionLogs />} />
+                      <Route path="/travel" element={<TravelManagementPage />} />
                       <Route path="/incident-reports" element={<IncidentReports />} />
                       <Route path="/fuel-optimizer" element={<FuelOptimizer />} />
                       <Route path="/weather-dashboard" element={<WeatherDashboard />} />

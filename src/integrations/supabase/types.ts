@@ -5443,6 +5443,59 @@ export type Database = {
         }
         Relationships: []
       }
+      mission_logs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          crew_members: string[]
+          description: string | null
+          id: string
+          location: string | null
+          metadata: Json | null
+          mission_date: string
+          mission_id: string | null
+          mission_name: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          crew_members?: string[]
+          description?: string | null
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          mission_date: string
+          mission_id?: string | null
+          mission_name: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          crew_members?: string[]
+          description?: string | null
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          mission_date?: string
+          mission_id?: string | null
+          mission_name?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mission_logs_mission_id_fkey"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       module_health: {
         Row: {
           cpu_usage: number | null
@@ -7631,6 +7684,42 @@ export type Database = {
         }
         Relationships: []
       }
+      satellite_events: {
+        Row: {
+          altitude: number | null
+          event_data: Json | null
+          event_type: string
+          id: string
+          latitude: number | null
+          longitude: number | null
+          norad_id: number
+          satellite_id: string
+          timestamp: string
+        }
+        Insert: {
+          altitude?: number | null
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          norad_id: number
+          satellite_id: string
+          timestamp?: string
+        }
+        Update: {
+          altitude?: number | null
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          norad_id?: number
+          satellite_id?: string
+          timestamp?: string
+        }
+        Relationships: []
+      }
       satellite_orbits: {
         Row: {
           altitude: number
@@ -7964,6 +8053,47 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      template_variables: {
+        Row: {
+          created_at: string
+          default_value: string | null
+          description: string | null
+          id: string
+          is_required: boolean | null
+          template_id: string | null
+          variable_name: string
+          variable_type: string
+        }
+        Insert: {
+          created_at?: string
+          default_value?: string | null
+          description?: string | null
+          id?: string
+          is_required?: boolean | null
+          template_id?: string | null
+          variable_name: string
+          variable_type?: string
+        }
+        Update: {
+          created_at?: string
+          default_value?: string | null
+          description?: string | null
+          id?: string
+          is_required?: boolean | null
+          template_id?: string | null
+          variable_name?: string
+          variable_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "template_variables_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "document_templates"
             referencedColumns: ["id"]
           },
         ]
@@ -8430,6 +8560,92 @@ export type Database = {
           tenant_id?: string | null
         }
         Relationships: []
+      }
+      travel_itineraries: {
+        Row: {
+          booking_reference: string | null
+          created_at: string
+          departure_date: string
+          destination: string
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          origin: string
+          return_date: string | null
+          segments: Json | null
+          status: string
+          total_cost: number | null
+          trip_name: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          booking_reference?: string | null
+          created_at?: string
+          departure_date: string
+          destination: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          origin: string
+          return_date?: string | null
+          segments?: Json | null
+          status?: string
+          total_cost?: number | null
+          trip_name: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          booking_reference?: string | null
+          created_at?: string
+          departure_date?: string
+          destination?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          origin?: string
+          return_date?: string | null
+          segments?: Json | null
+          status?: string
+          total_cost?: number | null
+          trip_name?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      travel_logs: {
+        Row: {
+          event_data: Json | null
+          event_type: string
+          id: string
+          itinerary_id: string | null
+          timestamp: string
+        }
+        Insert: {
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          itinerary_id?: string | null
+          timestamp?: string
+        }
+        Update: {
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          itinerary_id?: string | null
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_logs_itinerary_id_fkey"
+            columns: ["itinerary_id"]
+            isOneToOne: false
+            referencedRelation: "travel_itineraries"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       travel_predictions: {
         Row: {
