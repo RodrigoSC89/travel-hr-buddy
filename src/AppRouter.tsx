@@ -58,6 +58,8 @@ const FuelOptimizer = React.lazy(() => import("@/pages/FuelOptimizer"));
 // 🔹 PATCH 331-335 - SGSO Audits, Vault AI, User Management, Logistics
 const SGSOAudits = React.lazy(() => import("@/pages/admin/sgso/audits"));
 const VaultAIVector = React.lazy(() => import("@/pages/vault-ai"));
+const UserManagement = React.lazy(() => import("@/pages/admin/user-management"));
+const LogisticsHub = React.lazy(() => import("@/pages/admin/logistics-hub"));
 
 export default function AppRouter() {
   return (
@@ -101,6 +103,8 @@ export default function AppRouter() {
         {/* PATCH 331-335 Routes */}
         <Route path="/admin/sgso/audits" element={<SGSOAudits />} />
         <Route path="/vault-ai" element={<VaultAIVector />} />
+        <Route path="/admin/user-management" element={<UserManagement />} />
+        <Route path="/admin/logistics-hub" element={<LogisticsHub />} />
       </Routes>
     </Router>
   );
