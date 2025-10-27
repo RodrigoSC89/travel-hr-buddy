@@ -47,16 +47,16 @@ export const InvoiceManager = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [formData, setFormData] = useState({
-    invoice_type: 'sales',
-    vendor_supplier: '',
-    customer_name: '',
+    invoice_type: "sales",
+    vendor_supplier: "",
+    customer_name: "",
     subtotal: 0,
     tax_amount: 0,
     discount_amount: 0,
     total_amount: 0,
-    currency: 'USD',
-    payment_terms: '',
-    notes: ''
+    currency: "USD",
+    payment_terms: "",
+    notes: ""
   });
 
   const handleCreateInvoice = async () => {
@@ -64,58 +64,58 @@ export const InvoiceManager = () => {
       const invoiceNumber = `INV-${Date.now()}`;
       await createInvoice({
         ...formData,
-        invoice_type: formData.invoice_type as 'sales' | 'purchase' | 'expense',
+        invoice_type: formData.invoice_type as "sales" | "purchase" | "expense",
         invoice_number: invoiceNumber,
-        status: 'draft',
+        status: "draft",
         issue_date: new Date().toISOString()
       } as Partial<Invoice>);
       setIsCreateOpen(false);
       resetForm();
     } catch (error) {
-      console.error('Error creating invoice:', error);
+      console.error("Error creating invoice:", error);
     }
   };
 
   const resetForm = () => {
     setFormData({
-      invoice_type: 'sales',
-      vendor_supplier: '',
-      customer_name: '',
+      invoice_type: "sales",
+      vendor_supplier: "",
+      customer_name: "",
       subtotal: 0,
       tax_amount: 0,
       discount_amount: 0,
       total_amount: 0,
-      currency: 'USD',
-      payment_terms: '',
-      notes: ''
+      currency: "USD",
+      payment_terms: "",
+      notes: ""
     });
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'paid':
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'overdue':
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      case 'pending':
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      case 'cancelled':
-        return <XCircle className="h-4 w-4 text-gray-500" />;
-      default:
-        return <FileText className="h-4 w-4 text-blue-500" />;
+    case "paid":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "overdue":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    case "pending":
+      return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "cancelled":
+      return <XCircle className="h-4 w-4 text-gray-500" />;
+    default:
+      return <FileText className="h-4 w-4 text-blue-500" />;
     }
   };
 
   const getStatusVariant = (status: string): "default" | "secondary" | "destructive" | "outline" => {
     switch (status) {
-      case 'paid':
-        return 'default';
-      case 'overdue':
-        return 'destructive';
-      case 'pending':
-        return 'secondary';
-      default:
-        return 'outline';
+    case "paid":
+      return "default";
+    case "overdue":
+      return "destructive";
+    case "pending":
+      return "secondary";
+    default:
+      return "outline";
     }
   };
 
@@ -320,7 +320,7 @@ export const InvoiceManager = () => {
                     {invoice.invoice_type}
                   </TableCell>
                   <TableCell>
-                    {invoice.customer_name || invoice.vendor_supplier || '-'}
+                    {invoice.customer_name || invoice.vendor_supplier || "-"}
                   </TableCell>
                   <TableCell>
                     {formatCurrency(invoice.total_amount, invoice.currency)}

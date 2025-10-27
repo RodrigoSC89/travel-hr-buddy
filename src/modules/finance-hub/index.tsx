@@ -39,9 +39,9 @@ const FinanceHub = () => {
   }
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD"
     }).format(amount);
   };
 
@@ -64,7 +64,7 @@ const FinanceHub = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {summary ? formatCurrency(summary.totalIncome) : '$0.00'}
+              {summary ? formatCurrency(summary.totalIncome) : "$0.00"}
             </div>
             <p className="text-xs text-muted-foreground">Completed transactions</p>
           </CardContent>
@@ -77,7 +77,7 @@ const FinanceHub = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
-              {summary ? formatCurrency(summary.totalExpenses) : '$0.00'}
+              {summary ? formatCurrency(summary.totalExpenses) : "$0.00"}
             </div>
             <p className="text-xs text-muted-foreground">Completed transactions</p>
           </CardContent>
@@ -89,8 +89,8 @@ const FinanceHub = () => {
             <PieChart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${summary && summary.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {summary ? formatCurrency(summary.netProfit) : '$0.00'}
+            <div className={`text-2xl font-bold ${summary && summary.netProfit >= 0 ? "text-green-600" : "text-red-600"}`}>
+              {summary ? formatCurrency(summary.netProfit) : "$0.00"}
             </div>
             <p className="text-xs text-muted-foreground">Income - Expenses</p>
           </CardContent>
@@ -144,16 +144,16 @@ const FinanceHub = () => {
                     <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
                         <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
-                          transaction.transaction_type === 'income' ? 'bg-green-100' : 'bg-red-100'
+                          transaction.transaction_type === "income" ? "bg-green-100" : "bg-red-100"
                         }`}>
-                          {transaction.transaction_type === 'income' ? (
+                          {transaction.transaction_type === "income" ? (
                             <TrendingUp className="h-5 w-5 text-green-600" />
                           ) : (
                             <TrendingDown className="h-5 w-5 text-red-600" />
                           )}
                         </div>
                         <div>
-                          <p className="font-semibold">{transaction.description || 'Transaction'}</p>
+                          <p className="font-semibold">{transaction.description || "Transaction"}</p>
                           <p className="text-sm text-muted-foreground">
                             {new Date(transaction.transaction_date).toLocaleDateString()}
                           </p>
@@ -161,9 +161,9 @@ const FinanceHub = () => {
                       </div>
                       <div className="text-right">
                         <p className={`font-bold ${
-                          transaction.transaction_type === 'income' ? 'text-green-600' : 'text-red-600'
+                          transaction.transaction_type === "income" ? "text-green-600" : "text-red-600"
                         }`}>
-                          {transaction.transaction_type === 'income' ? '+' : '-'}
+                          {transaction.transaction_type === "income" ? "+" : "-"}
                           {formatCurrency(transaction.amount)}
                         </p>
                         <Badge variant="outline">{transaction.status}</Badge>
@@ -209,7 +209,7 @@ const FinanceHub = () => {
                                 {formatCurrency(category.budget_allocated)}
                               </p>
                               <p className="text-xs text-muted-foreground">
-                                {category.budget_period || 'monthly'}
+                                {category.budget_period || "monthly"}
                               </p>
                             </div>
                           )}
@@ -263,7 +263,7 @@ const FinanceHub = () => {
                             from: dateFrom.toISOString(),
                             to: dateTo.toISOString()
                           }
-                        }, `financial-report-${new Date().toISOString().split('T')[0]}.pdf`);
+                        }, `financial-report-${new Date().toISOString().split("T")[0]}.pdf`);
                         
                         toast({
                           title: "Success",
@@ -300,7 +300,7 @@ const FinanceHub = () => {
                             from: dateFrom.toISOString(),
                             to: dateTo.toISOString()
                           }
-                        }, `financial-report-${new Date().toISOString().split('T')[0]}.csv`);
+                        }, `financial-report-${new Date().toISOString().split("T")[0]}.csv`);
                         
                         toast({
                           title: "Success",
@@ -337,7 +337,7 @@ const FinanceHub = () => {
                         
                         FinanceExportService.exportTransactionsToCSV(
                           transactions,
-                          `transactions-${new Date().toISOString().split('T')[0]}.csv`
+                          `transactions-${new Date().toISOString().split("T")[0]}.csv`
                         );
                         
                         toast({
@@ -375,7 +375,7 @@ const FinanceHub = () => {
                         
                         FinanceExportService.exportInvoicesToCSV(
                           invoices,
-                          `invoices-${new Date().toISOString().split('T')[0]}.csv`
+                          `invoices-${new Date().toISOString().split("T")[0]}.csv`
                         );
                         
                         toast({
