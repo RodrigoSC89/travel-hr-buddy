@@ -61,7 +61,7 @@
     "stress:all": "npm run stress:ai && npm run stress:dashboard"
   },
   "engines": {
-    "node": "22.x",
+    "node": ">=20.0.0",
     "npm": ">=8.0.0"
   },
   "dependencies": {
