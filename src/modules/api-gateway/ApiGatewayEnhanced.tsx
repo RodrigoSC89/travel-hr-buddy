@@ -289,7 +289,7 @@ const ApiGatewayEnhanced = () => {
         route_path: string;
         method: string;
         description: string;
-        schema: any;
+        schema: unknown;
         version: string;
       }
 
