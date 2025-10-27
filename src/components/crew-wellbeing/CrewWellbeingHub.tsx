@@ -17,8 +17,15 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import CrewWellbeing from "@/modules/hr/crew-wellbeing";
 
 export default function CrewWellbeingHub() {
+  // Use the new comprehensive Crew Wellbeing module
+  return <CrewWellbeing />;
+}
+
+// Legacy component kept for backward compatibility
+export function CrewWellbeingHubLegacy() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
