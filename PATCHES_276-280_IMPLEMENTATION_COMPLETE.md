@@ -224,8 +224,9 @@ Automatic detection of:
 ### Services (3)
 1. `src/modules/compliance/sgso/services/generateSgsoReportPDF.ts`
 2. `src/modules/hr/training-academy/services/generateCertificatePDF.ts`
+3. Anomaly detection implemented via database trigger in migration
 
-### React Components (17)
+### React Components (18)
 **Integrations Hub (4):**
 1. `src/modules/connectivity/integrations-hub/index.tsx`
 2. `src/modules/connectivity/integrations-hub/components/CreateIntegrationDialog.tsx`
