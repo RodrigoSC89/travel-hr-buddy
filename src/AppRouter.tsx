@@ -43,6 +43,12 @@ const FleetManagement = React.lazy(() => import("@/modules/fleet"));
 const SimulationPage = React.lazy(() => import("@/pages/SimulationPage"));
 const TelemetryPage = React.lazy(() => import("@/pages/TelemetryPage"));
 
+// 🔹 PATCH 271-275 - Voice Assistant, Analytics, Satellite, Document Templates
+const VoiceAssistant = React.lazy(() => import("@/modules/voice-assistant/VoiceAssistant"));
+const AnalyticsCore = React.lazy(() => import("@/modules/analytics/AnalyticsCore"));
+const SatelliteTracker = React.lazy(() => import("@/modules/satellite/SatelliteTracker"));
+const DocumentTemplates = React.lazy(() => import("@/modules/documents/templates"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -69,6 +75,12 @@ export default function AppRouter() {
         <Route path="/fleet" element={<FleetManagement />} />
         <Route path="/simulation" element={<SimulationPage />} />
         <Route path="/telemetry" element={<TelemetryPage />} />
+        
+        {/* PATCH 271-275 Routes */}
+        <Route path="/voice-assistant" element={<VoiceAssistant />} />
+        <Route path="/analytics-core" element={<AnalyticsCore />} />
+        <Route path="/satellite-tracker" element={<SatelliteTracker />} />
+        <Route path="/document-templates" element={<DocumentTemplates />} />
       </Routes>
     </Router>
   );
