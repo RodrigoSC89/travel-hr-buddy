@@ -92,10 +92,10 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       const { data, error } = await supabase
         .from('project_tasks')
         .select('*')
-        .order('start_date', { ascending: true });
+        .order('start_date', { ascending: true }) as any;
 
       if (error) throw error;
-      setTasks(data || []);
+      setTasks((data || []) as any);
     } catch (error) {
       console.error('Error fetching tasks:', error);
       toast({
@@ -112,10 +112,10 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     try {
       const { data, error } = await supabase
         .from('project_dependencies')
-        .select('*');
+        .select('*') as any;
 
       if (error) throw error;
-      setDependencies(data || []);
+      setDependencies((data || []) as any);
     } catch (error) {
       console.error('Error fetching dependencies:', error);
     }

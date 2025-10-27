@@ -83,10 +83,10 @@ export const DocumentTemplateEditor: React.FC = () => {
       const { data, error } = await supabase
         .from('ai_document_templates')
         .select('*')
-        .order('updated_at', { ascending: false });
+        .order('updated_at', { ascending: false }) as any;
 
       if (error) throw error;
-      setTemplates(data || []);
+      setTemplates((data || []) as any);
     } catch (error) {
       console.error('Error fetching templates:', error);
       toast({
@@ -127,7 +127,7 @@ export const DocumentTemplateEditor: React.FC = () => {
       if (selectedTemplate) {
         const { error } = await supabase
           .from('ai_document_templates')
-          .update(templateData)
+          .update(templateData as any)
           .eq('id', selectedTemplate.id);
 
         if (error) throw error;
@@ -138,7 +138,7 @@ export const DocumentTemplateEditor: React.FC = () => {
       } else {
         const { error } = await supabase
           .from('ai_document_templates')
-          .insert([templateData]);
+          .insert([templateData as any]);
 
         if (error) throw error;
         toast({
@@ -166,7 +166,7 @@ export const DocumentTemplateEditor: React.FC = () => {
       const { error } = await supabase
         .from('ai_document_templates')
         .delete()
-        .eq('id', id);
+        .eq('id', id) as any;
 
       if (error) throw error;
       

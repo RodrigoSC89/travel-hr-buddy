@@ -1,6 +1,9 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, UserCheck, Calendar, Award } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { EmployeeRequests } from "./components/EmployeeRequests";
+import { EmployeeHistory } from "./components/EmployeeHistory";
 
 const PortalFuncionarioModule = () => {
   return (
@@ -56,17 +59,35 @@ const PortalFuncionarioModule = () => {
         </Card>
       </div>
       
-      <Card>
-        <CardHeader>
-          <CardTitle>Visão Geral do Módulo</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">
-            Portal completo de RH com gestão de funcionários, solicitações, férias,
-            documentos pessoais, onboarding e processos seletivos.
-          </p>
-        </CardContent>
-      </Card>
+      <Tabs defaultValue="overview" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="requests">Solicitações</TabsTrigger>
+          <TabsTrigger value="history">Histórico</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview">
+          <Card>
+            <CardHeader>
+              <CardTitle>Bem-vindo ao Portal do Funcionário</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">
+                Portal completo de autoatendimento com gestão de solicitações, férias,
+                certificados, viagens e acesso restrito via RLS aos seus próprios dados.
+              </p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="requests">
+          <EmployeeRequests />
+        </TabsContent>
+
+        <TabsContent value="history">
+          <EmployeeHistory />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
