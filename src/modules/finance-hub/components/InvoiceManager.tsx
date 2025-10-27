@@ -41,6 +41,7 @@ import {
 } from "lucide-react";
 import { useFinanceData, Invoice } from "../hooks/useFinanceData";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { generateInvoicePDF, previewInvoicePDF } from "./InvoicePDFGenerator";
 
 export const InvoiceManager = () => {
   const { invoices, loading, createInvoice, updateInvoice } = useFinanceData();
@@ -338,13 +339,28 @@ export const InvoiceManager = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => previewInvoicePDF(invoice)}
+                        title="Preview Invoice"
+                      >
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => setSelectedInvoice(invoice)}
+                        title="Edit Invoice"
+                      >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => generateInvoicePDF(invoice)}
+                        title="Download PDF"
+                      >
                         <Download className="h-4 w-4" />
                       </Button>
                     </div>

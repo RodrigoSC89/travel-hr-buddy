@@ -14,11 +14,13 @@ import {
 } from "lucide-react";
 import { useFinanceData } from "./hooks/useFinanceData";
 import { InvoiceManager } from "./components/InvoiceManager";
+import { TransactionForm } from "./components/TransactionForm";
+import { ExpensesByCategory } from "./components/ExpensesByCategory";
 
 // PATCH 192.0: Complete Finance Hub with real Supabase integration
 
 const FinanceHub = () => {
-  const { summary, transactions, categories, loading } = useFinanceData();
+  const { summary, transactions, categories, loading, refreshData: loadFinancialData } = useFinanceData();
 
   if (loading) {
     return (
@@ -125,7 +127,10 @@ const FinanceHub = () => {
         <TabsContent value="transactions" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Transactions</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle>Recent Transactions</CardTitle>
+                <TransactionForm onSuccess={loadFinancialData} />
+              </div>
             </CardHeader>
             <CardContent>
               {transactions.length === 0 ? (
@@ -176,6 +181,8 @@ const FinanceHub = () => {
         </TabsContent>
 
         <TabsContent value="categories" className="space-y-4">
+          <ExpensesByCategory />
+          
           <Card>
             <CardHeader>
               <CardTitle>Budget Categories</CardTitle>
