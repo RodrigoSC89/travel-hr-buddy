@@ -4,7 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 
 export interface FinancialTransaction {
   id: string;
-  transaction_type: 'income' | 'expense' | 'transfer' | 'adjustment';
+  transaction_type: "income" | "expense" | "transfer" | "adjustment";
   category_id?: string;
   amount: number;
   currency: string;
@@ -19,7 +19,7 @@ export interface FinancialTransaction {
 export interface BudgetCategory {
   id: string;
   name: string;
-  category_type: 'income' | 'expense' | 'both';
+  category_type: "income" | "expense" | "both";
   description?: string;
   budget_allocated?: number;
   budget_period?: string;
@@ -31,7 +31,7 @@ export interface BudgetCategory {
 export interface Invoice {
   id: string;
   invoice_number: string;
-  invoice_type: 'sales' | 'purchase' | 'expense' | 'credit_note' | 'debit_note';
+  invoice_type: "sales" | "purchase" | "expense" | "credit_note" | "debit_note";
   status: string;
   issue_date: string;
   due_date?: string;
@@ -72,9 +72,9 @@ export const useFinanceData = () => {
 
       // Load transactions
       const { data: transactionsData, error: transactionsError } = await supabase
-        .from('financial_transactions')
-        .select('*')
-        .order('transaction_date', { ascending: false })
+        .from("financial_transactions")
+        .select("*")
+        .order("transaction_date", { ascending: false })
         .limit(100);
 
       if (transactionsError) throw transactionsError;
@@ -82,19 +82,19 @@ export const useFinanceData = () => {
 
       // Load categories
       const { data: categoriesData, error: categoriesError } = await supabase
-        .from('budget_categories' as any)
-        .select('*')
-        .eq('is_active', true)
-        .order('display_order');
+        .from("budget_categories" as any)
+        .select("*")
+        .eq("is_active", true)
+        .order("display_order");
 
       if (categoriesError) throw categoriesError;
       setCategories((categoriesData as any[]) || []);
 
       // Load invoices
       const { data: invoicesData, error: invoicesError } = await supabase
-        .from('invoices' as any)
-        .select('*')
-        .order('issue_date', { ascending: false })
+        .from("invoices" as any)
+        .select("*")
+        .order("issue_date", { ascending: false })
         .limit(50);
 
       if (invoicesError) throw invoicesError;
@@ -104,7 +104,7 @@ export const useFinanceData = () => {
       calculateSummary((transactionsData as any[]) || [], (invoicesData as any[]) || []);
 
     } catch (err: any) {
-      console.error('Error loading financial data:', err);
+      console.error("Error loading financial data:", err);
       setError(err.message);
       toast({
         title: "Error",
@@ -122,19 +122,19 @@ export const useFinanceData = () => {
     invoicesData: Invoice[]
   ) => {
     const totalIncome = transactionsData
-      .filter(t => t.transaction_type === 'income' && t.status === 'completed')
+      .filter(t => t.transaction_type === "income" && t.status === "completed")
       .reduce((sum, t) => sum + Number(t.amount), 0);
 
     const totalExpenses = transactionsData
-      .filter(t => t.transaction_type === 'expense' && t.status === 'completed')
+      .filter(t => t.transaction_type === "expense" && t.status === "completed")
       .reduce((sum, t) => sum + Number(t.amount), 0);
 
     const pendingInvoices = invoicesData.filter(
-      i => i.status === 'pending' || i.status === 'sent'
+      i => i.status === "pending" || i.status === "sent"
     ).length;
 
     const overdueInvoices = invoicesData.filter(
-      i => i.status === 'overdue'
+      i => i.status === "overdue"
     ).length;
 
     setSummary({
@@ -151,7 +151,7 @@ export const useFinanceData = () => {
   const createTransaction = async (transaction: Partial<FinancialTransaction>) => {
     try {
       const { data, error } = await supabase
-        .from('financial_transactions')
+        .from("financial_transactions")
         .insert([transaction as any])
         .select()
         .single();
@@ -166,7 +166,7 @@ export const useFinanceData = () => {
       await loadFinancialData();
       return data;
     } catch (err: any) {
-      console.error('Error creating transaction:', err);
+      console.error("Error creating transaction:", err);
       toast({
         title: "Error",
         description: "Failed to create transaction",
@@ -180,9 +180,9 @@ export const useFinanceData = () => {
   const updateTransaction = async (id: string, updates: Partial<FinancialTransaction>) => {
     try {
       const { data, error } = await supabase
-        .from('financial_transactions')
+        .from("financial_transactions")
         .update(updates)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
@@ -196,7 +196,7 @@ export const useFinanceData = () => {
       await loadFinancialData();
       return data;
     } catch (err: any) {
-      console.error('Error updating transaction:', err);
+      console.error("Error updating transaction:", err);
       toast({
         title: "Error",
         description: "Failed to update transaction",
@@ -210,7 +210,7 @@ export const useFinanceData = () => {
   const createInvoice = async (invoice: Partial<Invoice>) => {
     try {
       const { data, error } = await supabase
-        .from('invoices' as any)
+        .from("invoices" as any)
         .insert([invoice as any])
         .select()
         .single();
@@ -225,7 +225,7 @@ export const useFinanceData = () => {
       await loadFinancialData();
       return data;
     } catch (err: any) {
-      console.error('Error creating invoice:', err);
+      console.error("Error creating invoice:", err);
       toast({
         title: "Error",
         description: "Failed to create invoice",
@@ -239,9 +239,9 @@ export const useFinanceData = () => {
   const updateInvoice = async (id: string, updates: Partial<Invoice>) => {
     try {
       const { data, error } = await supabase
-        .from('invoices' as any)
+        .from("invoices" as any)
         .update(updates as any)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
@@ -255,7 +255,7 @@ export const useFinanceData = () => {
       await loadFinancialData();
       return data;
     } catch (err: any) {
-      console.error('Error updating invoice:', err);
+      console.error("Error updating invoice:", err);
       toast({
         title: "Error",
         description: "Failed to update invoice",
