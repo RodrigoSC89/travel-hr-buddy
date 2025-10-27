@@ -21,12 +21,20 @@ serve(async (req) => {
   }
 
   try {
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       {
         global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
+          headers: { Authorization: authHeader },
         },
       }
     );
@@ -40,6 +48,7 @@ serve(async (req) => {
       );
     }
 
+    const startTime = performance.now();
     console.log('Vault search request:', { query, match_threshold, match_count, filter_type, use_llm });
 
     // Generate embedding for the query using OpenAI
@@ -151,6 +160,8 @@ serve(async (req) => {
 
     // Log the search
     const { data: user } = await supabaseClient.auth.getUser();
+    const endTime = performance.now();
+    const responseTimeMs = Math.round(endTime - startTime);
     
     await supabaseClient.from('vault_search_logs').insert({
       user_id: user?.user?.id,
@@ -162,7 +173,7 @@ serve(async (req) => {
       search_type: queryEmbedding.length > 0 ? 'semantic' : 'keyword',
       llm_used: use_llm && llmResponse !== null,
       llm_response: llmResponse,
-      response_time_ms: 0, // Would need proper timing
+      response_time_ms: responseTimeMs,
     });
 
     return new Response(

@@ -19,12 +19,20 @@ serve(async (req) => {
   }
 
   try {
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       {
         global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
+          headers: { Authorization: authHeader },
         },
       }
     );
@@ -44,11 +52,15 @@ serve(async (req) => {
         );
       }
 
-      // Convert base64 to blob
-      const audioBlob = new Blob(
-        [Uint8Array.from(atob(audio_data), c => c.charCodeAt(0))],
-        { type: 'audio/webm' }
-      );
+      // Convert base64 to Uint8Array more efficiently
+      const binaryString = atob(audio_data);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      
+      const audioBlob = new Blob([bytes], { type: 'audio/webm' });
 
       const formData = new FormData();
       formData.append('file', audioBlob, 'audio.webm');

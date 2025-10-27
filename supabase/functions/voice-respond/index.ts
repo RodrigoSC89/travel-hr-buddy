@@ -26,6 +26,14 @@ serve(async (req) => {
       );
     }
 
+    // Validate text length to prevent abuse
+    if (text.length > 4000) {
+      return new Response(
+        JSON.stringify({ error: 'Text too long. Maximum 4000 characters allowed.' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const openaiApiKey = Deno.env.get('OPENAI_API_KEY');
 
     if (!openaiApiKey) {
@@ -75,9 +83,18 @@ serve(async (req) => {
       );
     }
 
-    // Get audio as array buffer
+    // Get audio as array buffer and convert to base64 in chunks
     const audioBuffer = await ttsResponse.arrayBuffer();
-    const audioBase64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
+    const bytes = new Uint8Array(audioBuffer);
+    const chunkSize = 8192;
+    let binaryString = '';
+    
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      const chunk = bytes.slice(i, i + chunkSize);
+      binaryString += String.fromCharCode.apply(null, Array.from(chunk));
+    }
+    
+    const audioBase64 = btoa(binaryString);
 
     return new Response(
       JSON.stringify({
