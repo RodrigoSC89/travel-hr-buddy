@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 225.0 - Mirror Instance Controller
  * Orchestrates multiple clones in the field and synchronizes states

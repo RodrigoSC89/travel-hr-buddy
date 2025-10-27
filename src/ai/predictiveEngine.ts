@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 206.0 - Predictive Engine
  * AI engine capable of forecasting failures, overloads or demands

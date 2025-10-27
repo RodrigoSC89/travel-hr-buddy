@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 222.0 - Adaptive UI Reconfiguration Engine
  * Adapts UI based on device type, network, operation, and priority

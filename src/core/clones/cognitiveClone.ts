@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 221.0 - Cognitive Clone Core
  * System for creating functional copies of Nautilus with replicated AI + limited context

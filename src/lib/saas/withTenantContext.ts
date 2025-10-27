@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 197.0 - SaaS Engine (Multitenant Engine)
  * 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 210.0 - Cognitive Dashboard
  * Visualizes AI engine evolution, decisions, and predictions

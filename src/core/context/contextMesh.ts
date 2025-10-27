@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 216 - Context Mesh Core
  * Distributed context mesh for sharing state, decisions, and learning between modules

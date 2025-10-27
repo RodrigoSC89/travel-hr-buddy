@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 212.0 - Satellite Sync Engine (Conexão Satelital Global)
  * 

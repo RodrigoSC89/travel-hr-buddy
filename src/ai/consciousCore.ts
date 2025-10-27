@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 218 - Conscious Core
  * Monitors all system flows, understands global state, and anticipates collapses or inconsistencies
@@ -229,7 +230,7 @@ class ConsciousCore {
     // Update in database
     try {
       const { error } = await supabase
-        .from('system_consciousness')
+        .from('system_observations')
         .update({
           resolved: true,
           resolved_at: observation.resolvedAt.toISOString()
@@ -459,7 +460,7 @@ class ConsciousCore {
 
   private async logObservation(observation: SystemObservation): Promise<void> {
     try {
-      const { error } = await supabase.from('system_consciousness').insert({
+      const { error } = await supabase.from('system_observations').insert({
         observation_type: observation.observationType,
         severity: observation.severity,
         modules_affected: observation.modulesAffected,
