@@ -30,9 +30,12 @@ class EventTrackingService {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        // Try to get user's organization - this is a placeholder
-        // In a real app, you'd fetch this from your database
-        this.organizationId = user.id; // Using user_id as org_id for simplicity
+        // TODO: Replace with actual organization lookup
+        // For now, using user_id as placeholder. In production, fetch from:
+        // - profiles table with organization_id foreign key
+        // - organization_members junction table
+        // - or similar organizational structure
+        this.organizationId = user.id;
       }
     } catch (error) {
       console.error('Error initializing organization:', error);

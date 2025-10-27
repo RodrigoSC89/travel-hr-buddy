@@ -48,6 +48,9 @@ export default function VoiceAssistant() {
     }
   }, [transcript]);
 
+  // Estimated milliseconds per character for TTS duration calculation
+  const CHARS_TO_MS_ESTIMATE = 50;
+
   const handleUserMessage = async (text: string) => {
     const userMessage = { role: "user" as const, content: text, timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
@@ -64,9 +67,9 @@ export default function VoiceAssistant() {
     
     setMessages(prev => [...prev, assistantMessage]);
 
-    // Log assistant message to database
+    // Log assistant message to database with estimated duration
     await logMessage('assistant', response, {
-      duration: response.length * 50 // Estimate based on text length
+      duration: response.length * CHARS_TO_MS_ESTIMATE
     });
     
     if (ttsSupported) {

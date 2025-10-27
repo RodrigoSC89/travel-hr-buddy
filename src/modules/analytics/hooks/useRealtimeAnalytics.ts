@@ -143,7 +143,7 @@ export function useRealtimeAnalytics() {
       const { data, error } = await supabase
         .from('analytics_metrics')
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('period_end', { ascending: false })
         .limit(limit);
 
       if (error) throw error;
