@@ -249,10 +249,10 @@ export class FinanceExportService {
    * Export invoices only to CSV
    */
   static exportInvoicesToCSV(invoices: Invoice[], filename: string = 'invoices.csv'): void {
-    let csvContent = 'ID,Invoice Number,Type,Issue Date,Due Date,Paid Date,Status,Customer,Vendor,Subtotal,Tax,Discount,Total,Currency,Payment Terms\n';
+    let csvContent = 'ID,Invoice Number,Type,Issue Date,Due Date,Paid Date,Status,Customer,Vendor,Subtotal,Tax,Discount,Total,Currency\n';
     
     invoices.forEach(inv => {
-      csvContent += `${inv.id},${inv.invoice_number},${inv.invoice_type},${inv.issue_date},${inv.due_date || ''},${inv.paid_date || ''},${inv.status},"${this.escapeCsvField(inv.customer_name || '')}","${this.escapeCsvField(inv.vendor_supplier || '')}",${inv.subtotal},${inv.tax_amount},${inv.discount_amount},${inv.total_amount},${inv.currency},"${this.escapeCsvField(inv.payment_terms || '')}"\n`;
+      csvContent += `${inv.id},${inv.invoice_number},${inv.invoice_type},${inv.issue_date},${inv.due_date || ''},${inv.paid_date || ''},${inv.status},"${this.escapeCsvField(inv.customer_name || '')}","${this.escapeCsvField(inv.vendor_supplier || '')}",${inv.subtotal},${inv.tax_amount},${inv.discount_amount},${inv.total_amount},${inv.currency}\n`;
     });
     
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
