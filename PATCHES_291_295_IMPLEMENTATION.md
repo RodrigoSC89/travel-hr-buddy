@@ -233,11 +233,13 @@ import DocumentTemplatesDynamic from "@/pages/admin/documents/templates-dynamic"
 ### Migration File
 `/supabase/migrations/20251027183000_patches_291_295_schemas.sql`
 
-### Key Features
+This migration creates 13 new tables with:
+- Complete database schema for all 5 modules
 - Row Level Security (RLS) enabled on all tables
-- Proper indexes for performance
-- Foreign key constraints
-- Authenticated user access policies
+- Performance-optimized indexes on frequently queried columns
+- Foreign key constraints for data integrity
+- Authenticated user access policies for secure data access
+- Support for real-time data synchronization
 
 ### Tables Summary
 - **Fuel System**: 5 tables (fuel_logs, vessel_speeds, route_segments, fuel_predictions, fuel_alerts)
@@ -252,7 +254,7 @@ import DocumentTemplatesDynamic from "@/pages/admin/documents/templates-dynamic"
 
 ```json
 {
-  "reactflow": "^11.x" // Workflow builder
+  "reactflow": "^11.11.4" // Workflow builder
 }
 ```
 
