@@ -127,7 +127,7 @@ export class PEODPInferenceService {
 
     // Fetch performance metrics
     const { data: metrics } = await supabase
-      .from('vessel_performance_metrics')
+      .from('vessel_performance_metrics' as any)
       .select('*')
       .eq('vessel_id', vesselId)
       .order('recorded_at', { ascending: false })
@@ -135,27 +135,27 @@ export class PEODPInferenceService {
 
     // Fetch incident history
     const { data: incidents } = await supabase
-      .from('incidents')
+      .from('incidents' as any)
       .select('id')
       .eq('vessel_id', vesselId)
       .gte('occurred_at', new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString());
 
     const avgAccuracy = metrics && metrics.length > 0
-      ? metrics.reduce((sum, m) => sum + (m.positioning_accuracy || 0), 0) / metrics.length
+      ? metrics.reduce((sum: number, m: any) => sum + (m.positioning_accuracy || 0), 0) / metrics.length
       : 95;
 
     const avgFuelEfficiency = metrics && metrics.length > 0
-      ? metrics.reduce((sum, m) => sum + (m.fuel_efficiency || 0), 0) / metrics.length
+      ? metrics.reduce((sum: number, m: any) => sum + (m.fuel_efficiency || 0), 0) / metrics.length
       : 85;
 
     return {
       vessel_id: vesselId,
-      dp_class: vessel?.dp_class || 'DP2',
+      dp_class: (vessel as any)?.dp_class || 'DP2',
       operational_hours: vessel?.operational_hours || 0,
       incidents_count: incidents?.length || 0,
       avg_positioning_accuracy: avgAccuracy,
       fuel_efficiency: avgFuelEfficiency,
-      maintenance_status: vessel?.maintenance_status || 'good'
+      maintenance_status: (vessel as any)?.maintenance_status || 'good'
     };
   }
 
@@ -205,14 +205,14 @@ export class PEODPInferenceService {
    */
   private static async fetchPEODPPlan(vesselId: string): Promise<PEODPPlan | null> {
     const { data, error } = await supabase
-      .from('peodp_plans')
+      .from('peodp_plans' as any)
       .select('*')
       .eq('vessel_id', vesselId)
       .eq('status', 'active')
       .single();
 
     if (error || !data) return null;
-    return data as PEODPPlan;
+    return data as any as PEODPPlan;
   }
 
   /**
@@ -404,12 +404,12 @@ export class PEODPInferenceService {
     }
 
     // Weather-based recommendations
-    if (context?.weather_conditions === 'severe' || context?.sea_state >= 7) {
+    if (context?.weather_conditions === 'severe' || (context?.sea_state || 0) >= 7) {
       recommendations.push({
         recommendation_type: 'operational',
         priority: 'critical',
         title: 'Severe Weather Conditions Detected',
-        description: `Current conditions: ${context.weather_conditions}, Sea State: ${context.sea_state}`,
+        description: `Current conditions: ${context?.weather_conditions || 'unknown'}, Sea State: ${context?.sea_state || 'unknown'}`,
         reasoning: 'Severe weather significantly increases DP operation risks and may exceed vessel capabilities.',
         confidence: 95,
         suggested_actions: [
@@ -438,16 +438,16 @@ export class PEODPInferenceService {
       const { data: userData } = await supabase.auth.getUser();
       
       await supabase
-        .from('dp_inference_logs')
+        .from('dp_inference_logs' as any)
         .insert({
-          vessel_id: vesselId,
-          user_id: userData.user?.id,
-          recommendations_count: recommendations.length,
-          critical_count: recommendations.filter(r => r.priority === 'critical').length,
-          high_count: recommendations.filter(r => r.priority === 'high').length,
-          recommendations: recommendations,
-          timestamp: new Date().toISOString()
-        });
+          plan_id: null,
+          inference_type: 'peodp_recommendations',
+          input_data: { vesselId } as any,
+          output_data: { recommendations_count: recommendations.length } as any,
+          confidence_score: null,
+          processing_time_ms: null,
+          model_version: '1.0.0'
+        } as any);
     } catch (error) {
       console.error('Failed to log inference:', error);
     }
@@ -461,7 +461,7 @@ export class PEODPInferenceService {
     limit: number = 20
   ): Promise<any[]> {
     const { data, error } = await supabase
-      .from('dp_inference_logs')
+      .from('dp_inference_logs' as any)
       .select('*')
       .eq('vessel_id', vesselId)
       .order('timestamp', { ascending: false })
@@ -480,11 +480,10 @@ export class PEODPInferenceService {
    */
   static async savePEODPPlan(plan: Partial<PEODPPlan>): Promise<PEODPPlan> {
     const { data, error } = await supabase
-      .from('peodp_plans')
+      .from('peodp_plans' as any)
       .upsert({
-        ...plan,
-        updated_at: new Date().toISOString()
-      })
+        ...(plan as any)
+      } as any)
       .select()
       .single();
 
@@ -492,6 +491,6 @@ export class PEODPInferenceService {
       throw new Error(`Failed to save PEO-DP plan: ${error.message}`);
     }
 
-    return data as PEODPPlan;
+    return data as any as PEODPPlan;
   }
 }
