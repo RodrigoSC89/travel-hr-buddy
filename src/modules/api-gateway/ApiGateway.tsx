@@ -92,6 +92,33 @@ const ApiGateway = () => {
     });
   };
 
+  const handleGenerateDocumentation = async () => {
+    try {
+      const { data, error } = await supabase.rpc('generate_api_documentation');
+      if (error) throw error;
+      
+      // Download as markdown file
+      const blob = new Blob([data], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `api-documentation-${new Date().toISOString().split('T')[0]}.md`;
+      a.click();
+      
+      toast({
+        title: "Success",
+        description: "API documentation generated and downloaded"
+      });
+    } catch (error) {
+      console.error('Error generating documentation:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate documentation",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleCreateKey = () => {
     if (!newKeyName.trim()) {
       toast({
