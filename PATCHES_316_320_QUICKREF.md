@@ -11,8 +11,10 @@ npm install tesseract.js chart.js react-chartjs-2 date-fns
 
 2. **Configure Environment Variables**
 ```bash
-# Add to .env or .env.local
+# Add to .env.local (DO NOT commit this file to version control!)
 VITE_OPENWEATHER_API_KEY=your_openweather_api_key
+
+# Or add to your deployment platform's environment variables (Vercel, etc.)
 ```
 
 3. **Run Database Migrations**
@@ -481,5 +483,5 @@ npm run type-check
 
 ---
 
-**Last Updated:** October 27, 2025
+**Last Updated:** October 2025
 **Version:** 1.0
