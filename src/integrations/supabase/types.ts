@@ -2301,6 +2301,57 @@ export type Database = {
           },
         ]
       }
+      connected_integrations: {
+        Row: {
+          created_at: string | null
+          id: string
+          integration_name: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          metadata: Json | null
+          oauth_access_token: string | null
+          oauth_refresh_token: string | null
+          oauth_token_expires_at: string | null
+          organization_id: string | null
+          provider: string
+          scopes: string[] | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          integration_name: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          metadata?: Json | null
+          oauth_access_token?: string | null
+          oauth_refresh_token?: string | null
+          oauth_token_expires_at?: string | null
+          organization_id?: string | null
+          provider: string
+          scopes?: string[] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          integration_name?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          metadata?: Json | null
+          oauth_access_token?: string | null
+          oauth_refresh_token?: string | null
+          oauth_token_expires_at?: string | null
+          organization_id?: string | null
+          provider?: string
+          scopes?: string[] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       context_snapshots: {
         Row: {
           context_data: Json
@@ -3829,6 +3880,56 @@ export type Database = {
         }
         Relationships: []
       }
+      document_template_versions: {
+        Row: {
+          change_description: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_current: boolean | null
+          organization_id: string | null
+          template_content: string
+          template_id: string | null
+          template_name: string
+          variables: Json | null
+          version_number: number
+        }
+        Insert: {
+          change_description?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_current?: boolean | null
+          organization_id?: string | null
+          template_content: string
+          template_id?: string | null
+          template_name: string
+          variables?: Json | null
+          version_number?: number
+        }
+        Update: {
+          change_description?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_current?: boolean | null
+          organization_id?: string | null
+          template_content?: string
+          template_id?: string | null
+          template_name?: string
+          variables?: Json | null
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_template_versions_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "document_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_templates: {
         Row: {
           category: string | null
@@ -4590,6 +4691,57 @@ export type Database = {
           price?: number
           route_code?: string
           source?: string
+        }
+        Relationships: []
+      }
+      fuel_logs: {
+        Row: {
+          consumption_rate_lph: number | null
+          created_at: string | null
+          fuel_type: string
+          id: string
+          location_latitude: number | null
+          location_longitude: number | null
+          notes: string | null
+          organization_id: string | null
+          quantity_liters: number
+          timestamp: string
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_speed_knots: number | null
+          weather_condition: string | null
+        }
+        Insert: {
+          consumption_rate_lph?: number | null
+          created_at?: string | null
+          fuel_type?: string
+          id?: string
+          location_latitude?: number | null
+          location_longitude?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          quantity_liters: number
+          timestamp?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_speed_knots?: number | null
+          weather_condition?: string | null
+        }
+        Update: {
+          consumption_rate_lph?: number | null
+          created_at?: string | null
+          fuel_type?: string
+          id?: string
+          location_latitude?: number | null
+          location_longitude?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          quantity_liters?: number
+          timestamp?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_speed_knots?: number | null
+          weather_condition?: string | null
         }
         Relationships: []
       }
@@ -6358,6 +6510,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mission_workflows: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          execution_count: number | null
+          id: string
+          is_active: boolean | null
+          last_executed_at: string | null
+          name: string
+          organization_id: string | null
+          status: string | null
+          updated_at: string | null
+          workflow_definition: Json
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          execution_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_executed_at?: string | null
+          name: string
+          organization_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          workflow_definition: Json
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          execution_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_executed_at?: string | null
+          name?: string
+          organization_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          workflow_definition?: Json
+        }
+        Relationships: []
       }
       missions: {
         Row: {
@@ -8510,6 +8707,51 @@ export type Database = {
         }
         Relationships: []
       }
+      route_segments: {
+        Row: {
+          arrival_port: string
+          created_at: string | null
+          current_factor: number | null
+          departure_port: string
+          distance_nm: number
+          estimated_duration_hours: number | null
+          id: string
+          organization_id: string | null
+          route_id: string | null
+          segment_name: string
+          updated_at: string | null
+          weather_factor: number | null
+        }
+        Insert: {
+          arrival_port: string
+          created_at?: string | null
+          current_factor?: number | null
+          departure_port: string
+          distance_nm: number
+          estimated_duration_hours?: number | null
+          id?: string
+          organization_id?: string | null
+          route_id?: string | null
+          segment_name: string
+          updated_at?: string | null
+          weather_factor?: number | null
+        }
+        Update: {
+          arrival_port?: string
+          created_at?: string | null
+          current_factor?: number | null
+          departure_port?: string
+          distance_nm?: number
+          estimated_duration_hours?: number | null
+          id?: string
+          organization_id?: string | null
+          route_id?: string | null
+          segment_name?: string
+          updated_at?: string | null
+          weather_factor?: number | null
+        }
+        Relationships: []
+      }
       routes: {
         Row: {
           created_at: string | null
@@ -8777,6 +9019,66 @@ export type Database = {
           tle_line1?: string | null
           tle_line2?: string | null
           velocity?: number
+        }
+        Relationships: []
+      }
+      satellite_tracks: {
+        Row: {
+          altitude_km: number
+          azimuth: number | null
+          created_at: string | null
+          elevation: number | null
+          id: string
+          latitude: number
+          longitude: number
+          norad_id: number | null
+          organization_id: string | null
+          range_km: number | null
+          satellite_id: string
+          satellite_name: string
+          timestamp: string
+          tle_line1: string | null
+          tle_line2: string | null
+          velocity_kmh: number
+          visibility_status: string | null
+        }
+        Insert: {
+          altitude_km: number
+          azimuth?: number | null
+          created_at?: string | null
+          elevation?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          norad_id?: number | null
+          organization_id?: string | null
+          range_km?: number | null
+          satellite_id: string
+          satellite_name: string
+          timestamp?: string
+          tle_line1?: string | null
+          tle_line2?: string | null
+          velocity_kmh: number
+          visibility_status?: string | null
+        }
+        Update: {
+          altitude_km?: number
+          azimuth?: number | null
+          created_at?: string | null
+          elevation?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          norad_id?: number | null
+          organization_id?: string | null
+          range_km?: number | null
+          satellite_id?: string
+          satellite_name?: string
+          timestamp?: string
+          tle_line1?: string | null
+          tle_line2?: string | null
+          velocity_kmh?: number
+          visibility_status?: string | null
         }
         Relationships: []
       }
@@ -10535,6 +10837,50 @@ export type Database = {
           },
         ]
       }
+      vessel_speeds: {
+        Row: {
+          created_at: string | null
+          fuel_efficiency_rating: number | null
+          id: string
+          optimal_speed_knots: number | null
+          organization_id: string | null
+          recorded_speed_knots: number
+          route_segment_id: string | null
+          timestamp: string
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          fuel_efficiency_rating?: number | null
+          id?: string
+          optimal_speed_knots?: number | null
+          organization_id?: string | null
+          recorded_speed_knots: number
+          route_segment_id?: string | null
+          timestamp?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          fuel_efficiency_rating?: number | null
+          id?: string
+          optimal_speed_knots?: number | null
+          organization_id?: string | null
+          recorded_speed_knots?: number
+          route_segment_id?: string | null
+          timestamp?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_speeds_route_segment_id_fkey"
+            columns: ["route_segment_id"]
+            isOneToOne: false
+            referencedRelation: "route_segments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_tracking: {
         Row: {
           created_at: string | null
@@ -11057,6 +11403,59 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      webhook_events: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          event_name: string
+          event_type: string
+          headers: Json | null
+          id: string
+          integration_id: string | null
+          organization_id: string | null
+          payload: Json
+          processed_at: string | null
+          source_ip: string | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          event_name: string
+          event_type: string
+          headers?: Json | null
+          id?: string
+          integration_id?: string | null
+          organization_id?: string | null
+          payload: Json
+          processed_at?: string | null
+          source_ip?: string | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          event_name?: string
+          event_type?: string
+          headers?: Json | null
+          id?: string
+          integration_id?: string | null
+          organization_id?: string | null
+          payload?: Json
+          processed_at?: string | null
+          source_ip?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_events_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "connected_integrations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       workflow_execution_logs: {
         Row: {
