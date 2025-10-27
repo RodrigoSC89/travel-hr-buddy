@@ -5,6 +5,7 @@ import { Mic, MicOff, Volume2, VolumeX, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useVoiceRecognition } from "./hooks/useVoiceRecognition";
 import { useVoiceSynthesis } from "./hooks/useVoiceSynthesis";
+import { useVoiceLogging } from "./hooks/useVoiceLogging";
 import { ConversationHistory } from "./components/ConversationHistory";
 
 export default function VoiceAssistant() {
@@ -26,6 +27,13 @@ export default function VoiceAssistant() {
     isSupported: ttsSupported
   } = useVoiceSynthesis();
 
+  const {
+    currentConversationId,
+    startConversation,
+    endConversation,
+    logMessage
+  } = useVoiceLogging();
+
   useEffect(() => {
     if (!speechSupported) {
       toast.error("Seu navegador não suporta reconhecimento de voz", {
@@ -44,11 +52,22 @@ export default function VoiceAssistant() {
     const userMessage = { role: "user" as const, content: text, timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
 
+    // Log user message to database
+    await logMessage('user', text, {
+      transcript: text,
+      duration: 0
+    });
+
     // Simular resposta do assistente (integrar com OpenAI depois)
     const response = generateResponse(text);
     const assistantMessage = { role: "assistant" as const, content: response, timestamp: new Date() };
     
     setMessages(prev => [...prev, assistantMessage]);
+
+    // Log assistant message to database
+    await logMessage('assistant', response, {
+      duration: response.length * 50 // Estimate based on text length
+    });
     
     if (ttsSupported) {
       speak(response);
@@ -74,13 +93,23 @@ export default function VoiceAssistant() {
     return "Entendi. Posso ajudá-lo com informações sobre frotas, manutenções, relatórios e operações do Nautilus One.";
   };
 
-  const toggleAssistant = () => {
+  const toggleAssistant = async () => {
     if (isActive) {
       stopListening();
       cancelSpeech();
       setIsActive(false);
+      
+      // End conversation in database
+      await endConversation();
+      
+      toast.info("Assistente desativado", {
+        description: "Conversa encerrada e salva"
+      });
     } else {
       if (speechSupported) {
+        // Start new conversation in database
+        await startConversation("Conversa de Voz");
+        
         startListening();
         setIsActive(true);
         toast.success("Assistente ativado", {
