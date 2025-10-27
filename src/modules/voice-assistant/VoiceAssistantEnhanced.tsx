@@ -23,8 +23,6 @@ export const VoiceAssistantEnhanced: React.FC = () => {
   const [commandHistory, setCommandHistory] = useState<VoiceCommand[]>([]);
   const [sessionId] = useState(() => crypto.randomUUID());
   
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
   const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
@@ -327,7 +325,7 @@ export const VoiceAssistantEnhanced: React.FC = () => {
               "Help",
             ].map((cmd, idx) => (
               <Badge key={idx} variant="secondary" className="justify-start p-2">
-                "{cmd}"
+                {cmd}
               </Badge>
             ))}
           </div>

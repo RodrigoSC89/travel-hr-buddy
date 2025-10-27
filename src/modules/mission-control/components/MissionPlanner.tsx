@@ -26,6 +26,7 @@ interface MissionActivationResult {
   mission_name: string;
   activated_at: string;
   first_milestone_id?: string;
+  error?: string;
 }
 
 export const MissionPlanner: React.FC = () => {
