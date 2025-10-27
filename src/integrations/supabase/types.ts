@@ -189,6 +189,53 @@ export type Database = {
           },
         ]
       }
+      ai_documents: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_size: number | null
+          file_type: string
+          id: string
+          ocr_status: string
+          organization_id: string | null
+          storage_path: string
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_size?: number | null
+          file_type: string
+          id?: string
+          ocr_status?: string
+          organization_id?: string | null
+          storage_path: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_size?: number | null
+          file_type?: string
+          id?: string
+          ocr_status?: string
+          organization_id?: string | null
+          storage_path?: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_documents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_insights: {
         Row: {
           actionable: boolean
@@ -1391,6 +1438,106 @@ export type Database = {
             columns: ["workflow_id"]
             isOneToOne: false
             referencedRelation: "automation_workflows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      automation_logs: {
+        Row: {
+          actions_executed: Json | null
+          error_message: string | null
+          executed_at: string
+          execution_time_ms: number | null
+          id: string
+          rule_id: string | null
+          status: string
+          trigger_data: Json | null
+        }
+        Insert: {
+          actions_executed?: Json | null
+          error_message?: string | null
+          executed_at?: string
+          execution_time_ms?: number | null
+          id?: string
+          rule_id?: string | null
+          status: string
+          trigger_data?: Json | null
+        }
+        Update: {
+          actions_executed?: Json | null
+          error_message?: string | null
+          executed_at?: string
+          execution_time_ms?: number | null
+          id?: string
+          rule_id?: string | null
+          status?: string
+          trigger_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_logs_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "automation_rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      automation_rules: {
+        Row: {
+          actions: Json
+          conditions: Json | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          execution_count: number
+          id: string
+          is_active: boolean
+          last_executed_at: string | null
+          organization_id: string | null
+          rule_name: string
+          trigger_config: Json
+          trigger_type: string
+          updated_at: string
+        }
+        Insert: {
+          actions?: Json
+          conditions?: Json | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          execution_count?: number
+          id?: string
+          is_active?: boolean
+          last_executed_at?: string | null
+          organization_id?: string | null
+          rule_name: string
+          trigger_config?: Json
+          trigger_type: string
+          updated_at?: string
+        }
+        Update: {
+          actions?: Json
+          conditions?: Json | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          execution_count?: number
+          id?: string
+          is_active?: boolean
+          last_executed_at?: string | null
+          organization_id?: string | null
+          rule_name?: string
+          trigger_config?: Json
+          trigger_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -3716,6 +3863,44 @@ export type Database = {
         }
         Relationships: []
       }
+      extracted_data: {
+        Row: {
+          confidence_score: number | null
+          content: string | null
+          document_id: string | null
+          extracted_at: string
+          extraction_type: string
+          id: string
+          structured_data: Json | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          content?: string | null
+          document_id?: string | null
+          extracted_at?: string
+          extraction_type: string
+          id?: string
+          structured_data?: Json | null
+        }
+        Update: {
+          confidence_score?: number | null
+          content?: string | null
+          document_id?: string | null
+          extracted_at?: string
+          extraction_type?: string
+          id?: string
+          structured_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "extracted_data_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "ai_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feedback_events: {
         Row: {
           ai_decision_id: string | null
@@ -3921,6 +4106,71 @@ export type Database = {
           source?: string
         }
         Relationships: []
+      }
+      fuel_optimizations: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          destination: string
+          distance_nm: number
+          estimated_consumption: number
+          id: string
+          optimization_factors: Json | null
+          optimized_consumption: number | null
+          organization_id: string | null
+          origin: string
+          route_name: string
+          savings_percentage: number | null
+          status: string
+          updated_at: string
+          vessel_id: string | null
+          weather_conditions: Json | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          destination: string
+          distance_nm: number
+          estimated_consumption: number
+          id?: string
+          optimization_factors?: Json | null
+          optimized_consumption?: number | null
+          organization_id?: string | null
+          origin: string
+          route_name: string
+          savings_percentage?: number | null
+          status?: string
+          updated_at?: string
+          vessel_id?: string | null
+          weather_conditions?: Json | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          destination?: string
+          distance_nm?: number
+          estimated_consumption?: number
+          id?: string
+          optimization_factors?: Json | null
+          optimized_consumption?: number | null
+          organization_id?: string | null
+          origin?: string
+          route_name?: string
+          savings_percentage?: number | null
+          status?: string
+          updated_at?: string
+          vessel_id?: string | null
+          weather_conditions?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fuel_optimizations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       global_knowledge: {
         Row: {
@@ -4477,6 +4727,140 @@ export type Database = {
           version?: number | null
         }
         Relationships: []
+      }
+      logistics_inventory: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          item_code: string
+          item_name: string
+          last_restocked_at: string | null
+          location: string | null
+          min_stock_level: number
+          organization_id: string | null
+          quantity: number
+          supplier: string | null
+          unit: string
+          unit_price: number | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          item_code: string
+          item_name: string
+          last_restocked_at?: string | null
+          location?: string | null
+          min_stock_level?: number
+          organization_id?: string | null
+          quantity?: number
+          supplier?: string | null
+          unit: string
+          unit_price?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          item_code?: string
+          item_name?: string
+          last_restocked_at?: string | null
+          location?: string | null
+          min_stock_level?: number
+          organization_id?: string | null
+          quantity?: number
+          supplier?: string | null
+          unit?: string
+          unit_price?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logistics_inventory_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      logistics_supply_orders: {
+        Row: {
+          actual_delivery_date: string | null
+          approved_by: string | null
+          created_at: string
+          delivery_address: string | null
+          estimated_delivery_date: string | null
+          failure_reason: string | null
+          id: string
+          item_id: string | null
+          notes: string | null
+          order_number: string
+          organization_id: string | null
+          priority: string
+          quantity: number
+          requested_by: string | null
+          status: string
+          supplier: string | null
+          updated_at: string
+        }
+        Insert: {
+          actual_delivery_date?: string | null
+          approved_by?: string | null
+          created_at?: string
+          delivery_address?: string | null
+          estimated_delivery_date?: string | null
+          failure_reason?: string | null
+          id?: string
+          item_id?: string | null
+          notes?: string | null
+          order_number: string
+          organization_id?: string | null
+          priority?: string
+          quantity: number
+          requested_by?: string | null
+          status?: string
+          supplier?: string | null
+          updated_at?: string
+        }
+        Update: {
+          actual_delivery_date?: string | null
+          approved_by?: string | null
+          created_at?: string
+          delivery_address?: string | null
+          estimated_delivery_date?: string | null
+          failure_reason?: string | null
+          id?: string
+          item_id?: string | null
+          notes?: string | null
+          order_number?: string
+          organization_id?: string | null
+          priority?: string
+          quantity?: number
+          requested_by?: string | null
+          status?: string
+          supplier?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logistics_supply_orders_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "logistics_inventory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "logistics_supply_orders_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       logs: {
         Row: {
@@ -6635,6 +7019,107 @@ export type Database = {
             columns: ["manager_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_dependencies: {
+        Row: {
+          created_at: string
+          dependency_type: string
+          depends_on_task_id: string | null
+          id: string
+          task_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          dependency_type?: string
+          depends_on_task_id?: string | null
+          id?: string
+          task_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          dependency_type?: string
+          depends_on_task_id?: string | null
+          id?: string
+          task_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_dependencies_depends_on_task_id_fkey"
+            columns: ["depends_on_task_id"]
+            isOneToOne: false
+            referencedRelation: "project_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_dependencies_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "project_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_tasks: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          end_date: string
+          id: string
+          organization_id: string | null
+          priority: string
+          progress: number
+          project_id: string
+          project_name: string
+          start_date: string
+          status: string
+          task_name: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_date: string
+          id?: string
+          organization_id?: string | null
+          priority?: string
+          progress?: number
+          project_id: string
+          project_name: string
+          start_date: string
+          status?: string
+          task_name: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_date?: string
+          id?: string
+          organization_id?: string | null
+          priority?: string
+          progress?: number
+          project_id?: string
+          project_name?: string
+          start_date?: string
+          status?: string
+          task_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_tasks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]

@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Package, Truck, Users, BarChart3 } from "lucide-react";
 import { InventoryManagement } from "./inventory-management";
 import { ShipmentTracking } from "./shipment-tracking";
+import { SupplyOrdersManagement } from "./supply-orders-management";
 
 const LogisticsHubDashboard = () => {
   return (
@@ -21,9 +22,9 @@ const LogisticsHubDashboard = () => {
             <Package className="h-4 w-4 mr-2" />
             Inventory
           </TabsTrigger>
-          <TabsTrigger value="shipments">
+          <TabsTrigger value="orders">
             <Truck className="h-4 w-4 mr-2" />
-            Shipments
+            Supply Orders
           </TabsTrigger>
           <TabsTrigger value="suppliers">
             <Users className="h-4 w-4 mr-2" />
@@ -39,8 +40,8 @@ const LogisticsHubDashboard = () => {
           <InventoryManagement />
         </TabsContent>
 
-        <TabsContent value="shipments" className="space-y-4">
-          <ShipmentTracking />
+        <TabsContent value="orders" className="space-y-4">
+          <SupplyOrdersManagement />
         </TabsContent>
 
         <TabsContent value="suppliers" className="space-y-4">

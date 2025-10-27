@@ -40,6 +40,7 @@ const Intelligence = React.lazy(() => import("@/pages/Intelligence"));
 const Maritime = React.lazy(() => import("@/pages/Maritime"));
 const MaritimeSupremo = React.lazy(() => import("@/pages/MaritimeSupremo"));
 const NautilusOne = React.lazy(() => import("@/pages/NautilusOne"));
+const FuelOptimizerPage = React.lazy(() => import("@/pages/FuelOptimizerPage"));
 const ForecastPage = React.lazy(() => import("@/pages/Forecast"));
 const ForecastGlobal = React.lazy(() => import("@/pages/ForecastGlobal"));
 const MaintenanceDashboard = React.lazy(() => import("@/pages/Maintenance"));
