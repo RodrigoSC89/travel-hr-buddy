@@ -55,6 +55,9 @@ const WeatherDashboard = React.lazy(() => import("@/pages/WeatherDashboard"));
 const AIDocuments = React.lazy(() => import("@/pages/documents/ai"));
 const FuelOptimizer = React.lazy(() => import("@/pages/FuelOptimizer"));
 
+// 🔹 PATCH 331-335 - SGSO Audits, Vault AI, User Management, Logistics
+const SGSOAudits = React.lazy(() => import("@/pages/admin/sgso/audits"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -93,6 +96,9 @@ export default function AppRouter() {
         <Route path="/weather-dashboard" element={<WeatherDashboard />} />
         <Route path="/documents/ai" element={<AIDocuments />} />
         <Route path="/fuel-optimizer" element={<FuelOptimizer />} />
+        
+        {/* PATCH 331-335 Routes */}
+        <Route path="/admin/sgso/audits" element={<SGSOAudits />} />
       </Routes>
     </Router>
   );
