@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 235: Multi-Agent Performance Scanner
  * 

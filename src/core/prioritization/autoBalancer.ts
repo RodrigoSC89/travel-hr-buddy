@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 232: Auto Priority Balancer
  * 

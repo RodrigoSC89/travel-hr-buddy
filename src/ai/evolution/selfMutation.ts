@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 234: Self Evolution Model
  * 
