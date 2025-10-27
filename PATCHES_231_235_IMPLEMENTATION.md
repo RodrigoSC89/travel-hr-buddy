@@ -175,12 +175,17 @@ if (candidates.length > 0) {
 ### PATCH 235: Multi-Agent Performance Scanner 📊
 **File**: `/src/ai/monitoring/performanceScanner.ts`
 
-**Purpose**: Continuous performance monitoring across multiple AI agents with automatic ranking, failure detection, and agent switching.
+**Purpose**: Continuous performance monitoring across multiple AI agents and copilots with automatic ranking, failure detection, and agent switching.
 
 **Key Features**:
 - **Real-time Monitoring**: Tracks success rates, response times, accuracy, and resource usage
 - **Agent Ranking**: Generates performance rankings with category scores
-- **Failure Detection**: Identifies 5 failure types (high error rate, slow response, low accuracy, unavailable, resource exhaustion)
+- **Failure Detection**: Identifies 5 failure types:
+  1. High error rate
+  2. Slow response time
+  3. Low accuracy
+  4. Unavailability
+  5. Resource exhaustion
 - **Automatic Switching**: Replaces failing agents with better alternatives
 - **Historical Tracking**: Complete performance history in `agent_performance_metrics` table
 
@@ -402,7 +407,19 @@ DROP FUNCTION IF EXISTS refresh_agent_rankings CASCADE;
 ### Common Issues
 
 **Issue**: TypeScript errors with crypto module
-**Solution**: The `createHash` function is imported correctly. Ensure Node.js types are installed.
+**Solution**: The system uses Web Crypto API which works in both browser and Node.js environments:
+```typescript
+// Hash computation in collectiveMemory.ts
+private async computeHash(category: string, key: string, value: any, version: number): Promise<string> {
+  const content = JSON.stringify({ category, key, value, version });
+  const encoder = new TextEncoder();
+  const data = encoder.encode(content);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+```
+No additional dependencies required - uses native Web Crypto API.
 
 **Issue**: Supabase connection errors
 **Solution**: Verify `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in environment variables.

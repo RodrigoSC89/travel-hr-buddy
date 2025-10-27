@@ -6,7 +6,6 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
-import { createHash } from 'crypto';
 
 export interface KnowledgeEntry {
   id: string;
@@ -72,13 +71,14 @@ export class CollectiveMemoryHub {
   ): Promise<KnowledgeEntry> {
     const existingEntry = await this.get(category, key);
     const version = existingEntry ? existingEntry.version + 1 : 1;
+    const hash = await this.computeHash(category, key, value, version);
 
     const entry: Omit<KnowledgeEntry, 'id' | 'createdAt' | 'updatedAt'> = {
       category,
       key,
       value,
       version,
-      hash: this.computeHash(category, key, value, version),
+      hash,
       sourceInstanceId: this.instanceId,
       confidence: options.confidence ?? 1.0,
       tags: options.tags ?? [],
@@ -301,11 +301,16 @@ export class CollectiveMemoryHub {
   }
 
   /**
-   * Compute hash for knowledge versioning
+   * Compute hash for knowledge versioning using Web Crypto API
    */
-  private computeHash(category: string, key: string, value: any, version: number): string {
+  private async computeHash(category: string, key: string, value: any, version: number): Promise<string> {
     const content = JSON.stringify({ category, key, value, version });
-    return createHash('sha256').update(content).digest('hex');
+    const encoder = new TextEncoder();
+    const data = encoder.encode(content);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
   }
 
   /**
