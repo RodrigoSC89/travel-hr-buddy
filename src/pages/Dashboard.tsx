@@ -1,6 +1,6 @@
 import React from "react";
-import { ExecutiveDashboard } from "@/components/dashboard/executive-dashboard";
+import { ComprehensiveExecutiveDashboard } from "@/components/dashboard/comprehensive-executive-dashboard";
 
 export default function Dashboard() {
-  return <ExecutiveDashboard />;
+  return <ComprehensiveExecutiveDashboard />;
 }
