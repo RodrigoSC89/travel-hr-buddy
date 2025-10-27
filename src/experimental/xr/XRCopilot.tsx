@@ -194,7 +194,11 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
       // Generate adaptive response
       const response = await contextualAdapter.adaptResponse(intent, {
         visual: input.visual || visualContext || undefined,
-        gestural: input.gestural,
+        gestural: input.gestural ? {
+          type: input.gestural.type,
+          confidence: input.gestural.confidence,
+          data: input.gestural
+        } : undefined,
         currentEnvironment: 'xr',
       });
 

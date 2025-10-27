@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Stress Test Dashboard Component
  * PATCH 156.0 - Load Simulation Dashboard

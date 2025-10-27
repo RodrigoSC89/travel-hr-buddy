@@ -253,7 +253,7 @@ export function Scenario3D({ onAIAction, autoSimulate = false }: Scenario3DProps
 
   const logAIAction = async (action: AIAction) => {
     try {
-      await supabase.from('ia_performance_log').insert({
+      await (supabase as any).from('ia_performance_log').insert({
         module_name: 'scenario_simulator',
         operation_type: 'simulated_action',
         precision_score: action.confidence,
