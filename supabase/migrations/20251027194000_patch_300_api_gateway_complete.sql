@@ -250,7 +250,7 @@ DECLARE
   v_allowed boolean;
 BEGIN
   -- Get API key tier
-  SELECT rate_limit_tier INTO v_key_tier
+  SELECT tier INTO v_key_tier
   FROM api_keys
   WHERE id = p_api_key_id;
 
@@ -335,32 +335,9 @@ BEGIN
   )
   RETURNING id INTO v_log_id;
 
-  -- Update API analytics
-  INSERT INTO api_analytics (
-    api_key_id,
-    endpoint,
-    total_requests,
-    successful_requests,
-    failed_requests,
-    avg_response_time_ms,
-    period_start,
-    period_end
-  ) VALUES (
-    p_api_key_id,
-    p_route_path,
-    1,
-    CASE WHEN p_status_code < 400 THEN 1 ELSE 0 END,
-    CASE WHEN p_status_code >= 400 THEN 1 ELSE 0 END,
-    p_response_time_ms,
-    date_trunc('hour', now()),
-    date_trunc('hour', now()) + interval '1 hour'
-  )
-  ON CONFLICT (api_key_id, endpoint, period_start, period_end)
-  DO UPDATE SET
-    total_requests = api_analytics.total_requests + 1,
-    successful_requests = api_analytics.successful_requests + CASE WHEN p_status_code < 400 THEN 1 ELSE 0 END,
-    failed_requests = api_analytics.failed_requests + CASE WHEN p_status_code >= 400 THEN 1 ELSE 0 END,
-    avg_response_time_ms = (api_analytics.avg_response_time_ms * api_analytics.total_requests + p_response_time_ms) / (api_analytics.total_requests + 1);
+  -- Update API analytics (if organization_id is available)
+  -- Note: Skipping analytics update for now as we don't have organization_id in this context
+  -- This should be handled by a separate analytics aggregation job
 
   RETURN v_log_id;
 END;
