@@ -249,7 +249,7 @@ export class WeatherService {
         location: {
           name: data.location_name,
           lat: data.location.lat,
-          lon: data.location.lng,
+          lon: data.location.lon,
         },
         current: {
           temp: data.temperature,
@@ -268,8 +268,8 @@ export class WeatherService {
             },
           ],
         },
-        forecast: [],
-        alerts: [],
+        forecast: [], // Forecast not cached - will need fresh fetch
+        alerts: [], // Alerts not cached - will need fresh fetch
       };
     } catch (error) {
       logger.error('Error getting cached weather:', error);

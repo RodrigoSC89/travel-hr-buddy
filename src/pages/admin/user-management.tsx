@@ -21,6 +21,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { User, Shield, Mail, Search, UserX, Key } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 interface UserProfile {
   id: string;
@@ -55,7 +56,7 @@ export default function UserManagementPage() {
       if (error) throw error;
       setUsers(data || []);
     } catch (error: any) {
-      console.error('Error loading users:', error);
+      logger.error('Error loading users:', error);
       toast({
         title: 'Error',
         description: 'Failed to load users',
@@ -84,7 +85,7 @@ export default function UserManagementPage() {
 
       loadUsers();
     } catch (error: any) {
-      console.error('Error deactivating user:', error);
+      logger.error('Error deactivating user:', error);
       toast({
         title: 'Error',
         description: 'Failed to deactivate user',
@@ -106,7 +107,7 @@ export default function UserManagementPage() {
         description: 'Password reset email sent',
       });
     } catch (error: any) {
-      console.error('Error resetting password:', error);
+      logger.error('Error resetting password:', error);
       toast({
         title: 'Error',
         description: 'Failed to send reset email',
@@ -131,7 +132,7 @@ export default function UserManagementPage() {
 
       loadUsers();
     } catch (error: any) {
-      console.error('Error updating role:', error);
+      logger.error('Error updating role:', error);
       toast({
         title: 'Error',
         description: 'Failed to update role',

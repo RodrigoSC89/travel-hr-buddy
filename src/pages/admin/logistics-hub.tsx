@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, Package, Truck, Users, TrendingUp } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logger';
 import {
   Table,
   TableBody,
@@ -63,7 +64,7 @@ export default function LogisticsHubPage() {
         suppliers: 0, // Would need suppliers table query
       });
     } catch (error: any) {
-      console.error('Error loading data:', error);
+      logger.error('Error loading data:', error);
       toast({
         title: 'Error',
         description: 'Failed to load logistics data',
