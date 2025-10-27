@@ -139,15 +139,15 @@ docs/
 
 ```json
 {
-  "three": "latest",
-  "@react-three/fiber": "^9.x",
-  "@react-three/drei": "latest",
-  "webxr-polyfill": "latest",
-  "@tensorflow/tfjs": "latest",
-  "@tensorflow-models/coco-ssd": "latest",
+  "three": "^0.180.0",
+  "@react-three/fiber": "^9.4.0",
+  "@react-three/drei": "^10.7.6",
+  "webxr-polyfill": "^2.0.3",
+  "@tensorflow/tfjs": "^4.22.0",
+  "@tensorflow-models/coco-ssd": "^2.2.3",
   "tesseract.js": "^6.0.1",
-  "@mediapipe/hands": "latest",
-  "@mediapipe/camera_utils": "latest"
+  "@mediapipe/hands": "^0.4.1675469240",
+  "@mediapipe/camera_utils": "^0.3.1675466862"
 }
 ```
 
@@ -380,7 +380,7 @@ The system is ready for user acceptance testing and can be deployed to staging f
 
 ---
 
-**Implementation Date**: October 27, 2025  
+**Implementation Date**: October 27, 2024  
 **Build Status**: ✅ Success  
 **Type Check**: ✅ Pass  
 **Test Coverage**: Ready for implementation  
