@@ -76,7 +76,14 @@ export default function TemplatesPanel() {
 
   const extractVariables = (content: string): string[] => {
     const regex = /\{\{(\w+)\}\}/g;
-    const matches = content.match(regex) || [];
+    const matches: string[] = [];
+    let match;
+    
+    while ((match = regex.exec(content)) !== null) {
+      // match[1] contains the captured group (variable name without braces)
+      matches.push(`{{${match[1]}}}`);
+    }
+    
     return [...new Set(matches)]; // Remove duplicates
   };
 
@@ -141,9 +148,30 @@ export default function TemplatesPanel() {
     if (!previewTemplate) return "";
     
     let content = previewTemplate.content;
+    
+    // Sanitize content to prevent XSS
+    // Replace script tags and dangerous attributes
+    content = content
+      .replace(/<script[^>]*>.*?<\/script>/gi, '')
+      .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
+      .replace(/javascript:/gi, '');
+    
+    // Replace variables with values
     Object.entries(previewVariables).forEach(([key, value]) => {
-      content = content.replace(new RegExp(`\\{\\{${key}\\}\\}`, "g"), value || `[${key}]`);
+      // Escape HTML in user input to prevent XSS
+      const escapedValue = value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+      
+      content = content.replace(
+        new RegExp(`\\{\\{${key}\\}\\}`, "g"), 
+        escapedValue || `[${key}]`
+      );
     });
+    
     return content;
   };
 

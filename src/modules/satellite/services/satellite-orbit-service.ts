@@ -124,40 +124,73 @@ class SatelliteOrbitService {
     const degreesPerMinute = 360 / satellite.orbitalPeriod;
     const degreesElapsed = degreesPerMinute * (timeElapsed / 60000);
     
+    // Keep longitude within -180 to 180 range
+    let newLongitude = (satellite.longitude + degreesElapsed) % 360;
+    if (newLongitude > 180) newLongitude -= 360;
+    if (newLongitude < -180) newLongitude += 360;
+    
+    // Keep latitude within valid range (-90 to 90)
+    const latitudeVariation = Math.sin(degreesElapsed * Math.PI / 180) * satellite.inclination / 10;
+    let newLatitude = satellite.latitude + latitudeVariation;
+    newLatitude = Math.max(-90, Math.min(90, newLatitude));
+    
     return {
       ...satellite,
-      longitude: (satellite.longitude + degreesElapsed) % 360,
-      latitude: satellite.latitude + (Math.sin(degreesElapsed * Math.PI / 180) * 10),
+      longitude: newLongitude,
+      latitude: newLatitude,
       lastUpdated: new Date()
     };
   }
 
   // Helper methods to extract data from TLE
   private extractAltitudeFromTLE(tle: TLEData): number {
-    // Extract mean motion from line 2 and calculate altitude
-    // Simplified - typically 600-800 km for LEO, 35786 km for GEO
-    const line2Parts = tle.line2.split(/\s+/);
-    const meanMotion = parseFloat(line2Parts[7]);
-    
-    if (meanMotion > 10) return 780; // LEO
-    return 35786; // GEO
+    // TLE Line 2 has mean motion at columns 52-63
+    // Simplified extraction - typically 600-800 km for LEO, 35786 km for GEO
+    try {
+      const line2 = tle.line2;
+      // Mean motion is in revolutions per day at positions 52-63
+      const meanMotionStr = line2.substring(52, 63).trim();
+      const meanMotion = parseFloat(meanMotionStr);
+      
+      if (isNaN(meanMotion)) return 780; // Default LEO
+      if (meanMotion > 10) return 780; // LEO
+      return 35786; // GEO
+    } catch {
+      return 780; // Default to LEO
+    }
   }
 
   private extractOrbitalPeriod(tle: TLEData): number {
-    const line2Parts = tle.line2.split(/\s+/);
-    const meanMotion = parseFloat(line2Parts[7]);
-    return 1440 / meanMotion; // Convert mean motion to period in minutes
+    try {
+      const line2 = tle.line2;
+      const meanMotionStr = line2.substring(52, 63).trim();
+      const meanMotion = parseFloat(meanMotionStr);
+      return 1440 / meanMotion; // Convert mean motion to period in minutes
+    } catch {
+      return 90; // Default ~90 minutes
+    }
   }
 
   private extractInclination(tle: TLEData): number {
-    const line2Parts = tle.line2.split(/\s+/);
-    return parseFloat(line2Parts[2]);
+    try {
+      const line2 = tle.line2;
+      // Inclination is at columns 8-16
+      const inclinationStr = line2.substring(8, 16).trim();
+      return parseFloat(inclinationStr);
+    } catch {
+      return 51.6; // Default ISS-like inclination
+    }
   }
 
   private extractEccentricity(tle: TLEData): number {
-    const line2Parts = tle.line2.split(/\s+/);
-    const eccString = line2Parts[4];
-    return parseFloat(`0.${eccString}`);
+    try {
+      const line2 = tle.line2;
+      // Eccentricity is at columns 26-33 (decimal point assumed)
+      const eccString = line2.substring(26, 33).trim();
+      return parseFloat(`0.${eccString}`);
+    } catch {
+      return 0.0001; // Near-circular orbit
+    }
   }
 
   private calculateVelocity(tle: TLEData): number {
@@ -168,11 +201,15 @@ class SatelliteOrbitService {
   }
 
   private simulateLatitude(): number {
-    return (Math.random() - 0.5) * 180;
+    // Realistic satellite latitudes based on common orbital inclinations
+    // Most satellites are in LEO with inclinations between 0 and ~98 degrees
+    const inclination = Math.random() * 98; // 0 to 98 degrees
+    return (Math.random() - 0.5) * inclination;
   }
 
   private simulateLongitude(): number {
-    return (Math.random() - 0.5) * 360;
+    // Longitude can be anywhere from -180 to 180
+    return (Math.random() * 360) - 180;
   }
 
   /**
