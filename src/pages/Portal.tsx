@@ -1,6 +1,6 @@
 import React from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
-import { EmployeePortal } from "@/modules/hr/employee-portal";
+import EmployeePortal from "@/modules/hr/employee-portal";
 
 const Portal: React.FC = () => {
   return (

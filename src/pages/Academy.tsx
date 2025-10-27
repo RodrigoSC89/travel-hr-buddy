@@ -1,5 +1,5 @@
 import React from "react";
-import { TrainingAcademy } from "@/modules/hr/training-academy";
+import TrainingAcademy from "@/modules/hr/training-academy";
 
 const Academy = () => {
   return <TrainingAcademy />;
