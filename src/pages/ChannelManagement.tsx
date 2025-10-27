@@ -1,8 +1,8 @@
 import React from "react";
-import { ChannelManagerEnhanced } from "@/components/communication/channel-manager-enhanced";
+import ChannelManagerHub from "@/components/channel-manager/ChannelManagerHub";
 
 const ChannelManagement = () => {
-  return <ChannelManagerEnhanced />;
+  return <ChannelManagerHub />;
 };
 
 export default ChannelManagement;

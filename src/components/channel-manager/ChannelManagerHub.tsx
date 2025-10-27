@@ -140,13 +140,13 @@ export default function ChannelManagerHub() {
 
       if (error) throw error;
 
-      // Log status change
-      await supabase.from("channel_status_log").insert({
-        channel_id: channelId,
-        status: !isActive ? "online" : "offline",
-        message: `Canal ${!isActive ? "ativado" : "desativado"} manualmente`,
-        timestamp: new Date().toISOString(),
-      } as any);
+      // Log status change (table not yet created)
+      // await supabase.from("channel_status_log").insert({
+      //   channel_id: channelId,
+      //   status: !isActive ? "online" : "offline",
+      //   message: `Canal ${!isActive ? "ativado" : "desativado"} manualmente`,
+      //   timestamp: new Date().toISOString(),
+      // } as any);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["communication-channels"] });

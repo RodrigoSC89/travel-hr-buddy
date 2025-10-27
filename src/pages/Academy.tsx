@@ -1,8 +1,8 @@
 import React from "react";
-import { TrainingAcademyComplete } from "@/components/training/training-academy-complete";
+import { TrainingAcademy } from "@/modules/hr/training-academy";
 
 const Academy = () => {
-  return <TrainingAcademyComplete />;
+  return <TrainingAcademy />;
 };
 
 export default Academy;
