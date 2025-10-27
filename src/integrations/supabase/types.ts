@@ -14,6 +14,124 @@ export type Database = {
   }
   public: {
     Tables: {
+      academy_courses: {
+        Row: {
+          assessments: Json | null
+          certificate_template: string | null
+          course_description: string | null
+          course_name: string
+          created_at: string | null
+          duration_hours: number | null
+          id: string
+          instructor_id: string | null
+          is_published: boolean | null
+          metadata: Json | null
+          modules: Json | null
+          organization_id: string | null
+          passing_score: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          assessments?: Json | null
+          certificate_template?: string | null
+          course_description?: string | null
+          course_name: string
+          created_at?: string | null
+          duration_hours?: number | null
+          id?: string
+          instructor_id?: string | null
+          is_published?: boolean | null
+          metadata?: Json | null
+          modules?: Json | null
+          organization_id?: string | null
+          passing_score?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          assessments?: Json | null
+          certificate_template?: string | null
+          course_description?: string | null
+          course_name?: string
+          created_at?: string | null
+          duration_hours?: number | null
+          id?: string
+          instructor_id?: string | null
+          is_published?: boolean | null
+          metadata?: Json | null
+          modules?: Json | null
+          organization_id?: string | null
+          passing_score?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_courses_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_progress: {
+        Row: {
+          assessment_scores: Json | null
+          certificate_issued: boolean | null
+          completed_at: string | null
+          completed_modules: number[] | null
+          course_id: string | null
+          created_at: string | null
+          current_module: number | null
+          id: string
+          metadata: Json | null
+          progress_percent: number | null
+          started_at: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          assessment_scores?: Json | null
+          certificate_issued?: boolean | null
+          completed_at?: string | null
+          completed_modules?: number[] | null
+          course_id?: string | null
+          created_at?: string | null
+          current_module?: number | null
+          id?: string
+          metadata?: Json | null
+          progress_percent?: number | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          assessment_scores?: Json | null
+          certificate_issued?: boolean | null
+          completed_at?: string | null
+          completed_modules?: number[] | null
+          course_id?: string | null
+          created_at?: string | null
+          current_module?: number | null
+          id?: string
+          metadata?: Json | null
+          progress_percent?: number | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_progress_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       access_logs: {
         Row: {
           action: string
@@ -1769,6 +1887,50 @@ export type Database = {
           },
         ]
       }
+      channel_messages: {
+        Row: {
+          channel_id: string | null
+          created_at: string | null
+          id: string
+          is_urgent: boolean | null
+          message_content: string
+          message_type: string | null
+          metadata: Json | null
+          read_by: string[] | null
+          sender_id: string | null
+        }
+        Insert: {
+          channel_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_urgent?: boolean | null
+          message_content: string
+          message_type?: string | null
+          metadata?: Json | null
+          read_by?: string[] | null
+          sender_id?: string | null
+        }
+        Update: {
+          channel_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_urgent?: boolean | null
+          message_content?: string
+          message_type?: string | null
+          metadata?: Json | null
+          read_by?: string[] | null
+          sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_messages_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "communication_channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       checklist_ai_analysis: {
         Row: {
           analysis_data: Json
@@ -3090,6 +3252,60 @@ export type Database = {
           sleep_quality?: number | null
           stress_level?: number | null
           timestamp?: string | null
+        }
+        Relationships: []
+      }
+      crew_health_metrics: {
+        Row: {
+          anomaly_detected: boolean | null
+          anomaly_type: string | null
+          blood_pressure: string | null
+          created_at: string | null
+          crew_member_id: string | null
+          fatigue_level: number | null
+          heart_rate: number | null
+          id: string
+          metadata: Json | null
+          metric_date: string | null
+          mood_score: number | null
+          notes: string | null
+          sleep_hours: number | null
+          stress_level: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          anomaly_detected?: boolean | null
+          anomaly_type?: string | null
+          blood_pressure?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          fatigue_level?: number | null
+          heart_rate?: number | null
+          id?: string
+          metadata?: Json | null
+          metric_date?: string | null
+          mood_score?: number | null
+          notes?: string | null
+          sleep_hours?: number | null
+          stress_level?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          anomaly_detected?: boolean | null
+          anomaly_type?: string | null
+          blood_pressure?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          fatigue_level?: number | null
+          heart_rate?: number | null
+          id?: string
+          metadata?: Json | null
+          metric_date?: string | null
+          mood_score?: number | null
+          notes?: string | null
+          sleep_hours?: number | null
+          stress_level?: number | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -4642,6 +4858,65 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      integrations_registry: {
+        Row: {
+          config: Json | null
+          created_at: string | null
+          id: string
+          integration_name: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          metadata: Json | null
+          oauth_connected: boolean | null
+          organization_id: string | null
+          provider: string
+          updated_at: string | null
+          user_id: string | null
+          webhook_secret: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          config?: Json | null
+          created_at?: string | null
+          id?: string
+          integration_name: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          metadata?: Json | null
+          oauth_connected?: boolean | null
+          organization_id?: string | null
+          provider: string
+          updated_at?: string | null
+          user_id?: string | null
+          webhook_secret?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          config?: Json | null
+          created_at?: string | null
+          id?: string
+          integration_name?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          metadata?: Json | null
+          oauth_connected?: boolean | null
+          organization_id?: string | null
+          provider?: string
+          updated_at?: string | null
+          user_id?: string | null
+          webhook_secret?: string | null
+          webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integrations_registry_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       intelligent_notifications: {
         Row: {
@@ -8053,6 +8328,131 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      sgso_actions: {
+        Row: {
+          action_description: string | null
+          action_title: string
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string | null
+          due_date: string | null
+          evidence_url: string | null
+          id: string
+          metadata: Json | null
+          plan_id: string | null
+          priority: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          action_description?: string | null
+          action_title: string
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          evidence_url?: string | null
+          id?: string
+          metadata?: Json | null
+          plan_id?: string | null
+          priority?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          action_description?: string | null
+          action_title?: string
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          evidence_url?: string | null
+          id?: string
+          metadata?: Json | null
+          plan_id?: string | null
+          priority?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sgso_actions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "sgso_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sgso_plans: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          content: Json | null
+          created_at: string | null
+          created_by: string | null
+          effective_date: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          plan_name: string
+          plan_version: string | null
+          review_date: string | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          content?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          effective_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          plan_name: string
+          plan_version?: string | null
+          review_date?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          content?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          effective_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          plan_name?: string
+          plan_version?: string | null
+          review_date?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sgso_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sgso_plans_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       shared_alerts: {
         Row: {

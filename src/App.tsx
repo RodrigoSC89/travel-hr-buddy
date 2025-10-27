@@ -139,6 +139,10 @@ const PEODPAuditPage = React.lazy(() => import("@/pages/admin/peodp-audit"));
 const VaultAI = React.lazy(() => import("@/modules/vault_ai/pages/VaultAIPage"));
 const Patch66Dashboard = React.lazy(() => import("@/pages/Patch66Dashboard"));
 const CrewDossierPage = React.lazy(() => import("@/pages/CrewDossier"));
+const ChannelManagerHub = React.lazy(() => import("@/components/channel-manager/ChannelManagerHub"));
+const TrainingAcademyHub = React.lazy(() => import("@/components/academy/TrainingAcademy"));
+const CrewWellbeingNew = React.lazy(() => import("@/components/crew-wellbeing/CrewWellbeingHub"));
+const SGSOManagerPage = React.lazy(() => import("@/components/sgso/SGSOManager"));
 
 // New Module Imports - PATCH 66.0 Updated Paths
 const CrewModule = React.lazy(() => import("@/modules/operations/crew"));
@@ -328,6 +332,10 @@ function App() {
                       <Route path="/voice" element={<Voice />} />
                       <Route path="/portal" element={<Portal />} />
                       <Route path="/crew-dossier" element={<CrewDossierPage />} />
+                      <Route path="/channel-manager-new" element={<ChannelManagerHub />} />
+                      <Route path="/academy-new" element={<TrainingAcademyHub />} />
+                      <Route path="/crew-wellbeing-new" element={<CrewWellbeingNew />} />
+                      <Route path="/sgso-manager" element={<SGSOManagerPage />} />
                       <Route path="/ar" element={<AR />} />
                       <Route path="/iot" element={<IoT />} />
                       <Route path="/blockchain" element={<Blockchain />} />
