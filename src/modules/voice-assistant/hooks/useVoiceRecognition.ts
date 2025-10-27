@@ -36,11 +36,12 @@ interface ISpeechRecognition extends EventTarget {
   onend: ((event: Event) => void) | null;
 }
 
-export function useVoiceRecognition() {
+export function useVoiceRecognition(language: string = "pt-BR") {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [recognition, setRecognition] = useState<ISpeechRecognition | null>(null);
   const [isSupported, setIsSupported] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState(language);
 
   useEffect(() => {
     const win: any = window;
@@ -55,7 +56,7 @@ export function useVoiceRecognition() {
     const recognitionInstance = new SpeechRecognition();
     recognitionInstance.continuous = true;
     recognitionInstance.interimResults = false;
-    recognitionInstance.lang = "pt-BR";
+    recognitionInstance.lang = currentLanguage;
 
     recognitionInstance.onresult = (event: SpeechRecognitionEvent) => {
       const lastResult = event.results[event.results.length - 1];
@@ -81,7 +82,7 @@ export function useVoiceRecognition() {
         recognitionInstance.abort();
       }
     };
-  }, []);
+  }, [currentLanguage]);
 
   const startListening = useCallback(() => {
     if (recognition && !isListening) {
@@ -102,11 +103,20 @@ export function useVoiceRecognition() {
     }
   }, [recognition, isListening]);
 
+  const changeLanguage = useCallback((newLang: string) => {
+    setCurrentLanguage(newLang);
+    if (recognition) {
+      recognition.lang = newLang;
+    }
+  }, [recognition]);
+
   return {
     isListening,
     transcript,
     startListening,
     stopListening,
-    isSupported
+    isSupported,
+    currentLanguage,
+    changeLanguage
   };
 }
