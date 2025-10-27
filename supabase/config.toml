@@ -49,6 +49,9 @@ verify_jwt = true
 [functions.nautilus-llm]
 verify_jwt = true
 
+[functions.logEvent]
+verify_jwt = false
+
 [functions.api-gateway]
 verify_jwt = false
 
