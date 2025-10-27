@@ -1,15 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Satellite, Signal, MapPin, Activity, Ship } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Satellite, Signal, MapPin, Activity, Ship, RefreshCw } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { SatelliteStatus } from "./components/SatelliteStatus";
 import { CoverageMap } from "./components/CoverageMap";
 import { AISMarker, AISMapOverlay } from "./components/AISMarker";
 import { aisClient, type VesselPosition } from "@/lib/aisClient";
+import { satelliteOrbitService, type SatelliteOrbitData } from "./services/satellite-orbit-service";
+import { toast } from "sonner";
 
 const SatelliteTracker = () => {
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
   const [isLoadingVessels, setIsLoadingVessels] = useState(false);
+  const [satelliteOrbits, setSatelliteOrbits] = useState<SatelliteOrbitData[]>([]);
+  const [isLoadingSatellites, setIsLoadingSatellites] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+
+  // Fetch satellite orbit data
+  const fetchSatelliteOrbits = async () => {
+    setIsLoadingSatellites(true);
+    try {
+      const orbits = await satelliteOrbitService.getAllSatellitePositions();
+      setSatelliteOrbits(orbits);
+      setLastUpdate(new Date());
+      toast.success("Satellite positions updated", {
+        description: `${orbits.length} satellites tracked`
+      });
+    } catch (error) {
+      console.error('Error fetching satellite orbits:', error);
+      toast.error("Failed to update satellite positions");
+    } finally {
+      setIsLoadingSatellites(false);
+    }
+  };
 
   // Fetch AIS data on component mount
   useEffect(() => {
@@ -32,9 +57,16 @@ const SatelliteTracker = () => {
     };
 
     fetchVessels();
+    fetchSatelliteOrbits();
+    
     // Refresh every 5 minutes
-    const interval = setInterval(fetchVessels, 5 * 60 * 1000);
-    return () => clearInterval(interval);
+    const vesselInterval = setInterval(fetchVessels, 5 * 60 * 1000);
+    const satelliteInterval = setInterval(fetchSatelliteOrbits, 10 * 60 * 1000); // 10 minutes
+    
+    return () => {
+      clearInterval(vesselInterval);
+      clearInterval(satelliteInterval);
+    };
   }, []);
   const satelliteData = [
     {
@@ -104,20 +136,37 @@ const SatelliteTracker = () => {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center gap-3 mb-6">
-        <Satellite className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold">Rastreador de Satélites</h1>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <Satellite className="h-8 w-8 text-primary" />
+          <div>
+            <h1 className="text-3xl font-bold">Rastreador de Satélites</h1>
+            <p className="text-sm text-muted-foreground">
+              Última atualização: {lastUpdate.toLocaleTimeString()}
+            </p>
+          </div>
+        </div>
+        <Button 
+          onClick={fetchSatelliteOrbits} 
+          disabled={isLoadingSatellites}
+          className="gap-2"
+        >
+          <RefreshCw className={`h-4 w-4 ${isLoadingSatellites ? 'animate-spin' : ''}`} />
+          Atualizar
+        </Button>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Satélites Ativos</CardTitle>
+            <CardTitle className="text-sm font-medium">Satélites Rastreados</CardTitle>
             <Satellite className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground">De 4 disponíveis</p>
+            <div className="text-2xl font-bold">{satelliteOrbits.length}</div>
+            <p className="text-xs text-muted-foreground">
+              {isLoadingSatellites ? 'Atualizando...' : 'Ativos'}
+            </p>
           </CardContent>
         </Card>
         
@@ -167,6 +216,73 @@ const SatelliteTracker = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Orbital Data Display */}
+      {satelliteOrbits.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Satellite className="h-5 w-5" />
+              Dados Orbitais em Tempo Real
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              {satelliteOrbits.map((satellite) => (
+                <Card key={satellite.id} className="border-2">
+                  <CardContent className="pt-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 className="font-semibold text-lg">{satellite.name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          NORAD ID: {satellite.noradId}
+                        </p>
+                      </div>
+                      <Badge>Ativo</Badge>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div>
+                        <p className="text-muted-foreground">Altitude</p>
+                        <p className="font-semibold">{satellite.altitude.toFixed(0)} km</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Velocidade</p>
+                        <p className="font-semibold">{satellite.velocity.toFixed(2)} km/s</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Período Orbital</p>
+                        <p className="font-semibold">{satellite.orbitalPeriod.toFixed(1)} min</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Inclinação</p>
+                        <p className="font-semibold">{satellite.inclination.toFixed(1)}°</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Latitude</p>
+                        <p className="font-semibold">{satellite.latitude.toFixed(4)}°</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Longitude</p>
+                        <p className="font-semibold">{satellite.longitude.toFixed(4)}°</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Excentricidade</p>
+                        <p className="font-semibold">{satellite.eccentricity.toFixed(6)}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Última Atualização</p>
+                        <p className="font-semibold">
+                          {new Date(satellite.lastUpdated).toLocaleTimeString()}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <SatelliteStatus satellites={satelliteData} />
 
