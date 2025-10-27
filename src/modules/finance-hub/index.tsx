@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   DollarSign, 
   TrendingUp, 
@@ -10,15 +11,19 @@ import {
   PieChart, 
   FileText,
   Activity,
-  AlertTriangle 
+  AlertTriangle,
+  Download 
 } from "lucide-react";
 import { useFinanceData } from "./hooks/useFinanceData";
 import { InvoiceManager } from "./components/InvoiceManager";
+import { FinanceExportService } from "./services/finance-export";
+import { useToast } from "@/hooks/use-toast";
 
 // PATCH 192.0: Complete Finance Hub with real Supabase integration
 
 const FinanceHub = () => {
-  const { summary, transactions, categories, loading } = useFinanceData();
+  const { summary, transactions, categories, invoices, loading } = useFinanceData();
+  const { toast } = useToast();
 
   if (loading) {
     return (
@@ -223,10 +228,194 @@ const FinanceHub = () => {
             <CardHeader>
               <CardTitle>Financial Reports</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Financial reporting dashboard coming soon.</p>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Export Full Report</CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Export complete financial report including transactions, invoices, and budget categories
+                    </p>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Button 
+                      className="w-full" 
+                      onClick={() => {
+                        if (!summary) {
+                          toast({
+                            title: "No Data",
+                            description: "No financial data available to export",
+                            variant: "destructive"
+                          });
+                          return;
+                        }
+                        
+                        const dateFrom = new Date();
+                        dateFrom.setMonth(dateFrom.getMonth() - 1);
+                        const dateTo = new Date();
+                        
+                        FinanceExportService.exportToPDF({
+                          summary,
+                          transactions,
+                          invoices,
+                          categories,
+                          dateRange: {
+                            from: dateFrom.toISOString(),
+                            to: dateTo.toISOString()
+                          }
+                        }, `financial-report-${new Date().toISOString().split('T')[0]}.pdf`);
+                        
+                        toast({
+                          title: "Success",
+                          description: "Financial report exported to PDF"
+                        });
+                      }}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Export to PDF
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={() => {
+                        if (!summary) {
+                          toast({
+                            title: "No Data",
+                            description: "No financial data available to export",
+                            variant: "destructive"
+                          });
+                          return;
+                        }
+                        
+                        const dateFrom = new Date();
+                        dateFrom.setMonth(dateFrom.getMonth() - 1);
+                        const dateTo = new Date();
+                        
+                        FinanceExportService.exportToCSV({
+                          summary,
+                          transactions,
+                          invoices,
+                          categories,
+                          dateRange: {
+                            from: dateFrom.toISOString(),
+                            to: dateTo.toISOString()
+                          }
+                        }, `financial-report-${new Date().toISOString().split('T')[0]}.csv`);
+                        
+                        toast({
+                          title: "Success",
+                          description: "Financial report exported to CSV"
+                        });
+                      }}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Export to CSV
+                    </Button>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Export Transactions</CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Export only transaction data to CSV format
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={() => {
+                        if (transactions.length === 0) {
+                          toast({
+                            title: "No Data",
+                            description: "No transactions available to export",
+                            variant: "destructive"
+                          });
+                          return;
+                        }
+                        
+                        FinanceExportService.exportTransactionsToCSV(
+                          transactions,
+                          `transactions-${new Date().toISOString().split('T')[0]}.csv`
+                        );
+                        
+                        toast({
+                          title: "Success",
+                          description: "Transactions exported to CSV"
+                        });
+                      }}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Export Transactions
+                    </Button>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Export Invoices</CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Export only invoice data to CSV format
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={() => {
+                        if (invoices.length === 0) {
+                          toast({
+                            title: "No Data",
+                            description: "No invoices available to export",
+                            variant: "destructive"
+                          });
+                          return;
+                        }
+                        
+                        FinanceExportService.exportInvoicesToCSV(
+                          invoices,
+                          `invoices-${new Date().toISOString().split('T')[0]}.csv`
+                        );
+                        
+                        toast({
+                          title: "Success",
+                          description: "Invoices exported to CSV"
+                        });
+                      }}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Export Invoices
+                    </Button>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Report Summary</CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Current period financial overview
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    {summary && (
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Total Transactions:</span>
+                          <span className="font-semibold">{summary.transactionCount}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Total Invoices:</span>
+                          <span className="font-semibold">{invoices.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Active Categories:</span>
+                          <span className="font-semibold">{categories.length}</span>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
             </CardContent>
           </Card>
