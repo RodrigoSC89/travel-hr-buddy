@@ -109,6 +109,86 @@ export type Database = {
           },
         ]
       }
+      agent_registry: {
+        Row: {
+          agent_id: string
+          capabilities: Json
+          created_at: string
+          id: string
+          last_heartbeat: string | null
+          metadata: Json | null
+          name: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          agent_id: string
+          capabilities?: Json
+          created_at?: string
+          id?: string
+          last_heartbeat?: string | null
+          metadata?: Json | null
+          name: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string
+          capabilities?: Json
+          created_at?: string
+          id?: string
+          last_heartbeat?: string | null
+          metadata?: Json | null
+          name?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      agent_swarm_metrics: {
+        Row: {
+          agent_id: string
+          avg_response_time_ms: number
+          created_at: string
+          error_count: number
+          id: string
+          last_task_at: string | null
+          success_count: number
+          task_count: number
+          updated_at: string
+        }
+        Insert: {
+          agent_id: string
+          avg_response_time_ms?: number
+          created_at?: string
+          error_count?: number
+          id?: string
+          last_task_at?: string | null
+          success_count?: number
+          task_count?: number
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string
+          avg_response_time_ms?: number
+          created_at?: string
+          error_count?: number
+          id?: string
+          last_task_at?: string | null
+          success_count?: number
+          task_count?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_swarm_metrics_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agent_registry"
+            referencedColumns: ["agent_id"]
+          },
+        ]
+      }
       ai_insights: {
         Row: {
           actionable: boolean
@@ -3600,6 +3680,42 @@ export type Database = {
         }
         Relationships: []
       }
+      external_entities: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          metadata: Json | null
+          name: string
+          status: string
+          trust_score: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          metadata?: Json | null
+          name: string
+          status?: string
+          trust_score?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          metadata?: Json | null
+          name?: string
+          status?: string
+          trust_score?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feedback_events: {
         Row: {
           ai_decision_id: string | null
@@ -4086,6 +4202,110 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      interop_log: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          message: Json
+          protocol_type: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message: Json
+          protocol_type: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message?: Json
+          protocol_type?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      joint_mission_log: {
+        Row: {
+          created_at: string
+          details: Json
+          event_type: string
+          id: string
+          mission_id: string
+          severity: string
+        }
+        Insert: {
+          created_at?: string
+          details: Json
+          event_type: string
+          id?: string
+          mission_id: string
+          severity?: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json
+          event_type?: string
+          id?: string
+          mission_id?: string
+          severity?: string
+        }
+        Relationships: []
+      }
+      joint_mission_tasks: {
+        Row: {
+          assigned_at: string
+          assigned_entity: string
+          completed_at: string | null
+          created_at: string
+          id: string
+          mission_id: string
+          payload: Json
+          result: Json | null
+          status: string
+          task_name: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_at?: string
+          assigned_entity: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          mission_id: string
+          payload: Json
+          result?: Json | null
+          status?: string
+          task_name: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_at?: string
+          assigned_entity?: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          mission_id?: string
+          payload?: Json
+          result?: Json | null
+          status?: string
+          task_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "joint_mission_tasks_assigned_entity_fkey"
+            columns: ["assigned_entity"]
+            isOneToOne: false
+            referencedRelation: "external_entities"
+            referencedColumns: ["entity_id"]
+          },
+        ]
       }
       knowledge_base: {
         Row: {
@@ -7753,6 +7973,47 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      trust_events: {
+        Row: {
+          created_at: string
+          details: Json
+          entity_id: string
+          event_type: string
+          id: string
+          severity: string
+          trust_score_after: number
+          trust_score_before: number | null
+        }
+        Insert: {
+          created_at?: string
+          details: Json
+          entity_id: string
+          event_type: string
+          id?: string
+          severity?: string
+          trust_score_after: number
+          trust_score_before?: number | null
+        }
+        Update: {
+          created_at?: string
+          details?: Json
+          entity_id?: string
+          event_type?: string
+          id?: string
+          severity?: string
+          trust_score_after?: number
+          trust_score_before?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trust_events_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "external_entities"
+            referencedColumns: ["entity_id"]
+          },
+        ]
       }
       user_achievements: {
         Row: {

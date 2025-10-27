@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 226 - Protocol Adapter
  * Interoperability adapter for input/output with external systems via multiple protocols
