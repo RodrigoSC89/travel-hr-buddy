@@ -54,12 +54,12 @@ import {
 
 // Node types configuration
 const nodeTypes = [
-  { type: 'trigger', label: 'Trigger', icon: Zap, color: 'bg-yellow-500' },
-  { type: 'database', label: 'Database', icon: Database, color: 'bg-blue-500' },
-  { type: 'ai_analysis', label: 'AI Analysis', icon: Sparkles, color: 'bg-purple-500' },
-  { type: 'notification', label: 'Notification', icon: Bell, color: 'bg-green-500' },
-  { type: 'condition', label: 'Condition', icon: GitBranch, color: 'bg-orange-500' },
-  { type: 'delay', label: 'Delay', icon: Clock, color: 'bg-gray-500' },
+  { type: 'trigger', label: 'Trigger', icon: Zap, color: 'bg-yellow-500', hexColor: '#eab308' },
+  { type: 'database', label: 'Database', icon: Database, color: 'bg-blue-500', hexColor: '#3b82f6' },
+  { type: 'ai_analysis', label: 'AI Analysis', icon: Sparkles, color: 'bg-purple-500', hexColor: '#a855f7' },
+  { type: 'notification', label: 'Notification', icon: Bell, color: 'bg-green-500', hexColor: '#22c55e' },
+  { type: 'condition', label: 'Condition', icon: GitBranch, color: 'bg-orange-500', hexColor: '#f97316' },
+  { type: 'delay', label: 'Delay', icon: Clock, color: 'bg-gray-500', hexColor: '#6b7280' },
 ];
 
 interface WorkflowLog {
@@ -130,7 +130,7 @@ export const WorkflowBuilder = () => {
         nodeType: selectedNodeType,
       },
       style: {
-        background: nodeConfig.color.replace('bg-', '#'),
+        background: nodeConfig.hexColor,
         color: 'white',
         border: '2px solid #fff',
         borderRadius: '8px',
@@ -228,7 +228,7 @@ export const WorkflowBuilder = () => {
               nodeType: node.type,
             },
             style: {
-              background: nodeConfig?.color.replace('bg-', '#') || '#gray',
+              background: nodeConfig?.hexColor || '#6b7280',
               color: 'white',
               border: '2px solid #fff',
               borderRadius: '8px',

@@ -127,7 +127,7 @@ export const IntegrationsHubEnhanced = () => {
   const connectOAuth = async (provider: any) => {
     try {
       // Simulate OAuth flow
-      const mockToken = `mock_token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const mockToken = `mock_token_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
       const mockRefreshToken = `mock_refresh_${Date.now()}`;
 
       const { data: user } = await supabase.auth.getUser();

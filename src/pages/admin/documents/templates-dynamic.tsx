@@ -249,9 +249,7 @@ export const TemplatesDynamic = () => {
         .order('version_number', { ascending: false })
         .limit(1);
 
-      const nextVersion = existingVersions && existingVersions.length > 0 
-        ? existingVersions[0].version_number + 1 
-        : 1;
+      const nextVersion = (existingVersions?.[0]?.version_number || 0) + 1;
 
       // Mark all previous versions as not current
       await supabase

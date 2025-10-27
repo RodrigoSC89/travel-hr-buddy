@@ -29,6 +29,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
+// Constants for satellite coverage events
+const COVERAGE_EVENT_MIN_ELEVATION = 10;
+const COVERAGE_EVENT_PROBABILITY = 0.8;
+const COVERAGE_EVENT_MIN_DURATION_SEC = 60;
+const COVERAGE_EVENT_MAX_DURATION_SEC = 600;
+const COVERAGE_EVENT_DURATION_MS = 600000;
+
 interface SatelliteData {
   id: string;
   satellite_id: string;
@@ -224,7 +231,7 @@ export const SatelliteTrackerEnhanced = () => {
   const checkCoverageEvents = async (satellites: SatelliteData[]) => {
     for (const sat of satellites) {
       // Simulate coverage entry/exit events
-      if (sat.elevation > 10 && Math.random() > 0.8) {
+      if (sat.elevation > COVERAGE_EVENT_MIN_ELEVATION && Math.random() > COVERAGE_EVENT_PROBABILITY) {
         const eventType = Math.random() > 0.5 ? 'entry' : 'exit';
 
         await supabase.from('satellite_coverage_events').insert({
@@ -232,9 +239,9 @@ export const SatelliteTrackerEnhanced = () => {
           satellite_name: sat.satellite_name,
           event_type: eventType,
           max_elevation: sat.elevation,
-          duration_seconds: Math.floor(Math.random() * 600) + 60,
+          duration_seconds: Math.floor(Math.random() * COVERAGE_EVENT_MAX_DURATION_SEC) + COVERAGE_EVENT_MIN_DURATION_SEC,
           start_time: new Date().toISOString(),
-          end_time: new Date(Date.now() + 600000).toISOString(),
+          end_time: new Date(Date.now() + COVERAGE_EVENT_DURATION_MS).toISOString(),
         });
 
         if (eventType === 'entry') {
