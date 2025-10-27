@@ -49,6 +49,12 @@ const AnalyticsCore = React.lazy(() => import("@/modules/analytics/AnalyticsCore
 const SatelliteTracker = React.lazy(() => import("@/modules/satellite/SatelliteTracker"));
 const DocumentTemplates = React.lazy(() => import("@/modules/documents/templates"));
 
+// 🔹 PATCH 306-310 - Training Academy, Weather Dashboard, AI Documents, Fuel Optimizer
+const TrainingAcademyAdmin = React.lazy(() => import("@/pages/admin/training-academy"));
+const WeatherDashboard = React.lazy(() => import("@/pages/WeatherDashboard"));
+const AIDocuments = React.lazy(() => import("@/pages/documents/ai"));
+const FuelOptimizer = React.lazy(() => import("@/pages/FuelOptimizer"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -81,6 +87,12 @@ export default function AppRouter() {
         <Route path="/analytics-core" element={<AnalyticsCore />} />
         <Route path="/satellite-tracker" element={<SatelliteTracker />} />
         <Route path="/document-templates" element={<DocumentTemplates />} />
+        
+        {/* PATCH 306-310 Routes */}
+        <Route path="/admin/training-academy" element={<TrainingAcademyAdmin />} />
+        <Route path="/weather-dashboard" element={<WeatherDashboard />} />
+        <Route path="/documents/ai" element={<AIDocuments />} />
+        <Route path="/fuel-optimizer" element={<FuelOptimizer />} />
       </Routes>
     </Router>
   );
