@@ -7,7 +7,11 @@ import { Badge } from '@/components/ui/badge';
 import { MapPin, Truck, Package } from 'lucide-react';
 
 // Set your Mapbox access token (should be in environment variables)
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || 'pk.test';
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || '';
+
+if (!MAPBOX_TOKEN) {
+  console.warn('Mapbox token not configured. Map functionality will be limited.');
+}
 
 interface DeliveryLocation {
   id: string;
@@ -30,10 +34,14 @@ interface DeliveryMapProps {
 export function DeliveryMap({ deliveries }: DeliveryMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [selectedDelivery, setSelectedDelivery] = useState<DeliveryLocation | null>(null);
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
+
+    if (!MAPBOX_TOKEN) {
+      console.error('Mapbox token is required for map functionality');
+      return;
+    }
 
     try {
       mapboxgl.accessToken = MAPBOX_TOKEN;

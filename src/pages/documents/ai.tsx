@@ -333,7 +333,7 @@ export default function AIDocuments() {
             Documents
           </TabsTrigger>
           <TabsTrigger value="search">
-            <Search className="w-4 h-4 mr-2" />
+            <Search className="h-4 w-4 mr-2" />
             Semantic Search
           </TabsTrigger>
           <TabsTrigger value="analysis">

@@ -50,12 +50,28 @@ export function SemanticDocumentSearch() {
 
       if (error) throw error;
 
-      // Calculate simple similarity score based on term frequency
+      // Calculate similarity score based on term frequency and relevance
       const resultsWithSimilarity = (data || []).map(doc => {
         const text = doc.extracted_text?.toLowerCase() || '';
         const query = searchQuery.toLowerCase();
-        const termCount = (text.match(new RegExp(query, 'g')) || []).length;
-        const similarity = Math.min(termCount / 10, 1) * 100;
+        
+        // Count exact matches
+        const exactMatches = (text.match(new RegExp(query, 'g')) || []).length;
+        
+        // Count partial matches (words from query)
+        const queryWords = query.split(/\s+/).filter(w => w.length > 2);
+        const partialMatches = queryWords.reduce((sum, word) => {
+          return sum + (text.match(new RegExp(word, 'g')) || []).length;
+        }, 0);
+        
+        // Calculate relevance score (0-100)
+        // Exact matches are worth more than partial matches
+        const exactWeight = 5;
+        const partialWeight = 1;
+        const maxScore = 100;
+        
+        const rawScore = (exactMatches * exactWeight) + (partialMatches * partialWeight);
+        const similarity = Math.min((rawScore / 20) * maxScore, maxScore);
 
         return {
           ...doc,
