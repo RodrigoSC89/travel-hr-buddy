@@ -145,7 +145,7 @@ const ApiGatewayEnhanced = () => {
 
       if (error) throw error;
       setRoutes(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error loading routes:', error);
     }
   };
@@ -159,7 +159,7 @@ const ApiGatewayEnhanced = () => {
 
       if (error) throw error;
       setApiKeys(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error loading API keys:', error);
     }
   };
@@ -174,17 +174,17 @@ const ApiGatewayEnhanced = () => {
 
       if (error) throw error;
       setRateLimits(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error loading rate limits:', error);
     }
   };
 
   const createApiKey = async () => {
     try {
-      // Generate a random API key
-      const apiKey = 'sk_' + Array.from({ length: 32 }, () => 
-        Math.random().toString(36)[2] || '0'
-      ).join('');
+      // Generate a cryptographically secure random API key
+      const array = new Uint8Array(32);
+      crypto.getRandomValues(array);
+      const apiKey = 'sk_' + Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 
       const { error } = await supabase
         .from('api_keys')
@@ -205,10 +205,10 @@ const ApiGatewayEnhanced = () => {
       setShowNewKey(false);
       setKeyFormData({ key_name: '', tier: 'basic' });
       loadKeys();
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Error creating API key",
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Unknown error',
         variant: "destructive",
       });
     }
@@ -241,10 +241,10 @@ const ApiGatewayEnhanced = () => {
         is_public: false
       });
       loadRoutes();
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Error creating route",
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Unknown error',
         variant: "destructive",
       });
     }
@@ -265,10 +265,10 @@ const ApiGatewayEnhanced = () => {
       });
 
       loadKeys();
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Error revoking key",
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Unknown error',
         variant: "destructive",
       });
     }
@@ -285,7 +285,15 @@ const ApiGatewayEnhanced = () => {
       markdown += `Generated: ${new Date().toLocaleString()}\n\n`;
       markdown += '## Available Endpoints\n\n';
 
-      data.forEach((route: any) => {
+      interface RouteDoc {
+        route_path: string;
+        method: string;
+        description: string;
+        schema: any;
+        version: string;
+      }
+
+      (data as RouteDoc[]).forEach((route) => {
         markdown += `### ${route.method} ${route.route_path}\n\n`;
         markdown += `**Description:** ${route.description || 'No description'}\n\n`;
         markdown += `**Version:** ${route.version}\n\n`;
@@ -314,10 +322,10 @@ const ApiGatewayEnhanced = () => {
         title: "✅ Documentation Generated",
         description: "API documentation has been exported",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Error generating documentation",
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Unknown error',
         variant: "destructive",
       });
     }
