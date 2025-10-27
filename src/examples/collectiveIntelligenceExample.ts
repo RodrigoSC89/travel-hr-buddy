@@ -9,32 +9,32 @@ import {
   initializeCollectiveIntelligence,
   contextMesh,
   type ContextMessage 
-} from '@/core';
+} from "@/core";
 import { 
   distributedDecisionCore,
   type DecisionContext 
-} from '@/ai/distributedDecisionCore';
+} from "@/ai/distributedDecisionCore";
 import { 
   consciousCore,
   type ModuleHealth 
-} from '@/ai/consciousCore';
+} from "@/ai/consciousCore";
 import { 
   collectiveLoopEngine 
-} from '@/ai/feedback/collectiveLoop';
-import { logger } from '@/lib/logger';
+} from "@/ai/feedback/collectiveLoop";
+import { logger } from "@/lib/logger";
 
 /**
  * Example 1: Basic Setup and Initialization
  */
 export async function example1_BasicSetup() {
-  console.log('=== Example 1: Basic Setup ===\n');
+  console.log("=== Example 1: Basic Setup ===\n");
 
   try {
     // Initialize all systems
     await initializeCollectiveIntelligence();
-    console.log('✅ All systems initialized\n');
+    console.log("✅ All systems initialized\n");
   } catch (error) {
-    console.error('❌ Initialization failed:', error);
+    console.error("❌ Initialization failed:", error);
     throw error;
   }
 }
@@ -43,14 +43,14 @@ export async function example1_BasicSetup() {
  * Example 2: Publishing and Subscribing to Context
  */
 export async function example2_ContextMesh() {
-  console.log('=== Example 2: Context Mesh ===\n');
+  console.log("=== Example 2: Context Mesh ===\n");
 
   // Subscribe to context updates
   const subscriptionId = contextMesh.subscribe({
-    moduleName: 'ExampleModule',
-    contextTypes: ['mission', 'risk'],
+    moduleName: "ExampleModule",
+    contextTypes: ["mission", "risk"],
     handler: (message: ContextMessage) => {
-      console.log('📨 Received context update:', {
+      console.log("📨 Received context update:", {
         type: message.contextType,
         module: message.moduleName,
         data: message.contextData
@@ -60,28 +60,28 @@ export async function example2_ContextMesh() {
 
   // Publish some context
   await contextMesh.publish({
-    moduleName: 'PaymentProcessor',
-    contextType: 'mission',
+    moduleName: "PaymentProcessor",
+    contextType: "mission",
     contextData: {
-      status: 'processing',
-      transactionId: 'TXN-12345',
+      status: "processing",
+      transactionId: "TXN-12345",
       amount: 150.00
     },
-    source: 'PaymentService'
+    source: "PaymentService"
   });
 
   await contextMesh.publish({
-    moduleName: 'PaymentProcessor',
-    contextType: 'risk',
+    moduleName: "PaymentProcessor",
+    contextType: "risk",
     contextData: {
       riskLevel: 0.25,
-      factors: ['amount_normal', 'verified_user']
+      factors: ["amount_normal", "verified_user"]
     },
-    source: 'RiskAnalyzer'
+    source: "RiskAnalyzer"
   });
 
   // Get context history
-  const history = await contextMesh.getContextHistory('PaymentProcessor', 'mission', 10);
+  const history = await contextMesh.getContextHistory("PaymentProcessor", "mission", 10);
   console.log(`\n📚 Found ${history.length} context messages in history\n`);
 
   // Cleanup
@@ -92,19 +92,19 @@ export async function example2_ContextMesh() {
  * Example 3: Distributed Decision Making
  */
 export async function example3_DecisionMaking() {
-  console.log('=== Example 3: Decision Making ===\n');
+  console.log("=== Example 3: Decision Making ===\n");
 
   // Register a decision rule
   distributedDecisionCore.registerRule({
-    id: 'high-amount-alert',
-    name: 'High Amount Transaction Alert',
-    moduleName: 'PaymentProcessor',
-    priority: 'high',
+    id: "high-amount-alert",
+    name: "High Amount Transaction Alert",
+    moduleName: "PaymentProcessor",
+    priority: "high",
     condition: async (context: DecisionContext) => {
       return context.contextData.amount > 1000;
     },
     action: async (context: DecisionContext) => {
-      return 'notify_human';
+      return "notify_human";
     },
     requiresEscalation: false,
     timeoutMs: 5000
@@ -112,16 +112,16 @@ export async function example3_DecisionMaking() {
 
   // Make a decision
   const decision = await distributedDecisionCore.makeDecision({
-    moduleName: 'PaymentProcessor',
-    decisionType: 'transaction_review',
+    moduleName: "PaymentProcessor",
+    decisionType: "transaction_review",
     contextData: {
       amount: 1500,
-      userId: 'user-123',
-      transactionId: 'TXN-67890'
+      userId: "user-123",
+      transactionId: "TXN-67890"
     }
   });
 
-  console.log('🎯 Decision made:', {
+  console.log("🎯 Decision made:", {
     level: decision.decisionLevel,
     action: decision.action,
     success: decision.success,
@@ -129,7 +129,7 @@ export async function example3_DecisionMaking() {
   });
 
   // Get decision history
-  const decisionHistory = await distributedDecisionCore.getDecisionHistory('PaymentProcessor', 5);
+  const decisionHistory = await distributedDecisionCore.getDecisionHistory("PaymentProcessor", 5);
   console.log(`\n📊 Found ${decisionHistory.length} decisions in history\n`);
 }
 
@@ -137,12 +137,12 @@ export async function example3_DecisionMaking() {
  * Example 4: System Monitoring
  */
 export async function example4_SystemMonitoring() {
-  console.log('=== Example 4: System Monitoring ===\n');
+  console.log("=== Example 4: System Monitoring ===\n");
 
   // Update module health
   const healthUpdate: ModuleHealth = {
-    moduleName: 'PaymentProcessor',
-    status: 'healthy',
+    moduleName: "PaymentProcessor",
+    status: "healthy",
     lastCheck: new Date(),
     errorCount: 0,
     responseTime: 120,
@@ -151,11 +151,11 @@ export async function example4_SystemMonitoring() {
   };
 
   consciousCore.updateModuleHealth(healthUpdate);
-  console.log('✅ Module health updated');
+  console.log("✅ Module health updated");
 
   // Get system state
   const systemState = await consciousCore.getSystemState();
-  console.log('\n🏥 System State:', {
+  console.log("\n🏥 System State:", {
     overallHealth: systemState.overallHealth,
     activeModules: `${systemState.activeModules}/${systemState.totalModules}`,
     activeIssues: systemState.activeObservations,
@@ -171,25 +171,25 @@ export async function example4_SystemMonitoring() {
  * Example 5: Feedback and Learning
  */
 export async function example5_FeedbackLoop() {
-  console.log('=== Example 5: Feedback Loop ===\n');
+  console.log("=== Example 5: Feedback Loop ===\n");
 
   // Submit human feedback
   await collectiveLoopEngine.submitHumanFeedback(
-    'DocumentGenerator',
-    'accuracy',
+    "DocumentGenerator",
+    "accuracy",
     4,
-    'Document was well-formatted but had minor typos',
+    "Document was well-formatted but had minor typos",
     {
-      documentType: 'invoice',
+      documentType: "invoice",
       typoCount: 2,
       processingTime: 1200
     }
   );
-  console.log('✅ Human feedback submitted');
+  console.log("✅ Human feedback submitted");
 
   // Submit AI feedback
   await collectiveLoopEngine.submitAIFeedback(
-    'TextClassifier',
+    "TextClassifier",
     {
       precision: 0.92,
       recall: 0.88,
@@ -199,11 +199,11 @@ export async function example5_FeedbackLoop() {
       successRate: 0.95
     }
   );
-  console.log('✅ AI feedback submitted');
+  console.log("✅ AI feedback submitted");
 
   // Get feedback summary
   const summary = await collectiveLoopEngine.getFeedbackSummary(undefined, 7);
-  console.log('\n📈 Feedback Summary (last 7 days):', {
+  console.log("\n📈 Feedback Summary (last 7 days):", {
     totalEvents: summary.totalEvents,
     averageRating: summary.averageRating.toFixed(2),
     processed: summary.processedCount,
@@ -212,7 +212,7 @@ export async function example5_FeedbackLoop() {
   });
 
   // Get learning history
-  const learningHistory = collectiveLoopEngine.getLearningHistory('TextClassifier');
+  const learningHistory = collectiveLoopEngine.getLearningHistory("TextClassifier");
   console.log(`\n🎓 Learning adjustments: ${learningHistory.length}\n`);
 }
 
@@ -220,12 +220,12 @@ export async function example5_FeedbackLoop() {
  * Example 6: Complete Workflow
  */
 export async function example6_CompleteWorkflow() {
-  console.log('=== Example 6: Complete Workflow ===\n');
+  console.log("=== Example 6: Complete Workflow ===\n");
 
   // 1. Module reports health
   consciousCore.updateModuleHealth({
-    moduleName: 'OrderProcessor',
-    status: 'healthy',
+    moduleName: "OrderProcessor",
+    status: "healthy",
     lastCheck: new Date(),
     errorCount: 0,
     responseTime: 200
@@ -233,33 +233,33 @@ export async function example6_CompleteWorkflow() {
 
   // 2. Module publishes context
   await contextMesh.publish({
-    moduleName: 'OrderProcessor',
-    contextType: 'mission',
+    moduleName: "OrderProcessor",
+    contextType: "mission",
     contextData: {
-      orderId: 'ORD-001',
-      status: 'processing',
+      orderId: "ORD-001",
+      status: "processing",
       items: 5,
       total: 299.99
     },
-    source: 'OrderService'
+    source: "OrderService"
   });
 
   // 3. Decision is triggered based on context
   const decision = await distributedDecisionCore.makeDecision({
-    moduleName: 'OrderProcessor',
-    decisionType: 'priority_check',
+    moduleName: "OrderProcessor",
+    decisionType: "priority_check",
     contextData: {
-      orderId: 'ORD-001',
+      orderId: "ORD-001",
       total: 299.99,
-      customerTier: 'premium'
+      customerTier: "premium"
     }
   });
 
-  console.log('📋 Decision:', decision.action);
+  console.log("📋 Decision:", decision.action);
 
   // 4. Feedback is collected
   await collectiveLoopEngine.submitOperationalFeedback(
-    'OrderProcessor',
+    "OrderProcessor",
     {
       processingTime: 850,
       successRate: 0.98,
@@ -269,7 +269,7 @@ export async function example6_CompleteWorkflow() {
 
   // 5. System state is checked
   const state = await consciousCore.getSystemState();
-  console.log('\n📊 Final System State:', {
+  console.log("\n📊 Final System State:", {
     health: state.overallHealth,
     modules: state.activeModules,
     issues: state.activeObservations
@@ -280,25 +280,25 @@ export async function example6_CompleteWorkflow() {
  * Example 7: Error Handling and Resilience
  */
 export async function example7_ErrorHandling() {
-  console.log('=== Example 7: Error Handling ===\n');
+  console.log("=== Example 7: Error Handling ===\n");
 
   try {
     // Simulate a failing module
     consciousCore.updateModuleHealth({
-      moduleName: 'FailingService',
-      status: 'critical',
+      moduleName: "FailingService",
+      status: "critical",
       lastCheck: new Date(),
       errorCount: 25,
       responseTime: 5000
     });
 
-    console.log('⚠️ Critical module reported');
+    console.log("⚠️ Critical module reported");
 
     // The conscious core will detect this and create observations
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     const observations = consciousCore.getActiveObservations();
-    const criticalObs = observations.filter(o => o.severity === 'critical');
+    const criticalObs = observations.filter(o => o.severity === "critical");
     
     console.log(`\n🚨 Critical observations: ${criticalObs.length}`);
     criticalObs.forEach(obs => {
@@ -309,7 +309,7 @@ export async function example7_ErrorHandling() {
     });
 
   } catch (error) {
-    console.error('Error during workflow:', error);
+    console.error("Error during workflow:", error);
   }
 }
 
@@ -317,8 +317,8 @@ export async function example7_ErrorHandling() {
  * Run all examples
  */
 export async function runAllExamples() {
-  console.log('\n🚀 Running Collective Intelligence Examples\n');
-  console.log('='.repeat(50) + '\n');
+  console.log("\n🚀 Running Collective Intelligence Examples\n");
+  console.log("=".repeat(50) + "\n");
 
   try {
     await example1_BasicSetup();
@@ -341,12 +341,12 @@ export async function runAllExamples() {
 
     await example7_ErrorHandling();
 
-    console.log('\n' + '='.repeat(50));
-    console.log('✅ All examples completed successfully!');
-    console.log('='.repeat(50) + '\n');
+    console.log("\n" + "=".repeat(50));
+    console.log("✅ All examples completed successfully!");
+    console.log("=".repeat(50) + "\n");
 
   } catch (error) {
-    console.error('\n❌ Example execution failed:', error);
+    console.error("\n❌ Example execution failed:", error);
     throw error;
   }
 }

@@ -9,12 +9,12 @@
  * - Automatic mission execution
  */
 
-import { DronePosition } from './droneSubCore';
+import { DronePosition } from "./droneSubCore";
 
 export interface Waypoint {
   id: string;
   position: DronePosition;
-  action?: 'hover' | 'scan' | 'sample' | 'photo' | 'wait';
+  action?: "hover" | "scan" | "sample" | "photo" | "wait";
   duration?: number; // seconds
   description?: string;
   completed: boolean;
@@ -28,13 +28,13 @@ export interface Mission {
   waypoints: Waypoint[];
   startTime?: string;
   endTime?: string;
-  status: 'pending' | 'active' | 'paused' | 'completed' | 'aborted';
+  status: "pending" | "active" | "paused" | "completed" | "aborted";
   progress: number; // 0-100%
   metadata?: {
     vesselId?: string;
     operatorId?: string;
     missionType?: string;
-    priority?: 'low' | 'medium' | 'high' | 'critical';
+    priority?: "low" | "medium" | "high" | "critical";
   };
 }
 
@@ -42,7 +42,7 @@ export interface MissionEvent {
   id: string;
   missionId: string;
   waypointId?: string;
-  type: 'start' | 'waypoint_reached' | 'waypoint_completed' | 'pause' | 'resume' | 'abort' | 'complete';
+  type: "start" | "waypoint_reached" | "waypoint_completed" | "pause" | "resume" | "abort" | "complete";
   timestamp: string;
   message: string;
   data?: any;
@@ -59,7 +59,7 @@ class MissionUploadSub {
    */
   uploadMission(missionJson: string | object): { success: boolean; error?: string } {
     try {
-      const mission: Mission = typeof missionJson === 'string' 
+      const mission: Mission = typeof missionJson === "string" 
         ? JSON.parse(missionJson) 
         : missionJson;
 
@@ -72,7 +72,7 @@ class MissionUploadSub {
       // Initialize mission
       this.currentMission = {
         ...mission,
-        status: 'pending',
+        status: "pending",
         progress: 0,
         waypoints: mission.waypoints.map(wp => ({ ...wp, completed: false })),
       };
@@ -80,7 +80,7 @@ class MissionUploadSub {
       this.currentWaypointIndex = 0;
       
       this.addEvent({
-        type: 'start',
+        type: "start",
         message: `Mission "${mission.name}" uploaded successfully`,
       });
 
@@ -88,7 +88,7 @@ class MissionUploadSub {
     } catch (error) {
       return { 
         success: false, 
-        error: error instanceof Error ? error.message : 'Invalid JSON format' 
+        error: error instanceof Error ? error.message : "Invalid JSON format" 
       };
     }
   }
@@ -98,11 +98,11 @@ class MissionUploadSub {
    */
   private validateMission(mission: any): { valid: boolean; error?: string } {
     if (!mission.id || !mission.name) {
-      return { valid: false, error: 'Mission must have id and name' };
+      return { valid: false, error: "Mission must have id and name" };
     }
 
     if (!Array.isArray(mission.waypoints) || mission.waypoints.length === 0) {
-      return { valid: false, error: 'Mission must have at least one waypoint' };
+      return { valid: false, error: "Mission must have at least one waypoint" };
     }
 
     // Validate waypoints
@@ -113,9 +113,9 @@ class MissionUploadSub {
       }
 
       if (
-        typeof wp.position.lat !== 'number' ||
-        typeof wp.position.lon !== 'number' ||
-        typeof wp.position.depth !== 'number'
+        typeof wp.position.lat !== "number" ||
+        typeof wp.position.lon !== "number" ||
+        typeof wp.position.depth !== "number"
       ) {
         return { valid: false, error: `Waypoint ${i + 1} has invalid position` };
       }
@@ -141,17 +141,17 @@ class MissionUploadSub {
    * Start mission execution
    */
   startMission(): boolean {
-    if (!this.currentMission || this.currentMission.status !== 'pending') {
+    if (!this.currentMission || this.currentMission.status !== "pending") {
       return false;
     }
 
-    this.currentMission.status = 'active';
+    this.currentMission.status = "active";
     this.currentMission.startTime = new Date().toISOString();
     this.currentWaypointIndex = 0;
 
     this.addEvent({
-      type: 'start',
-      message: 'Mission started',
+      type: "start",
+      message: "Mission started",
     });
 
     return true;
@@ -161,15 +161,15 @@ class MissionUploadSub {
    * Pause mission
    */
   pauseMission(): boolean {
-    if (!this.currentMission || this.currentMission.status !== 'active') {
+    if (!this.currentMission || this.currentMission.status !== "active") {
       return false;
     }
 
-    this.currentMission.status = 'paused';
+    this.currentMission.status = "paused";
     
     this.addEvent({
-      type: 'pause',
-      message: 'Mission paused',
+      type: "pause",
+      message: "Mission paused",
     });
 
     return true;
@@ -179,15 +179,15 @@ class MissionUploadSub {
    * Resume mission
    */
   resumeMission(): boolean {
-    if (!this.currentMission || this.currentMission.status !== 'paused') {
+    if (!this.currentMission || this.currentMission.status !== "paused") {
       return false;
     }
 
-    this.currentMission.status = 'active';
+    this.currentMission.status = "active";
     
     this.addEvent({
-      type: 'resume',
-      message: 'Mission resumed',
+      type: "resume",
+      message: "Mission resumed",
     });
 
     return true;
@@ -201,12 +201,12 @@ class MissionUploadSub {
       return false;
     }
 
-    this.currentMission.status = 'aborted';
+    this.currentMission.status = "aborted";
     this.currentMission.endTime = new Date().toISOString();
     
     this.addEvent({
-      type: 'abort',
-      message: reason || 'Mission aborted',
+      type: "abort",
+      message: reason || "Mission aborted",
     });
 
     return true;
@@ -235,7 +235,7 @@ class MissionUploadSub {
     // Consider waypoint reached if within 5 meters
     if (distance <= 5) {
       this.addEvent({
-        type: 'waypoint_reached',
+        type: "waypoint_reached",
         waypointId: waypoint.id,
         message: `Reached waypoint ${this.currentWaypointIndex + 1}: ${waypoint.description || waypoint.id}`,
         data: { distance },
@@ -254,7 +254,7 @@ class MissionUploadSub {
     waypoint.timestamp = new Date().toISOString();
 
     this.addEvent({
-      type: 'waypoint_completed',
+      type: "waypoint_completed",
       waypointId: waypoint.id,
       message: `Completed waypoint ${this.currentWaypointIndex + 1}: ${waypoint.description || waypoint.id}`,
     });
@@ -277,13 +277,13 @@ class MissionUploadSub {
   private completeMission(): void {
     if (!this.currentMission) return;
 
-    this.currentMission.status = 'completed';
+    this.currentMission.status = "completed";
     this.currentMission.endTime = new Date().toISOString();
     this.currentMission.progress = 100;
 
     this.addEvent({
-      type: 'complete',
-      message: 'Mission completed successfully',
+      type: "complete",
+      message: "Mission completed successfully",
     });
   }
 
@@ -343,10 +343,10 @@ class MissionUploadSub {
   /**
    * Add mission event
    */
-  private addEvent(partial: Omit<MissionEvent, 'id' | 'missionId' | 'timestamp'>): void {
+  private addEvent(partial: Omit<MissionEvent, "id" | "missionId" | "timestamp">): void {
     const event: MissionEvent = {
       id: `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      missionId: this.currentMission?.id || 'unknown',
+      missionId: this.currentMission?.id || "unknown",
       timestamp: new Date().toISOString(),
       ...partial,
     };
@@ -368,32 +368,32 @@ class MissionUploadSub {
    */
   exportTemplate(): string {
     const template: Mission = {
-      id: 'mission-template',
-      name: 'Mission Template',
-      description: 'Template for creating new missions',
+      id: "mission-template",
+      name: "Mission Template",
+      description: "Template for creating new missions",
       waypoints: [
         {
-          id: 'wp-1',
+          id: "wp-1",
           position: { lat: 0, lon: 0, depth: 10, altitude: 0 },
-          action: 'hover',
+          action: "hover",
           duration: 30,
-          description: 'Waypoint 1',
+          description: "Waypoint 1",
           completed: false,
         },
         {
-          id: 'wp-2',
+          id: "wp-2",
           position: { lat: 0.001, lon: 0.001, depth: 20, altitude: 0 },
-          action: 'scan',
+          action: "scan",
           duration: 60,
-          description: 'Waypoint 2',
+          description: "Waypoint 2",
           completed: false,
         },
       ],
-      status: 'pending',
+      status: "pending",
       progress: 0,
       metadata: {
-        missionType: 'survey',
-        priority: 'medium',
+        missionType: "survey",
+        priority: "medium",
       },
     };
 

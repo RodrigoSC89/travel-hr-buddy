@@ -14,7 +14,7 @@ export interface VesselArrival {
   ata?: string; // Actual Time of Arrival
   etd?: string; // Estimated Time of Departure
   atd?: string; // Actual Time of Departure
-  status: 'scheduled' | 'arrived' | 'departed' | 'delayed';
+  status: "scheduled" | "arrived" | "departed" | "delayed";
   createdAt: string;
   updatedAt: string;
 }
@@ -37,7 +37,7 @@ export interface PortSubmission {
   vesselId: string;
   portCode: string;
   submittedAt: string;
-  status: 'pending' | 'accepted' | 'rejected' | 'requires_docs';
+  status: "pending" | "accepted" | "rejected" | "requires_docs";
   crew: CrewMember[];
   documents: PortDocument[];
   missingDocuments: string[];
@@ -55,7 +55,7 @@ export interface PortDocument {
 
 export interface PortNotification {
   id: string;
-  type: 'missing_document' | 'approval' | 'rejection' | 'status_update';
+  type: "missing_document" | "approval" | "rejection" | "status_update";
   message: string;
   timestamp: string;
   acknowledged: boolean;
@@ -65,7 +65,7 @@ export interface PortAuthorityAPI {
   name: string;
   endpoint: string;
   apiKey?: string;
-  type: 'ANTAQ' | 'Portbase' | 'OpenPort' | 'Custom';
+  type: "ANTAQ" | "Portbase" | "OpenPort" | "Custom";
 }
 
 export interface SyncResult {

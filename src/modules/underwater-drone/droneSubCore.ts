@@ -35,11 +35,11 @@ export interface DroneState {
   thrusters: ThrusterState;
   speed: number; // knots
   heading: number; // degrees
-  status: 'idle' | 'moving' | 'hovering' | 'ascending' | 'descending' | 'emergency';
+  status: "idle" | "moving" | "hovering" | "ascending" | "descending" | "emergency";
 }
 
 export interface MovementCommand {
-  type: 'move' | 'rotate' | 'depth' | 'hover' | 'surface' | 'emergency_stop';
+  type: "move" | "rotate" | "depth" | "hover" | "surface" | "emergency_stop";
   target?: Partial<DronePosition>;
   orientation?: Partial<DroneOrientation>;
   speed?: number;
@@ -58,7 +58,7 @@ class DroneSubCore {
       thrusters: { forward: 0, lateral: 0, vertical: 0, rotation: 0 },
       speed: 0,
       heading: 0,
-      status: 'idle',
+      status: "idle",
     };
   }
 
@@ -74,24 +74,24 @@ class DroneSubCore {
    */
   executeCommand(command: MovementCommand): void {
     switch (command.type) {
-      case 'move':
-        this.moveTo(command.target!, command.speed || 2);
-        break;
-      case 'rotate':
-        this.rotateTo(command.orientation!);
-        break;
-      case 'depth':
-        this.changeDepth(command.target?.depth || 0);
-        break;
-      case 'hover':
-        this.hover();
-        break;
-      case 'surface':
-        this.surface();
-        break;
-      case 'emergency_stop':
-        this.emergencyStop();
-        break;
+    case "move":
+      this.moveTo(command.target!, command.speed || 2);
+      break;
+    case "rotate":
+      this.rotateTo(command.orientation!);
+      break;
+    case "depth":
+      this.changeDepth(command.target?.depth || 0);
+      break;
+    case "hover":
+      this.hover();
+      break;
+    case "surface":
+      this.surface();
+      break;
+    case "emergency_stop":
+      this.emergencyStop();
+      break;
     }
   }
 
@@ -99,7 +99,7 @@ class DroneSubCore {
    * Move drone to target position
    */
   private moveTo(target: Partial<DronePosition>, speed: number): void {
-    this.state.status = 'moving';
+    this.state.status = "moving";
     this.state.speed = Math.min(speed, this.maxSpeed);
 
     // Calculate direction
@@ -146,13 +146,13 @@ class DroneSubCore {
     const delta = safeDepth - this.state.position.depth;
 
     if (delta > 0) {
-      this.state.status = 'descending';
+      this.state.status = "descending";
       this.state.thrusters.vertical = -60; // Negative for down
     } else if (delta < 0) {
-      this.state.status = 'ascending';
+      this.state.status = "ascending";
       this.state.thrusters.vertical = 60; // Positive for up
     } else {
-      this.state.status = 'hovering';
+      this.state.status = "hovering";
       this.state.thrusters.vertical = 0;
     }
   }
@@ -161,7 +161,7 @@ class DroneSubCore {
    * Hover at current position
    */
   private hover(): void {
-    this.state.status = 'hovering';
+    this.state.status = "hovering";
     this.state.thrusters.forward = 0;
     this.state.thrusters.lateral = 0;
     this.state.thrusters.vertical = 0;
@@ -173,7 +173,7 @@ class DroneSubCore {
    * Surface drone (emergency or end of mission)
    */
   private surface(): void {
-    this.state.status = 'ascending';
+    this.state.status = "ascending";
     this.state.thrusters.vertical = 100; // Maximum upward thrust
     this.state.thrusters.forward = 0;
     this.state.thrusters.lateral = 0;
@@ -183,7 +183,7 @@ class DroneSubCore {
    * Emergency stop - all thrusters to zero
    */
   private emergencyStop(): void {
-    this.state.status = 'emergency';
+    this.state.status = "emergency";
     this.state.thrusters.forward = 0;
     this.state.thrusters.lateral = 0;
     this.state.thrusters.vertical = 0;
@@ -226,8 +226,8 @@ class DroneSubCore {
     this.state.orientation.roll *= 0.95;
 
     // Update status
-    if (this.state.position.depth < 0.5 && this.state.status === 'ascending') {
-      this.state.status = 'idle';
+    if (this.state.position.depth < 0.5 && this.state.status === "ascending") {
+      this.state.status = "idle";
       this.state.thrusters.vertical = 0;
     }
   }

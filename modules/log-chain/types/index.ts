@@ -4,7 +4,7 @@
  */
 
 export interface BlockchainConfig {
-  network: 'ethereum-rinkeby' | 'polygon-mumbai' | 'ethereum-mainnet' | 'polygon-mainnet';
+  network: "ethereum-rinkeby" | "polygon-mumbai" | "ethereum-mainnet" | "polygon-mainnet";
   rpcUrl: string;
   contractAddress?: string;
   explorerUrl: string;
@@ -12,8 +12,8 @@ export interface BlockchainConfig {
 
 export interface LogEvent {
   id: string;
-  type: 'incident' | 'audit' | 'certificate' | 'signature' | 'system';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "incident" | "audit" | "certificate" | "signature" | "system";
+  severity: "low" | "medium" | "high" | "critical";
   description: string;
   metadata: Record<string, any>;
   hash: string;

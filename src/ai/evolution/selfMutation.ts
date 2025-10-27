@@ -6,7 +6,7 @@
  * functions, generation of alternatives, A/B testing, and replacement.
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface BehaviorFunction {
   id: string;
@@ -37,7 +37,7 @@ export interface MutationCandidate {
 
 export interface AlternativeFunction extends BehaviorFunction {
   parentFunctionId: string;
-  mutationType: 'optimization' | 'logic_change' | 'algorithm_swap' | 'parameter_tuning';
+  mutationType: "optimization" | "logic_change" | "algorithm_swap" | "parameter_tuning";
   hypothesis: string;
 }
 
@@ -52,7 +52,7 @@ export interface ABTestResult {
     improvement: number;
     statisticalSignificance: number;
   }[];
-  winner: 'A' | 'B' | 'tie';
+  winner: "A" | "B" | "tie";
   confidence: number;
 }
 
@@ -96,7 +96,7 @@ export class SelfEvolutionModel {
 
         candidates.push({
           originalFunction: func,
-          reason: issues.join(', '),
+          reason: issues.join(", "),
           failurePatterns: patterns,
           suggestedImprovements: improvements,
         });
@@ -111,7 +111,7 @@ export class SelfEvolutionModel {
    */
   async generateAlternative(
     candidate: MutationCandidate,
-    mutationType: AlternativeFunction['mutationType']
+    mutationType: AlternativeFunction["mutationType"]
   ): Promise<AlternativeFunction> {
     const original = candidate.originalFunction;
 
@@ -119,7 +119,7 @@ export class SelfEvolutionModel {
     const alternative: AlternativeFunction = {
       id: `${original.id}-alt-${Date.now()}`,
       name: `${original.name} (Alternative)`,
-      description: `Improved version: ${candidate.suggestedImprovements.join(', ')}`,
+      description: `Improved version: ${candidate.suggestedImprovements.join(", ")}`,
       implementation: await this.generateImprovedImplementation(
         original,
         mutationType,
@@ -157,7 +157,7 @@ export class SelfEvolutionModel {
 
     const comparisons = [
       {
-        metric: 'successRate',
+        metric: "successRate",
         functionAValue: metricsA.successRate,
         functionBValue: metricsB.successRate,
         improvement: ((metricsB.successRate - metricsA.successRate) / metricsA.successRate) * 100,
@@ -168,7 +168,7 @@ export class SelfEvolutionModel {
         ),
       },
       {
-        metric: 'avgExecutionTime',
+        metric: "avgExecutionTime",
         functionAValue: metricsA.avgExecutionTime,
         functionBValue: metricsB.avgExecutionTime,
         improvement: ((metricsA.avgExecutionTime - metricsB.avgExecutionTime) / metricsA.avgExecutionTime) * 100,
@@ -179,7 +179,7 @@ export class SelfEvolutionModel {
         ),
       },
       {
-        metric: 'errorRate',
+        metric: "errorRate",
         functionAValue: metricsA.errorRate,
         functionBValue: metricsB.errorRate,
         improvement: ((metricsA.errorRate - metricsB.errorRate) / metricsA.errorRate) * 100,
@@ -190,7 +190,7 @@ export class SelfEvolutionModel {
         ),
       },
       {
-        metric: 'userSatisfaction',
+        metric: "userSatisfaction",
         functionAValue: metricsA.userSatisfaction,
         functionBValue: metricsB.userSatisfaction,
         improvement: ((metricsB.userSatisfaction - metricsA.userSatisfaction) / metricsA.userSatisfaction) * 100,
@@ -211,7 +211,7 @@ export class SelfEvolutionModel {
       functionBId: functionB.id,
       sampleSize,
       metricComparisons: comparisons,
-      winner: scoreB > scoreA + 0.05 ? 'B' : scoreA > scoreB + 0.05 ? 'A' : 'tie',
+      winner: scoreB > scoreA + 0.05 ? "B" : scoreA > scoreB + 0.05 ? "A" : "tie",
       confidence: this.calculateOverallConfidence(comparisons),
     };
 
@@ -226,8 +226,8 @@ export class SelfEvolutionModel {
     alternative: AlternativeFunction,
     testResult: ABTestResult
   ): Promise<boolean> {
-    if (testResult.winner !== 'B' || testResult.confidence < 0.8) {
-      console.log('Mutation rejected: insufficient improvement or confidence');
+    if (testResult.winner !== "B" || testResult.confidence < 0.8) {
+      console.log("Mutation rejected: insufficient improvement or confidence");
       await this.logMutation(original, alternative, testResult, false);
       return false;
     }
@@ -242,7 +242,7 @@ export class SelfEvolutionModel {
       console.log(`✅ Mutation applied: ${original.name} → ${alternative.name}`);
       return true;
     } catch (error) {
-      console.error('Failed to apply mutation:', error);
+      console.error("Failed to apply mutation:", error);
       return false;
     }
   }
@@ -307,11 +307,11 @@ export class SelfEvolutionModel {
     // For now, return simulated functions
     return [
       {
-        id: 'route-optimizer-v1',
-        name: 'Route Optimizer',
-        description: 'Optimizes routes for vessel navigation',
-        implementation: 'dijkstra-algorithm',
-        category: 'navigation',
+        id: "route-optimizer-v1",
+        name: "Route Optimizer",
+        description: "Optimizes routes for vessel navigation",
+        implementation: "dijkstra-algorithm",
+        category: "navigation",
         version: 1,
         performanceMetrics: {
           successRate: 0.82,
@@ -349,26 +349,26 @@ export class SelfEvolutionModel {
   private async identifyFailurePatterns(func: BehaviorFunction): Promise<string[]> {
     // This would analyze logs to find patterns
     return [
-      'Fails with complex multi-waypoint routes',
-      'High execution time on routes with >10 waypoints',
-      'Poor performance in adverse weather conditions',
+      "Fails with complex multi-waypoint routes",
+      "High execution time on routes with >10 waypoints",
+      "Poor performance in adverse weather conditions",
     ];
   }
 
   private suggestImprovements(func: BehaviorFunction, issues: string[]): string[] {
     const improvements: string[] = [];
 
-    if (issues.some(i => i.includes('success rate'))) {
-      improvements.push('Add input validation and error recovery');
+    if (issues.some(i => i.includes("success rate"))) {
+      improvements.push("Add input validation and error recovery");
     }
-    if (issues.some(i => i.includes('error rate'))) {
-      improvements.push('Implement fallback algorithms');
+    if (issues.some(i => i.includes("error rate"))) {
+      improvements.push("Implement fallback algorithms");
     }
-    if (issues.some(i => i.includes('resource efficiency'))) {
-      improvements.push('Optimize algorithm complexity');
+    if (issues.some(i => i.includes("resource efficiency"))) {
+      improvements.push("Optimize algorithm complexity");
     }
-    if (issues.some(i => i.includes('user satisfaction'))) {
-      improvements.push('Improve output quality and predictability');
+    if (issues.some(i => i.includes("user satisfaction"))) {
+      improvements.push("Improve output quality and predictability");
     }
 
     return improvements;
@@ -376,15 +376,15 @@ export class SelfEvolutionModel {
 
   private async generateImprovedImplementation(
     original: BehaviorFunction,
-    mutationType: AlternativeFunction['mutationType'],
+    mutationType: AlternativeFunction["mutationType"],
     candidate: MutationCandidate
   ): Promise<string> {
     // This would use LLM or predefined optimizations
     const improvements: Record<string, string> = {
-      optimization: 'a-star-algorithm-optimized',
-      logic_change: 'dynamic-programming-approach',
-      algorithm_swap: 'genetic-algorithm',
-      parameter_tuning: 'dijkstra-algorithm-tuned',
+      optimization: "a-star-algorithm-optimized",
+      logic_change: "dynamic-programming-approach",
+      algorithm_swap: "genetic-algorithm",
+      parameter_tuning: "dijkstra-algorithm-tuned",
     };
 
     return improvements[mutationType] || original.implementation;
@@ -395,7 +395,7 @@ export class SelfEvolutionModel {
     mutationType: string
   ): string {
     return `By applying ${mutationType}, we expect to address: ${candidate.reason}. ` +
-      `Suggested improvements: ${candidate.suggestedImprovements.join(', ')}.`;
+      `Suggested improvements: ${candidate.suggestedImprovements.join(", ")}.`;
   }
 
   private async collectMetrics(
@@ -437,19 +437,19 @@ export class SelfEvolutionModel {
     );
   }
 
-  private calculateOverallConfidence(comparisons: ABTestResult['metricComparisons']): number {
+  private calculateOverallConfidence(comparisons: ABTestResult["metricComparisons"]): number {
     const avgSignificance =
       comparisons.reduce((sum, c) => sum + c.statisticalSignificance, 0) / comparisons.length;
     return avgSignificance;
   }
 
-  private selectMutationType(candidate: MutationCandidate): AlternativeFunction['mutationType'] {
+  private selectMutationType(candidate: MutationCandidate): AlternativeFunction["mutationType"] {
     const issues = candidate.reason;
 
-    if (issues.includes('execution time')) return 'optimization';
-    if (issues.includes('error rate')) return 'logic_change';
-    if (issues.includes('success rate')) return 'algorithm_swap';
-    return 'parameter_tuning';
+    if (issues.includes("execution time")) return "optimization";
+    if (issues.includes("error rate")) return "logic_change";
+    if (issues.includes("success rate")) return "algorithm_swap";
+    return "parameter_tuning";
   }
 
   private async replaceBehaviorFunction(
@@ -470,7 +470,7 @@ export class SelfEvolutionModel {
       this.calculateOverallScore(original.performanceMetrics);
 
     try {
-      await supabase.from('behavior_mutation_log').insert({
+      await supabase.from("behavior_mutation_log").insert({
         function_id: original.id,
         function_name: original.name,
         mutation_type: alternative.mutationType,
@@ -483,17 +483,17 @@ export class SelfEvolutionModel {
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      console.error('Failed to log mutation:', error);
+      console.error("Failed to log mutation:", error);
     }
   }
 
   private async getLatestMutationLog(functionId: string): Promise<MutationLog | null> {
     try {
       const { data, error } = await supabase
-        .from('behavior_mutation_log')
-        .select('*')
-        .eq('function_id', functionId)
-        .order('timestamp', { ascending: false })
+        .from("behavior_mutation_log")
+        .select("*")
+        .eq("function_id", functionId)
+        .order("timestamp", { ascending: false })
         .limit(1)
         .single();
 
@@ -513,7 +513,7 @@ export class SelfEvolutionModel {
         timestamp: data.timestamp,
       } : null;
     } catch (error) {
-      console.error('Failed to fetch mutation log:', error);
+      console.error("Failed to fetch mutation log:", error);
       return null;
     }
   }

@@ -3,11 +3,11 @@
  * Dashboard de analytics com métricas avançadas e visualizações de BI
  */
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   BarChart3,
   TrendingUp,
@@ -21,7 +21,7 @@ import {
   Download,
   RefreshCw,
   Calendar
-} from 'lucide-react';
+} from "lucide-react";
 import { 
   ComposedChart,
   Line,
@@ -37,46 +37,46 @@ import {
   Scatter,
   ZAxis,
   Cell
-} from 'recharts';
-import { motion } from 'framer-motion';
-import { ProfessionalHeader } from './professional-header';
-import { ProfessionalKPICard } from './professional-kpi-card';
+} from "recharts";
+import { motion } from "framer-motion";
+import { ProfessionalHeader } from "./professional-header";
+import { ProfessionalKPICard } from "./professional-kpi-card";
 
 const revenueData = [
-  { month: 'Jan', revenue: 45000, costs: 28000, profit: 17000, transactions: 450 },
-  { month: 'Fev', revenue: 52000, costs: 30000, profit: 22000, transactions: 520 },
-  { month: 'Mar', revenue: 48000, costs: 29000, profit: 19000, transactions: 480 },
-  { month: 'Abr', revenue: 61000, costs: 35000, profit: 26000, transactions: 610 },
-  { month: 'Mai', revenue: 55000, costs: 32000, profit: 23000, transactions: 550 },
-  { month: 'Jun', revenue: 70000, costs: 38000, profit: 32000, transactions: 700 }
+  { month: "Jan", revenue: 45000, costs: 28000, profit: 17000, transactions: 450 },
+  { month: "Fev", revenue: 52000, costs: 30000, profit: 22000, transactions: 520 },
+  { month: "Mar", revenue: 48000, costs: 29000, profit: 19000, transactions: 480 },
+  { month: "Abr", revenue: 61000, costs: 35000, profit: 26000, transactions: 610 },
+  { month: "Mai", revenue: 55000, costs: 32000, profit: 23000, transactions: 550 },
+  { month: "Jun", revenue: 70000, costs: 38000, profit: 32000, transactions: 700 }
 ];
 
 const userGrowth = [
-  { month: 'Jan', active: 1200, new: 150, churned: 45 },
-  { month: 'Fev', active: 1305, new: 180, churned: 75 },
-  { month: 'Mar', active: 1410, new: 165, churned: 60 },
-  { month: 'Abr', active: 1515, new: 195, churned: 90 },
-  { month: 'Mai', active: 1620, new: 170, churned: 65 },
-  { month: 'Jun', active: 1725, new: 210, churned: 105 }
+  { month: "Jan", active: 1200, new: 150, churned: 45 },
+  { month: "Fev", active: 1305, new: 180, churned: 75 },
+  { month: "Mar", active: 1410, new: 165, churned: 60 },
+  { month: "Abr", active: 1515, new: 195, churned: 90 },
+  { month: "Mai", active: 1620, new: 170, churned: 65 },
+  { month: "Jun", active: 1725, new: 210, churned: 105 }
 ];
 
 const performanceMetrics = [
-  { category: 'Vendas', value: 850, benchmark: 800 },
-  { category: 'Conversão', value: 920, benchmark: 850 },
-  { category: 'Satisfação', value: 890, benchmark: 900 },
-  { category: 'Retenção', value: 950, benchmark: 920 }
+  { category: "Vendas", value: 850, benchmark: 800 },
+  { category: "Conversão", value: 920, benchmark: 850 },
+  { category: "Satisfação", value: 890, benchmark: 900 },
+  { category: "Retenção", value: 950, benchmark: 920 }
 ];
 
 const scatterData = [
-  { x: 100, y: 200, z: 200, category: 'A' },
-  { x: 120, y: 100, z: 260, category: 'A' },
-  { x: 170, y: 300, z: 400, category: 'B' },
-  { x: 140, y: 250, z: 280, category: 'B' },
-  { x: 150, y: 400, z: 500, category: 'C' },
-  { x: 110, y: 280, z: 200, category: 'C' }
+  { x: 100, y: 200, z: 200, category: "A" },
+  { x: 120, y: 100, z: 260, category: "A" },
+  { x: 170, y: 300, z: 400, category: "B" },
+  { x: 140, y: 250, z: 280, category: "B" },
+  { x: 150, y: 400, z: 500, category: "C" },
+  { x: 110, y: 280, z: 200, category: "C" }
 ];
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
 
 const MetricCard = ({ title, value, change, icon: Icon, trend }: any) => {
   const isPositive = change >= 0;
@@ -100,8 +100,8 @@ const MetricCard = ({ title, value, change, icon: Icon, trend }: any) => {
           <div className="space-y-1">
             <p className="text-3xl font-bold font-playfair">{value}</p>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <span className={isPositive ? 'text-green-600' : 'text-red-600'}>
-                {isPositive ? '↑' : '↓'} {Math.abs(change)}%
+              <span className={isPositive ? "text-green-600" : "text-red-600"}>
+                {isPositive ? "↑" : "↓"} {Math.abs(change)}%
               </span>
               {trend}
             </p>
@@ -113,7 +113,7 @@ const MetricCard = ({ title, value, change, icon: Icon, trend }: any) => {
 };
 
 export function ProfessionalAnalyticsDashboard() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div className="space-y-6 p-6">
@@ -267,7 +267,7 @@ export function ProfessionalAnalyticsDashboard() {
                             animate={{ width: `${Math.min(percentage, 100)}%` }}
                             transition={{ duration: 1, ease: "easeOut" }}
                             className={`absolute top-0 left-0 h-full rounded-full ${
-                              isAbove ? 'bg-gradient-to-r from-green-500 to-emerald-500' : 'bg-gradient-to-r from-yellow-500 to-orange-500'
+                              isAbove ? "bg-gradient-to-r from-green-500 to-emerald-500" : "bg-gradient-to-r from-yellow-500 to-orange-500"
                             }`}
                           />
                         </div>
@@ -295,7 +295,7 @@ export function ProfessionalAnalyticsDashboard() {
                     <XAxis type="number" dataKey="x" name="Investimento" />
                     <YAxis type="number" dataKey="y" name="Retorno" />
                     <ZAxis type="number" dataKey="z" range={[100, 500]} />
-                    <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                    <Tooltip cursor={{ strokeDasharray: "3 3" }} />
                     <Scatter data={scatterData} fill="#3b82f6">
                       {scatterData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

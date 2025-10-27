@@ -3,9 +3,9 @@
  * PATCH 151.0 - Certificate generation and validation
  */
 
-import { createClient } from '@/integrations/supabase/client';
-import QRCode from 'qrcode';
-import { CertificationData, CertificationFormData, ValidationResult } from '../types';
+import { createClient } from "@/integrations/supabase/client";
+import QRCode from "qrcode";
+import { CertificationData, CertificationFormData, ValidationResult } from "../types";
 
 /**
  * Generate SHA256 hash from certificate data
@@ -22,9 +22,9 @@ export const generateCertificateHash = async (data: CertificationFormData): Prom
   
   const encoder = new TextEncoder();
   const dataBuffer = encoder.encode(dataString);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
   
   return hashHex;
 };
@@ -45,13 +45,13 @@ export const generateQRCode = async (certificateId: string, hash: string): Promi
       width: 300,
       margin: 2,
       color: {
-        dark: '#000000',
-        light: '#FFFFFF'
+        dark: "#000000",
+        light: "#FFFFFF"
       }
     });
     return qrCodeDataUrl;
   } catch (error) {
-    console.error('Error generating QR code:', error);
+    console.error("Error generating QR code:", error);
     throw error;
   }
 };
@@ -94,11 +94,11 @@ export const issueCertificate = async (formData: CertificationFormData): Promise
   
   // Store in database
   const { error } = await supabase
-    .from('certifications')
+    .from("certifications")
     .insert([certificateData]);
   
   if (error) {
-    console.error('Error storing certificate:', error);
+    console.error("Error storing certificate:", error);
     throw error;
   }
   
@@ -112,15 +112,15 @@ export const validateCertificate = async (certificateId: string, hash?: string):
   const supabase = createClient();
   
   const { data, error } = await supabase
-    .from('certifications')
-    .select('*')
-    .eq('id', certificateId)
+    .from("certifications")
+    .select("*")
+    .eq("id", certificateId)
     .single();
   
   if (error || !data) {
     return {
       valid: false,
-      message: 'Certificate not found',
+      message: "Certificate not found",
       verifiedAt: new Date().toISOString()
     };
   }
@@ -130,7 +130,7 @@ export const validateCertificate = async (certificateId: string, hash?: string):
     return {
       valid: false,
       certificate: data,
-      message: 'Certificate hash mismatch - possible tampering detected',
+      message: "Certificate hash mismatch - possible tampering detected",
       verifiedAt: new Date().toISOString()
     };
   }
@@ -143,7 +143,7 @@ export const validateCertificate = async (certificateId: string, hash?: string):
     return {
       valid: false,
       certificate: data,
-      message: 'Certificate has expired',
+      message: "Certificate has expired",
       verifiedAt: new Date().toISOString()
     };
   }
@@ -151,7 +151,7 @@ export const validateCertificate = async (certificateId: string, hash?: string):
   return {
     valid: true,
     certificate: data,
-    message: 'Certificate is valid',
+    message: "Certificate is valid",
     verifiedAt: new Date().toISOString()
   };
 };
@@ -163,13 +163,13 @@ export const getCertificateHistory = async (certificateId: string) => {
   const supabase = createClient();
   
   const { data, error } = await supabase
-    .from('certification_history')
-    .select('*')
-    .eq('certificateId', certificateId)
-    .order('timestamp', { ascending: false });
+    .from("certification_history")
+    .select("*")
+    .eq("certificateId", certificateId)
+    .order("timestamp", { ascending: false });
   
   if (error) {
-    console.error('Error fetching history:', error);
+    console.error("Error fetching history:", error);
     return [];
   }
   
@@ -187,22 +187,22 @@ export const listCertificates = async (filters?: {
   const supabase = createClient();
   
   let query = supabase
-    .from('certifications')
-    .select('*')
-    .order('createdAt', { ascending: false });
+    .from("certifications")
+    .select("*")
+    .order("createdAt", { ascending: false });
   
   if (filters?.type) {
-    query = query.eq('type', filters.type);
+    query = query.eq("type", filters.type);
   }
   
   if (filters?.vesselId) {
-    query = query.eq('vesselId', filters.vesselId);
+    query = query.eq("vesselId", filters.vesselId);
   }
   
   const { data, error } = await query;
   
   if (error) {
-    console.error('Error listing certificates:', error);
+    console.error("Error listing certificates:", error);
     return [];
   }
   

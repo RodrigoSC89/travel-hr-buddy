@@ -101,14 +101,14 @@ const UnderwaterDrone: React.FC = () => {
 
       // Check mission progress
       const mission = missionManager.getMission();
-      if (mission?.status === 'active') {
+      if (mission?.status === "active") {
         const waypoint = missionManager.getCurrentWaypoint();
         if (waypoint) {
           missionManager.waypointReached(state.position);
           
           // Auto-complete waypoint if close enough and hovering
           const distance = droneCore.distanceTo(waypoint.position);
-          if (distance < 5 && state.status === 'hovering') {
+          if (distance < 5 && state.status === "hovering") {
             setTimeout(() => missionManager.completeWaypoint(), 2000);
           }
         }
@@ -126,7 +126,7 @@ const UnderwaterDrone: React.FC = () => {
   // Command handlers
   const handleMoveTo = () => {
     const command: MovementCommand = {
-      type: 'move',
+      type: "move",
       target: { lat: targetLat, lon: targetLon, depth: targetDepth, altitude: 0 },
       speed: 3,
     };
@@ -134,20 +134,20 @@ const UnderwaterDrone: React.FC = () => {
   };
 
   const handleChangeDepth = () => {
-    droneCore.executeCommand({ type: 'depth', target: { depth: targetDepth, lat: 0, lon: 0, altitude: 0 } });
+    droneCore.executeCommand({ type: "depth", target: { depth: targetDepth, lat: 0, lon: 0, altitude: 0 } });
   };
 
   const handleHover = () => {
-    droneCore.executeCommand({ type: 'hover' });
+    droneCore.executeCommand({ type: "hover" });
   };
 
   const handleSurface = () => {
-    droneCore.executeCommand({ type: 'surface' });
+    droneCore.executeCommand({ type: "surface" });
   };
 
   const handleEmergencyStop = () => {
-    droneCore.executeCommand({ type: 'emergency_stop' });
-    missionManager.abortMission('Emergency stop activated');
+    droneCore.executeCommand({ type: "emergency_stop" });
+    missionManager.abortMission("Emergency stop activated");
   };
 
   const handleUploadMission = () => {
@@ -174,7 +174,7 @@ const UnderwaterDrone: React.FC = () => {
   };
 
   const handleAbortMission = () => {
-    if (missionManager.abortMission('Manually aborted')) {
+    if (missionManager.abortMission("Manually aborted")) {
       setCurrentMission(missionManager.getMission());
     }
   };
@@ -185,22 +185,22 @@ const UnderwaterDrone: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'idle': return 'bg-gray-500';
-      case 'moving': return 'bg-blue-500';
-      case 'hovering': return 'bg-green-500';
-      case 'ascending': return 'bg-cyan-500';
-      case 'descending': return 'bg-indigo-500';
-      case 'emergency': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "idle": return "bg-gray-500";
+    case "moving": return "bg-blue-500";
+    case "hovering": return "bg-green-500";
+    case "ascending": return "bg-cyan-500";
+    case "descending": return "bg-indigo-500";
+    case "emergency": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getAlertColor = (severity: string) => {
     switch (severity) {
-      case 'info': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'warning': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+    case "info": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    case "warning": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
+    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     }
   };
 
@@ -463,11 +463,11 @@ const UnderwaterDrone: React.FC = () => {
                     <div className="text-sm text-zinc-400">{currentMission.description}</div>
                   </div>
                   <Badge className={
-                    currentMission.status === 'active' ? 'bg-green-500' :
-                    currentMission.status === 'paused' ? 'bg-yellow-500' :
-                    currentMission.status === 'completed' ? 'bg-blue-500' :
-                    currentMission.status === 'aborted' ? 'bg-red-500' :
-                    'bg-gray-500'
+                    currentMission.status === "active" ? "bg-green-500" :
+                      currentMission.status === "paused" ? "bg-yellow-500" :
+                        currentMission.status === "completed" ? "bg-blue-500" :
+                          currentMission.status === "aborted" ? "bg-red-500" :
+                            "bg-gray-500"
                   }>
                     {currentMission.status.toUpperCase()}
                   </Badge>
@@ -492,7 +492,7 @@ const UnderwaterDrone: React.FC = () => {
                     {currentMission.waypoints.map((wp, idx) => (
                       <div 
                         key={wp.id}
-                        className={`p-2 rounded ${wp.completed ? 'bg-green-500/10 border border-green-500/30' : 'bg-zinc-900/50 border border-zinc-700'}`}
+                        className={`p-2 rounded ${wp.completed ? "bg-green-500/10 border border-green-500/30" : "bg-zinc-900/50 border border-zinc-700"}`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-mono text-xs">
@@ -506,25 +506,25 @@ const UnderwaterDrone: React.FC = () => {
                 </div>
 
                 <div className="flex gap-2">
-                  {currentMission.status === 'pending' && (
+                  {currentMission.status === "pending" && (
                     <Button onClick={handleStartMission} className="bg-green-600 hover:bg-green-700">
                       <PlayCircle className="w-4 h-4 mr-2" />
                       Start Mission
                     </Button>
                   )}
-                  {currentMission.status === 'active' && (
+                  {currentMission.status === "active" && (
                     <Button onClick={handlePauseMission} className="bg-yellow-600 hover:bg-yellow-700">
                       <PauseCircle className="w-4 h-4 mr-2" />
                       Pause Mission
                     </Button>
                   )}
-                  {currentMission.status === 'paused' && (
+                  {currentMission.status === "paused" && (
                     <Button onClick={handleStartMission} className="bg-green-600 hover:bg-green-700">
                       <PlayCircle className="w-4 h-4 mr-2" />
                       Resume Mission
                     </Button>
                   )}
-                  {(currentMission.status === 'active' || currentMission.status === 'paused') && (
+                  {(currentMission.status === "active" || currentMission.status === "paused") && (
                     <Button onClick={handleAbortMission} variant="destructive">
                       <StopCircle className="w-4 h-4 mr-2" />
                       Abort Mission

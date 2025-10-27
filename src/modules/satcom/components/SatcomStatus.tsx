@@ -15,36 +15,36 @@ interface SatcomStatusProps {
 }
 
 export const SatcomStatus: React.FC<SatcomStatusProps> = ({ connections }) => {
-  const getStatusColor = (status: SatcomConnection['status']) => {
+  const getStatusColor = (status: SatcomConnection["status"]) => {
     switch (status) {
-      case 'connected':
-        return 'bg-green-500';
-      case 'degraded':
-        return 'bg-yellow-500';
-      case 'disconnected':
-        return 'bg-red-500';
-      default:
-        return 'bg-gray-500';
+    case "connected":
+      return "bg-green-500";
+    case "degraded":
+      return "bg-yellow-500";
+    case "disconnected":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
-  const getStatusLabel = (status: SatcomConnection['status']) => {
+  const getStatusLabel = (status: SatcomConnection["status"]) => {
     switch (status) {
-      case 'connected':
-        return 'Conectado';
-      case 'degraded':
-        return 'Degradado';
-      case 'disconnected':
-        return 'Desconectado';
-      default:
-        return 'Desconhecido';
+    case "connected":
+      return "Conectado";
+    case "degraded":
+      return "Degradado";
+    case "disconnected":
+      return "Desconectado";
+    default:
+      return "Desconhecido";
     }
   };
 
   const getSignalColor = (strength: number) => {
-    if (strength >= 80) return 'text-green-500';
-    if (strength >= 50) return 'text-yellow-500';
-    return 'text-red-500';
+    if (strength >= 80) return "text-green-500";
+    if (strength >= 50) return "text-yellow-500";
+    return "text-red-500";
   };
 
   const formatBandwidth = (kbps: number) => {

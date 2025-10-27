@@ -14,7 +14,7 @@ export class VoiceFeedback {
 
   private initialize() {
     try {
-      if ('speechSynthesis' in window) {
+      if ("speechSynthesis" in window) {
         this.synth = window.speechSynthesis;
         
         // Load voices
@@ -28,13 +28,13 @@ export class VoiceFeedback {
         }
 
         this.isInitialized = true;
-        console.log('VoiceFeedback initialized');
+        console.log("VoiceFeedback initialized");
       } else {
-        console.warn('Speech Synthesis not supported');
+        console.warn("Speech Synthesis not supported");
         this.isInitialized = false;
       }
     } catch (error) {
-      console.error('Failed to initialize VoiceFeedback:', error);
+      console.error("Failed to initialize VoiceFeedback:", error);
       this.isInitialized = false;
     }
   }
@@ -63,7 +63,7 @@ export class VoiceFeedback {
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.isInitialized || !this.synth) {
-        reject(new Error('VoiceFeedback not initialized'));
+        reject(new Error("VoiceFeedback not initialized"));
         return;
       }
 
@@ -82,7 +82,7 @@ export class VoiceFeedback {
         }
       } else {
         // Try to find Portuguese voice
-        const ptVoice = this.voices.find(v => v.lang.startsWith('pt'));
+        const ptVoice = this.voices.find(v => v.lang.startsWith("pt"));
         if (ptVoice) {
           utterance.voice = ptVoice;
         }
@@ -92,7 +92,7 @@ export class VoiceFeedback {
       utterance.rate = options?.rate ?? 1.0;
       utterance.pitch = options?.pitch ?? 1.0;
       utterance.volume = options?.volume ?? 1.0;
-      utterance.lang = options?.lang ?? 'pt-BR';
+      utterance.lang = options?.lang ?? "pt-BR";
 
       // Set event handlers
       utterance.onend = () => {
@@ -177,7 +177,7 @@ export class VoiceFeedback {
    */
   async speakWithEmotion(
     text: string,
-    emotion: 'calm' | 'urgent' | 'warning' | 'critical' | 'success'
+    emotion: "calm" | "urgent" | "warning" | "critical" | "success"
   ): Promise<void> {
     const emotionConfig = {
       calm: { rate: 0.9, pitch: 1.0, volume: 0.8 },
@@ -203,20 +203,20 @@ export class VoiceFeedback {
     }
   ): Promise<void> {
     // Create overlay element
-    const overlay = document.createElement('div');
-    overlay.style.position = 'fixed';
-    overlay.style.bottom = '20px';
-    overlay.style.left = '50%';
-    overlay.style.transform = 'translateX(-50%)';
-    overlay.style.backgroundColor = overlayConfig?.backgroundColor || 'rgba(0, 0, 0, 0.8)';
-    overlay.style.color = overlayConfig?.textColor || '#fff';
-    overlay.style.padding = '12px 24px';
-    overlay.style.borderRadius = '8px';
-    overlay.style.zIndex = '9999';
-    overlay.style.fontSize = '16px';
-    overlay.style.fontFamily = 'system-ui, -apple-system, sans-serif';
-    overlay.style.maxWidth = '80%';
-    overlay.style.textAlign = 'center';
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.bottom = "20px";
+    overlay.style.left = "50%";
+    overlay.style.transform = "translateX(-50%)";
+    overlay.style.backgroundColor = overlayConfig?.backgroundColor || "rgba(0, 0, 0, 0.8)";
+    overlay.style.color = overlayConfig?.textColor || "#fff";
+    overlay.style.padding = "12px 24px";
+    overlay.style.borderRadius = "8px";
+    overlay.style.zIndex = "9999";
+    overlay.style.fontSize = "16px";
+    overlay.style.fontFamily = "system-ui, -apple-system, sans-serif";
+    overlay.style.maxWidth = "80%";
+    overlay.style.textAlign = "center";
     overlay.textContent = text;
 
     document.body.appendChild(overlay);

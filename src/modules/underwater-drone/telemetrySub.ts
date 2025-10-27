@@ -11,7 +11,7 @@
  * - Communication signal
  */
 
-import { DronePosition, DroneOrientation } from './droneSubCore';
+import { DronePosition, DroneOrientation } from "./droneSubCore";
 
 export interface TelemetryData {
   timestamp: string;
@@ -36,7 +36,7 @@ export interface CommunicationStatus {
   signalStrength: number; // 0-100%
   latency: number; // milliseconds
   dataRate: number; // kbps
-  connectionType: 'tether' | 'acoustic' | 'satellite' | 'none';
+  connectionType: "tether" | "acoustic" | "satellite" | "none";
 }
 
 export interface EnvironmentalData {
@@ -49,8 +49,8 @@ export interface EnvironmentalData {
 
 export interface TelemetryAlert {
   id: string;
-  severity: 'info' | 'warning' | 'critical';
-  type: 'battery' | 'depth' | 'temperature' | 'pressure' | 'communication' | 'environment';
+  severity: "info" | "warning" | "critical";
+  type: "battery" | "depth" | "temperature" | "pressure" | "communication" | "environment";
   message: string;
   timestamp: string;
   value?: number;
@@ -92,7 +92,7 @@ class TelemetrySub {
         signalStrength: 85,
         latency: 120,
         dataRate: 1500,
-        connectionType: 'tether',
+        connectionType: "tether",
       },
       environmental: {
         salinity: 35,
@@ -211,19 +211,19 @@ class TelemetrySub {
   private updateCommunication(depth: number): void {
     if (depth < 50) {
       // Shallow - good tether connection
-      this.telemetry.communication.connectionType = 'tether';
+      this.telemetry.communication.connectionType = "tether";
       this.telemetry.communication.signalStrength = 90 - depth * 0.2;
       this.telemetry.communication.latency = 50 + depth;
       this.telemetry.communication.dataRate = 2000 - depth * 10;
     } else if (depth < 200) {
       // Medium depth - acoustic modem
-      this.telemetry.communication.connectionType = 'acoustic';
+      this.telemetry.communication.connectionType = "acoustic";
       this.telemetry.communication.signalStrength = 70 - depth * 0.1;
       this.telemetry.communication.latency = 200 + depth * 2;
       this.telemetry.communication.dataRate = 100;
     } else {
       // Deep - limited or no connection
-      this.telemetry.communication.connectionType = 'acoustic';
+      this.telemetry.communication.connectionType = "acoustic";
       this.telemetry.communication.signalStrength = Math.max(10, 50 - depth * 0.05);
       this.telemetry.communication.latency = 500 + depth * 3;
       this.telemetry.communication.dataRate = 50;
@@ -261,16 +261,16 @@ class TelemetrySub {
     // Battery alerts
     if (this.telemetry.battery.level <= this.THRESHOLDS.batteryCritical) {
       newAlerts.push(this.createAlert(
-        'critical',
-        'battery',
+        "critical",
+        "battery",
         `Critical battery level: ${this.telemetry.battery.level.toFixed(1)}%`,
         this.telemetry.battery.level,
         this.THRESHOLDS.batteryCritical
       ));
     } else if (this.telemetry.battery.level <= this.THRESHOLDS.batteryLow) {
       newAlerts.push(this.createAlert(
-        'warning',
-        'battery',
+        "warning",
+        "battery",
         `Low battery: ${this.telemetry.battery.level.toFixed(1)}%`,
         this.telemetry.battery.level,
         this.THRESHOLDS.batteryLow
@@ -280,16 +280,16 @@ class TelemetrySub {
     // Depth alerts
     if (this.telemetry.depth >= this.THRESHOLDS.depthMax) {
       newAlerts.push(this.createAlert(
-        'critical',
-        'depth',
+        "critical",
+        "depth",
         `Maximum depth reached: ${this.telemetry.depth.toFixed(1)}m`,
         this.telemetry.depth,
         this.THRESHOLDS.depthMax
       ));
     } else if (this.telemetry.depth >= this.THRESHOLDS.depthWarning) {
       newAlerts.push(this.createAlert(
-        'warning',
-        'depth',
+        "warning",
+        "depth",
         `Approaching maximum depth: ${this.telemetry.depth.toFixed(1)}m`,
         this.telemetry.depth,
         this.THRESHOLDS.depthWarning
@@ -302,8 +302,8 @@ class TelemetrySub {
       this.telemetry.temperature > this.THRESHOLDS.tempMax
     ) {
       newAlerts.push(this.createAlert(
-        'warning',
-        'temperature',
+        "warning",
+        "temperature",
         `Temperature out of range: ${this.telemetry.temperature.toFixed(1)}°C`,
         this.telemetry.temperature
       ));
@@ -312,8 +312,8 @@ class TelemetrySub {
     // Communication alerts
     if (this.telemetry.communication.signalStrength < this.THRESHOLDS.signalLow) {
       newAlerts.push(this.createAlert(
-        'warning',
-        'communication',
+        "warning",
+        "communication",
         `Weak signal: ${this.telemetry.communication.signalStrength.toFixed(0)}%`,
         this.telemetry.communication.signalStrength,
         this.THRESHOLDS.signalLow
@@ -336,8 +336,8 @@ class TelemetrySub {
    * Create alert object
    */
   private createAlert(
-    severity: TelemetryAlert['severity'],
-    type: TelemetryAlert['type'],
+    severity: TelemetryAlert["severity"],
+    type: TelemetryAlert["type"],
     message: string,
     value?: number,
     threshold?: number

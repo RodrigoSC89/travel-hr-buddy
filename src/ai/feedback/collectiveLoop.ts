@@ -8,8 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { contextMesh } from "@/core/context/contextMesh";
 
-export type FeedbackType = 'human' | 'ai' | 'operational' | 'system';
-export type FeedbackCategory = 'accuracy' | 'performance' | 'suggestion' | 'correction' | 'rating' | 'telemetry';
+export type FeedbackType = "human" | "ai" | "operational" | "system";
+export type FeedbackCategory = "accuracy" | "performance" | "suggestion" | "correction" | "rating" | "telemetry";
 
 export interface FeedbackEvent {
   id?: string;
@@ -78,8 +78,8 @@ class CollectiveLoopEngine {
 
     // Subscribe to feedback-related contexts
     contextMesh.subscribe({
-      moduleName: 'CollectiveLoop',
-      contextTypes: ['ai', 'telemetry'],
+      moduleName: "CollectiveLoop",
+      contextTypes: ["ai", "telemetry"],
       handler: (message) => {
         this.handleContextUpdate(message.contextData);
       }
@@ -129,7 +129,7 @@ class CollectiveLoopEngine {
     metadata: Record<string, any> = {}
   ): Promise<void> {
     const feedback: FeedbackEvent = {
-      feedbackType: 'human',
+      feedbackType: "human",
       sourceModule,
       feedbackCategory: category,
       rating: Math.max(1, Math.min(5, rating)),
@@ -156,9 +156,9 @@ class CollectiveLoopEngine {
     const impactScore = this.calculateImpactScore(metrics);
 
     const feedback: FeedbackEvent = {
-      feedbackType: 'ai',
+      feedbackType: "ai",
       sourceModule,
-      feedbackCategory: 'performance',
+      feedbackCategory: "performance",
       aiMetrics: metrics,
       impactScore,
       metadata,
@@ -179,9 +179,9 @@ class CollectiveLoopEngine {
     telemetryData: Record<string, any>
   ): Promise<void> {
     const feedback: FeedbackEvent = {
-      feedbackType: 'operational',
+      feedbackType: "operational",
       sourceModule,
-      feedbackCategory: 'telemetry',
+      feedbackCategory: "telemetry",
       metadata: telemetryData,
       processed: false,
       learningApplied: false,
@@ -204,12 +204,12 @@ class CollectiveLoopEngine {
       cutoffDate.setDate(cutoffDate.getDate() - days);
 
       let query = supabase
-        .from('feedback_events')
-        .select('*')
-        .gte('timestamp', cutoffDate.toISOString());
+        .from("feedback_events")
+        .select("*")
+        .gte("timestamp", cutoffDate.toISOString());
 
       if (moduleName) {
-        query = query.eq('source_module', moduleName);
+        query = query.eq("source_module", moduleName);
       }
 
       const { data, error } = await query;
@@ -254,24 +254,24 @@ class CollectiveLoopEngine {
       // Publish learning adjustments to context mesh
       await contextMesh.publish({
         moduleName: moduleId,
-        contextType: 'ai',
+        contextType: "ai",
         contextData: {
           learningAdjustments: adjustments,
           appliedAt: new Date()
         },
-        source: 'CollectiveLoop'
+        source: "CollectiveLoop"
       });
 
       // Mark feedback as learning applied
       for (const fb of feedback) {
         if (fb.id) {
           await supabase
-            .from('feedback_events')
+            .from("feedback_events")
             .update({
               learning_applied: true,
               learning_results: { adjustments }
             })
-            .eq('id', fb.id);
+            .eq("id", fb.id);
         }
       }
 
@@ -295,21 +295,21 @@ class CollectiveLoopEngine {
   ): Promise<FeedbackEvent[]> {
     try {
       let query = supabase
-        .from('feedback_events')
-        .select('*')
-        .order('timestamp', { ascending: false });
+        .from("feedback_events")
+        .select("*")
+        .order("timestamp", { ascending: false });
 
       if (filters?.moduleName) {
-        query = query.eq('source_module', filters.moduleName);
+        query = query.eq("source_module", filters.moduleName);
       }
       if (filters?.feedbackType) {
-        query = query.eq('feedback_type', filters.feedbackType);
+        query = query.eq("feedback_type", filters.feedbackType);
       }
       if (filters?.category) {
-        query = query.eq('feedback_category', filters.category);
+        query = query.eq("feedback_category", filters.category);
       }
       if (filters?.processed !== undefined) {
-        query = query.eq('processed', filters.processed);
+        query = query.eq("processed", filters.processed);
       }
       if (filters?.limit) {
         query = query.limit(filters.limit);
@@ -334,7 +334,7 @@ class CollectiveLoopEngine {
   private async recordFeedback(feedback: FeedbackEvent): Promise<void> {
     try {
       const { data, error } = await supabase
-        .from('feedback_events')
+        .from("feedback_events")
         .insert({
           event_type: feedback.feedbackType,
           source_module: feedback.sourceModule,
@@ -362,7 +362,7 @@ class CollectiveLoopEngine {
       // Publish to context mesh
       await contextMesh.publish({
         moduleName: feedback.sourceModule,
-        contextType: 'ai',
+        contextType: "ai",
         contextData: {
           feedback: {
             id: feedback.id,
@@ -371,7 +371,7 @@ class CollectiveLoopEngine {
             rating: feedback.rating
           }
         },
-        source: 'CollectiveLoop'
+        source: "CollectiveLoop"
       });
     } catch (error) {
       logger.error("[CollectiveLoop] Error recording feedback", error);
@@ -412,9 +412,9 @@ class CollectiveLoopEngine {
       for (const feedback of feedbacks) {
         if (feedback.id) {
           await supabase
-            .from('feedback_events')
+            .from("feedback_events")
             .update({ processed: true })
-            .eq('id', feedback.id);
+            .eq("id", feedback.id);
         }
       }
 
@@ -426,8 +426,8 @@ class CollectiveLoopEngine {
 
   private analyzeFeedbackPatterns(feedbacks: FeedbackEvent[]): { requiresLearning: boolean } {
     // Simple heuristic: require learning if average rating < 3 or low AI metrics
-    const humanFeedback = feedbacks.filter(f => f.feedbackType === 'human');
-    const aiFeedback = feedbacks.filter(f => f.feedbackType === 'ai');
+    const humanFeedback = feedbacks.filter(f => f.feedbackType === "human");
+    const aiFeedback = feedbacks.filter(f => f.feedbackType === "ai");
 
     let requiresLearning = false;
 
@@ -451,8 +451,8 @@ class CollectiveLoopEngine {
     const adjustments: LearningAdjustment[] = [];
 
     // Analyze feedback to generate adjustments
-    const humanFeedback = feedbacks.filter(f => f.feedbackType === 'human');
-    const aiFeedback = feedbacks.filter(f => f.feedbackType === 'ai');
+    const humanFeedback = feedbacks.filter(f => f.feedbackType === "human");
+    const aiFeedback = feedbacks.filter(f => f.feedbackType === "ai");
 
     // Example adjustment based on low ratings
     if (humanFeedback.length > 0) {
@@ -461,7 +461,7 @@ class CollectiveLoopEngine {
       if (avgRating < 3) {
         adjustments.push({
           moduleId,
-          parameter: 'confidence_threshold',
+          parameter: "confidence_threshold",
           oldValue: 0.8,
           newValue: 0.9,
           reason: `Low user satisfaction (avg rating: ${avgRating.toFixed(2)})`,
@@ -477,7 +477,7 @@ class CollectiveLoopEngine {
       if (avgAccuracy < 0.7) {
         adjustments.push({
           moduleId,
-          parameter: 'learning_rate',
+          parameter: "learning_rate",
           oldValue: 0.01,
           newValue: 0.005,
           reason: `Low accuracy (${(avgAccuracy * 100).toFixed(1)}%)`,

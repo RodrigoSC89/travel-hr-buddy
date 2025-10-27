@@ -34,7 +34,7 @@ import { useToast } from "@/hooks/use-toast";
 const TripulantCopilot = () => {
   const [input, setInput] = useState("");
   // Initialize with a safer default, handling cases where navigator.onLine might be undefined
-  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' && navigator.onLine !== false);
+  const [isOnline, setIsOnline] = useState(typeof navigator !== "undefined" && navigator.onLine !== false);
   const [cacheLoaded, setCacheLoaded] = useState(false);
   const [cacheStats, setCacheStats] = useState({ messageCount: 0, contextCount: 0, lastUpdate: null as string | null });
   const { messages, isProcessing, sendMessage, clearMessages, quickAction } = 

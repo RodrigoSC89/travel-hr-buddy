@@ -12,7 +12,7 @@ export interface EmergencyProtocol {
   id: string;
   name: string;
   scenario: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
   steps: ProtocolStep[];
   conditions: Record<string, any>;
   requires_human_override: boolean;
@@ -23,16 +23,16 @@ export interface ProtocolStep {
   action: string;
   description: string;
   automated: boolean;
-  risk_level: 'low' | 'medium' | 'high';
+  risk_level: "low" | "medium" | "high";
 }
 
 export interface IncidentHistory {
   id: string;
   incident_type: string;
   timestamp: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   resolution: string;
-  outcome: 'resolved' | 'escalated' | 'pending';
+  outcome: "resolved" | "escalated" | "pending";
   lessons_learned: string[];
   metadata: Record<string, any>;
 }
@@ -47,18 +47,18 @@ export interface WeatherPattern {
     visibility: number;
     sea_state?: string;
   };
-  risk_assessment: 'safe' | 'caution' | 'warning' | 'danger';
+  risk_assessment: "safe" | "caution" | "warning" | "danger";
 }
 
 export interface SystemState {
-  modules_status: Record<string, 'online' | 'offline' | 'degraded'>;
-  connectivity: 'online' | 'offline' | 'limited';
+  modules_status: Record<string, "online" | "offline" | "degraded">;
+  connectivity: "online" | "offline" | "limited";
   location?: {
     latitude: number;
     longitude: number;
   };
   weather?: WeatherPattern;
-  crew_status?: 'normal' | 'alert' | 'emergency';
+  crew_status?: "normal" | "alert" | "emergency";
   resources: {
     battery?: number;
     fuel?: number;
@@ -69,13 +69,13 @@ export interface SystemState {
 export interface DecisionContext {
   current_state: SystemState;
   incident_type?: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   available_protocols: string[];
   historical_data: IncidentHistory[];
 }
 
 export interface DecisionResult {
-  action: 'suggest' | 'act' | 'escalate';
+  action: "suggest" | "act" | "escalate";
   protocol?: EmergencyProtocol;
   reasoning: string;
   confidence: number;
@@ -103,159 +103,159 @@ class MissionAICore {
    */
   private initializeEmergencyProtocols() {
     // Protocol: System Failure
-    this.protocols.set('system-failure', {
-      id: 'system-failure',
-      name: 'System Failure Response',
-      scenario: 'Critical system component failure',
-      priority: 'critical',
+    this.protocols.set("system-failure", {
+      id: "system-failure",
+      name: "System Failure Response",
+      scenario: "Critical system component failure",
+      priority: "critical",
       requires_human_override: true,
       conditions: {
-        module_status: 'offline',
-        impact: 'high',
+        module_status: "offline",
+        impact: "high",
       },
       steps: [
         {
           order: 1,
-          action: 'isolate_failed_component',
-          description: 'Isolate failed component to prevent cascade',
+          action: "isolate_failed_component",
+          description: "Isolate failed component to prevent cascade",
           automated: true,
-          risk_level: 'low',
+          risk_level: "low",
         },
         {
           order: 2,
-          action: 'activate_backup_system',
-          description: 'Switch to backup system if available',
+          action: "activate_backup_system",
+          description: "Switch to backup system if available",
           automated: true,
-          risk_level: 'medium',
+          risk_level: "medium",
         },
         {
           order: 3,
-          action: 'notify_crew',
-          description: 'Alert crew of system status',
+          action: "notify_crew",
+          description: "Alert crew of system status",
           automated: true,
-          risk_level: 'low',
+          risk_level: "low",
         },
         {
           order: 4,
-          action: 'initiate_diagnostic',
-          description: 'Run diagnostics on failed component',
+          action: "initiate_diagnostic",
+          description: "Run diagnostics on failed component",
           automated: false,
-          risk_level: 'low',
+          risk_level: "low",
         },
       ],
     });
 
     // Protocol: Weather Emergency
-    this.protocols.set('weather-emergency', {
-      id: 'weather-emergency',
-      name: 'Severe Weather Response',
-      scenario: 'Severe weather conditions detected',
-      priority: 'high',
+    this.protocols.set("weather-emergency", {
+      id: "weather-emergency",
+      name: "Severe Weather Response",
+      scenario: "Severe weather conditions detected",
+      priority: "high",
       requires_human_override: true,
       conditions: {
-        weather_risk: 'danger',
-        visibility: '<1km',
+        weather_risk: "danger",
+        visibility: "<1km",
       },
       steps: [
         {
           order: 1,
-          action: 'secure_operations',
-          description: 'Secure all deck operations',
+          action: "secure_operations",
+          description: "Secure all deck operations",
           automated: false,
-          risk_level: 'high',
+          risk_level: "high",
         },
         {
           order: 2,
-          action: 'update_route',
-          description: 'Calculate safe route alternatives',
+          action: "update_route",
+          description: "Calculate safe route alternatives",
           automated: true,
-          risk_level: 'medium',
+          risk_level: "medium",
         },
         {
           order: 3,
-          action: 'alert_authorities',
-          description: 'Notify maritime authorities',
+          action: "alert_authorities",
+          description: "Notify maritime authorities",
           automated: true,
-          risk_level: 'low',
+          risk_level: "low",
         },
       ],
     });
 
     // Protocol: Communication Loss
-    this.protocols.set('comm-loss', {
-      id: 'comm-loss',
-      name: 'Communication Loss Protocol',
-      scenario: 'Loss of external communications',
-      priority: 'medium',
+    this.protocols.set("comm-loss", {
+      id: "comm-loss",
+      name: "Communication Loss Protocol",
+      scenario: "Loss of external communications",
+      priority: "medium",
       requires_human_override: false,
       conditions: {
-        connectivity: 'offline',
-        duration: '>30min',
+        connectivity: "offline",
+        duration: ">30min",
       },
       steps: [
         {
           order: 1,
-          action: 'switch_to_offline_mode',
-          description: 'Activate offline operation mode',
+          action: "switch_to_offline_mode",
+          description: "Activate offline operation mode",
           automated: true,
-          risk_level: 'low',
+          risk_level: "low",
         },
         {
           order: 2,
-          action: 'cache_critical_data',
-          description: 'Cache all critical operational data',
+          action: "cache_critical_data",
+          description: "Cache all critical operational data",
           automated: true,
-          risk_level: 'low',
+          risk_level: "low",
         },
         {
           order: 3,
-          action: 'attempt_reconnection',
-          description: 'Periodically attempt to restore connection',
+          action: "attempt_reconnection",
+          description: "Periodically attempt to restore connection",
           automated: true,
-          risk_level: 'low',
+          risk_level: "low",
         },
       ],
     });
 
     // Protocol: Medical Emergency
-    this.protocols.set('medical-emergency', {
-      id: 'medical-emergency',
-      name: 'Medical Emergency Response',
-      scenario: 'Crew medical emergency',
-      priority: 'critical',
+    this.protocols.set("medical-emergency", {
+      id: "medical-emergency",
+      name: "Medical Emergency Response",
+      scenario: "Crew medical emergency",
+      priority: "critical",
       requires_human_override: true,
       conditions: {
-        crew_status: 'emergency',
-        medical_support: 'needed',
+        crew_status: "emergency",
+        medical_support: "needed",
       },
       steps: [
         {
           order: 1,
-          action: 'alert_medical_team',
-          description: 'Alert onboard medical personnel',
+          action: "alert_medical_team",
+          description: "Alert onboard medical personnel",
           automated: true,
-          risk_level: 'low',
+          risk_level: "low",
         },
         {
           order: 2,
-          action: 'contact_shore_medical',
-          description: 'Establish contact with shore medical support',
+          action: "contact_shore_medical",
+          description: "Establish contact with shore medical support",
           automated: true,
-          risk_level: 'low',
+          risk_level: "low",
         },
         {
           order: 3,
-          action: 'prepare_evacuation',
-          description: 'Prepare for potential medical evacuation',
+          action: "prepare_evacuation",
+          description: "Prepare for potential medical evacuation",
           automated: false,
-          risk_level: 'high',
+          risk_level: "high",
         },
         {
           order: 4,
-          action: 'divert_to_port',
-          description: 'Calculate route to nearest medical facility',
+          action: "divert_to_port",
+          description: "Calculate route to nearest medical facility",
           automated: true,
-          risk_level: 'medium',
+          risk_level: "medium",
         },
       ],
     });
@@ -271,13 +271,13 @@ class MissionAICore {
   private loadOfflineData() {
     try {
       // Load incident history
-      const storedIncidents = localStorage.getItem('incident_history');
+      const storedIncidents = localStorage.getItem("incident_history");
       if (storedIncidents) {
         this.incidentHistory = JSON.parse(storedIncidents);
       }
 
       // Load weather patterns
-      const storedWeather = localStorage.getItem('weather_patterns');
+      const storedWeather = localStorage.getItem("weather_patterns");
       if (storedWeather) {
         this.weatherPatterns = JSON.parse(storedWeather);
       }
@@ -295,12 +295,12 @@ class MissionAICore {
    * Setup offline detection
    */
   private setupOfflineDetection() {
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.isOfflineMode = false;
       logger.info("[MissionCore] Online mode activated");
     });
 
-    window.addEventListener('offline', () => {
+    window.addEventListener("offline", () => {
       this.isOfflineMode = true;
       logger.warn("[MissionCore] Offline mode activated");
       this.handleOfflineTransition();
@@ -321,7 +321,7 @@ class MissionAICore {
 
     // Notify system
     window.dispatchEvent(
-      new CustomEvent('mission-offline-mode', {
+      new CustomEvent("mission-offline-mode", {
         detail: { timestamp: new Date().toISOString() },
       })
     );
@@ -334,13 +334,13 @@ class MissionAICore {
     try {
       // Cache protocols
       const protocolsData = Array.from(this.protocols.values());
-      localStorage.setItem('emergency_protocols', JSON.stringify(protocolsData));
+      localStorage.setItem("emergency_protocols", JSON.stringify(protocolsData));
 
       // Cache incident history
-      localStorage.setItem('incident_history', JSON.stringify(this.incidentHistory));
+      localStorage.setItem("incident_history", JSON.stringify(this.incidentHistory));
 
       // Cache weather patterns
-      localStorage.setItem('weather_patterns', JSON.stringify(this.weatherPatterns));
+      localStorage.setItem("weather_patterns", JSON.stringify(this.weatherPatterns));
 
       logger.info("[MissionCore] Emergency data cached for offline access");
     } catch (error) {
@@ -363,7 +363,7 @@ class MissionAICore {
       const protocol = this.findMatchingProtocol(context);
 
       if (!protocol) {
-        return this.escalateToHuman(context, 'No matching protocol found');
+        return this.escalateToHuman(context, "No matching protocol found");
       }
 
       // Calculate risk score
@@ -373,15 +373,15 @@ class MissionAICore {
       const requiresOverride = 
         protocol.requires_human_override || 
         riskScore >= this.riskThreshold ||
-        context.severity === 'critical';
+        context.severity === "critical";
 
       // Separate automated and manual steps
       const automatedSteps = protocol.steps
-        .filter(s => s.automated && s.risk_level !== 'high')
+        .filter(s => s.automated && s.risk_level !== "high")
         .map(s => s.action);
 
       const manualSteps = protocol.steps
-        .filter(s => !s.automated || s.risk_level === 'high')
+        .filter(s => !s.automated || s.risk_level === "high")
         .map(s => s.action);
 
       // Build reasoning
@@ -391,7 +391,7 @@ class MissionAICore {
       const confidence = this.calculateConfidence(context, protocol);
 
       const result: DecisionResult = {
-        action: requiresOverride ? 'suggest' : 'act',
+        action: requiresOverride ? "suggest" : "act",
         protocol,
         reasoning,
         confidence,
@@ -403,8 +403,8 @@ class MissionAICore {
 
       // Track decision
       await learningCore.trackDecision(
-        'mission-core',
-        'emergency_response',
+        "mission-core",
+        "emergency_response",
         {
           context: {
             incident: context.incident_type,
@@ -464,9 +464,9 @@ class MissionAICore {
     const state = context.current_state;
 
     for (const [key, value] of Object.entries(conditions)) {
-      if (key === 'connectivity' && state.connectivity !== value) return false;
-      if (key === 'weather_risk' && state.weather?.risk_assessment !== value) return false;
-      if (key === 'crew_status' && state.crew_status !== value) return false;
+      if (key === "connectivity" && state.connectivity !== value) return false;
+      if (key === "weather_risk" && state.weather?.risk_assessment !== value) return false;
+      if (key === "crew_status" && state.crew_status !== value) return false;
     }
 
     return true;
@@ -497,7 +497,7 @@ class MissionAICore {
 
     // Reduce based on historical success
     const similarIncidents = this.incidentHistory.filter(
-      i => i.incident_type === context.incident_type && i.outcome === 'resolved'
+      i => i.incident_type === context.incident_type && i.outcome === "resolved"
     );
     if (similarIncidents.length > 3) score -= 1;
 
@@ -519,7 +519,7 @@ class MissionAICore {
     reasons.push(`Risk score: ${riskScore}/10`);
 
     if (this.isOfflineMode) {
-      reasons.push('System is in offline mode');
+      reasons.push("System is in offline mode");
     }
 
     const similarIncidents = this.incidentHistory.filter(
@@ -531,10 +531,10 @@ class MissionAICore {
     }
 
     if (riskScore >= this.riskThreshold) {
-      reasons.push('High risk - human override required');
+      reasons.push("High risk - human override required");
     }
 
-    return reasons.join('. ');
+    return reasons.join(". ");
   }
 
   /**
@@ -552,7 +552,7 @@ class MissionAICore {
     );
     
     const resolvedIncidents = similarIncidents.filter(
-      i => i.outcome === 'resolved'
+      i => i.outcome === "resolved"
     );
 
     if (similarIncidents.length > 0) {
@@ -580,13 +580,13 @@ class MissionAICore {
     logger.warn("[MissionCore] Escalating to human", { reason });
 
     return {
-      action: 'escalate',
+      action: "escalate",
       reasoning: `Escalating to human: ${reason}`,
       confidence: 0,
       risk_score: 10,
       requires_human_override: true,
       automated_steps: [],
-      manual_steps: ['Review situation and make manual decision'],
+      manual_steps: ["Review situation and make manual decision"],
     };
   }
 
@@ -602,7 +602,7 @@ class MissionAICore {
     }
 
     // Save to storage
-    localStorage.setItem('incident_history', JSON.stringify(this.incidentHistory));
+    localStorage.setItem("incident_history", JSON.stringify(this.incidentHistory));
 
     logger.info("[MissionCore] Incident recorded", {
       type: incident.incident_type,
@@ -611,14 +611,14 @@ class MissionAICore {
 
     // Track in learning core
     await learningCore.trackSystemEvent(
-      'incident_recorded',
-      'mission-core',
+      "incident_recorded",
+      "mission-core",
       {
         incident_type: incident.incident_type,
         severity: incident.severity,
         outcome: incident.outcome,
       },
-      incident.outcome === 'resolved' ? 'success' : 'failure'
+      incident.outcome === "resolved" ? "success" : "failure"
     );
   }
 
@@ -634,7 +634,7 @@ class MissionAICore {
     }
 
     // Save to storage
-    localStorage.setItem('weather_patterns', JSON.stringify(this.weatherPatterns));
+    localStorage.setItem("weather_patterns", JSON.stringify(this.weatherPatterns));
 
     logger.info("[MissionCore] Weather pattern recorded", {
       location: pattern.location,

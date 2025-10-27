@@ -18,7 +18,7 @@ export interface Vessel {
     latitude: number;
     longitude: number;
   };
-  status: 'operational' | 'maintenance' | 'offline';
+  status: "operational" | "maintenance" | "offline";
   crew_count: number;
 }
 
@@ -33,7 +33,7 @@ export interface WeatherCondition {
   visibility: number;
   sea_state: string;
   timestamp: Date;
-  risk_level: 'safe' | 'caution' | 'warning' | 'danger';
+  risk_level: "safe" | "caution" | "warning" | "danger";
 }
 
 export interface CrewMember {
@@ -42,7 +42,7 @@ export interface CrewMember {
   role: string;
   experience_years: number;
   certifications: string[];
-  status: 'available' | 'on_duty' | 'unavailable';
+  status: "available" | "on_duty" | "unavailable";
 }
 
 export interface PayloadItem {
@@ -50,7 +50,7 @@ export interface PayloadItem {
   type: string;
   weight: number;
   volume: number;
-  hazard_level: 'none' | 'low' | 'medium' | 'high';
+  hazard_level: "none" | "low" | "medium" | "high";
   special_requirements: string[];
 }
 
@@ -89,7 +89,7 @@ export interface SimulationOutcome {
   completion_percentage: number;
   incidents: Array<{
     type: string;
-    severity: 'low' | 'medium' | 'high' | 'critical';
+    severity: "low" | "medium" | "high" | "critical";
     timestamp: Date;
     description: string;
     resolution: string;
@@ -138,8 +138,8 @@ class MissionSimulationCore {
 
       // Save to Supabase
       const { data, error } = await (supabase as any)
-        .from('simulated_missions')
-        .from('simulated_missions')
+        .from("simulated_missions")
+        .from("simulated_missions")
         .insert({
           name: blueprint.name,
           description: blueprint.description,
@@ -150,7 +150,7 @@ class MissionSimulationCore {
           risk_factors: blueprint.riskFactors,
           failure_injections: blueprint.failureInjections || {},
           predictions: predictions,
-          status: 'pending',
+          status: "pending",
         })
         .select()
         .single();
@@ -190,10 +190,10 @@ class MissionSimulationCore {
 
       // Update status to running
       await (supabase as any)
-        .from('simulated_missions')
-        .from('simulated_missions')
-        .update({ status: 'running' })
-        .eq('id', simulationId);
+        .from("simulated_missions")
+        .from("simulated_missions")
+        .update({ status: "running" })
+        .eq("id", simulationId);
 
       this.isRunning = true;
 
@@ -202,20 +202,20 @@ class MissionSimulationCore {
 
       // Update status and save outcome
       await (supabase as any)
-        .from('simulated_missions')
-        .from('simulated_missions')
+        .from("simulated_missions")
+        .from("simulated_missions")
         .update({
-          status: outcome.success ? 'completed' : 'failed',
+          status: outcome.success ? "completed" : "failed",
           outcome: outcome,
         })
-        .eq('id', simulationId);
+        .eq("id", simulationId);
 
       this.isRunning = false;
 
       // Track decision with learning core
       await learningCore.trackDecision(
-        'mission-simulation',
-        'simulation_completed',
+        "mission-simulation",
+        "simulation_completed",
         { simulationId, blueprint },
         { outcome },
         outcome.success ? 0.9 : 0.5
@@ -231,10 +231,10 @@ class MissionSimulationCore {
       logger.error("[MissionSimulationCore] Simulation failed", { error });
       
       await (supabase as any)
-        .from('simulated_missions')
-        .from('simulated_missions')
-        .update({ status: 'failed' })
-        .eq('id', simulationId);
+        .from("simulated_missions")
+        .from("simulated_missions")
+        .update({ status: "failed" })
+        .eq("id", simulationId);
 
       this.isRunning = false;
       throw error;
@@ -281,7 +281,7 @@ class MissionSimulationCore {
 
     // Adjust for weather conditions
     const dangerousWeather = blueprint.weather.filter(
-      (w) => w.risk_level === 'danger' || w.risk_level === 'warning'
+      (w) => w.risk_level === "danger" || w.risk_level === "warning"
     );
     successProbability -= dangerousWeather.length * 0.1;
 
@@ -302,7 +302,7 @@ class MissionSimulationCore {
 
     // Adjust for payload hazards
     const highHazardPayload = blueprint.payload.filter(
-      (p) => p.hazard_level === 'high' || p.hazard_level === 'medium'
+      (p) => p.hazard_level === "high" || p.hazard_level === "medium"
     );
     successProbability -= highHazardPayload.length * 0.05;
 
@@ -358,7 +358,7 @@ class MissionSimulationCore {
   ): Promise<SimulationOutcome> {
     logger.info("[MissionSimulationCore] Executing simulation phases");
 
-    const incidents: SimulationOutcome['incidents'] = [];
+    const incidents: SimulationOutcome["incidents"] = [];
     let completionPercentage = 0;
     let success = true;
 
@@ -366,11 +366,11 @@ class MissionSimulationCore {
     completionPercentage = 20;
     if (blueprint.failureInjections?.crew_delay) {
       incidents.push({
-        type: 'crew_delay',
-        severity: 'medium',
+        type: "crew_delay",
+        severity: "medium",
         timestamp: new Date(),
-        description: 'Crew members delayed during initialization',
-        resolution: 'Proceeded with available crew',
+        description: "Crew members delayed during initialization",
+        resolution: "Proceeded with available crew",
       });
     }
 
@@ -378,36 +378,36 @@ class MissionSimulationCore {
     completionPercentage = 50;
     if (blueprint.failureInjections?.system_crash) {
       incidents.push({
-        type: 'system_crash',
-        severity: 'high',
+        type: "system_crash",
+        severity: "high",
         timestamp: new Date(),
-        description: 'Critical system crashed during execution',
-        resolution: 'System restarted, minor data loss',
+        description: "Critical system crashed during execution",
+        resolution: "System restarted, minor data loss",
       });
       success = false;
     }
 
     if (blueprint.failureInjections?.comms_loss) {
       incidents.push({
-        type: 'comms_loss',
-        severity: 'critical',
+        type: "comms_loss",
+        severity: "critical",
         timestamp: new Date(),
-        description: 'Lost communication with command center',
-        resolution: 'Switched to backup communication system',
+        description: "Lost communication with command center",
+        resolution: "Switched to backup communication system",
       });
     }
 
     // Check weather conditions
     const dangerousWeather = blueprint.weather.filter(
-      (w) => w.risk_level === 'danger'
+      (w) => w.risk_level === "danger"
     );
     if (dangerousWeather.length > 0) {
       incidents.push({
-        type: 'weather_event',
-        severity: 'high',
+        type: "weather_event",
+        severity: "high",
         timestamp: new Date(),
-        description: 'Encountered dangerous weather conditions',
-        resolution: 'Adjusted route and reduced speed',
+        description: "Encountered dangerous weather conditions",
+        resolution: "Adjusted route and reduced speed",
       });
     }
 
@@ -416,11 +416,11 @@ class MissionSimulationCore {
     // Phase 3: Completion (70-100%)
     if (blueprint.failureInjections?.equipment_failure) {
       incidents.push({
-        type: 'equipment_failure',
-        severity: 'medium',
+        type: "equipment_failure",
+        severity: "medium",
         timestamp: new Date(),
-        description: 'Non-critical equipment failure',
-        resolution: 'Continued with redundant systems',
+        description: "Non-critical equipment failure",
+        resolution: "Continued with redundant systems",
       });
     }
 
@@ -446,13 +446,13 @@ class MissionSimulationCore {
 
     // Generate lessons learned
     const lessonsLearned: string[] = [];
-    if (incidents.some((i) => i.type === 'system_crash')) {
+    if (incidents.some((i) => i.type === "system_crash")) {
       lessonsLearned.push("Implement redundant systems to prevent critical failures");
     }
-    if (incidents.some((i) => i.type === 'comms_loss')) {
+    if (incidents.some((i) => i.type === "comms_loss")) {
       lessonsLearned.push("Ensure backup communication systems are always available");
     }
-    if (incidents.some((i) => i.type === 'weather_event')) {
+    if (incidents.some((i) => i.type === "weather_event")) {
       lessonsLearned.push("Improve weather monitoring and route planning");
     }
 
@@ -486,10 +486,10 @@ class MissionSimulationCore {
   async getSimulation(simulationId: string): Promise<SimulationBlueprint | null> {
     try {
       const { data, error } = await (supabase as any)
-        .from('simulated_missions')
-        .from('simulated_missions')
-        .select('*')
-        .eq('id', simulationId)
+        .from("simulated_missions")
+        .from("simulated_missions")
+        .select("*")
+        .eq("id", simulationId)
         .single();
 
       if (error) throw error;
@@ -524,10 +524,10 @@ class MissionSimulationCore {
   async listSimulations(): Promise<any[]> {
     try {
       const { data, error } = await (supabase as any)
-        .from('simulated_missions')
-        .from('simulated_missions')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("simulated_missions")
+        .from("simulated_missions")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
@@ -546,10 +546,10 @@ class MissionSimulationCore {
   async deleteSimulation(simulationId: string): Promise<void> {
     try {
       const { error } = await (supabase as any)
-        .from('simulated_missions')
-        .from('simulated_missions')
+        .from("simulated_missions")
+        .from("simulated_missions")
         .delete()
-        .eq('id', simulationId);
+        .eq("id", simulationId);
 
       if (error) throw error;
 

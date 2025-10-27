@@ -10,8 +10,8 @@
 import { logger } from "@/lib/logger";
 import WebXRPolyfill from "webxr-polyfill";
 
-export type XRMode = 'vr' | 'ar' | 'inline';
-export type XRSessionState = 'idle' | 'starting' | 'active' | 'ending' | 'error';
+export type XRMode = "vr" | "ar" | "inline";
+export type XRSessionState = "idle" | "starting" | "active" | "ending" | "error";
 
 export interface XRConfig {
   mode: XRMode;
@@ -38,27 +38,27 @@ class XRInterfaceCore {
    */
   async initialize(): Promise<boolean> {
     if (this.isInitialized) {
-      logger.warn('[XRCore] Already initialized');
+      logger.warn("[XRCore] Already initialized");
       return true;
     }
 
     try {
       // Check native WebXR support
-      if (!('xr' in navigator)) {
-        logger.info('[XRCore] WebXR not natively supported, loading polyfill...');
+      if (!("xr" in navigator)) {
+        logger.info("[XRCore] WebXR not natively supported, loading polyfill...");
         this.polyfill = new WebXRPolyfill();
       }
 
       // Verify XR availability
       if (!navigator.xr) {
-        throw new Error('WebXR not available even with polyfill');
+        throw new Error("WebXR not available even with polyfill");
       }
 
       this.isInitialized = true;
-      logger.info('[XRCore] ✓ WebXR initialized successfully');
+      logger.info("[XRCore] ✓ WebXR initialized successfully");
       return true;
     } catch (error) {
-      logger.error('[XRCore] Failed to initialize:', error);
+      logger.error("[XRCore] Failed to initialize:", error);
       return false;
     }
   }
@@ -72,8 +72,8 @@ class XRInterfaceCore {
     }
 
     try {
-      const sessionMode = mode === 'vr' ? 'immersive-vr' : 
-                         mode === 'ar' ? 'immersive-ar' : 'inline';
+      const sessionMode = mode === "vr" ? "immersive-vr" : 
+        mode === "ar" ? "immersive-ar" : "inline";
       
       return await navigator.xr!.isSessionSupported(sessionMode);
     } catch (error) {
@@ -90,39 +90,39 @@ class XRInterfaceCore {
       await this.initialize();
     }
 
-    if (this.currentSession?.state === 'active') {
-      logger.warn('[XRCore] Session already active');
+    if (this.currentSession?.state === "active") {
+      logger.warn("[XRCore] Session already active");
       return this.currentSession;
     }
 
-    const sessionMode = config.mode === 'vr' ? 'immersive-vr' : 
-                       config.mode === 'ar' ? 'immersive-ar' : 'inline';
+    const sessionMode = config.mode === "vr" ? "immersive-vr" : 
+      config.mode === "ar" ? "immersive-ar" : "inline";
 
     try {
       this.currentSession = {
         mode: config.mode,
-        state: 'starting',
+        state: "starting",
         session: null,
         referenceSpace: null
       };
 
       const sessionInit: XRSessionInit = {
-        requiredFeatures: config.requiredFeatures || ['local'],
+        requiredFeatures: config.requiredFeatures || ["local"],
         optionalFeatures: config.optionalFeatures || []
       };
 
       const session = await navigator.xr!.requestSession(sessionMode, sessionInit);
-      const referenceSpace = await session.requestReferenceSpace('local');
+      const referenceSpace = await session.requestReferenceSpace("local");
 
       this.currentSession = {
         mode: config.mode,
-        state: 'active',
+        state: "active",
         session,
         referenceSpace
       };
 
       // Setup session end handler
-      session.addEventListener('end', () => {
+      session.addEventListener("end", () => {
         this.handleSessionEnd();
       });
 
@@ -134,9 +134,9 @@ class XRInterfaceCore {
       logger.info(`[XRCore] ✓ ${config.mode.toUpperCase()} session started`);
       return this.currentSession;
     } catch (error) {
-      logger.error('[XRCore] Failed to start session:', error);
+      logger.error("[XRCore] Failed to start session:", error);
       if (this.currentSession) {
-        this.currentSession.state = 'error';
+        this.currentSession.state = "error";
       }
       return null;
     }
@@ -147,16 +147,16 @@ class XRInterfaceCore {
    */
   async endSession(): Promise<void> {
     if (!this.currentSession?.session) {
-      logger.warn('[XRCore] No active session to end');
+      logger.warn("[XRCore] No active session to end");
       return;
     }
 
     try {
-      this.currentSession.state = 'ending';
+      this.currentSession.state = "ending";
       await this.currentSession.session.end();
-      logger.info('[XRCore] Session ended successfully');
+      logger.info("[XRCore] Session ended successfully");
     } catch (error) {
-      logger.error('[XRCore] Error ending session:', error);
+      logger.error("[XRCore] Error ending session:", error);
     }
   }
 
@@ -168,8 +168,8 @@ class XRInterfaceCore {
       return; // Already exists
     }
 
-    this.overlayElement = document.createElement('div');
-    this.overlayElement.id = 'xr-overlay';
+    this.overlayElement = document.createElement("div");
+    this.overlayElement.id = "xr-overlay";
     this.overlayElement.style.cssText = `
       position: fixed;
       top: 0;
@@ -185,7 +185,7 @@ class XRInterfaceCore {
     `;
 
     // Top bar
-    const topBar = document.createElement('div');
+    const topBar = document.createElement("div");
     topBar.style.cssText = `
       background: rgba(0, 0, 0, 0.7);
       color: white;
@@ -194,18 +194,18 @@ class XRInterfaceCore {
       pointer-events: auto;
       backdrop-filter: blur(10px);
     `;
-    topBar.textContent = `XR Mode: ${this.currentSession?.mode.toUpperCase() || 'Unknown'}`;
+    topBar.textContent = `XR Mode: ${this.currentSession?.mode.toUpperCase() || "Unknown"}`;
 
     // Bottom controls
-    const bottomBar = document.createElement('div');
+    const bottomBar = document.createElement("div");
     bottomBar.style.cssText = `
       display: flex;
       justify-content: center;
       gap: 10px;
     `;
 
-    const exitButton = document.createElement('button');
-    exitButton.textContent = 'Exit XR';
+    const exitButton = document.createElement("button");
+    exitButton.textContent = "Exit XR";
     exitButton.style.cssText = `
       background: rgba(255, 0, 0, 0.8);
       color: white;
@@ -223,7 +223,7 @@ class XRInterfaceCore {
     this.overlayElement.appendChild(bottomBar);
     document.body.appendChild(this.overlayElement);
 
-    logger.info('[XRCore] ✓ Overlay created');
+    logger.info("[XRCore] ✓ Overlay created");
   }
 
   /**
@@ -233,7 +233,7 @@ class XRInterfaceCore {
     if (this.overlayElement) {
       document.body.removeChild(this.overlayElement);
       this.overlayElement = null;
-      logger.info('[XRCore] Overlay removed');
+      logger.info("[XRCore] Overlay removed");
     }
   }
 
@@ -241,7 +241,7 @@ class XRInterfaceCore {
    * Handle session end
    */
   private handleSessionEnd(): void {
-    logger.info('[XRCore] Session ended');
+    logger.info("[XRCore] Session ended");
     this.removeOverlay();
     this.currentSession = null;
   }

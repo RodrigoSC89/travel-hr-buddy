@@ -15,8 +15,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { MQTTClient } from "@/core/MQTTClient";
 
-export type AlertType = 'weather' | 'navigation' | 'emergency' | 'maintenance' | 'security' | 'custom';
-export type AlertSeverity = 'info' | 'warning' | 'critical';
+export type AlertType = "weather" | "navigation" | "emergency" | "maintenance" | "security" | "custom";
+export type AlertSeverity = "info" | "warning" | "critical";
 
 export interface VesselAlert {
   id: string;
@@ -39,7 +39,7 @@ export interface SyncMessage {
   message_id: string;
   source_vessel_id: string;
   target_vessel_id?: string; // If null, broadcast to all
-  message_type: 'alert' | 'log' | 'status' | 'coordination';
+  message_type: "alert" | "log" | "status" | "coordination";
   payload: any;
   timestamp: string;
   signature?: string; // For authentication
@@ -48,7 +48,7 @@ export interface SyncMessage {
 export interface VesselTrust {
   vessel_id: string;
   trusted_vessel_id: string;
-  trust_level: 'full' | 'partial' | 'read-only';
+  trust_level: "full" | "partial" | "read-only";
   created_at: string;
 }
 
@@ -67,7 +67,7 @@ export class IntervesselSync {
    */
   static async initialize(vesselId: string): Promise<void> {
     if (this.initialized) {
-      logger.info('Intervessel sync already initialized');
+      logger.info("Intervessel sync already initialized");
       return;
     }
 
@@ -77,10 +77,10 @@ export class IntervesselSync {
     try {
       MQTTClient.connect({
         topics: [
-          'fleet-updates',
+          "fleet-updates",
           `vessel/${vesselId}/alerts`,
           `vessel/${vesselId}/coordination`,
-          'fleet-global'
+          "fleet-global"
         ]
       });
 
@@ -90,7 +90,7 @@ export class IntervesselSync {
       this.initialized = true;
       logger.info(`Intervessel sync initialized for vessel ${vesselId}`);
     } catch (error) {
-      logger.error('Failed to initialize intervessel sync:', error);
+      logger.error("Failed to initialize intervessel sync:", error);
       throw error;
     }
   }
@@ -101,15 +101,15 @@ export class IntervesselSync {
   private static setupMessageHandlers(): void {
     // This would be implemented with actual MQTT event listeners
     // For now, we'll use a polling approach with Supabase
-    logger.info('Message handlers setup complete');
+    logger.info("Message handlers setup complete");
   }
 
   /**
    * Send alert to other vessels
    */
-  static async sendAlert(alert: Omit<VesselAlert, 'id' | 'source_vessel_id' | 'timestamp'>): Promise<boolean> {
+  static async sendAlert(alert: Omit<VesselAlert, "id" | "source_vessel_id" | "timestamp">): Promise<boolean> {
     if (!this.vesselId) {
-      logger.error('Sync layer not initialized');
+      logger.error("Sync layer not initialized");
       return false;
     }
 
@@ -123,7 +123,7 @@ export class IntervesselSync {
 
       // Store alert in database
       const { error: dbError } = await supabase
-        .from('vessel_alerts')
+        .from("vessel_alerts")
         .insert({
           id: fullAlert.id,
           source_vessel_id: fullAlert.source_vessel_id,
@@ -138,14 +138,14 @@ export class IntervesselSync {
         });
 
       if (dbError) {
-        logger.error('Error storing alert in database:', dbError);
+        logger.error("Error storing alert in database:", dbError);
       }
 
       // Try MQTT first
       const mqttSuccess = this.sendViaMQTT({
         message_id: fullAlert.id,
         source_vessel_id: this.vesselId,
-        message_type: 'alert',
+        message_type: "alert",
         payload: fullAlert,
         timestamp: fullAlert.timestamp
       });
@@ -158,7 +158,7 @@ export class IntervesselSync {
       logger.info(`Alert sent from vessel ${this.vesselId}:`, fullAlert);
       return true;
     } catch (error) {
-      logger.error('Error sending alert:', error);
+      logger.error("Error sending alert:", error);
       return false;
     }
   }
@@ -169,18 +169,18 @@ export class IntervesselSync {
   private static sendViaMQTT(message: SyncMessage): boolean {
     try {
       if (!MQTTClient.isConnected()) {
-        logger.warn('MQTT not connected, will use fallback');
+        logger.warn("MQTT not connected, will use fallback");
         return false;
       }
 
       const topic = message.target_vessel_id 
         ? `vessel/${message.target_vessel_id}/alerts`
-        : 'fleet-updates';
+        : "fleet-updates";
 
       MQTTClient.send(topic, message);
       return true;
     } catch (error) {
-      logger.error('MQTT send failed:', error);
+      logger.error("MQTT send failed:", error);
       return false;
     }
   }
@@ -192,10 +192,10 @@ export class IntervesselSync {
     try {
       // Broadcast to all vessels via database
       const { data: vessels } = await supabase
-        .from('vessels')
-        .select('id')
-        .neq('id', this.vesselId)
-        .eq('status', 'active');
+        .from("vessels")
+        .select("id")
+        .neq("id", this.vesselId)
+        .eq("status", "active");
 
       if (vessels) {
         // Create notification records for each vessel
@@ -207,13 +207,13 @@ export class IntervesselSync {
         }));
 
         await supabase
-          .from('vessel_alert_notifications')
+          .from("vessel_alert_notifications")
           .insert(notifications);
 
         logger.info(`HTTP fallback: Alert delivered to ${vessels.length} vessels`);
       }
     } catch (error) {
-      logger.error('HTTP fallback failed:', error);
+      logger.error("HTTP fallback failed:", error);
       throw error;
     }
   }
@@ -228,27 +228,27 @@ export class IntervesselSync {
     limit?: number;
   }): Promise<VesselAlert[]> {
     if (!this.vesselId) {
-      logger.error('Sync layer not initialized');
+      logger.error("Sync layer not initialized");
       return [];
     }
 
     try {
       let query = supabase
-        .from('vessel_alerts')
+        .from("vessel_alerts")
         .select(`
           *,
           vessels!vessel_alerts_source_vessel_id_fkey (
             name
           )
         `)
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
 
       if (filters?.severity) {
-        query = query.eq('severity', filters.severity);
+        query = query.eq("severity", filters.severity);
       }
 
       if (filters?.alert_type) {
-        query = query.eq('alert_type', filters.alert_type);
+        query = query.eq("alert_type", filters.alert_type);
       }
 
       if (filters?.limit) {
@@ -261,7 +261,7 @@ export class IntervesselSync {
       const { data, error } = await query;
 
       if (error) {
-        logger.error('Error fetching alerts:', error);
+        logger.error("Error fetching alerts:", error);
         return [];
       }
 
@@ -279,7 +279,7 @@ export class IntervesselSync {
         expires_at: alert.expires_at
       })) || [];
     } catch (error) {
-      logger.error('Error in getAlerts:', error);
+      logger.error("Error in getAlerts:", error);
       return [];
     }
   }
@@ -293,20 +293,20 @@ export class IntervesselSync {
     metadata?: Record<string, any>;
   }): Promise<boolean> {
     if (!this.vesselId) {
-      logger.error('Sync layer not initialized');
+      logger.error("Sync layer not initialized");
       return false;
     }
 
     try {
       // Get trusted vessels
       const { data: trustedVessels } = await supabase
-        .from('vessel_trust_relationships')
-        .select('trusted_vessel_id, trust_level')
-        .eq('vessel_id', this.vesselId)
-        .in('trust_level', ['full', 'partial']);
+        .from("vessel_trust_relationships")
+        .select("trusted_vessel_id, trust_level")
+        .eq("vessel_id", this.vesselId)
+        .in("trust_level", ["full", "partial"]);
 
       if (!trustedVessels || trustedVessels.length === 0) {
-        logger.info('No trusted vessels for log replication');
+        logger.info("No trusted vessels for log replication");
         return true;
       }
 
@@ -321,18 +321,18 @@ export class IntervesselSync {
       }));
 
       const { error } = await supabase
-        .from('replicated_logs')
+        .from("replicated_logs")
         .insert(replicatedLogs);
 
       if (error) {
-        logger.error('Error replicating logs:', error);
+        logger.error("Error replicating logs:", error);
         return false;
       }
 
       logger.info(`Log replicated to ${trustedVessels.length} trusted vessels`);
       return true;
     } catch (error) {
-      logger.error('Error in replicateLog:', error);
+      logger.error("Error in replicateLog:", error);
       return false;
     }
   }
@@ -342,13 +342,13 @@ export class IntervesselSync {
    */
   static async getReplicatedLogs(limit: number = 50): Promise<any[]> {
     if (!this.vesselId) {
-      logger.error('Sync layer not initialized');
+      logger.error("Sync layer not initialized");
       return [];
     }
 
     try {
       const { data, error } = await supabase
-        .from('replicated_logs')
+        .from("replicated_logs")
         .select(`
           *,
           vessels!replicated_logs_source_vessel_id_fkey (
@@ -356,18 +356,18 @@ export class IntervesselSync {
             imo_code
           )
         `)
-        .eq('target_vessel_id', this.vesselId)
-        .order('replicated_at', { ascending: false })
+        .eq("target_vessel_id", this.vesselId)
+        .order("replicated_at", { ascending: false })
         .limit(limit);
 
       if (error) {
-        logger.error('Error fetching replicated logs:', error);
+        logger.error("Error fetching replicated logs:", error);
         return [];
       }
 
       return data || [];
     } catch (error) {
-      logger.error('Error in getReplicatedLogs:', error);
+      logger.error("Error in getReplicatedLogs:", error);
       return [];
     }
   }
@@ -377,16 +377,16 @@ export class IntervesselSync {
    */
   static async establishTrust(
     trustedVesselId: string,
-    trustLevel: 'full' | 'partial' | 'read-only'
+    trustLevel: "full" | "partial" | "read-only"
   ): Promise<boolean> {
     if (!this.vesselId) {
-      logger.error('Sync layer not initialized');
+      logger.error("Sync layer not initialized");
       return false;
     }
 
     try {
       const { error } = await supabase
-        .from('vessel_trust_relationships')
+        .from("vessel_trust_relationships")
         .insert({
           vessel_id: this.vesselId,
           trusted_vessel_id: trustedVesselId,
@@ -394,14 +394,14 @@ export class IntervesselSync {
         });
 
       if (error) {
-        logger.error('Error establishing trust:', error);
+        logger.error("Error establishing trust:", error);
         return false;
       }
 
       logger.info(`Trust established with vessel ${trustedVesselId} (${trustLevel})`);
       return true;
     } catch (error) {
-      logger.error('Error in establishTrust:', error);
+      logger.error("Error in establishTrust:", error);
       return false;
     }
   }
@@ -412,7 +412,7 @@ export class IntervesselSync {
   static async getFleetStatus(): Promise<any[]> {
     try {
       const { data, error } = await supabase
-        .from('vessels')
+        .from("vessels")
         .select(`
           id,
           name,
@@ -421,17 +421,17 @@ export class IntervesselSync {
           vessel_type,
           maintenance_status
         `)
-        .eq('status', 'active')
-        .order('name');
+        .eq("status", "active")
+        .order("name");
 
       if (error) {
-        logger.error('Error fetching fleet status:', error);
+        logger.error("Error fetching fleet status:", error);
         return [];
       }
 
       return data || [];
     } catch (error) {
-      logger.error('Error in getFleetStatus:', error);
+      logger.error("Error in getFleetStatus:", error);
       return [];
     }
   }
@@ -445,24 +445,24 @@ export class IntervesselSync {
     maintenance_status?: string;
   }): Promise<boolean> {
     if (!this.vesselId) {
-      logger.error('Sync layer not initialized');
+      logger.error("Sync layer not initialized");
       return false;
     }
 
     try {
       // Update own status in database
       const { error } = await supabase
-        .from('vessels')
+        .from("vessels")
         .update({
           status: status.status,
           last_known_position: status.position,
           maintenance_status: status.maintenance_status,
           updated_at: new Date().toISOString()
         })
-        .eq('id', this.vesselId);
+        .eq("id", this.vesselId);
 
       if (error) {
-        logger.error('Error updating vessel status:', error);
+        logger.error("Error updating vessel status:", error);
         return false;
       }
 
@@ -470,7 +470,7 @@ export class IntervesselSync {
       const message: SyncMessage = {
         message_id: crypto.randomUUID(),
         source_vessel_id: this.vesselId,
-        message_type: 'status',
+        message_type: "status",
         payload: status,
         timestamp: new Date().toISOString()
       };
@@ -480,7 +480,7 @@ export class IntervesselSync {
       logger.info(`Status broadcast from vessel ${this.vesselId}`);
       return true;
     } catch (error) {
-      logger.error('Error in broadcastStatus:', error);
+      logger.error("Error in broadcastStatus:", error);
       return false;
     }
   }
@@ -493,7 +493,7 @@ export class IntervesselSync {
       MQTTClient.disconnect();
       this.vesselId = null;
       this.initialized = false;
-      logger.info('Intervessel sync disconnected');
+      logger.info("Intervessel sync disconnected");
     }
   }
 

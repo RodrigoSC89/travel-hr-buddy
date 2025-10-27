@@ -19,9 +19,9 @@ export interface AutonomousRule {
 }
 
 export interface AutonomousEvent {
-  type: 'module_crash' | 'high_latency' | 'api_failure' | 'error_threshold' | 'custom';
+  type: "module_crash" | "high_latency" | "api_failure" | "error_threshold" | "custom";
   module: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   data: Record<string, any>;
   timestamp: Date;
 }
@@ -50,12 +50,12 @@ class AutonomyLayer {
   private initializeDefaultRules() {
     // Rule 1: Restart module on crash
     this.addRule({
-      id: 'restart-on-crash',
-      name: 'Restart Module on Crash',
-      description: 'Automatically restart a module that has crashed',
+      id: "restart-on-crash",
+      name: "Restart Module on Crash",
+      description: "Automatically restart a module that has crashed",
       priority: 10,
       enabled: true,
-      condition: (event) => event.type === 'module_crash',
+      condition: (event) => event.type === "module_crash",
       action: async (event) => {
         logger.warn("[AutonomyLayer] Attempting to restart crashed module", {
           module: event.module,
@@ -67,16 +67,16 @@ class AutonomyLayer {
 
           // Track decision
           await learningCore.trackDecision(
-            'autonomy-layer',
-            'module_restart',
-            { module: event.module, reason: 'crash' },
+            "autonomy-layer",
+            "module_restart",
+            { module: event.module, reason: "crash" },
             { success: true },
             0.9
           );
 
           return {
             success: true,
-            action: 'restart',
+            action: "restart",
             description: `Module ${event.module} restarted successfully`,
           };
         } catch (error) {
@@ -87,7 +87,7 @@ class AutonomyLayer {
 
           return {
             success: false,
-            action: 'restart',
+            action: "restart",
             description: `Failed to restart module ${event.module}`,
             requiresHumanReview: true,
           };
@@ -97,13 +97,13 @@ class AutonomyLayer {
 
     // Rule 2: Notify on high latency
     this.addRule({
-      id: 'notify-high-latency',
-      name: 'Notify on High Latency',
-      description: 'Send notification when latency exceeds threshold',
+      id: "notify-high-latency",
+      name: "Notify on High Latency",
+      description: "Send notification when latency exceeds threshold",
       priority: 5,
       enabled: true,
       condition: (event) => {
-        return event.type === 'high_latency' && event.data.latency > 5000;
+        return event.type === "high_latency" && event.data.latency > 5000;
       },
       action: async (event) => {
         logger.warn("[AutonomyLayer] High latency detected", {
@@ -113,22 +113,22 @@ class AutonomyLayer {
 
         try {
           await this.sendNotification(
-            'High Latency Alert',
+            "High Latency Alert",
             `Module ${event.module} has latency of ${event.data.latency}ms`,
             event.severity
           );
 
           return {
             success: true,
-            action: 'notify',
-            description: 'Notification sent for high latency',
+            action: "notify",
+            description: "Notification sent for high latency",
           };
         } catch (error) {
           logger.error("[AutonomyLayer] Failed to send notification", { error });
           return {
             success: false,
-            action: 'notify',
-            description: 'Failed to send notification',
+            action: "notify",
+            description: "Failed to send notification",
           };
         }
       },
@@ -136,16 +136,16 @@ class AutonomyLayer {
 
     // Rule 3: Auto-disable faulty feature
     this.addRule({
-      id: 'disable-faulty-feature',
-      name: 'Disable Faulty Feature',
-      description: 'Automatically disable a feature that repeatedly fails',
+      id: "disable-faulty-feature",
+      name: "Disable Faulty Feature",
+      description: "Automatically disable a feature that repeatedly fails",
       priority: 8,
       enabled: true,
       condition: (event) => {
         return (
-          event.type === 'error_threshold' &&
+          event.type === "error_threshold" &&
           event.data.error_count > 10 &&
-          event.severity === 'critical'
+          event.severity === "critical"
         );
       },
       action: async (event) => {
@@ -158,8 +158,8 @@ class AutonomyLayer {
           await this.disableFeature(event.module, event.data.feature);
 
           await learningCore.trackDecision(
-            'autonomy-layer',
-            'feature_disable',
+            "autonomy-layer",
+            "feature_disable",
             { module: event.module, feature: event.data.feature },
             { success: true },
             0.85
@@ -167,7 +167,7 @@ class AutonomyLayer {
 
           return {
             success: true,
-            action: 'disable',
+            action: "disable",
             description: `Feature ${event.data.feature} in ${event.module} disabled`,
             requiresHumanReview: true,
           };
@@ -175,8 +175,8 @@ class AutonomyLayer {
           logger.error("[AutonomyLayer] Failed to disable feature", { error });
           return {
             success: false,
-            action: 'disable',
-            description: 'Failed to disable feature',
+            action: "disable",
+            description: "Failed to disable feature",
             requiresHumanReview: true,
           };
         }
@@ -185,13 +185,13 @@ class AutonomyLayer {
 
     // Rule 4: Route fallback
     this.addRule({
-      id: 'route-fallback',
-      name: 'Route Fallback',
-      description: 'Switch to fallback route when primary fails',
+      id: "route-fallback",
+      name: "Route Fallback",
+      description: "Switch to fallback route when primary fails",
       priority: 7,
       enabled: true,
       condition: (event) => {
-        return event.type === 'api_failure' && event.data.consecutive_failures > 3;
+        return event.type === "api_failure" && event.data.consecutive_failures > 3;
       },
       action: async (event) => {
         logger.warn("[AutonomyLayer] Activating route fallback", {
@@ -204,15 +204,15 @@ class AutonomyLayer {
 
           return {
             success: true,
-            action: 'fallback',
+            action: "fallback",
             description: `Fallback route activated for ${event.module}`,
           };
         } catch (error) {
           logger.error("[AutonomyLayer] Failed to activate fallback", { error });
           return {
             success: false,
-            action: 'fallback',
-            description: 'Failed to activate fallback route',
+            action: "fallback",
+            description: "Failed to activate fallback route",
             requiresHumanReview: true,
           };
         }
@@ -221,13 +221,13 @@ class AutonomyLayer {
 
     // Rule 5: Cache flush
     this.addRule({
-      id: 'cache-flush',
-      name: 'Cache Flush',
-      description: 'Flush cache when stale data is detected',
+      id: "cache-flush",
+      name: "Cache Flush",
+      description: "Flush cache when stale data is detected",
       priority: 3,
       enabled: true,
       condition: (event) => {
-        return event.type === 'custom' && event.data.issue === 'stale_cache';
+        return event.type === "custom" && event.data.issue === "stale_cache";
       },
       action: async (event) => {
         logger.info("[AutonomyLayer] Flushing cache", { module: event.module });
@@ -237,15 +237,15 @@ class AutonomyLayer {
 
           return {
             success: true,
-            action: 'cache_flush',
+            action: "cache_flush",
             description: `Cache flushed for ${event.module}`,
           };
         } catch (error) {
           logger.error("[AutonomyLayer] Failed to flush cache", { error });
           return {
             success: false,
-            action: 'cache_flush',
-            description: 'Failed to flush cache',
+            action: "cache_flush",
+            description: "Failed to flush cache",
           };
         }
       },
@@ -330,8 +330,8 @@ class AutonomyLayer {
 
     // Track event in learning core
     await learningCore.trackSystemEvent(
-      'autonomous_event',
-      'autonomy-layer',
+      "autonomous_event",
+      "autonomy-layer",
       {
         event_type: event.type,
         module: event.module,
@@ -385,8 +385,8 @@ class AutonomyLayer {
 
       // Track result
       await learningCore.trackDecision(
-        'autonomy-layer',
-        'rule_execution',
+        "autonomy-layer",
+        "rule_execution",
         { rule_id: rule.id, event_type: event.type },
         { success: result.success, action: result.action },
         result.success ? 0.9 : 0.3
@@ -402,7 +402,7 @@ class AutonomyLayer {
       });
 
       await learningCore.trackModuleError(
-        'autonomy-layer',
+        "autonomy-layer",
         `Rule execution failed: ${rule.id}`,
         error instanceof Error ? error.stack : undefined
       );
@@ -417,7 +417,7 @@ class AutonomyLayer {
     
     // Trigger module reload by dispatching custom event
     window.dispatchEvent(
-      new CustomEvent('module-restart', { detail: { module: moduleName } })
+      new CustomEvent("module-restart", { detail: { module: moduleName } })
     );
 
     // Wait for restart
@@ -436,7 +436,7 @@ class AutonomyLayer {
 
     // Dispatch notification event
     window.dispatchEvent(
-      new CustomEvent('autonomous-notification', {
+      new CustomEvent("autonomous-notification", {
         detail: { title, message, severity },
       })
     );
@@ -450,7 +450,7 @@ class AutonomyLayer {
 
     // Store in localStorage
     const disabledFeatures = JSON.parse(
-      localStorage.getItem('disabled_features') || '{}'
+      localStorage.getItem("disabled_features") || "{}"
     );
     
     if (!disabledFeatures[moduleName]) {
@@ -461,11 +461,11 @@ class AutonomyLayer {
       disabledFeatures[moduleName].push(feature);
     }
 
-    localStorage.setItem('disabled_features', JSON.stringify(disabledFeatures));
+    localStorage.setItem("disabled_features", JSON.stringify(disabledFeatures));
 
     // Dispatch event
     window.dispatchEvent(
-      new CustomEvent('feature-disabled', {
+      new CustomEvent("feature-disabled", {
         detail: { module: moduleName, feature },
       })
     );
@@ -481,13 +481,13 @@ class AutonomyLayer {
     });
 
     // Store fallback state
-    const fallbacks = JSON.parse(localStorage.getItem('active_fallbacks') || '{}');
+    const fallbacks = JSON.parse(localStorage.getItem("active_fallbacks") || "{}");
     fallbacks[moduleName] = { route, activated_at: new Date().toISOString() };
-    localStorage.setItem('active_fallbacks', JSON.stringify(fallbacks));
+    localStorage.setItem("active_fallbacks", JSON.stringify(fallbacks));
 
     // Dispatch event
     window.dispatchEvent(
-      new CustomEvent('fallback-activated', {
+      new CustomEvent("fallback-activated", {
         detail: { module: moduleName, route },
       })
     );
@@ -505,7 +505,7 @@ class AutonomyLayer {
 
     // Dispatch event
     window.dispatchEvent(
-      new CustomEvent('cache-flushed', { detail: { module: moduleName } })
+      new CustomEvent("cache-flushed", { detail: { module: moduleName } })
     );
   }
 
@@ -523,18 +523,18 @@ class AutonomyLayer {
     });
 
     // Store review request
-    const reviews = JSON.parse(localStorage.getItem('review_requests') || '[]');
+    const reviews = JSON.parse(localStorage.getItem("review_requests") || "[]");
     reviews.push({
       event,
       result,
       requested_at: new Date().toISOString(),
-      status: 'pending',
+      status: "pending",
     });
-    localStorage.setItem('review_requests', JSON.stringify(reviews));
+    localStorage.setItem("review_requests", JSON.stringify(reviews));
 
     // Dispatch event
     window.dispatchEvent(
-      new CustomEvent('human-review-requested', {
+      new CustomEvent("human-review-requested", {
         detail: { event, result },
       })
     );

@@ -3,10 +3,10 @@
  * Dashboard executivo completo com informações sobre todos os módulos e sistemas
  */
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import {
   Ship,
   Brain,
@@ -32,320 +32,320 @@ import {
   FileText,
   Lock,
   Target
-} from 'lucide-react';
-import nautilusLogo from '@/assets/nautilus-logo.png';
+} from "lucide-react";
+import nautilusLogo from "@/assets/nautilus-logo.png";
 
 const systemModules = [
   {
-    id: 'patch-216',
-    name: 'Context Mesh Core',
-    description: 'Sistema de malha de contexto distribuído para sincronização em tempo real',
+    id: "patch-216",
+    name: "Context Mesh Core",
+    description: "Sistema de malha de contexto distribuído para sincronização em tempo real",
     icon: Network,
-    status: 'operational',
+    status: "operational",
     uptime: 99.8,
     features: [
-      'Pub/Sub Architecture',
-      'Real-time State Sync',
-      'Local Cache',
-      'Supabase Persistence'
+      "Pub/Sub Architecture",
+      "Real-time State Sync",
+      "Local Cache",
+      "Supabase Persistence"
     ],
     metrics: {
-      events: '2.4M',
-      latency: '< 100ms',
-      nodes: '156'
+      events: "2.4M",
+      latency: "< 100ms",
+      nodes: "156"
     }
   },
   {
-    id: 'patch-221',
-    name: 'Cognitive Clone Core',
-    description: 'Clonagem cognitiva de instâncias IA com contexto parcial/completo',
+    id: "patch-221",
+    name: "Cognitive Clone Core",
+    description: "Clonagem cognitiva de instâncias IA com contexto parcial/completo",
     icon: Brain,
-    status: 'operational',
+    status: "operational",
     uptime: 98.5,
     features: [
-      'Instance Cloning',
-      'Context Snapshot',
-      'Remote Dispatch',
-      'Clone Registry'
+      "Instance Cloning",
+      "Context Snapshot",
+      "Remote Dispatch",
+      "Clone Registry"
     ],
     metrics: {
-      clones: '24',
-      avgCloneTime: '350ms',
-      contextSize: '3.2MB'
+      clones: "24",
+      avgCloneTime: "350ms",
+      contextSize: "3.2MB"
     }
   },
   {
-    id: 'patch-222',
-    name: 'Adaptive UI Engine',
-    description: 'Motor de reconfiguração adaptativa de interface por contexto',
+    id: "patch-222",
+    name: "Adaptive UI Engine",
+    description: "Motor de reconfiguração adaptativa de interface por contexto",
     icon: Layers,
-    status: 'operational',
+    status: "operational",
     uptime: 99.2,
     features: [
-      'Mobile/Desktop/Mission Profiles',
-      'Network Optimization',
-      'Conditional Loading',
-      'Hot Reload Config'
+      "Mobile/Desktop/Mission Profiles",
+      "Network Optimization",
+      "Conditional Loading",
+      "Hot Reload Config"
     ],
     metrics: {
-      profiles: '3',
-      networkSaved: '42%',
-      loadTime: '< 2s'
+      profiles: "3",
+      networkSaved: "42%",
+      loadTime: "< 2s"
     }
   },
   {
-    id: 'patch-223',
-    name: 'Edge AI Ops Core',
-    description: 'IA embarcada operando localmente via WebGPU/WASM',
+    id: "patch-223",
+    name: "Edge AI Ops Core",
+    description: "IA embarcada operando localmente via WebGPU/WASM",
     icon: Cpu,
-    status: 'operational',
+    status: "operational",
     uptime: 97.8,
     features: [
-      'Local Inference',
-      'WebGPU Acceleration',
-      'ONNX Runtime',
-      'Offline Capability'
+      "Local Inference",
+      "WebGPU Acceleration",
+      "ONNX Runtime",
+      "Offline Capability"
     ],
     metrics: {
-      inferenceTime: '< 100ms',
-      modelSize: '87MB',
-      gpuUsage: '78%'
+      inferenceTime: "< 100ms",
+      modelSize: "87MB",
+      gpuUsage: "78%"
     }
   },
   {
-    id: 'patch-224',
-    name: 'Deployment Kit Builder',
-    description: 'Gerador automático de kits standalone (.zip/.iso) offline',
+    id: "patch-224",
+    name: "Deployment Kit Builder",
+    description: "Gerador automático de kits standalone (.zip/.iso) offline",
     icon: Box,
-    status: 'operational',
+    status: "operational",
     uptime: 99.5,
     features: [
-      'Auto Kit Generation',
-      'Local IndexedDB',
-      'Complete Documentation',
-      'Offline Operation'
+      "Auto Kit Generation",
+      "Local IndexedDB",
+      "Complete Documentation",
+      "Offline Operation"
     ],
     metrics: {
-      kitSize: '< 50MB',
-      genTime: '< 2min',
-      deployments: '48'
+      kitSize: "< 50MB",
+      genTime: "< 2min",
+      deployments: "48"
     }
   },
   {
-    id: 'patch-225',
-    name: 'Mirror Instance Controller',
-    description: 'Controlador de múltiplas instâncias com sync e mesh networking',
+    id: "patch-225",
+    name: "Mirror Instance Controller",
+    description: "Controlador de múltiplas instâncias com sync e mesh networking",
     icon: GitBranch,
-    status: 'operational',
+    status: "operational",
     uptime: 98.9,
     features: [
-      'Instance Management',
-      'Partial/Full Sync',
-      'Conflict Resolution',
-      'Mesh Consensus'
+      "Instance Management",
+      "Partial/Full Sync",
+      "Conflict Resolution",
+      "Mesh Consensus"
     ],
     metrics: {
-      instances: '8',
-      syncLatency: '< 5s',
-      conflicts: '2'
+      instances: "8",
+      syncLatency: "< 5s",
+      conflicts: "2"
     }
   },
   {
-    id: 'patch-226',
-    name: 'Protocol Adapter',
-    description: 'Adaptador de protocolos JSON-RPC, GMDSS e outros marítimos',
+    id: "patch-226",
+    name: "Protocol Adapter",
+    description: "Adaptador de protocolos JSON-RPC, GMDSS e outros marítimos",
     icon: Radio,
-    status: 'operational',
+    status: "operational",
     uptime: 99.7,
     features: [
-      'JSON-RPC 2.0',
-      'GMDSS Parser',
-      'Message Validation',
-      'Protocol Logging'
+      "JSON-RPC 2.0",
+      "GMDSS Parser",
+      "Message Validation",
+      "Protocol Logging"
     ],
     metrics: {
-      messages: '15.2K',
-      protocols: '5',
-      successRate: '98.5%'
+      messages: "15.2K",
+      protocols: "5",
+      successRate: "98.5%"
     }
   },
   {
-    id: 'patch-227',
-    name: 'Agent Swarm Bridge',
-    description: 'Coordenação de enxames de agentes com distribuição paralela',
+    id: "patch-227",
+    name: "Agent Swarm Bridge",
+    description: "Coordenação de enxames de agentes com distribuição paralela",
     icon: Users,
-    status: 'operational',
+    status: "operational",
     uptime: 97.5,
     features: [
-      'Agent Registry',
-      'Parallel Distribution',
-      'Result Consolidation',
-      'Performance Metrics'
+      "Agent Registry",
+      "Parallel Distribution",
+      "Result Consolidation",
+      "Performance Metrics"
     ],
     metrics: {
-      agents: '32',
-      avgResponseTime: '280ms',
-      tasksCompleted: '8.4K'
+      agents: "32",
+      avgResponseTime: "280ms",
+      tasksCompleted: "8.4K"
     }
   },
   {
-    id: 'patch-228',
-    name: 'Joint Tasking System',
-    description: 'Sistema de tarefas conjuntas com entidades externas',
+    id: "patch-228",
+    name: "Joint Tasking System",
+    description: "Sistema de tarefas conjuntas com entidades externas",
     icon: Target,
-    status: 'operational',
+    status: "operational",
     uptime: 98.2,
     features: [
-      'Task Assignment',
-      'Entity Registry',
-      'Status Sync',
-      'Mission Logging'
+      "Task Assignment",
+      "Entity Registry",
+      "Status Sync",
+      "Mission Logging"
     ],
     metrics: {
-      missions: '156',
-      entities: '12',
-      syncStatus: '100%'
+      missions: "156",
+      entities: "12",
+      syncStatus: "100%"
     }
   },
   {
-    id: 'patch-229',
-    name: 'Trust Compliance',
-    description: 'Sistema de compliance baseado em trust score',
+    id: "patch-229",
+    name: "Trust Compliance",
+    description: "Sistema de compliance baseado em trust score",
     icon: Shield,
-    status: 'operational',
+    status: "operational",
     uptime: 99.9,
     features: [
-      'Trust Score Calculation',
-      'Input Validation',
-      'Event Logging',
-      'Alert System'
+      "Trust Score Calculation",
+      "Input Validation",
+      "Event Logging",
+      "Alert System"
     ],
     metrics: {
-      avgTrustScore: '87%',
-      blockedEntities: '3',
-      alerts: '8'
+      avgTrustScore: "87%",
+      blockedEntities: "3",
+      alerts: "8"
     }
   },
   {
-    id: 'patch-230',
-    name: 'Interop Dashboard',
-    description: 'Dashboard unificado de interoperabilidade e status',
+    id: "patch-230",
+    name: "Interop Dashboard",
+    description: "Dashboard unificado de interoperabilidade e status",
     icon: Activity,
-    status: 'operational',
+    status: "operational",
     uptime: 99.4,
     features: [
-      'Multi-source Data',
-      'Real-time Metrics',
-      'Agent Visualization',
-      'Trust Display'
+      "Multi-source Data",
+      "Real-time Metrics",
+      "Agent Visualization",
+      "Trust Display"
     ],
     metrics: {
-      dataSources: '10',
-      refreshRate: '< 500ms',
-      charts: '8'
+      dataSources: "10",
+      refreshRate: "< 500ms",
+      charts: "8"
     }
   },
   {
-    id: 'core-systems',
-    name: 'Core Systems',
-    description: 'Sistemas centrais de gestão e operação',
+    id: "core-systems",
+    name: "Core Systems",
+    description: "Sistemas centrais de gestão e operação",
     icon: Database,
-    status: 'operational',
+    status: "operational",
     uptime: 99.6,
     features: [
-      'Vessel Management',
-      'Crew Management',
-      'Maintenance Scheduling',
-      'Document Control'
+      "Vessel Management",
+      "Crew Management",
+      "Maintenance Scheduling",
+      "Document Control"
     ],
     metrics: {
-      vessels: '24',
-      crew: '342',
-      documents: '1.2K'
+      vessels: "24",
+      crew: "342",
+      documents: "1.2K"
     }
   },
   {
-    id: 'peotram',
-    name: 'PEOTRAM Compliance',
-    description: 'Sistema de auditoria e compliance PEOTRAM',
+    id: "peotram",
+    name: "PEOTRAM Compliance",
+    description: "Sistema de auditoria e compliance PEOTRAM",
     icon: FileText,
-    status: 'operational',
+    status: "operational",
     uptime: 98.8,
     features: [
-      'Audit Management',
-      'AI Score Prediction',
-      'Non-conformity Tracking',
-      'Compliance Reports'
+      "Audit Management",
+      "AI Score Prediction",
+      "Non-conformity Tracking",
+      "Compliance Reports"
     ],
     metrics: {
-      audits: '89',
-      avgScore: '85.5',
-      nonConformities: '12'
+      audits: "89",
+      avgScore: "85.5",
+      nonConformities: "12"
     }
   },
   {
-    id: 'security',
-    name: 'Security & Auth',
-    description: 'Sistema de segurança e autenticação',
+    id: "security",
+    name: "Security & Auth",
+    description: "Sistema de segurança e autenticação",
     icon: Lock,
-    status: 'operational',
+    status: "operational",
     uptime: 99.9,
     features: [
-      'Multi-factor Auth',
-      'Role-based Access',
-      'Session Management',
-      'Audit Logs'
+      "Multi-factor Auth",
+      "Role-based Access",
+      "Session Management",
+      "Audit Logs"
     ],
     metrics: {
-      users: '1.2K',
-      sessions: '342',
-      authRate: '99.8%'
+      users: "1.2K",
+      sessions: "342",
+      authRate: "99.8%"
     }
   },
   {
-    id: 'analytics',
-    name: 'Analytics & BI',
-    description: 'Sistema de análise e business intelligence',
+    id: "analytics",
+    name: "Analytics & BI",
+    description: "Sistema de análise e business intelligence",
     icon: BarChart3,
-    status: 'operational',
+    status: "operational",
     uptime: 99.1,
     features: [
-      'Custom Dashboards',
-      'Real-time Metrics',
-      'Predictive Analytics',
-      'Export Reports'
+      "Custom Dashboards",
+      "Real-time Metrics",
+      "Predictive Analytics",
+      "Export Reports"
     ],
     metrics: {
-      dashboards: '24',
-      metrics: '156',
-      reports: '89'
+      dashboards: "24",
+      metrics: "156",
+      reports: "89"
     }
   }
 ];
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'operational':
-      return 'bg-green-500';
-    case 'degraded':
-      return 'bg-yellow-500';
-    case 'offline':
-      return 'bg-red-500';
-    default:
-      return 'bg-gray-500';
+  case "operational":
+    return "bg-green-500";
+  case "degraded":
+    return "bg-yellow-500";
+  case "offline":
+    return "bg-red-500";
+  default:
+    return "bg-gray-500";
   }
 };
 
 const getStatusBadge = (status: string) => {
   switch (status) {
-    case 'operational':
-      return <Badge className="gap-1"><CheckCircle className="h-3 w-3" />Operacional</Badge>;
-    case 'degraded':
-      return <Badge variant="secondary" className="gap-1"><AlertTriangle className="h-3 w-3" />Degradado</Badge>;
-    case 'offline':
-      return <Badge variant="destructive" className="gap-1"><AlertTriangle className="h-3 w-3" />Offline</Badge>;
-    default:
-      return <Badge variant="outline">Desconhecido</Badge>;
+  case "operational":
+    return <Badge className="gap-1"><CheckCircle className="h-3 w-3" />Operacional</Badge>;
+  case "degraded":
+    return <Badge variant="secondary" className="gap-1"><AlertTriangle className="h-3 w-3" />Degradado</Badge>;
+  case "offline":
+    return <Badge variant="destructive" className="gap-1"><AlertTriangle className="h-3 w-3" />Offline</Badge>;
+  default:
+    return <Badge variant="outline">Desconhecido</Badge>;
   }
 };
 
@@ -405,7 +405,7 @@ const ModuleCard = ({ module }: { module: typeof systemModules[0] }) => {
 
 export function ComprehensiveExecutiveDashboard() {
   const totalModules = systemModules.length;
-  const operationalModules = systemModules.filter(m => m.status === 'operational').length;
+  const operationalModules = systemModules.filter(m => m.status === "operational").length;
   const avgUptime = (systemModules.reduce((sum, m) => sum + m.uptime, 0) / totalModules).toFixed(1);
 
   return (
@@ -422,7 +422,7 @@ export function ComprehensiveExecutiveDashboard() {
           </div>
         </div>
         <Badge variant="outline" className="gap-2 py-2 px-3">
-          <div className={`h-2 w-2 rounded-full ${getStatusColor('operational')} animate-pulse`} />
+          <div className={`h-2 w-2 rounded-full ${getStatusColor("operational")} animate-pulse`} />
           Sistema Operacional
         </Badge>
       </div>
@@ -553,7 +553,7 @@ export function ComprehensiveExecutiveDashboard() {
         <TabsContent value="ai" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {systemModules
-              .filter(m => ['patch-221', 'patch-223', 'patch-227'].includes(m.id))
+              .filter(m => ["patch-221", "patch-223", "patch-227"].includes(m.id))
               .map((module) => (
                 <ModuleCard key={module.id} module={module} />
               ))}
@@ -563,7 +563,7 @@ export function ComprehensiveExecutiveDashboard() {
         <TabsContent value="interop" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {systemModules
-              .filter(m => ['patch-216', 'patch-226', 'patch-228', 'patch-225', 'patch-230'].includes(m.id))
+              .filter(m => ["patch-216", "patch-226", "patch-228", "patch-225", "patch-230"].includes(m.id))
               .map((module) => (
                 <ModuleCard key={module.id} module={module} />
               ))}
@@ -573,7 +573,7 @@ export function ComprehensiveExecutiveDashboard() {
         <TabsContent value="core" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {systemModules
-              .filter(m => ['core-systems', 'peotram', 'security', 'analytics'].includes(m.id))
+              .filter(m => ["core-systems", "peotram", "security", "analytics"].includes(m.id))
               .map((module) => (
                 <ModuleCard key={module.id} module={module} />
               ))}

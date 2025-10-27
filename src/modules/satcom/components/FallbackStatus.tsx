@@ -29,29 +29,29 @@ export const FallbackStatus: React.FC<FallbackStatusProps> = ({
   fallbackConnection,
   isFallbackActive,
 }) => {
-  const getStatusIcon = (status: SatcomConnection['status']) => {
+  const getStatusIcon = (status: SatcomConnection["status"]) => {
     switch (status) {
-      case 'connected':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'degraded':
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case 'disconnected':
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      default:
-        return <Activity className="h-5 w-5 text-gray-500" />;
+    case "connected":
+      return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "degraded":
+      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    case "disconnected":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    default:
+      return <Activity className="h-5 w-5 text-gray-500" />;
     }
   };
 
-  const getStatusLabel = (status: SatcomConnection['status']) => {
+  const getStatusLabel = (status: SatcomConnection["status"]) => {
     switch (status) {
-      case 'connected':
-        return 'Conectado';
-      case 'degraded':
-        return 'Degradado';
-      case 'disconnected':
-        return 'Desconectado';
-      default:
-        return 'Desconhecido';
+    case "connected":
+      return "Conectado";
+    case "degraded":
+      return "Degradado";
+    case "disconnected":
+      return "Desconectado";
+    default:
+      return "Desconhecido";
     }
   };
 
@@ -90,7 +90,7 @@ export const FallbackStatus: React.FC<FallbackStatusProps> = ({
           {/* Primary Connection */}
           <div className={cn(
             "p-4 rounded-lg border-2 transition-colors",
-            primaryConnection?.status === 'connected' 
+            primaryConnection?.status === "connected" 
               ? "border-green-500 bg-green-50 dark:bg-green-950" 
               : "border-red-500 bg-red-50 dark:bg-red-950"
           )}>
@@ -99,7 +99,7 @@ export const FallbackStatus: React.FC<FallbackStatusProps> = ({
                 <Radio className="h-4 w-4" />
                 <span className="font-semibold">Conexão Primária</span>
               </div>
-              <Badge variant={primaryConnection?.status === 'connected' ? 'default' : 'destructive'}>
+              <Badge variant={primaryConnection?.status === "connected" ? "default" : "destructive"}>
                 Primária
               </Badge>
             </div>
@@ -113,7 +113,7 @@ export const FallbackStatus: React.FC<FallbackStatusProps> = ({
                 <div className="text-sm text-muted-foreground">
                   Status: {getStatusLabel(primaryConnection.status)}
                 </div>
-                {primaryConnection.status === 'connected' && (
+                {primaryConnection.status === "connected" && (
                   <div className="text-xs text-muted-foreground">
                     Sinal: {primaryConnection.signalStrength.toFixed(0)}% | 
                     Banda: {(primaryConnection.bandwidth / 1000).toFixed(1)} Mbps
@@ -148,7 +148,7 @@ export const FallbackStatus: React.FC<FallbackStatusProps> = ({
                 <div className="text-sm text-muted-foreground">
                   Status: {getStatusLabel(fallbackConnection.status)}
                 </div>
-                {fallbackConnection.status === 'connected' && (
+                {fallbackConnection.status === "connected" && (
                   <div className="text-xs text-muted-foreground">
                     Sinal: {fallbackConnection.signalStrength.toFixed(0)}% | 
                     Banda: {(fallbackConnection.bandwidth / 1000).toFixed(1)} Mbps

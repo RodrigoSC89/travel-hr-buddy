@@ -1,9 +1,9 @@
 // @ts-nocheck
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Brain, 
   TrendingUp, 
@@ -12,9 +12,9 @@ import {
   Activity,
   Shield,
   Zap
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { PerformanceMonitor } from '../PerformanceMonitor';
+} from "lucide-react";
+import { toast } from "sonner";
+import { PerformanceMonitor } from "../PerformanceMonitor";
 
 interface BehaviorEvolution {
   timestamp: string;
@@ -28,7 +28,7 @@ interface SystemStatus {
   total_modules: number;
   active_alerts: number;
   avg_strategic_alignment: number;
-  evolution_trend: 'improving' | 'stable' | 'degrading';
+  evolution_trend: "improving" | "stable" | "degrading";
 }
 
 export function BehavioralEvolutionDashboard() {
@@ -36,7 +36,7 @@ export function BehavioralEvolutionDashboard() {
     total_modules: 0,
     active_alerts: 0,
     avg_strategic_alignment: 0,
-    evolution_trend: 'stable',
+    evolution_trend: "stable",
   });
   const [recentEvolutions, setRecentEvolutions] = useState<BehaviorEvolution[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,12 +47,12 @@ export function BehavioralEvolutionDashboard() {
     
     // Set up real-time subscription for watchdog alerts
     const channel = supabase
-      .channel('behavioral_evolution_updates')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'watchdog_behavior_alerts' },
+      .channel("behavioral_evolution_updates")
+      .on("postgres_changes",
+        { event: "*", schema: "public", table: "watchdog_behavior_alerts" },
         () => {
           fetchSystemStatus();
-          toast.info('System Watchdog: New behavioral event detected');
+          toast.info("System Watchdog: New behavioral event detected");
         }
       )
       .subscribe();
@@ -66,17 +66,17 @@ export function BehavioralEvolutionDashboard() {
     try {
       // Fetch active alerts
       const { data: alerts, error: alertsError } = await supabase
-        .from('watchdog_behavior_alerts')
-        .select('*')
-        .eq('resolved', false);
+        .from("watchdog_behavior_alerts")
+        .select("*")
+        .eq("resolved", false);
 
       if (alertsError) throw alertsError;
 
       // Fetch performance data
       const { data: perfData, error: perfError } = await supabase
-        .from('ia_performance_log')
-        .select('module_name, precision_score, recall_score')
-        .order('created_at', { ascending: false })
+        .from("ia_performance_log")
+        .select("module_name, precision_score, recall_score")
+        .order("created_at", { ascending: false })
         .limit(100);
 
       if (perfError) throw perfError;
@@ -98,8 +98,8 @@ export function BehavioralEvolutionDashboard() {
       setRecentEvolutions(evolutions);
 
     } catch (error) {
-      console.error('Error fetching system status:', error);
-      toast.error('Failed to load behavioral evolution data');
+      console.error("Error fetching system status:", error);
+      toast.error("Failed to load behavioral evolution data");
     } finally {
       setLoading(false);
     }
@@ -115,8 +115,8 @@ export function BehavioralEvolutionDashboard() {
     return (sum / data.length) * 100;
   };
 
-  const determineEvolutionTrend = (data: any[]): 'improving' | 'stable' | 'degrading' => {
-    if (data.length < 10) return 'stable';
+  const determineEvolutionTrend = (data: any[]): "improving" | "stable" | "degrading" => {
+    if (data.length < 10) return "stable";
     
     const recent = data.slice(0, 5);
     const older = data.slice(5, 10);
@@ -127,9 +127,9 @@ export function BehavioralEvolutionDashboard() {
       acc + ((d.precision_score || 0) + (d.recall_score || 0)) / 2, 0) / older.length;
     
     const diff = recentAvg - olderAvg;
-    if (diff > 0.05) return 'improving';
-    if (diff < -0.05) return 'degrading';
-    return 'stable';
+    if (diff > 0.05) return "improving";
+    if (diff < -0.05) return "degrading";
+    return "stable";
   };
 
   const generateEvolutionData = (data: any[]): BehaviorEvolution[] => {
@@ -150,7 +150,7 @@ export function BehavioralEvolutionDashboard() {
         evolutions.push({
           timestamp: new Date().toISOString(),
           module_name: moduleName,
-          behavior_type: 'tactical_optimization',
+          behavior_type: "tactical_optimization",
           evolution_score: score * 100,
           strategic_alignment: score * 100,
         });
@@ -162,17 +162,17 @@ export function BehavioralEvolutionDashboard() {
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-      case 'improving': return 'text-green-600';
-      case 'degrading': return 'text-red-600';
-      default: return 'text-blue-600';
+    case "improving": return "text-green-600";
+    case "degrading": return "text-red-600";
+    default: return "text-blue-600";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving': return <TrendingUp className="h-5 w-5" />;
-      case 'degrading': return <AlertTriangle className="h-5 w-5" />;
-      default: return <Activity className="h-5 w-5" />;
+    case "improving": return <TrendingUp className="h-5 w-5" />;
+    case "degrading": return <AlertTriangle className="h-5 w-5" />;
+    default: return <Activity className="h-5 w-5" />;
     }
   };
 
@@ -201,7 +201,7 @@ export function BehavioralEvolutionDashboard() {
           onClick={() => setShowPerformanceMonitor(!showPerformanceMonitor)}
         >
           <Shield className="h-4 w-4 mr-2" />
-          {showPerformanceMonitor ? 'Hide' : 'Show'} Performance Monitor
+          {showPerformanceMonitor ? "Hide" : "Show"} Performance Monitor
         </Button>
       </div>
 
@@ -228,7 +228,7 @@ export function BehavioralEvolutionDashboard() {
               {systemStatus.active_alerts}
             </div>
             <p className="text-xs text-muted-foreground">
-              {systemStatus.active_alerts === 0 ? 'All systems normal' : 'Require attention'}
+              {systemStatus.active_alerts === 0 ? "All systems normal" : "Require attention"}
             </p>
           </CardContent>
         </Card>

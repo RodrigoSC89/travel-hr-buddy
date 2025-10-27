@@ -96,19 +96,19 @@ class SatcomWatchdogIntegration {
       let message: string | undefined;
 
       switch (healthStatus.overall) {
-        case "healthy":
-          status = "online";
-          break;
-        case "degraded":
-          status = "degraded";
-          message = fallbackState.isActive
-            ? `Fallback active: ${fallbackState.reason}`
-            : "Some connections degraded";
-          break;
-        case "critical":
-          status = "offline";
-          message = "Critical connectivity issues";
-          break;
+      case "healthy":
+        status = "online";
+        break;
+      case "degraded":
+        status = "degraded";
+        message = fallbackState.isActive
+          ? `Fallback active: ${fallbackState.reason}`
+          : "Some connections degraded";
+        break;
+      case "critical":
+        status = "offline";
+        message = "Critical connectivity issues";
+        break;
       }
 
       const result: HealthCheckResult = {
@@ -203,7 +203,7 @@ class SatcomWatchdogIntegration {
     fallbackActive: boolean;
     activeConnections: number;
     totalConnections: number;
-  } {
+    } {
     const fallbackState = linkFallbackManager.getState();
     const activeConnections = this.connections.filter(c => c.status === "connected").length;
 

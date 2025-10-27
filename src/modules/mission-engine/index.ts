@@ -3,7 +3,7 @@
  * Executes missions based on rules and conditions
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 export interface MissionStep {
   id: string;
@@ -20,7 +20,7 @@ export interface Mission {
   name: string;
   description?: string;
   steps: MissionStep[];
-  status: 'pending' | 'running' | 'completed' | 'failed' | 'paused';
+  status: "pending" | "running" | "completed" | "failed" | "paused";
   createdAt: number;
   startedAt?: number;
   completedAt?: number;
@@ -30,7 +30,7 @@ export interface Mission {
 
 export interface MissionLog {
   timestamp: number;
-  level: 'info' | 'warning' | 'error' | 'success';
+  level: "info" | "warning" | "error" | "success";
   message: string;
   stepId?: string;
   data?: any;
@@ -53,16 +53,16 @@ class MissionEngine {
   /**
    * Define a new mission
    */
-  defineMission(mission: Omit<Mission, 'status' | 'createdAt' | 'logs'>): string {
+  defineMission(mission: Omit<Mission, "status" | "createdAt" | "logs">): string {
     const newMission: Mission = {
       ...mission,
-      status: 'pending',
+      status: "pending",
       createdAt: Date.now(),
       logs: []
     };
 
     this.missions.set(mission.id, newMission);
-    this.autolog(mission.id, 'info', `Mission "${mission.name}" defined`);
+    this.autolog(mission.id, "info", `Mission "${mission.name}" defined`);
     
     return mission.id;
   }
@@ -77,7 +77,7 @@ class MissionEngine {
       throw new Error(`Mission ${missionId} not found`);
     }
 
-    if (mission.status === 'running') {
+    if (mission.status === "running") {
       throw new Error(`Mission ${missionId} is already running`);
     }
 
@@ -100,24 +100,24 @@ class MissionEngine {
    * Internal mission execution with step handling
    */
   private async _executeMissionSteps(mission: Mission): Promise<void> {
-    mission.status = 'running';
+    mission.status = "running";
     mission.startedAt = Date.now();
     mission.currentStep = 0;
 
-    this.autolog(mission.id, 'info', `Starting mission "${mission.name}"`);
+    this.autolog(mission.id, "info", `Starting mission "${mission.name}"`);
 
     try {
       for (let i = 0; i < mission.steps.length; i++) {
         const step = mission.steps[i];
         mission.currentStep = i;
 
-        this.autolog(mission.id, 'info', `Executing step: ${step.name}`, step.id);
+        this.autolog(mission.id, "info", `Executing step: ${step.name}`, step.id);
 
         // Check step condition if exists
         if (step.condition) {
           const conditionMet = await step.condition();
           if (!conditionMet) {
-            this.autolog(mission.id, 'warning', `Step "${step.name}" condition not met, skipping`, step.id);
+            this.autolog(mission.id, "warning", `Step "${step.name}" condition not met, skipping`, step.id);
             continue;
           }
         }
@@ -126,13 +126,13 @@ class MissionEngine {
         await this._executeStep(mission, step);
       }
 
-      mission.status = 'completed';
+      mission.status = "completed";
       mission.completedAt = Date.now();
-      this.autolog(mission.id, 'success', `Mission "${mission.name}" completed successfully`);
+      this.autolog(mission.id, "success", `Mission "${mission.name}" completed successfully`);
     } catch (error) {
-      mission.status = 'failed';
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      this.autolog(mission.id, 'error', `Mission "${mission.name}" failed: ${errorMessage}`);
+      mission.status = "failed";
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      this.autolog(mission.id, "error", `Mission "${mission.name}" failed: ${errorMessage}`);
       throw error;
     }
   }
@@ -153,15 +153,15 @@ class MissionEngine {
           await step.action();
         }
 
-        this.autolog(mission.id, 'success', `Step "${step.name}" completed`, step.id);
+        this.autolog(mission.id, "success", `Step "${step.name}" completed`, step.id);
         return; // Success, exit retry loop
       } catch (error) {
-        lastError = error instanceof Error ? error : new Error('Unknown error');
+        lastError = error instanceof Error ? error : new Error("Unknown error");
         
         if (attempt < maxRetries - 1) {
           this.autolog(
             mission.id,
-            'warning',
+            "warning",
             `Step "${step.name}" failed (attempt ${attempt + 1}/${maxRetries}), retrying...`,
             step.id,
             { error: lastError.message }
@@ -184,7 +184,7 @@ class MissionEngine {
     return Promise.race([
       action(),
       new Promise<void>((_, reject) => 
-        setTimeout(() => reject(new Error('Step timeout exceeded')), timeout)
+        setTimeout(() => reject(new Error("Step timeout exceeded")), timeout)
       )
     ]);
   }
@@ -231,7 +231,7 @@ class MissionEngine {
    */
   autolog(
     missionId: string,
-    level: 'info' | 'warning' | 'error' | 'success',
+    level: "info" | "warning" | "error" | "success",
     message: string,
     stepId?: string,
     data?: any
@@ -250,9 +250,9 @@ class MissionEngine {
     mission.logs.push(logEntry);
 
     // Also log to console
-    const logMethod = level === 'error' ? logger.error : 
-                     level === 'warning' ? logger.warn : 
-                     logger.info;
+    const logMethod = level === "error" ? logger.error : 
+      level === "warning" ? logger.warn : 
+        logger.info;
     
     logMethod(`[Mission ${mission.name}] ${message}`, data);
   }
@@ -284,9 +284,9 @@ class MissionEngine {
    */
   pauseMission(missionId: string): void {
     const mission = this.missions.get(missionId);
-    if (mission && mission.status === 'running') {
-      mission.status = 'paused';
-      this.autolog(missionId, 'info', 'Mission paused');
+    if (mission && mission.status === "running") {
+      mission.status = "paused";
+      this.autolog(missionId, "info", "Mission paused");
     }
   }
 
@@ -295,8 +295,8 @@ class MissionEngine {
    */
   async resumeMission(missionId: string): Promise<void> {
     const mission = this.missions.get(missionId);
-    if (mission && mission.status === 'paused') {
-      this.autolog(missionId, 'info', 'Mission resumed');
+    if (mission && mission.status === "paused") {
+      this.autolog(missionId, "info", "Mission resumed");
       await this.executeMission(missionId);
     }
   }
@@ -307,8 +307,8 @@ class MissionEngine {
   cancelMission(missionId: string): void {
     const mission = this.missions.get(missionId);
     if (mission) {
-      mission.status = 'failed';
-      this.autolog(missionId, 'warning', 'Mission cancelled');
+      mission.status = "failed";
+      this.autolog(missionId, "warning", "Mission cancelled");
     }
   }
 

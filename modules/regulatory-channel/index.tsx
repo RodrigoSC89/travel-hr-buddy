@@ -3,12 +3,12 @@
  * PATCH 155.0 - Secure communication with regulatory bodies
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Send, History, Users } from 'lucide-react';
-import { listSubmissions, listAuthorities } from './services/regulatory-service';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Shield, Send, History, Users } from "lucide-react";
+import { listSubmissions, listAuthorities } from "./services/regulatory-service";
 
 export const RegulatoryChannel: React.FC = () => {
   const [submissions, setSubmissions] = useState<any[]>([]);
@@ -29,7 +29,7 @@ export const RegulatoryChannel: React.FC = () => {
       setSubmissions(submissionsData);
       setAuthorities(authoritiesData);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error("Error loading data:", error);
     } finally {
       setLoading(false);
     }
@@ -37,14 +37,14 @@ export const RegulatoryChannel: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, any> = {
-      pending: 'secondary',
-      sent: 'default',
-      acknowledged: 'default',
-      responded: 'default',
-      closed: 'outline'
+      pending: "secondary",
+      sent: "default",
+      acknowledged: "default",
+      responded: "default",
+      closed: "outline"
     };
     return (
-      <Badge variant={variants[status] || 'default'}>
+      <Badge variant={variants[status] || "default"}>
         {status.toUpperCase()}
       </Badge>
     );
@@ -81,7 +81,7 @@ export const RegulatoryChannel: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {submissions.filter(s => s.status === 'pending').length}
+              {submissions.filter(s => s.status === "pending").length}
             </div>
           </CardContent>
         </Card>
@@ -95,7 +95,7 @@ export const RegulatoryChannel: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {submissions.filter(s => s.status === 'acknowledged').length}
+              {submissions.filter(s => s.status === "acknowledged").length}
             </div>
           </CardContent>
         </Card>
@@ -169,7 +169,7 @@ export const RegulatoryChannel: React.FC = () => {
                           {new Date(submission.submittedAt).toLocaleString()}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          To: {submission.regulatory_authorities?.name || 'Unknown Authority'}
+                          To: {submission.regulatory_authorities?.name || "Unknown Authority"}
                         </div>
                       </div>
                       {getStatusBadge(submission.status)}
@@ -237,6 +237,6 @@ export const RegulatoryChannel: React.FC = () => {
 };
 
 export default RegulatoryChannel;
-export * from './types';
-export * from './services/regulatory-service';
-export * from './utils/encryption';
+export * from "./types";
+export * from "./services/regulatory-service";
+export * from "./utils/encryption";

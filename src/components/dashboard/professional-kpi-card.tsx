@@ -3,11 +3,11 @@
  * Card de KPI profissional com animações e gradientes
  */
 
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ArrowUpRight, ArrowDownRight, LucideIcon } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ArrowUpRight, ArrowDownRight, LucideIcon } from "lucide-react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface ProfessionalKPICardProps {
   title: string;
@@ -17,35 +17,35 @@ interface ProfessionalKPICardProps {
   icon: LucideIcon;
   prefix?: string;
   suffix?: string;
-  color?: 'blue' | 'green' | 'purple' | 'orange' | 'red';
+  color?: "blue" | "green" | "purple" | "orange" | "red";
   delay?: number;
 }
 
 const colorVariants = {
   blue: {
-    gradient: 'from-blue-500/10 to-transparent',
-    icon: 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
-    badge: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+    gradient: "from-blue-500/10 to-transparent",
+    icon: "bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400",
+    badge: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
   },
   green: {
-    gradient: 'from-green-500/10 to-transparent',
-    icon: 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400',
-    badge: 'bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20',
+    gradient: "from-green-500/10 to-transparent",
+    icon: "bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400",
+    badge: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20",
   },
   purple: {
-    gradient: 'from-purple-500/10 to-transparent',
-    icon: 'bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
-    badge: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+    gradient: "from-purple-500/10 to-transparent",
+    icon: "bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400",
+    badge: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
   },
   orange: {
-    gradient: 'from-orange-500/10 to-transparent',
-    icon: 'bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400',
-    badge: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20',
+    gradient: "from-orange-500/10 to-transparent",
+    icon: "bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400",
+    badge: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20",
   },
   red: {
-    gradient: 'from-red-500/10 to-transparent',
-    icon: 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400',
-    badge: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
+    gradient: "from-red-500/10 to-transparent",
+    icon: "bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400",
+    badge: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
   },
 };
 
@@ -55,9 +55,9 @@ export function ProfessionalKPICard({
   change,
   trend,
   icon: Icon,
-  prefix = '',
-  suffix = '',
-  color = 'blue',
+  prefix = "",
+  suffix = "",
+  color = "blue",
   delay = 0,
 }: ProfessionalKPICardProps) {
   const isPositive = change ? change >= 0 : true;

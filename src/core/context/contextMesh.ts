@@ -7,8 +7,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
-export type ContextType = 'mission' | 'risk' | 'ai' | 'prediction' | 'telemetry';
-export type SyncStatus = 'pending' | 'synced' | 'failed';
+export type ContextType = "mission" | "risk" | "ai" | "prediction" | "telemetry";
+export type SyncStatus = "pending" | "synced" | "failed";
 
 export interface ContextMessage {
   id?: string;
@@ -50,7 +50,7 @@ class ContextMesh {
     
     // Test Supabase connectivity
     try {
-      const { error } = await supabase.from('context_history').select('id').limit(1);
+      const { error } = await supabase.from("context_history").select("id").limit(1);
       if (error) {
         logger.warn("[ContextMesh] Supabase not available, using local storage", error);
         this.useLocalStorage = true;
@@ -76,7 +76,7 @@ class ContextMesh {
       const fullMessage: ContextMessage = {
         ...message,
         timestamp,
-        syncStatus: 'pending'
+        syncStatus: "pending"
       };
 
       // Notify local subscribers via event bus
@@ -100,7 +100,7 @@ class ContextMesh {
   /**
    * Subscribe to context updates
    */
-  subscribe(subscription: Omit<ContextSubscription, 'id'>): string {
+  subscribe(subscription: Omit<ContextSubscription, "id">): string {
     const id = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const fullSubscription: ContextSubscription = { ...subscription, id };
     
@@ -114,7 +114,7 @@ class ContextMesh {
       this.eventBus.get(type)!.add(subscription.handler);
     });
 
-    logger.debug(`[ContextMesh] Module ${subscription.moduleName} subscribed to ${subscription.contextTypes.join(', ')}`);
+    logger.debug(`[ContextMesh] Module ${subscription.moduleName} subscribed to ${subscription.contextTypes.join(", ")}`);
     
     return id;
   }
@@ -155,14 +155,14 @@ class ContextMesh {
       }
 
       let query = supabase
-        .from('context_history')
-        .select('*')
-        .eq('module_name', moduleName)
-        .order('timestamp', { ascending: false })
+        .from("context_history")
+        .select("*")
+        .eq("module_name", moduleName)
+        .order("timestamp", { ascending: false })
         .limit(limit);
 
       if (contextType) {
-        query = query.eq('context_type', contextType);
+        query = query.eq("context_type", contextType);
       }
 
       const { data, error } = await query;
@@ -228,7 +228,7 @@ class ContextMesh {
 
       if (this.useLocalStorage) {
         // Clean up local storage
-        const key = 'context_mesh_history';
+        const key = "context_mesh_history";
         const stored = localStorage.getItem(key);
         if (stored) {
           const history = JSON.parse(stored) as ContextMessage[];
@@ -240,9 +240,9 @@ class ContextMesh {
       } else {
         // Clean up Supabase
         const { error } = await supabase
-          .from('context_history')
+          .from("context_history")
           .delete()
-          .lt('timestamp', cutoffDate.toISOString());
+          .lt("timestamp", cutoffDate.toISOString());
 
         if (error) {
           logger.error("[ContextMesh] Failed to cleanup old context", error);
@@ -288,14 +288,14 @@ class ContextMesh {
 
   private async saveToSupabase(message: ContextMessage): Promise<void> {
     const { error } = await supabase
-      .from('context_history')
+      .from("context_history")
       .insert({
         module_name: message.moduleName,
         context_type: message.contextType,
         context_data: message.contextData,
         timestamp: message.timestamp?.toISOString(),
         source: message.source,
-        sync_status: message.syncStatus || 'synced'
+        sync_status: message.syncStatus || "synced"
       });
 
     if (error) {
@@ -306,14 +306,14 @@ class ContextMesh {
 
   private async saveToLocalStorage(message: ContextMessage): Promise<void> {
     try {
-      const key = 'context_mesh_history';
+      const key = "context_mesh_history";
       const stored = localStorage.getItem(key);
       const history: ContextMessage[] = stored ? JSON.parse(stored) : [];
       
       history.unshift({
         ...message,
         id: `local_${Date.now()}_${Math.random()}`,
-        syncStatus: 'synced'
+        syncStatus: "synced"
       });
       
       // Keep only last 1000 messages in local storage
@@ -333,19 +333,19 @@ class ContextMesh {
 
   private async saveToIndexedDB(message: ContextMessage): Promise<void> {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('ContextMeshDB', 1);
+      const request = indexedDB.open("ContextMeshDB", 1);
       
       request.onerror = () => reject(request.error);
       
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction(['contexts'], 'readwrite');
-        const store = transaction.objectStore('contexts');
+        const transaction = db.transaction(["contexts"], "readwrite");
+        const store = transaction.objectStore("contexts");
         
         store.add({
           ...message,
           id: `idb_${Date.now()}_${Math.random()}`,
-          syncStatus: 'pending'
+          syncStatus: "pending"
         });
         
         transaction.oncomplete = () => resolve();
@@ -354,8 +354,8 @@ class ContextMesh {
       
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
-        if (!db.objectStoreNames.contains('contexts')) {
-          db.createObjectStore('contexts', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains("contexts")) {
+          db.createObjectStore("contexts", { keyPath: "id" });
         }
       };
     });
@@ -367,7 +367,7 @@ class ContextMesh {
     limit: number = 100
   ): ContextMessage[] {
     try {
-      const key = 'context_mesh_history';
+      const key = "context_mesh_history";
       const stored = localStorage.getItem(key);
       if (!stored) return [];
       

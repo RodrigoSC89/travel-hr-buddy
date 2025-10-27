@@ -3,14 +3,14 @@
  * PATCH 152.0 - Port Authority API Integration
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Anchor, Clock, Users, FileText, Bell } from 'lucide-react';
-import { listArrivals, checkMissingDocuments } from './services/port-service';
-import { VesselArrival } from './types';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Anchor, Clock, Users, FileText, Bell } from "lucide-react";
+import { listArrivals, checkMissingDocuments } from "./services/port-service";
+import { VesselArrival } from "./types";
 
 export const PortAuthorityIntegration: React.FC = () => {
   const [arrivals, setArrivals] = useState<VesselArrival[]>([]);
@@ -26,7 +26,7 @@ export const PortAuthorityIntegration: React.FC = () => {
       const data = await listArrivals();
       setArrivals(data);
     } catch (error) {
-      console.error('Error loading arrivals:', error);
+      console.error("Error loading arrivals:", error);
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ export const PortAuthorityIntegration: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {arrivals.filter(a => a.status === 'scheduled').length}
+              {arrivals.filter(a => a.status === "scheduled").length}
             </div>
           </CardContent>
         </Card>
@@ -65,7 +65,7 @@ export const PortAuthorityIntegration: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {arrivals.filter(a => a.status === 'arrived').length}
+              {arrivals.filter(a => a.status === "arrived").length}
             </div>
           </CardContent>
         </Card>
@@ -118,5 +118,5 @@ export const PortAuthorityIntegration: React.FC = () => {
 };
 
 export default PortAuthorityIntegration;
-export * from './types';
-export * from './services/port-service';
+export * from "./types";
+export * from "./services/port-service";

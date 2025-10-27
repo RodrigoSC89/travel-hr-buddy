@@ -137,14 +137,14 @@ class SatcomStatusMonitor {
     // In a real implementation, this would track connection history
     // For now, we'll estimate based on current status
     switch (connection.status) {
-      case "connected":
-        return 99.9;
-      case "degraded":
-        return 85.0;
-      case "disconnected":
-        return 0;
-      default:
-        return 0;
+    case "connected":
+      return 99.9;
+    case "degraded":
+      return 85.0;
+    case "disconnected":
+      return 0;
+    default:
+      return 0;
     }
   }
 
@@ -213,7 +213,7 @@ class SatcomStatusMonitor {
    */
   simulateLatencyMeasurement(connection: SatcomConnection): number {
     // Simulate realistic latency based on provider type
-    let baseLatency = connection.latency;
+    const baseLatency = connection.latency;
     const variance = baseLatency * 0.1; // 10% variance
     const measured = baseLatency + (Math.random() - 0.5) * variance * 2;
 
@@ -230,18 +230,18 @@ class SatcomStatusMonitor {
 
     // Simulate packet loss based on connection status
     switch (connection.status) {
-      case "connected":
-        // Low packet loss for good connections
-        packetsLost = Math.floor(Math.random() * 5);
-        break;
-      case "degraded":
-        // Higher packet loss for degraded connections
-        packetsLost = Math.floor(Math.random() * 50 + 10);
-        break;
-      case "disconnected":
-        // Complete packet loss
-        packetsLost = packetsTotal;
-        break;
+    case "connected":
+      // Low packet loss for good connections
+      packetsLost = Math.floor(Math.random() * 5);
+      break;
+    case "degraded":
+      // Higher packet loss for degraded connections
+      packetsLost = Math.floor(Math.random() * 50 + 10);
+      break;
+    case "disconnected":
+      // Complete packet loss
+      packetsLost = packetsTotal;
+      break;
     }
 
     this.updatePacketLoss(connection.id, packetsLost, packetsTotal);
@@ -262,7 +262,7 @@ class SatcomStatusMonitor {
   exportData(): {
     latency: Record<string, number[]>;
     packetLoss: Record<string, PacketLossMetrics>;
-  } {
+    } {
     const latency: Record<string, number[]> = {};
     const packetLoss: Record<string, PacketLossMetrics> = {};
 

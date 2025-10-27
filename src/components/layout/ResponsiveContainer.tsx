@@ -3,13 +3,13 @@
  * Mobile-first responsive container using mobile-ui-kit
  */
 
-import React from 'react';
-import { cn } from '@/lib/utils';
-import { getContainerStyles, mobileClasses, spacing } from '@/styles/mobile-ui-kit';
+import React from "react";
+import { cn } from "@/lib/utils";
+import { getContainerStyles, mobileClasses, spacing } from "@/styles/mobile-ui-kit";
 
 interface ResponsiveContainerProps {
   children: React.ReactNode;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "full";
   className?: string;
   noPadding?: boolean;
   fullHeight?: boolean;
@@ -18,7 +18,7 @@ interface ResponsiveContainerProps {
 
 export const ResponsiveContainer: React.FC<ResponsiveContainerProps> = ({
   children,
-  size = 'xl',
+  size = "xl",
   className,
   noPadding = false,
   fullHeight = false,
@@ -29,8 +29,8 @@ export const ResponsiveContainer: React.FC<ResponsiveContainerProps> = ({
   return (
     <div
       className={cn(
-        'responsive-container',
-        fullHeight && 'h-full',
+        "responsive-container",
+        fullHeight && "h-full",
         !noPadding && mobileClasses.responsivePadding,
         safeArea && [
           mobileClasses.safeAreaTop,
@@ -79,7 +79,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   return (
     <div
       className={cn(
-        'grid',
+        "grid",
         `grid-cols-${gridCols.xs}`,
         `sm:grid-cols-${gridCols.sm}`,
         `md:grid-cols-${gridCols.md}`,
@@ -96,40 +96,40 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
 
 interface ResponsiveStackProps {
   children: React.ReactNode;
-  direction?: 'vertical' | 'horizontal' | 'responsive';
+  direction?: "vertical" | "horizontal" | "responsive";
   gap?: keyof typeof spacing;
-  align?: 'start' | 'center' | 'end' | 'stretch';
-  justify?: 'start' | 'center' | 'end' | 'between' | 'around';
+  align?: "start" | "center" | "end" | "stretch";
+  justify?: "start" | "center" | "end" | "between" | "around";
   className?: string;
 }
 
 export const ResponsiveStack: React.FC<ResponsiveStackProps> = ({
   children,
-  direction = 'vertical',
+  direction = "vertical",
   gap = 4,
-  align = 'stretch',
-  justify = 'start',
+  align = "stretch",
+  justify = "start",
   className,
 }) => {
   const directionClasses = {
-    vertical: 'flex flex-col',
-    horizontal: 'flex flex-row',
+    vertical: "flex flex-col",
+    horizontal: "flex flex-row",
     responsive: mobileClasses.stackOnMobile,
   };
 
   const alignClasses = {
-    start: 'items-start',
-    center: 'items-center',
-    end: 'items-end',
-    stretch: 'items-stretch',
+    start: "items-start",
+    center: "items-center",
+    end: "items-end",
+    stretch: "items-stretch",
   };
 
   const justifyClasses = {
-    start: 'justify-start',
-    center: 'justify-center',
-    end: 'justify-end',
-    between: 'justify-between',
-    around: 'justify-around',
+    start: "justify-start",
+    center: "justify-center",
+    end: "justify-end",
+    between: "justify-between",
+    around: "justify-around",
   };
 
   return (

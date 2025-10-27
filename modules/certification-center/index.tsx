@@ -9,16 +9,16 @@
  * - Certificate verification endpoint
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileCheck, Shield, History } from 'lucide-react';
-import { CertificationForm } from './components/CertificationForm';
-import { CertificateValidator } from './components/CertificateValidator';
-import { CertificateHistory } from './components/CertificateHistory';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileCheck, Shield, History } from "lucide-react";
+import { CertificationForm } from "./components/CertificationForm";
+import { CertificateValidator } from "./components/CertificateValidator";
+import { CertificateHistory } from "./components/CertificateHistory";
 
 export const CertificationCenter: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('issue');
+  const [activeTab, setActiveTab] = useState("issue");
   const [refreshKey, setRefreshKey] = useState(0);
 
   const handleCertificateIssued = () => {
@@ -109,6 +109,6 @@ export const CertificationCenter: React.FC = () => {
 export default CertificationCenter;
 
 // Re-export types and services for external use
-export * from './types';
-export * from './services/certification-service';
-export * from './utils/pdf-generator';
+export * from "./types";
+export * from "./services/certification-service";
+export * from "./utils/pdf-generator";

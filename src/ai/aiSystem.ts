@@ -37,53 +37,53 @@ class AISystem {
    */
   async initialize(config?: Partial<AISystemConfig>): Promise<void> {
     if (this.isInitialized) {
-      logger.warn('[AISystem] Already initialized');
+      logger.warn("[AISystem] Already initialized");
       return;
     }
 
     // Merge config
     this.config = { ...this.config, ...config };
 
-    logger.info('[AISystem] Initializing AI System...');
+    logger.info("[AISystem] Initializing AI System...");
 
     try {
       // Start System Watchdog first (monitoring)
       if (this.config.enableWatchdog) {
         systemWatchdog.start();
-        logger.info('[AISystem] ✓ System Watchdog started');
+        logger.info("[AISystem] ✓ System Watchdog started");
       }
 
       // Start Predictive Engine (predictions)
       if (this.config.enablePredictive) {
         await predictiveEngine.trainModel();
-        logger.info('[AISystem] ✓ Predictive Engine initialized');
+        logger.info("[AISystem] ✓ Predictive Engine initialized");
       }
 
       // Start Tactical AI (decisions)
       if (this.config.enableTactical) {
         tacticalAI.start();
-        logger.info('[AISystem] ✓ Tactical AI started');
+        logger.info("[AISystem] ✓ Tactical AI started");
       }
 
       // Start Adaptive Metrics Engine (auto-tuning)
       if (this.config.enableAdaptive) {
         adaptiveMetricsEngine.start();
-        logger.info('[AISystem] ✓ Adaptive Metrics Engine started');
+        logger.info("[AISystem] ✓ Adaptive Metrics Engine started");
       }
 
       // Start Evolution AI Connector (learning)
       if (this.config.enableEvolution) {
         evoAIConnector.start();
-        logger.info('[AISystem] ✓ Evolution AI Connector started');
+        logger.info("[AISystem] ✓ Evolution AI Connector started");
       }
 
       this.isInitialized = true;
-      logger.info('[AISystem] 🚀 AI System fully initialized');
+      logger.info("[AISystem] 🚀 AI System fully initialized");
 
       // Schedule periodic health check
       this.scheduleHealthCheck();
     } catch (error) {
-      logger.error('[AISystem] Failed to initialize:', error);
+      logger.error("[AISystem] Failed to initialize:", error);
       throw error;
     }
   }
@@ -94,7 +94,7 @@ class AISystem {
   shutdown(): void {
     if (!this.isInitialized) return;
 
-    logger.info('[AISystem] Shutting down AI System...');
+    logger.info("[AISystem] Shutting down AI System...");
 
     // Clear health check interval
     if (this.healthCheckInterval) {
@@ -119,7 +119,7 @@ class AISystem {
     }
 
     this.isInitialized = false;
-    logger.info('[AISystem] AI System shutdown complete');
+    logger.info("[AISystem] AI System shutdown complete");
   }
 
   /**
@@ -156,7 +156,7 @@ class AISystem {
         health.evolution = evoAIConnector.getStats();
       }
 
-      logger.info('[AISystem] Health check:', health);
+      logger.info("[AISystem] Health check:", health);
 
       // Check for any critical issues
       if (health.watchdog && health.watchdog.criticalErrors > this.CRITICAL_ERROR_THRESHOLD) {
@@ -167,7 +167,7 @@ class AISystem {
         logger.warn(`[AISystem] Tactical decision queue is backing up: ${health.tactical.queueLength} items`);
       }
     } catch (error) {
-      logger.error('[AISystem] Health check failed:', error);
+      logger.error("[AISystem] Health check failed:", error);
     }
   }
 
@@ -190,11 +190,11 @@ class AISystem {
    */
   async runPredictions(): Promise<void> {
     if (!this.config.enablePredictive) {
-      logger.warn('[AISystem] Predictive engine is disabled');
+      logger.warn("[AISystem] Predictive engine is disabled");
       return;
     }
 
-    logger.info('[AISystem] Running predictions for all modules...');
+    logger.info("[AISystem] Running predictions for all modules...");
     await predictiveEngine.predictAllModules();
   }
 
@@ -203,7 +203,7 @@ class AISystem {
    */
   async evaluateModule(moduleName: string): Promise<void> {
     if (!this.config.enableTactical) {
-      logger.warn('[AISystem] Tactical AI is disabled');
+      logger.warn("[AISystem] Tactical AI is disabled");
       return;
     }
 

@@ -3,15 +3,15 @@
  * PATCH 151.0 - Display certificate history
  */
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { History, Loader2 } from 'lucide-react';
-import { listCertificates } from '../services/certification-service';
-import { CertificationData } from '../types';
-import { downloadCertificatePDF } from '../utils/pdf-generator';
-import { Button } from '@/components/ui/button';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { History, Loader2 } from "lucide-react";
+import { listCertificates } from "../services/certification-service";
+import { CertificationData } from "../types";
+import { downloadCertificatePDF } from "../utils/pdf-generator";
+import { Button } from "@/components/ui/button";
 
 export const CertificateHistory: React.FC = () => {
   const [certificates, setCertificates] = useState<CertificationData[]>([]);
@@ -27,7 +27,7 @@ export const CertificateHistory: React.FC = () => {
       const data = await listCertificates();
       setCertificates(data);
     } catch (error) {
-      console.error('Error loading certificates:', error);
+      console.error("Error loading certificates:", error);
     } finally {
       setLoading(false);
     }
@@ -37,15 +37,15 @@ export const CertificateHistory: React.FC = () => {
     try {
       await downloadCertificatePDF(certificate);
     } catch (error) {
-      console.error('Error downloading PDF:', error);
+      console.error("Error downloading PDF:", error);
     }
   };
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      compliant: 'default',
-      'non-compliant': 'destructive',
-      conditional: 'secondary'
+      compliant: "default",
+      "non-compliant": "destructive",
+      conditional: "secondary"
     };
     return (
       <Badge variant={variants[status as keyof typeof variants] as any}>

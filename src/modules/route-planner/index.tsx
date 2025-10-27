@@ -4,54 +4,54 @@
  * Patch 145.0
  */
 
-import React, { useState } from 'react';
-import { RoutePlannerMap, type RouteData } from './components/RoutePlannerMap';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Navigation, Plus, TrendingUp, Clock } from 'lucide-react';
+import React, { useState } from "react";
+import { RoutePlannerMap, type RouteData } from "./components/RoutePlannerMap";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Navigation, Plus, TrendingUp, Clock } from "lucide-react";
 
 const RoutePlanner = () => {
   const [routes] = useState<RouteData[]>([
     {
-      id: 'route-1',
-      name: 'Rota Principal - Santos → Rio',
-      type: 'planned',
-      color: '#3b82f6',
+      id: "route-1",
+      name: "Rota Principal - Santos → Rio",
+      type: "planned",
+      color: "#3b82f6",
       distance: 370000, // meters
       duration: 18, // hours
       points: [
-        { longitude: -46.3333, latitude: -23.9608, name: 'Porto de Santos' },
-        { longitude: -45.5, latitude: -23.5, name: 'Waypoint 1' },
-        { longitude: -44.5, latitude: -23.2, name: 'Waypoint 2' },
-        { longitude: -43.1729, latitude: -22.9068, name: 'Porto do Rio de Janeiro' },
+        { longitude: -46.3333, latitude: -23.9608, name: "Porto de Santos" },
+        { longitude: -45.5, latitude: -23.5, name: "Waypoint 1" },
+        { longitude: -44.5, latitude: -23.2, name: "Waypoint 2" },
+        { longitude: -43.1729, latitude: -22.9068, name: "Porto do Rio de Janeiro" },
       ],
     },
     {
-      id: 'route-2',
-      name: 'Rota Alternativa (Costeira)',
-      type: 'alternative',
-      color: '#f59e0b',
+      id: "route-2",
+      name: "Rota Alternativa (Costeira)",
+      type: "alternative",
+      color: "#f59e0b",
       distance: 420000,
       duration: 21,
       points: [
-        { longitude: -46.3333, latitude: -23.9608, name: 'Porto de Santos' },
-        { longitude: -46.0, latitude: -23.8, name: 'Alt Waypoint 1' },
-        { longitude: -45.2, latitude: -23.4, name: 'Alt Waypoint 2' },
-        { longitude: -44.0, latitude: -23.0, name: 'Alt Waypoint 3' },
-        { longitude: -43.1729, latitude: -22.9068, name: 'Porto do Rio de Janeiro' },
+        { longitude: -46.3333, latitude: -23.9608, name: "Porto de Santos" },
+        { longitude: -46.0, latitude: -23.8, name: "Alt Waypoint 1" },
+        { longitude: -45.2, latitude: -23.4, name: "Alt Waypoint 2" },
+        { longitude: -44.0, latitude: -23.0, name: "Alt Waypoint 3" },
+        { longitude: -43.1729, latitude: -22.9068, name: "Porto do Rio de Janeiro" },
       ],
     },
     {
-      id: 'route-3',
-      name: 'Rota Atual (Navegação)',
-      type: 'actual',
-      color: '#22c55e',
+      id: "route-3",
+      name: "Rota Atual (Navegação)",
+      type: "actual",
+      color: "#22c55e",
       distance: 185000,
       duration: 9,
       points: [
-        { longitude: -46.3333, latitude: -23.9608, name: 'Porto de Santos' },
-        { longitude: -45.5, latitude: -23.5, name: 'Atual Waypoint 1' },
-        { longitude: -44.9, latitude: -23.3, name: 'Posição Atual' },
+        { longitude: -46.3333, latitude: -23.9608, name: "Porto de Santos" },
+        { longitude: -45.5, latitude: -23.5, name: "Atual Waypoint 1" },
+        { longitude: -44.9, latitude: -23.3, name: "Posição Atual" },
       ],
     },
   ]);
@@ -62,11 +62,11 @@ const RoutePlanner = () => {
   });
 
   const handleRouteSelect = (routeId: string) => {
-    console.log('Route selected:', routeId);
+    console.log("Route selected:", routeId);
   };
 
-  const selectedRoute = routes.find(r => r.type === 'planned');
-  const alternativeRoute = routes.find(r => r.type === 'alternative');
+  const selectedRoute = routes.find(r => r.type === "planned");
+  const alternativeRoute = routes.find(r => r.type === "alternative");
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -89,7 +89,7 @@ const RoutePlanner = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {selectedRoute ? ((selectedRoute.distance ?? 0) / 1852).toFixed(0) : '0'} nm
+              {selectedRoute ? ((selectedRoute.distance ?? 0) / 1852).toFixed(0) : "0"} nm
             </div>
             <p className="text-xs text-muted-foreground">Rota planejada</p>
           </CardContent>
@@ -117,7 +117,7 @@ const RoutePlanner = () => {
             <div className="text-2xl font-bold text-green-500">
               {selectedRoute && alternativeRoute
                 ? `${((((alternativeRoute.distance ?? 0) - (selectedRoute.distance ?? 0)) / 1852)).toFixed(0)} nm`
-                : '0 nm'}
+                : "0 nm"}
             </div>
             <p className="text-xs text-muted-foreground">vs. rota alternativa</p>
           </CardContent>

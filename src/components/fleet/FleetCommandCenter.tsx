@@ -11,16 +11,16 @@
  * - Filtering and search capabilities
  */
 
-import React, { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Ship, 
   AlertTriangle, 
@@ -32,13 +32,13 @@ import {
   Search,
   Plus,
   RefreshCw
-} from 'lucide-react';
-import { MissionEngine, Mission, Vessel } from '@/lib/mission-engine';
-import { DistributedAIEngine } from '@/lib/distributed-ai-engine';
-import { logger } from '@/lib/logger';
+} from "lucide-react";
+import { MissionEngine, Mission, Vessel } from "@/lib/mission-engine";
+import { DistributedAIEngine } from "@/lib/distributed-ai-engine";
+import { logger } from "@/lib/logger";
 
-type VesselStatus = 'active' | 'maintenance' | 'inactive' | 'critical';
-type FilterStatus = 'all' | VesselStatus;
+type VesselStatus = "active" | "maintenance" | "inactive" | "critical";
+type FilterStatus = "all" | VesselStatus;
 
 interface VesselWithMission extends Vessel {
   current_mission?: Mission;
@@ -50,16 +50,16 @@ interface VesselWithMission extends Vessel {
 
 export const FleetCommandCenter: React.FC = () => {
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [autoRefresh, setAutoRefresh] = useState(true);
 
   // Fetch all vessels with their status
   const { data: vessels, isLoading: vesselsLoading, refetch: refetchVessels } = useQuery({
-    queryKey: ['fleet-vessels', filterStatus],
+    queryKey: ["fleet-vessels", filterStatus],
     queryFn: async () => {
       let query = supabase
-        .from('vessels')
+        .from("vessels")
         .select(`
           *,
           maintenance_records (
@@ -72,16 +72,16 @@ export const FleetCommandCenter: React.FC = () => {
             last_sync
           )
         `)
-        .order('name');
+        .order("name");
 
-      if (filterStatus !== 'all') {
-        query = query.eq('status', filterStatus);
+      if (filterStatus !== "all") {
+        query = query.eq("status", filterStatus);
       }
 
       const { data, error } = await query;
 
       if (error) {
-        logger.error('Error fetching vessels:', error);
+        logger.error("Error fetching vessels:", error);
         throw error;
       }
 
@@ -92,28 +92,28 @@ export const FleetCommandCenter: React.FC = () => {
 
   // Fetch active missions
   const { data: missions, isLoading: missionsLoading } = useQuery({
-    queryKey: ['fleet-missions'],
+    queryKey: ["fleet-missions"],
     queryFn: async () => {
-      return await MissionEngine.getMissions({ status: 'active' });
+      return await MissionEngine.getMissions({ status: "active" });
     },
     refetchInterval: autoRefresh ? 30000 : false,
   });
 
   // Fetch logs for selected vessel
   const { data: vesselLogs } = useQuery({
-    queryKey: ['vessel-logs', selectedVessel],
+    queryKey: ["vessel-logs", selectedVessel],
     queryFn: async () => {
       if (!selectedVessel) return [];
 
       const { data, error } = await supabase
-        .from('mission_logs')
-        .select('*')
-        .eq('vessel_id', selectedVessel)
-        .order('created_at', { ascending: false })
+        .from("mission_logs")
+        .select("*")
+        .eq("vessel_id", selectedVessel)
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) {
-        logger.error('Error fetching vessel logs:', error);
+        logger.error("Error fetching vessel logs:", error);
         return [];
       }
 
@@ -131,25 +131,25 @@ export const FleetCommandCenter: React.FC = () => {
   // Get status color and icon
   const getStatusInfo = (status: VesselStatus) => {
     switch (status) {
-      case 'active':
-        return { color: 'bg-green-500', icon: CheckCircle, label: 'OK' };
-      case 'maintenance':
-        return { color: 'bg-yellow-500', icon: Activity, label: 'Maintenance' };
-      case 'critical':
-        return { color: 'bg-red-500', icon: AlertTriangle, label: 'Critical' };
-      case 'inactive':
-        return { color: 'bg-gray-500', icon: XCircle, label: 'Inactive' };
-      default:
-        return { color: 'bg-gray-500', icon: Ship, label: 'Unknown' };
+    case "active":
+      return { color: "bg-green-500", icon: CheckCircle, label: "OK" };
+    case "maintenance":
+      return { color: "bg-yellow-500", icon: Activity, label: "Maintenance" };
+    case "critical":
+      return { color: "bg-red-500", icon: AlertTriangle, label: "Critical" };
+    case "inactive":
+      return { color: "bg-gray-500", icon: XCircle, label: "Inactive" };
+    default:
+      return { color: "bg-gray-500", icon: Ship, label: "Unknown" };
     }
   };
 
   // Calculate fleet statistics
   const fleetStats = {
     total: vessels?.length || 0,
-    active: vessels?.filter(v => v.status === 'active').length || 0,
-    maintenance: vessels?.filter(v => v.status === 'maintenance').length || 0,
-    critical: vessels?.filter(v => v.status === 'critical').length || 0,
+    active: vessels?.filter(v => v.status === "active").length || 0,
+    maintenance: vessels?.filter(v => v.status === "maintenance").length || 0,
+    critical: vessels?.filter(v => v.status === "critical").length || 0,
     missions: missions?.length || 0,
   };
 
@@ -174,13 +174,13 @@ export const FleetCommandCenter: React.FC = () => {
               refetchVessels();
             }}
           >
-            <RefreshCw className={`h-4 w-4 ${autoRefresh ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 ${autoRefresh ? "animate-spin" : ""}`} />
           </Button>
           <Button
-            variant={autoRefresh ? 'default' : 'outline'}
+            variant={autoRefresh ? "default" : "outline"}
             onClick={() => setAutoRefresh(!autoRefresh)}
           >
-            Auto Refresh: {autoRefresh ? 'ON' : 'OFF'}
+            Auto Refresh: {autoRefresh ? "ON" : "OFF"}
           </Button>
         </div>
       </div>
@@ -285,7 +285,7 @@ export const FleetCommandCenter: React.FC = () => {
                       <Card
                         key={vessel.id}
                         className={`cursor-pointer transition-all hover:shadow-lg ${
-                          selectedVessel === vessel.id ? 'ring-2 ring-primary' : ''
+                          selectedVessel === vessel.id ? "ring-2 ring-primary" : ""
                         }`}
                         onClick={() => setSelectedVessel(vessel.id)}
                       >
@@ -301,18 +301,18 @@ export const FleetCommandCenter: React.FC = () => {
                             </Badge>
                           </div>
                           <CardDescription className="text-xs">
-                            {vessel.imo_code || 'No IMO Code'}
+                            {vessel.imo_code || "No IMO Code"}
                           </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-2">
                           <div className="text-sm space-y-1">
                             <div className="flex justify-between">
                               <span className="text-muted-foreground">Type:</span>
-                              <span className="font-medium">{vessel.vessel_type || 'Unknown'}</span>
+                              <span className="font-medium">{vessel.vessel_type || "Unknown"}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-muted-foreground">Flag:</span>
-                              <span className="font-medium">{vessel.flag || 'Unknown'}</span>
+                              <span className="font-medium">{vessel.flag || "Unknown"}</span>
                             </div>
                             {vessel.last_known_position && (
                               <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -344,9 +344,9 @@ export const FleetCommandCenter: React.FC = () => {
                       vesselLogs.map((log) => (
                         <div key={log.id} className="flex items-start gap-2 p-3 bg-muted rounded-lg">
                           <Badge variant={
-                            log.log_type === 'error' ? 'destructive' :
-                            log.log_type === 'warning' ? 'default' :
-                            'secondary'
+                            log.log_type === "error" ? "destructive" :
+                              log.log_type === "warning" ? "default" :
+                                "secondary"
                           }>
                             {log.log_type}
                           </Badge>
@@ -393,9 +393,9 @@ export const FleetCommandCenter: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <CardTitle className="text-lg">{mission.name}</CardTitle>
                           <Badge variant={
-                            mission.priority === 'critical' ? 'destructive' :
-                            mission.priority === 'high' ? 'default' :
-                            'secondary'
+                            mission.priority === "critical" ? "destructive" :
+                              mission.priority === "high" ? "default" :
+                                "secondary"
                           }>
                             {mission.priority}
                           </Badge>

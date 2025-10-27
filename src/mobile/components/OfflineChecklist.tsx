@@ -3,16 +3,16 @@
  * Operational checklists that work offline-first
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { CheckCircle2, Circle, WifiOff, Cloud, AlertCircle } from 'lucide-react';
-import { sqliteStorage } from '../services/sqlite-storage';
-import { MobileChecklist, ChecklistItem } from '../types';
-import { toast } from 'sonner';
+import React, { useState, useEffect } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { CheckCircle2, Circle, WifiOff, Cloud, AlertCircle } from "lucide-react";
+import { sqliteStorage } from "../services/sqlite-storage";
+import { MobileChecklist, ChecklistItem } from "../types";
+import { toast } from "sonner";
 
 interface OfflineChecklistProps {
   checklist: MobileChecklist;
@@ -44,28 +44,28 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
       items: updatedItems,
       completed: updatedItems.every(item => item.checked),
       lastModified: Date.now(),
-      syncStatus: 'pending'
+      syncStatus: "pending"
     };
 
     // Save locally first
     try {
       await sqliteStorage.save(
-        'checklists',
+        "checklists",
         updatedChecklist,
-        'update',
-        'high'
+        "update",
+        "high"
       );
 
       onUpdate(updatedChecklist);
 
       if (!isOnline) {
-        toast.info('Checklist saved offline. Will sync when online.');
+        toast.info("Checklist saved offline. Will sync when online.");
       } else {
-        toast.success('Checklist updated');
+        toast.success("Checklist updated");
       }
     } catch (error) {
-      console.error('Failed to save checklist:', error);
-      toast.error('Failed to save checklist');
+      console.error("Failed to save checklist:", error);
+      toast.error("Failed to save checklist");
     }
   };
 
@@ -80,14 +80,14 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
       ...checklist,
       items: updatedItems,
       lastModified: Date.now(),
-      syncStatus: 'pending'
+      syncStatus: "pending"
     };
 
     await sqliteStorage.save(
-      'checklists',
+      "checklists",
       updatedChecklist,
-      'update',
-      'medium'
+      "update",
+      "medium"
     );
 
     onUpdate(updatedChecklist);
@@ -95,24 +95,24 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'operational': return 'bg-blue-500';
-      case 'safety': return 'bg-red-500';
-      case 'maintenance': return 'bg-yellow-500';
-      case 'inspection': return 'bg-green-500';
-      default: return 'bg-gray-500';
+    case "operational": return "bg-blue-500";
+    case "safety": return "bg-red-500";
+    case "maintenance": return "bg-yellow-500";
+    case "inspection": return "bg-green-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getSyncStatusIcon = () => {
     switch (checklist.syncStatus) {
-      case 'synced':
-        return <Cloud className="h-4 w-4 text-green-500" />;
-      case 'pending':
-        return <WifiOff className="h-4 w-4 text-yellow-500" />;
-      case 'failed':
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      default:
-        return null;
+    case "synced":
+      return <Cloud className="h-4 w-4 text-green-500" />;
+    case "pending":
+      return <WifiOff className="h-4 w-4 text-yellow-500" />;
+    case "failed":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    default:
+      return null;
     }
   };
 
@@ -140,7 +140,7 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-300 ${
-                progress === 100 ? 'bg-green-500' : 'bg-blue-500'
+                progress === 100 ? "bg-green-500" : "bg-blue-500"
               }`}
               style={{ width: `${progress}%` }}
             />
@@ -163,7 +163,7 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
                   <label
                     htmlFor={item.id}
                     className={`text-sm font-medium cursor-pointer ${
-                      item.checked ? 'line-through text-muted-foreground' : ''
+                      item.checked ? "line-through text-muted-foreground" : ""
                     }`}
                   >
                     {item.text}
@@ -174,13 +174,13 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
                   <div className="mt-2">
                     <Textarea
                       placeholder="Add notes..."
-                      value={notes[item.id] || item.notes || ''}
+                      value={notes[item.id] || item.notes || ""}
                       onChange={(e) => {
                         setNotes({ ...notes, [item.id]: e.target.value });
                       }}
                       onBlur={() => {
                         if (notes[item.id] !== item.notes) {
-                          handleAddNote(item.id, notes[item.id] || '');
+                          handleAddNote(item.id, notes[item.id] || "");
                         }
                       }}
                       className="min-h-[60px]"

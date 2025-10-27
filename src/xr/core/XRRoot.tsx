@@ -1,11 +1,11 @@
-import React, { Suspense, useEffect, useRef, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Environment } from '@react-three/drei';
-import { useXR } from './XRContext';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Activity, Glasses, Smartphone } from 'lucide-react';
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, PerspectiveCamera, Environment } from "@react-three/drei";
+import { useXR } from "./XRContext";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Activity, Glasses, Smartphone } from "lucide-react";
 
 interface XRRootProps {
   children?: React.ReactNode;
@@ -59,8 +59,8 @@ export function XRRoot({ children, fallback, showControls = true }: XRRootProps)
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   return (
@@ -69,9 +69,9 @@ export function XRRoot({ children, fallback, showControls = true }: XRRootProps)
       {showControls && (
         <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Badge variant={isXRSupported ? 'default' : 'secondary'}>
+            <Badge variant={isXRSupported ? "default" : "secondary"}>
               {isMobile ? <Smartphone className="h-3 w-3 mr-1" /> : <Glasses className="h-3 w-3 mr-1" />}
-              {isXRSupported ? 'XR Ready' : 'Fallback Mode'}
+              {isXRSupported ? "XR Ready" : "Fallback Mode"}
             </Badge>
             {isXRActive && (
               <Badge variant="outline" className="animate-pulse">
@@ -115,9 +115,9 @@ export function XRRoot({ children, fallback, showControls = true }: XRRootProps)
             alpha: true,
           }}
           style={{
-            width: '100%',
-            height: '100%',
-            touchAction: 'none',
+            width: "100%",
+            height: "100%",
+            touchAction: "none",
           }}
         >
           <Suspense fallback={null}>

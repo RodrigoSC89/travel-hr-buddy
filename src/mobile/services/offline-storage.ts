@@ -5,10 +5,10 @@
  * Supports both IndexedDB (web) and SQLite (mobile)
  */
 
-import { sqliteStorage } from './sqlite-storage';
-import { structuredLogger } from '@/lib/logger/structured-logger';
+import { sqliteStorage } from "./sqlite-storage";
+import { structuredLogger } from "@/lib/logger/structured-logger";
 
-export type StorageType = 'indexeddb' | 'sqlite' | 'localstorage';
+export type StorageType = "indexeddb" | "sqlite" | "localstorage";
 
 export interface StorageConfig {
   type: StorageType;
@@ -62,7 +62,7 @@ class IndexedDBAdapter implements StorageAdapter {
         // Create object stores for each table
         for (const table of this.config.tables) {
           if (!db.objectStoreNames.contains(table)) {
-            db.createObjectStore(table, { keyPath: 'key' });
+            db.createObjectStore(table, { keyPath: "key" });
           }
         }
       };
@@ -70,10 +70,10 @@ class IndexedDBAdapter implements StorageAdapter {
   }
 
   async get<T>(table: string, key: string): Promise<CacheEntry<T> | null> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) throw new Error("Database not initialized");
 
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([table], 'readonly');
+      const transaction = this.db!.transaction([table], "readonly");
       const store = transaction.objectStore(table);
       const request = store.get(key);
 
@@ -93,7 +93,7 @@ class IndexedDBAdapter implements StorageAdapter {
   }
 
   async set<T>(table: string, key: string, value: T, ttl?: number): Promise<void> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) throw new Error("Database not initialized");
 
     const entry: CacheEntry<T> = {
       key,
@@ -103,7 +103,7 @@ class IndexedDBAdapter implements StorageAdapter {
     };
 
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([table], 'readwrite');
+      const transaction = this.db!.transaction([table], "readwrite");
       const store = transaction.objectStore(table);
       const request = store.put(entry);
 
@@ -113,10 +113,10 @@ class IndexedDBAdapter implements StorageAdapter {
   }
 
   async delete(table: string, key: string): Promise<void> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) throw new Error("Database not initialized");
 
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([table], 'readwrite');
+      const transaction = this.db!.transaction([table], "readwrite");
       const store = transaction.objectStore(table);
       const request = store.delete(key);
 
@@ -126,10 +126,10 @@ class IndexedDBAdapter implements StorageAdapter {
   }
 
   async clear(table: string): Promise<void> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) throw new Error("Database not initialized");
 
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([table], 'readwrite');
+      const transaction = this.db!.transaction([table], "readwrite");
       const store = transaction.objectStore(table);
       const request = store.clear();
 
@@ -139,10 +139,10 @@ class IndexedDBAdapter implements StorageAdapter {
   }
 
   async getAll<T>(table: string): Promise<CacheEntry<T>[]> {
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) throw new Error("Database not initialized");
 
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([table], 'readonly');
+      const transaction = this.db!.transaction([table], "readonly");
       const store = transaction.objectStore(table);
       const request = store.getAll();
 
@@ -181,9 +181,9 @@ export class OfflineStorageService {
     this.config = config;
     
     // Select appropriate adapter based on environment and config
-    if (config.type === 'indexeddb') {
+    if (config.type === "indexeddb") {
       this.adapter = new IndexedDBAdapter(config);
-    } else if (config.type === 'sqlite') {
+    } else if (config.type === "sqlite") {
       // Use existing SQLite adapter (wrapped)
       this.adapter = this.createSQLiteAdapter();
     } else {
@@ -198,20 +198,20 @@ export class OfflineStorageService {
     return {
       init: async () => {
         await sqliteStorage.initialize();
-        structuredLogger.info('SQLite adapter initialized');
+        structuredLogger.info("SQLite adapter initialized");
       },
       get: async <T>(table: string, key: string) => {
         // SQLite storage doesn't have a direct query method, fallback to mock
         return null;
       },
       set: async <T>(table: string, key: string, value: T) => {
-        await sqliteStorage.save(table, { id: key, ...value } as any, 'create');
+        await sqliteStorage.save(table, { id: key, ...value } as any, "create");
       },
       delete: async (table: string, key: string) => {
-        await sqliteStorage.save(table, { id: key }, 'delete');
+        await sqliteStorage.save(table, { id: key }, "delete");
       },
       clear: async (table: string) => {
-        structuredLogger.warn('Clear operation not implemented for SQLite');
+        structuredLogger.warn("Clear operation not implemented for SQLite");
       },
       getAll: async <T>(table: string) => {
         // Return empty array for SQLite - data managed by sync queue
@@ -230,12 +230,12 @@ export class OfflineStorageService {
   async initialize(): Promise<void> {
     try {
       await this.adapter.init();
-      structuredLogger.info('Offline storage initialized', {
+      structuredLogger.info("Offline storage initialized", {
         type: this.config.type,
         tables: this.config.tables,
       });
     } catch (error) {
-      structuredLogger.error('Failed to initialize offline storage', error as Error);
+      structuredLogger.error("Failed to initialize offline storage", error as Error);
       throw error;
     }
   }
@@ -244,15 +244,15 @@ export class OfflineStorageService {
    * Cache route data
    */
   async cacheRoute(route: string, data: unknown, ttl: number = 3600000): Promise<void> {
-    await this.adapter.set('routes', route, data, ttl);
-    structuredLogger.debug('Route cached', { route });
+    await this.adapter.set("routes", route, data, ttl);
+    structuredLogger.debug("Route cached", { route });
   }
 
   /**
    * Get cached route
    */
   async getCachedRoute<T>(route: string): Promise<T | null> {
-    const entry = await this.adapter.get<T>('routes', route);
+    const entry = await this.adapter.get<T>("routes", route);
     return entry?.value || null;
   }
 
@@ -260,15 +260,15 @@ export class OfflineStorageService {
    * Cache mission data
    */
   async cacheMission(missionId: string, data: unknown): Promise<void> {
-    await this.adapter.set('missions', missionId, data);
-    structuredLogger.debug('Mission cached', { missionId });
+    await this.adapter.set("missions", missionId, data);
+    structuredLogger.debug("Mission cached", { missionId });
   }
 
   /**
    * Get cached mission
    */
   async getCachedMission<T>(missionId: string): Promise<T | null> {
-    const entry = await this.adapter.get<T>('missions', missionId);
+    const entry = await this.adapter.get<T>("missions", missionId);
     return entry?.value || null;
   }
 
@@ -276,14 +276,14 @@ export class OfflineStorageService {
    * Cache log entries
    */
   async cacheLog(logId: string, logData: unknown): Promise<void> {
-    await this.adapter.set('logs', logId, logData);
+    await this.adapter.set("logs", logId, logData);
   }
 
   /**
    * Get cached logs
    */
   async getCachedLogs<T>(): Promise<T[]> {
-    const entries = await this.adapter.getAll<T>('logs');
+    const entries = await this.adapter.getAll<T>("logs");
     return entries.map((e) => e.value);
   }
 
@@ -294,7 +294,7 @@ export class OfflineStorageService {
     for (const table of this.config.tables) {
       await this.adapter.clear(table);
     }
-    structuredLogger.info('All cached data cleared');
+    structuredLogger.info("All cached data cleared");
   }
 
   /**
@@ -306,9 +306,9 @@ export class OfflineStorageService {
     logs: number;
     total: number;
   }> {
-    const routes = await this.adapter.getAll('routes');
-    const missions = await this.adapter.getAll('missions');
-    const logs = await this.adapter.getAll('logs');
+    const routes = await this.adapter.getAll("routes");
+    const missions = await this.adapter.getAll("missions");
+    const logs = await this.adapter.getAll("logs");
 
     return {
       routes: routes.length,
@@ -321,8 +321,8 @@ export class OfflineStorageService {
 
 // Export singleton instance
 export const offlineStorage = new OfflineStorageService({
-  type: typeof indexedDB !== 'undefined' ? 'indexeddb' : 'sqlite',
-  databaseName: 'nautilus_offline',
+  type: typeof indexedDB !== "undefined" ? "indexeddb" : "sqlite",
+  databaseName: "nautilus_offline",
   version: 1,
-  tables: ['routes', 'missions', 'logs', 'checklists'],
+  tables: ["routes", "missions", "logs", "checklists"],
 });

@@ -9,8 +9,8 @@ import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import { learningCore } from "./learning-core";
 
-export type DecisionLevel = 'auto_execute' | 'request_approval' | 'forbidden';
-export type ActionStatus = 'pending' | 'approved' | 'rejected' | 'executed' | 'failed';
+export type DecisionLevel = "auto_execute" | "request_approval" | "forbidden";
+export type ActionStatus = "pending" | "approved" | "rejected" | "executed" | "failed";
 
 export interface AutonomyAction {
   id?: string;
@@ -39,7 +39,7 @@ export interface DecisionRule {
 export interface WebhookNotification {
   action_id: string;
   action_type: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
   message: string;
   context: Record<string, any>;
   timestamp: Date;
@@ -61,8 +61,8 @@ class MissionAutonomyEngine {
   private initializeDecisionRules(): void {
     // Route adjustment - auto-execute for low risk
     this.addDecisionRule({
-      action_type: 'route_adjustment',
-      decision_level: 'auto_execute',
+      action_type: "route_adjustment",
+      decision_level: "auto_execute",
       risk_threshold: 0.3,
       confidence_threshold: 0.7,
       requires_approval_if: (context) => context.deviation_percentage > 20,
@@ -70,8 +70,8 @@ class MissionAutonomyEngine {
 
     // Speed change - auto-execute for minor changes
     this.addDecisionRule({
-      action_type: 'speed_change',
-      decision_level: 'auto_execute',
+      action_type: "speed_change",
+      decision_level: "auto_execute",
       risk_threshold: 0.4,
       confidence_threshold: 0.6,
       requires_approval_if: (context) => Math.abs(context.speed_delta) > 5,
@@ -79,8 +79,8 @@ class MissionAutonomyEngine {
 
     // Resource allocation - request approval for significant changes
     this.addDecisionRule({
-      action_type: 'resource_allocation',
-      decision_level: 'request_approval',
+      action_type: "resource_allocation",
+      decision_level: "request_approval",
       risk_threshold: 0.6,
       confidence_threshold: 0.7,
       requires_approval_if: (context) => context.resource_value > 10000,
@@ -88,8 +88,8 @@ class MissionAutonomyEngine {
 
     // Emergency protocol - always request approval
     this.addDecisionRule({
-      action_type: 'emergency_protocol',
-      decision_level: 'request_approval',
+      action_type: "emergency_protocol",
+      decision_level: "request_approval",
       risk_threshold: 0.8,
       confidence_threshold: 0.8,
       requires_approval_if: () => true,
@@ -97,8 +97,8 @@ class MissionAutonomyEngine {
 
     // Crew reassignment - request approval
     this.addDecisionRule({
-      action_type: 'crew_reassignment',
-      decision_level: 'request_approval',
+      action_type: "crew_reassignment",
+      decision_level: "request_approval",
       risk_threshold: 0.5,
       confidence_threshold: 0.75,
       requires_approval_if: (context) => context.role_critical === true,
@@ -106,8 +106,8 @@ class MissionAutonomyEngine {
 
     // System shutdown - forbidden without explicit override
     this.addDecisionRule({
-      action_type: 'system_shutdown',
-      decision_level: 'forbidden',
+      action_type: "system_shutdown",
+      decision_level: "forbidden",
       risk_threshold: 1.0,
       confidence_threshold: 1.0,
       requires_approval_if: () => true,
@@ -115,8 +115,8 @@ class MissionAutonomyEngine {
 
     // Mission abort - forbidden without explicit override
     this.addDecisionRule({
-      action_type: 'mission_abort',
-      decision_level: 'forbidden',
+      action_type: "mission_abort",
+      decision_level: "forbidden",
       risk_threshold: 1.0,
       confidence_threshold: 1.0,
       requires_approval_if: () => true,
@@ -168,7 +168,7 @@ class MissionAutonomyEngine {
         // Default to request approval
         return this.createAction(
           action_type,
-          'request_approval',
+          "request_approval",
           context,
           reasoning,
           confidence_score,
@@ -181,16 +181,16 @@ class MissionAutonomyEngine {
 
       // Check if approval is required based on context
       if (rule.requires_approval_if(context)) {
-        decision_level = 'request_approval';
+        decision_level = "request_approval";
       }
 
       // Check risk and confidence thresholds
       if (risk_score > rule.risk_threshold) {
-        decision_level = 'request_approval';
+        decision_level = "request_approval";
       }
 
       if (confidence_score < rule.confidence_threshold) {
-        decision_level = 'request_approval';
+        decision_level = "request_approval";
       }
 
       // Create action
@@ -204,13 +204,13 @@ class MissionAutonomyEngine {
       );
 
       // Execute or request approval
-      if (decision_level === 'auto_execute') {
+      if (decision_level === "auto_execute") {
         await this.executeAction(action);
-      } else if (decision_level === 'request_approval') {
+      } else if (decision_level === "request_approval") {
         await this.requestApproval(action);
       } else {
         logger.warn("[MissionAutonomy] Action is forbidden", { action_type });
-        action.status = 'rejected';
+        action.status = "rejected";
         await this.updateAction(action);
       }
 
@@ -234,11 +234,11 @@ class MissionAutonomyEngine {
   ): Promise<AutonomyAction> {
     try {
       const { data, error } = await (supabase as any)
-        .from('autonomy_actions')
+        .from("autonomy_actions")
         .insert({
           action_type,
           decision_level,
-          status: 'pending',
+          status: "pending",
           context,
           reasoning,
           confidence_score,
@@ -285,7 +285,7 @@ class MissionAutonomyEngine {
       const result = await this.performAction(action);
 
       // Update action status
-      action.status = 'executed';
+      action.status = "executed";
       action.executed_at = new Date();
       action.result = result;
 
@@ -293,7 +293,7 @@ class MissionAutonomyEngine {
 
       // Track decision with learning core
       await learningCore.trackDecision(
-        'mission-autonomy',
+        "mission-autonomy",
         action.action_type,
         action.context,
         result,
@@ -306,7 +306,7 @@ class MissionAutonomyEngine {
     } catch (error) {
       logger.error("[MissionAutonomy] Failed to execute action", { error });
       
-      action.status = 'failed';
+      action.status = "failed";
       action.result = { error: String(error) };
       await this.updateAction(action);
       
@@ -326,33 +326,33 @@ class MissionAutonomyEngine {
     });
 
     switch (action.action_type) {
-      case 'route_adjustment':
-        return {
-          success: true,
-          new_route: action.context.new_route,
-          estimated_time_saved: 15,
-        };
+    case "route_adjustment":
+      return {
+        success: true,
+        new_route: action.context.new_route,
+        estimated_time_saved: 15,
+      };
 
-      case 'speed_change':
-        return {
-          success: true,
-          old_speed: action.context.current_speed,
-          new_speed: action.context.target_speed,
-          impact: 'minimal',
-        };
+    case "speed_change":
+      return {
+        success: true,
+        old_speed: action.context.current_speed,
+        new_speed: action.context.target_speed,
+        impact: "minimal",
+      };
 
-      case 'resource_allocation':
-        return {
-          success: true,
-          resources_allocated: action.context.resources,
-          allocation_complete: true,
-        };
+    case "resource_allocation":
+      return {
+        success: true,
+        resources_allocated: action.context.resources,
+        allocation_complete: true,
+      };
 
-      default:
-        return {
-          success: true,
-          message: `Action ${action.action_type} completed`,
-        };
+    default:
+      return {
+        success: true,
+        message: `Action ${action.action_type} completed`,
+      };
     }
   }
 
@@ -373,7 +373,7 @@ class MissionAutonomyEngine {
 
       // Send webhook notification
       await this.sendWebhookNotification({
-        action_id: action.id || '',
+        action_id: action.id || "",
         action_type: action.action_type,
         priority: this.determinePriority(action.risk_score),
         message: `Approval required for ${action.action_type}`,
@@ -406,7 +406,7 @@ class MissionAutonomyEngine {
       }
 
       // Update action
-      action.status = 'approved';
+      action.status = "approved";
       action.approved_by = approvedBy;
       await this.updateAction(action);
 
@@ -440,7 +440,7 @@ class MissionAutonomyEngine {
         throw new Error(`Action ${actionId} not found`);
       }
 
-      action.status = 'rejected';
+      action.status = "rejected";
       action.approved_by = rejectedBy;
       await this.updateAction(action);
 
@@ -460,9 +460,9 @@ class MissionAutonomyEngine {
   private async getAction(actionId: string): Promise<AutonomyAction | null> {
     try {
       const { data, error } = await (supabase as any)
-        .from('autonomy_actions')
-        .select('*')
-        .eq('id', actionId)
+        .from("autonomy_actions")
+        .select("*")
+        .eq("id", actionId)
         .single();
 
       if (error) throw error;
@@ -495,14 +495,14 @@ class MissionAutonomyEngine {
   private async updateAction(action: AutonomyAction): Promise<void> {
     try {
       const { error } = await (supabase as any)
-        .from('autonomy_actions')
+        .from("autonomy_actions")
         .update({
           status: action.status,
           approved_by: action.approved_by,
           executed_at: action.executed_at?.toISOString(),
           result: action.result,
         })
-        .eq('id', action.id);
+        .eq("id", action.id);
 
       if (error) throw error;
     } catch (error) {
@@ -545,11 +545,11 @@ class MissionAutonomyEngine {
    */
   private determinePriority(
     risk_score: number
-  ): 'low' | 'medium' | 'high' | 'critical' {
-    if (risk_score >= 0.8) return 'critical';
-    if (risk_score >= 0.6) return 'high';
-    if (risk_score >= 0.4) return 'medium';
-    return 'low';
+  ): "low" | "medium" | "high" | "critical" {
+    if (risk_score >= 0.8) return "critical";
+    if (risk_score >= 0.6) return "high";
+    if (risk_score >= 0.4) return "medium";
+    return "low";
   }
 
   /**
@@ -565,10 +565,10 @@ class MissionAutonomyEngine {
   async getAuditLogs(limit: number = 100): Promise<AutonomyAction[]> {
     try {
       const { data, error } = await (supabase as any)
-        .from('autonomy_actions')
-        .from('autonomy_actions')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("autonomy_actions")
+        .from("autonomy_actions")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;

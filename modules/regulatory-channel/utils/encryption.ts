@@ -9,16 +9,16 @@
 export const generateEncryptionKey = async (): Promise<string> => {
   const key = await crypto.subtle.generateKey(
     {
-      name: 'AES-GCM',
+      name: "AES-GCM",
       length: 256
     },
     true,
-    ['encrypt', 'decrypt']
+    ["encrypt", "decrypt"]
   );
 
-  const exportedKey = await crypto.subtle.exportKey('raw', key);
+  const exportedKey = await crypto.subtle.exportKey("raw", key);
   const keyArray = Array.from(new Uint8Array(exportedKey));
-  const keyHex = keyArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  const keyHex = keyArray.map(b => b.toString(16).padStart(2, "0")).join("");
 
   return keyHex;
 };
@@ -30,11 +30,11 @@ export const encryptData = async (data: string, keyHex: string): Promise<string>
   // Convert hex key to CryptoKey
   const keyArray = new Uint8Array(keyHex.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));
   const key = await crypto.subtle.importKey(
-    'raw',
+    "raw",
     keyArray,
-    { name: 'AES-GCM', length: 256 },
+    { name: "AES-GCM", length: 256 },
     false,
-    ['encrypt']
+    ["encrypt"]
   );
 
   // Generate IV
@@ -44,7 +44,7 @@ export const encryptData = async (data: string, keyHex: string): Promise<string>
   const encoder = new TextEncoder();
   const dataBuffer = encoder.encode(data);
   const encryptedBuffer = await crypto.subtle.encrypt(
-    { name: 'AES-GCM', iv },
+    { name: "AES-GCM", iv },
     key,
     dataBuffer
   );
@@ -57,8 +57,8 @@ export const encryptData = async (data: string, keyHex: string): Promise<string>
 
   // Convert to hex
   const hexString = Array.from(combined)
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
 
   return hexString;
 };
@@ -81,16 +81,16 @@ export const decryptData = async (encryptedHex: string, keyHex: string): Promise
 
   // Import key
   const key = await crypto.subtle.importKey(
-    'raw',
+    "raw",
     keyArray,
-    { name: 'AES-GCM', length: 256 },
+    { name: "AES-GCM", length: 256 },
     false,
-    ['decrypt']
+    ["decrypt"]
   );
 
   // Decrypt
   const decryptedBuffer = await crypto.subtle.decrypt(
-    { name: 'AES-GCM', iv },
+    { name: "AES-GCM", iv },
     key,
     data
   );
@@ -106,9 +106,9 @@ export const decryptData = async (encryptedHex: string, keyHex: string): Promise
 export const generateChecksum = async (data: string): Promise<string> => {
   const encoder = new TextEncoder();
   const dataBuffer = encoder.encode(data);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const checksum = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  const checksum = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 
   return checksum;
 };

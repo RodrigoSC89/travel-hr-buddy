@@ -15,48 +15,48 @@ interface SignalHistoryProps {
 }
 
 export const SignalHistory: React.FC<SignalHistoryProps> = ({ events }) => {
-  const getEventIcon = (type: SignalEvent['type']) => {
+  const getEventIcon = (type: SignalEvent["type"]) => {
     switch (type) {
-      case 'connection_lost':
-        return <WifiOff className="h-4 w-4 text-red-500" />;
-      case 'connection_restored':
-        return <Wifi className="h-4 w-4 text-green-500" />;
-      case 'degraded':
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'maintenance':
-        return <Settings className="h-4 w-4 text-blue-500" />;
-      default:
-        return <History className="h-4 w-4 text-gray-500" />;
+    case "connection_lost":
+      return <WifiOff className="h-4 w-4 text-red-500" />;
+    case "connection_restored":
+      return <Wifi className="h-4 w-4 text-green-500" />;
+    case "degraded":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "maintenance":
+      return <Settings className="h-4 w-4 text-blue-500" />;
+    default:
+      return <History className="h-4 w-4 text-gray-500" />;
     }
   };
 
-  const getEventLabel = (type: SignalEvent['type']) => {
+  const getEventLabel = (type: SignalEvent["type"]) => {
     switch (type) {
-      case 'connection_lost':
-        return 'Conexão Perdida';
-      case 'connection_restored':
-        return 'Conexão Restaurada';
-      case 'degraded':
-        return 'Sinal Degradado';
-      case 'maintenance':
-        return 'Manutenção';
-      default:
-        return 'Evento Desconhecido';
+    case "connection_lost":
+      return "Conexão Perdida";
+    case "connection_restored":
+      return "Conexão Restaurada";
+    case "degraded":
+      return "Sinal Degradado";
+    case "maintenance":
+      return "Manutenção";
+    default:
+      return "Evento Desconhecido";
     }
   };
 
-  const getEventColor = (type: SignalEvent['type']) => {
+  const getEventColor = (type: SignalEvent["type"]) => {
     switch (type) {
-      case 'connection_lost':
-        return 'destructive';
-      case 'connection_restored':
-        return 'default';
-      case 'degraded':
-        return 'secondary';
-      case 'maintenance':
-        return 'outline';
-      default:
-        return 'outline';
+    case "connection_lost":
+      return "destructive";
+    case "connection_restored":
+      return "default";
+    case "degraded":
+      return "secondary";
+    case "maintenance":
+      return "outline";
+    default:
+      return "outline";
     }
   };
 
@@ -71,7 +71,7 @@ export const SignalHistory: React.FC<SignalHistoryProps> = ({ events }) => {
     if (days > 0) return `${days}d atrás`;
     if (hours > 0) return `${hours}h atrás`;
     if (minutes > 0) return `${minutes}m atrás`;
-    return 'agora mesmo';
+    return "agora mesmo";
   };
 
   // Sort events by most recent first

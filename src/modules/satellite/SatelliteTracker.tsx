@@ -25,7 +25,7 @@ const SatelliteTracker = () => {
         });
         setVessels(vesselData);
       } catch (error) {
-        console.error('Error fetching AIS data:', error);
+        console.error("Error fetching AIS data:", error);
       } finally {
         setIsLoadingVessels(false);
       }
@@ -162,7 +162,7 @@ const SatelliteTracker = () => {
           <CardContent>
             <div className="text-2xl font-bold">{vessels.length}</div>
             <p className="text-xs text-muted-foreground">
-              {isLoadingVessels ? 'Carregando...' : 'Rastreadas'}
+              {isLoadingVessels ? "Carregando..." : "Rastreadas"}
             </p>
           </CardContent>
         </Card>

@@ -3,15 +3,15 @@
  * Contextual AI assistant with offline support and GPT-4o-mini fallback
  */
 
-import OpenAI from 'openai';
-import { localMemory } from './localMemory';
-import { intentParser, Intent } from './intentParser';
-import { logger } from '@/lib/logger';
+import OpenAI from "openai";
+import { localMemory } from "./localMemory";
+import { intentParser, Intent } from "./intentParser";
+import { logger } from "@/lib/logger";
 
 interface AIResponse {
   content: string;
   intent?: Intent;
-  source: 'local' | 'gpt4';
+  source: "local" | "gpt4";
   confidence: number;
 }
 
@@ -44,7 +44,7 @@ class MobileAICore {
       });
       this.isInitialized = true;
     } else {
-      logger.warn('OpenAI API key not configured. Using offline mode only.');
+      logger.warn("OpenAI API key not configured. Using offline mode only.");
     }
   }
 
@@ -60,7 +60,7 @@ class MobileAICore {
 
     // Store user message
     await localMemory.storeMessage({
-      role: 'user',
+      role: "user",
       content: userInput,
       context: { intent, ...context }
     });
@@ -72,7 +72,7 @@ class MobileAICore {
       if (offlineResponse) {
         // Store assistant response
         await localMemory.storeMessage({
-          role: 'assistant',
+          role: "assistant",
           content: offlineResponse.content
         });
         
@@ -87,13 +87,13 @@ class MobileAICore {
         
         // Store assistant response
         await localMemory.storeMessage({
-          role: 'assistant',
+          role: "assistant",
           content: gptResponse.content
         });
         
         return gptResponse;
       } catch (error) {
-        logger.error('GPT-4 query failed:', error);
+        logger.error("GPT-4 query failed:", error);
         
         // Fallback to offline if GPT fails
         const fallbackResponse = await this.handleOfflineQuery(intent, context);
@@ -106,7 +106,7 @@ class MobileAICore {
     // Ultimate fallback
     return {
       content: "I'm currently operating in offline mode. I can help with basic queries about mission status, location, weather, and checklists based on cached data.",
-      source: 'local',
+      source: "local",
       confidence: 0.3
     };
   }
@@ -118,103 +118,103 @@ class MobileAICore {
     intent: Intent,
     context: QueryContext
   ): Promise<AIResponse | null> {
-    let response = '';
+    let response = "";
 
     switch (intent.action) {
-      case 'get_mission_status':
-        if (context.mission) {
-          response = `Mission Status:\n`;
-          response += `- Name: ${context.mission.name}\n`;
-          response += `- Status: ${context.mission.status}\n`;
-          response += `- Progress: ${context.mission.progress}%\n`;
-          response += `- Checklists: ${context.mission.checklistsCompleted}/${context.mission.checklistsTotal}\n`;
+    case "get_mission_status":
+      if (context.mission) {
+        response = "Mission Status:\n";
+        response += `- Name: ${context.mission.name}\n`;
+        response += `- Status: ${context.mission.status}\n`;
+        response += `- Progress: ${context.mission.progress}%\n`;
+        response += `- Checklists: ${context.mission.checklistsCompleted}/${context.mission.checklistsTotal}\n`;
           
-          if (context.mission.criticalItems > 0) {
-            response += `\n⚠️ ${context.mission.criticalItems} critical items require attention.`;
-          }
-        } else {
-          response = 'No active mission data available offline.';
+        if (context.mission.criticalItems > 0) {
+          response += `\n⚠️ ${context.mission.criticalItems} critical items require attention.`;
         }
-        break;
+      } else {
+        response = "No active mission data available offline.";
+      }
+      break;
 
-      case 'get_route_info':
-        if (context.location) {
-          response = `Current Location:\n`;
-          response += `- Latitude: ${context.location.lat.toFixed(4)}°\n`;
-          response += `- Longitude: ${context.location.lng.toFixed(4)}°\n`;
+    case "get_route_info":
+      if (context.location) {
+        response = "Current Location:\n";
+        response += `- Latitude: ${context.location.lat.toFixed(4)}°\n`;
+        response += `- Longitude: ${context.location.lng.toFixed(4)}°\n`;
           
-          if (context.location.speed) {
-            response += `- Speed: ${context.location.speed.toFixed(1)} knots\n`;
-          }
-          
-          if (context.location.heading) {
-            response += `- Heading: ${context.location.heading}°\n`;
-          }
-        } else {
-          response = 'Location data not available offline.';
+        if (context.location.speed) {
+          response += `- Speed: ${context.location.speed.toFixed(1)} knots\n`;
         }
-        break;
-
-      case 'get_weather':
-        if (context.weather) {
-          response = `Weather Conditions:\n`;
-          response += `- Conditions: ${context.weather.conditions}\n`;
-          response += `- Temperature: ${context.weather.temperature}°C\n`;
-          response += `- Wind: ${Math.round(context.weather.windSpeed)} knots from ${context.weather.windDirection}°\n`;
-          response += `- Visibility: ${context.weather.visibility}km\n`;
           
-          if (context.weather.severity !== 'safe') {
-            response += `\n⚠️ Weather severity: ${context.weather.severity.toUpperCase()}`;
-          }
-        } else {
-          response = 'Weather data not available offline. Last sync required.';
+        if (context.location.heading) {
+          response += `- Heading: ${context.location.heading}°\n`;
         }
-        break;
+      } else {
+        response = "Location data not available offline.";
+      }
+      break;
 
-      case 'show_checklist':
-        if (context.checklists && context.checklists.length > 0) {
-          response = `Active Checklists (${context.checklists.length}):\n\n`;
+    case "get_weather":
+      if (context.weather) {
+        response = "Weather Conditions:\n";
+        response += `- Conditions: ${context.weather.conditions}\n`;
+        response += `- Temperature: ${context.weather.temperature}°C\n`;
+        response += `- Wind: ${Math.round(context.weather.windSpeed)} knots from ${context.weather.windDirection}°\n`;
+        response += `- Visibility: ${context.weather.visibility}km\n`;
           
-          context.checklists.forEach((checklist, index) => {
-            const completed = checklist.items.filter((i: any) => i.checked).length;
-            const total = checklist.items.length;
-            const percent = Math.round((completed / total) * 100);
+        if (context.weather.severity !== "safe") {
+          response += `\n⚠️ Weather severity: ${context.weather.severity.toUpperCase()}`;
+        }
+      } else {
+        response = "Weather data not available offline. Last sync required.";
+      }
+      break;
+
+    case "show_checklist":
+      if (context.checklists && context.checklists.length > 0) {
+        response = `Active Checklists (${context.checklists.length}):\n\n`;
+          
+        context.checklists.forEach((checklist, index) => {
+          const completed = checklist.items.filter((i: any) => i.checked).length;
+          const total = checklist.items.length;
+          const percent = Math.round((completed / total) * 100);
             
-            response += `${index + 1}. ${checklist.title}\n`;
-            response += `   Progress: ${completed}/${total} (${percent}%)\n`;
-            response += `   Status: ${checklist.completed ? '✓ Complete' : '○ In Progress'}\n\n`;
-          });
-        } else {
-          response = 'No active checklists found.';
-        }
-        break;
+          response += `${index + 1}. ${checklist.title}\n`;
+          response += `   Progress: ${completed}/${total} (${percent}%)\n`;
+          response += `   Status: ${checklist.completed ? "✓ Complete" : "○ In Progress"}\n\n`;
+        });
+      } else {
+        response = "No active checklists found.";
+      }
+      break;
 
-      case 'get_system_status':
-        response = `System Status:\n`;
-        response += `- Mode: ${context.isOnline ? 'Online' : 'Offline'}\n`;
-        response += `- Active Mission: ${context.mission ? 'Yes' : 'No'}\n`;
-        response += `- Cached Data: Available\n`;
+    case "get_system_status":
+      response = "System Status:\n";
+      response += `- Mode: ${context.isOnline ? "Online" : "Offline"}\n`;
+      response += `- Active Mission: ${context.mission ? "Yes" : "No"}\n`;
+      response += "- Cached Data: Available\n";
         
-        if (!context.isOnline) {
-          response += `\n📡 Operating in offline mode. Some features may be limited.`;
-        }
-        break;
+      if (!context.isOnline) {
+        response += "\n📡 Operating in offline mode. Some features may be limited.";
+      }
+      break;
 
-      default:
-        // Try to answer based on conversation history
-        const history = await localMemory.searchHistory(intent.entities.subject || '');
-        if (history.length > 0) {
-          const lastRelevant = history[0];
-          response = `Based on recent conversation: ${lastRelevant.content}`;
-        } else {
-          return null; // Can't handle offline
-        }
+    default:
+      // Try to answer based on conversation history
+      const history = await localMemory.searchHistory(intent.entities.subject || "");
+      if (history.length > 0) {
+        const lastRelevant = history[0];
+        response = `Based on recent conversation: ${lastRelevant.content}`;
+      } else {
+        return null; // Can't handle offline
+      }
     }
 
     return {
       content: response,
       intent,
-      source: 'local',
+      source: "local",
       confidence: intent.confidence
     };
   }
@@ -227,7 +227,7 @@ class MobileAICore {
     context: QueryContext
   ): Promise<AIResponse> {
     if (!this.openai) {
-      throw new Error('OpenAI not initialized');
+      throw new Error("OpenAI not initialized");
     }
 
     // Build context for GPT
@@ -237,26 +237,26 @@ class MobileAICore {
     const history = await localMemory.getHistory(10);
 
     const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: 'system', content: systemPrompt },
+      { role: "system", content: systemPrompt },
       ...history.map(msg => ({
-        role: msg.role as 'user' | 'assistant' | 'system',
+        role: msg.role as "user" | "assistant" | "system",
         content: msg.content
       })),
-      { role: 'user', content: userInput }
+      { role: "user", content: userInput }
     ];
 
     const completion = await this.openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: "gpt-4o-mini",
       messages,
       temperature: 0.7,
       max_tokens: 500
     });
 
-    const content = completion.choices[0]?.message?.content || 'No response generated.';
+    const content = completion.choices[0]?.message?.content || "No response generated.";
 
     return {
       content,
-      source: 'gpt4',
+      source: "gpt4",
       confidence: 0.95
     };
   }
@@ -293,7 +293,7 @@ Wind: ${Math.round(context.weather.windSpeed)} knots`;
       prompt += `\n\nActive Checklists: ${context.checklists.length}`;
     }
 
-    prompt += `\n\nMode: ${context.isOnline ? 'Online' : 'Offline'}
+    prompt += `\n\nMode: ${context.isOnline ? "Online" : "Offline"}
 
 Provide helpful, professional responses. Keep answers concise and actionable. Focus on maritime safety and operational efficiency.`;
 

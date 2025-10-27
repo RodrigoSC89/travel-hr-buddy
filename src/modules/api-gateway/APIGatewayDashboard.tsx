@@ -86,9 +86,9 @@ const APIGatewayDashboard = () => {
 
   const loadAPIKeys = async () => {
     const { data, error } = await supabase
-      .from('api_keys')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("api_keys")
+      .select("*")
+      .order("created_at", { ascending: false });
     
     if (error) {
       console.error("Error loading API keys:", error);
@@ -100,9 +100,9 @@ const APIGatewayDashboard = () => {
 
   const loadRequestLogs = async () => {
     const { data, error } = await supabase
-      .from('api_request_logs')
-      .select('*')
-      .order('created_at', { ascending: false })
+      .from("api_request_logs")
+      .select("*")
+      .order("created_at", { ascending: false })
       .limit(50);
     
     if (error) {
@@ -119,9 +119,9 @@ const APIGatewayDashboard = () => {
     today.setHours(0, 0, 0, 0);
     
     const { data, error } = await supabase
-      .from('api_request_logs')
-      .select('endpoint')
-      .gte('created_at', today.toISOString());
+      .from("api_request_logs")
+      .select("endpoint")
+      .gte("created_at", today.toISOString());
     
     if (error) {
       console.error("Error loading quota stats:", error);
@@ -136,11 +136,11 @@ const APIGatewayDashboard = () => {
     
     // Define limits per endpoint
     const limits: Record<string, number> = {
-      '/documents': 1000,
-      '/checklists': 500,
-      '/weather': 200,
-      '/analytics': 300,
-      '/graphql': 500,
+      "/documents": 1000,
+      "/checklists": 500,
+      "/weather": 200,
+      "/analytics": 300,
+      "/graphql": 500,
     };
     
     const stats = Object.entries(endpointCounts).map(([endpoint, count]) => ({
@@ -176,10 +176,10 @@ const APIGatewayDashboard = () => {
 
       // Call edge function to create key
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/api-gateway/api-keys`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-          'Content-Type': 'application/json'
+          "Authorization": `Bearer ${session.access_token}`,
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           name: newKeyName,
@@ -189,7 +189,7 @@ const APIGatewayDashboard = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create API key');
+        throw new Error("Failed to create API key");
       }
 
       const newKey = await response.json();
@@ -224,9 +224,9 @@ const APIGatewayDashboard = () => {
   const handleRevokeKey = async (keyId: string) => {
     try {
       const { error } = await supabase
-        .from('api_keys')
+        .from("api_keys")
         .update({ is_active: false })
-        .eq('id', keyId);
+        .eq("id", keyId);
       
       if (error) throw error;
       
@@ -248,9 +248,9 @@ const APIGatewayDashboard = () => {
   const handleDeleteKey = async (keyId: string) => {
     try {
       const { error } = await supabase
-        .from('api_keys')
+        .from("api_keys")
         .delete()
-        .eq('id', keyId);
+        .eq("id", keyId);
       
       if (error) throw error;
       
@@ -278,12 +278,12 @@ const APIGatewayDashboard = () => {
   };
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
     });
   };
 
@@ -494,10 +494,10 @@ const APIGatewayDashboard = () => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        {key.scope.includes('*') ? (
+                        {key.scope.includes("*") ? (
                           <Badge>Full Access</Badge>
                         ) : (
-                          <Badge variant="outline">{key.scope.join(', ')}</Badge>
+                          <Badge variant="outline">{key.scope.join(", ")}</Badge>
                         )}
                       </TableCell>
                       <TableCell>
@@ -622,7 +622,7 @@ const APIGatewayDashboard = () => {
                           )}
                         </TableCell>
                         <TableCell className="text-sm">
-                          {log.response_time ? `${log.response_time}ms` : '-'}
+                          {log.response_time ? `${log.response_time}ms` : "-"}
                         </TableCell>
                         <TableCell className="text-sm text-muted-foreground">
                           {formatDate(log.created_at)}
@@ -710,7 +710,7 @@ const APIGatewayDashboard = () => {
                     </a>
                   </Button>
                   <Button variant="outline" asChild>
-                    <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/api-gateway/graphql`} target="_blank">
+                    <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/api-gateway/graphql`} target="_blank" rel="noreferrer">
                       GraphQL Playground
                     </a>
                   </Button>

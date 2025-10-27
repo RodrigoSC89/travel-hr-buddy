@@ -80,9 +80,9 @@ export const encryptData = (data: string): string => {
     // ⚠️ XOR encryption - DEMO ONLY, NOT SECURE
     // TODO: Replace with proper AES256 before production
     const encrypted = btoa(
-      data.split('').map((char, i) => 
+      data.split("").map((char, i) => 
         String.fromCharCode(char.charCodeAt(0) ^ ENCRYPTION_KEY.charCodeAt(i % ENCRYPTION_KEY.length))
-      ).join('')
+      ).join("")
     );
     
     logger.debug("Data encrypted (DEMO mode)", { originalLength: data.length, encryptedLength: encrypted.length });
@@ -102,11 +102,11 @@ export const decryptData = (encryptedData: string): string => {
     // ⚠️ XOR decryption - DEMO ONLY, NOT SECURE
     // TODO: Replace with proper AES256 before production
     const decrypted = atob(encryptedData)
-      .split('')
+      .split("")
       .map((char, i) =>
         String.fromCharCode(char.charCodeAt(0) ^ ENCRYPTION_KEY.charCodeAt(i % ENCRYPTION_KEY.length))
       )
-      .join('');
+      .join("");
     
     logger.debug("Data decrypted (DEMO mode)");
     return decrypted;

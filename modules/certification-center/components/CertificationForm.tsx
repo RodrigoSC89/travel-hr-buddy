@@ -3,38 +3,38 @@
  * PATCH 151.0 - Certificate issuance form
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { toast } from 'sonner';
-import { FileCheck, Loader2 } from 'lucide-react';
-import { CertificationFormData } from '../types';
-import { issueCertificate } from '../services/certification-service';
-import { downloadCertificatePDF } from '../utils/pdf-generator';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { FileCheck, Loader2 } from "lucide-react";
+import { CertificationFormData } from "../types";
+import { issueCertificate } from "../services/certification-service";
+import { downloadCertificatePDF } from "../utils/pdf-generator";
 
 export const CertificationForm: React.FC<{
   onSuccess?: () => void;
 }> = ({ onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<CertificationFormData>({
-    type: 'ISM',
-    vesselId: '',
-    vesselName: '',
-    imoNumber: '',
-    issuedBy: '',
-    expiryDate: '',
-    portName: '',
-    operationType: '',
-    inspectorName: '',
-    inspectionDate: '',
+    type: "ISM",
+    vesselId: "",
+    vesselName: "",
+    imoNumber: "",
+    issuedBy: "",
+    expiryDate: "",
+    portName: "",
+    operationType: "",
+    inspectorName: "",
+    inspectionDate: "",
     findings: [],
-    status: 'compliant'
+    status: "compliant"
   });
-  const [findingsText, setFindingsText] = useState('');
+  const [findingsText, setFindingsText] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +43,7 @@ export const CertificationForm: React.FC<{
     try {
       // Parse findings
       const findings = findingsText
-        .split('\n')
+        .split("\n")
         .filter(f => f.trim())
         .map(f => f.trim());
 
@@ -55,32 +55,32 @@ export const CertificationForm: React.FC<{
       // Issue certificate
       const certificate = await issueCertificate(dataToSubmit);
       
-      toast.success('Certificate issued successfully!');
+      toast.success("Certificate issued successfully!");
       
       // Generate and download PDF
       await downloadCertificatePDF(certificate);
       
       // Reset form
       setFormData({
-        type: 'ISM',
-        vesselId: '',
-        vesselName: '',
-        imoNumber: '',
-        issuedBy: '',
-        expiryDate: '',
-        portName: '',
-        operationType: '',
-        inspectorName: '',
-        inspectionDate: '',
+        type: "ISM",
+        vesselId: "",
+        vesselName: "",
+        imoNumber: "",
+        issuedBy: "",
+        expiryDate: "",
+        portName: "",
+        operationType: "",
+        inspectorName: "",
+        inspectionDate: "",
         findings: [],
-        status: 'compliant'
+        status: "compliant"
       });
-      setFindingsText('');
+      setFindingsText("");
       
       onSuccess?.();
     } catch (error) {
-      console.error('Error issuing certificate:', error);
-      toast.error('Failed to issue certificate');
+      console.error("Error issuing certificate:", error);
+      toast.error("Failed to issue certificate");
     } finally {
       setLoading(false);
     }

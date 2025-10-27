@@ -5,12 +5,12 @@
  * alerts and AI evolution.
  */
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Globe,
   Satellite,
@@ -20,13 +20,13 @@ import {
   Download,
   Play,
   Pause,
-} from 'lucide-react';
-import { satelliteSyncEngine } from '@/lib/satelliteSyncEngine';
-import { missionSimulationCore } from '@/ai/missionSimulationCore';
-import { neuralCopilot } from '@/assistants/neuralCopilot';
-import { missionAutonomyEngine } from '@/ai/missionAutonomyEngine';
-import { logger } from '@/lib/logger';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { satelliteSyncEngine } from "@/lib/satelliteSyncEngine";
+import { missionSimulationCore } from "@/ai/missionSimulationCore";
+import { neuralCopilot } from "@/assistants/neuralCopilot";
+import { missionAutonomyEngine } from "@/ai/missionAutonomyEngine";
+import { logger } from "@/lib/logger";
+import { toast } from "sonner";
 
 interface TelemetryDashboard360Props {
   userId?: string;
@@ -68,7 +68,7 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
       const status = satelliteSyncEngine.getSyncStatus();
       setSyncStatus(status);
     } catch (error) {
-      logger.error('[TelemetryDashboard360] Failed to load data', { error });
+      logger.error("[TelemetryDashboard360] Failed to load data", { error });
     }
   };
 
@@ -76,48 +76,48 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
     if (isAutoSyncEnabled) {
       satelliteSyncEngine.stopAutoSync();
       setIsAutoSyncEnabled(false);
-      toast.success('Auto-sync disabled');
+      toast.success("Auto-sync disabled");
     } else {
       satelliteSyncEngine.startAutoSync();
       setIsAutoSyncEnabled(true);
-      toast.success('Auto-sync enabled');
+      toast.success("Auto-sync enabled");
     }
   };
 
   const exportToPDF = () => {
-    toast.info('PDF export feature coming soon');
+    toast.info("PDF export feature coming soon");
   };
 
   const getRiskBadgeVariant = (riskLevel: string) => {
     switch (riskLevel) {
-      case 'danger':
-      case 'critical':
-        return 'destructive';
-      case 'warning':
-      case 'high':
-        return 'default';
-      case 'caution':
-      case 'medium':
-        return 'secondary';
-      default:
-        return 'outline';
+    case "danger":
+    case "critical":
+      return "destructive";
+    case "warning":
+    case "high":
+      return "default";
+    case "caution":
+    case "medium":
+      return "secondary";
+    default:
+      return "outline";
     }
   };
 
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
-      case 'active':
-      case 'completed':
-      case 'executed':
-        return 'default';
-      case 'pending':
-        return 'secondary';
-      case 'error':
-      case 'failed':
-      case 'rejected':
-        return 'destructive';
-      default:
-        return 'outline';
+    case "active":
+    case "completed":
+    case "executed":
+      return "default";
+    case "pending":
+      return "secondary";
+    case "error":
+    case "failed":
+    case "rejected":
+      return "destructive";
+    default:
+      return "outline";
     }
   };
 
@@ -136,7 +136,7 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
         </div>
         <div className="flex gap-2">
           <Button
-            variant={isAutoSyncEnabled ? 'default' : 'outline'}
+            variant={isAutoSyncEnabled ? "default" : "outline"}
             onClick={toggleAutoSync}
           >
             {isAutoSyncEnabled ? (
@@ -225,7 +225,7 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
                       >
                         <div className="flex items-center justify-between">
                           <div className="font-medium">
-                            {weather.location_name || 'Unknown Location'}
+                            {weather.location_name || "Unknown Location"}
                           </div>
                           <Badge variant={getRiskBadgeVariant(weather.risk_level)}>
                             {weather.risk_level}
@@ -233,19 +233,19 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <div>
-                            <span className="text-muted-foreground">Temp:</span>{' '}
+                            <span className="text-muted-foreground">Temp:</span>{" "}
                             {weather.temperature}°C
                           </div>
                           <div>
-                            <span className="text-muted-foreground">Wind:</span>{' '}
+                            <span className="text-muted-foreground">Wind:</span>{" "}
                             {weather.wind_speed} kt
                           </div>
                           <div>
-                            <span className="text-muted-foreground">Visibility:</span>{' '}
+                            <span className="text-muted-foreground">Visibility:</span>{" "}
                             {weather.visibility} m
                           </div>
                           <div>
-                            <span className="text-muted-foreground">Source:</span>{' '}
+                            <span className="text-muted-foreground">Source:</span>{" "}
                             {weather.source}
                           </div>
                         </div>
@@ -312,11 +312,11 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
                       </p>
                       <div className="grid grid-cols-2 gap-2 text-sm">
                         <div>
-                          <span className="text-muted-foreground">Confidence:</span>{' '}
+                          <span className="text-muted-foreground">Confidence:</span>{" "}
                           {(action.confidence_score * 100).toFixed(0)}%
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Risk:</span>{' '}
+                          <span className="text-muted-foreground">Risk:</span>{" "}
                           {(action.risk_score * 100).toFixed(0)}%
                         </div>
                       </div>
@@ -365,11 +365,11 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
                       {sim.predictions && (
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <div>
-                            <span className="text-muted-foreground">Success Prob:</span>{' '}
+                            <span className="text-muted-foreground">Success Prob:</span>{" "}
                             {(sim.predictions.success_probability * 100).toFixed(0)}%
                           </div>
                           <div>
-                            <span className="text-muted-foreground">Risk Score:</span>{' '}
+                            <span className="text-muted-foreground">Risk Score:</span>{" "}
                             {sim.predictions.risk_score.toFixed(1)}
                           </div>
                         </div>
@@ -377,7 +377,7 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
                       {sim.outcome && (
                         <div className="text-xs bg-muted p-2 rounded space-y-1">
                           <div>
-                            Success: {sim.outcome.success ? 'Yes' : 'No'} (
+                            Success: {sim.outcome.success ? "Yes" : "No"} (
                             {sim.outcome.completion_percentage}%)
                           </div>
                           <div>Incidents: {sim.outcome.incidents?.length || 0}</div>

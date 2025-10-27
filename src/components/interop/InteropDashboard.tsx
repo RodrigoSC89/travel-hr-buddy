@@ -10,32 +10,32 @@ import { Activity, Users, Target, Shield } from "lucide-react";
 
 export default function InteropDashboard() {
   const { data: interopLogs } = useQuery({
-    queryKey: ['interop-logs'],
+    queryKey: ["interop-logs"],
     queryFn: () => getInteropLogs(undefined, 10)
   });
 
   const { data: agents } = useQuery({
-    queryKey: ['agents'],
+    queryKey: ["agents"],
     queryFn: () => listAgents()
   });
 
   const { data: agentMetrics } = useQuery({
-    queryKey: ['agent-metrics'],
+    queryKey: ["agent-metrics"],
     queryFn: () => getAgentMetrics()
   });
 
   const { data: externalEntities } = useQuery({
-    queryKey: ['external-entities'],
+    queryKey: ["external-entities"],
     queryFn: () => getExternalEntities()
   });
 
-  const activeAgents = agents?.filter(a => a.status === 'active').length || 0;
+  const activeAgents = agents?.filter(a => a.status === "active").length || 0;
   const totalAgents = agents?.length || 0;
   const avgResponseTime = agentMetrics?.length > 0
     ? Math.round(agentMetrics.reduce((sum: number, m: any) => sum + m.avg_response_time_ms, 0) / agentMetrics.length)
     : 0;
 
-  const activeEntities = externalEntities?.filter(e => e.status === 'active').length || 0;
+  const activeEntities = externalEntities?.filter(e => e.status === "active").length || 0;
   const avgTrustScore = externalEntities?.length > 0
     ? Math.round(externalEntities.reduce((sum: number, e: any) => sum + e.trust_score, 0) / externalEntities.length)
     : 0;
@@ -118,7 +118,7 @@ export default function InteropDashboard() {
                         <p className="text-muted-foreground">{metrics.avg_response_time_ms}ms avg</p>
                       </div>
                     )}
-                    <Badge variant={agent.status === 'active' ? 'default' : 'secondary'}>
+                    <Badge variant={agent.status === "active" ? "default" : "secondary"}>
                       {agent.status}
                     </Badge>
                   </div>
@@ -146,14 +146,14 @@ export default function InteropDashboard() {
                   <div className="text-right">
                     <p className="font-medium">Trust: {entity.trust_score}%</p>
                     <Badge variant={
-                      entity.trust_score >= 70 ? 'default' :
-                      entity.trust_score >= 50 ? 'secondary' : 'destructive'
+                      entity.trust_score >= 70 ? "default" :
+                        entity.trust_score >= 50 ? "secondary" : "destructive"
                     }>
-                      {entity.trust_score >= 70 ? 'High' :
-                       entity.trust_score >= 50 ? 'Medium' : 'Low'}
+                      {entity.trust_score >= 70 ? "High" :
+                        entity.trust_score >= 50 ? "Medium" : "Low"}
                     </Badge>
                   </div>
-                  <Badge variant={entity.status === 'active' ? 'default' : 'secondary'}>
+                  <Badge variant={entity.status === "active" ? "default" : "secondary"}>
                     {entity.status}
                   </Badge>
                 </div>
@@ -179,8 +179,8 @@ export default function InteropDashboard() {
                   </span>
                 </div>
                 <Badge variant={
-                  log.status === 'success' ? 'default' :
-                  log.status === 'warning' ? 'secondary' : 'destructive'
+                  log.status === "success" ? "default" :
+                    log.status === "warning" ? "secondary" : "destructive"
                 }>
                   {log.status}
                 </Badge>

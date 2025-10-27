@@ -3,12 +3,12 @@
  * Unified dashboard showing decisions, contexts, conflicts, AI suggestions, learning, and performance
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Brain, 
   TrendingUp, 
@@ -21,13 +21,13 @@ import {
   Target,
   Zap,
   Users
-} from 'lucide-react';
-import { distributedDecisionCore, Decision } from '@/ai/distributedDecisionCore';
-import { consciousCore, SystemState, SystemObservation } from '@/ai/consciousCore';
-import { collectiveLoopEngine, FeedbackSummary, FeedbackEvent } from '@/ai/feedback/collectiveLoop';
-import { contextMesh } from '@/core/context/contextMesh';
-import { logger } from '@/lib/logger';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+} from "lucide-react";
+import { distributedDecisionCore, Decision } from "@/ai/distributedDecisionCore";
+import { consciousCore, SystemState, SystemObservation } from "@/ai/consciousCore";
+import { collectiveLoopEngine, FeedbackSummary, FeedbackEvent } from "@/ai/feedback/collectiveLoop";
+import { contextMesh } from "@/core/context/contextMesh";
+import { logger } from "@/lib/logger";
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface ModulePerformance {
   moduleName: string;
@@ -44,12 +44,12 @@ interface ConflictData {
   modules: string[];
   severity: string;
   description: string;
-  status: 'open' | 'resolving' | 'resolved';
+  status: "open" | "resolving" | "resolved";
   timestamp: Date;
 }
 
 export const CollectiveDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('decisions');
+  const [activeTab, setActiveTab] = useState("decisions");
   const [systemState, setSystemState] = useState<SystemState | null>(null);
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [observations, setObservations] = useState<SystemObservation[]>([]);
@@ -106,13 +106,13 @@ export const CollectiveDashboard: React.FC = () => {
       setModulePerformance(performance);
 
       // Extract conflicts from observations
-      const conflictObs = activeObs.filter(o => o.observationType === 'conflict');
+      const conflictObs = activeObs.filter(o => o.observationType === "conflict");
       const conflictData: ConflictData[] = conflictObs.map(o => ({
-        id: o.id || '',
+        id: o.id || "",
         modules: o.modulesAffected,
         severity: o.severity,
         description: o.description,
-        status: o.resolved ? 'resolved' : 'open',
+        status: o.resolved ? "resolved" : "open",
         timestamp: o.timestamp
       }));
       setConflicts(conflictData);
@@ -158,37 +158,37 @@ export const CollectiveDashboard: React.FC = () => {
   const exportPDF = async () => {
     logger.info("[CollectiveDashboard] Exporting PDF report...");
     // In real implementation, this would generate a PDF
-    alert('PDF export feature - would generate comprehensive report');
+    alert("PDF export feature - would generate comprehensive report");
   };
 
   const getStatusColor = (status: string): string => {
     switch (status) {
-      case 'healthy': return 'text-green-500';
-      case 'degraded': return 'text-yellow-500';
-      case 'critical': return 'text-red-500';
-      default: return 'text-gray-500';
+    case "healthy": return "text-green-500";
+    case "degraded": return "text-yellow-500";
+    case "critical": return "text-red-500";
+    default: return "text-gray-500";
     }
   };
 
   const getSeverityBadge = (severity: string) => {
     const variants: Record<string, any> = {
-      info: 'default',
-      warning: 'secondary',
-      error: 'destructive',
-      critical: 'destructive'
+      info: "default",
+      warning: "secondary",
+      error: "destructive",
+      critical: "destructive"
     };
-    return <Badge variant={variants[severity] || 'default'}>{severity}</Badge>;
+    return <Badge variant={variants[severity] || "default"}>{severity}</Badge>;
   };
 
   const getDecisionLevelBadge = (level: string) => {
     const colors: Record<string, string> = {
-      local: 'bg-blue-500',
-      escalated: 'bg-orange-500',
-      delegated: 'bg-purple-500',
-      collaborative: 'bg-green-500'
+      local: "bg-blue-500",
+      escalated: "bg-orange-500",
+      delegated: "bg-purple-500",
+      collaborative: "bg-green-500"
     };
     return (
-      <Badge className={colors[level] || 'bg-gray-500'}>
+      <Badge className={colors[level] || "bg-gray-500"}>
         {level}
       </Badge>
     );
@@ -312,7 +312,7 @@ export const CollectiveDashboard: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <span className="font-semibold">{decision.moduleName}</span>
                             {getDecisionLevelBadge(decision.decisionLevel)}
-                            <Badge variant={decision.success ? 'default' : 'destructive'}>
+                            <Badge variant={decision.success ? "default" : "destructive"}>
                               {decision.status}
                             </Badge>
                           </div>
@@ -358,7 +358,7 @@ export const CollectiveDashboard: React.FC = () => {
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         {getSeverityBadge(conflict.severity)}
-                        <Badge variant={conflict.status === 'resolved' ? 'default' : 'secondary'}>
+                        <Badge variant={conflict.status === "resolved" ? "default" : "secondary"}>
                           {conflict.status}
                         </Badge>
                       </div>

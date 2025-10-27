@@ -7,10 +7,10 @@
 
 import { logger } from "@/lib/logger";
 
-export type DeviceType = 'mobile' | 'tablet' | 'desktop' | 'console';
-export type NetworkQuality = 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
-export type MissionType = 'tactical' | 'maintenance' | 'administrative' | 'emergency';
-export type UIMode = 'full' | 'reduced' | 'minimal' | 'emergency';
+export type DeviceType = "mobile" | "tablet" | "desktop" | "console";
+export type NetworkQuality = "excellent" | "good" | "fair" | "poor" | "offline";
+export type MissionType = "tactical" | "maintenance" | "administrative" | "emergency";
+export type UIMode = "full" | "reduced" | "minimal" | "emergency";
 
 export interface NetworkMetrics {
   latency: number; // ms
@@ -31,7 +31,7 @@ export interface DeviceMetrics {
 
 export interface OperationalContext {
   missionType: MissionType;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
   location?: string;
   isOffline: boolean;
   requiresSpeed: boolean;
@@ -40,7 +40,7 @@ export interface OperationalContext {
 
 export interface UIConfiguration {
   mode: UIMode;
-  componentSet: 'light' | 'heavy';
+  componentSet: "light" | "heavy";
   features: {
     animations: boolean;
     charts: boolean;
@@ -51,15 +51,15 @@ export interface UIConfiguration {
     backgroundSync: boolean;
   };
   layout: {
-    sidebar: 'full' | 'mini' | 'hidden';
-    header: 'full' | 'compact' | 'minimal';
-    panels: 'multi' | 'single' | 'modal';
+    sidebar: "full" | "mini" | "hidden";
+    header: "full" | "compact" | "minimal";
+    panels: "multi" | "single" | "modal";
   };
   dataStrategy: {
-    caching: 'aggressive' | 'normal' | 'minimal';
+    caching: "aggressive" | "normal" | "minimal";
     preloading: boolean;
     lazyLoading: boolean;
-    compressionLevel: 'high' | 'medium' | 'low';
+    compressionLevel: "high" | "medium" | "low";
   };
 }
 
@@ -73,15 +73,15 @@ class AdaptiveUI {
    * Initialize adaptive UI system
    */
   initialize(): void {
-    logger.info('[AdaptiveUI] Initializing Adaptive UI Reconfiguration Engine...');
+    logger.info("[AdaptiveUI] Initializing Adaptive UI Reconfiguration Engine...");
 
     // Detect initial device and network
     const device = this.detectDevice();
     const network = this.measureNetwork();
     const context: OperationalContext = {
-      missionType: 'administrative',
-      priority: 'medium',
-      isOffline: network.quality === 'offline',
+      missionType: "administrative",
+      priority: "medium",
+      isOffline: network.quality === "offline",
       requiresSpeed: false,
       dataSensitive: false,
     };
@@ -95,7 +95,7 @@ class AdaptiveUI {
     // Connect to context mesh
     this.connectContextMesh();
 
-    logger.info('[AdaptiveUI] Adaptive UI initialized');
+    logger.info("[AdaptiveUI] Adaptive UI initialized");
   }
 
   /**
@@ -103,11 +103,11 @@ class AdaptiveUI {
    */
   startMonitoring(intervalMs: number = 30000): void {
     if (this.isMonitoring) {
-      logger.warn('[AdaptiveUI] Already monitoring');
+      logger.warn("[AdaptiveUI] Already monitoring");
       return;
     }
 
-    logger.info('[AdaptiveUI] Starting adaptive monitoring...');
+    logger.info("[AdaptiveUI] Starting adaptive monitoring...");
     this.isMonitoring = true;
 
     this.monitoringInterval = setInterval(() => {
@@ -127,7 +127,7 @@ class AdaptiveUI {
     }
 
     this.isMonitoring = false;
-    logger.info('[AdaptiveUI] Monitoring stopped');
+    logger.info("[AdaptiveUI] Monitoring stopped");
   }
 
   /**
@@ -143,12 +143,12 @@ class AdaptiveUI {
 
       // Check if configuration changed significantly
       if (this.shouldReconfigure(newConfig)) {
-        logger.info('[AdaptiveUI] Reconfiguring UI based on new conditions');
+        logger.info("[AdaptiveUI] Reconfiguring UI based on new conditions");
         await this.applyConfiguration(newConfig);
         this.currentConfig = newConfig;
       }
     } catch (error) {
-      logger.error('[AdaptiveUI] Failed to evaluate and reconfigure:', error);
+      logger.error("[AdaptiveUI] Failed to evaluate and reconfigure:", error);
     }
   }
 
@@ -159,13 +159,13 @@ class AdaptiveUI {
     const width = window.innerWidth;
     const height = window.innerHeight;
 
-    let type: DeviceType = 'desktop';
+    let type: DeviceType = "desktop";
     if (width < 768) {
-      type = 'mobile';
+      type = "mobile";
     } else if (width < 1024) {
-      type = 'tablet';
+      type = "tablet";
     } else if (width >= 1920) {
-      type = 'console'; // Large displays / control room consoles
+      type = "console"; // Large displays / control room consoles
     }
 
     // Try to get device memory if available
@@ -176,7 +176,7 @@ class AdaptiveUI {
     let batteryLevel: number | undefined;
     let isLowPowerMode: boolean | undefined;
 
-    if ('getBattery' in navigator) {
+    if ("getBattery" in navigator) {
       (navigator as any).getBattery().then((battery: any) => {
         batteryLevel = battery.level * 100;
         isLowPowerMode = batteryLevel < 20;
@@ -202,7 +202,7 @@ class AdaptiveUI {
 
     let latency = 50; // Default
     let bandwidth = 10; // Default Mbps
-    let packetLoss = 0;
+    const packetLoss = 0;
 
     if (connection) {
       // Get effective type (slow-2g, 2g, 3g, 4g, 5g)
@@ -215,34 +215,34 @@ class AdaptiveUI {
 
       // Estimate latency based on connection type
       switch (effectiveType) {
-        case 'slow-2g':
-          latency = 2000;
-          break;
-        case '2g':
-          latency = 500;
-          break;
-        case '3g':
-          latency = 200;
-          break;
-        case '4g':
-          latency = 50;
-          break;
-        case '5g':
-          latency = 10;
-          break;
+      case "slow-2g":
+        latency = 2000;
+        break;
+      case "2g":
+        latency = 500;
+        break;
+      case "3g":
+        latency = 200;
+        break;
+      case "4g":
+        latency = 50;
+        break;
+      case "5g":
+        latency = 10;
+        break;
       }
     }
 
     // Determine quality
-    let quality: NetworkQuality = 'good';
+    let quality: NetworkQuality = "good";
     if (!navigator.onLine) {
-      quality = 'offline';
+      quality = "offline";
     } else if (latency > 500 || bandwidth < 1) {
-      quality = 'poor';
+      quality = "poor";
     } else if (latency > 200 || bandwidth < 5) {
-      quality = 'fair';
+      quality = "fair";
     } else if (latency < 50 && bandwidth > 20) {
-      quality = 'excellent';
+      quality = "excellent";
     }
 
     return { latency, bandwidth, packetLoss, quality };
@@ -254,16 +254,16 @@ class AdaptiveUI {
   private getOperationalContext(): OperationalContext {
     // This would be connected to contextMesh in real implementation
     // For now, derive from localStorage or defaults
-    const missionType = (localStorage.getItem('current_mission_type') as MissionType) || 'administrative';
-    const priority = (localStorage.getItem('current_priority') as any) || 'medium';
+    const missionType = (localStorage.getItem("current_mission_type") as MissionType) || "administrative";
+    const priority = (localStorage.getItem("current_priority") as any) || "medium";
     const isOffline = !navigator.onLine;
 
     return {
       missionType,
       priority,
       isOffline,
-      requiresSpeed: priority === 'critical' || missionType === 'emergency',
-      dataSensitive: missionType === 'tactical',
+      requiresSpeed: priority === "critical" || missionType === "emergency",
+      dataSensitive: missionType === "tactical",
     };
   }
 
@@ -276,51 +276,51 @@ class AdaptiveUI {
     context: OperationalContext
   ): UIConfiguration {
     // Determine UI mode
-    let mode: UIMode = 'full';
+    let mode: UIMode = "full";
 
-    if (context.missionType === 'emergency' || context.priority === 'critical') {
-      mode = 'emergency';
-    } else if (device.type === 'mobile' || network.quality === 'poor' || context.isOffline) {
-      mode = 'minimal';
-    } else if (device.type === 'tablet' || network.quality === 'fair') {
-      mode = 'reduced';
+    if (context.missionType === "emergency" || context.priority === "critical") {
+      mode = "emergency";
+    } else if (device.type === "mobile" || network.quality === "poor" || context.isOffline) {
+      mode = "minimal";
+    } else if (device.type === "tablet" || network.quality === "fair") {
+      mode = "reduced";
     }
 
     // Determine component set
-    const componentSet: 'light' | 'heavy' = 
-      mode === 'full' && network.quality === 'excellent' && device.type !== 'mobile' 
-        ? 'heavy' 
-        : 'light';
+    const componentSet: "light" | "heavy" = 
+      mode === "full" && network.quality === "excellent" && device.type !== "mobile" 
+        ? "heavy" 
+        : "light";
 
     // Configure features based on conditions
     const features = {
-      animations: mode === 'full' && network.quality !== 'poor',
-      charts: mode !== 'emergency',
-      maps: mode !== 'minimal' && network.quality !== 'poor',
-      realTimeUpdates: network.quality !== 'offline' && network.quality !== 'poor',
-      autoRefresh: mode === 'full' && network.quality === 'excellent',
-      heavyGraphics: componentSet === 'heavy',
-      backgroundSync: !context.isOffline && network.quality !== 'poor',
+      animations: mode === "full" && network.quality !== "poor",
+      charts: mode !== "emergency",
+      maps: mode !== "minimal" && network.quality !== "poor",
+      realTimeUpdates: network.quality !== "offline" && network.quality !== "poor",
+      autoRefresh: mode === "full" && network.quality === "excellent",
+      heavyGraphics: componentSet === "heavy",
+      backgroundSync: !context.isOffline && network.quality !== "poor",
     };
 
     // Configure layout
     const layout = {
-      sidebar: mode === 'emergency' || device.type === 'mobile' ? 'hidden' : 
-               mode === 'minimal' || device.type === 'tablet' ? 'mini' : 'full',
-      header: mode === 'emergency' ? 'minimal' : 
-              mode === 'minimal' || device.type === 'mobile' ? 'compact' : 'full',
-      panels: mode === 'emergency' || device.type === 'mobile' ? 'modal' : 
-              mode === 'minimal' ? 'single' : 'multi',
+      sidebar: mode === "emergency" || device.type === "mobile" ? "hidden" : 
+        mode === "minimal" || device.type === "tablet" ? "mini" : "full",
+      header: mode === "emergency" ? "minimal" : 
+        mode === "minimal" || device.type === "mobile" ? "compact" : "full",
+      panels: mode === "emergency" || device.type === "mobile" ? "modal" : 
+        mode === "minimal" ? "single" : "multi",
     };
 
     // Configure data strategy
     const dataStrategy = {
-      caching: network.quality === 'poor' || context.isOffline ? 'aggressive' : 
-               network.quality === 'excellent' ? 'minimal' : 'normal',
-      preloading: network.quality === 'excellent' && !device.isLowPowerMode,
-      lazyLoading: mode !== 'emergency' && (device.type === 'mobile' || network.quality !== 'excellent'),
-      compressionLevel: network.quality === 'poor' ? 'high' : 
-                       network.quality === 'fair' ? 'medium' : 'low',
+      caching: network.quality === "poor" || context.isOffline ? "aggressive" : 
+        network.quality === "excellent" ? "minimal" : "normal",
+      preloading: network.quality === "excellent" && !device.isLowPowerMode,
+      lazyLoading: mode !== "emergency" && (device.type === "mobile" || network.quality !== "excellent"),
+      compressionLevel: network.quality === "poor" ? "high" : 
+        network.quality === "fair" ? "medium" : "low",
     };
 
     return {
@@ -340,16 +340,16 @@ class AdaptiveUI {
 
     try {
       // Save configuration to localStorage
-      localStorage.setItem('adaptive_ui_config', JSON.stringify(config));
+      localStorage.setItem("adaptive_ui_config", JSON.stringify(config));
 
       // Update CSS variables for animations
       document.documentElement.style.setProperty(
-        '--animation-enabled',
-        config.features.animations ? '1' : '0'
+        "--animation-enabled",
+        config.features.animations ? "1" : "0"
       );
 
       // Dispatch event for other components to react
-      window.dispatchEvent(new CustomEvent('adaptive-ui-config-changed', {
+      window.dispatchEvent(new CustomEvent("adaptive-ui-config-changed", {
         detail: config,
       }));
 
@@ -358,9 +358,9 @@ class AdaptiveUI {
         await this.updateContextMesh(config);
       }
 
-      logger.info('[AdaptiveUI] Configuration applied successfully');
+      logger.info("[AdaptiveUI] Configuration applied successfully");
     } catch (error) {
-      logger.error('[AdaptiveUI] Failed to apply configuration:', error);
+      logger.error("[AdaptiveUI] Failed to apply configuration:", error);
     }
   }
 
@@ -384,9 +384,9 @@ class AdaptiveUI {
   private connectContextMesh(): void {
     // Placeholder for contextMesh integration
     // In real implementation, this would connect to a message bus or state manager
-    logger.info('[AdaptiveUI] Connecting to contextMesh...');
+    logger.info("[AdaptiveUI] Connecting to contextMesh...");
     this.contextMeshConnected = true;
-    logger.info('[AdaptiveUI] Connected to contextMesh');
+    logger.info("[AdaptiveUI] Connected to contextMesh");
   }
 
   /**
@@ -394,7 +394,7 @@ class AdaptiveUI {
    */
   private async updateContextMesh(config: UIConfiguration): Promise<void> {
     // Placeholder for contextMesh update
-    logger.debug('[AdaptiveUI] Updating contextMesh with new configuration');
+    logger.debug("[AdaptiveUI] Updating contextMesh with new configuration");
   }
 
   /**

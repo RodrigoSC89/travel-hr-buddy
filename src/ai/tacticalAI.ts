@@ -11,17 +11,17 @@ import { predictiveEngine, ModuleRiskScore } from "./predictiveEngine";
 import { systemWatchdog } from "./watchdog";
 
 export type TacticalAction = 
-  | 'restart_module'
-  | 'shift_load'
-  | 'scale_up'
-  | 'scale_down'
-  | 'notify_human'
-  | 'enable_fallback'
-  | 'disable_feature'
-  | 'clear_cache'
-  | 'no_action';
+  | "restart_module"
+  | "shift_load"
+  | "scale_up"
+  | "scale_down"
+  | "notify_human"
+  | "enable_fallback"
+  | "disable_feature"
+  | "clear_cache"
+  | "no_action";
 
-export type DecisionPriority = 'low' | 'medium' | 'high' | 'critical';
+export type DecisionPriority = "low" | "medium" | "high" | "critical";
 
 export interface TacticalDecision {
   id: string;
@@ -73,84 +73,84 @@ class TacticalAI {
     this.rules = [
       // Critical: Restart module on critical risk
       {
-        id: 'restart-critical',
-        name: 'Restart Module on Critical Risk',
+        id: "restart-critical",
+        name: "Restart Module on Critical Risk",
         condition: (ctx) => {
-          return ctx.prediction?.riskLevel === 'critical' && 
-                 ctx.prediction.forecastEvent === 'incident';
+          return ctx.prediction?.riskLevel === "critical" && 
+                 ctx.prediction.forecastEvent === "incident";
         },
-        action: 'restart_module',
-        priority: 'critical',
+        action: "restart_module",
+        priority: "critical",
         requiresConfirmation: false,
       },
 
       // High: Enable fallback on predicted downtime
       {
-        id: 'fallback-downtime',
-        name: 'Enable Fallback on Downtime Prediction',
+        id: "fallback-downtime",
+        name: "Enable Fallback on Downtime Prediction",
         condition: (ctx) => {
-          return ctx.prediction?.forecastEvent === 'downtime' &&
+          return ctx.prediction?.forecastEvent === "downtime" &&
                  (ctx.prediction?.riskScore ?? 0) >= 60;
         },
-        action: 'enable_fallback',
-        priority: 'high',
+        action: "enable_fallback",
+        priority: "high",
         requiresConfirmation: false,
       },
 
       // High: Scale up on overload prediction
       {
-        id: 'scale-overload',
-        name: 'Scale Up on Overload Prediction',
+        id: "scale-overload",
+        name: "Scale Up on Overload Prediction",
         condition: (ctx) => {
-          return ctx.prediction?.forecastEvent === 'overload' &&
+          return ctx.prediction?.forecastEvent === "overload" &&
                  ctx.prediction.confidence > 0.7;
         },
-        action: 'scale_up',
-        priority: 'high',
+        action: "scale_up",
+        priority: "high",
         requiresConfirmation: true,
       },
 
       // Medium: Notify human on high risk
       {
-        id: 'notify-high-risk',
-        name: 'Notify Human on High Risk',
+        id: "notify-high-risk",
+        name: "Notify Human on High Risk",
         condition: (ctx) => {
-          return ctx.prediction?.riskLevel === 'high' &&
+          return ctx.prediction?.riskLevel === "high" &&
                  !ctx.recentDecisions.some(d => 
                    d.moduleName === ctx.moduleName && 
-                   d.action === 'notify_human' &&
+                   d.action === "notify_human" &&
                    Date.now() - d.timestamp.getTime() < 30 * 60 * 1000 // 30 min
                  );
         },
-        action: 'notify_human',
-        priority: 'medium',
+        action: "notify_human",
+        priority: "medium",
         requiresConfirmation: false,
       },
 
       // Medium: Clear cache on multiple errors
       {
-        id: 'clear-cache-errors',
-        name: 'Clear Cache on Multiple Errors',
+        id: "clear-cache-errors",
+        name: "Clear Cache on Multiple Errors",
         condition: (ctx) => {
           return ctx.watchdogAlerts.length > 5 &&
                  (ctx.prediction?.riskScore ?? 0) > 40;
         },
-        action: 'clear_cache',
-        priority: 'medium',
+        action: "clear_cache",
+        priority: "medium",
         requiresConfirmation: false,
       },
 
       // Low: Shift load to backup
       {
-        id: 'shift-load-backup',
-        name: 'Shift Load to Backup',
+        id: "shift-load-backup",
+        name: "Shift Load to Backup",
         condition: (ctx) => {
-          return ctx.prediction?.riskLevel === 'high' &&
+          return ctx.prediction?.riskLevel === "high" &&
                  ctx.systemLoad > 0.8 &&
                  ctx.activeModules.length > 1;
         },
-        action: 'shift_load',
-        priority: 'low',
+        action: "shift_load",
+        priority: "low",
         requiresConfirmation: true,
       },
     ];
@@ -161,19 +161,19 @@ class TacticalAI {
    */
   start(): void {
     if (this.isActive) {
-      logger.warn('[TacticalAI] Already running');
+      logger.warn("[TacticalAI] Already running");
       return;
     }
 
     this.isActive = true;
-    logger.info('[TacticalAI] Starting Tactical AI Core...');
+    logger.info("[TacticalAI] Starting Tactical AI Core...");
 
     // Process decision queue periodically
     this.executionInterval = setInterval(() => {
       this.processDecisionQueue();
     }, 10000); // Every 10 seconds
 
-    logger.info('[TacticalAI] Tactical AI Core is active');
+    logger.info("[TacticalAI] Tactical AI Core is active");
   }
 
   /**
@@ -188,7 +188,7 @@ class TacticalAI {
       this.executionInterval = null;
     }
 
-    logger.info('[TacticalAI] Tactical AI stopped');
+    logger.info("[TacticalAI] Tactical AI stopped");
   }
 
   /**
@@ -248,9 +248,9 @@ class TacticalAI {
 
     // Get active modules
     const { data: activeModulesData } = await (supabase as any)
-      .from('system_metrics')
-      .select('metric_name')
-      .gte('recorded_at', new Date(Date.now() - 5 * 60 * 1000).toISOString());
+      .from("system_metrics")
+      .select("metric_name")
+      .gte("recorded_at", new Date(Date.now() - 5 * 60 * 1000).toISOString());
     
     const activeModules = [...new Set(((activeModulesData as any[]) || []).map((m: any) => String(m.metric_name)))] as string[];
 
@@ -259,11 +259,11 @@ class TacticalAI {
 
     // Get recent decisions
     const { data: recentDecisionsData } = await supabase
-      .from('tactical_decisions')
-      .select('*')
-      .eq('module_name', moduleName)
-      .gte('created_at', new Date(Date.now() - 60 * 60 * 1000).toISOString())
-      .order('created_at', { ascending: false })
+      .from("tactical_decisions")
+      .select("*")
+      .eq("module_name", moduleName)
+      .gte("created_at", new Date(Date.now() - 60 * 60 * 1000).toISOString())
+      .order("created_at", { ascending: false })
       .limit(10);
 
     const recentDecisions: TacticalDecision[] = (((recentDecisionsData as any[]) || []).map((d: any) => ({
@@ -327,7 +327,7 @@ class TacticalAI {
   private async saveDecision(decision: TacticalDecision): Promise<void> {
     try {
       const { error } = await supabase
-        .from('tactical_decisions')
+        .from("tactical_decisions")
         .insert({
           decision_id: decision.id,
           module_name: decision.moduleName,
@@ -343,10 +343,10 @@ class TacticalAI {
         });
 
       if (error) {
-        logger.error('[TacticalAI] Failed to save decision:', error);
+        logger.error("[TacticalAI] Failed to save decision:", error);
       }
     } catch (error) {
-      logger.error('[TacticalAI] Error saving decision:', error);
+      logger.error("[TacticalAI] Error saving decision:", error);
     }
   }
 
@@ -381,41 +381,41 @@ class TacticalAI {
       let success = false;
 
       switch (decision.action) {
-        case 'restart_module':
-          success = await this.restartModule(decision.moduleName);
-          break;
+      case "restart_module":
+        success = await this.restartModule(decision.moduleName);
+        break;
 
-        case 'shift_load':
-          success = await this.shiftLoad(decision.moduleName);
-          break;
+      case "shift_load":
+        success = await this.shiftLoad(decision.moduleName);
+        break;
 
-        case 'scale_up':
-          success = await this.scaleUp(decision.moduleName);
-          break;
+      case "scale_up":
+        success = await this.scaleUp(decision.moduleName);
+        break;
 
-        case 'scale_down':
-          success = await this.scaleDown(decision.moduleName);
-          break;
+      case "scale_down":
+        success = await this.scaleDown(decision.moduleName);
+        break;
 
-        case 'enable_fallback':
-          success = await this.enableFallback(decision.moduleName);
-          break;
+      case "enable_fallback":
+        success = await this.enableFallback(decision.moduleName);
+        break;
 
-        case 'disable_feature':
-          success = await this.disableFeature(decision.moduleName);
-          break;
+      case "disable_feature":
+        success = await this.disableFeature(decision.moduleName);
+        break;
 
-        case 'clear_cache':
-          success = await this.clearCache(decision.moduleName);
-          break;
+      case "clear_cache":
+        success = await this.clearCache(decision.moduleName);
+        break;
 
-        case 'notify_human':
-          success = await this.notifyHuman(decision);
-          break;
+      case "notify_human":
+        success = await this.notifyHuman(decision);
+        break;
 
-        default:
-          logger.warn(`[TacticalAI] Unknown action: ${decision.action}`);
-          success = false;
+      default:
+        logger.warn(`[TacticalAI] Unknown action: ${decision.action}`);
+        success = false;
       }
 
       // Update decision status
@@ -424,32 +424,32 @@ class TacticalAI {
 
       // Update in database
       await supabase
-        .from('tactical_decisions')
+        .from("tactical_decisions")
         .update({
           executed: true,
           success,
           executed_at: new Date().toISOString(),
         })
-        .eq('id', decision.id);
+        .eq("id", decision.id);
 
-      logger.info(`[TacticalAI] Decision executed: ${success ? 'SUCCESS' : 'FAILED'}`);
+      logger.info(`[TacticalAI] Decision executed: ${success ? "SUCCESS" : "FAILED"}`);
     } catch (error) {
       decision.executed = true;
       decision.success = false;
-      decision.error = error instanceof Error ? error.message : 'Unknown error';
+      decision.error = error instanceof Error ? error.message : "Unknown error";
 
-      logger.error(`[TacticalAI] Failed to execute decision:`, error);
+      logger.error("[TacticalAI] Failed to execute decision:", error);
 
       // Update with error
       await supabase
-        .from('tactical_decisions')
+        .from("tactical_decisions")
         .update({
           executed: true,
           success: false,
           error: decision.error,
           executed_at: new Date().toISOString(),
         })
-        .eq('id', decision.id);
+        .eq("id", decision.id);
     }
   }
 
@@ -525,9 +525,9 @@ class TacticalAI {
     try {
       // Send notification through multiple channels
       await supabase
-        .from('notifications')
+        .from("notifications")
         .insert({
-          type: 'tactical_alert',
+          type: "tactical_alert",
           priority: decision.priority,
           title: `Tactical Alert: ${decision.moduleName}`,
           message: decision.reason,
@@ -537,7 +537,7 @@ class TacticalAI {
 
       return true;
     } catch (error) {
-      logger.error('[TacticalAI] Failed to notify human:', error);
+      logger.error("[TacticalAI] Failed to notify human:", error);
       return false;
     }
   }
@@ -561,13 +561,13 @@ class TacticalAI {
   async getDecisionHistory(moduleName?: string, limit = 50): Promise<TacticalDecision[]> {
     try {
       let query = supabase
-        .from('tactical_decisions')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("tactical_decisions")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (moduleName) {
-        query = query.eq('module_name', moduleName);
+        query = query.eq("module_name", moduleName);
       }
 
       const { data, error } = await query;
@@ -588,7 +588,7 @@ class TacticalAI {
         manualOverride: d.manual_override,
       }));
     } catch (error) {
-      logger.error('[TacticalAI] Failed to fetch decision history:', error);
+      logger.error("[TacticalAI] Failed to fetch decision history:", error);
       return [];
     }
   }

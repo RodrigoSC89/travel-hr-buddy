@@ -8,8 +8,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
-export type ForecastEvent = 'incident' | 'downtime' | 'overload' | 'normal';
-export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
+export type ForecastEvent = "incident" | "downtime" | "overload" | "normal";
+export type RiskLevel = "low" | "medium" | "high" | "critical";
 
 export interface ModuleRiskScore {
   moduleName: string;
@@ -25,7 +25,7 @@ export interface PredictiveMetrics {
   totalIncidents: number;
   avgResponseTime: number;
   errorRate: number;
-  usagePattern: 'stable' | 'increasing' | 'decreasing' | 'volatile';
+  usagePattern: "stable" | "increasing" | "decreasing" | "volatile";
   lastIncidentTime?: Date;
 }
 
@@ -37,7 +37,7 @@ export interface TrainingData {
 
 class PredictiveEngine {
   private isTraining = false;
-  private modelVersion = '1.0.0';
+  private modelVersion = "1.0.0";
   private predictionCache = new Map<string, ModuleRiskScore>();
   private cacheTimeout = 5 * 60 * 1000; // 5 minutes
 
@@ -46,12 +46,12 @@ class PredictiveEngine {
    */
   async trainModel(data?: TrainingData): Promise<void> {
     if (this.isTraining) {
-      logger.warn('[PredictiveEngine] Training already in progress');
+      logger.warn("[PredictiveEngine] Training already in progress");
       return;
     }
 
     this.isTraining = true;
-    logger.info('[PredictiveEngine] Starting model training...');
+    logger.info("[PredictiveEngine] Starting model training...");
 
     try {
       // Fetch training data if not provided
@@ -63,9 +63,9 @@ class PredictiveEngine {
       // Update model parameters
       await this.updateModelParameters(patterns);
 
-      logger.info('[PredictiveEngine] Model training completed successfully');
+      logger.info("[PredictiveEngine] Model training completed successfully");
     } catch (error) {
-      logger.error('[PredictiveEngine] Training failed:', error);
+      logger.error("[PredictiveEngine] Training failed:", error);
       throw error;
     } finally {
       this.isTraining = false;
@@ -79,27 +79,27 @@ class PredictiveEngine {
     try {
       // Fetch watchdog logs (last 30 days)
       const { data: watchdogLogs } = await (supabase as any)
-        .from('watchdog_logs')
-        .select('*')
-        .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
-        .from('watchdog_logs')
-        .select('*')
-        .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
-        .order('created_at', { ascending: false });
+        .from("watchdog_logs")
+        .select("*")
+        .gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        .from("watchdog_logs")
+        .select("*")
+        .gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        .order("created_at", { ascending: false });
 
       // Fetch usage statistics
       const { data: usageStats } = await (supabase as any)
-        .from('system_metrics')
-        .select('*')
-        .gte('recorded_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
-        .order('recorded_at', { ascending: false });
+        .from("system_metrics")
+        .select("*")
+        .gte("recorded_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        .order("recorded_at", { ascending: false });
 
       // Fetch past incidents
       const { data: incidentPatterns } = await (supabase as any)
-        .from('incidents')
-        .select('*')
-        .gte('created_at', new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString())
-        .order('created_at', { ascending: false });
+        .from("incidents")
+        .select("*")
+        .gte("created_at", new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString())
+        .order("created_at", { ascending: false });
 
       return {
         watchdogLogs: watchdogLogs || [],
@@ -107,7 +107,7 @@ class PredictiveEngine {
         incidentPatterns: incidentPatterns || [],
       };
     } catch (error) {
-      logger.error('[PredictiveEngine] Failed to fetch training data:', error);
+      logger.error("[PredictiveEngine] Failed to fetch training data:", error);
       return {
         watchdogLogs: [],
         usageStats: [],
@@ -128,7 +128,7 @@ class PredictiveEngine {
 
     // Analyze error frequency by module
     data.watchdogLogs.forEach((log: any) => {
-      const moduleName = log.module_name || 'unknown';
+      const moduleName = log.module_name || "unknown";
       if (!patterns.errorFrequency[moduleName]) {
         patterns.errorFrequency[moduleName] = 0;
       }
@@ -137,7 +137,7 @@ class PredictiveEngine {
 
     // Analyze incident patterns
     data.incidentPatterns.forEach((incident: any) => {
-      const moduleName = incident.module || 'unknown';
+      const moduleName = incident.module || "unknown";
       if (!patterns.moduleHealth[moduleName]) {
         patterns.moduleHealth[moduleName] = {
           incidents: 0,
@@ -158,15 +158,15 @@ class PredictiveEngine {
   private async updateModelParameters(patterns: Record<string, any>): Promise<void> {
     try {
       await (supabase as any)
-        .from('ai_model_config')
+        .from("ai_model_config")
         .upsert({
-          model_name: 'predictive_engine',
+          model_name: "predictive_engine",
           version: this.modelVersion,
           parameters: patterns,
           updated_at: new Date().toISOString(),
         });
     } catch (error) {
-      logger.warn('[PredictiveEngine] Failed to save model parameters:', error as any);
+      logger.warn("[PredictiveEngine] Failed to save model parameters:", error as any);
     }
   }
 
@@ -223,27 +223,27 @@ class PredictiveEngine {
     try {
       // Fetch recent errors
       const { data: errors, count: errorCount } = await (supabase as any)
-        .from('watchdog_logs')
-        .select('*', { count: 'exact' })
-        .eq('module_name', moduleName)
-        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+        .from("watchdog_logs")
+        .select("*", { count: "exact" })
+        .eq("module_name", moduleName)
+        .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
       // Fetch recent incidents
       const { data: incidents } = await (supabase as any)
-        .from('incidents')
-        .select('*')
-        .eq('module', moduleName)
-        .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-        .order('created_at', { ascending: false })
+        .from("incidents")
+        .select("*")
+        .eq("module", moduleName)
+        .gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+        .order("created_at", { ascending: false })
         .limit(1);
 
       // Fetch usage stats
       const { data: usageStats } = await (supabase as any)
-        .from('system_metrics')
-        .select('*')
-        .eq('metric_name', moduleName)
-        .gte('recorded_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
-        .order('recorded_at', { ascending: false });
+        .from("system_metrics")
+        .select("*")
+        .eq("metric_name", moduleName)
+        .gte("recorded_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+        .order("recorded_at", { ascending: false });
 
       // Calculate metrics
       const totalIncidents = incidents?.length || 0;
@@ -251,15 +251,15 @@ class PredictiveEngine {
       const errorRate = (errorCount || 0) / Math.max(usageStats?.length || 1, 1);
       
       // Determine usage pattern
-      let usagePattern: 'stable' | 'increasing' | 'decreasing' | 'volatile' = 'stable';
+      let usagePattern: "stable" | "increasing" | "decreasing" | "volatile" = "stable";
       if (usageStats && (usageStats as any[]).length > 5) {
         const recentAvg = (usageStats as any[]).slice(0, 5).reduce((sum, s: any) => sum + (s.request_count || 0), 0) / 5;
         const olderAvg = (usageStats as any[]).slice(5).reduce((sum, s: any) => sum + (s.request_count || 0), 0) / Math.max((usageStats as any[]).length - 5, 1);
         const change = (recentAvg - olderAvg) / Math.max(olderAvg, 1);
         
-        if (Math.abs(change) > 0.5) usagePattern = 'volatile';
-        else if (change > 0.2) usagePattern = 'increasing';
-        else if (change < -0.2) usagePattern = 'decreasing';
+        if (Math.abs(change) > 0.5) usagePattern = "volatile";
+        else if (change > 0.2) usagePattern = "increasing";
+        else if (change < -0.2) usagePattern = "decreasing";
       }
 
       return {
@@ -275,7 +275,7 @@ class PredictiveEngine {
         totalIncidents: 0,
         avgResponseTime: 0,
         errorRate: 0,
-        usagePattern: 'stable',
+        usagePattern: "stable",
       };
     }
   }
@@ -307,9 +307,9 @@ class PredictiveEngine {
     }
 
     // Factor 4: Usage pattern (10% weight)
-    if (metrics.usagePattern === 'volatile') {
+    if (metrics.usagePattern === "volatile") {
       score += 10;
-    } else if (metrics.usagePattern === 'increasing') {
+    } else if (metrics.usagePattern === "increasing") {
       score += 5;
     }
 
@@ -320,10 +320,10 @@ class PredictiveEngine {
    * Determine risk level from score
    */
   private getRiskLevel(score: number): RiskLevel {
-    if (score >= 75) return 'critical';
-    if (score >= 50) return 'high';
-    if (score >= 25) return 'medium';
-    return 'low';
+    if (score >= 75) return "critical";
+    if (score >= 50) return "high";
+    if (score >= 25) return "medium";
+    return "low";
   }
 
   /**
@@ -331,12 +331,12 @@ class PredictiveEngine {
    */
   private predictEvent(metrics: PredictiveMetrics, riskScore: number): ForecastEvent {
     if (riskScore >= 75) {
-      return metrics.usagePattern === 'increasing' ? 'overload' : 'incident';
+      return metrics.usagePattern === "increasing" ? "overload" : "incident";
     }
     if (riskScore >= 50) {
-      return metrics.avgResponseTime > 2000 ? 'downtime' : 'incident';
+      return metrics.avgResponseTime > 2000 ? "downtime" : "incident";
     }
-    return 'normal';
+    return "normal";
   }
 
   /**
@@ -360,25 +360,25 @@ class PredictiveEngine {
     const factors: string[] = [];
 
     if (metrics.errorRate > 0.1) {
-      factors.push('High error rate detected');
+      factors.push("High error rate detected");
     }
     if (metrics.avgResponseTime > 1000) {
-      factors.push('Elevated response times');
+      factors.push("Elevated response times");
     }
-    if (metrics.usagePattern === 'volatile') {
-      factors.push('Volatile usage patterns');
+    if (metrics.usagePattern === "volatile") {
+      factors.push("Volatile usage patterns");
     }
-    if (metrics.usagePattern === 'increasing') {
-      factors.push('Increasing demand');
+    if (metrics.usagePattern === "increasing") {
+      factors.push("Increasing demand");
     }
     if (metrics.lastIncidentTime) {
       const hoursSince = (Date.now() - metrics.lastIncidentTime.getTime()) / (1000 * 60 * 60);
       if (hoursSince < 24) {
-        factors.push('Recent incident detected');
+        factors.push("Recent incident detected");
       }
     }
     if (factors.length === 0) {
-      factors.push('System operating normally');
+      factors.push("System operating normally");
     }
 
     return factors;
@@ -390,7 +390,7 @@ class PredictiveEngine {
   private async savePrediction(prediction: ModuleRiskScore): Promise<void> {
     try {
       const { error } = await (supabase as any)
-        .from('predictive_events')
+        .from("predictive_events")
         .insert({
           module_name: prediction.moduleName,
           risk_score: prediction.riskScore,
@@ -402,10 +402,10 @@ class PredictiveEngine {
         });
 
       if (error) {
-        logger.error('[PredictiveEngine] Failed to save prediction:', error);
+        logger.error("[PredictiveEngine] Failed to save prediction:", error);
       }
     } catch (error) {
-      logger.error('[PredictiveEngine] Error saving prediction:', error);
+      logger.error("[PredictiveEngine] Error saving prediction:", error);
     }
   }
 
@@ -413,14 +413,14 @@ class PredictiveEngine {
    * Predict risks for all active modules
    */
   async predictAllModules(): Promise<ModuleRiskScore[]> {
-    logger.info('[PredictiveEngine] Predicting risks for all modules...');
+    logger.info("[PredictiveEngine] Predicting risks for all modules...");
 
     try {
       // Fetch list of active modules
       const { data: modules } = await (supabase as any)
-        .from('system_metrics')
-        .select('metric_name')
-        .gte('recorded_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+        .from("system_metrics")
+        .select("metric_name")
+        .gte("recorded_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
       const uniqueModules = [...new Set(modules?.map(m => m.module_name) || [])];
 
@@ -431,7 +431,7 @@ class PredictiveEngine {
 
       return predictions;
     } catch (error) {
-      logger.error('[PredictiveEngine] Failed to predict all modules:', error);
+      logger.error("[PredictiveEngine] Failed to predict all modules:", error);
       return [];
     }
   }
@@ -442,15 +442,15 @@ class PredictiveEngine {
   async getRecentPredictions(limit = 50): Promise<any[]> {
     try {
       const { data, error } = await (supabase as any)
-        .from('predictive_events')
-        .select('*')
-        .order('predicted_at', { ascending: false })
+        .from("predictive_events")
+        .select("*")
+        .order("predicted_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
       return data || [];
     } catch (error) {
-      logger.error('[PredictiveEngine] Failed to fetch predictions:', error);
+      logger.error("[PredictiveEngine] Failed to fetch predictions:", error);
       return [];
     }
   }
@@ -460,7 +460,7 @@ class PredictiveEngine {
    */
   clearCache(): void {
     this.predictionCache.clear();
-    logger.info('[PredictiveEngine] Cache cleared');
+    logger.info("[PredictiveEngine] Cache cleared");
   }
 }
 
