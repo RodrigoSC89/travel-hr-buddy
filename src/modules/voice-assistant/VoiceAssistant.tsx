@@ -5,11 +5,12 @@ import { Mic, MicOff, Volume2, VolumeX, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useVoiceRecognition } from "./hooks/useVoiceRecognition";
 import { useVoiceSynthesis } from "./hooks/useVoiceSynthesis";
+import { useVoiceConversation } from "./hooks/useVoiceConversation";
 import { ConversationHistory } from "./components/ConversationHistory";
 
 export default function VoiceAssistant() {
   const [isActive, setIsActive] = useState(false);
-  const [messages, setMessages] = useState<Array<{ role: "user" | "assistant"; content: string; timestamp: Date }>>([]);
+  const [localMessages, setLocalMessages] = useState<Array<{ role: "user" | "assistant"; content: string; timestamp: Date }>>([]);
   
   const { 
     isListening, 
@@ -25,6 +26,14 @@ export default function VoiceAssistant() {
     cancel: cancelSpeech,
     isSupported: ttsSupported
   } = useVoiceSynthesis();
+
+  const {
+    currentConversation,
+    messages: dbMessages,
+    startConversation,
+    endConversation,
+    logMessage
+  } = useVoiceConversation();
 
   useEffect(() => {
     if (!speechSupported) {
@@ -42,17 +51,38 @@ export default function VoiceAssistant() {
 
   const handleUserMessage = async (text: string) => {
     const userMessage = { role: "user" as const, content: text, timestamp: new Date() };
-    setMessages(prev => [...prev, userMessage]);
+    setLocalMessages(prev => [...prev, userMessage]);
+
+    // Log to database
+    await logMessage("user", text, {
+      transcript: text,
+      command_detected: detectCommand(text)
+    });
 
     // Simular resposta do assistente (integrar com OpenAI depois)
     const response = generateResponse(text);
     const assistantMessage = { role: "assistant" as const, content: response, timestamp: new Date() };
     
-    setMessages(prev => [...prev, assistantMessage]);
+    setLocalMessages(prev => [...prev, assistantMessage]);
+    
+    // Log assistant response to database
+    await logMessage("assistant", response, {
+      action_taken: detectCommand(text)
+    });
     
     if (ttsSupported) {
       speak(response);
     }
+  };
+
+  const detectCommand = (input: string): string | undefined => {
+    const lower = input.toLowerCase();
+    if (lower.includes("status") || lower.includes("embarcações")) return "fleet_status_query";
+    if (lower.includes("manutenção")) return "maintenance_query";
+    if (lower.includes("relatório") || lower.includes("report")) return "report_request";
+    if (lower.includes("dashboard")) return "dashboard_navigation";
+    if (lower.includes("missão") || lower.includes("mission")) return "mission_query";
+    return undefined;
   };
 
   const generateResponse = (input: string): string => {
@@ -64,6 +94,12 @@ export default function VoiceAssistant() {
     if (lower.includes("status") || lower.includes("embarcações")) {
       return "Todas as embarcações estão operacionais. A frota está 100% ativa no momento.";
     }
+    if (lower.includes("dashboard") || lower.includes("painel")) {
+      return "Abrindo o painel de controle principal. Um momento, por favor.";
+    }
+    if (lower.includes("missão") || lower.includes("mission")) {
+      return "O centro de controle de missões está disponível. Há 2 missões ativas no momento.";
+    }
     if (lower.includes("manutenção")) {
       return "Há 3 manutenções programadas para esta semana. Deseja ver os detalhes?";
     }
@@ -74,18 +110,22 @@ export default function VoiceAssistant() {
     return "Entendi. Posso ajudá-lo com informações sobre frotas, manutenções, relatórios e operações do Nautilus One.";
   };
 
-  const toggleAssistant = () => {
+  const toggleAssistant = async () => {
     if (isActive) {
       stopListening();
       cancelSpeech();
+      await endConversation();
       setIsActive(false);
     } else {
       if (speechSupported) {
-        startListening();
-        setIsActive(true);
-        toast.success("Assistente ativado", {
-          description: "Pode começar a falar"
-        });
+        const conversation = await startConversation();
+        if (conversation) {
+          startListening();
+          setIsActive(true);
+          toast.success("Assistente ativado", {
+            description: "Pode começar a falar"
+          });
+        }
       }
     }
   };
@@ -160,7 +200,32 @@ export default function VoiceAssistant() {
       </Card>
 
       {/* Conversation History */}
-      <ConversationHistory messages={messages} />
+      <ConversationHistory messages={localMessages} />
+
+      {/* Conversation Info */}
+      {currentConversation && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Sessão Atual</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">ID da Sessão:</span>
+                <span className="font-mono">{currentConversation.session_id}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Mensagens:</span>
+                <span>{currentConversation.message_count}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Iniciada:</span>
+                <span>{new Date(currentConversation.start_time).toLocaleTimeString()}</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Voice Controls Help */}
       <Card>
@@ -171,6 +236,8 @@ export default function VoiceAssistant() {
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>• "Olá" ou "Oi" - Cumprimentar o assistente</li>
             <li>• "Status das embarcações" - Ver status da frota</li>
+            <li>• "Abrir dashboard" - Navegar para painel principal</li>
+            <li>• "Status da missão" - Consultar missões ativas</li>
             <li>• "Programar manutenção" - Agendar manutenções</li>
             <li>• "Gerar relatório" - Criar relatórios</li>
             <li>• "Ajuda" - Ver mais comandos</li>
