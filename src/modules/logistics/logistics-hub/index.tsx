@@ -1,7 +1,15 @@
+/**
+ * PATCH 296: Logistics Hub Complete
+ * Enhanced with tabbed dashboard, supply requests, and alerts
+ */
+
 import React from "react";
-import { Package } from "lucide-react";
+import { Package, ClipboardList, AlertTriangle, Truck } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InventoryAlerts } from "./components/InventoryAlerts";
 import { ShipmentTracker } from "./components/ShipmentTracker";
+import { SupplyRequests } from "./components/SupplyRequests";
+import { LogisticsAlertsPanel } from "./components/LogisticsAlertsPanel";
 
 const LogisticsHub = () => {
   return (
@@ -16,9 +24,43 @@ const LogisticsHub = () => {
         </div>
       </div>
       
-      <InventoryAlerts />
-      
-      <ShipmentTracker />
+      <Tabs defaultValue="alerts" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="alerts" className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4" />
+            Alerts
+          </TabsTrigger>
+          <TabsTrigger value="shipments" className="flex items-center gap-2">
+            <Truck className="h-4 w-4" />
+            Shipments
+          </TabsTrigger>
+          <TabsTrigger value="requests" className="flex items-center gap-2">
+            <ClipboardList className="h-4 w-4" />
+            Supply Requests
+          </TabsTrigger>
+          <TabsTrigger value="inventory" className="flex items-center gap-2">
+            <Package className="h-4 w-4" />
+            Inventory
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="alerts" className="space-y-4">
+          <LogisticsAlertsPanel />
+          <InventoryAlerts />
+        </TabsContent>
+
+        <TabsContent value="shipments">
+          <ShipmentTracker />
+        </TabsContent>
+
+        <TabsContent value="requests">
+          <SupplyRequests />
+        </TabsContent>
+
+        <TabsContent value="inventory">
+          <InventoryAlerts />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
