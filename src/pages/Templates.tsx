@@ -1,11 +1,11 @@
 import React from "react";
-import TemplateManager from "@/components/templates/template-manager";
+import { DocumentTemplateEditor } from "@/components/templates/document-template-editor";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 
 const Templates = () => {
   return (
     <ModulePageWrapper gradient="green">
-      <TemplateManager />
+      <DocumentTemplateEditor />
     </ModulePageWrapper>
   );
 };
