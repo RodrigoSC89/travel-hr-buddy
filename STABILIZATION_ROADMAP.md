@@ -26,7 +26,7 @@ This document provides the complete implementation guide for stabilizing the Nau
 
 ### PATCH 241.1 - Regenerate Supabase Types & TypeScript Cleanup
 **Priority**: HIGH  
-**Effort**: Large (216 files)
+**Effort**: Large (5-8 days, 216 files to address)
 
 #### Approach
 Since full Supabase type regeneration requires authentication, and there are 216 files with `@ts-nocheck`:
@@ -106,7 +106,12 @@ See `FINANCE_HUB_README.md` for complete guide.
 ```typescript
 // Voice Input Component
 const VoiceInput: React.FC = () => {
-  const [recognition] = useState(() => new (window as any).webkitSpeechRecognition());
+  const [recognition] = useState(() => {
+    // Check browser support before initialization
+    const SpeechRecognition = (window as any).SpeechRecognition || 
+                              (window as any).webkitSpeechRecognition;
+    return SpeechRecognition ? new SpeechRecognition() : null;
+  });
   
   const startListening = () => {
     recognition.start();
@@ -293,6 +298,11 @@ Replace simulated scoring with basic ML:
 ```typescript
 // Simple weighted scoring algorithm
 const calculateTrustScore = (metrics: Metrics) => {
+  // Weights based on maritime industry standards:
+  // - Reliability: Most critical (30%) - safety and consistency
+  // - Performance: High priority (25%) - efficiency metrics
+  // - Compliance: High priority (25%) - regulatory requirements
+  // - Communication: Important (20%) - crew coordination
   const weights = {
     reliability: 0.3,
     performance: 0.25,
@@ -396,8 +406,7 @@ npm run lint:fix
 
 ### Documentation
 - [Finance Hub Guide](./FINANCE_HUB_README.md)
-- [TypeScript Best Practices](./docs/typescript.md)
-- [Testing Guide](./docs/testing.md)
+- [System Stabilization Roadmap](./STABILIZATION_ROADMAP.md)
 
 ### Tools
 - TypeScript: `npm run type-check`

@@ -258,7 +258,7 @@ All tables include:
 
 ## Resources
 
-- Database Schema: `supabase/migrations/20251027010237_create_finance_hub_tables.sql`
+- Database Schema: `supabase/migrations/*_create_finance_hub_tables.sql`
 - TypeScript Types: `src/types/finance/index.ts`
 - React Query Hooks: `src/hooks/finance/useFinanceData.ts` (to be created)
 - Components: `src/components/finance/` (to be created)
