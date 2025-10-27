@@ -16,21 +16,24 @@ import {
 import { AICommander } from "./components/AICommander";
 import { KPIDashboard } from "./components/KPIDashboard";
 import { SystemLogs } from "./components/SystemLogs";
+import { MissionManager } from "./components/MissionManager";
 
 /**
- * PATCH 177.0 - Mission Control Consolidation & AI Commander
+ * PATCH 177.0 + 272.0 - Mission Control Consolidation & AI Commander
  * 
  * Unified operational hub consolidating:
  * - Fleet Management
  * - Emergency Response
  * - Satellite Communications
  * - Weather Monitoring
+ * - Mission Management (PATCH 272)
  * 
  * Features:
  * - AI Commander for contextual commands and queries
  * - Live KPI dashboard with real-time status
  * - Integrated logs, alerts, and status per module
  * - Tactical operational overview
+ * - Mission creation and agent assignment (PATCH 272)
  */
 
 interface ModuleStatus {
@@ -181,8 +184,9 @@ const MissionControl: React.FC = () => {
 
         {/* Detailed Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-zinc-800/50">
+          <TabsList className="grid w-full grid-cols-6 bg-zinc-800/50">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="missions">Missions</TabsTrigger>
             <TabsTrigger value="fleet">Fleet</TabsTrigger>
             <TabsTrigger value="emergency">Emergency</TabsTrigger>
             <TabsTrigger value="satellite">Satellite</TabsTrigger>
@@ -216,6 +220,10 @@ const MissionControl: React.FC = () => {
             </Card>
 
             <SystemLogs />
+          </TabsContent>
+
+          <TabsContent value="missions" className="mt-4">
+            <MissionManager />
           </TabsContent>
 
           <TabsContent value="fleet" className="mt-4">
