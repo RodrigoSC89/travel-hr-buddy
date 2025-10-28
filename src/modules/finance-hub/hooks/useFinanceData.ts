@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+/**
+ * Represents a financial transaction in the system
+ */
 export interface FinancialTransaction {
   id: string;
   transaction_type: "income" | "expense" | "transfer" | "adjustment";
@@ -16,6 +19,9 @@ export interface FinancialTransaction {
   created_at: string;
 }
 
+/**
+ * Represents a budget category for organizing transactions
+ */
 export interface BudgetCategory {
   id: string;
   name: string;
@@ -28,6 +34,9 @@ export interface BudgetCategory {
   is_active: boolean;
 }
 
+/**
+ * Represents an invoice document
+ */
 export interface Invoice {
   id: string;
   invoice_number: string;
@@ -46,6 +55,9 @@ export interface Invoice {
   created_at: string;
 }
 
+/**
+ * Summary of financial data including totals and counts
+ */
 export interface FinancialSummary {
   totalIncome: number;
   totalExpenses: number;
@@ -55,6 +67,29 @@ export interface FinancialSummary {
   transactionCount: number;
 }
 
+/**
+ * Custom hook for managing financial data from Supabase
+ * Fetches transactions, categories, invoices, and calculates financial summaries
+ * 
+ * @returns {Object} Financial data and methods
+ * @returns {FinancialTransaction[]} transactions - List of financial transactions
+ * @returns {BudgetCategory[]} categories - List of budget categories
+ * @returns {Invoice[]} invoices - List of invoices
+ * @returns {FinancialSummary | null} summary - Financial summary data
+ * @returns {boolean} loading - Loading state
+ * @returns {string | null} error - Error message if any
+ * @returns {Function} refreshData - Function to refresh all data
+ * @returns {Function} createTransaction - Function to create a new transaction
+ * @returns {Function} updateTransaction - Function to update a transaction
+ * @returns {Function} createInvoice - Function to create a new invoice
+ * @returns {Function} updateInvoice - Function to update an invoice
+ * 
+ * @example
+ * const { summary, transactions, loading } = useFinanceData();
+ * if (!loading) {
+ *   console.log('Net Profit:', summary?.netProfit);
+ * }
+ */
 export const useFinanceData = () => {
   const { toast } = useToast();
   const [transactions, setTransactions] = useState<FinancialTransaction[]>([]);
@@ -64,7 +99,10 @@ export const useFinanceData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Load all financial data
+  /**
+   * Load all financial data from Supabase including transactions, categories, and invoices
+   * @private
+   */
   const loadFinancialData = async () => {
     try {
       setLoading(true);
@@ -116,7 +154,12 @@ export const useFinanceData = () => {
     }
   };
 
-  // Calculate financial summary
+  /**
+   * Calculate financial summary from transactions and invoices data
+   * @param {FinancialTransaction[]} transactionsData - Array of transactions
+   * @param {Invoice[]} invoicesData - Array of invoices
+   * @private
+   */
   const calculateSummary = (
     transactionsData: FinancialTransaction[],
     invoicesData: Invoice[]
@@ -147,7 +190,12 @@ export const useFinanceData = () => {
     });
   };
 
-  // Create new transaction
+  /**
+   * Create a new financial transaction
+   * @param {Partial<FinancialTransaction>} transaction - Transaction data
+   * @returns {Promise<FinancialTransaction>} Created transaction
+   * @throws {Error} If transaction creation fails
+   */
   const createTransaction = async (transaction: Partial<FinancialTransaction>) => {
     try {
       const { data, error } = await supabase
@@ -176,7 +224,13 @@ export const useFinanceData = () => {
     }
   };
 
-  // Update transaction
+  /**
+   * Update an existing financial transaction
+   * @param {string} id - Transaction ID
+   * @param {Partial<FinancialTransaction>} updates - Fields to update
+   * @returns {Promise<FinancialTransaction>} Updated transaction
+   * @throws {Error} If transaction update fails
+   */
   const updateTransaction = async (id: string, updates: Partial<FinancialTransaction>) => {
     try {
       const { data, error } = await supabase
@@ -206,7 +260,12 @@ export const useFinanceData = () => {
     }
   };
 
-  // Create new invoice
+  /**
+   * Create a new invoice
+   * @param {Partial<Invoice>} invoice - Invoice data
+   * @returns {Promise<Invoice>} Created invoice
+   * @throws {Error} If invoice creation fails
+   */
   const createInvoice = async (invoice: Partial<Invoice>) => {
     try {
       const { data, error } = await supabase
@@ -235,7 +294,13 @@ export const useFinanceData = () => {
     }
   };
 
-  // Update invoice
+  /**
+   * Update an existing invoice
+   * @param {string} id - Invoice ID
+   * @param {Partial<Invoice>} updates - Fields to update
+   * @returns {Promise<Invoice>} Updated invoice
+   * @throws {Error} If invoice update fails
+   */
   const updateInvoice = async (id: string, updates: Partial<Invoice>) => {
     try {
       const { data, error } = await supabase
