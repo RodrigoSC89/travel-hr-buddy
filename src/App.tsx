@@ -203,6 +203,8 @@ const CrewWellbeing = React.lazy(() => import("@/modules/operations/crew-wellbei
 const SatelliteTracker = React.lazy(() => import("@/modules/logistics/satellite-tracker"));
 const ProjectTimeline = React.lazy(() => import("@/modules/project-timeline"));
 const UserManagement = React.lazy(() => import("@/modules/user-management"));
+// PATCH 426-430: Consolidated Mission Engine
+const MissionEngine = React.lazy(() => import("@/modules/mission-engine"));
 const MissionControl = React.lazy(() => import("@/modules/emergency/mission-control"));
 const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insight-dashboard"));
 const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
@@ -543,7 +545,12 @@ function App() {
                       <Route path="/users" element={<UserManagement />} />
                       <Route path="/emergency-response" element={<EmergencyResponse />} />
                       <Route path="/emergency" element={<EmergencyResponse />} />
-                      <Route path="/mission-control" element={<MissionControl />} />
+                      {/* PATCH 426-430: Unified Mission Engine */}
+                      <Route path="/mission-engine" element={<MissionEngine />} />
+                      {/* Legacy mission routes - redirect to mission-engine */}
+                      <Route path="/mission-control" element={<MissionEngine />} />
+                      <Route path="/mission-logs" element={<MissionEngine />} />
+                      {/* Mission control sub-pages */}
                       {/* PATCH 89: Redirect insight-dashboard to ai-insights for consolidation */}
                       <Route path="/mission-control/insight-dashboard" element={<InsightDashboard />} />
                       <Route path="/insights" element={<AIInsights />} />

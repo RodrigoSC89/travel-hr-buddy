@@ -390,7 +390,7 @@ const navigationItems = [
       },
       {
         title: "Logs de Missões",
-        url: "/mission-logs",
+        url: "/mission-engine",
         icon: FileText,
       },
       {
@@ -465,7 +465,7 @@ const navigationItems = [
       },
       {
         title: "Controle Missão",
-        url: "/mission-control",
+        url: "/mission-engine",
         icon: Target,
       },
       {
