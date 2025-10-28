@@ -123,32 +123,6 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       
       setCurrentBranding(demoBranding);
       applyBrandingTheme(demoBranding);
-      
-      // Tentar carregar branding real do Supabase (com timeout)
-      try {
-        const timeoutPromise = new Promise<null>((_, reject) => 
-          setTimeout(() => reject(new Error("Timeout")), 3000)
-        );
-        
-        const fetchPromise = supabase
-          .from("organization_branding")
-          .select("*")
-          .eq("organization_id", "550e8400-e29b-41d4-a716-446655440000")
-          .maybeSingle();
-
-        const { data: branding, error: brandingError } = await Promise.race([
-          fetchPromise,
-          timeoutPromise
-        ]).catch(() => ({ data: null, error: null })) as unknown;
-
-        if (!brandingError && branding) {
-          setCurrentBranding(branding as unknown);
-          applyBrandingTheme(branding as unknown);
-        }
-      } catch (err) {
-        // Ignorar erros - já temos o branding demo configurado
-        logger.warn("Could not load organization branding from database, using demo data");
-      }
     } catch (err) {
       logger.error("Error loading organization:", err);
       setError("Erro ao carregar dados da organização");
