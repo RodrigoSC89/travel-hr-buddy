@@ -35,32 +35,6 @@ import {
 import { deepRiskAIService, type RiskFactors, type RiskScore, type RiskRecommendation } from "./services/deepRiskAIService";
 import { toast } from "sonner";
 
-interface RiskFactors {
-  depth: number;
-  pressure: number;
-  temperature: number;
-  current: number;
-  visibility: number;
-  sonarQuality: number;
-}
-
-interface RiskScore {
-  overall: number;
-  categories: {
-    environmental: number;
-    mechanical: number;
-    operational: number;
-    communication: number;
-  };
-  level: "minimal" | "low" | "moderate" | "high" | "severe" | "critical";
-}
-
-interface AIRecommendation {
-  priority: "low" | "medium" | "high" | "critical";
-  category: string;
-  recommendation: string;
-  reasoning: string;
-}
 
 const DeepRiskAI: React.FC = () => {
   const [depth, setDepth] = useState(100);

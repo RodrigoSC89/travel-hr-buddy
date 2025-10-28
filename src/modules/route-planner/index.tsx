@@ -23,7 +23,8 @@ import {
   MapPin,
   CloudRain
 } from "lucide-react";
-import { routePlannerService, type Route, type Coordinates } from "./services/routePlannerService";
+import { routePlannerService, type Route } from "./services/routePlannerService";
+import type { Coordinates } from "@/modules/navigation-copilot";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 

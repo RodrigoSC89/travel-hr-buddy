@@ -301,10 +301,10 @@ export const SensorsHub: React.FC = () => {
 
       {/* Selected Sensor Details */}
       {selectedSensor && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <SensorPanel sensorId={selectedSensor} />
-          <SensorHistory sensorId={selectedSensor} />
-        </div>
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <SensorPanel title="Sensor Details" sensors={[]} onRefresh={() => {}} />
+  <SensorHistory sensorType="generic" />
+</div>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 /**
  * Unified Template Editor - PATCH 434
- * Complete template management system with PDF generation
+ * Barrel file re-exporting the actual editor component
  */
 
-export { TemplateEditor } from "./TemplateEditorUnified";
-export { default } from "./TemplateEditorUnified";
+export { TemplateEditor } from "./TemplateEditor";
+export { default } from "./TemplateEditor";

@@ -23,7 +23,7 @@ import {
   Waves,
 } from "lucide-react";
 import { navigationCopilot, type Coordinates, type WeatherData } from "../index";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Mission {
   id: string;

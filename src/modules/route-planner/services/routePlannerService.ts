@@ -4,7 +4,7 @@
  */
 
 import { navigationCopilot, type Coordinates, type WeatherData } from "@/modules/navigation-copilot/index";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 export interface Waypoint {
@@ -31,6 +31,7 @@ export interface Route {
   weatherAlerts: WeatherAlert[];
   riskScore: number;
   status: "draft" | "planned" | "active" | "completed";
+  recommended?: boolean;
   createdAt?: string;
   updatedAt?: string;
   userId?: string;
@@ -78,20 +79,21 @@ class RoutePlannerService {
           riskLevel: this.determineWaypointRisk(wp, navRoute.weatherAlerts),
         }));
 
-        return {
-          id: navRoute.id,
-          name: navRoute.recommended ? "Rota Recomendada" : "Rota Alternativa",
-          description: `Rota ${navRoute.recommended ? "otimizada" : "alternativa"} com análise meteorológica`,
-          origin: navRoute.origin,
-          destination: navRoute.destination,
-          waypoints,
-          distance: navRoute.distance,
-          estimatedDuration: navRoute.estimatedDuration,
-          etaArrival: navRoute.etaWithAI,
-          weatherAlerts: navRoute.weatherAlerts,
-          riskScore: navRoute.riskScore,
-          status: "planned",
-        };
+return {
+  id: navRoute.id,
+  name: navRoute.recommended ? "Rota Recomendada" : "Rota Alternativa",
+  description: `Rota ${navRoute.recommended ? "otimizada" : "alternativa"} com análise meteorológica`,
+  origin: navRoute.origin,
+  destination: navRoute.destination,
+  waypoints,
+  distance: navRoute.distance,
+  estimatedDuration: navRoute.estimatedDuration,
+  etaArrival: navRoute.etaWithAI,
+  weatherAlerts: navRoute.weatherAlerts,
+  riskScore: navRoute.riskScore,
+  status: "planned",
+  recommended: navRoute.recommended,
+};
       });
 
       return routes;
