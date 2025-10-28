@@ -321,6 +321,8 @@ VALUES
   ('Santos to Rio Grande', '{"lat": -23.9608, "lng": -46.3333, "name": "Port of Santos"}', '{"lat": -32.0345, "lng": -52.0985, "name": "Rio Grande"}', 520.5, 52.0, 'weather_optimized', 25, true);
 
 -- Insert sample navigation alert
+-- Note: affected_radius_nautical_miles is set to 50.0 nm (approximately 92.6 km)
+-- This is a typical radius for maritime weather alerts covering a regional area
 INSERT INTO public.navigation_alerts (route_id, alert_type, severity, title, description, location, affected_radius_nautical_miles)
 SELECT 
   id,

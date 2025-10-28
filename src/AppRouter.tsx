@@ -136,7 +136,6 @@ export default function AppRouter() {
         
         {/* PATCH 421-425 Routes - Maritime Operations */}
         <Route path="/documents" element={<Documents />} />
-        <Route path="/drones/submarine" element={<UnderwaterDrone />} />
         <Route path="/underwater-drone" element={<UnderwaterDrone />} />
         <Route path="/navigation-copilot" element={<NavigationCopilotPage />} />
       </Routes>
