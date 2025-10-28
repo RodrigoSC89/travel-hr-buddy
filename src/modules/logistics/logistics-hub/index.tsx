@@ -1,10 +1,10 @@
 /**
- * PATCH 352: Logistics Hub Complete
- * Enhanced with inventory management, purchase orders, and supply tracking
+ * PATCH 376: Logistics Hub Complete - Inventory & Routes
+ * Enhanced with suppliers management, route planning, and advanced inventory control
  */
 
 import React from "react";
-import { Package, ClipboardList, AlertTriangle, Truck, ShoppingCart } from "lucide-react";
+import { Package, ClipboardList, AlertTriangle, Truck, ShoppingCart, Building2, Route } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InventoryAlerts } from "./components/InventoryAlerts";
 import { ShipmentTracker } from "./components/ShipmentTracker";
@@ -12,6 +12,8 @@ import { SupplyRequests } from "./components/SupplyRequests";
 import { LogisticsAlertsPanel } from "./components/LogisticsAlertsPanel";
 import { InventoryManagement } from "./components/InventoryManagement";
 import { PurchaseOrdersManagement } from "./components/PurchaseOrdersManagement";
+import { SuppliersManagement } from "./components/SuppliersManagement";
+import { RoutePlanning } from "./components/RoutePlanning";
 
 const LogisticsHub = () => {
   return (
@@ -21,16 +23,24 @@ const LogisticsHub = () => {
         <div>
           <h1 className="text-3xl font-bold">Logistics Hub</h1>
           <p className="text-muted-foreground">
-            Complete supply chain management and inventory control system
+            Complete supply chain management with inventory, routes, and supplier control
           </p>
         </div>
       </div>
       
       <Tabs defaultValue="inventory" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="inventory" className="flex items-center gap-2">
             <Package className="h-4 w-4" />
             Inventory
+          </TabsTrigger>
+          <TabsTrigger value="suppliers" className="flex items-center gap-2">
+            <Building2 className="h-4 w-4" />
+            Suppliers
+          </TabsTrigger>
+          <TabsTrigger value="routes" className="flex items-center gap-2">
+            <Route className="h-4 w-4" />
+            Routes
           </TabsTrigger>
           <TabsTrigger value="orders" className="flex items-center gap-2">
             <ShoppingCart className="h-4 w-4" />
@@ -52,6 +62,14 @@ const LogisticsHub = () => {
 
         <TabsContent value="inventory" className="space-y-4">
           <InventoryManagement />
+        </TabsContent>
+
+        <TabsContent value="suppliers" className="space-y-4">
+          <SuppliersManagement />
+        </TabsContent>
+
+        <TabsContent value="routes" className="space-y-4">
+          <RoutePlanning />
         </TabsContent>
 
         <TabsContent value="orders" className="space-y-4">
