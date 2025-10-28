@@ -22,6 +22,7 @@ const Travel = lazyWithPreload(() => import("@/pages/Travel"));
 
 // Páginas secundárias - carregamento normal
 const PriceAlerts = React.lazy(() => import("@/modules/features/price-alerts"));
+const PriceAlertsValidation = React.lazy(() => import("@/pages/admin/price-alerts/validation"));
 const Reports = React.lazy(() => import("@/pages/Reports"));
 const Reservations = React.lazy(() => import("@/pages/Reservations"));
 const ChecklistsInteligentes = React.lazy(() => import("@/pages/ChecklistsInteligentes"));
@@ -330,6 +331,7 @@ function App() {
                       <Route path="/" element={<Index />} />
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/price-alerts" element={<PriceAlerts />} />
+                      <Route path="/price-alerts/validation" element={<PriceAlertsValidation />} />
                       <Route path="/reports" element={<Reports />} />
                       <Route path="/reservations" element={<Reservations />} />
                       <Route path="/checklists" element={<ChecklistsInteligentes />} />

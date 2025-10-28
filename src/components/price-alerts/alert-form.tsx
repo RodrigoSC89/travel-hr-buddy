@@ -32,7 +32,7 @@ import { CreatePriceAlertInput, PriceAlert, UpdatePriceAlertInput } from '@/serv
 interface AlertFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: CreatePriceAlertInput | UpdatePriceAlertInput) => Promise<void>;
+  onSubmit: (data: any) => Promise<void>;
   alert?: PriceAlert | null;
   mode: 'create' | 'edit';
 }

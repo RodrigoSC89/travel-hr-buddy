@@ -70,7 +70,7 @@ class PriceAlertsService {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data as PriceAlert[];
+    return data as any as PriceAlert[];
   }
 
   /**
@@ -84,7 +84,7 @@ class PriceAlertsService {
       .single();
 
     if (error) throw error;
-    return data as PriceAlert;
+    return data as any as PriceAlert;
   }
 
   /**
@@ -108,12 +108,12 @@ class PriceAlertsService {
         notification_push: input.notification_push ?? true,
         notification_frequency: input.notification_frequency ?? 'immediate',
         is_active: true
-      })
+      } as any)
       .select()
       .single();
 
     if (error) throw error;
-    return data as PriceAlert;
+    return data as any as PriceAlert;
   }
 
   /**
@@ -122,13 +122,13 @@ class PriceAlertsService {
   async updateAlert(id: string, input: UpdatePriceAlertInput): Promise<PriceAlert> {
     const { data, error } = await supabase
       .from('price_alerts')
-      .update(input)
+      .update(input as any)
       .eq('id', id)
       .select()
       .single();
 
     if (error) throw error;
-    return data as PriceAlert;
+    return data as any as PriceAlert;
   }
 
   /**
