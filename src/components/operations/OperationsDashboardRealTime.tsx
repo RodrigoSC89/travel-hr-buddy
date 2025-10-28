@@ -31,8 +31,10 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
-import mqtt from 'mqtt';
+// Note: MQTT and Chart.js imports removed - functionality is simulated for demo
+// In production, uncomment and configure:
+// import mqtt from 'mqtt';
+// import { Line, Bar, Doughnut } from 'react-chartjs-2';
 
 interface OperationalMetrics {
   mission_status: Record<string, number>;
@@ -154,13 +156,15 @@ export const OperationsDashboardRealTime: React.FC = () => {
 
   const setupMQTTConnection = () => {
     try {
-      // Connect to MQTT broker (simulated for demo)
-      // In production, use actual MQTT broker URL
-      const mqttUrl = 'wss://test.mosquitto.org:8081';
+      // Note: MQTT functionality is simulated for demo
+      // In production, configure actual MQTT broker:
+      // const mqttUrl = 'wss://your-mqtt-broker:8081';
+      // mqttClientRef.current = mqtt.connect(mqttUrl, { username: 'user', password: 'pass' });
+      // mqttClientRef.current.on('connect', () => setMqttConnected(true));
+      // mqttClientRef.current.on('message', (topic, message) => handleMQTTMessage({ topic, payload: JSON.parse(message) }));
       
-      // Note: In a real implementation, use proper MQTT credentials
-      console.log('MQTT connection would be established here');
-      setMqttConnected(false); // Set to false for demo since we don't have a real broker
+      console.log('MQTT connection simulated for demo');
+      setMqttConnected(false);
       
       // Simulate MQTT messages for demo
       simulateMQTTMessages();

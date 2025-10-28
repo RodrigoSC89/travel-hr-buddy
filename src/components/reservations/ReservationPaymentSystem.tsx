@@ -32,6 +32,7 @@ import {
   Link as LinkIcon,
   X
 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { format, parseISO } from 'date-fns';
@@ -124,7 +125,7 @@ export const ReservationPaymentSystem: React.FC = () => {
       setProcessingPayment(true);
 
       // Simulate payment processing (in production, integrate with Stripe/PayPal)
-      const transactionId = `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const transactionId = `txn_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 
       // Update reservation with payment info
       const { error } = await supabase
@@ -725,24 +726,20 @@ END:VCALENDAR`;
             </div>
             <div className="flex items-center justify-between">
               <Label>Auto-sync future reservations</Label>
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={calendarSync.auto_sync}
-                onChange={(e) =>
-                  setCalendarSync({ ...calendarSync, auto_sync: e.target.checked })
+                onCheckedChange={(checked) =>
+                  setCalendarSync({ ...calendarSync, auto_sync: !!checked })
                 }
-                className="rounded"
               />
             </div>
             <div className="flex items-center justify-between">
               <Label>Send reminders</Label>
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={calendarSync.send_reminders}
-                onChange={(e) =>
-                  setCalendarSync({ ...calendarSync, send_reminders: e.target.checked })
+                onCheckedChange={(checked) =>
+                  setCalendarSync({ ...calendarSync, send_reminders: !!checked })
                 }
-                className="rounded"
               />
             </div>
             <Button

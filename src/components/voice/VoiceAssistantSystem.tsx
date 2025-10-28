@@ -27,6 +27,8 @@ import {
   Download,
   MessageSquare
 } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
@@ -109,7 +111,7 @@ export const VoiceAssistantSystem: React.FC = () => {
   }, []);
 
   const generateSessionId = () => {
-    const id = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const id = `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     setSessionId(id);
   };
 
@@ -702,13 +704,11 @@ export const VoiceAssistantSystem: React.FC = () => {
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label>Enable Wake Word</Label>
-                <input
-                  type="checkbox"
+                <Checkbox
                   checked={wakeWordConfig.enabled}
-                  onChange={(e) =>
-                    setWakeWordConfig({ ...wakeWordConfig, enabled: e.target.checked })
+                  onCheckedChange={(checked) =>
+                    setWakeWordConfig({ ...wakeWordConfig, enabled: !!checked })
                   }
-                  className="rounded"
                 />
               </div>
               <div>
