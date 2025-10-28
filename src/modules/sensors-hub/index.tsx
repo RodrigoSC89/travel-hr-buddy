@@ -1,6 +1,7 @@
 /**
  * PATCH 174.0 - Sensors Hub UI
  * PATCH 441 - Enhanced with real-time updates, normalization, and alerts
+ * PATCH 461 - Added MQTT/Supabase Realtime integration and configurable alerts
  * Real-time sensor data visualization with anomaly detection
  */
 
@@ -15,16 +16,21 @@ import {
   AlertTriangle,
   Power,
   TrendingUp,
-  Bell
+  Bell,
+  Settings,
+  Wifi,
+  WifiOff
 } from "lucide-react";
 import { toast } from "sonner";
 import { sensorStream, type SensorData } from "./sensorStream";
 import { sensorRegistry } from "./sensorRegistry";
 import { sensorSimulator } from "./services/sensor-simulator";
 import { sensorDataService } from "./services/sensor-data-service";
+import { sensorRealtimeService } from "./services/sensor-realtime-service";
 import { SensorAlerts } from "./components/SensorAlerts";
 import { SensorPanel } from "./components/SensorPanel";
 import { SensorHistory } from "./components/SensorHistory";
+import AlertConfigModal from "./components/AlertConfigModal";
 
 export const SensorsHub: React.FC = () => {
   const [sensors, setSensors] = useState<string[]>([]);
@@ -32,15 +38,21 @@ export const SensorsHub: React.FC = () => {
   const [isSimulating, setIsSimulating] = useState(false);
   const [alerts, setAlerts] = useState<any[]>([]);
   const [selectedSensor, setSelectedSensor] = useState<string | null>(null);
+  const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
+  const [showAlertConfig, setShowAlertConfig] = useState(false);
 
   useEffect(() => {
     // Start simulation automatically
     handleStartSimulation();
     loadAlerts();
 
+    // Initialize MQTT and Realtime connections
+    initializeConnections();
+
     // Cleanup on unmount
     return () => {
       sensorSimulator.stop();
+      sensorRealtimeService.disconnect();
     };
   }, []);
 
@@ -98,6 +110,29 @@ export const SensorsHub: React.FC = () => {
     }
   };
 
+  const initializeConnections = async () => {
+    try {
+      // Initialize Supabase Realtime
+      await sensorRealtimeService.initializeRealtime();
+      
+      // Initialize MQTT (optional - only if MQTT broker is available)
+      try {
+        await sensorRealtimeService.initializeMQTT();
+      } catch (mqttError) {
+        console.warn("MQTT not available, using Supabase Realtime only:", mqttError);
+      }
+      
+      setIsRealtimeConnected(sensorRealtimeService.isServiceConnected());
+      
+      if (sensorRealtimeService.isServiceConnected()) {
+        toast.success("Real-time sensor connections established");
+      }
+    } catch (error) {
+      console.error("Failed to initialize connections:", error);
+      toast.error("Failed to connect to real-time services");
+    }
+  };
+
   const handleStartSimulation = () => {
     if (!isSimulating) {
       sensorSimulator.start();
@@ -145,11 +180,30 @@ export const SensorsHub: React.FC = () => {
             <Activity className="h-8 w-8 text-primary" />
             Sensors Hub
           </h1>
-          <p className="text-sm text-muted-foreground">
-            PATCH 441 - Real-time sensor monitoring with anomaly detection
+          <p className="text-sm text-muted-foreground flex items-center gap-2">
+            PATCH 461 - Real-time sensor monitoring with MQTT/Realtime
+            {isRealtimeConnected ? (
+              <Badge className="bg-green-500 flex items-center gap-1">
+                <Wifi className="h-3 w-3" />
+                Connected
+              </Badge>
+            ) : (
+              <Badge className="bg-gray-500 flex items-center gap-1">
+                <WifiOff className="h-3 w-3" />
+                Offline
+              </Badge>
+            )}
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setShowAlertConfig(true)}
+            size="sm"
+          >
+            <Settings className="h-4 w-4 mr-2" />
+            Configure
+          </Button>
           <Badge variant={isSimulating ? "default" : "secondary"}>
             <Power className="h-3 w-3 mr-1" />
             {isSimulating ? "Active" : "Inactive"}
@@ -306,6 +360,17 @@ export const SensorsHub: React.FC = () => {
   <SensorHistory sensorType="generic" />
 </div>
       )}
+
+      {/* Alert Configuration Modal */}
+      <AlertConfigModal
+        isOpen={showAlertConfig}
+        onClose={() => setShowAlertConfig(false)}
+        onSave={(config) => {
+          // Save configuration (could be stored in database or local state)
+          console.log("Alert config saved:", config);
+          toast.success(`Alert configuration saved for ${config.sensorType}`);
+        }}
+      />
     </div>
   );
 };
