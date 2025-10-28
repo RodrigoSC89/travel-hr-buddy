@@ -111,6 +111,10 @@ const TVWallLogs = React.lazy(() => import("@/pages/tv/LogsPage"));
 const TemplateEditorPage = React.lazy(() => import("@/pages/admin/templates/editor"));
 const TemplateValidationPage = React.lazy(() => import("@/pages/admin/templates/validation"));
 const CrewConsolidationValidationPage = React.lazy(() => import("@/pages/admin/crew/consolidation-validation"));
+const DocumentHubValidationPage = React.lazy(() => import("@/pages/admin/document-hub/validation"));
+const MissionControlValidationPage = React.lazy(() => import("@/pages/admin/mission-control/validation"));
+const DocumentationValidationPage = React.lazy(() => import("@/pages/admin/documentation/validation"));
+const TestsValidationPage = React.lazy(() => import("@/pages/admin/tests"));
 const MMIJobsPanel = React.lazy(() => import("@/pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("@/pages/MmiBI"));
 const MMIHistory = React.lazy(() => import("@/pages/MMIHistory"));
@@ -433,6 +437,10 @@ function App() {
                       <Route path="/admin/templates/editor" element={<TemplateEditorPage />} />
                       <Route path="/admin/templates/validation" element={<TemplateValidationPage />} />
                       <Route path="/admin/crew/consolidation-validation" element={<CrewConsolidationValidationPage />} />
+                      <Route path="/admin/document-hub/validation" element={<DocumentHubValidationPage />} />
+                      <Route path="/admin/mission-control/validation" element={<MissionControlValidationPage />} />
+                      <Route path="/admin/documentation/validation" element={<DocumentationValidationPage />} />
+                      <Route path="/admin/tests/validation" element={<TestsValidationPage />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />
