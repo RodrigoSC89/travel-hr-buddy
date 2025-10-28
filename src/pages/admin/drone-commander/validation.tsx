@@ -1,5 +1,5 @@
-import DroneCommanderValidation from "@/modules/control/drone-commander/validation/DroneCommanderValidation";
+import UnderwaterDroneValidation from "@/modules/underwater-drone/validation/UnderwaterDroneValidation";
 
 export default function DroneCommanderValidationPage() {
-  return <DroneCommanderValidation />;
+  return <UnderwaterDroneValidation />;
 }
