@@ -5,7 +5,7 @@
 
 import React from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
-import TemplateValidationReport from "@/modules/documents/templates/validation/TemplateValidationReport";
+import TemplateValidationReport from "@/modules/document-hub/templates/validation/TemplateValidationReport";
 
 export default function TemplateValidationPage() {
   return (
