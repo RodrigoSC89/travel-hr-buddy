@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2025-10-26T03:00:00.000Z",
+  "lastUpdated": "2025-10-28T20:00:00.000Z",
   "modules": [
     {
       "id": "fleet",
@@ -47,11 +47,11 @@
       "path": "/modules/crew-management",
       "route": "/crew-management",
       "status": "active",
-      "category": "hr",
-      "description": "Unified crew management with personnel, certifications, rotations, and performance tracking",
+      "category": "operations",
+      "description": "Unified crew management with personnel, certifications, rotations, and performance tracking - PATCH 446",
       "hasDatabase": true,
       "hasMockData": false,
-      "version": "406.0",
+      "version": "446.0",
       "lastModified": "2025-10-28"
     },
     {
@@ -74,10 +74,49 @@
       "route": "/sonar-ai",
       "status": "active",
       "category": "intelligence",
-      "description": "AI-powered sonar data analysis and pattern detection",
+      "description": "AI-powered sonar data analysis and pattern detection - PATCH 448",
       "hasDatabase": true,
       "hasMockData": false,
-      "version": "407.0",
+      "version": "448.0",
+      "lastModified": "2025-10-28"
+    },
+    {
+      "id": "navigation-copilot",
+      "name": "Navigation Copilot",
+      "path": "/modules/navigation-copilot",
+      "route": "/navigation-copilot",
+      "status": "active",
+      "category": "intelligence",
+      "description": "AI-powered navigation with weather integration and route optimization - PATCH 447",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "447.0",
+      "lastModified": "2025-10-28"
+    },
+    {
+      "id": "route-planner",
+      "name": "Route Planner v2",
+      "path": "/modules/route-planner",
+      "route": "/route-planner",
+      "status": "active",
+      "category": "planning",
+      "description": "Enhanced route planning with dynamic ETA and weather integration - PATCH 449",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "449.0",
+      "lastModified": "2025-10-28"
+    },
+    {
+      "id": "underwater-drone",
+      "name": "Underwater Drone Control",
+      "path": "/modules/underwater-drone",
+      "route": "/underwater-drone",
+      "status": "active",
+      "category": "operations",
+      "description": "ROV/AUV control system with mission planning and telemetry tracking - PATCH 450",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "450.0",
       "lastModified": "2025-10-28"
     },
     {
@@ -184,6 +223,24 @@
       "type": "module"
     },
     {
+      "path": "/navigation-copilot",
+      "module": "navigation-copilot",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/route-planner",
+      "module": "route-planner",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/underwater-drone",
+      "module": "underwater-drone",
+      "status": "active",
+      "type": "module"
+    },
+    {
       "path": "/mission-control",
       "module": "mission-control",
       "status": "active",
@@ -205,10 +262,10 @@
     }
   ],
   "statistics": {
-    "totalModules": 8,
-    "activeModules": 7,
+    "totalModules": 11,
+    "activeModules": 10,
     "deprecatedModules": 3,
-    "modulesWithRealData": 6,
+    "modulesWithRealData": 9,
     "modulesWithMockData": 0
   }
 }
