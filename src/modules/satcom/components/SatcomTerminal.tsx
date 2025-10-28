@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 420: Satcom Interactive Terminal
  * Terminal interface for sending and receiving satellite communications

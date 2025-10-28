@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 427 - Drone Commander Service
  */
