@@ -12,11 +12,15 @@ import { CommandPalette } from "@/components/CommandPalette";
 import { OfflineBanner } from "@/components/OfflineBanner";
 import { systemWatchdog } from "@/ai/watchdog";
 import { webVitalsService } from "@/services/web-vitals-service";
-// Removed safeLazyImport - using React.lazy directly
+import { OffshoreLoader, PageSkeleton } from "@/components/LoadingStates";
+import { lazyWithPreload, preloadStrategy } from "@/lib/performance/lazy-with-preload";
 
-// Lazy load all pages
-const Index = React.lazy(() => import("@/pages/Index"));
-const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
+// Páginas mais usadas - carregamento prioritário
+const Index = lazyWithPreload(() => import("@/pages/Index"));
+const Dashboard = lazyWithPreload(() => import("@/pages/Dashboard"));
+const Travel = lazyWithPreload(() => import("@/pages/Travel"));
+
+// Páginas secundárias - carregamento normal
 const PriceAlerts = React.lazy(() => import("@/modules/features/price-alerts"));
 const Reports = React.lazy(() => import("@/pages/Reports"));
 const Reservations = React.lazy(() => import("@/pages/Reservations"));
@@ -33,7 +37,6 @@ const Settings = React.lazy(() => import("@/pages/Settings"));
 const Documents = React.lazy(() => import("@/modules/documents/documents-ai/DocumentsAI"));
 const DocumentHub = React.lazy(() => import("@/modules/document-hub"));
 const AIAssistant = React.lazy(() => import("@/pages/AIAssistant"));
-const Travel = React.lazy(() => import("@/pages/Travel"));
 const Analytics = React.lazy(() => import("@/pages/Analytics"));
 const HumanResources = React.lazy(() => import("@/pages/HumanResources"));
 const Communication = React.lazy(() => import("@/modules/connectivity/communication"));
@@ -206,18 +209,24 @@ const VoiceAssistantModule = React.lazy(() => import("@/modules/assistants/voice
 const NotificationsCenterModule = React.lazy(() => import("@/modules/connectivity/notifications-center"));
 const AIModulesStatus = React.lazy(() => import("@/pages/AIModulesStatus"));
 
-// Loading component
+// Loading component otimizado para offshore
 const LoadingSpinner = () => (
-  <div className="flex items-center justify-center min-h-screen bg-gray-100">
-    <div className="text-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-      <p className="mt-4 text-muted-foreground">Carregando Nautilus One...</p>
-    </div>
-  </div>
+  <OffshoreLoader module="Sistema" />
 );
 
-// Create QueryClient
-const queryClient = new QueryClient();
+// Create QueryClient com configurações otimizadas para offshore
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutos - dados considerados frescos
+      gcTime: 10 * 60 * 1000, // 10 minutos - manter em cache (antes cacheTime)
+      retry: 3, // Tentar 3 vezes em caso de falha
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      refetchOnWindowFocus: false, // Não recarregar ao focar janela
+      refetchOnReconnect: true, // Recarregar ao reconectar
+    },
+  },
+});
 
 // Component to handle redirect from 404.html
 // This component restores the original route when the app loads after a 404 redirect
@@ -257,6 +266,12 @@ function App() {
     
     // PATCH 85.0 - Iniciar System Watchdog automaticamente
     systemWatchdog.start();
+    
+    // Preload módulos críticos durante idle time
+    preloadStrategy.idle(async () => {
+      await Dashboard.preload();
+      await Travel.preload();
+    });
     
     // PATCH 371 - Web Vitals monitoring initialized via service export
     
