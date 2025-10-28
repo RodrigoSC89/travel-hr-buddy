@@ -229,6 +229,17 @@ const AIModulesStatus = React.lazy(() => import("@/pages/AIModulesStatus"));
 const CrewManagement = React.lazy(() => import("@/modules/crew-management"));
 // PATCH 407: Sonar AI Module
 const SonarAI = React.lazy(() => import("@/modules/sonar-ai"));
+// Validation Pages - Patches 401-410
+const TemplateEditorValidation = React.lazy(() => import("@/pages/admin/template-editor/validation"));
+const DocumentsConsolidationValidation = React.lazy(() => import("@/pages/admin/documents-consolidation/validation"));
+const PriceAlertsValidation = React.lazy(() => import("@/pages/admin/price-alerts/validation"));
+const IncidentsConsolidationValidation = React.lazy(() => import("@/pages/admin/incidents-consolidation/validation"));
+const SensorHubValidation = React.lazy(() => import("@/pages/admin/sensor-hub/validation"));
+const CrewConsolidationValidation = React.lazy(() => import("@/pages/admin/crew-consolidation/validation"));
+const SonarAIValidation = React.lazy(() => import("@/pages/admin/sonar-ai/validation"));
+const TestAutomationValidation = React.lazy(() => import("@/pages/admin/test-automation/validation"));
+const TemplatesApplicationValidation = React.lazy(() => import("@/pages/admin/templates-application/validation"));
+const MissionControlConsolidationValidation = React.lazy(() => import("@/pages/admin/mission-control-consolidation/validation"));
 
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
@@ -604,6 +615,18 @@ function App() {
                       
                       {/* PATCH 407: Sonar AI Module */}
                       <Route path="/sonar-ai" element={<SonarAI />} />
+                      
+                      {/* Validation Routes - Patches 401-410 */}
+                      <Route path="/admin/template-editor/validation" element={<TemplateEditorValidation />} />
+                      <Route path="/admin/documents-consolidation/validation" element={<DocumentsConsolidationValidation />} />
+                      <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidation />} />
+                      <Route path="/admin/incidents-consolidation/validation" element={<IncidentsConsolidationValidation />} />
+                      <Route path="/admin/sensor-hub/validation" element={<SensorHubValidation />} />
+                      <Route path="/admin/crew-consolidation/validation" element={<CrewConsolidationValidation />} />
+                      <Route path="/admin/sonar-ai/validation" element={<SonarAIValidation />} />
+                      <Route path="/admin/test-automation/validation" element={<TestAutomationValidation />} />
+                      <Route path="/admin/templates-application/validation" element={<TemplatesApplicationValidation />} />
+                      <Route path="/admin/mission-control-consolidation/validation" element={<MissionControlConsolidationValidation />} />
                       
                       {/* Portuguese Module Routes with English Aliases */}
                       <Route path="/comunicacao" element={<Communication />} />
