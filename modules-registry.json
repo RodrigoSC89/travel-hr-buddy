@@ -3,6 +3,20 @@
   "lastUpdated": "2025-10-26T03:00:00.000Z",
   "modules": [
     {
+      "id": "crew-management",
+      "name": "Crew Management",
+      "path": "/modules/crew-management",
+      "route": "/crew-management",
+      "status": "active",
+      "category": "operations",
+      "description": "Unified crew management with certifications and rotations",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "406.0",
+      "lastModified": "2025-10-28",
+      "mobileCompatible": true
+    },
+    {
       "id": "fleet",
       "name": "Fleet Management",
       "path": "/modules/fleet",
@@ -43,15 +57,17 @@
     },
     {
       "id": "crew",
-      "name": "Crew Management",
+      "name": "Crew Management (Legacy)",
       "path": "/modules/operations/crew",
       "route": "/crew",
-      "status": "active",
+      "status": "deprecated",
       "category": "hr",
-      "description": "Crew member management and assignments",
+      "description": "Legacy crew module - replaced by crew-management",
       "hasDatabase": true,
       "hasMockData": true,
-      "version": "66.0"
+      "version": "66.0",
+      "deprecatedIn": "406.0",
+      "replacedBy": "crew-management"
     },
     {
       "id": "documents",
@@ -94,6 +110,12 @@
   ],
   "routes": [
     {
+      "path": "/crew-management",
+      "module": "crew-management",
+      "status": "active",
+      "type": "module"
+    },
+    {
       "path": "/fleet",
       "module": "fleet",
       "status": "active",
@@ -119,9 +141,10 @@
     },
     {
       "path": "/crew",
-      "module": "crew",
-      "status": "active",
-      "type": "module"
+      "module": "crew-management",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/crew-management"
     },
     {
       "path": "/maritime",
@@ -139,10 +162,10 @@
     }
   ],
   "statistics": {
-    "totalModules": 5,
+    "totalModules": 6,
     "activeModules": 5,
-    "deprecatedModules": 2,
-    "modulesWithRealData": 3,
+    "deprecatedModules": 3,
+    "modulesWithRealData": 4,
     "modulesWithMockData": 1
   }
 }

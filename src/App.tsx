@@ -167,6 +167,8 @@ const SGSOManagerPage = React.lazy(() => import("@/components/sgso/SGSOManager")
 
 // New Module Imports - PATCH 66.0 Updated Paths
 const CrewModule = React.lazy(() => import("@/modules/operations/crew"));
+// PATCH 406: Consolidated Crew Management Module
+const CrewManagement = React.lazy(() => import("@/modules/crew-management"));
 const FeedbackModule = React.lazy(() => import("@/modules/operations/feedback"));
 // PATCH 191.0: Consolidated Fleet Module
 const FleetModule = React.lazy(() => import("@/modules/fleet"));
@@ -494,6 +496,8 @@ function App() {
                       
                       {/* New Module Routes */}
                       <Route path="/crew" element={<CrewModule />} />
+                      {/* PATCH 406: Consolidated Crew Management */}
+                      <Route path="/crew-management" element={<CrewManagement />} />
                       <Route path="/feedback" element={<FeedbackModule />} />
                       {/* PATCH 191.0: Consolidated Fleet Module */}
                       <Route path="/fleet" element={<FleetModule />} />
