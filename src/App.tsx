@@ -276,6 +276,11 @@ const NavigationCopilotV2Validation = React.lazy(() => import("@/pages/admin/nav
 const DeepRiskAIValidation = React.lazy(() => import("@/pages/admin/deep-risk-ai/validation"));
 const TemplatesSystemValidation = React.lazy(() => import("@/pages/admin/templates-system/validation"));
 const SonarAIValidationV2 = React.lazy(() => import("@/pages/admin/sonar-ai/validation"));
+// PATCH 436-440 Validation Pages
+const CrewConsolidationValidationPatch437 = React.lazy(() => import("@/pages/admin/crew-consolidation/validation"));
+const PriceAlertsValidationPatch438 = React.lazy(() => import("@/pages/admin/price-alerts/validation"));
+const IncidentReportsV2Validation = React.lazy(() => import("@/pages/admin/incident-reports-v2/validation"));
+const AICoordinationValidation = React.lazy(() => import("@/pages/admin/ai-coordination/validation"));
 // PATCH 441-445 Validation Pages
 const SensorHubV2Validation = React.lazy(() => import("@/pages/admin/sensor-hub-v2/validation"));
 const SATCOMv2Validation = React.lazy(() => import("@/pages/admin/satcom-v2/validation"));
@@ -551,6 +556,13 @@ function App() {
                       <Route path="/admin/deep-risk-ai/validation" element={<DeepRiskAIValidation />} />
                       <Route path="/admin/templates-system/validation" element={<TemplatesSystemValidation />} />
                       <Route path="/admin/sonar-ai-v2/validation" element={<SonarAIValidationV2 />} />
+                      
+                      {/* Validation Routes - Patches 436-440 */}
+                      <Route path="/admin/underwater-drone/validation" element={<UnderwaterDroneValidation />} />
+                      <Route path="/admin/crew-consolidation/validation" element={<CrewConsolidationValidationPatch437 />} />
+                      <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidationPatch438 />} />
+                      <Route path="/admin/incident-reports-v2/validation" element={<IncidentReportsV2Validation />} />
+                      <Route path="/admin/ai-coordination/validation" element={<AICoordinationValidation />} />
                       
                       {/* Validation Routes - Patches 441-445 */}
                       <Route path="/admin/sensor-hub-v2/validation" element={<SensorHubV2Validation />} />
