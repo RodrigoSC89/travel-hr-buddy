@@ -22,6 +22,9 @@ export class VoiceService {
   private static recognition: SpeechRecognition | null = null;
   private static synthesis: SpeechSynthesis | null = null;
   private static currentSessionId: string | null = null;
+  private static wakeWordDetector: SpeechRecognition | null = null;
+  private static isWakeWordActive = false;
+  private static wakeWordCallback: ((detected: boolean) => void) | null = null;
 
   // Initialize Speech APIs
   static initSpeechAPIs(): void {
@@ -401,5 +404,183 @@ export class VoiceService {
       success_rate: Math.round(successRate),
       avg_confidence: Math.round(avgConfidence * 100) / 100,
     };
+  }
+
+  // PATCH 381: Wake Word Detection
+  static startWakeWordDetection(
+    wakeWord: string = 'nautilus',
+    onDetected: (detected: boolean) => void
+  ): void {
+    if (!this.recognition) {
+      throw new Error('Speech recognition not available');
+    }
+
+    this.isWakeWordActive = true;
+    this.wakeWordCallback = onDetected;
+
+    // @ts-expect-error - webkit prefix
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    this.wakeWordDetector = new SpeechRecognition();
+    this.wakeWordDetector.continuous = true;
+    this.wakeWordDetector.interimResults = true;
+    this.wakeWordDetector.lang = 'pt-BR';
+
+    this.wakeWordDetector.onresult = (event) => {
+      const results = Array.from(event.results);
+      const transcript = results
+        .map((result: any) => result[0].transcript)
+        .join(' ')
+        .toLowerCase();
+
+      if (transcript.includes(wakeWord.toLowerCase())) {
+        onDetected(true);
+        this.logInteraction('wake_word_detected', { wakeWord, transcript });
+      }
+    };
+
+    this.wakeWordDetector.onerror = (event) => {
+      console.error('Wake word detection error:', event.error);
+      this.isWakeWordActive = false;
+    };
+
+    this.wakeWordDetector.start();
+  }
+
+  static stopWakeWordDetection(): void {
+    if (this.wakeWordDetector) {
+      this.wakeWordDetector.stop();
+      this.wakeWordDetector = null;
+      this.isWakeWordActive = false;
+      this.wakeWordCallback = null;
+    }
+  }
+
+  static isWakeWordDetectionActive(): boolean {
+    return this.isWakeWordActive;
+  }
+
+  // PATCH 381: Enhanced TTS with Natural Voice
+  static async speakWithNaturalVoice(
+    text: string,
+    options?: {
+      rate?: number;
+      pitch?: number;
+      volume?: number;
+      voiceName?: string;
+    }
+  ): Promise<void> {
+    if (!this.synthesis) {
+      throw new Error('Speech synthesis not available');
+    }
+
+    return new Promise((resolve, reject) => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Get available voices and select the most natural one
+      const voices = this.synthesis.getVoices();
+      let selectedVoice = null;
+
+      if (options?.voiceName) {
+        selectedVoice = voices.find(v => v.name === options.voiceName);
+      }
+
+      if (!selectedVoice) {
+        // Try to find a Portuguese voice with 'natural' or 'premium' in the name
+        selectedVoice = voices.find(v => 
+          v.lang.startsWith('pt') && 
+          (v.name.toLowerCase().includes('natural') || 
+           v.name.toLowerCase().includes('premium') ||
+           v.name.toLowerCase().includes('enhanced'))
+        ) || voices.find(v => v.lang.startsWith('pt')) || voices[0];
+      }
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+
+      utterance.lang = 'pt-BR';
+      utterance.rate = options?.rate || 1.0;
+      utterance.pitch = options?.pitch || 1.0;
+      utterance.volume = options?.volume || 1.0;
+
+      utterance.onend = () => {
+        this.logInteraction('speech_completed', { text, voice: selectedVoice?.name });
+        resolve();
+      };
+      
+      utterance.onerror = (event) => {
+        this.logInteraction('speech_error', { text, error: event.error });
+        reject(new Error(event.error));
+      };
+
+      this.synthesis.speak(utterance);
+      this.logInteraction('speech_started', { text, voice: selectedVoice?.name });
+    });
+  }
+
+  // PATCH 381: Interaction Logging with Timestamps
+  static async logInteraction(
+    eventType: string,
+    data: Record<string, unknown>
+  ): Promise<void> {
+    try {
+      const timestamp = new Date().toISOString();
+      
+      await supabase.from('voice_interaction_logs').insert({
+        session_id: this.currentSessionId,
+        event_type: eventType,
+        event_data: data,
+        timestamp,
+        created_at: timestamp,
+      });
+    } catch (error) {
+      console.error('Failed to log interaction:', error);
+    }
+  }
+
+  static async getInteractionHistory(
+    sessionId?: string,
+    limit = 100
+  ): Promise<any[]> {
+    let query = supabase
+      .from('voice_interaction_logs')
+      .select('*')
+      .order('timestamp', { ascending: false })
+      .limit(limit);
+
+    if (sessionId) {
+      query = query.eq('session_id', sessionId);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    return data || [];
+  }
+
+  // Get available natural voices
+  static getAvailableVoices(): SpeechSynthesisVoice[] {
+    if (!this.synthesis) {
+      return [];
+    }
+
+    this.initSpeechAPIs();
+    return this.synthesis.getVoices();
+  }
+
+  static async waitForVoices(): Promise<SpeechSynthesisVoice[]> {
+    if (!this.synthesis) {
+      return [];
+    }
+
+    return new Promise((resolve) => {
+      const voices = this.synthesis!.getVoices();
+      if (voices.length > 0) {
+        resolve(voices);
+      } else {
+        this.synthesis!.onvoiceschanged = () => {
+          resolve(this.synthesis!.getVoices());
+        };
+      }
+    });
   }
 }
