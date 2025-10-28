@@ -142,7 +142,9 @@ const ExternalAuditSystem = React.lazy(() => import("@/pages/ExternalAuditSystem
 const ForecastHistoryPage = React.lazy(() => import("@/pages/admin/mmi/forecast/ForecastHistory"));
 const BIForecastsPage = React.lazy(() => import("@/pages/admin/bi/forecasts"));
 const PEODPAuditPage = React.lazy(() => import("@/pages/admin/peodp-audit"));
+const PEODPWizardComplete = React.lazy(() => import("@/pages/admin/peodp-wizard-complete"));
 const VaultAI = React.lazy(() => import("@/modules/vault_ai/pages/VaultAIPage"));
+const VaultAIComplete = React.lazy(() => import("@/pages/admin/vault-ai-complete"));
 const Patch66Dashboard = React.lazy(() => import("@/pages/Patch66Dashboard"));
 const CrewDossierPage = React.lazy(() => import("@/pages/CrewDossier"));
 const ChannelManagerHub = React.lazy(() => import("@/components/channel-manager/ChannelManagerHub"));
@@ -324,6 +326,7 @@ function App() {
                       <Route path="/compliance" element={<ComplianceHub />} />
                       <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/vault-ai" element={<VaultAI />} />
+                      <Route path="/admin/vault-ai-search" element={<VaultAIComplete />} />
                       <Route path="/patch66" element={<Patch66Dashboard />} />
                       <Route path="/patch-66" element={<Patch66Dashboard />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
@@ -403,6 +406,7 @@ function App() {
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/auditorias-lista" element={<AuditoriasLista />} />
                       <Route path="/admin/peodp-audit" element={<PEODPAuditPage />} />
+                      <Route path="/admin/peodp-wizard" element={<PEODPWizardComplete />} />
                       <Route path="/admin/simulations" element={<Simulations />} />
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
