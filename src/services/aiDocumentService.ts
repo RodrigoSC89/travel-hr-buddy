@@ -4,11 +4,11 @@
  * Tesseract.js integration for OCR with entity extraction
  */
 
-import { createWorker, Worker } from 'tesseract.js';
-import { supabase } from '@/integrations/supabase/client';
+import { createWorker, Worker } from "tesseract.js";
+import { supabase } from "@/integrations/supabase/client";
 
 interface EntityExtraction {
-  type: 'email' | 'phone' | 'amount' | 'date' | 'name' | 'other';
+  type: "email" | "phone" | "amount" | "date" | "name" | "other";
   value: string;
   confidence: number;
   position?: { start: number; end: number };
@@ -52,7 +52,7 @@ class AIDocumentService {
       return this.worker;
     }
 
-    this.worker = await createWorker('eng');
+    this.worker = await createWorker("eng");
     return this.worker;
   }
 
@@ -67,7 +67,7 @@ class AIDocumentService {
     let match;
     while ((match = emailRegex.exec(text)) !== null) {
       entities.push({
-        type: 'email',
+        type: "email",
         value: match[0],
         confidence: 0.95,
         position: { start: match.index, end: match.index + match[0].length }
@@ -78,7 +78,7 @@ class AIDocumentService {
     const phoneRegex = /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g;
     while ((match = phoneRegex.exec(text)) !== null) {
       entities.push({
-        type: 'phone',
+        type: "phone",
         value: match[0],
         confidence: 0.85,
         position: { start: match.index, end: match.index + match[0].length }
@@ -89,7 +89,7 @@ class AIDocumentService {
     const amountRegex = /\$\s?[\d,]+\.?\d{0,2}|[\d,]+\.?\d{0,2}\s?(USD|EUR|GBP|BRL)/gi;
     while ((match = amountRegex.exec(text)) !== null) {
       entities.push({
-        type: 'amount',
+        type: "amount",
         value: match[0],
         confidence: 0.90,
         position: { start: match.index, end: match.index + match[0].length }
@@ -111,7 +111,7 @@ class AIDocumentService {
     while ((match = isoRegex.exec(text)) !== null) {
       dates.push({
         date: match[0],
-        format: 'YYYY-MM-DD',
+        format: "YYYY-MM-DD",
         context: text.substring(Math.max(0, match.index - 20), match.index + match[0].length + 20)
       });
     }
@@ -121,7 +121,7 @@ class AIDocumentService {
     while ((match = usRegex.exec(text)) !== null) {
       dates.push({
         date: match[0],
-        format: 'MM/DD/YYYY',
+        format: "MM/DD/YYYY",
         context: text.substring(Math.max(0, match.index - 20), match.index + match[0].length + 20)
       });
     }
@@ -131,7 +131,7 @@ class AIDocumentService {
     while ((match = longRegex.exec(text)) !== null) {
       dates.push({
         date: match[0],
-        format: 'Month DD, YYYY',
+        format: "Month DD, YYYY",
         context: text.substring(Math.max(0, match.index - 20), match.index + match[0].length + 20)
       });
     }
@@ -144,15 +144,15 @@ class AIDocumentService {
    */
   private detectTables(text: string): TableDetection[] {
     const tables: TableDetection[] = [];
-    const lines = text.split('\n');
+    const lines = text.split("\n");
 
     let currentTable: string[][] = [];
     let inTable = false;
 
     for (const line of lines) {
       // Look for lines with multiple tab or pipe separators
-      const hasTabs = line.includes('\t');
-      const hasPipes = line.includes('|');
+      const hasTabs = line.includes("\t");
+      const hasPipes = line.includes("|");
       const hasMultipleSpaces = /\s{3,}/.test(line);
 
       if (hasTabs || hasPipes || hasMultipleSpaces) {
@@ -208,23 +208,23 @@ class AIDocumentService {
   private classifyDocument(text: string, keywords: string[]): string {
     const lowerText = text.toLowerCase();
     
-    if (lowerText.includes('invoice') || lowerText.includes('bill') || lowerText.includes('payment')) {
-      return 'invoice';
+    if (lowerText.includes("invoice") || lowerText.includes("bill") || lowerText.includes("payment")) {
+      return "invoice";
     }
-    if (lowerText.includes('contract') || lowerText.includes('agreement') || lowerText.includes('terms')) {
-      return 'contract';
+    if (lowerText.includes("contract") || lowerText.includes("agreement") || lowerText.includes("terms")) {
+      return "contract";
     }
-    if (lowerText.includes('report') || lowerText.includes('analysis') || lowerText.includes('summary')) {
-      return 'report';
+    if (lowerText.includes("report") || lowerText.includes("analysis") || lowerText.includes("summary")) {
+      return "report";
     }
-    if (lowerText.includes('certificate') || lowerText.includes('certification')) {
-      return 'certificate';
+    if (lowerText.includes("certificate") || lowerText.includes("certification")) {
+      return "certificate";
     }
-    if (lowerText.includes('receipt') || lowerText.includes('proof of purchase')) {
-      return 'receipt';
+    if (lowerText.includes("receipt") || lowerText.includes("proof of purchase")) {
+      return "receipt";
     }
     
-    return 'other';
+    return "other";
   }
 
   /**
@@ -252,7 +252,7 @@ class AIDocumentService {
    */
   private generateSummary(text: string): string {
     const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
-    return sentences.slice(0, 3).join(' ').substring(0, 500);
+    return sentences.slice(0, 3).join(" ").substring(0, 500);
   }
 
   /**
@@ -298,7 +298,7 @@ class AIDocumentService {
       const processingTimeMs = Date.now() - startTime;
 
       // Save insights to database
-      const { error } = await supabase.from('ai_document_insights').insert({
+      const { error } = await supabase.from("ai_document_insights").insert({
         document_id: documentId,
         extracted_text: extractedText,
         confidence_score: confidence,
@@ -309,25 +309,25 @@ class AIDocumentService {
         highlights,
         keywords,
         summary,
-        language: data.text.match(/[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F]/) ? 'other' : 'en',
+        language: data.text.match(/[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F]/) ? "other" : "en",
         processing_time_ms: processingTimeMs,
-        ocr_engine: 'tesseract',
-        model_version: '4.0.0'
+        ocr_engine: "tesseract",
+        model_version: "4.0.0"
       });
 
       if (error) {
-        console.error('Error saving document insights:', error);
+        console.error("Error saving document insights:", error);
       }
 
       // Update processing queue
       await supabase
-        .from('document_processing_queue')
+        .from("document_processing_queue")
         .update({ 
-          status: 'completed',
+          status: "completed",
           completed_at: new Date().toISOString()
         })
-        .eq('document_id', documentId)
-        .eq('status', 'processing');
+        .eq("document_id", documentId)
+        .eq("status", "processing");
 
       return {
         documentId,
@@ -340,7 +340,7 @@ class AIDocumentService {
         highlights,
         keywords,
         summary,
-        language: 'en',
+        language: "en",
         processingTimeMs
       };
     } catch (error) {
@@ -348,14 +348,14 @@ class AIDocumentService {
       
       // Update processing queue with error
       await supabase
-        .from('document_processing_queue')
+        .from("document_processing_queue")
         .update({ 
-          status: 'failed',
-          error_message: error instanceof Error ? error.message : 'Unknown error',
+          status: "failed",
+          error_message: error instanceof Error ? error.message : "Unknown error",
           completed_at: new Date().toISOString()
         })
-        .eq('document_id', documentId)
-        .eq('status', 'processing');
+        .eq("document_id", documentId)
+        .eq("status", "processing");
 
       throw error;
     }

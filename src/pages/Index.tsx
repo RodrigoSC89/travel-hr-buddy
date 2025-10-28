@@ -10,22 +10,22 @@ import { useState } from "react";
 
 // Dados mockados
 const revenueData = [
-  { month: 'Jan', revenue: 42000, target: 40000 },
-  { month: 'Fev', revenue: 48000, target: 45000 },
-  { month: 'Mar', revenue: 52000, target: 50000 },
-  { month: 'Abr', revenue: 58000, target: 55000 },
-  { month: 'Mai', revenue: 65000, target: 60000 },
-  { month: 'Jun', revenue: 72000, target: 70000 },
+  { month: "Jan", revenue: 42000, target: 40000 },
+  { month: "Fev", revenue: 48000, target: 45000 },
+  { month: "Mar", revenue: 52000, target: 50000 },
+  { month: "Abr", revenue: 58000, target: 55000 },
+  { month: "Mai", revenue: 65000, target: 60000 },
+  { month: "Jun", revenue: 72000, target: 70000 },
 ];
 
 const fleetData = [
-  { name: 'Operacional', value: 20, color: '#10b981' },
-  { name: 'Manutenção', value: 3, color: '#f59e0b' },
-  { name: 'Standby', value: 1, color: '#3b82f6' },
+  { name: "Operacional", value: 20, color: "#10b981" },
+  { name: "Manutenção", value: 3, color: "#f59e0b" },
+  { name: "Standby", value: 1, color: "#3b82f6" },
 ];
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-muted/20 min-h-screen">

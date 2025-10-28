@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Incident {
   id: string;
@@ -45,7 +45,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
               <span>{incident.title}</span>
               <Badge variant="outline">{incident.incident_number}</Badge>
             </DialogTitle>
-            <Badge variant={incident.severity === 'critical' ? 'destructive' : 'default'}>
+            <Badge variant={incident.severity === "critical" ? "destructive" : "default"}>
               {incident.severity}
             </Badge>
           </div>
@@ -65,14 +65,14 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
               </CardHeader>
               <CardContent className="space-y-3">
                 <div>
-                  <span className="font-medium">Status:</span>{' '}
-                  <Badge>{incident.status.replace('_', ' ')}</Badge>
+                  <span className="font-medium">Status:</span>{" "}
+                  <Badge>{incident.status.replace("_", " ")}</Badge>
                 </div>
                 <div>
                   <span className="font-medium">Category:</span> {incident.category}
                 </div>
                 <div>
-                  <span className="font-medium">Date:</span>{' '}
+                  <span className="font-medium">Date:</span>{" "}
                   {new Date(incident.incident_date).toLocaleString()}
                 </div>
                 {incident.incident_location && (

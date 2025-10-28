@@ -3,12 +3,12 @@
  * Displays network status and sync information
  */
 
-import { useNetworkStatus } from '@/hooks/useNetworkStatus';
-import { WifiOff, Wifi, CloudOff, Cloud, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { syncEngine } from '@/lib/syncEngine';
-import { toast } from 'sonner';
-import { useState } from 'react';
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
+import { WifiOff, Wifi, CloudOff, Cloud, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { syncEngine } from "@/lib/syncEngine";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export const OfflineBanner = () => {
   const { isOnline, wasOffline, pendingChanges } = useNetworkStatus();
@@ -21,7 +21,7 @@ export const OfflineBanner = () => {
 
   const handleManualSync = async () => {
     if (!isOnline) {
-      toast.error('Cannot sync while offline');
+      toast.error("Cannot sync while offline");
       return;
     }
 
@@ -29,8 +29,8 @@ export const OfflineBanner = () => {
     try {
       await syncEngine.pushLocalChanges();
     } catch (error) {
-      console.error('Manual sync failed:', error);
-      toast.error('Sync failed. Please try again.');
+      console.error("Manual sync failed:", error);
+      toast.error("Sync failed. Please try again.");
     } finally {
       setIsSyncing(false);
     }
@@ -40,8 +40,8 @@ export const OfflineBanner = () => {
     <div
       className={`fixed top-0 left-0 right-0 z-50 px-4 py-3 text-sm font-medium transition-all duration-300 ${
         isOnline
-          ? 'bg-green-600 text-white'
-          : 'bg-yellow-600 text-white'
+          ? "bg-green-600 text-white"
+          : "bg-yellow-600 text-white"
       }`}
       role="alert"
       aria-live="polite"

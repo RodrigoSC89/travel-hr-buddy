@@ -4,7 +4,7 @@
  */
 
 export interface Intent {
-  type: 'query' | 'command' | 'navigation' | 'checklist' | 'weather' | 'status' | 'unknown';
+  type: "query" | "command" | "navigation" | "checklist" | "weather" | "status" | "unknown";
   confidence: number;
   entities: Record<string, any>;
   action?: string;
@@ -66,10 +66,10 @@ class IntentParser {
     // Check for mission intent
     if (this.matchesPatterns(normalized, this.patterns.mission)) {
       return {
-        type: 'query',
+        type: "query",
         confidence: 0.9,
-        entities: { subject: 'mission' },
-        action: 'get_mission_status'
+        entities: { subject: "mission" },
+        action: "get_mission_status"
       };
     }
     
@@ -78,28 +78,28 @@ class IntentParser {
       const hasNavigate = /navigate to (.+)/i.exec(input);
       if (hasNavigate) {
         return {
-          type: 'navigation',
+          type: "navigation",
           confidence: 0.95,
           entities: { destination: hasNavigate[1] },
-          action: 'navigate_to'
+          action: "navigate_to"
         };
       }
       
       return {
-        type: 'query',
+        type: "query",
         confidence: 0.85,
-        entities: { subject: 'route' },
-        action: 'get_route_info'
+        entities: { subject: "route" },
+        action: "get_route_info"
       };
     }
     
     // Check for weather intent
     if (this.matchesPatterns(normalized, this.patterns.weather)) {
       return {
-        type: 'query',
+        type: "query",
         confidence: 0.9,
-        entities: { subject: 'weather' },
-        action: 'get_weather'
+        entities: { subject: "weather" },
+        action: "get_weather"
       };
     }
     
@@ -108,20 +108,20 @@ class IntentParser {
       const hasComplete = /complete|finish|mark.*complete/i.test(input);
       
       return {
-        type: hasComplete ? 'command' : 'query',
+        type: hasComplete ? "command" : "query",
         confidence: 0.85,
-        entities: { subject: 'checklist' },
-        action: hasComplete ? 'complete_checklist' : 'show_checklist'
+        entities: { subject: "checklist" },
+        action: hasComplete ? "complete_checklist" : "show_checklist"
       };
     }
     
     // Check for status intent
     if (this.matchesPatterns(normalized, this.patterns.status)) {
       return {
-        type: 'query',
+        type: "query",
         confidence: 0.8,
-        entities: { subject: 'status' },
-        action: 'get_system_status'
+        entities: { subject: "status" },
+        action: "get_system_status"
       };
     }
     
@@ -129,10 +129,10 @@ class IntentParser {
     const entities = this.extractEntities(input);
     
     return {
-      type: 'unknown',
+      type: "unknown",
       confidence: 0.3,
       entities,
-      action: 'general_query'
+      action: "general_query"
     };
   }
 
@@ -164,14 +164,14 @@ class IntentParser {
     
     // Extract location references
     if (/port|harbor|dock|shore/i.test(input)) {
-      entities.locationType = 'port';
+      entities.locationType = "port";
     }
     
     // Extract severity/priority
     if (/critical|urgent|emergency/i.test(input)) {
-      entities.priority = 'high';
+      entities.priority = "high";
     } else if (/important|soon/i.test(input)) {
-      entities.priority = 'medium';
+      entities.priority = "medium";
     }
     
     return entities;
@@ -182,29 +182,29 @@ class IntentParser {
    */
   getSuggestedActions(intent: Intent): string[] {
     switch (intent.type) {
-      case 'query':
-        if (intent.entities.subject === 'mission') {
-          return ['Show mission details', 'View progress', 'List tasks'];
-        }
-        if (intent.entities.subject === 'route') {
-          return ['Show map', 'Get ETA', 'View waypoints'];
-        }
-        if (intent.entities.subject === 'weather') {
-          return ['Current conditions', 'Forecast', 'Weather alerts'];
-        }
-        return ['View details', 'Get more info'];
+    case "query":
+      if (intent.entities.subject === "mission") {
+        return ["Show mission details", "View progress", "List tasks"];
+      }
+      if (intent.entities.subject === "route") {
+        return ["Show map", "Get ETA", "View waypoints"];
+      }
+      if (intent.entities.subject === "weather") {
+        return ["Current conditions", "Forecast", "Weather alerts"];
+      }
+      return ["View details", "Get more info"];
         
-      case 'command':
-        return ['Execute command', 'Confirm action', 'Cancel'];
+    case "command":
+      return ["Execute command", "Confirm action", "Cancel"];
         
-      case 'navigation':
-        return ['Calculate route', 'Start navigation', 'Set waypoint'];
+    case "navigation":
+      return ["Calculate route", "Start navigation", "Set waypoint"];
         
-      case 'checklist':
-        return ['Open checklist', 'Mark complete', 'Add note'];
+    case "checklist":
+      return ["Open checklist", "Mark complete", "Add note"];
         
-      default:
-        return ['Try again', 'Help', 'Cancel'];
+    default:
+      return ["Try again", "Help", "Cancel"];
     }
   }
 
@@ -213,23 +213,23 @@ class IntentParser {
    */
   getResponseTemplate(intent: Intent): string {
     switch (intent.action) {
-      case 'get_mission_status':
-        return 'Current mission status: [MISSION_STATUS]. Progress: [PROGRESS]%. [NEXT_TASK]';
+    case "get_mission_status":
+      return "Current mission status: [MISSION_STATUS]. Progress: [PROGRESS]%. [NEXT_TASK]";
         
-      case 'get_route_info':
-        return 'Current location: [LOCATION]. Heading: [HEADING]. ETA: [ETA]. Distance remaining: [DISTANCE]nm.';
+    case "get_route_info":
+      return "Current location: [LOCATION]. Heading: [HEADING]. ETA: [ETA]. Distance remaining: [DISTANCE]nm.";
         
-      case 'get_weather':
-        return 'Current weather: [CONDITIONS]. Temperature: [TEMP]°C. Wind: [WIND_SPEED] knots from [WIND_DIR]. Visibility: [VISIBILITY]km.';
+    case "get_weather":
+      return "Current weather: [CONDITIONS]. Temperature: [TEMP]°C. Wind: [WIND_SPEED] knots from [WIND_DIR]. Visibility: [VISIBILITY]km.";
         
-      case 'show_checklist':
-        return 'Active checklists: [CHECKLIST_COUNT]. Completed: [COMPLETED]/[TOTAL]. [NEXT_ITEM]';
+    case "show_checklist":
+      return "Active checklists: [CHECKLIST_COUNT]. Completed: [COMPLETED]/[TOTAL]. [NEXT_ITEM]";
         
-      case 'get_system_status':
-        return 'All systems operational. [CRITICAL_ITEMS] critical items. Last update: [LAST_UPDATE].';
+    case "get_system_status":
+      return "All systems operational. [CRITICAL_ITEMS] critical items. Last update: [LAST_UPDATE].";
         
-      default:
-        return 'I can help you with mission status, route information, weather updates, and checklists. What would you like to know?';
+    default:
+      return "I can help you with mission status, route information, weather updates, and checklists. What would you like to know?";
     }
   }
 }

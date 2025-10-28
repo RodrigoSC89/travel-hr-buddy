@@ -25,16 +25,16 @@ interface Incident {
   id: string;
   incident_number: string;
   title: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   category: string;
-  status: 'pending' | 'under_analysis' | 'resolved' | 'closed';
+  status: "pending" | "under_analysis" | "resolved" | "closed";
   incident_date: string;
   impact_level: string;
   description?: string;
 }
 
 const IncidentReports = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -48,19 +48,19 @@ const IncidentReports = () => {
   const fetchIncidents = async () => {
     try {
       const { data, error } = await supabase
-        .from('incident_reports')
-        .select('*')
-        .order('incident_date', { ascending: false });
+        .from("incident_reports")
+        .select("*")
+        .order("incident_date", { ascending: false });
 
       if (error) throw error;
 
       setIncidents(data || []);
     } catch (error) {
-      console.error('Error fetching incidents:', error);
+      console.error("Error fetching incidents:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load incidents',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load incidents",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -69,28 +69,28 @@ const IncidentReports = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+    case "critical": return "bg-red-500";
+    case "high": return "bg-orange-500";
+    case "medium": return "bg-yellow-500";
+    case "low": return "bg-green-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'closed': return 'text-gray-600';
-      case 'resolved': return 'text-green-600';
-      case 'under_analysis': return 'text-blue-600';
-      case 'pending': return 'text-yellow-600';
-      default: return 'text-gray-600';
+    case "closed": return "text-gray-600";
+    case "resolved": return "text-green-600";
+    case "under_analysis": return "text-blue-600";
+    case "pending": return "text-yellow-600";
+    default: return "text-gray-600";
     }
   };
 
   const stats = {
     total: incidents.length,
-    open: incidents.filter((i) => i.status === 'pending' || i.status === 'under_analysis').length,
-    resolved: incidents.filter((i) => i.status === 'resolved' || i.status === 'closed').length,
+    open: incidents.filter((i) => i.status === "pending" || i.status === "under_analysis").length,
+    resolved: incidents.filter((i) => i.status === "resolved" || i.status === "closed").length,
   };
 
   if (loading) {
@@ -205,7 +205,7 @@ const IncidentReports = () => {
                     </div>
                     <div className="flex items-center gap-3">
                       <Badge className={getStatusColor(incident.status)} variant="outline">
-                        {incident.status.replace('_', ' ')}
+                        {incident.status.replace("_", " ")}
                       </Badge>
                       <Button variant="ghost" size="sm">
                         <FileText className="h-4 w-4" />
@@ -257,7 +257,7 @@ const IncidentReports = () => {
                     </div>
                     <div className="text-right">
                       <Badge className={getStatusColor(incident.status)}>
-                        {incident.status.replace('_', ' ')}
+                        {incident.status.replace("_", " ")}
                       </Badge>
                       <div className="text-xs text-muted-foreground mt-2">
                         {new Date(incident.reported_date).toLocaleDateString()}

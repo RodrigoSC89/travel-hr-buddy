@@ -55,7 +55,7 @@ const SatelliteTracker = () => {
         description: `${orbits.length} satellites tracked`
       });
     } catch (error) {
-      console.error('Error fetching satellite orbits:', error);
+      console.error("Error fetching satellite orbits:", error);
       toast.error("Failed to update satellite positions");
     } finally {
       setIsLoadingSatellites(false);
@@ -76,7 +76,7 @@ const SatelliteTracker = () => {
         });
         setVessels(vesselData);
       } catch (error) {
-        console.error('Error fetching AIS data:', error);
+        console.error("Error fetching AIS data:", error);
       } finally {
         setIsLoadingVessels(false);
       }
@@ -177,7 +177,7 @@ const SatelliteTracker = () => {
           disabled={isLoadingSatellites}
           className="gap-2"
         >
-          <RefreshCw className={`h-4 w-4 ${isLoadingSatellites ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 ${isLoadingSatellites ? "animate-spin" : ""}`} />
           Atualizar
         </Button>
       </div>
@@ -191,7 +191,7 @@ const SatelliteTracker = () => {
           <CardContent>
             <div className="text-2xl font-bold">{satelliteOrbits.length}</div>
             <p className="text-xs text-muted-foreground">
-              {isLoadingSatellites ? 'Atualizando...' : 'Ativos'}
+              {isLoadingSatellites ? "Atualizando..." : "Ativos"}
             </p>
           </CardContent>
         </Card>
@@ -237,7 +237,7 @@ const SatelliteTracker = () => {
           <CardContent>
             <div className="text-2xl font-bold">{vessels.length}</div>
             <p className="text-xs text-muted-foreground">
-              {isLoadingVessels ? 'Carregando...' : 'Rastreadas'}
+              {isLoadingVessels ? "Carregando..." : "Rastreadas"}
             </p>
           </CardContent>
         </Card>

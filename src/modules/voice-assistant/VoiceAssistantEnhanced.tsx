@@ -28,12 +28,12 @@ export const VoiceAssistantEnhanced: React.FC = () => {
 
   useEffect(() => {
     // Initialize Web Speech API for browser-based recognition
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = 'en-US';
+      recognitionRef.current.lang = "en-US";
 
       recognitionRef.current.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
@@ -42,7 +42,7 @@ export const VoiceAssistantEnhanced: React.FC = () => {
       };
 
       recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
+        console.error("Speech recognition error:", event.error);
         toast({
           title: "Recognition Error",
           description: event.error,
@@ -78,7 +78,7 @@ export const VoiceAssistantEnhanced: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error('Error starting recording:', error);
+      console.error("Error starting recording:", error);
       toast({
         title: "Error",
         description: "Failed to start voice recording",
@@ -102,7 +102,7 @@ export const VoiceAssistantEnhanced: React.FC = () => {
 
     setIsProcessing(true);
     try {
-      const { data, error } = await supabase.rpc('process_voice_command', {
+      const { data, error } = await supabase.rpc("process_voice_command", {
         p_transcript: transcript,
         p_user_id: (await supabase.auth.getUser()).data.user?.id,
         p_session_id: sessionId,
@@ -128,7 +128,7 @@ export const VoiceAssistantEnhanced: React.FC = () => {
         description: `Intent: ${data.intent} (${(data.confidence * 100).toFixed(0)}% confidence)`,
       });
     } catch (error) {
-      console.error('Command processing error:', error);
+      console.error("Command processing error:", error);
       toast({
         title: "Processing Failed",
         description: error.message || "Failed to process voice command",
@@ -142,7 +142,7 @@ export const VoiceAssistantEnhanced: React.FC = () => {
   const speakResponse = async (text: string) => {
     try {
       // Try Web Speech Synthesis API first (browser-based)
-      if ('speechSynthesis' in window) {
+      if ("speechSynthesis" in window) {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.rate = 1.0;
         utterance.pitch = 1.0;
@@ -157,14 +157,14 @@ export const VoiceAssistantEnhanced: React.FC = () => {
         const response = await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-respond`,
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Authorization': `Bearer ${session.access_token}`,
-              'Content-Type': 'application/json',
+              "Authorization": `Bearer ${session.access_token}`,
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
               text: text.substring(0, 4000), // Limit to 4000 chars
-              voice: 'nova',
+              voice: "nova",
               speed: 1.0,
             }),
           }
@@ -177,7 +177,7 @@ export const VoiceAssistantEnhanced: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error('TTS error:', error);
+      console.error("TTS error:", error);
     }
   };
 

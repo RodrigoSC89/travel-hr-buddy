@@ -43,7 +43,7 @@ export const FuelOptimizerAI: React.FC = () => {
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.rpc('optimize_fuel_plan', {
+      const { data, error } = await supabase.rpc("optimize_fuel_plan", {
         p_route_id: routeId,
         p_cargo_weight: parseFloat(cargoWeight) || 0,
         p_weather_condition: weatherCondition,
@@ -60,7 +60,7 @@ export const FuelOptimizerAI: React.FC = () => {
         description: `Potential savings: ${data.fuel_savings_percentage.toFixed(2)}%`,
       });
     } catch (error) {
-      console.error('Optimization error:', error);
+      console.error("Optimization error:", error);
       toast({
         title: "Optimization Failed",
         description: error.message || "Failed to optimize fuel plan",
@@ -206,7 +206,7 @@ export const FuelOptimizerAI: React.FC = () => {
               <div className="pt-3 border-t">
                 <span className="text-sm font-semibold">Optimization Level:</span>
                 <p className="text-sm text-muted-foreground capitalize">
-                  {result.optimization_level.replace(/_/g, ' ')}
+                  {result.optimization_level.replace(/_/g, " ")}
                 </p>
               </div>
             </CardContent>

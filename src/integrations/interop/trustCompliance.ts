@@ -7,7 +7,7 @@ export interface TrustEvent {
   event_type: string;
   trust_impact: number; // positive or negative change
   details: any;
-  severity?: 'info' | 'warning' | 'critical';
+  severity?: "info" | "warning" | "critical";
 }
 
 export interface TrustValidationResult {
@@ -37,9 +37,9 @@ export async function validateEntityTrust(
   action: string
 ): Promise<TrustValidationResult> {
   const { data: entity, error } = await supabase
-    .from('external_entities')
-    .select('*')
-    .eq('entity_id', entityId)
+    .from("external_entities")
+    .select("*")
+    .eq("entity_id", entityId)
     .single();
 
   if (error || !entity) {
@@ -47,8 +47,8 @@ export async function validateEntityTrust(
       valid: false,
       trust_score: 0,
       blocked: true,
-      reason: 'Entity not found',
-      warnings: ['Entity does not exist in registry']
+      reason: "Entity not found",
+      warnings: ["Entity does not exist in registry"]
     };
   }
 
@@ -58,17 +58,17 @@ export async function validateEntityTrust(
   // Trust score thresholds
   if (entity.trust_score < 30) {
     blocked = true;
-    warnings.push('Trust score critically low - entity blocked');
+    warnings.push("Trust score critically low - entity blocked");
   } else if (entity.trust_score < 50) {
-    warnings.push('Trust score below recommended threshold');
+    warnings.push("Trust score below recommended threshold");
   }
 
   // Status check
-  if (entity.status === 'suspended') {
+  if (entity.status === "suspended") {
     blocked = true;
-    warnings.push('Entity is currently suspended');
-  } else if (entity.status === 'inactive') {
-    warnings.push('Entity is marked as inactive');
+    warnings.push("Entity is currently suspended");
+  } else if (entity.status === "inactive") {
+    warnings.push("Entity is marked as inactive");
   }
 
   return {
@@ -84,9 +84,9 @@ export async function validateEntityTrust(
 export async function recordTrustEvent(event: TrustEvent): Promise<void> {
   // Get current entity trust score
   const { data: entity } = await supabase
-    .from('external_entities')
-    .select('trust_score')
-    .eq('entity_id', event.entity_id)
+    .from("external_entities")
+    .select("trust_score")
+    .eq("entity_id", event.entity_id)
     .single();
 
   if (!entity) {
@@ -98,18 +98,18 @@ export async function recordTrustEvent(event: TrustEvent): Promise<void> {
 
   // Update entity trust score
   await supabase
-    .from('external_entities')
+    .from("external_entities")
     .update({ trust_score: newScore })
-    .eq('entity_id', event.entity_id);
+    .eq("entity_id", event.entity_id);
 
   // Log the trust event
-  await supabase.from('trust_events').insert({
+  await supabase.from("trust_events").insert({
     entity_id: event.entity_id,
     event_type: event.event_type,
     trust_score_before: oldScore,
     trust_score_after: newScore,
     details: event.details,
-    severity: event.severity || 'info'
+    severity: event.severity || "info"
   });
 }
 
@@ -119,10 +119,10 @@ export async function getTrustEvents(
   limit: number = 50
 ) {
   const { data, error } = await supabase
-    .from('trust_events')
-    .select('*')
-    .eq('entity_id', entityId)
-    .order('created_at', { ascending: false })
+    .from("trust_events")
+    .select("*")
+    .eq("entity_id", entityId)
+    .order("created_at", { ascending: false })
     .limit(limit);
 
   if (error) throw error;
@@ -146,19 +146,19 @@ export function validateTrustInput(input: any): { valid: boolean; errors: string
   const errors: string[] = [];
 
   if (!input.entity_id) {
-    errors.push('Missing entity_id');
+    errors.push("Missing entity_id");
   }
 
   if (!input.event_type) {
-    errors.push('Missing event_type');
+    errors.push("Missing event_type");
   }
 
-  if (typeof input.trust_impact !== 'number') {
-    errors.push('Missing or invalid trust_impact');
+  if (typeof input.trust_impact !== "number") {
+    errors.push("Missing or invalid trust_impact");
   }
 
   if (input.trust_impact && Math.abs(input.trust_impact) > 50) {
-    errors.push('Trust impact too large (max ±50)');
+    errors.push("Trust impact too large (max ±50)");
   }
 
   return {
@@ -172,7 +172,7 @@ export async function checkTrustAlerts(entityId: string): Promise<{
   should_alert: boolean;
   alerts: string[];
 }> {
-  const validation = await validateEntityTrust(entityId, 'check');
+  const validation = await validateEntityTrust(entityId, "check");
   const alerts: string[] = [];
 
   if (validation.trust_score < 30) {

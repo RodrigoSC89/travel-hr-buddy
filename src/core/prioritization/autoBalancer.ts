@@ -6,14 +6,14 @@
  * Reads system state, applies intelligent rebalancing algorithms, and logs all changes.
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface Priority {
   moduleId: string;
   taskId?: string;
   priority: number; // 0-100
   weight: number; // 0-1
-  criticality: 'low' | 'medium' | 'high' | 'critical';
+  criticality: "low" | "medium" | "high" | "critical";
 }
 
 export interface GlobalContext {
@@ -22,8 +22,8 @@ export interface GlobalContext {
   availableResources: number;
   criticalDeadlines: number;
   userActivity: number;
-  timeOfDay: 'night' | 'morning' | 'afternoon' | 'evening';
-  dayOfWeek: 'weekday' | 'weekend';
+  timeOfDay: "night" | "morning" | "afternoon" | "evening";
+  dayOfWeek: "weekday" | "weekend";
   emergencyMode: boolean;
 }
 
@@ -65,11 +65,11 @@ export class AutoPriorityBalancer {
     const dayOfWeek = now.getDay();
 
     // Determine time of day
-    let timeOfDay: GlobalContext['timeOfDay'];
-    if (hour >= 0 && hour < 6) timeOfDay = 'night';
-    else if (hour >= 6 && hour < 12) timeOfDay = 'morning';
-    else if (hour >= 12 && hour < 18) timeOfDay = 'afternoon';
-    else timeOfDay = 'evening';
+    let timeOfDay: GlobalContext["timeOfDay"];
+    if (hour >= 0 && hour < 6) timeOfDay = "night";
+    else if (hour >= 6 && hour < 12) timeOfDay = "morning";
+    else if (hour >= 12 && hour < 18) timeOfDay = "afternoon";
+    else timeOfDay = "evening";
 
     // Fetch system metrics from various sources
     const [incidents, resources, systemMetrics] = await Promise.all([
@@ -85,7 +85,7 @@ export class AutoPriorityBalancer {
       criticalDeadlines: await this.countCriticalDeadlines(),
       userActivity: systemMetrics.activeUsers,
       timeOfDay,
-      dayOfWeek: (dayOfWeek === 0 || dayOfWeek === 6) ? 'weekend' : 'weekday',
+      dayOfWeek: (dayOfWeek === 0 || dayOfWeek === 6) ? "weekend" : "weekday",
       emergencyMode: incidents.hasEmergency || systemMetrics.load > 90,
     };
   }
@@ -148,9 +148,9 @@ export class AutoPriorityBalancer {
         timestamp: shift.timestamp,
       }));
 
-      await supabase.from('priority_shifts').insert(records);
+      await supabase.from("priority_shifts").insert(records);
     } catch (error) {
-      console.error('Failed to log priority shifts:', error);
+      console.error("Failed to log priority shifts:", error);
     }
   }
 
@@ -160,15 +160,15 @@ export class AutoPriorityBalancer {
    */
   private emergencyModeStrategy(): BalancingStrategy {
     return {
-      name: 'Emergency Mode',
-      description: 'Elevate critical tasks during emergencies',
+      name: "Emergency Mode",
+      description: "Elevate critical tasks during emergencies",
       apply: (priorities: Priority[], context: GlobalContext) => {
         if (!context.emergencyMode) return priorities;
 
         return priorities.map(p => {
-          if (p.criticality === 'critical') {
+          if (p.criticality === "critical") {
             return { ...p, priority: Math.min(100, p.priority + 30) };
-          } else if (p.criticality === 'low') {
+          } else if (p.criticality === "low") {
             return { ...p, priority: Math.max(0, p.priority - 20) };
           }
           return p;
@@ -183,8 +183,8 @@ export class AutoPriorityBalancer {
    */
   private loadBalancingStrategy(): BalancingStrategy {
     return {
-      name: 'Load Balancing',
-      description: 'Distribute priorities to prevent overload',
+      name: "Load Balancing",
+      description: "Distribute priorities to prevent overload",
       apply: (priorities: Priority[], context: GlobalContext) => {
         if (context.systemLoad < 70) return priorities;
 
@@ -192,7 +192,7 @@ export class AutoPriorityBalancer {
         const loadFactor = (context.systemLoad - 70) / 30; // 0 to 1
         
         return priorities.map(p => {
-          if (p.criticality !== 'critical') {
+          if (p.criticality !== "critical") {
             const reduction = Math.floor(loadFactor * 15);
             return { ...p, priority: Math.max(0, p.priority - reduction) };
           }
@@ -208,8 +208,8 @@ export class AutoPriorityBalancer {
    */
   private deadlineProximityStrategy(): BalancingStrategy {
     return {
-      name: 'Deadline Proximity',
-      description: 'Boost priority for tasks near deadlines',
+      name: "Deadline Proximity",
+      description: "Boost priority for tasks near deadlines",
       apply: (priorities: Priority[], context: GlobalContext) => {
         if (context.criticalDeadlines === 0) return priorities;
 
@@ -217,7 +217,7 @@ export class AutoPriorityBalancer {
         const urgencyFactor = Math.min(1, context.criticalDeadlines / 5);
         
         return priorities.map(p => {
-          if (p.criticality === 'high' || p.criticality === 'critical') {
+          if (p.criticality === "high" || p.criticality === "critical") {
             const boost = Math.floor(urgencyFactor * 20);
             return { ...p, priority: Math.min(100, p.priority + boost) };
           }
@@ -233,8 +233,8 @@ export class AutoPriorityBalancer {
    */
   private resourceOptimizationStrategy(): BalancingStrategy {
     return {
-      name: 'Resource Optimization',
-      description: 'Optimize priorities based on resource availability',
+      name: "Resource Optimization",
+      description: "Optimize priorities based on resource availability",
       apply: (priorities: Priority[], context: GlobalContext) => {
         // When resources are scarce, focus on high-value tasks
         const resourceScarcity = context.availableResources < 30;
@@ -260,18 +260,18 @@ export class AutoPriorityBalancer {
    */
   private circadianRhythmStrategy(): BalancingStrategy {
     return {
-      name: 'Circadian Rhythm',
-      description: 'Adjust priorities based on time patterns',
+      name: "Circadian Rhythm",
+      description: "Adjust priorities based on time patterns",
       apply: (priorities: Priority[], context: GlobalContext) => {
         // During off-hours, reduce non-critical priorities
         const isOffHours = 
-          context.timeOfDay === 'night' || 
-          context.dayOfWeek === 'weekend';
+          context.timeOfDay === "night" || 
+          context.dayOfWeek === "weekend";
 
         if (!isOffHours) return priorities;
 
         return priorities.map(p => {
-          if (p.criticality === 'low' || p.criticality === 'medium') {
+          if (p.criticality === "low" || p.criticality === "medium") {
             return { ...p, priority: Math.max(0, p.priority - 15) };
           }
           return p;
@@ -287,7 +287,7 @@ export class AutoPriorityBalancer {
     let confidence = 0.7;
 
     // Higher confidence in emergency mode
-    if (context.emergencyMode && strategy.name === 'Emergency Mode') {
+    if (context.emergencyMode && strategy.name === "Emergency Mode") {
       confidence = 0.95;
     }
 
@@ -307,18 +307,18 @@ export class AutoPriorityBalancer {
   private async fetchActiveIncidents(): Promise<{ count: number; hasEmergency: boolean }> {
     try {
       const { data, error } = await supabase
-        .from('dp_incidents')
-        .select('id, severity')
-        .eq('status', 'open');
+        .from("dp_incidents")
+        .select("id, severity")
+        .eq("status", "open");
 
       if (error) throw error;
 
       return {
         count: data?.length || 0,
-        hasEmergency: data?.some(i => i.severity === 'critical') || false,
+        hasEmergency: data?.some(i => i.severity === "critical") || false,
       };
     } catch (error) {
-      console.error('Failed to fetch incidents:', error);
+      console.error("Failed to fetch incidents:", error);
       return { count: 0, hasEmergency: false };
     }
   }
@@ -352,16 +352,16 @@ export class AutoPriorityBalancer {
       tomorrow.setDate(tomorrow.getDate() + 1);
 
       const { data, error } = await supabase
-        .from('jobs')
-        .select('id')
-        .lte('due_date', tomorrow.toISOString())
-        .eq('status', 'pending');
+        .from("jobs")
+        .select("id")
+        .lte("due_date", tomorrow.toISOString())
+        .eq("status", "pending");
 
       if (error) throw error;
 
       return data?.length || 0;
     } catch (error) {
-      console.error('Failed to count deadlines:', error);
+      console.error("Failed to count deadlines:", error);
       return 0;
     }
   }
@@ -375,10 +375,10 @@ export class AutoPriorityBalancer {
   ): Promise<PriorityShift[]> {
     try {
       const { data, error } = await supabase
-        .from('priority_shifts')
-        .select('*')
-        .eq('module_id', moduleId)
-        .order('timestamp', { ascending: false })
+        .from("priority_shifts")
+        .select("*")
+        .eq("module_id", moduleId)
+        .order("timestamp", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
@@ -393,7 +393,7 @@ export class AutoPriorityBalancer {
         timestamp: d.timestamp,
       })) || [];
     } catch (error) {
-      console.error('Failed to fetch priority history:', error);
+      console.error("Failed to fetch priority history:", error);
       return [];
     }
   }

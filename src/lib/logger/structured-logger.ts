@@ -11,7 +11,7 @@
 const isDevelopment = import.meta.env.DEV;
 const isProduction = import.meta.env.PROD;
 
-type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+type LogLevel = "debug" | "info" | "warn" | "error";
 
 interface LogEntry {
   timestamp: string;
@@ -23,7 +23,7 @@ interface LogEntry {
     stack?: string;
     name?: string;
   };
-  environment: 'development' | 'production';
+  environment: "development" | "production";
   session?: string;
 }
 
@@ -43,8 +43,8 @@ class StructuredLogger {
     this.sessionId = this.generateSessionId();
     this.config = {
       enabledLevels: isDevelopment 
-        ? ['debug', 'info', 'warn', 'error'] 
-        : ['warn', 'error'],
+        ? ["debug", "info", "warn", "error"] 
+        : ["warn", "error"],
       sendToMonitoring: isProduction,
       includeStack: isDevelopment,
     };
@@ -64,7 +64,7 @@ class StructuredLogger {
       timestamp: new Date().toISOString(),
       level,
       message,
-      environment: isDevelopment ? 'development' : 'production',
+      environment: isDevelopment ? "development" : "production",
       session: this.sessionId,
     };
 
@@ -101,11 +101,11 @@ class StructuredLogger {
 
     try {
       // Send to Sentry for errors
-      if (entry.level === 'error' && typeof window !== 'undefined') {
+      if (entry.level === "error" && typeof window !== "undefined") {
         const Sentry = (window as any).Sentry;
         if (Sentry && entry.error) {
           Sentry.captureMessage(entry.message, {
-            level: 'error',
+            level: "error",
             extra: {
               ...entry.context,
               timestamp: entry.timestamp,
@@ -120,7 +120,7 @@ class StructuredLogger {
     } catch (error) {
       // Fail silently - never throw from logger
       if (isDevelopment) {
-        console.warn('[Logger] Failed to send to monitoring:', error);
+        console.warn("[Logger] Failed to send to monitoring:", error);
       }
     }
   }
@@ -128,17 +128,17 @@ class StructuredLogger {
   private outputLog(entry: LogEntry): void {
     // In production, ONLY output errors and warnings to console
     // All other logs are completely suppressed
-    if (isProduction && !['error', 'warn'].includes(entry.level)) {
+    if (isProduction && !["error", "warn"].includes(entry.level)) {
       return;
     }
 
     // In development, use console with colors
     if (isDevelopment) {
       const emoji = {
-        debug: '🐛',
-        info: 'ℹ️',
-        warn: '⚠️',
-        error: '❌',
+        debug: "🐛",
+        info: "ℹ️",
+        warn: "⚠️",
+        error: "❌",
       }[entry.level];
 
       const consoleMethod = {
@@ -151,53 +151,53 @@ class StructuredLogger {
       consoleMethod(`${emoji} [${entry.level.toUpperCase()}] ${entry.message}`);
       
       if (entry.context) {
-        consoleMethod('Context:', JSON.stringify(entry.context, null, 2));
+        consoleMethod("Context:", JSON.stringify(entry.context, null, 2));
       }
       
       if (entry.error) {
-        consoleMethod('Error:', JSON.stringify(entry.error, null, 2));
+        consoleMethod("Error:", JSON.stringify(entry.error, null, 2));
       }
     } else {
       // In production, use structured JSON format for log aggregation
       // Only for errors and warnings
-      if (entry.level === 'error' || entry.level === 'warn') {
+      if (entry.level === "error" || entry.level === "warn") {
         console.error(JSON.stringify(entry));
       }
     }
   }
 
   public debug(message: string, context?: Record<string, unknown>): void {
-    if (!this.shouldLog('debug')) return;
+    if (!this.shouldLog("debug")) return;
 
-    const entry = this.createLogEntry('debug', message, context);
+    const entry = this.createLogEntry("debug", message, context);
     this.addToBuffer(entry);
     this.outputLog(entry);
   }
 
   public info(message: string, context?: Record<string, unknown>): void {
-    if (!this.shouldLog('info')) return;
+    if (!this.shouldLog("info")) return;
 
-    const entry = this.createLogEntry('info', message, context);
+    const entry = this.createLogEntry("info", message, context);
     this.addToBuffer(entry);
     this.outputLog(entry);
   }
 
   public warn(message: string, context?: Record<string, unknown>): void {
-    if (!this.shouldLog('warn')) return;
+    if (!this.shouldLog("warn")) return;
 
-    const entry = this.createLogEntry('warn', message, context);
+    const entry = this.createLogEntry("warn", message, context);
     this.addToBuffer(entry);
     this.outputLog(entry);
     this.sendToMonitoring(entry);
   }
 
   public error(message: string, error?: Error | unknown, context?: Record<string, unknown>): void {
-    if (!this.shouldLog('error')) return;
+    if (!this.shouldLog("error")) return;
 
     const errorObj = error instanceof Error ? error : undefined;
     const errorContext = error && !(error instanceof Error) ? { error } : context;
 
-    const entry = this.createLogEntry('error', message, errorContext, errorObj);
+    const entry = this.createLogEntry("error", message, errorContext, errorObj);
     this.addToBuffer(entry);
     this.outputLog(entry);
     this.sendToMonitoring(entry);
@@ -233,18 +233,18 @@ class StructuredLogger {
    */
   public log(level: LogLevel, message: string, context?: Record<string, unknown>): void {
     switch (level) {
-      case 'debug':
-        this.debug(message, context);
-        break;
-      case 'info':
-        this.info(message, context);
-        break;
-      case 'warn':
-        this.warn(message, context);
-        break;
-      case 'error':
-        this.error(message, undefined, context);
-        break;
+    case "debug":
+      this.debug(message, context);
+      break;
+    case "info":
+      this.info(message, context);
+      break;
+    case "warn":
+      this.warn(message, context);
+      break;
+    case "error":
+      this.error(message, undefined, context);
+      break;
     }
   }
 }

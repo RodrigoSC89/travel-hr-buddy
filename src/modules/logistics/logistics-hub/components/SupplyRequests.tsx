@@ -39,23 +39,23 @@ export const SupplyRequests = () => {
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    category: '',
-    priority: 'normal',
-    justification: '',
-    items: [{ item_name: '', quantity: 1, unit: '', description: '' }]
+    category: "",
+    priority: "normal",
+    justification: "",
+    items: [{ item_name: "", quantity: 1, unit: "", description: "" }]
   });
 
   useEffect(() => {
     loadRequests();
     
     const channel = supabase
-      .channel('supply_requests_changes')
+      .channel("supply_requests_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'supply_requests'
+          event: "*",
+          schema: "public",
+          table: "supply_requests"
         },
         () => {
           loadRequests();
@@ -71,15 +71,15 @@ export const SupplyRequests = () => {
   const loadRequests = async () => {
     try {
       const { data, error } = await supabase
-        .from('supply_requests')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("supply_requests")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
       setRequests(data || []);
     } catch (error: any) {
-      console.error('Error loading supply requests:', error);
+      console.error("Error loading supply requests:", error);
       toast({
         title: "Error loading requests",
         description: error.message,
@@ -93,13 +93,13 @@ export const SupplyRequests = () => {
   const createRequest = async () => {
     try {
       const { error } = await supabase
-        .from('supply_requests')
+        .from("supply_requests")
         .insert({
           category: formData.category,
           priority: formData.priority,
           justification: formData.justification,
           items: formData.items,
-          status: 'pending'
+          status: "pending"
         });
 
       if (error) throw error;
@@ -111,10 +111,10 @@ export const SupplyRequests = () => {
 
       setShowNewRequest(false);
       setFormData({
-        category: '',
-        priority: 'normal',
-        justification: '',
-        items: [{ item_name: '', quantity: 1, unit: '', description: '' }]
+        category: "",
+        priority: "normal",
+        justification: "",
+        items: [{ item_name: "", quantity: 1, unit: "", description: "" }]
       });
       loadRequests();
     } catch (error: any) {
@@ -129,12 +129,12 @@ export const SupplyRequests = () => {
   const approveRequest = async (requestId: string) => {
     try {
       const { error } = await supabase
-        .from('supply_requests')
+        .from("supply_requests")
         .update({
-          status: 'approved',
+          status: "approved",
           approved_at: new Date().toISOString()
         })
-        .eq('id', requestId);
+        .eq("id", requestId);
 
       if (error) throw error;
 
@@ -156,12 +156,12 @@ export const SupplyRequests = () => {
   const rejectRequest = async (requestId: string) => {
     try {
       const { error } = await supabase
-        .from('supply_requests')
+        .from("supply_requests")
         .update({
-          status: 'rejected',
-          rejection_reason: 'Rejected by user'
+          status: "rejected",
+          rejection_reason: "Rejected by user"
         })
-        .eq('id', requestId);
+        .eq("id", requestId);
 
       if (error) throw error;
 
@@ -182,46 +182,46 @@ export const SupplyRequests = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'approved':
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case 'rejected':
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'pending':
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      default:
-        return <ClipboardList className="h-4 w-4 text-gray-500" />;
+    case "approved":
+      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+    case "rejected":
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    case "pending":
+      return <Clock className="h-4 w-4 text-yellow-500" />;
+    default:
+      return <ClipboardList className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'approved':
-        return <Badge className="bg-green-500">Approved</Badge>;
-      case 'rejected':
-        return <Badge variant="destructive">Rejected</Badge>;
-      case 'pending':
-        return <Badge variant="secondary">Pending</Badge>;
-      case 'in_progress':
-        return <Badge className="bg-blue-500">In Progress</Badge>;
-      case 'completed':
-        return <Badge>Completed</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "approved":
+      return <Badge className="bg-green-500">Approved</Badge>;
+    case "rejected":
+      return <Badge variant="destructive">Rejected</Badge>;
+    case "pending":
+      return <Badge variant="secondary">Pending</Badge>;
+    case "in_progress":
+      return <Badge className="bg-blue-500">In Progress</Badge>;
+    case "completed":
+      return <Badge>Completed</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case 'urgent':
-        return <Badge variant="destructive">Urgent</Badge>;
-      case 'high':
-        return <Badge className="bg-orange-500">High</Badge>;
-      case 'normal':
-        return <Badge variant="secondary">Normal</Badge>;
-      case 'low':
-        return <Badge variant="outline">Low</Badge>;
-      default:
-        return <Badge variant="outline">{priority}</Badge>;
+    case "urgent":
+      return <Badge variant="destructive">Urgent</Badge>;
+    case "high":
+      return <Badge className="bg-orange-500">High</Badge>;
+    case "normal":
+      return <Badge variant="secondary">Normal</Badge>;
+    case "low":
+      return <Badge variant="outline">Low</Badge>;
+    default:
+      return <Badge variant="outline">{priority}</Badge>;
     }
   };
 
@@ -351,7 +351,7 @@ export const SupplyRequests = () => {
                       className="mt-2"
                       onClick={() => setFormData({
                         ...formData,
-                        items: [...formData.items, { item_name: '', quantity: 1, unit: '', description: '' }]
+                        items: [...formData.items, { item_name: "", quantity: 1, unit: "", description: "" }]
                       })}
                     >
                       Add Item
@@ -399,12 +399,12 @@ export const SupplyRequests = () => {
                           </p>
                           <div className="text-sm">
                             <p className="text-muted-foreground">
-                              {request.items?.length || 0} items • Created {format(new Date(request.created_at), 'dd/MM/yyyy')}
+                              {request.items?.length || 0} items • Created {format(new Date(request.created_at), "dd/MM/yyyy")}
                             </p>
                           </div>
                         </div>
                       </div>
-                      {request.status === 'pending' && (
+                      {request.status === "pending" && (
                         <div className="flex gap-2">
                           <Button
                             size="sm"

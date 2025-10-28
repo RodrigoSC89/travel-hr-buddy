@@ -11,26 +11,26 @@ import * as protocolAdapter from "@/core/interop/protocolAdapter";
 
 // Mission Types
 export type MissionType = 
-  | 'surveillance'
-  | 'rescue'
-  | 'transport'
-  | 'maintenance'
-  | 'training'
-  | 'combat'
-  | 'humanitarian'
-  | 'intelligence';
+  | "surveillance"
+  | "rescue"
+  | "transport"
+  | "maintenance"
+  | "training"
+  | "combat"
+  | "humanitarian"
+  | "intelligence";
 
 export type MissionStatus = 
-  | 'planning'
-  | 'assigned'
-  | 'executing'
-  | 'paused'
-  | 'completed'
-  | 'failed'
-  | 'cancelled';
+  | "planning"
+  | "assigned"
+  | "executing"
+  | "paused"
+  | "completed"
+  | "failed"
+  | "cancelled";
 
-export type MissionPriority = 'low' | 'medium' | 'high' | 'critical' | 'emergency';
-export type SyncStatus = 'pending' | 'synced' | 'partial' | 'failed';
+export type MissionPriority = "low" | "medium" | "high" | "critical" | "emergency";
+export type SyncStatus = "pending" | "synced" | "partial" | "failed";
 
 // Task Interface
 export interface MissionTask {
@@ -40,7 +40,7 @@ export interface MissionTask {
   type: string;
   priority: MissionPriority;
   assignedTo?: string; // Entity ID
-  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  status: "pending" | "in_progress" | "completed" | "failed";
   startTime?: Date;
   endTime?: Date;
   estimatedDuration?: number; // hours
@@ -51,12 +51,12 @@ export interface MissionTask {
 // External Entity (system, vessel, unit, etc.)
 export interface ExternalEntity {
   id: string;
-  type: 'system' | 'vessel' | 'aircraft' | 'unit' | 'station';
+  type: "system" | "vessel" | "aircraft" | "unit" | "station";
   name: string;
   protocol: protocolAdapter.ProtocolType;
   endpoint?: string;
   capabilities: string[];
-  status: 'available' | 'busy' | 'offline';
+  status: "available" | "busy" | "offline";
   metadata?: Record<string, any>;
 }
 
@@ -105,7 +105,7 @@ export interface SyncResult {
  * Create a new joint mission
  */
 export async function createMission(
-  mission: Omit<JointMission, 'id' | 'completionPercentage' | 'syncStatus' | 'syncErrors'>
+  mission: Omit<JointMission, "id" | "completionPercentage" | "syncStatus" | "syncErrors">
 ): Promise<{ success: boolean; missionId?: string; error?: string }> {
   logger.info(`[JointTasking] Creating mission: ${mission.name}`);
 
@@ -116,12 +116,12 @@ export async function createMission(
       ...mission,
       id: missionId,
       completionPercentage: 0,
-      syncStatus: 'pending',
+      syncStatus: "pending",
       syncErrors: [],
     };
 
     // Store in database
-    const { error } = await supabase.from('joint_mission_log').insert({
+    const { error } = await supabase.from("joint_mission_log").insert({
       mission_id: newMission.id,
       mission_name: newMission.name,
       mission_type: newMission.type,
@@ -142,7 +142,7 @@ export async function createMission(
     });
 
     if (error) {
-      logger.error('[JointTasking] Database error:', error);
+      logger.error("[JointTasking] Database error:", error);
       return { success: false, error: error.message };
     }
 
@@ -150,7 +150,7 @@ export async function createMission(
     return { success: true, missionId };
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error);
-    logger.error('[JointTasking] Failed to create mission:', error);
+    logger.error("[JointTasking] Failed to create mission:", error);
     return { success: false, error: errorMsg };
   }
 }
@@ -160,65 +160,65 @@ export async function createMission(
  */
 export function divideMission(
   mission: JointMission,
-  divisionStrategy: 'capability' | 'priority' | 'sequential' = 'capability'
+  divisionStrategy: "capability" | "priority" | "sequential" = "capability"
 ): MissionTask[] {
   logger.info(`[JointTasking] Dividing mission ${mission.id} using ${divisionStrategy} strategy`);
 
   const tasks: MissionTask[] = [];
 
   switch (divisionStrategy) {
-    case 'capability':
-      // Divide based on entity capabilities
-      mission.externalEntities.forEach((entity, index) => {
-        entity.capabilities.forEach(capability => {
-          tasks.push({
-            id: `task-${mission.id}-${index}-${capability}`,
-            name: `${capability} Task`,
-            description: `Execute ${capability} for ${mission.name}`,
-            type: capability,
-            priority: mission.priority,
-            status: 'pending',
-            metadata: {
-              entityId: entity.id,
-              capability,
-            },
-          });
-        });
-      });
-      break;
-
-    case 'priority':
-      // Create tasks by priority levels
-      const priorities: MissionPriority[] = ['emergency', 'critical', 'high', 'medium', 'low'];
-      priorities.forEach((priority, index) => {
-        if (index <= priorities.indexOf(mission.priority)) {
-          tasks.push({
-            id: `task-${mission.id}-p${index}`,
-            name: `${priority.toUpperCase()} Priority Task`,
-            description: `Handle ${priority} priority aspects of ${mission.name}`,
-            type: 'general',
-            priority,
-            status: 'pending',
-          });
-        }
-      });
-      break;
-
-    case 'sequential':
-      // Create sequential tasks
-      const phases = ['preparation', 'execution', 'completion'];
-      phases.forEach((phase, index) => {
+  case "capability":
+    // Divide based on entity capabilities
+    mission.externalEntities.forEach((entity, index) => {
+      entity.capabilities.forEach(capability => {
         tasks.push({
-          id: `task-${mission.id}-s${index}`,
-          name: `${phase.charAt(0).toUpperCase() + phase.slice(1)} Phase`,
-          description: `${phase} phase for ${mission.name}`,
-          type: phase,
+          id: `task-${mission.id}-${index}-${capability}`,
+          name: `${capability} Task`,
+          description: `Execute ${capability} for ${mission.name}`,
+          type: capability,
           priority: mission.priority,
-          status: 'pending',
-          dependencies: index > 0 ? [`task-${mission.id}-s${index - 1}`] : undefined,
+          status: "pending",
+          metadata: {
+            entityId: entity.id,
+            capability,
+          },
         });
       });
-      break;
+    });
+    break;
+
+  case "priority":
+    // Create tasks by priority levels
+    const priorities: MissionPriority[] = ["emergency", "critical", "high", "medium", "low"];
+    priorities.forEach((priority, index) => {
+      if (index <= priorities.indexOf(mission.priority)) {
+        tasks.push({
+          id: `task-${mission.id}-p${index}`,
+          name: `${priority.toUpperCase()} Priority Task`,
+          description: `Handle ${priority} priority aspects of ${mission.name}`,
+          type: "general",
+          priority,
+          status: "pending",
+        });
+      }
+    });
+    break;
+
+  case "sequential":
+    // Create sequential tasks
+    const phases = ["preparation", "execution", "completion"];
+    phases.forEach((phase, index) => {
+      tasks.push({
+        id: `task-${mission.id}-s${index}`,
+        name: `${phase.charAt(0).toUpperCase() + phase.slice(1)} Phase`,
+        description: `${phase} phase for ${mission.name}`,
+        type: phase,
+        priority: mission.priority,
+        status: "pending",
+        dependencies: index > 0 ? [`task-${mission.id}-s${index - 1}`] : undefined,
+      });
+    });
+    break;
   }
 
   logger.info(`[JointTasking] Created ${tasks.length} tasks for mission ${mission.id}`);
@@ -244,8 +244,8 @@ export function mapTasksToEntities(
   // Assign tasks based on capabilities and availability
   tasks.forEach(task => {
     const suitableEntities = entities.filter(entity =>
-      entity.status === 'available' &&
-      (entity.capabilities.includes(task.type) || entity.capabilities.includes('general'))
+      entity.status === "available" &&
+      (entity.capabilities.includes(task.type) || entity.capabilities.includes("general"))
     );
 
     if (suitableEntities.length > 0) {
@@ -291,8 +291,8 @@ export async function syncMissionStatus(mission: JointMission): Promise<SyncResu
         // Create status update message
         const message: protocolAdapter.ProtocolMessage = {
           protocol: entity.protocol,
-          direction: 'outbound',
-          sourceSystem: 'joint-tasking-system',
+          direction: "outbound",
+          sourceSystem: "joint-tasking-system",
           targetSystem: entity.id,
           payload: {
             missionId: mission.id,
@@ -330,13 +330,13 @@ export async function syncMissionStatus(mission: JointMission): Promise<SyncResu
 
     // Update mission sync status in database
     await supabase
-      .from('joint_mission_log')
+      .from("joint_mission_log")
       .update({
-        sync_status: success ? 'synced' : (syncedTasks > 0 ? 'partial' : 'failed'),
+        sync_status: success ? "synced" : (syncedTasks > 0 ? "partial" : "failed"),
         sync_errors: errors,
         last_sync_at: new Date().toISOString(),
       })
-      .eq('mission_id', mission.id);
+      .eq("mission_id", mission.id);
 
     logger.info(`[JointTasking] Sync complete: ${syncedTasks} synced, ${failedTasks} failed`);
 
@@ -351,7 +351,7 @@ export async function syncMissionStatus(mission: JointMission): Promise<SyncResu
   } catch (error) {
     const latencyMs = Date.now() - startTime;
     const errorMsg = error instanceof Error ? error.message : String(error);
-    logger.error('[JointTasking] Sync error:', error);
+    logger.error("[JointTasking] Sync error:", error);
 
     return {
       missionId: mission.id,
@@ -370,7 +370,7 @@ export async function syncMissionStatus(mission: JointMission): Promise<SyncResu
 export async function updateTaskStatus(
   missionId: string,
   taskId: string,
-  status: MissionTask['status'],
+  status: MissionTask["status"],
   metadata?: Record<string, any>
 ): Promise<{ success: boolean; error?: string }> {
   logger.info(`[JointTasking] Updating task ${taskId} status to ${status}`);
@@ -378,20 +378,20 @@ export async function updateTaskStatus(
   try {
     // Fetch current mission
     const { data: missions, error: fetchError } = await supabase
-      .from('joint_mission_log')
-      .select('*')
-      .eq('mission_id', missionId)
+      .from("joint_mission_log")
+      .select("*")
+      .eq("mission_id", missionId)
       .single();
 
     if (fetchError || !missions) {
-      return { success: false, error: 'Mission not found' };
+      return { success: false, error: "Mission not found" };
     }
 
     const tasks = missions.tasks as MissionTask[];
     const taskIndex = tasks.findIndex(t => t.id === taskId);
 
     if (taskIndex === -1) {
-      return { success: false, error: 'Task not found' };
+      return { success: false, error: "Task not found" };
     }
 
     // Update task
@@ -400,23 +400,23 @@ export async function updateTaskStatus(
       tasks[taskIndex].metadata = { ...tasks[taskIndex].metadata, ...metadata };
     }
 
-    if (status === 'completed') {
+    if (status === "completed") {
       tasks[taskIndex].endTime = new Date();
     }
 
     // Calculate completion percentage
-    const completedTasks = tasks.filter(t => t.status === 'completed').length;
+    const completedTasks = tasks.filter(t => t.status === "completed").length;
     const completionPercentage = Math.round((completedTasks / tasks.length) * 100);
 
     // Update mission in database
     const { error: updateError } = await supabase
-      .from('joint_mission_log')
+      .from("joint_mission_log")
       .update({
         tasks,
         completion_percentage: completionPercentage,
-        mission_status: completionPercentage === 100 ? 'completed' : missions.mission_status,
+        mission_status: completionPercentage === 100 ? "completed" : missions.mission_status,
       })
-      .eq('mission_id', missionId);
+      .eq("mission_id", missionId);
 
     if (updateError) {
       return { success: false, error: updateError.message };
@@ -426,7 +426,7 @@ export async function updateTaskStatus(
     return { success: true };
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error);
-    logger.error('[JointTasking] Failed to update task status:', error);
+    logger.error("[JointTasking] Failed to update task status:", error);
     return { success: false, error: errorMsg };
   }
 }
@@ -437,13 +437,13 @@ export async function updateTaskStatus(
 export async function getMission(missionId: string): Promise<JointMission | null> {
   try {
     const { data, error } = await supabase
-      .from('joint_mission_log')
-      .select('*')
-      .eq('mission_id', missionId)
+      .from("joint_mission_log")
+      .select("*")
+      .eq("mission_id", missionId)
       .single();
 
     if (error || !data) {
-      logger.error('[JointTasking] Mission not found:', missionId);
+      logger.error("[JointTasking] Mission not found:", missionId);
       return null;
     }
 
@@ -469,7 +469,7 @@ export async function getMission(missionId: string): Promise<JointMission | null
       missionData: data.mission_data,
     };
   } catch (error) {
-    logger.error('[JointTasking] Error fetching mission:', error);
+    logger.error("[JointTasking] Error fetching mission:", error);
     return null;
   }
 }

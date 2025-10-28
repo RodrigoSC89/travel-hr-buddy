@@ -135,7 +135,7 @@ export default function WeatherDashboard() {
           }]
         },
         forecast: Array.from({ length: 7 }, (_, i) => ({
-          date: new Date(Date.now() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          date: new Date(Date.now() + i * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
           temp_min: 18 + Math.random() * 5,
           temp_max: 28 + Math.random() * 5,
           description: ["Clear", "Cloudy", "Rainy", "Partly Cloudy"][Math.floor(Math.random() * 4)],
@@ -180,7 +180,7 @@ export default function WeatherDashboard() {
   };
 
   const getWindDirection = (deg: number) => {
-    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+    const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     return directions[Math.round(deg / 45) % 8];
   };
 
@@ -232,7 +232,7 @@ export default function WeatherDashboard() {
             )}
             disabled={loading}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </Button>
         </div>
@@ -379,7 +379,7 @@ export default function WeatherDashboard() {
                     <Card key={i} className="text-center">
                       <CardContent className="pt-6">
                         <p className="text-sm font-medium mb-2">
-                          {new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}
+                          {new Date(day.date).toLocaleDateString("en-US", { weekday: "short" })}
                         </p>
                         <div className="flex justify-center mb-2">
                           {getWeatherIcon(day.description)}

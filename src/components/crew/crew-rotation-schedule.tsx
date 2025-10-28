@@ -1,13 +1,13 @@
 // @ts-nocheck
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { CrewRotation } from '@/types/modules';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Calendar, Ship, User, AlertCircle, CheckCircle, Clock } from 'lucide-react';
-import { format } from 'date-fns';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { CrewRotation } from "@/types/modules";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Ship, User, AlertCircle, CheckCircle, Clock } from "lucide-react";
+import { format } from "date-fns";
+import { toast } from "sonner";
 
 export function CrewRotationSchedule() {
   const [rotations, setRotations] = useState<CrewRotation[]>([]);
@@ -20,31 +20,31 @@ export function CrewRotationSchedule() {
   const loadRotations = async () => {
     try {
       const { data, error } = await supabase
-        .from('crew_rotations')
-        .select('*')
-        .order('scheduled_date', { ascending: true });
+        .from("crew_rotations")
+        .select("*")
+        .order("scheduled_date", { ascending: true });
 
       if (error) throw error;
       setRotations(data || []);
     } catch (error) {
-      console.error('Error loading rotations:', error);
-      toast.error('Failed to load crew rotations');
+      console.error("Error loading rotations:", error);
+      toast.error("Failed to load crew rotations");
     } finally {
       setLoading(false);
     }
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      scheduled: 'secondary',
-      confirmed: 'default',
-      completed: 'outline',
-      cancelled: 'destructive',
-      delayed: 'outline'
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      scheduled: "secondary",
+      confirmed: "default",
+      completed: "outline",
+      cancelled: "destructive",
+      delayed: "outline"
     };
 
     return (
-      <Badge variant={variants[status] || 'default'}>
+      <Badge variant={variants[status] || "default"}>
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
     );
@@ -110,7 +110,7 @@ export function CrewRotationSchedule() {
                   {getStatusBadge(rotation.status)}
                 </div>
                 <CardDescription>
-                  {format(new Date(rotation.scheduled_date), 'PPP')}
+                  {format(new Date(rotation.scheduled_date), "PPP")}
                 </CardDescription>
               </CardHeader>
               <CardContent>

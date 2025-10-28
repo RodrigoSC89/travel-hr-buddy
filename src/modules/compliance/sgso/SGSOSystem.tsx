@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, FileText, Shield, Activity, Download } from 'lucide-react';
-import { CreatePlanDialog } from './components/CreatePlanDialog';
-import { PlansList } from './components/PlansList';
-import { ActionsList } from './components/ActionsList';
-import { VersionHistory } from './components/VersionHistory';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Plus, FileText, Shield, Activity, Download } from "lucide-react";
+import { CreatePlanDialog } from "./components/CreatePlanDialog";
+import { PlansList } from "./components/PlansList";
+import { ActionsList } from "./components/ActionsList";
+import { VersionHistory } from "./components/VersionHistory";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function SGSOSystem() {
-  const [activeTab, setActiveTab] = useState('plans');
+  const [activeTab, setActiveTab] = useState("plans");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [stats, setStats] = useState({
@@ -29,21 +29,21 @@ export default function SGSOSystem() {
   const loadStats = async () => {
     try {
       const { data: plans } = await supabase
-        .from('sgso_plans')
-        .select('id, status');
+        .from("sgso_plans")
+        .select("id, status");
 
       const { data: actions } = await supabase
-        .from('sgso_actions')
-        .select('id, status');
+        .from("sgso_actions")
+        .select("id, status");
 
       setStats({
         totalPlans: plans?.length || 0,
-        activePlans: plans?.filter(p => p.status === 'active').length || 0,
+        activePlans: plans?.filter(p => p.status === "active").length || 0,
         totalActions: actions?.length || 0,
-        pendingActions: actions?.filter(a => a.status === 'pending').length || 0,
+        pendingActions: actions?.filter(a => a.status === "pending").length || 0,
       });
     } catch (error) {
-      console.error('Error loading stats:', error);
+      console.error("Error loading stats:", error);
     }
   };
 

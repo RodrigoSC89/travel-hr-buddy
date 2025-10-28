@@ -3,15 +3,15 @@
  * Displays AI cognitive feedback reports and insights
  */
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Brain, TrendingUp, TrendingDown, AlertCircle, CheckCircle, XCircle } from 'lucide-react';
-import { getWeeklyFeedbackReport, getFeedbackInsights, type WeeklyFeedbackReport, type FeedbackInsight } from '@/ai/feedback-core';
-import { logger } from '@/lib/logger';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Brain, TrendingUp, TrendingDown, AlertCircle, CheckCircle, XCircle } from "lucide-react";
+import { getWeeklyFeedbackReport, getFeedbackInsights, type WeeklyFeedbackReport, type FeedbackInsight } from "@/ai/feedback-core";
+import { logger } from "@/lib/logger";
 
 interface WeeklyFeedbackReportProps {
   vesselId?: string;
@@ -44,23 +44,23 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
       setReport(reportData);
       setInsights(insightsData);
     } catch (err) {
-      logger.error('Failed to load feedback report:', err);
-      setError('Failed to load feedback report. Please try again.');
+      logger.error("Failed to load feedback report:", err);
+      setError("Failed to load feedback report. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return 'text-green-600';
-    if (confidence >= 0.5) return 'text-yellow-600';
-    return 'text-red-600';
+    if (confidence >= 0.8) return "text-green-600";
+    if (confidence >= 0.5) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getConfidenceBadgeVariant = (confidence: number): "default" | "secondary" | "destructive" | "outline" => {
-    if (confidence >= 0.8) return 'default';
-    if (confidence >= 0.5) return 'secondary';
-    return 'destructive';
+    if (confidence >= 0.8) return "default";
+    if (confidence >= 0.5) return "secondary";
+    return "destructive";
   };
 
   if (loading) {
@@ -95,7 +95,7 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-              {error || 'No data available for the selected period.'}
+              {error || "No data available for the selected period."}
             </AlertDescription>
           </Alert>
         </CardContent>
@@ -219,9 +219,9 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
                   {insights.map((insight, idx) => (
                     <Alert key={idx} className="relative">
                       <div className="flex items-start gap-3">
-                        {insight.category === 'success_pattern' ? (
+                        {insight.category === "success_pattern" ? (
                           <TrendingUp className="h-4 w-4 text-green-600 mt-0.5" />
-                        ) : insight.category === 'rejection_pattern' ? (
+                        ) : insight.category === "rejection_pattern" ? (
                           <TrendingDown className="h-4 w-4 text-red-600 mt-0.5" />
                         ) : (
                           <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5" />
@@ -266,7 +266,7 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
                           <div className="space-y-3">
                             <div className="flex items-center justify-between">
                               <h4 className="font-medium">{module}</h4>
-                              <Badge variant={perf.success_rate >= 0.7 ? 'default' : perf.success_rate >= 0.4 ? 'secondary' : 'destructive'}>
+                              <Badge variant={perf.success_rate >= 0.7 ? "default" : perf.success_rate >= 0.4 ? "secondary" : "destructive"}>
                                 {(perf.success_rate * 100).toFixed(1)}% success
                               </Badge>
                             </div>

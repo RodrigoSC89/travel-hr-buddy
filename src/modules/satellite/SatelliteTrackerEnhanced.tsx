@@ -1,12 +1,12 @@
 // @ts-nocheck
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Satellite,
   Radio,
@@ -18,8 +18,8 @@ import {
   AlertCircle,
   CheckCircle2,
   RefreshCw,
-} from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
+} from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
 // Constants for satellite coverage events
 const COVERAGE_EVENT_MIN_ELEVATION = 10;
@@ -93,9 +93,9 @@ export const SatelliteTrackerEnhanced = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('satellite_tracks')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("satellite_tracks")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(20);
 
       if (error) throw error;
@@ -108,11 +108,11 @@ export const SatelliteTrackerEnhanced = () => {
 
       setSatellites(data);
     } catch (error: any) {
-      console.error('Error loading satellite data:', error);
+      console.error("Error loading satellite data:", error);
       toast({
-        title: 'Error loading satellites',
+        title: "Error loading satellites",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -122,58 +122,58 @@ export const SatelliteTrackerEnhanced = () => {
   const loadCoverageEvents = async () => {
     try {
       const { data, error } = await supabase
-        .from('satellite_coverage_events')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("satellite_coverage_events")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       setCoverageEvents(data || []);
     } catch (error: any) {
-      console.error('Error loading coverage events:', error);
+      console.error("Error loading coverage events:", error);
     }
   };
 
   const createMockSatellites = async () => {
     const mockSatellites = [
       {
-        satellite_id: 'NOAA-18',
-        satellite_name: 'NOAA-18',
-        tle_line1: '1 28654U 05018A   21001.00000000  .00000000  00000-0  00000-0 0  9999',
-        tle_line2: '2 28654  98.7000 000.0000 0013000 000.0000 360.0000 14.12000000000000',
+        satellite_id: "NOAA-18",
+        satellite_name: "NOAA-18",
+        tle_line1: "1 28654U 05018A   21001.00000000  .00000000  00000-0  00000-0 0  9999",
+        tle_line2: "2 28654  98.7000 000.0000 0013000 000.0000 360.0000 14.12000000000000",
         latitude: -15.234,
         longitude: 45.678,
         altitude_km: 854.2,
         velocity_kmh: 27200.5,
-        visibility_status: 'visible',
+        visibility_status: "visible",
         azimuth: 125.5,
         elevation: 45.2,
         range_km: 1245.8,
       },
       {
-        satellite_id: 'ISS',
-        satellite_name: 'International Space Station',
-        tle_line1: '1 25544U 98067A   21001.00000000  .00000000  00000-0  00000-0 0  9999',
-        tle_line2: '2 25544  51.6000 000.0000 0001000 000.0000 360.0000 15.49000000000000',
+        satellite_id: "ISS",
+        satellite_name: "International Space Station",
+        tle_line1: "1 25544U 98067A   21001.00000000  .00000000  00000-0  00000-0 0  9999",
+        tle_line2: "2 25544  51.6000 000.0000 0001000 000.0000 360.0000 15.49000000000000",
         latitude: 23.456,
         longitude: -78.123,
         altitude_km: 408.5,
         velocity_kmh: 27600.0,
-        visibility_status: 'visible',
+        visibility_status: "visible",
         azimuth: 275.3,
         elevation: 32.1,
         range_km: 687.4,
       },
       {
-        satellite_id: 'SENTINEL-1A',
-        satellite_name: 'Sentinel-1A',
-        tle_line1: '1 39634U 14016A   21001.00000000  .00000000  00000-0  00000-0 0  9999',
-        tle_line2: '2 39634  98.1800 000.0000 0001200 000.0000 360.0000 14.59000000000000',
+        satellite_id: "SENTINEL-1A",
+        satellite_name: "Sentinel-1A",
+        tle_line1: "1 39634U 14016A   21001.00000000  .00000000  00000-0  00000-0 0  9999",
+        tle_line2: "2 39634  98.1800 000.0000 0001200 000.0000 360.0000 14.59000000000000",
         latitude: 52.789,
         longitude: 13.456,
         altitude_km: 693.0,
         velocity_kmh: 27100.0,
-        visibility_status: 'eclipsed',
+        visibility_status: "eclipsed",
         azimuth: 180.0,
         elevation: 12.5,
         range_km: 2456.2,
@@ -182,12 +182,12 @@ export const SatelliteTrackerEnhanced = () => {
 
     try {
       for (const sat of mockSatellites) {
-        await supabase.from('satellite_tracks').insert(sat);
+        await supabase.from("satellite_tracks").insert(sat);
       }
 
       await loadSatelliteData();
     } catch (error: any) {
-      console.error('Error creating mock satellites:', error);
+      console.error("Error creating mock satellites:", error);
     }
   };
 
@@ -205,7 +205,7 @@ export const SatelliteTrackerEnhanced = () => {
       }));
 
       for (const update of updates) {
-        await supabase.from('satellite_tracks').insert({
+        await supabase.from("satellite_tracks").insert({
           satellite_id: update.satellite_id,
           satellite_name: update.satellite_name,
           tle_line1: update.tle_line1,
@@ -224,7 +224,7 @@ export const SatelliteTrackerEnhanced = () => {
       // Check for coverage events
       checkCoverageEvents(updates);
     } catch (error: any) {
-      console.error('Error updating satellites:', error);
+      console.error("Error updating satellites:", error);
     }
   };
 
@@ -232,9 +232,9 @@ export const SatelliteTrackerEnhanced = () => {
     for (const sat of satellites) {
       // Simulate coverage entry/exit events
       if (sat.elevation > COVERAGE_EVENT_MIN_ELEVATION && Math.random() > COVERAGE_EVENT_PROBABILITY) {
-        const eventType = Math.random() > 0.5 ? 'entry' : 'exit';
+        const eventType = Math.random() > 0.5 ? "entry" : "exit";
 
-        await supabase.from('satellite_coverage_events').insert({
+        await supabase.from("satellite_coverage_events").insert({
           satellite_id: sat.satellite_id,
           satellite_name: sat.satellite_name,
           event_type: eventType,
@@ -244,9 +244,9 @@ export const SatelliteTrackerEnhanced = () => {
           end_time: new Date(Date.now() + COVERAGE_EVENT_DURATION_MS).toISOString(),
         });
 
-        if (eventType === 'entry') {
+        if (eventType === "entry") {
           toast({
-            title: 'Satellite Coverage',
+            title: "Satellite Coverage",
             description: `${sat.satellite_name} entering coverage area`,
           });
         }
@@ -263,32 +263,32 @@ export const SatelliteTrackerEnhanced = () => {
     setLoading(false);
 
     toast({
-      title: 'Data refreshed',
-      description: 'Satellite data has been updated',
+      title: "Data refreshed",
+      description: "Satellite data has been updated",
     });
   };
 
   const getVisibilityColor = (status: string) => {
     switch (status?.toLowerCase()) {
-      case 'visible':
-        return 'text-green-600';
-      case 'eclipsed':
-        return 'text-gray-600';
-      case 'daylight':
-        return 'text-blue-600';
-      default:
-        return 'text-gray-400';
+    case "visible":
+      return "text-green-600";
+    case "eclipsed":
+      return "text-gray-600";
+    case "daylight":
+      return "text-blue-600";
+    default:
+      return "text-gray-400";
     }
   };
 
   const getVisibilityIcon = (status: string) => {
     switch (status?.toLowerCase()) {
-      case 'visible':
-        return <CheckCircle2 className="h-4 w-4 text-green-600" />;
-      case 'eclipsed':
-        return <AlertCircle className="h-4 w-4 text-gray-600" />;
-      default:
-        return <Radio className="h-4 w-4 text-blue-600" />;
+    case "visible":
+      return <CheckCircle2 className="h-4 w-4 text-green-600" />;
+    case "eclipsed":
+      return <AlertCircle className="h-4 w-4 text-gray-600" />;
+    default:
+      return <Radio className="h-4 w-4 text-blue-600" />;
     }
   };
 
@@ -325,7 +325,7 @@ export const SatelliteTrackerEnhanced = () => {
             <span className="text-sm text-muted-foreground">sec</span>
           </div>
           <Button onClick={manualRefresh} disabled={loading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </Button>
         </div>
@@ -349,7 +349,7 @@ export const SatelliteTrackerEnhanced = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {satellites.filter((s) => s.visibility_status === 'visible').length}
+              {satellites.filter((s) => s.visibility_status === "visible").length}
             </div>
             <p className="text-xs text-muted-foreground mt-1">In coverage area</p>
           </CardContent>
@@ -373,9 +373,9 @@ export const SatelliteTrackerEnhanced = () => {
             <div className="text-2xl font-bold">
               {satellites.length > 0
                 ? (
-                    satellites.reduce((sum, s) => sum + s.altitude_km, 0) / satellites.length
-                  ).toFixed(0)
-                : 0}{' '}
+                  satellites.reduce((sum, s) => sum + s.altitude_km, 0) / satellites.length
+                ).toFixed(0)
+                : 0}{" "}
               km
             </div>
             <p className="text-xs text-muted-foreground mt-1">Mean orbital height</p>
@@ -421,7 +421,7 @@ export const SatelliteTrackerEnhanced = () => {
                   </TableCell>
                   <TableCell>
                     <Badge
-                      variant={sat.visibility_status === 'visible' ? 'default' : 'secondary'}
+                      variant={sat.visibility_status === "visible" ? "default" : "secondary"}
                       className="flex items-center gap-1 w-fit"
                     >
                       {getVisibilityIcon(sat.visibility_status)}
@@ -518,12 +518,12 @@ export const SatelliteTrackerEnhanced = () => {
                   className="flex items-center justify-between p-3 bg-muted rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <Badge variant={event.event_type === 'entry' ? 'default' : 'secondary'}>
+                    <Badge variant={event.event_type === "entry" ? "default" : "secondary"}>
                       {event.event_type}
                     </Badge>
                     <span className="font-medium">{event.satellite_name}</span>
                     <span className="text-sm text-muted-foreground">
-                      Elevation: {event.max_elevation?.toFixed(1)}° | Duration:{' '}
+                      Elevation: {event.max_elevation?.toFixed(1)}° | Duration:{" "}
                       {event.duration_seconds}s
                     </span>
                   </div>

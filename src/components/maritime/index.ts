@@ -1,2 +1,2 @@
 // Maritime System Components
-export { MaritimeSystemDashboard } from './maritime-system-dashboard';
+export { MaritimeSystemDashboard } from "./maritime-system-dashboard";

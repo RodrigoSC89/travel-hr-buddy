@@ -24,14 +24,14 @@ const ChannelManager = () => {
   const loadStats = async () => {
     try {
       const { data: channels } = await supabase
-        .from('communication_channels')
-        .select('id')
-        .eq('is_active', true);
+        .from("communication_channels")
+        .select("id")
+        .eq("is_active", true);
 
       const { data: messages } = await supabase
-        .from('channel_messages')
-        .select('id')
-        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+        .from("channel_messages")
+        .select("id")
+        .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
       setStats({
         activeChannels: channels?.length || 0,
@@ -39,7 +39,7 @@ const ChannelManager = () => {
         onlineUsers: 0, // Would need presence tracking
       });
     } catch (error) {
-      console.error('Error loading stats:', error);
+      console.error("Error loading stats:", error);
     }
   };
 

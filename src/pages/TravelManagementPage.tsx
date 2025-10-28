@@ -22,16 +22,16 @@ export default function TravelManagementPage() {
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
 
   const [formData, setFormData] = useState<Partial<TravelItinerary>>({
-    tripName: '',
-    origin: '',
-    destination: '',
-    departureDate: new Date().toISOString().split('T')[0],
-    status: 'draft',
+    tripName: "",
+    origin: "",
+    destination: "",
+    departureDate: new Date().toISOString().split("T")[0],
+    status: "draft",
     segments: []
   });
 
   const [alertData, setAlertData] = useState<Partial<PriceAlert>>({
-    route: '',
+    route: "",
     targetPrice: 0
   });
 
@@ -52,11 +52,11 @@ export default function TravelManagementPage() {
     e.preventDefault();
     try {
       await travelService.createItinerary(formData as TravelItinerary);
-      toast.success('Itinerary created');
+      toast.success("Itinerary created");
       setIsDialogOpen(false);
       loadData();
     } catch (error) {
-      toast.error('Failed to create itinerary');
+      toast.error("Failed to create itinerary");
     }
   };
 
@@ -64,23 +64,23 @@ export default function TravelManagementPage() {
     e.preventDefault();
     try {
       await travelService.createPriceAlert(alertData as PriceAlert);
-      toast.success('Price alert created');
+      toast.success("Price alert created");
       setIsAlertDialogOpen(false);
       loadData();
     } catch (error) {
-      toast.error('Failed to create price alert');
+      toast.error("Failed to create price alert");
     }
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      'draft': 'outline',
-      'confirmed': 'default',
-      'in-progress': 'secondary',
-      'completed': 'secondary',
-      'cancelled': 'destructive'
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      "draft": "outline",
+      "confirmed": "default",
+      "in-progress": "secondary",
+      "completed": "secondary",
+      "cancelled": "destructive"
     };
-    return <Badge variant={variants[status] || 'default'}>{status}</Badge>;
+    return <Badge variant={variants[status] || "default"}>{status}</Badge>;
   };
 
   return (

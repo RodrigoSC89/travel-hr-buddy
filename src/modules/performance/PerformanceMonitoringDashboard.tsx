@@ -1,12 +1,12 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Activity, 
   AlertTriangle, 
@@ -14,10 +14,10 @@ import {
   Download, 
   Settings,
   Gauge
-} from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface PerformanceMetric {
   id: string;
@@ -55,19 +55,19 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
     try {
       // Fetch recent metrics
       const { data: metricsData, error: metricsError } = await supabase
-        .from('performance_metrics')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("performance_metrics")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(100);
 
       if (metricsError) throw metricsError;
 
       // Fetch active alerts
       const { data: alertsData, error: alertsError } = await supabase
-        .from('performance_alerts')
-        .select('*')
-        .eq('is_resolved', false)
-        .order('created_at', { ascending: false });
+        .from("performance_alerts")
+        .select("*")
+        .eq("is_resolved", false)
+        .order("created_at", { ascending: false });
 
       if (alertsError) throw alertsError;
 
@@ -75,16 +75,16 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
       setAlerts(alertsData || []);
 
       // Show toast for new critical alerts
-      const criticalAlerts = alertsData?.filter((a) => a.severity === 'critical') || [];
+      const criticalAlerts = alertsData?.filter((a) => a.severity === "critical") || [];
       if (criticalAlerts.length > 0) {
         toast({
-          title: 'Critical Alert',
+          title: "Critical Alert",
           description: `${criticalAlerts.length} critical performance alert(s) detected`,
-          variant: 'destructive',
+          variant: "destructive",
         });
       }
     } catch (error) {
-      console.error('Error fetching performance data:', error);
+      console.error("Error fetching performance data:", error);
     } finally {
       setLoading(false);
     }
@@ -93,7 +93,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
   const exportLogs = async () => {
     try {
       const csvContent = [
-        ['Timestamp', 'System', 'Metric', 'Value', 'Unit', 'Status'].join(','),
+        ["Timestamp", "System", "Metric", "Value", "Unit", "Status"].join(","),
         ...metrics.map((m) =>
           [
             new Date(m.created_at).toISOString(),
@@ -102,26 +102,26 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
             m.metric_value,
             m.metric_unit,
             m.status,
-          ].join(',')
+          ].join(",")
         ),
-      ].join('\n');
+      ].join("\n");
 
-      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const blob = new Blob([csvContent], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `performance-logs-${new Date().toISOString()}.csv`;
       a.click();
 
       toast({
-        title: 'Export Complete',
-        description: 'Performance logs exported successfully',
+        title: "Export Complete",
+        description: "Performance logs exported successfully",
       });
     } catch (error) {
       toast({
-        title: 'Export Failed',
-        description: 'Failed to export logs',
-        variant: 'destructive',
+        title: "Export Failed",
+        description: "Failed to export logs",
+        variant: "destructive",
       });
     }
   };
@@ -139,16 +139,16 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
     const systemData = systemMetrics[system];
     return {
       name: system,
-      normal: systemData.filter((m) => m.status === 'normal').length,
-      warning: systemData.filter((m) => m.status === 'warning').length,
-      critical: systemData.filter((m) => m.status === 'critical').length,
+      normal: systemData.filter((m) => m.status === "normal").length,
+      warning: systemData.filter((m) => m.status === "warning").length,
+      critical: systemData.filter((m) => m.status === "critical").length,
     };
   });
 
   const stats = {
     totalMetrics: metrics.length,
-    criticalAlerts: alerts.filter((a) => a.severity === 'critical').length,
-    warningAlerts: alerts.filter((a) => a.severity === 'warning').length,
+    criticalAlerts: alerts.filter((a) => a.severity === "critical").length,
+    warningAlerts: alerts.filter((a) => a.severity === "warning").length,
     systems: Object.keys(systemMetrics).length,
   };
 
@@ -277,11 +277,11 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
                       </span>
                       <Badge
                         variant={
-                          metric.status === 'critical'
-                            ? 'destructive'
-                            : metric.status === 'warning'
-                            ? 'secondary'
-                            : 'default'
+                          metric.status === "critical"
+                            ? "destructive"
+                            : metric.status === "warning"
+                              ? "secondary"
+                              : "default"
                         }
                       >
                         {metric.status}
@@ -309,7 +309,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
               ) : (
                 <div className="space-y-3">
                   {alerts.map((alert) => (
-                    <Alert key={alert.id} variant={alert.severity === 'critical' ? 'destructive' : 'default'}>
+                    <Alert key={alert.id} variant={alert.severity === "critical" ? "destructive" : "default"}>
                       <AlertTriangle className="h-4 w-4" />
                       <AlertDescription>
                         <div className="flex items-start justify-between">
@@ -319,7 +319,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
                               {new Date(alert.created_at).toLocaleString()}
                             </p>
                           </div>
-                          <Badge variant={alert.severity === 'critical' ? 'destructive' : 'secondary'}>
+                          <Badge variant={alert.severity === "critical" ? "destructive" : "secondary"}>
                             {alert.severity}
                           </Badge>
                         </div>

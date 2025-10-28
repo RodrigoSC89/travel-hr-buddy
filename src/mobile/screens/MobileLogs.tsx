@@ -4,12 +4,12 @@
  * Real-time system logs and activity tracking for mobile app
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Input } from '@/components/ui/input';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
 import {
   FileText,
   AlertTriangle,
@@ -18,14 +18,14 @@ import {
   CheckCircle,
   Search,
   Filter,
-} from 'lucide-react';
-import { structuredLogger } from '@/lib/logger/structured-logger';
-import type { LogEntry, LogLevel } from '@/lib/logger/structured-logger';
+} from "lucide-react";
+import { structuredLogger } from "@/lib/logger/structured-logger";
+import type { LogEntry, LogLevel } from "@/lib/logger/structured-logger";
 
 export const MobileLogs: React.FC = () => {
   const [logs, setLogs] = useState<LogEntry[]>([]);
-  const [filter, setFilter] = useState<LogLevel | 'all'>('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState<LogLevel | "all">("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     // Get recent logs from structured logger
@@ -42,31 +42,31 @@ export const MobileLogs: React.FC = () => {
   }, []);
 
   const filteredLogs = logs.filter((log) => {
-    const matchesFilter = filter === 'all' || log.level === filter;
-    const matchesSearch = searchTerm === '' || 
+    const matchesFilter = filter === "all" || log.level === filter;
+    const matchesSearch = searchTerm === "" || 
       log.message.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
   const getLogIcon = (level: LogLevel) => {
     switch (level) {
-      case 'error':
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'warn':
-        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
-      case 'info':
-        return <Info className="h-4 w-4 text-blue-500" />;
-      case 'debug':
-        return <CheckCircle className="h-4 w-4 text-gray-500" />;
+    case "error":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "warn":
+      return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+    case "info":
+      return <Info className="h-4 w-4 text-blue-500" />;
+    case "debug":
+      return <CheckCircle className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getLogBadge = (level: LogLevel) => {
     const variants = {
-      error: 'destructive',
-      warn: 'default',
-      info: 'secondary',
-      debug: 'outline',
+      error: "destructive",
+      warn: "default",
+      info: "secondary",
+      debug: "outline",
     } as const;
 
     return (
@@ -78,19 +78,19 @@ export const MobileLogs: React.FC = () => {
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString('pt-BR', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
+    return date.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
     });
   };
 
   const getLevelStats = () => {
     return {
-      error: logs.filter(l => l.level === 'error').length,
-      warn: logs.filter(l => l.level === 'warn').length,
-      info: logs.filter(l => l.level === 'info').length,
-      debug: logs.filter(l => l.level === 'debug').length,
+      error: logs.filter(l => l.level === "error").length,
+      warn: logs.filter(l => l.level === "warn").length,
+      info: logs.filter(l => l.level === "info").length,
+      debug: logs.filter(l => l.level === "debug").length,
     };
   };
 
@@ -151,32 +151,32 @@ export const MobileLogs: React.FC = () => {
       {/* Filter Buttons */}
       <div className="flex gap-2 overflow-x-auto pb-2">
         <Button
-          variant={filter === 'all' ? 'default' : 'outline'}
+          variant={filter === "all" ? "default" : "outline"}
           size="sm"
-          onClick={() => setFilter('all')}
+          onClick={() => setFilter("all")}
         >
           Todos
         </Button>
         <Button
-          variant={filter === 'error' ? 'default' : 'outline'}
+          variant={filter === "error" ? "default" : "outline"}
           size="sm"
-          onClick={() => setFilter('error')}
+          onClick={() => setFilter("error")}
           className="whitespace-nowrap"
         >
           Erros ({stats.error})
         </Button>
         <Button
-          variant={filter === 'warn' ? 'default' : 'outline'}
+          variant={filter === "warn" ? "default" : "outline"}
           size="sm"
-          onClick={() => setFilter('warn')}
+          onClick={() => setFilter("warn")}
           className="whitespace-nowrap"
         >
           Avisos ({stats.warn})
         </Button>
         <Button
-          variant={filter === 'info' ? 'default' : 'outline'}
+          variant={filter === "info" ? "default" : "outline"}
           size="sm"
-          onClick={() => setFilter('info')}
+          onClick={() => setFilter("info")}
           className="whitespace-nowrap"
         >
           Info ({stats.info})

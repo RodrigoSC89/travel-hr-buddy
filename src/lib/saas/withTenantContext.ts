@@ -23,14 +23,14 @@ export function getCurrentTenantContext(): TenantContext | null {
   try {
     // Try subdomain first
     const hostname = window.location.hostname;
-    const parts = hostname.split('.');
+    const parts = hostname.split(".");
     
     // If subdomain exists (e.g., company.travel-hr-buddy.com)
     if (parts.length > 2) {
       const subdomain = parts[0];
       
       // Skip common non-tenant subdomains
-      if (!['www', 'api', 'admin'].includes(subdomain)) {
+      if (!["www", "api", "admin"].includes(subdomain)) {
         return {
           tenantId: subdomain,
           tenantName: subdomain,
@@ -39,9 +39,9 @@ export function getCurrentTenantContext(): TenantContext | null {
     }
 
     // Try custom header (for API calls)
-    const tenantHeader = document.querySelector('meta[name="x-tenant-id"]');
+    const tenantHeader = document.querySelector("meta[name=\"x-tenant-id\"]");
     if (tenantHeader) {
-      const tenantId = tenantHeader.getAttribute('content');
+      const tenantId = tenantHeader.getAttribute("content");
       if (tenantId) {
         return {
           tenantId,
@@ -50,7 +50,7 @@ export function getCurrentTenantContext(): TenantContext | null {
     }
 
     // Try localStorage (fallback for development)
-    const storedTenantId = localStorage.getItem('tenant_id');
+    const storedTenantId = localStorage.getItem("tenant_id");
     if (storedTenantId) {
       return {
         tenantId: storedTenantId,
@@ -68,7 +68,7 @@ export function getCurrentTenantContext(): TenantContext | null {
  * Set tenant context in localStorage (for development/testing)
  */
 export function setTenantContext(tenantId: string): void {
-  localStorage.setItem('tenant_id', tenantId);
+  localStorage.setItem("tenant_id", tenantId);
   logger.info("[TenantContext] Tenant context set", { tenantId });
 }
 
@@ -76,7 +76,7 @@ export function setTenantContext(tenantId: string): void {
  * Clear tenant context
  */
 export function clearTenantContext(): void {
-  localStorage.removeItem('tenant_id');
+  localStorage.removeItem("tenant_id");
   logger.info("[TenantContext] Tenant context cleared");
 }
 
@@ -125,7 +125,7 @@ export function createTenantClient() {
           const query = baseQuery.select(...args);
           
           // Add tenant filter if applicable
-          return query.eq('tenant_id', context.tenantId);
+          return query.eq("tenant_id", context.tenantId);
         },
         insert: (data: any) => {
           // Automatically inject tenant_id
@@ -137,10 +137,10 @@ export function createTenantClient() {
         },
         update: (data: any) => {
           const dataWithTenant = { ...data, tenant_id: context.tenantId };
-          return baseQuery.update(dataWithTenant).eq('tenant_id', context.tenantId);
+          return baseQuery.update(dataWithTenant).eq("tenant_id", context.tenantId);
         },
         delete: () => {
-          return baseQuery.delete().eq('tenant_id', context.tenantId);
+          return baseQuery.delete().eq("tenant_id", context.tenantId);
         },
         upsert: (data: any) => {
           const dataWithTenant = Array.isArray(data)
@@ -163,10 +163,10 @@ export async function verifyTenantAccess(
 ): Promise<boolean> {
   try {
     const { data, error } = await supabase
-      .from('tenant_users')
-      .select('id, role, permissions')
-      .eq('user_id', userId)
-      .eq('tenant_id', tenantId)
+      .from("tenant_users")
+      .select("id, role, permissions")
+      .eq("user_id", userId)
+      .eq("tenant_id", tenantId)
       .single();
 
     if (error || !data) {
@@ -193,10 +193,10 @@ export async function getUserTenantRole(
 ): Promise<string | null> {
   try {
     const { data, error } = await supabase
-      .from('tenant_users')
-      .select('role')
-      .eq('user_id', userId)
-      .eq('tenant_id', tenantId)
+      .from("tenant_users")
+      .select("role")
+      .eq("user_id", userId)
+      .eq("tenant_id", tenantId)
       .single();
 
     if (error || !data) {
@@ -216,10 +216,10 @@ export async function getUserTenantRole(
 export async function getTenantModules(tenantId: string): Promise<string[]> {
   try {
     const { data, error } = await supabase
-      .from('tenant_modules')
-      .select('module_name')
-      .eq('tenant_id', tenantId)
-      .eq('enabled', true);
+      .from("tenant_modules")
+      .select("module_name")
+      .eq("tenant_id", tenantId)
+      .eq("enabled", true);
 
     if (error || !data) {
       logger.error("[TenantContext] Failed to get tenant modules", { error });
@@ -242,10 +242,10 @@ export async function isModuleEnabledForTenant(
 ): Promise<boolean> {
   try {
     const { data, error } = await supabase
-      .from('tenant_modules')
-      .select('enabled')
-      .eq('tenant_id', tenantId)
-      .eq('module_name', moduleName)
+      .from("tenant_modules")
+      .select("enabled")
+      .eq("tenant_id", tenantId)
+      .eq("module_name", moduleName)
       .single();
 
     if (error || !data) {
@@ -270,7 +270,7 @@ export function tenantMiddleware() {
     if (context) {
       // Add tenant context to request headers
       const headers = new Headers(req.headers);
-      headers.set('X-Tenant-ID', context.tenantId);
+      headers.set("X-Tenant-ID", context.tenantId);
       
       // Create modified request
       const modifiedReq = new Request(req, { headers });

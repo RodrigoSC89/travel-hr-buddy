@@ -5,7 +5,7 @@
 
 export interface CertificationData {
   id: string;
-  type: 'ISM' | 'ISPS' | 'IMCA';
+  type: "ISM" | "ISPS" | "IMCA";
   vesselId: string;
   vesselName: string;
   imoNumber: string;
@@ -18,7 +18,7 @@ export interface CertificationData {
     inspectorName: string;
     inspectionDate: string;
     findings: string[];
-    status: 'compliant' | 'non-compliant' | 'conditional';
+    status: "compliant" | "non-compliant" | "conditional";
   };
   hash: string;
   qrCode: string;
@@ -28,7 +28,7 @@ export interface CertificationData {
 }
 
 export interface CertificationFormData {
-  type: 'ISM' | 'ISPS' | 'IMCA';
+  type: "ISM" | "ISPS" | "IMCA";
   vesselId: string;
   vesselName: string;
   imoNumber: string;
@@ -39,7 +39,7 @@ export interface CertificationFormData {
   inspectorName: string;
   inspectionDate: string;
   findings: string[];
-  status: 'compliant' | 'non-compliant' | 'conditional';
+  status: "compliant" | "non-compliant" | "conditional";
 }
 
 export interface ValidationResult {
@@ -52,7 +52,7 @@ export interface ValidationResult {
 export interface CertificationHistory {
   id: string;
   certificateId: string;
-  action: 'issued' | 'validated' | 'revoked' | 'renewed';
+  action: "issued" | "validated" | "revoked" | "renewed";
   performedBy: string;
   timestamp: string;
   details: string;

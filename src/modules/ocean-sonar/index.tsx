@@ -73,24 +73,24 @@ const OceanSonar: React.FC = () => {
     }, 2000);
   };
 
-  const getRiskColor = (risk: SonarReading['riskLevel']) => {
+  const getRiskColor = (risk: SonarReading["riskLevel"]) => {
     switch (risk) {
-      case 'safe':
-        return 'text-green-400 bg-green-500/10';
-      case 'caution':
-        return 'text-yellow-400 bg-yellow-500/10';
-      case 'danger':
-        return 'text-red-400 bg-red-500/10';
+    case "safe":
+      return "text-green-400 bg-green-500/10";
+    case "caution":
+      return "text-yellow-400 bg-yellow-500/10";
+    case "danger":
+      return "text-red-400 bg-red-500/10";
     }
   };
 
-  const getRiskIcon = (risk: SonarReading['riskLevel']) => {
+  const getRiskIcon = (risk: SonarReading["riskLevel"]) => {
     switch (risk) {
-      case 'safe':
-        return <CheckCircle className="w-4 h-4" />;
-      case 'caution':
-      case 'danger':
-        return <AlertTriangle className="w-4 h-4" />;
+    case "safe":
+      return <CheckCircle className="w-4 h-4" />;
+    case "caution":
+    case "danger":
+      return <AlertTriangle className="w-4 h-4" />;
     }
   };
 
@@ -105,7 +105,7 @@ const OceanSonar: React.FC = () => {
     try {
       await exporter.downloadPNG(bathymetricData, `bathymetry-${Date.now()}.png`, 1200, 1200);
     } catch (error) {
-      console.error('Failed to export PNG:', error);
+      console.error("Failed to export PNG:", error);
     }
   };
 
@@ -353,7 +353,7 @@ const OceanSonar: React.FC = () => {
               </CardHeader>
               <CardContent>
                 {/* Bathymetric Grid - Using flex wrapping for 20x20 grid */}
-                <div className="flex flex-wrap gap-1 mb-4" style={{ maxWidth: '600px' }}>
+                <div className="flex flex-wrap gap-1 mb-4" style={{ maxWidth: "600px" }}>
                   {bathymetricData.readings.map((reading) => {
                     const color = sonarEngine.getDepthColor(reading.depth);
                     return (
@@ -362,8 +362,8 @@ const OceanSonar: React.FC = () => {
                         className="rounded-sm cursor-pointer hover:ring-2 hover:ring-white transition-all"
                         style={{ 
                           backgroundColor: color,
-                          width: 'calc(5% - 4px)', // 20 columns
-                          aspectRatio: '1'
+                          width: "calc(5% - 4px)", // 20 columns
+                          aspectRatio: "1"
                         }}
                         title={`Depth: ${reading.depth.toFixed(1)}m\nRisk: ${reading.riskLevel}\nTerrain: ${reading.terrain}`}
                       />
@@ -402,7 +402,7 @@ const OceanSonar: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {(['safe', 'caution', 'danger'] as const).map((risk) => {
+                  {(["safe", "caution", "danger"] as const).map((risk) => {
                     const count = bathymetricData.readings.filter(r => r.riskLevel === risk).length;
                     const percentage = ((count / bathymetricData.readings.length) * 100).toFixed(1);
                     

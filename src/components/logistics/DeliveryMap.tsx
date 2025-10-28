@@ -1,16 +1,16 @@
 // @ts-nocheck
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { MapPin, Truck, Package } from 'lucide-react';
+import React, { useEffect, useRef, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Truck, Package } from "lucide-react";
 
 // Set your Mapbox access token (should be in environment variables)
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || '';
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "";
 
 if (!MAPBOX_TOKEN) {
-  console.warn('Mapbox token not configured. Map functionality will be limited.');
+  console.warn("Mapbox token not configured. Map functionality will be limited.");
 }
 
 interface DeliveryLocation {
@@ -18,7 +18,7 @@ interface DeliveryLocation {
   shipment_number: string;
   origin: string;
   destination: string;
-  status: 'pending' | 'in_transit' | 'delivered' | 'delayed';
+  status: "pending" | "in_transit" | "delivered" | "delayed";
   coordinates: {
     origin: [number, number]; // [lng, lat]
     destination: [number, number];
@@ -39,7 +39,7 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
     if (!mapContainer.current || map.current) return;
 
     if (!MAPBOX_TOKEN) {
-      console.error('Mapbox token is required for map functionality');
+      console.error("Mapbox token is required for map functionality");
       return;
     }
 
@@ -48,20 +48,20 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
 
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v12',
+        style: "mapbox://styles/mapbox/streets-v12",
         center: [-50, -10], // Center on Brazil
         zoom: 3,
       });
 
       // Add navigation controls
-      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
 
       // Wait for map to load
-      map.current.on('load', () => {
+      map.current.on("load", () => {
         addDeliveryMarkers();
       });
     } catch (error) {
-      console.error('Error initializing map:', error);
+      console.error("Error initializing map:", error);
     }
 
     return () => {
@@ -82,7 +82,7 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
     if (!map.current) return;
 
     // Clear existing markers
-    const markers = document.querySelectorAll('.mapboxgl-marker');
+    const markers = document.querySelectorAll(".mapboxgl-marker");
     markers.forEach(marker => marker.remove());
 
     // Add markers for each delivery
@@ -90,8 +90,8 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
       if (!map.current) return;
 
       // Origin marker
-      const originEl = document.createElement('div');
-      originEl.className = 'delivery-marker origin';
+      const originEl = document.createElement("div");
+      originEl.className = "delivery-marker origin";
       originEl.innerHTML = `
         <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white shadow-lg">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -114,8 +114,8 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
         .addTo(map.current);
 
       // Destination marker
-      const destEl = document.createElement('div');
-      destEl.className = 'delivery-marker destination';
+      const destEl = document.createElement("div");
+      destEl.className = "delivery-marker destination";
       destEl.innerHTML = `
         <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white shadow-lg">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -138,9 +138,9 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
         .addTo(map.current);
 
       // Current location marker (if in transit)
-      if (delivery.coordinates.current && delivery.status === 'in_transit') {
-        const currentEl = document.createElement('div');
-        currentEl.className = 'delivery-marker current';
+      if (delivery.coordinates.current && delivery.status === "in_transit") {
+        const currentEl = document.createElement("div");
+        currentEl.className = "delivery-marker current";
         currentEl.innerHTML = `
           <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white shadow-lg animate-pulse">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -173,12 +173,12 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
       }
 
       map.current.addSource(`route-${delivery.id}`, {
-        type: 'geojson',
+        type: "geojson",
         data: {
-          type: 'Feature',
+          type: "Feature",
           properties: {},
           geometry: {
-            type: 'LineString',
+            type: "LineString",
             coordinates: [delivery.coordinates.origin, delivery.coordinates.destination],
           },
         },
@@ -186,16 +186,16 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
 
       map.current.addLayer({
         id: `route-${delivery.id}`,
-        type: 'line',
+        type: "line",
         source: `route-${delivery.id}`,
         layout: {
-          'line-join': 'round',
-          'line-cap': 'round',
+          "line-join": "round",
+          "line-cap": "round",
         },
         paint: {
-          'line-color': delivery.status === 'delivered' ? '#22c55e' : '#3b82f6',
-          'line-width': 2,
-          'line-dasharray': [2, 2],
+          "line-color": delivery.status === "delivered" ? "#22c55e" : "#3b82f6",
+          "line-width": 2,
+          "line-dasharray": [2, 2],
         },
       });
     });
@@ -203,14 +203,14 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'delivered':
-        return 'bg-green-500';
-      case 'in_transit':
-        return 'bg-blue-500';
-      case 'delayed':
-        return 'bg-red-500';
-      default:
-        return 'bg-gray-500';
+    case "delivered":
+      return "bg-green-500";
+    case "in_transit":
+      return "bg-blue-500";
+    case "delayed":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
@@ -255,13 +255,13 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">
-                  {deliveries.filter(d => d.status === 'in_transit').length}
+                  {deliveries.filter(d => d.status === "in_transit").length}
                 </div>
                 <div className="text-xs text-gray-500">In Transit</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">
-                  {deliveries.filter(d => d.status === 'delivered').length}
+                  {deliveries.filter(d => d.status === "delivered").length}
                 </div>
                 <div className="text-xs text-gray-500">Delivered</div>
               </div>

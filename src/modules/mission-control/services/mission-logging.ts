@@ -4,7 +4,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-type LogSeverity = 'info' | 'warning' | 'error' | 'critical';
+type LogSeverity = "info" | "warning" | "error" | "critical";
 
 export interface MissionLog {
   id?: string;
@@ -22,7 +22,7 @@ export class MissionLoggingService {
   async logEvent(
     missionId: string,
     eventType: string,
-    severity: LogSeverity = 'info',
+    severity: LogSeverity = "info",
     message?: string,
     eventData?: Record<string, any>
   ): Promise<MissionLog | null> {
@@ -30,7 +30,7 @@ export class MissionLoggingService {
       const { data: { user } } = await supabase.auth.getUser();
 
       const { data, error } = await supabase
-        .from('mission_control_logs')
+        .from("mission_control_logs")
         .insert({
           mission_id: missionId,
           user_id: user?.id,
@@ -46,7 +46,7 @@ export class MissionLoggingService {
 
       return this.mapToLog(data);
     } catch (error) {
-      console.error('Error logging mission event:', error);
+      console.error("Error logging mission event:", error);
       return null;
     }
   }
@@ -54,17 +54,17 @@ export class MissionLoggingService {
   async getMissionLogs(missionId: string, limit: number = 100): Promise<MissionLog[]> {
     try {
       const { data, error } = await supabase
-        .from('mission_control_logs')
-        .select('*')
-        .eq('mission_id', missionId)
-        .order('created_at', { ascending: false })
+        .from("mission_control_logs")
+        .select("*")
+        .eq("mission_id", missionId)
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
 
       return (data || []).map(this.mapToLog);
     } catch (error) {
-      console.error('Error fetching mission logs:', error);
+      console.error("Error fetching mission logs:", error);
       return [];
     }
   }
@@ -72,16 +72,16 @@ export class MissionLoggingService {
   async getRecentLogs(limit: number = 50): Promise<MissionLog[]> {
     try {
       const { data, error } = await supabase
-        .from('mission_control_logs')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("mission_control_logs")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
 
       return (data || []).map(this.mapToLog);
     } catch (error) {
-      console.error('Error fetching recent logs:', error);
+      console.error("Error fetching recent logs:", error);
       return [];
     }
   }
@@ -89,17 +89,17 @@ export class MissionLoggingService {
   async getLogsBySeverity(severity: LogSeverity, limit: number = 100): Promise<MissionLog[]> {
     try {
       const { data, error } = await supabase
-        .from('mission_control_logs')
-        .select('*')
-        .eq('severity', severity)
-        .order('created_at', { ascending: false })
+        .from("mission_control_logs")
+        .select("*")
+        .eq("severity", severity)
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
 
       return (data || []).map(this.mapToLog);
     } catch (error) {
-      console.error('Error fetching logs by severity:', error);
+      console.error("Error fetching logs by severity:", error);
       return [];
     }
   }

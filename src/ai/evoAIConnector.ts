@@ -24,14 +24,14 @@ export interface PerformanceScore {
   adaptation: number;
   tactical: number;
   timestamp: Date;
-  trend: 'improving' | 'stable' | 'degrading';
+  trend: "improving" | "stable" | "degrading";
 }
 
 export interface FeedbackInsight {
   category: string;
   pattern: string;
   frequency: number;
-  impact: 'high' | 'medium' | 'low';
+  impact: "high" | "medium" | "low";
   recommendation: string;
 }
 
@@ -54,12 +54,12 @@ class EvoAIConnector {
    */
   start(): void {
     if (this.isActive) {
-      logger.warn('[EvoAI] Already running');
+      logger.warn("[EvoAI] Already running");
       return;
     }
 
     this.isActive = true;
-    logger.info('[EvoAI] Starting Evolution AI Connector...');
+    logger.info("[EvoAI] Starting Evolution AI Connector...");
 
     // Process insights periodically
     this.batchInterval = setInterval(() => {
@@ -69,7 +69,7 @@ class EvoAIConnector {
     // Process initial batch
     setTimeout(() => this.processBatchInsights(), 5000);
 
-    logger.info('[EvoAI] Evolution AI Connector is active');
+    logger.info("[EvoAI] Evolution AI Connector is active");
   }
 
   /**
@@ -84,7 +84,7 @@ class EvoAIConnector {
       this.batchInterval = null;
     }
 
-    logger.info('[EvoAI] Evolution AI Connector stopped');
+    logger.info("[EvoAI] Evolution AI Connector stopped");
   }
 
   /**
@@ -93,7 +93,7 @@ class EvoAIConnector {
   private async processBatchInsights(): Promise<void> {
     if (!this.isActive) return;
 
-    logger.info('[EvoAI] Processing batch insights...');
+    logger.info("[EvoAI] Processing batch insights...");
 
     try {
       // Sync data from all sources
@@ -129,9 +129,9 @@ class EvoAIConnector {
         await this.triggerFineTune(report);
       }
 
-      logger.info('[EvoAI] Batch insights processed successfully');
+      logger.info("[EvoAI] Batch insights processed successfully");
     } catch (error) {
-      logger.error('[EvoAI] Failed to process batch insights:', error);
+      logger.error("[EvoAI] Failed to process batch insights:", error);
     }
   }
 
@@ -141,14 +141,14 @@ class EvoAIConnector {
   private async syncFeedbackCore(): Promise<any[]> {
     try {
       const { data } = await supabase
-        .from('user_feedback')
-        .select('*')
-        .gte('created_at', new Date(Date.now() - this.batchIntervalHours * 60 * 60 * 1000).toISOString())
-        .order('created_at', { ascending: false });
+        .from("user_feedback")
+        .select("*")
+        .gte("created_at", new Date(Date.now() - this.batchIntervalHours * 60 * 60 * 1000).toISOString())
+        .order("created_at", { ascending: false });
 
       return data || [];
     } catch (error) {
-      logger.error('[EvoAI] Failed to sync feedback core:', error);
+      logger.error("[EvoAI] Failed to sync feedback core:", error);
       return [];
     }
   }
@@ -161,7 +161,7 @@ class EvoAIConnector {
       const predictions = await predictiveEngine.getRecentPredictions(1000);
       return predictions;
     } catch (error) {
-      logger.error('[EvoAI] Failed to sync predictive engine:', error);
+      logger.error("[EvoAI] Failed to sync predictive engine:", error);
       return [];
     }
   }
@@ -174,7 +174,7 @@ class EvoAIConnector {
       const history = await adaptiveMetricsEngine.getAdjustmentHistory(500);
       return history;
     } catch (error) {
-      logger.error('[EvoAI] Failed to sync adaptive metrics:', error);
+      logger.error("[EvoAI] Failed to sync adaptive metrics:", error);
       return [];
     }
   }
@@ -213,7 +213,7 @@ class EvoAIConnector {
 
     // Count feedback by category
     feedbackData.forEach(feedback => {
-      const category = feedback.category || 'general';
+      const category = feedback.category || "general";
       patterns.set(category, (patterns.get(category) || 0) + 1);
     });
 
@@ -221,10 +221,10 @@ class EvoAIConnector {
     patterns.forEach((count: number, category: string) => {
       if (count > 5) {
         insights.push({
-          category: 'user_feedback',
+          category: "user_feedback",
           pattern: `Frequent ${category} feedback`,
           frequency: count,
-          impact: count > 20 ? 'high' : count > 10 ? 'medium' : 'low',
+          impact: count > 20 ? "high" : count > 10 ? "medium" : "low",
           recommendation: `Review and address ${category} concerns`,
         });
       }
@@ -252,21 +252,21 @@ class EvoAIConnector {
 
     if (avgConfidence < 0.6) {
       insights.push({
-        category: 'prediction',
-        pattern: 'Low prediction confidence',
+        category: "prediction",
+        pattern: "Low prediction confidence",
         frequency: predictiveData.length,
-        impact: 'high',
-        recommendation: 'Increase training data or refine prediction model',
+        impact: "high",
+        recommendation: "Increase training data or refine prediction model",
       });
     }
 
     if (riskLevels.critical > predictiveData.length * 0.2) {
       insights.push({
-        category: 'prediction',
-        pattern: 'High critical risk rate',
+        category: "prediction",
+        pattern: "High critical risk rate",
         frequency: riskLevels.critical,
-        impact: 'high',
-        recommendation: 'Review critical risk thresholds and system stability',
+        impact: "high",
+        recommendation: "Review critical risk thresholds and system stability",
       });
     }
 
@@ -291,10 +291,10 @@ class EvoAIConnector {
     (Object.entries(paramAdjustments) as Array<[string, number]>).forEach(([param, count]) => {
       if (count > 10) {
         insights.push({
-          category: 'adaptation',
+          category: "adaptation",
           pattern: `Frequent ${param} adjustments`,
           frequency: count,
-          impact: 'medium',
+          impact: "medium",
           recommendation: `Review ${param} baseline and adjustment rules`,
         });
       }
@@ -309,16 +309,16 @@ class EvoAIConnector {
   private async calculatePerformanceScore(): Promise<PerformanceScore> {
     // Fetch recent metrics
     const { data: recentMetrics } = await supabase
-      .from('system_metrics')
-      .select('*')
-      .gte('recorded_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-      .order('recorded_at', { ascending: false });
+      .from("system_metrics")
+      .select("*")
+      .gte("recorded_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+      .order("recorded_at", { ascending: false });
 
     const { data: oldMetrics } = await supabase
-      .from('system_metrics')
-      .select('*')
-      .gte('recorded_at', new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString())
-      .lt('recorded_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+      .from("system_metrics")
+      .select("*")
+      .gte("recorded_at", new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString())
+      .lt("recorded_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
     // Calculate scores (simplified)
     const recentArray = (recentMetrics ?? []) as any[];
@@ -326,7 +326,7 @@ class EvoAIConnector {
     const recentAvg = recentArray.reduce((sum, m: any) => sum + (m.value ?? 0.5), 0) / Math.max(recentArray.length || 1, 1);
     const oldAvg = oldArray.reduce((sum, m: any) => sum + (m.value ?? 0.5), 0) / Math.max(oldArray.length || 1, 1);
 
-    const trend = recentAvg > oldAvg * 1.05 ? 'improving' : recentAvg < oldAvg * 0.95 ? 'degrading' : 'stable';
+    const trend = recentAvg > oldAvg * 1.05 ? "improving" : recentAvg < oldAvg * 0.95 ? "degrading" : "stable";
 
     return {
       overall: Math.min(recentAvg, 1),
@@ -346,7 +346,7 @@ class EvoAIConnector {
 
     // Generate deltas based on insights
     insights.forEach(insight => {
-      if (insight.impact === 'high') {
+      if (insight.impact === "high") {
         deltas.push({
           component: insight.category,
           metric: insight.pattern,
@@ -369,8 +369,8 @@ class EvoAIConnector {
     insights: FeedbackInsight[]
   ): number {
     const baseScore = performanceScore.overall * 100;
-    const trendBonus = performanceScore.trend === 'improving' ? 10 : performanceScore.trend === 'degrading' ? -10 : 0;
-    const insightPenalty = insights.filter(i => i.impact === 'high').length * 5;
+    const trendBonus = performanceScore.trend === "improving" ? 10 : performanceScore.trend === "degrading" ? -10 : 0;
+    const insightPenalty = insights.filter(i => i.impact === "high").length * 5;
 
     return Math.max(0, Math.min(100, baseScore + trendBonus - insightPenalty));
   }
@@ -385,21 +385,21 @@ class EvoAIConnector {
 
       // Save training deltas snapshot
       await (supabase as any)
-        .from('training_deltas')
+        .from("training_deltas")
         .insert({
           cycle_id: cycleId,
-          module_name: 'evo_ai',
-          metric_name: 'composite',
-          source: 'evo_ai_connector',
+          module_name: "evo_ai",
+          metric_name: "composite",
+          source: "evo_ai_connector",
           deltas: report.trainingDeltas,
           created_at: new Date().toISOString(),
         });
 
       // Save performance score
       await (supabase as any)
-        .from('performance_scores')
+        .from("performance_scores")
         .insert({
-          module_name: 'evo_ai',
+          module_name: "evo_ai",
           overall_score: report.performanceScore.overall,
           prediction_score: report.performanceScore.prediction,
           adaptation_score: report.performanceScore.adaptation,
@@ -420,12 +420,12 @@ class EvoAIConnector {
       }));
 
       if (insightRecords.length > 0) {
-        await (supabase as any).from('evolution_insights').insert(insightRecords);
+        await (supabase as any).from("evolution_insights").insert(insightRecords);
       }
 
-      logger.info('[EvoAI] Evolution report saved');
+      logger.info("[EvoAI] Evolution report saved");
     } catch (error) {
-      logger.error('[EvoAI] Failed to save evolution report:', error);
+      logger.error("[EvoAI] Failed to save evolution report:", error);
     }
   }
 
@@ -434,7 +434,7 @@ class EvoAIConnector {
    */
   private async calculatePatternDeviation(insights: FeedbackInsight[]): Promise<number> {
     // Calculate deviation based on high-impact insights
-    const highImpactCount = insights.filter(i => i.impact === 'high').length;
+    const highImpactCount = insights.filter(i => i.impact === "high").length;
     const totalInsights = insights.length || 1;
 
     return highImpactCount / totalInsights;
@@ -444,28 +444,28 @@ class EvoAIConnector {
    * Trigger LLM fine-tune
    */
   private async triggerFineTune(report: EvolutionReport): Promise<void> {
-    logger.info('[EvoAI] Triggering LLM fine-tune...');
+    logger.info("[EvoAI] Triggering LLM fine-tune...");
 
     try {
       // Save fine-tune request
       await (supabase as any)
-        .from('fine_tune_requests')
+        .from("fine_tune_requests")
         .insert({
-          module_name: 'evo_ai',
+          module_name: "evo_ai",
           request_id: (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2)),
-          trigger_reason: 'pattern_deviation_exceeded',
+          trigger_reason: "pattern_deviation_exceeded",
           deviation_percent: await this.calculatePatternDeviation(report.insights),
           training_data: {
             deltas: report.trainingDeltas,
             insights: report.insights,
           },
-          status: 'pending',
+          status: "pending",
           requested_at: new Date().toISOString(),
         });
 
-      logger.info('[EvoAI] Fine-tune request created');
+      logger.info("[EvoAI] Fine-tune request created");
     } catch (error) {
-      logger.error('[EvoAI] Failed to trigger fine-tune:', error);
+      logger.error("[EvoAI] Failed to trigger fine-tune:", error);
     }
   }
 
@@ -475,23 +475,23 @@ class EvoAIConnector {
   async getLatestReport(): Promise<EvolutionReport | null> {
     try {
       const { data: performanceData } = await supabase
-        .from('performance_scores')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("performance_scores")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(1)
         .single();
 
       if (!performanceData) return null;
 
       const { data: insightsData } = await supabase
-        .from('evolution_insights')
-        .select('*')
-        .gte('generated_at', new Date(Date.now() - this.batchIntervalHours * 60 * 60 * 1000).toISOString());
+        .from("evolution_insights")
+        .select("*")
+        .gte("generated_at", new Date(Date.now() - this.batchIntervalHours * 60 * 60 * 1000).toISOString());
 
       const { data: deltasData } = await supabase
-        .from('training_deltas')
-        .select('*')
-        .order('generated_at', { ascending: false })
+        .from("training_deltas")
+        .select("*")
+        .order("generated_at", { ascending: false })
         .limit(1)
         .single();
 
@@ -502,14 +502,14 @@ class EvoAIConnector {
         adaptation: performanceData.adaptation_score ?? 0,
         tactical: performanceData.tactical_score ?? 0,
         timestamp: new Date(performanceData.timestamp ?? new Date().toISOString()),
-        trend: (performanceData.trend ?? 'stable') as PerformanceScore['trend'],
+        trend: (performanceData.trend ?? "stable") as PerformanceScore["trend"],
       };
 
       const insights: FeedbackInsight[] = (insightsData || []).map(i => ({
         category: i.category,
         pattern: i.pattern,
         frequency: i.frequency,
-        impact: (i.impact as FeedbackInsight['impact']) ?? 'low',
+        impact: (i.impact as FeedbackInsight["impact"]) ?? "low",
         recommendation: i.recommendation,
       }));
 
@@ -521,7 +521,7 @@ class EvoAIConnector {
         generatedAt: new Date(performanceData.timestamp ?? new Date().toISOString()),
       };
     } catch (error) {
-      logger.error('[EvoAI] Failed to fetch latest report:', error);
+      logger.error("[EvoAI] Failed to fetch latest report:", error);
       return null;
     }
   }

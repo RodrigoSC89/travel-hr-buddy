@@ -3,13 +3,13 @@
  * Provides offline data persistence and synchronization capabilities
  */
 
-const DB_NAME = 'nautilus-offline-db';
+const DB_NAME = "nautilus-offline-db";
 const DB_VERSION = 1;
 
 export interface OfflineRecord {
   id?: number;
   table: string;
-  action: 'create' | 'update' | 'delete';
+  action: "create" | "update" | "delete";
   data: any;
   timestamp: number;
   synced: boolean;
@@ -32,23 +32,23 @@ class LocalSyncManager {
         const db = (event.target as IDBOpenDBRequest).result;
 
         // Store for offline actions queue
-        if (!db.objectStoreNames.contains('syncQueue')) {
-          const syncStore = db.createObjectStore('syncQueue', { 
-            keyPath: 'id', 
+        if (!db.objectStoreNames.contains("syncQueue")) {
+          const syncStore = db.createObjectStore("syncQueue", { 
+            keyPath: "id", 
             autoIncrement: true 
           });
-          syncStore.createIndex('synced', 'synced', { unique: false });
-          syncStore.createIndex('table', 'table', { unique: false });
-          syncStore.createIndex('timestamp', 'timestamp', { unique: false });
+          syncStore.createIndex("synced", "synced", { unique: false });
+          syncStore.createIndex("table", "table", { unique: false });
+          syncStore.createIndex("timestamp", "timestamp", { unique: false });
         }
 
         // Store for cached data
-        if (!db.objectStoreNames.contains('dataCache')) {
-          const cacheStore = db.createObjectStore('dataCache', { 
-            keyPath: 'key' 
+        if (!db.objectStoreNames.contains("dataCache")) {
+          const cacheStore = db.createObjectStore("dataCache", { 
+            keyPath: "key" 
           });
-          cacheStore.createIndex('table', 'table', { unique: false });
-          cacheStore.createIndex('timestamp', 'timestamp', { unique: false });
+          cacheStore.createIndex("table", "table", { unique: false });
+          cacheStore.createIndex("timestamp", "timestamp", { unique: false });
         }
       };
     });
@@ -57,17 +57,17 @@ class LocalSyncManager {
   /**
    * Save data locally when offline
    */
-  async saveLocally(data: any, table: string, action: 'create' | 'update' | 'delete' = 'create'): Promise<void> {
+  async saveLocally(data: any, table: string, action: "create" | "update" | "delete" = "create"): Promise<void> {
     if (!this.db) await this.init();
 
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error('Database not initialized'));
+        reject(new Error("Database not initialized"));
         return;
       }
 
-      const transaction = this.db.transaction(['syncQueue'], 'readwrite');
-      const store = transaction.objectStore('syncQueue');
+      const transaction = this.db.transaction(["syncQueue"], "readwrite");
+      const store = transaction.objectStore("syncQueue");
 
       const record: OfflineRecord = {
         table,
@@ -91,12 +91,12 @@ class LocalSyncManager {
 
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error('Database not initialized'));
+        reject(new Error("Database not initialized"));
         return;
       }
 
-      const transaction = this.db.transaction(['dataCache'], 'readwrite');
-      const store = transaction.objectStore('dataCache');
+      const transaction = this.db.transaction(["dataCache"], "readwrite");
+      const store = transaction.objectStore("dataCache");
 
       const cacheRecord = {
         key,
@@ -119,12 +119,12 @@ class LocalSyncManager {
 
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error('Database not initialized'));
+        reject(new Error("Database not initialized"));
         return;
       }
 
-      const transaction = this.db.transaction(['dataCache'], 'readonly');
-      const store = transaction.objectStore('dataCache');
+      const transaction = this.db.transaction(["dataCache"], "readonly");
+      const store = transaction.objectStore("dataCache");
 
       const request = store.get(key);
       request.onsuccess = () => resolve(request.result?.data || null);
@@ -140,12 +140,12 @@ class LocalSyncManager {
 
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error('Database not initialized'));
+        reject(new Error("Database not initialized"));
         return;
       }
 
-      const transaction = this.db.transaction(['syncQueue'], 'readonly');
-      const store = transaction.objectStore('syncQueue');
+      const transaction = this.db.transaction(["syncQueue"], "readonly");
+      const store = transaction.objectStore("syncQueue");
 
       const request = store.getAll();
       request.onsuccess = () => {
@@ -164,12 +164,12 @@ class LocalSyncManager {
 
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error('Database not initialized'));
+        reject(new Error("Database not initialized"));
         return;
       }
 
-      const transaction = this.db.transaction(['syncQueue'], 'readwrite');
-      const store = transaction.objectStore('syncQueue');
+      const transaction = this.db.transaction(["syncQueue"], "readwrite");
+      const store = transaction.objectStore("syncQueue");
 
       const request = store.get(id);
       request.onsuccess = () => {
@@ -195,12 +195,12 @@ class LocalSyncManager {
 
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error('Database not initialized'));
+        reject(new Error("Database not initialized"));
         return;
       }
 
-      const transaction = this.db.transaction(['syncQueue'], 'readwrite');
-      const store = transaction.objectStore('syncQueue');
+      const transaction = this.db.transaction(["syncQueue"], "readwrite");
+      const store = transaction.objectStore("syncQueue");
 
       const request = store.delete(id);
       request.onsuccess = () => resolve();
@@ -216,12 +216,12 @@ class LocalSyncManager {
 
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error('Database not initialized'));
+        reject(new Error("Database not initialized"));
         return;
       }
 
-      const transaction = this.db.transaction(['syncQueue'], 'readwrite');
-      const store = transaction.objectStore('syncQueue');
+      const transaction = this.db.transaction(["syncQueue"], "readwrite");
+      const store = transaction.objectStore("syncQueue");
 
       const request = store.openCursor();
       request.onsuccess = (event) => {
@@ -248,12 +248,12 @@ class LocalSyncManager {
 
     return new Promise((resolve, reject) => {
       if (!this.db) {
-        reject(new Error('Database not initialized'));
+        reject(new Error("Database not initialized"));
         return;
       }
 
-      const transaction = this.db.transaction(['syncQueue'], 'readonly');
-      const store = transaction.objectStore('syncQueue');
+      const transaction = this.db.transaction(["syncQueue"], "readonly");
+      const store = transaction.objectStore("syncQueue");
 
       const request = store.getAll();
       request.onsuccess = () => {
@@ -269,6 +269,6 @@ class LocalSyncManager {
 export const localSync = new LocalSyncManager();
 
 // Initialize on module load
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   localSync.init().catch(console.error);
 }

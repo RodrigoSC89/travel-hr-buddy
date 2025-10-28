@@ -21,13 +21,13 @@ export interface SonarPing {
 export interface SonarReturn {
   ping: SonarPing;
   depth: number; // calculated depth in meters
-  material: 'rock' | 'sand' | 'mud' | 'metal' | 'biological' | 'unknown';
+  material: "rock" | "sand" | "mud" | "metal" | "biological" | "unknown";
   confidence: number; // 0-100
   noise: number; // background noise level
 }
 
 export interface SonarPattern {
-  type: 'anomaly' | 'structure' | 'terrain' | 'object';
+  type: "anomaly" | "structure" | "terrain" | "object";
   location: { angle: number; distance: number; depth: number };
   size: number; // estimated size in meters
   description: string;
@@ -102,32 +102,32 @@ class DataAnalyzer {
   private classifyMaterial(
     intensity: number,
     echoDelay: number
-  ): SonarReturn['material'] {
+  ): SonarReturn["material"] {
     // High intensity, short delay = hard surface (rock, metal)
     if (intensity > 80 && echoDelay < 50) {
-      return 'rock';
+      return "rock";
     }
 
     // Very high intensity = metal
     if (intensity > 90) {
-      return 'metal';
+      return "metal";
     }
 
     // Medium intensity = sand
     if (intensity > 50 && intensity < 80) {
-      return 'sand';
+      return "sand";
     }
 
     // Low intensity = soft surface (mud, biological)
     if (intensity < 50) {
       // Biological matter often has irregular patterns
       if (Math.random() > 0.7) {
-        return 'biological';
+        return "biological";
       }
-      return 'mud';
+      return "mud";
     }
 
-    return 'unknown';
+    return "unknown";
   }
 
   /**
@@ -148,16 +148,16 @@ class DataAnalyzer {
       const uniqueMaterials = new Set(materials).size;
 
       // Detect anomalies (unusual patterns)
-      if (uniqueMaterials === 1 && materials[0] === 'metal') {
+      if (uniqueMaterials === 1 && materials[0] === "metal") {
         patterns.push({
-          type: 'object',
+          type: "object",
           location: {
             angle: cluster[0].ping.angle,
             distance: cluster[0].ping.distance,
             depth: cluster[0].depth,
           },
           size: this.estimateClusterSize(cluster),
-          description: 'Metallic object detected',
+          description: "Metallic object detected",
           confidence: avgIntensity,
         });
       }
@@ -165,14 +165,14 @@ class DataAnalyzer {
       // Detect structures (consistent hard surfaces)
       if (avgIntensity > 70 && cluster.length > 5) {
         patterns.push({
-          type: 'structure',
+          type: "structure",
           location: {
             angle: cluster[0].ping.angle,
             distance: cluster[0].ping.distance,
             depth: cluster[0].depth,
           },
           size: this.estimateClusterSize(cluster),
-          description: 'Underwater structure or formation',
+          description: "Underwater structure or formation",
           confidence: Math.min(95, avgIntensity),
         });
       }
@@ -180,14 +180,14 @@ class DataAnalyzer {
       // Detect terrain features
       if (this.isTerrainFeature(cluster)) {
         patterns.push({
-          type: 'terrain',
+          type: "terrain",
           location: {
             angle: cluster[0].ping.angle,
             distance: cluster[0].ping.distance,
             depth: cluster[0].depth,
           },
           size: this.estimateClusterSize(cluster),
-          description: 'Significant terrain feature',
+          description: "Significant terrain feature",
           confidence: 80,
         });
       }

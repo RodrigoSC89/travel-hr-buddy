@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,18 +6,18 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 interface CreateIntegrationDialogProps {
   open: boolean;
@@ -31,14 +31,14 @@ export const CreateIntegrationDialog: React.FC<CreateIntegrationDialogProps> = (
   onCreate,
 }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    type: 'oauth2',
-    provider: '',
-    oauth_client_id: '',
-    oauth_client_secret: '',
-    oauth_redirect_uri: '',
-    webhook_url: '',
-    webhook_secret: '',
+    name: "",
+    type: "oauth2",
+    provider: "",
+    oauth_client_id: "",
+    oauth_client_secret: "",
+    oauth_redirect_uri: "",
+    webhook_url: "",
+    webhook_secret: "",
     config: {},
   });
 
@@ -50,14 +50,14 @@ export const CreateIntegrationDialog: React.FC<CreateIntegrationDialogProps> = (
 
   const handleReset = () => {
     setFormData({
-      name: '',
-      type: 'oauth2',
-      provider: '',
-      oauth_client_id: '',
-      oauth_client_secret: '',
-      oauth_redirect_uri: '',
-      webhook_url: '',
-      webhook_secret: '',
+      name: "",
+      type: "oauth2",
+      provider: "",
+      oauth_client_id: "",
+      oauth_client_secret: "",
+      oauth_redirect_uri: "",
+      webhook_url: "",
+      webhook_secret: "",
       config: {},
     });
   };
@@ -126,7 +126,7 @@ export const CreateIntegrationDialog: React.FC<CreateIntegrationDialogProps> = (
             </Select>
           </div>
 
-          {formData.type === 'oauth2' && (
+          {formData.type === "oauth2" && (
             <>
               <div className="space-y-2">
                 <Label htmlFor="oauth_client_id">Client ID</Label>
@@ -137,7 +137,7 @@ export const CreateIntegrationDialog: React.FC<CreateIntegrationDialogProps> = (
                     setFormData({ ...formData, oauth_client_id: e.target.value })
                   }
                   placeholder="Enter OAuth client ID"
-                  required={formData.type === 'oauth2'}
+                  required={formData.type === "oauth2"}
                 />
               </div>
 
@@ -151,7 +151,7 @@ export const CreateIntegrationDialog: React.FC<CreateIntegrationDialogProps> = (
                     setFormData({ ...formData, oauth_client_secret: e.target.value })
                   }
                   placeholder="Enter OAuth client secret"
-                  required={formData.type === 'oauth2'}
+                  required={formData.type === "oauth2"}
                 />
               </div>
 
@@ -164,13 +164,13 @@ export const CreateIntegrationDialog: React.FC<CreateIntegrationDialogProps> = (
                     setFormData({ ...formData, oauth_redirect_uri: e.target.value })
                   }
                   placeholder="https://your-app.com/oauth/callback"
-                  required={formData.type === 'oauth2'}
+                  required={formData.type === "oauth2"}
                 />
               </div>
             </>
           )}
 
-          {formData.type === 'webhook' && (
+          {formData.type === "webhook" && (
             <>
               <div className="space-y-2">
                 <Label htmlFor="webhook_url">Webhook URL</Label>
@@ -181,7 +181,7 @@ export const CreateIntegrationDialog: React.FC<CreateIntegrationDialogProps> = (
                     setFormData({ ...formData, webhook_url: e.target.value })
                   }
                   placeholder="https://your-webhook-endpoint.com"
-                  required={formData.type === 'webhook'}
+                  required={formData.type === "webhook"}
                 />
               </div>
 

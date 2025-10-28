@@ -4,7 +4,7 @@
  * Service for managing webhooks, OAuth connections, and integration plugins
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 import type {
   WebhookIntegration,
   WebhookEvent,
@@ -13,15 +13,15 @@ import type {
   IntegrationLog,
   IntegrationDashboardStats,
   IntegrationProvider,
-} from '@/types/integrations';
+} from "@/types/integrations";
 
 export class IntegrationsService {
   // Webhook Integrations
   static async getIntegrations(): Promise<WebhookIntegration[]> {
     const { data, error } = await supabase
-      .from('webhook_integrations')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("webhook_integrations")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -29,9 +29,9 @@ export class IntegrationsService {
 
   static async getIntegration(id: string): Promise<WebhookIntegration | null> {
     const { data, error } = await supabase
-      .from('webhook_integrations')
-      .select('*')
-      .eq('id', id)
+      .from("webhook_integrations")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) throw error;
@@ -42,7 +42,7 @@ export class IntegrationsService {
     integration: Partial<WebhookIntegration>
   ): Promise<WebhookIntegration> {
     const { data, error } = await supabase
-      .from('webhook_integrations')
+      .from("webhook_integrations")
       .insert(integration)
       .select()
       .single();
@@ -56,9 +56,9 @@ export class IntegrationsService {
     updates: Partial<WebhookIntegration>
   ): Promise<WebhookIntegration> {
     const { data, error } = await supabase
-      .from('webhook_integrations')
+      .from("webhook_integrations")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -68,29 +68,29 @@ export class IntegrationsService {
 
   static async deleteIntegration(id: string): Promise<void> {
     const { error } = await supabase
-      .from('webhook_integrations')
+      .from("webhook_integrations")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) throw error;
   }
 
   static async toggleIntegration(id: string, enabled: boolean): Promise<void> {
     await this.updateIntegration(id, {
-      status: enabled ? 'active' : 'inactive',
+      status: enabled ? "active" : "inactive",
     });
   }
 
   // Webhook Events
   static async getWebhookEvents(integrationId?: string): Promise<WebhookEvent[]> {
     let query = supabase
-      .from('webhook_events')
-      .select('*')
-      .order('triggered_at', { ascending: false })
+      .from("webhook_events")
+      .select("*")
+      .order("triggered_at", { ascending: false })
       .limit(100);
 
     if (integrationId) {
-      query = query.eq('integration_id', integrationId);
+      query = query.eq("integration_id", integrationId);
     }
 
     const { data, error } = await query;
@@ -103,7 +103,7 @@ export class IntegrationsService {
     eventType: string,
     payload: Record<string, unknown>
   ): Promise<string> {
-    const { data, error } = await supabase.rpc('dispatch_webhook_event', {
+    const { data, error } = await supabase.rpc("dispatch_webhook_event", {
       p_integration_id: integrationId,
       p_event_type: eventType,
       p_payload: payload,
@@ -116,9 +116,9 @@ export class IntegrationsService {
   // OAuth Connections
   static async getOAuthConnections(): Promise<OAuthConnection[]> {
     const { data, error } = await supabase
-      .from('oauth_connections')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("oauth_connections")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -128,9 +128,9 @@ export class IntegrationsService {
     provider: IntegrationProvider
   ): Promise<OAuthConnection | null> {
     const { data, error } = await supabase
-      .from('oauth_connections')
-      .select('*')
-      .eq('provider', provider)
+      .from("oauth_connections")
+      .select("*")
+      .eq("provider", provider)
       .maybeSingle();
 
     if (error) throw error;
@@ -141,7 +141,7 @@ export class IntegrationsService {
     connection: Partial<OAuthConnection>
   ): Promise<OAuthConnection> {
     const { data, error } = await supabase
-      .from('oauth_connections')
+      .from("oauth_connections")
       .upsert(connection)
       .select()
       .single();
@@ -152,9 +152,9 @@ export class IntegrationsService {
 
   static async disconnectOAuth(provider: IntegrationProvider): Promise<void> {
     const { error } = await supabase
-      .from('oauth_connections')
+      .from("oauth_connections")
       .delete()
-      .eq('provider', provider);
+      .eq("provider", provider);
 
     if (error) throw error;
   }
@@ -165,7 +165,7 @@ export class IntegrationsService {
     // In production, this would call the OAuth provider's token refresh endpoint
     const connection = await this.getOAuthConnection(provider);
     if (!connection || !connection.refresh_token) {
-      throw new Error('No refresh token available');
+      throw new Error("No refresh token available");
     }
 
     // Placeholder - implement actual refresh logic
@@ -175,9 +175,9 @@ export class IntegrationsService {
   // Integration Plugins
   static async getPlugins(): Promise<IntegrationPlugin[]> {
     const { data, error } = await supabase
-      .from('integration_plugins')
-      .select('*')
-      .order('display_name');
+      .from("integration_plugins")
+      .select("*")
+      .order("display_name");
 
     if (error) throw error;
     return data || [];
@@ -185,10 +185,10 @@ export class IntegrationsService {
 
   static async getEnabledPlugins(): Promise<IntegrationPlugin[]> {
     const { data, error } = await supabase
-      .from('integration_plugins')
-      .select('*')
-      .eq('is_enabled', true)
-      .order('display_name');
+      .from("integration_plugins")
+      .select("*")
+      .eq("is_enabled", true)
+      .order("display_name");
 
     if (error) throw error;
     return data || [];
@@ -196,9 +196,9 @@ export class IntegrationsService {
 
   static async togglePlugin(id: string, enabled: boolean): Promise<void> {
     const { error } = await supabase
-      .from('integration_plugins')
+      .from("integration_plugins")
       .update({ is_enabled: enabled })
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) throw error;
   }
@@ -206,9 +206,9 @@ export class IntegrationsService {
   // Integration Logs
   static async getLogs(limit = 100): Promise<IntegrationLog[]> {
     const { data, error } = await supabase
-      .from('integration_logs')
-      .select('*')
-      .order('created_at', { ascending: false })
+      .from("integration_logs")
+      .select("*")
+      .order("created_at", { ascending: false })
       .limit(limit);
 
     if (error) throw error;
@@ -216,7 +216,7 @@ export class IntegrationsService {
   }
 
   static async createLog(log: Partial<IntegrationLog>): Promise<void> {
-    const { error } = await supabase.from('integration_logs').insert(log);
+    const { error } = await supabase.from("integration_logs").insert(log);
     if (error) throw error;
   }
 
@@ -228,9 +228,9 @@ export class IntegrationsService {
       this.getLogs(20),
     ]);
 
-    const activeIntegrations = integrations.filter((i) => i.status === 'active');
+    const activeIntegrations = integrations.filter((i) => i.status === "active");
     const totalEvents = events.length;
-    const successfulEvents = events.filter((e) => e.status === 'success').length;
+    const successfulEvents = events.filter((e) => e.status === "success").length;
     const successRate = totalEvents > 0 ? (successfulEvents / totalEvents) * 100 : 0;
 
     return {
@@ -251,7 +251,7 @@ export class IntegrationsService {
     scope: string[]
   ): string {
     const state = Math.random().toString(36).substring(7);
-    const scopeStr = scope.join(' ');
+    const scopeStr = scope.join(" ");
 
     const urls: Record<IntegrationProvider, string> = {
       google: `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scopeStr}&state=${state}`,
@@ -261,6 +261,6 @@ export class IntegrationsService {
       custom: redirectUri,
     };
 
-    return urls[provider] || '';
+    return urls[provider] || "";
   }
 }

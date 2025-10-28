@@ -1,38 +1,38 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Radio, Satellite, Send, Activity, AlertTriangle, CheckCircle2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Radio, Satellite, Send, Activity, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const ChannelManager = () => {
   const { toast } = useToast();
   const [channels, setChannels] = useState([
     {
-      id: '1',
-      name: 'VHF Canal 16',
-      type: 'radio',
-      status: 'online',
+      id: "1",
+      name: "VHF Canal 16",
+      type: "radio",
+      status: "online",
       latency: 12,
       uptime: 99.8,
       users: 45
     },
     {
-      id: '2',
-      name: 'Satélite Inmarsat',
-      type: 'satellite',
-      status: 'online',
+      id: "2",
+      name: "Satélite Inmarsat",
+      type: "satellite",
+      status: "online",
       latency: 450,
       uptime: 98.5,
       users: 12
     },
     {
-      id: '3',
-      name: 'Canal Emergência',
-      type: 'radio',
-      status: 'standby',
+      id: "3",
+      name: "Canal Emergência",
+      type: "radio",
+      status: "standby",
       latency: 8,
       uptime: 100,
       users: 0
@@ -42,22 +42,22 @@ const ChannelManager = () => {
   const [selectedChannel, setSelectedChannel] = useState(channels[0]);
   const [messages, setMessages] = useState([
     {
-      id: '1',
-      channel_id: '1',
-      user: 'Operador A',
-      message: 'Teste de comunicação confirmado',
+      id: "1",
+      channel_id: "1",
+      user: "Operador A",
+      message: "Teste de comunicação confirmado",
       timestamp: new Date(Date.now() - 300000).toISOString()
     },
     {
-      id: '2',
-      channel_id: '1',
-      user: 'Ponte',
-      message: 'Recebido, status nominal',
+      id: "2",
+      channel_id: "1",
+      user: "Ponte",
+      message: "Recebido, status nominal",
       timestamp: new Date(Date.now() - 180000).toISOString()
     }
   ]);
 
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return;
@@ -65,30 +65,30 @@ const ChannelManager = () => {
     const message = {
       id: Date.now().toString(),
       channel_id: selectedChannel.id,
-      user: 'Você',
+      user: "Você",
       message: newMessage,
       timestamp: new Date().toISOString()
     };
 
     setMessages([...messages, message]);
-    setNewMessage('');
+    setNewMessage("");
     
     toast({
-      title: 'Mensagem enviada',
+      title: "Mensagem enviada",
       description: `Via ${selectedChannel.name}`
     });
   };
 
   const handleTestFallback = () => {
     toast({
-      title: 'Testando fallback',
-      description: 'Simulando falha e alternância automática',
+      title: "Testando fallback",
+      description: "Simulando falha e alternância automática",
     });
 
     setTimeout(() => {
       toast({
-        title: 'Fallback ativado',
-        description: 'Canal alternativo: Satélite Inmarsat',
+        title: "Fallback ativado",
+        description: "Canal alternativo: Satélite Inmarsat",
       });
     }, 2000);
   };
@@ -97,11 +97,11 @@ const ChannelManager = () => {
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      online: 'bg-green-500',
-      standby: 'bg-amber-500',
-      offline: 'bg-red-500'
+      online: "bg-green-500",
+      standby: "bg-amber-500",
+      offline: "bg-red-500"
     };
-    return colors[status] || 'bg-muted';
+    return colors[status] || "bg-muted";
   };
 
   return (
@@ -128,7 +128,7 @@ const ChannelManager = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {channels.filter(c => c.status === 'online').length}
+              {channels.filter(c => c.status === "online").length}
             </div>
           </CardContent>
         </Card>
@@ -173,13 +173,13 @@ const ChannelManager = () => {
               <div
                 key={channel.id}
                 className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                  selectedChannel.id === channel.id ? 'border-primary bg-primary/5' : ''
+                  selectedChannel.id === channel.id ? "border-primary bg-primary/5" : ""
                 }`}
                 onClick={() => setSelectedChannel(channel)}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    {channel.type === 'radio' ? (
+                    {channel.type === "radio" ? (
                       <Radio className="h-5 w-5" />
                     ) : (
                       <Satellite className="h-5 w-5" />
@@ -205,7 +205,7 @@ const ChannelManager = () => {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              {selectedChannel.type === 'radio' ? (
+              {selectedChannel.type === "radio" ? (
                 <Radio className="h-5 w-5" />
               ) : (
                 <Satellite className="h-5 w-5" />
@@ -244,7 +244,7 @@ const ChannelManager = () => {
                       <div className="flex items-center gap-2">
                         <span className="font-semibold text-sm">{msg.user}</span>
                         <span className="text-xs text-muted-foreground">
-                          {new Date(msg.timestamp).toLocaleTimeString('pt-BR')}
+                          {new Date(msg.timestamp).toLocaleTimeString("pt-BR")}
                         </span>
                       </div>
                       <div className="bg-muted/50 rounded-lg p-3">
@@ -261,12 +261,12 @@ const ChannelManager = () => {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Digite sua mensagem..."
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                disabled={selectedChannel.status !== 'online'}
+                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                disabled={selectedChannel.status !== "online"}
               />
               <Button 
                 onClick={handleSendMessage}
-                disabled={selectedChannel.status !== 'online'}
+                disabled={selectedChannel.status !== "online"}
               >
                 <Send className="h-4 w-4" />
               </Button>

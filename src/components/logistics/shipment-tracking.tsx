@@ -51,9 +51,9 @@ export const ShipmentTracking = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('shipments')
-        .select('*')
-        .order('estimated_arrival', { ascending: true });
+        .from("shipments")
+        .select("*")
+        .order("estimated_arrival", { ascending: true });
 
       if (error) throw error;
       setShipments(data || []);
@@ -70,26 +70,26 @@ export const ShipmentTracking = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'delivered':
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case 'delayed':
-      case 'lost':
-        return <AlertCircle className="h-5 w-5 text-red-500" />;
-      case 'in_transit':
-        return <Truck className="h-5 w-5 text-blue-500" />;
-      default:
-        return <Clock className="h-5 w-5 text-yellow-500" />;
+    case "delivered":
+      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+    case "delayed":
+    case "lost":
+      return <AlertCircle className="h-5 w-5 text-red-500" />;
+    case "in_transit":
+      return <Truck className="h-5 w-5 text-blue-500" />;
+    default:
+      return <Clock className="h-5 w-5 text-yellow-500" />;
     }
   };
 
   const getShippingIcon = (method: string) => {
     switch (method) {
-      case 'air':
-        return <Plane className="h-4 w-4" />;
-      case 'sea':
-        return <Ship className="h-4 w-4" />;
-      default:
-        return <Truck className="h-4 w-4" />;
+    case "air":
+      return <Plane className="h-4 w-4" />;
+    case "sea":
+      return <Ship className="h-4 w-4" />;
+    default:
+      return <Truck className="h-4 w-4" />;
     }
   };
 
@@ -108,7 +108,7 @@ export const ShipmentTracking = () => {
     };
     return (
       <Badge variant={variants[status] || "default"}>
-        {status.replace('_', ' ')}
+        {status.replace("_", " ")}
       </Badge>
     );
   };
@@ -121,12 +121,12 @@ export const ShipmentTracking = () => {
 
   const getActiveShipments = () => {
     return shipments.filter(s => 
-      !['delivered', 'cancelled', 'lost'].includes(s.status)
+      !["delivered", "cancelled", "lost"].includes(s.status)
     );
   };
 
   const getDelayedShipments = () => {
-    return shipments.filter(s => s.status === 'delayed');
+    return shipments.filter(s => s.status === "delayed");
   };
 
   return (
@@ -171,7 +171,7 @@ export const ShipmentTracking = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {shipments.filter(s => s.status === 'delivered').length}
+              {shipments.filter(s => s.status === "delivered").length}
             </div>
             <p className="text-xs text-muted-foreground">Successfully delivered</p>
           </CardContent>
@@ -253,7 +253,7 @@ export const ShipmentTracking = () => {
                         <div className="flex items-center gap-2">
                           <MapPin className="h-4 w-4 text-muted-foreground" />
                           <span className="text-sm font-medium">
-                            {shipment.origin_port || 'N/A'}
+                            {shipment.origin_port || "N/A"}
                           </span>
                         </div>
                       </div>
@@ -262,7 +262,7 @@ export const ShipmentTracking = () => {
                         <div className="flex items-center gap-2">
                           <MapPin className="h-4 w-4 text-muted-foreground" />
                           <span className="text-sm font-medium">
-                            {shipment.destination_port || 'N/A'}
+                            {shipment.destination_port || "N/A"}
                           </span>
                         </div>
                       </div>
@@ -271,7 +271,7 @@ export const ShipmentTracking = () => {
                         <div className="flex items-center gap-2">
                           <MapPin className="h-4 w-4 text-blue-500" />
                           <span className="text-sm font-medium">
-                            {shipment.current_location || 'Updating...'}
+                            {shipment.current_location || "Updating..."}
                           </span>
                         </div>
                       </div>
@@ -284,8 +284,8 @@ export const ShipmentTracking = () => {
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
                           {shipment.shipped_date ? 
-                            format(new Date(shipment.shipped_date), 'MMM dd, yyyy') : 
-                            'Not shipped'
+                            format(new Date(shipment.shipped_date), "MMM dd, yyyy") : 
+                            "Not shipped"
                           }
                         </div>
                       </div>
@@ -294,8 +294,8 @@ export const ShipmentTracking = () => {
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
                           {shipment.estimated_arrival ? 
-                            format(new Date(shipment.estimated_arrival), 'MMM dd, yyyy') : 
-                            'N/A'
+                            format(new Date(shipment.estimated_arrival), "MMM dd, yyyy") : 
+                            "N/A"
                           }
                         </div>
                       </div>
@@ -304,7 +304,7 @@ export const ShipmentTracking = () => {
                           <div className="text-xs text-muted-foreground mb-1">Delivered</div>
                           <div className="flex items-center gap-2 text-sm text-green-600">
                             <CheckCircle2 className="h-4 w-4" />
-                            {format(new Date(shipment.actual_arrival), 'MMM dd, yyyy')}
+                            {format(new Date(shipment.actual_arrival), "MMM dd, yyyy")}
                           </div>
                         </div>
                       )}

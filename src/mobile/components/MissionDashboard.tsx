@@ -3,10 +3,10 @@
  * Summarized mission control panel for mobile
  */
 
-import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Activity, 
   CheckCircle, 
@@ -14,8 +14,8 @@ import {
   AlertTriangle,
   TrendingUp,
   MapPin
-} from 'lucide-react';
-import { MissionDashboard } from '../types';
+} from "lucide-react";
+import { MissionDashboard } from "../types";
 
 interface MissionDashboardProps {
   mission: MissionDashboard;
@@ -28,19 +28,19 @@ export const MissionDashboardComponent: React.FC<MissionDashboardProps> = ({
 }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'completed': return 'bg-blue-500';
-      case 'pending': return 'bg-yellow-500';
-      default: return 'bg-gray-500';
+    case "active": return "bg-green-500";
+    case "completed": return "bg-blue-500";
+    case "pending": return "bg-yellow-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active': return <Activity className="h-4 w-4" />;
-      case 'completed': return <CheckCircle className="h-4 w-4" />;
-      case 'pending': return <Clock className="h-4 w-4" />;
-      default: return null;
+    case "active": return <Activity className="h-4 w-4" />;
+    case "completed": return <CheckCircle className="h-4 w-4" />;
+    case "pending": return <Clock className="h-4 w-4" />;
+    default: return null;
     }
   };
 
@@ -83,7 +83,7 @@ export const MissionDashboardComponent: React.FC<MissionDashboardProps> = ({
           <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-500 ${
-                mission.progress === 100 ? 'bg-green-500' : 'bg-blue-500'
+                mission.progress === 100 ? "bg-green-500" : "bg-blue-500"
               }`}
               style={{ width: `${mission.progress}%` }}
             />

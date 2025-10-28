@@ -8,21 +8,21 @@
  * Run with: node tests/stress/dashboard-stress.js
  */
 
-import { chromium } from 'playwright';
-import { performance } from 'perf_hooks';
-import fs from 'fs';
-import path from 'path';
+import { chromium } from "playwright";
+import { performance } from "perf_hooks";
+import fs from "fs";
+import path from "path";
 
 // Configuration
 const CONFIG = {
-  BASE_URL: process.env.VITE_APP_URL || 'http://localhost:5173',
+  BASE_URL: process.env.VITE_APP_URL || "http://localhost:5173",
   NUM_ITERATIONS: 20,
   DASHBOARDS: [
-    '/analytics',
-    '/dashboard',
-    '/bi-jobs',
-    '/unified-dashboard',
-    '/performance-monitor',
+    "/analytics",
+    "/dashboard",
+    "/bi-jobs",
+    "/unified-dashboard",
+    "/performance-monitor",
   ],
   HEADLESS: true,
 };
@@ -40,14 +40,14 @@ const metrics = {
  */
 async function measurePagePerformance(page) {
   const performanceMetrics = await page.evaluate(() => {
-    const navigation = performance.getEntriesByType('navigation')[0];
-    const paint = performance.getEntriesByType('paint');
+    const navigation = performance.getEntriesByType("navigation")[0];
+    const paint = performance.getEntriesByType("paint");
     
     return {
       domContentLoaded: navigation?.domContentLoadedEventEnd - navigation?.domContentLoadedEventStart || 0,
       loadComplete: navigation?.loadEventEnd - navigation?.loadEventStart || 0,
-      firstPaint: paint.find(p => p.name === 'first-paint')?.startTime || 0,
-      firstContentfulPaint: paint.find(p => p.name === 'first-contentful-paint')?.startTime || 0,
+      firstPaint: paint.find(p => p.name === "first-paint")?.startTime || 0,
+      firstContentfulPaint: paint.find(p => p.name === "first-contentful-paint")?.startTime || 0,
       domInteractive: navigation?.domInteractive - navigation?.fetchStart || 0,
     };
   });
@@ -88,14 +88,14 @@ async function testDashboard(browser, dashboardPath, iteration) {
     
     // Navigate to dashboard
     const response = await page.goto(`${CONFIG.BASE_URL}${dashboardPath}`, {
-      waitUntil: 'networkidle',
+      waitUntil: "networkidle",
       timeout: 30000,
     });
     
     const navigationTime = performance.now() - startTime;
     
     // Wait for content to load
-    await page.waitForLoadState('domcontentloaded');
+    await page.waitForLoadState("domcontentloaded");
     
     // Get performance metrics
     const perfMetrics = await measurePagePerformance(page);
@@ -103,21 +103,21 @@ async function testDashboard(browser, dashboardPath, iteration) {
     
     // Check for console errors
     const consoleErrors = [];
-    page.on('console', msg => {
-      if (msg.type() === 'error') {
+    page.on("console", msg => {
+      if (msg.type() === "error") {
         consoleErrors.push(msg.text());
       }
     });
     
     // Take screenshot for verification
-    const screenshotsDir = path.join(process.cwd(), 'reports', 'stress-screenshots');
+    const screenshotsDir = path.join(process.cwd(), "reports", "stress-screenshots");
     if (!fs.existsSync(screenshotsDir)) {
       fs.mkdirSync(screenshotsDir, { recursive: true });
     }
     
     const screenshotPath = path.join(
       screenshotsDir,
-      `${dashboardPath.replace(/\//g, '-')}-${iteration}.png`
+      `${dashboardPath.replace(/\//g, "-")}-${iteration}.png`
     );
     await page.screenshot({ path: screenshotPath, fullPage: false });
     
@@ -148,7 +148,7 @@ async function testDashboard(browser, dashboardPath, iteration) {
  * Run stress test for all dashboards
  */
 async function runStressTest() {
-  console.log('🎯 Starting Dashboard Stress Test...');
+  console.log("🎯 Starting Dashboard Stress Test...");
   console.log(`Testing ${CONFIG.DASHBOARDS.length} dashboards, ${CONFIG.NUM_ITERATIONS} iterations each`);
   
   const browser = await chromium.launch({ headless: CONFIG.HEADLESS });
@@ -171,9 +171,9 @@ async function runStressTest() {
       
       if (!result.success) {
         metrics.failedTests++;
-        console.log('❌ FAILED');
+        console.log("❌ FAILED");
       } else {
-        console.log('✅');
+        console.log("✅");
       }
       
       // Small delay between iterations
@@ -212,16 +212,16 @@ async function runStressTest() {
  * Generate and print report
  */
 function generateReport() {
-  console.log('\n' + '='.repeat(70));
-  console.log('🔥 DASHBOARD STRESS TEST RESULTS');
-  console.log('='.repeat(70));
+  console.log("\n" + "=".repeat(70));
+  console.log("🔥 DASHBOARD STRESS TEST RESULTS");
+  console.log("=".repeat(70));
   
-  console.log('\n📊 OVERALL SUMMARY:');
+  console.log("\n📊 OVERALL SUMMARY:");
   console.log(`   Total Tests: ${metrics.totalTests}`);
   console.log(`   Failed Tests: ${metrics.failedTests}`);
   console.log(`   Success Rate: ${(((metrics.totalTests - metrics.failedTests) / metrics.totalTests) * 100).toFixed(2)}%`);
   
-  console.log('\n📈 DASHBOARD PERFORMANCE:');
+  console.log("\n📈 DASHBOARD PERFORMANCE:");
   for (const [path, data] of Object.entries(metrics.dashboards)) {
     console.log(`\n   ${path}:`);
     console.log(`      Success Rate: ${data.stats.successRate}`);
@@ -230,19 +230,19 @@ function generateReport() {
     console.log(`      Min/Max Nav Time: ${data.stats.navigationTime.min.toFixed(2)}ms / ${data.stats.navigationTime.max.toFixed(2)}ms`);
   }
   
-  console.log('\n' + '='.repeat(70));
+  console.log("\n" + "=".repeat(70));
 }
 
 /**
  * Save report to file
  */
 function saveReport() {
-  const reportsDir = path.join(process.cwd(), 'reports');
+  const reportsDir = path.join(process.cwd(), "reports");
   if (!fs.existsSync(reportsDir)) {
     fs.mkdirSync(reportsDir, { recursive: true });
   }
   
-  const filename = path.join(reportsDir, 'stress-test-dashboard.json');
+  const filename = path.join(reportsDir, "stress-test-dashboard.json");
   fs.writeFileSync(filename, JSON.stringify(metrics, null, 2));
   console.log(`\n💾 Report saved to: ${filename}`);
 }
@@ -257,7 +257,7 @@ async function main() {
     saveReport();
     process.exit(0);
   } catch (error) {
-    console.error('❌ Stress test failed:', error);
+    console.error("❌ Stress test failed:", error);
     process.exit(1);
   }
 }

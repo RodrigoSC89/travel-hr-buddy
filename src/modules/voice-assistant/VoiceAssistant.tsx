@@ -67,7 +67,7 @@ export default function VoiceAssistant() {
     setMessages(prev => [...prev, userMessage]);
 
     // Log user message to database
-    await logMessage('user', text, {
+    await logMessage("user", text, {
       transcript: text,
       duration: 0
     });
@@ -79,7 +79,7 @@ export default function VoiceAssistant() {
     setMessages(prev => [...prev, assistantMessage]);
 
     // Log assistant message to database with estimated duration
-    await logMessage('assistant', response, {
+    await logMessage("assistant", response, {
       duration: response.length * CHARS_TO_MS_ESTIMATE
     });
     

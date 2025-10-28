@@ -9,8 +9,8 @@ import { logger } from "@/lib/logger";
 import { contextMesh } from "@/core/context/contextMesh";
 import { systemWatchdog } from "./watchdog";
 
-export type ObservationType = 'loop_detection' | 'conflict' | 'failure_pattern' | 'anomaly' | 'health_check';
-export type Severity = 'info' | 'warning' | 'error' | 'critical';
+export type ObservationType = "loop_detection" | "conflict" | "failure_pattern" | "anomaly" | "health_check";
+export type Severity = "info" | "warning" | "error" | "critical";
 
 export interface SystemObservation {
   id?: string;
@@ -31,7 +31,7 @@ export interface SystemObservation {
 
 export interface ModuleHealth {
   moduleName: string;
-  status: 'healthy' | 'degraded' | 'critical' | 'offline';
+  status: "healthy" | "degraded" | "critical" | "offline";
   lastCheck: Date;
   errorCount: number;
   responseTime: number;
@@ -40,7 +40,7 @@ export interface ModuleHealth {
 }
 
 export interface SystemState {
-  overallHealth: 'healthy' | 'degraded' | 'critical';
+  overallHealth: "healthy" | "degraded" | "critical";
   activeModules: number;
   totalModules: number;
   activeObservations: number;
@@ -72,8 +72,8 @@ class ConsciousCore {
 
     // Subscribe to all context types
     contextMesh.subscribe({
-      moduleName: 'ConsciousCore',
-      contextTypes: ['mission', 'risk', 'ai', 'prediction', 'telemetry'],
+      moduleName: "ConsciousCore",
+      contextTypes: ["mission", "risk", "ai", "prediction", "telemetry"],
       handler: (message) => {
         this.analyzeContextMessage(message);
       }
@@ -120,22 +120,22 @@ class ConsciousCore {
    */
   async getSystemState(): Promise<SystemState> {
     const healthStatuses = Array.from(this.moduleHealth.values());
-    const criticalModules = healthStatuses.filter(h => h.status === 'critical').length;
+    const criticalModules = healthStatuses.filter(h => h.status === "critical").length;
     const activeObservations = Array.from(this.observations.values()).filter(o => !o.resolved).length;
     const criticalIssues = Array.from(this.observations.values()).filter(
-      o => !o.resolved && o.severity === 'critical'
+      o => !o.resolved && o.severity === "critical"
     ).length;
 
-    let overallHealth: 'healthy' | 'degraded' | 'critical' = 'healthy';
+    let overallHealth: "healthy" | "degraded" | "critical" = "healthy";
     if (criticalModules > 0 || criticalIssues > 0) {
-      overallHealth = 'critical';
-    } else if (healthStatuses.some(h => h.status === 'degraded')) {
-      overallHealth = 'degraded';
+      overallHealth = "critical";
+    } else if (healthStatuses.some(h => h.status === "degraded")) {
+      overallHealth = "degraded";
     }
 
     return {
       overallHealth,
-      activeModules: healthStatuses.filter(h => h.status !== 'offline').length,
+      activeModules: healthStatuses.filter(h => h.status !== "offline").length,
       totalModules: healthStatuses.length,
       activeObservations,
       criticalIssues,
@@ -164,10 +164,10 @@ class ConsciousCore {
     this.moduleHealth.set(health.moduleName, health);
     
     // Check if action is needed
-    if (health.status === 'critical') {
+    if (health.status === "critical") {
       this.recordObservation({
-        observationType: 'anomaly',
-        severity: 'critical',
+        observationType: "anomaly",
+        severity: "critical",
         modulesAffected: [health.moduleName],
         description: `Module ${health.moduleName} is in critical state`,
         detectionData: health,
@@ -189,7 +189,7 @@ class ConsciousCore {
     this.observations.set(obsId, fullObservation);
 
     // Attempt auto-correction if appropriate
-    if (observation.severity === 'error' || observation.severity === 'critical') {
+    if (observation.severity === "error" || observation.severity === "critical") {
       await this.attemptAutoCorrection(fullObservation);
     }
 
@@ -198,8 +198,8 @@ class ConsciousCore {
 
     // Publish to context mesh
     await contextMesh.publish({
-      moduleName: 'ConsciousCore',
-      contextType: 'risk',
+      moduleName: "ConsciousCore",
+      contextType: "risk",
       contextData: {
         observation: {
           id: obsId,
@@ -208,7 +208,7 @@ class ConsciousCore {
           modulesAffected: observation.modulesAffected
         }
       },
-      source: 'ConsciousCore'
+      source: "ConsciousCore"
     });
 
     logger.info(`[ConsciousCore] Recorded ${observation.severity} observation: ${observation.description}`);
@@ -230,12 +230,12 @@ class ConsciousCore {
     // Update in database
     try {
       const { error } = await supabase
-        .from('system_observations')
+        .from("system_observations")
         .update({
           resolved: true,
           resolved_at: observation.resolvedAt.toISOString()
         })
-        .eq('id', observationId);
+        .eq("id", observationId);
 
       if (error) {
         logger.error("[ConsciousCore] Failed to update observation", error);
@@ -255,12 +255,12 @@ class ConsciousCore {
       const timeSinceLastCheck = Date.now() - health.lastCheck.getTime();
       
       // If no update in 60 seconds, mark as potentially offline
-      if (timeSinceLastCheck > 60000 && health.status !== 'offline') {
-        health.status = 'offline';
+      if (timeSinceLastCheck > 60000 && health.status !== "offline") {
+        health.status = "offline";
         
         await this.recordObservation({
-          observationType: 'health_check',
-          severity: 'warning',
+          observationType: "health_check",
+          severity: "warning",
           modulesAffected: [moduleName],
           description: `Module ${moduleName} appears to be offline`,
           detectionData: { lastCheck: health.lastCheck, timeSinceLastCheck },
@@ -285,12 +285,12 @@ class ConsciousCore {
       // If 5 actions in less than 1 second, likely a loop
       if (timeSpan < 1000) {
         this.recordObservation({
-          observationType: 'loop_detection',
-          severity: 'error',
+          observationType: "loop_detection",
+          severity: "error",
           modulesAffected: [moduleName],
           description: `Detected potential infinite loop in ${moduleName}`,
           detectionData: { timestamps: recentTimestamps, timeSpan },
-          suggestedAction: 'Throttle module operations or investigate loop condition',
+          suggestedAction: "Throttle module operations or investigate loop condition",
           autoCorrectionAttempted: false,
           escalated: false,
           resolved: false,
@@ -323,12 +323,12 @@ class ConsciousCore {
     for (const [moduleName, observations] of moduleObservations.entries()) {
       if (observations.length >= 3) {
         this.recordObservation({
-          observationType: 'conflict',
-          severity: 'warning',
+          observationType: "conflict",
+          severity: "warning",
           modulesAffected: [moduleName],
           description: `Module ${moduleName} has ${observations.length} active issues`,
           detectionData: { observationCount: observations.length },
-          suggestedAction: 'Review and prioritize issue resolution',
+          suggestedAction: "Review and prioritize issue resolution",
           autoCorrectionAttempted: false,
           escalated: false,
           resolved: false,
@@ -356,15 +356,15 @@ class ConsciousCore {
     for (const [type, count] of typeCount.entries()) {
       if (count >= 5) {
         this.recordObservation({
-          observationType: 'failure_pattern',
-          severity: 'error',
-          modulesAffected: ['system'],
+          observationType: "failure_pattern",
+          severity: "error",
+          modulesAffected: ["system"],
           description: `Detected repeated ${type} failures (${count} in last 5 minutes)`,
-          detectionData: { type, count, timeWindow: '5m' },
-          suggestedAction: 'Investigate root cause of repeated failures',
+          detectionData: { type, count, timeWindow: "5m" },
+          suggestedAction: "Investigate root cause of repeated failures",
           autoCorrectionAttempted: false,
           escalated: true,
-          escalationReason: 'High frequency failure pattern',
+          escalationReason: "High frequency failure pattern",
           resolved: false,
           timestamp: new Date()
         });
@@ -380,23 +380,23 @@ class ConsciousCore {
       let correctionResult: Record<string, any> = {};
 
       switch (observation.observationType) {
-        case 'loop_detection':
-          // Attempt to break the loop
-          correctionResult = await this.correctLoop(observation);
-          break;
+      case "loop_detection":
+        // Attempt to break the loop
+        correctionResult = await this.correctLoop(observation);
+        break;
         
-        case 'failure_pattern':
-          // Attempt to restart affected modules
-          correctionResult = await this.correctFailurePattern(observation);
-          break;
+      case "failure_pattern":
+        // Attempt to restart affected modules
+        correctionResult = await this.correctFailurePattern(observation);
+        break;
         
-        case 'anomaly':
-          // Attempt to reset affected modules
-          correctionResult = await this.correctAnomaly(observation);
-          break;
+      case "anomaly":
+        // Attempt to reset affected modules
+        correctionResult = await this.correctAnomaly(observation);
+        break;
         
-        default:
-          correctionResult = { action: 'none', reason: 'No auto-correction available' };
+      default:
+        correctionResult = { action: "none", reason: "No auto-correction available" };
       }
 
       observation.autoCorrectionResult = correctionResult;
@@ -405,7 +405,7 @@ class ConsciousCore {
     } catch (error) {
       observation.autoCorrectionResult = {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : "Unknown error"
       };
       logger.error("[ConsciousCore] Auto-correction failed", error);
     }
@@ -418,7 +418,7 @@ class ConsciousCore {
     });
 
     return {
-      action: 'clear_loop_detector',
+      action: "clear_loop_detector",
       modulesCleared: observation.modulesAffected,
       success: true
     };
@@ -427,8 +427,8 @@ class ConsciousCore {
   private async correctFailurePattern(observation: SystemObservation): Promise<Record<string, any>> {
     // Suggest escalation for repeated failures
     return {
-      action: 'escalate',
-      reason: 'Repeated failures require manual intervention',
+      action: "escalate",
+      reason: "Repeated failures require manual intervention",
       success: true
     };
   }
@@ -436,7 +436,7 @@ class ConsciousCore {
   private async correctAnomaly(observation: SystemObservation): Promise<Record<string, any>> {
     // Log anomaly for investigation
     return {
-      action: 'log_for_investigation',
+      action: "log_for_investigation",
       modulesAffected: observation.modulesAffected,
       success: true
     };
@@ -460,7 +460,7 @@ class ConsciousCore {
 
   private async logObservation(observation: SystemObservation): Promise<void> {
     try {
-      const { error } = await supabase.from('system_observations').insert({
+      const { error } = await supabase.from("system_observations").insert({
         observation_type: observation.observationType,
         severity: observation.severity,
         modules_affected: observation.modulesAffected,

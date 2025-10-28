@@ -3,10 +3,10 @@
  * PATCH 386 - Autonomous weather data updates with OpenWeather API
  */
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Cloud, Wind, Droplets, Thermometer, Gauge, Eye, Sunrise, Sunset } from 'lucide-react';
-import { logger } from '@/lib/logger';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Cloud, Wind, Droplets, Thermometer, Gauge, Eye, Sunrise, Sunset } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface WeatherData {
   temperature: number;
@@ -54,10 +54,10 @@ export const RealTimeWeatherData: React.FC<RealTimeWeatherDataProps> = ({
   const fetchWeatherData = async () => {
     try {
       // In production, use actual OpenWeather API key from environment
-      const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY || 'demo-key';
+      const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY || "demo-key";
       
       // Note: For demo purposes, we'll use mock data if API key is not available
-      if (apiKey === 'demo-key') {
+      if (apiKey === "demo-key") {
         // Use mock data for demonstration
         setWeather(generateMockWeatherData());
         setLoading(false);
@@ -69,7 +69,7 @@ export const RealTimeWeatherData: React.FC<RealTimeWeatherDataProps> = ({
       );
 
       if (!response.ok) {
-        throw new Error('Failed to fetch weather data');
+        throw new Error("Failed to fetch weather data");
       }
 
       const data = await response.json();
@@ -82,17 +82,17 @@ export const RealTimeWeatherData: React.FC<RealTimeWeatherDataProps> = ({
         windSpeed: data.wind.speed,
         windDirection: data.wind.deg,
         visibility: data.visibility / 1000, // Convert to km
-        description: data.weather[0]?.description || 'Unknown',
+        description: data.weather[0]?.description || "Unknown",
         sunrise: data.sys.sunrise,
         sunset: data.sys.sunset,
         lastUpdated: new Date(),
       });
 
-      logger.info('Weather data updated successfully');
+      logger.info("Weather data updated successfully");
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
-      logger.error('Error fetching weather data:', errorMessage);
+      logger.error("Error fetching weather data:", errorMessage);
     } finally {
       setLoading(false);
     }
@@ -108,7 +108,7 @@ export const RealTimeWeatherData: React.FC<RealTimeWeatherDataProps> = ({
       windSpeed: 10 + Math.random() * 8,
       windDirection: Math.random() * 360,
       visibility: 8 + Math.random() * 2,
-      description: ['clear sky', 'few clouds', 'scattered clouds', 'partly cloudy'][Math.floor(Math.random() * 4)],
+      description: ["clear sky", "few clouds", "scattered clouds", "partly cloudy"][Math.floor(Math.random() * 4)],
       sunrise: Date.now() / 1000 - 3600 * 6,
       sunset: Date.now() / 1000 + 3600 * 6,
       lastUpdated: new Date(),
@@ -116,15 +116,15 @@ export const RealTimeWeatherData: React.FC<RealTimeWeatherDataProps> = ({
   };
 
   const getWindDirection = (degrees: number): string => {
-    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+    const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     const index = Math.round(degrees / 45) % 8;
     return directions[index];
   };
 
   const formatTime = (timestamp: number): string => {
-    return new Date(timestamp * 1000).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(timestamp * 1000).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 

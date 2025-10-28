@@ -3,17 +3,17 @@
  * Health and psychological support system with privacy and aggregated reporting
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { WellbeingDashboard } from './components/WellbeingDashboard';
-import { WeeklyAssessment } from './components/WeeklyAssessment';
-import { ManagerAlerts } from './components/ManagerAlerts';
-import { WellbeingHistory } from './components/WellbeingHistory';
-import { Heart, Activity, Brain, TrendingUp } from 'lucide-react';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { WellbeingDashboard } from "./components/WellbeingDashboard";
+import { WeeklyAssessment } from "./components/WeeklyAssessment";
+import { ManagerAlerts } from "./components/ManagerAlerts";
+import { WellbeingHistory } from "./components/WellbeingHistory";
+import { Heart, Activity, Brain, TrendingUp } from "lucide-react";
 
 export const CrewWellbeing: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   return (
     <div className="container mx-auto p-6 space-y-6">

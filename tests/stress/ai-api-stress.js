@@ -8,14 +8,14 @@
  * Run with: node tests/stress/ai-api-stress.js
  */
 
-import fetch from 'node-fetch';
-import { performance } from 'perf_hooks';
-import fs from 'fs';
-import path from 'path';
+import fetch from "node-fetch";
+import { performance } from "perf_hooks";
+import fs from "fs";
+import path from "path";
 
 // Configuration
 const CONFIG = {
-  OPENAI_API_KEY: process.env.VITE_OPENAI_API_KEY || '',
+  OPENAI_API_KEY: process.env.VITE_OPENAI_API_KEY || "",
   CONCURRENT_REQUESTS: 10,
   TOTAL_REQUESTS: 50,
   BATCH_SIZE: 5,
@@ -35,11 +35,11 @@ const metrics = {
 
 // Test scenarios
 const TEST_PROMPTS = [
-  'Analyze this crew member status and provide recommendations.',
-  'Generate a safety report summary for the vessel.',
-  'Provide incident response guidance for equipment failure.',
-  'Create a maintenance schedule recommendation.',
-  'Analyze weather conditions and suggest route adjustments.',
+  "Analyze this crew member status and provide recommendations.",
+  "Generate a safety report summary for the vessel.",
+  "Provide incident response guidance for equipment failure.",
+  "Create a maintenance schedule recommendation.",
+  "Analyze weather conditions and suggest route adjustments.",
 ];
 
 /**
@@ -50,17 +50,17 @@ async function makeAIRequest(promptIndex) {
   const prompt = TEST_PROMPTS[promptIndex % TEST_PROMPTS.length];
   
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${CONFIG.OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${CONFIG.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: "gpt-3.5-turbo",
         messages: [
-          { role: 'system', content: 'You are a maritime operations assistant.' },
-          { role: 'user', content: prompt }
+          { role: "system", content: "You are a maritime operations assistant." },
+          { role: "user", content: prompt }
         ],
         max_tokens: 150,
         temperature: 0.7,
@@ -184,25 +184,25 @@ function generateReport() {
  * Print report to console
  */
 function printReport(report) {
-  console.log('\n' + '='.repeat(60));
-  console.log('🔥 AI API STRESS TEST RESULTS');
-  console.log('='.repeat(60));
-  console.log('\n📊 SUMMARY:');
+  console.log("\n" + "=".repeat(60));
+  console.log("🔥 AI API STRESS TEST RESULTS");
+  console.log("=".repeat(60));
+  console.log("\n📊 SUMMARY:");
   console.log(`   Total Requests: ${report.summary.totalRequests}`);
   console.log(`   Successful: ${report.summary.successfulRequests} (${report.summary.successRate})`);
   console.log(`   Failed: ${report.summary.failedRequests} (${report.summary.failureRate})`);
-  console.log('\n⚡ LATENCY:');
+  console.log("\n⚡ LATENCY:");
   console.log(`   Average: ${report.latency.average}`);
   console.log(`   P50: ${report.latency.p50}`);
   console.log(`   P95: ${report.latency.p95}`);
   console.log(`   P99: ${report.latency.p99}`);
   console.log(`   Max: ${report.latency.max}`);
-  console.log('\n🎯 TOKEN USAGE:');
+  console.log("\n🎯 TOKEN USAGE:");
   console.log(`   Total: ${report.tokens.total}`);
   console.log(`   Average per request: ${report.tokens.average}`);
   
   if (report.errors.length > 0) {
-    console.log('\n❌ ERRORS:');
+    console.log("\n❌ ERRORS:");
     report.errors.slice(0, 5).forEach((error, index) => {
       console.log(`   ${index + 1}. ${error.error} (${error.timestamp})`);
     });
@@ -211,19 +211,19 @@ function printReport(report) {
     }
   }
   
-  console.log('\n' + '='.repeat(60));
+  console.log("\n" + "=".repeat(60));
 }
 
 /**
  * Save report to file
  */
 function saveReport(report) {
-  const reportsDir = path.join(process.cwd(), 'reports');
+  const reportsDir = path.join(process.cwd(), "reports");
   if (!fs.existsSync(reportsDir)) {
     fs.mkdirSync(reportsDir, { recursive: true });
   }
   
-  const filename = path.join(reportsDir, 'stress-test-ai-api.json');
+  const filename = path.join(reportsDir, "stress-test-ai-api.json");
   fs.writeFileSync(filename, JSON.stringify(report, null, 2));
   console.log(`\n💾 Report saved to: ${filename}`);
 }
@@ -232,11 +232,11 @@ function saveReport(report) {
  * Main test execution
  */
 async function runStressTest() {
-  console.log('🎯 Starting AI API Stress Test...');
+  console.log("🎯 Starting AI API Stress Test...");
   console.log(`Configuration: ${CONFIG.TOTAL_REQUESTS} total requests, ${CONFIG.BATCH_SIZE} per batch`);
   
   if (!CONFIG.OPENAI_API_KEY) {
-    console.error('❌ Error: VITE_OPENAI_API_KEY environment variable not set');
+    console.error("❌ Error: VITE_OPENAI_API_KEY environment variable not set");
     process.exit(1);
   }
   
@@ -269,6 +269,6 @@ async function runStressTest() {
 
 // Run the stress test
 runStressTest().catch(error => {
-  console.error('❌ Stress test failed:', error);
+  console.error("❌ Stress test failed:", error);
   process.exit(1);
 });

@@ -3,8 +3,8 @@
  * Dropdown selector for switching between vessels in the header
  */
 
-import React from 'react';
-import { Ship, Check, ChevronDown } from 'lucide-react';
+import React from "react";
+import { Ship, Check, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,11 +12,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useVessel, type Vessel } from '@/lib/vesselContext';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useVessel, type Vessel } from "@/lib/vesselContext";
+import { cn } from "@/lib/utils";
 
 interface VesselSelectorProps {
   className?: string;
@@ -29,35 +29,35 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({
 }) => {
   const { currentVessel, allVessels, setCurrentVessel, loading } = useVessel();
 
-  const getStatusBadgeVariant = (status: Vessel['status']): "default" | "secondary" | "destructive" | "outline" => {
+  const getStatusBadgeVariant = (status: Vessel["status"]): "default" | "secondary" | "destructive" | "outline" => {
     switch (status) {
-      case 'active':
-        return 'default';
-      case 'maintenance':
-        return 'secondary';
-      case 'inactive':
-        return 'outline';
-      default:
-        return 'outline';
+    case "active":
+      return "default";
+    case "maintenance":
+      return "secondary";
+    case "inactive":
+      return "outline";
+    default:
+      return "outline";
     }
   };
 
-  const getStatusColor = (status: Vessel['status']): string => {
+  const getStatusColor = (status: Vessel["status"]): string => {
     switch (status) {
-      case 'active':
-        return 'text-green-500';
-      case 'maintenance':
-        return 'text-yellow-500';
-      case 'inactive':
-        return 'text-gray-500';
-      default:
-        return 'text-gray-500';
+    case "active":
+      return "text-green-500";
+    case "maintenance":
+      return "text-yellow-500";
+    case "inactive":
+      return "text-gray-500";
+    default:
+      return "text-gray-500";
     }
   };
 
   if (loading) {
     return (
-      <div className={cn('flex items-center gap-2', className)}>
+      <div className={cn("flex items-center gap-2", className)}>
         <div className="animate-pulse flex items-center gap-2">
           <div className="h-8 w-8 bg-muted rounded"></div>
           <div className="h-4 w-32 bg-muted rounded"></div>
@@ -68,7 +68,7 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({
 
   if (allVessels.length === 0) {
     return (
-      <div className={cn('flex items-center gap-2 text-muted-foreground', className)}>
+      <div className={cn("flex items-center gap-2 text-muted-foreground", className)}>
         {showIcon && <Ship className="h-4 w-4" />}
         <span className="text-sm">No vessels available</span>
       </div>
@@ -81,7 +81,7 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({
         <Button
           variant="outline"
           className={cn(
-            'flex items-center gap-2 min-w-[200px] justify-between',
+            "flex items-center gap-2 min-w-[200px] justify-between",
             className
           )}
         >
@@ -89,10 +89,10 @@ export const VesselSelector: React.FC<VesselSelectorProps> = ({
             {showIcon && <Ship className="h-4 w-4 flex-shrink-0" />}
             <div className="flex flex-col items-start min-w-0">
               <span className="text-sm font-medium truncate max-w-[150px]">
-                {currentVessel?.name || 'Select Vessel'}
+                {currentVessel?.name || "Select Vessel"}
               </span>
               {currentVessel && (
-                <span className={cn('text-xs', getStatusColor(currentVessel.status))}>
+                <span className={cn("text-xs", getStatusColor(currentVessel.status))}>
                   {currentVessel.status}
                 </span>
               )}

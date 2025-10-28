@@ -1,40 +1,40 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { GraduationCap, BookOpen, Award, TrendingUp, Clock, CheckCircle2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GraduationCap, BookOpen, Award, TrendingUp, Clock, CheckCircle2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const TrainingAcademy = () => {
   const { toast } = useToast();
   const [courses, setCourses] = useState([
     {
-      id: '1',
-      title: 'Dynamic Positioning - Nível Avançado',
-      category: 'DP Operations',
-      duration: '40h',
+      id: "1",
+      title: "Dynamic Positioning - Nível Avançado",
+      category: "DP Operations",
+      duration: "40h",
       modules: 12,
       progress: 0,
       enrolled: false,
       certificate_available: false
     },
     {
-      id: '2',
-      title: 'Resposta a Emergências',
-      category: 'Emergency Response',
-      duration: '24h',
+      id: "2",
+      title: "Resposta a Emergências",
+      category: "Emergency Response",
+      duration: "24h",
       modules: 8,
       progress: 75,
       enrolled: true,
       certificate_available: false
     },
     {
-      id: '3',
-      title: 'SGSO - Sistema de Gestão',
-      category: 'SGSO Compliance',
-      duration: '16h',
+      id: "3",
+      title: "SGSO - Sistema de Gestão",
+      category: "SGSO Compliance",
+      duration: "16h",
       modules: 6,
       progress: 100,
       enrolled: true,
@@ -44,10 +44,10 @@ const TrainingAcademy = () => {
 
   const [certificates, setCertificates] = useState([
     {
-      id: '1',
-      course: 'SGSO - Sistema de Gestão',
-      issued_at: '2025-01-10',
-      valid_until: '2026-01-10'
+      id: "1",
+      course: "SGSO - Sistema de Gestão",
+      issued_at: "2025-01-10",
+      valid_until: "2026-01-10"
     }
   ]);
 
@@ -57,22 +57,22 @@ const TrainingAcademy = () => {
     ));
     
     toast({
-      title: 'Inscrição realizada',
-      description: 'Você foi inscrito no curso com sucesso'
+      title: "Inscrição realizada",
+      description: "Você foi inscrito no curso com sucesso"
     });
   };
 
   const handleContinue = (courseId: string) => {
     toast({
-      title: 'Continuando curso',
-      description: 'Redirecionando para o módulo atual'
+      title: "Continuando curso",
+      description: "Redirecionando para o módulo atual"
     });
   };
 
   const handleDownloadCertificate = (certId: string) => {
     toast({
-      title: 'Baixando certificado',
-      description: 'PDF será baixado em instantes'
+      title: "Baixando certificado",
+      description: "PDF será baixado em instantes"
     });
   };
 
@@ -238,10 +238,10 @@ const TrainingAcademy = () => {
                       <div>
                         <h3 className="font-semibold">{cert.course}</h3>
                         <p className="text-sm text-muted-foreground">
-                          Emitido em {new Date(cert.issued_at).toLocaleDateString('pt-BR')}
+                          Emitido em {new Date(cert.issued_at).toLocaleDateString("pt-BR")}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Válido até {new Date(cert.valid_until).toLocaleDateString('pt-BR')}
+                          Válido até {new Date(cert.valid_until).toLocaleDateString("pt-BR")}
                         </p>
                       </div>
                     </div>

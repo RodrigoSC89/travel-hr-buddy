@@ -56,13 +56,13 @@ export function useRealtimeAnalytics() {
 
         // Subscribe to analytics events
         eventsChannel = supabase
-          .channel('analytics_events_channel')
+          .channel("analytics_events_channel")
           .on(
-            'postgres_changes',
+            "postgres_changes",
             {
-              event: 'INSERT',
-              schema: 'public',
-              table: 'analytics_events'
+              event: "INSERT",
+              schema: "public",
+              table: "analytics_events"
             },
             (payload) => {
               const newEvent = payload.new as AnalyticsEvent;
@@ -70,28 +70,28 @@ export function useRealtimeAnalytics() {
             }
           )
           .subscribe((status) => {
-            if (status === 'SUBSCRIBED') {
+            if (status === "SUBSCRIBED") {
               setIsConnected(true);
-            } else if (status === 'CHANNEL_ERROR') {
-              setError('Failed to connect to events channel');
+            } else if (status === "CHANNEL_ERROR") {
+              setError("Failed to connect to events channel");
             }
           });
 
         // Subscribe to analytics metrics
         metricsChannel = supabase
-          .channel('analytics_metrics_channel')
+          .channel("analytics_metrics_channel")
           .on(
-            'postgres_changes',
+            "postgres_changes",
             {
-              event: '*',
-              schema: 'public',
-              table: 'analytics_metrics'
+              event: "*",
+              schema: "public",
+              table: "analytics_metrics"
             },
             (payload) => {
-              if (payload.eventType === 'INSERT') {
+              if (payload.eventType === "INSERT") {
                 const newMetric = payload.new as AnalyticsMetric;
                 setMetrics(prev => [newMetric, ...prev].slice(0, 50));
-              } else if (payload.eventType === 'UPDATE') {
+              } else if (payload.eventType === "UPDATE") {
                 const updatedMetric = payload.new as AnalyticsMetric;
                 setMetrics(prev => 
                   prev.map(m => m.id === updatedMetric.id ? updatedMetric : m)
@@ -103,7 +103,7 @@ export function useRealtimeAnalytics() {
 
       } catch (err: any) {
         setError(err.message);
-        console.error('Error setting up realtime subscriptions:', err);
+        console.error("Error setting up realtime subscriptions:", err);
       }
     };
 
@@ -123,9 +123,9 @@ export function useRealtimeAnalytics() {
   const loadRecentEvents = useCallback(async (limit = 50) => {
     try {
       const { data, error } = await supabase
-        .from('analytics_events')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("analytics_events")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
@@ -133,7 +133,7 @@ export function useRealtimeAnalytics() {
       setEvents(data as AnalyticsEvent[]);
     } catch (err: any) {
       setError(err.message);
-      console.error('Error loading events:', err);
+      console.error("Error loading events:", err);
     }
   }, []);
 
@@ -141,9 +141,9 @@ export function useRealtimeAnalytics() {
   const loadRecentMetrics = useCallback(async (limit = 20) => {
     try {
       const { data, error } = await supabase
-        .from('analytics_metrics')
-        .select('*')
-        .order('period_end', { ascending: false })
+        .from("analytics_metrics")
+        .select("*")
+        .order("period_end", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
@@ -151,7 +151,7 @@ export function useRealtimeAnalytics() {
       setMetrics(data as AnalyticsMetric[]);
     } catch (err: any) {
       setError(err.message);
-      console.error('Error loading metrics:', err);
+      console.error("Error loading metrics:", err);
     }
   }, []);
 

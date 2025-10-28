@@ -1,13 +1,13 @@
 // @ts-nocheck
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
-import { Send, Check, CheckCheck } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
+import { Send, Check, CheckCheck } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface Channel {
   id: string;
@@ -29,7 +29,7 @@ interface ChannelMessagesProps {
 
 export const ChannelMessages: React.FC<ChannelMessagesProps> = ({ channel }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -58,10 +58,10 @@ export const ChannelMessages: React.FC<ChannelMessagesProps> = ({ channel }) => 
   const fetchMessages = async () => {
     try {
       const { data, error } = await supabase
-        .from('channel_messages')
-        .select('*')
-        .eq('channel_id', channel.id)
-        .order('created_at', { ascending: true })
+        .from("channel_messages")
+        .select("*")
+        .eq("channel_id", channel.id)
+        .order("created_at", { ascending: true })
         .limit(100);
 
       if (error) throw error;
@@ -69,7 +69,7 @@ export const ChannelMessages: React.FC<ChannelMessagesProps> = ({ channel }) => 
       setMessages(data || []);
       scrollToBottom();
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      console.error("Error fetching messages:", error);
     }
   };
 
@@ -77,15 +77,15 @@ export const ChannelMessages: React.FC<ChannelMessagesProps> = ({ channel }) => 
     realtimeChannelRef.current = supabase
       .channel(`messages-${channel.id}`)
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'channel_messages',
+          event: "INSERT",
+          schema: "public",
+          table: "channel_messages",
           filter: `channel_id=eq.${channel.id}`,
         },
         (payload) => {
-          console.log('New message received', payload);
+          console.log("New message received", payload);
           setMessages((prev) => [...prev, payload.new as Message]);
           scrollToBottom();
         }
@@ -98,29 +98,29 @@ export const ChannelMessages: React.FC<ChannelMessagesProps> = ({ channel }) => 
 
     setSending(true);
     try {
-      const { error } = await supabase.from('channel_messages').insert({
+      const { error } = await supabase.from("channel_messages").insert({
         channel_id: channel.id,
         user_id: currentUserId,
         message_text: newMessage.trim(),
-        message_type: 'text',
+        message_type: "text",
       });
 
       if (error) throw error;
 
-      setNewMessage('');
+      setNewMessage("");
       
       // Show visual confirmation
       toast({
-        title: 'Message sent',
-        description: 'Your message has been delivered',
+        title: "Message sent",
+        description: "Your message has been delivered",
         duration: 2000,
       });
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to send message',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to send message",
+        variant: "destructive",
       });
     } finally {
       setSending(false);
@@ -130,7 +130,7 @@ export const ChannelMessages: React.FC<ChannelMessagesProps> = ({ channel }) => 
   const scrollToBottom = () => {
     requestAnimationFrame(() => {
       if (scrollAreaRef.current) {
-        const scrollElement = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+        const scrollElement = scrollAreaRef.current.querySelector("[data-radix-scroll-area-viewport]");
         if (scrollElement) {
           scrollElement.scrollTop = scrollElement.scrollHeight;
         }
@@ -156,22 +156,22 @@ export const ChannelMessages: React.FC<ChannelMessagesProps> = ({ channel }) => 
               <div
                 key={message.id}
                 className={`flex ${
-                  message.user_id === currentUserId ? 'justify-end' : 'justify-start'
+                  message.user_id === currentUserId ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
                   className={`max-w-[70%] rounded-lg p-3 ${
                     message.user_id === currentUserId
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted'
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
                   }`}
                 >
                   <p className="text-sm">{message.message_text}</p>
                   <div className="flex items-center justify-between mt-1 gap-2">
                     <span className="text-xs opacity-70">
                       {new Date(message.created_at).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
+                        hour: "2-digit",
+                        minute: "2-digit",
                       })}
                     </span>
                     {message.user_id === currentUserId && (
@@ -193,7 +193,7 @@ export const ChannelMessages: React.FC<ChannelMessagesProps> = ({ channel }) => 
           <Input
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && sendMessage()}
+            onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
             placeholder="Type a message..."
             disabled={sending}
           />

@@ -6,12 +6,12 @@
  * failure detection, and automatic agent switching.
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface AgentMetrics {
   agentId: string;
   agentName: string;
-  agentType: 'copilot' | 'assistant' | 'autonomous' | 'worker';
+  agentType: "copilot" | "assistant" | "autonomous" | "worker";
   performance: {
     successRate: number;
     avgResponseTime: number;
@@ -31,7 +31,7 @@ export interface AgentMetrics {
   availability: {
     uptime: number;
     lastSeen: string;
-    status: 'active' | 'idle' | 'busy' | 'offline' | 'error';
+    status: "active" | "idle" | "busy" | "offline" | "error";
   };
   specialization: string[];
   version: string;
@@ -49,14 +49,14 @@ export interface AgentRanking {
     efficiency: number;
     quality: number;
   };
-  trend: 'improving' | 'stable' | 'declining';
+  trend: "improving" | "stable" | "declining";
 }
 
 export interface FailureDetection {
   agentId: string;
   agentName: string;
-  failureType: 'high_error_rate' | 'slow_response' | 'low_accuracy' | 'unavailable' | 'resource_exhaustion';
-  severity: 'warning' | 'critical';
+  failureType: "high_error_rate" | "slow_response" | "low_accuracy" | "unavailable" | "resource_exhaustion";
+  severity: "warning" | "critical";
   details: string;
   timestamp: string;
   recommendations: string[];
@@ -91,7 +91,7 @@ export class MultiAgentPerformanceScanner {
     this.isScanning = true;
     this.scan();
     setInterval(() => this.scan(), this.scanInterval);
-    console.log('🔍 Multi-Agent Performance Scanner started');
+    console.log("🔍 Multi-Agent Performance Scanner started");
   }
 
   /**
@@ -99,7 +99,7 @@ export class MultiAgentPerformanceScanner {
    */
   stopScanning(): void {
     this.isScanning = false;
-    console.log('⏹️ Multi-Agent Performance Scanner stopped');
+    console.log("⏹️ Multi-Agent Performance Scanner stopped");
   }
 
   /**
@@ -127,7 +127,7 @@ export class MultiAgentPerformanceScanner {
       await this.updateRankings(metrics);
 
     } catch (error) {
-      console.error('Error during performance scan:', error);
+      console.error("Error during performance scan:", error);
     }
   }
 
@@ -139,9 +139,9 @@ export class MultiAgentPerformanceScanner {
     // For simulation, return sample agents
     return [
       {
-        agentId: 'copilot-gpt4',
-        agentName: 'GPT-4 Copilot',
-        agentType: 'copilot',
+        agentId: "copilot-gpt4",
+        agentName: "GPT-4 Copilot",
+        agentType: "copilot",
         performance: {
           successRate: 0.94,
           avgResponseTime: 2300,
@@ -161,16 +161,16 @@ export class MultiAgentPerformanceScanner {
         availability: {
           uptime: 0.98,
           lastSeen: new Date().toISOString(),
-          status: 'active',
+          status: "active",
         },
-        specialization: ['code_generation', 'analysis', 'documentation'],
-        version: '4.0',
+        specialization: ["code_generation", "analysis", "documentation"],
+        version: "4.0",
         lastUpdated: new Date().toISOString(),
       },
       {
-        agentId: 'assistant-claude',
-        agentName: 'Claude Assistant',
-        agentType: 'assistant',
+        agentId: "assistant-claude",
+        agentName: "Claude Assistant",
+        agentType: "assistant",
         performance: {
           successRate: 0.89,
           avgResponseTime: 1800,
@@ -190,16 +190,16 @@ export class MultiAgentPerformanceScanner {
         availability: {
           uptime: 0.96,
           lastSeen: new Date().toISOString(),
-          status: 'active',
+          status: "active",
         },
-        specialization: ['conversation', 'reasoning', 'planning'],
-        version: '3.5',
+        specialization: ["conversation", "reasoning", "planning"],
+        version: "3.5",
         lastUpdated: new Date().toISOString(),
       },
       {
-        agentId: 'worker-local-llm',
-        agentName: 'Local LLM Worker',
-        agentType: 'worker',
+        agentId: "worker-local-llm",
+        agentName: "Local LLM Worker",
+        agentType: "worker",
         performance: {
           successRate: 0.78,
           avgResponseTime: 3500,
@@ -219,10 +219,10 @@ export class MultiAgentPerformanceScanner {
         availability: {
           uptime: 0.88,
           lastSeen: new Date().toISOString(),
-          status: 'busy',
+          status: "busy",
         },
-        specialization: ['simple_tasks', 'offline_mode'],
-        version: '1.0',
+        specialization: ["simple_tasks", "offline_mode"],
+        version: "1.0",
         lastUpdated: new Date().toISOString(),
       },
     ];
@@ -240,14 +240,14 @@ export class MultiAgentPerformanceScanner {
         failures.push({
           agentId: agent.agentId,
           agentName: agent.agentName,
-          failureType: 'high_error_rate',
-          severity: agent.performance.successRate < 0.70 ? 'critical' : 'warning',
+          failureType: "high_error_rate",
+          severity: agent.performance.successRate < 0.70 ? "critical" : "warning",
           details: `Success rate ${(agent.performance.successRate * 100).toFixed(1)}% below threshold ${(this.thresholds.minSuccessRate * 100).toFixed(1)}%`,
           timestamp: new Date().toISOString(),
           recommendations: [
-            'Review recent task failures',
-            'Check agent configuration',
-            'Consider switching to backup agent',
+            "Review recent task failures",
+            "Check agent configuration",
+            "Consider switching to backup agent",
           ],
         });
       }
@@ -257,14 +257,14 @@ export class MultiAgentPerformanceScanner {
         failures.push({
           agentId: agent.agentId,
           agentName: agent.agentName,
-          failureType: 'high_error_rate',
-          severity: agent.performance.errorRate > 0.20 ? 'critical' : 'warning',
+          failureType: "high_error_rate",
+          severity: agent.performance.errorRate > 0.20 ? "critical" : "warning",
           details: `Error rate ${(agent.performance.errorRate * 100).toFixed(1)}% above threshold ${(this.thresholds.maxErrorRate * 100).toFixed(1)}%`,
           timestamp: new Date().toISOString(),
           recommendations: [
-            'Investigate error patterns',
-            'Update agent logic',
-            'Implement better error handling',
+            "Investigate error patterns",
+            "Update agent logic",
+            "Implement better error handling",
           ],
         });
       }
@@ -274,14 +274,14 @@ export class MultiAgentPerformanceScanner {
         failures.push({
           agentId: agent.agentId,
           agentName: agent.agentName,
-          failureType: 'slow_response',
-          severity: agent.performance.avgResponseTime > 10000 ? 'critical' : 'warning',
+          failureType: "slow_response",
+          severity: agent.performance.avgResponseTime > 10000 ? "critical" : "warning",
           details: `Average response time ${agent.performance.avgResponseTime}ms exceeds ${this.thresholds.maxResponseTime}ms`,
           timestamp: new Date().toISOString(),
           recommendations: [
-            'Optimize agent processing',
-            'Check resource availability',
-            'Consider load balancing',
+            "Optimize agent processing",
+            "Check resource availability",
+            "Consider load balancing",
           ],
         });
       }
@@ -291,14 +291,14 @@ export class MultiAgentPerformanceScanner {
         failures.push({
           agentId: agent.agentId,
           agentName: agent.agentName,
-          failureType: 'low_accuracy',
-          severity: agent.performance.accuracyScore < 0.70 ? 'critical' : 'warning',
+          failureType: "low_accuracy",
+          severity: agent.performance.accuracyScore < 0.70 ? "critical" : "warning",
           details: `Accuracy ${(agent.performance.accuracyScore * 100).toFixed(1)}% below threshold ${(this.thresholds.minAccuracy * 100).toFixed(1)}%`,
           timestamp: new Date().toISOString(),
           recommendations: [
-            'Retrain or update agent model',
-            'Review training data quality',
-            'Adjust agent parameters',
+            "Retrain or update agent model",
+            "Review training data quality",
+            "Adjust agent parameters",
           ],
         });
       }
@@ -308,14 +308,14 @@ export class MultiAgentPerformanceScanner {
         failures.push({
           agentId: agent.agentId,
           agentName: agent.agentName,
-          failureType: 'unavailable',
-          severity: agent.availability.uptime < 0.80 ? 'critical' : 'warning',
+          failureType: "unavailable",
+          severity: agent.availability.uptime < 0.80 ? "critical" : "warning",
           details: `Uptime ${(agent.availability.uptime * 100).toFixed(1)}% below threshold ${(this.thresholds.minUptime * 100).toFixed(1)}%`,
           timestamp: new Date().toISOString(),
           recommendations: [
-            'Investigate downtime causes',
-            'Implement redundancy',
-            'Set up health checks',
+            "Investigate downtime causes",
+            "Implement redundancy",
+            "Set up health checks",
           ],
         });
       }
@@ -325,14 +325,14 @@ export class MultiAgentPerformanceScanner {
         failures.push({
           agentId: agent.agentId,
           agentName: agent.agentName,
-          failureType: 'resource_exhaustion',
-          severity: 'critical',
+          failureType: "resource_exhaustion",
+          severity: "critical",
           details: `Resource usage: CPU ${agent.resourceUsage.cpuUsage}%, Memory ${agent.resourceUsage.memoryUsage}MB`,
           timestamp: new Date().toISOString(),
           recommendations: [
-            'Scale resources',
-            'Optimize agent resource usage',
-            'Distribute load to other agents',
+            "Scale resources",
+            "Optimize agent resource usage",
+            "Distribute load to other agents",
           ],
         });
       }
@@ -389,7 +389,7 @@ export class MultiAgentPerformanceScanner {
     allMetrics: AgentMetrics[]
   ): Promise<void> {
     for (const failure of failures) {
-      if (failure.severity === 'critical') {
+      if (failure.severity === "critical") {
         // Find replacement agent
         const replacementAgent = await this.findReplacementAgent(
           failure.agentId,
@@ -420,7 +420,7 @@ export class MultiAgentPerformanceScanner {
     // Find agents with similar specializations and better performance
     const candidates = allMetrics.filter(agent =>
       agent.agentId !== failingAgentId &&
-      agent.availability.status === 'active' &&
+      agent.availability.status === "active" &&
       agent.performance.successRate > failingAgent.performance.successRate + 0.05 &&
       this.hasOverlappingSpecialization(agent.specialization, failingAgent.specialization)
     );
@@ -440,7 +440,7 @@ export class MultiAgentPerformanceScanner {
     toAgentId: string,
     reason: string
   ): Promise<void> {
-    const switchRecord: Omit<AgentSwitch, 'taskId'> = {
+    const switchRecord: Omit<AgentSwitch, "taskId"> = {
       fromAgentId,
       toAgentId,
       reason,
@@ -453,15 +453,15 @@ export class MultiAgentPerformanceScanner {
     // Log the switch
     // In a real implementation, this would also redirect tasks
     try {
-      await supabase.from('agent_performance_metrics').insert({
+      await supabase.from("agent_performance_metrics").insert({
         agent_id: toAgentId,
-        metric_type: 'switch',
+        metric_type: "switch",
         metric_value: 1,
         context: switchRecord,
         timestamp: switchRecord.timestamp,
       });
     } catch (error) {
-      console.error('Failed to log agent switch:', error);
+      console.error("Failed to log agent switch:", error);
     }
   }
 
@@ -482,9 +482,9 @@ export class MultiAgentPerformanceScanner {
         timestamp: new Date().toISOString(),
       }));
 
-      await supabase.from('agent_performance_metrics').insert(records);
+      await supabase.from("agent_performance_metrics").insert(records);
     } catch (error) {
-      console.error('Failed to store metrics:', error);
+      console.error("Failed to store metrics:", error);
     }
   }
 
@@ -505,14 +505,14 @@ export class MultiAgentPerformanceScanner {
         timestamp: new Date().toISOString(),
       }));
 
-      await supabase.from('agent_performance_metrics').insert(records);
+      await supabase.from("agent_performance_metrics").insert(records);
     } catch (error) {
-      console.error('Failed to update rankings:', error);
+      console.error("Failed to update rankings:", error);
     }
   }
 
   // Scoring helpers
-  private calculatePerformanceScore(performance: AgentMetrics['performance']): number {
+  private calculatePerformanceScore(performance: AgentMetrics["performance"]): number {
     return (
       performance.successRate * 0.4 +
       (1 - performance.errorRate) * 0.3 +
@@ -521,19 +521,19 @@ export class MultiAgentPerformanceScanner {
   }
 
   private calculateReliabilityScore(
-    performance: AgentMetrics['performance'],
-    availability: AgentMetrics['availability']
+    performance: AgentMetrics["performance"],
+    availability: AgentMetrics["availability"]
   ): number {
     return (
       availability.uptime * 0.5 +
       performance.successRate * 0.3 +
-      (availability.status === 'active' ? 0.2 : 0)
+      (availability.status === "active" ? 0.2 : 0)
     );
   }
 
   private calculateEfficiencyScore(
-    performance: AgentMetrics['performance'],
-    resources: AgentMetrics['resourceUsage']
+    performance: AgentMetrics["performance"],
+    resources: AgentMetrics["resourceUsage"]
   ): number {
     const cpuEfficiency = 1 - (resources.cpuUsage / 100);
     const memoryEfficiency = 1 - Math.min(1, resources.memoryUsage / 4096);
@@ -542,17 +542,17 @@ export class MultiAgentPerformanceScanner {
     return (cpuEfficiency * 0.3 + memoryEfficiency * 0.3 + throughput * 0.4);
   }
 
-  private calculateQualityScore(performance: AgentMetrics['performance']): number {
+  private calculateQualityScore(performance: AgentMetrics["performance"]): number {
     return (
       performance.accuracyScore * 0.5 +
       (performance.userRating / 5) * 0.5
     );
   }
 
-  private async calculateTrend(agentId: string): Promise<'improving' | 'stable' | 'declining'> {
+  private async calculateTrend(agentId: string): Promise<"improving" | "stable" | "declining"> {
     // This would analyze historical data
     // For simulation, return random trend
-    const trends: Array<'improving' | 'stable' | 'declining'> = ['improving', 'stable', 'declining'];
+    const trends: Array<"improving" | "stable" | "declining"> = ["improving", "stable", "declining"];
     return trends[Math.floor(Math.random() * trends.length)];
   }
 

@@ -18,8 +18,8 @@ import {
   XCircle,
   FileText
 } from "lucide-react";
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface AuditArea {
   id: string;
@@ -203,7 +203,7 @@ export default function SGSOAuditEditor() {
     ]);
     
     autoTable(doc, {
-      head: [['Área', 'Critério', 'Status', 'Comentários']],
+      head: [["Área", "Critério", "Status", "Comentários"]],
       body: tableData,
       startY: 45,
       styles: { fontSize: 9 },

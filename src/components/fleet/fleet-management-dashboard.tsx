@@ -1,13 +1,13 @@
 // @ts-nocheck
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { VesselStatus, MaintenanceAlert, FuelUsage } from '@/types/modules';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Ship, MapPin, Fuel, AlertTriangle, Activity, TrendingUp } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { VesselStatus, MaintenanceAlert, FuelUsage } from "@/types/modules";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Ship, MapPin, Fuel, AlertTriangle, Activity, TrendingUp } from "lucide-react";
+import { toast } from "sonner";
 
 export function FleetManagementDashboard() {
   const [vesselStatuses, setVesselStatuses] = useState<VesselStatus[]>([]);
@@ -20,13 +20,13 @@ export function FleetManagementDashboard() {
     
     // Set up real-time subscription for vessel status updates
     const channel = supabase
-      .channel('vessel_status_changes')
+      .channel("vessel_status_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'vessel_status'
+          event: "*",
+          schema: "public",
+          table: "vessel_status"
         },
         () => {
           loadFleetData();
@@ -43,20 +43,20 @@ export function FleetManagementDashboard() {
     try {
       const [statusRes, alertsRes, fuelRes] = await Promise.all([
         supabase
-          .from('vessel_status')
-          .select('*')
-          .order('timestamp', { ascending: false })
+          .from("vessel_status")
+          .select("*")
+          .order("timestamp", { ascending: false })
           .limit(10),
         supabase
-          .from('maintenance_alerts')
-          .select('*')
-          .eq('status', 'active')
-          .order('severity', { ascending: false })
-          .order('created_at', { ascending: false }),
+          .from("maintenance_alerts")
+          .select("*")
+          .eq("status", "active")
+          .order("severity", { ascending: false })
+          .order("created_at", { ascending: false }),
         supabase
-          .from('fuel_usage')
-          .select('*')
-          .order('recorded_at', { ascending: false })
+          .from("fuel_usage")
+          .select("*")
+          .order("recorded_at", { ascending: false })
           .limit(20)
       ]);
 
@@ -68,41 +68,41 @@ export function FleetManagementDashboard() {
       setMaintenanceAlerts(alertsRes.data || []);
       setFuelUsage(fuelRes.data || []);
     } catch (error) {
-      console.error('Error loading fleet data:', error);
-      toast.error('Failed to load fleet data');
+      console.error("Error loading fleet data:", error);
+      toast.error("Failed to load fleet data");
     } finally {
       setLoading(false);
     }
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      underway: 'default',
-      at_anchor: 'secondary',
-      moored: 'outline',
-      docked: 'outline',
-      maintenance: 'destructive',
-      emergency: 'destructive',
-      offline: 'secondary'
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      underway: "default",
+      at_anchor: "secondary",
+      moored: "outline",
+      docked: "outline",
+      maintenance: "destructive",
+      emergency: "destructive",
+      offline: "secondary"
     };
 
     return (
-      <Badge variant={variants[status] || 'default'}>
-        {status.replace('_', ' ').toUpperCase()}
+      <Badge variant={variants[status] || "default"}>
+        {status.replace("_", " ").toUpperCase()}
       </Badge>
     );
   };
 
   const getSeverityBadge = (severity: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      low: 'outline',
-      medium: 'secondary',
-      high: 'default',
-      critical: 'destructive'
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      low: "outline",
+      medium: "secondary",
+      high: "default",
+      critical: "destructive"
     };
 
     return (
-      <Badge variant={variants[severity] || 'default'}>
+      <Badge variant={variants[severity] || "default"}>
         {severity.toUpperCase()}
       </Badge>
     );
@@ -278,7 +278,7 @@ export function FleetManagementDashboard() {
               </Card>
             ) : (
               maintenanceAlerts.map((alert) => (
-                <Card key={alert.id} className={alert.severity === 'critical' ? 'border-red-500' : ''}>
+                <Card key={alert.id} className={alert.severity === "critical" ? "border-red-500" : ""}>
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg flex items-center">
@@ -287,7 +287,7 @@ export function FleetManagementDashboard() {
                       </CardTitle>
                       <div className="flex gap-2">
                         {getSeverityBadge(alert.severity)}
-                        <Badge variant="outline">{alert.alert_type.replace('_', ' ')}</Badge>
+                        <Badge variant="outline">{alert.alert_type.replace("_", " ")}</Badge>
                       </div>
                     </div>
                   </CardHeader>

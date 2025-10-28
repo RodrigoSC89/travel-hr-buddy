@@ -171,7 +171,7 @@ export class FuelOptimizationService {
     
     // Speed recommendation
     if (Math.abs(currentSpeed - optimalSpeed) > 0.5) {
-      const speedChange = currentSpeed > optimalSpeed ? 'Reduce' : 'Increase';
+      const speedChange = currentSpeed > optimalSpeed ? "Reduce" : "Increase";
       recommendations.push(
         `${speedChange} vessel speed from ${currentSpeed.toFixed(1)} to ${optimalSpeed.toFixed(1)} knots for optimal fuel efficiency`
       );
@@ -180,22 +180,22 @@ export class FuelOptimizationService {
     // Weather-based recommendations
     if (weatherFactor > this.AVERAGE_WEATHER_FACTOR) {
       recommendations.push(
-        'Consider delaying departure or adjusting route to avoid adverse weather conditions'
+        "Consider delaying departure or adjusting route to avoid adverse weather conditions"
       );
     } else if (weatherFactor < this.AVERAGE_WEATHER_FACTOR) {
       recommendations.push(
-        'Favorable weather conditions detected - maintain current route planning'
+        "Favorable weather conditions detected - maintain current route planning"
       );
     }
     
     // Current-based recommendations
     if (currentFactor > 1.1) {
       recommendations.push(
-        'Strong currents detected - consider route adjustments to minimize opposing currents'
+        "Strong currents detected - consider route adjustments to minimize opposing currents"
       );
     } else if (currentFactor < 0.9) {
       recommendations.push(
-        'Favorable currents available - route is well-optimized for current conditions'
+        "Favorable currents available - route is well-optimized for current conditions"
       );
     }
     
@@ -216,7 +216,7 @@ export class FuelOptimizationService {
     
     // General best practices
     if (recommendations.length === 0) {
-      recommendations.push('Route is optimally configured for current conditions');
+      recommendations.push("Route is optimally configured for current conditions");
     }
     
     return recommendations;
@@ -264,14 +264,14 @@ export class FuelOptimizationService {
   ): string {
     const speedDiff = Math.abs(currentSpeed - optimalSpeed);
     const weatherDesc = 
-      weatherFactor > 1.2 ? 'challenging' :
-      weatherFactor > 1.0 ? 'moderate' :
-      weatherFactor > 0.9 ? 'favorable' : 'excellent';
+      weatherFactor > 1.2 ? "challenging" :
+        weatherFactor > 1.0 ? "moderate" :
+          weatherFactor > 0.9 ? "favorable" : "excellent";
     
     let reasoning = `Analysis of route conditions shows ${weatherDesc} weather patterns. `;
     
     if (speedDiff > 1) {
-      const direction = currentSpeed > optimalSpeed ? 'reducing' : 'increasing';
+      const direction = currentSpeed > optimalSpeed ? "reducing" : "increasing";
       reasoning += `By ${direction} speed from ${currentSpeed.toFixed(1)} to ${optimalSpeed.toFixed(1)} knots, `;
       reasoning += `fuel consumption can be reduced by approximately ${savingsPercentage.toFixed(1)}%. `;
     } else {
@@ -279,8 +279,8 @@ export class FuelOptimizationService {
       reasoning += `Minor adjustments could yield ${savingsPercentage.toFixed(1)}% improvement. `;
     }
     
-    reasoning += `The optimization algorithm considers vessel speed dynamics, environmental factors, `;
-    reasoning += `and historical performance data to provide accurate fuel consumption predictions.`;
+    reasoning += "The optimization algorithm considers vessel speed dynamics, environmental factors, ";
+    reasoning += "and historical performance data to provide accurate fuel consumption predictions.";
     
     return reasoning;
   }

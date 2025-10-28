@@ -1,54 +1,54 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Fuel, TrendingDown, Route, AlertCircle, Zap, MapPin } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Fuel, TrendingDown, Route, AlertCircle, Zap, MapPin } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const FuelOptimizer = () => {
   const { toast } = useToast();
   const [routeData, setRouteData] = useState({
-    origin: '',
-    destination: '',
-    cargo_weight: '',
-    weather_condition: 'normal'
+    origin: "",
+    destination: "",
+    cargo_weight: "",
+    weather_condition: "normal"
   });
 
   const [optimization, setOptimization] = useState<any>(null);
   const [history, setHistory] = useState([
     {
-      id: '1',
-      route: 'Santos → Rio de Janeiro',
+      id: "1",
+      route: "Santos → Rio de Janeiro",
       estimated_consumption: 2500,
       actual_consumption: 2450,
       savings: 50,
-      date: '2025-01-15'
+      date: "2025-01-15"
     },
     {
-      id: '2',
-      route: 'Rio de Janeiro → Vitória',
+      id: "2",
+      route: "Rio de Janeiro → Vitória",
       estimated_consumption: 1800,
       actual_consumption: 1850,
       savings: -50,
-      date: '2025-01-10'
+      date: "2025-01-10"
     }
   ]);
 
   const handleOptimize = () => {
     if (!routeData.origin || !routeData.destination || !routeData.cargo_weight) {
       toast({
-        title: 'Dados incompletos',
-        description: 'Preencha todos os campos obrigatórios',
-        variant: 'destructive'
+        title: "Dados incompletos",
+        description: "Preencha todos os campos obrigatórios",
+        variant: "destructive"
       });
       return;
     }
 
     // Simulação de otimização AI
     const baseConsumption = parseFloat(routeData.cargo_weight) * 0.15;
-    const weatherFactor = routeData.weather_condition === 'normal' ? 1.0 : 1.2;
+    const weatherFactor = routeData.weather_condition === "normal" ? 1.0 : 1.2;
     const optimizedConsumption = baseConsumption * weatherFactor * 0.85; // 15% de economia
 
     const result = {
@@ -58,16 +58,16 @@ const FuelOptimizer = () => {
       savings_liters: Math.round(baseConsumption * weatherFactor - optimizedConsumption),
       savings_percentage: 15,
       recommendations: [
-        'Velocidade ideal: 12 nós',
-        'Evitar correntes contrárias no trecho sul',
-        'Janela de tempo favorável: próximas 48h'
+        "Velocidade ideal: 12 nós",
+        "Evitar correntes contrárias no trecho sul",
+        "Janela de tempo favorável: próximas 48h"
       ]
     };
 
     setOptimization(result);
     
     toast({
-      title: 'Otimização concluída',
+      title: "Otimização concluída",
       description: `Economia estimada: ${result.savings_liters}L (${result.savings_percentage}%)`
     });
   };
@@ -234,14 +234,14 @@ const FuelOptimizer = () => {
               <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex-1">
                   <p className="font-semibold">{item.route}</p>
-                  <p className="text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString('pt-BR')}</p>
+                  <p className="text-sm text-muted-foreground">{new Date(item.date).toLocaleDateString("pt-BR")}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-muted-foreground">
                     Estimado: {item.estimated_consumption}L | Real: {item.actual_consumption}L
                   </p>
-                  <Badge className={item.savings >= 0 ? 'bg-green-500' : 'bg-red-500'}>
-                    {item.savings >= 0 ? '+' : ''}{item.savings}L
+                  <Badge className={item.savings >= 0 ? "bg-green-500" : "bg-red-500"}>
+                    {item.savings >= 0 ? "+" : ""}{item.savings}L
                   </Badge>
                 </div>
               </div>

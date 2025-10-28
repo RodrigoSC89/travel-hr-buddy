@@ -1,18 +1,18 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertTriangle, CheckCircle, AlertCircle, Info } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertTriangle, CheckCircle, AlertCircle, Info } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface WellbeingAlert {
   id: string;
   user_id: string;
   alert_type: string;
-  severity: 'info' | 'warning' | 'critical';
+  severity: "info" | "warning" | "critical";
   message: string;
   status: string;
   created_at: string;
@@ -33,20 +33,20 @@ export const ManagerAlerts: React.FC = () => {
       if (!user) return;
 
       const { data, error } = await supabase
-        .from('wellbeing_alerts')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .from("wellbeing_alerts")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       setAlerts(data || []);
     } catch (error) {
-      console.error('Error fetching alerts:', error);
+      console.error("Error fetching alerts:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load wellbeing alerts',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load wellbeing alerts",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -56,27 +56,27 @@ export const ManagerAlerts: React.FC = () => {
   const acknowledgeAlert = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('wellbeing_alerts')
+        .from("wellbeing_alerts")
         .update({
-          status: 'acknowledged',
+          status: "acknowledged",
           acknowledged_at: new Date().toISOString(),
         })
-        .eq('id', alertId);
+        .eq("id", alertId);
 
       if (error) throw error;
 
       toast({
-        title: 'Success',
-        description: 'Alert acknowledged',
+        title: "Success",
+        description: "Alert acknowledged",
       });
 
       fetchAlerts();
     } catch (error) {
-      console.error('Error acknowledging alert:', error);
+      console.error("Error acknowledging alert:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to acknowledge alert',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to acknowledge alert",
+        variant: "destructive",
       });
     }
   };
@@ -84,60 +84,60 @@ export const ManagerAlerts: React.FC = () => {
   const resolveAlert = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('wellbeing_alerts')
+        .from("wellbeing_alerts")
         .update({
-          status: 'resolved',
+          status: "resolved",
           resolved_at: new Date().toISOString(),
         })
-        .eq('id', alertId);
+        .eq("id", alertId);
 
       if (error) throw error;
 
       toast({
-        title: 'Success',
-        description: 'Alert resolved',
+        title: "Success",
+        description: "Alert resolved",
       });
 
       fetchAlerts();
     } catch (error) {
-      console.error('Error resolving alert:', error);
+      console.error("Error resolving alert:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to resolve alert',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to resolve alert",
+        variant: "destructive",
       });
     }
   };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return <AlertTriangle className="h-5 w-5 text-red-600" />;
-      case 'warning':
-        return <AlertCircle className="h-5 w-5 text-yellow-600" />;
-      case 'info':
-        return <Info className="h-5 w-5 text-blue-600" />;
-      default:
-        return <Info className="h-5 w-5" />;
+    case "critical":
+      return <AlertTriangle className="h-5 w-5 text-red-600" />;
+    case "warning":
+      return <AlertCircle className="h-5 w-5 text-yellow-600" />;
+    case "info":
+      return <Info className="h-5 w-5 text-blue-600" />;
+    default:
+      return <Info className="h-5 w-5" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return 'destructive';
-      case 'warning':
-        return 'secondary';
-      case 'info':
-        return 'default';
-      default:
-        return 'default';
+    case "critical":
+      return "destructive";
+    case "warning":
+      return "secondary";
+    case "info":
+      return "default";
+    default:
+      return "default";
     }
   };
 
-  const activeAlerts = alerts.filter((a) => a.status === 'active');
-  const acknowledgedAlerts = alerts.filter((a) => a.status === 'acknowledged');
-  const resolvedAlerts = alerts.filter((a) => a.status === 'resolved');
+  const activeAlerts = alerts.filter((a) => a.status === "active");
+  const acknowledgedAlerts = alerts.filter((a) => a.status === "acknowledged");
+  const resolvedAlerts = alerts.filter((a) => a.status === "resolved");
 
   if (loading) {
     return (
@@ -207,7 +207,7 @@ export const ManagerAlerts: React.FC = () => {
                     <div className="flex items-center gap-2 mb-2">
                       {getSeverityIcon(alert.severity)}
                       <Badge variant={getSeverityColor(alert.severity) as any}>
-                        {alert.alert_type.replace('_', ' ')}
+                        {alert.alert_type.replace("_", " ")}
                       </Badge>
                     </div>
                     <AlertDescription className="text-sm">

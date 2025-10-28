@@ -9,17 +9,17 @@
  * - Conflict resolution
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { enhancedSyncEngine } from '../services/enhanced-sync-engine';
-import { networkDetector } from '../services/networkDetector';
-import { structuredLogger } from '@/lib/logger/structured-logger';
+import { useState, useEffect, useCallback } from "react";
+import { enhancedSyncEngine } from "../services/enhanced-sync-engine";
+import { networkDetector } from "../services/networkDetector";
+import { structuredLogger } from "@/lib/logger/structured-logger";
 
 export interface OfflineSyncState {
   isOnline: boolean;
   isSyncing: boolean;
   lastSync: Date | null;
   pendingChanges: number;
-  syncMode: 'realtime' | 'polling' | 'offline';
+  syncMode: "realtime" | "polling" | "offline";
   error: Error | null;
 }
 
@@ -52,7 +52,7 @@ export const useOfflineSync = (): UseOfflineSyncResult => {
     isSyncing: false,
     lastSync: null,
     pendingChanges: 0,
-    syncMode: 'offline',
+    syncMode: "offline",
     error: null,
   });
 
@@ -79,11 +79,11 @@ export const useOfflineSync = (): UseOfflineSyncResult => {
     try {
       await enhancedSyncEngine.forceSync();
       updateFromSyncEngine();
-      structuredLogger.info('Manual sync completed successfully');
+      structuredLogger.info("Manual sync completed successfully");
     } catch (error) {
-      const err = error instanceof Error ? error : new Error('Sync failed');
+      const err = error instanceof Error ? error : new Error("Sync failed");
       setState((prev) => ({ ...prev, error: err }));
-      structuredLogger.error('Manual sync failed', err);
+      structuredLogger.error("Manual sync failed", err);
     } finally {
       setState((prev) => ({ ...prev, isSyncing: false }));
     }
@@ -129,7 +129,7 @@ export const useOfflineSync = (): UseOfflineSyncResult => {
       
       // Auto-sync when connection restored
       if (isOnline && state.pendingChanges > 0) {
-        structuredLogger.info('Connection restored, starting auto-sync');
+        structuredLogger.info("Connection restored, starting auto-sync");
         sync();
       }
     });

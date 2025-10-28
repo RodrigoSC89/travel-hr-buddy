@@ -5,12 +5,12 @@
  * Checks authentication before rendering sensitive content
  */
 
-import React, { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { structuredLogger } from '@/lib/logger/structured-logger';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Shield, Loader2 } from 'lucide-react';
+import React, { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { structuredLogger } from "@/lib/logger/structured-logger";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Shield, Loader2 } from "lucide-react";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -30,7 +30,7 @@ interface AuthGuardProps {
 export const AuthGuard: React.FC<AuthGuardProps> = ({
   children,
   requiredRoles = [],
-  fallbackPath = '/unauthorized',
+  fallbackPath = "/unauthorized",
   showAlert = true,
 }) => {
   const { user, isLoading } = useAuth();
@@ -39,7 +39,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
 
   useEffect(() => {
     if (!isLoading && !user) {
-      structuredLogger.warn('Unauthorized access attempt', {
+      structuredLogger.warn("Unauthorized access attempt", {
         path: location.pathname,
         timestamp: new Date().toISOString(),
       });
@@ -84,11 +84,11 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
 
   // Check role requirements if specified
   if (requiredRoles.length > 0) {
-    const userRole = (user as any).user_metadata?.role || 'user';
+    const userRole = (user as any).user_metadata?.role || "user";
     const hasRequiredRole = requiredRoles.includes(userRole);
 
     if (!hasRequiredRole) {
-      structuredLogger.warn('Insufficient permissions', {
+      structuredLogger.warn("Insufficient permissions", {
         userId: user.id,
         requiredRoles,
         userRole,
@@ -105,7 +105,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
                 Você não tem permissão para acessar este recurso.
                 {requiredRoles.length > 0 && (
                   <p className="mt-2 text-xs">
-                    Funções necessárias: {requiredRoles.join(', ')}
+                    Funções necessárias: {requiredRoles.join(", ")}
                   </p>
                 )}
               </AlertDescription>
@@ -131,7 +131,7 @@ export const useAuthGuard = () => {
   
   const hasRole = (roles: string[]): boolean => {
     if (!user) return false;
-    const userRole = (user as any).user_metadata?.role || 'user';
+    const userRole = (user as any).user_metadata?.role || "user";
     return roles.includes(userRole);
   };
 
@@ -139,8 +139,8 @@ export const useAuthGuard = () => {
     if (isAuthenticated) {
       callback();
     } else {
-      structuredLogger.warn('Action requires authentication', {
-        action: callback.name || 'anonymous',
+      structuredLogger.warn("Action requires authentication", {
+        action: callback.name || "anonymous",
       });
     }
   };

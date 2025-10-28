@@ -1,12 +1,12 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Download, Eye, Trash2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { generateSgsoReportPDF } from '../services/generateSgsoReportPDF';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Download, Eye, Trash2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { generateSgsoReportPDF } from "../services/generateSgsoReportPDF";
 
 interface PlansListProps {
   onSelectPlan: (plan: any) => void;
@@ -25,17 +25,17 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
   const loadPlans = async () => {
     try {
       const { data, error } = await supabase
-        .from('sgso_plans')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("sgso_plans")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setPlans(data || []);
     } catch (error: any) {
       toast({
-        title: 'Error loading plans',
+        title: "Error loading plans",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -45,27 +45,27 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
   const handleExportPDF = async (plan: any) => {
     try {
       const { data: actions } = await supabase
-        .from('sgso_actions')
-        .select('*')
-        .eq('plan_id', plan.id);
+        .from("sgso_actions")
+        .select("*")
+        .eq("plan_id", plan.id);
 
       const blob = await generateSgsoReportPDF(plan, actions || []);
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `sgso-plan-${plan.id}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
 
       toast({
-        title: 'PDF generated',
-        description: 'SGSO report has been downloaded.',
+        title: "PDF generated",
+        description: "SGSO report has been downloaded.",
       });
     } catch (error: any) {
       toast({
-        title: 'Error generating PDF',
+        title: "Error generating PDF",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -86,14 +86,14 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
                   Version {plan.version}
                 </CardDescription>
               </div>
-              <Badge variant={plan.status === 'active' ? 'default' : 'secondary'}>
+              <Badge variant={plan.status === "active" ? "default" : "secondary"}>
                 {plan.status}
               </Badge>
             </div>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-              {plan.description || 'No description'}
+              {plan.description || "No description"}
             </p>
             <div className="flex gap-2">
               <Button

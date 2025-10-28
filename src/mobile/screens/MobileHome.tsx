@@ -4,11 +4,11 @@
  * Main dashboard for mobile app with quick access to key features
  */
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Ship,
   CheckSquare,
@@ -18,11 +18,11 @@ import {
   WifiOff,
   RefreshCw,
   LogIn,
-} from 'lucide-react';
-import { enhancedSyncEngine } from '../services/enhanced-sync-engine';
-import { networkDetector } from '../services/networkDetector';
-import { biometricAuthService } from '../services/biometric-auth';
-import { structuredLogger } from '@/lib/logger/structured-logger';
+} from "lucide-react";
+import { enhancedSyncEngine } from "../services/enhanced-sync-engine";
+import { networkDetector } from "../services/networkDetector";
+import { biometricAuthService } from "../services/biometric-auth";
+import { structuredLogger } from "@/lib/logger/structured-logger";
 
 export const MobileHome: React.FC = () => {
   const [syncStatus, setSyncStatus] = useState(enhancedSyncEngine.getStatus());
@@ -59,18 +59,18 @@ export const MobileHome: React.FC = () => {
   const handleQuickSync = async () => {
     try {
       await enhancedSyncEngine.forceSync();
-      structuredLogger.info('Manual sync completed');
+      structuredLogger.info("Manual sync completed");
     } catch (error) {
-      structuredLogger.error('Manual sync failed', error as Error);
+      structuredLogger.error("Manual sync failed", error as Error);
     }
   };
 
   const handleBiometricAuth = async () => {
     const result = await biometricAuthService.authenticate();
     if (result.success) {
-      structuredLogger.info('Biometric authentication successful');
+      structuredLogger.info("Biometric authentication successful");
     } else {
-      structuredLogger.warn('Biometric authentication failed', { error: result.error });
+      structuredLogger.warn("Biometric authentication failed", { error: result.error });
     }
   };
 
@@ -193,7 +193,7 @@ export const MobileHome: React.FC = () => {
         <CardContent className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Modo:</span>
-            <Badge variant={syncStatus.mode === 'realtime' ? 'default' : 'secondary'}>
+            <Badge variant={syncStatus.mode === "realtime" ? "default" : "secondary"}>
               {syncStatus.mode}
             </Badge>
           </div>
@@ -202,7 +202,7 @@ export const MobileHome: React.FC = () => {
             <span>
               {syncStatus.lastSync
                 ? new Date(syncStatus.lastSync).toLocaleTimeString()
-                : 'Nunca'}
+                : "Nunca"}
             </span>
           </div>
           <div className="flex justify-between text-sm">

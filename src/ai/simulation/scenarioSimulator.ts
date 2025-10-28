@@ -11,8 +11,8 @@ import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import * as THREE from "three";
 
-export type ScenarioType = 'emergency' | 'training' | 'planning' | 'inspection';
-export type SimulationState = 'idle' | 'loading' | 'running' | 'paused' | 'completed';
+export type ScenarioType = "emergency" | "training" | "planning" | "inspection";
+export type SimulationState = "idle" | "loading" | "running" | "paused" | "completed";
 
 export interface ScenarioConfig {
   type: ScenarioType;
@@ -44,7 +44,7 @@ class ScenarioSimulator {
   private camera: THREE.PerspectiveCamera | null = null;
   private renderer: THREE.WebGLRenderer | null = null;
   private animationFrameId: number | null = null;
-  private state: SimulationState = 'idle';
+  private state: SimulationState = "idle";
   private currentScenario: ScenarioConfig | null = null;
   private events: SimulationEvent[] = [];
   private decisions: DecisionLog[] = [];
@@ -55,7 +55,7 @@ class ScenarioSimulator {
    */
   async initialize(container: HTMLElement): Promise<void> {
     if (this.scene) {
-      logger.warn('[Simulator] Already initialized');
+      logger.warn("[Simulator] Already initialized");
       return;
     }
 
@@ -86,11 +86,11 @@ class ScenarioSimulator {
       this.setupLighting();
 
       // Handle window resize
-      window.addEventListener('resize', () => this.handleResize(container));
+      window.addEventListener("resize", () => this.handleResize(container));
 
-      logger.info('[Simulator] ✓ 3D environment initialized');
+      logger.info("[Simulator] ✓ 3D environment initialized");
     } catch (error) {
-      logger.error('[Simulator] Failed to initialize:', error);
+      logger.error("[Simulator] Failed to initialize:", error);
       throw error;
     }
   }
@@ -125,10 +125,10 @@ class ScenarioSimulator {
    */
   async loadScenario(config: ScenarioConfig): Promise<void> {
     if (!this.scene) {
-      throw new Error('Simulator not initialized');
+      throw new Error("Simulator not initialized");
     }
 
-    this.state = 'loading';
+    this.state = "loading";
     this.currentScenario = config;
 
     try {
@@ -142,10 +142,10 @@ class ScenarioSimulator {
       this.addInteractiveElements();
 
       logger.info(`[Simulator] ✓ Scenario loaded: ${config.type}`);
-      this.state = 'idle';
+      this.state = "idle";
     } catch (error) {
-      logger.error('[Simulator] Failed to load scenario:', error);
-      this.state = 'idle';
+      logger.error("[Simulator] Failed to load scenario:", error);
+      this.state = "idle";
       throw error;
     }
   }
@@ -188,17 +188,17 @@ class ScenarioSimulator {
 
     // Add environment-specific objects
     switch (environment) {
-      case 'maritime':
-        this.buildMaritimeEnvironment();
-        break;
-      case 'industrial':
-        this.buildIndustrialEnvironment();
-        break;
-      case 'emergency':
-        this.buildEmergencyEnvironment();
-        break;
-      default:
-        this.buildDefaultEnvironment();
+    case "maritime":
+      this.buildMaritimeEnvironment();
+      break;
+    case "industrial":
+      this.buildIndustrialEnvironment();
+      break;
+    case "emergency":
+      this.buildEmergencyEnvironment();
+      break;
+    default:
+      this.buildDefaultEnvironment();
     }
   }
 
@@ -311,12 +311,12 @@ class ScenarioSimulator {
    * Start simulation
    */
   start(): void {
-    if (this.state === 'running') {
-      logger.warn('[Simulator] Simulation already running');
+    if (this.state === "running") {
+      logger.warn("[Simulator] Simulation already running");
       return;
     }
 
-    this.state = 'running';
+    this.state = "running";
     this.startTime = Date.now();
     this.animate();
     
@@ -324,14 +324,14 @@ class ScenarioSimulator {
       this.startAISimulation();
     }
 
-    logger.info('[Simulator] ✓ Simulation started');
+    logger.info("[Simulator] ✓ Simulation started");
   }
 
   /**
    * Animation loop
    */
   private animate = (): void => {
-    if (this.state !== 'running') return;
+    if (this.state !== "running") return;
 
     this.animationFrameId = requestAnimationFrame(this.animate);
 
@@ -353,7 +353,7 @@ class ScenarioSimulator {
   private async startAISimulation(): Promise<void> {
     // Generate events periodically
     const eventInterval = setInterval(() => {
-      if (this.state !== 'running') {
+      if (this.state !== "running") {
         clearInterval(eventInterval);
         return;
       }
@@ -366,7 +366,7 @@ class ScenarioSimulator {
    * Generate simulation event
    */
   private async generateSimulationEvent(): Promise<void> {
-    const eventTypes = ['warning', 'alert', 'info', 'critical'];
+    const eventTypes = ["warning", "alert", "info", "critical"];
     const event: SimulationEvent = {
       id: `event_${Date.now()}`,
       type: eventTypes[Math.floor(Math.random() * eventTypes.length)],
@@ -383,7 +383,7 @@ class ScenarioSimulator {
     this.events.push(event);
     await this.logEvent(event);
     
-    logger.info('[Simulator] Event generated:', event);
+    logger.info("[Simulator] Event generated:", event);
   }
 
   /**
@@ -391,17 +391,17 @@ class ScenarioSimulator {
    */
   private async getAIResponse(event: SimulationEvent): Promise<string> {
     try {
-      const { data } = await supabase.functions.invoke('simulate-ai-decision', {
+      const { data } = await supabase.functions.invoke("simulate-ai-decision", {
         body: {
           event,
           scenario: this.currentScenario
         }
       });
 
-      return data?.response || 'No AI response';
+      return data?.response || "No AI response";
     } catch (error) {
-      logger.error('[Simulator] AI response failed:', error);
-      return 'AI response unavailable';
+      logger.error("[Simulator] AI response failed:", error);
+      return "AI response unavailable";
     }
   }
 
@@ -410,7 +410,7 @@ class ScenarioSimulator {
    */
   private async logEvent(event: SimulationEvent): Promise<void> {
     try {
-      await supabase.from('simulation_event_log').insert({
+      await supabase.from("simulation_event_log").insert({
         event_id: event.id,
         event_type: event.type,
         description: event.description,
@@ -419,7 +419,7 @@ class ScenarioSimulator {
         timestamp: event.timestamp
       });
     } catch (error) {
-      logger.error('[Simulator] Failed to log event:', error);
+      logger.error("[Simulator] Failed to log event:", error);
     }
   }
 
@@ -430,10 +430,10 @@ class ScenarioSimulator {
     this.decisions.push(decision);
     
     try {
-      await supabase.from('simulation_decision_log').insert(decision);
-      logger.info('[Simulator] Decision logged');
+      await supabase.from("simulation_decision_log").insert(decision);
+      logger.info("[Simulator] Decision logged");
     } catch (error) {
-      logger.error('[Simulator] Failed to log decision:', error);
+      logger.error("[Simulator] Failed to log decision:", error);
     }
   }
 
@@ -441,21 +441,21 @@ class ScenarioSimulator {
    * Pause simulation
    */
   pause(): void {
-    this.state = 'paused';
+    this.state = "paused";
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
-    logger.info('[Simulator] Simulation paused');
+    logger.info("[Simulator] Simulation paused");
   }
 
   /**
    * Resume simulation
    */
   resume(): void {
-    if (this.state === 'paused') {
-      this.state = 'running';
+    if (this.state === "paused") {
+      this.state = "running";
       this.animate();
-      logger.info('[Simulator] Simulation resumed');
+      logger.info("[Simulator] Simulation resumed");
     }
   }
 
@@ -463,11 +463,11 @@ class ScenarioSimulator {
    * Stop simulation
    */
   stop(): void {
-    this.state = 'completed';
+    this.state = "completed";
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
-    logger.info('[Simulator] Simulation stopped');
+    logger.info("[Simulator] Simulation stopped");
   }
 
   /**
@@ -511,7 +511,7 @@ class ScenarioSimulator {
     this.events = [];
     this.decisions = [];
     
-    logger.info('[Simulator] Cleanup complete');
+    logger.info("[Simulator] Cleanup complete");
   }
 }
 

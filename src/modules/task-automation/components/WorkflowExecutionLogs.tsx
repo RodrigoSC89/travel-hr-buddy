@@ -3,21 +3,21 @@
  * PATCH 387 - Execution logging and history tracking
  */
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { CheckCircle, XCircle, Clock, Play, AlertCircle, RefreshCw } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { format } from 'date-fns';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { CheckCircle, XCircle, Clock, Play, AlertCircle, RefreshCw } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { format } from "date-fns";
 
 interface WorkflowExecution {
   id: string;
   workflow_id: string;
   workflow_name: string;
-  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+  status: "pending" | "running" | "completed" | "failed" | "cancelled";
   started_at: string;
   completed_at?: string;
   duration_ms?: number;
@@ -38,11 +38,11 @@ export const WorkflowExecutionLogs: React.FC<{ workflowId?: string }> = ({ workf
 
     // Set up real-time subscription
     const subscription = supabase
-      .channel('workflow_executions')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'automation_executions'
+      .channel("workflow_executions")
+      .on("postgres_changes", {
+        event: "*",
+        schema: "public",
+        table: "automation_executions"
       }, () => {
         fetchExecutions();
       })
@@ -85,7 +85,7 @@ export const WorkflowExecutionLogs: React.FC<{ workflowId?: string }> = ({ workf
       const formattedExecutions: WorkflowExecution[] = (data || []).map((exec: any) => ({
         id: exec.id,
         workflow_id: exec.rule_id,
-        workflow_name: exec.automation_rules?.rule_name || 'Unknown Workflow',
+        workflow_name: exec.automation_rules?.rule_name || "Unknown Workflow",
         status: exec.status,
         started_at: exec.started_at,
         completed_at: exec.completed_at,
@@ -98,10 +98,10 @@ export const WorkflowExecutionLogs: React.FC<{ workflowId?: string }> = ({ workf
 
       setExecutions(formattedExecutions);
     } catch (error) {
-      console.error('Error fetching executions:', error);
+      console.error("Error fetching executions:", error);
       toast({
-        title: 'Error loading execution logs',
-        variant: 'destructive',
+        title: "Error loading execution logs",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -110,34 +110,34 @@ export const WorkflowExecutionLogs: React.FC<{ workflowId?: string }> = ({ workf
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'failed':
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'running':
-        return <Play className="h-4 w-4 text-blue-500 animate-pulse" />;
-      case 'pending':
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      case 'cancelled':
-        return <AlertCircle className="h-4 w-4 text-gray-500" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "failed":
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    case "running":
+      return <Play className="h-4 w-4 text-blue-500 animate-pulse" />;
+    case "pending":
+      return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "cancelled":
+      return <AlertCircle className="h-4 w-4 text-gray-500" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'default' | 'destructive' | 'secondary'> = {
-      completed: 'default',
-      failed: 'destructive',
-      running: 'default',
-      pending: 'secondary',
-      cancelled: 'secondary',
+    const variants: Record<string, "default" | "destructive" | "secondary"> = {
+      completed: "default",
+      failed: "destructive",
+      running: "default",
+      pending: "secondary",
+      cancelled: "secondary",
     };
-    return <Badge variant={variants[status] || 'secondary'}>{status.toUpperCase()}</Badge>;
+    return <Badge variant={variants[status] || "secondary"}>{status.toUpperCase()}</Badge>;
   };
 
   const formatDuration = (ms?: number) => {
-    if (!ms) return 'N/A';
+    if (!ms) return "N/A";
     if (ms < 1000) return `${ms}ms`;
     return `${(ms / 1000).toFixed(2)}s`;
   };
@@ -177,7 +177,7 @@ export const WorkflowExecutionLogs: React.FC<{ workflowId?: string }> = ({ workf
                   <div
                     key={execution.id}
                     className={`p-3 border rounded-lg cursor-pointer hover:bg-accent transition-colors ${
-                      selectedExecution?.id === execution.id ? 'bg-accent' : ''
+                      selectedExecution?.id === execution.id ? "bg-accent" : ""
                     }`}
                     onClick={() => setSelectedExecution(execution)}
                   >
@@ -189,7 +189,7 @@ export const WorkflowExecutionLogs: React.FC<{ workflowId?: string }> = ({ workf
                       {getStatusBadge(execution.status)}
                     </div>
                     <div className="text-xs text-muted-foreground space-y-1">
-                      <p>Started: {format(new Date(execution.started_at), 'PPpp')}</p>
+                      <p>Started: {format(new Date(execution.started_at), "PPpp")}</p>
                       <p>Duration: {formatDuration(execution.duration_ms)}</p>
                       <p>Trigger: {execution.trigger_type}</p>
                     </div>
@@ -231,12 +231,12 @@ export const WorkflowExecutionLogs: React.FC<{ workflowId?: string }> = ({ workf
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Started:</span>
-                    <span>{format(new Date(selectedExecution.started_at), 'PPpp')}</span>
+                    <span>{format(new Date(selectedExecution.started_at), "PPpp")}</span>
                   </div>
                   {selectedExecution.completed_at && (
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Completed:</span>
-                      <span>{format(new Date(selectedExecution.completed_at), 'PPpp')}</span>
+                      <span>{format(new Date(selectedExecution.completed_at), "PPpp")}</span>
                     </div>
                   )}
                 </div>

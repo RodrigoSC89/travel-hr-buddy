@@ -86,8 +86,8 @@ export function MissionManager() {
     // Log mission creation to mission_control_logs
     await missionLoggingService.logEvent(
       mission.id,
-      'mission_created',
-      'info',
+      "mission_created",
+      "info",
       `Mission "${mission.name}" created with ${selectedAgents.length} agent(s)`,
       {
         missionName: mission.name,
@@ -112,27 +112,27 @@ export function MissionManager() {
 
   const getPriorityColor = (priority: Mission["priority"]) => {
     switch (priority) {
-      case "critical":
-        return "bg-red-500";
-      case "high":
-        return "bg-orange-500";
-      case "medium":
-        return "bg-yellow-500";
-      case "low":
-        return "bg-green-500";
+    case "critical":
+      return "bg-red-500";
+    case "high":
+      return "bg-orange-500";
+    case "medium":
+      return "bg-yellow-500";
+    case "low":
+      return "bg-green-500";
     }
   };
 
   const getStatusColor = (status: Mission["status"]) => {
     switch (status) {
-      case "active":
-        return "bg-blue-500";
-      case "planned":
-        return "bg-purple-500";
-      case "completed":
-        return "bg-green-500";
-      case "cancelled":
-        return "bg-gray-500";
+    case "active":
+      return "bg-blue-500";
+    case "planned":
+      return "bg-purple-500";
+    case "completed":
+      return "bg-green-500";
+    case "cancelled":
+      return "bg-gray-500";
     }
   };
 

@@ -9,12 +9,12 @@
  * - Navigation recommendations
  */
 
-import { SonarReturn, SonarPattern } from './dataAnalyzer';
+import { SonarReturn, SonarPattern } from "./dataAnalyzer";
 
 export interface Hazard {
   id: string;
-  type: 'obstacle' | 'anomaly' | 'dangerous_terrain' | 'unknown_object' | 'low_visibility';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "obstacle" | "anomaly" | "dangerous_terrain" | "unknown_object" | "low_visibility";
+  severity: "low" | "medium" | "high" | "critical";
   location: { angle: number; distance: number; depth: number };
   description: string;
   recommendation: string;
@@ -32,7 +32,7 @@ export interface SafeZone {
 
 export interface RiskAssessment {
   timestamp: string;
-  overallRisk: 'safe' | 'caution' | 'dangerous' | 'critical';
+  overallRisk: "safe" | "caution" | "dangerous" | "critical";
   riskScore: number; // 0-100 (higher = more risk)
   hazards: Hazard[];
   safeZones: SafeZone[];
@@ -59,7 +59,7 @@ class RiskInterpreter {
     const riskScore = this.calculateRiskScore(hazards);
     const overallRisk = this.categorizeRisk(riskScore);
     const navigationAdvice = this.generateNavigationAdvice(hazards, safeZones, overallRisk);
-    const detectedAnomalies = patterns.filter(p => p.type === 'anomaly').length;
+    const detectedAnomalies = patterns.filter(p => p.type === "anomaly").length;
 
     return {
       timestamp: new Date().toISOString(),
@@ -84,7 +84,7 @@ class RiskInterpreter {
 
     // Detect obstacles from high-intensity returns
     const obstacles = returns.filter(
-      r => r.ping.intensity > this.OBSTACLE_INTENSITY_THRESHOLD && r.material === 'rock'
+      r => r.ping.intensity > this.OBSTACLE_INTENSITY_THRESHOLD && r.material === "rock"
     );
 
     for (const obstacle of obstacles) {
@@ -95,8 +95,8 @@ class RiskInterpreter {
       if (distance < 20 && depthDiff < 5) {
         hazards.push({
           id: `hazard-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          type: 'obstacle',
-          severity: distance < 10 ? 'critical' : 'high',
+          type: "obstacle",
+          severity: distance < 10 ? "critical" : "high",
           location: {
             angle: obstacle.ping.angle,
             distance: obstacle.ping.distance,
@@ -112,14 +112,14 @@ class RiskInterpreter {
 
     // Detect dangerous terrain from patterns
     for (const pattern of patterns) {
-      if (pattern.type === 'terrain' && pattern.confidence > 70) {
+      if (pattern.type === "terrain" && pattern.confidence > 70) {
         const depthDiff = Math.abs(pattern.location.depth - currentDepth);
         
         if (depthDiff > this.CRITICAL_DEPTH_VARIANCE) {
           hazards.push({
             id: `hazard-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            type: 'dangerous_terrain',
-            severity: depthDiff > 100 ? 'critical' : 'high',
+            type: "dangerous_terrain",
+            severity: depthDiff > 100 ? "critical" : "high",
             location: pattern.location,
             description: `Dangerous terrain: ${pattern.description}`,
             recommendation: `Avoid area. Depth variance: ${depthDiff.toFixed(0)}m`,
@@ -130,12 +130,12 @@ class RiskInterpreter {
       }
 
       // Detect anomalies
-      if (pattern.type === 'anomaly' || pattern.type === 'object') {
+      if (pattern.type === "anomaly" || pattern.type === "object") {
         const severity = this.assessAnomalySeverity(pattern);
         
         hazards.push({
           id: `hazard-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          type: pattern.type === 'object' ? 'unknown_object' : 'anomaly',
+          type: pattern.type === "object" ? "unknown_object" : "anomaly",
           severity,
           location: pattern.location,
           description: pattern.description,
@@ -151,11 +151,11 @@ class RiskInterpreter {
     if (lowVisReturns.length > returns.length * 0.3) {
       hazards.push({
         id: `hazard-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        type: 'low_visibility',
-        severity: 'medium',
+        type: "low_visibility",
+        severity: "medium",
         location: { angle: 0, distance: 0, depth: currentDepth },
-        description: 'Reduced sonar visibility due to high turbidity or noise',
-        recommendation: 'Reduce speed and proceed with caution',
+        description: "Reduced sonar visibility due to high turbidity or noise",
+        recommendation: "Reduce speed and proceed with caution",
         affectedRadius: 50,
         confidence: 85,
       });
@@ -167,29 +167,29 @@ class RiskInterpreter {
   /**
    * Assess severity of anomaly
    */
-  private assessAnomalySeverity(pattern: SonarPattern): Hazard['severity'] {
+  private assessAnomalySeverity(pattern: SonarPattern): Hazard["severity"] {
     if (pattern.confidence > 90 && pattern.size > 20) {
-      return 'critical';
+      return "critical";
     } else if (pattern.confidence > 75 || pattern.size > 10) {
-      return 'high';
+      return "high";
     } else if (pattern.confidence > 60) {
-      return 'medium';
+      return "medium";
     }
-    return 'low';
+    return "low";
   }
 
   /**
    * Get recommendation for anomaly
    */
-  private getAnomalyRecommendation(pattern: SonarPattern, severity: Hazard['severity']): string {
-    if (severity === 'critical') {
-      return 'CRITICAL: Unidentified large object. Immediate evasive action required.';
-    } else if (severity === 'high') {
-      return 'HIGH: Unknown object detected. Maintain safe distance and monitor.';
-    } else if (severity === 'medium') {
-      return 'MEDIUM: Possible anomaly detected. Exercise caution.';
+  private getAnomalyRecommendation(pattern: SonarPattern, severity: Hazard["severity"]): string {
+    if (severity === "critical") {
+      return "CRITICAL: Unidentified large object. Immediate evasive action required.";
+    } else if (severity === "high") {
+      return "HIGH: Unknown object detected. Maintain safe distance and monitor.";
+    } else if (severity === "medium") {
+      return "MEDIUM: Possible anomaly detected. Exercise caution.";
     }
-    return 'LOW: Minor anomaly. Continue monitoring.';
+    return "LOW: Minor anomaly. Continue monitoring.";
   }
 
   /**
@@ -221,16 +221,16 @@ class RiskInterpreter {
       const materials = directionReturns.map(r => r.material);
 
       // Determine if it's a good safe zone
-      const isSoftBottom = materials.filter(m => m === 'sand' || m === 'mud').length > materials.length * 0.7;
+      const isSoftBottom = materials.filter(m => m === "sand" || m === "mud").length > materials.length * 0.7;
       const isConsistent = new Set(materials).size <= 2;
       const hasGoodSignal = directionReturns.every(r => r.confidence > 60);
 
       if (isSoftBottom && isConsistent && hasGoodSignal) {
         const characteristics: string[] = [];
         
-        if (isSoftBottom) characteristics.push('Soft bottom (safe for landing)');
-        if (isConsistent) characteristics.push('Consistent terrain');
-        if (hasGoodSignal) characteristics.push('Good sonar visibility');
+        if (isSoftBottom) characteristics.push("Soft bottom (safe for landing)");
+        if (isConsistent) characteristics.push("Consistent terrain");
+        if (hasGoodSignal) characteristics.push("Good sonar visibility");
 
         const safetyScore = this.calculateSafetyScore(directionReturns, hazards);
 
@@ -297,11 +297,11 @@ class RiskInterpreter {
   /**
    * Categorize risk level
    */
-  private categorizeRisk(riskScore: number): RiskAssessment['overallRisk'] {
-    if (riskScore < 20) return 'safe';
-    if (riskScore < 50) return 'caution';
-    if (riskScore < 80) return 'dangerous';
-    return 'critical';
+  private categorizeRisk(riskScore: number): RiskAssessment["overallRisk"] {
+    if (riskScore < 20) return "safe";
+    if (riskScore < 50) return "caution";
+    if (riskScore < 80) return "dangerous";
+    return "critical";
   }
 
   /**
@@ -310,33 +310,33 @@ class RiskInterpreter {
   private generateNavigationAdvice(
     hazards: Hazard[],
     safeZones: SafeZone[],
-    overallRisk: RiskAssessment['overallRisk']
+    overallRisk: RiskAssessment["overallRisk"]
   ): string {
-    if (overallRisk === 'critical') {
-      const criticalHazards = hazards.filter(h => h.severity === 'critical');
+    if (overallRisk === "critical") {
+      const criticalHazards = hazards.filter(h => h.severity === "critical");
       return `CRITICAL ALERT: ${criticalHazards.length} critical hazard(s) detected. Immediate evasive action required. Surface or retreat to safe distance.`;
     }
 
-    if (overallRisk === 'dangerous') {
-      return `HIGH RISK: Multiple hazards detected. Reduce speed and maintain heightened awareness. Consider alternative route.`;
+    if (overallRisk === "dangerous") {
+      return "HIGH RISK: Multiple hazards detected. Reduce speed and maintain heightened awareness. Consider alternative route.";
     }
 
-    if (overallRisk === 'caution') {
+    if (overallRisk === "caution") {
       if (safeZones.length > 0) {
         const bestZone = safeZones.reduce((best, zone) => 
           zone.safetyScore > best.safetyScore ? zone : best
         );
         return `CAUTION: Hazards present. Recommend heading ${bestZone.center.angle.toFixed(0)}° towards safe zone (safety score: ${bestZone.safetyScore.toFixed(0)}).`;
       }
-      return `CAUTION: Some hazards detected. Proceed slowly and monitor sonar closely.`;
+      return "CAUTION: Some hazards detected. Proceed slowly and monitor sonar closely.";
     }
 
     // Safe conditions
     if (safeZones.length > 3) {
-      return `SAFE: Multiple safe zones identified. Current area is clear for navigation. Continue monitoring.`;
+      return "SAFE: Multiple safe zones identified. Current area is clear for navigation. Continue monitoring.";
     }
     
-    return `SAFE: No immediate hazards detected. Maintain current course and speed.`;
+    return "SAFE: No immediate hazards detected. Maintain current course and speed.";
   }
 
   /**
@@ -348,9 +348,9 @@ class RiskInterpreter {
     geologicalFeature: boolean;
     manMadeObject: boolean;
   } {
-    const metals = returns.filter(r => r.material === 'metal');
-    const biological = returns.filter(r => r.material === 'biological');
-    const rocks = returns.filter(r => r.material === 'rock');
+    const metals = returns.filter(r => r.material === "metal");
+    const biological = returns.filter(r => r.material === "biological");
+    const rocks = returns.filter(r => r.material === "rock");
 
     return {
       wreckage: metals.length > 5 && metals.some(m => m.confidence > 85),

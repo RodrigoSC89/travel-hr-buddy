@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { 
   Heart, 
   Moon, 
@@ -15,8 +15,8 @@ import {
   Save,
   TrendingUp,
   TrendingDown
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface HealthMetrics {
   sleep_hours: number;
@@ -41,26 +41,26 @@ export const HealthCheckin: React.FC = () => {
     energy_level: 3,
     exercise_minutes: 30,
     water_intake_liters: 2,
-    notes: ''
+    notes: ""
   });
 
   const handleSubmit = async () => {
     // TODO: Implement actual save to Supabase
     toast({
-      title: 'Health Check-in Saved',
-      description: 'Your health metrics have been recorded successfully'
+      title: "Health Check-in Saved",
+      description: "Your health metrics have been recorded successfully"
     });
   };
 
   const getRatingColor = (rating: number, inverse: boolean = false) => {
     if (inverse) {
-      if (rating >= 4) return 'text-red-500';
-      if (rating === 3) return 'text-yellow-500';
-      return 'text-green-500';
+      if (rating >= 4) return "text-red-500";
+      if (rating === 3) return "text-yellow-500";
+      return "text-green-500";
     }
-    if (rating >= 4) return 'text-green-500';
-    if (rating === 3) return 'text-yellow-500';
-    return 'text-red-500';
+    if (rating >= 4) return "text-green-500";
+    if (rating === 3) return "text-yellow-500";
+    return "text-red-500";
   };
 
   const getRatingIcon = (value: number) => {

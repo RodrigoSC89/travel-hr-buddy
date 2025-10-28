@@ -45,10 +45,10 @@ export interface CloneSnapshot {
 
 export interface CloneDeployment {
   cloneId: string;
-  status: 'pending' | 'deploying' | 'active' | 'inactive' | 'failed';
+  status: "pending" | "deploying" | "active" | "inactive" | "failed";
   endpoint?: string;
   lastSync?: Date;
-  syncStatus?: 'synced' | 'partial' | 'out_of_sync';
+  syncStatus?: "synced" | "partial" | "out_of_sync";
 }
 
 class CognitiveClone {
@@ -60,21 +60,21 @@ class CognitiveClone {
    */
   async initialize(): Promise<void> {
     if (this.isInitialized) {
-      logger.warn('[CognitiveClone] Already initialized');
+      logger.warn("[CognitiveClone] Already initialized");
       return;
     }
 
-    logger.info('[CognitiveClone] Initializing Cognitive Clone Core...');
+    logger.info("[CognitiveClone] Initializing Cognitive Clone Core...");
 
     try {
       // Load existing clones from registry
       const { data: clones, error } = await supabase
-        .from('clone_registry')
-        .select('*')
-        .eq('status', 'active');
+        .from("clone_registry")
+        .select("*")
+        .eq("status", "active");
 
       if (error) {
-        logger.error('[CognitiveClone] Failed to load clone registry:', error);
+        logger.error("[CognitiveClone] Failed to load clone registry:", error);
       } else if (clones) {
         clones.forEach(clone => {
           this.activeClones.set(clone.id, this.deserializeClone(clone));
@@ -83,9 +83,9 @@ class CognitiveClone {
       }
 
       this.isInitialized = true;
-      logger.info('[CognitiveClone] Cognitive Clone Core initialized');
+      logger.info("[CognitiveClone] Cognitive Clone Core initialized");
     } catch (error) {
-      logger.error('[CognitiveClone] Initialization failed:', error);
+      logger.error("[CognitiveClone] Initialization failed:", error);
       throw error;
     }
   }
@@ -94,26 +94,26 @@ class CognitiveClone {
    * Create a snapshot of current configuration
    */
   async createSnapshot(name?: string): Promise<CloneSnapshot> {
-    logger.info('[CognitiveClone] Creating configuration snapshot...');
+    logger.info("[CognitiveClone] Creating configuration snapshot...");
 
     try {
       // Capture current module state
       const { data: modules } = await supabase
-        .from('modules')
-        .select('*')
-        .eq('active', true);
+        .from("modules")
+        .select("*")
+        .eq("active", true);
 
       // Capture AI context
       const { data: memories } = await supabase
-        .from('ai_memory')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("ai_memory")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(100);
 
       // Capture preferences and settings
       const { data: settings } = await supabase
-        .from('user_settings')
-        .select('*')
+        .from("user_settings")
+        .select("*")
         .limit(1)
         .single();
 
@@ -127,14 +127,14 @@ class CognitiveClone {
           capabilities: this.getCurrentCapabilities(),
         },
         llmState: {
-          model: 'gpt-4',
+          model: "gpt-4",
           temperature: 0.7,
           maxTokens: 2000,
           systemPrompt: this.getSystemPrompt(),
         },
         metadata: {
-          version: '1.0.0',
-          environment: import.meta.env.MODE || 'production',
+          version: "1.0.0",
+          environment: import.meta.env.MODE || "production",
           parentInstance: this.getInstanceId(),
         },
       };
@@ -142,10 +142,10 @@ class CognitiveClone {
       // Save snapshot to database
       await this.saveSnapshot(snapshot);
 
-      logger.info('[CognitiveClone] Snapshot created successfully');
+      logger.info("[CognitiveClone] Snapshot created successfully");
       return snapshot;
     } catch (error) {
-      logger.error('[CognitiveClone] Failed to create snapshot:', error);
+      logger.error("[CognitiveClone] Failed to create snapshot:", error);
       throw error;
     }
   }
@@ -160,7 +160,7 @@ class CognitiveClone {
       contextLimit?: number;
       capabilities?: string[];
       restrictions?: string[];
-      deploymentTarget?: 'local' | 'remote' | 'edge';
+      deploymentTarget?: "local" | "remote" | "edge";
     }
   ): Promise<CloneConfiguration> {
     logger.info(`[CognitiveClone] Creating clone: ${options.name}`);
@@ -199,7 +199,7 @@ class CognitiveClone {
       logger.info(`[CognitiveClone] Clone created successfully: ${cloneConfig.id}`);
       return cloneConfig;
     } catch (error) {
-      logger.error('[CognitiveClone] Failed to create clone:', error);
+      logger.error("[CognitiveClone] Failed to create clone:", error);
       throw error;
     }
   }
@@ -225,16 +225,16 @@ class CognitiveClone {
 
       // Also save to Supabase for backup
       await supabase
-        .from('clone_context_storage')
+        .from("clone_context_storage")
         .insert({
           clone_id: config.id,
           context_data: contextData,
           created_at: new Date().toISOString(),
         });
 
-      logger.info('[CognitiveClone] Clone data persisted successfully');
+      logger.info("[CognitiveClone] Clone data persisted successfully");
     } catch (error) {
-      logger.error('[CognitiveClone] Failed to persist clone data:', error);
+      logger.error("[CognitiveClone] Failed to persist clone data:", error);
       throw error;
     }
   }
@@ -245,7 +245,7 @@ class CognitiveClone {
   private async registerClone(config: CloneConfiguration): Promise<void> {
     try {
       const { error } = await supabase
-        .from('clone_registry')
+        .from("clone_registry")
         .insert({
           id: config.id,
           name: config.name,
@@ -256,7 +256,7 @@ class CognitiveClone {
           capabilities: config.capabilities,
           restrictions: config.restrictions,
           parent_instance_id: config.parentInstanceId,
-          status: 'active',
+          status: "active",
           created_at: config.createdAt.toISOString(),
         });
 
@@ -264,7 +264,7 @@ class CognitiveClone {
 
       logger.info(`[CognitiveClone] Clone registered: ${config.id}`);
     } catch (error) {
-      logger.error('[CognitiveClone] Failed to register clone:', error);
+      logger.error("[CognitiveClone] Failed to register clone:", error);
       throw error;
     }
   }
@@ -275,7 +275,7 @@ class CognitiveClone {
   private async saveSnapshot(snapshot: CloneSnapshot): Promise<void> {
     try {
       const { error } = await supabase
-        .from('clone_snapshots')
+        .from("clone_snapshots")
         .insert({
           id: snapshot.configurationId,
           timestamp: snapshot.timestamp.toISOString(),
@@ -287,7 +287,7 @@ class CognitiveClone {
 
       if (error) throw error;
     } catch (error) {
-      logger.error('[CognitiveClone] Failed to save snapshot:', error);
+      logger.error("[CognitiveClone] Failed to save snapshot:", error);
       throw error;
     }
   }
@@ -302,16 +302,16 @@ class CognitiveClone {
 
     try {
       const { data, error } = await supabase
-        .from('clone_registry')
-        .select('*')
-        .eq('id', cloneId)
+        .from("clone_registry")
+        .select("*")
+        .eq("id", cloneId)
         .single();
 
       if (error) throw error;
 
       return data ? this.deserializeClone(data) : null;
     } catch (error) {
-      logger.error('[CognitiveClone] Failed to get clone:', error);
+      logger.error("[CognitiveClone] Failed to get clone:", error);
       return null;
     }
   }
@@ -321,10 +321,10 @@ class CognitiveClone {
    */
   async listClones(filter?: { status?: string }): Promise<CloneConfiguration[]> {
     try {
-      let query = supabase.from('clone_registry').select('*');
+      let query = supabase.from("clone_registry").select("*");
 
       if (filter?.status) {
-        query = query.eq('status', filter.status);
+        query = query.eq("status", filter.status);
       }
 
       const { data, error } = await query;
@@ -333,7 +333,7 @@ class CognitiveClone {
 
       return (data || []).map(c => this.deserializeClone(c));
     } catch (error) {
-      logger.error('[CognitiveClone] Failed to list clones:', error);
+      logger.error("[CognitiveClone] Failed to list clones:", error);
       return [];
     }
   }
@@ -346,15 +346,15 @@ class CognitiveClone {
 
     try {
       await supabase
-        .from('clone_registry')
-        .update({ status: 'inactive', updated_at: new Date().toISOString() })
-        .eq('id', cloneId);
+        .from("clone_registry")
+        .update({ status: "inactive", updated_at: new Date().toISOString() })
+        .eq("id", cloneId);
 
       this.activeClones.delete(cloneId);
 
-      logger.info('[CognitiveClone] Clone deactivated successfully');
+      logger.info("[CognitiveClone] Clone deactivated successfully");
     } catch (error) {
-      logger.error('[CognitiveClone] Failed to deactivate clone:', error);
+      logger.error("[CognitiveClone] Failed to deactivate clone:", error);
       throw error;
     }
   }
@@ -367,21 +367,21 @@ class CognitiveClone {
   }
 
   private getInstanceId(): string {
-    return localStorage.getItem('instance_id') || 'main-instance';
+    return localStorage.getItem("instance_id") || "main-instance";
   }
 
   private getCurrentCapabilities(): string[] {
     return [
-      'document_processing',
-      'ai_inference',
-      'decision_making',
-      'predictive_analytics',
-      'tactical_operations',
+      "document_processing",
+      "ai_inference",
+      "decision_making",
+      "predictive_analytics",
+      "tactical_operations",
     ];
   }
 
   private getSystemPrompt(): string {
-    return 'You are Nautilus AI, a maritime operations assistant.';
+    return "You are Nautilus AI, a maritime operations assistant.";
   }
 
   private deserializeClone(data: any): CloneConfiguration {

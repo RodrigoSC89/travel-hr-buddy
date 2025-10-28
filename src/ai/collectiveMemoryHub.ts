@@ -26,7 +26,7 @@ export interface SyncStatus {
   instance_id: string;
   last_sync: string;
   entries_synced: number;
-  status: 'synced' | 'syncing' | 'error';
+  status: "synced" | "syncing" | "error";
 }
 
 export interface RollbackResult {
@@ -49,7 +49,7 @@ class CollectiveMemoryHub {
    * Initialize the collective memory hub
    */
   async initialize(): Promise<void> {
-    console.log('[CollectiveMemory] Initializing with instance ID:', this.instanceId);
+    console.log("[CollectiveMemory] Initializing with instance ID:", this.instanceId);
     await this.loadKnowledgeFromDB();
     this.startSync();
   }
@@ -60,7 +60,7 @@ class CollectiveMemoryHub {
   async store(
     key: string,
     value: any,
-    source: string = 'system',
+    source: string = "system",
     tags: string[] = []
   ): Promise<KnowledgeEntry> {
     // Get current version
@@ -85,7 +85,7 @@ class CollectiveMemoryHub {
     // Store in database
     await this.syncEntryToDB(entry);
 
-    console.log('[CollectiveMemory] Stored:', key, 'v' + version);
+    console.log("[CollectiveMemory] Stored:", key, "v" + version);
     return entry;
   }
 
@@ -101,10 +101,10 @@ class CollectiveMemoryHub {
     // Fetch from database
     try {
       const { data, error } = await supabase
-        .from('collective_knowledge')
-        .select('*')
-        .eq('key', key)
-        .order('version', { ascending: false })
+        .from("collective_knowledge")
+        .select("*")
+        .eq("key", key)
+        .order("version", { ascending: false })
         .limit(1)
         .single();
 
@@ -127,7 +127,7 @@ class CollectiveMemoryHub {
         return entry;
       }
     } catch (error) {
-      console.error('[CollectiveMemory] Failed to retrieve:', error);
+      console.error("[CollectiveMemory] Failed to retrieve:", error);
     }
 
     return null;
@@ -138,7 +138,7 @@ class CollectiveMemoryHub {
    */
   private async syncEntryToDB(entry: KnowledgeEntry): Promise<void> {
     try {
-      await supabase.from('collective_knowledge').insert({
+      await supabase.from("collective_knowledge").insert({
         id: entry.id,
         key: entry.key,
         value: entry.value,
@@ -149,7 +149,7 @@ class CollectiveMemoryHub {
         instance_id: this.instanceId
       });
     } catch (error) {
-      console.error('[CollectiveMemory] Failed to sync entry:', error);
+      console.error("[CollectiveMemory] Failed to sync entry:", error);
     }
   }
 
@@ -159,9 +159,9 @@ class CollectiveMemoryHub {
   private async loadKnowledgeFromDB(): Promise<void> {
     try {
       const { data, error } = await supabase
-        .from('collective_knowledge')
-        .select('*')
-        .order('updated_at', { ascending: false });
+        .from("collective_knowledge")
+        .select("*")
+        .order("updated_at", { ascending: false });
 
       if (error) throw error;
 
@@ -189,10 +189,10 @@ class CollectiveMemoryHub {
           });
         });
 
-        console.log('[CollectiveMemory] Loaded', this.knowledge.size, 'entries from DB');
+        console.log("[CollectiveMemory] Loaded", this.knowledge.size, "entries from DB");
       }
     } catch (error) {
-      console.error('[CollectiveMemory] Failed to load from DB:', error);
+      console.error("[CollectiveMemory] Failed to load from DB:", error);
     }
   }
 
@@ -206,7 +206,7 @@ class CollectiveMemoryHub {
       await this.syncWithInstances();
     }, intervalMs);
 
-    console.log('[CollectiveMemory] Started sync (interval:', intervalMs, 'ms)');
+    console.log("[CollectiveMemory] Started sync (interval:", intervalMs, "ms)");
   }
 
   /**
@@ -219,11 +219,11 @@ class CollectiveMemoryHub {
     try {
       // Fetch recent updates from other instances
       const { data, error } = await supabase
-        .from('collective_knowledge')
-        .select('*')
-        .neq('instance_id', this.instanceId)
-        .gte('updated_at', new Date(Date.now() - 60000).toISOString())
-        .order('updated_at', { ascending: false });
+        .from("collective_knowledge")
+        .select("*")
+        .neq("instance_id", this.instanceId)
+        .gte("updated_at", new Date(Date.now() - 60000).toISOString())
+        .order("updated_at", { ascending: false });
 
       if (error) throw error;
 
@@ -252,21 +252,21 @@ class CollectiveMemoryHub {
         instance_id: this.instanceId,
         last_sync: new Date().toISOString(),
         entries_synced: entriesSynced,
-        status: 'synced'
+        status: "synced"
       };
 
       if (entriesSynced > 0) {
-        console.log('[CollectiveMemory] Synced', entriesSynced, 'entries');
+        console.log("[CollectiveMemory] Synced", entriesSynced, "entries");
       }
 
       return status;
     } catch (error) {
-      console.error('[CollectiveMemory] Sync error:', error);
+      console.error("[CollectiveMemory] Sync error:", error);
       return {
         instance_id: this.instanceId,
         last_sync: new Date().toISOString(),
         entries_synced: 0,
-        status: 'error'
+        status: "error"
       };
     }
   }
@@ -275,15 +275,15 @@ class CollectiveMemoryHub {
    * Rollback to a specific version
    */
   async rollback(key: string, targetVersion: number): Promise<RollbackResult> {
-    console.log('[CollectiveMemory] Rolling back', key, 'to version', targetVersion);
+    console.log("[CollectiveMemory] Rolling back", key, "to version", targetVersion);
 
     try {
       // Fetch the target version from DB
       const { data, error } = await supabase
-        .from('collective_knowledge')
-        .select('*')
-        .eq('key', key)
-        .eq('version', targetVersion)
+        .from("collective_knowledge")
+        .select("*")
+        .eq("key", key)
+        .eq("version", targetVersion)
         .single();
 
       if (error) throw error;
@@ -298,7 +298,7 @@ class CollectiveMemoryHub {
           version: currentVersion + 1,
           source: `rollback-to-v${targetVersion}`,
           confidence: data.confidence,
-          tags: [...(data.tags || []), 'rollback'],
+          tags: [...(data.tags || []), "rollback"],
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         };
@@ -314,9 +314,9 @@ class CollectiveMemoryHub {
         };
       }
 
-      throw new Error('Target version not found');
+      throw new Error("Target version not found");
     } catch (error) {
-      console.error('[CollectiveMemory] Rollback failed:', error);
+      console.error("[CollectiveMemory] Rollback failed:", error);
       return {
         success: false,
         rolled_back_to_version: targetVersion,
@@ -332,10 +332,10 @@ class CollectiveMemoryHub {
   async getHistory(key: string, limit: number = 20): Promise<KnowledgeEntry[]> {
     try {
       const { data, error } = await supabase
-        .from('collective_knowledge')
-        .select('*')
-        .eq('key', key)
-        .order('version', { ascending: false })
+        .from("collective_knowledge")
+        .select("*")
+        .eq("key", key)
+        .order("version", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
@@ -352,7 +352,7 @@ class CollectiveMemoryHub {
         updated_at: row.updated_at
       }));
     } catch (error) {
-      console.error('[CollectiveMemory] Failed to fetch history:', error);
+      console.error("[CollectiveMemory] Failed to fetch history:", error);
       return [];
     }
   }
@@ -365,7 +365,7 @@ class CollectiveMemoryHub {
       clearInterval(this.syncInterval);
       this.syncInterval = null;
     }
-    console.log('[CollectiveMemory] Shutdown complete');
+    console.log("[CollectiveMemory] Shutdown complete");
   }
 
   /**

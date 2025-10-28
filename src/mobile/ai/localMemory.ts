@@ -5,7 +5,7 @@
 
 interface ConversationMessage {
   id: string;
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
   timestamp: number;
   context?: Record<string, any>;
@@ -21,16 +21,16 @@ interface MemoryContext {
 }
 
 class LocalMemory {
-  private dbName = 'nautilus_ai_memory';
+  private dbName = "nautilus_ai_memory";
   private maxMessages = 100;
   private context: MemoryContext = {};
 
   /**
    * Store a conversation message
    */
-  async storeMessage(message: Omit<ConversationMessage, 'id' | 'timestamp'>): Promise<string> {
+  async storeMessage(message: Omit<ConversationMessage, "id" | "timestamp">): Promise<string> {
     // Generate UUID if available, otherwise fallback to timestamp-based ID
-    const uuid = typeof crypto !== 'undefined' && crypto.randomUUID 
+    const uuid = typeof crypto !== "undefined" && crypto.randomUUID 
       ? crypto.randomUUID()
       : `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
@@ -40,7 +40,7 @@ class LocalMemory {
       timestamp: Date.now()
     };
 
-    await this.saveToIndexedDB('messages', fullMessage);
+    await this.saveToIndexedDB("messages", fullMessage);
     
     // Cleanup old messages if exceeding limit
     await this.cleanupOldMessages();
@@ -52,7 +52,7 @@ class LocalMemory {
    * Get conversation history
    */
   async getHistory(limit: number = 20): Promise<ConversationMessage[]> {
-    const messages = await this.getAllFromIndexedDB('messages');
+    const messages = await this.getAllFromIndexedDB("messages");
     
     // Sort by timestamp descending and take latest
     return messages
@@ -66,14 +66,14 @@ class LocalMemory {
    */
   async updateContext(updates: Partial<MemoryContext>): Promise<void> {
     this.context = { ...this.context, ...updates };
-    await this.saveToIndexedDB('context', { id: 'current', ...this.context });
+    await this.saveToIndexedDB("context", { id: "current", ...this.context });
   }
 
   /**
    * Get current context
    */
   async getContext(): Promise<MemoryContext> {
-    const stored = await this.getFromIndexedDB('context', 'current');
+    const stored = await this.getFromIndexedDB("context", "current");
     if (stored) {
       this.context = stored;
     }
@@ -84,7 +84,7 @@ class LocalMemory {
    * Search conversation history
    */
   async searchHistory(query: string, limit: number = 10): Promise<ConversationMessage[]> {
-    const allMessages = await this.getAllFromIndexedDB('messages');
+    const allMessages = await this.getAllFromIndexedDB("messages");
     const lowerQuery = query.toLowerCase();
     
     return allMessages
@@ -116,14 +116,14 @@ class LocalMemory {
    * Clear all history
    */
   async clearHistory(): Promise<void> {
-    await this.clearIndexedDBStore('messages');
+    await this.clearIndexedDBStore("messages");
   }
 
   /**
    * Clear old messages beyond limit
    */
   private async cleanupOldMessages(): Promise<void> {
-    const messages = await this.getAllFromIndexedDB('messages');
+    const messages = await this.getAllFromIndexedDB("messages");
     
     if (messages.length > this.maxMessages) {
       const sorted = messages.sort(
@@ -133,7 +133,7 @@ class LocalMemory {
       const toDelete = sorted.slice(this.maxMessages);
       
       for (const msg of toDelete) {
-        await this.deleteFromIndexedDB('messages', msg.id);
+        await this.deleteFromIndexedDB("messages", msg.id);
       }
     }
   }
@@ -145,10 +145,10 @@ class LocalMemory {
     const context = await this.getContext();
     const recentMessages = await this.getHistory(5);
     
-    let summary = 'Current Context:\n';
+    let summary = "Current Context:\n";
     
     if (context.missionId) {
-      summary += `- Mission: ${context.missionId} (${context.missionStatus || 'unknown'})\n`;
+      summary += `- Mission: ${context.missionId} (${context.missionStatus || "unknown"})\n`;
     }
     
     if (context.currentLocation) {
@@ -156,7 +156,7 @@ class LocalMemory {
     }
     
     if (context.weatherConditions) {
-      summary += `- Weather: ${context.weatherConditions.conditions || 'unknown'}\n`;
+      summary += `- Weather: ${context.weatherConditions.conditions || "unknown"}\n`;
     }
     
     if (context.activeChecklists && context.activeChecklists.length > 0) {
@@ -164,7 +164,7 @@ class LocalMemory {
     }
     
     if (recentMessages.length > 0) {
-      summary += '\nRecent Conversation:\n';
+      summary += "\nRecent Conversation:\n";
       recentMessages.forEach(msg => {
         summary += `${msg.role}: ${msg.content.substring(0, 100)}...\n`;
       });
@@ -181,7 +181,7 @@ class LocalMemory {
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction([storeName], 'readwrite');
+        const transaction = db.transaction([storeName], "readwrite");
         const store = transaction.objectStore(storeName);
         
         store.put(data);
@@ -192,13 +192,13 @@ class LocalMemory {
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
         
-        if (!db.objectStoreNames.contains('messages')) {
-          const messageStore = db.createObjectStore('messages', { keyPath: 'id' });
-          messageStore.createIndex('timestamp', 'timestamp', { unique: false });
+        if (!db.objectStoreNames.contains("messages")) {
+          const messageStore = db.createObjectStore("messages", { keyPath: "id" });
+          messageStore.createIndex("timestamp", "timestamp", { unique: false });
         }
         
-        if (!db.objectStoreNames.contains('context')) {
-          db.createObjectStore('context', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains("context")) {
+          db.createObjectStore("context", { keyPath: "id" });
         }
       };
     });
@@ -211,7 +211,7 @@ class LocalMemory {
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction([storeName], 'readonly');
+        const transaction = db.transaction([storeName], "readonly");
         const store = transaction.objectStore(storeName);
         
         const getRequest = store.get(key);
@@ -228,7 +228,7 @@ class LocalMemory {
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction([storeName], 'readonly');
+        const transaction = db.transaction([storeName], "readonly");
         const store = transaction.objectStore(storeName);
         
         const getAllRequest = store.getAll();
@@ -245,7 +245,7 @@ class LocalMemory {
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction([storeName], 'readwrite');
+        const transaction = db.transaction([storeName], "readwrite");
         const store = transaction.objectStore(storeName);
         
         store.delete(key);
@@ -262,7 +262,7 @@ class LocalMemory {
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction([storeName], 'readwrite');
+        const transaction = db.transaction([storeName], "readwrite");
         const store = transaction.objectStore(storeName);
         
         store.clear();

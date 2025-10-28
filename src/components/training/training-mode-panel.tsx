@@ -6,12 +6,12 @@
  * interactive checklists, and incident replay simulations
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   GraduationCap,
   Play,
@@ -24,8 +24,8 @@ import {
   Lightbulb,
   AlertCircle,
   ChevronRight,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface TrainingStep {
   id: string;
@@ -41,152 +41,152 @@ interface TrainingModule {
   id: string;
   title: string;
   description: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: "beginner" | "intermediate" | "advanced";
   duration: string;
   steps: TrainingStep[];
 }
 
 const TRAINING_MODULES: TrainingModule[] = [
   {
-    id: 'dashboard-basics',
-    title: 'Dashboard Navigation Basics',
-    description: 'Learn to navigate the main dashboard and understand key metrics',
-    difficulty: 'beginner',
-    duration: '10 min',
+    id: "dashboard-basics",
+    title: "Dashboard Navigation Basics",
+    description: "Learn to navigate the main dashboard and understand key metrics",
+    difficulty: "beginner",
+    duration: "10 min",
     steps: [
       {
-        id: 'step-1',
-        title: 'Understanding the Main Dashboard',
-        description: 'Explore the main dashboard layout and key components',
-        aiExplanation: 'The dashboard provides a centralized view of all critical operations. The top section shows real-time metrics, while the sidebar gives you quick access to all modules.',
-        action: 'Navigate to the main dashboard',
+        id: "step-1",
+        title: "Understanding the Main Dashboard",
+        description: "Explore the main dashboard layout and key components",
+        aiExplanation: "The dashboard provides a centralized view of all critical operations. The top section shows real-time metrics, while the sidebar gives you quick access to all modules.",
+        action: "Navigate to the main dashboard",
         completed: false,
         tips: [
-          'Look for color-coded status indicators',
-          'Check the notification bell for updates',
-          'Use the search bar for quick access',
+          "Look for color-coded status indicators",
+          "Check the notification bell for updates",
+          "Use the search bar for quick access",
         ],
       },
       {
-        id: 'step-2',
-        title: 'Reading Key Performance Indicators',
-        description: 'Interpret KPIs and metrics displayed on cards',
-        aiExplanation: 'Each KPI card shows a specific metric. Green indicates good performance, yellow means attention needed, and red signals critical issues requiring immediate action.',
-        action: 'Identify and explain three KPIs',
+        id: "step-2",
+        title: "Reading Key Performance Indicators",
+        description: "Interpret KPIs and metrics displayed on cards",
+        aiExplanation: "Each KPI card shows a specific metric. Green indicates good performance, yellow means attention needed, and red signals critical issues requiring immediate action.",
+        action: "Identify and explain three KPIs",
         completed: false,
         tips: [
-          'Hover over metrics for detailed tooltips',
-          'Click cards for detailed breakdowns',
-          'Use filters to customize your view',
+          "Hover over metrics for detailed tooltips",
+          "Click cards for detailed breakdowns",
+          "Use filters to customize your view",
         ],
       },
       {
-        id: 'step-3',
-        title: 'Accessing Module Sections',
-        description: 'Learn how to navigate between different modules',
-        aiExplanation: 'The sidebar contains links to all system modules. Each module has a dedicated icon and label. Click on any module to access its features and sub-sections.',
-        action: 'Navigate to at least 3 different modules',
+        id: "step-3",
+        title: "Accessing Module Sections",
+        description: "Learn how to navigate between different modules",
+        aiExplanation: "The sidebar contains links to all system modules. Each module has a dedicated icon and label. Click on any module to access its features and sub-sections.",
+        action: "Navigate to at least 3 different modules",
         completed: false,
         tips: [
-          'Use breadcrumbs to track your location',
-          'Sidebar can be collapsed for more space',
-          'Recent items appear at the top',
+          "Use breadcrumbs to track your location",
+          "Sidebar can be collapsed for more space",
+          "Recent items appear at the top",
         ],
       },
     ],
   },
   {
-    id: 'incident-response',
-    title: 'Incident Response Protocol',
-    description: 'Master the incident response workflow from detection to resolution',
-    difficulty: 'intermediate',
-    duration: '20 min',
+    id: "incident-response",
+    title: "Incident Response Protocol",
+    description: "Master the incident response workflow from detection to resolution",
+    difficulty: "intermediate",
+    duration: "20 min",
     steps: [
       {
-        id: 'step-1',
-        title: 'Incident Detection and Classification',
-        description: 'Identify and properly classify different types of incidents',
-        aiExplanation: 'When an incident occurs, the system will alert you. Your first task is to classify it correctly: Safety, Environmental, Equipment, or Personnel. This determines the response protocol.',
-        action: 'Review and classify a sample incident',
+        id: "step-1",
+        title: "Incident Detection and Classification",
+        description: "Identify and properly classify different types of incidents",
+        aiExplanation: "When an incident occurs, the system will alert you. Your first task is to classify it correctly: Safety, Environmental, Equipment, or Personnel. This determines the response protocol.",
+        action: "Review and classify a sample incident",
         completed: false,
         tips: [
-          'Review the incident severity matrix',
-          'Consider potential escalation scenarios',
-          'Document initial observations',
+          "Review the incident severity matrix",
+          "Consider potential escalation scenarios",
+          "Document initial observations",
         ],
       },
       {
-        id: 'step-2',
-        title: 'Immediate Response Actions',
-        description: 'Execute the appropriate immediate response procedures',
-        aiExplanation: 'Based on the classification, the AI will suggest immediate actions. For safety incidents, prioritize personnel evacuation. For equipment failures, follow lockout/tagout procedures.',
-        action: 'Complete the immediate response checklist',
+        id: "step-2",
+        title: "Immediate Response Actions",
+        description: "Execute the appropriate immediate response procedures",
+        aiExplanation: "Based on the classification, the AI will suggest immediate actions. For safety incidents, prioritize personnel evacuation. For equipment failures, follow lockout/tagout procedures.",
+        action: "Complete the immediate response checklist",
         completed: false,
         tips: [
-          'Follow the order of operations strictly',
-          'Communicate with team members',
-          'Document all actions taken',
+          "Follow the order of operations strictly",
+          "Communicate with team members",
+          "Document all actions taken",
         ],
       },
       {
-        id: 'step-3',
-        title: 'Investigation and Reporting',
-        description: 'Conduct thorough investigation and document findings',
-        aiExplanation: 'After immediate response, investigate root causes. Use the 5 Whys technique. Document evidence, interview witnesses, and create a comprehensive report.',
-        action: 'Complete incident investigation form',
+        id: "step-3",
+        title: "Investigation and Reporting",
+        description: "Conduct thorough investigation and document findings",
+        aiExplanation: "After immediate response, investigate root causes. Use the 5 Whys technique. Document evidence, interview witnesses, and create a comprehensive report.",
+        action: "Complete incident investigation form",
         completed: false,
         tips: [
-          'Take photos and collect physical evidence',
-          'Interview all involved parties',
-          'Identify contributing factors',
+          "Take photos and collect physical evidence",
+          "Interview all involved parties",
+          "Identify contributing factors",
         ],
       },
     ],
   },
   {
-    id: 'safety-audit',
-    title: 'SGSO Safety Audit Procedures',
-    description: 'Complete safety audit process from planning to corrective actions',
-    difficulty: 'advanced',
-    duration: '30 min',
+    id: "safety-audit",
+    title: "SGSO Safety Audit Procedures",
+    description: "Complete safety audit process from planning to corrective actions",
+    difficulty: "advanced",
+    duration: "30 min",
     steps: [
       {
-        id: 'step-1',
-        title: 'Pre-Audit Preparation',
-        description: 'Prepare documentation and checklists for the audit',
-        aiExplanation: 'Before conducting an audit, gather all relevant documentation: previous audit reports, incident logs, training records, and maintenance schedules. Review applicable regulations.',
-        action: 'Complete pre-audit checklist',
+        id: "step-1",
+        title: "Pre-Audit Preparation",
+        description: "Prepare documentation and checklists for the audit",
+        aiExplanation: "Before conducting an audit, gather all relevant documentation: previous audit reports, incident logs, training records, and maintenance schedules. Review applicable regulations.",
+        action: "Complete pre-audit checklist",
         completed: false,
         tips: [
-          'Review IMCA guidelines',
-          'Check certification expiry dates',
-          'Prepare interview questions',
+          "Review IMCA guidelines",
+          "Check certification expiry dates",
+          "Prepare interview questions",
         ],
       },
       {
-        id: 'step-2',
-        title: 'Conducting the Audit',
-        description: 'Perform systematic inspection and documentation',
-        aiExplanation: 'During the audit, follow the IMCA audit protocol systematically. Observe operations, interview personnel, inspect equipment, and verify documentation. Record all findings objectively.',
-        action: 'Complete audit inspection',
+        id: "step-2",
+        title: "Conducting the Audit",
+        description: "Perform systematic inspection and documentation",
+        aiExplanation: "During the audit, follow the IMCA audit protocol systematically. Observe operations, interview personnel, inspect equipment, and verify documentation. Record all findings objectively.",
+        action: "Complete audit inspection",
         completed: false,
         tips: [
-          'Use standardized checklists',
-          'Take detailed notes',
-          'Verify with physical inspection',
+          "Use standardized checklists",
+          "Take detailed notes",
+          "Verify with physical inspection",
         ],
       },
       {
-        id: 'step-3',
-        title: 'Corrective Action Plan',
-        description: 'Develop and implement corrective actions',
-        aiExplanation: 'For each finding, develop specific corrective actions with timelines and responsible parties. Prioritize based on risk level. High-risk items require immediate action.',
-        action: 'Create corrective action plan',
+        id: "step-3",
+        title: "Corrective Action Plan",
+        description: "Develop and implement corrective actions",
+        aiExplanation: "For each finding, develop specific corrective actions with timelines and responsible parties. Prioritize based on risk level. High-risk items require immediate action.",
+        action: "Create corrective action plan",
         completed: false,
         tips: [
-          'Assign clear responsibilities',
-          'Set realistic deadlines',
-          'Schedule follow-up verifications',
+          "Assign clear responsibilities",
+          "Set realistic deadlines",
+          "Schedule follow-up verifications",
         ],
       },
     ],
@@ -234,14 +234,14 @@ export function TrainingModePanel() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'beginner':
-        return 'bg-green-500';
-      case 'intermediate':
-        return 'bg-yellow-500';
-      case 'advanced':
-        return 'bg-red-500';
-      default:
-        return 'bg-gray-500';
+    case "beginner":
+      return "bg-green-500";
+    case "intermediate":
+      return "bg-yellow-500";
+    case "advanced":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
@@ -272,8 +272,8 @@ export function TrainingModePanel() {
               <Card
                 key={module.id}
                 className={cn(
-                  'cursor-pointer transition-all hover:shadow-lg',
-                  selectedModule?.id === module.id && 'ring-2 ring-primary'
+                  "cursor-pointer transition-all hover:shadow-lg",
+                  selectedModule?.id === module.id && "ring-2 ring-primary"
                 )}
                 onClick={() => {
                   setSelectedModule(module);
@@ -426,10 +426,10 @@ export function TrainingModePanel() {
                             <div
                               key={step.id}
                               className={cn(
-                                'flex items-start gap-3 p-2 rounded cursor-pointer transition-colors',
+                                "flex items-start gap-3 p-2 rounded cursor-pointer transition-colors",
                                 index === currentStepIndex &&
-                                  'bg-primary/10 border border-primary',
-                                step.completed && 'opacity-60'
+                                  "bg-primary/10 border border-primary",
+                                step.completed && "opacity-60"
                               )}
                               onClick={() => setCurrentStepIndex(index)}
                             >
@@ -461,7 +461,7 @@ export function TrainingModePanel() {
                           onClick={() => setShowAIHelp(!showAIHelp)}
                         >
                           <Lightbulb className="mr-2 h-4 w-4" />
-                          {showAIHelp ? 'Hide' : 'Show'} AI Guidance
+                          {showAIHelp ? "Hide" : "Show"} AI Guidance
                         </Button>
                         <Button variant="outline" className="w-full justify-start">
                           <AlertCircle className="mr-2 h-4 w-4" />

@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface CreateChannelDialogProps {
   open: boolean;
@@ -32,9 +32,9 @@ export const CreateChannelDialog: React.FC<CreateChannelDialogProps> = ({
   onSuccess,
 }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    channel_type: 'group',
+    name: "",
+    description: "",
+    channel_type: "group",
     is_private: false,
   });
   const [submitting, setSubmitting] = useState(false);
@@ -46,9 +46,9 @@ export const CreateChannelDialog: React.FC<CreateChannelDialogProps> = ({
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      if (!user) throw new Error("Not authenticated");
 
-      const { error } = await supabase.from('communication_channels').insert({
+      const { error } = await supabase.from("communication_channels").insert({
         ...formData,
         created_by: user.id,
         is_active: true,
@@ -57,24 +57,24 @@ export const CreateChannelDialog: React.FC<CreateChannelDialogProps> = ({
       if (error) throw error;
 
       toast({
-        title: 'Success',
-        description: 'Channel created successfully',
+        title: "Success",
+        description: "Channel created successfully",
       });
 
       onSuccess();
       onOpenChange(false);
       setFormData({
-        name: '',
-        description: '',
-        channel_type: 'group',
+        name: "",
+        description: "",
+        channel_type: "group",
         is_private: false,
       });
     } catch (error) {
-      console.error('Error creating channel:', error);
+      console.error("Error creating channel:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to create channel',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to create channel",
+        variant: "destructive",
       });
     } finally {
       setSubmitting(false);
@@ -141,7 +141,7 @@ export const CreateChannelDialog: React.FC<CreateChannelDialogProps> = ({
               Cancel
             </Button>
             <Button type="submit" disabled={submitting}>
-              {submitting ? 'Creating...' : 'Create Channel'}
+              {submitting ? "Creating..." : "Create Channel"}
             </Button>
           </div>
         </form>

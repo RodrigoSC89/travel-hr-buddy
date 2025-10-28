@@ -75,20 +75,20 @@ export const DroneTelemetryStream: React.FC<DroneTelemetryStreamProps> = ({
 
   const getStatusColor = (status: DroneStatus["status"]) => {
     switch (status) {
-      case "flying":
-      case "hovering":
-        return "text-green-500";
-      case "idle":
-        return "text-gray-500";
-      case "takeoff":
-      case "landing":
-        return "text-blue-500";
-      case "emergency":
-        return "text-red-500";
-      case "offline":
-        return "text-gray-400";
-      default:
-        return "text-gray-500";
+    case "flying":
+    case "hovering":
+      return "text-green-500";
+    case "idle":
+      return "text-gray-500";
+    case "takeoff":
+    case "landing":
+      return "text-blue-500";
+    case "emergency":
+      return "text-red-500";
+    case "offline":
+      return "text-gray-400";
+    default:
+      return "text-gray-500";
     }
   };
 
@@ -110,21 +110,21 @@ export const DroneTelemetryStream: React.FC<DroneTelemetryStreamProps> = ({
 
   const handleCommand = async (command: string) => {
     switch (command) {
-      case "takeoff":
-        droneCommander.sendCommand(droneId, "takeoff");
-        break;
-      case "land":
-        droneCommander.sendCommand(droneId, "land");
-        break;
-      case "hover":
-        droneCommander.sendCommand(droneId, "hover");
-        break;
-      case "return_home":
-        droneCommander.sendCommand(droneId, "return_home");
-        break;
-      case "emergency_stop":
-        droneCommander.sendCommand(droneId, "emergency_stop");
-        break;
+    case "takeoff":
+      droneCommander.sendCommand(droneId, "takeoff");
+      break;
+    case "land":
+      droneCommander.sendCommand(droneId, "land");
+      break;
+    case "hover":
+      droneCommander.sendCommand(droneId, "hover");
+      break;
+    case "return_home":
+      droneCommander.sendCommand(droneId, "return_home");
+      break;
+    case "emergency_stop":
+      droneCommander.sendCommand(droneId, "emergency_stop");
+      break;
     }
   };
 

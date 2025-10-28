@@ -11,21 +11,21 @@ import type { ProtocolType } from "@/core/interop/protocolAdapter";
 
 // Trust and Compliance Types
 export type EventType = 
-  | 'validation'
-  | 'breach'
-  | 'alert'
-  | 'audit'
-  | 'whitelist_check'
-  | 'blacklist_check';
+  | "validation"
+  | "breach"
+  | "alert"
+  | "audit"
+  | "whitelist_check"
+  | "blacklist_check";
 
 export type ComplianceStatus = 
-  | 'compliant'
-  | 'non_compliant'
-  | 'suspicious'
-  | 'blocked'
-  | 'pending';
+  | "compliant"
+  | "non_compliant"
+  | "suspicious"
+  | "blocked"
+  | "pending";
 
-export type AlertLevel = 'info' | 'warning' | 'high' | 'critical' | 'emergency';
+export type AlertLevel = "info" | "warning" | "high" | "critical" | "emergency";
 
 // Trust Evaluation Result
 export interface TrustEvaluation {
@@ -66,23 +66,23 @@ export interface SourceConfig {
 
 // Whitelist and Blacklist (in-memory for this implementation)
 const whitelist: Set<string> = new Set([
-  'trusted-system-1',
-  'maritime-ops-center',
-  'naval-command',
-  'allied-vessel-001',
+  "trusted-system-1",
+  "maritime-ops-center",
+  "naval-command",
+  "allied-vessel-001",
 ]);
 
 const blacklist: Set<string> = new Set([
-  'malicious-source',
-  'banned-system',
+  "malicious-source",
+  "banned-system",
 ]);
 
 const trustedProtocols: Set<ProtocolType> = new Set([
-  'json-rpc',
-  'graphql',
-  'ais',
-  'gmdss',
-  'nato-stanag',
+  "json-rpc",
+  "graphql",
+  "ais",
+  "gmdss",
+  "nato-stanag",
 ]);
 
 /**
@@ -105,20 +105,20 @@ export async function evaluateTrust(
   const whitelistCheck = checkWhitelist(sourceSystem);
   checks.push(whitelistCheck);
   if (!whitelistCheck.passed) {
-    failedChecks.push('whitelist_check');
-    recommendations.push('Add source to whitelist after verification');
+    failedChecks.push("whitelist_check");
+    recommendations.push("Add source to whitelist after verification");
   }
 
   // Check 2: Blacklist verification
   const blacklistCheck = checkBlacklist(sourceSystem);
   checks.push(blacklistCheck);
   if (!blacklistCheck.passed) {
-    failedChecks.push('blacklist_check');
+    failedChecks.push("blacklist_check");
     alerts.push({
-      level: 'critical',
+      level: "critical",
       message: `Blocked source detected: ${sourceSystem}`,
       timestamp: new Date(),
-      action: 'REJECT_INPUT',
+      action: "REJECT_INPUT",
     });
   }
 
@@ -126,16 +126,16 @@ export async function evaluateTrust(
   const protocolCheck = checkProtocolSecurity(protocol);
   checks.push(protocolCheck);
   if (!protocolCheck.passed) {
-    failedChecks.push('protocol_security');
-    recommendations.push('Use secure communication protocol');
+    failedChecks.push("protocol_security");
+    recommendations.push("Use secure communication protocol");
   }
 
   // Check 4: Payload schema validation
   const schemaCheck = checkPayloadSchema(protocol, payload);
   checks.push(schemaCheck);
   if (!schemaCheck.passed) {
-    failedChecks.push('schema_validation');
-    recommendations.push('Ensure payload conforms to protocol schema');
+    failedChecks.push("schema_validation");
+    recommendations.push("Ensure payload conforms to protocol schema");
   }
 
   // Check 5: IP reputation (if provided)
@@ -143,9 +143,9 @@ export async function evaluateTrust(
     const ipCheck = checkIpReputation(sourceIp);
     checks.push(ipCheck);
     if (!ipCheck.passed) {
-      failedChecks.push('ip_reputation');
+      failedChecks.push("ip_reputation");
       alerts.push({
-        level: 'warning',
+        level: "warning",
         message: `Suspicious IP detected: ${sourceIp}`,
         timestamp: new Date(),
       });
@@ -161,30 +161,30 @@ export async function evaluateTrust(
   // Generate appropriate alerts
   if (trustScore < 30) {
     alerts.push({
-      level: 'critical',
+      level: "critical",
       message: `Very low trust score (${trustScore}) for ${sourceSystem}`,
       timestamp: new Date(),
-      action: 'REJECT_AND_LOG',
+      action: "REJECT_AND_LOG",
     });
   } else if (trustScore < 50) {
     alerts.push({
-      level: 'high',
+      level: "high",
       message: `Low trust score (${trustScore}) for ${sourceSystem}`,
       timestamp: new Date(),
-      action: 'ENHANCED_MONITORING',
+      action: "ENHANCED_MONITORING",
     });
   } else if (trustScore < 70) {
     alerts.push({
-      level: 'warning',
+      level: "warning",
       message: `Medium trust score (${trustScore}) for ${sourceSystem}`,
       timestamp: new Date(),
-      action: 'STANDARD_MONITORING',
+      action: "STANDARD_MONITORING",
     });
   }
 
   // Log trust event
   await logTrustEvent({
-    eventType: 'validation',
+    eventType: "validation",
     sourceSystem,
     sourceIp,
     sourceProtocol: protocol,
@@ -217,12 +217,12 @@ function checkWhitelist(sourceSystem: string): CheckResult {
   const isWhitelisted = whitelist.has(sourceSystem);
 
   return {
-    checkName: 'Whitelist Verification',
+    checkName: "Whitelist Verification",
     passed: isWhitelisted,
     score: isWhitelisted ? 100 : 50,
     message: isWhitelisted
-      ? 'Source is whitelisted'
-      : 'Source is not in whitelist - requires additional verification',
+      ? "Source is whitelisted"
+      : "Source is not in whitelist - requires additional verification",
     details: { whitelisted: isWhitelisted },
   };
 }
@@ -234,12 +234,12 @@ function checkBlacklist(sourceSystem: string): CheckResult {
   const isBlacklisted = blacklist.has(sourceSystem);
 
   return {
-    checkName: 'Blacklist Verification',
+    checkName: "Blacklist Verification",
     passed: !isBlacklisted,
     score: isBlacklisted ? 0 : 100,
     message: isBlacklisted
-      ? '❌ CRITICAL: Source is blacklisted - REJECT'
-      : 'Source is not blacklisted',
+      ? "❌ CRITICAL: Source is blacklisted - REJECT"
+      : "Source is not blacklisted",
     details: { blacklisted: isBlacklisted },
   };
 }
@@ -252,30 +252,30 @@ function checkProtocolSecurity(protocol: ProtocolType): CheckResult {
   
   // Additional security checks for specific protocols
   let securityLevel = 100;
-  let message = 'Protocol is secure and trusted';
+  let message = "Protocol is secure and trusted";
 
   switch (protocol) {
-    case 'json-rpc':
-    case 'graphql':
-      // These are application-level protocols - require transport security
-      securityLevel = 80;
-      message = 'Protocol is trusted - ensure transport layer security (TLS)';
-      break;
-    case 'ais':
-    case 'gmdss':
-      // Maritime protocols - inherently less secure but necessary
-      securityLevel = 70;
-      message = 'Maritime protocol - apply additional validation';
-      break;
-    case 'nato-stanag':
-      // Military protocol - should be highly secure
-      securityLevel = 95;
-      message = 'Military-grade protocol with high security';
-      break;
+  case "json-rpc":
+  case "graphql":
+    // These are application-level protocols - require transport security
+    securityLevel = 80;
+    message = "Protocol is trusted - ensure transport layer security (TLS)";
+    break;
+  case "ais":
+  case "gmdss":
+    // Maritime protocols - inherently less secure but necessary
+    securityLevel = 70;
+    message = "Maritime protocol - apply additional validation";
+    break;
+  case "nato-stanag":
+    // Military protocol - should be highly secure
+    securityLevel = 95;
+    message = "Military-grade protocol with high security";
+    break;
   }
 
   return {
-    checkName: 'Protocol Security',
+    checkName: "Protocol Security",
     passed: isSecure,
     score: securityLevel,
     message,
@@ -290,50 +290,50 @@ function checkPayloadSchema(protocol: ProtocolType, payload: any): CheckResult {
   const errors: string[] = [];
 
   // Basic payload validation
-  if (!payload || typeof payload !== 'object') {
-    errors.push('Payload must be an object');
+  if (!payload || typeof payload !== "object") {
+    errors.push("Payload must be an object");
   }
 
   // Protocol-specific schema checks
   switch (protocol) {
-    case 'json-rpc':
-      if (!payload.jsonrpc || payload.jsonrpc !== '2.0') {
-        errors.push('Invalid JSON-RPC version');
-      }
-      if (!payload.method) {
-        errors.push('Missing method field');
-      }
-      break;
+  case "json-rpc":
+    if (!payload.jsonrpc || payload.jsonrpc !== "2.0") {
+      errors.push("Invalid JSON-RPC version");
+    }
+    if (!payload.method) {
+      errors.push("Missing method field");
+    }
+    break;
 
-    case 'graphql':
-      if (!payload.query) {
-        errors.push('Missing query field');
-      }
-      break;
+  case "graphql":
+    if (!payload.query) {
+      errors.push("Missing query field");
+    }
+    break;
 
-    case 'ais':
-      if (!payload.mmsi) {
-        errors.push('Missing MMSI field');
-      }
-      if (payload.latitude === undefined || payload.longitude === undefined) {
-        errors.push('Missing position data');
-      }
-      break;
+  case "ais":
+    if (!payload.mmsi) {
+      errors.push("Missing MMSI field");
+    }
+    if (payload.latitude === undefined || payload.longitude === undefined) {
+      errors.push("Missing position data");
+    }
+    break;
 
-    case 'nato-stanag':
-      if (!payload.messageId || !payload.classification || !payload.priority) {
-        errors.push('Missing required STANAG fields');
-      }
-      break;
+  case "nato-stanag":
+    if (!payload.messageId || !payload.classification || !payload.priority) {
+      errors.push("Missing required STANAG fields");
+    }
+    break;
   }
 
   const passed = errors.length === 0;
 
   return {
-    checkName: 'Schema Validation',
+    checkName: "Schema Validation",
     passed,
     score: passed ? 100 : Math.max(0, 100 - errors.length * 25),
-    message: passed ? 'Payload conforms to schema' : `Schema validation failed: ${errors.join(', ')}`,
+    message: passed ? "Payload conforms to schema" : `Schema validation failed: ${errors.join(", ")}`,
     details: { errors },
   };
 }
@@ -345,14 +345,14 @@ function checkIpReputation(ip: string): CheckResult {
   // Simulate IP reputation check
   // In real implementation, this would query a threat intelligence database
   
-  const suspiciousPatterns = ['192.0.2', '198.51.100', '203.0.113']; // TEST-NET addresses
+  const suspiciousPatterns = ["192.0.2", "198.51.100", "203.0.113"]; // TEST-NET addresses
   const isSuspicious = suspiciousPatterns.some(pattern => ip.startsWith(pattern));
 
   return {
-    checkName: 'IP Reputation',
+    checkName: "IP Reputation",
     passed: !isSuspicious,
     score: isSuspicious ? 30 : 100,
-    message: isSuspicious ? 'IP has suspicious patterns' : 'IP reputation is clean',
+    message: isSuspicious ? "IP has suspicious patterns" : "IP reputation is clean",
     details: { ip, suspicious: isSuspicious },
   };
 }
@@ -395,18 +395,18 @@ function calculateTrustScore(
  */
 function getCheckWeight(checkName: string): number {
   switch (checkName) {
-    case 'Blacklist Verification':
-      return 3.0; // Most critical
-    case 'Whitelist Verification':
-      return 2.0;
-    case 'Protocol Security':
-      return 2.0;
-    case 'Schema Validation':
-      return 1.5;
-    case 'IP Reputation':
-      return 1.0;
-    default:
-      return 1.0;
+  case "Blacklist Verification":
+    return 3.0; // Most critical
+  case "Whitelist Verification":
+    return 2.0;
+  case "Protocol Security":
+    return 2.0;
+  case "Schema Validation":
+    return 1.5;
+  case "IP Reputation":
+    return 1.0;
+  default:
+    return 1.0;
   }
 }
 
@@ -415,17 +415,17 @@ function getCheckWeight(checkName: string): number {
  */
 function determineComplianceStatus(trustScore: number, notBlacklisted: boolean): ComplianceStatus {
   if (!notBlacklisted) {
-    return 'blocked';
+    return "blocked";
   }
 
   if (trustScore >= 80) {
-    return 'compliant';
+    return "compliant";
   } else if (trustScore >= 50) {
-    return 'non_compliant';
+    return "non_compliant";
   } else if (trustScore >= 30) {
-    return 'suspicious';
+    return "suspicious";
   } else {
-    return 'blocked';
+    return "blocked";
   }
 }
 
@@ -447,15 +447,15 @@ async function logTrustEvent(event: {
   try {
     const highestAlert = event.alerts.reduce(
       (highest, alert) => {
-        const levels: AlertLevel[] = ['info', 'warning', 'high', 'critical', 'emergency'];
+        const levels: AlertLevel[] = ["info", "warning", "high", "critical", "emergency"];
         return levels.indexOf(alert.level) > levels.indexOf(highest)
           ? alert.level
           : highest;
       },
-      'info' as AlertLevel
+      "info" as AlertLevel
     );
 
-    const { error } = await supabase.from('trust_events').insert({
+    const { error } = await supabase.from("trust_events").insert({
       event_type: event.eventType,
       source_system: event.sourceSystem,
       source_ip: event.sourceIp,
@@ -468,12 +468,12 @@ async function logTrustEvent(event: {
       },
       checks_performed: event.checks.map(c => c.checkName),
       failed_checks: event.failedChecks,
-      whitelisted: event.checks.find(c => c.checkName === 'Whitelist Verification')?.passed || false,
-      blacklisted: !(event.checks.find(c => c.checkName === 'Blacklist Verification')?.passed ?? true),
-      protocol_secure: event.checks.find(c => c.checkName === 'Protocol Security')?.passed || false,
-      schema_valid: event.checks.find(c => c.checkName === 'Schema Validation')?.passed || false,
+      whitelisted: event.checks.find(c => c.checkName === "Whitelist Verification")?.passed || false,
+      blacklisted: !(event.checks.find(c => c.checkName === "Blacklist Verification")?.passed ?? true),
+      protocol_secure: event.checks.find(c => c.checkName === "Protocol Security")?.passed || false,
+      schema_valid: event.checks.find(c => c.checkName === "Schema Validation")?.passed || false,
       alert_level: highestAlert,
-      alert_message: event.alerts[0]?.message || 'Trust evaluation completed',
+      alert_message: event.alerts[0]?.message || "Trust evaluation completed",
       action_taken: event.alerts[0]?.action,
       operator_notified: event.trustScore < 50,
       metadata: {
@@ -482,13 +482,13 @@ async function logTrustEvent(event: {
     });
 
     if (error) {
-      logger.error('[TrustComplianceChecker] Failed to log trust event:', error);
+      logger.error("[TrustComplianceChecker] Failed to log trust event:", error);
     }
 
     // Console alert for critical issues
-    if (event.trustScore < 50 || event.complianceStatus === 'blocked') {
+    if (event.trustScore < 50 || event.complianceStatus === "blocked") {
       console.warn(
-        '🚨 SECURITY ALERT:',
+        "🚨 SECURITY ALERT:",
         `Source: ${event.sourceSystem}`,
         `Trust Score: ${event.trustScore}`,
         `Status: ${event.complianceStatus}`,
@@ -496,7 +496,7 @@ async function logTrustEvent(event: {
       );
     }
   } catch (error) {
-    logger.error('[TrustComplianceChecker] Error logging trust event:', error);
+    logger.error("[TrustComplianceChecker] Error logging trust event:", error);
   }
 }
 

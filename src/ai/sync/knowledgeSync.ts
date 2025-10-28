@@ -34,7 +34,7 @@ export interface BehaviorDrift {
   local_value: number;
   global_value: number;
   drift_percentage: number;
-  significance: 'low' | 'medium' | 'high';
+  significance: "low" | "medium" | "high";
 }
 
 export interface SyncResult {
@@ -129,20 +129,20 @@ class KnowledgeSync {
 
       // Track sync event
       await learningCore.trackSystemEvent(
-        'knowledge_sync_completed',
-        'knowledge-sync',
+        "knowledge_sync_completed",
+        "knowledge-sync",
         result,
-        'success'
+        "success"
       );
     } catch (error) {
       logger.error("[KnowledgeSync] Sync failed", { error });
       result.success = false;
 
       await learningCore.trackSystemEvent(
-        'knowledge_sync_failed',
-        'knowledge-sync',
+        "knowledge_sync_failed",
+        "knowledge-sync",
         { error: String(error) },
-        'failure'
+        "failure"
       );
     }
 
@@ -155,7 +155,7 @@ class KnowledgeSync {
   async createLocalSnapshots(): Promise<LocalSnapshot[]> {
     logger.info("[KnowledgeSync] Creating local snapshots");
 
-    const modules = ['ai-engine', 'autonomy-layer', 'learning-core', 'mission-core'];
+    const modules = ["ai-engine", "autonomy-layer", "learning-core", "mission-core"];
     const snapshots: LocalSnapshot[] = [];
 
     for (const module of modules) {
@@ -173,7 +173,7 @@ class KnowledgeSync {
 
         // Save to Supabase
         const { error } = await (supabase as any)
-          .from('local_knowledge')
+          .from("local_knowledge")
           .insert([snapshot]);
 
         if (error) {
@@ -208,10 +208,10 @@ class KnowledgeSync {
       try {
         // Aggregate with existing global knowledge
         const { data: existingGlobal } = await (supabase as any)
-          .from('global_knowledge')
-          .select('*')
-          .eq('module_name', snapshot.module_name)
-          .order('created_at', { ascending: false })
+          .from("global_knowledge")
+          .select("*")
+          .eq("module_name", snapshot.module_name)
+          .order("created_at", { ascending: false })
           .limit(1)
           .single();
 
@@ -243,7 +243,7 @@ class KnowledgeSync {
         };
 
         const { error } = await (supabase as any)
-          .from('global_knowledge')
+          .from("global_knowledge")
           .insert([globalKnowledge]);
 
         if (error) {
@@ -275,25 +275,25 @@ class KnowledgeSync {
     logger.info("[KnowledgeSync] Detecting behavior drift");
 
     const drifts: BehaviorDrift[] = [];
-    const modules = ['ai-engine', 'autonomy-layer', 'learning-core', 'mission-core'];
+    const modules = ["ai-engine", "autonomy-layer", "learning-core", "mission-core"];
 
     for (const module of modules) {
       try {
         // Get local snapshot
         const { data: localData } = await (supabase as any)
-          .from('local_knowledge')
-          .select('*')
-          .eq('module_name', module)
-          .order('created_at', { ascending: false })
+          .from("local_knowledge")
+          .select("*")
+          .eq("module_name", module)
+          .order("created_at", { ascending: false })
           .limit(1)
           .single();
 
         // Get global knowledge
         const { data: globalData } = await (supabase as any)
-          .from('global_knowledge')
-          .select('*')
-          .eq('module_name', module)
-          .order('created_at', { ascending: false })
+          .from("global_knowledge")
+          .select("*")
+          .eq("module_name", module)
+          .order("created_at", { ascending: false })
           .limit(1)
           .single();
 
@@ -318,7 +318,7 @@ class KnowledgeSync {
               local_value: localValue,
               global_value: globalValue,
               drift_percentage: driftPercentage,
-              significance: driftPercentage > 50 ? 'high' : driftPercentage > 35 ? 'medium' : 'low',
+              significance: driftPercentage > 50 ? "high" : driftPercentage > 35 ? "medium" : "low",
             };
 
             drifts.push(drift);
@@ -343,14 +343,14 @@ class KnowledgeSync {
 
     for (const drift of drifts) {
       // Only merge if confidence is high enough
-      if (drift.significance === 'low') {
+      if (drift.significance === "low") {
         try {
           // Get global knowledge
           const { data: globalData } = await (supabase as any)
-            .from('global_knowledge')
-            .select('*')
-            .eq('module_name', drift.module)
-            .order('created_at', { ascending: false })
+            .from("global_knowledge")
+            .select("*")
+            .eq("module_name", drift.module)
+            .order("created_at", { ascending: false })
             .limit(1)
             .single();
 
@@ -374,8 +374,8 @@ class KnowledgeSync {
 
           // Track decision
           await learningCore.trackDecision(
-            'knowledge-sync',
-            'merge_applied',
+            "knowledge-sync",
+            "merge_applied",
             { drift },
             { success: true, confidence: globalData.confidence_score },
             globalData.confidence_score
@@ -400,15 +400,15 @@ class KnowledgeSync {
   private async collectModuleUsage(module: string): Promise<Record<string, any>> {
     // Get events from learning core
     const { data: events } = await supabase
-      .from('learning_events')
-      .select('*')
-      .eq('module_name', module)
-      .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+      .from("learning_events")
+      .select("*")
+      .eq("module_name", module)
+      .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
     return {
       total_events: events?.length || 0,
-      event_types: this.groupBy(events || [], 'event_type'),
-      outcomes: this.groupBy(events || [], 'outcome'),
+      event_types: this.groupBy(events || [], "event_type"),
+      outcomes: this.groupBy(events || [], "outcome"),
       timestamp: new Date().toISOString(),
     };
   }
@@ -467,7 +467,7 @@ class KnowledgeSync {
     logger.info("[KnowledgeSync] Updating local model", { module, metric, value });
 
     // Store in localStorage for local access
-    const localModels = JSON.parse(localStorage.getItem('local_models') || '{}');
+    const localModels = JSON.parse(localStorage.getItem("local_models") || "{}");
     
     if (!localModels[module]) {
       localModels[module] = {};
@@ -476,10 +476,10 @@ class KnowledgeSync {
     localModels[module][metric] = {
       value,
       updated_at: new Date().toISOString(),
-      source: 'global',
+      source: "global",
     };
 
-    localStorage.setItem('local_models', JSON.stringify(localModels));
+    localStorage.setItem("local_models", JSON.stringify(localModels));
   }
 
   /**
@@ -487,7 +487,7 @@ class KnowledgeSync {
    */
   private groupBy(array: any[], key: string): Record<string, number> {
     return array.reduce((result, item) => {
-      const value = item[key] || 'unknown';
+      const value = item[key] || "unknown";
       result[value] = (result[value] || 0) + 1;
       return result;
     }, {});

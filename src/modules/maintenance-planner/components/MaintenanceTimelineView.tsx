@@ -1,11 +1,11 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { format, differenceInDays } from 'date-fns';
-import { Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { format, differenceInDays } from "date-fns";
+import { Clock, CheckCircle, AlertCircle } from "lucide-react";
 
 interface MaintenanceTask {
   id: string;
@@ -30,20 +30,20 @@ export const MaintenanceTimelineView: React.FC = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('maintenance_tasks')
-        .select('*')
-        .order('scheduled_date', { ascending: true })
+        .from("maintenance_tasks")
+        .select("*")
+        .order("scheduled_date", { ascending: true })
         .limit(50);
 
       if (error) throw error;
 
       setTasks(data || []);
     } catch (error) {
-      console.error('Error fetching tasks:', error);
+      console.error("Error fetching tasks:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load maintenance timeline',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load maintenance timeline",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -52,30 +52,30 @@ export const MaintenanceTimelineView: React.FC = () => {
 
   const getTaskIcon = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'overdue':
-        return <AlertCircle className="h-5 w-5 text-red-500" />;
-      default:
-        return <Clock className="h-5 w-5 text-blue-500" />;
+    case "completed":
+      return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "overdue":
+      return <AlertCircle className="h-5 w-5 text-red-500" />;
+    default:
+      return <Clock className="h-5 w-5 text-blue-500" />;
     }
   };
 
   const getDaysUntil = (date: string) => {
     const days = differenceInDays(new Date(date), new Date());
     if (days < 0) return `${Math.abs(days)} days overdue`;
-    if (days === 0) return 'Today';
-    if (days === 1) return 'Tomorrow';
+    if (days === 0) return "Today";
+    if (days === 1) return "Tomorrow";
     return `In ${days} days`;
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+    case "urgent": return "bg-red-500";
+    case "high": return "bg-orange-500";
+    case "medium": return "bg-yellow-500";
+    case "low": return "bg-green-500";
+    default: return "bg-gray-500";
     }
   };
 
@@ -127,7 +127,7 @@ export const MaintenanceTimelineView: React.FC = () => {
                           <div className="space-y-1">
                             <h4 className="font-semibold">{task.task_name}</h4>
                             <p className="text-sm text-muted-foreground">
-                              {format(new Date(task.scheduled_date), 'MMM dd, yyyy')}
+                              {format(new Date(task.scheduled_date), "MMM dd, yyyy")}
                             </p>
                           </div>
                           <Badge className={`${getPriorityColor(task.priority)} text-xs`}>
@@ -140,13 +140,13 @@ export const MaintenanceTimelineView: React.FC = () => {
                             {getDaysUntil(task.scheduled_date)}
                           </span>
                           <span className="font-medium">
-                            Status: {task.status.replace('_', ' ')}
+                            Status: {task.status.replace("_", " ")}
                           </span>
                         </div>
                         
                         {task.deadline_date && (
                           <div className="mt-2 text-sm text-muted-foreground">
-                            Deadline: {format(new Date(task.deadline_date), 'MMM dd, yyyy')}
+                            Deadline: {format(new Date(task.deadline_date), "MMM dd, yyyy")}
                           </div>
                         )}
                       </CardContent>

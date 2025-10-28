@@ -9,24 +9,24 @@
  * - Optimistic updates
  */
 
-import { supabase } from '@/integrations/supabase/client';
-import { RealtimeChannel } from '@supabase/supabase-js';
-import { syncQueue } from './syncQueue';
-import { networkDetector } from './networkDetector';
-import { structuredLogger } from '@/lib/logger/structured-logger';
+import { supabase } from "@/integrations/supabase/client";
+import { RealtimeChannel } from "@supabase/supabase-js";
+import { syncQueue } from "./syncQueue";
+import { networkDetector } from "./networkDetector";
+import { structuredLogger } from "@/lib/logger/structured-logger";
 
 interface SyncConfig {
   tables: string[];
   pollingInterval?: number;
   enableRealtime?: boolean;
-  conflictResolution?: 'local' | 'remote' | 'latest';
+  conflictResolution?: "local" | "remote" | "latest";
 }
 
 interface SyncStatus {
   isConnected: boolean;
   lastSync: Date | null;
   pendingChanges: number;
-  mode: 'realtime' | 'polling' | 'offline';
+  mode: "realtime" | "polling" | "offline";
 }
 
 export class EnhancedSyncEngine {
@@ -37,7 +37,7 @@ export class EnhancedSyncEngine {
     isConnected: false,
     lastSync: null,
     pendingChanges: 0,
-    mode: 'offline',
+    mode: "offline",
   };
   private listeners: Set<(status: SyncStatus) => void> = new Set();
 
@@ -46,7 +46,7 @@ export class EnhancedSyncEngine {
       tables: config.tables,
       pollingInterval: config.pollingInterval || 30000, // 30 seconds
       enableRealtime: config.enableRealtime !== false,
-      conflictResolution: config.conflictResolution || 'latest',
+      conflictResolution: config.conflictResolution || "latest",
     };
   }
 
@@ -54,9 +54,9 @@ export class EnhancedSyncEngine {
    * Initialize sync engine
    */
   async initialize(): Promise<void> {
-    structuredLogger.info('Initializing Enhanced Sync Engine', {
+    structuredLogger.info("Initializing Enhanced Sync Engine", {
       tables: this.config.tables,
-      mode: this.config.enableRealtime ? 'realtime' : 'polling',
+      mode: this.config.enableRealtime ? "realtime" : "polling",
     });
 
     // Monitor network status
@@ -79,11 +79,11 @@ export class EnhancedSyncEngine {
    * Handle online state
    */
   private async onOnline(): Promise<void> {
-    structuredLogger.info('Sync engine going online');
+    structuredLogger.info("Sync engine going online");
     
     this.updateStatus({
       isConnected: true,
-      mode: this.config.enableRealtime ? 'realtime' : 'polling',
+      mode: this.config.enableRealtime ? "realtime" : "polling",
     });
 
     // Process pending queue
@@ -101,11 +101,11 @@ export class EnhancedSyncEngine {
    * Handle offline state
    */
   private onOffline(): void {
-    structuredLogger.warn('Sync engine going offline');
+    structuredLogger.warn("Sync engine going offline");
     
     this.updateStatus({
       isConnected: false,
-      mode: 'offline',
+      mode: "offline",
     });
 
     // Stop all sync operations
@@ -121,10 +121,10 @@ export class EnhancedSyncEngine {
       const channel = supabase
         .channel(`sync:${table}`)
         .on(
-          'postgres_changes',
+          "postgres_changes",
           {
-            event: '*',
-            schema: 'public',
+            event: "*",
+            schema: "public",
             table: table,
           },
           (payload) => {
@@ -132,11 +132,11 @@ export class EnhancedSyncEngine {
           }
         )
         .subscribe((status) => {
-          if (status === 'SUBSCRIBED') {
+          if (status === "SUBSCRIBED") {
             structuredLogger.info(`Realtime sync active for ${table}`);
-          } else if (status === 'CHANNEL_ERROR') {
+          } else if (status === "CHANNEL_ERROR") {
             structuredLogger.error(`Realtime sync error for ${table}`, 
-              new Error('Channel error'));
+              new Error("Channel error"));
             // Fallback to polling
             this.startPollingForTable(table);
           }
@@ -207,9 +207,9 @@ export class EnhancedSyncEngine {
     
     const { data, error } = await supabase
       .from(table as any)
-      .select('*')
-      .gte('updated_at', lastSync.toISOString())
-      .order('updated_at', { ascending: false })
+      .select("*")
+      .gte("updated_at", lastSync.toISOString())
+      .order("updated_at", { ascending: false })
       .limit(100);
 
     if (error) {
@@ -236,21 +236,21 @@ export class EnhancedSyncEngine {
   ): Promise<void> {
     const { eventType, new: newRecord, old: oldRecord } = payload;
 
-    structuredLogger.debug('Realtime change received', {
+    structuredLogger.debug("Realtime change received", {
       table,
       event: eventType,
     });
 
     switch (eventType) {
-      case 'INSERT':
-        await this.handleRemoteChange(table, newRecord);
-        break;
-      case 'UPDATE':
-        await this.handleRemoteChange(table, newRecord, oldRecord);
-        break;
-      case 'DELETE':
-        await this.handleRemoteDelete(table, oldRecord);
-        break;
+    case "INSERT":
+      await this.handleRemoteChange(table, newRecord);
+      break;
+    case "UPDATE":
+      await this.handleRemoteChange(table, newRecord, oldRecord);
+      break;
+    case "DELETE":
+      await this.handleRemoteDelete(table, oldRecord);
+      break;
     }
 
     this.updateStatus({ lastSync: new Date() });
@@ -270,29 +270,29 @@ export class EnhancedSyncEngine {
     if (localChanges.total > 0) {
       // Apply conflict resolution strategy
       switch (this.config.conflictResolution) {
-        case 'local':
-          // Keep local changes, ignore remote
-          structuredLogger.debug('Conflict: keeping local changes');
-          break;
-        case 'remote':
-          // Accept remote changes, discard local
-          structuredLogger.debug('Conflict: accepting remote changes');
+      case "local":
+        // Keep local changes, ignore remote
+        structuredLogger.debug("Conflict: keeping local changes");
+        break;
+      case "remote":
+        // Accept remote changes, discard local
+        structuredLogger.debug("Conflict: accepting remote changes");
+        // TODO: Update local storage with remote data
+        break;
+      case "latest":
+        // Use timestamp to determine winner
+        const localTimestamp = oldRecord?.updated_at;
+        const remoteTimestamp = newRecord.updated_at;
+        if (remoteTimestamp > localTimestamp) {
+          structuredLogger.debug("Conflict: remote is newer");
           // TODO: Update local storage with remote data
-          break;
-        case 'latest':
-          // Use timestamp to determine winner
-          const localTimestamp = oldRecord?.updated_at;
-          const remoteTimestamp = newRecord.updated_at;
-          if (remoteTimestamp > localTimestamp) {
-            structuredLogger.debug('Conflict: remote is newer');
-            // TODO: Update local storage with remote data
-          }
-          break;
+        }
+        break;
       }
     }
 
     // Emit event for UI updates
-    this.emitChange(table, 'update', newRecord);
+    this.emitChange(table, "update", newRecord);
   }
 
   /**
@@ -300,7 +300,7 @@ export class EnhancedSyncEngine {
    */
   private async handleRemoteDelete(table: string, record: any): Promise<void> {
     // TODO: Update local storage to mark as deleted
-    this.emitChange(table, 'delete', record);
+    this.emitChange(table, "delete", record);
   }
 
   /**
@@ -313,13 +313,13 @@ export class EnhancedSyncEngine {
       return;
     }
 
-    structuredLogger.info('Processing pending sync queue', stats);
+    structuredLogger.info("Processing pending sync queue", stats);
     
     const result = await syncQueue.processQueue();
     
     this.updateStatus({ pendingChanges: result.failed });
     
-    structuredLogger.info('Sync queue processed', result);
+    structuredLogger.info("Sync queue processed", result);
   }
 
   /**
@@ -353,7 +353,7 @@ export class EnhancedSyncEngine {
    */
   private emitChange(table: string, event: string, data: any): void {
     // TODO: Implement event emitter for UI updates
-    structuredLogger.debug('Change emitted', { table, event });
+    structuredLogger.debug("Change emitted", { table, event });
   }
 
   /**
@@ -383,20 +383,20 @@ export class EnhancedSyncEngine {
     this.stopRealtimeSync();
     this.stopPollingSync();
     this.listeners.clear();
-    structuredLogger.info('Enhanced Sync Engine shutdown');
+    structuredLogger.info("Enhanced Sync Engine shutdown");
   }
 }
 
 // Export singleton with default configuration
 export const enhancedSyncEngine = new EnhancedSyncEngine({
   tables: [
-    'checklists',
-    'missions',
-    'logs',
-    'crew_members',
-    'incidents',
-    'maintenance_schedules',
+    "checklists",
+    "missions",
+    "logs",
+    "crew_members",
+    "incidents",
+    "maintenance_schedules",
   ],
   enableRealtime: true,
-  conflictResolution: 'latest',
+  conflictResolution: "latest",
 });

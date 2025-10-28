@@ -9,21 +9,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 // Protocol types
-export type ProtocolType = 'json-rpc' | 'graphql' | 'ais' | 'gmdss' | 'nato-stanag';
-export type Direction = 'inbound' | 'outbound';
-export type ValidationStatus = 'valid' | 'invalid' | 'pending' | 'error';
-export type ProcessingStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'rejected';
+export type ProtocolType = "json-rpc" | "graphql" | "ais" | "gmdss" | "nato-stanag";
+export type Direction = "inbound" | "outbound";
+export type ValidationStatus = "valid" | "invalid" | "pending" | "error";
+export type ProcessingStatus = "pending" | "processing" | "completed" | "failed" | "rejected";
 
 // JSON-RPC 2.0 Interfaces
 export interface JsonRpcRequest {
-  jsonrpc: '2.0';
+  jsonrpc: "2.0";
   method: string;
   params?: any;
   id: string | number;
 }
 
 export interface JsonRpcResponse {
-  jsonrpc: '2.0';
+  jsonrpc: "2.0";
   result?: any;
   error?: {
     code: number;
@@ -65,8 +65,8 @@ export interface AisMessage {
 // NATO STANAG Message (Simulated)
 export interface StanagMessage {
   messageId: string;
-  classification: 'UNCLASSIFIED' | 'CONFIDENTIAL' | 'SECRET' | 'TOP_SECRET';
-  priority: 'ROUTINE' | 'PRIORITY' | 'IMMEDIATE' | 'FLASH';
+  classification: "UNCLASSIFIED" | "CONFIDENTIAL" | "SECRET" | "TOP_SECRET";
+  priority: "ROUTINE" | "PRIORITY" | "IMMEDIATE" | "FLASH";
   originUnit: string;
   destinationUnit: string;
   messageType: string;
@@ -128,47 +128,47 @@ export async function parse(message: ProtocolMessage): Promise<ParsedMessage> {
 
   try {
     switch (message.protocol) {
-      case 'json-rpc':
-        const rpcResult = parseJsonRpc(message.payload);
-        data = rpcResult.data;
-        isValid = rpcResult.isValid;
-        errors.push(...rpcResult.errors);
-        break;
+    case "json-rpc":
+      const rpcResult = parseJsonRpc(message.payload);
+      data = rpcResult.data;
+      isValid = rpcResult.isValid;
+      errors.push(...rpcResult.errors);
+      break;
 
-      case 'graphql':
-        const gqlResult = parseGraphQL(message.payload);
-        data = gqlResult.data;
-        isValid = gqlResult.isValid;
-        errors.push(...gqlResult.errors);
-        break;
+    case "graphql":
+      const gqlResult = parseGraphQL(message.payload);
+      data = gqlResult.data;
+      isValid = gqlResult.isValid;
+      errors.push(...gqlResult.errors);
+      break;
 
-      case 'ais':
-        const aisResult = parseAIS(message.payload);
-        data = aisResult.data;
-        isValid = aisResult.isValid;
-        errors.push(...aisResult.errors);
-        break;
+    case "ais":
+      const aisResult = parseAIS(message.payload);
+      data = aisResult.data;
+      isValid = aisResult.isValid;
+      errors.push(...aisResult.errors);
+      break;
 
-      case 'gmdss':
-        const gmdssResult = parseGMDSS(message.payload);
-        data = gmdssResult.data;
-        isValid = gmdssResult.isValid;
-        errors.push(...gmdssResult.errors);
-        break;
+    case "gmdss":
+      const gmdssResult = parseGMDSS(message.payload);
+      data = gmdssResult.data;
+      isValid = gmdssResult.isValid;
+      errors.push(...gmdssResult.errors);
+      break;
 
-      case 'nato-stanag':
-        const stanagResult = parseStanag(message.payload);
-        data = stanagResult.data;
-        isValid = stanagResult.isValid;
-        errors.push(...stanagResult.errors);
-        break;
+    case "nato-stanag":
+      const stanagResult = parseStanag(message.payload);
+      data = stanagResult.data;
+      isValid = stanagResult.isValid;
+      errors.push(...stanagResult.errors);
+      break;
 
-      default:
-        errors.push(`Unknown protocol: ${message.protocol}`);
+    default:
+      errors.push(`Unknown protocol: ${message.protocol}`);
     }
   } catch (error) {
     errors.push(`Parse error: ${error instanceof Error ? error.message : String(error)}`);
-    logger.error('[ProtocolAdapter] Parse error:', error);
+    logger.error("[ProtocolAdapter] Parse error:", error);
   }
 
   return {
@@ -191,13 +191,13 @@ export async function validate(
   
   const errors: string[] = [];
   const warnings: string[] = [];
-  let status: ValidationStatus = 'valid';
+  let status: ValidationStatus = "valid";
 
   try {
     // Check basic validity
     if (!parsedMessage.isValid) {
       errors.push(...parsedMessage.errors);
-      status = 'invalid';
+      status = "invalid";
     }
 
     // Protocol-specific validation
@@ -205,25 +205,25 @@ export async function validate(
       const schemaErrors = validateSchema(parsedMessage.protocol, parsedMessage.data);
       if (schemaErrors.length > 0) {
         errors.push(...schemaErrors);
-        status = 'invalid';
+        status = "invalid";
       }
     }
 
     // Additional security checks
-    if (parsedMessage.protocol === 'nato-stanag') {
+    if (parsedMessage.protocol === "nato-stanag") {
       const stanagData = parsedMessage.data as StanagMessage;
-      if (stanagData.classification === 'TOP_SECRET') {
-        warnings.push('TOP_SECRET classification requires additional clearance');
+      if (stanagData.classification === "TOP_SECRET") {
+        warnings.push("TOP_SECRET classification requires additional clearance");
       }
     }
 
-    if (status === 'valid' && errors.length > 0) {
-      status = 'invalid';
+    if (status === "valid" && errors.length > 0) {
+      status = "invalid";
     }
   } catch (error) {
     errors.push(`Validation error: ${error instanceof Error ? error.message : String(error)}`);
-    status = 'error';
-    logger.error('[ProtocolAdapter] Validation error:', error);
+    status = "error";
+    logger.error("[ProtocolAdapter] Validation error:", error);
   }
 
   return {
@@ -246,13 +246,13 @@ export async function route(
 
   try {
     // Reject invalid messages
-    if (validationResult.status === 'invalid' || validationResult.status === 'error') {
-      await logInteropEvent(message, parsedMessage, validationResult, null, 'rejected');
+    if (validationResult.status === "invalid" || validationResult.status === "error") {
+      await logInteropEvent(message, parsedMessage, validationResult, null, "rejected");
       return {
         success: false,
-        routedTo: 'none',
+        routedTo: "none",
         latencyMs: Date.now() - startTime,
-        error: `Message rejected: ${validationResult.errors.join(', ')}`,
+        error: `Message rejected: ${validationResult.errors.join(", ")}`,
       };
     }
 
@@ -265,7 +265,7 @@ export async function route(
     const latencyMs = Date.now() - startTime;
 
     // Log successful routing
-    await logInteropEvent(message, parsedMessage, validationResult, destination, 'completed', response, latencyMs);
+    await logInteropEvent(message, parsedMessage, validationResult, destination, "completed", response, latencyMs);
 
     return {
       success: true,
@@ -277,12 +277,12 @@ export async function route(
     const latencyMs = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : String(error);
     
-    await logInteropEvent(message, parsedMessage, validationResult, null, 'failed', null, latencyMs, errorMessage);
+    await logInteropEvent(message, parsedMessage, validationResult, null, "failed", null, latencyMs, errorMessage);
     
-    logger.error('[ProtocolAdapter] Routing error:', error);
+    logger.error("[ProtocolAdapter] Routing error:", error);
     return {
       success: false,
-      routedTo: 'error',
+      routedTo: "error",
       latencyMs,
       error: errorMessage,
     };
@@ -294,22 +294,22 @@ export async function route(
 function parseJsonRpc(payload: any): { data: any; isValid: boolean; errors: string[] } {
   const errors: string[] = [];
   
-  if (typeof payload !== 'object' || payload === null) {
-    return { data: null, isValid: false, errors: ['Invalid JSON-RPC payload'] };
+  if (typeof payload !== "object" || payload === null) {
+    return { data: null, isValid: false, errors: ["Invalid JSON-RPC payload"] };
   }
 
   const rpc = payload as Partial<JsonRpcRequest>;
   
-  if (rpc.jsonrpc !== '2.0') {
-    errors.push('Invalid JSON-RPC version, expected 2.0');
+  if (rpc.jsonrpc !== "2.0") {
+    errors.push("Invalid JSON-RPC version, expected 2.0");
   }
   
-  if (!rpc.method || typeof rpc.method !== 'string') {
-    errors.push('Missing or invalid method');
+  if (!rpc.method || typeof rpc.method !== "string") {
+    errors.push("Missing or invalid method");
   }
   
   if (rpc.id === undefined) {
-    errors.push('Missing request id');
+    errors.push("Missing request id");
   }
 
   return {
@@ -322,14 +322,14 @@ function parseJsonRpc(payload: any): { data: any; isValid: boolean; errors: stri
 function parseGraphQL(payload: any): { data: any; isValid: boolean; errors: string[] } {
   const errors: string[] = [];
   
-  if (typeof payload !== 'object' || payload === null) {
-    return { data: null, isValid: false, errors: ['Invalid GraphQL payload'] };
+  if (typeof payload !== "object" || payload === null) {
+    return { data: null, isValid: false, errors: ["Invalid GraphQL payload"] };
   }
 
   const gql = payload as Partial<GraphQLQuery>;
   
-  if (!gql.query || typeof gql.query !== 'string') {
-    errors.push('Missing or invalid query string');
+  if (!gql.query || typeof gql.query !== "string") {
+    errors.push("Missing or invalid query string");
   }
 
   return {
@@ -342,22 +342,22 @@ function parseGraphQL(payload: any): { data: any; isValid: boolean; errors: stri
 function parseAIS(payload: any): { data: any; isValid: boolean; errors: string[] } {
   const errors: string[] = [];
   
-  if (typeof payload !== 'object' || payload === null) {
-    return { data: null, isValid: false, errors: ['Invalid AIS payload'] };
+  if (typeof payload !== "object" || payload === null) {
+    return { data: null, isValid: false, errors: ["Invalid AIS payload"] };
   }
 
   const ais = payload as Partial<AisMessage>;
   
-  if (!ais.mmsi || typeof ais.mmsi !== 'string') {
-    errors.push('Missing or invalid MMSI');
+  if (!ais.mmsi || typeof ais.mmsi !== "string") {
+    errors.push("Missing or invalid MMSI");
   }
   
-  if (ais.latitude === undefined || typeof ais.latitude !== 'number') {
-    errors.push('Missing or invalid latitude');
+  if (ais.latitude === undefined || typeof ais.latitude !== "number") {
+    errors.push("Missing or invalid latitude");
   }
   
-  if (ais.longitude === undefined || typeof ais.longitude !== 'number') {
-    errors.push('Missing or invalid longitude');
+  if (ais.longitude === undefined || typeof ais.longitude !== "number") {
+    errors.push("Missing or invalid longitude");
   }
 
   return {
@@ -371,15 +371,15 @@ function parseGMDSS(payload: any): { data: any; isValid: boolean; errors: string
   const errors: string[] = [];
   
   // GMDSS is similar to AIS but includes distress signaling
-  if (typeof payload !== 'object' || payload === null) {
-    return { data: null, isValid: false, errors: ['Invalid GMDSS payload'] };
+  if (typeof payload !== "object" || payload === null) {
+    return { data: null, isValid: false, errors: ["Invalid GMDSS payload"] };
   }
 
   // Simulate GMDSS-specific validation
   const gmdss = payload as any;
   
   if (!gmdss.messageType) {
-    errors.push('Missing GMDSS message type');
+    errors.push("Missing GMDSS message type");
   }
 
   return {
@@ -392,26 +392,26 @@ function parseGMDSS(payload: any): { data: any; isValid: boolean; errors: string
 function parseStanag(payload: any): { data: any; isValid: boolean; errors: string[] } {
   const errors: string[] = [];
   
-  if (typeof payload !== 'object' || payload === null) {
-    return { data: null, isValid: false, errors: ['Invalid STANAG payload'] };
+  if (typeof payload !== "object" || payload === null) {
+    return { data: null, isValid: false, errors: ["Invalid STANAG payload"] };
   }
 
   const stanag = payload as Partial<StanagMessage>;
   
   if (!stanag.messageId) {
-    errors.push('Missing message ID');
+    errors.push("Missing message ID");
   }
   
   if (!stanag.classification) {
-    errors.push('Missing classification level');
+    errors.push("Missing classification level");
   }
   
   if (!stanag.priority) {
-    errors.push('Missing priority level');
+    errors.push("Missing priority level");
   }
   
   if (!stanag.originUnit) {
-    errors.push('Missing origin unit');
+    errors.push("Missing origin unit");
   }
 
   return {
@@ -426,31 +426,31 @@ function validateSchema(protocol: ProtocolType, data: any): string[] {
   
   // Protocol-specific schema validation
   switch (protocol) {
-    case 'json-rpc':
-      // Already validated in parse
-      break;
-    case 'graphql':
-      // Additional GraphQL schema validation could go here
-      break;
-    case 'ais':
-      const ais = data as AisMessage;
-      if (ais.latitude && (ais.latitude < -90 || ais.latitude > 90)) {
-        errors.push('Latitude out of range');
-      }
-      if (ais.longitude && (ais.longitude < -180 || ais.longitude > 180)) {
-        errors.push('Longitude out of range');
-      }
-      break;
-    case 'gmdss':
-      // GMDSS schema validation
-      break;
-    case 'nato-stanag':
-      const stanag = data as StanagMessage;
-      const validClassifications = ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP_SECRET'];
-      if (stanag.classification && !validClassifications.includes(stanag.classification)) {
-        errors.push('Invalid classification level');
-      }
-      break;
+  case "json-rpc":
+    // Already validated in parse
+    break;
+  case "graphql":
+    // Additional GraphQL schema validation could go here
+    break;
+  case "ais":
+    const ais = data as AisMessage;
+    if (ais.latitude && (ais.latitude < -90 || ais.latitude > 90)) {
+      errors.push("Latitude out of range");
+    }
+    if (ais.longitude && (ais.longitude < -180 || ais.longitude > 180)) {
+      errors.push("Longitude out of range");
+    }
+    break;
+  case "gmdss":
+    // GMDSS schema validation
+    break;
+  case "nato-stanag":
+    const stanag = data as StanagMessage;
+    const validClassifications = ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP_SECRET"];
+    if (stanag.classification && !validClassifications.includes(stanag.classification)) {
+      errors.push("Invalid classification level");
+    }
+    break;
   }
 
   return errors;
@@ -459,18 +459,18 @@ function validateSchema(protocol: ProtocolType, data: any): string[] {
 function determineRouteDestination(protocol: ProtocolType, data: any): string {
   // Route based on protocol and data content
   switch (protocol) {
-    case 'json-rpc':
-      const rpc = data as JsonRpcRequest;
-      return `rpc-handler:${rpc.method}`;
-    case 'graphql':
-      return 'graphql-resolver';
-    case 'ais':
-    case 'gmdss':
-      return 'maritime-tracking-system';
-    case 'nato-stanag':
-      return 'military-ops-center';
-    default:
-      return 'default-handler';
+  case "json-rpc":
+    const rpc = data as JsonRpcRequest;
+    return `rpc-handler:${rpc.method}`;
+  case "graphql":
+    return "graphql-resolver";
+  case "ais":
+  case "gmdss":
+    return "maritime-tracking-system";
+  case "nato-stanag":
+    return "military-ops-center";
+  default:
+    return "default-handler";
   }
 }
 
@@ -479,7 +479,7 @@ async function simulateRouteToHandler(destination: string, data: any): Promise<a
   await new Promise(resolve => setTimeout(resolve, 50));
   
   return {
-    status: 'accepted',
+    status: "accepted",
     destination,
     processedAt: new Date().toISOString(),
     acknowledgment: `Message routed to ${destination}`,
@@ -497,7 +497,7 @@ async function logInteropEvent(
   errorMessage?: string
 ): Promise<void> {
   try {
-    const { error } = await supabase.from('interop_log').insert({
+    const { error } = await supabase.from("interop_log").insert({
       protocol: message.protocol,
       direction: message.direction,
       source_system: message.sourceSystem,
@@ -512,14 +512,14 @@ async function logInteropEvent(
       latency_ms: latencyMs,
       status,
       error_message: errorMessage,
-      processed_at: status === 'completed' ? new Date().toISOString() : null,
+      processed_at: status === "completed" ? new Date().toISOString() : null,
     });
 
     if (error) {
-      logger.error('[ProtocolAdapter] Failed to log interop event:', error);
+      logger.error("[ProtocolAdapter] Failed to log interop event:", error);
     }
   } catch (error) {
-    logger.error('[ProtocolAdapter] Error logging interop event:', error);
+    logger.error("[ProtocolAdapter] Error logging interop event:", error);
   }
 }
 

@@ -3,12 +3,12 @@
  * Types for voice commands, sessions, and offline support
  */
 
-export type Platform = 'web' | 'mobile_ios' | 'mobile_android' | 'desktop';
-export type VoiceMode = 'online' | 'offline' | 'hybrid';
-export type VoiceEngine = 'web_speech_api' | 'native' | 'fallback';
-export type CommandType = 'navigation' | 'query' | 'action' | 'unknown';
-export type CommandStatus = 'processing' | 'executed' | 'failed' | 'rejected';
-export type VoiceTone = 'professional' | 'friendly' | 'casual';
+export type Platform = "web" | "mobile_ios" | "mobile_android" | "desktop";
+export type VoiceMode = "online" | "offline" | "hybrid";
+export type VoiceEngine = "web_speech_api" | "native" | "fallback";
+export type CommandType = "navigation" | "query" | "action" | "unknown";
+export type CommandStatus = "processing" | "executed" | "failed" | "rejected";
+export type VoiceTone = "professional" | "friendly" | "casual";
 
 export interface VoiceSession {
   id: string;
@@ -82,8 +82,8 @@ export interface VoicePersonality {
   language: string;
   tone: VoiceTone;
   response_style?: {
-    verbosity?: 'concise' | 'normal' | 'detailed';
-    formality?: 'informal' | 'neutral' | 'formal';
+    verbosity?: "concise" | "normal" | "detailed";
+    formality?: "informal" | "neutral" | "formal";
     emoji_enabled?: boolean;
   };
   avatar_url?: string;

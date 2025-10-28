@@ -83,7 +83,7 @@ export function AIDocumentsAnalyzer() {
     const file = event.target.files?.[0];
     if (file) {
       // Validate file type
-      const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff'];
+      const validTypes = ["application/pdf", "image/jpeg", "image/jpg", "image/png", "image/gif", "image/bmp", "image/tiff"];
       if (!validTypes.includes(file.type)) {
         toast({
           title: "Tipo de arquivo inválido",
@@ -115,9 +115,9 @@ export function AIDocumentsAnalyzer() {
     try {
       setProgress(10);
       
-      const result = await Tesseract.recognize(file, 'eng+por', {
+      const result = await Tesseract.recognize(file, "eng+por", {
         logger: (m) => {
-          if (m.status === 'recognizing text') {
+          if (m.status === "recognizing text") {
             setProgress(10 + (m.progress * 70));
           }
         },
@@ -130,8 +130,8 @@ export function AIDocumentsAnalyzer() {
         confidence: result.data.confidence,
       };
     } catch (error) {
-      console.error('OCR Error:', error);
-      throw new Error('Falha ao processar OCR');
+      console.error("OCR Error:", error);
+      throw new Error("Falha ao processar OCR");
     }
   };
 
@@ -144,9 +144,9 @@ export function AIDocumentsAnalyzer() {
     emails.forEach((email) => {
       entities.push({
         id: crypto.randomUUID(),
-        entity_type: 'email',
+        entity_type: "email",
         entity_value: email,
-        entity_label: 'Email',
+        entity_label: "Email",
         confidence_score: 95,
       });
     });
@@ -157,9 +157,9 @@ export function AIDocumentsAnalyzer() {
     dates.forEach((date) => {
       entities.push({
         id: crypto.randomUUID(),
-        entity_type: 'date',
+        entity_type: "date",
         entity_value: date,
-        entity_label: 'Data',
+        entity_label: "Data",
         confidence_score: 90,
       });
     });
@@ -170,9 +170,9 @@ export function AIDocumentsAnalyzer() {
     amounts.forEach((amount) => {
       entities.push({
         id: crypto.randomUUID(),
-        entity_type: 'amount',
+        entity_type: "amount",
         entity_value: amount,
-        entity_label: 'Valor',
+        entity_label: "Valor",
         confidence_score: 85,
       });
     });
@@ -183,9 +183,9 @@ export function AIDocumentsAnalyzer() {
     phones.forEach((phone) => {
       entities.push({
         id: crypto.randomUUID(),
-        entity_type: 'phone',
+        entity_type: "phone",
         entity_value: phone,
-        entity_label: 'Telefone',
+        entity_label: "Telefone",
         confidence_score: 88,
       });
     });
@@ -196,9 +196,9 @@ export function AIDocumentsAnalyzer() {
     imos.forEach((imo) => {
       entities.push({
         id: crypto.randomUUID(),
-        entity_type: 'imo_number',
+        entity_type: "imo_number",
         entity_value: imo,
-        entity_label: 'IMO Number',
+        entity_label: "IMO Number",
         confidence_score: 98,
       });
     });
@@ -208,10 +208,10 @@ export function AIDocumentsAnalyzer() {
 
   // Generate automatic summary (first 200 chars or extractive summary)
   const generateSummary = (text: string): string => {
-    if (!text || text.length === 0) return '';
+    if (!text || text.length === 0) return "";
     
     // Remove excessive whitespace
-    const cleaned = text.replace(/\s+/g, ' ').trim();
+    const cleaned = text.replace(/\s+/g, " ").trim();
     
     // Split into sentences
     const sentences = cleaned.split(/[.!?]+/).filter(s => s.trim().length > 10);
@@ -219,7 +219,7 @@ export function AIDocumentsAnalyzer() {
     if (sentences.length === 0) return cleaned.substring(0, 200);
     
     // Take first 2-3 most important sentences (simple extractive summarization)
-    const summary = sentences.slice(0, Math.min(3, sentences.length)).join('. ') + '.';
+    const summary = sentences.slice(0, Math.min(3, sentences.length)).join(". ") + ".";
     
     return summary.substring(0, 500); // Max 500 chars
   };
@@ -227,13 +227,13 @@ export function AIDocumentsAnalyzer() {
   // Extract topics using keyword frequency
   const extractTopics = (text: string): string[] => {
     const stopWords = new Set([
-      'o', 'a', 'os', 'as', 'um', 'uma', 'de', 'do', 'da', 'dos', 'das', 'em', 'no', 
-      'na', 'nos', 'nas', 'por', 'para', 'com', 'sem', 'sob', 'sobre', 'e', 'ou',
-      'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with'
+      "o", "a", "os", "as", "um", "uma", "de", "do", "da", "dos", "das", "em", "no", 
+      "na", "nos", "nas", "por", "para", "com", "sem", "sob", "sobre", "e", "ou",
+      "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with"
     ]);
 
     const words = text.toLowerCase()
-      .replace(/[^\w\s]/g, '')
+      .replace(/[^\w\s]/g, "")
       .split(/\s+/)
       .filter(word => word.length > 4 && !stopWords.has(word));
 
@@ -258,20 +258,20 @@ export function AIDocumentsAnalyzer() {
 
     // Add tags based on entity types present
     const entityTypes = new Set(entities.map(e => e.entity_type));
-    if (entityTypes.has('email')) tags.push('contact');
-    if (entityTypes.has('phone')) tags.push('contact');
-    if (entityTypes.has('amount')) tags.push('financial');
-    if (entityTypes.has('date')) tags.push('time-sensitive');
-    if (entityTypes.has('imo_number')) tags.push('maritime', 'vessel');
+    if (entityTypes.has("email")) tags.push("contact");
+    if (entityTypes.has("phone")) tags.push("contact");
+    if (entityTypes.has("amount")) tags.push("financial");
+    if (entityTypes.has("date")) tags.push("time-sensitive");
+    if (entityTypes.has("imo_number")) tags.push("maritime", "vessel");
 
     // Add tags based on keywords
     const lowerText = text.toLowerCase();
-    if (lowerText.includes('contrato') || lowerText.includes('contract')) tags.push('legal');
-    if (lowerText.includes('invoice') || lowerText.includes('fatura')) tags.push('financial');
-    if (lowerText.includes('certificado') || lowerText.includes('certificate')) tags.push('certification');
-    if (lowerText.includes('segurança') || lowerText.includes('safety')) tags.push('safety');
-    if (lowerText.includes('tripulação') || lowerText.includes('crew')) tags.push('crew');
-    if (lowerText.includes('navio') || lowerText.includes('vessel') || lowerText.includes('ship')) tags.push('vessel');
+    if (lowerText.includes("contrato") || lowerText.includes("contract")) tags.push("legal");
+    if (lowerText.includes("invoice") || lowerText.includes("fatura")) tags.push("financial");
+    if (lowerText.includes("certificado") || lowerText.includes("certificate")) tags.push("certification");
+    if (lowerText.includes("segurança") || lowerText.includes("safety")) tags.push("safety");
+    if (lowerText.includes("tripulação") || lowerText.includes("crew")) tags.push("crew");
+    if (lowerText.includes("navio") || lowerText.includes("vessel") || lowerText.includes("ship")) tags.push("vessel");
 
     return [...new Set(tags)]; // Remove duplicates
   };
@@ -294,24 +294,24 @@ export function AIDocumentsAnalyzer() {
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        throw new Error('Usuário não autenticado');
+        throw new Error("Usuário não autenticado");
       }
 
       // Upload file to Supabase Storage
       setProgress(5);
-      const fileExt = selectedFile.name.split('.').pop();
+      const fileExt = selectedFile.name.split(".").pop();
       const fileName = `${Date.now()}-${crypto.randomUUID()}.${fileExt}`;
       const filePath = `documents/${user.id}/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('documents')
+        .from("documents")
         .upload(filePath, selectedFile);
 
       if (uploadError) throw uploadError;
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('documents')
+        .from("documents")
         .getPublicUrl(filePath);
 
       // Perform OCR
@@ -339,12 +339,12 @@ export function AIDocumentsAnalyzer() {
       // Save document to ai_documents database
       setProgress(90);
       const { data: document, error: dbError } = await supabase
-        .from('ai_documents')
+        .from("ai_documents")
         .insert({
           organization_id: orgData?.organization_id,
-          document_name: selectedFile.name.replace(/\.[^/.]+$/, ''),
+          document_name: selectedFile.name.replace(/\.[^/.]+$/, ""),
           file_url: publicUrl,
-          file_type: selectedFile.type.includes('pdf') ? 'pdf' : 'image',
+          file_type: selectedFile.type.includes("pdf") ? "pdf" : "image",
           file_size_bytes: selectedFile.size,
           ocr_text: text,
           summary: summary,
@@ -355,7 +355,7 @@ export function AIDocumentsAnalyzer() {
             value: e.entity_value,
             confidence: e.confidence_score
           })),
-          processing_status: 'completed',
+          processing_status: "completed",
           processing_time_ms: processingTime,
           uploaded_by: user.id,
         })
@@ -367,7 +367,7 @@ export function AIDocumentsAnalyzer() {
       // Save extracted entities
       if (extractedEntities.length > 0) {
         const { error: entitiesError } = await supabase
-          .from('document_entities')
+          .from("document_entities")
           .insert(
             extractedEntities.map((entity) => ({
               document_id: document.id,
@@ -375,7 +375,7 @@ export function AIDocumentsAnalyzer() {
               entity_value: entity.entity_value,
               entity_label: entity.entity_label,
               confidence_score: entity.confidence_score,
-              extraction_method: 'ocr',
+              extraction_method: "ocr",
             }))
           );
 
@@ -397,7 +397,7 @@ export function AIDocumentsAnalyzer() {
       setProgress(0);
       
     } catch (error: any) {
-      console.error('Error processing document:', error);
+      console.error("Error processing document:", error);
       toast({
         title: "Erro ao processar documento",
         description: error.message || "Tente novamente mais tarde",
@@ -412,15 +412,15 @@ export function AIDocumentsAnalyzer() {
   const loadDocuments = async () => {
     try {
       const { data, error } = await supabase
-        .from('documents_with_entities')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("documents_with_entities")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       setDocuments(data || []);
     } catch (error) {
-      console.error('Error loading documents:', error);
+      console.error("Error loading documents:", error);
       toast({
         title: "Erro ao carregar documentos",
         description: "Tente novamente mais tarde",
@@ -432,24 +432,24 @@ export function AIDocumentsAnalyzer() {
   const loadDocumentDetails = async (documentId: string) => {
     try {
       const { data: doc, error: docError } = await supabase
-        .from('ai_documents')
-        .select('*')
-        .eq('id', documentId)
+        .from("ai_documents")
+        .select("*")
+        .eq("id", documentId)
         .single();
 
       if (docError) throw docError;
 
       const { data: entitiesData, error: entitiesError } = await supabase
-        .from('document_entities')
-        .select('*')
-        .eq('document_id', documentId);
+        .from("document_entities")
+        .select("*")
+        .eq("document_id", documentId);
 
       if (entitiesError) throw entitiesError;
 
       setSelectedDocument(doc);
       setEntities(entitiesData || []);
     } catch (error) {
-      console.error('Error loading document details:', error);
+      console.error("Error loading document details:", error);
       toast({
         title: "Erro ao carregar detalhes",
         description: "Tente novamente mais tarde",
@@ -466,7 +466,7 @@ export function AIDocumentsAnalyzer() {
 
     try {
       const { data, error } = await supabase
-        .rpc('search_documents', {
+        .rpc("search_documents", {
           p_query: searchQuery,
           p_limit: 50,
         });
@@ -475,7 +475,7 @@ export function AIDocumentsAnalyzer() {
 
       setSearchResults(data || []);
     } catch (error) {
-      console.error('Error searching documents:', error);
+      console.error("Error searching documents:", error);
       toast({
         title: "Erro na busca",
         description: "Tente novamente mais tarde",
@@ -486,27 +486,27 @@ export function AIDocumentsAnalyzer() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'processing':
-        return <Loader2 className="h-4 w-4 text-blue-500 animate-spin" />;
-      case 'failed':
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      default:
-        return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "processing":
+      return <Loader2 className="h-4 w-4 text-blue-500 animate-spin" />;
+    case "failed":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    default:
+      return <Clock className="h-4 w-4 text-yellow-500" />;
     }
   };
 
   const getEntityBadgeColor = (entityType: string) => {
     const colors: Record<string, string> = {
-      email: 'bg-blue-100 text-blue-800',
-      date: 'bg-green-100 text-green-800',
-      amount: 'bg-yellow-100 text-yellow-800',
-      phone: 'bg-purple-100 text-purple-800',
-      imo_number: 'bg-red-100 text-red-800',
-      name: 'bg-indigo-100 text-indigo-800',
+      email: "bg-blue-100 text-blue-800",
+      date: "bg-green-100 text-green-800",
+      amount: "bg-yellow-100 text-yellow-800",
+      phone: "bg-purple-100 text-purple-800",
+      imo_number: "bg-red-100 text-red-800",
+      name: "bg-indigo-100 text-indigo-800",
     };
-    return colors[entityType] || 'bg-gray-100 text-gray-800';
+    return colors[entityType] || "bg-gray-100 text-gray-800";
   };
 
   return (
@@ -614,7 +614,7 @@ export function AIDocumentsAnalyzer() {
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          {doc.file_type === 'pdf' ? (
+                          {doc.file_type === "pdf" ? (
                             <FileText className="h-8 w-8 text-red-500" />
                           ) : (
                             <FileImage className="h-8 w-8 text-blue-500" />
@@ -718,7 +718,7 @@ export function AIDocumentsAnalyzer() {
                   placeholder="Digite sua busca..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
                 <Button onClick={handleSearch}>
                   <Search className="h-4 w-4 mr-2" />

@@ -44,10 +44,10 @@ const MaintenancePlanner = () => {
 
       // Fetch scheduled tasks
       const { data: scheduledData, error: scheduledError } = await supabase
-        .from('maintenance_tasks')
-        .select('*')
-        .eq('status', 'pending')
-        .lte('scheduled_date', thirtyDaysFromNow.toISOString().split('T')[0]);
+        .from("maintenance_tasks")
+        .select("*")
+        .eq("status", "pending")
+        .lte("scheduled_date", thirtyDaysFromNow.toISOString().split("T")[0]);
 
       if (scheduledError) throw scheduledError;
 
@@ -56,18 +56,18 @@ const MaintenancePlanner = () => {
       firstDayOfMonth.setDate(1);
       
       const { data: completedData, error: completedError } = await supabase
-        .from('maintenance_tasks')
-        .select('*')
-        .eq('status', 'completed')
-        .gte('completed_at', firstDayOfMonth.toISOString());
+        .from("maintenance_tasks")
+        .select("*")
+        .eq("status", "completed")
+        .gte("completed_at", firstDayOfMonth.toISOString());
 
       if (completedError) throw completedError;
 
       // Fetch overdue tasks
       const { data: overdueData, error: overdueError } = await supabase
-        .from('maintenance_tasks')
-        .select('*')
-        .eq('status', 'overdue');
+        .from("maintenance_tasks")
+        .select("*")
+        .eq("status", "overdue");
 
       if (overdueError) throw overdueError;
 
@@ -84,11 +84,11 @@ const MaintenancePlanner = () => {
         efficiency: efficiency
       });
     } catch (error) {
-      console.error('Error fetching maintenance stats:', error);
+      console.error("Error fetching maintenance stats:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load maintenance statistics',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load maintenance statistics",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -102,46 +102,46 @@ const MaintenancePlanner = () => {
       endDate.setDate(endDate.getDate() + 7);
 
       const { data, error } = await supabase
-        .from('maintenance_tasks')
-        .select('*, maintenance_plans(*)')
-        .gte('scheduled_date', startDate.toISOString().split('T')[0])
-        .lte('scheduled_date', endDate.toISOString().split('T')[0])
-        .order('scheduled_date', { ascending: true });
+        .from("maintenance_tasks")
+        .select("*, maintenance_plans(*)")
+        .gte("scheduled_date", startDate.toISOString().split("T")[0])
+        .lte("scheduled_date", endDate.toISOString().split("T")[0])
+        .order("scheduled_date", { ascending: true });
 
       if (error) throw error;
 
       // Simple CSV export for now (full PDF export would need additional library)
       const csvContent = [
-        ['Task Name', 'Equipment', 'Scheduled Date', 'Status', 'Priority'].join(','),
+        ["Task Name", "Equipment", "Scheduled Date", "Status", "Priority"].join(","),
         ...(data || []).map(task => [
           task.task_name,
-          task.maintenance_plans?.equipment_type || 'N/A',
+          task.maintenance_plans?.equipment_type || "N/A",
           task.scheduled_date,
           task.status,
           task.priority
-        ].join(','))
-      ].join('\n');
+        ].join(","))
+      ].join("\n");
 
-      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const blob = new Blob([csvContent], { type: "text/csv" });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `maintenance-schedule-${startDate.toISOString().split('T')[0]}.csv`;
+      a.download = `maintenance-schedule-${startDate.toISOString().split("T")[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
 
       toast({
-        title: 'Success',
-        description: 'Weekly schedule exported successfully',
+        title: "Success",
+        description: "Weekly schedule exported successfully",
       });
     } catch (error) {
-      console.error('Error exporting schedule:', error);
+      console.error("Error exporting schedule:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to export schedule',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to export schedule",
+        variant: "destructive",
       });
     }
   };

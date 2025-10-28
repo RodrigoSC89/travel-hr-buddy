@@ -4,16 +4,16 @@
  * Patch 145.0
  */
 
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Navigation, MapPin, Route, Anchor } from 'lucide-react';
+import React, { useEffect, useRef, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Navigation, MapPin, Route, Anchor } from "lucide-react";
 
 // Set Mapbox access token (in production, use env variable)
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || "";
 if (MAPBOX_TOKEN) {
   mapboxgl.accessToken = MAPBOX_TOKEN;
 }
@@ -28,7 +28,7 @@ export interface RouteData {
   id: string;
   name: string;
   points: RoutePoint[];
-  type: 'planned' | 'alternative' | 'actual';
+  type: "planned" | "alternative" | "actual";
   distance?: number;
   duration?: number;
   color?: string;
@@ -61,18 +61,18 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/navigation-day-v1',
+      style: "mapbox://styles/mapbox/navigation-day-v1",
       center: center,
       zoom: zoom,
     });
 
     // Add navigation controls
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
 
     // Add scale control
-    map.current.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+    map.current.addControl(new mapboxgl.ScaleControl(), "bottom-left");
 
-    map.current.on('load', () => {
+    map.current.on("load", () => {
       setMapLoaded(true);
     });
 
@@ -107,21 +107,21 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
       const coordinates = route.points.map(p => [p.longitude, p.latitude]);
       
       const routeColor = route.color || (
-        route.type === 'planned' ? '#3b82f6' :
-        route.type === 'alternative' ? '#f59e0b' :
-        '#22c55e'
+        route.type === "planned" ? "#3b82f6" :
+          route.type === "alternative" ? "#f59e0b" :
+            "#22c55e"
       );
 
-      const lineStyle = route.type === 'alternative' ? 'dashed' : 'solid';
+      const lineStyle = route.type === "alternative" ? "dashed" : "solid";
 
       // Add route source
       map.current!.addSource(`route-${index}`, {
-        type: 'geojson',
+        type: "geojson",
         data: {
-          type: 'Feature',
+          type: "Feature",
           properties: {},
           geometry: {
-            type: 'LineString',
+            type: "LineString",
             coordinates: coordinates,
           },
         },
@@ -130,32 +130,32 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
       // Add route layer
       map.current!.addLayer({
         id: `route-${index}`,
-        type: 'line',
+        type: "line",
         source: `route-${index}`,
         layout: {
-          'line-join': 'round',
-          'line-cap': 'round',
+          "line-join": "round",
+          "line-cap": "round",
         },
         paint: {
-          'line-color': routeColor,
-          'line-width': 4,
-          'line-opacity': selectedRoute === route.id || !selectedRoute ? 0.8 : 0.3,
-          ...(lineStyle === 'dashed' && {
-            'line-dasharray': [2, 2],
+          "line-color": routeColor,
+          "line-width": 4,
+          "line-opacity": selectedRoute === route.id || !selectedRoute ? 0.8 : 0.3,
+          ...(lineStyle === "dashed" && {
+            "line-dasharray": [2, 2],
           }),
         },
       });
 
       // Add markers for waypoints
       route.points.forEach((point, pointIndex) => {
-        const el = document.createElement('div');
-        el.className = 'route-marker';
-        el.style.width = '12px';
-        el.style.height = '12px';
-        el.style.borderRadius = '50%';
+        const el = document.createElement("div");
+        el.className = "route-marker";
+        el.style.width = "12px";
+        el.style.height = "12px";
+        el.style.borderRadius = "50%";
         el.style.backgroundColor = routeColor;
-        el.style.border = '2px solid white';
-        el.style.cursor = 'pointer';
+        el.style.border = "2px solid white";
+        el.style.cursor = "pointer";
 
         const marker = new mapboxgl.Marker(el)
           .setLngLat([point.longitude, point.latitude])
@@ -176,10 +176,10 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
 
     // Add live position marker if provided
     if (livePosition) {
-      const el = document.createElement('div');
-      el.className = 'live-position-marker';
-      el.innerHTML = '<span role="img" aria-label="Current position">📍</span>';
-      el.style.fontSize = '24px';
+      const el = document.createElement("div");
+      el.className = "live-position-marker";
+      el.innerHTML = "<span role=\"img\" aria-label=\"Current position\">📍</span>";
+      el.style.fontSize = "24px";
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat([livePosition.longitude, livePosition.latitude])
@@ -216,29 +216,29 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
     onRouteSelect?.(routeId);
   };
 
-  const getRouteIcon = (type: RouteData['type']) => {
+  const getRouteIcon = (type: RouteData["type"]) => {
     switch (type) {
-      case 'planned':
-        return <Route className="h-4 w-4" />;
-      case 'alternative':
-        return <Navigation className="h-4 w-4" />;
-      case 'actual':
-        return <Anchor className="h-4 w-4" />;
-      default:
-        return <MapPin className="h-4 w-4" />;
+    case "planned":
+      return <Route className="h-4 w-4" />;
+    case "alternative":
+      return <Navigation className="h-4 w-4" />;
+    case "actual":
+      return <Anchor className="h-4 w-4" />;
+    default:
+      return <MapPin className="h-4 w-4" />;
     }
   };
 
-  const getRouteLabel = (type: RouteData['type']) => {
+  const getRouteLabel = (type: RouteData["type"]) => {
     switch (type) {
-      case 'planned':
-        return 'Planejada';
-      case 'alternative':
-        return 'Alternativa';
-      case 'actual':
-        return 'Atual';
-      default:
-        return 'Rota';
+    case "planned":
+      return "Planejada";
+    case "alternative":
+      return "Alternativa";
+    case "actual":
+      return "Atual";
+    default:
+      return "Rota";
     }
   };
 
@@ -255,7 +255,7 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
           {!MAPBOX_TOKEN ? (
             <div 
               className="w-full rounded-lg bg-muted flex items-center justify-center"
-              style={{ height: '600px' }}
+              style={{ height: "600px" }}
             >
               <div className="text-center space-y-4 p-8">
                 <Navigation className="h-16 w-16 mx-auto text-muted-foreground" />
@@ -279,7 +279,7 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
             <div
               ref={mapContainer}
               className="w-full rounded-lg overflow-hidden"
-              style={{ height: '600px' }}
+              style={{ height: "600px" }}
             />
           )}
         </CardContent>
@@ -297,8 +297,8 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
                   key={route.id}
                   className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                     selectedRoute === route.id
-                      ? 'bg-accent border-primary'
-                      : 'hover:bg-accent'
+                      ? "bg-accent border-primary"
+                      : "hover:bg-accent"
                   }`}
                   onClick={() => handleRouteClick(route.id)}
                 >
@@ -309,11 +309,11 @@ export const RoutePlannerMap: React.FC<RoutePlannerMapProps> = ({
                         style={{
                           backgroundColor:
                             route.color ||
-                            (route.type === 'planned'
-                              ? '#3b82f6'
-                              : route.type === 'alternative'
-                              ? '#f59e0b'
-                              : '#22c55e'),
+                            (route.type === "planned"
+                              ? "#3b82f6"
+                              : route.type === "alternative"
+                                ? "#f59e0b"
+                                : "#22c55e"),
                         }}
                       />
                       <div>

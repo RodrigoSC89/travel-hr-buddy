@@ -10,7 +10,7 @@ export interface MissionLog {
   missionName: string;
   missionDate: string;
   crewMembers: string[];
-  status: 'planned' | 'in-progress' | 'completed' | 'cancelled';
+  status: "planned" | "in-progress" | "completed" | "cancelled";
   description?: string;
   location?: string;
   metadata?: Record<string, any>;
@@ -27,7 +27,7 @@ export class MissionLogsService {
       if (!user) throw new Error("User not authenticated");
 
       const { data, error } = await supabase
-        .from('mission_logs')
+        .from("mission_logs")
         .insert({
           mission_id: log.missionId,
           mission_name: log.missionName,
@@ -45,7 +45,7 @@ export class MissionLogsService {
       if (error) throw error;
       return this.mapToLog(data);
     } catch (error) {
-      console.error('Error creating mission log:', error);
+      console.error("Error creating mission log:", error);
       throw error;
     }
   }
@@ -62,16 +62,16 @@ export class MissionLogsService {
       if (log.metadata) updateData.metadata = log.metadata;
 
       const { data, error } = await supabase
-        .from('mission_logs')
+        .from("mission_logs")
         .update(updateData)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
       if (error) throw error;
       return this.mapToLog(data);
     } catch (error) {
-      console.error('Error updating mission log:', error);
+      console.error("Error updating mission log:", error);
       throw error;
     }
   }
@@ -79,13 +79,13 @@ export class MissionLogsService {
   async deleteLog(id: string): Promise<void> {
     try {
       const { error } = await supabase
-        .from('mission_logs')
+        .from("mission_logs")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error deleting mission log:', error);
+      console.error("Error deleting mission log:", error);
       throw error;
     }
   }
@@ -93,18 +93,18 @@ export class MissionLogsService {
   async getLogs(filters?: { status?: string; dateFrom?: string; dateTo?: string }): Promise<MissionLog[]> {
     try {
       let query = supabase
-        .from('mission_logs')
-        .select('*')
-        .order('mission_date', { ascending: false });
+        .from("mission_logs")
+        .select("*")
+        .order("mission_date", { ascending: false });
 
       if (filters?.status) {
-        query = query.eq('status', filters.status);
+        query = query.eq("status", filters.status);
       }
       if (filters?.dateFrom) {
-        query = query.gte('mission_date', filters.dateFrom);
+        query = query.gte("mission_date", filters.dateFrom);
       }
       if (filters?.dateTo) {
-        query = query.lte('mission_date', filters.dateTo);
+        query = query.lte("mission_date", filters.dateTo);
       }
 
       const { data, error } = await query;
@@ -112,7 +112,7 @@ export class MissionLogsService {
 
       return (data || []).map(this.mapToLog);
     } catch (error) {
-      console.error('Error fetching mission logs:', error);
+      console.error("Error fetching mission logs:", error);
       return [];
     }
   }
@@ -120,15 +120,15 @@ export class MissionLogsService {
   async getLog(id: string): Promise<MissionLog | null> {
     try {
       const { data, error } = await supabase
-        .from('mission_logs')
-        .select('*')
-        .eq('id', id)
+        .from("mission_logs")
+        .select("*")
+        .eq("id", id)
         .single();
 
       if (error) throw error;
       return data ? this.mapToLog(data) : null;
     } catch (error) {
-      console.error('Error fetching mission log:', error);
+      console.error("Error fetching mission log:", error);
       return null;
     }
   }

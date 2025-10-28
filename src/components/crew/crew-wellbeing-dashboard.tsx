@@ -1,13 +1,13 @@
 // @ts-nocheck
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { CrewHealthRecord, WellbeingAlert } from '@/types/modules';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Heart, Activity, AlertTriangle, TrendingUp, Brain } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { CrewHealthRecord, WellbeingAlert } from "@/types/modules";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Heart, Activity, AlertTriangle, TrendingUp, Brain } from "lucide-react";
+import { toast } from "sonner";
 
 export function CrewWellbeingDashboard() {
   const [healthRecords, setHealthRecords] = useState<CrewHealthRecord[]>([]);
@@ -22,16 +22,16 @@ export function CrewWellbeingDashboard() {
     try {
       const [recordsRes, alertsRes] = await Promise.all([
         supabase
-          .from('crew_health_records')
-          .select('*')
-          .order('record_date', { ascending: false })
+          .from("crew_health_records")
+          .select("*")
+          .order("record_date", { ascending: false })
           .limit(20),
         supabase
-          .from('wellbeing_alerts')
-          .select('*')
-          .eq('status', 'active')
-          .order('severity', { ascending: false })
-          .order('detected_at', { ascending: false })
+          .from("wellbeing_alerts")
+          .select("*")
+          .eq("status", "active")
+          .order("severity", { ascending: false })
+          .order("detected_at", { ascending: false })
       ]);
 
       if (recordsRes.error) throw recordsRes.error;
@@ -40,23 +40,23 @@ export function CrewWellbeingDashboard() {
       setHealthRecords(recordsRes.data || []);
       setAlerts(alertsRes.data || []);
     } catch (error) {
-      console.error('Error loading wellbeing data:', error);
-      toast.error('Failed to load wellbeing data');
+      console.error("Error loading wellbeing data:", error);
+      toast.error("Failed to load wellbeing data");
     } finally {
       setLoading(false);
     }
   };
 
   const getSeverityBadge = (severity: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      low: 'outline',
-      medium: 'secondary',
-      high: 'default',
-      critical: 'destructive'
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      low: "outline",
+      medium: "secondary",
+      high: "default",
+      critical: "destructive"
     };
 
     return (
-      <Badge variant={variants[severity] || 'default'}>
+      <Badge variant={variants[severity] || "default"}>
         {severity.toUpperCase()}
       </Badge>
     );
@@ -64,14 +64,14 @@ export function CrewWellbeingDashboard() {
 
   const getHealthStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      excellent: 'text-green-500',
-      good: 'text-blue-500',
-      fair: 'text-yellow-500',
-      poor: 'text-orange-500',
-      critical: 'text-red-500'
+      excellent: "text-green-500",
+      good: "text-blue-500",
+      fair: "text-yellow-500",
+      poor: "text-orange-500",
+      critical: "text-red-500"
     };
 
-    return colors[status] || 'text-gray-500';
+    return colors[status] || "text-gray-500";
   };
 
   if (loading) {
@@ -120,7 +120,7 @@ export function CrewWellbeingDashboard() {
             </Card>
           ) : (
             alerts.map((alert) => (
-              <Card key={alert.id} className={alert.severity === 'critical' ? 'border-red-500' : ''}>
+              <Card key={alert.id} className={alert.severity === "critical" ? "border-red-500" : ""}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg flex items-center">
@@ -138,7 +138,7 @@ export function CrewWellbeingDashboard() {
                     </div>
                   </div>
                   <CardDescription>
-                    {alert.alert_type.replace('_', ' ').toUpperCase()}
+                    {alert.alert_type.replace("_", " ").toUpperCase()}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -197,7 +197,7 @@ export function CrewWellbeingDashboard() {
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-base capitalize">
-                        {record.record_type.replace('_', ' ')}
+                        {record.record_type.replace("_", " ")}
                       </CardTitle>
                       {record.overall_health_status && (
                         <Badge className={getHealthStatusColor(record.overall_health_status)}>
@@ -219,8 +219,8 @@ export function CrewWellbeingDashboard() {
                             <div className="w-20 h-2 bg-secondary rounded-full">
                               <div
                                 className={`h-full rounded-full ${
-                                  record.fatigue_level > 7 ? 'bg-red-500' :
-                                  record.fatigue_level > 4 ? 'bg-yellow-500' : 'bg-green-500'
+                                  record.fatigue_level > 7 ? "bg-red-500" :
+                                    record.fatigue_level > 4 ? "bg-yellow-500" : "bg-green-500"
                                 }`}
                                 style={{ width: `${(record.fatigue_level / 10) * 100}%` }}
                               />
@@ -253,8 +253,8 @@ export function CrewWellbeingDashboard() {
                       {record.is_fit_for_duty !== undefined && (
                         <div className="flex justify-between items-center pt-2 border-t">
                           <span className="text-muted-foreground">Fit for Duty:</span>
-                          <Badge variant={record.is_fit_for_duty ? 'default' : 'destructive'}>
-                            {record.is_fit_for_duty ? 'Yes' : 'No'}
+                          <Badge variant={record.is_fit_for_duty ? "default" : "destructive"}>
+                            {record.is_fit_for_duty ? "Yes" : "No"}
                           </Badge>
                         </div>
                       )}

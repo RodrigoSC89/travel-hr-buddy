@@ -1,12 +1,12 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { TrendingUp, Award, BookOpen } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { TrendingUp, Award, BookOpen } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 export const ProgressDashboard: React.FC = () => {
   const [stats, setStats] = useState({
@@ -30,9 +30,9 @@ export const ProgressDashboard: React.FC = () => {
 
       // Get enrolled courses
       const { data: progress } = await supabase
-        .from('academy_progress')
-        .select('course_id, is_completed, score, updated_at')
-        .eq('user_id', user.id);
+        .from("academy_progress")
+        .select("course_id, is_completed, score, updated_at")
+        .eq("user_id", user.id);
 
       const uniqueCourses = new Set(progress?.map(p => p.course_id) || []);
       const completedCourses = progress?.filter(p => p.is_completed) || [];
@@ -43,9 +43,9 @@ export const ProgressDashboard: React.FC = () => {
 
       // Get certificates
       const { data: certificates } = await supabase
-        .from('academy_certificates')
-        .select('id')
-        .eq('user_id', user.id);
+        .from("academy_certificates")
+        .select("id")
+        .eq("user_id", user.id);
 
       // Create progress chart data
       const progressData = progress
@@ -64,9 +64,9 @@ export const ProgressDashboard: React.FC = () => {
       });
     } catch (error: any) {
       toast({
-        title: 'Error loading progress',
+        title: "Error loading progress",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -106,7 +106,7 @@ export const ProgressDashboard: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{stats.averageScore}%</div>
             <Badge variant="default" className="mt-2">
-              {stats.averageScore >= 80 ? 'Excellent' : stats.averageScore >= 60 ? 'Good' : 'Needs Improvement'}
+              {stats.averageScore >= 80 ? "Excellent" : stats.averageScore >= 60 ? "Good" : "Needs Improvement"}
             </Badge>
           </CardContent>
         </Card>

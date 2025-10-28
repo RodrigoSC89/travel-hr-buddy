@@ -97,7 +97,7 @@ export const MoodDashboard = () => {
   };
 
   const chartData = {
-    labels: moodHistory.map(d => d.date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })),
+    labels: moodHistory.map(d => d.date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })),
     datasets: [
       {
         label: "Humor",

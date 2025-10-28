@@ -29,9 +29,9 @@ export function FindingsManager() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('non_conformities')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("non_conformities")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
@@ -49,12 +49,12 @@ export function FindingsManager() {
 
   const getSeverityBadge = (type: string) => {
     const severityConfig: Record<string, { variant: any; color: string }> = {
-      'major': { variant: 'destructive', color: 'text-red-600' },
-      'minor': { variant: 'default', color: 'text-yellow-600' },
-      'observation': { variant: 'outline', color: 'text-blue-600' },
+      "major": { variant: "destructive", color: "text-red-600" },
+      "minor": { variant: "default", color: "text-yellow-600" },
+      "observation": { variant: "outline", color: "text-blue-600" },
     };
 
-    const config = severityConfig[type] || severityConfig['observation'];
+    const config = severityConfig[type] || severityConfig["observation"];
 
     return (
       <Badge variant={config.variant}>
@@ -65,18 +65,18 @@ export function FindingsManager() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { variant: any }> = {
-      'open': { variant: 'destructive' },
-      'investigating': { variant: 'default' },
-      'action_planned': { variant: 'secondary' },
-      'resolved': { variant: 'outline' },
-      'closed': { variant: 'outline' },
+      "open": { variant: "destructive" },
+      "investigating": { variant: "default" },
+      "action_planned": { variant: "secondary" },
+      "resolved": { variant: "outline" },
+      "closed": { variant: "outline" },
     };
 
-    const config = statusConfig[status] || statusConfig['open'];
+    const config = statusConfig[status] || statusConfig["open"];
 
     return (
       <Badge variant={config.variant}>
-        {status.replace('_', ' ')}
+        {status.replace("_", " ")}
       </Badge>
     );
   };
@@ -134,11 +134,11 @@ export function FindingsManager() {
                   <Badge variant="outline">{finding.source}</Badge>
                 </TableCell>
                 <TableCell className="max-w-xs truncate">
-                  {finding.description || 'No description'}
+                  {finding.description || "No description"}
                 </TableCell>
                 <TableCell>{getStatusBadge(finding.status)}</TableCell>
                 <TableCell>
-                  {finding.created_at ? format(new Date(finding.created_at), 'PP') : '-'}
+                  {finding.created_at ? format(new Date(finding.created_at), "PP") : "-"}
                 </TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="sm">

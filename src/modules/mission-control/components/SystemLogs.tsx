@@ -59,37 +59,37 @@ export const SystemLogs: React.FC = () => {
 
   const getLevelIcon = (level: LogEntry["level"]) => {
     switch (level) {
-      case "success":
-        return <CheckCircle className="w-4 h-4 text-green-400" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4 text-yellow-400" />;
-      case "error":
-        return <AlertTriangle className="w-4 h-4 text-red-400" />;
-      case "info":
-      default:
-        return <Info className="w-4 h-4 text-blue-400" />;
+    case "success":
+      return <CheckCircle className="w-4 h-4 text-green-400" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4 text-yellow-400" />;
+    case "error":
+      return <AlertTriangle className="w-4 h-4 text-red-400" />;
+    case "info":
+    default:
+      return <Info className="w-4 h-4 text-blue-400" />;
     }
   };
 
   const getLevelColor = (level: LogEntry["level"]) => {
     switch (level) {
-      case "success":
-        return "border-l-green-500";
-      case "warning":
-        return "border-l-yellow-500";
-      case "error":
-        return "border-l-red-500";
-      case "info":
-      default:
-        return "border-l-blue-500";
+    case "success":
+      return "border-l-green-500";
+    case "warning":
+      return "border-l-yellow-500";
+    case "error":
+      return "border-l-red-500";
+    case "info":
+    default:
+      return "border-l-blue-500";
     }
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      second: '2-digit'
+    return date.toLocaleTimeString("en-US", { 
+      hour: "2-digit", 
+      minute: "2-digit",
+      second: "2-digit"
     });
   };
 

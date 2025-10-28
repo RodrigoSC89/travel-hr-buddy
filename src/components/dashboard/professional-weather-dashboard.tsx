@@ -3,10 +3,10 @@
  * Dashboard meteorológico profissional com dados em tempo real
  */
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Cloud, 
   CloudRain, 
@@ -20,43 +20,43 @@ import {
   CloudSnow,
   Zap,
   AlertTriangle
-} from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { motion } from 'framer-motion';
-import { ProfessionalHeader } from './professional-header';
-import { ProfessionalKPICard } from './professional-kpi-card';
+} from "lucide-react";
+import { LineChart, Line, AreaChart, Area, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { motion } from "framer-motion";
+import { ProfessionalHeader } from "./professional-header";
+import { ProfessionalKPICard } from "./professional-kpi-card";
 
 // Dados mockados
 const weatherForecast = [
-  { time: '00:00', temp: 22, humidity: 75, wind: 12, pressure: 1013 },
-  { time: '03:00', temp: 21, humidity: 78, wind: 15, pressure: 1012 },
-  { time: '06:00', temp: 20, humidity: 82, wind: 18, pressure: 1011 },
-  { time: '09:00', temp: 23, humidity: 70, wind: 20, pressure: 1012 },
-  { time: '12:00', temp: 26, humidity: 65, wind: 22, pressure: 1013 },
-  { time: '15:00', temp: 27, humidity: 60, wind: 25, pressure: 1014 },
-  { time: '18:00', temp: 25, humidity: 68, wind: 20, pressure: 1013 },
-  { time: '21:00', temp: 23, humidity: 72, wind: 15, pressure: 1012 },
+  { time: "00:00", temp: 22, humidity: 75, wind: 12, pressure: 1013 },
+  { time: "03:00", temp: 21, humidity: 78, wind: 15, pressure: 1012 },
+  { time: "06:00", temp: 20, humidity: 82, wind: 18, pressure: 1011 },
+  { time: "09:00", temp: 23, humidity: 70, wind: 20, pressure: 1012 },
+  { time: "12:00", temp: 26, humidity: 65, wind: 22, pressure: 1013 },
+  { time: "15:00", temp: 27, humidity: 60, wind: 25, pressure: 1014 },
+  { time: "18:00", temp: 25, humidity: 68, wind: 20, pressure: 1013 },
+  { time: "21:00", temp: 23, humidity: 72, wind: 15, pressure: 1012 },
 ];
 
 const waveData = [
-  { time: '00:00', height: 1.2, period: 6, direction: 45 },
-  { time: '03:00', height: 1.5, period: 7, direction: 50 },
-  { time: '06:00', height: 1.8, period: 8, direction: 55 },
-  { time: '09:00', height: 2.1, period: 9, direction: 60 },
-  { time: '12:00', height: 2.4, period: 10, direction: 58 },
-  { time: '15:00', height: 2.2, period: 9, direction: 52 },
-  { time: '18:00', height: 1.9, period: 8, direction: 48 },
-  { time: '21:00', height: 1.5, period: 7, direction: 45 },
+  { time: "00:00", height: 1.2, period: 6, direction: 45 },
+  { time: "03:00", height: 1.5, period: 7, direction: 50 },
+  { time: "06:00", height: 1.8, period: 8, direction: 55 },
+  { time: "09:00", height: 2.1, period: 9, direction: 60 },
+  { time: "12:00", height: 2.4, period: 10, direction: 58 },
+  { time: "15:00", height: 2.2, period: 9, direction: 52 },
+  { time: "18:00", height: 1.9, period: 8, direction: 48 },
+  { time: "21:00", height: 1.5, period: 7, direction: 45 },
 ];
 
 const alerts = [
-  { type: 'warning', message: 'Ventos fortes esperados entre 15h-18h', icon: Wind, color: 'orange' },
-  { type: 'info', message: 'Visibilidade excelente (>10km)', icon: Eye, color: 'blue' },
-  { type: 'alert', message: 'Ondas podem atingir 2.5m no período da tarde', icon: Waves, color: 'red' },
+  { type: "warning", message: "Ventos fortes esperados entre 15h-18h", icon: Wind, color: "orange" },
+  { type: "info", message: "Visibilidade excelente (>10km)", icon: Eye, color: "blue" },
+  { type: "alert", message: "Ondas podem atingir 2.5m no período da tarde", icon: Waves, color: "red" },
 ];
 
 export function ProfessionalWeatherDashboard() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-muted/20 min-h-screen">
@@ -121,9 +121,9 @@ export function ProfessionalWeatherDashboard() {
         {alerts.map((alert, index) => {
           const Icon = alert.icon;
           const colorMap = {
-            orange: 'border-orange-500/30 bg-orange-500/5',
-            blue: 'border-blue-500/30 bg-blue-500/5',
-            red: 'border-red-500/30 bg-red-500/5',
+            orange: "border-orange-500/30 bg-orange-500/5",
+            blue: "border-blue-500/30 bg-blue-500/5",
+            red: "border-red-500/30 bg-red-500/5",
           };
           
           return (
@@ -131,9 +131,9 @@ export function ProfessionalWeatherDashboard() {
               <CardContent className="pt-6">
                 <div className="flex items-start gap-3">
                   <div className={`p-2 rounded-lg ${
-                    alert.color === 'orange' ? 'bg-orange-500/10 text-orange-600' :
-                    alert.color === 'blue' ? 'bg-blue-500/10 text-blue-600' :
-                    'bg-red-500/10 text-red-600'
+                    alert.color === "orange" ? "bg-orange-500/10 text-orange-600" :
+                      alert.color === "blue" ? "bg-blue-500/10 text-blue-600" :
+                        "bg-red-500/10 text-red-600"
                   }`}>
                     <Icon className="h-5 w-5" />
                   </div>
@@ -266,20 +266,20 @@ export function ProfessionalWeatherDashboard() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
             {[
-              { label: 'Pressão', value: '1013 hPa', icon: Gauge, color: 'purple' },
-              { label: 'Umidade', value: '65%', icon: Droplets, color: 'blue' },
-              { label: 'Direção', value: 'NE 45°', icon: Navigation, color: 'green' },
-              { label: 'UV Index', value: '8 Alto', icon: AlertTriangle, color: 'orange' },
+              { label: "Pressão", value: "1013 hPa", icon: Gauge, color: "purple" },
+              { label: "Umidade", value: "65%", icon: Droplets, color: "blue" },
+              { label: "Direção", value: "NE 45°", icon: Navigation, color: "green" },
+              { label: "UV Index", value: "8 Alto", icon: AlertTriangle, color: "orange" },
             ].map((item, index) => {
               const Icon = item.icon;
               return (
                 <Card key={index} className="border-primary/10">
                   <CardContent className="pt-6 text-center">
                     <div className={`inline-flex p-3 rounded-xl mb-3 ${
-                      item.color === 'purple' ? 'bg-purple-500/10 text-purple-600' :
-                      item.color === 'blue' ? 'bg-blue-500/10 text-blue-600' :
-                      item.color === 'green' ? 'bg-green-500/10 text-green-600' :
-                      'bg-orange-500/10 text-orange-600'
+                      item.color === "purple" ? "bg-purple-500/10 text-purple-600" :
+                        item.color === "blue" ? "bg-blue-500/10 text-blue-600" :
+                          item.color === "green" ? "bg-green-500/10 text-green-600" :
+                            "bg-orange-500/10 text-orange-600"
                     }`}>
                       <Icon className="h-6 w-6" />
                     </div>

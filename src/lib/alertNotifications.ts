@@ -4,9 +4,9 @@
  * Patch 144.0
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
-export type AlertPriority = 'low' | 'medium' | 'high' | 'critical';
+export type AlertPriority = "low" | "medium" | "high" | "critical";
 
 export interface SMSAlertOptions {
   to: string;
@@ -38,7 +38,7 @@ export interface AlertResponse {
  */
 export async function sendSMSAlert(options: SMSAlertOptions): Promise<AlertResponse> {
   try {
-    const { data, error } = await supabase.functions.invoke('send-alert-sms', {
+    const { data, error } = await supabase.functions.invoke("send-alert-sms", {
       body: options,
     });
 
@@ -48,10 +48,10 @@ export async function sendSMSAlert(options: SMSAlertOptions): Promise<AlertRespo
 
     return data as AlertResponse;
   } catch (error) {
-    console.error('Error sending SMS alert:', error);
+    console.error("Error sending SMS alert:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }
@@ -61,7 +61,7 @@ export async function sendSMSAlert(options: SMSAlertOptions): Promise<AlertRespo
  */
 export async function sendEmailAlert(options: EmailAlertOptions): Promise<AlertResponse> {
   try {
-    const { data, error } = await supabase.functions.invoke('send-alert-email', {
+    const { data, error } = await supabase.functions.invoke("send-alert-email", {
       body: options,
     });
 
@@ -71,10 +71,10 @@ export async function sendEmailAlert(options: EmailAlertOptions): Promise<AlertR
 
     return data as AlertResponse;
   } catch (error) {
-    console.error('Error sending email alert:', error);
+    console.error("Error sending email alert:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }
@@ -87,8 +87,8 @@ export async function sendCriticalAlert(
   emailOptions: EmailAlertOptions
 ): Promise<{ sms: AlertResponse; email: AlertResponse }> {
   const [smsResult, emailResult] = await Promise.all([
-    sendSMSAlert({ ...smsOptions, priority: 'critical' }),
-    sendEmailAlert({ ...emailOptions, priority: 'critical' }),
+    sendSMSAlert({ ...smsOptions, priority: "critical" }),
+    sendEmailAlert({ ...emailOptions, priority: "critical" }),
   ]);
 
   return {

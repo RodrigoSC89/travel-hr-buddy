@@ -3,13 +3,13 @@
  * PATCH 154.0 - Blockchain-based log verification
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Link2, Shield, BarChart3, ExternalLink } from 'lucide-react';
-import { getBlockchainStats, listBlockchainRecords } from './services/blockchain-service';
-import { BlockchainRecord } from './types';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link2, Shield, BarChart3, ExternalLink } from "lucide-react";
+import { getBlockchainStats, listBlockchainRecords } from "./services/blockchain-service";
+import { BlockchainRecord } from "./types";
 
 export const LogChain: React.FC = () => {
   const [stats, setStats] = useState({ total: 0, verified: 0, byNetwork: {} });
@@ -30,7 +30,7 @@ export const LogChain: React.FC = () => {
       setStats(statsData);
       setRecords(recordsData);
     } catch (error) {
-      console.error('Error loading blockchain data:', error);
+      console.error("Error loading blockchain data:", error);
     } finally {
       setLoading(false);
     }
@@ -113,7 +113,7 @@ export const LogChain: React.FC = () => {
               records.slice(0, 10).map((record) => (
                 <div key={record.id} className="flex items-start justify-between border-b pb-3">
                   <div className="space-y-1">
-                    <div className="font-medium">{record.log_events?.description || 'Log Event'}</div>
+                    <div className="font-medium">{record.log_events?.description || "Log Event"}</div>
                     <div className="text-sm text-muted-foreground">
                       Block: {record.blockNumber}
                     </div>
@@ -163,5 +163,5 @@ export const LogChain: React.FC = () => {
 };
 
 export default LogChain;
-export * from './types';
-export * from './services/blockchain-service';
+export * from "./types";
+export * from "./services/blockchain-service";

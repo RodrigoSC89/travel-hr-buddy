@@ -15,7 +15,7 @@ export interface TravelItinerary {
   returnDate?: string;
   segments: TravelSegment[];
   totalCost?: number;
-  status: 'draft' | 'confirmed' | 'in-progress' | 'completed' | 'cancelled';
+  status: "draft" | "confirmed" | "in-progress" | "completed" | "cancelled";
   bookingReference?: string;
   metadata?: Record<string, any>;
   createdAt?: string;
@@ -23,7 +23,7 @@ export interface TravelItinerary {
 }
 
 export interface TravelSegment {
-  type: 'flight' | 'hotel' | 'transport' | 'activity';
+  type: "flight" | "hotel" | "transport" | "activity";
   name: string;
   startDate: string;
   endDate?: string;
@@ -52,7 +52,7 @@ export class TravelService {
       if (!user) throw new Error("User not authenticated");
 
       const { data, error } = await supabase
-        .from('travel_itineraries')
+        .from("travel_itineraries")
         .insert({
           organization_id: itinerary.organizationId,
           trip_name: itinerary.tripName,
@@ -72,11 +72,11 @@ export class TravelService {
       if (error) throw error;
 
       // Log the creation event
-      await this.logEvent(data.id, 'itinerary_created', { itinerary: data });
+      await this.logEvent(data.id, "itinerary_created", { itinerary: data });
 
       return this.mapToItinerary(data);
     } catch (error) {
-      console.error('Error creating itinerary:', error);
+      console.error("Error creating itinerary:", error);
       throw error;
     }
   }
@@ -96,19 +96,19 @@ export class TravelService {
       if (itinerary.metadata) updateData.metadata = itinerary.metadata;
 
       const { data, error } = await supabase
-        .from('travel_itineraries')
+        .from("travel_itineraries")
         .update(updateData)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
       if (error) throw error;
 
-      await this.logEvent(id, 'itinerary_updated', { changes: updateData });
+      await this.logEvent(id, "itinerary_updated", { changes: updateData });
 
       return this.mapToItinerary(data);
     } catch (error) {
-      console.error('Error updating itinerary:', error);
+      console.error("Error updating itinerary:", error);
       throw error;
     }
   }
@@ -116,13 +116,13 @@ export class TravelService {
   async deleteItinerary(id: string): Promise<void> {
     try {
       const { error } = await supabase
-        .from('travel_itineraries')
+        .from("travel_itineraries")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error deleting itinerary:', error);
+      console.error("Error deleting itinerary:", error);
       throw error;
     }
   }
@@ -130,14 +130,14 @@ export class TravelService {
   async getItineraries(): Promise<TravelItinerary[]> {
     try {
       const { data, error } = await supabase
-        .from('travel_itineraries')
-        .select('*')
-        .order('departure_date', { ascending: false });
+        .from("travel_itineraries")
+        .select("*")
+        .order("departure_date", { ascending: false });
 
       if (error) throw error;
       return (data || []).map(this.mapToItinerary);
     } catch (error) {
-      console.error('Error fetching itineraries:', error);
+      console.error("Error fetching itineraries:", error);
       return [];
     }
   }
@@ -148,12 +148,12 @@ export class TravelService {
       if (!user) throw new Error("User not authenticated");
 
       const { data, error } = await supabase
-        .from('travel_price_alerts')
+        .from("travel_price_alerts")
         .insert({
           route: alert.route,
           target_price: alert.targetPrice,
           current_price: alert.currentPrice,
-          alert_type: 'price_drop',
+          alert_type: "price_drop",
           is_active: true
         } as any)
         .select()
@@ -162,7 +162,7 @@ export class TravelService {
       if (error) throw error;
       return this.mapToPriceAlert(data);
     } catch (error) {
-      console.error('Error creating price alert:', error);
+      console.error("Error creating price alert:", error);
       throw error;
     }
   }
@@ -170,14 +170,14 @@ export class TravelService {
   async getPriceAlerts(): Promise<PriceAlert[]> {
     try {
       const { data, error } = await supabase
-        .from('travel_price_alerts')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("travel_price_alerts")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return (data || []).map(this.mapToPriceAlert);
     } catch (error) {
-      console.error('Error fetching price alerts:', error);
+      console.error("Error fetching price alerts:", error);
       return [];
     }
   }
@@ -185,14 +185,14 @@ export class TravelService {
   private async logEvent(itineraryId: string, eventType: string, eventData: any): Promise<void> {
     try {
       await supabase
-        .from('travel_logs')
+        .from("travel_logs")
         .insert({
           itinerary_id: itineraryId,
           event_type: eventType,
           event_data: eventData
         });
     } catch (error) {
-      console.error('Error logging travel event:', error);
+      console.error("Error logging travel event:", error);
     }
   }
 

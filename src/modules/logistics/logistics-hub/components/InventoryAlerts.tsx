@@ -27,13 +27,13 @@ export const InventoryAlerts = () => {
     
     // Subscribe to inventory changes
     const channel = supabase
-      .channel('inventory_changes')
+      .channel("inventory_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'logistics_inventory'
+          event: "*",
+          schema: "public",
+          table: "logistics_inventory"
         },
         () => {
           loadLowStockItems();
@@ -49,10 +49,10 @@ export const InventoryAlerts = () => {
   const loadLowStockItems = async () => {
     try {
       const { data, error } = await supabase
-        .from('logistics_inventory')
-        .select('*')
-        .lte('quantity', supabase.raw('min_stock_level'))
-        .order('quantity', { ascending: true });
+        .from("logistics_inventory")
+        .select("*")
+        .lte("quantity", supabase.raw("min_stock_level"))
+        .order("quantity", { ascending: true });
 
       if (error) throw error;
       setLowStockItems(data || []);
@@ -66,7 +66,7 @@ export const InventoryAlerts = () => {
         });
       }
     } catch (error: any) {
-      console.error('Error loading low stock items:', error);
+      console.error("Error loading low stock items:", error);
     } finally {
       setLoading(false);
     }
@@ -75,13 +75,13 @@ export const InventoryAlerts = () => {
   const createRestockOrder = async (item: InventoryItem) => {
     try {
       const { error } = await supabase
-        .from('logistics_supply_orders')
+        .from("logistics_supply_orders")
         .insert({
           order_number: `RST-${Date.now()}`,
           item_id: item.id,
           quantity: item.min_stock_level * 2 - item.quantity,
-          status: 'pending',
-          priority: 'high',
+          status: "pending",
+          priority: "high",
           notes: `Auto-generated restock order for ${item.item_name}`,
         });
 

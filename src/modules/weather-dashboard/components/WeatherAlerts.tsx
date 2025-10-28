@@ -3,18 +3,18 @@
  * PATCH 386 - Real-time weather alert system with notifications
  */
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle, CloudRain, Wind, Thermometer, Bell } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertTriangle, CloudRain, Wind, Thermometer, Bell } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface WeatherAlert {
   id: string;
-  severity: 'info' | 'warning' | 'critical';
-  type: 'wind' | 'rain' | 'temperature' | 'storm' | 'fog';
+  severity: "info" | "warning" | "critical";
+  type: "wind" | "rain" | "temperature" | "storm" | "fog";
   title: string;
   description: string;
   location: string;
@@ -32,11 +32,11 @@ export const WeatherAlerts: React.FC = () => {
     
     // Set up real-time subscription for new alerts
     const subscription = supabase
-      .channel('weather_alerts')
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'weather_alerts'
+      .channel("weather_alerts")
+      .on("postgres_changes", {
+        event: "INSERT",
+        schema: "public",
+        table: "weather_alerts"
       }, (payload) => {
         const newAlert = payload.new as any;
         handleNewAlert(newAlert);
@@ -52,27 +52,27 @@ export const WeatherAlerts: React.FC = () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from('weather_alerts')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
+        .from("weather_alerts")
+        .select("*")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       const formattedAlerts: WeatherAlert[] = (data || []).map((alert: any) => ({
         id: alert.id,
-        severity: alert.severity || 'info',
-        type: alert.alert_type || 'wind',
+        severity: alert.severity || "info",
+        type: alert.alert_type || "wind",
         title: alert.title,
         description: alert.description,
-        location: alert.location || 'Unknown',
+        location: alert.location || "Unknown",
         validUntil: alert.valid_until,
         isActive: alert.is_active
       }));
 
       setAlerts(formattedAlerts);
     } catch (error) {
-      console.error('Error fetching weather alerts:', error);
+      console.error("Error fetching weather alerts:", error);
     } finally {
       setLoading(false);
     }
@@ -81,11 +81,11 @@ export const WeatherAlerts: React.FC = () => {
   const handleNewAlert = (newAlert: any) => {
     const alert: WeatherAlert = {
       id: newAlert.id,
-      severity: newAlert.severity || 'info',
-      type: newAlert.alert_type || 'wind',
+      severity: newAlert.severity || "info",
+      type: newAlert.alert_type || "wind",
       title: newAlert.title,
       description: newAlert.description,
-      location: newAlert.location || 'Unknown',
+      location: newAlert.location || "Unknown",
       validUntil: newAlert.valid_until,
       isActive: newAlert.is_active
     };
@@ -93,18 +93,18 @@ export const WeatherAlerts: React.FC = () => {
     setAlerts(prev => [alert, ...prev]);
 
     // Show system notification for critical alerts
-    if (alert.severity === 'critical') {
+    if (alert.severity === "critical") {
       toast({
         title: `⚠️ ${alert.title}`,
         description: alert.description,
-        variant: 'destructive',
+        variant: "destructive",
       });
 
       // Request browser notification permission if critical
-      if ('Notification' in window && Notification.permission === 'granted') {
+      if ("Notification" in window && Notification.permission === "granted") {
         new Notification(alert.title, {
           body: alert.description,
-          icon: '/weather-alert-icon.png',
+          icon: "/weather-alert-icon.png",
           tag: alert.id,
         });
       }
@@ -113,26 +113,26 @@ export const WeatherAlerts: React.FC = () => {
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case 'wind':
-        return <Wind className="h-5 w-5" />;
-      case 'rain':
-      case 'storm':
-        return <CloudRain className="h-5 w-5" />;
-      case 'temperature':
-        return <Thermometer className="h-5 w-5" />;
-      default:
-        return <AlertTriangle className="h-5 w-5" />;
+    case "wind":
+      return <Wind className="h-5 w-5" />;
+    case "rain":
+    case "storm":
+      return <CloudRain className="h-5 w-5" />;
+    case "temperature":
+      return <Thermometer className="h-5 w-5" />;
+    default:
+      return <AlertTriangle className="h-5 w-5" />;
     }
   };
 
   const getSeverityVariant = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return 'destructive';
-      case 'warning':
-        return 'default';
-      default:
-        return 'secondary';
+    case "critical":
+      return "destructive";
+    case "warning":
+      return "default";
+    default:
+      return "secondary";
     }
   };
 

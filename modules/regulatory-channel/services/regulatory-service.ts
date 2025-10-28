@@ -3,7 +3,7 @@
  * PATCH 155.0 - Secure document submission
  */
 
-import { createClient } from '@/integrations/supabase/client';
+import { createClient } from "@/integrations/supabase/client";
 import { 
   SecureSubmission, 
   SecureDocument, 
@@ -11,14 +11,14 @@ import {
   NotificationLog,
   TrackingInfo,
   TimelineEvent
-} from '../types';
-import { encryptData, generateEncryptionKey, generateChecksum } from '../utils/encryption';
+} from "../types";
+import { encryptData, generateEncryptionKey, generateChecksum } from "../utils/encryption";
 
 /**
  * Submit secure document to regulatory authority
  */
 export const submitSecureDocument = async (
-  submission: Omit<SecureSubmission, 'id' | 'encryptedData' | 'encryptionKey' | 'submittedAt' | 'status'>
+  submission: Omit<SecureSubmission, "id" | "encryptedData" | "encryptionKey" | "submittedAt" | "status">
 ): Promise<SecureSubmission> => {
   const supabase = createClient();
 
@@ -41,12 +41,12 @@ export const submitSecureDocument = async (
     encryptedData,
     encryptionKey,
     submittedAt: new Date().toISOString(),
-    status: 'pending'
+    status: "pending"
   };
 
   // Store in database
   const { error } = await supabase
-    .from('regulatory_submissions')
+    .from("regulatory_submissions")
     .insert([secureSubmission]);
 
   if (error) throw error;
@@ -55,7 +55,7 @@ export const submitSecureDocument = async (
   await sendNotifications(secureSubmission);
 
   // Add to timeline
-  await addTimelineEvent(secureSubmission.id, 'submitted', 'Submission created and encrypted');
+  await addTimelineEvent(secureSubmission.id, "submitted", "Submission created and encrypted");
 
   return secureSubmission;
 };
@@ -68,9 +68,9 @@ const sendNotifications = async (submission: SecureSubmission): Promise<void> =>
 
   // Fetch authority details
   const { data: authority } = await supabase
-    .from('regulatory_authorities')
-    .select('*')
-    .eq('id', submission.authorityId)
+    .from("regulatory_authorities")
+    .select("*")
+    .eq("id", submission.authorityId)
     .single();
 
   if (!authority) return;
@@ -82,7 +82,7 @@ const sendNotifications = async (submission: SecureSubmission): Promise<void> =>
     notifications.push({
       id: `NOTIF-${Date.now()}-EMAIL`,
       submissionId: submission.id,
-      channel: 'email',
+      channel: "email",
       recipient: authority.email,
       message: `New secure submission: ${submission.subject}`,
       sentAt: new Date().toISOString(),
@@ -95,7 +95,7 @@ const sendNotifications = async (submission: SecureSubmission): Promise<void> =>
     notifications.push({
       id: `NOTIF-${Date.now()}-WA`,
       submissionId: submission.id,
-      channel: 'whatsapp',
+      channel: "whatsapp",
       recipient: authority.whatsapp,
       message: `New secure submission: ${submission.subject}`,
       sentAt: new Date().toISOString(),
@@ -105,7 +105,7 @@ const sendNotifications = async (submission: SecureSubmission): Promise<void> =>
 
   // Store notifications
   if (notifications.length > 0) {
-    await supabase.from('notification_logs').insert(notifications);
+    await supabase.from("notification_logs").insert(notifications);
   }
 };
 
@@ -126,7 +126,7 @@ const addTimelineEvent = async (
     timestamp: new Date().toISOString()
   };
 
-  await supabase.from('submission_timeline').insert([{
+  await supabase.from("submission_timeline").insert([{
     submissionId,
     ...event
   }]);
@@ -140,19 +140,19 @@ export const getTrackingInfo = async (submissionId: string): Promise<TrackingInf
 
   // Fetch submission
   const { data: submission } = await supabase
-    .from('regulatory_submissions')
-    .select('*')
-    .eq('id', submissionId)
+    .from("regulatory_submissions")
+    .select("*")
+    .eq("id", submissionId)
     .single();
 
   if (!submission) return null;
 
   // Fetch timeline
   const { data: timeline } = await supabase
-    .from('submission_timeline')
-    .select('*')
-    .eq('submissionId', submissionId)
-    .order('timestamp', { ascending: true });
+    .from("submission_timeline")
+    .select("*")
+    .eq("submissionId", submissionId)
+    .order("timestamp", { ascending: true });
 
   return {
     submissionId,
@@ -171,22 +171,22 @@ export const listSubmissions = async (filters?: {
   const supabase = createClient();
 
   let query = supabase
-    .from('regulatory_submissions')
-    .select('*, regulatory_authorities(*)')
-    .order('submittedAt', { ascending: false });
+    .from("regulatory_submissions")
+    .select("*, regulatory_authorities(*)")
+    .order("submittedAt", { ascending: false });
 
   if (filters?.status) {
-    query = query.eq('status', filters.status);
+    query = query.eq("status", filters.status);
   }
 
   if (filters?.authorityId) {
-    query = query.eq('authorityId', filters.authorityId);
+    query = query.eq("authorityId", filters.authorityId);
   }
 
   const { data, error } = await query;
 
   if (error) {
-    console.error('Error listing submissions:', error);
+    console.error("Error listing submissions:", error);
     return [];
   }
 
@@ -200,12 +200,12 @@ export const listAuthorities = async () => {
   const supabase = createClient();
 
   const { data, error } = await supabase
-    .from('regulatory_authorities')
-    .select('*')
-    .order('name', { ascending: true });
+    .from("regulatory_authorities")
+    .select("*")
+    .order("name", { ascending: true });
 
   if (error) {
-    console.error('Error listing authorities:', error);
+    console.error("Error listing authorities:", error);
     return [];
   }
 
@@ -217,19 +217,19 @@ export const listAuthorities = async () => {
  */
 export const updateSubmissionStatus = async (
   submissionId: string,
-  status: SecureSubmission['status']
+  status: SecureSubmission["status"]
 ): Promise<void> => {
   const supabase = createClient();
 
   await supabase
-    .from('regulatory_submissions')
+    .from("regulatory_submissions")
     .update({ status })
-    .eq('id', submissionId);
+    .eq("id", submissionId);
 
   // Add timeline event
   await addTimelineEvent(
     submissionId,
-    'status_update',
+    "status_update",
     `Status changed to ${status}`
   );
 };
@@ -244,13 +244,13 @@ export const cleanupOldSubmissions = async (): Promise<number> => {
   cutoffDate.setDate(cutoffDate.getDate() - 90);
 
   const { data, error } = await supabase
-    .from('regulatory_submissions')
+    .from("regulatory_submissions")
     .delete()
-    .lt('submittedAt', cutoffDate.toISOString())
+    .lt("submittedAt", cutoffDate.toISOString())
     .select();
 
   if (error) {
-    console.error('Error cleaning up submissions:', error);
+    console.error("Error cleaning up submissions:", error);
     return 0;
   }
 

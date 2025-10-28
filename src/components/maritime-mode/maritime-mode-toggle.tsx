@@ -5,15 +5,15 @@
  * Enables/disables maritime mode for field operations
  */
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Ship, Sun } from 'lucide-react';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Ship, Sun } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 
 interface MaritimeModeContextType {
   isMaritimeMode: boolean;
@@ -27,14 +27,14 @@ export function MaritimeModeProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     // Load saved preference
-    const saved = localStorage.getItem('maritime-mode');
-    if (saved === 'enabled') {
+    const saved = localStorage.getItem("maritime-mode");
+    if (saved === "enabled") {
       setIsMaritimeMode(true);
-      document.documentElement.classList.add('maritime-mode');
+      document.documentElement.classList.add("maritime-mode");
     }
 
     // Also load the maritime CSS
-    import('@/styles/maritime-mode.css');
+    import("@/styles/maritime-mode.css");
   }, []);
 
   const toggleMaritimeMode = () => {
@@ -42,11 +42,11 @@ export function MaritimeModeProvider({ children }: { children: React.ReactNode }
     setIsMaritimeMode(newValue);
 
     if (newValue) {
-      document.documentElement.classList.add('maritime-mode');
-      localStorage.setItem('maritime-mode', 'enabled');
+      document.documentElement.classList.add("maritime-mode");
+      localStorage.setItem("maritime-mode", "enabled");
     } else {
-      document.documentElement.classList.remove('maritime-mode');
-      localStorage.setItem('maritime-mode', 'disabled');
+      document.documentElement.classList.remove("maritime-mode");
+      localStorage.setItem("maritime-mode", "disabled");
     }
   };
 
@@ -60,7 +60,7 @@ export function MaritimeModeProvider({ children }: { children: React.ReactNode }
 export function useMaritimeMode() {
   const context = useContext(MaritimeModeContext);
   if (context === undefined) {
-    throw new Error('useMaritimeMode must be used within MaritimeModeProvider');
+    throw new Error("useMaritimeMode must be used within MaritimeModeProvider");
   }
   return context;
 }
@@ -87,7 +87,7 @@ export function MaritimeModeToggle() {
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={toggleMaritimeMode}>
           <Ship className="mr-2 h-4 w-4" />
-          {isMaritimeMode ? 'Disable' : 'Enable'} Maritime Mode
+          {isMaritimeMode ? "Disable" : "Enable"} Maritime Mode
         </DropdownMenuItem>
         <DropdownMenuItem disabled>
           <span className="text-xs text-muted-foreground">
@@ -129,9 +129,9 @@ export function MaritimeModeSettings() {
           </div>
           <Button
             onClick={toggleMaritimeMode}
-            variant={isMaritimeMode ? 'default' : 'outline'}
+            variant={isMaritimeMode ? "default" : "outline"}
           >
-            {isMaritimeMode ? 'Enabled' : 'Disabled'}
+            {isMaritimeMode ? "Enabled" : "Disabled"}
           </Button>
         </div>
 

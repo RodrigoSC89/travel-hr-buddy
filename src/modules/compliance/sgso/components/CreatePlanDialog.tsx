@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,20 +7,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CreatePlanDialogProps {
   open: boolean;
@@ -34,11 +34,11 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
   onSuccess,
 }) => {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    status: 'draft',
-    start_date: '',
-    end_date: '',
+    title: "",
+    description: "",
+    status: "draft",
+    start_date: "",
+    end_date: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -49,9 +49,9 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      if (!user) throw new Error("Not authenticated");
 
-      const { error } = await supabase.from('sgso_plans').insert([
+      const { error } = await supabase.from("sgso_plans").insert([
         {
           ...formData,
           created_by: user.id,
@@ -62,25 +62,25 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
       if (error) throw error;
 
       toast({
-        title: 'Plan created',
-        description: 'SGSO plan has been created successfully.',
+        title: "Plan created",
+        description: "SGSO plan has been created successfully.",
       });
 
       setFormData({
-        title: '',
-        description: '',
-        status: 'draft',
-        start_date: '',
-        end_date: '',
+        title: "",
+        description: "",
+        status: "draft",
+        start_date: "",
+        end_date: "",
       });
 
       onOpenChange(false);
       onSuccess();
     } catch (error: any) {
       toast({
-        title: 'Error creating plan',
+        title: "Error creating plan",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -169,7 +169,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Creating...' : 'Create Plan'}
+              {isSubmitting ? "Creating..." : "Create Plan"}
             </Button>
           </DialogFooter>
         </form>

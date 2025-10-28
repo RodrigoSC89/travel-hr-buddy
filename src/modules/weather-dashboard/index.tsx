@@ -12,8 +12,8 @@ import { RealTimeWeatherData } from "./components/RealTimeWeatherData";
 import { WeatherAlerts } from "./components/WeatherAlerts";
 
 const WeatherDashboard = () => {
-  const [selectedOverlay, setSelectedOverlay] = useState<WindyOverlay>('wind');
-  const [activeTab, setActiveTab] = useState('overview');
+  const [selectedOverlay, setSelectedOverlay] = useState<WindyOverlay>("wind");
+  const [activeTab, setActiveTab] = useState("overview");
   
   return (
     <div className="container mx-auto p-6 space-y-6">

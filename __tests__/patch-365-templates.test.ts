@@ -222,7 +222,7 @@ describe("PATCH 365 - Document Templates", () => {
 
       let result = template;
       Object.entries(values).forEach(([key, value]) => {
-        result = result.replace(new RegExp(`{{${key}}}`, 'g'), value);
+        result = result.replace(new RegExp(`{{${key}}}`, "g"), value);
       });
 
       expect(result).toBe("Hello John, welcome to Acme Corp!");

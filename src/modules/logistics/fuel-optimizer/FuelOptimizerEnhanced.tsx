@@ -241,7 +241,7 @@ export const FuelOptimizerEnhanced: React.FC = () => {
 
       fetchSavedResults();
     } catch (error) {
-      console.error('Optimization error:', error);
+      console.error("Optimization error:", error);
       toast({
         title: "Optimization Failed",
         description: "Failed to calculate optimization",
@@ -459,7 +459,7 @@ export const FuelOptimizerEnhanced: React.FC = () => {
                       </div>
                     </div>
                     <Badge variant={route.fuel_savings > 3 ? "default" : "secondary"}>
-                      {route.fuel_savings > 0 ? `+${route.fuel_savings.toFixed(1)}%` : 'Baseline'}
+                      {route.fuel_savings > 0 ? `+${route.fuel_savings.toFixed(1)}%` : "Baseline"}
                     </Badge>
                   </div>
                 ))}

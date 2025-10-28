@@ -1,59 +1,59 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { FileText, Download, Calendar, Clock, Filter, Send } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { FileText, Download, Calendar, Clock, Filter, Send } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const ComplianceReports = () => {
   const { toast } = useToast();
   const [showForm, setShowForm] = useState(false);
   const [reportConfig, setReportConfig] = useState({
-    title: '',
-    template: '',
-    format: 'pdf',
-    schedule: 'manual'
+    title: "",
+    template: "",
+    format: "pdf",
+    schedule: "manual"
   });
 
   const [reports, setReports] = useState([
     {
-      id: '1',
-      title: 'Relatório Mensal SGSO',
-      template: 'SGSO Compliance',
-      format: 'pdf',
-      status: 'completed',
-      generated_at: '2025-01-15T10:00:00',
+      id: "1",
+      title: "Relatório Mensal SGSO",
+      template: "SGSO Compliance",
+      format: "pdf",
+      status: "completed",
+      generated_at: "2025-01-15T10:00:00",
       scheduled: false
     },
     {
-      id: '2',
-      title: 'Auditoria Trimestral',
-      template: 'Full Audit',
-      format: 'excel',
-      status: 'scheduled',
-      generated_at: '2025-01-20T09:00:00',
+      id: "2",
+      title: "Auditoria Trimestral",
+      template: "Full Audit",
+      format: "excel",
+      status: "scheduled",
+      generated_at: "2025-01-20T09:00:00",
       scheduled: true,
-      next_run: '2025-02-01'
+      next_run: "2025-02-01"
     }
   ]);
 
   const templates = [
-    'SGSO Compliance',
-    'Full Audit',
-    'Environmental Report',
-    'Safety Metrics',
-    'Training Summary'
+    "SGSO Compliance",
+    "Full Audit",
+    "Environmental Report",
+    "Safety Metrics",
+    "Training Summary"
   ];
 
   const handleCreateReport = () => {
     if (!reportConfig.title || !reportConfig.template) {
       toast({
-        title: 'Campos obrigatórios',
-        description: 'Preencha título e template',
-        variant: 'destructive'
+        title: "Campos obrigatórios",
+        description: "Preencha título e template",
+        variant: "destructive"
       });
       return;
     }
@@ -61,63 +61,63 @@ const ComplianceReports = () => {
     const report = {
       id: Date.now().toString(),
       ...reportConfig,
-      status: reportConfig.schedule === 'manual' ? 'pending' : 'scheduled',
+      status: reportConfig.schedule === "manual" ? "pending" : "scheduled",
       generated_at: new Date().toISOString(),
-      scheduled: reportConfig.schedule !== 'manual',
-      next_run: reportConfig.schedule !== 'manual' ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : undefined
+      scheduled: reportConfig.schedule !== "manual",
+      next_run: reportConfig.schedule !== "manual" ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0] : undefined
     };
 
     setReports([report, ...reports]);
     setShowForm(false);
-    setReportConfig({ title: '', template: '', format: 'pdf', schedule: 'manual' });
+    setReportConfig({ title: "", template: "", format: "pdf", schedule: "manual" });
     
     toast({
-      title: 'Relatório configurado',
-      description: report.scheduled ? 'Será gerado automaticamente' : 'Iniciando geração'
+      title: "Relatório configurado",
+      description: report.scheduled ? "Será gerado automaticamente" : "Iniciando geração"
     });
   };
 
   const handleDownload = (report: any) => {
     toast({
-      title: 'Baixando relatório',
+      title: "Baixando relatório",
       description: `Formato: ${report.format.toUpperCase()}`
     });
   };
 
   const handleGenerateNow = (reportId: string) => {
     setReports(reports.map(r => 
-      r.id === reportId ? { ...r, status: 'generating' } : r
+      r.id === reportId ? { ...r, status: "generating" } : r
     ));
 
     setTimeout(() => {
       setReports(reports.map(r => 
-        r.id === reportId ? { ...r, status: 'completed', generated_at: new Date().toISOString() } : r
+        r.id === reportId ? { ...r, status: "completed", generated_at: new Date().toISOString() } : r
       ));
       toast({
-        title: 'Relatório gerado',
-        description: 'Disponível para download'
+        title: "Relatório gerado",
+        description: "Disponível para download"
       });
     }, 2000);
   };
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      completed: 'bg-green-500',
-      generating: 'bg-blue-500',
-      scheduled: 'bg-amber-500',
-      pending: 'bg-muted',
-      error: 'bg-destructive'
+      completed: "bg-green-500",
+      generating: "bg-blue-500",
+      scheduled: "bg-amber-500",
+      pending: "bg-muted",
+      error: "bg-destructive"
     };
-    return colors[status] || 'bg-muted';
+    return colors[status] || "bg-muted";
   };
 
   const getStatusText = (status: string) => {
     const texts: Record<string, string> = {
-      completed: 'Concluído',
-      generating: 'Gerando',
-      scheduled: 'Agendado',
-      pending: 'Pendente',
-      error: 'Erro'
+      completed: "Concluído",
+      generating: "Gerando",
+      scheduled: "Agendado",
+      pending: "Pendente",
+      error: "Erro"
     };
     return texts[status] || status;
   };
@@ -146,7 +146,7 @@ const ComplianceReports = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {reports.filter(r => r.status === 'completed').length}
+              {reports.filter(r => r.status === "completed").length}
             </div>
           </CardContent>
         </Card>
@@ -281,15 +281,15 @@ const ComplianceReports = () => {
                     <span>Formato: {report.format.toUpperCase()}</span>
                     <span className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
-                      {new Date(report.generated_at).toLocaleDateString('pt-BR')}
+                      {new Date(report.generated_at).toLocaleDateString("pt-BR")}
                     </span>
                     {report.next_run && (
-                      <span>Próxima: {new Date(report.next_run).toLocaleDateString('pt-BR')}</span>
+                      <span>Próxima: {new Date(report.next_run).toLocaleDateString("pt-BR")}</span>
                     )}
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  {report.status === 'scheduled' && (
+                  {report.status === "scheduled" && (
                     <Button 
                       variant="outline" 
                       size="sm"
@@ -299,7 +299,7 @@ const ComplianceReports = () => {
                       Gerar Agora
                     </Button>
                   )}
-                  {report.status === 'completed' && (
+                  {report.status === "completed" && (
                     <Button 
                       variant="outline" 
                       size="sm"

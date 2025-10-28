@@ -1,10 +1,10 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { History, FileText } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { History, FileText } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VersionHistoryProps {
   selectedPlanId?: string;
@@ -27,18 +27,18 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({ selectedPlanId }
   const loadVersions = async () => {
     try {
       const { data, error } = await supabase
-        .from('sgso_versions')
-        .select('*')
-        .eq('plan_id', selectedPlanId)
-        .order('created_at', { ascending: false });
+        .from("sgso_versions")
+        .select("*")
+        .eq("plan_id", selectedPlanId)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setVersions(data || []);
     } catch (error: any) {
       toast({
-        title: 'Error loading versions',
+        title: "Error loading versions",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);

@@ -1,12 +1,12 @@
 // @ts-nocheck
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Send } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Send } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface ChatInterfaceProps {
   channel: any;
@@ -14,7 +14,7 @@ interface ChatInterfaceProps {
 
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({ channel }) => {
   const [messages, setMessages] = useState<any[]>([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
@@ -27,11 +27,11 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ channel }) => {
       const subscription = supabase
         .channel(`messages_${channel.id}`)
         .on(
-          'postgres_changes',
+          "postgres_changes",
           {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'channel_messages',
+            event: "INSERT",
+            schema: "public",
+            table: "channel_messages",
             filter: `channel_id=eq.${channel.id}`,
           },
           (payload) => {
@@ -50,10 +50,10 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ channel }) => {
   const loadMessages = async () => {
     try {
       const { data, error } = await supabase
-        .from('channel_messages')
-        .select('*')
-        .eq('channel_id', channel.id)
-        .order('created_at', { ascending: true })
+        .from("channel_messages")
+        .select("*")
+        .eq("channel_id", channel.id)
+        .order("created_at", { ascending: true })
         .limit(100);
 
       if (error) throw error;
@@ -61,9 +61,9 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ channel }) => {
       setTimeout(scrollToBottom, 100);
     } catch (error: any) {
       toast({
-        title: 'Error loading messages',
+        title: "Error loading messages",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -81,9 +81,9 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ channel }) => {
     setIsSending(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      if (!user) throw new Error("Not authenticated");
 
-      const { error } = await supabase.from('channel_messages').insert([
+      const { error } = await supabase.from("channel_messages").insert([
         {
           channel_id: channel.id,
           user_id: user.id,
@@ -92,12 +92,12 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ channel }) => {
       ]);
 
       if (error) throw error;
-      setNewMessage('');
+      setNewMessage("");
     } catch (error: any) {
       toast({
-        title: 'Error sending message',
+        title: "Error sending message",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsSending(false);

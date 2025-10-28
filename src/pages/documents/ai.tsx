@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { createWorker } from 'tesseract.js';
+import { createWorker } from "tesseract.js";
 import { AIDocumentsAnalyzer } from "@/components/documents/ai-documents-analyzer";
 import { SemanticDocumentSearch } from "@/components/documents/SemanticDocumentSearch";
 import {
@@ -211,7 +211,7 @@ export default function AIDocuments() {
   // Simple keyword extraction
   const extractKeywords = (text: string) => {
     const words = text.toLowerCase()
-      .replace(/[^a-záàâãéèêíïóôõöúçñ\s]/g, '')
+      .replace(/[^a-záàâãéèêíïóôõöúçñ\s]/g, "")
       .split(/\s+/)
       .filter(word => word.length > 4);
     
@@ -234,8 +234,8 @@ export default function AIDocuments() {
     
     let highlighted = text;
     keywords.slice(0, 10).forEach(kw => {
-      const regex = new RegExp(`\\b${kw.text || kw}\\b`, 'gi');
-      highlighted = highlighted.replace(regex, `<mark class="bg-yellow-200 dark:bg-yellow-800">$&</mark>`);
+      const regex = new RegExp(`\\b${kw.text || kw}\\b`, "gi");
+      highlighted = highlighted.replace(regex, "<mark class=\"bg-yellow-200 dark:bg-yellow-800\">$&</mark>");
     });
     
     return highlighted;
@@ -243,14 +243,14 @@ export default function AIDocuments() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case "processing":
-        return <Clock className="h-4 w-4 text-blue-600 animate-spin" />;
-      case "failed":
-        return <XCircle className="h-4 w-4 text-red-600" />;
-      default:
-        return <AlertCircle className="h-4 w-4 text-gray-600" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case "processing":
+      return <Clock className="h-4 w-4 text-blue-600 animate-spin" />;
+    case "failed":
+      return <XCircle className="h-4 w-4 text-red-600" />;
+    default:
+      return <AlertCircle className="h-4 w-4 text-gray-600" />;
     }
   };
 
@@ -422,7 +422,7 @@ export default function AIDocuments() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => window.open(doc.file_url, '_blank')}
+                          onClick={() => window.open(doc.file_url, "_blank")}
                         >
                           <Download className="w-4 h-4" />
                         </Button>

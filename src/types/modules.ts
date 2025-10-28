@@ -8,16 +8,16 @@ export interface CrewRotation {
   id: string;
   crew_member_id: string;
   vessel_id?: string;
-  rotation_type: 'embarkation' | 'disembarkation' | 'rotation' | 'leave' | 'emergency';
+  rotation_type: "embarkation" | "disembarkation" | "rotation" | "leave" | "emergency";
   scheduled_date: string;
   actual_date?: string;
-  status: 'scheduled' | 'confirmed' | 'completed' | 'cancelled' | 'delayed';
+  status: "scheduled" | "confirmed" | "completed" | "cancelled" | "delayed";
   departure_port?: string;
   arrival_port?: string;
   transportation_method?: string;
   flight_details?: Record<string, any>;
   accommodation_details?: Record<string, any>;
-  documentation_status: 'pending' | 'verified' | 'incomplete' | 'expired';
+  documentation_status: "pending" | "verified" | "incomplete" | "expired";
   medical_clearance: boolean;
   visa_status?: string;
   notes?: string;
@@ -33,7 +33,7 @@ export interface CrewAssignment {
   role: string;
   rank?: string;
   department?: string;
-  assignment_status: 'active' | 'on_leave' | 'completed' | 'terminated';
+  assignment_status: "active" | "on_leave" | "completed" | "terminated";
   assigned_date: string;
   end_date?: string;
   rotation_schedule?: string;
@@ -54,11 +54,11 @@ export interface IoTSensorData {
   id: string;
   vessel_id: string;
   sensor_id: string;
-  sensor_type: 'temperature' | 'pressure' | 'vibration' | 'fuel_level' | 'engine_rpm' | 'gps' | 'weather' | 'other';
+  sensor_type: "temperature" | "pressure" | "vibration" | "fuel_level" | "engine_rpm" | "gps" | "weather" | "other";
   sensor_location?: string;
   value: number;
   unit: string;
-  status: 'normal' | 'warning' | 'critical' | 'offline';
+  status: "normal" | "warning" | "critical" | "offline";
   threshold_min?: number;
   threshold_max?: number;
   is_alert: boolean;
@@ -70,7 +70,7 @@ export interface IoTSensorData {
 export interface CrewRotationLog {
   id: string;
   rotation_id: string;
-  log_type: 'status_change' | 'notification_sent' | 'document_updated' | 'comment' | 'system';
+  log_type: "status_change" | "notification_sent" | "document_updated" | "comment" | "system";
   description: string;
   previous_status?: string;
   new_status?: string;
@@ -82,10 +82,10 @@ export interface CrewRotationLog {
 export interface ChecklistRecord {
   id: string;
   vessel_id?: string;
-  checklist_type: 'pre_departure' | 'arrival' | 'safety' | 'maintenance' | 'inspection' | 'emergency' | 'custom';
+  checklist_type: "pre_departure" | "arrival" | "safety" | "maintenance" | "inspection" | "emergency" | "custom";
   checklist_name: string;
   items: any[];
-  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'expired';
+  status: "pending" | "in_progress" | "completed" | "failed" | "expired";
   assigned_to?: string;
   completed_by?: string;
   started_at?: string;
@@ -103,7 +103,7 @@ export interface ChecklistRecord {
 export interface VesselStatus {
   id: string;
   vessel_id: string;
-  status: 'underway' | 'at_anchor' | 'moored' | 'docked' | 'maintenance' | 'emergency' | 'offline';
+  status: "underway" | "at_anchor" | "moored" | "docked" | "maintenance" | "emergency" | "offline";
   speed_knots?: number;
   heading?: number;
   latitude?: number;
@@ -126,11 +126,11 @@ export interface MaintenanceAlert {
   id: string;
   vessel_id: string;
   maintenance_id?: string;
-  alert_type: 'due_soon' | 'overdue' | 'critical' | 'parts_needed' | 'inspection_required';
+  alert_type: "due_soon" | "overdue" | "critical" | "parts_needed" | "inspection_required";
   title: string;
   description?: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  status: 'active' | 'acknowledged' | 'resolved' | 'dismissed';
+  severity: "low" | "medium" | "high" | "critical";
+  status: "active" | "acknowledged" | "resolved" | "dismissed";
   due_date?: string;
   acknowledged_at?: string;
   acknowledged_by?: string;
@@ -167,11 +167,11 @@ export interface CrewMessage {
   recipient_id?: string;
   vessel_id?: string;
   channel_id?: string;
-  message_type: 'text' | 'voice' | 'attachment' | 'system' | 'alert';
+  message_type: "text" | "voice" | "attachment" | "system" | "alert";
   content?: string;
   subject?: string;
-  priority: 'low' | 'normal' | 'high' | 'urgent';
-  status: 'draft' | 'sent' | 'delivered' | 'read' | 'failed';
+  priority: "low" | "normal" | "high" | "urgent";
+  status: "draft" | "sent" | "delivered" | "read" | "failed";
   is_read: boolean;
   read_at?: string;
   reply_to_id?: string;
@@ -225,16 +225,16 @@ export interface VoyagePlan {
   planned_arrival: string;
   estimated_duration_hours?: number;
   total_distance_nm?: number;
-  status: 'draft' | 'approved' | 'active' | 'completed' | 'cancelled';
+  status: "draft" | "approved" | "active" | "completed" | "cancelled";
   weather_checked: boolean;
   fuel_optimized: boolean;
-  route_type: 'shortest' | 'fastest' | 'economical' | 'safest' | 'custom';
+  route_type: "shortest" | "fastest" | "economical" | "safest" | "custom";
   average_speed_knots?: number;
   fuel_estimate?: number;
   crew_required?: number;
   cargo_capacity_used?: number;
   special_considerations?: string;
-  approval_status: 'pending' | 'approved' | 'rejected';
+  approval_status: "pending" | "approved" | "rejected";
   approved_by?: string;
   approved_at?: string;
   metadata?: Record<string, any>;
@@ -257,7 +257,7 @@ export interface RouteForecast {
   sea_state?: string;
   visibility_nm?: number;
   precipitation_mm?: number;
-  weather_risk_level?: 'low' | 'moderate' | 'high' | 'severe';
+  weather_risk_level?: "low" | "moderate" | "high" | "severe";
   recommended_action?: string;
   data_source?: string;
   confidence_level?: number;
@@ -268,7 +268,7 @@ export interface RouteForecast {
 export interface FuelSuggestion {
   id: string;
   voyage_plan_id: string;
-  suggestion_type: 'route_optimization' | 'speed_adjustment' | 'weather_routing' | 'port_optimization';
+  suggestion_type: "route_optimization" | "speed_adjustment" | "weather_routing" | "port_optimization";
   current_fuel_estimate: number;
   optimized_fuel_estimate: number;
   potential_savings_percentage?: number;
@@ -278,7 +278,7 @@ export interface FuelSuggestion {
   optimized_speed_profile?: Record<string, any>;
   confidence_score?: number;
   factors_considered?: any[];
-  status: 'pending' | 'accepted' | 'rejected' | 'implemented';
+  status: "pending" | "accepted" | "rejected" | "implemented";
   implemented_at?: string;
   actual_savings?: number;
   metadata?: Record<string, any>;
@@ -292,10 +292,10 @@ export interface FuelSuggestion {
 export interface NotificationHistory {
   id: string;
   user_id: string;
-  notification_type: 'push' | 'email' | 'sms' | 'in_app' | 'webhook';
+  notification_type: "push" | "email" | "sms" | "in_app" | "webhook";
   title: string;
   message: string;
-  delivery_status: 'pending' | 'sent' | 'delivered' | 'failed' | 'bounced';
+  delivery_status: "pending" | "sent" | "delivered" | "failed" | "bounced";
   delivery_method?: string;
   recipient_address?: string;
   sent_at?: string;
@@ -305,7 +305,7 @@ export interface NotificationHistory {
   error_message?: string;
   retry_count: number;
   max_retries: number;
-  priority: 'low' | 'normal' | 'high' | 'urgent';
+  priority: "low" | "normal" | "high" | "urgent";
   category?: string;
   source_module?: string;
   related_entity_type?: string;
@@ -340,9 +340,9 @@ export interface CrewHealthRecord {
   id: string;
   crew_member_id: string;
   vessel_id?: string;
-  record_type: 'daily_check' | 'medical_exam' | 'incident' | 'vaccination' | 'mental_health' | 'fitness';
+  record_type: "daily_check" | "medical_exam" | "incident" | "vaccination" | "mental_health" | "fitness";
   record_date: string;
-  overall_health_status?: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
+  overall_health_status?: "excellent" | "good" | "fair" | "poor" | "critical";
   temperature_celsius?: number;
   blood_pressure_systolic?: number;
   blood_pressure_diastolic?: number;
@@ -350,7 +350,7 @@ export interface CrewHealthRecord {
   fatigue_level?: number;
   stress_level?: number;
   sleep_hours?: number;
-  sleep_quality?: 'poor' | 'fair' | 'good' | 'excellent';
+  sleep_quality?: "poor" | "fair" | "good" | "excellent";
   symptoms?: string[];
   medications?: string[];
   notes?: string;
@@ -368,11 +368,11 @@ export interface WellbeingAlert {
   id: string;
   crew_member_id: string;
   vessel_id?: string;
-  alert_type: 'fatigue_risk' | 'health_concern' | 'stress_high' | 'mental_health' | 'medical_due' | 'fitness_issue';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  alert_type: "fatigue_risk" | "health_concern" | "stress_high" | "mental_health" | "medical_due" | "fitness_issue";
+  severity: "low" | "medium" | "high" | "critical";
   title: string;
   description: string;
-  status: 'active' | 'acknowledged' | 'resolved' | 'dismissed' | 'escalated';
+  status: "active" | "acknowledged" | "resolved" | "dismissed" | "escalated";
   detected_at: string;
   acknowledged_at?: string;
   acknowledged_by?: string;
@@ -406,14 +406,14 @@ export interface UserRole {
 export interface UserAccessLog {
   id: string;
   user_id?: string;
-  action: 'login' | 'logout' | 'page_view' | 'api_call' | 'data_access' | 'data_modify' | 'failed_login' | 'permission_denied';
+  action: "login" | "logout" | "page_view" | "api_call" | "data_access" | "data_modify" | "failed_login" | "permission_denied";
   resource_type?: string;
   resource_id?: string;
   ip_address?: string;
   user_agent?: string;
   location?: string;
   session_id?: string;
-  status?: 'success' | 'failure' | 'blocked';
+  status?: "success" | "failure" | "blocked";
   error_message?: string;
   metadata?: Record<string, any>;
   created_at: string;

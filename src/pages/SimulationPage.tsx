@@ -4,21 +4,21 @@
  * UI panel for creating and running mission simulations
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { FlaskConical, Play, Trash2, Eye } from 'lucide-react';
-import { missionSimulationCore } from '@/ai/missionSimulationCore';
-import type { SimulationBlueprint, FailureInjection } from '@/ai/missionSimulationCore';
-import { toast } from 'sonner';
-import { logger } from '@/lib/logger';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { FlaskConical, Play, Trash2, Eye } from "lucide-react";
+import { missionSimulationCore } from "@/ai/missionSimulationCore";
+import type { SimulationBlueprint, FailureInjection } from "@/ai/missionSimulationCore";
+import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export default function SimulationPage() {
   const [simulations, setSimulations] = useState<any[]>([]);
@@ -26,8 +26,8 @@ export default function SimulationPage() {
   const [isRunning, setIsRunning] = useState(false);
 
   // Form state
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [failureInjections, setFailureInjections] = useState<FailureInjection>({
     system_crash: false,
     comms_loss: false,
@@ -45,14 +45,14 @@ export default function SimulationPage() {
       const sims = await missionSimulationCore.listSimulations();
       setSimulations(sims);
     } catch (error) {
-      logger.error('[SimulationPage] Failed to load simulations', { error });
-      toast.error('Failed to load simulations');
+      logger.error("[SimulationPage] Failed to load simulations", { error });
+      toast.error("Failed to load simulations");
     }
   };
 
   const createSimulation = async () => {
     if (!name) {
-      toast.error('Please provide a simulation name');
+      toast.error("Please provide a simulation name");
       return;
     }
 
@@ -62,12 +62,12 @@ export default function SimulationPage() {
         description,
         vessels: [
           {
-            id: 'vessel-1',
-            name: 'MV Atlantic',
-            type: 'cargo',
+            id: "vessel-1",
+            name: "MV Atlantic",
+            type: "cargo",
             capacity: 50000,
             currentLocation: { latitude: -23.5505, longitude: -46.6333 },
-            status: 'operational',
+            status: "operational",
             crew_count: 20,
           },
         ],
@@ -78,47 +78,47 @@ export default function SimulationPage() {
             wind_speed: 15,
             wind_direction: 180,
             visibility: 10000,
-            sea_state: 'moderate',
+            sea_state: "moderate",
             timestamp: new Date(),
-            risk_level: 'safe',
+            risk_level: "safe",
           },
         ],
         crew: [
           {
-            id: 'crew-1',
-            name: 'Captain Smith',
-            role: 'Captain',
+            id: "crew-1",
+            name: "Captain Smith",
+            role: "Captain",
             experience_years: 15,
-            certifications: ['Master Mariner', 'STCW'],
-            status: 'available',
+            certifications: ["Master Mariner", "STCW"],
+            status: "available",
           },
           {
-            id: 'crew-2',
-            name: 'Engineer Jones',
-            role: 'Chief Engineer',
+            id: "crew-2",
+            name: "Engineer Jones",
+            role: "Chief Engineer",
             experience_years: 10,
-            certifications: ['Marine Engineering', 'STCW'],
-            status: 'available',
+            certifications: ["Marine Engineering", "STCW"],
+            status: "available",
           },
         ],
         payload: [
           {
-            id: 'payload-1',
-            type: 'general_cargo',
+            id: "payload-1",
+            type: "general_cargo",
             weight: 25000,
             volume: 5000,
-            hazard_level: 'none',
+            hazard_level: "none",
             special_requirements: [],
           },
         ],
         riskFactors: [
           {
-            id: 'risk-1',
-            category: 'weather',
-            description: 'Potential storm in route',
+            id: "risk-1",
+            category: "weather",
+            description: "Potential storm in route",
             probability: 0.3,
             impact: 5,
-            mitigation: 'Monitor weather closely and adjust route if needed',
+            mitigation: "Monitor weather closely and adjust route if needed",
           },
         ],
         failureInjections,
@@ -126,11 +126,11 @@ export default function SimulationPage() {
       };
 
       const simulationId = await missionSimulationCore.createSimulation(blueprint);
-      toast.success('Simulation created successfully');
+      toast.success("Simulation created successfully");
       
       // Reset form
-      setName('');
-      setDescription('');
+      setName("");
+      setDescription("");
       setFailureInjections({
         system_crash: false,
         comms_loss: false,
@@ -141,8 +141,8 @@ export default function SimulationPage() {
 
       await loadSimulations();
     } catch (error) {
-      logger.error('[SimulationPage] Failed to create simulation', { error });
-      toast.error('Failed to create simulation');
+      logger.error("[SimulationPage] Failed to create simulation", { error });
+      toast.error("Failed to create simulation");
     }
   };
 
@@ -150,11 +150,11 @@ export default function SimulationPage() {
     setIsRunning(true);
     try {
       const outcome = await missionSimulationCore.runSimulation(simulationId);
-      toast.success(`Simulation completed: ${outcome.success ? 'Success' : 'Failed'}`);
+      toast.success(`Simulation completed: ${outcome.success ? "Success" : "Failed"}`);
       await loadSimulations();
     } catch (error) {
-      logger.error('[SimulationPage] Failed to run simulation', { error });
-      toast.error('Failed to run simulation');
+      logger.error("[SimulationPage] Failed to run simulation", { error });
+      toast.error("Failed to run simulation");
     } finally {
       setIsRunning(false);
     }
@@ -163,24 +163,24 @@ export default function SimulationPage() {
   const deleteSimulation = async (simulationId: string) => {
     try {
       await missionSimulationCore.deleteSimulation(simulationId);
-      toast.success('Simulation deleted');
+      toast.success("Simulation deleted");
       await loadSimulations();
     } catch (error) {
-      logger.error('[SimulationPage] Failed to delete simulation', { error });
-      toast.error('Failed to delete simulation');
+      logger.error("[SimulationPage] Failed to delete simulation", { error });
+      toast.error("Failed to delete simulation");
     }
   };
 
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'default';
-      case 'running':
-        return 'secondary';
-      case 'failed':
-        return 'destructive';
-      default:
-        return 'outline';
+    case "completed":
+      return "default";
+    case "running":
+      return "secondary";
+    case "failed":
+      return "destructive";
+    default:
+      return "outline";
     }
   };
 
@@ -329,15 +329,15 @@ export default function SimulationPage() {
                         {sim.predictions && (
                           <div className="grid grid-cols-3 gap-2 text-sm">
                             <div>
-                              <span className="text-muted-foreground">Success:</span>{' '}
+                              <span className="text-muted-foreground">Success:</span>{" "}
                               {(sim.predictions.success_probability * 100).toFixed(0)}%
                             </div>
                             <div>
-                              <span className="text-muted-foreground">Risk:</span>{' '}
+                              <span className="text-muted-foreground">Risk:</span>{" "}
                               {sim.predictions.risk_score.toFixed(1)}
                             </div>
                             <div>
-                              <span className="text-muted-foreground">Duration:</span>{' '}
+                              <span className="text-muted-foreground">Duration:</span>{" "}
                               {sim.predictions.estimated_duration_hours.toFixed(0)}h
                             </div>
                           </div>
@@ -347,7 +347,7 @@ export default function SimulationPage() {
                           <div className="p-3 bg-muted rounded space-y-2">
                             <div className="font-medium">Outcome</div>
                             <div className="grid grid-cols-2 gap-2 text-sm">
-                              <div>Success: {sim.outcome.success ? 'Yes' : 'No'}</div>
+                              <div>Success: {sim.outcome.success ? "Yes" : "No"}</div>
                               <div>Completion: {sim.outcome.completion_percentage}%</div>
                               <div>Incidents: {sim.outcome.incidents?.length || 0}</div>
                               <div>
@@ -362,10 +362,10 @@ export default function SimulationPage() {
                             size="sm"
                             variant="outline"
                             onClick={() => runSimulation(sim.id)}
-                            disabled={isRunning || sim.status === 'running'}
+                            disabled={isRunning || sim.status === "running"}
                           >
                             <Play className="h-4 w-4 mr-2" />
-                            {sim.status === 'running' ? 'Running...' : 'Run'}
+                            {sim.status === "running" ? "Running..." : "Run"}
                           </Button>
                           <Button
                             size="sm"

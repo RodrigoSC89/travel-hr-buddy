@@ -115,7 +115,7 @@ export const SupplyOrdersManagement = () => {
   const updateOrderStatus = async (orderId: string, status: string, failureReason?: string) => {
     const updates: any = { status };
     if (status === "delivered") {
-      updates.actual_delivery_date = new Date().toISOString().split('T')[0];
+      updates.actual_delivery_date = new Date().toISOString().split("T")[0];
     }
     if (failureReason) {
       updates.failure_reason = failureReason;

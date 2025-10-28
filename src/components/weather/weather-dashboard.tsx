@@ -84,42 +84,42 @@ export function WeatherDashboard() {
   const loadVessels = async () => {
     try {
       const { data, error } = await supabase
-        .from('vessels')
-        .select('id, name, last_known_position')
-        .eq('status', 'active');
+        .from("vessels")
+        .select("id, name, last_known_position")
+        .eq("status", "active");
 
       if (error) throw error;
       setVessels(data || []);
     } catch (error) {
-      console.error('Error loading vessels:', error);
+      console.error("Error loading vessels:", error);
     }
   };
 
   const loadWeatherData = async () => {
     try {
       const { data, error } = await supabase
-        .from('weather_logs')
-        .select('*')
-        .order('observation_time', { ascending: false })
+        .from("weather_logs")
+        .select("*")
+        .order("observation_time", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       setWeatherData(data || []);
     } catch (error) {
-      console.error('Error loading weather data:', error);
+      console.error("Error loading weather data:", error);
     }
   };
 
   const loadWeatherEvents = async () => {
     try {
       const { data, error } = await supabase
-        .from('critical_weather_events')
-        .select('*');
+        .from("critical_weather_events")
+        .select("*");
 
       if (error) throw error;
       setWeatherEvents(data || []);
     } catch (error) {
-      console.error('Error loading weather events:', error);
+      console.error("Error loading weather events:", error);
     }
   };
 
@@ -139,13 +139,13 @@ export function WeatherDashboard() {
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${apiKey}&units=metric&lang=pt_br`
       );
 
-      if (!currentResponse.ok) throw new Error('Failed to fetch weather data');
+      if (!currentResponse.ok) throw new Error("Failed to fetch weather data");
 
       const currentData = await currentResponse.json();
 
       // Save to database
       const { error: insertError } = await supabase
-        .from('weather_logs')
+        .from("weather_logs")
         .insert({
           vessel_id: vesselId || null,
           location_name: locationName,
@@ -182,12 +182,12 @@ export function WeatherDashboard() {
 
         // Save forecast data (sample first 8 entries - 24 hours)
         for (const item of forecastData.list.slice(0, 8)) {
-          await supabase.from('weather_predictions').insert({
+          await supabase.from("weather_predictions").insert({
             vessel_id: vesselId || null,
             location_name: locationName,
             location: { lat, lng },
             forecast_time: new Date(item.dt * 1000).toISOString(),
-            forecast_range: 'short',
+            forecast_range: "short",
             temperature: item.main.temp,
             feels_like: item.main.feels_like,
             temp_min: item.main.temp_min,
@@ -198,7 +198,7 @@ export function WeatherDashboard() {
             wind_direction: item.wind.deg,
             clouds_percentage: item.clouds.all,
             rain_probability: item.pop * 100,
-            rain_volume: item.rain?.['3h'] || 0,
+            rain_volume: item.rain?.["3h"] || 0,
             weather_main: item.weather[0].main,
             weather_description: item.weather[0].description,
             weather_icon: item.weather[0].icon,
@@ -210,15 +210,15 @@ export function WeatherDashboard() {
 
       // Check for critical conditions
       if (currentData.wind.speed > 15 || currentData.visibility < 2000) {
-        await supabase.from('weather_events').insert({
-          event_type: currentData.wind.speed > 20 ? 'high_winds' : 'fog',
-          severity: currentData.wind.speed > 20 ? 'high' : 'moderate',
-          title: currentData.wind.speed > 20 ? 'Ventos Fortes Detectados' : 'Baixa Visibilidade',
+        await supabase.from("weather_events").insert({
+          event_type: currentData.wind.speed > 20 ? "high_winds" : "fog",
+          severity: currentData.wind.speed > 20 ? "high" : "moderate",
+          title: currentData.wind.speed > 20 ? "Ventos Fortes Detectados" : "Baixa Visibilidade",
           description: `Condições críticas em ${locationName}. Vento: ${currentData.wind.speed} m/s, Visibilidade: ${currentData.visibility} m`,
           affected_area: { coordinates: [{ lat, lng }] },
           affected_vessels: vesselId ? [vesselId] : [],
           start_time: new Date().toISOString(),
-          status: 'warning',
+          status: "warning",
         });
       }
 
@@ -231,7 +231,7 @@ export function WeatherDashboard() {
       await loadWeatherEvents();
 
     } catch (error: any) {
-      console.error('Error fetching weather:', error);
+      console.error("Error fetching weather:", error);
       toast({
         title: "Erro ao buscar dados meteorológicos",
         description: error.message || "Tente novamente mais tarde",
@@ -281,7 +281,7 @@ export function WeatherDashboard() {
           });
         }
       } catch (error) {
-        console.error('Geocoding error:', error);
+        console.error("Geocoding error:", error);
       }
     }
 
@@ -305,13 +305,13 @@ export function WeatherDashboard() {
       const { data: { user } } = await supabase.auth.getUser();
       
       const { error } = await supabase
-        .from('weather_events')
+        .from("weather_events")
         .update({
           acknowledged: true,
           acknowledged_by: user?.id,
           acknowledged_at: new Date().toISOString(),
         })
-        .eq('id', eventId);
+        .eq("id", eventId);
 
       if (error) throw error;
 
@@ -322,7 +322,7 @@ export function WeatherDashboard() {
 
       await loadWeatherEvents();
     } catch (error) {
-      console.error('Error acknowledging event:', error);
+      console.error("Error acknowledging event:", error);
     }
   };
 
@@ -340,27 +340,27 @@ export function WeatherDashboard() {
 
   const getSeverityColor = (severity: string) => {
     const colors: Record<string, string> = {
-      low: 'bg-blue-100 text-blue-800 border-blue-300',
-      moderate: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-      high: 'bg-orange-100 text-orange-800 border-orange-300',
-      severe: 'bg-red-100 text-red-800 border-red-300',
-      extreme: 'bg-purple-100 text-purple-800 border-purple-300',
+      low: "bg-blue-100 text-blue-800 border-blue-300",
+      moderate: "bg-yellow-100 text-yellow-800 border-yellow-300",
+      high: "bg-orange-100 text-orange-800 border-orange-300",
+      severe: "bg-red-100 text-red-800 border-red-300",
+      extreme: "bg-purple-100 text-purple-800 border-purple-300",
     };
-    return colors[severity] || 'bg-gray-100 text-gray-800 border-gray-300';
+    return colors[severity] || "bg-gray-100 text-gray-800 border-gray-300";
   };
 
   const getSeaStateColor = (seaState: string) => {
     const colors: Record<string, string> = {
-      calm: 'text-green-600',
-      slight: 'text-blue-600',
-      moderate: 'text-yellow-600',
-      rough: 'text-orange-600',
-      very_rough: 'text-red-600',
-      high: 'text-red-700',
-      very_high: 'text-purple-600',
-      phenomenal: 'text-purple-800',
+      calm: "text-green-600",
+      slight: "text-blue-600",
+      moderate: "text-yellow-600",
+      rough: "text-orange-600",
+      very_rough: "text-red-600",
+      high: "text-red-700",
+      very_high: "text-purple-600",
+      phenomenal: "text-purple-800",
     };
-    return colors[seaState] || 'text-gray-600';
+    return colors[seaState] || "text-gray-600";
   };
 
   return (
@@ -380,7 +380,7 @@ export function WeatherDashboard() {
             onClick={refreshWeatherData}
             disabled={refreshing}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
           <Button
@@ -389,7 +389,7 @@ export function WeatherDashboard() {
             onClick={() => setAutoRefresh(!autoRefresh)}
           >
             <Activity className="h-4 w-4 mr-2" />
-            Auto-refresh {autoRefresh ? 'ON' : 'OFF'}
+            Auto-refresh {autoRefresh ? "ON" : "OFF"}
           </Button>
         </div>
       </div>
@@ -417,7 +417,7 @@ export function WeatherDashboard() {
                       <h3 className="font-semibold">{event.title}</h3>
                       <p className="text-sm text-muted-foreground">{event.description}</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Início: {format(new Date(event.start_time), 'dd/MM/yyyy HH:mm')}
+                        Início: {format(new Date(event.start_time), "dd/MM/yyyy HH:mm")}
                       </p>
                     </div>
                     {!event.acknowledged && (
@@ -453,7 +453,7 @@ export function WeatherDashboard() {
                     <div>
                       <CardTitle className="text-lg">{weather.location_name}</CardTitle>
                       <CardDescription>
-                        {format(new Date(weather.observation_time), 'dd/MM HH:mm')}
+                        {format(new Date(weather.observation_time), "dd/MM HH:mm")}
                       </CardDescription>
                     </div>
                     {getWeatherIcon(weather.weather_main)}
@@ -596,7 +596,7 @@ export function WeatherDashboard() {
                       <div>
                         <p className="font-semibold">{weather.location_name}</p>
                         <p className="text-sm text-muted-foreground">
-                          {format(new Date(weather.observation_time), 'dd/MM/yyyy HH:mm')}
+                          {format(new Date(weather.observation_time), "dd/MM/yyyy HH:mm")}
                         </p>
                       </div>
                     </div>

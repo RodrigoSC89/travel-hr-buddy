@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface IntentInput {
   voiceCommand?: string;
@@ -17,7 +17,7 @@ export interface IntentOutput {
   confidence: number;
   action: string;
   parameters: Record<string, any>;
-  inputType: 'voice' | 'gesture' | 'text' | 'multimodal';
+  inputType: "voice" | "gesture" | "text" | "multimodal";
   timestamp: string;
 }
 
@@ -37,18 +37,18 @@ export class MultimodalIntentEngine {
   private async initialize() {
     try {
       // Initialize Web Speech API if available
-      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
         const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         this.recognitionService = new SpeechRecognition();
         this.recognitionService.continuous = false;
         this.recognitionService.interimResults = false;
-        this.recognitionService.lang = 'pt-BR';
+        this.recognitionService.lang = "pt-BR";
       }
       
       this.isInitialized = true;
-      console.log('Multimodal Intent Engine initialized');
+      console.log("Multimodal Intent Engine initialized");
     } catch (error) {
-      console.error('Failed to initialize Intent Engine:', error);
+      console.error("Failed to initialize Intent Engine:", error);
     }
   }
 
@@ -71,8 +71,8 @@ export class MultimodalIntentEngine {
       // Log performance
       const responseTime = Date.now() - startTime;
       await this.logPerformance({
-        module_name: 'multimodal_intent_engine',
-        operation_type: 'intent_classification',
+        module_name: "multimodal_intent_engine",
+        operation_type: "intent_classification",
         response_time_ms: responseTime,
         context: {
           inputType,
@@ -87,7 +87,7 @@ export class MultimodalIntentEngine {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      console.error('Error processing intent:', error);
+      console.error("Error processing intent:", error);
       throw error;
     }
   }
@@ -100,7 +100,7 @@ export class MultimodalIntentEngine {
     onError?: (error: any) => void
   ): Promise<void> {
     if (!this.recognitionService) {
-      throw new Error('Speech recognition not available');
+      throw new Error("Speech recognition not available");
     }
 
     return new Promise((resolve, reject) => {
@@ -142,21 +142,21 @@ export class MultimodalIntentEngine {
     });
   }
 
-  private determineInputType(input: IntentInput): 'voice' | 'gesture' | 'text' | 'multimodal' {
+  private determineInputType(input: IntentInput): "voice" | "gesture" | "text" | "multimodal" {
     const hasVoice = !!input.voiceCommand;
     const hasGesture = !!input.gestureInput;
     const hasText = !!input.typedQuery;
     
     const count = [hasVoice, hasGesture, hasText].filter(Boolean).length;
     
-    if (count > 1) return 'multimodal';
-    if (hasVoice) return 'voice';
-    if (hasGesture) return 'gesture';
-    return 'text';
+    if (count > 1) return "multimodal";
+    if (hasVoice) return "voice";
+    if (hasGesture) return "gesture";
+    return "text";
   }
 
   private buildIntentPrompt(input: IntentInput, inputType: string): string {
-    let prompt = `You are an AI assistant helping to interpret user intent from multimodal input.\n\n`;
+    let prompt = "You are an AI assistant helping to interpret user intent from multimodal input.\n\n";
     prompt += `Input Type: ${inputType}\n\n`;
     
     if (input.voiceCommand) {
@@ -189,7 +189,7 @@ export class MultimodalIntentEngine {
     return prompt;
   }
 
-  private async classifyIntent(prompt: string, context?: Record<string, any>): Promise<Omit<IntentOutput, 'inputType' | 'timestamp'>> {
+  private async classifyIntent(prompt: string, context?: Record<string, any>): Promise<Omit<IntentOutput, "inputType" | "timestamp">> {
     try {
       // In a real implementation, this would call GPT-4o or another LLM
       // For now, we'll use a simple pattern matching approach
@@ -203,14 +203,14 @@ export class MultimodalIntentEngine {
         parameters: intent.parameters,
       };
     } catch (error) {
-      console.error('Error classifying intent:', error);
+      console.error("Error classifying intent:", error);
       
       // Return default intent on error
       return {
-        intent: 'unknown',
+        intent: "unknown",
         target: null,
         confidence: 0,
-        action: 'none',
+        action: "none",
         parameters: {},
       };
     }
@@ -227,62 +227,62 @@ export class MultimodalIntentEngine {
     const lowerPrompt = prompt.toLowerCase();
     
     // Navigation intents
-    if (lowerPrompt.includes('navigate') || lowerPrompt.includes('go to') || lowerPrompt.includes('open')) {
+    if (lowerPrompt.includes("navigate") || lowerPrompt.includes("go to") || lowerPrompt.includes("open")) {
       return {
-        intent: 'navigate',
+        intent: "navigate",
         target: this.extractTarget(prompt),
         confidence: 0.85,
-        action: 'navigate_to',
+        action: "navigate_to",
         parameters: {},
       };
     }
     
     // Query intents
-    if (lowerPrompt.includes('show') || lowerPrompt.includes('display') || lowerPrompt.includes('what') || lowerPrompt.includes('how')) {
+    if (lowerPrompt.includes("show") || lowerPrompt.includes("display") || lowerPrompt.includes("what") || lowerPrompt.includes("how")) {
       return {
-        intent: 'query',
+        intent: "query",
         target: this.extractTarget(prompt),
         confidence: 0.80,
-        action: 'fetch_data',
+        action: "fetch_data",
         parameters: {},
       };
     }
     
     // Command intents
-    if (lowerPrompt.includes('create') || lowerPrompt.includes('add') || lowerPrompt.includes('new')) {
+    if (lowerPrompt.includes("create") || lowerPrompt.includes("add") || lowerPrompt.includes("new")) {
       return {
-        intent: 'command',
+        intent: "command",
         target: this.extractTarget(prompt),
         confidence: 0.90,
-        action: 'create',
+        action: "create",
         parameters: {},
       };
     }
     
     // Update intents
-    if (lowerPrompt.includes('update') || lowerPrompt.includes('edit') || lowerPrompt.includes('change')) {
+    if (lowerPrompt.includes("update") || lowerPrompt.includes("edit") || lowerPrompt.includes("change")) {
       return {
-        intent: 'command',
+        intent: "command",
         target: this.extractTarget(prompt),
         confidence: 0.85,
-        action: 'update',
+        action: "update",
         parameters: {},
       };
     }
     
     // Default
     return {
-      intent: 'query',
+      intent: "query",
       target: null,
       confidence: 0.50,
-      action: 'process',
+      action: "process",
       parameters: {},
     };
   }
 
   private extractTarget(prompt: string): string | null {
     // Extract potential targets from prompt
-    const targets = ['dashboard', 'report', 'incident', 'task', 'document', 'vessel', 'crew'];
+    const targets = ["dashboard", "report", "incident", "task", "document", "vessel", "crew"];
     
     for (const target of targets) {
       if (prompt.toLowerCase().includes(target)) {
@@ -295,9 +295,9 @@ export class MultimodalIntentEngine {
 
   private async logPerformance(data: any) {
     try {
-      await (supabase as any).from('ia_performance_log').insert(data);
+      await (supabase as any).from("ia_performance_log").insert(data);
     } catch (error) {
-      console.error('Failed to log performance:', error);
+      console.error("Failed to log performance:", error);
     }
   }
 }

@@ -43,25 +43,25 @@ export function SemanticDocumentSearch() {
       // For now, use simple text search since vector embeddings require OpenAI integration
       // In production, this would use the search_documents_by_similarity function
       const { data, error } = await supabase
-        .from('ai_generated_documents')
-        .select('id, title, extracted_text, document_category, document_tags, created_at')
-        .ilike('extracted_text', `%${searchQuery}%`)
+        .from("ai_generated_documents")
+        .select("id, title, extracted_text, document_category, document_tags, created_at")
+        .ilike("extracted_text", `%${searchQuery}%`)
         .limit(20);
 
       if (error) throw error;
 
       // Calculate similarity score based on term frequency and relevance
       const resultsWithSimilarity = (data || []).map(doc => {
-        const text = doc.extracted_text?.toLowerCase() || '';
+        const text = doc.extracted_text?.toLowerCase() || "";
         const query = searchQuery.toLowerCase();
         
         // Count exact matches
-        const exactMatches = (text.match(new RegExp(query, 'g')) || []).length;
+        const exactMatches = (text.match(new RegExp(query, "g")) || []).length;
         
         // Count partial matches (words from query)
         const queryWords = query.split(/\s+/).filter(w => w.length > 2);
         const partialMatches = queryWords.reduce((sum, word) => {
-          return sum + (text.match(new RegExp(word, 'g')) || []).length;
+          return sum + (text.match(new RegExp(word, "g")) || []).length;
         }, 0);
         
         // Calculate relevance score (0-100)
@@ -102,18 +102,18 @@ export function SemanticDocumentSearch() {
 
   const getCategoryColor = (category?: string) => {
     switch (category) {
-      case 'safety_compliance':
-        return 'bg-red-100 text-red-800';
-      case 'operations':
-        return 'bg-blue-100 text-blue-800';
-      case 'maintenance':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'administration':
-        return 'bg-purple-100 text-purple-800';
-      case 'training':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+    case "safety_compliance":
+      return "bg-red-100 text-red-800";
+    case "operations":
+      return "bg-blue-100 text-blue-800";
+    case "maintenance":
+      return "bg-yellow-100 text-yellow-800";
+    case "administration":
+      return "bg-purple-100 text-purple-800";
+    case "training":
+      return "bg-green-100 text-green-800";
+    default:
+      return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -135,7 +135,7 @@ export function SemanticDocumentSearch() {
             placeholder="Search for documents (e.g., 'safety procedures', 'fuel reports')..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             className="flex-1"
           />
           <Button onClick={handleSearch} disabled={searching}>
@@ -157,7 +157,7 @@ export function SemanticDocumentSearch() {
         {results.length > 0 && (
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>
-              Found {results.length} {results.length === 1 ? 'document' : 'documents'}
+              Found {results.length} {results.length === 1 ? "document" : "documents"}
             </span>
             <span>Search time: {searchTime}ms</span>
           </div>
@@ -195,7 +195,7 @@ export function SemanticDocumentSearch() {
                   <div className="flex items-center gap-2 flex-wrap">
                     {result.document_category && (
                       <Badge variant="outline" className={getCategoryColor(result.document_category)}>
-                        {result.document_category.replace('_', ' ')}
+                        {result.document_category.replace("_", " ")}
                       </Badge>
                     )}
                     {result.document_tags?.slice(0, 3).map((tag, idx) => (

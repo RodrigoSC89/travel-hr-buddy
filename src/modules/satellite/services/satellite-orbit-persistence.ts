@@ -26,14 +26,14 @@ export class SatelliteOrbitPersistence {
       }));
 
       const { data, error } = await supabase
-        .from('satellite_orbits')
-        .upsert(upsertData, { onConflict: 'norad_id' })
+        .from("satellite_orbits")
+        .upsert(upsertData, { onConflict: "norad_id" })
         .select();
 
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error saving satellite orbits:', error);
+      console.error("Error saving satellite orbits:", error);
       throw error;
     }
   }
@@ -41,9 +41,9 @@ export class SatelliteOrbitPersistence {
   async getSatelliteOrbits(): Promise<SatelliteOrbitData[]> {
     try {
       const { data, error } = await supabase
-        .from('satellite_orbits')
-        .select('*')
-        .order('last_updated', { ascending: false });
+        .from("satellite_orbits")
+        .select("*")
+        .order("last_updated", { ascending: false });
 
       if (error) throw error;
 
@@ -58,12 +58,12 @@ export class SatelliteOrbitPersistence {
         orbitalPeriod: row.orbital_period || 90,
         inclination: row.inclination || 0,
         eccentricity: row.eccentricity || 0,
-        tleLine1: row.tle_line1 || '',
-        tleLine2: row.tle_line2 || '',
+        tleLine1: row.tle_line1 || "",
+        tleLine2: row.tle_line2 || "",
         lastUpdated: new Date(row.last_updated)
       }));
     } catch (error) {
-      console.error('Error fetching satellite orbits:', error);
+      console.error("Error fetching satellite orbits:", error);
       return [];
     }
   }
@@ -71,9 +71,9 @@ export class SatelliteOrbitPersistence {
   async getSatelliteByNoradId(noradId: string): Promise<SatelliteOrbitData | null> {
     try {
       const { data, error } = await supabase
-        .from('satellite_orbits')
-        .select('*')
-        .eq('norad_id', parseInt(noradId))
+        .from("satellite_orbits")
+        .select("*")
+        .eq("norad_id", parseInt(noradId))
         .single();
 
       if (error) throw error;
@@ -91,12 +91,12 @@ export class SatelliteOrbitPersistence {
         orbitalPeriod: data.orbital_period || 90,
         inclination: data.inclination || 0,
         eccentricity: data.eccentricity || 0,
-        tleLine1: data.tle_line1 || '',
-        tleLine2: data.tle_line2 || '',
+        tleLine1: data.tle_line1 || "",
+        tleLine2: data.tle_line2 || "",
         lastUpdated: new Date(data.last_updated)
       };
     } catch (error) {
-      console.error('Error fetching satellite by NORAD ID:', error);
+      console.error("Error fetching satellite by NORAD ID:", error);
       return null;
     }
   }

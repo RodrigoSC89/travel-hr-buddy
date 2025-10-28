@@ -4,7 +4,7 @@
  * Service for voice commands, sessions, and multi-platform support
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 import type {
   VoiceSession,
   VoiceCommand,
@@ -16,7 +16,7 @@ import type {
   VoiceRecognitionResult,
   CommandExecutionResult,
   Platform,
-} from '@/types/voice';
+} from "@/types/voice";
 
 export class VoiceService {
   private static recognition: SpeechRecognition | null = null;
@@ -25,14 +25,14 @@ export class VoiceService {
 
   // Initialize Speech APIs
   static initSpeechAPIs(): void {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // @ts-expect-error - webkit prefix
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRecognition) {
         this.recognition = new SpeechRecognition();
         this.recognition.continuous = false;
         this.recognition.interimResults = false;
-        this.recognition.lang = 'pt-BR';
+        this.recognition.lang = "pt-BR";
       }
 
       if (window.speechSynthesis) {
@@ -59,15 +59,15 @@ export class VoiceService {
     this.currentSessionId = sessionId;
 
     const { data, error } = await supabase
-      .from('voice_sessions')
+      .from("voice_sessions")
       .insert({
         session_id: sessionId,
         platform: request.platform,
-        mode: request.mode || 'online',
-        language: request.language || 'pt-BR',
+        mode: request.mode || "online",
+        language: request.language || "pt-BR",
         voice_engine: this.isSpeechRecognitionAvailable()
-          ? 'web_speech_api'
-          : 'fallback',
+          ? "web_speech_api"
+          : "fallback",
         device_info: request.device_info,
       })
       .select()
@@ -86,12 +86,12 @@ export class VoiceService {
     );
 
     const { error } = await supabase
-      .from('voice_sessions')
+      .from("voice_sessions")
       .update({
         ended_at: new Date().toISOString(),
         duration_seconds: duration,
       })
-      .eq('session_id', sessionId);
+      .eq("session_id", sessionId);
 
     if (error) throw error;
 
@@ -102,9 +102,9 @@ export class VoiceService {
 
   static async getSession(sessionId: string): Promise<VoiceSession | null> {
     const { data, error } = await supabase
-      .from('voice_sessions')
-      .select('*')
-      .eq('session_id', sessionId)
+      .from("voice_sessions")
+      .select("*")
+      .eq("session_id", sessionId)
       .single();
 
     if (error) throw error;
@@ -121,7 +121,7 @@ export class VoiceService {
     onError?: (error: Error) => void
   ): Promise<void> {
     if (!this.recognition) {
-      throw new Error('Speech recognition not available');
+      throw new Error("Speech recognition not available");
     }
 
     this.recognition.onresult = (event) => {
@@ -158,12 +158,12 @@ export class VoiceService {
     }
   ): Promise<void> {
     if (!this.synthesis) {
-      throw new Error('Speech synthesis not available');
+      throw new Error("Speech synthesis not available");
     }
 
     return new Promise((resolve, reject) => {
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'pt-BR';
+      utterance.lang = "pt-BR";
       utterance.rate = options?.rate || 1.0;
       utterance.pitch = options?.pitch || 1.0;
       utterance.volume = options?.volume || 1.0;
@@ -185,7 +185,7 @@ export class VoiceService {
   static async processCommand(
     request: VoiceCommandRequest
   ): Promise<VoiceCommand> {
-    const { data, error } = await supabase.rpc('process_voice_command', {
+    const { data, error } = await supabase.rpc("process_voice_command", {
       p_session_id: request.session_id,
       p_command_text: request.command_text,
       p_confidence_score: request.confidence_score || 0.0,
@@ -195,16 +195,16 @@ export class VoiceService {
 
     // Get the created command
     const command = await this.getCommand(data);
-    if (!command) throw new Error('Command not found');
+    if (!command) throw new Error("Command not found");
 
     return command;
   }
 
   static async getCommand(id: string): Promise<VoiceCommand | null> {
     const { data, error } = await supabase
-      .from('voice_commands')
-      .select('*')
-      .eq('id', id)
+      .from("voice_commands")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) throw error;
@@ -213,9 +213,9 @@ export class VoiceService {
 
   static async getCommandHistory(limit = 50): Promise<VoiceCommand[]> {
     const { data, error } = await supabase
-      .from('voice_commands')
-      .select('*')
-      .order('created_at', { ascending: false })
+      .from("voice_commands")
+      .select("*")
+      .order("created_at", { ascending: false })
       .limit(limit);
 
     if (error) throw error;
@@ -224,10 +224,10 @@ export class VoiceService {
 
   static async searchCommands(query: string): Promise<VoiceCommand[]> {
     const { data, error } = await supabase
-      .from('voice_commands')
-      .select('*')
-      .ilike('command_text', `%${query}%`)
-      .order('created_at', { ascending: false })
+      .from("voice_commands")
+      .select("*")
+      .ilike("command_text", `%${query}%`)
+      .order("created_at", { ascending: false })
       .limit(20);
 
     if (error) throw error;
@@ -237,10 +237,10 @@ export class VoiceService {
   // Command Templates
   static async getTemplates(): Promise<VoiceCommandTemplate[]> {
     const { data, error } = await supabase
-      .from('voice_command_templates')
-      .select('*')
-      .eq('is_enabled', true)
-      .order('popularity_score', { ascending: false });
+      .from("voice_command_templates")
+      .select("*")
+      .eq("is_enabled", true)
+      .order("popularity_score", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -250,7 +250,7 @@ export class VoiceService {
     limit = 20
   ): Promise<VoiceCommandTemplate[]> {
     const { data, error } = await supabase.rpc(
-      'get_popular_commands_for_cache',
+      "get_popular_commands_for_cache",
       {
         p_user_id: (await supabase.auth.getUser()).data.user?.id,
         p_limit: limit,
@@ -264,10 +264,10 @@ export class VoiceService {
   // Personalities
   static async getPersonalities(): Promise<VoicePersonality[]> {
     const { data, error } = await supabase
-      .from('voice_personalities')
-      .select('*')
-      .eq('is_enabled', true)
-      .order('display_name');
+      .from("voice_personalities")
+      .select("*")
+      .eq("is_enabled", true)
+      .order("display_name");
 
     if (error) throw error;
     return data || [];
@@ -275,10 +275,10 @@ export class VoiceService {
 
   static async getDefaultPersonality(): Promise<VoicePersonality | null> {
     const { data, error } = await supabase
-      .from('voice_personalities')
-      .select('*')
-      .eq('is_default', true)
-      .eq('is_enabled', true)
+      .from("voice_personalities")
+      .select("*")
+      .eq("is_default", true)
+      .eq("is_enabled", true)
       .maybeSingle();
 
     if (error) throw error;
@@ -288,8 +288,8 @@ export class VoiceService {
   // Settings
   static async getSettings(): Promise<VoiceSettings | null> {
     const { data, error } = await supabase
-      .from('voice_settings')
-      .select('*')
+      .from("voice_settings")
+      .select("*")
       .maybeSingle();
 
     if (error) throw error;
@@ -300,7 +300,7 @@ export class VoiceService {
     settings: Partial<VoiceSettings>
   ): Promise<VoiceSettings> {
     const { data, error } = await supabase
-      .from('voice_settings')
+      .from("voice_settings")
       .upsert(settings)
       .select()
       .single();
@@ -312,9 +312,9 @@ export class VoiceService {
   // Offline Cache
   static async getCachedCommands() {
     const { data, error } = await supabase
-      .from('voice_command_cache')
-      .select('*')
-      .order('last_used_at', { ascending: false });
+      .from("voice_command_cache")
+      .select("*")
+      .order("last_used_at", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -326,7 +326,7 @@ export class VoiceService {
     response: string,
     cachedData?: Record<string, unknown>
   ): Promise<void> {
-    const { error } = await supabase.from('voice_command_cache').upsert({
+    const { error } = await supabase.from("voice_command_cache").upsert({
       command_pattern: commandPattern,
       intent,
       cached_response: response,
@@ -346,13 +346,13 @@ export class VoiceService {
     // This would integrate with other services based on intent
     // For now, return a simple response
     const responses: Record<string, string> = {
-      fleet_status: 'A frota está operando normalmente com todos os navios em rota.',
-      create_mission: 'Iniciando criação de nova missão...',
-      check_alerts: 'Não há alertas ativos no momento.',
-      help: 'Posso ajudar com status da frota, criar missões, verificar alertas e muito mais.',
+      fleet_status: "A frota está operando normalmente com todos os navios em rota.",
+      create_mission: "Iniciando criação de nova missão...",
+      check_alerts: "Não há alertas ativos no momento.",
+      help: "Posso ajudar com status da frota, criar missões, verificar alertas e muito mais.",
     };
 
-    const responseText = responses[intent] || 'Comando não reconhecido.';
+    const responseText = responses[intent] || "Comando não reconhecido.";
 
     return {
       success: !!responses[intent],
@@ -369,20 +369,20 @@ export class VoiceService {
 
     const [sessions, commands] = await Promise.all([
       supabase
-        .from('voice_sessions')
-        .select('*')
-        .gte('started_at', startDate.toISOString()),
+        .from("voice_sessions")
+        .select("*")
+        .gte("started_at", startDate.toISOString()),
       supabase
-        .from('voice_commands')
-        .select('*')
-        .gte('created_at', startDate.toISOString()),
+        .from("voice_commands")
+        .select("*")
+        .gte("created_at", startDate.toISOString()),
     ]);
 
     const sessionData = sessions.data || [];
     const commandData = commands.data || [];
 
     const successfulCommands = commandData.filter(
-      (c) => c.status === 'executed'
+      (c) => c.status === "executed"
     ).length;
     const successRate =
       commandData.length > 0

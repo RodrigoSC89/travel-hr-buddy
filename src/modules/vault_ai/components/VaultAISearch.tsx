@@ -61,10 +61,10 @@ export const VaultAISearch: React.FC = () => {
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/vault-search`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             query,
@@ -78,7 +78,7 @@ export const VaultAISearch: React.FC = () => {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Search failed');
+        throw new Error(error.error || "Search failed");
       }
 
       const data: VaultSearchResponse = await response.json();
@@ -89,7 +89,7 @@ export const VaultAISearch: React.FC = () => {
         description: `Found ${data.results_count} results in ${data.search_duration_ms.toFixed(0)}ms`,
       });
     } catch (error) {
-      console.error('Search error:', error);
+      console.error("Search error:", error);
       toast({
         title: "Search Failed",
         description: error.message || "Failed to search vault",
@@ -134,7 +134,7 @@ export const VaultAISearch: React.FC = () => {
               placeholder="e.g., safety procedures for emergency situations"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
           </div>
 

@@ -18,7 +18,7 @@ export interface AnalyticsDashboard {
 
 export interface DashboardWidget {
   id: string;
-  type: 'chart' | 'metric' | 'table' | 'map';
+  type: "chart" | "metric" | "table" | "map";
   title: string;
   dataSource?: string;
   config: Record<string, any>;
@@ -48,7 +48,7 @@ export class AnalyticsDashboardService {
       if (!user) throw new Error("User not authenticated");
 
       const { data, error } = await supabase
-        .from('analytics_dashboards')
+        .from("analytics_dashboards")
         .insert({
           organization_id: dashboard.organizationId,
           dashboard_name: dashboard.dashboardName,
@@ -62,7 +62,7 @@ export class AnalyticsDashboardService {
       if (error) throw error;
       return this.mapToDashboard(data);
     } catch (error) {
-      console.error('Error creating dashboard:', error);
+      console.error("Error creating dashboard:", error);
       throw error;
     }
   }
@@ -76,16 +76,16 @@ export class AnalyticsDashboardService {
       if (dashboard.isPublic !== undefined) updateData.is_public = dashboard.isPublic;
 
       const { data, error } = await supabase
-        .from('analytics_dashboards')
+        .from("analytics_dashboards")
         .update(updateData)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
       if (error) throw error;
       return this.mapToDashboard(data);
     } catch (error) {
-      console.error('Error updating dashboard:', error);
+      console.error("Error updating dashboard:", error);
       throw error;
     }
   }
@@ -93,13 +93,13 @@ export class AnalyticsDashboardService {
   async deleteDashboard(id: string): Promise<void> {
     try {
       const { error } = await supabase
-        .from('analytics_dashboards')
+        .from("analytics_dashboards")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error deleting dashboard:', error);
+      console.error("Error deleting dashboard:", error);
       throw error;
     }
   }
@@ -107,14 +107,14 @@ export class AnalyticsDashboardService {
   async getDashboards(): Promise<AnalyticsDashboard[]> {
     try {
       const { data, error } = await supabase
-        .from('analytics_dashboards')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("analytics_dashboards")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return (data || []).map(this.mapToDashboard);
     } catch (error) {
-      console.error('Error fetching dashboards:', error);
+      console.error("Error fetching dashboards:", error);
       return [];
     }
   }
@@ -122,15 +122,15 @@ export class AnalyticsDashboardService {
   async getDashboard(id: string): Promise<AnalyticsDashboard | null> {
     try {
       const { data, error } = await supabase
-        .from('analytics_dashboards')
-        .select('*')
-        .eq('id', id)
+        .from("analytics_dashboards")
+        .select("*")
+        .eq("id", id)
         .single();
 
       if (error) throw error;
       return data ? this.mapToDashboard(data) : null;
     } catch (error) {
-      console.error('Error fetching dashboard:', error);
+      console.error("Error fetching dashboard:", error);
       return null;
     }
   }
@@ -140,7 +140,7 @@ export class AnalyticsDashboardService {
       const { data: { user } } = await supabase.auth.getUser();
 
       await supabase
-        .from('analytics_events')
+        .from("analytics_events")
         .insert({
           user_id: user?.id,
           organization_id: event.organizationId,
@@ -154,26 +154,26 @@ export class AnalyticsDashboardService {
           os: event.os
         });
     } catch (error) {
-      console.error('Error tracking event:', error);
+      console.error("Error tracking event:", error);
     }
   }
 
   async getEvents(filters?: { category?: string; dateFrom?: string; dateTo?: string }): Promise<AnalyticsEvent[]> {
     try {
       let query = supabase
-        .from('analytics_events')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("analytics_events")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(1000);
 
       if (filters?.category) {
-        query = query.eq('event_category', filters.category);
+        query = query.eq("event_category", filters.category);
       }
       if (filters?.dateFrom) {
-        query = query.gte('timestamp', filters.dateFrom);
+        query = query.gte("timestamp", filters.dateFrom);
       }
       if (filters?.dateTo) {
-        query = query.lte('timestamp', filters.dateTo);
+        query = query.lte("timestamp", filters.dateTo);
       }
 
       const { data, error } = await query;
@@ -181,7 +181,7 @@ export class AnalyticsDashboardService {
 
       return (data || []).map(this.mapToEvent);
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error("Error fetching events:", error);
       return [];
     }
   }

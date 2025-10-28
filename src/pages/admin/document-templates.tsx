@@ -147,7 +147,7 @@ export default function DocumentTemplates() {
     
     // Replace all variables with their values
     Object.entries(variableValues).forEach(([key, value]) => {
-      const regex = new RegExp(`{{${key}}}`, 'g');
+      const regex = new RegExp(`{{${key}}}`, "g");
       preview = preview.replace(regex, value || `[${key}]`);
     });
     

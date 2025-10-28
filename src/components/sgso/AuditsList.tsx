@@ -39,9 +39,9 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('sgso_audits')
-        .select('*')
-        .order('audit_date', { ascending: false })
+        .from("sgso_audits")
+        .select("*")
+        .order("audit_date", { ascending: false })
         .limit(50);
 
       if (error) throw error;
@@ -59,20 +59,20 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { variant: any; icon: any }> = {
-      'planned': { variant: 'outline', icon: Clock },
-      'in_progress': { variant: 'default', icon: Clock },
-      'completed': { variant: 'default', icon: CheckCircle },
-      'follow_up': { variant: 'secondary', icon: Clock },
-      'closed': { variant: 'secondary', icon: CheckCircle },
+      "planned": { variant: "outline", icon: Clock },
+      "in_progress": { variant: "default", icon: Clock },
+      "completed": { variant: "default", icon: CheckCircle },
+      "follow_up": { variant: "secondary", icon: Clock },
+      "closed": { variant: "secondary", icon: CheckCircle },
     };
 
-    const config = statusConfig[status] || statusConfig['planned'];
+    const config = statusConfig[status] || statusConfig["planned"];
     const Icon = config.icon;
 
     return (
       <Badge variant={config.variant} className="flex items-center gap-1 w-fit">
         <Icon className="h-3 w-3" />
-        {status.replace('_', ' ')}
+        {status.replace("_", " ")}
       </Badge>
     );
   };
@@ -80,17 +80,17 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
   const handleStatusChange = async (auditId: string, newStatus: string) => {
     try {
       const { error } = await supabase
-        .from('sgso_audits')
+        .from("sgso_audits")
         .update({ status: newStatus })
-        .eq('id', auditId);
+        .eq("id", auditId);
 
       if (error) throw error;
 
       // Log the status change
       const { data: { user } } = await supabase.auth.getUser();
-      await supabase.from('audit_logs').insert({
-        action: 'audit_status_changed',
-        entity_type: 'sgso_audit',
+      await supabase.from("audit_logs").insert({
+        action: "audit_status_changed",
+        entity_type: "sgso_audit",
         entity_id: auditId,
         details: { new_status: newStatus },
         user_id: user?.id
@@ -164,7 +164,7 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
                 </TableCell>
                 <TableCell className="max-w-xs truncate">{audit.audit_scope}</TableCell>
                 <TableCell>
-                  {audit.audit_date ? format(new Date(audit.audit_date), 'PP') : '-'}
+                  {audit.audit_date ? format(new Date(audit.audit_date), "PP") : "-"}
                 </TableCell>
                 <TableCell>{getStatusBadge(audit.status)}</TableCell>
                 <TableCell>
@@ -184,20 +184,20 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
                         <Eye className="h-4 w-4 mr-2" />
                         View Details
                       </DropdownMenuItem>
-                      {audit.status === 'planned' && (
-                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, 'in_progress')}>
+                      {audit.status === "planned" && (
+                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, "in_progress")}>
                           <Clock className="h-4 w-4 mr-2" />
                           Start Audit
                         </DropdownMenuItem>
                       )}
-                      {audit.status === 'in_progress' && (
-                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, 'completed')}>
+                      {audit.status === "in_progress" && (
+                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, "completed")}>
                           <CheckCircle className="h-4 w-4 mr-2" />
                           Mark Complete
                         </DropdownMenuItem>
                       )}
-                      {audit.status === 'completed' && (
-                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, 'closed')}>
+                      {audit.status === "completed" && (
+                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, "closed")}>
                           <CheckCircle className="h-4 w-4 mr-2" />
                           Close Audit
                         </DropdownMenuItem>

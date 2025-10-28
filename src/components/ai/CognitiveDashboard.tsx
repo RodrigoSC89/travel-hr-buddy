@@ -4,11 +4,11 @@
  * Visualizes AI engine evolution, decisions, and predictions
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Brain, 
   TrendingUp, 
@@ -19,22 +19,22 @@ import {
   Clock,
   Filter,
   RefreshCw
-} from 'lucide-react';
-import { predictiveEngine, ModuleRiskScore } from '@/ai/predictiveEngine';
-import { tacticalAI, TacticalDecision } from '@/ai/tacticalAI';
-import { adaptiveMetricsEngine } from '@/ai/adaptiveMetrics';
-import { evoAIConnector, EvolutionReport } from '@/ai/evoAIConnector';
-import { logger } from '@/lib/logger';
+} from "lucide-react";
+import { predictiveEngine, ModuleRiskScore } from "@/ai/predictiveEngine";
+import { tacticalAI, TacticalDecision } from "@/ai/tacticalAI";
+import { adaptiveMetricsEngine } from "@/ai/adaptiveMetrics";
+import { evoAIConnector, EvolutionReport } from "@/ai/evoAIConnector";
+import { logger } from "@/lib/logger";
 
 export const CognitiveDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('predictions');
+  const [activeTab, setActiveTab] = useState("predictions");
   const [predictions, setPredictions] = useState<ModuleRiskScore[]>([]);
   const [decisions, setDecisions] = useState<TacticalDecision[]>([]);
   const [parameters, setParameters] = useState<any>(null);
   const [evolutionReport, setEvolutionReport] = useState<EvolutionReport | null>(null);
   const [loading, setLoading] = useState(true);
-  const [filterModule, setFilterModule] = useState<string>('all');
-  const [filterTimeRange, setFilterTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
+  const [filterModule, setFilterModule] = useState<string>("all");
+  const [filterTimeRange, setFilterTimeRange] = useState<"1h" | "24h" | "7d" | "30d">("24h");
 
   useEffect(() => {
     loadDashboardData();
@@ -64,7 +64,7 @@ export const CognitiveDashboard: React.FC = () => {
 
       setLoading(false);
     } catch (error) {
-      logger.error('[CognitiveDashboard] Failed to load data:', error);
+      logger.error("[CognitiveDashboard] Failed to load data:", error);
       setLoading(false);
     }
   };
@@ -75,52 +75,52 @@ export const CognitiveDashboard: React.FC = () => {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+    case "critical": return "bg-red-500";
+    case "high": return "bg-orange-500";
+    case "medium": return "bg-yellow-500";
+    case "low": return "bg-green-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'destructive';
-      case 'high': return 'default';
-      case 'medium': return 'secondary';
-      case 'low': return 'outline';
-      default: return 'outline';
+    case "critical": return "destructive";
+    case "high": return "default";
+    case "medium": return "secondary";
+    case "low": return "outline";
+    default: return "outline";
     }
   };
 
   const formatTimestamp = (date: Date | string) => {
-    const d = typeof date === 'string' ? new Date(date) : date;
+    const d = typeof date === "string" ? new Date(date) : date;
     return d.toLocaleString();
   };
 
   const filteredPredictions = predictions.filter(p => {
-    if (filterModule !== 'all' && p.module_name !== filterModule) return false;
+    if (filterModule !== "all" && p.module_name !== filterModule) return false;
     // Filter by time range
     const predTime = new Date(p.predicted_at).getTime();
     const now = Date.now();
     const ranges = {
-      '1h': 60 * 60 * 1000,
-      '24h': 24 * 60 * 60 * 1000,
-      '7d': 7 * 24 * 60 * 60 * 1000,
-      '30d': 30 * 24 * 60 * 60 * 1000,
+      "1h": 60 * 60 * 1000,
+      "24h": 24 * 60 * 60 * 1000,
+      "7d": 7 * 24 * 60 * 60 * 1000,
+      "30d": 30 * 24 * 60 * 60 * 1000,
     };
     return now - predTime <= ranges[filterTimeRange];
   });
 
   const filteredDecisions = decisions.filter(d => {
-    if (filterModule !== 'all' && d.moduleName !== filterModule) return false;
+    if (filterModule !== "all" && d.moduleName !== filterModule) return false;
     const decTime = d.timestamp.getTime();
     const now = Date.now();
     const ranges = {
-      '1h': 60 * 60 * 1000,
-      '24h': 24 * 60 * 60 * 1000,
-      '7d': 7 * 24 * 60 * 60 * 1000,
-      '30d': 30 * 24 * 60 * 60 * 1000,
+      "1h": 60 * 60 * 1000,
+      "24h": 24 * 60 * 60 * 1000,
+      "7d": 7 * 24 * 60 * 60 * 1000,
+      "30d": 30 * 24 * 60 * 60 * 1000,
     };
     return now - decTime <= ranges[filterTimeRange];
   });
@@ -142,7 +142,7 @@ export const CognitiveDashboard: React.FC = () => {
           </div>
         </div>
         <Button onClick={handleRefresh} disabled={loading}>
-          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
@@ -383,7 +383,7 @@ export const CognitiveDashboard: React.FC = () => {
                           </div>
                           <div>
                             <span className="text-muted-foreground">Delta:</span>
-                            <span className={`ml-2 font-medium ${parseFloat(deltaPercent) > 0 ? 'text-orange-500' : 'text-green-500'}`}>
+                            <span className={`ml-2 font-medium ${parseFloat(deltaPercent) > 0 ? "text-orange-500" : "text-green-500"}`}>
                               {deltaPercent}%
                             </span>
                           </div>
@@ -466,8 +466,8 @@ export const CognitiveDashboard: React.FC = () => {
                             <div className="flex items-center justify-between mb-1">
                               <span className="font-medium">{insight.pattern}</span>
                               <Badge variant={
-                                insight.impact === 'high' ? 'destructive' :
-                                insight.impact === 'medium' ? 'default' : 'secondary'
+                                insight.impact === "high" ? "destructive" :
+                                  insight.impact === "medium" ? "default" : "secondary"
                               }>
                                 {insight.impact}
                               </Badge>

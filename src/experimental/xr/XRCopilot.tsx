@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import React, { useEffect, useRef, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { 
   Camera, 
   Mic, 
@@ -13,13 +13,13 @@ import {
   AlertCircle,
   CheckCircle,
   Zap
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { intentEngine, IntentOutput } from '@/ai/multimodal/intentEngine';
-import { copilotVision, VisualContext } from '@/ai/vision/copilotVision';
-import { gestureProcessor, GestureData } from './inputs/GestureProcessor';
-import { voiceFeedback } from './outputs/VoiceFeedback';
-import { contextualAdapter, AdaptiveResponse } from '@/ai/multimodal/contextualAdapter';
+} from "lucide-react";
+import { toast } from "sonner";
+import { intentEngine, IntentOutput } from "@/ai/multimodal/intentEngine";
+import { copilotVision, VisualContext } from "@/ai/vision/copilotVision";
+import { gestureProcessor, GestureData } from "./inputs/GestureProcessor";
+import { voiceFeedback } from "./outputs/VoiceFeedback";
+import { contextualAdapter, AdaptiveResponse } from "@/ai/multimodal/contextualAdapter";
 
 interface XRCopilotProps {
   experimentalMode?: boolean;
@@ -72,10 +72,10 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
 
       setStream(mediaStream);
       setCameraEnabled(true);
-      toast.success('Camera activated');
+      toast.success("Camera activated");
     } catch (error) {
-      console.error('Error starting camera:', error);
-      toast.error('Failed to activate camera');
+      console.error("Error starting camera:", error);
+      toast.error("Failed to activate camera");
     }
   };
 
@@ -88,12 +88,12 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
       videoRef.current.srcObject = null;
     }
     setCameraEnabled(false);
-    toast.info('Camera deactivated');
+    toast.info("Camera deactivated");
   };
 
   const startVisionAnalysis = async () => {
     if (!videoRef.current || !cameraEnabled) {
-      toast.error('Camera must be enabled first');
+      toast.error("Camera must be enabled first");
       return;
     }
 
@@ -108,16 +108,16 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
       );
 
       stopAnalysisRef.current = stopFn;
-      toast.success('Vision analysis started');
+      toast.success("Vision analysis started");
     } catch (error) {
-      console.error('Error starting vision analysis:', error);
-      toast.error('Failed to start vision analysis');
+      console.error("Error starting vision analysis:", error);
+      toast.error("Failed to start vision analysis");
     }
   };
 
   const startGestureRecognition = async () => {
     if (!videoRef.current || !cameraEnabled) {
-      toast.error('Camera must be enabled first');
+      toast.error("Camera must be enabled first");
       return;
     }
 
@@ -128,23 +128,23 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
       });
 
       setGestureEnabled(true);
-      toast.success('Gesture recognition started');
+      toast.success("Gesture recognition started");
     } catch (error) {
-      console.error('Error starting gesture recognition:', error);
-      toast.error('Failed to start gesture recognition');
+      console.error("Error starting gesture recognition:", error);
+      toast.error("Failed to start gesture recognition");
     }
   };
 
   const stopGestureRecognition = () => {
     gestureProcessor.stopRecognition();
     setGestureEnabled(false);
-    toast.info('Gesture recognition stopped');
+    toast.info("Gesture recognition stopped");
   };
 
   const startVoiceCommand = async () => {
     try {
       setVoiceEnabled(true);
-      toast.info('Listening for voice command...');
+      toast.info("Listening for voice command...");
 
       await intentEngine.processVoiceCommand(
         (transcript) => {
@@ -152,15 +152,15 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
           processMultimodalInput({ voice: transcript });
         },
         (error) => {
-          console.error('Voice recognition error:', error);
-          toast.error('Voice recognition failed');
+          console.error("Voice recognition error:", error);
+          toast.error("Voice recognition failed");
         }
       );
 
       setVoiceEnabled(false);
     } catch (error) {
-      console.error('Error with voice command:', error);
-      toast.error('Failed to process voice command');
+      console.error("Error with voice command:", error);
+      toast.error("Failed to process voice command");
       setVoiceEnabled(false);
     }
   };
@@ -185,7 +185,7 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
         } : undefined,
         context: {
           visual: input.visual,
-          currentEnvironment: 'xr',
+          currentEnvironment: "xr",
         },
       });
 
@@ -199,7 +199,7 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
           confidence: input.gestural.confidence,
           data: input.gestural
         } : undefined,
-        currentEnvironment: 'xr',
+        currentEnvironment: "xr",
       });
 
       setLastResponse(response);
@@ -208,8 +208,8 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
       await outputResponse(response);
 
     } catch (error) {
-      console.error('Error processing multimodal input:', error);
-      toast.error('Failed to process input');
+      console.error("Error processing multimodal input:", error);
+      toast.error("Failed to process input");
     } finally {
       setIsProcessing(false);
     }
@@ -217,20 +217,20 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
 
   const outputResponse = async (response: AdaptiveResponse) => {
     // Voice output
-    if (response.modality === 'voice' || response.modality === 'multimodal') {
-      const emotion = response.urgency === 'critical' ? 'critical' :
-                     response.urgency === 'high' ? 'urgent' :
-                     response.urgency === 'medium' ? 'warning' : 'calm';
+    if (response.modality === "voice" || response.modality === "multimodal") {
+      const emotion = response.urgency === "critical" ? "critical" :
+        response.urgency === "high" ? "urgent" :
+          response.urgency === "medium" ? "warning" : "calm";
       
       await voiceFeedback.speakWithEmotion(response.content, emotion);
     }
 
     // Text/visual output
-    if (response.modality === 'text' || response.modality === 'visual' || response.modality === 'multimodal') {
-      const variant = response.urgency === 'critical' || response.urgency === 'high' ? 'error' :
-                     response.urgency === 'medium' ? 'warning' : 'success';
+    if (response.modality === "text" || response.modality === "visual" || response.modality === "multimodal") {
+      const variant = response.urgency === "critical" || response.urgency === "high" ? "error" :
+        response.urgency === "medium" ? "warning" : "success";
       
-      toast[variant === 'error' ? 'error' : variant === 'warning' ? 'warning' : 'success'](response.content);
+      toast[variant === "error" ? "error" : variant === "warning" ? "warning" : "success"](response.content);
     }
   };
 
@@ -239,13 +239,13 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
       // Start copilot
       await startCamera();
       setIsActive(true);
-      toast.success('XR Copilot activated');
+      toast.success("XR Copilot activated");
     } else {
       // Stop copilot
       cleanup();
       stopCamera();
       setIsActive(false);
-      toast.info('XR Copilot deactivated');
+      toast.info("XR Copilot deactivated");
     }
   };
 
@@ -279,11 +279,11 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Activity className={`h-5 w-5 ${isActive ? 'text-green-600 animate-pulse' : 'text-gray-400'}`} />
+              <Activity className={`h-5 w-5 ${isActive ? "text-green-600 animate-pulse" : "text-gray-400"}`} />
               <span className="font-medium">XR Copilot</span>
             </div>
-            <Button onClick={toggleCopilot} variant={isActive ? 'destructive' : 'default'}>
-              {isActive ? 'Deactivate' : 'Activate'}
+            <Button onClick={toggleCopilot} variant={isActive ? "destructive" : "default"}>
+              {isActive ? "Deactivate" : "Activate"}
             </Button>
           </div>
 
@@ -328,11 +328,11 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
                 </div>
                 <Button 
                   size="sm" 
-                  variant={voiceEnabled ? 'secondary' : 'outline'}
+                  variant={voiceEnabled ? "secondary" : "outline"}
                   onClick={startVoiceCommand}
                   disabled={voiceEnabled}
                 >
-                  {voiceEnabled ? 'Listening...' : 'Speak'}
+                  {voiceEnabled ? "Listening..." : "Speak"}
                 </Button>
               </div>
             </div>
@@ -371,15 +371,15 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
               {visualContext ? (
                 <div className="space-y-2 text-sm">
                   <div>
-                    <span className="font-semibold">Scene:</span>{' '}
+                    <span className="font-semibold">Scene:</span>{" "}
                     {visualContext.sceneClassification}
                   </div>
                   <div>
-                    <span className="font-semibold">Objects:</span>{' '}
+                    <span className="font-semibold">Objects:</span>{" "}
                     {visualContext.detectedObjects.length}
                   </div>
                   <div>
-                    <span className="font-semibold">Confidence:</span>{' '}
+                    <span className="font-semibold">Confidence:</span>{" "}
                     {(visualContext.confidence * 100).toFixed(0)}%
                   </div>
                 </div>
@@ -400,15 +400,15 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
               {currentGesture ? (
                 <div className="space-y-2 text-sm">
                   <div>
-                    <span className="font-semibold">Type:</span>{' '}
+                    <span className="font-semibold">Type:</span>{" "}
                     {currentGesture.type}
                   </div>
                   <div>
-                    <span className="font-semibold">Hand:</span>{' '}
+                    <span className="font-semibold">Hand:</span>{" "}
                     {currentGesture.handedness}
                   </div>
                   <div>
-                    <span className="font-semibold">Confidence:</span>{' '}
+                    <span className="font-semibold">Confidence:</span>{" "}
                     {(currentGesture.confidence * 100).toFixed(0)}%
                   </div>
                 </div>
@@ -429,17 +429,17 @@ export function XRCopilot({ experimentalMode = true }: XRCopilotProps) {
               {currentIntent ? (
                 <div className="space-y-2 text-sm">
                   <div>
-                    <span className="font-semibold">Intent:</span>{' '}
+                    <span className="font-semibold">Intent:</span>{" "}
                     {currentIntent.intent}
                   </div>
                   <div>
-                    <span className="font-semibold">Action:</span>{' '}
+                    <span className="font-semibold">Action:</span>{" "}
                     {currentIntent.action}
                   </div>
                   {lastResponse && (
                     <div>
-                      <span className="font-semibold">Urgency:</span>{' '}
-                      <Badge variant={lastResponse.urgency === 'critical' ? 'destructive' : 'default'}>
+                      <span className="font-semibold">Urgency:</span>{" "}
+                      <Badge variant={lastResponse.urgency === "critical" ? "destructive" : "default"}>
                         {lastResponse.urgency}
                       </Badge>
                     </div>

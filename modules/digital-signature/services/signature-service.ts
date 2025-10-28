@@ -3,15 +3,15 @@
  * PATCH 153.0 - Document signing with ICP-Brasil/OpenCert
  */
 
-import { createClient } from '@/integrations/supabase/client';
-import { DigitalCertificate, SignatureRequest, SignedDocument, SignatureVerification } from '../types';
+import { createClient } from "@/integrations/supabase/client";
+import { DigitalCertificate, SignatureRequest, SignedDocument, SignatureVerification } from "../types";
 
 /**
  * Upload digital certificate or key
  */
 export const uploadCertificate = async (
   certificateFile: File,
-  type: 'ICP-Brasil' | 'OpenCert' | 'Custom'
+  type: "ICP-Brasil" | "OpenCert" | "Custom"
 ): Promise<DigitalCertificate> => {
   const supabase = createClient();
 
@@ -23,8 +23,8 @@ export const uploadCertificate = async (
     id: `CERT-${Date.now()}`,
     type,
     name: certificateFile.name,
-    issuer: 'Certificate Authority',
-    subject: 'User Subject',
+    issuer: "Certificate Authority",
+    subject: "User Subject",
     validFrom: new Date().toISOString(),
     validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
     serialNumber: `SN-${Date.now()}`,
@@ -35,7 +35,7 @@ export const uploadCertificate = async (
 
   // Store certificate
   const { error } = await supabase
-    .from('digital_certificates')
+    .from("digital_certificates")
     .insert([certificate]);
 
   if (error) throw error;
@@ -57,7 +57,7 @@ export const signDocument = async (request: SignatureRequest): Promise<SignedDoc
     originalDocumentId: request.documentId,
     signedDocumentUrl: `${request.documentUrl}?signed=true`,
     certificateId: request.certificateId,
-    signedBy: 'Current User',
+    signedBy: "Current User",
     signedAt: new Date().toISOString(),
     reason: request.reason,
     location: request.location,
@@ -67,7 +67,7 @@ export const signDocument = async (request: SignatureRequest): Promise<SignedDoc
 
   // Store signed document
   const { error } = await supabase
-    .from('signed_documents')
+    .from("signed_documents")
     .insert([signedDoc]);
 
   if (error) throw error;
@@ -83,9 +83,9 @@ export const verifySignature = async (signedDocumentId: string): Promise<Signatu
 
   // Fetch signed document
   const { data: signedDoc, error: docError } = await supabase
-    .from('signed_documents')
-    .select('*')
-    .eq('id', signedDocumentId)
+    .from("signed_documents")
+    .select("*")
+    .eq("id", signedDocumentId)
     .single();
 
   if (docError || !signedDoc) {
@@ -93,16 +93,16 @@ export const verifySignature = async (signedDocumentId: string): Promise<Signatu
       valid: false,
       signedDocument: null,
       certificate: null,
-      message: 'Signed document not found',
+      message: "Signed document not found",
       verifiedAt: new Date().toISOString()
     };
   }
 
   // Fetch certificate
   const { data: cert, error: certError } = await supabase
-    .from('digital_certificates')
-    .select('*')
-    .eq('id', signedDoc.certificateId)
+    .from("digital_certificates")
+    .select("*")
+    .eq("id", signedDoc.certificateId)
     .single();
 
   if (certError || !cert) {
@@ -110,7 +110,7 @@ export const verifySignature = async (signedDocumentId: string): Promise<Signatu
       valid: false,
       signedDocument: signedDoc,
       certificate: null,
-      message: 'Certificate not found',
+      message: "Certificate not found",
       verifiedAt: new Date().toISOString()
     };
   }
@@ -125,7 +125,7 @@ export const verifySignature = async (signedDocumentId: string): Promise<Signatu
       valid: false,
       signedDocument: signedDoc,
       certificate: cert,
-      message: 'Certificate is expired or not yet valid',
+      message: "Certificate is expired or not yet valid",
       verifiedAt: new Date().toISOString()
     };
   }
@@ -137,7 +137,7 @@ export const verifySignature = async (signedDocumentId: string): Promise<Signatu
     valid: isValid,
     signedDocument: signedDoc,
     certificate: cert,
-    message: isValid ? 'Signature is valid' : 'Signature verification failed',
+    message: isValid ? "Signature is valid" : "Signature verification failed",
     verifiedAt: new Date().toISOString()
   };
 };
@@ -154,9 +154,9 @@ const generateSignature = async (request: SignatureRequest): Promise<string> => 
 
   const encoder = new TextEncoder();
   const dataBuffer = encoder.encode(data);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const signature = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  const signature = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 
   return signature;
 };
@@ -167,9 +167,9 @@ const generateSignature = async (request: SignatureRequest): Promise<string> => 
 const generateFingerprint = async (content: string): Promise<string> => {
   const encoder = new TextEncoder();
   const dataBuffer = encoder.encode(content);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const fingerprint = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  const fingerprint = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 
   return fingerprint;
 };
@@ -193,12 +193,12 @@ export const listCertificates = async () => {
   const supabase = createClient();
 
   const { data, error } = await supabase
-    .from('digital_certificates')
-    .select('*')
-    .order('uploadedAt', { ascending: false });
+    .from("digital_certificates")
+    .select("*")
+    .order("uploadedAt", { ascending: false });
 
   if (error) {
-    console.error('Error listing certificates:', error);
+    console.error("Error listing certificates:", error);
     return [];
   }
 
@@ -212,12 +212,12 @@ export const listSignedDocuments = async () => {
   const supabase = createClient();
 
   const { data, error } = await supabase
-    .from('signed_documents')
-    .select('*')
-    .order('signedAt', { ascending: false });
+    .from("signed_documents")
+    .select("*")
+    .order("signedAt", { ascending: false });
 
   if (error) {
-    console.error('Error listing signed documents:', error);
+    console.error("Error listing signed documents:", error);
     return [];
   }
 

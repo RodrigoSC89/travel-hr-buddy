@@ -9,14 +9,14 @@
  * - Mission continuity management
  */
 
-import { offlineStorage } from './offline-storage';
-import { networkDetector } from './networkDetector';
-import { structuredLogger } from '@/lib/logger/structured-logger';
-import { supabase } from '@/integrations/supabase/client';
+import { offlineStorage } from "./offline-storage";
+import { networkDetector } from "./networkDetector";
+import { structuredLogger } from "@/lib/logger/structured-logger";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface MissionState {
   missionId: string;
-  status: 'active' | 'paused' | 'failed' | 'completed';
+  status: "active" | "paused" | "failed" | "completed";
   progress: number;
   currentStep: number;
   totalSteps: number;
@@ -35,7 +35,7 @@ export interface MissionCheckpoint {
   step: number;
   timestamp: Date;
   data: Record<string, unknown>;
-  status: 'completed' | 'failed';
+  status: "completed" | "failed";
 }
 
 export interface RecoveryOptions {
@@ -76,7 +76,7 @@ class MissionRecoveryEngine {
   ): Promise<void> {
     const state: MissionState = {
       missionId,
-      status: 'active',
+      status: "active",
       progress: 0,
       currentStep: 0,
       totalSteps,
@@ -92,7 +92,7 @@ class MissionRecoveryEngine {
     // Start auto-checkpointing
     this.startAutoCheckpointing(missionId);
 
-    structuredLogger.info('Mission started with recovery support', { missionId });
+    structuredLogger.info("Mission started with recovery support", { missionId });
   }
 
   /**
@@ -115,7 +115,7 @@ class MissionRecoveryEngine {
 
     await this.persistState(missionId, state);
 
-    structuredLogger.debug('Mission progress updated', {
+    structuredLogger.debug("Mission progress updated", {
       missionId,
       step,
       progress: state.progress,
@@ -133,13 +133,13 @@ class MissionRecoveryEngine {
       step: state.currentStep,
       timestamp: new Date(),
       data: { ...state.data },
-      status: 'completed',
+      status: "completed",
     };
 
     state.checkpoints.push(checkpoint);
     await this.persistState(missionId, state);
 
-    structuredLogger.debug('Mission checkpoint created', {
+    structuredLogger.debug("Mission checkpoint created", {
       missionId,
       step: checkpoint.step,
     });
@@ -156,7 +156,7 @@ class MissionRecoveryEngine {
     const state = this.activeMissions.get(missionId);
     if (!state) return;
 
-    state.status = 'failed';
+    state.status = "failed";
     state.error = {
       message: error.message,
       timestamp: new Date(),
@@ -165,7 +165,7 @@ class MissionRecoveryEngine {
 
     await this.persistState(missionId, state);
 
-    structuredLogger.error('Mission failed', error, {
+    structuredLogger.error("Mission failed", error, {
       missionId,
       recoverable,
     });
@@ -198,13 +198,13 @@ class MissionRecoveryEngine {
     // Check retry attempts
     const attempts = this.recoveryAttempts.get(missionId) || 0;
     if (attempts >= maxRetries) {
-      structuredLogger.warn('Max recovery attempts reached', { missionId });
+      structuredLogger.warn("Max recovery attempts reached", { missionId });
       return false;
     }
 
     this.recoveryAttempts.set(missionId, attempts + 1);
 
-    structuredLogger.info('Attempting mission recovery', {
+    structuredLogger.info("Attempting mission recovery", {
       missionId,
       attempt: attempts + 1,
       maxRetries,
@@ -216,11 +216,11 @@ class MissionRecoveryEngine {
 
       if (!isOnline && fallbackToLocal) {
         // Continue in offline mode
-        state.status = 'active';
+        state.status = "active";
         state.error = undefined;
         await this.persistState(missionId, state);
         
-        structuredLogger.info('Mission recovered in offline mode', { missionId });
+        structuredLogger.info("Mission recovered in offline mode", { missionId });
         return true;
       }
 
@@ -240,17 +240,17 @@ class MissionRecoveryEngine {
         state.progress = (lastCheckpoint.step / state.totalSteps) * 100;
       }
 
-      state.status = 'active';
+      state.status = "active";
       state.error = undefined;
       await this.persistState(missionId, state);
 
       // Sync with backend
       await this.syncMissionState(missionId, state);
 
-      structuredLogger.info('Mission recovered successfully', { missionId });
+      structuredLogger.info("Mission recovered successfully", { missionId });
       return true;
     } catch (error) {
-      structuredLogger.error('Mission recovery failed', error as Error, { missionId });
+      structuredLogger.error("Mission recovery failed", error as Error, { missionId });
       
       if (autoRetry) {
         setTimeout(() => this.attemptRecovery(missionId, options), retryDelay);
@@ -265,9 +265,9 @@ class MissionRecoveryEngine {
    */
   private async attemptRecoveryForAllMissions(): Promise<void> {
     const failedMissions = Array.from(this.activeMissions.entries())
-      .filter(([_, state]) => state.status === 'failed' && state.error?.recoverable);
+      .filter(([_, state]) => state.status === "failed" && state.error?.recoverable);
 
-    structuredLogger.info('Attempting recovery for all failed missions', {
+    structuredLogger.info("Attempting recovery for all failed missions", {
       count: failedMissions.length,
     });
 
@@ -283,7 +283,7 @@ class MissionRecoveryEngine {
     const state = this.activeMissions.get(missionId);
     if (!state) return;
 
-    state.status = 'completed';
+    state.status = "completed";
     state.progress = 100;
     state.currentStep = state.totalSteps;
     await this.persistState(missionId, state);
@@ -298,7 +298,7 @@ class MissionRecoveryEngine {
     this.activeMissions.delete(missionId);
     this.recoveryAttempts.delete(missionId);
 
-    structuredLogger.info('Mission completed', { missionId });
+    structuredLogger.info("Mission completed", { missionId });
   }
 
   /**
@@ -313,18 +313,18 @@ class MissionRecoveryEngine {
         
         // Only restore active or failed recoverable missions
         if (
-          state.status === 'active' ||
-          (state.status === 'failed' && state.error?.recoverable)
+          state.status === "active" ||
+          (state.status === "failed" && state.error?.recoverable)
         ) {
           this.activeMissions.set(state.missionId, state);
           
-          if (state.status === 'active') {
+          if (state.status === "active") {
             this.startAutoCheckpointing(state.missionId);
           }
         }
       }
 
-      structuredLogger.info('Missions restored from storage', {
+      structuredLogger.info("Missions restored from storage", {
         count: this.activeMissions.size,
       });
 
@@ -334,7 +334,7 @@ class MissionRecoveryEngine {
         await this.attemptRecoveryForAllMissions();
       }
     } catch (error) {
-      structuredLogger.error('Failed to restore missions', error as Error);
+      structuredLogger.error("Failed to restore missions", error as Error);
     }
   }
 
@@ -345,7 +345,7 @@ class MissionRecoveryEngine {
     try {
       await offlineStorage.cacheMission(missionId, state);
     } catch (error) {
-      structuredLogger.error('Failed to persist mission state', error as Error, { missionId });
+      structuredLogger.error("Failed to persist mission state", error as Error, { missionId });
     }
   }
 
@@ -355,7 +355,7 @@ class MissionRecoveryEngine {
   private async syncMissionState(missionId: string, state: MissionState): Promise<void> {
     try {
       const { error } = await supabase
-        .from('missions' as any)
+        .from("missions" as any)
         .upsert({
           id: missionId,
           status: state.status,
@@ -368,9 +368,9 @@ class MissionRecoveryEngine {
 
       if (error) throw error;
 
-      structuredLogger.debug('Mission state synced', { missionId });
+      structuredLogger.debug("Mission state synced", { missionId });
     } catch (error) {
-      structuredLogger.error('Failed to sync mission state', error as Error, { missionId });
+      structuredLogger.error("Failed to sync mission state", error as Error, { missionId });
       throw error;
     }
   }

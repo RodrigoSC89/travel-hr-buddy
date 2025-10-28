@@ -128,23 +128,23 @@ export function EmployeeRequests() {
 
   const getStatusBadge = (status: RequestStatus) => {
     switch (status) {
-      case "approved":
-        return <Badge variant="default">Aprovada</Badge>;
-      case "rejected":
-        return <Badge variant="destructive">Rejeitada</Badge>;
-      default:
-        return <Badge variant="secondary">Pendente</Badge>;
+    case "approved":
+      return <Badge variant="default">Aprovada</Badge>;
+    case "rejected":
+      return <Badge variant="destructive">Rejeitada</Badge>;
+    default:
+      return <Badge variant="secondary">Pendente</Badge>;
     }
   };
 
   const getRequestIcon = (type: RequestType) => {
     switch (type) {
-      case "vacation":
-        return <Calendar className="h-5 w-5" />;
-      case "certificate":
-        return <FileText className="h-5 w-5" />;
-      case "travel":
-        return <Plane className="h-5 w-5" />;
+    case "vacation":
+      return <Calendar className="h-5 w-5" />;
+    case "certificate":
+      return <FileText className="h-5 w-5" />;
+    case "travel":
+      return <Plane className="h-5 w-5" />;
     }
   };
 

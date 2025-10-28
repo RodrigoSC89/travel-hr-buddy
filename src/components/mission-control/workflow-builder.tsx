@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from "react";
 import ReactFlow, {
   Node,
   Edge,
@@ -11,16 +11,16 @@ import ReactFlow, {
   Background,
   MiniMap,
   Panel,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+} from "reactflow";
+import "reactflow/dist/style.css";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Play,
   Save,
@@ -35,7 +35,7 @@ import {
   List,
   Download,
   Upload,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -43,23 +43,23 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 // Node types configuration
 const nodeTypes = [
-  { type: 'trigger', label: 'Trigger', icon: Zap, color: 'bg-yellow-500', hexColor: '#eab308' },
-  { type: 'database', label: 'Database', icon: Database, color: 'bg-blue-500', hexColor: '#3b82f6' },
-  { type: 'ai_analysis', label: 'AI Analysis', icon: Sparkles, color: 'bg-purple-500', hexColor: '#a855f7' },
-  { type: 'notification', label: 'Notification', icon: Bell, color: 'bg-green-500', hexColor: '#22c55e' },
-  { type: 'condition', label: 'Condition', icon: GitBranch, color: 'bg-orange-500', hexColor: '#f97316' },
-  { type: 'delay', label: 'Delay', icon: Clock, color: 'bg-gray-500', hexColor: '#6b7280' },
+  { type: "trigger", label: "Trigger", icon: Zap, color: "bg-yellow-500", hexColor: "#eab308" },
+  { type: "database", label: "Database", icon: Database, color: "bg-blue-500", hexColor: "#3b82f6" },
+  { type: "ai_analysis", label: "AI Analysis", icon: Sparkles, color: "bg-purple-500", hexColor: "#a855f7" },
+  { type: "notification", label: "Notification", icon: Bell, color: "bg-green-500", hexColor: "#22c55e" },
+  { type: "condition", label: "Condition", icon: GitBranch, color: "bg-orange-500", hexColor: "#f97316" },
+  { type: "delay", label: "Delay", icon: Clock, color: "bg-gray-500", hexColor: "#6b7280" },
 ];
 
 interface WorkflowLog {
@@ -76,9 +76,9 @@ export const WorkflowBuilder = () => {
   const { toast } = useToast();
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [workflowName, setWorkflowName] = useState('');
-  const [workflowDescription, setWorkflowDescription] = useState('');
-  const [selectedNodeType, setSelectedNodeType] = useState('trigger');
+  const [workflowName, setWorkflowName] = useState("");
+  const [workflowDescription, setWorkflowDescription] = useState("");
+  const [selectedNodeType, setSelectedNodeType] = useState("trigger");
   const [workflows, setWorkflows] = useState([]);
   const [selectedWorkflow, setSelectedWorkflow] = useState(null);
   const [isExecuting, setIsExecuting] = useState(false);
@@ -92,17 +92,17 @@ export const WorkflowBuilder = () => {
   const loadWorkflows = async () => {
     try {
       const { data, error } = await supabase
-        .from('mission_workflows')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("mission_workflows")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setWorkflows(data || []);
     } catch (error: any) {
       toast({
-        title: 'Error loading workflows',
+        title: "Error loading workflows",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -118,7 +118,7 @@ export const WorkflowBuilder = () => {
 
     const newNode: Node = {
       id: `node-${Date.now()}`,
-      type: 'default',
+      type: "default",
       position: { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 },
       data: {
         label: (
@@ -131,17 +131,17 @@ export const WorkflowBuilder = () => {
       },
       style: {
         background: nodeConfig.hexColor,
-        color: 'white',
-        border: '2px solid #fff',
-        borderRadius: '8px',
-        padding: '10px',
+        color: "white",
+        border: "2px solid #fff",
+        borderRadius: "8px",
+        padding: "10px",
       },
     };
 
     setNodes((nds) => [...nds, newNode]);
 
     toast({
-      title: 'Node added',
+      title: "Node added",
       description: `${nodeConfig.label} node added to workflow`,
     });
   };
@@ -149,9 +149,9 @@ export const WorkflowBuilder = () => {
   const saveWorkflow = async () => {
     if (!workflowName) {
       toast({
-        title: 'Name required',
-        description: 'Please enter a workflow name',
-        variant: 'destructive',
+        title: "Name required",
+        description: "Please enter a workflow name",
+        variant: "destructive",
       });
       return;
     }
@@ -172,12 +172,12 @@ export const WorkflowBuilder = () => {
       };
 
       const { data, error } = await supabase
-        .from('mission_workflows')
+        .from("mission_workflows")
         .insert({
           name: workflowName,
           description: workflowDescription,
           workflow_definition: workflowDefinition,
-          status: 'active',
+          status: "active",
           is_active: true,
           created_by: (await supabase.auth.getUser()).data.user?.id,
         })
@@ -187,7 +187,7 @@ export const WorkflowBuilder = () => {
       if (error) throw error;
 
       toast({
-        title: 'Workflow saved',
+        title: "Workflow saved",
         description: `Workflow "${workflowName}" has been saved successfully`,
       });
 
@@ -195,9 +195,9 @@ export const WorkflowBuilder = () => {
       loadWorkflows();
     } catch (error: any) {
       toast({
-        title: 'Error saving workflow',
+        title: "Error saving workflow",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -206,7 +206,7 @@ export const WorkflowBuilder = () => {
     try {
       setSelectedWorkflow(workflow);
       setWorkflowName(workflow.name);
-      setWorkflowDescription(workflow.description || '');
+      setWorkflowDescription(workflow.description || "");
 
       if (workflow.workflow_definition) {
         const def = workflow.workflow_definition;
@@ -216,7 +216,7 @@ export const WorkflowBuilder = () => {
           const nodeConfig = nodeTypes.find((n) => n.type === node.type);
           return {
             id: node.id,
-            type: 'default',
+            type: "default",
             position: node.position,
             data: {
               label: (
@@ -228,11 +228,11 @@ export const WorkflowBuilder = () => {
               nodeType: node.type,
             },
             style: {
-              background: nodeConfig?.hexColor || '#6b7280',
-              color: 'white',
-              border: '2px solid #fff',
-              borderRadius: '8px',
-              padding: '10px',
+              background: nodeConfig?.hexColor || "#6b7280",
+              color: "white",
+              border: "2px solid #fff",
+              borderRadius: "8px",
+              padding: "10px",
             },
           };
         }) || [];
@@ -249,14 +249,14 @@ export const WorkflowBuilder = () => {
       }
 
       toast({
-        title: 'Workflow loaded',
+        title: "Workflow loaded",
         description: `Loaded workflow "${workflow.name}"`,
       });
     } catch (error: any) {
       toast({
-        title: 'Error loading workflow',
+        title: "Error loading workflow",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -264,9 +264,9 @@ export const WorkflowBuilder = () => {
   const executeWorkflow = async () => {
     if (!selectedWorkflow) {
       toast({
-        title: 'No workflow selected',
-        description: 'Please save or load a workflow first',
-        variant: 'destructive',
+        title: "No workflow selected",
+        description: "Please save or load a workflow first",
+        variant: "destructive",
       });
       return;
     }
@@ -288,14 +288,14 @@ export const WorkflowBuilder = () => {
         await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 2000));
 
         const duration = Date.now() - startTime;
-        const status = Math.random() > 0.1 ? 'completed' : 'failed';
+        const status = Math.random() > 0.1 ? "completed" : "failed";
 
         const log: WorkflowLog = {
           id: `log-${Date.now()}-${i}`,
           step_name: `Step ${i + 1}`,
           step_type: node.data.nodeType,
           status,
-          error_message: status === 'failed' ? 'Simulated error for testing' : undefined,
+          error_message: status === "failed" ? "Simulated error for testing" : undefined,
           timestamp: new Date().toISOString(),
           duration_ms: duration,
         };
@@ -304,7 +304,7 @@ export const WorkflowBuilder = () => {
         setExecutionLogs([...logs]);
 
         // Save to database
-        await supabase.from('mission_logs').insert({
+        await supabase.from("mission_logs").insert({
           workflow_id: selectedWorkflow.id,
           execution_id: executionId,
           step_name: log.step_name,
@@ -313,30 +313,30 @@ export const WorkflowBuilder = () => {
           error_message: log.error_message,
           duration_ms: log.duration_ms,
           input_data: { node_id: node.id },
-          output_data: status === 'completed' ? { result: 'success' } : null,
+          output_data: status === "completed" ? { result: "success" } : null,
         });
 
-        if (status === 'failed') break;
+        if (status === "failed") break;
       }
 
       // Update workflow execution count
       await supabase
-        .from('mission_workflows')
+        .from("mission_workflows")
         .update({
           last_executed_at: new Date().toISOString(),
           execution_count: (selectedWorkflow.execution_count || 0) + 1,
         })
-        .eq('id', selectedWorkflow.id);
+        .eq("id", selectedWorkflow.id);
 
       toast({
-        title: 'Workflow executed',
+        title: "Workflow executed",
         description: `Execution completed with ${logs.length} steps`,
       });
     } catch (error: any) {
       toast({
-        title: 'Execution error',
+        title: "Execution error",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsExecuting(false);
@@ -348,28 +348,28 @@ export const WorkflowBuilder = () => {
 
     try {
       const { error } = await supabase
-        .from('mission_workflows')
+        .from("mission_workflows")
         .delete()
-        .eq('id', selectedWorkflow.id);
+        .eq("id", selectedWorkflow.id);
 
       if (error) throw error;
 
       toast({
-        title: 'Workflow deleted',
-        description: 'Workflow has been deleted successfully',
+        title: "Workflow deleted",
+        description: "Workflow has been deleted successfully",
       });
 
       setSelectedWorkflow(null);
       setNodes([]);
       setEdges([]);
-      setWorkflowName('');
-      setWorkflowDescription('');
+      setWorkflowName("");
+      setWorkflowDescription("");
       loadWorkflows();
     } catch (error: any) {
       toast({
-        title: 'Error deleting workflow',
+        title: "Error deleting workflow",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -377,8 +377,8 @@ export const WorkflowBuilder = () => {
   const clearCanvas = () => {
     setNodes([]);
     setEdges([]);
-    setWorkflowName('');
-    setWorkflowDescription('');
+    setWorkflowName("");
+    setWorkflowDescription("");
     setSelectedWorkflow(null);
   };
 
@@ -405,7 +405,7 @@ export const WorkflowBuilder = () => {
           </Button>
           <Button onClick={executeWorkflow} disabled={isExecuting || !selectedWorkflow}>
             <Play className="h-4 w-4 mr-2" />
-            {isExecuting ? 'Executing...' : 'Execute'}
+            {isExecuting ? "Executing..." : "Execute"}
           </Button>
           {selectedWorkflow && (
             <Button onClick={deleteWorkflow} variant="destructive">
@@ -426,7 +426,7 @@ export const WorkflowBuilder = () => {
             {workflows.map((workflow) => (
               <Button
                 key={workflow.id}
-                variant={selectedWorkflow?.id === workflow.id ? 'default' : 'outline'}
+                variant={selectedWorkflow?.id === workflow.id ? "default" : "outline"}
                 className="w-full justify-start text-left"
                 onClick={() => loadWorkflow(workflow)}
               >
@@ -529,13 +529,13 @@ export const WorkflowBuilder = () => {
           </DialogHeader>
           <div className="space-y-2">
             {executionLogs.map((log) => (
-              <Card key={log.id} className={log.status === 'failed' ? 'border-red-500' : ''}>
+              <Card key={log.id} className={log.status === "failed" ? "border-red-500" : ""}>
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <Badge
-                          variant={log.status === 'completed' ? 'default' : 'destructive'}
+                          variant={log.status === "completed" ? "default" : "destructive"}
                         >
                           {log.status}
                         </Badge>

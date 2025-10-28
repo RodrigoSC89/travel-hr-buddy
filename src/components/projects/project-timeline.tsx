@@ -24,8 +24,8 @@ import {
   Users,
   FileText
 } from "lucide-react";
-import * as XLSX from 'xlsx';
-import jsPDF from 'jspdf';
+import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
 
 interface ProjectTask {
   id: string;
@@ -33,8 +33,8 @@ interface ProjectTask {
   project_name: string;
   task_name: string;
   description: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'blocked' | 'cancelled';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  status: "pending" | "in_progress" | "completed" | "blocked" | "cancelled";
+  priority: "low" | "medium" | "high" | "critical";
   assigned_to?: string;
   start_date: string;
   end_date: string;
@@ -47,7 +47,7 @@ interface TaskDependency {
   id: string;
   task_id: string;
   depends_on_task_id: string;
-  dependency_type: 'finish_to_start' | 'start_to_start' | 'finish_to_finish' | 'start_to_finish';
+  dependency_type: "finish_to_start" | "start_to_start" | "finish_to_finish" | "start_to_finish";
 }
 
 interface ProjectTimelineProps {}
@@ -63,7 +63,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterPriority, setFilterPriority] = useState<string>("all");
   const [filterAssignee, setFilterAssignee] = useState<string>("all");
-  const [viewMode, setViewMode] = useState<'gantt' | 'list'>('gantt');
+  const [viewMode, setViewMode] = useState<"gantt" | "list">("gantt");
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -73,8 +73,8 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     status: "pending" as const,
     priority: "medium" as const,
     assigned_to: "",
-    start_date: new Date().toISOString().split('T')[0],
-    end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    start_date: new Date().toISOString().split("T")[0],
+    end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     progress: 0
   });
 
@@ -91,14 +91,14 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('project_tasks')
-        .select('*')
-        .order('start_date', { ascending: true }) as any;
+        .from("project_tasks")
+        .select("*")
+        .order("start_date", { ascending: true }) as any;
 
       if (error) throw error;
       setTasks((data || []) as any);
     } catch (error) {
-      console.error('Error fetching tasks:', error);
+      console.error("Error fetching tasks:", error);
       toast({
         title: "Error",
         description: "Failed to load tasks",
@@ -112,13 +112,13 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
   const fetchDependencies = async () => {
     try {
       const { data, error } = await supabase
-        .from('project_dependencies')
-        .select('*') as any;
+        .from("project_dependencies")
+        .select("*") as any;
 
       if (error) throw error;
       setDependencies((data || []) as any);
     } catch (error) {
-      console.error('Error fetching dependencies:', error);
+      console.error("Error fetching dependencies:", error);
     }
   };
 
@@ -143,7 +143,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
   const createTask = async () => {
     try {
       const { error } = await supabase
-        .from('project_tasks')
+        .from("project_tasks")
         .insert([{
           project_id: formData.project_name, // In a real app, this would be a proper UUID
           ...formData
@@ -156,7 +156,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       resetForm();
       fetchTasks();
     } catch (error) {
-      console.error('Error creating task:', error);
+      console.error("Error creating task:", error);
       toast({
         title: "Error",
         description: "Failed to create task",
@@ -170,9 +170,9 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
 
     try {
       const { error } = await supabase
-        .from('project_tasks')
+        .from("project_tasks")
         .update(formData)
-        .eq('id', selectedTask.id);
+        .eq("id", selectedTask.id);
 
       if (error) throw error;
 
@@ -182,7 +182,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       resetForm();
       fetchTasks();
     } catch (error) {
-      console.error('Error updating task:', error);
+      console.error("Error updating task:", error);
       toast({
         title: "Error",
         description: "Failed to update task",
@@ -196,16 +196,16 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
 
     try {
       const { error } = await supabase
-        .from('project_tasks')
+        .from("project_tasks")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
 
       toast({ title: "Success", description: "Task deleted successfully" });
       fetchTasks();
     } catch (error) {
-      console.error('Error deleting task:', error);
+      console.error("Error deleting task:", error);
       toast({
         title: "Error",
         description: "Failed to delete task",
@@ -222,8 +222,8 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       status: "pending",
       priority: "medium",
       assigned_to: "",
-      start_date: new Date().toISOString().split('T')[0],
-      end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      start_date: new Date().toISOString().split("T")[0],
+      end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       progress: 0
     });
   };
@@ -237,8 +237,8 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       status: task.status,
       priority: task.priority,
       assigned_to: task.assigned_to || "",
-      start_date: task.start_date.split('T')[0],
-      end_date: task.end_date.split('T')[0],
+      start_date: task.start_date.split("T")[0],
+      end_date: task.end_date.split("T")[0],
       progress: task.progress
     });
     setIsEditOpen(true);
@@ -246,19 +246,19 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredTasks.map(task => ({
-      'Project': task.project_name,
-      'Task': task.task_name,
-      'Status': task.status,
-      'Priority': task.priority,
-      'Assigned To': task.assigned_to || 'Unassigned',
-      'Start Date': new Date(task.start_date).toLocaleDateString(),
-      'End Date': new Date(task.end_date).toLocaleDateString(),
-      'Progress': `${task.progress}%`
+      "Project": task.project_name,
+      "Task": task.task_name,
+      "Status": task.status,
+      "Priority": task.priority,
+      "Assigned To": task.assigned_to || "Unassigned",
+      "Start Date": new Date(task.start_date).toLocaleDateString(),
+      "End Date": new Date(task.end_date).toLocaleDateString(),
+      "Progress": `${task.progress}%`
     })));
 
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Tasks');
-    XLSX.writeFile(workbook, 'project_timeline.xlsx');
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Tasks");
+    XLSX.writeFile(workbook, "project_timeline.xlsx");
 
     toast({ title: "Success", description: "Timeline exported to Excel" });
   };
@@ -267,7 +267,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     const doc = new jsPDF();
     
     doc.setFontSize(16);
-    doc.text('Project Timeline', 14, 20);
+    doc.text("Project Timeline", 14, 20);
     
     doc.setFontSize(10);
     let yPos = 35;
@@ -288,35 +288,35 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       yPos += 10;
     });
     
-    doc.save('project_timeline.pdf');
+    doc.save("project_timeline.pdf");
     toast({ title: "Success", description: "Timeline exported to PDF" });
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'bg-green-500';
-      case 'in_progress':
-        return 'bg-blue-500';
-      case 'blocked':
-        return 'bg-red-500';
-      case 'cancelled':
-        return 'bg-gray-500';
-      default:
-        return 'bg-yellow-500';
+    case "completed":
+      return "bg-green-500";
+    case "in_progress":
+      return "bg-blue-500";
+    case "blocked":
+      return "bg-red-500";
+    case "cancelled":
+      return "bg-gray-500";
+    default:
+      return "bg-yellow-500";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical':
-        return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-      case 'high':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
-      default:
-        return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
+    case "critical":
+      return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300";
+    case "high":
+      return "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300";
+    case "medium":
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300";
+    default:
+      return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300";
     }
   };
 
@@ -401,14 +401,14 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
 
             <div className="flex gap-2 ml-auto">
               <Button
-                variant={viewMode === 'gantt' ? 'default' : 'outline'}
-                onClick={() => setViewMode('gantt')}
+                variant={viewMode === "gantt" ? "default" : "outline"}
+                onClick={() => setViewMode("gantt")}
               >
                 Gantt View
               </Button>
               <Button
-                variant={viewMode === 'list' ? 'default' : 'outline'}
-                onClick={() => setViewMode('list')}
+                variant={viewMode === "list" ? "default" : "outline"}
+                onClick={() => setViewMode("list")}
               >
                 List View
               </Button>
@@ -421,7 +421,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
             <div className="text-center py-8 text-muted-foreground">
               No tasks found. Create your first task to get started.
             </div>
-          ) : viewMode === 'gantt' ? (
+          ) : viewMode === "gantt" ? (
             /* Gantt Chart View */
             <div className="space-y-4">
               <div className="overflow-x-auto">
@@ -565,7 +565,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       }}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>{isEditOpen ? 'Edit Task' : 'Create New Task'}</DialogTitle>
+            <DialogTitle>{isEditOpen ? "Edit Task" : "Create New Task"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
@@ -676,7 +676,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
                 Cancel
               </Button>
               <Button onClick={isEditOpen ? updateTask : createTask}>
-                {isEditOpen ? 'Update' : 'Create'} Task
+                {isEditOpen ? "Update" : "Create"} Task
               </Button>
             </div>
           </div>

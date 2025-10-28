@@ -75,18 +75,18 @@ const FuelOptimizerPage = () => {
     
     // Weather impact
     switch(weather.condition) {
-      case "calm":
-        factor = 0.85;
-        break;
-      case "moderate":
-        factor = 0.95;
-        break;
-      case "rough":
-        factor = 1.15;
-        break;
-      case "stormy":
-        factor = 1.35;
-        break;
+    case "calm":
+      factor = 0.85;
+      break;
+    case "moderate":
+      factor = 0.95;
+      break;
+    case "rough":
+      factor = 1.15;
+      break;
+    case "stormy":
+      factor = 1.35;
+      break;
     }
     
     // Wind impact
@@ -244,7 +244,7 @@ const FuelOptimizerPage = () => {
                 </div>
                 <Badge variant={opt.savings_percentage && opt.savings_percentage > 0 ? "default" : "secondary"}>
                   {opt.savings_percentage 
-                    ? `${opt.savings_percentage > 0 ? '+' : ''}${opt.savings_percentage.toFixed(2)}%`
+                    ? `${opt.savings_percentage > 0 ? "+" : ""}${opt.savings_percentage.toFixed(2)}%`
                     : "N/A"
                   }
                 </Badge>

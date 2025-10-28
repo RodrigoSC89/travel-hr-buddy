@@ -1,45 +1,45 @@
 // API endpoint for AI-powered fuel route optimization
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
 export default async function handler(req: any, res: any) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
   try {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    if (req.method === 'GET') {
+    if (req.method === "GET") {
       const { vessel_id, limit = 10 } = req.query;
 
       let query = supabase
-        .from('fuel_ai_route_optimization')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("fuel_ai_route_optimization")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(parseInt(limit as string));
 
       if (vessel_id) {
-        query = query.eq('vessel_id', vessel_id);
+        query = query.eq("vessel_id", vessel_id);
       }
 
       const { data, error } = await query;
 
       if (error) {
-        console.error('Error fetching route optimizations:', error);
+        console.error("Error fetching route optimizations:", error);
         return res.status(500).json({ error: error.message });
       }
 
       return res.status(200).json({ optimizations: data });
     }
 
-    if (req.method === 'POST') {
+    if (req.method === "POST") {
       // Request route optimization
       const {
         vessel_id,
@@ -54,16 +54,16 @@ export default async function handler(req: any, res: any) {
 
       if (!vessel_id || !origin_port || !destination_port || !distance_nm) {
         return res.status(400).json({ 
-          error: 'vessel_id, origin_port, destination_port, and distance_nm are required' 
+          error: "vessel_id, origin_port, destination_port, and distance_nm are required" 
         });
       }
 
       // Get vessel historical fuel consumption
       const { data: historicalData } = await supabase
-        .from('fuel_consumption_logs')
-        .select('quantity_consumed, distance_covered_nm, vessel_speed_knots')
-        .eq('vessel_id', vessel_id)
-        .order('log_date', { ascending: false })
+        .from("fuel_consumption_logs")
+        .select("quantity_consumed, distance_covered_nm, vessel_speed_knots")
+        .eq("vessel_id", vessel_id)
+        .order("log_date", { ascending: false })
         .limit(10);
 
       // Calculate baseline consumption (simplified - in production use ML model)
@@ -88,7 +88,7 @@ export default async function handler(req: any, res: any) {
       const co2Reduction = fuelSavings * 3.15; // 1 ton fuel = ~3.15 tons CO2
 
       const { data: optimization, error: optimizationError } = await supabase
-        .from('fuel_ai_route_optimization')
+        .from("fuel_ai_route_optimization")
         .insert({
           vessel_id,
           origin_port,
@@ -97,8 +97,8 @@ export default async function handler(req: any, res: any) {
           cargo_weight_tons,
           departure_date,
           weather_data: weather_data || {},
-          ai_model_version: 'v1.0',
-          optimization_algorithm: 'weather_routing',
+          ai_model_version: "v1.0",
+          optimization_algorithm: "weather_routing",
           optimized_waypoints: [],
           recommended_speed_knots: 12.5,
           baseline_fuel_consumption_mt: baselineConsumption,
@@ -114,16 +114,16 @@ export default async function handler(req: any, res: any) {
         .single();
 
       if (optimizationError) {
-        console.error('Error creating optimization:', optimizationError);
+        console.error("Error creating optimization:", optimizationError);
         return res.status(500).json({ error: optimizationError.message });
       }
 
       return res.status(201).json({ optimization });
     }
 
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: "Method not allowed" });
   } catch (error: any) {
-    console.error('API Error:', error);
-    return res.status(500).json({ error: error.message || 'Internal server error' });
+    console.error("API Error:", error);
+    return res.status(500).json({ error: error.message || "Internal server error" });
   }
 }

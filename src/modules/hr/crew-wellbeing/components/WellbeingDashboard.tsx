@@ -1,17 +1,17 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Activity, Heart, Brain, TrendingUp, AlertTriangle } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Activity, Heart, Brain, TrendingUp, AlertTriangle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface WellbeingScore {
   overall: number;
   physical: number;
   mental: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
 }
 
 export const WellbeingDashboard: React.FC = () => {
@@ -19,7 +19,7 @@ export const WellbeingDashboard: React.FC = () => {
     overall: 0,
     physical: 0,
     mental: 0,
-    trend: 'stable',
+    trend: "stable",
   });
   const [loading, setLoading] = useState(true);
   const [recentAlerts, setRecentAlerts] = useState<any[]>([]);
@@ -36,25 +36,25 @@ export const WellbeingDashboard: React.FC = () => {
 
       // Fetch calculated wellbeing score
       const { data: scoreData, error: scoreError } = await supabase
-        .rpc('calculate_wellbeing_score', { p_user_id: user.id, p_days: 7 });
+        .rpc("calculate_wellbeing_score", { p_user_id: user.id, p_days: 7 });
 
       if (scoreError) throw scoreError;
 
       // Fetch recent health check-ins
       const { data: checkins } = await supabase
-        .from('health_checkins')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('checkin_date', { ascending: false })
+        .from("health_checkins")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("checkin_date", { ascending: false })
         .limit(7);
 
       // Fetch active alerts
       const { data: alerts } = await supabase
-        .from('wellbeing_alerts')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false })
+        .from("wellbeing_alerts")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .order("created_at", { ascending: false })
         .limit(5);
 
       // Calculate scores
@@ -70,15 +70,15 @@ export const WellbeingDashboard: React.FC = () => {
         overall: overallScore,
         physical: physicalScore,
         mental: mentalScore,
-        trend: overallScore >= 7 ? 'up' : overallScore >= 5 ? 'stable' : 'down',
+        trend: overallScore >= 7 ? "up" : overallScore >= 5 ? "stable" : "down",
       });
       setRecentAlerts(alerts || []);
     } catch (error) {
-      console.error('Error fetching wellbeing data:', error);
+      console.error("Error fetching wellbeing data:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load wellbeing data',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load wellbeing data",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -86,16 +86,16 @@ export const WellbeingDashboard: React.FC = () => {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 8) return 'text-green-600';
-    if (score >= 6) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 8) return "text-green-600";
+    if (score >= 6) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getScoreLabel = (score: number) => {
-    if (score >= 8) return 'Excellent';
-    if (score >= 6) return 'Good';
-    if (score >= 4) return 'Fair';
-    return 'Needs Attention';
+    if (score >= 8) return "Excellent";
+    if (score >= 6) return "Good";
+    if (score >= 4) return "Fair";
+    return "Needs Attention";
   };
 
   if (loading) {
@@ -173,11 +173,11 @@ export const WellbeingDashboard: React.FC = () => {
         <CardContent>
           <div className="flex items-center gap-2">
             <Badge
-              variant={score.trend === 'up' ? 'default' : score.trend === 'stable' ? 'secondary' : 'destructive'}
+              variant={score.trend === "up" ? "default" : score.trend === "stable" ? "secondary" : "destructive"}
             >
-              {score.trend === 'up' && '↑ Improving'}
-              {score.trend === 'stable' && '→ Stable'}
-              {score.trend === 'down' && '↓ Declining'}
+              {score.trend === "up" && "↑ Improving"}
+              {score.trend === "stable" && "→ Stable"}
+              {score.trend === "down" && "↓ Declining"}
             </Badge>
           </div>
           <p className="text-xs text-muted-foreground mt-2">
@@ -212,7 +212,7 @@ export const WellbeingDashboard: React.FC = () => {
                     </p>
                   </div>
                   <Badge
-                    variant={alert.severity === 'critical' ? 'destructive' : 'secondary'}
+                    variant={alert.severity === "critical" ? "destructive" : "secondary"}
                   >
                     {alert.severity}
                   </Badge>
