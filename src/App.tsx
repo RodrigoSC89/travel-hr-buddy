@@ -261,6 +261,15 @@ const TemplatesEditorValidation = React.lazy(() => import("@/pages/admin/templat
 const PriceAlertsNotificationValidation = React.lazy(() => import("@/pages/admin/price-alerts-notification/validation"));
 const MissionControlRealtimeValidation = React.lazy(() => import("@/pages/admin/mission-control-realtime/validation"));
 const SatcomSimulationValidation = React.lazy(() => import("@/pages/admin/satcom-simulation/validation"));
+// PATCH 421-425 Validation Pages
+const DocumentsConsolidatedValidation = React.lazy(() => import("@/pages/admin/documents-consolidated/validation"));
+const OceanSonarValidation = React.lazy(() => import("@/pages/admin/ocean-sonar/validation"));
+const UnderwaterDroneValidation = React.lazy(() => import("@/pages/admin/underwater-drone/validation"));
+// PATCH 426-430 Validation Pages
+const MissionEngineValidation = React.lazy(() => import("@/pages/admin/mission-engine/validation"));
+const DroneCommanderValidation = React.lazy(() => import("@/pages/admin/drone-commander/validation"));
+const SatcomValidation = React.lazy(() => import("@/pages/admin/satcom/validation"));
+const MissionConsolidationValidation = React.lazy(() => import("@/pages/admin/mission-consolidation/validation"));
 
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
@@ -518,6 +527,13 @@ function App() {
                       <Route path="/admin/incidents-consolidation/validation" element={<IncidentsConsolidationValidationPage />} />
                       <Route path="/admin/sensor-hub/validation" element={<SensorHubValidationPage />} />
                       <Route path="/admin/tests/validation" element={<TestsValidationPage />} />
+                      <Route path="/admin/documents-consolidated/validation" element={<DocumentsConsolidatedValidation />} />
+                      <Route path="/admin/ocean-sonar/validation" element={<OceanSonarValidation />} />
+                      <Route path="/admin/underwater-drone/validation" element={<UnderwaterDroneValidation />} />
+                      <Route path="/admin/mission-engine/validation" element={<MissionEngineValidation />} />
+                      <Route path="/admin/drone-commander/validation" element={<DroneCommanderValidation />} />
+                      <Route path="/admin/satcom/validation" element={<SatcomValidation />} />
+                      <Route path="/admin/mission-consolidation/validation" element={<MissionConsolidationValidation />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />

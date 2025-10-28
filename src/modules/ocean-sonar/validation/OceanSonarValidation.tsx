@@ -1,19 +1,19 @@
 /**
- * PATCH 425 - Navigation Copilot Validation
+ * PATCH 423 - Ocean Sonar Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Compass, Brain, Cloud, AlertTriangle } from "lucide-react";
+import { CheckCircle2, Waves, BarChart3, AlertTriangle, Database } from "lucide-react";
 import { useState } from "react";
 
-export default function NavigationCopilotValidation() {
+export default function OceanSonarValidation() {
   const [checks, setChecks] = useState({
-    panel: false,
-    integration: false,
+    signal: false,
+    visualization: false,
     alerts: false,
-    suggestions: false,
+    storage: false,
   });
 
   const allChecked = Object.values(checks).every(Boolean);
@@ -23,11 +23,11 @@ export default function NavigationCopilotValidation() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Compass className="h-8 w-8 text-primary" />
-            PATCH 425 - Navigation Copilot
+            <Waves className="h-8 w-8 text-primary" />
+            PATCH 423 - Ocean Sonar
           </h1>
           <p className="text-muted-foreground mt-2">
-            Validação do copiloto de navegação com IA
+            Validação do sistema de sonar oceânico
           </p>
         </div>
         {allChecked && (
@@ -48,44 +48,44 @@ export default function NavigationCopilotValidation() {
         <CardContent className="space-y-4">
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="panel"
-              checked={checks.panel}
+              id="signal"
+              checked={checks.signal}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, panel: checked as boolean })
+                setChecks({ ...checks, signal: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="panel"
+                htmlFor="signal"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Brain className="inline h-4 w-4 mr-1" />
-                Painel com sugestões AI visível
+                <Waves className="inline h-4 w-4 mr-1" />
+                Sinal sonar simulado
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Interface mostrando recomendações geradas por IA em tempo real
+                Sistema de simulação de sonar gerando sinais realistas
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="integration"
-              checked={checks.integration}
+              id="visualization"
+              checked={checks.visualization}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, integration: checked as boolean })
+                setChecks({ ...checks, visualization: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="integration"
+                htmlFor="visualization"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Cloud className="inline h-4 w-4 mr-1" />
-                Dados de clima/performance integrados
+                <BarChart3 className="inline h-4 w-4 mr-1" />
+                Painel com visualização gráfica
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Sistema recebendo e processando dados meteorológicos e de performance
+                Interface visual mostrando dados do sonar em tempo real
               </p>
             </div>
           </div>
@@ -104,32 +104,32 @@ export default function NavigationCopilotValidation() {
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
                 <AlertTriangle className="inline h-4 w-4 mr-1" />
-                Alertas de risco visíveis
+                Alertas de risco exibidos
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Notificações de riscos de navegação sendo exibidas adequadamente
+                Sistema de alertas funcionando para detecção de riscos
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="suggestions"
-              checked={checks.suggestions}
+              id="storage"
+              checked={checks.storage}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, suggestions: checked as boolean })
+                setChecks({ ...checks, storage: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="suggestions"
+                htmlFor="storage"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Compass className="inline h-4 w-4 mr-1" />
-                Sugestões contextualizadas
+                <Database className="inline h-4 w-4 mr-1" />
+                Dados armazenados corretamente
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Recomendações relevantes ao contexto atual de navegação
+                Leituras e alertas sendo persistidos no banco de dados
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function NavigationCopilotValidation() {
         </CardHeader>
         <CardContent>
           <p className="font-medium">
-            ✅ Copiloto com AI operante
+            ✅ Sonar operante com feedback visual e alertas
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             Todos os checkboxes acima devem estar marcados para aprovação

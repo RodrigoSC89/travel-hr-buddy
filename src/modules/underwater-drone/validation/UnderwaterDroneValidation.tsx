@@ -1,19 +1,19 @@
 /**
- * PATCH 425 - Navigation Copilot Validation
+ * PATCH 424 - Underwater Drone Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Compass, Brain, Cloud, AlertTriangle } from "lucide-react";
+import { CheckCircle2, Anchor, Navigation, FileText, Gauge } from "lucide-react";
 import { useState } from "react";
 
-export default function NavigationCopilotValidation() {
+export default function UnderwaterDroneValidation() {
   const [checks, setChecks] = useState({
     panel: false,
-    integration: false,
-    alerts: false,
-    suggestions: false,
+    control: false,
+    logs: false,
+    interface: false,
   });
 
   const allChecked = Object.values(checks).every(Boolean);
@@ -23,11 +23,11 @@ export default function NavigationCopilotValidation() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Compass className="h-8 w-8 text-primary" />
-            PATCH 425 - Navigation Copilot
+            <Anchor className="h-8 w-8 text-primary" />
+            PATCH 424 - Underwater Drone
           </h1>
           <p className="text-muted-foreground mt-2">
-            Validação do copiloto de navegação com IA
+            Validação do drone submarino
           </p>
         </div>
         {allChecked && (
@@ -59,77 +59,77 @@ export default function NavigationCopilotValidation() {
                 htmlFor="panel"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Brain className="inline h-4 w-4 mr-1" />
-                Painel com sugestões AI visível
+                <Gauge className="inline h-4 w-4 mr-1" />
+                Painel de drone ativo
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Interface mostrando recomendações geradas por IA em tempo real
+                Dashboard mostrando status e telemetria do drone submarino
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="integration"
-              checked={checks.integration}
+              id="control"
+              checked={checks.control}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, integration: checked as boolean })
+                setChecks({ ...checks, control: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="integration"
+                htmlFor="control"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Cloud className="inline h-4 w-4 mr-1" />
-                Dados de clima/performance integrados
+                <Navigation className="inline h-4 w-4 mr-1" />
+                Controle de rota e status funcionando
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Sistema recebendo e processando dados meteorológicos e de performance
+                Comandos de navegação e controle de missão operacionais
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="alerts"
-              checked={checks.alerts}
+              id="logs"
+              checked={checks.logs}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, alerts: checked as boolean })
+                setChecks({ ...checks, logs: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="alerts"
+                htmlFor="logs"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <AlertTriangle className="inline h-4 w-4 mr-1" />
-                Alertas de risco visíveis
+                <FileText className="inline h-4 w-4 mr-1" />
+                Log de missão salvo
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Notificações de riscos de navegação sendo exibidas adequadamente
+                Histórico de missões e operações sendo registrado corretamente
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="suggestions"
-              checked={checks.suggestions}
+              id="interface"
+              checked={checks.interface}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, suggestions: checked as boolean })
+                setChecks({ ...checks, interface: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="suggestions"
+                htmlFor="interface"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Compass className="inline h-4 w-4 mr-1" />
-                Sugestões contextualizadas
+                <CheckCircle2 className="inline h-4 w-4 mr-1" />
+                Interface operável
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Recomendações relevantes ao contexto atual de navegação
+                UI responsiva e intuitiva para controle do drone
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function NavigationCopilotValidation() {
         </CardHeader>
         <CardContent>
           <p className="font-medium">
-            ✅ Copiloto com AI operante
+            ✅ Drone submarino simulado com controles
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             Todos os checkboxes acima devem estar marcados para aprovação
