@@ -117,6 +117,9 @@ const CrewConsolidationValidationPage = React.lazy(() => import("@/pages/admin/c
 const DocumentHubValidationPage = React.lazy(() => import("@/pages/admin/document-hub/validation"));
 const MissionControlValidationPage = React.lazy(() => import("@/pages/admin/mission-control/validation"));
 const DocumentationValidationPage = React.lazy(() => import("@/pages/admin/documentation/validation"));
+const DocumentTemplatesValidationPage = React.lazy(() => import("@/pages/admin/document-templates/validation"));
+const SatelliteTrackerValidationPage = React.lazy(() => import("@/pages/admin/satellite-tracker/validation"));
+const NavigationCopilotValidationPage = React.lazy(() => import("@/pages/admin/navigation-copilot/validation"));
 const TestsValidationPage = React.lazy(() => import("@/pages/admin/tests"));
 const MMIJobsPanel = React.lazy(() => import("@/pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("@/pages/MmiBI"));
@@ -166,7 +169,6 @@ const CrewWellbeingNew = React.lazy(() => import("@/components/crew-wellbeing/Cr
 const SGSOManagerPage = React.lazy(() => import("@/components/sgso/SGSOManager"));
 
 // New Module Imports - PATCH 66.0 Updated Paths
-const CrewModule = React.lazy(() => import("@/modules/operations/crew"));
 const FeedbackModule = React.lazy(() => import("@/modules/operations/feedback"));
 // PATCH 191.0: Consolidated Fleet Module
 const FleetModule = React.lazy(() => import("@/modules/fleet"));
@@ -447,6 +449,9 @@ function App() {
                       <Route path="/admin/document-hub/validation" element={<DocumentHubValidationPage />} />
                       <Route path="/admin/mission-control/validation" element={<MissionControlValidationPage />} />
                       <Route path="/admin/documentation/validation" element={<DocumentationValidationPage />} />
+                      <Route path="/admin/document-templates/validation" element={<DocumentTemplatesValidationPage />} />
+                      <Route path="/admin/satellite-tracker/validation" element={<SatelliteTrackerValidationPage />} />
+                      <Route path="/admin/navigation-copilot/validation" element={<NavigationCopilotValidationPage />} />
                       <Route path="/admin/tests/validation" element={<TestsValidationPage />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
@@ -493,7 +498,6 @@ function App() {
                       <Route path="/_offline" element={<Offline />} />
                       
                       {/* New Module Routes */}
-                      <Route path="/crew" element={<CrewModule />} />
                       <Route path="/feedback" element={<FeedbackModule />} />
                       {/* PATCH 191.0: Consolidated Fleet Module */}
                       <Route path="/fleet" element={<FleetModule />} />
