@@ -225,7 +225,14 @@ const AIModulesStatus = React.lazy(() => import("@/pages/AIModulesStatus"));
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
   console.log("🔄 LoadingSpinner renderizado");
-  return <OffshoreLoader module="Sistema" />;
+  return (
+    <div className="flex items-center justify-center min-h-[200px]">
+      <div className="flex items-center gap-3">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <span className="text-sm text-muted-foreground">Carregando...</span>
+      </div>
+    </div>
+  );
 };
 
 // Create QueryClient com configurações otimizadas para offshore
@@ -273,9 +280,19 @@ const RedirectHandler = () => {
   return null;
 };
 
+// Flag global para evitar dupla inicialização
+let isInitialized = false;
+
 function App() {
   // Initialize monitoring systems on app start
   useEffect(() => {
+    // Evita dupla inicialização causada por React StrictMode
+    if (isInitialized) {
+      console.log("⚠️ App já inicializado, pulando inicialização duplicada");
+      return;
+    }
+    
+    isInitialized = true;
     console.log("🚀 Nautilus One - Inicializando sistema...");
     
     try {
@@ -316,6 +333,7 @@ function App() {
     
     return () => {
       systemWatchdog.stop();
+      isInitialized = false; // Reset para hot-reload em dev
     };
   }, []);
 
