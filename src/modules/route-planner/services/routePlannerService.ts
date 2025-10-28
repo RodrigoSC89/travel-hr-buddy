@@ -136,7 +136,7 @@ return {
       if (error) throw error;
 
       // Also save to planned_routes table (PATCH 449)
-      await supabase
+      await (supabase as any)
         .from("planned_routes")
         .insert({
           user_id: userId,

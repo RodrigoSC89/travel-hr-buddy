@@ -51,7 +51,7 @@ class SonarAIService {
     try {
       logger.info("Logging sonar detection", { type: detection.detectionType });
 
-      const { error } = await supabase.from("sonar_detections").insert({
+      const { error } = await (supabase as any).from("sonar_detections").insert({
         timestamp: detection.timestamp,
         detection_type: detection.detectionType,
         location: detection.location,
@@ -76,7 +76,7 @@ class SonarAIService {
     try {
       logger.info("Logging sonar scan", { depth: scanLog.scanDepth });
 
-      const { error } = await supabase.from("sonar_scans").insert({
+      const { error } = await (supabase as any).from("sonar_scans").insert({
         timestamp: scanLog.timestamp,
         scan_depth: scanLog.scanDepth,
         scan_radius: scanLog.scanRadius,
@@ -100,7 +100,7 @@ class SonarAIService {
    */
   async getRecentDetections(limit = 50): Promise<SonarDetection[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("sonar_detections")
         .select("*")
         .order("timestamp", { ascending: false })
@@ -132,7 +132,7 @@ class SonarAIService {
    */
   async getScanHistory(limit = 20): Promise<SonarScanLog[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("sonar_scans")
         .select("*")
         .order("timestamp", { ascending: false })
@@ -351,7 +351,7 @@ class SonarAIService {
    */
   async resolveDetection(detectionId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("sonar_detections")
         .update({ resolved: true })
         .eq("id", detectionId);
@@ -404,7 +404,7 @@ class SonarAIService {
         confidence: ret.confidence,
       }));
 
-      const { error } = await supabase.from("sonar_ai_results").insert({
+      const { error } = await (supabase as any).from("sonar_ai_results").insert({
         mission_id: missionId,
         analysis_type: "acoustic_pattern_detection",
         detected_patterns: analysis.patterns,

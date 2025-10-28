@@ -4,4 +4,4 @@
  */
 
 export { TemplateEditor } from "./TemplateEditor";
-export { default } from "./TemplateEditor";
+export { TemplateEditor as default } from "./TemplateEditor";

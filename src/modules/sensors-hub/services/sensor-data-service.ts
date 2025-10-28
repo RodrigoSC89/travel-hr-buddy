@@ -55,8 +55,8 @@ class SensorDataService {
         location: data.location,
       };
 
-const { error } = await supabase
-  .from<any>("sensor_data_normalized")
+const { error } = await (supabase as any)
+  .from("sensor_data_normalized")
   .insert(normalizedData);
 
       if (error) {
@@ -88,8 +88,8 @@ const { error } = await supabase
         location: data.location,
       }));
 
-const { error } = await supabase
-  .from<any>("sensor_data_normalized")
+const { error } = await (supabase as any)
+  .from("sensor_data_normalized")
   .insert(normalizedDataPoints);
 
       if (error) {
@@ -114,7 +114,7 @@ const { error } = await supabase
     threshold: number
   ): Promise<boolean> {
     try {
-const { data, error } = await supabase.rpc<any>("detect_sensor_anomaly", {
+const { data, error } = await (supabase as any).rpc("detect_sensor_anomaly", {
   p_sensor_id: sensorId,
   p_value: value,
   p_threshold: threshold,
@@ -125,7 +125,8 @@ const { data, error } = await supabase.rpc<any>("detect_sensor_anomaly", {
         return false;
       }
 
-      if (data === true) {
+      const isAnomaly = (data === true) || ((data as any)?.is_anomaly === true);
+      if (isAnomaly) {
         await this.createAlert({
           sensor_id: sensorId,
           sensor_name: sensorName,
@@ -151,7 +152,7 @@ const { data, error } = await supabase.rpc<any>("detect_sensor_anomaly", {
    */
   async createAlert(alert: SensorAlert): Promise<void> {
     try {
-      const { error } = await supabase.from<any>("sensor_alerts").insert(alert);
+      const { error } = await (supabase as any).from("sensor_alerts").insert(alert);
 
       if (error) {
         logger.error("Failed to create alert", { error: error.message });
@@ -176,8 +177,8 @@ const { data, error } = await supabase.rpc<any>("detect_sensor_anomaly", {
     limit: number = 100
   ): Promise<NormalizedSensorData[]> {
     try {
-const { data, error } = await supabase
-  .from<any>("sensor_data_normalized")
+const { data, error } = await (supabase as any)
+  .from("sensor_data_normalized")
   .select("*")
   .eq("sensor_id", sensorId)
   .order("timestamp", { ascending: false })
@@ -200,8 +201,8 @@ const { data, error } = await supabase
    */
   async getUnresolvedAlerts(): Promise<SensorAlert[]> {
     try {
-const { data, error } = await supabase
-  .from<any>("sensor_alerts")
+const { data, error } = await (supabase as any)
+  .from("sensor_alerts")
   .select("*")
   .eq("resolved", false)
   .order("timestamp", { ascending: false })
@@ -224,7 +225,7 @@ const { data, error } = await supabase
    */
   async acknowledgeAlert(alertId: string, userId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("sensor_alerts")
         .update({
           acknowledged: true,
@@ -250,7 +251,7 @@ const { data, error } = await supabase
    */
   async resolveAlert(alertId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("sensor_alerts")
         .update({
           resolved: true,
@@ -281,7 +282,7 @@ const { data, error } = await supabase
     anomalyCount: number;
   } | null> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("sensor_data_normalized")
         .select("value, is_anomaly")
         .eq("sensor_id", sensorId)
@@ -296,8 +297,8 @@ const { data, error } = await supabase
         return null;
       }
 
-      const values = data.map((d) => d.value);
-      const anomalyCount = data.filter((d) => d.is_anomaly).length;
+      const values = (data as any[]).map((d: any) => d.value);
+      const anomalyCount = (data as any[]).filter((d: any) => d.is_anomaly).length;
 
       return {
         count: data.length,

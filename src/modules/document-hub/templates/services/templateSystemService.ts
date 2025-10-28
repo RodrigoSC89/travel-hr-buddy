@@ -307,7 +307,7 @@ class TemplateSystemService {
    */
   private async saveGeneratedDocument(document: GeneratedDocument): Promise<void> {
     try {
-      const { error } = await supabase.from("generated_documents").insert({
+      const { error } = await (supabase as any).from("generated_documents").insert({
         template_id: document.templateId,
         template_name: document.templateName,
         field_values: document.fieldValues,
@@ -328,7 +328,7 @@ class TemplateSystemService {
    */
   async getGeneratedDocuments(userId: string): Promise<GeneratedDocument[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("generated_documents")
         .select("*")
         .eq("user_id", userId)
@@ -337,7 +337,7 @@ class TemplateSystemService {
       if (error) throw error;
 
       return (
-        data?.map((d) => ({
+        data?.map((d: any) => ({
           id: d.id,
           templateId: d.template_id,
           templateName: d.template_name,

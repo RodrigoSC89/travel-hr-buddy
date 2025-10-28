@@ -3,7 +3,7 @@
  * Persists AI-generated route suggestions to database
  */
 
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { NavigationRoute, Coordinates } from "../index";
 
@@ -38,7 +38,7 @@ class RouteSuggestionService {
       const aiConfidence = route.recommended ? 95 : 75;
       const validUntil = new Date(Date.now() + 6 * 60 * 60 * 1000); // Valid for 6 hours
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("route_suggestions")
         .insert({
           user_id: userId,
@@ -75,7 +75,7 @@ class RouteSuggestionService {
    */
   async getUserRouteSuggestions(userId: string): Promise<RouteSuggestionRecord[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("route_suggestions")
         .select("*")
         .eq("user_id", userId)
@@ -97,7 +97,7 @@ class RouteSuggestionService {
    */
   async acceptRouteSuggestion(suggestionId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("route_suggestions")
         .update({ status: "accepted" })
         .eq("id", suggestionId);
@@ -116,7 +116,7 @@ class RouteSuggestionService {
    */
   async rejectRouteSuggestion(suggestionId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("route_suggestions")
         .update({ status: "rejected" })
         .eq("id", suggestionId);
@@ -135,7 +135,7 @@ class RouteSuggestionService {
    */
   async cleanupExpiredSuggestions(): Promise<number> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("route_suggestions")
         .update({ status: "expired" })
         .eq("status", "active")

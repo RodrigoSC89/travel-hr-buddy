@@ -228,7 +228,7 @@ class DeepRiskAIService {
    */
   async logRiskEvent(event: RiskEvent): Promise<void> {
     try {
-      const { error } = await supabase.from("risk_events").insert({
+      const { error } = await (supabase as any).from("risk_events").insert({
         timestamp: event.timestamp,
         event_type: event.eventType,
         risk_score: event.riskScore,
@@ -253,7 +253,7 @@ class DeepRiskAIService {
    */
   async getRiskEventHistory(limit = 50): Promise<RiskEvent[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("risk_events")
         .select("*")
         .order("timestamp", { ascending: false })
@@ -461,7 +461,7 @@ return (
    */
   private async getForecastData(): Promise<any> {
     try {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from("weather_forecasts")
         .select("*")
         .gte("timestamp", new Date().toISOString())

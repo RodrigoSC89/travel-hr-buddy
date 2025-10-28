@@ -91,15 +91,19 @@ export const NavigationCopilotPanel: React.FC = () => {
         .single();
 
       if (data) {
+        const safeStatus = (value: any): Mission["status"] =>
+          ["planned", "active", "completed", "paused"].includes(value) ? value : "active";
+        const safePriority = (value: any): Mission["priority"] =>
+          ["low", "medium", "high", "critical"].includes(value) ? value : "medium";
         setCurrentMission({
-          id: data.id,
-          name: data.name,
-          status: data.status,
-          priority: data.priority || "medium",
-          targetLocation: data.target_location,
-          startTime: data.start_time,
-          estimatedCompletion: data.estimated_completion,
-        });
+          id: (data as any).id,
+          name: (data as any).name || (data as any).title || (data as any).description || "Missão",
+          status: safeStatus((data as any).status),
+          priority: safePriority((data as any).priority),
+          targetLocation: (data as any).target_location,
+          startTime: (data as any).start_time || (data as any).start_date,
+          estimatedCompletion: (data as any).estimated_completion || (data as any).end_date,
+        } as Mission);
       }
     } catch (error) {
       console.error("Failed to load mission:", error);
@@ -191,7 +195,7 @@ export const NavigationCopilotPanel: React.FC = () => {
 
     // Save to database
     try {
-      await supabase.from("navigation_decisions").insert({
+      await (supabase as any).from("navigation_decisions").insert({
         suggestion_id: suggestion.id,
         suggestion_type: suggestion.type,
         priority: suggestion.priority,
@@ -220,7 +224,7 @@ export const NavigationCopilotPanel: React.FC = () => {
     };
 
     try {
-      await supabase.from("navigation_decisions").insert({
+      await (supabase as any).from("navigation_decisions").insert({
         suggestion_id: suggestion.id,
         suggestion_type: suggestion.type,
         priority: suggestion.priority,

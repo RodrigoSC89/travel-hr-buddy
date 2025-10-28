@@ -63,7 +63,7 @@ class SatcomFailoverService {
    */
   async logFailover(entry: FailoverLogEntry): Promise<string | null> {
 try {
-  const { data, error } = await supabase.rpc<any>("log_satcom_failover", {
+  const { data, error } = await (supabase as any).rpc("log_satcom_failover", {
     p_vessel_id: entry.vessel_id,
     p_event_type: entry.event_type,
     p_from_provider: entry.from_provider || null,
@@ -95,7 +95,7 @@ try {
    */
   async updateConnectionStatus(status: ConnectionStatus): Promise<void> {
 try {
-  await supabase.rpc<any>("update_satcom_connection_status", {
+  await (supabase as any).rpc("update_satcom_connection_status", {
     p_vessel_id: status.vessel_id,
     p_connection_id: status.connection_id,
     p_provider: status.provider,
@@ -120,7 +120,7 @@ try {
    */
   async logCommunication(log: CommunicationLog): Promise<string | null> {
     try {
-const { data, error } = await supabase.rpc<any>("log_satcom_communication", {
+const { data, error } = await (supabase as any).rpc("log_satcom_communication", {
   p_vessel_id: log.vessel_id,
   p_provider: log.provider || null,
   p_message_type: log.message_type,
@@ -154,8 +154,8 @@ const { data, error } = await supabase.rpc<any>("log_satcom_communication", {
     limit: number = 50
   ): Promise<any[]> {
     try {
-const { data, error } = await supabase
-  .from<any>("satcom_failover_logs")
+const { data, error } = await (supabase as any)
+  .from("satcom_failover_logs")
   .select("*")
   .eq("vessel_id", vesselId)
   .order("timestamp", { ascending: false })
@@ -178,8 +178,8 @@ const { data, error } = await supabase
    */
   async getConnectionStatus(vesselId: string): Promise<ConnectionStatus[]> {
     try {
-const { data, error } = await supabase
-  .from<any>("satcom_connection_status")
+const { data, error } = await (supabase as any)
+  .from("satcom_connection_status")
   .select("*")
   .eq("vessel_id", vesselId)
   .order("updated_at", { ascending: false });
@@ -206,8 +206,8 @@ const { data, error } = await supabase
     limit: number = 100
   ): Promise<any[]> {
     try {
-const { data, error } = await supabase
-  .from<any>("satcom_communication_logs")
+const { data, error } = await (supabase as any)
+  .from("satcom_communication_logs")
   .select("*")
   .eq("vessel_id", vesselId)
   .order("timestamp", { ascending: false })
@@ -241,7 +241,7 @@ const { data, error } = await supabase
     most_common_provider: string;
   } | null> {
     try {
-const { data, error } = await supabase.rpc<any>("get_satcom_failover_stats", {
+const { data, error } = await (supabase as any).rpc("get_satcom_failover_stats", {
   p_vessel_id: vesselId,
   p_hours: hours,
 });
