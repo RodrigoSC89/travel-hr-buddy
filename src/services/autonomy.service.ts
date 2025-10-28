@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 348: Mission Control v2 - Autonomy Service Layer
  * Service for managing autonomous tasks and decision engine

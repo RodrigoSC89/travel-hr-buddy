@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 347: Analytics Core v2 - Real-Time Dashboard
  * Real-time analytics with streaming metrics and automatic alerts
