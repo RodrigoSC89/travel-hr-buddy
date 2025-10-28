@@ -66,6 +66,12 @@ const VaultAI = React.lazy(() => import("@/modules/vault_ai/components/VaultVect
 const UserManagement = React.lazy(() => import("@/pages/admin/user-management"));
 const LogisticsHubAdmin = React.lazy(() => import("@/pages/admin/logistics-hub"));
 
+// 🔹 PATCH 421-425 - Maritime Operations Modules
+const Documents = React.lazy(() => import("@/pages/Documents"));
+const CoordinationAI = React.lazy(() => import("@/pages/CoordinationAI"));
+const UnderwaterDrone = React.lazy(() => import("@/modules/underwater-drone"));
+const NavigationCopilot = React.lazy(() => import("@/pages/NavigationCopilot"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -116,6 +122,12 @@ export default function AppRouter() {
         <Route path="/vault-ai" element={<VaultAI />} />
         <Route path="/admin/user-management" element={<UserManagement />} />
         <Route path="/admin/logistics-hub" element={<LogisticsHubAdmin />} />
+        
+        {/* PATCH 421-425 Routes - Maritime Operations Modules */}
+        <Route path="/documents" element={<Documents />} />
+        <Route path="/coordination-ai" element={<CoordinationAI />} />
+        <Route path="/drones/submarine" element={<UnderwaterDrone />} />
+        <Route path="/navigation-copilot" element={<NavigationCopilot />} />
       </Routes>
     </Router>
   );
