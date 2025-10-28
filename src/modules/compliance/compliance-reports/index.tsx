@@ -88,7 +88,7 @@ const ComplianceReports = () => {
   const fetchComplianceData = async () => {
     try {
       setLoading(true);
-      let query = supabase.from('compliance_items').select('*');
+      let query = supabase.from('compliance_items' as any).select('*');
       
       // Apply filters if any
       if (reportConfig.categories?.length > 0) {
