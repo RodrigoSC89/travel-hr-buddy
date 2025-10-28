@@ -72,6 +72,11 @@ const UnifiedLogs = React.lazy(() => import("@/pages/UnifiedLogs"));
 const CoordinationAI = React.lazy(() => import("@/pages/CoordinationAI"));
 const ExperimentalModules = React.lazy(() => import("@/pages/ExperimentalModules"));
 
+// 🔹 PATCH 421-425 - Maritime Operations Modules
+const Documents = React.lazy(() => import("@/pages/Documents"));
+const UnderwaterDrone = React.lazy(() => import("@/modules/underwater-drone"));
+const NavigationCopilotPage = React.lazy(() => import("@/pages/NavigationCopilot"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -128,6 +133,12 @@ export default function AppRouter() {
         <Route path="/unified-logs" element={<UnifiedLogs />} />
         <Route path="/coordination-ai" element={<CoordinationAI />} />
         <Route path="/experimental-modules" element={<ExperimentalModules />} />
+        
+        {/* PATCH 421-425 Routes - Maritime Operations */}
+        <Route path="/documents" element={<Documents />} />
+        <Route path="/drones/submarine" element={<UnderwaterDrone />} />
+        <Route path="/underwater-drone" element={<UnderwaterDrone />} />
+        <Route path="/navigation-copilot" element={<NavigationCopilotPage />} />
       </Routes>
     </Router>
   );
