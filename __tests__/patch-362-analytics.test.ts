@@ -278,45 +278,17 @@ describe("PATCH 362 - Analytics Core Advanced Visualizations", () => {
   });
 
   describe("Chart Types Support", () => {
-    it("should support line chart widget", async () => {
+    it.each([
+      { chartType: "line", title: "Line Chart" },
+      { chartType: "bar", title: "Bar Chart" },
+      { chartType: "pie", title: "Pie Chart" },
+      { chartType: "doughnut", title: "Doughnut Chart" },
+      { chartType: "area", title: "Area Chart" },
+    ])("should support $chartType chart widget", async ({ chartType, title }) => {
       const widgetData = {
         widget_type: "chart",
-        chart_type: "line",
-        title: "Line Chart",
-      };
-
-      const mockInsert = vi.fn().mockResolvedValue({ data: widgetData, error: null });
-      vi.spyOn(supabase, "from").mockReturnValue({
-        insert: mockInsert,
-      } as any);
-
-      await supabase.from("dashboard_widgets").insert(widgetData);
-
-      expect(mockInsert).toHaveBeenCalledWith(widgetData);
-    });
-
-    it("should support bar chart widget", async () => {
-      const widgetData = {
-        widget_type: "chart",
-        chart_type: "bar",
-        title: "Bar Chart",
-      };
-
-      const mockInsert = vi.fn().mockResolvedValue({ data: widgetData, error: null });
-      vi.spyOn(supabase, "from").mockReturnValue({
-        insert: mockInsert,
-      } as any);
-
-      await supabase.from("dashboard_widgets").insert(widgetData);
-
-      expect(mockInsert).toHaveBeenCalledWith(widgetData);
-    });
-
-    it("should support pie chart widget", async () => {
-      const widgetData = {
-        widget_type: "chart",
-        chart_type: "pie",
-        title: "Pie Chart",
+        chart_type: chartType,
+        title: title,
       };
 
       const mockInsert = vi.fn().mockResolvedValue({ data: widgetData, error: null });
