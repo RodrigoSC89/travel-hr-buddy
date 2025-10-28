@@ -276,6 +276,12 @@ const NavigationCopilotV2Validation = React.lazy(() => import("@/pages/admin/nav
 const DeepRiskAIValidation = React.lazy(() => import("@/pages/admin/deep-risk-ai/validation"));
 const TemplatesSystemValidation = React.lazy(() => import("@/pages/admin/templates-system/validation"));
 const SonarAIValidationV2 = React.lazy(() => import("@/pages/admin/sonar-ai/validation"));
+// PATCH 441-445 Validation Pages
+const SensorHubV2Validation = React.lazy(() => import("@/pages/admin/sensor-hub-v2/validation"));
+const SATCOMv2Validation = React.lazy(() => import("@/pages/admin/satcom-v2/validation"));
+const OceanSonarV3Validation = React.lazy(() => import("@/pages/admin/ocean-sonar-v3/validation"));
+const DocumentsUnificationValidation = React.lazy(() => import("@/pages/admin/documents-unification/validation"));
+const MissionEngineV2Validation = React.lazy(() => import("@/pages/admin/mission-engine-v2/validation"));
 
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
@@ -545,6 +551,13 @@ function App() {
                       <Route path="/admin/deep-risk-ai/validation" element={<DeepRiskAIValidation />} />
                       <Route path="/admin/templates-system/validation" element={<TemplatesSystemValidation />} />
                       <Route path="/admin/sonar-ai-v2/validation" element={<SonarAIValidationV2 />} />
+                      
+                      {/* Validation Routes - Patches 441-445 */}
+                      <Route path="/admin/sensor-hub-v2/validation" element={<SensorHubV2Validation />} />
+                      <Route path="/admin/satcom-v2/validation" element={<SATCOMv2Validation />} />
+                      <Route path="/admin/ocean-sonar-v3/validation" element={<OceanSonarV3Validation />} />
+                      <Route path="/admin/documents-unification/validation" element={<DocumentsUnificationValidation />} />
+                      <Route path="/admin/mission-engine-v2/validation" element={<MissionEngineV2Validation />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />
