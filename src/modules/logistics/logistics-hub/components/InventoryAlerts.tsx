@@ -152,9 +152,10 @@ export const InventoryAlerts = () => {
   // PATCH 391: Automatic reorder requests
   const handleAutoReorder = async (item: InventoryItem, level: AlertLevel) => {
     if (level !== "critical" && level !== "low") return;
+    if (!item.reorder_level || item.reorder_level <= 0) return; // Guard against invalid reorder level
     
     try {
-      const reorderQuantity = item.reorder_level * 2 - item.quantity;
+      const reorderQuantity = Math.max(10, item.reorder_level * 2 - item.quantity); // Guard against negative values
       
       const { error } = await supabase
         .from("logistics_supply_orders")
@@ -163,9 +164,8 @@ export const InventoryAlerts = () => {
           item_id: item.id,
           quantity: reorderQuantity,
           status: "pending",
-          priority: level === "critical" ? "urgent" : "high",
-          notes: `Auto-generated reorder for ${item.item_name} (${level} level - ${Math.round((item.quantity / item.reorder_level) * 100)}% of reorder level)`,
-          auto_generated: true
+          priority: level === "critical" ? "high" : "medium", // Use valid priority values
+          notes: `Auto-generated reorder for ${item.item_name} (${level} level - ${Math.round((item.quantity / item.reorder_level) * 100)}% of reorder level)`
         });
 
       if (error) throw error;
@@ -185,12 +185,14 @@ export const InventoryAlerts = () => {
       const exportData = lowStockItems.map(item => ({
         'Item Name': item.item_name,
         'Current Qty': item.quantity,
-        'Reorder Level': item.reorder_level,
+        'Reorder Level': item.reorder_level || 0,
         'Min Stock': item.min_stock_level,
         'Unit': item.unit,
         'Location': item.location,
         'Alert Level': getAlertLevel(item),
-        'Stock %': `${Math.round((item.quantity / item.reorder_level) * 100)}%`,
+        'Stock %': item.reorder_level && item.reorder_level > 0 
+          ? `${Math.round((item.quantity / item.reorder_level) * 100)}%` 
+          : 'N/A',
         'Category': item.category || 'N/A'
       }));
 
@@ -220,12 +222,14 @@ export const InventoryAlerts = () => {
       const rows = lowStockItems.map(item => [
         item.item_name,
         item.quantity,
-        item.reorder_level,
+        item.reorder_level || 0,
         item.min_stock_level,
         item.unit,
         item.location,
         getAlertLevel(item),
-        `${Math.round((item.quantity / item.reorder_level) * 100)}%`
+        item.reorder_level && item.reorder_level > 0 
+          ? `${Math.round((item.quantity / item.reorder_level) * 100)}%` 
+          : 'N/A'
       ]);
       
       const csvContent = [
@@ -348,10 +352,13 @@ export const InventoryAlerts = () => {
                   {getAlertBadge(alertLevel)}
                   <div className="text-right">
                     <Badge variant={alertLevel === "critical" ? "destructive" : "secondary"}>
-                      {item.quantity} / {item.reorder_level} {item.unit}
+                      {item.quantity} / {item.reorder_level || 0} {item.unit}
                     </Badge>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {Math.round((item.quantity / item.reorder_level) * 100)}% of reorder level
+                      {item.reorder_level && item.reorder_level > 0 
+                        ? `${Math.round((item.quantity / item.reorder_level) * 100)}% of reorder level`
+                        : 'Reorder level not set'
+                      }
                     </p>
                   </div>
                   <Button
