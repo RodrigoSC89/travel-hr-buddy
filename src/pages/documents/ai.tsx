@@ -11,6 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { createWorker } from 'tesseract.js';
+import { AIDocumentsAnalyzer } from "@/components/documents/ai-documents-analyzer";
+import { SemanticDocumentSearch } from "@/components/documents/SemanticDocumentSearch";
 import {
   FileText,
   Upload,
@@ -330,11 +332,19 @@ export default function AIDocuments() {
             <FileText className="w-4 w-4 mr-2" />
             Documents
           </TabsTrigger>
+          <TabsTrigger value="search">
+            <Search className="h-4 w-4 mr-2" />
+            Semantic Search
+          </TabsTrigger>
           <TabsTrigger value="analysis">
             <Sparkles className="w-4 h-4 mr-2" />
             Analysis Logs
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="search" className="space-y-4">
+          <SemanticDocumentSearch />
+        </TabsContent>
 
         <TabsContent value="list" className="space-y-4">
           {isLoading ? (

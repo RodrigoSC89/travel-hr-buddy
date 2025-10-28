@@ -55,6 +55,11 @@ const WeatherDashboard = React.lazy(() => import("@/pages/WeatherDashboard"));
 const AIDocuments = React.lazy(() => import("@/pages/documents/ai"));
 const FuelOptimizer = React.lazy(() => import("@/pages/FuelOptimizer"));
 
+// 🔹 PATCH 326-330 - SGSO Workflow, Fuel Optimizer, Logistics, Channel Manager, AI Documents
+const SGSOWorkflow = React.lazy(() => import("@/pages/sgso/SGSOWorkflow"));
+const LogisticsHub = React.lazy(() => import("@/pages/LogisticsHub"));
+const ChannelManager = React.lazy(() => import("@/pages/ChannelManager"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -93,6 +98,12 @@ export default function AppRouter() {
         <Route path="/weather-dashboard" element={<WeatherDashboard />} />
         <Route path="/documents/ai" element={<AIDocuments />} />
         <Route path="/fuel-optimizer" element={<FuelOptimizer />} />
+        
+        {/* PATCH 326-330 Routes */}
+        <Route path="/sgso/workflow" element={<SGSOWorkflow />} />
+        <Route path="/fuel/optimize" element={<FuelOptimizer />} />
+        <Route path="/logistics-hub" element={<LogisticsHub />} />
+        <Route path="/channel-manager" element={<ChannelManager />} />
       </Routes>
     </Router>
   );
