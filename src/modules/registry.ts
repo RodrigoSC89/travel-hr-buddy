@@ -99,14 +99,28 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "94.0",
   },
 
-  "operations.crew": {
-    id: "operations.crew",
+  "operations.crew-management": {
+    id: "operations.crew-management",
     name: "Crew Management",
     category: "operations",
+    path: "modules/crew-management",
+    description: "PATCH 446 - Consolidated crew management system with personnel tracking, certifications, rotations, and performance reviews. Unified from src/modules/crew/ and src/modules/operations/crew/",
+    status: "active",
+    completeness: "100%",
+    route: "/crew-management",
+    icon: "Users",
+    lazy: true,
+    version: "446.0",
+  },
+
+  "operations.crew": {
+    id: "operations.crew",
+    name: "Crew Management (Legacy)",
+    category: "operations",
     path: "modules/operations/crew",
-    description: "Manage crew members and assignments",
-    status: "incomplete", // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
-    completeness: "partial",
+    description: "Legacy crew management - redirects to /crew-management",
+    status: "deprecated", // PATCH 446 – Consolidated into operations.crew-management
+    completeness: "deprecated",
     route: "/crew",
     icon: "Users",
     lazy: true,
@@ -758,13 +772,13 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "Underwater Drone Control",
     category: "operations",
     path: "modules/underwater-drone",
-    description: "PATCH 181.0 - ROV/AUV control system with 3D movement logic, telemetry monitoring (depth, orientation, temperature), and mission waypoint navigation",
+    description: "PATCH 450 - Enhanced ROV/AUV control with XYZ movement, depth/rotation controls, WebSocket telemetry, 2D underwater maps, and mission planning integration. Database: drone_missions, drone_telemetry",
     status: "active",
     completeness: "100%",
     route: "/underwater-drone",
     icon: "Anchor",
     lazy: true,
-    version: "181.0",
+    version: "450.0",
   },
 
   "intelligence.sonar-ai": {
@@ -772,13 +786,13 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "Sonar AI Enhancement",
     category: "intelligence",
     path: "modules/sonar-ai",
-    description: "PATCH 182.0 - Enhanced sonar AI with real-time data analysis, risk interpreter for anomaly/obstacle detection, and bathymetric depth map with AI reports",
+    description: "PATCH 448 - Enhanced sonar AI with ONNX model for acoustic signal classification, real-time ocean-sonar integration, pattern detection UI, and AI-powered bathymetric analysis. Database: sonar_ai_results",
     status: "active",
     completeness: "100%",
     route: "/sonar-ai",
     icon: "Radar",
     lazy: true,
-    version: "182.0",
+    version: "448.0",
   },
 
   "operations.auto-sub": {
@@ -807,6 +821,48 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Brain",
     lazy: true,
     version: "185.0",
+  },
+
+  "intelligence.navigation-copilot": {
+    id: "intelligence.navigation-copilot",
+    name: "Navigation Copilot",
+    category: "intelligence",
+    path: "modules/navigation-copilot",
+    description: "PATCH 447 - AI-powered navigation with Mapbox/Leaflet visualization, route optimization based on weather/tides/restrictions, integrated with voyage-planner and forecast-global. Database: route_suggestions",
+    status: "active",
+    completeness: "100%",
+    route: "/navigation-copilot",
+    icon: "Navigation",
+    lazy: true,
+    version: "447.0",
+  },
+
+  "planning.route-planner": {
+    id: "planning.route-planner",
+    name: "Route Planner v2",
+    category: "planning",
+    path: "modules/route-planner",
+    description: "PATCH 449 - Advanced route planning with drag-and-drop interface, dynamic ETA calculation based on weather and vessel speed, integrated with navigation-copilot. Database: planned_routes",
+    status: "active",
+    completeness: "100%",
+    route: "/route-planner",
+    icon: "MapPin",
+    lazy: true,
+    version: "449.0",
+  },
+
+  "operations.drone-commander": {
+    id: "operations.drone-commander",
+    name: "Drone Commander",
+    category: "operations",
+    path: "modules/drone-commander",
+    description: "PATCH 172.0 - UAV/Drone command and control system with mission planning, telemetry monitoring, and autonomous flight coordination",
+    status: "active",
+    completeness: "100%",
+    route: "/drone-commander",
+    icon: "Plane",
+    lazy: true,
+    version: "172.0",
   }
 };
 
