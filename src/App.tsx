@@ -16,7 +16,7 @@ import { OffshoreLoader, PageSkeleton } from "@/components/LoadingStates";
 import { lazyWithPreload, preloadStrategy } from "@/lib/performance/lazy-with-preload";
 
 // Páginas mais usadas - carregamento prioritário
-const Index = lazyWithPreload(() => import("@/pages/Index"));
+import Index from "@/pages/Index";
 const Dashboard = lazyWithPreload(() => import("@/pages/Dashboard"));
 const Travel = lazyWithPreload(() => import("@/pages/Travel"));
 
