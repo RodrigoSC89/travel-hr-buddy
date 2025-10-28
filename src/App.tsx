@@ -108,6 +108,7 @@ const Unauthorized = React.lazy(() => import("@/pages/Unauthorized"));
 const RestoreChartEmbed = React.lazy(() => import("@/pages/embed/RestoreChartEmbed"));
 const TVWallLogs = React.lazy(() => import("@/pages/tv/LogsPage"));
 const TemplateEditorPage = React.lazy(() => import("@/pages/admin/templates/editor"));
+const TemplateValidationPage = React.lazy(() => import("@/pages/admin/templates/validation"));
 const MMIJobsPanel = React.lazy(() => import("@/pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("@/pages/MmiBI"));
 const MMIHistory = React.lazy(() => import("@/pages/MMIHistory"));
@@ -427,6 +428,7 @@ function App() {
                       <Route path="/admin/templates/edit/:id" element={<EditTemplatePage />} />
                       <Route path="/admin/documents/demo" element={<DocumentEditorDemo />} />
                       <Route path="/admin/templates/editor" element={<TemplateEditorPage />} />
+                      <Route path="/admin/templates/validation" element={<TemplateValidationPage />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />
