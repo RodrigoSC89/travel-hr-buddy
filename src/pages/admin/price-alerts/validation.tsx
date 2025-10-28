@@ -1,8 +1,5 @@
-import React from "react";
-import { PriceAlertsValidationReport } from "@/modules/features/price-alerts/validation/PriceAlertsValidationReport";
+import PriceAlertsValidation from "@/modules/operations/price-alerts/validation/PriceAlertsValidation";
 
-const PriceAlertsValidationPage = () => {
-  return <PriceAlertsValidationReport />;
-};
-
-export default PriceAlertsValidationPage;
+export default function PriceAlertsValidationPage() {
+  return <PriceAlertsValidation />;
+}

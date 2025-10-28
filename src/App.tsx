@@ -22,7 +22,6 @@ const Travel = lazyWithPreload(() => import("@/pages/Travel"));
 
 // Páginas secundárias - carregamento normal
 const PriceAlerts = React.lazy(() => import("@/modules/features/price-alerts"));
-const PriceAlertsValidation = React.lazy(() => import("@/pages/admin/price-alerts/validation"));
 const SensorsHub = React.lazy(() => import("@/modules/sensors-hub"));
 const CrewValidation = React.lazy(() => import("@/pages/admin/crew/validation"));
 const IntegrationsValidation = React.lazy(() => import("@/pages/admin/integrations/validation"));
@@ -121,6 +120,11 @@ const DocumentationValidationPage = React.lazy(() => import("@/pages/admin/docum
 const DocumentTemplatesValidationPage = React.lazy(() => import("@/pages/admin/document-templates/validation"));
 const SatelliteTrackerValidationPage = React.lazy(() => import("@/pages/admin/satellite-tracker/validation"));
 const NavigationCopilotValidationPage = React.lazy(() => import("@/pages/admin/navigation-copilot/validation"));
+const TemplateEditorValidationPage = React.lazy(() => import("@/pages/admin/template-editor/validation"));
+const DocumentsConsolidationValidationPage = React.lazy(() => import("@/pages/admin/documents-consolidation/validation"));
+const PriceAlertsValidationPage = React.lazy(() => import("@/pages/admin/price-alerts/validation"));
+const IncidentsConsolidationValidationPage = React.lazy(() => import("@/pages/admin/incidents-consolidation/validation"));
+const SensorHubValidationPage = React.lazy(() => import("@/pages/admin/sensor-hub/validation"));
 const TestsValidationPage = React.lazy(() => import("@/pages/admin/tests"));
 const MMIJobsPanel = React.lazy(() => import("@/pages/MMIJobsPanel"));
 const MmiBI = React.lazy(() => import("@/pages/MmiBI"));
@@ -360,7 +364,6 @@ function App() {
                       <Route path="/" element={<Index />} />
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/price-alerts" element={<PriceAlerts />} />
-                      <Route path="/price-alerts/validation" element={<PriceAlertsValidation />} />
                       <Route path="/sensors-hub" element={<SensorsHub />} />
                       <Route path="/reports" element={<Reports />} />
                       <Route path="/reservations" element={<Reservations />} />
@@ -463,7 +466,6 @@ function App() {
                       <Route path="/admin/templates/validation" element={<TemplateValidationPage />} />
                       <Route path="/admin/crew/consolidation-validation" element={<CrewConsolidationValidationPage />} />
                       <Route path="/admin/crew/validation" element={<CrewValidation />} />
-                      <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidation />} />
                       <Route path="/admin/integrations/validation" element={<IntegrationsValidation />} />
                       <Route path="/admin/analytics/validation" element={<AnalyticsValidation />} />
                       <Route path="/admin/document-hub/validation" element={<DocumentHubValidationPage />} />
@@ -472,6 +474,11 @@ function App() {
                       <Route path="/admin/document-templates/validation" element={<DocumentTemplatesValidationPage />} />
                       <Route path="/admin/satellite-tracker/validation" element={<SatelliteTrackerValidationPage />} />
                       <Route path="/admin/navigation-copilot/validation" element={<NavigationCopilotValidationPage />} />
+                      <Route path="/admin/template-editor/validation" element={<TemplateEditorValidationPage />} />
+                      <Route path="/admin/documents-consolidation/validation" element={<DocumentsConsolidationValidationPage />} />
+                      <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidationPage />} />
+                      <Route path="/admin/incidents-consolidation/validation" element={<IncidentsConsolidationValidationPage />} />
+                      <Route path="/admin/sensor-hub/validation" element={<SensorHubValidationPage />} />
                       <Route path="/admin/tests/validation" element={<TestsValidationPage />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
