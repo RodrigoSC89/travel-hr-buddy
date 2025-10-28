@@ -270,6 +270,12 @@ const MissionEngineValidation = React.lazy(() => import("@/pages/admin/mission-e
 const DroneCommanderValidation = React.lazy(() => import("@/pages/admin/drone-commander/validation"));
 const SatcomValidation = React.lazy(() => import("@/pages/admin/satcom/validation"));
 const MissionConsolidationValidation = React.lazy(() => import("@/pages/admin/mission-consolidation/validation"));
+// PATCH 431-435 Validation Pages
+const RoutePlannerValidation = React.lazy(() => import("@/pages/admin/route-planner/validation"));
+const NavigationCopilotV2Validation = React.lazy(() => import("@/pages/admin/navigation-copilot-v2/validation"));
+const DeepRiskAIValidation = React.lazy(() => import("@/pages/admin/deep-risk-ai/validation"));
+const TemplatesSystemValidation = React.lazy(() => import("@/pages/admin/templates-system/validation"));
+const SonarAIValidationV2 = React.lazy(() => import("@/pages/admin/sonar-ai/validation"));
 
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
@@ -534,6 +540,11 @@ function App() {
                       <Route path="/admin/drone-commander/validation" element={<DroneCommanderValidation />} />
                       <Route path="/admin/satcom/validation" element={<SatcomValidation />} />
                       <Route path="/admin/mission-consolidation/validation" element={<MissionConsolidationValidation />} />
+                      <Route path="/admin/route-planner/validation" element={<RoutePlannerValidation />} />
+                      <Route path="/admin/navigation-copilot-v2/validation" element={<NavigationCopilotV2Validation />} />
+                      <Route path="/admin/deep-risk-ai/validation" element={<DeepRiskAIValidation />} />
+                      <Route path="/admin/templates-system/validation" element={<TemplatesSystemValidation />} />
+                      <Route path="/admin/sonar-ai-v2/validation" element={<SonarAIValidationV2 />} />
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />
