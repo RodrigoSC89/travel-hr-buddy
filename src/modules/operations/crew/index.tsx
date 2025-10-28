@@ -1,74 +1,38 @@
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, UserCheck, Calendar, Award } from "lucide-react";
+/**
+ * PATCH 398 - Crew Module Consolidation
+ * 
+ * @deprecated This module has been consolidated into @/modules/crew
+ * Please update your imports to use @/modules/crew instead
+ * 
+ * This file now redirects to the unified crew management module
+ */
 
-const CrewModule = () => {
-  return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center gap-3 mb-6">
-        <Users className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold">Crew Management</h1>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Crew</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">248</div>
-            <p className="text-xs text-muted-foreground">+12% from last month</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">On Duty</CardTitle>
-            <UserCheck className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">186</div>
-            <p className="text-xs text-muted-foreground">75% availability</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Certifications Due</CardTitle>
-            <Award className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">23</div>
-            <p className="text-xs text-muted-foreground">Next 30 days</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Scheduled Rotations</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground">This week</p>
-          </CardContent>
-        </Card>
-      </div>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Module Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">
-            Complete crew management system with certification tracking, rotation scheduling, 
-            and performance monitoring. Integration with training and compliance modules.
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
-};
+// Redirect to consolidated crew module
+export { default } from "@/modules/crew";
 
-export default CrewModule;
+// Re-export for backward compatibility
+export { default as CrewModule } from "@/modules/crew";
+export { default as CrewManagement } from "@/modules/crew";
+export { default as CrewOperations } from "@/modules/crew";
+
+/**
+ * Migration Notice:
+ * ----------------
+ * This module (src/modules/operations/crew) has been deprecated and merged
+ * into the unified crew management module at src/modules/crew.
+ * 
+ * Please update your imports:
+ * 
+ * OLD (deprecated):
+ *   import CrewModule from '@/modules/operations/crew'
+ * 
+ * NEW (recommended):
+ *   import CrewManagement from '@/modules/crew'
+ * 
+ * All functionality remains available through the consolidated module including:
+ * - Crew member management and performance tracking
+ * - Offline sync capabilities for mobile/field operations
+ * - Ethics and consent management
+ * - Checklists, reports, and attendance tracking
+ * - Certification tracking and rotation scheduling
+ */

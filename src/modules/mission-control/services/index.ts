@@ -1,8 +1,17 @@
 /**
- * PATCH 163.0 - Autonomous Mission Engine
- * Executes missions based on rules and conditions
+ * Mission Control Services
+ * Consolidated exports for all mission control functionality
  */
 
+// PATCH 396 - New Mission Control Services
+export * from "./mission-service";
+export * from "./mission-sync-service";
+export * from "./mission-logging";
+
+// Legacy exports (PATCH 163.0)
+export * from "./mission-logs-service";
+
+// Autonomous Mission Engine (PATCH 163.0)
 import { logger } from "@/lib/logger";
 
 export interface MissionStep {
@@ -326,3 +335,4 @@ class MissionEngine {
 }
 
 export const missionEngine = new MissionEngine();
+
