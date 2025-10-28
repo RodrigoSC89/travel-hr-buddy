@@ -116,17 +116,23 @@ Navigate to `/price-alerts` or `/alertas-precos` in the application menu under "
 \`\`\`typescript
 import { priceAlertsService } from '@/services/price-alerts-service';
 
-const newAlert = await priceAlertsService.createAlert({
-  product_name: 'Flight to New York',
-  target_price: 500,
-  current_price: 650,
-  product_url: 'https://example.com/flight',
-  route: 'São Paulo - New York',
-  travel_date: '2025-12-25',
-  notification_email: true,
-  notification_push: true,
-  notification_frequency: 'immediate'
-});
+try {
+  const newAlert = await priceAlertsService.createAlert({
+    product_name: 'Flight to New York',
+    target_price: 500,
+    current_price: 650,
+    product_url: 'https://example.com/flight',
+    route: 'São Paulo - New York',
+    travel_date: '2025-12-25',
+    notification_email: true,
+    notification_push: true,
+    notification_frequency: 'immediate'
+  });
+  console.log('Alert created:', newAlert);
+} catch (error) {
+  console.error('Failed to create alert:', error);
+  // Handle error appropriately
+}
 \`\`\`
 
 ### Using the React Hook
@@ -135,21 +141,35 @@ const newAlert = await priceAlertsService.createAlert({
 import { usePriceAlerts } from '@/hooks/use-price-alerts';
 
 function MyComponent() {
-  const { alerts, loading, createAlert, deleteAlert } = usePriceAlerts();
+  const { alerts, loading, error, createAlert, deleteAlert } = usePriceAlerts();
   
   // Create alert
   const handleCreate = async () => {
-    await createAlert({
-      product_name: 'Hotel in Paris',
-      target_price: 200,
-      product_url: 'https://example.com/hotel',
-    });
+    try {
+      await createAlert({
+        product_name: 'Hotel in Paris',
+        target_price: 200,
+        product_url: 'https://example.com/hotel',
+      });
+    } catch (err) {
+      // Error is handled by the hook and shown via toast
+      console.error('Create failed:', err);
+    }
   };
   
   // Delete alert
   const handleDelete = async (id: string) => {
-    await deleteAlert(id);
+    try {
+      await deleteAlert(id);
+    } catch (err) {
+      // Error is handled by the hook and shown via toast
+      console.error('Delete failed:', err);
+    }
   };
+  
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
   
   return (
     <div>
