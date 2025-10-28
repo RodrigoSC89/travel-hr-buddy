@@ -16,3 +16,6 @@ export * from "./ethics-guard";
 
 // Re-export copilot functionality if needed
 export * from "./copilot";
+
+// Default export for backward compatibility
+export { ConsentScreen as default } from "./components/ConsentScreen";
