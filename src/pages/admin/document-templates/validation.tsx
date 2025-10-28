@@ -2,7 +2,7 @@ import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { FileText } from "lucide-react";
-import DocumentTemplatesValidation from "@/modules/documents/templates/validation/DocumentTemplatesValidation";
+import DocumentTemplatesValidation from "@/modules/document-hub/templates/validation/DocumentTemplatesValidation";
 
 export default function DocumentTemplatesValidationPage() {
   return (
