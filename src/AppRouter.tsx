@@ -77,6 +77,9 @@ const Documents = React.lazy(() => import("@/pages/Documents"));
 const UnderwaterDrone = React.lazy(() => import("@/modules/underwater-drone"));
 const NavigationCopilotPage = React.lazy(() => import("@/pages/NavigationCopilot"));
 
+// 🔹 PATCH 461-465 - Sensors Hub, Missions Consolidation, Templates, Price Alerts, Technical Validation
+const TechnicalValidation = React.lazy(() => import("@/pages/admin/technical-validation"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -138,6 +141,9 @@ export default function AppRouter() {
         <Route path="/documents" element={<Documents />} />
         <Route path="/underwater-drone" element={<UnderwaterDrone />} />
         <Route path="/navigation-copilot" element={<NavigationCopilotPage />} />
+        
+        {/* PATCH 461-465 Routes */}
+        <Route path="/admin/technical-validation" element={<TechnicalValidation />} />
       </Routes>
     </Router>
   );
