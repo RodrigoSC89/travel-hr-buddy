@@ -3,7 +3,7 @@
  * Enhanced sonar data processing with logging and visualization
  */
 
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { SonarAnalysis, SonarReturn, SonarPattern } from "../dataAnalyzer";
 
