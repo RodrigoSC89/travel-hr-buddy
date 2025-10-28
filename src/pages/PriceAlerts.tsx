@@ -1,4 +1,4 @@
-import { AdvancedPriceAlerts } from "@/components/price-alerts/advanced-price-alerts";
+import { PriceAlertsDashboard } from "@/components/price-alerts/price-alerts-dashboard-integrated";
 import { PriceAnalyticsDashboard } from "@/components/price-alerts/price-analytics-dashboard";
 import { AIPricePredictor } from "@/components/price-alerts/ai-price-predictor";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -54,7 +54,7 @@ const PriceAlerts = () => {
         </TabsList>
 
         <TabsContent value="alerts">
-          <AdvancedPriceAlerts />
+          <PriceAlertsDashboard />
         </TabsContent>
 
         <TabsContent value="analytics">
