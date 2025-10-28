@@ -13,7 +13,7 @@ import {
   Filter,
   Brain,
   Plane,
-  Sonar,
+  Radio,
   Navigation,
   Zap,
   Droplet,
@@ -275,7 +275,7 @@ const ExperimentalModules = () => {
   const getIcon = (tags: string[]) => {
     if (tags.includes("AI")) return Brain;
     if (tags.includes("drone")) return Plane;
-    if (tags.includes("sonar")) return Sonar;
+    if (tags.includes("sonar")) return Radio;
     if (tags.includes("nav")) return Navigation;
     if (tags.includes("automation")) return Zap;
     if (tags.includes("underwater")) return Droplet;

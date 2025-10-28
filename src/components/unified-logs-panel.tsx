@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Search, Download, FileText, AlertCircle, Info, AlertTriangle, XCircle } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
@@ -58,7 +58,7 @@ export function UnifiedLogsPanel() {
         allLogs.push(
           ...accessLogs.map((log) => ({
             id: log.id,
-            message: `User ${log.user_id} accessed ${log.endpoint || "system"}`,
+            message: `User ${log.user_id} accessed ${log.module_accessed}`,
             level: "info",
             source: "access",
             timestamp: log.created_at,
@@ -67,27 +67,8 @@ export function UnifiedLogsPanel() {
         );
       }
 
-      // Fetch assistant logs
-      const { data: assistantLogs, error: assistantError } = await supabase
-        .from("assistant_logs")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(50);
-
-      if (assistantError) throw assistantError;
-
-      if (assistantLogs) {
-        allLogs.push(
-          ...assistantLogs.map((log) => ({
-            id: log.id,
-            message: log.message || "AI Assistant interaction",
-            level: log.level || "info",
-            source: "assistant",
-            timestamp: log.created_at,
-            metadata: log,
-          }))
-        );
-      }
+      // Fetch system logs only (assistant_logs table doesn't exist in current schema)
+      // We'll skip assistant logs for now
 
       // Fetch system logs
       const { data: systemLogs, error: systemError } = await supabase

@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/contexts/AuthContext";
 import { CalendarIcon, Save, TrendingDown } from "lucide-react";
 import { format } from "date-fns";
 
@@ -55,7 +55,6 @@ export function PriceRangeConfig() {
       const { error } = await supabase
         .from("price_alerts")
         .insert({
-          user_id: user.id,
           route,
           travel_date: travelDate?.toISOString().split('T')[0],
           target_price: targetPrice,
@@ -65,7 +64,7 @@ export function PriceRangeConfig() {
           notification_push: pushEnabled,
           notification_frequency: notificationFrequency,
           active: true
-        });
+        } as any);
 
       if (error) throw error;
 

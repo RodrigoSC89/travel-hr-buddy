@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/contexts/AuthContext";
 import { Line, Bar } from "react-chartjs-2";
 import { Download, TrendingUp, BarChart3, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -86,9 +86,9 @@ export function EnhancedHistoryStats() {
       setFlightHistory(
         (flightData || []).map((item) => ({
           id: item.id,
-          route: item.route || "Unknown",
+          route: item.route_code || "Unknown",
           price: item.price || 0,
-          recorded_at: item.recorded_at,
+          recorded_at: item.captured_at,
           source: "flight",
         }))
       );
@@ -97,8 +97,8 @@ export function EnhancedHistoryStats() {
         (hotelData || []).map((item) => ({
           id: item.id,
           route: item.hotel_name || "Unknown",
-          price: item.price || 0,
-          recorded_at: item.recorded_at,
+          price: item.total_price || 0,
+          recorded_at: item.captured_at,
           source: "hotel",
         }))
       );

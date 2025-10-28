@@ -240,6 +240,12 @@ const SonarAIValidation = React.lazy(() => import("@/pages/admin/sonar-ai/valida
 const TestAutomationValidation = React.lazy(() => import("@/pages/admin/test-automation/validation"));
 const TemplatesApplicationValidation = React.lazy(() => import("@/pages/admin/templates-application/validation"));
 const MissionControlConsolidationValidation = React.lazy(() => import("@/pages/admin/mission-control-consolidation/validation"));
+// PATCH 411-415 Validation Pages
+const PriceAlertsFinalizadoValidation = React.lazy(() => import("@/pages/admin/price-alerts-finalizado/validation"));
+const DocumentsConsolidadoValidation = React.lazy(() => import("@/pages/admin/documents-consolidado/validation"));
+const UnifiedLogsPanelValidation = React.lazy(() => import("@/pages/admin/unified-logs-panel/validation"));
+const CoordinationAIValidation = React.lazy(() => import("@/pages/admin/coordination-ai/validation"));
+const ExperimentalModulesValidation = React.lazy(() => import("@/pages/admin/experimental-modules/validation"));
 
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
@@ -627,6 +633,13 @@ function App() {
                       <Route path="/admin/test-automation/validation" element={<TestAutomationValidation />} />
                       <Route path="/admin/templates-application/validation" element={<TemplatesApplicationValidation />} />
                       <Route path="/admin/mission-control-consolidation/validation" element={<MissionControlConsolidationValidation />} />
+                      
+                      {/* Validation Routes - Patches 411-415 */}
+                      <Route path="/admin/price-alerts-finalizado/validation" element={<PriceAlertsFinalizadoValidation />} />
+                      <Route path="/admin/documents-consolidado/validation" element={<DocumentsConsolidadoValidation />} />
+                      <Route path="/admin/unified-logs-panel/validation" element={<UnifiedLogsPanelValidation />} />
+                      <Route path="/admin/coordination-ai/validation" element={<CoordinationAIValidation />} />
+                      <Route path="/admin/experimental-modules/validation" element={<ExperimentalModulesValidation />} />
                       
                       {/* Portuguese Module Routes with English Aliases */}
                       <Route path="/comunicacao" element={<Communication />} />
