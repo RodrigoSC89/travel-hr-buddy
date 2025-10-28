@@ -7,6 +7,10 @@ import { InventoryManagement } from "./inventory-management";
 import { ShipmentTracking } from "./shipment-tracking";
 import { SupplyOrdersManagement } from "./supply-orders-management";
 import { DeliveryMap } from "./DeliveryMap";
+import { SupplierManagement } from "./supplier-management";
+import { TransportTracking } from "./transport-tracking";
+import { MovementHistory } from "./movement-history";
+import { InventoryAlerts } from "./inventory-alerts";
 import { supabase } from "@/integrations/supabase/client";
 
 const LogisticsHubDashboard = () => {
@@ -54,30 +58,35 @@ const LogisticsHubDashboard = () => {
       </div>
 
       <Tabs defaultValue="inventory" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="inventory">
             <Package className="h-4 w-4 mr-2" />
             Inventory
           </TabsTrigger>
           <TabsTrigger value="orders">
             <Truck className="h-4 w-4 mr-2" />
-            Supply Orders
+            Orders
           </TabsTrigger>
-          <TabsTrigger value="map">
-            <Map className="h-4 w-4 mr-2" />
-            Delivery Map
+          <TabsTrigger value="transport">
+            <Truck className="h-4 w-4 mr-2" />
+            Transport
           </TabsTrigger>
           <TabsTrigger value="suppliers">
             <Users className="h-4 w-4 mr-2" />
             Suppliers
           </TabsTrigger>
-          <TabsTrigger value="analytics">
+          <TabsTrigger value="movement">
             <BarChart3 className="h-4 w-4 mr-2" />
-            Analytics
+            Movement
+          </TabsTrigger>
+          <TabsTrigger value="map">
+            <Map className="h-4 w-4 mr-2" />
+            Map
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="inventory" className="space-y-4">
+          <InventoryAlerts />
           <InventoryManagement />
         </TabsContent>
 
@@ -89,36 +98,16 @@ const LogisticsHubDashboard = () => {
           <DeliveryMap deliveries={deliveryLocations} />
         </TabsContent>
 
-        <TabsContent value="suppliers" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Supplier Management</CardTitle>
-              <CardDescription>Manage your supplier relationships and procurement</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Supplier management interface coming soon...</p>
-                <p className="text-sm mt-2">View and manage suppliers, ratings, and contracts</p>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="transport" className="space-y-4">
+          <TransportTracking />
         </TabsContent>
 
-        <TabsContent value="analytics" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Logistics Analytics</CardTitle>
-              <CardDescription>View logistics performance metrics and insights</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Analytics dashboard coming soon...</p>
-                <p className="text-sm mt-2">Track KPIs, costs, and efficiency metrics</p>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="suppliers" className="space-y-4">
+          <SupplierManagement />
+        </TabsContent>
+
+        <TabsContent value="movement" className="space-y-4">
+          <MovementHistory />
         </TabsContent>
       </Tabs>
     </div>
