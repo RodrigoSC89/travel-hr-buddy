@@ -108,7 +108,7 @@ export default function DocumentsConsolidationValidation() {
                 Diretório único e limpo
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Confirmar que existe apenas src/modules/documents/document-hub
+                Confirmar que existe apenas src/modules/document-hub
               </p>
             </div>
           </div>
