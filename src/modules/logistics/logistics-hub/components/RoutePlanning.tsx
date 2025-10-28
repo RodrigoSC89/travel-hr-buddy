@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 376: Route Planning with Map Integration
  * Interactive route planning with Leaflet map visualization

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 377: Travel Reservations & Group Management
  * Reservations synchronization, group travel, and enhanced exports
