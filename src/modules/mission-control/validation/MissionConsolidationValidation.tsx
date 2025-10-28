@@ -1,19 +1,19 @@
 /**
- * PATCH 428 - Sensors Hub Validation
+ * PATCH 430 - Consolidação de Missões Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Activity, Bell, Database, Network } from "lucide-react";
+import { CheckCircle2, FolderTree, GitMerge, Navigation, CheckCheck } from "lucide-react";
 import { useState } from "react";
 
-export default function SensorHubValidation() {
+export default function MissionConsolidationValidation() {
   const [checks, setChecks] = useState({
-    data: false,
-    alerts: false,
-    persistence: false,
-    integration: false,
+    route: false,
+    duplicates: false,
+    navigation: false,
+    features: false,
   });
 
   const allChecked = Object.values(checks).every(Boolean);
@@ -23,11 +23,11 @@ export default function SensorHubValidation() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Activity className="h-8 w-8 text-primary" />
-            PATCH 428 - Sensors Hub
+            <GitMerge className="h-8 w-8 text-primary" />
+            PATCH 430 - Consolidação de Missões
           </h1>
           <p className="text-muted-foreground mt-2">
-            Validação do hub central de sensores
+            Validação da estrutura unificada do sistema de missões
           </p>
         </div>
         {allChecked && (
@@ -48,88 +48,88 @@ export default function SensorHubValidation() {
         <CardContent className="space-y-4">
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="data"
-              checked={checks.data}
+              id="route"
+              checked={checks.route}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, data: checked as boolean })
+                setChecks({ ...checks, route: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="data"
+                htmlFor="route"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Activity className="inline h-4 w-4 mr-1" />
-                Dados de sensores visíveis na UI
+                <FolderTree className="inline h-4 w-4 mr-1" />
+                Rota única ativa (/mission-engine/)
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Interface exibe leituras de todos os sensores em tempo real
+                Sistema usa rota consolidada /mission-engine/ para todas as operações
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="alerts"
-              checked={checks.alerts}
+              id="duplicates"
+              checked={checks.duplicates}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, alerts: checked as boolean })
+                setChecks({ ...checks, duplicates: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="alerts"
+                htmlFor="duplicates"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Bell className="inline h-4 w-4 mr-1" />
-                Alertas emitidos corretamente
+                <CheckCheck className="inline h-4 w-4 mr-1" />
+                Sem entradas duplicadas no registry
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Sistema detecta e notifica condições anormais automaticamente
+                Registry de módulos não contém duplicatas ou referências obsoletas
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="persistence"
-              checked={checks.persistence}
+              id="navigation"
+              checked={checks.navigation}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, persistence: checked as boolean })
+                setChecks({ ...checks, navigation: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="persistence"
+                htmlFor="navigation"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Database className="inline h-4 w-4 mr-1" />
-                Dados persistidos em tempo real
+                <Navigation className="inline h-4 w-4 mr-1" />
+                Navegação atualizada
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Todas as leituras são salvas no banco de dados continuamente
+                Menus e links internos apontam para a rota consolidada
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="integration"
-              checked={checks.integration}
+              id="features"
+              checked={checks.features}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, integration: checked as boolean })
+                setChecks({ ...checks, features: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="integration"
+                htmlFor="features"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Network className="inline h-4 w-4 mr-1" />
-                Integração com outros módulos
+                <CheckCircle2 className="inline h-4 w-4 mr-1" />
+                Todas funcionalidades anteriores ativas
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Dados de sensores alimentam outros sistemas (alerts, mission control, etc.)
+                Recursos existentes continuam funcionando após consolidação
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function SensorHubValidation() {
         </CardHeader>
         <CardContent>
           <p className="font-medium">
-            ✅ Painel central funcional e conectado
+            ✅ Estrutura de missão unificada e sem redundância
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             Todos os checkboxes acima devem estar marcados para aprovação

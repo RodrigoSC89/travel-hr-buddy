@@ -1,19 +1,19 @@
 /**
- * PATCH 428 - Sensors Hub Validation
+ * PATCH 426 - Mission Engine Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Activity, Bell, Database, Network } from "lucide-react";
+import { CheckCircle2, Rocket, Database, Network, Monitor } from "lucide-react";
 import { useState } from "react";
 
-export default function SensorHubValidation() {
+export default function MissionEngineValidation() {
   const [checks, setChecks] = useState({
-    data: false,
-    alerts: false,
-    persistence: false,
+    execution: false,
+    history: false,
     integration: false,
+    ui: false,
   });
 
   const allChecked = Object.values(checks).every(Boolean);
@@ -23,11 +23,11 @@ export default function SensorHubValidation() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Activity className="h-8 w-8 text-primary" />
-            PATCH 428 - Sensors Hub
+            <Rocket className="h-8 w-8 text-primary" />
+            PATCH 426 - Mission Engine
           </h1>
           <p className="text-muted-foreground mt-2">
-            Validação do hub central de sensores
+            Validação do motor de execução de missões táticas
           </p>
         </div>
         {allChecked && (
@@ -48,66 +48,44 @@ export default function SensorHubValidation() {
         <CardContent className="space-y-4">
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="data"
-              checked={checks.data}
+              id="execution"
+              checked={checks.execution}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, data: checked as boolean })
+                setChecks({ ...checks, execution: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="data"
+                htmlFor="execution"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Activity className="inline h-4 w-4 mr-1" />
-                Dados de sensores visíveis na UI
+                <Rocket className="inline h-4 w-4 mr-1" />
+                Execução de missões simula corretamente
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Interface exibe leituras de todos os sensores em tempo real
+                Sistema executa missões táticas com simulação realista
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="alerts"
-              checked={checks.alerts}
+              id="history"
+              checked={checks.history}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, alerts: checked as boolean })
+                setChecks({ ...checks, history: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="alerts"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-              >
-                <Bell className="inline h-4 w-4 mr-1" />
-                Alertas emitidos corretamente
-              </label>
-              <p className="text-sm text-muted-foreground mt-1">
-                Sistema detecta e notifica condições anormais automaticamente
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
-            <Checkbox
-              id="persistence"
-              checked={checks.persistence}
-              onCheckedChange={(checked) =>
-                setChecks({ ...checks, persistence: checked as boolean })
-              }
-            />
-            <div className="flex-1">
-              <label
-                htmlFor="persistence"
+                htmlFor="history"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
                 <Database className="inline h-4 w-4 mr-1" />
-                Dados persistidos em tempo real
+                Histórico salvo no banco
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Todas as leituras são salvas no banco de dados continuamente
+                Todas as missões são persistidas com timestamps e resultados
               </p>
             </div>
           </div>
@@ -126,10 +104,32 @@ export default function SensorHubValidation() {
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
                 <Network className="inline h-4 w-4 mr-1" />
-                Integração com outros módulos
+                Integrações com AI e agentes ativas
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Dados de sensores alimentam outros sistemas (alerts, mission control, etc.)
+                Orquestração AI coordena agentes e recursos adequadamente
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+            <Checkbox
+              id="ui"
+              checked={checks.ui}
+              onCheckedChange={(checked) =>
+                setChecks({ ...checks, ui: checked as boolean })
+              }
+            />
+            <div className="flex-1">
+              <label
+                htmlFor="ui"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+              >
+                <Monitor className="inline h-4 w-4 mr-1" />
+                UI funcional
+              </label>
+              <p className="text-sm text-muted-foreground mt-1">
+                Interface permite criar, executar e monitorar missões
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function SensorHubValidation() {
         </CardHeader>
         <CardContent>
           <p className="font-medium">
-            ✅ Painel central funcional e conectado
+            ✅ Missões táticas executáveis com orquestração AI
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             Todos os checkboxes acima devem estar marcados para aprovação

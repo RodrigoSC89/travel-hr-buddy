@@ -1,19 +1,19 @@
 /**
- * PATCH 428 - Sensors Hub Validation
+ * PATCH 429 - Satcom Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Activity, Bell, Database, Network } from "lucide-react";
+import { CheckCircle2, Satellite, Send, Clock, FileText } from "lucide-react";
 import { useState } from "react";
 
-export default function SensorHubValidation() {
+export default function SatcomValidation() {
   const [checks, setChecks] = useState({
-    data: false,
-    alerts: false,
-    persistence: false,
-    integration: false,
+    messaging: false,
+    latency: false,
+    logs: false,
+    ui: false,
   });
 
   const allChecked = Object.values(checks).every(Boolean);
@@ -23,11 +23,11 @@ export default function SensorHubValidation() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Activity className="h-8 w-8 text-primary" />
-            PATCH 428 - Sensors Hub
+            <Satellite className="h-8 w-8 text-primary" />
+            PATCH 429 - Satcom
           </h1>
           <p className="text-muted-foreground mt-2">
-            Validação do hub central de sensores
+            Validação do sistema de comunicação satelital
           </p>
         </div>
         {allChecked && (
@@ -48,88 +48,88 @@ export default function SensorHubValidation() {
         <CardContent className="space-y-4">
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="data"
-              checked={checks.data}
+              id="messaging"
+              checked={checks.messaging}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, data: checked as boolean })
+                setChecks({ ...checks, messaging: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="data"
+                htmlFor="messaging"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Activity className="inline h-4 w-4 mr-1" />
-                Dados de sensores visíveis na UI
+                <Send className="inline h-4 w-4 mr-1" />
+                Mensagens enviadas e recebidas
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Interface exibe leituras de todos os sensores em tempo real
+                Sistema transmite e recebe mensagens via canal satelital
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="alerts"
-              checked={checks.alerts}
+              id="latency"
+              checked={checks.latency}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, alerts: checked as boolean })
+                setChecks({ ...checks, latency: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="alerts"
+                htmlFor="latency"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Bell className="inline h-4 w-4 mr-1" />
-                Alertas emitidos corretamente
+                <Clock className="inline h-4 w-4 mr-1" />
+                Simulação de latência presente
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Sistema detecta e notifica condições anormais automaticamente
+                Sistema simula atrasos e condições reais de comunicação satelital
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="persistence"
-              checked={checks.persistence}
+              id="logs"
+              checked={checks.logs}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, persistence: checked as boolean })
+                setChecks({ ...checks, logs: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="persistence"
+                htmlFor="logs"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Database className="inline h-4 w-4 mr-1" />
-                Dados persistidos em tempo real
+                <FileText className="inline h-4 w-4 mr-1" />
+                Logs registrados
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Todas as leituras são salvas no banco de dados continuamente
+                Todas as comunicações são registradas com timestamps e status
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="integration"
-              checked={checks.integration}
+              id="ui"
+              checked={checks.ui}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, integration: checked as boolean })
+                setChecks({ ...checks, ui: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="integration"
+                htmlFor="ui"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Network className="inline h-4 w-4 mr-1" />
-                Integração com outros módulos
+                <Satellite className="inline h-4 w-4 mr-1" />
+                Canal satelital ativo na UI
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Dados de sensores alimentam outros sistemas (alerts, mission control, etc.)
+                Interface mostra status do canal e histórico de comunicações
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function SensorHubValidation() {
         </CardHeader>
         <CardContent>
           <p className="font-medium">
-            ✅ Painel central funcional e conectado
+            ✅ Canal de comunicação satelital simulado funcionalmente
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             Todos os checkboxes acima devem estar marcados para aprovação

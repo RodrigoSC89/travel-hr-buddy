@@ -1,19 +1,19 @@
 /**
- * PATCH 428 - Sensors Hub Validation
+ * PATCH 427 - Drone Commander Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Activity, Bell, Database, Network } from "lucide-react";
+import { CheckCircle2, Plane, Gamepad2, FileText, Calendar } from "lucide-react";
 import { useState } from "react";
 
-export default function SensorHubValidation() {
+export default function DroneCommanderValidation() {
   const [checks, setChecks] = useState({
-    data: false,
-    alerts: false,
-    persistence: false,
-    integration: false,
+    panel: false,
+    commands: false,
+    logs: false,
+    scheduling: false,
   });
 
   const allChecked = Object.values(checks).every(Boolean);
@@ -23,11 +23,11 @@ export default function SensorHubValidation() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Activity className="h-8 w-8 text-primary" />
-            PATCH 428 - Sensors Hub
+            <Plane className="h-8 w-8 text-primary" />
+            PATCH 427 - Drone Commander
           </h1>
           <p className="text-muted-foreground mt-2">
-            Validação do hub central de sensores
+            Validação do sistema de comando e controle de drones
           </p>
         </div>
         {allChecked && (
@@ -48,88 +48,88 @@ export default function SensorHubValidation() {
         <CardContent className="space-y-4">
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="data"
-              checked={checks.data}
+              id="panel"
+              checked={checks.panel}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, data: checked as boolean })
+                setChecks({ ...checks, panel: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="data"
+                htmlFor="panel"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Activity className="inline h-4 w-4 mr-1" />
-                Dados de sensores visíveis na UI
+                <Plane className="inline h-4 w-4 mr-1" />
+                Painel de drones interativo
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Interface exibe leituras de todos os sensores em tempo real
+                Interface mostra status e localização de múltiplos drones em tempo real
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="alerts"
-              checked={checks.alerts}
+              id="commands"
+              checked={checks.commands}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, alerts: checked as boolean })
+                setChecks({ ...checks, commands: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="alerts"
+                htmlFor="commands"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Bell className="inline h-4 w-4 mr-1" />
-                Alertas emitidos corretamente
+                <Gamepad2 className="inline h-4 w-4 mr-1" />
+                Comandos operacionais
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Sistema detecta e notifica condições anormais automaticamente
+                Sistema permite enviar comandos de voo, retorno e emergência
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="persistence"
-              checked={checks.persistence}
+              id="logs"
+              checked={checks.logs}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, persistence: checked as boolean })
+                setChecks({ ...checks, logs: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="persistence"
+                htmlFor="logs"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Database className="inline h-4 w-4 mr-1" />
-                Dados persistidos em tempo real
+                <FileText className="inline h-4 w-4 mr-1" />
+                Logs de voos persistidos
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Todas as leituras são salvas no banco de dados continuamente
+                Histórico completo de voos armazenado no banco de dados
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="integration"
-              checked={checks.integration}
+              id="scheduling"
+              checked={checks.scheduling}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, integration: checked as boolean })
+                setChecks({ ...checks, scheduling: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="integration"
+                htmlFor="scheduling"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Network className="inline h-4 w-4 mr-1" />
-                Integração com outros módulos
+                <Calendar className="inline h-4 w-4 mr-1" />
+                Agendamento funcional
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Dados de sensores alimentam outros sistemas (alerts, mission control, etc.)
+                Missões podem ser agendadas e executadas automaticamente
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function SensorHubValidation() {
         </CardHeader>
         <CardContent>
           <p className="font-medium">
-            ✅ Painel central funcional e conectado
+            ✅ Controle e simulação de múltiplos drones operante
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             Todos os checkboxes acima devem estar marcados para aprovação
