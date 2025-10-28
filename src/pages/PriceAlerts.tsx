@@ -1,6 +1,8 @@
 import { PriceAlertsDashboard } from "@/components/price-alerts/price-alerts-dashboard-integrated";
 import { PriceAnalyticsDashboard } from "@/components/price-alerts/price-analytics-dashboard";
 import { AIPricePredictor } from "@/components/price-alerts/ai-price-predictor";
+import { PriceRangeConfig } from "@/components/price-alerts/components/price-range-config";
+import { EnhancedHistoryStats } from "@/components/price-alerts/components/enhanced-history-stats";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
@@ -9,10 +11,22 @@ import {
   BarChart3, 
   Target, 
   TrendingUp,
-  Zap
+  Zap,
+  Settings,
+  History
 } from "lucide-react";
+import { useState } from "react";
+import { PriceRangeSettings } from "@/components/price-alerts/components/price-range-config";
 
 const PriceAlerts = () => {
+  const [priceRangeConfig, setPriceRangeConfig] = useState<PriceRangeSettings | undefined>();
+
+  const handlePriceConfigSave = (config: PriceRangeSettings) => {
+    setPriceRangeConfig(config);
+    // Store in localStorage for persistence
+    localStorage.setItem("price-range-config", JSON.stringify(config));
+  };
+
   return (
     <ModulePageWrapper gradient="orange">
       <ModuleHeader
@@ -29,7 +43,7 @@ const PriceAlerts = () => {
 
       {/* Main Tabs */}
       <Tabs defaultValue="alerts" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 bg-muted/50">
+        <TabsList className="grid w-full grid-cols-5 bg-muted/50">
           <TabsTrigger 
             value="alerts" 
             className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
@@ -38,11 +52,25 @@ const PriceAlerts = () => {
             Alertas Inteligentes
           </TabsTrigger>
           <TabsTrigger 
+            value="config" 
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
+            <Settings className="w-4 h-4 mr-2" />
+            Configuração
+          </TabsTrigger>
+          <TabsTrigger 
+            value="history" 
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          >
+            <History className="w-4 h-4 mr-2" />
+            Histórico
+          </TabsTrigger>
+          <TabsTrigger 
             value="analytics" 
             className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             <BarChart3 className="w-4 h-4 mr-2" />
-            Analytics Avançado
+            Analytics
           </TabsTrigger>
           <TabsTrigger 
             value="ai-predictor" 
@@ -55,6 +83,17 @@ const PriceAlerts = () => {
 
         <TabsContent value="alerts">
           <PriceAlertsDashboard />
+        </TabsContent>
+
+        <TabsContent value="config">
+          <PriceRangeConfig 
+            onSave={handlePriceConfigSave}
+            initialConfig={priceRangeConfig}
+          />
+        </TabsContent>
+
+        <TabsContent value="history">
+          <EnhancedHistoryStats />
         </TabsContent>
 
         <TabsContent value="analytics">
