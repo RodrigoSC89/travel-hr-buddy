@@ -4,6 +4,6 @@
  */
 
 import React from "react";
-import { UserManagement } from "./components/UserManagementCRUD";
+import { UserManagementMultiTenant } from "@/components/admin/user-management-multi-tenant";
 
-export default UserManagement;
+export default UserManagementMultiTenant;
