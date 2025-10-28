@@ -534,7 +534,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     id: "documents.ai",
     name: "AI Documents",
     category: "documents",
-    path: "modules/documents/documents-ai/DocumentsAI",
+    path: "modules/document-hub/components/DocumentsAI",
     description: "AI-powered document management",
     status: "incomplete", // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
     completeness: "partial",
@@ -560,7 +560,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     id: "documents.templates",
     name: "Templates",
     category: "documents",
-    path: "modules/documents/templates",
+    path: "modules/document-hub/templates",
     description: "Document templates",
     status: "incomplete", // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
     completeness: "partial",

@@ -47,7 +47,7 @@ const TelemetryPage = React.lazy(() => import("@/pages/TelemetryPage"));
 const VoiceAssistant = React.lazy(() => import("@/modules/voice-assistant/VoiceAssistant"));
 const AnalyticsCore = React.lazy(() => import("@/modules/analytics/AnalyticsCore"));
 const SatelliteTracker = React.lazy(() => import("@/modules/satellite/SatelliteTracker"));
-const DocumentTemplates = React.lazy(() => import("@/modules/documents/templates"));
+const DocumentTemplates = React.lazy(() => import("@/modules/document-hub/templates"));
 
 // 🔹 PATCH 306-310 - Training Academy, Weather Dashboard, AI Documents, Fuel Optimizer
 const TrainingAcademyAdmin = React.lazy(() => import("@/pages/admin/training-academy"));

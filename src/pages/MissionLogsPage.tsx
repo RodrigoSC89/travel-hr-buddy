@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { missionLogsService, type MissionLog } from "@/modules/mission-logs/services/mission-logs-service";
+import { missionLogsService, type MissionLog } from "@/modules/mission-control/services/mission-logs-service";
 import { FileText, Plus, Edit, Trash2, Filter } from "lucide-react";
 
 export default function MissionLogsPage() {
