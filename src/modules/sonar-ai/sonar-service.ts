@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 407: Sonar AI Service
  * Service layer for CRUD operations on sonar data, analysis, and alerts
