@@ -102,12 +102,16 @@ class RoutePlannerService {
   }
 
   /**
-   * Save route to database
+   * Save route to database (PATCH 449 - Enhanced with planned_routes table)
    */
   async saveRoute(route: Route, userId: string): Promise<Route> {
     try {
       logger.info("Saving route to database", { routeName: route.name, userId });
 
+      // Calculate weather factor
+      const weatherFactor = this.calculateWeatherFactor(route.weatherAlerts);
+
+      // Save to both routes table (legacy) and planned_routes (PATCH 449)
       const { data, error } = await supabase
         .from("routes")
         .insert({
@@ -128,6 +132,24 @@ class RoutePlannerService {
         .single();
 
       if (error) throw error;
+
+      // Also save to planned_routes table (PATCH 449)
+      await supabase
+        .from("planned_routes")
+        .insert({
+          user_id: userId,
+          route_name: route.name,
+          description: route.description,
+          waypoints: route.waypoints,
+          origin: route.origin,
+          destination: route.destination,
+          distance_nm: route.distance,
+          estimated_duration_hours: route.estimatedDuration,
+          weather_integrated: true,
+          weather_factor: weatherFactor,
+          eta: new Date(Date.now() + route.estimatedDuration * 3600000).toISOString(),
+          status: route.status,
+        });
 
       return this.mapDatabaseRoute(data);
     } catch (error) {
@@ -269,6 +291,33 @@ class RoutePlannerService {
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
+  }
+
+  /**
+   * Helper: Calculate weather factor for ETA adjustment
+   */
+  private calculateWeatherFactor(alerts: WeatherAlert[]): number {
+    if (alerts.length === 0) return 1.0;
+
+    let factor = 1.0;
+    alerts.forEach((alert) => {
+      switch (alert.severity) {
+        case "low":
+          factor *= 1.05; // 5% delay
+          break;
+        case "medium":
+          factor *= 1.15; // 15% delay
+          break;
+        case "high":
+          factor *= 1.30; // 30% delay
+          break;
+        case "critical":
+          factor *= 1.50; // 50% delay
+          break;
+      }
+    });
+
+    return Math.min(factor, 2.0); // Cap at 2x
   }
 
   private toRad(degrees: number): number {
