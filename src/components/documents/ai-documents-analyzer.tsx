@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,9 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Upload, FileText, Search, Eye, Download, AlertCircle, 
-  CheckCircle, Clock, Loader2, FileImage, FilePlus
+  CheckCircle, Clock, Loader2, FileImage, FilePlus, Brain, Tag, List
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -46,6 +46,37 @@ export function AIDocumentsAnalyzer() {
   const [entities, setEntities] = useState<DocumentEntity[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<ProcessedDocument[]>([]);
+
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
+
+  const fetchDocuments = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data: orgData } = await supabase
+      .from("organization_users")
+      .select("organization_id")
+      .eq("user_id", user.id)
+      .eq("status", "active")
+      .single();
+
+    if (!orgData) return;
+
+    const { data, error } = await supabase
+      .from("ai_documents")
+      .select("*")
+      .eq("organization_id", orgData.organization_id)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      toast({ title: "Erro ao carregar documentos", variant: "destructive" });
+      return;
+    }
+
+    setDocuments(data as any || []);
+  };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -174,6 +205,76 @@ export function AIDocumentsAnalyzer() {
     return entities;
   };
 
+  // Generate automatic summary (first 200 chars or extractive summary)
+  const generateSummary = (text: string): string => {
+    if (!text || text.length === 0) return '';
+    
+    // Remove excessive whitespace
+    const cleaned = text.replace(/\s+/g, ' ').trim();
+    
+    // Split into sentences
+    const sentences = cleaned.split(/[.!?]+/).filter(s => s.trim().length > 10);
+    
+    if (sentences.length === 0) return cleaned.substring(0, 200);
+    
+    // Take first 2-3 most important sentences (simple extractive summarization)
+    const summary = sentences.slice(0, Math.min(3, sentences.length)).join('. ') + '.';
+    
+    return summary.substring(0, 500); // Max 500 chars
+  };
+
+  // Extract topics using keyword frequency
+  const extractTopics = (text: string): string[] => {
+    const stopWords = new Set([
+      'o', 'a', 'os', 'as', 'um', 'uma', 'de', 'do', 'da', 'dos', 'das', 'em', 'no', 
+      'na', 'nos', 'nas', 'por', 'para', 'com', 'sem', 'sob', 'sobre', 'e', 'ou',
+      'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with'
+    ]);
+
+    const words = text.toLowerCase()
+      .replace(/[^\w\s]/g, '')
+      .split(/\s+/)
+      .filter(word => word.length > 4 && !stopWords.has(word));
+
+    // Count frequency
+    const frequency: Record<string, number> = {};
+    words.forEach(word => {
+      frequency[word] = (frequency[word] || 0) + 1;
+    });
+
+    // Get top 10 most frequent words as topics
+    const sorted = Object.entries(frequency)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([word]) => word);
+
+    return sorted;
+  };
+
+  // Generate tags based on content
+  const generateTags = (text: string, entities: DocumentEntity[]): string[] => {
+    const tags: string[] = [];
+
+    // Add tags based on entity types present
+    const entityTypes = new Set(entities.map(e => e.entity_type));
+    if (entityTypes.has('email')) tags.push('contact');
+    if (entityTypes.has('phone')) tags.push('contact');
+    if (entityTypes.has('amount')) tags.push('financial');
+    if (entityTypes.has('date')) tags.push('time-sensitive');
+    if (entityTypes.has('imo_number')) tags.push('maritime', 'vessel');
+
+    // Add tags based on keywords
+    const lowerText = text.toLowerCase();
+    if (lowerText.includes('contrato') || lowerText.includes('contract')) tags.push('legal');
+    if (lowerText.includes('invoice') || lowerText.includes('fatura')) tags.push('financial');
+    if (lowerText.includes('certificado') || lowerText.includes('certificate')) tags.push('certification');
+    if (lowerText.includes('segurança') || lowerText.includes('safety')) tags.push('safety');
+    if (lowerText.includes('tripulação') || lowerText.includes('crew')) tags.push('crew');
+    if (lowerText.includes('navio') || lowerText.includes('vessel') || lowerText.includes('ship')) tags.push('vessel');
+
+    return [...new Set(tags)]; // Remove duplicates
+  };
+
   const handleUploadAndProcess = async () => {
     if (!selectedFile) {
       toast({
@@ -213,28 +314,48 @@ export function AIDocumentsAnalyzer() {
         .getPublicUrl(filePath);
 
       // Perform OCR
+      const startTime = Date.now();
       const { text, confidence } = await performOCR(selectedFile);
       
       // Extract entities
       setProgress(85);
       const extractedEntities = extractEntities(text);
 
-      // Save document to database
+      // Generate AI insights
+      const summary = generateSummary(text);
+      const topics = extractTopics(text);
+      const tags = generateTags(text, extractedEntities);
+      const processingTime = Date.now() - startTime;
+
+      // Get organization ID
+      const { data: orgData } = await supabase
+        .from("organization_users")
+        .select("organization_id")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .single();
+
+      // Save document to ai_documents database
       setProgress(90);
       const { data: document, error: dbError } = await supabase
         .from('ai_documents')
         .insert({
-          title: selectedFile.name.replace(/\.[^/.]+$/, ''),
-          file_name: selectedFile.name,
-          file_path: filePath,
+          organization_id: orgData?.organization_id,
+          document_name: selectedFile.name.replace(/\.[^/.]+$/, ''),
           file_url: publicUrl,
           file_type: selectedFile.type.includes('pdf') ? 'pdf' : 'image',
-          file_size: selectedFile.size,
-          ocr_status: 'completed',
-          ocr_completed_at: new Date().toISOString(),
-          extracted_text: text,
-          confidence_score: confidence,
-          is_processed: true,
+          file_size_bytes: selectedFile.size,
+          ocr_text: text,
+          summary: summary,
+          topics: topics,
+          tags: tags,
+          key_insights: extractedEntities.map(e => ({
+            type: e.entity_type,
+            value: e.entity_value,
+            confidence: e.confidence_score
+          })),
+          processing_status: 'completed',
+          processing_time_ms: processingTime,
           uploaded_by: user.id,
         })
         .select()
