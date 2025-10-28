@@ -136,7 +136,7 @@ CREATE POLICY "Users can update insights for their missions"
   );
 
 -- Update triggers
-CREATE OR REPLACE FUNCTION update_mission_updated_at()
+CREATE OR REPLACE FUNCTION update_updated_at_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
   NEW.updated_at = NOW();
@@ -147,12 +147,12 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER update_missions_updated_at
   BEFORE UPDATE ON missions
   FOR EACH ROW
-  EXECUTE FUNCTION update_mission_updated_at();
+  EXECUTE FUNCTION update_updated_at_timestamp();
 
 CREATE TRIGGER update_mission_ai_insights_updated_at
   BEFORE UPDATE ON mission_ai_insights
   FOR EACH ROW
-  EXECUTE FUNCTION update_mission_updated_at();
+  EXECUTE FUNCTION update_updated_at_timestamp();
 
 -- Views for statistics
 CREATE OR REPLACE VIEW mission_statistics AS

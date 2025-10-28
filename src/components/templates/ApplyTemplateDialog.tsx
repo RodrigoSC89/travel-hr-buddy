@@ -274,3 +274,17 @@ export function ApplyTemplateDialog({
     </Dialog>
   );
 }
+
+// Type guard for badge variant
+type BadgeVariant = "default" | "secondary" | "destructive" | "outline";
+
+function getBadgeVariant(severity: string): BadgeVariant {
+  switch (severity) {
+    case "critical":
+      return "destructive";
+    case "high":
+      return "outline";
+    default:
+      return "secondary";
+  }
+}

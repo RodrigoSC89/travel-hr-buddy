@@ -131,6 +131,15 @@ export class TemplateApplicationService {
   }
 
   /**
+   * Escape HTML characters to prevent XSS
+   */
+  static escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  /**
    * Export document to specified format
    */
   static async exportDocument(
@@ -147,13 +156,18 @@ export class TemplateApplicationService {
           break;
 
         case 'HTML':
+          // Escape content to prevent XSS
+          const escapedLines = content.split('\n').map(line => 
+            `  <p>${this.escapeHtml(line)}</p>`
+          ).join('\n');
+          
           const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${options.metadata?.title || 'Document'}</title>
+  <title>${this.escapeHtml(options.metadata?.title || 'Document')}</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -167,7 +181,7 @@ export class TemplateApplicationService {
   </style>
 </head>
 <body>
-${content.split('\n').map(line => `  <p>${line}</p>`).join('\n')}
+${escapedLines}
 </body>
 </html>`;
           blob = new Blob([htmlContent], { type: 'text/html' });
