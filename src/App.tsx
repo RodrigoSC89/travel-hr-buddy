@@ -11,6 +11,7 @@ import { initializeMonitoring } from "@/lib/monitoring/init";
 import { CommandPalette } from "@/components/CommandPalette";
 import { OfflineBanner } from "@/components/OfflineBanner";
 import { systemWatchdog } from "@/ai/watchdog";
+import { webVitalsService } from "@/services/web-vitals-service";
 // Removed safeLazyImport - using React.lazy directly
 
 // Lazy load all pages
@@ -128,6 +129,11 @@ const IMCAAudit = React.lazy(() => import("@/pages/IMCAAudit"));
 const Simulations = React.lazy(() => import("@/pages/admin/simulations"));
 const CronMonitor = React.lazy(() => import("@/pages/admin/cron-monitor"));
 const TrainingManagement = React.lazy(() => import("@/pages/admin/training"));
+const TrainingAcademyAdmin = React.lazy(() => import("@/pages/admin/training-academy"));
+const TrainingAcademyEnhanced = React.lazy(() => import("@/pages/admin/training-academy-enhanced"));
+const IncidentsPage = React.lazy(() => import("@/pages/admin/incidents"));
+const IncidentReportsComplete = React.lazy(() => import("@/pages/admin/incident-reports-complete"));
+const PerformanceDashboard = React.lazy(() => import("@/pages/admin/performance-dashboard"));
 const BackupAudit = React.lazy(() => import("@/pages/BackupAudit"));
 const RiskAudit = React.lazy(() => import("@/pages/admin/risk-audit"));
 const CertViewer = React.lazy(() => import("@/components/cert/CertViewer"));
@@ -136,7 +142,9 @@ const ExternalAuditSystem = React.lazy(() => import("@/pages/ExternalAuditSystem
 const ForecastHistoryPage = React.lazy(() => import("@/pages/admin/mmi/forecast/ForecastHistory"));
 const BIForecastsPage = React.lazy(() => import("@/pages/admin/bi/forecasts"));
 const PEODPAuditPage = React.lazy(() => import("@/pages/admin/peodp-audit"));
+const PEODPWizardComplete = React.lazy(() => import("@/pages/admin/peodp-wizard-complete"));
 const VaultAI = React.lazy(() => import("@/modules/vault_ai/pages/VaultAIPage"));
+const VaultAIComplete = React.lazy(() => import("@/pages/admin/vault-ai-complete"));
 const Patch66Dashboard = React.lazy(() => import("@/pages/Patch66Dashboard"));
 const CrewDossierPage = React.lazy(() => import("@/pages/CrewDossier"));
 const ChannelManagerHub = React.lazy(() => import("@/components/channel-manager/ChannelManagerHub"));
@@ -250,6 +258,9 @@ function App() {
     // PATCH 85.0 - Iniciar System Watchdog automaticamente
     systemWatchdog.start();
     
+    // PATCH 371 - Initialize Web Vitals monitoring
+    webVitalsService.getInstance();
+    
     return () => {
       systemWatchdog.stop();
     };
@@ -315,6 +326,7 @@ function App() {
                       <Route path="/compliance" element={<ComplianceHub />} />
                       <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/vault-ai" element={<VaultAI />} />
+                      <Route path="/admin/vault-ai-search" element={<VaultAIComplete />} />
                       <Route path="/patch66" element={<Patch66Dashboard />} />
                       <Route path="/patch-66" element={<Patch66Dashboard />} />
                       <Route path="/mmi/jobs" element={<MMIJobsPanel />} />
@@ -394,9 +406,15 @@ function App() {
                       <Route path="/admin/auditorias-imca" element={<AuditoriasIMCA />} />
                       <Route path="/admin/auditorias-lista" element={<AuditoriasLista />} />
                       <Route path="/admin/peodp-audit" element={<PEODPAuditPage />} />
+                      <Route path="/admin/peodp-wizard" element={<PEODPWizardComplete />} />
                       <Route path="/admin/simulations" element={<Simulations />} />
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
+                      <Route path="/admin/training-academy" element={<TrainingAcademyAdmin />} />
+                      <Route path="/admin/training-progress" element={<TrainingAcademyEnhanced />} />
+                      <Route path="/admin/incidents" element={<IncidentsPage />} />
+                      <Route path="/admin/incident-reports" element={<IncidentReportsComplete />} />
+                      <Route path="/admin/performance-dashboard" element={<PerformanceDashboard />} />
                       <Route path="/developer/module-health" element={<ModuleHealth />} />
                       <Route path="/developer/watchdog" element={<WatchdogMonitor />} />
                       <Route path="/developer/ai-modules-status" element={<AIModulesStatus />} />
