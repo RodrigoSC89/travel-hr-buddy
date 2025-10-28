@@ -246,6 +246,12 @@ const DocumentsConsolidadoValidation = React.lazy(() => import("@/pages/admin/do
 const UnifiedLogsPanelValidation = React.lazy(() => import("@/pages/admin/unified-logs-panel/validation"));
 const CoordinationAIValidation = React.lazy(() => import("@/pages/admin/coordination-ai/validation"));
 const ExperimentalModulesValidation = React.lazy(() => import("@/pages/admin/experimental-modules/validation"));
+// PATCH 416-420 Validation Pages
+const CrewConsolidadoValidation = React.lazy(() => import("@/pages/admin/crew-consolidado/validation"));
+const TemplatesEditorValidation = React.lazy(() => import("@/pages/admin/templates-editor/validation"));
+const PriceAlertsNotificationValidation = React.lazy(() => import("@/pages/admin/price-alerts-notification/validation"));
+const MissionControlRealtimeValidation = React.lazy(() => import("@/pages/admin/mission-control-realtime/validation"));
+const SatcomSimulationValidation = React.lazy(() => import("@/pages/admin/satcom-simulation/validation"));
 
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
@@ -640,6 +646,13 @@ function App() {
                       <Route path="/admin/unified-logs-panel/validation" element={<UnifiedLogsPanelValidation />} />
                       <Route path="/admin/coordination-ai/validation" element={<CoordinationAIValidation />} />
                       <Route path="/admin/experimental-modules/validation" element={<ExperimentalModulesValidation />} />
+                      
+                      {/* Validation Routes - Patches 416-420 */}
+                      <Route path="/admin/crew-consolidado/validation" element={<CrewConsolidadoValidation />} />
+                      <Route path="/admin/templates-editor/validation" element={<TemplatesEditorValidation />} />
+                      <Route path="/admin/price-alerts-notification/validation" element={<PriceAlertsNotificationValidation />} />
+                      <Route path="/admin/mission-control-realtime/validation" element={<MissionControlRealtimeValidation />} />
+                      <Route path="/admin/satcom-simulation/validation" element={<SatcomSimulationValidation />} />
                       
                       {/* Portuguese Module Routes with English Aliases */}
                       <Route path="/comunicacao" element={<Communication />} />
