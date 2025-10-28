@@ -28,10 +28,10 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
-    <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-muted/20 min-h-screen">
+    <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
       <ProfessionalHeader
         title="Dashboard Executivo"
-        subtitle="Visão estratégica e métricas em tempo real do sistema Nautilus One"
+        subtitle="Visão estratégica e métricas em tempo real - Sistema Nautilus One"
         showLogo={true}
         showRealTime={true}
       />
@@ -82,10 +82,16 @@ const Index = () => {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 bg-muted/50">
-          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-          <TabsTrigger value="financial">Financeiro</TabsTrigger>
-          <TabsTrigger value="operations">Operações</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 bg-card/50 border border-primary/10">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            Visão Geral
+          </TabsTrigger>
+          <TabsTrigger value="financial" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            Financeiro
+          </TabsTrigger>
+          <TabsTrigger value="operations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            Operações
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
