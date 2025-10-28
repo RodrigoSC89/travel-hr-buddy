@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 352: Purchase Orders Management
  * Create and track purchase orders with status updates

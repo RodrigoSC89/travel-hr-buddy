@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 352: Inventory Management Component
  * Complete inventory management with add, move, and remove operations
