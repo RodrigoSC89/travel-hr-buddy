@@ -42,16 +42,56 @@
       "lastModified": "2025-10-26"
     },
     {
-      "id": "crew",
-      "name": "Crew Management",
-      "path": "/modules/operations/crew",
-      "route": "/crew",
+      "id": "crew-management",
+      "name": "Crew Management (Consolidated)",
+      "path": "/modules/crew-management",
+      "route": "/crew-management",
       "status": "active",
       "category": "hr",
-      "description": "Crew member management and assignments",
+      "description": "Unified crew management with personnel, certifications, rotations, and performance tracking",
       "hasDatabase": true,
-      "hasMockData": true,
-      "version": "66.0"
+      "hasMockData": false,
+      "version": "406.0",
+      "lastModified": "2025-10-28"
+    },
+    {
+      "id": "crew",
+      "name": "Crew Management (Legacy)",
+      "path": "/modules/operations/crew",
+      "route": "/crew",
+      "status": "deprecated",
+      "category": "hr",
+      "description": "Consolidated into crew-management module",
+      "hasDatabase": false,
+      "hasMockData": false,
+      "deprecatedIn": "406.0",
+      "replacedBy": "crew-management"
+    },
+    {
+      "id": "sonar-ai",
+      "name": "Sonar AI",
+      "path": "/modules/sonar-ai",
+      "route": "/sonar-ai",
+      "status": "active",
+      "category": "intelligence",
+      "description": "AI-powered sonar data analysis and pattern detection",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "407.0",
+      "lastModified": "2025-10-28"
+    },
+    {
+      "id": "mission-control",
+      "name": "Mission Control",
+      "path": "/modules/mission-control",
+      "route": "/mission-control",
+      "status": "active",
+      "category": "operations",
+      "description": "Unified mission control with planning, execution, logs, and autonomy submodules",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "410.0",
+      "lastModified": "2025-10-28"
     },
     {
       "id": "documents",
@@ -118,8 +158,34 @@
       "type": "module"
     },
     {
+      "path": "/crew-management",
+      "module": "crew-management",
+      "status": "active",
+      "type": "module"
+    },
+    {
       "path": "/crew",
-      "module": "crew",
+      "module": "crew-management",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/crew-management"
+    },
+    {
+      "path": "/operations/crew",
+      "module": "crew-management",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/crew-management"
+    },
+    {
+      "path": "/sonar-ai",
+      "module": "sonar-ai",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/mission-control",
+      "module": "mission-control",
       "status": "active",
       "type": "module"
     },
@@ -139,10 +205,10 @@
     }
   ],
   "statistics": {
-    "totalModules": 5,
-    "activeModules": 5,
-    "deprecatedModules": 2,
-    "modulesWithRealData": 3,
-    "modulesWithMockData": 1
+    "totalModules": 8,
+    "activeModules": 7,
+    "deprecatedModules": 3,
+    "modulesWithRealData": 6,
+    "modulesWithMockData": 0
   }
 }
