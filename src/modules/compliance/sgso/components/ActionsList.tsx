@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Plus, CheckCircle, Clock, XCircle } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Plus, CheckCircle, Clock, XCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ActionsListProps {
   selectedPlanId?: string;
@@ -23,12 +23,12 @@ export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefr
   const loadActions = async () => {
     try {
       let query = supabase
-        .from('sgso_actions')
-        .select('*, sgso_plans(title)')
-        .order('created_at', { ascending: false });
+        .from("sgso_actions")
+        .select("*, sgso_plans(title)")
+        .order("created_at", { ascending: false });
 
       if (selectedPlanId) {
-        query = query.eq('plan_id', selectedPlanId);
+        query = query.eq("plan_id", selectedPlanId);
       }
 
       const { data, error } = await query;
@@ -36,9 +36,9 @@ export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefr
       setActions(data || []);
     } catch (error: any) {
       toast({
-        title: 'Error loading actions',
+        title: "Error loading actions",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -47,14 +47,14 @@ export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefr
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'in_progress':
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      case 'cancelled':
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      default:
-        return <Clock className="h-4 w-4 text-gray-500" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "in_progress":
+      return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "cancelled":
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    default:
+      return <Clock className="h-4 w-4 text-gray-500" />;
     }
   };
 
@@ -80,11 +80,11 @@ export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefr
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-2">
-              {action.description || 'No description'}
+              {action.description || "No description"}
             </p>
             <div className="flex justify-between items-center text-sm">
               <span className="text-muted-foreground">
-                Plan: {action.sgso_plans?.title || 'N/A'}
+                Plan: {action.sgso_plans?.title || "N/A"}
               </span>
               {action.due_date && (
                 <span className="text-muted-foreground">

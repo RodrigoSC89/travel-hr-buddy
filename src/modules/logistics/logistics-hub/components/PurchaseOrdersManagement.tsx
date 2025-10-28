@@ -63,8 +63,8 @@ export const PurchaseOrdersManagement: React.FC = () => {
   const [formData, setFormData] = useState({
     order_number: `PO-${Date.now()}`,
     supplier: "",
-    order_date: new Date().toISOString().split('T')[0],
-    expected_delivery_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    order_date: new Date().toISOString().split("T")[0],
+    expected_delivery_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     notes: "",
     items: [
       { item_name: "", quantity: 1, unit_price: 0 }
@@ -75,13 +75,13 @@ export const PurchaseOrdersManagement: React.FC = () => {
     loadOrders();
     
     const channel = supabase
-      .channel('purchase_orders_changes')
+      .channel("purchase_orders_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'purchase_orders'
+          event: "*",
+          schema: "public",
+          table: "purchase_orders"
         },
         () => {
           loadOrders();
@@ -98,14 +98,14 @@ export const PurchaseOrdersManagement: React.FC = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('purchase_orders')
-        .select('*')
-        .order('order_date', { ascending: false });
+        .from("purchase_orders")
+        .select("*")
+        .order("order_date", { ascending: false });
 
       if (error) throw error;
       setOrders(data || []);
     } catch (error: any) {
-      console.error('Error loading orders:', error);
+      console.error("Error loading orders:", error);
       toast({
         title: "Error loading orders",
         description: error.message,
@@ -119,14 +119,14 @@ export const PurchaseOrdersManagement: React.FC = () => {
   const loadOrderItems = async (orderId: string) => {
     try {
       const { data, error } = await supabase
-        .from('purchase_order_items')
-        .select('*')
-        .eq('order_id', orderId);
+        .from("purchase_order_items")
+        .select("*")
+        .eq("order_id", orderId);
 
       if (error) throw error;
       setOrderItems(data || []);
     } catch (error: any) {
-      console.error('Error loading order items:', error);
+      console.error("Error loading order items:", error);
     }
   };
 
@@ -143,7 +143,7 @@ export const PurchaseOrdersManagement: React.FC = () => {
 
       // Create purchase order
       const { data: orderData, error: orderError } = await supabase
-        .from('purchase_orders')
+        .from("purchase_orders")
         .insert({
           order_number: formData.order_number,
           supplier: formData.supplier,
@@ -151,7 +151,7 @@ export const PurchaseOrdersManagement: React.FC = () => {
           expected_delivery_date: formData.expected_delivery_date,
           total_amount: totalAmount,
           notes: formData.notes,
-          status: 'pending',
+          status: "pending",
           created_by: user.user.id
         })
         .select()
@@ -170,7 +170,7 @@ export const PurchaseOrdersManagement: React.FC = () => {
       }));
 
       const { error: itemsError } = await supabase
-        .from('purchase_order_items')
+        .from("purchase_order_items")
         .insert(itemsToInsert);
 
       if (itemsError) throw itemsError;
@@ -196,14 +196,14 @@ export const PurchaseOrdersManagement: React.FC = () => {
     try {
       const updates: any = { status: newStatus };
       
-      if (newStatus === 'delivered') {
-        updates.actual_delivery_date = new Date().toISOString().split('T')[0];
+      if (newStatus === "delivered") {
+        updates.actual_delivery_date = new Date().toISOString().split("T")[0];
       }
 
       const { error } = await supabase
-        .from('purchase_orders')
+        .from("purchase_orders")
         .update(updates)
-        .eq('id', orderId);
+        .eq("id", orderId);
 
       if (error) throw error;
 
@@ -251,8 +251,8 @@ export const PurchaseOrdersManagement: React.FC = () => {
     setFormData({
       order_number: `PO-${Date.now()}`,
       supplier: "",
-      order_date: new Date().toISOString().split('T')[0],
-      expected_delivery_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      order_date: new Date().toISOString().split("T")[0],
+      expected_delivery_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       notes: "",
       items: [{ item_name: "", quantity: 1, unit_price: 0 }]
     });
@@ -378,7 +378,7 @@ export const PurchaseOrdersManagement: React.FC = () => {
                               <Label>Item Name</Label>
                               <Input
                                 value={item.item_name}
-                                onChange={(e) => updateItem(index, 'item_name', e.target.value)}
+                                onChange={(e) => updateItem(index, "item_name", e.target.value)}
                                 placeholder="Item name"
                               />
                             </div>
@@ -387,7 +387,7 @@ export const PurchaseOrdersManagement: React.FC = () => {
                               <Input
                                 type="number"
                                 value={item.quantity}
-                                onChange={(e) => updateItem(index, 'quantity', parseInt(e.target.value) || 0)}
+                                onChange={(e) => updateItem(index, "quantity", parseInt(e.target.value) || 0)}
                               />
                             </div>
                             <div className="col-span-3">
@@ -396,7 +396,7 @@ export const PurchaseOrdersManagement: React.FC = () => {
                                 type="number"
                                 step="0.01"
                                 value={item.unit_price}
-                                onChange={(e) => updateItem(index, 'unit_price', parseFloat(e.target.value) || 0)}
+                                onChange={(e) => updateItem(index, "unit_price", parseFloat(e.target.value) || 0)}
                               />
                             </div>
                             <div className="col-span-1 flex items-end">
@@ -454,14 +454,14 @@ export const PurchaseOrdersManagement: React.FC = () => {
                   <TableRow key={order.id}>
                     <TableCell className="font-mono text-sm">{order.order_number}</TableCell>
                     <TableCell>{order.supplier}</TableCell>
-                    <TableCell>{format(new Date(order.order_date), 'MMM dd, yyyy')}</TableCell>
+                    <TableCell>{format(new Date(order.order_date), "MMM dd, yyyy")}</TableCell>
                     <TableCell>
                       {order.expected_delivery_date
-                        ? format(new Date(order.expected_delivery_date), 'MMM dd, yyyy')
-                        : '-'}
+                        ? format(new Date(order.expected_delivery_date), "MMM dd, yyyy")
+                        : "-"}
                     </TableCell>
                     <TableCell className="text-right font-semibold">
-                      ${order.total_amount?.toFixed(2) || '0.00'}
+                      ${order.total_amount?.toFixed(2) || "0.00"}
                     </TableCell>
                     <TableCell>{getStatusBadge(order.status)}</TableCell>
                     <TableCell>
@@ -469,38 +469,38 @@ export const PurchaseOrdersManagement: React.FC = () => {
                         <Button size="sm" variant="outline" onClick={() => viewOrder(order)}>
                           <Eye className="h-4 w-4" />
                         </Button>
-                        {order.status === 'pending' && (
+                        {order.status === "pending" && (
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => updateOrderStatus(order.id, 'approved')}
+                            onClick={() => updateOrderStatus(order.id, "approved")}
                           >
                             Approve
                           </Button>
                         )}
-                        {order.status === 'approved' && (
+                        {order.status === "approved" && (
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => updateOrderStatus(order.id, 'ordered')}
+                            onClick={() => updateOrderStatus(order.id, "ordered")}
                           >
                             Order
                           </Button>
                         )}
-                        {order.status === 'ordered' && (
+                        {order.status === "ordered" && (
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => updateOrderStatus(order.id, 'in_transit')}
+                            onClick={() => updateOrderStatus(order.id, "in_transit")}
                           >
                             Ship
                           </Button>
                         )}
-                        {order.status === 'in_transit' && (
+                        {order.status === "in_transit" && (
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => updateOrderStatus(order.id, 'delivered')}
+                            onClick={() => updateOrderStatus(order.id, "delivered")}
                           >
                             Deliver
                           </Button>
@@ -535,14 +535,14 @@ export const PurchaseOrdersManagement: React.FC = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>Order Date</Label>
-                  <div className="text-sm">{format(new Date(selectedOrder.order_date), 'MMM dd, yyyy')}</div>
+                  <div className="text-sm">{format(new Date(selectedOrder.order_date), "MMM dd, yyyy")}</div>
                 </div>
                 <div>
                   <Label>Expected Delivery</Label>
                   <div className="text-sm">
                     {selectedOrder.expected_delivery_date
-                      ? format(new Date(selectedOrder.expected_delivery_date), 'MMM dd, yyyy')
-                      : '-'}
+                      ? format(new Date(selectedOrder.expected_delivery_date), "MMM dd, yyyy")
+                      : "-"}
                   </div>
                 </div>
                 <div>
@@ -551,7 +551,7 @@ export const PurchaseOrdersManagement: React.FC = () => {
                 </div>
                 <div>
                   <Label>Total Amount</Label>
-                  <div className="text-lg font-semibold">${selectedOrder.total_amount?.toFixed(2) || '0.00'}</div>
+                  <div className="text-lg font-semibold">${selectedOrder.total_amount?.toFixed(2) || "0.00"}</div>
                 </div>
               </div>
 

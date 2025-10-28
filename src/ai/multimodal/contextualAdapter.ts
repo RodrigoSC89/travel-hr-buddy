@@ -1,7 +1,7 @@
-import { VisualContext } from '../vision/copilotVision';
-import { IntentOutput } from './intentEngine';
+import { VisualContext } from "../vision/copilotVision";
+import { IntentOutput } from "./intentEngine";
 // @ts-nocheck
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface ContextData {
   visual?: VisualContext;
@@ -24,8 +24,8 @@ export interface ContextData {
 
 export interface AdaptiveResponse {
   content: string;
-  modality: 'text' | 'voice' | 'visual' | 'haptic' | 'multimodal';
-  urgency: 'low' | 'medium' | 'high' | 'critical';
+  modality: "text" | "voice" | "visual" | "haptic" | "multimodal";
+  urgency: "low" | "medium" | "high" | "critical";
   actionRequired: boolean;
   actions?: Array<{
     type: string;
@@ -69,8 +69,8 @@ export class ContextualAdapter {
       // Log performance
       const responseTime = Date.now() - startTime;
       await this.logPerformance({
-        module_name: 'contextual_adapter',
-        operation_type: 'response_adaptation',
+        module_name: "contextual_adapter",
+        operation_type: "response_adaptation",
         response_time_ms: responseTime,
         context: {
           intent: intent.intent,
@@ -82,7 +82,7 @@ export class ContextualAdapter {
 
       return response;
     } catch (error) {
-      console.error('Error adapting response:', error);
+      console.error("Error adapting response:", error);
       throw error;
     }
   }
@@ -91,28 +91,28 @@ export class ContextualAdapter {
    * Build contextual prompt for LLM
    */
   private buildContextualPrompt(intent: IntentOutput, context: ContextData): string {
-    let prompt = `You are an AI assistant in a maritime operations XR environment.\n\n`;
+    let prompt = "You are an AI assistant in a maritime operations XR environment.\n\n";
 
     // Add intent context
-    prompt += `User Intent:\n`;
+    prompt += "User Intent:\n";
     prompt += `- Action: ${intent.intent}\n`;
-    prompt += `- Target: ${intent.target || 'none'}\n`;
+    prompt += `- Target: ${intent.target || "none"}\n`;
     prompt += `- Confidence: ${(intent.confidence * 100).toFixed(1)}%\n\n`;
 
     // Add visual context
     if (context.visual) {
-      prompt += `Visual Context:\n`;
+      prompt += "Visual Context:\n";
       prompt += `- Scene: ${context.visual.sceneClassification}\n`;
-      prompt += `- Objects detected: ${context.visual.detectedObjects.map(o => o.class).join(', ')}\n`;
+      prompt += `- Objects detected: ${context.visual.detectedObjects.map(o => o.class).join(", ")}\n`;
       if (context.visual.extractedText.length > 0) {
-        prompt += `- Text detected: ${context.visual.extractedText.join(' ')}\n`;
+        prompt += `- Text detected: ${context.visual.extractedText.join(" ")}\n`;
       }
-      prompt += `\n`;
+      prompt += "\n";
     }
 
     // Add gestural context
     if (context.gestural) {
-      prompt += `Gestural Input:\n`;
+      prompt += "Gestural Input:\n";
       prompt += `- Type: ${context.gestural.type}\n`;
       prompt += `- Confidence: ${(context.gestural.confidence * 100).toFixed(1)}%\n\n`;
     }
@@ -124,20 +124,20 @@ export class ContextualAdapter {
 
     // Add history context
     if (context.history && context.history.length > 0) {
-      prompt += `Recent Actions:\n`;
+      prompt += "Recent Actions:\n";
       context.history.slice(-3).forEach(h => {
         prompt += `- ${h.action}: ${h.result}\n`;
       });
-      prompt += `\n`;
+      prompt += "\n";
     }
 
     // Add user profile context
     if (context.userProfile) {
-      prompt += `User Profile:\n`;
+      prompt += "User Profile:\n";
       if (context.userProfile.expertise) {
         prompt += `- Expertise: ${context.userProfile.expertise}\n`;
       }
-      prompt += `\n`;
+      prompt += "\n";
     }
 
     prompt += `Based on the above context, provide an appropriate response that:
@@ -174,13 +174,13 @@ Respond in JSON format with:
       const response = this.generateRuleBasedResponse(intent, context);
       return response;
     } catch (error) {
-      console.error('Error generating response:', error);
+      console.error("Error generating response:", error);
       
       // Fallback response
       return {
-        content: 'I understand your request. How can I assist you?',
-        modality: 'text',
-        urgency: 'low',
+        content: "I understand your request. How can I assist you?",
+        modality: "text",
+        urgency: "low",
         actionRequired: false,
         timestamp: new Date().toISOString(),
       };
@@ -199,7 +199,7 @@ Respond in JSON format with:
 
     // Base response structure
     const response: AdaptiveResponse = {
-      content: '',
+      content: "",
       modality,
       urgency,
       actionRequired: false,
@@ -208,40 +208,40 @@ Respond in JSON format with:
 
     // Generate content based on intent
     switch (intent.intent) {
-      case 'navigate':
-        response.content = `Navigating to ${intent.target || 'requested location'}.`;
-        response.actionRequired = true;
-        response.actions = [{
-          type: 'navigate',
-          target: intent.target || 'unknown',
-          parameters: {},
-        }];
-        break;
+    case "navigate":
+      response.content = `Navigating to ${intent.target || "requested location"}.`;
+      response.actionRequired = true;
+      response.actions = [{
+        type: "navigate",
+        target: intent.target || "unknown",
+        parameters: {},
+      }];
+      break;
 
-      case 'query':
-        response.content = this.generateQueryResponse(intent, context);
-        response.actionRequired = false;
-        break;
+    case "query":
+      response.content = this.generateQueryResponse(intent, context);
+      response.actionRequired = false;
+      break;
 
-      case 'command':
-        response.content = `Executing ${intent.action} on ${intent.target || 'target'}.`;
-        response.actionRequired = true;
-        response.actions = [{
-          type: intent.action,
-          target: intent.target || 'unknown',
-          parameters: intent.parameters,
-        }];
-        break;
+    case "command":
+      response.content = `Executing ${intent.action} on ${intent.target || "target"}.`;
+      response.actionRequired = true;
+      response.actions = [{
+        type: intent.action,
+        target: intent.target || "unknown",
+        parameters: intent.parameters,
+      }];
+      break;
 
-      default:
-        response.content = 'How can I assist you with your maritime operations?';
-        response.actionRequired = false;
+    default:
+      response.content = "How can I assist you with your maritime operations?";
+      response.actionRequired = false;
     }
 
     // Add visual overlay if in XR mode
-    if (context.currentEnvironment === 'xr' && context.visual) {
+    if (context.currentEnvironment === "xr" && context.visual) {
       response.visualOverlay = {
-        type: 'highlight',
+        type: "highlight",
         data: {
           objects: context.visual.detectedObjects,
           scene: context.visual.sceneClassification,
@@ -261,37 +261,37 @@ Respond in JSON format with:
       const objects = context.visual.detectedObjects;
 
       if (objects.length > 0) {
-        const objectList = objects.map(o => o.class).join(', ');
+        const objectList = objects.map(o => o.class).join(", ");
         return `I can see ${objectList} in the current ${scene} scene. What would you like to know about them?`;
       } else {
         return `The current scene appears to be ${scene}. How can I assist you?`;
       }
     }
 
-    return 'What information would you like to query?';
+    return "What information would you like to query?";
   }
 
   /**
    * Determine optimal output modality
    */
-  private determineModality(context: ContextData): 'text' | 'voice' | 'visual' | 'haptic' | 'multimodal' {
+  private determineModality(context: ContextData): "text" | "voice" | "visual" | "haptic" | "multimodal" {
     // If in XR environment, prefer multimodal
-    if (context.currentEnvironment === 'xr') {
-      return 'multimodal';
+    if (context.currentEnvironment === "xr") {
+      return "multimodal";
     }
 
     // If visual context is present, prefer visual
     if (context.visual) {
-      return 'visual';
+      return "visual";
     }
 
     // If gestural input, prefer multimodal
     if (context.gestural) {
-      return 'multimodal';
+      return "multimodal";
     }
 
     // Default to text
-    return 'text';
+    return "text";
   }
 
   /**
@@ -300,27 +300,27 @@ Respond in JSON format with:
   private determineUrgency(
     intent: IntentOutput,
     context: ContextData
-  ): 'low' | 'medium' | 'high' | 'critical' {
+  ): "low" | "medium" | "high" | "critical" {
     // Check for critical keywords
-    const criticalKeywords = ['emergency', 'critical', 'urgent', 'danger', 'alert'];
+    const criticalKeywords = ["emergency", "critical", "urgent", "danger", "alert"];
     const intentString = JSON.stringify(intent).toLowerCase();
     
     if (criticalKeywords.some(kw => intentString.includes(kw))) {
-      return 'critical';
+      return "critical";
     }
 
     // Check for high priority actions
-    const highPriorityActions = ['stop', 'abort', 'shutdown', 'override'];
+    const highPriorityActions = ["stop", "abort", "shutdown", "override"];
     if (highPriorityActions.includes(intent.action.toLowerCase())) {
-      return 'high';
+      return "high";
     }
 
     // Check confidence level
     if (intent.confidence < 0.5) {
-      return 'medium'; // Lower confidence requires user confirmation
+      return "medium"; // Lower confidence requires user confirmation
     }
 
-    return 'low';
+    return "low";
   }
 
   /**
@@ -351,9 +351,9 @@ Respond in JSON format with:
 
   private async logPerformance(data: any) {
     try {
-      await (supabase as any).from('ia_performance_log').insert(data);
+      await (supabase as any).from("ia_performance_log").insert(data);
     } catch (error) {
-      console.error('Failed to log performance:', error);
+      console.error("Failed to log performance:", error);
     }
   }
 }

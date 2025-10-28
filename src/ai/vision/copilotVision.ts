@@ -1,7 +1,7 @@
-import * as cocoSsd from '@tensorflow-models/coco-ssd';
-import * as tf from '@tensorflow/tfjs';
-import Tesseract from 'tesseract.js';
-import { supabase } from '@/integrations/supabase/client';
+import * as cocoSsd from "@tensorflow-models/coco-ssd";
+import * as tf from "@tensorflow/tfjs";
+import Tesseract from "tesseract.js";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface VisualContext {
   detectedObjects: DetectedObject[];
@@ -39,21 +39,21 @@ export class CopilotVision {
 
   private async initialize() {
     try {
-      console.log('Initializing Copilot Vision...');
+      console.log("Initializing Copilot Vision...");
       
       // Initialize TensorFlow.js backend
       await tf.ready();
-      console.log('TensorFlow.js backend ready:', tf.getBackend());
+      console.log("TensorFlow.js backend ready:", tf.getBackend());
       
       // Load COCO-SSD model
       this.cocoModel = await cocoSsd.load({
-        base: 'mobilenet_v2',
+        base: "mobilenet_v2",
       });
       
       this.isInitialized = true;
-      console.log('Copilot Vision initialized successfully');
+      console.log("Copilot Vision initialized successfully");
     } catch (error) {
-      console.error('Failed to initialize Copilot Vision:', error);
+      console.error("Failed to initialize Copilot Vision:", error);
       this.isInitialized = false;
     }
   }
@@ -86,8 +86,8 @@ export class CopilotVision {
       // Log performance
       const responseTime = Date.now() - startTime;
       await this.logPerformance({
-        module_name: 'copilot_vision',
-        operation_type: 'visual_analysis',
+        module_name: "copilot_vision",
+        operation_type: "visual_analysis",
         response_time_ms: responseTime,
         context: {
           objectsDetected: objects.length,
@@ -104,7 +104,7 @@ export class CopilotVision {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      console.error('Error analyzing visual input:', error);
+      console.error("Error analyzing visual input:", error);
       throw error;
     }
   }
@@ -117,7 +117,7 @@ export class CopilotVision {
   ): Promise<DetectedObject[]> {
     try {
       if (!this.cocoModel) {
-        console.warn('COCO model not loaded, skipping object detection');
+        console.warn("COCO model not loaded, skipping object detection");
         return [];
       }
 
@@ -129,7 +129,7 @@ export class CopilotVision {
         bbox: pred.bbox as [number, number, number, number],
       }));
     } catch (error) {
-      console.error('Error detecting objects:', error);
+      console.error("Error detecting objects:", error);
       return [];
     }
   }
@@ -141,9 +141,9 @@ export class CopilotVision {
     imageSource: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | ImageData
   ): Promise<OCRResult[]> {
     try {
-      const result = await Tesseract.recognize(imageSource as any, 'eng', {
+      const result = await Tesseract.recognize(imageSource as any, "eng", {
         logger: (m) => {
-          if (m.status === 'recognizing text') {
+          if (m.status === "recognizing text") {
             console.log(`OCR Progress: ${(m.progress * 100).toFixed(0)}%`);
           }
         },
@@ -163,7 +163,7 @@ export class CopilotVision {
           bbox: word.bbox,
         }));
     } catch (error) {
-      console.error('Error performing OCR:', error);
+      console.error("Error performing OCR:", error);
       return [];
     }
   }
@@ -182,28 +182,28 @@ export class CopilotVision {
     const categories = Array.from(objectCategories.keys());
     
     // Maritime/vessel related
-    if (categories.some(c => ['boat', 'ship', 'vessel'].includes(c.toLowerCase()))) {
-      return 'maritime_vessel';
+    if (categories.some(c => ["boat", "ship", "vessel"].includes(c.toLowerCase()))) {
+      return "maritime_vessel";
     }
     
     // Office/workspace
-    if (categories.some(c => ['laptop', 'keyboard', 'mouse', 'monitor'].includes(c.toLowerCase()))) {
-      return 'office_workspace';
+    if (categories.some(c => ["laptop", "keyboard", "mouse", "monitor"].includes(c.toLowerCase()))) {
+      return "office_workspace";
     }
     
     // Document/paperwork
-    if (text.length > 5 && categories.some(c => ['book', 'paper'].includes(c.toLowerCase()))) {
-      return 'document_reading';
+    if (text.length > 5 && categories.some(c => ["book", "paper"].includes(c.toLowerCase()))) {
+      return "document_reading";
     }
     
     // Person/people
-    if (categories.includes('person')) {
-      const personCount = objectCategories.get('person') || 0;
-      return personCount > 1 ? 'group_interaction' : 'single_person';
+    if (categories.includes("person")) {
+      const personCount = objectCategories.get("person") || 0;
+      return personCount > 1 ? "group_interaction" : "single_person";
     }
     
     // Default
-    return objects.length > 0 ? 'general_scene' : 'empty_scene';
+    return objects.length > 0 ? "general_scene" : "empty_scene";
   }
 
   /**
@@ -231,13 +231,13 @@ export class CopilotVision {
    * Capture frame from video stream
    */
   async captureFrameFromVideo(videoElement: HTMLVideoElement): Promise<HTMLCanvasElement> {
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = videoElement.videoWidth;
     canvas.height = videoElement.videoHeight;
     
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) {
-      throw new Error('Failed to get canvas context');
+      throw new Error("Failed to get canvas context");
     }
     
     ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
@@ -262,7 +262,7 @@ export class CopilotVision {
         const context = await this.analyzeVisualInput(canvas);
         onUpdate(context);
       } catch (error) {
-        console.error('Error in continuous analysis:', error);
+        console.error("Error in continuous analysis:", error);
       }
       
       if (isRunning) {
@@ -281,9 +281,9 @@ export class CopilotVision {
 
   private async logPerformance(data: any) {
     try {
-      await (supabase as any).from('ia_performance_log').insert(data);
+      await (supabase as any).from("ia_performance_log").insert(data);
     } catch (error) {
-      console.error('Failed to log performance:', error);
+      console.error("Failed to log performance:", error);
     }
   }
 }

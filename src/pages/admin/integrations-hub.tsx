@@ -374,8 +374,8 @@ export default function IntegrationsHub() {
                                   log.status === "success" 
                                     ? "default" 
                                     : log.status === "failure"
-                                    ? "destructive"
-                                    : "secondary"
+                                      ? "destructive"
+                                      : "secondary"
                                 }
                               >
                                 {log.status}

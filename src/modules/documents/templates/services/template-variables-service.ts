@@ -8,7 +8,7 @@ export interface TemplateVariable {
   id?: string;
   templateId: string;
   variableName: string;
-  variableType: 'text' | 'number' | 'date' | 'boolean' | 'email' | 'url';
+  variableType: "text" | "number" | "date" | "boolean" | "email" | "url";
   defaultValue?: string;
   isRequired?: boolean;
   description?: string;
@@ -20,7 +20,7 @@ export class TemplateVariablesService {
   async createVariable(variable: TemplateVariable): Promise<TemplateVariable> {
     try {
       const { data, error } = await supabase
-        .from('template_variables')
+        .from("template_variables")
         .insert({
           template_id: variable.templateId,
           variable_name: variable.variableName,
@@ -35,7 +35,7 @@ export class TemplateVariablesService {
       if (error) throw error;
       return this.mapToVariable(data);
     } catch (error) {
-      console.error('Error creating template variable:', error);
+      console.error("Error creating template variable:", error);
       throw error;
     }
   }
@@ -50,16 +50,16 @@ export class TemplateVariablesService {
       if (variable.description !== undefined) updateData.description = variable.description;
 
       const { data, error } = await supabase
-        .from('template_variables')
+        .from("template_variables")
         .update(updateData)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
       if (error) throw error;
       return this.mapToVariable(data);
     } catch (error) {
-      console.error('Error updating template variable:', error);
+      console.error("Error updating template variable:", error);
       throw error;
     }
   }
@@ -67,13 +67,13 @@ export class TemplateVariablesService {
   async deleteVariable(id: string): Promise<void> {
     try {
       const { error } = await supabase
-        .from('template_variables')
+        .from("template_variables")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error deleting template variable:', error);
+      console.error("Error deleting template variable:", error);
       throw error;
     }
   }
@@ -81,15 +81,15 @@ export class TemplateVariablesService {
   async getVariables(templateId: string): Promise<TemplateVariable[]> {
     try {
       const { data, error } = await supabase
-        .from('template_variables')
-        .select('*')
-        .eq('template_id', templateId)
-        .order('created_at', { ascending: true });
+        .from("template_variables")
+        .select("*")
+        .eq("template_id", templateId)
+        .order("created_at", { ascending: true });
 
       if (error) throw error;
       return (data || []).map(this.mapToVariable);
     } catch (error) {
-      console.error('Error fetching template variables:', error);
+      console.error("Error fetching template variables:", error);
       return [];
     }
   }
@@ -97,15 +97,15 @@ export class TemplateVariablesService {
   async getVariable(id: string): Promise<TemplateVariable | null> {
     try {
       const { data, error } = await supabase
-        .from('template_variables')
-        .select('*')
-        .eq('id', id)
+        .from("template_variables")
+        .select("*")
+        .eq("id", id)
         .single();
 
       if (error) throw error;
       return data ? this.mapToVariable(data) : null;
     } catch (error) {
-      console.error('Error fetching template variable:', error);
+      console.error("Error fetching template variable:", error);
       return null;
     }
   }
@@ -126,8 +126,8 @@ export class TemplateVariablesService {
     let filledContent = content;
     
     for (const [key, value] of Object.entries(values)) {
-      const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
-      filledContent = filledContent.replace(regex, String(value ?? ''));
+      const regex = new RegExp(`\\{\\{${key}\\}\\}`, "g");
+      filledContent = filledContent.replace(regex, String(value ?? ""));
     }
     
     return filledContent;

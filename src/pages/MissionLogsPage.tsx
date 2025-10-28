@@ -19,16 +19,16 @@ export default function MissionLogsPage() {
   const [logs, setLogs] = useState<MissionLog[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingLog, setEditingLog] = useState<MissionLog | null>(null);
-  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState<Partial<MissionLog>>({
-    missionName: '',
-    missionDate: new Date().toISOString().split('T')[0],
+    missionName: "",
+    missionDate: new Date().toISOString().split("T")[0],
     crewMembers: [],
-    status: 'planned',
-    description: '',
-    location: ''
+    status: "planned",
+    description: "",
+    location: ""
   });
 
   useEffect(() => {
@@ -48,51 +48,51 @@ export default function MissionLogsPage() {
     try {
       if (editingLog?.id) {
         await missionLogsService.updateLog(editingLog.id, formData);
-        toast.success('Mission log updated');
+        toast.success("Mission log updated");
       } else {
         await missionLogsService.createLog(formData as MissionLog);
-        toast.success('Mission log created');
+        toast.success("Mission log created");
       }
       setIsDialogOpen(false);
       resetForm();
       loadLogs();
     } catch (error) {
-      toast.error('Failed to save mission log');
+      toast.error("Failed to save mission log");
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this log?')) {
+    if (confirm("Are you sure you want to delete this log?")) {
       try {
         await missionLogsService.deleteLog(id);
-        toast.success('Mission log deleted');
+        toast.success("Mission log deleted");
         loadLogs();
       } catch (error) {
-        toast.error('Failed to delete mission log');
+        toast.error("Failed to delete mission log");
       }
     }
   };
 
   const resetForm = () => {
     setFormData({
-      missionName: '',
-      missionDate: new Date().toISOString().split('T')[0],
+      missionName: "",
+      missionDate: new Date().toISOString().split("T")[0],
       crewMembers: [],
-      status: 'planned',
-      description: '',
-      location: ''
+      status: "planned",
+      description: "",
+      location: ""
     });
     setEditingLog(null);
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      'planned': 'outline',
-      'in-progress': 'default',
-      'completed': 'secondary',
-      'cancelled': 'destructive'
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      "planned": "outline",
+      "in-progress": "default",
+      "completed": "secondary",
+      "cancelled": "destructive"
     };
-    return <Badge variant={variants[status] || 'default'}>{status}</Badge>;
+    return <Badge variant={variants[status] || "default"}>{status}</Badge>;
   };
 
   return (
@@ -110,7 +110,7 @@ export default function MissionLogsPage() {
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>{editingLog ? 'Edit Mission Log' : 'Create Mission Log'}</DialogTitle>
+              <DialogTitle>{editingLog ? "Edit Mission Log" : "Create Mission Log"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -156,8 +156,8 @@ export default function MissionLogsPage() {
               <div>
                 <Label>Crew Members (comma-separated)</Label>
                 <Input
-                  value={formData.crewMembers?.join(', ')}
-                  onChange={(e) => setFormData({ ...formData, crewMembers: e.target.value.split(',').map(s => s.trim()) })}
+                  value={formData.crewMembers?.join(", ")}
+                  onChange={(e) => setFormData({ ...formData, crewMembers: e.target.value.split(",").map(s => s.trim()) })}
                 />
               </div>
               <div>
@@ -169,7 +169,7 @@ export default function MissionLogsPage() {
                 />
               </div>
               <Button type="submit" className="w-full">
-                {editingLog ? 'Update' : 'Create'} Mission Log
+                {editingLog ? "Update" : "Create"} Mission Log
               </Button>
             </form>
           </DialogContent>
@@ -215,7 +215,7 @@ export default function MissionLogsPage() {
                     <p>📅 {new Date(log.missionDate).toLocaleDateString()}</p>
                     {log.location && <p>📍 {log.location}</p>}
                     {log.crewMembers.length > 0 && (
-                      <p>👥 {log.crewMembers.join(', ')}</p>
+                      <p>👥 {log.crewMembers.join(", ")}</p>
                     )}
                   </div>
                   {log.description && (

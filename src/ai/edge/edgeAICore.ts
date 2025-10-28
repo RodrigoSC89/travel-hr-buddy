@@ -8,8 +8,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
-export type EdgeAITask = 'route_optimization' | 'failure_detection' | 'quick_response' | 'anomaly_detection' | 'predictive_maintenance';
-export type ModelFormat = 'ggml' | 'onnx-lite' | 'tflite' | 'wasm';
+export type EdgeAITask = "route_optimization" | "failure_detection" | "quick_response" | "anomaly_detection" | "predictive_maintenance";
+export type ModelFormat = "ggml" | "onnx-lite" | "tflite" | "wasm";
 
 export interface EdgeModel {
   id: string;
@@ -26,7 +26,7 @@ export interface EdgeModel {
 export interface InferenceRequest {
   task: EdgeAITask;
   input: any;
-  priority: 'low' | 'normal' | 'high' | 'urgent';
+  priority: "low" | "normal" | "high" | "urgent";
   timeout?: number; // ms
 }
 
@@ -61,16 +61,16 @@ class EdgeAICore {
    */
   async initialize(): Promise<void> {
     if (this.isInitialized) {
-      logger.warn('[EdgeAI] Already initialized');
+      logger.warn("[EdgeAI] Already initialized");
       return;
     }
 
-    logger.info('[EdgeAI] Initializing Edge AI Operations Core...');
+    logger.info("[EdgeAI] Initializing Edge AI Operations Core...");
 
     try {
       // Detect GPU capabilities
       this.gpuCapabilities = await this.detectGPUCapabilities();
-      logger.info('[EdgeAI] GPU capabilities detected:', this.gpuCapabilities);
+      logger.info("[EdgeAI] GPU capabilities detected:", this.gpuCapabilities);
 
       // Initialize WebGPU if supported
       if (this.gpuCapabilities.webGPUSupported) {
@@ -81,9 +81,9 @@ class EdgeAICore {
       await this.loadModels();
 
       this.isInitialized = true;
-      logger.info('[EdgeAI] Edge AI Core initialized successfully');
+      logger.info("[EdgeAI] Edge AI Core initialized successfully");
     } catch (error) {
-      logger.error('[EdgeAI] Initialization failed:', error);
+      logger.error("[EdgeAI] Initialization failed:", error);
       throw error;
     }
   }
@@ -98,7 +98,7 @@ class EdgeAICore {
     };
 
     // Check WebGPU support
-    if ('gpu' in navigator) {
+    if ("gpu" in navigator) {
       try {
         const adapter = await (navigator as any).gpu.requestAdapter();
         if (adapter) {
@@ -108,23 +108,23 @@ class EdgeAICore {
           capabilities.maxComputeWorkgroups = device.limits.maxComputeWorkgroupsPerDimension;
         }
       } catch (error) {
-        logger.warn('[EdgeAI] WebGPU not available:', error);
+        logger.warn("[EdgeAI] WebGPU not available:", error);
       }
     }
 
     // Check WebGL support
     try {
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      const canvas = document.createElement("canvas");
+      const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
       if (gl) {
         capabilities.webGLSupported = true;
-        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+        const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
         if (debugInfo) {
           capabilities.vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
         }
       }
     } catch (error) {
-      logger.warn('[EdgeAI] WebGL not available:', error);
+      logger.warn("[EdgeAI] WebGL not available:", error);
     }
 
     return capabilities;
@@ -135,19 +135,19 @@ class EdgeAICore {
    */
   private async initializeWebGPU(): Promise<void> {
     try {
-      if (!('gpu' in navigator)) {
-        throw new Error('WebGPU not supported');
+      if (!("gpu" in navigator)) {
+        throw new Error("WebGPU not supported");
       }
 
       const adapter = await (navigator as any).gpu.requestAdapter();
       if (!adapter) {
-        throw new Error('No WebGPU adapter found');
+        throw new Error("No WebGPU adapter found");
       }
 
       this.webGPUDevice = await adapter.requestDevice();
-      logger.info('[EdgeAI] WebGPU device initialized');
+      logger.info("[EdgeAI] WebGPU device initialized");
     } catch (error) {
-      logger.error('[EdgeAI] Failed to initialize WebGPU:', error);
+      logger.error("[EdgeAI] Failed to initialize WebGPU:", error);
     }
   }
 
@@ -155,55 +155,55 @@ class EdgeAICore {
    * Load lightweight AI models
    */
   private async loadModels(): Promise<void> {
-    logger.info('[EdgeAI] Loading lightweight AI models...');
+    logger.info("[EdgeAI] Loading lightweight AI models...");
 
     // Define models (in production, these would be actual model files)
     const modelDefinitions: EdgeModel[] = [
       {
-        id: 'route-opt-v1',
-        name: 'Route Optimizer',
-        task: 'route_optimization',
-        format: 'onnx-lite',
+        id: "route-opt-v1",
+        name: "Route Optimizer",
+        task: "route_optimization",
+        format: "onnx-lite",
         size: 5 * 1024 * 1024, // 5MB
         loaded: false,
         accuracy: 0.89,
         inferenceTimeMs: 50,
       },
       {
-        id: 'failure-detect-v1',
-        name: 'Failure Detector',
-        task: 'failure_detection',
-        format: 'ggml',
+        id: "failure-detect-v1",
+        name: "Failure Detector",
+        task: "failure_detection",
+        format: "ggml",
         size: 3 * 1024 * 1024, // 3MB
         loaded: false,
         accuracy: 0.92,
         inferenceTimeMs: 30,
       },
       {
-        id: 'quick-resp-v1',
-        name: 'Quick Response Generator',
-        task: 'quick_response',
-        format: 'tflite',
+        id: "quick-resp-v1",
+        name: "Quick Response Generator",
+        task: "quick_response",
+        format: "tflite",
         size: 2 * 1024 * 1024, // 2MB
         loaded: false,
         accuracy: 0.85,
         inferenceTimeMs: 20,
       },
       {
-        id: 'anomaly-det-v1',
-        name: 'Anomaly Detector',
-        task: 'anomaly_detection',
-        format: 'onnx-lite',
+        id: "anomaly-det-v1",
+        name: "Anomaly Detector",
+        task: "anomaly_detection",
+        format: "onnx-lite",
         size: 4 * 1024 * 1024, // 4MB
         loaded: false,
         accuracy: 0.88,
         inferenceTimeMs: 40,
       },
       {
-        id: 'pred-maint-v1',
-        name: 'Predictive Maintenance',
-        task: 'predictive_maintenance',
-        format: 'ggml',
+        id: "pred-maint-v1",
+        name: "Predictive Maintenance",
+        task: "predictive_maintenance",
+        format: "ggml",
         size: 6 * 1024 * 1024, // 6MB
         loaded: false,
         accuracy: 0.91,
@@ -232,7 +232,7 @@ class EdgeAICore {
    */
   async runInference(request: InferenceRequest): Promise<InferenceResult> {
     if (!this.isInitialized) {
-      throw new Error('Edge AI Core not initialized');
+      throw new Error("Edge AI Core not initialized");
     }
 
     logger.debug(`[EdgeAI] Running inference for task: ${request.task}`);
@@ -244,7 +244,7 @@ class EdgeAICore {
       const cacheKey = this.getCacheKey(request);
       const cached = this.resultsCache.get(cacheKey);
       if (cached && Date.now() - cached.timestamp.getTime() < 60000) { // 1 min cache
-        logger.debug('[EdgeAI] Returning cached result');
+        logger.debug("[EdgeAI] Returning cached result");
         return cached;
       }
 
@@ -281,7 +281,7 @@ class EdgeAICore {
       logger.debug(`[EdgeAI] Inference completed in ${inferenceTime}ms`);
       return result;
     } catch (error) {
-      logger.error('[EdgeAI] Inference failed:', error);
+      logger.error("[EdgeAI] Inference failed:", error);
       throw error;
     }
   }
@@ -292,23 +292,23 @@ class EdgeAICore {
   private async executeInference(model: EdgeModel, input: any): Promise<any> {
     // Simulate inference based on task
     switch (model.task) {
-      case 'route_optimization':
-        return this.optimizeRoute(input);
+    case "route_optimization":
+      return this.optimizeRoute(input);
       
-      case 'failure_detection':
-        return this.detectFailure(input);
+    case "failure_detection":
+      return this.detectFailure(input);
       
-      case 'quick_response':
-        return this.generateQuickResponse(input);
+    case "quick_response":
+      return this.generateQuickResponse(input);
       
-      case 'anomaly_detection':
-        return this.detectAnomaly(input);
+    case "anomaly_detection":
+      return this.detectAnomaly(input);
       
-      case 'predictive_maintenance':
-        return this.predictMaintenance(input);
+    case "predictive_maintenance":
+      return this.predictMaintenance(input);
       
-      default:
-        throw new Error(`Unknown task: ${model.task}`);
+    default:
+      throw new Error(`Unknown task: ${model.task}`);
     }
   }
 
@@ -321,7 +321,7 @@ class EdgeAICore {
       optimizedRoute: input.waypoints || [],
       estimatedTime: Math.random() * 120 + 60, // 60-180 minutes
       fuelEfficiency: Math.random() * 0.3 + 0.7, // 70-100%
-      recommendations: ['Avoid heavy traffic areas', 'Weather conditions favorable'],
+      recommendations: ["Avoid heavy traffic areas", "Weather conditions favorable"],
     };
   }
 
@@ -330,20 +330,20 @@ class EdgeAICore {
     const failureScore = Math.random();
     return {
       failureDetected: failureScore > 0.7,
-      failureType: failureScore > 0.9 ? 'critical' : failureScore > 0.7 ? 'warning' : 'normal',
-      affectedComponent: input.component || 'unknown',
+      failureType: failureScore > 0.9 ? "critical" : failureScore > 0.7 ? "warning" : "normal",
+      affectedComponent: input.component || "unknown",
       score: failureScore,
-      recommendations: failureScore > 0.7 ? ['Immediate inspection required'] : ['Continue monitoring'],
+      recommendations: failureScore > 0.7 ? ["Immediate inspection required"] : ["Continue monitoring"],
     };
   }
 
   private generateQuickResponse(input: any): any {
     // Simplified response generation
     const responses = [
-      'Acknowledged. Processing request.',
-      'Understood. Taking appropriate action.',
-      'Confirmed. Standing by for further instructions.',
-      'Roger that. Executing command.',
+      "Acknowledged. Processing request.",
+      "Understood. Taking appropriate action.",
+      "Confirmed. Standing by for further instructions.",
+      "Roger that. Executing command.",
     ];
     return {
       response: responses[Math.floor(Math.random() * responses.length)],
@@ -358,9 +358,9 @@ class EdgeAICore {
     return {
       isAnomaly: anomalyScore > 0.8,
       anomalyScore,
-      severity: anomalyScore > 0.95 ? 'critical' : anomalyScore > 0.8 ? 'high' : 'normal',
+      severity: anomalyScore > 0.95 ? "critical" : anomalyScore > 0.8 ? "high" : "normal",
       details: {
-        metric: input.metric || 'unknown',
+        metric: input.metric || "unknown",
         deviation: anomalyScore,
         baseline: input.baseline || 0,
       },
@@ -372,13 +372,13 @@ class EdgeAICore {
     const riskScore = Math.random();
     return {
       maintenanceNeeded: riskScore > 0.6,
-      urgency: riskScore > 0.9 ? 'immediate' : riskScore > 0.7 ? 'soon' : 'routine',
+      urgency: riskScore > 0.9 ? "immediate" : riskScore > 0.7 ? "soon" : "routine",
       estimatedDaysUntilFailure: Math.floor((1 - riskScore) * 90), // 0-90 days
       riskScore,
       recommendations: [
-        'Schedule inspection within 7 days',
-        'Monitor temperature readings',
-        'Check oil levels',
+        "Schedule inspection within 7 days",
+        "Monitor temperature readings",
+        "Check oil levels",
       ],
     };
   }
@@ -411,9 +411,9 @@ class EdgeAICore {
   private async logInference(request: InferenceRequest, result: InferenceResult): Promise<void> {
     try {
       await supabase
-        .from('system_observations')
+        .from("system_observations")
         .insert({
-          observation_type: 'edge_ai_inference',
+          observation_type: "edge_ai_inference",
           task: request.task,
           input: request.input,
           output: result.output,
@@ -424,7 +424,7 @@ class EdgeAICore {
           created_at: result.timestamp.toISOString(),
         });
     } catch (error) {
-      logger.error('[EdgeAI] Failed to log inference:', error);
+      logger.error("[EdgeAI] Failed to log inference:", error);
     }
   }
 
@@ -455,7 +455,7 @@ class EdgeAICore {
    */
   clearCache(): void {
     this.resultsCache.clear();
-    logger.info('[EdgeAI] Inference cache cleared');
+    logger.info("[EdgeAI] Inference cache cleared");
   }
 
   /**

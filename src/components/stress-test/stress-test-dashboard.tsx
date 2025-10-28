@@ -7,13 +7,13 @@
  * Shows latency, failure rates, and resource consumption
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Activity, AlertTriangle, TrendingUp, Zap, Database, Brain, LayoutDashboard } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Activity, AlertTriangle, TrendingUp, Zap, Database, Brain, LayoutDashboard } from "lucide-react";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface StressTestMetrics {
   name: string;
@@ -25,7 +25,7 @@ interface StressTestMetrics {
   p95Latency: number;
   p99Latency: number;
   timestamp: string;
-  status: 'idle' | 'running' | 'completed' | 'failed';
+  status: "idle" | "running" | "completed" | "failed";
 }
 
 export function StressTestDashboard() {
@@ -40,7 +40,7 @@ export function StressTestDashboard() {
   const loadMetrics = async () => {
     try {
       // Try to load metrics from reports directory
-      const response = await fetch('/reports/stress-test-summary.json');
+      const response = await fetch("/reports/stress-test-summary.json");
       if (response.ok) {
         const data = await response.json();
         setMetrics(data);
@@ -53,7 +53,7 @@ export function StressTestDashboard() {
 
   const getDefaultMetrics = (): StressTestMetrics[] => [
     {
-      name: 'Supabase Load Test',
+      name: "Supabase Load Test",
       icon: Database,
       totalRequests: 0,
       successfulRequests: 0,
@@ -62,10 +62,10 @@ export function StressTestDashboard() {
       p95Latency: 0,
       p99Latency: 0,
       timestamp: new Date().toISOString(),
-      status: 'idle',
+      status: "idle",
     },
     {
-      name: 'AI API Stress Test',
+      name: "AI API Stress Test",
       icon: Brain,
       totalRequests: 0,
       successfulRequests: 0,
@@ -74,10 +74,10 @@ export function StressTestDashboard() {
       p95Latency: 0,
       p99Latency: 0,
       timestamp: new Date().toISOString(),
-      status: 'idle',
+      status: "idle",
     },
     {
-      name: 'Dashboard Load Test',
+      name: "Dashboard Load Test",
       icon: LayoutDashboard,
       totalRequests: 0,
       successfulRequests: 0,
@@ -86,7 +86,7 @@ export function StressTestDashboard() {
       p95Latency: 0,
       p99Latency: 0,
       timestamp: new Date().toISOString(),
-      status: 'idle',
+      status: "idle",
     },
   ];
 
@@ -96,7 +96,7 @@ export function StressTestDashboard() {
     // Update status to running
     setMetrics(prev =>
       prev.map(m =>
-        m.name === testName ? { ...m, status: 'running' as const } : m
+        m.name === testName ? { ...m, status: "running" as const } : m
       )
     );
 
@@ -107,16 +107,16 @@ export function StressTestDashboard() {
         prev.map(m =>
           m.name === testName
             ? {
-                ...m,
-                totalRequests: Math.floor(Math.random() * 500) + 100,
-                successfulRequests: Math.floor(Math.random() * 450) + 50,
-                failedRequests: Math.floor(Math.random() * 50),
-                avgLatency: Math.floor(Math.random() * 1000) + 200,
-                p95Latency: Math.floor(Math.random() * 2000) + 500,
-                p99Latency: Math.floor(Math.random() * 3000) + 1000,
-                timestamp: new Date().toISOString(),
-                status: 'completed' as const,
-              }
+              ...m,
+              totalRequests: Math.floor(Math.random() * 500) + 100,
+              successfulRequests: Math.floor(Math.random() * 450) + 50,
+              failedRequests: Math.floor(Math.random() * 50),
+              avgLatency: Math.floor(Math.random() * 1000) + 200,
+              p95Latency: Math.floor(Math.random() * 2000) + 500,
+              p99Latency: Math.floor(Math.random() * 3000) + 1000,
+              timestamp: new Date().toISOString(),
+              status: "completed" as const,
+            }
             : m
         )
       );
@@ -124,16 +124,16 @@ export function StressTestDashboard() {
     }, 5000);
   };
 
-  const getStatusBadge = (status: StressTestMetrics['status']) => {
+  const getStatusBadge = (status: StressTestMetrics["status"]) => {
     switch (status) {
-      case 'running':
-        return <Badge className="bg-blue-500">Running</Badge>;
-      case 'completed':
-        return <Badge className="bg-green-500">Completed</Badge>;
-      case 'failed':
-        return <Badge className="bg-red-500">Failed</Badge>;
-      default:
-        return <Badge variant="outline">Idle</Badge>;
+    case "running":
+      return <Badge className="bg-blue-500">Running</Badge>;
+    case "completed":
+      return <Badge className="bg-green-500">Completed</Badge>;
+    case "failed":
+      return <Badge className="bg-red-500">Failed</Badge>;
+    default:
+      return <Badge variant="outline">Idle</Badge>;
     }
   };
 
@@ -143,14 +143,14 @@ export function StressTestDashboard() {
   };
 
   const latencyChartData = metrics.map(m => ({
-    name: m.name.split(' ')[0],
-    'Avg Latency': m.avgLatency,
-    'P95 Latency': m.p95Latency,
-    'P99 Latency': m.p99Latency,
+    name: m.name.split(" ")[0],
+    "Avg Latency": m.avgLatency,
+    "P95 Latency": m.p95Latency,
+    "P99 Latency": m.p99Latency,
   }));
 
   const requestsChartData = metrics.map(m => ({
-    name: m.name.split(' ')[0],
+    name: m.name.split(" ")[0],
     Successful: m.successfulRequests,
     Failed: m.failedRequests,
   }));
@@ -240,7 +240,7 @@ export function StressTestDashboard() {
                   className="w-full"
                   variant="outline"
                 >
-                  {metric.status === 'running' ? 'Running...' : 'Run Test'}
+                  {metric.status === "running" ? "Running..." : "Run Test"}
                 </Button>
               </CardContent>
             </Card>
@@ -311,11 +311,11 @@ export function StressTestDashboard() {
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">P95 Latency</span>
-                  <span className="font-medium">{'< 2000ms'}</span>
+                  <span className="font-medium">{"< 2000ms"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Failure Rate</span>
-                  <span className="font-medium">{'< 10%'}</span>
+                  <span className="font-medium">{"< 10%"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Throughput</span>
@@ -332,15 +332,15 @@ export function StressTestDashboard() {
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Avg Latency</span>
-                  <span className="font-medium">{'< 3000ms'}</span>
+                  <span className="font-medium">{"< 3000ms"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">P95 Latency</span>
-                  <span className="font-medium">{'< 5000ms'}</span>
+                  <span className="font-medium">{"< 5000ms"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Failure Rate</span>
-                  <span className="font-medium">{'< 5%'}</span>
+                  <span className="font-medium">{"< 5%"}</span>
                 </div>
               </div>
             </div>
@@ -353,15 +353,15 @@ export function StressTestDashboard() {
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Page Load</span>
-                  <span className="font-medium">{'< 3000ms'}</span>
+                  <span className="font-medium">{"< 3000ms"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">FCP</span>
-                  <span className="font-medium">{'< 1500ms'}</span>
+                  <span className="font-medium">{"< 1500ms"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Memory</span>
-                  <span className="font-medium">{'< 100MB'}</span>
+                  <span className="font-medium">{"< 100MB"}</span>
                 </div>
               </div>
             </div>

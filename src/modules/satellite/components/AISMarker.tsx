@@ -15,47 +15,47 @@ interface AISMarkerProps {
 }
 
 export const AISMarker: React.FC<AISMarkerProps> = ({ vessels, onVesselClick }) => {
-  const getStatusIcon = (status: VesselPosition['status']) => {
+  const getStatusIcon = (status: VesselPosition["status"]) => {
     switch (status) {
-      case 'at_anchor':
-      case 'moored':
-        return <Anchor className="h-4 w-4" />;
-      case 'underway':
-        return <Navigation className="h-4 w-4" />;
-      default:
-        return <Ship className="h-4 w-4" />;
+    case "at_anchor":
+    case "moored":
+      return <Anchor className="h-4 w-4" />;
+    case "underway":
+      return <Navigation className="h-4 w-4" />;
+    default:
+      return <Ship className="h-4 w-4" />;
     }
   };
 
-  const getStatusColor = (status: VesselPosition['status']) => {
+  const getStatusColor = (status: VesselPosition["status"]) => {
     switch (status) {
-      case 'underway':
-        return 'text-green-500';
-      case 'at_anchor':
-      case 'moored':
-        return 'text-blue-500';
-      case 'not_under_command':
-      case 'restricted_maneuverability':
-        return 'text-orange-500';
-      default:
-        return 'text-gray-500';
+    case "underway":
+      return "text-green-500";
+    case "at_anchor":
+    case "moored":
+      return "text-blue-500";
+    case "not_under_command":
+    case "restricted_maneuverability":
+      return "text-orange-500";
+    default:
+      return "text-gray-500";
     }
   };
 
-  const getStatusLabel = (status: VesselPosition['status']) => {
+  const getStatusLabel = (status: VesselPosition["status"]) => {
     switch (status) {
-      case 'underway':
-        return 'Em Navegação';
-      case 'at_anchor':
-        return 'Ancorado';
-      case 'moored':
-        return 'Atracado';
-      case 'not_under_command':
-        return 'Sem Comando';
-      case 'restricted_maneuverability':
-        return 'Manobra Restrita';
-      default:
-        return 'Desconhecido';
+    case "underway":
+      return "Em Navegação";
+    case "at_anchor":
+      return "Ancorado";
+    case "moored":
+      return "Atracado";
+    case "not_under_command":
+      return "Sem Comando";
+    case "restricted_maneuverability":
+      return "Manobra Restrita";
+    default:
+      return "Desconhecido";
     }
   };
 
@@ -105,7 +105,7 @@ export const AISMarker: React.FC<AISMarkerProps> = ({ vessels, onVesselClick }) 
         </div>
         {vessels.length > 0 && (
           <div className="mt-4 text-xs text-muted-foreground text-center">
-            Última atualização: {new Date().toLocaleTimeString('pt-BR')}
+            Última atualização: {new Date().toLocaleTimeString("pt-BR")}
           </div>
         )}
       </CardContent>
@@ -160,12 +160,12 @@ export const AISMapOverlay: React.FC<AISMapOverlayProps> = ({ vessel, onClose })
             <div>
               <span className="text-muted-foreground">Status:</span>
               <div className="font-medium capitalize">
-                {vessel.status.replace(/_/g, ' ')}
+                {vessel.status.replace(/_/g, " ")}
               </div>
             </div>
           </div>
           <div className="pt-2 text-xs text-muted-foreground">
-            Atualizado: {new Date(vessel.timestamp).toLocaleString('pt-BR')}
+            Atualizado: {new Date(vessel.timestamp).toLocaleString("pt-BR")}
           </div>
         </CardContent>
       </Card>

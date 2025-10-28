@@ -3,12 +3,12 @@
  * Dashboard executivo com métricas, KPIs e visualizações avançadas
  */
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Ship,
   TrendingUp,
@@ -27,35 +27,35 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Clock
-} from 'lucide-react';
-import { LineChart as RechartsLine, Line, AreaChart, Area, BarChart as RechartsBar, Bar, PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { motion } from 'framer-motion';
+} from "lucide-react";
+import { LineChart as RechartsLine, Line, AreaChart, Area, BarChart as RechartsBar, Bar, PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { motion } from "framer-motion";
 
 // Dados mockados para demonstração
 const revenueData = [
-  { month: 'Jan', revenue: 42000, target: 40000, costs: 28000 },
-  { month: 'Fev', revenue: 48000, target: 45000, costs: 30000 },
-  { month: 'Mar', revenue: 52000, target: 50000, costs: 32000 },
-  { month: 'Abr', revenue: 58000, target: 55000, costs: 35000 },
-  { month: 'Mai', revenue: 65000, target: 60000, costs: 38000 },
-  { month: 'Jun', revenue: 72000, target: 70000, costs: 42000 },
+  { month: "Jan", revenue: 42000, target: 40000, costs: 28000 },
+  { month: "Fev", revenue: 48000, target: 45000, costs: 30000 },
+  { month: "Mar", revenue: 52000, target: 50000, costs: 32000 },
+  { month: "Abr", revenue: 58000, target: 55000, costs: 35000 },
+  { month: "Mai", revenue: 65000, target: 60000, costs: 38000 },
+  { month: "Jun", revenue: 72000, target: 70000, costs: 42000 },
 ];
 
 const fleetPerformance = [
-  { vessel: 'Atlântico I', efficiency: 92, uptime: 98, compliance: 95 },
-  { vessel: 'Pacífico II', efficiency: 88, uptime: 95, compliance: 92 },
-  { vessel: 'Índico III', efficiency: 94, uptime: 99, compliance: 97 },
-  { vessel: 'Ártico IV', efficiency: 86, uptime: 93, compliance: 90 },
+  { vessel: "Atlântico I", efficiency: 92, uptime: 98, compliance: 95 },
+  { vessel: "Pacífico II", efficiency: 88, uptime: 95, compliance: 92 },
+  { vessel: "Índico III", efficiency: 94, uptime: 99, compliance: 97 },
+  { vessel: "Ártico IV", efficiency: 86, uptime: 93, compliance: 90 },
 ];
 
 const operationalMetrics = [
-  { name: 'Excelente', value: 65, color: '#10b981' },
-  { name: 'Bom', value: 25, color: '#3b82f6' },
-  { name: 'Regular', value: 8, color: '#f59e0b' },
-  { name: 'Crítico', value: 2, color: '#ef4444' },
+  { name: "Excelente", value: 65, color: "#10b981" },
+  { name: "Bom", value: 25, color: "#3b82f6" },
+  { name: "Regular", value: 8, color: "#f59e0b" },
+  { name: "Crítico", value: 2, color: "#ef4444" },
 ];
 
-const KPICard = ({ title, value, change, icon: Icon, trend, prefix = '', suffix = '' }: any) => {
+const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix = "" }: any) => {
   const isPositive = change >= 0;
   const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
 
@@ -76,7 +76,7 @@ const KPICard = ({ title, value, change, icon: Icon, trend, prefix = '', suffix 
               </p>
               <div className="flex items-center gap-2">
                 <Badge
-                  variant={isPositive ? 'default' : 'destructive'}
+                  variant={isPositive ? "default" : "destructive"}
                   className="gap-1"
                 >
                   <TrendIcon className="h-3 w-3" />
@@ -85,8 +85,8 @@ const KPICard = ({ title, value, change, icon: Icon, trend, prefix = '', suffix 
                 <span className="text-xs text-muted-foreground">{trend}</span>
               </div>
             </div>
-            <div className={`p-3 rounded-lg ${isPositive ? 'bg-green-100 dark:bg-green-900/20' : 'bg-blue-100 dark:bg-blue-900/20'}`}>
-              <Icon className={`h-6 w-6 ${isPositive ? 'text-green-600 dark:text-green-400' : 'text-blue-600 dark:text-blue-400'}`} />
+            <div className={`p-3 rounded-lg ${isPositive ? "bg-green-100 dark:bg-green-900/20" : "bg-blue-100 dark:bg-blue-900/20"}`}>
+              <Icon className={`h-6 w-6 ${isPositive ? "text-green-600 dark:text-green-400" : "text-blue-600 dark:text-blue-400"}`} />
             </div>
           </div>
         </CardContent>
@@ -95,7 +95,7 @@ const KPICard = ({ title, value, change, icon: Icon, trend, prefix = '', suffix 
   );
 };
 
-const MetricIndicator = ({ label, value, target, color = 'blue' }: any) => {
+const MetricIndicator = ({ label, value, target, color = "blue" }: any) => {
   const percentage = (value / target) * 100;
   const isExceeding = percentage >= 100;
 
@@ -166,7 +166,7 @@ const VesselPerformanceCard = ({ vessel }: any) => (
 );
 
 export function ExecutiveDashboard() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div className="space-y-6 p-6">

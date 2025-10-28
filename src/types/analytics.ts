@@ -3,14 +3,14 @@
  * Types for real-time analytics events, metrics, and dashboards
  */
 
-export type EventType = 'page_view' | 'user_action' | 'api_call' | 'error' | 'system' | 'business';
-export type EventCategory = 'navigation' | 'interaction' | 'system' | 'business';
-export type DeviceType = 'desktop' | 'mobile' | 'tablet';
-export type MetricType = 'counter' | 'gauge' | 'histogram' | 'rate';
-export type AlertCondition = 'greater_than' | 'less_than' | 'equals' | 'not_equals';
-export type AlertSeverity = 'info' | 'warning' | 'critical';
-export type AlertStatus = 'active' | 'resolved' | 'acknowledged';
-export type Granularity = 'second' | 'minute' | 'hour' | 'day';
+export type EventType = "page_view" | "user_action" | "api_call" | "error" | "system" | "business";
+export type EventCategory = "navigation" | "interaction" | "system" | "business";
+export type DeviceType = "desktop" | "mobile" | "tablet";
+export type MetricType = "counter" | "gauge" | "histogram" | "rate";
+export type AlertCondition = "greater_than" | "less_than" | "equals" | "not_equals";
+export type AlertSeverity = "info" | "warning" | "critical";
+export type AlertStatus = "active" | "resolved" | "acknowledged";
+export type Granularity = "second" | "minute" | "hour" | "day";
 
 export interface AnalyticsEvent {
   id: string;
@@ -102,7 +102,7 @@ export interface DashboardConfig {
 }
 
 export interface DashboardWidget {
-  type: 'line_chart' | 'bar_chart' | 'counter' | 'gauge' | 'table' | 'pie_chart';
+  type: "line_chart" | "bar_chart" | "counter" | "gauge" | "table" | "pie_chart";
   title: string;
   metric?: string;
   timeframe?: number; // minutes

@@ -26,22 +26,22 @@ interface CrewCompetencyData {
 }
 
 interface OperationalContext {
-  weather_conditions: 'favorable' | 'moderate' | 'challenging' | 'severe';
+  weather_conditions: "favorable" | "moderate" | "challenging" | "severe";
   sea_state: number; // 0-9 Douglas scale
-  operation_type: 'drilling' | 'construction' | 'dive_support' | 'transfer' | 'other';
+  operation_type: "drilling" | "construction" | "dive_support" | "transfer" | "other";
   critical_operation: boolean;
-  proximity_to_structures: 'close' | 'medium' | 'far';
+  proximity_to_structures: "close" | "medium" | "far";
 }
 
 interface InferenceResult {
-  recommendation_type: 'training' | 'maintenance' | 'operational' | 'crew' | 'safety';
-  priority: 'critical' | 'high' | 'medium' | 'low';
+  recommendation_type: "training" | "maintenance" | "operational" | "crew" | "safety";
+  priority: "critical" | "high" | "medium" | "low";
   title: string;
   description: string;
   reasoning: string;
   confidence: number; // 0-100
   suggested_actions: string[];
-  risk_level: 'critical' | 'high' | 'medium' | 'low';
+  risk_level: "critical" | "high" | "medium" | "low";
   estimated_impact: string;
 }
 
@@ -53,7 +53,7 @@ interface PEODPPlan {
   training_requirements: any;
   maintenance_schedule: any;
   emergency_procedures: any;
-  status: 'draft' | 'active' | 'under_review' | 'archived';
+  status: "draft" | "active" | "under_review" | "archived";
 }
 
 export class PEODPInferenceService {
@@ -108,8 +108,8 @@ export class PEODPInferenceService {
       
       return sortedRecommendations;
     } catch (error) {
-      console.error('Error generating recommendations:', error);
-      throw new Error('Failed to generate PEO-DP recommendations');
+      console.error("Error generating recommendations:", error);
+      throw new Error("Failed to generate PEO-DP recommendations");
     }
   }
 
@@ -118,27 +118,27 @@ export class PEODPInferenceService {
    */
   private static async fetchVesselPerformance(vesselId: string): Promise<VesselPerformanceData> {
     const { data: vessel, error: vesselError } = await supabase
-      .from('vessels')
-      .select('*')
-      .eq('id', vesselId)
+      .from("vessels")
+      .select("*")
+      .eq("id", vesselId)
       .single();
 
     if (vesselError) throw vesselError;
 
     // Fetch performance metrics
     const { data: metrics } = await supabase
-      .from('vessel_performance_metrics' as any)
-      .select('*')
-      .eq('vessel_id', vesselId)
-      .order('recorded_at', { ascending: false })
+      .from("vessel_performance_metrics" as any)
+      .select("*")
+      .eq("vessel_id", vesselId)
+      .order("recorded_at", { ascending: false })
       .limit(30);
 
     // Fetch incident history
     const { data: incidents } = await supabase
-      .from('incidents' as any)
-      .select('id')
-      .eq('vessel_id', vesselId)
-      .gte('occurred_at', new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString());
+      .from("incidents" as any)
+      .select("id")
+      .eq("vessel_id", vesselId)
+      .gte("occurred_at", new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString());
 
     const avgAccuracy = metrics && metrics.length > 0
       ? metrics.reduce((sum: number, m: any) => sum + (m.positioning_accuracy || 0), 0) / metrics.length
@@ -150,12 +150,12 @@ export class PEODPInferenceService {
 
     return {
       vessel_id: vesselId,
-      dp_class: (vessel as any)?.dp_class || 'DP2',
+      dp_class: (vessel as any)?.dp_class || "DP2",
       operational_hours: vessel?.operational_hours || 0,
       incidents_count: incidents?.length || 0,
       avg_positioning_accuracy: avgAccuracy,
       fuel_efficiency: avgFuelEfficiency,
-      maintenance_status: (vessel as any)?.maintenance_status || 'good'
+      maintenance_status: (vessel as any)?.maintenance_status || "good"
     };
   }
 
@@ -164,28 +164,28 @@ export class PEODPInferenceService {
    */
   private static async fetchCrewCompetency(vesselId: string): Promise<CrewCompetencyData> {
     const { data: assignments } = await supabase
-      .from('crew_assignments')
+      .from("crew_assignments")
       .select(`
         *,
         crew:profiles(*)
       `)
-      .eq('vessel_id', vesselId)
-      .eq('assignment_status', 'active');
+      .eq("vessel_id", vesselId)
+      .eq("assignment_status", "active");
 
     const totalCrew = assignments?.length || 0;
     const dpCertified = assignments?.filter((a: any) => 
-      a.crew?.certifications?.includes('DP')
+      a.crew?.certifications?.includes("DP")
     ).length || 0;
 
     const avgExperience = assignments && assignments.length > 0
       ? assignments.reduce((sum: number, a: any) => 
-          sum + (a.crew?.years_experience || 0), 0
-        ) / assignments.length
+        sum + (a.crew?.years_experience || 0), 0
+      ) / assignments.length
       : 0;
 
     // Check for expiring certifications
     const expiringCerts = assignments?.filter((a: any) => {
-      const expiryDate = new Date(a.crew?.cert_expiry_date || '');
+      const expiryDate = new Date(a.crew?.cert_expiry_date || "");
       const threeMonthsFromNow = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
       return expiryDate < threeMonthsFromNow;
     }).length || 0;
@@ -205,10 +205,10 @@ export class PEODPInferenceService {
    */
   private static async fetchPEODPPlan(vesselId: string): Promise<PEODPPlan | null> {
     const { data, error } = await supabase
-      .from('peodp_plans' as any)
-      .select('*')
-      .eq('vessel_id', vesselId)
-      .eq('status', 'active')
+      .from("peodp_plans" as any)
+      .select("*")
+      .eq("vessel_id", vesselId)
+      .eq("status", "active")
       .single();
 
     if (error || !data) return null;
@@ -231,57 +231,57 @@ export class PEODPInferenceService {
 
     if (certificationRatio < 0.5) {
       recommendations.push({
-        recommendation_type: 'crew',
-        priority: 'high',
-        title: 'Insufficient DP-Certified Crew',
+        recommendation_type: "crew",
+        priority: "high",
+        title: "Insufficient DP-Certified Crew",
         description: `Only ${(certificationRatio * 100).toFixed(0)}% of crew are DP-certified. Minimum recommended: 50%`,
-        reasoning: 'Adequate DP-certified personnel are essential for safe operations and redundancy during critical tasks.',
+        reasoning: "Adequate DP-certified personnel are essential for safe operations and redundancy during critical tasks.",
         confidence: 90,
         suggested_actions: [
-          'Schedule DP training for additional crew members',
-          'Consider hiring DP-certified personnel',
-          'Review crew rotation to ensure certified coverage'
+          "Schedule DP training for additional crew members",
+          "Consider hiring DP-certified personnel",
+          "Review crew rotation to ensure certified coverage"
         ],
-        risk_level: 'high',
-        estimated_impact: 'Improved operational safety and compliance with IMCA guidelines'
+        risk_level: "high",
+        estimated_impact: "Improved operational safety and compliance with IMCA guidelines"
       });
     }
 
     // Check for expiring certifications
     if (crewData.certification_expiry_soon > 0) {
       recommendations.push({
-        recommendation_type: 'training',
-        priority: crewData.certification_expiry_soon >= crewData.dp_certified_crew * 0.3 ? 'critical' : 'medium',
-        title: 'Certifications Expiring Soon',
+        recommendation_type: "training",
+        priority: crewData.certification_expiry_soon >= crewData.dp_certified_crew * 0.3 ? "critical" : "medium",
+        title: "Certifications Expiring Soon",
         description: `${crewData.certification_expiry_soon} crew member(s) have certifications expiring within 90 days`,
-        reasoning: 'Expired certifications can lead to operational disruptions and non-compliance issues.',
+        reasoning: "Expired certifications can lead to operational disruptions and non-compliance issues.",
         confidence: 100,
         suggested_actions: [
-          'Schedule refresher training immediately',
-          'Plan crew rotation to maintain certification coverage',
-          'Set up automated certification tracking'
+          "Schedule refresher training immediately",
+          "Plan crew rotation to maintain certification coverage",
+          "Set up automated certification tracking"
         ],
-        risk_level: crewData.certification_expiry_soon >= crewData.dp_certified_crew * 0.3 ? 'critical' : 'medium',
-        estimated_impact: 'Maintained operational capability and regulatory compliance'
+        risk_level: crewData.certification_expiry_soon >= crewData.dp_certified_crew * 0.3 ? "critical" : "medium",
+        estimated_impact: "Maintained operational capability and regulatory compliance"
       });
     }
 
     // Check experience level
     if (crewData.avg_experience_years < 3 && context?.critical_operation) {
       recommendations.push({
-        recommendation_type: 'crew',
-        priority: 'high',
-        title: 'Low Average Crew Experience for Critical Operation',
+        recommendation_type: "crew",
+        priority: "high",
+        title: "Low Average Crew Experience for Critical Operation",
         description: `Average crew experience is ${crewData.avg_experience_years.toFixed(1)} years. Recommended minimum for critical ops: 3 years`,
-        reasoning: 'Critical operations require experienced crew to handle unexpected situations effectively.',
+        reasoning: "Critical operations require experienced crew to handle unexpected situations effectively.",
         confidence: 85,
         suggested_actions: [
-          'Add senior DP operators to the crew complement',
-          'Conduct additional briefings and simulations',
-          'Consider delaying non-urgent critical operations'
+          "Add senior DP operators to the crew complement",
+          "Conduct additional briefings and simulations",
+          "Consider delaying non-urgent critical operations"
         ],
-        risk_level: 'high',
-        estimated_impact: 'Reduced operational risk during critical tasks'
+        risk_level: "high",
+        estimated_impact: "Reduced operational risk during critical tasks"
       });
     }
 
@@ -300,40 +300,40 @@ export class PEODPInferenceService {
     // Check positioning accuracy
     if (performanceData.avg_positioning_accuracy < 90) {
       recommendations.push({
-        recommendation_type: 'maintenance',
-        priority: performanceData.avg_positioning_accuracy < 80 ? 'critical' : 'high',
-        title: 'Degraded Positioning Accuracy',
+        recommendation_type: "maintenance",
+        priority: performanceData.avg_positioning_accuracy < 80 ? "critical" : "high",
+        title: "Degraded Positioning Accuracy",
         description: `Average positioning accuracy is ${performanceData.avg_positioning_accuracy.toFixed(1)}%. Target: >95%`,
-        reasoning: 'Poor positioning accuracy may indicate sensor drift, GNSS issues, or thruster degradation.',
+        reasoning: "Poor positioning accuracy may indicate sensor drift, GNSS issues, or thruster degradation.",
         confidence: 88,
         suggested_actions: [
-          'Calibrate position reference systems',
-          'Check GNSS antenna and cabling',
-          'Inspect thruster performance and response',
-          'Review and update FMEA scenarios'
+          "Calibrate position reference systems",
+          "Check GNSS antenna and cabling",
+          "Inspect thruster performance and response",
+          "Review and update FMEA scenarios"
         ],
-        risk_level: performanceData.avg_positioning_accuracy < 80 ? 'critical' : 'high',
-        estimated_impact: 'Restored positioning accuracy to safe operational levels'
+        risk_level: performanceData.avg_positioning_accuracy < 80 ? "critical" : "high",
+        estimated_impact: "Restored positioning accuracy to safe operational levels"
       });
     }
 
     // Check maintenance status
-    if (performanceData.maintenance_status === 'overdue' || performanceData.maintenance_status === 'critical') {
+    if (performanceData.maintenance_status === "overdue" || performanceData.maintenance_status === "critical") {
       recommendations.push({
-        recommendation_type: 'maintenance',
-        priority: 'critical',
-        title: 'Overdue Maintenance Items',
-        description: 'Critical maintenance tasks are overdue and require immediate attention',
-        reasoning: 'Overdue maintenance increases failure risk and may compromise DP system reliability.',
+        recommendation_type: "maintenance",
+        priority: "critical",
+        title: "Overdue Maintenance Items",
+        description: "Critical maintenance tasks are overdue and require immediate attention",
+        reasoning: "Overdue maintenance increases failure risk and may compromise DP system reliability.",
         confidence: 95,
         suggested_actions: [
-          'Schedule immediate maintenance window',
-          'Review and prioritize critical components',
-          'Restrict operations until maintenance is completed',
-          'Update preventive maintenance schedule'
+          "Schedule immediate maintenance window",
+          "Review and prioritize critical components",
+          "Restrict operations until maintenance is completed",
+          "Update preventive maintenance schedule"
         ],
-        risk_level: 'critical',
-        estimated_impact: 'Prevention of equipment failure and operational downtime'
+        risk_level: "critical",
+        estimated_impact: "Prevention of equipment failure and operational downtime"
       });
     }
 
@@ -352,20 +352,20 @@ export class PEODPInferenceService {
     // Check for incidents
     if (performanceData.incidents_count > 5) {
       recommendations.push({
-        recommendation_type: 'training',
-        priority: 'high',
-        title: 'High Incident Rate Indicates Training Need',
+        recommendation_type: "training",
+        priority: "high",
+        title: "High Incident Rate Indicates Training Need",
         description: `${performanceData.incidents_count} incidents recorded in the past year`,
-        reasoning: 'Elevated incident rates often indicate gaps in crew training or procedural compliance.',
+        reasoning: "Elevated incident rates often indicate gaps in crew training or procedural compliance.",
         confidence: 82,
         suggested_actions: [
-          'Conduct incident analysis to identify common factors',
-          'Schedule additional simulator training',
-          'Review and update emergency response procedures',
-          'Implement more frequent drills and exercises'
+          "Conduct incident analysis to identify common factors",
+          "Schedule additional simulator training",
+          "Review and update emergency response procedures",
+          "Implement more frequent drills and exercises"
         ],
-        risk_level: 'high',
-        estimated_impact: 'Reduced incident frequency and improved emergency response'
+        risk_level: "high",
+        estimated_impact: "Reduced incident frequency and improved emergency response"
       });
     }
 
@@ -386,41 +386,41 @@ export class PEODPInferenceService {
     // Check if PEO-DP plan exists
     if (!peodpPlan) {
       recommendations.push({
-        recommendation_type: 'operational',
-        priority: 'critical',
-        title: 'No Active PEO-DP Plan',
-        description: 'Vessel does not have an active PEO-DP plan',
-        reasoning: 'PEO-DP plan is mandatory for DP operations per IMCA guidelines.',
+        recommendation_type: "operational",
+        priority: "critical",
+        title: "No Active PEO-DP Plan",
+        description: "Vessel does not have an active PEO-DP plan",
+        reasoning: "PEO-DP plan is mandatory for DP operations per IMCA guidelines.",
         confidence: 100,
         suggested_actions: [
-          'Create PEO-DP plan using the wizard',
-          'Conduct FMEA and ASOG analysis',
-          'Define emergency procedures and contingency plans',
-          'Submit plan for approval'
+          "Create PEO-DP plan using the wizard",
+          "Conduct FMEA and ASOG analysis",
+          "Define emergency procedures and contingency plans",
+          "Submit plan for approval"
         ],
-        risk_level: 'critical',
-        estimated_impact: 'Full compliance with DP operational requirements'
+        risk_level: "critical",
+        estimated_impact: "Full compliance with DP operational requirements"
       });
     }
 
     // Weather-based recommendations
-    if (context?.weather_conditions === 'severe' || (context?.sea_state || 0) >= 7) {
+    if (context?.weather_conditions === "severe" || (context?.sea_state || 0) >= 7) {
       recommendations.push({
-        recommendation_type: 'operational',
-        priority: 'critical',
-        title: 'Severe Weather Conditions Detected',
-        description: `Current conditions: ${context?.weather_conditions || 'unknown'}, Sea State: ${context?.sea_state || 'unknown'}`,
-        reasoning: 'Severe weather significantly increases DP operation risks and may exceed vessel capabilities.',
+        recommendation_type: "operational",
+        priority: "critical",
+        title: "Severe Weather Conditions Detected",
+        description: `Current conditions: ${context?.weather_conditions || "unknown"}, Sea State: ${context?.sea_state || "unknown"}`,
+        reasoning: "Severe weather significantly increases DP operation risks and may exceed vessel capabilities.",
         confidence: 95,
         suggested_actions: [
-          'Consider postponing non-critical operations',
-          'Increase watch-keeping vigilance',
-          'Review drift-off procedures',
-          'Ensure all emergency systems are ready',
-          'Maintain constant communication with shore'
+          "Consider postponing non-critical operations",
+          "Increase watch-keeping vigilance",
+          "Review drift-off procedures",
+          "Ensure all emergency systems are ready",
+          "Maintain constant communication with shore"
         ],
-        risk_level: 'critical',
-        estimated_impact: 'Prevention of position loss or equipment damage'
+        risk_level: "critical",
+        estimated_impact: "Prevention of position loss or equipment damage"
       });
     }
 
@@ -438,18 +438,18 @@ export class PEODPInferenceService {
       const { data: userData } = await supabase.auth.getUser();
       
       await supabase
-        .from('dp_inference_logs' as any)
+        .from("dp_inference_logs" as any)
         .insert({
           plan_id: null,
-          inference_type: 'peodp_recommendations',
+          inference_type: "peodp_recommendations",
           input_data: { vesselId } as any,
           output_data: { recommendations_count: recommendations.length } as any,
           confidence_score: null,
           processing_time_ms: null,
-          model_version: '1.0.0'
+          model_version: "1.0.0"
         } as any);
     } catch (error) {
-      console.error('Failed to log inference:', error);
+      console.error("Failed to log inference:", error);
     }
   }
 
@@ -461,14 +461,14 @@ export class PEODPInferenceService {
     limit: number = 20
   ): Promise<any[]> {
     const { data, error } = await supabase
-      .from('dp_inference_logs' as any)
-      .select('*')
-      .eq('vessel_id', vesselId)
-      .order('timestamp', { ascending: false })
+      .from("dp_inference_logs" as any)
+      .select("*")
+      .eq("vessel_id", vesselId)
+      .order("timestamp", { ascending: false })
       .limit(limit);
 
     if (error) {
-      console.error('Failed to fetch inference history:', error);
+      console.error("Failed to fetch inference history:", error);
       return [];
     }
 
@@ -480,7 +480,7 @@ export class PEODPInferenceService {
    */
   static async savePEODPPlan(plan: Partial<PEODPPlan>): Promise<PEODPPlan> {
     const { data, error } = await supabase
-      .from('peodp_plans' as any)
+      .from("peodp_plans" as any)
       .upsert({
         ...(plan as any)
       } as any)

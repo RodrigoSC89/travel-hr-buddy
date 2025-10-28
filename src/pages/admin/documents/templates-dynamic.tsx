@@ -1,13 +1,13 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   FileText,
   Save,
@@ -19,7 +19,7 @@ import {
   Plus,
   RefreshCw,
   FileDown,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -27,17 +27,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 interface TemplateVersion {
   id: string;
@@ -62,31 +62,31 @@ interface GenerationHistory {
 
 // Available dynamic variables
 const DYNAMIC_VARIABLES = [
-  { key: 'voyage_number', label: 'Voyage Number', source: 'mission_workflows', field: 'name' },
-  { key: 'vessel_name', label: 'Vessel Name', source: 'vessels', field: 'name' },
-  { key: 'crew_count', label: 'Crew Count', source: 'profiles', field: 'count' },
-  { key: 'port_of_departure', label: 'Port of Departure', source: 'route_segments', field: 'departure_port' },
-  { key: 'port_of_arrival', label: 'Port of Arrival', source: 'route_segments', field: 'arrival_port' },
-  { key: 'current_date', label: 'Current Date', source: 'system', field: 'date' },
-  { key: 'current_time', label: 'Current Time', source: 'system', field: 'time' },
-  { key: 'user_name', label: 'User Name', source: 'auth', field: 'full_name' },
-  { key: 'user_email', label: 'User Email', source: 'auth', field: 'email' },
-  { key: 'company_name', label: 'Company Name', source: 'system', field: 'company' },
-  { key: 'document_id', label: 'Document ID', source: 'system', field: 'uuid' },
-  { key: 'fuel_consumption', label: 'Total Fuel Consumption', source: 'fuel_logs', field: 'sum' },
+  { key: "voyage_number", label: "Voyage Number", source: "mission_workflows", field: "name" },
+  { key: "vessel_name", label: "Vessel Name", source: "vessels", field: "name" },
+  { key: "crew_count", label: "Crew Count", source: "profiles", field: "count" },
+  { key: "port_of_departure", label: "Port of Departure", source: "route_segments", field: "departure_port" },
+  { key: "port_of_arrival", label: "Port of Arrival", source: "route_segments", field: "arrival_port" },
+  { key: "current_date", label: "Current Date", source: "system", field: "date" },
+  { key: "current_time", label: "Current Time", source: "system", field: "time" },
+  { key: "user_name", label: "User Name", source: "auth", field: "full_name" },
+  { key: "user_email", label: "User Email", source: "auth", field: "email" },
+  { key: "company_name", label: "Company Name", source: "system", field: "company" },
+  { key: "document_id", label: "Document ID", source: "system", field: "uuid" },
+  { key: "fuel_consumption", label: "Total Fuel Consumption", source: "fuel_logs", field: "sum" },
 ];
 
 export const TemplatesDynamic = () => {
   const { toast } = useToast();
   const [templates, setTemplates] = useState<TemplateVersion[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateVersion | null>(null);
-  const [templateName, setTemplateName] = useState('');
-  const [templateContent, setTemplateContent] = useState('');
-  const [previewHtml, setPreviewHtml] = useState('');
+  const [templateName, setTemplateName] = useState("");
+  const [templateContent, setTemplateContent] = useState("");
+  const [previewHtml, setPreviewHtml] = useState("");
   const [versions, setVersions] = useState<TemplateVersion[]>([]);
   const [generationHistory, setGenerationHistory] = useState<GenerationHistory[]>([]);
   const [loading, setLoading] = useState(false);
-  const [changeDescription, setChangeDescription] = useState('');
+  const [changeDescription, setChangeDescription] = useState("");
   const [variableValues, setVariableValues] = useState({});
 
   useEffect(() => {
@@ -104,18 +104,18 @@ export const TemplatesDynamic = () => {
   const loadTemplates = async () => {
     try {
       const { data, error } = await supabase
-        .from('document_template_versions')
-        .select('*')
-        .eq('is_current', true)
-        .order('created_at', { ascending: false });
+        .from("document_template_versions")
+        .select("*")
+        .eq("is_current", true)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setTemplates(data || []);
     } catch (error: any) {
       toast({
-        title: 'Error loading templates',
+        title: "Error loading templates",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -123,30 +123,30 @@ export const TemplatesDynamic = () => {
   const loadVersions = async (templateId: string) => {
     try {
       const { data, error } = await supabase
-        .from('document_template_versions')
-        .select('*')
-        .eq('template_id', templateId)
-        .order('version_number', { ascending: false });
+        .from("document_template_versions")
+        .select("*")
+        .eq("template_id", templateId)
+        .order("version_number", { ascending: false });
 
       if (error) throw error;
       setVersions(data || []);
     } catch (error: any) {
-      console.error('Error loading versions:', error);
+      console.error("Error loading versions:", error);
     }
   };
 
   const loadGenerationHistory = async () => {
     try {
       const { data, error } = await supabase
-        .from('document_generation_history')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("document_generation_history")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(20);
 
       if (error) throw error;
       setGenerationHistory(data || []);
     } catch (error: any) {
-      console.error('Error loading history:', error);
+      console.error("Error loading history:", error);
     }
   };
 
@@ -156,47 +156,47 @@ export const TemplatesDynamic = () => {
     try {
       // Fetch real data from Supabase for each variable
       for (const variable of DYNAMIC_VARIABLES) {
-        if (variable.source === 'system') {
+        if (variable.source === "system") {
           // System variables
-          if (variable.field === 'date') {
+          if (variable.field === "date") {
             values[variable.key] = new Date().toLocaleDateString();
-          } else if (variable.field === 'time') {
+          } else if (variable.field === "time") {
             values[variable.key] = new Date().toLocaleTimeString();
-          } else if (variable.field === 'company') {
-            values[variable.key] = 'Maritime Operations Co.';
-          } else if (variable.field === 'uuid') {
+          } else if (variable.field === "company") {
+            values[variable.key] = "Maritime Operations Co.";
+          } else if (variable.field === "uuid") {
             values[variable.key] = `DOC-${Date.now()}`;
           }
-        } else if (variable.source === 'auth') {
+        } else if (variable.source === "auth") {
           // Auth variables
           const { data: user } = await supabase.auth.getUser();
-          if (variable.field === 'full_name') {
-            values[variable.key] = user.user?.user_metadata?.full_name || 'User';
-          } else if (variable.field === 'email') {
-            values[variable.key] = user.user?.email || 'user@example.com';
+          if (variable.field === "full_name") {
+            values[variable.key] = user.user?.user_metadata?.full_name || "User";
+          } else if (variable.field === "email") {
+            values[variable.key] = user.user?.email || "user@example.com";
           }
-        } else if (variable.source === 'mission_workflows') {
+        } else if (variable.source === "mission_workflows") {
           const { data } = await supabase
-            .from('mission_workflows')
-            .select('name')
+            .from("mission_workflows")
+            .select("name")
             .limit(1)
             .single();
-          values[variable.key] = data?.name || 'Voyage 001';
-        } else if (variable.source === 'vessels') {
-          const { data } = await supabase.from('vessels').select('name').limit(1).single();
-          values[variable.key] = data?.name || 'MV Example';
-        } else if (variable.source === 'profiles') {
-          const { count } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-          values[variable.key] = count?.toString() || '0';
-        } else if (variable.source === 'route_segments') {
-          const { data } = await supabase.from('route_segments').select('*').limit(1).single();
-          if (variable.field === 'departure_port') {
-            values[variable.key] = data?.departure_port || 'Port A';
-          } else if (variable.field === 'arrival_port') {
-            values[variable.key] = data?.arrival_port || 'Port B';
+          values[variable.key] = data?.name || "Voyage 001";
+        } else if (variable.source === "vessels") {
+          const { data } = await supabase.from("vessels").select("name").limit(1).single();
+          values[variable.key] = data?.name || "MV Example";
+        } else if (variable.source === "profiles") {
+          const { count } = await supabase.from("profiles").select("*", { count: "exact", head: true });
+          values[variable.key] = count?.toString() || "0";
+        } else if (variable.source === "route_segments") {
+          const { data } = await supabase.from("route_segments").select("*").limit(1).single();
+          if (variable.field === "departure_port") {
+            values[variable.key] = data?.departure_port || "Port A";
+          } else if (variable.field === "arrival_port") {
+            values[variable.key] = data?.arrival_port || "Port B";
           }
-        } else if (variable.source === 'fuel_logs') {
-          const { data } = await supabase.from('fuel_logs').select('quantity_consumed');
+        } else if (variable.source === "fuel_logs") {
+          const { data } = await supabase.from("fuel_logs").select("quantity_consumed");
           const total = data?.reduce((sum, log) => sum + (log.quantity_consumed || 0), 0) || 0;
           values[variable.key] = total.toFixed(2);
         }
@@ -204,7 +204,7 @@ export const TemplatesDynamic = () => {
 
       setVariableValues(values);
     } catch (error: any) {
-      console.error('Error fetching variables:', error);
+      console.error("Error fetching variables:", error);
       // Set default values
       DYNAMIC_VARIABLES.forEach((v) => {
         values[v.key] = `{{${v.key}}}`;
@@ -218,7 +218,7 @@ export const TemplatesDynamic = () => {
 
     // Replace all variables with their values
     Object.keys(variableValues).forEach((key) => {
-      const regex = new RegExp(`{{${key}}}`, 'g');
+      const regex = new RegExp(`{{${key}}}`, "g");
       html = html.replace(regex, variableValues[key] || `{{${key}}}`);
     });
 
@@ -228,9 +228,9 @@ export const TemplatesDynamic = () => {
   const saveTemplate = async () => {
     if (!templateName || !templateContent) {
       toast({
-        title: 'Missing fields',
-        description: 'Please provide template name and content',
-        variant: 'destructive',
+        title: "Missing fields",
+        description: "Please provide template name and content",
+        variant: "destructive",
       });
       return;
     }
@@ -243,23 +243,23 @@ export const TemplatesDynamic = () => {
 
       // Get next version number
       const { data: existingVersions } = await supabase
-        .from('document_template_versions')
-        .select('version_number')
-        .eq('template_id', templateId)
-        .order('version_number', { ascending: false })
+        .from("document_template_versions")
+        .select("version_number")
+        .eq("template_id", templateId)
+        .order("version_number", { ascending: false })
         .limit(1);
 
       const nextVersion = (existingVersions?.[0]?.version_number || 0) + 1;
 
       // Mark all previous versions as not current
       await supabase
-        .from('document_template_versions')
+        .from("document_template_versions")
         .update({ is_current: false })
-        .eq('template_id', templateId);
+        .eq("template_id", templateId);
 
       // Insert new version
       const { data, error } = await supabase
-        .from('document_template_versions')
+        .from("document_template_versions")
         .insert({
           template_id: templateId,
           template_name: templateName,
@@ -276,19 +276,19 @@ export const TemplatesDynamic = () => {
       if (error) throw error;
 
       toast({
-        title: 'Template saved',
+        title: "Template saved",
         description: `Template saved as version ${nextVersion}`,
       });
 
       setSelectedTemplate(data);
-      setChangeDescription('');
+      setChangeDescription("");
       await loadTemplates();
       await loadVersions(templateId);
     } catch (error: any) {
       toast({
-        title: 'Error saving template',
+        title: "Error saving template",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -306,20 +306,20 @@ export const TemplatesDynamic = () => {
     try {
       // Mark all versions as not current
       await supabase
-        .from('document_template_versions')
+        .from("document_template_versions")
         .update({ is_current: false })
-        .eq('template_id', version.template_id);
+        .eq("template_id", version.template_id);
 
       // Mark selected version as current
       const { error } = await supabase
-        .from('document_template_versions')
+        .from("document_template_versions")
         .update({ is_current: true })
-        .eq('id', version.id);
+        .eq("id", version.id);
 
       if (error) throw error;
 
       toast({
-        title: 'Version restored',
+        title: "Version restored",
         description: `Restored to version ${version.version_number}`,
       });
 
@@ -327,9 +327,9 @@ export const TemplatesDynamic = () => {
       await loadTemplates();
     } catch (error: any) {
       toast({
-        title: 'Error restoring version',
+        title: "Error restoring version",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -339,42 +339,42 @@ export const TemplatesDynamic = () => {
       setLoading(true);
       const startTime = Date.now();
 
-      const element = document.getElementById('preview-content');
+      const element = document.getElementById("preview-content");
       if (!element) return;
 
       const canvas = await html2canvas(element);
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL("image/png");
 
       const pdf = new jsPDF();
       const imgWidth = 190;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-      pdf.save(`${templateName || 'document'}.pdf`);
+      pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+      pdf.save(`${templateName || "document"}.pdf`);
 
       // Log generation
       const { data: user } = await supabase.auth.getUser();
-      await supabase.from('document_generation_history').insert({
-        template_id: selectedTemplate?.template_id || 'unknown',
+      await supabase.from("document_generation_history").insert({
+        template_id: selectedTemplate?.template_id || "unknown",
         template_version_id: selectedTemplate?.id,
         generated_by: user.user?.id,
         variables_used: variableValues,
-        output_format: 'pdf',
+        output_format: "pdf",
         generation_duration_ms: Date.now() - startTime,
-        status: 'completed',
+        status: "completed",
       });
 
       await loadGenerationHistory();
 
       toast({
-        title: 'PDF exported',
-        description: 'Document has been exported successfully',
+        title: "PDF exported",
+        description: "Document has been exported successfully",
       });
     } catch (error: any) {
       toast({
-        title: 'Export failed',
+        title: "Export failed",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -387,37 +387,37 @@ export const TemplatesDynamic = () => {
       const startTime = Date.now();
 
       // Basic DOCX export (text only)
-      const blob = new Blob([previewHtml], { type: 'text/html' });
+      const blob = new Blob([previewHtml], { type: "text/html" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `${templateName || 'document'}.html`;
+      link.download = `${templateName || "document"}.html`;
       link.click();
       URL.revokeObjectURL(url);
 
       // Log generation
       const { data: user } = await supabase.auth.getUser();
-      await supabase.from('document_generation_history').insert({
-        template_id: selectedTemplate?.template_id || 'unknown',
+      await supabase.from("document_generation_history").insert({
+        template_id: selectedTemplate?.template_id || "unknown",
         template_version_id: selectedTemplate?.id,
         generated_by: user.user?.id,
         variables_used: variableValues,
-        output_format: 'docx',
+        output_format: "docx",
         generation_duration_ms: Date.now() - startTime,
-        status: 'completed',
+        status: "completed",
       });
 
       await loadGenerationHistory();
 
       toast({
-        title: 'Document exported',
-        description: 'Document has been exported as HTML',
+        title: "Document exported",
+        description: "Document has been exported as HTML",
       });
     } catch (error: any) {
       toast({
-        title: 'Export failed',
+        title: "Export failed",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -431,10 +431,10 @@ export const TemplatesDynamic = () => {
 
   const newTemplate = () => {
     setSelectedTemplate(null);
-    setTemplateName('');
-    setTemplateContent('');
+    setTemplateName("");
+    setTemplateContent("");
     setVersions([]);
-    setPreviewHtml('');
+    setPreviewHtml("");
   };
 
   return (
@@ -514,7 +514,7 @@ export const TemplatesDynamic = () => {
             {templates.map((template) => (
               <Button
                 key={template.id}
-                variant={selectedTemplate?.id === template.id ? 'default' : 'outline'}
+                variant={selectedTemplate?.id === template.id ? "default" : "outline"}
                 className="w-full justify-start text-left"
                 onClick={() => loadTemplate(template)}
               >
@@ -612,7 +612,7 @@ export const TemplatesDynamic = () => {
                               {`{{${variable.key}}}`}
                             </code>
                             <p className="text-xs text-muted-foreground mt-1">
-                              Current: {variableValues[variable.key] || 'Loading...'}
+                              Current: {variableValues[variable.key] || "Loading..."}
                             </p>
                           </div>
                           <Button
@@ -641,13 +641,13 @@ export const TemplatesDynamic = () => {
                       {versions.map((version) => (
                         <Card
                           key={version.id}
-                          className={version.is_current ? 'border-blue-500' : ''}
+                          className={version.is_current ? "border-blue-500" : ""}
                         >
                           <CardContent className="pt-4">
                             <div className="flex items-start justify-between">
                               <div>
                                 <div className="flex items-center gap-2 mb-2">
-                                  <Badge variant={version.is_current ? 'default' : 'secondary'}>
+                                  <Badge variant={version.is_current ? "default" : "secondary"}>
                                     v{version.version_number}
                                   </Badge>
                                   {version.is_current && <Badge>Current</Badge>}

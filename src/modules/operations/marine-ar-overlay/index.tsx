@@ -178,8 +178,8 @@ const MarineAROverlay = () => {
         // Marker color based on status
         const color = 
           marker.status === "critical" ? "#ef4444" :
-          marker.status === "warning" ? "#f59e0b" :
-          "#22c55e";
+            marker.status === "warning" ? "#f59e0b" :
+              "#22c55e";
 
         // Draw marker point
         ctx.beginPath();
@@ -240,12 +240,12 @@ const MarineAROverlay = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "critical":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case "warning":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      default:
-        return <Info className="h-4 w-4 text-green-500" />;
+    case "critical":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    default:
+      return <Info className="h-4 w-4 text-green-500" />;
     }
   };
 
@@ -414,8 +414,8 @@ const MarineAROverlay = () => {
                         <Badge
                           variant={
                             marker.status === "critical" ? "destructive" :
-                            marker.status === "warning" ? "secondary" :
-                            "default"
+                              marker.status === "warning" ? "secondary" :
+                                "default"
                           }
                         >
                           {marker.status}

@@ -1,9 +1,9 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Plus, 
   Link2, 
@@ -13,12 +13,12 @@ import {
   CheckCircle, 
   Activity,
   Settings
-} from 'lucide-react';
-import { CreateIntegrationDialog } from './components/CreateIntegrationDialog';
-import { IntegrationCard } from './components/IntegrationCard';
-import { IntegrationLogs } from './components/IntegrationLogs';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { CreateIntegrationDialog } from "./components/CreateIntegrationDialog";
+import { IntegrationCard } from "./components/IntegrationCard";
+import { IntegrationLogs } from "./components/IntegrationLogs";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface Integration {
   id: string;
@@ -32,7 +32,7 @@ export interface Integration {
 }
 
 const IntegrationsHub = () => {
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState("all");
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -46,17 +46,17 @@ const IntegrationsHub = () => {
     try {
       setIsLoading(true);
       const { data, error } = await supabase
-        .from('integrations_registry')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("integrations_registry")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setIntegrations(data || []);
     } catch (error: any) {
       toast({
-        title: 'Error loading integrations',
+        title: "Error loading integrations",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -66,7 +66,7 @@ const IntegrationsHub = () => {
   const handleCreateIntegration = async (integrationData: any) => {
     try {
       const { data, error } = await supabase
-        .from('integrations_registry')
+        .from("integrations_registry")
         .insert([integrationData])
         .select()
         .single();
@@ -77,14 +77,14 @@ const IntegrationsHub = () => {
       setShowCreateDialog(false);
       
       toast({
-        title: 'Integration created',
-        description: 'Your integration has been created successfully.',
+        title: "Integration created",
+        description: "Your integration has been created successfully.",
       });
     } catch (error: any) {
       toast({
-        title: 'Error creating integration',
+        title: "Error creating integration",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -92,9 +92,9 @@ const IntegrationsHub = () => {
   const handleToggleIntegration = async (id: string, isActive: boolean) => {
     try {
       const { error } = await supabase
-        .from('integrations_registry')
+        .from("integrations_registry")
         .update({ is_active: isActive })
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
 
@@ -103,14 +103,14 @@ const IntegrationsHub = () => {
       ));
 
       toast({
-        title: isActive ? 'Integration activated' : 'Integration deactivated',
-        description: `Integration has been ${isActive ? 'activated' : 'deactivated'}.`,
+        title: isActive ? "Integration activated" : "Integration deactivated",
+        description: `Integration has been ${isActive ? "activated" : "deactivated"}.`,
       });
     } catch (error: any) {
       toast({
-        title: 'Error updating integration',
+        title: "Error updating integration",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -118,23 +118,23 @@ const IntegrationsHub = () => {
   const handleDeleteIntegration = async (id: string) => {
     try {
       const { error } = await supabase
-        .from('integrations_registry')
+        .from("integrations_registry")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
 
       setIntegrations(integrations.filter(int => int.id !== id));
       
       toast({
-        title: 'Integration deleted',
-        description: 'Integration has been deleted successfully.',
+        title: "Integration deleted",
+        description: "Integration has been deleted successfully.",
       });
     } catch (error: any) {
       toast({
-        title: 'Error deleting integration',
+        title: "Error deleting integration",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -142,14 +142,14 @@ const IntegrationsHub = () => {
   const stats = {
     total: integrations.length,
     active: integrations.filter(i => i.is_active).length,
-    oauth: integrations.filter(i => i.type === 'oauth2').length,
-    webhook: integrations.filter(i => i.type === 'webhook').length,
+    oauth: integrations.filter(i => i.type === "oauth2").length,
+    webhook: integrations.filter(i => i.type === "webhook").length,
   };
 
   const filteredIntegrations = integrations.filter(int => {
-    if (activeTab === 'all') return true;
-    if (activeTab === 'active') return int.is_active;
-    if (activeTab === 'inactive') return !int.is_active;
+    if (activeTab === "all") return true;
+    if (activeTab === "active") return int.is_active;
+    if (activeTab === "inactive") return !int.is_active;
     return int.type === activeTab;
   });
 

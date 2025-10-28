@@ -3,12 +3,12 @@
  * Comprehensive types for webhooks, OAuth, and integration plugins
  */
 
-export type IntegrationProvider = 'google' | 'microsoft' | 'zapier' | 'slack' | 'custom';
-export type IntegrationStatus = 'active' | 'inactive' | 'error' | 'pending';
-export type AuthType = 'oauth' | 'api_key' | 'none';
-export type WebhookEventStatus = 'pending' | 'success' | 'failed' | 'retrying';
-export type OAuthStatus = 'connected' | 'disconnected' | 'expired' | 'error';
-export type IntegrationLogLevel = 'debug' | 'info' | 'warning' | 'error' | 'critical';
+export type IntegrationProvider = "google" | "microsoft" | "zapier" | "slack" | "custom";
+export type IntegrationStatus = "active" | "inactive" | "error" | "pending";
+export type AuthType = "oauth" | "api_key" | "none";
+export type WebhookEventStatus = "pending" | "success" | "failed" | "retrying";
+export type OAuthStatus = "connected" | "disconnected" | "expired" | "error";
+export type IntegrationLogLevel = "debug" | "info" | "warning" | "error" | "critical";
 
 export interface WebhookIntegration {
   id: string;

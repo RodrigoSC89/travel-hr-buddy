@@ -7,14 +7,14 @@
 
 import { logger } from "@/lib/logger";
 
-type Locale = 'en' | 'pt' | 'es';
+type Locale = "en" | "pt" | "es";
 
 interface Translations {
   [key: string]: any;
 }
 
 class I18nSystem {
-  private currentLocale: Locale = 'en';
+  private currentLocale: Locale = "en";
   private translations: Record<Locale, Translations> = {
     en: {},
     pt: {},
@@ -30,12 +30,12 @@ class I18nSystem {
     try {
       const detectedLocale = this.detectBrowserLocale();
       await this.setLocale(detectedLocale);
-      logger.info('i18n system initialized', { locale: detectedLocale });
+      logger.info("i18n system initialized", { locale: detectedLocale });
     } catch (error) {
-      logger.error('Failed to initialize i18n:', error);
+      logger.error("Failed to initialize i18n:", error);
       // Fallback to English
-      await this.loadLocale('en');
-      this.currentLocale = 'en';
+      await this.loadLocale("en");
+      this.currentLocale = "en";
     }
   }
 
@@ -43,14 +43,14 @@ class I18nSystem {
    * Detect browser locale
    */
   private detectBrowserLocale(): Locale {
-    if (typeof window === 'undefined') return 'en';
+    if (typeof window === "undefined") return "en";
 
     const browserLang = navigator.language.toLowerCase();
     
     // Match exact locale or language code
-    if (browserLang.startsWith('pt')) return 'pt';
-    if (browserLang.startsWith('es')) return 'es';
-    return 'en';
+    if (browserLang.startsWith("pt")) return "pt";
+    if (browserLang.startsWith("es")) return "es";
+    return "en";
   }
 
   /**
@@ -86,9 +86,9 @@ class I18nSystem {
       await this.loadLocale(locale);
       this.currentLocale = locale;
       this.notifyListeners();
-      logger.info('Locale changed', { locale });
+      logger.info("Locale changed", { locale });
     } catch (error) {
-      logger.error('Failed to set locale:', error);
+      logger.error("Failed to set locale:", error);
       throw error;
     }
   }
@@ -104,30 +104,30 @@ class I18nSystem {
    * Get translation for a key (supports nested keys with dot notation)
    */
   translate(key: string, params?: Record<string, string | number>): string {
-    const keys = key.split('.');
+    const keys = key.split(".");
     let value: any = this.translations[this.currentLocale];
 
     // Navigate through nested object
     for (const k of keys) {
-      if (value && typeof value === 'object' && k in value) {
+      if (value && typeof value === "object" && k in value) {
         value = value[k];
       } else {
         // Fallback to English if key not found
         logger.warn(`Translation key not found: ${key} in locale ${this.currentLocale}`);
-        value = this.getFromLocale('en', key);
+        value = this.getFromLocale("en", key);
         break;
       }
     }
 
     // If still not found, return the key itself
-    if (typeof value !== 'string') {
+    if (typeof value !== "string") {
       return key;
     }
 
     // Replace parameters
     if (params) {
       Object.entries(params).forEach(([param, val]) => {
-        value = value.replace(new RegExp(`{${param}}`, 'g'), String(val));
+        value = value.replace(new RegExp(`{${param}}`, "g"), String(val));
       });
     }
 
@@ -138,25 +138,25 @@ class I18nSystem {
    * Get translation from specific locale
    */
   private getFromLocale(locale: Locale, key: string): string {
-    const keys = key.split('.');
+    const keys = key.split(".");
     let value: any = this.translations[locale];
 
     for (const k of keys) {
-      if (value && typeof value === 'object' && k in value) {
+      if (value && typeof value === "object" && k in value) {
         value = value[k];
       } else {
         return key;
       }
     }
 
-    return typeof value === 'string' ? value : key;
+    return typeof value === "string" ? value : key;
   }
 
   /**
    * Get all available locales
    */
   getAvailableLocales(): Locale[] {
-    return ['en', 'pt', 'es'];
+    return ["en", "pt", "es"];
   }
 
   /**
@@ -199,9 +199,9 @@ export const t = (key: string, params?: Record<string, string | number>): string
   i18n.translate(key, params);
 
 // Initialize on module load
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   i18n.initialize().catch(err => {
-    logger.error('Failed to auto-initialize i18n:', err);
+    logger.error("Failed to auto-initialize i18n:", err);
   });
 }
 

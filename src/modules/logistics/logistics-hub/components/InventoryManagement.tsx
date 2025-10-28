@@ -77,13 +77,13 @@ export const InventoryManagement: React.FC = () => {
     
     // Subscribe to real-time changes
     const channel = supabase
-      .channel('inventory_changes')
+      .channel("inventory_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'inventory_items'
+          event: "*",
+          schema: "public",
+          table: "inventory_items"
         },
         () => {
           loadItems();
@@ -104,14 +104,14 @@ export const InventoryManagement: React.FC = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('inventory_items')
-        .select('*')
-        .order('name', { ascending: true });
+        .from("inventory_items")
+        .select("*")
+        .order("name", { ascending: true });
 
       if (error) throw error;
       setItems(data || []);
     } catch (error: any) {
-      console.error('Error loading inventory:', error);
+      console.error("Error loading inventory:", error);
       toast({
         title: "Error loading inventory",
         description: error.message,
@@ -150,10 +150,10 @@ export const InventoryManagement: React.FC = () => {
   const createItem = async () => {
     try {
       const { error } = await supabase
-        .from('inventory_items')
+        .from("inventory_items")
         .insert({
           ...formData,
-          status: 'active'
+          status: "active"
         });
 
       if (error) throw error;
@@ -180,9 +180,9 @@ export const InventoryManagement: React.FC = () => {
 
     try {
       const { error } = await supabase
-        .from('inventory_items')
+        .from("inventory_items")
         .update(formData)
-        .eq('id', selectedItem.id);
+        .eq("id", selectedItem.id);
 
       if (error) throw error;
 
@@ -209,9 +209,9 @@ export const InventoryManagement: React.FC = () => {
 
     try {
       const { error } = await supabase
-        .from('inventory_items')
-        .update({ status: 'discontinued' })
-        .eq('id', itemId);
+        .from("inventory_items")
+        .update({ status: "discontinued" })
+        .eq("id", itemId);
 
       if (error) throw error;
 
@@ -238,15 +238,15 @@ export const InventoryManagement: React.FC = () => {
       const newStock = Math.max(0, item.current_stock + adjustment);
 
       const { error } = await supabase
-        .from('inventory_items')
+        .from("inventory_items")
         .update({ current_stock: newStock })
-        .eq('id', itemId);
+        .eq("id", itemId);
 
       if (error) throw error;
 
       toast({
         title: "✅ Stock Updated",
-        description: `Stock ${adjustment > 0 ? 'increased' : 'decreased'} successfully`,
+        description: `Stock ${adjustment > 0 ? "increased" : "decreased"} successfully`,
       });
 
       loadItems();
@@ -524,10 +524,10 @@ export const InventoryManagement: React.FC = () => {
                       </div>
                     </TableCell>
                     <TableCell className="text-right text-sm text-muted-foreground">
-                      {item.min_stock} / {item.max_stock || 'N/A'}
+                      {item.min_stock} / {item.max_stock || "N/A"}
                     </TableCell>
                     <TableCell>{getStockStatus(item)}</TableCell>
-                    <TableCell>{item.location || '-'}</TableCell>
+                    <TableCell>{item.location || "-"}</TableCell>
                     <TableCell>
                       <div className="flex items-center justify-end gap-2">
                         <Button

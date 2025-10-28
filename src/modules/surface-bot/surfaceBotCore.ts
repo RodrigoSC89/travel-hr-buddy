@@ -388,7 +388,7 @@ class SurfaceBotCore {
     manual: number;
     emergency: number;
     averageSpeed: number;
-  } {
+    } {
     const bots = Array.from(this.bots.values());
 
     return {

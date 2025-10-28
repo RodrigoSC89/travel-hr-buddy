@@ -135,7 +135,7 @@ export const useSync = (options: UseSyncOptions = {}): UseSyncReturn => {
     pending.push(syncableData);
     savePendingData(pending);
 
-    logger.info(`Data saved locally for sync`, { id, type });
+    logger.info("Data saved locally for sync", { id, type });
 
     // If online and auto-sync is enabled, trigger sync
     if (isOnline && autoSync) {
@@ -234,23 +234,23 @@ export const useSync = (options: UseSyncOptions = {}): UseSyncReturn => {
 
     // Example implementation for different types:
     switch (type) {
-      case "checklist":
-        // await supabase.from('checklists').insert(items.map(i => i.data));
-        logger.info("Checklists synced to Supabase");
-        break;
+    case "checklist":
+      // await supabase.from('checklists').insert(items.map(i => i.data));
+      logger.info("Checklists synced to Supabase");
+      break;
       
-      case "report":
-        // await supabase.from('reports').insert(items.map(i => i.data));
-        logger.info("Reports synced to Supabase");
-        break;
+    case "report":
+      // await supabase.from('reports').insert(items.map(i => i.data));
+      logger.info("Reports synced to Supabase");
+      break;
       
-      case "attendance":
-        // await supabase.from('attendance').insert(items.map(i => i.data));
-        logger.info("Attendance synced to Supabase");
-        break;
+    case "attendance":
+      // await supabase.from('attendance').insert(items.map(i => i.data));
+      logger.info("Attendance synced to Supabase");
+      break;
       
-      default:
-        logger.warn(`Unknown sync type: ${type}`);
+    default:
+      logger.warn(`Unknown sync type: ${type}`);
     }
   };
 

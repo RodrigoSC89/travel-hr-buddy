@@ -29,9 +29,9 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import jsPDF from 'jspdf';
-import { Document, Packer, Paragraph, TextRun } from 'docx';
-import { saveAs } from 'file-saver';
+import jsPDF from "jspdf";
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { saveAs } from "file-saver";
 
 interface Template {
   id: string;
@@ -67,25 +67,25 @@ const DocumentTemplatesManager = () => {
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    category: 'report',
-    content: '',
-    format: 'html',
-    tags: ''
+    name: "",
+    description: "",
+    category: "report",
+    content: "",
+    format: "html",
+    tags: ""
   });
 
   useEffect(() => {
     loadTemplates();
     
     const channel = supabase
-      .channel('templates_changes')
+      .channel("templates_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'document_templates'
+          event: "*",
+          schema: "public",
+          table: "document_templates"
         },
         () => {
           loadTemplates();
@@ -101,9 +101,9 @@ const DocumentTemplatesManager = () => {
   const loadTemplates = async () => {
     try {
       const { data, error } = await supabase
-        .from('document_templates')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("document_templates")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       
@@ -115,7 +115,7 @@ const DocumentTemplatesManager = () => {
       
       setTemplates(templatesWithVars);
     } catch (error: any) {
-      console.error('Error loading templates:', error);
+      console.error("Error loading templates:", error);
       toast({
         title: "Error loading templates",
         description: error.message,
@@ -129,15 +129,15 @@ const DocumentTemplatesManager = () => {
   const loadVersions = async (templateId: string) => {
     try {
       const { data, error } = await supabase
-        .from('template_versions')
-        .select('*')
-        .eq('template_id', templateId)
-        .order('version_number', { ascending: false });
+        .from("template_versions")
+        .select("*")
+        .eq("template_id", templateId)
+        .order("version_number", { ascending: false });
 
       if (error) throw error;
       setVersions(data || []);
     } catch (error: any) {
-      console.error('Error loading versions:', error);
+      console.error("Error loading versions:", error);
     }
   };
 
@@ -156,7 +156,7 @@ const DocumentTemplatesManager = () => {
   const substituteVariables = (content: string, variables: Record<string, string>): string => {
     let result = content;
     Object.entries(variables).forEach(([key, value]) => {
-      result = result.replace(new RegExp(`{{${key}}}`, 'g'), value);
+      result = result.replace(new RegExp(`{{${key}}}`, "g"), value);
     });
     return result;
   };
@@ -164,10 +164,10 @@ const DocumentTemplatesManager = () => {
   const createTemplate = async () => {
     try {
       const templateCode = `TPL-${Date.now()}`;
-      const tags = formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+      const tags = formData.tags.split(",").map(tag => tag.trim()).filter(tag => tag);
       
       const { error } = await supabase
-        .from('document_templates')
+        .from("document_templates")
         .insert({
           template_code: templateCode,
           name: formData.name,
@@ -176,7 +176,7 @@ const DocumentTemplatesManager = () => {
           content: formData.content,
           format: formData.format,
           tags,
-          status: 'active'
+          status: "active"
         });
 
       if (error) throw error;
@@ -188,12 +188,12 @@ const DocumentTemplatesManager = () => {
 
       setShowNewTemplate(false);
       setFormData({
-        name: '',
-        description: '',
-        category: 'report',
-        content: '',
-        format: 'html',
-        tags: ''
+        name: "",
+        description: "",
+        category: "report",
+        content: "",
+        format: "html",
+        tags: ""
       });
       loadTemplates();
     } catch (error: any) {
@@ -208,9 +208,9 @@ const DocumentTemplatesManager = () => {
   const updateTemplate = async (templateId: string, newContent: string) => {
     try {
       const { error } = await supabase
-        .from('document_templates')
+        .from("document_templates")
         .update({ content: newContent })
-        .eq('id', templateId);
+        .eq("id", templateId);
 
       if (error) throw error;
 
@@ -232,9 +232,9 @@ const DocumentTemplatesManager = () => {
   const deleteTemplate = async (templateId: string) => {
     try {
       const { error } = await supabase
-        .from('document_templates')
-        .update({ status: 'archived' })
-        .eq('id', templateId);
+        .from("document_templates")
+        .update({ status: "archived" })
+        .eq("id", templateId);
 
       if (error) throw error;
 
@@ -259,9 +259,9 @@ const DocumentTemplatesManager = () => {
     const content = substituteVariables(template.content, variables);
     
     // Simple HTML to text conversion
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = content;
-    const textContent = tempDiv.textContent || tempDiv.innerText || '';
+    const textContent = tempDiv.textContent || tempDiv.innerText || "";
     
     doc.setFontSize(12);
     const lines = doc.splitTextToSize(textContent, 180);
@@ -273,10 +273,10 @@ const DocumentTemplatesManager = () => {
     const processingTime = Date.now() - startTime;
     
     // Log usage
-    supabase.from('template_usage_log').insert({
+    supabase.from("template_usage_log").insert({
       template_id: template.id,
       version_number: template.current_version,
-      output_format: 'pdf',
+      output_format: "pdf",
       variables_used: variables,
       generation_time_ms: processingTime,
       success: true
@@ -293,9 +293,9 @@ const DocumentTemplatesManager = () => {
     const content = substituteVariables(template.content, variables);
     
     // Simple HTML to text conversion
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = content;
-    const textContent = tempDiv.textContent || tempDiv.innerText || '';
+    const textContent = tempDiv.textContent || tempDiv.innerText || "";
     
     const doc = new Document({
       sections: [{
@@ -317,10 +317,10 @@ const DocumentTemplatesManager = () => {
     const processingTime = Date.now() - startTime;
     
     // Log usage
-    supabase.from('template_usage_log').insert({
+    supabase.from("template_usage_log").insert({
       template_id: template.id,
       version_number: template.current_version,
-      output_format: 'docx',
+      output_format: "docx",
       variables_used: variables,
       generation_time_ms: processingTime,
       success: true
@@ -334,16 +334,16 @@ const DocumentTemplatesManager = () => {
 
   const getCategoryBadge = (category: string) => {
     switch (category) {
-      case 'contract':
-        return <Badge className="bg-purple-500">Contract</Badge>;
-      case 'report':
-        return <Badge className="bg-blue-500">Report</Badge>;
-      case 'certificate':
-        return <Badge className="bg-green-500">Certificate</Badge>;
-      case 'invoice':
-        return <Badge className="bg-yellow-500">Invoice</Badge>;
-      default:
-        return <Badge variant="outline">{category}</Badge>;
+    case "contract":
+      return <Badge className="bg-purple-500">Contract</Badge>;
+    case "report":
+      return <Badge className="bg-blue-500">Report</Badge>;
+    case "certificate":
+      return <Badge className="bg-green-500">Certificate</Badge>;
+    case "invoice":
+      return <Badge className="bg-yellow-500">Invoice</Badge>;
+    default:
+      return <Badge variant="outline">{category}</Badge>;
     }
   };
 
@@ -437,7 +437,7 @@ const DocumentTemplatesManager = () => {
                       className="font-mono"
                     />
                     <p className="text-xs text-muted-foreground mt-1">
-                      Variables: {extractVariables(formData.content).join(', ') || 'None'}
+                      Variables: {extractVariables(formData.content).join(", ") || "None"}
                     </p>
                   </div>
                   <div>
@@ -466,12 +466,12 @@ const DocumentTemplatesManager = () => {
           <div className="space-y-3">
             {loading ? (
               <p>Loading templates...</p>
-            ) : templates.filter(t => t.status === 'active').length === 0 ? (
+            ) : templates.filter(t => t.status === "active").length === 0 ? (
               <p className="text-center text-muted-foreground py-8">
                 No templates found. Create your first template!
               </p>
             ) : (
-              templates.filter(t => t.status === 'active').map((template) => (
+              templates.filter(t => t.status === "active").map((template) => (
                 <Card key={template.id} className="border-l-4 border-l-blue-500">
                   <CardContent className="pt-6">
                     <div className="flex items-start justify-between">
@@ -529,7 +529,7 @@ const DocumentTemplatesManager = () => {
                             // Initialize preview variables
                             const vars: Record<string, string> = {};
                             template.variables?.forEach(v => {
-                              vars[v] = '';
+                              vars[v] = "";
                             });
                             setPreviewVariables(vars);
                           }}
@@ -571,7 +571,7 @@ const DocumentTemplatesManager = () => {
                     <Label htmlFor={variable}>{variable}</Label>
                     <Input
                       id={variable}
-                      value={previewVariables[variable] || ''}
+                      value={previewVariables[variable] || ""}
                       onChange={(e) => setPreviewVariables({
                         ...previewVariables,
                         [variable]: e.target.value

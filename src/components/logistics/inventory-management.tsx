@@ -53,9 +53,9 @@ export const InventoryManagement = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('inventory_items')
-        .select('*')
-        .order('name');
+        .from("inventory_items")
+        .select("*")
+        .order("name");
 
       if (error) throw error;
       setItems(data || []);
@@ -73,7 +73,7 @@ export const InventoryManagement = () => {
   const getLowStockItems = () => {
     return items.filter(item => 
       item.current_stock <= item.minimum_stock && 
-      item.status !== 'discontinued'
+      item.status !== "discontinued"
     );
   };
 
@@ -97,7 +97,7 @@ export const InventoryManagement = () => {
       discontinued: "outline",
       expired: "destructive"
     };
-    return <Badge variant={variants[status] || "default"}>{status.replace('_', ' ')}</Badge>;
+    return <Badge variant={variants[status] || "default"}>{status.replace("_", " ")}</Badge>;
   };
 
   const getStockIndicator = (item: InventoryItem) => {
@@ -270,7 +270,7 @@ export const InventoryManagement = () => {
                     <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
                       <span>Code: {item.item_code}</span>
                       <span>•</span>
-                      <span className="capitalize">{item.category.replace('_', ' ')}</span>
+                      <span className="capitalize">{item.category.replace("_", " ")}</span>
                       <span>•</span>
                       <span>{item.location}</span>
                     </div>
@@ -280,7 +280,7 @@ export const InventoryManagement = () => {
                       Stock: {item.current_stock} / {item.minimum_stock}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      Value: ${item.total_value?.toFixed(2) || '0.00'}
+                      Value: ${item.total_value?.toFixed(2) || "0.00"}
                     </div>
                   </div>
                   <div className="flex gap-2">

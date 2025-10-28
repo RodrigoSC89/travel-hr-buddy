@@ -6,20 +6,20 @@
  */
 
 // Capacitor imports with fallbacks for web
-const Preferences = typeof window !== 'undefined' && (window as any).Capacitor?.Plugins?.Preferences || {
+const Preferences = typeof window !== "undefined" && (window as any).Capacitor?.Plugins?.Preferences || {
   set: async (opts: any) => localStorage.setItem(opts.key, opts.value),
   get: async (opts: any) => ({ value: localStorage.getItem(opts.key) }),
   remove: async (opts: any) => localStorage.removeItem(opts.key),
 };
 
-const BiometricAuth = typeof window !== 'undefined' && (window as any).Capacitor?.Plugins?.BiometricAuth || {
-  checkBiometry: async () => ({ isAvailable: false, biometryType: 'none' as BiometryType }),
-  authenticate: async (opts: any) => Promise.reject(new Error('Biometric auth not available')),
+const BiometricAuth = typeof window !== "undefined" && (window as any).Capacitor?.Plugins?.BiometricAuth || {
+  checkBiometry: async () => ({ isAvailable: false, biometryType: "none" as BiometryType }),
+  authenticate: async (opts: any) => Promise.reject(new Error("Biometric auth not available")),
 };
 
-type BiometryType = 'none' | 'touchId' | 'faceId' | 'fingerprintAuthentication' | 'faceAuthentication' | 'irisAuthentication';
-import { structuredLogger } from '@/lib/logger/structured-logger';
-import { supabase } from '@/integrations/supabase/client';
+type BiometryType = "none" | "touchId" | "faceId" | "fingerprintAuthentication" | "faceAuthentication" | "irisAuthentication";
+import { structuredLogger } from "@/lib/logger/structured-logger";
+import { supabase } from "@/integrations/supabase/client";
 
 interface BiometricAuthResult {
   success: boolean;
@@ -35,7 +35,7 @@ interface SecureToken {
 }
 
 export class BiometricAuthService {
-  private readonly STORAGE_KEY = 'nautilus_secure_token';
+  private readonly STORAGE_KEY = "nautilus_secure_token";
   private readonly TOKEN_EXPIRY_BUFFER = 5 * 60 * 1000; // 5 minutes
 
   /**
@@ -53,10 +53,10 @@ export class BiometricAuthService {
         biometryType: result.biometryType,
       };
     } catch (error) {
-      structuredLogger.error('Biometric check failed', error as Error);
+      structuredLogger.error("Biometric check failed", error as Error);
       return {
         available: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -65,7 +65,7 @@ export class BiometricAuthService {
    * Authenticate user with biometrics
    */
   async authenticate(
-    reason: string = 'Autenticar no Nautilus One'
+    reason: string = "Autenticar no Nautilus One"
   ): Promise<BiometricAuthResult> {
     try {
       // Check if biometrics are available
@@ -73,16 +73,16 @@ export class BiometricAuthService {
       if (!availability.available) {
         return {
           success: false,
-          error: 'Biometric authentication not available',
+          error: "Biometric authentication not available",
         };
       }
 
       // Perform biometric authentication
       await BiometricAuth.authenticate({
         reason,
-        cancelTitle: 'Cancelar',
+        cancelTitle: "Cancelar",
         allowDeviceCredential: true,
-        iosFallbackTitle: 'Usar senha',
+        iosFallbackTitle: "Usar senha",
       });
 
       // Retrieve stored token
@@ -91,7 +91,7 @@ export class BiometricAuthService {
       if (!token) {
         return {
           success: false,
-          error: 'No stored credentials found',
+          error: "No stored credentials found",
         };
       }
 
@@ -102,7 +102,7 @@ export class BiometricAuthService {
         if (!refreshed.success) {
           return {
             success: false,
-            error: 'Session expired, please login again',
+            error: "Session expired, please login again",
           };
         }
         return refreshed;
@@ -113,10 +113,10 @@ export class BiometricAuthService {
         token: token.accessToken,
       };
     } catch (error) {
-      structuredLogger.error('Biometric authentication failed', error as Error);
+      structuredLogger.error("Biometric authentication failed", error as Error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Authentication failed',
+        error: error instanceof Error ? error.message : "Authentication failed",
       };
     }
   }
@@ -145,10 +145,10 @@ export class BiometricAuthService {
         value: encrypted,
       });
 
-      structuredLogger.info('Token stored securely', { userId });
+      structuredLogger.info("Token stored securely", { userId });
       return true;
     } catch (error) {
-      structuredLogger.error('Failed to store token', error as Error);
+      structuredLogger.error("Failed to store token", error as Error);
       return false;
     }
   }
@@ -166,7 +166,7 @@ export class BiometricAuthService {
 
       return await this.decryptToken(value);
     } catch (error) {
-      structuredLogger.error('Failed to retrieve token', error as Error);
+      structuredLogger.error("Failed to retrieve token", error as Error);
       return null;
     }
   }
@@ -188,7 +188,7 @@ export class BiometricAuthService {
       });
 
       if (error || !data.session) {
-        throw error || new Error('Failed to refresh session');
+        throw error || new Error("Failed to refresh session");
       }
 
       // Store new token
@@ -204,10 +204,10 @@ export class BiometricAuthService {
         token: data.session.access_token,
       };
     } catch (error) {
-      structuredLogger.error('Token refresh failed', error as Error);
+      structuredLogger.error("Token refresh failed", error as Error);
       return {
         success: false,
-        error: 'Failed to refresh session',
+        error: "Failed to refresh session",
       };
     }
   }
@@ -218,9 +218,9 @@ export class BiometricAuthService {
   async clearStoredCredentials(): Promise<void> {
     try {
       await Preferences.remove({ key: this.STORAGE_KEY });
-      structuredLogger.info('Stored credentials cleared');
+      structuredLogger.info("Stored credentials cleared");
     } catch (error) {
-      structuredLogger.error('Failed to clear credentials', error as Error);
+      structuredLogger.error("Failed to clear credentials", error as Error);
     }
   }
 
@@ -260,21 +260,21 @@ export class BiometricAuthService {
       if (!availability.available) {
         return {
           success: false,
-          error: `Biometric authentication not available on this device`,
+          error: "Biometric authentication not available on this device",
         };
       }
 
       // Perform initial authentication to verify biometrics work
       const authResult = await BiometricAuth.authenticate({
-        reason: 'Ativar autenticação biométrica',
-        cancelTitle: 'Cancelar',
+        reason: "Ativar autenticação biométrica",
+        cancelTitle: "Cancelar",
         allowDeviceCredential: true,
       });
 
       if (!authResult) {
         return {
           success: false,
-          error: 'Biometric authentication failed',
+          error: "Biometric authentication failed",
         };
       }
 
@@ -289,17 +289,17 @@ export class BiometricAuthService {
       if (!stored) {
         return {
           success: false,
-          error: 'Failed to store credentials',
+          error: "Failed to store credentials",
         };
       }
 
-      structuredLogger.info('Biometric authentication enabled', { userId });
+      structuredLogger.info("Biometric authentication enabled", { userId });
       return { success: true };
     } catch (error) {
-      structuredLogger.error('Failed to enable biometric', error as Error);
+      structuredLogger.error("Failed to enable biometric", error as Error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -309,7 +309,7 @@ export class BiometricAuthService {
    */
   async disableBiometric(): Promise<void> {
     await this.clearStoredCredentials();
-    structuredLogger.info('Biometric authentication disabled');
+    structuredLogger.info("Biometric authentication disabled");
   }
 }
 

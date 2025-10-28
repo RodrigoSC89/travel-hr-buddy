@@ -54,15 +54,15 @@ export const EmployeeBenefits: React.FC = () => {
       if (!user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('employee_benefits')
-        .select('*')
-        .eq('employee_id', user.id)
-        .order('created_at', { ascending: false });
+        .from("employee_benefits")
+        .select("*")
+        .eq("employee_id", user.id)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setBenefits(data || []);
     } catch (error: any) {
-      console.error('Error loading benefits:', error);
+      console.error("Error loading benefits:", error);
       toast({
         title: "Error loading benefits",
         description: error.message,
@@ -75,20 +75,20 @@ export const EmployeeBenefits: React.FC = () => {
 
   const getBenefitIcon = (type: string) => {
     switch (type) {
-      case 'health_insurance':
-        return Heart;
-      case 'dental':
-      case 'vision':
-        return Eye;
-      case 'life_insurance':
-        return Shield;
-      case 'retirement':
-        return DollarSign;
-      case 'vacation':
-      case 'sick_leave':
-        return Calendar;
-      default:
-        return Briefcase;
+    case "health_insurance":
+      return Heart;
+    case "dental":
+    case "vision":
+      return Eye;
+    case "life_insurance":
+      return Shield;
+    case "retirement":
+      return DollarSign;
+    case "vacation":
+    case "sick_leave":
+      return Calendar;
+    default:
+      return Briefcase;
     }
   };
 
@@ -197,9 +197,9 @@ export const EmployeeBenefits: React.FC = () => {
                               <div className="text-sm">
                                 <span className="text-muted-foreground">Period:</span>
                                 <div className="font-medium">
-                                  {format(new Date(benefit.start_date), 'MMM dd, yyyy')}
+                                  {format(new Date(benefit.start_date), "MMM dd, yyyy")}
                                   {benefit.end_date && (
-                                    <> - {format(new Date(benefit.end_date), 'MMM dd, yyyy')}</>
+                                    <> - {format(new Date(benefit.end_date), "MMM dd, yyyy")}</>
                                   )}
                                   {!benefit.end_date && <> - Ongoing</>}
                                 </div>

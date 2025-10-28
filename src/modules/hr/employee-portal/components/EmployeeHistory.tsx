@@ -47,23 +47,23 @@ export function EmployeeHistory() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "success":
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "error":
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      default:
-        return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+    case "success":
+      return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "error":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    default:
+      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "success":
-        return <Badge variant="default">Concluído</Badge>;
-      case "error":
-        return <Badge variant="destructive">Erro</Badge>;
-      default:
-        return <Badge variant="secondary">Pendente</Badge>;
+    case "success":
+      return <Badge variant="default">Concluído</Badge>;
+    case "error":
+      return <Badge variant="destructive">Erro</Badge>;
+    default:
+      return <Badge variant="secondary">Pendente</Badge>;
     }
   };
 

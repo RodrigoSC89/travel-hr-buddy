@@ -10,16 +10,16 @@ import { supabase } from "@/integrations/supabase/client";
 
 export interface CopilotMessage {
   id: string;
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
-  input_type?: 'voice' | 'text';
+  input_type?: "voice" | "text";
   timestamp: Date;
 }
 
 export interface TacticalRecommendation {
   id: string;
-  type: 'route_change' | 'speed_adjustment' | 'crew_alert' | 'resource_allocation' | 'emergency_protocol';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  type: "route_change" | "speed_adjustment" | "crew_alert" | "resource_allocation" | "emergency_protocol";
+  priority: "low" | "medium" | "high" | "critical";
   description: string;
   reasoning: string;
   suggested_actions: string[];
@@ -44,7 +44,7 @@ export interface CopilotSession {
   context: CopilotContext;
   messages: CopilotMessage[];
   recommendations: TacticalRecommendation[];
-  status: 'active' | 'paused' | 'completed';
+  status: "active" | "paused" | "completed";
   created_at: Date;
   updated_at: Date;
 }
@@ -64,14 +64,14 @@ class NeuralCopilotEngine {
    * Initialize Web Speech API
    */
   private initializeSpeechAPIs(): void {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Speech Recognition (input)
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
         this.speechRecognition = new SpeechRecognition();
         this.speechRecognition.continuous = true;
         this.speechRecognition.interimResults = false;
-        this.speechRecognition.lang = 'pt-BR';
+        this.speechRecognition.lang = "pt-BR";
         
         logger.info("[NeuralCopilot] Speech Recognition initialized");
       } else {
@@ -79,7 +79,7 @@ class NeuralCopilotEngine {
       }
 
       // Speech Synthesis (output)
-      if ('speechSynthesis' in window) {
+      if ("speechSynthesis" in window) {
         this.speechSynthesis = window.speechSynthesis;
         logger.info("[NeuralCopilot] Speech Synthesis initialized");
       } else {
@@ -101,20 +101,20 @@ class NeuralCopilotEngine {
 
       const systemMessage: CopilotMessage = {
         id: crypto.randomUUID(),
-        role: 'system',
-        content: 'You are a Naval AI Copilot assistant. Provide tactical recommendations and explain decisions clearly.',
+        role: "system",
+        content: "You are a Naval AI Copilot assistant. Provide tactical recommendations and explain decisions clearly.",
         timestamp: new Date(),
       };
 
       const { data, error } = await supabase
-        .from('copilot_sessions')
+        .from("copilot_sessions")
         .insert({
-      tenant_id: userId,
+          tenant_id: userId,
           session_name: sessionName,
           context: context,
           messages: [systemMessage],
           recommendations: [],
-          status: 'active',
+          status: "active",
         })
         .select()
         .single();
@@ -128,7 +128,7 @@ class NeuralCopilotEngine {
         context: context,
         messages: [systemMessage],
         recommendations: [],
-        status: 'active',
+        status: "active",
         created_at: new Date(data.created_at),
         updated_at: new Date(data.updated_at),
       };
@@ -159,9 +159,9 @@ class NeuralCopilotEngine {
       // Add user message
       const userMessage: CopilotMessage = {
         id: crypto.randomUUID(),
-        role: 'user',
+        role: "user",
         content: command,
-        input_type: 'text',
+        input_type: "text",
         timestamp: new Date(),
       };
 
@@ -173,7 +173,7 @@ class NeuralCopilotEngine {
       // Add assistant message
       const assistantMessage: CopilotMessage = {
         id: crypto.randomUUID(),
-        role: 'assistant',
+        role: "assistant",
         content: response,
         timestamp: new Date(),
       };
@@ -205,15 +205,15 @@ class NeuralCopilotEngine {
     const contextSummary = this.buildContextSummary(session.context);
     
     // Analyze command type
-    if (command.toLowerCase().includes('weather') || command.toLowerCase().includes('clima')) {
-      return `Based on current telemetry, weather conditions are ${session.context.weather_conditions ? 'available' : 'being fetched'}. ${contextSummary}`;
+    if (command.toLowerCase().includes("weather") || command.toLowerCase().includes("clima")) {
+      return `Based on current telemetry, weather conditions are ${session.context.weather_conditions ? "available" : "being fetched"}. ${contextSummary}`;
     }
     
-    if (command.toLowerCase().includes('route') || command.toLowerCase().includes('rota')) {
-      return `Analyzing current route. Current location: ${session.context.current_location ? `${session.context.current_location.latitude}, ${session.context.current_location.longitude}` : 'unknown'}. Recommendation: Maintain current course unless weather deteriorates.`;
+    if (command.toLowerCase().includes("route") || command.toLowerCase().includes("rota")) {
+      return `Analyzing current route. Current location: ${session.context.current_location ? `${session.context.current_location.latitude}, ${session.context.current_location.longitude}` : "unknown"}. Recommendation: Maintain current course unless weather deteriorates.`;
     }
     
-    if (command.toLowerCase().includes('status') || command.toLowerCase().includes('situação')) {
+    if (command.toLowerCase().includes("status") || command.toLowerCase().includes("situação")) {
       return `System Status: All systems operational. ${session.context.mission_logs.length} mission logs recorded. Telemetry data: ${session.context.telemetry_data.length} readings available.`;
     }
 
@@ -236,10 +236,10 @@ class NeuralCopilotEngine {
     }
     
     if (context.current_location) {
-      parts.push(`position tracked`);
+      parts.push("position tracked");
     }
 
-    return parts.length > 0 ? `Context: ${parts.join(', ')}.` : '';
+    return parts.length > 0 ? `Context: ${parts.join(", ")}.` : "";
   }
 
   /**
@@ -247,7 +247,7 @@ class NeuralCopilotEngine {
    */
   async generateRecommendation(
     sessionId: string,
-    type: TacticalRecommendation['type']
+    type: TacticalRecommendation["type"]
   ): Promise<TacticalRecommendation> {
     try {
       logger.info("[NeuralCopilot] Generating recommendation", { sessionId, type });
@@ -261,7 +261,7 @@ class NeuralCopilotEngine {
       const recommendation: TacticalRecommendation = {
         id: crypto.randomUUID(),
         type: type,
-        priority: 'medium',
+        priority: "medium",
         description: this.getRecommendationDescription(type),
         reasoning: this.getRecommendationReasoning(type, session.context),
         suggested_actions: this.getSuggestedActions(type),
@@ -286,13 +286,13 @@ class NeuralCopilotEngine {
   /**
    * Get recommendation description
    */
-  private getRecommendationDescription(type: TacticalRecommendation['type']): string {
-    const descriptions: Record<TacticalRecommendation['type'], string> = {
-      route_change: 'Consider adjusting route to optimize efficiency',
-      speed_adjustment: 'Adjust vessel speed based on current conditions',
-      crew_alert: 'Alert crew members about upcoming situation',
-      resource_allocation: 'Optimize resource distribution',
-      emergency_protocol: 'Review emergency protocols',
+  private getRecommendationDescription(type: TacticalRecommendation["type"]): string {
+    const descriptions: Record<TacticalRecommendation["type"], string> = {
+      route_change: "Consider adjusting route to optimize efficiency",
+      speed_adjustment: "Adjust vessel speed based on current conditions",
+      crew_alert: "Alert crew members about upcoming situation",
+      resource_allocation: "Optimize resource distribution",
+      emergency_protocol: "Review emergency protocols",
     };
     return descriptions[type];
   }
@@ -301,11 +301,11 @@ class NeuralCopilotEngine {
    * Get recommendation reasoning
    */
   private getRecommendationReasoning(
-    type: TacticalRecommendation['type'],
+    type: TacticalRecommendation["type"],
     context: CopilotContext
   ): string {
-    const weatherInfo = context.weather_conditions ? 'with current weather patterns' : '';
-    const telemetryInfo = context.telemetry_data.length > 0 ? `based on ${context.telemetry_data.length} telemetry readings` : '';
+    const weatherInfo = context.weather_conditions ? "with current weather patterns" : "";
+    const telemetryInfo = context.telemetry_data.length > 0 ? `based on ${context.telemetry_data.length} telemetry readings` : "";
     
     return `Recommendation ${weatherInfo} ${telemetryInfo}. AI analysis suggests this action will improve mission outcomes.`;
   }
@@ -313,32 +313,32 @@ class NeuralCopilotEngine {
   /**
    * Get suggested actions
    */
-  private getSuggestedActions(type: TacticalRecommendation['type']): string[] {
-    const actions: Record<TacticalRecommendation['type'], string[]> = {
+  private getSuggestedActions(type: TacticalRecommendation["type"]): string[] {
+    const actions: Record<TacticalRecommendation["type"], string[]> = {
       route_change: [
-        'Review alternative routes',
-        'Calculate fuel impact',
-        'Notify navigation team',
+        "Review alternative routes",
+        "Calculate fuel impact",
+        "Notify navigation team",
       ],
       speed_adjustment: [
-        'Reduce speed by 10%',
-        'Monitor fuel consumption',
-        'Update ETA',
+        "Reduce speed by 10%",
+        "Monitor fuel consumption",
+        "Update ETA",
       ],
       crew_alert: [
-        'Send notification to crew',
-        'Brief team on situation',
-        'Prepare contingency plans',
+        "Send notification to crew",
+        "Brief team on situation",
+        "Prepare contingency plans",
       ],
       resource_allocation: [
-        'Review current inventory',
-        'Redistribute resources',
-        'Update supply requests',
+        "Review current inventory",
+        "Redistribute resources",
+        "Update supply requests",
       ],
       emergency_protocol: [
-        'Review emergency procedures',
-        'Ensure equipment readiness',
-        'Conduct safety drill',
+        "Review emergency procedures",
+        "Ensure equipment readiness",
+        "Conduct safety drill",
       ],
     };
     return actions[type];
@@ -395,7 +395,7 @@ class NeuralCopilotEngine {
     }
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'pt-BR';
+    utterance.lang = "pt-BR";
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
 
@@ -414,9 +414,9 @@ class NeuralCopilotEngine {
     // Fetch from database
     try {
       const { data, error } = await supabase
-        .from('copilot_sessions')
-        .select('*')
-        .eq('id', sessionId)
+        .from("copilot_sessions")
+        .select("*")
+        .eq("id", sessionId)
         .single();
 
       if (error) throw error;
@@ -448,14 +448,14 @@ class NeuralCopilotEngine {
   private async updateSession(session: CopilotSession): Promise<void> {
     try {
       const { error } = await supabase
-        .from('copilot_sessions')
+        .from("copilot_sessions")
         .update({
-      messages: session.messages as any,
-      recommendations: session.recommendations as any,
+          messages: session.messages as any,
+          recommendations: session.recommendations as any,
           context: session.context,
           status: session.status,
         })
-        .eq('id', session.id);
+        .eq("id", session.id);
 
       if (error) throw error;
 
@@ -472,10 +472,10 @@ class NeuralCopilotEngine {
   async listSessions(userId: string): Promise<CopilotSession[]> {
     try {
       const { data, error } = await supabase
-        .from('copilot_sessions')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .from("copilot_sessions")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
@@ -502,9 +502,9 @@ class NeuralCopilotEngine {
   async endSession(sessionId: string): Promise<void> {
     try {
       const { error } = await supabase
-        .from('copilot_sessions')
-        .update({ status: 'completed' })
-        .eq('id', sessionId);
+        .from("copilot_sessions")
+        .update({ status: "completed" })
+        .eq("id", sessionId);
 
       if (error) throw error;
 

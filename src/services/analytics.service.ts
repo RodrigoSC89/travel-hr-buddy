@@ -4,7 +4,7 @@
  * Service for tracking events, managing metrics, and handling alerts
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 import type {
   AnalyticsEvent,
   AnalyticsAlert,
@@ -12,7 +12,7 @@ import type {
   RealTimeMetrics,
   TimeSeriesData,
   EventTrackingOptions,
-} from '@/types/analytics';
+} from "@/types/analytics";
 
 export class AnalyticsService {
   private static sessionId: string | null = null;
@@ -33,7 +33,7 @@ export class AnalyticsService {
   static async trackEvent(options: EventTrackingOptions): Promise<string> {
     const sessionId = this.getSessionId();
 
-    const { data, error } = await supabase.rpc('track_analytics_event', {
+    const { data, error } = await supabase.rpc("track_analytics_event", {
       p_event_type: options.event_type,
       p_event_category: options.event_category,
       p_event_name: options.event_name,
@@ -49,8 +49,8 @@ export class AnalyticsService {
 
   static async trackPageView(pageName: string): Promise<string> {
     return this.trackEvent({
-      event_type: 'page_view',
-      event_category: 'navigation',
+      event_type: "page_view",
+      event_category: "navigation",
       event_name: pageName,
       properties: {
         url: window.location.href,
@@ -64,8 +64,8 @@ export class AnalyticsService {
     properties?: Record<string, unknown>
   ): Promise<string> {
     return this.trackEvent({
-      event_type: 'user_action',
-      event_category: 'interaction',
+      event_type: "user_action",
+      event_category: "interaction",
       event_name: actionName,
       properties,
     });
@@ -76,9 +76,9 @@ export class AnalyticsService {
     errorDetails?: Record<string, unknown>
   ): Promise<string> {
     return this.trackEvent({
-      event_type: 'error',
-      event_category: 'system',
-      event_name: 'error_occurred',
+      event_type: "error",
+      event_category: "system",
+      event_name: "error_occurred",
       properties: {
         message: errorMessage,
         ...errorDetails,
@@ -92,13 +92,13 @@ export class AnalyticsService {
     limit = 100
   ): Promise<AnalyticsEvent[]> {
     const { data, error } = await supabase
-      .from('analytics_events')
-      .select('*')
+      .from("analytics_events")
+      .select("*")
       .gte(
-        'timestamp',
+        "timestamp",
         new Date(Date.now() - timeframeMinutes * 60 * 1000).toISOString()
       )
-      .order('timestamp', { ascending: false })
+      .order("timestamp", { ascending: false })
       .limit(limit);
 
     if (error) throw error;
@@ -110,14 +110,14 @@ export class AnalyticsService {
     timeframeMinutes = 60
   ): Promise<AnalyticsEvent[]> {
     const { data, error } = await supabase
-      .from('analytics_events')
-      .select('*')
-      .eq('event_type', eventType)
+      .from("analytics_events")
+      .select("*")
+      .eq("event_type", eventType)
       .gte(
-        'timestamp',
+        "timestamp",
         new Date(Date.now() - timeframeMinutes * 60 * 1000).toISOString()
       )
-      .order('timestamp', { ascending: false });
+      .order("timestamp", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -134,8 +134,8 @@ export class AnalyticsService {
     ]);
 
     const eventsPerMinute = events.length / 5;
-    const pageViews = events.filter((e) => e.event_type === 'page_view').length;
-    const errors = events.filter((e) => e.event_type === 'error').length;
+    const pageViews = events.filter((e) => e.event_type === "page_view").length;
+    const errors = events.filter((e) => e.event_type === "error").length;
     const uniqueUsers = new Set(events.map((e) => e.user_id).filter(Boolean)).size;
 
     return {
@@ -158,12 +158,12 @@ export class AnalyticsService {
     const startTime = new Date(Date.now() - timeframeMinutes * 60 * 1000);
 
     const { data, error } = await supabase
-      .from('analytics_events')
-      .select('timestamp')
-      .eq('event_type', metricName)
-      .gte('timestamp', startTime.toISOString())
-      .lte('timestamp', endTime.toISOString())
-      .order('timestamp', { ascending: true });
+      .from("analytics_events")
+      .select("timestamp")
+      .eq("event_type", metricName)
+      .gte("timestamp", startTime.toISOString())
+      .lte("timestamp", endTime.toISOString())
+      .order("timestamp", { ascending: true });
 
     if (error) throw error;
 
@@ -186,9 +186,9 @@ export class AnalyticsService {
   // Alerts Management
   static async getAlerts(): Promise<AnalyticsAlert[]> {
     const { data, error } = await supabase
-      .from('analytics_alerts')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("analytics_alerts")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -203,7 +203,7 @@ export class AnalyticsService {
     alert: Partial<AnalyticsAlert>
   ): Promise<AnalyticsAlert> {
     const { data, error } = await supabase
-      .from('analytics_alerts')
+      .from("analytics_alerts")
       .insert(alert)
       .select()
       .single();
@@ -217,9 +217,9 @@ export class AnalyticsService {
     updates: Partial<AnalyticsAlert>
   ): Promise<AnalyticsAlert> {
     const { data, error } = await supabase
-      .from('analytics_alerts')
+      .from("analytics_alerts")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -232,19 +232,19 @@ export class AnalyticsService {
   }
 
   static async checkAlerts(): Promise<void> {
-    const { error } = await supabase.rpc('check_analytics_alerts');
+    const { error } = await supabase.rpc("check_analytics_alerts");
     if (error) throw error;
   }
 
   static async getAlertHistory(alertId?: string) {
     let query = supabase
-      .from('analytics_alert_history')
-      .select('*')
-      .order('triggered_at', { ascending: false })
+      .from("analytics_alert_history")
+      .select("*")
+      .order("triggered_at", { ascending: false })
       .limit(50);
 
     if (alertId) {
-      query = query.eq('alert_id', alertId);
+      query = query.eq("alert_id", alertId);
     }
 
     const { data, error } = await query;
@@ -255,9 +255,9 @@ export class AnalyticsService {
   // Dashboards
   static async getDashboards(): Promise<AnalyticsDashboard[]> {
     const { data, error } = await supabase
-      .from('analytics_dashboards')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("analytics_dashboards")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -265,9 +265,9 @@ export class AnalyticsService {
 
   static async getDefaultDashboard(): Promise<AnalyticsDashboard | null> {
     const { data, error } = await supabase
-      .from('analytics_dashboards')
-      .select('*')
-      .eq('is_default', true)
+      .from("analytics_dashboards")
+      .select("*")
+      .eq("is_default", true)
       .maybeSingle();
 
     if (error) throw error;
@@ -278,7 +278,7 @@ export class AnalyticsService {
     dashboard: Partial<AnalyticsDashboard>
   ): Promise<AnalyticsDashboard> {
     const { data, error } = await supabase
-      .from('analytics_dashboards')
+      .from("analytics_dashboards")
       .insert(dashboard)
       .select()
       .single();
@@ -292,10 +292,10 @@ export class AnalyticsService {
     const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000);
 
     const { data, error } = await supabase
-      .from('analytics_sessions')
-      .select('*')
-      .gte('last_activity_at', fiveMinAgo.toISOString())
-      .is('ended_at', null);
+      .from("analytics_sessions")
+      .select("*")
+      .gte("last_activity_at", fiveMinAgo.toISOString())
+      .is("ended_at", null);
 
     if (error) throw error;
     return data || [];
@@ -303,8 +303,8 @@ export class AnalyticsService {
 
   // Aggregation
   static async aggregateMetrics(): Promise<void> {
-    const { error } = await supabase.rpc('aggregate_analytics_metrics', {
-      p_granularity: 'minute',
+    const { error } = await supabase.rpc("aggregate_analytics_metrics", {
+      p_granularity: "minute",
     });
     if (error) throw error;
   }

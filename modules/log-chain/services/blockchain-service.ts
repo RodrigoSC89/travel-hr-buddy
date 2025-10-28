@@ -3,20 +3,20 @@
  * PATCH 154.0 - Log hash registry on blockchain
  */
 
-import { createClient } from '@/integrations/supabase/client';
-import { LogEvent, BlockchainRecord, BlockchainConfig, VerificationResult } from '../types';
+import { createClient } from "@/integrations/supabase/client";
+import { LogEvent, BlockchainRecord, BlockchainConfig, VerificationResult } from "../types";
 
 // Default configuration for testnet
 const DEFAULT_CONFIG: BlockchainConfig = {
-  network: 'polygon-mumbai',
-  rpcUrl: 'https://rpc-mumbai.maticvigil.com',
-  explorerUrl: 'https://mumbai.polygonscan.com'
+  network: "polygon-mumbai",
+  rpcUrl: "https://rpc-mumbai.maticvigil.com",
+  explorerUrl: "https://mumbai.polygonscan.com"
 };
 
 /**
  * Generate SHA256 hash for log event
  */
-export const generateLogHash = async (logEvent: Omit<LogEvent, 'id' | 'hash' | 'timestamp'>): Promise<string> => {
+export const generateLogHash = async (logEvent: Omit<LogEvent, "id" | "hash" | "timestamp">): Promise<string> => {
   const dataString = JSON.stringify({
     type: logEvent.type,
     severity: logEvent.severity,
@@ -27,9 +27,9 @@ export const generateLogHash = async (logEvent: Omit<LogEvent, 'id' | 'hash' | '
 
   const encoder = new TextEncoder();
   const dataBuffer = encoder.encode(dataString);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  const hash = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 
   return hash;
 };
@@ -38,7 +38,7 @@ export const generateLogHash = async (logEvent: Omit<LogEvent, 'id' | 'hash' | '
  * Register log event on blockchain
  */
 export const registerLogOnBlockchain = async (
-  logEvent: Omit<LogEvent, 'id' | 'hash' | 'timestamp'>
+  logEvent: Omit<LogEvent, "id" | "hash" | "timestamp">
 ): Promise<BlockchainRecord> => {
   const supabase = createClient();
 
@@ -54,7 +54,7 @@ export const registerLogOnBlockchain = async (
   };
 
   // Store log event
-  await supabase.from('log_events').insert([event]);
+  await supabase.from("log_events").insert([event]);
 
   // Simulate blockchain transaction
   // In real implementation, this would use ethers.js or web3.js
@@ -74,7 +74,7 @@ export const registerLogOnBlockchain = async (
   };
 
   // Store blockchain record
-  await supabase.from('blockchain_records').insert([record]);
+  await supabase.from("blockchain_records").insert([record]);
 
   return record;
 };
@@ -89,9 +89,9 @@ export const verifyLogOnBlockchain = async (
 
   // Fetch log event
   const { data: logEvent, error: logError } = await supabase
-    .from('log_events')
-    .select('*')
-    .eq('id', logEventId)
+    .from("log_events")
+    .select("*")
+    .eq("id", logEventId)
     .single();
 
   if (logError || !logEvent) {
@@ -99,16 +99,16 @@ export const verifyLogOnBlockchain = async (
       valid: false,
       logEvent: null,
       blockchainRecord: null,
-      message: 'Log event not found',
+      message: "Log event not found",
       verifiedAt: new Date().toISOString()
     };
   }
 
   // Fetch blockchain record
   const { data: bcRecord, error: bcError } = await supabase
-    .from('blockchain_records')
-    .select('*')
-    .eq('logEventId', logEventId)
+    .from("blockchain_records")
+    .select("*")
+    .eq("logEventId", logEventId)
     .single();
 
   if (bcError || !bcRecord) {
@@ -116,7 +116,7 @@ export const verifyLogOnBlockchain = async (
       valid: false,
       logEvent,
       blockchainRecord: null,
-      message: 'Blockchain record not found',
+      message: "Blockchain record not found",
       verifiedAt: new Date().toISOString()
     };
   }
@@ -132,7 +132,7 @@ export const verifyLogOnBlockchain = async (
     valid: isValid,
     logEvent,
     blockchainRecord: bcRecord,
-    message: isValid ? 'Log verified on blockchain' : 'Blockchain verification failed',
+    message: isValid ? "Log verified on blockchain" : "Blockchain verification failed",
     verifiedAt: new Date().toISOString()
   };
 };
@@ -151,13 +151,13 @@ const simulateBlockchainTransaction = async (hash: string): Promise<{
   // Generate mock transaction data
   const txHash = `0x${Array.from({ length: 64 }, () => 
     Math.floor(Math.random() * 16).toString(16)
-  ).join('')}`;
+  ).join("")}`;
 
   const blockNumber = Math.floor(Math.random() * 1000000).toString();
 
   const blockHash = `0x${Array.from({ length: 64 }, () => 
     Math.floor(Math.random() * 16).toString(16)
-  ).join('')}`;
+  ).join("")}`;
 
   return { txHash, blockNumber, blockHash };
 };
@@ -185,18 +185,18 @@ export const listBlockchainRecords = async (filters?: {
   const supabase = createClient();
 
   let query = supabase
-    .from('blockchain_records')
-    .select('*, log_events(*)')
-    .order('recordedAt', { ascending: false });
+    .from("blockchain_records")
+    .select("*, log_events(*)")
+    .order("recordedAt", { ascending: false });
 
   if (filters?.network) {
-    query = query.eq('network', filters.network);
+    query = query.eq("network", filters.network);
   }
 
   const { data, error } = await query;
 
   if (error) {
-    console.error('Error listing blockchain records:', error);
+    console.error("Error listing blockchain records:", error);
     return [];
   }
 
@@ -210,8 +210,8 @@ export const getBlockchainStats = async () => {
   const supabase = createClient();
 
   const { data, error } = await supabase
-    .from('blockchain_records')
-    .select('network, verified');
+    .from("blockchain_records")
+    .select("network, verified");
 
   if (error) {
     return { total: 0, verified: 0, byNetwork: {} };

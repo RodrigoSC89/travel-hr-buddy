@@ -8,12 +8,12 @@
  * - Offline data caching
  */
 
-import { BathymetricData, SonarReading } from './sonarEngine';
+import { BathymetricData, SonarReading } from "./sonarEngine";
 
 export interface GeoJSONFeature {
-  type: 'Feature';
+  type: "Feature";
   geometry: {
-    type: 'Point';
+    type: "Point";
     coordinates: [number, number, number]; // [lon, lat, depth]
   };
   properties: {
@@ -26,7 +26,7 @@ export interface GeoJSONFeature {
 }
 
 export interface GeoJSONCollection {
-  type: 'FeatureCollection';
+  type: "FeatureCollection";
   features: GeoJSONFeature[];
   metadata: {
     minDepth: number;
@@ -43,9 +43,9 @@ class BathymetryExporter {
    */
   exportToGeoJSON(data: BathymetricData): GeoJSONCollection {
     const features: GeoJSONFeature[] = data.readings.map(reading => ({
-      type: 'Feature',
+      type: "Feature",
       geometry: {
-        type: 'Point',
+        type: "Point",
         coordinates: [reading.longitude, reading.latitude, -reading.depth], // Negative depth for elevation
       },
       properties: {
@@ -58,7 +58,7 @@ class BathymetryExporter {
     }));
 
     return {
-      type: 'FeatureCollection',
+      type: "FeatureCollection",
       features,
       metadata: {
         minDepth: data.minDepth,
@@ -73,10 +73,10 @@ class BathymetryExporter {
   /**
    * Download GeoJSON file
    */
-  downloadGeoJSON(data: BathymetricData, filename: string = 'bathymetry.geojson'): void {
+  downloadGeoJSON(data: BathymetricData, filename: string = "bathymetry.geojson"): void {
     const geoJSON = this.exportToGeoJSON(data);
     const jsonString = JSON.stringify(geoJSON, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
+    const blob = new Blob([jsonString], { type: "application/json" });
     this.downloadBlob(blob, filename);
   }
 
@@ -92,7 +92,7 @@ class BathymetryExporter {
     return new Promise((resolve, reject) => {
       try {
         // Create canvas
-        const canvas = document.createElement('canvas');
+        const canvas = document.createElement("canvas");
         const gridSize = Math.sqrt(data.readings.length);
         
         // Set canvas size
@@ -100,13 +100,13 @@ class BathymetryExporter {
         canvas.width = width + colorbarWidth;
         canvas.height = height;
         
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext("2d");
         if (!ctx) {
-          throw new Error('Failed to get canvas context');
+          throw new Error("Failed to get canvas context");
         }
 
         // Fill background
-        ctx.fillStyle = '#000000';
+        ctx.fillStyle = "#000000";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Calculate cell size
@@ -145,9 +145,9 @@ class BathymetryExporter {
           if (blob) {
             resolve(blob);
           } else {
-            reject(new Error('Failed to create PNG blob'));
+            reject(new Error("Failed to create PNG blob"));
           }
-        }, 'image/png');
+        }, "image/png");
       } catch (error) {
         reject(error);
       }
@@ -159,7 +159,7 @@ class BathymetryExporter {
    */
   async downloadPNG(
     data: BathymetricData,
-    filename: string = 'bathymetry.png',
+    filename: string = "bathymetry.png",
     width: number = 800,
     height: number = 800
   ): Promise<void> {
@@ -237,9 +237,9 @@ class BathymetryExporter {
     }
 
     // Draw labels
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = '12px monospace';
-    ctx.textAlign = 'left';
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "12px monospace";
+    ctx.textAlign = "left";
 
     const labels = [
       { text: `${minDepth.toFixed(0)}m`, y: y + height - 5 },
@@ -255,8 +255,8 @@ class BathymetryExporter {
     ctx.save();
     ctx.translate(x + 5, y + height / 2);
     ctx.rotate(-Math.PI / 2);
-    ctx.textAlign = 'center';
-    ctx.fillText('Depth', 0, 0);
+    ctx.textAlign = "center";
+    ctx.fillText("Depth", 0, 0);
     ctx.restore();
   }
 
@@ -269,19 +269,19 @@ class BathymetryExporter {
     width: number,
     height: number
   ): void {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
     ctx.fillRect(0, 0, width, 30);
     ctx.fillRect(0, height - 30, width, 30);
 
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 14px monospace';
-    ctx.textAlign = 'left';
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "bold 14px monospace";
+    ctx.textAlign = "left";
     
     // Title
-    ctx.fillText('Bathymetric Map', 10, 20);
+    ctx.fillText("Bathymetric Map", 10, 20);
     
     // Bottom metadata
-    ctx.font = '11px monospace';
+    ctx.font = "11px monospace";
     const avgDepth = `Avg: ${data.avgDepth.toFixed(1)}m`;
     const range = `Range: ${data.minDepth.toFixed(0)}-${data.maxDepth.toFixed(0)}m`;
     const readings = `${data.readings.length} readings`;
@@ -289,7 +289,7 @@ class BathymetryExporter {
     
     ctx.fillText(`${avgDepth} | ${range} | ${readings}`, 10, height - 10);
     
-    ctx.textAlign = 'right';
+    ctx.textAlign = "right";
     ctx.fillText(timestamp, width - 10, height - 10);
   }
 
@@ -298,7 +298,7 @@ class BathymetryExporter {
    */
   private downloadBlob(blob: Blob, filename: string): void {
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = filename;
     document.body.appendChild(link);
@@ -310,23 +310,23 @@ class BathymetryExporter {
   /**
    * Save bathymetric data to localStorage (offline support)
    */
-  saveToCache(data: BathymetricData, key: string = 'bathymetry-cache'): void {
+  saveToCache(data: BathymetricData, key: string = "bathymetry-cache"): void {
     try {
       const cacheData = {
         data,
         timestamp: new Date().toISOString(),
-        version: '183.0',
+        version: "183.0",
       };
       localStorage.setItem(key, JSON.stringify(cacheData));
     } catch (error) {
-      console.error('Failed to save bathymetry data to cache:', error);
+      console.error("Failed to save bathymetry data to cache:", error);
     }
   }
 
   /**
    * Load bathymetric data from localStorage
    */
-  loadFromCache(key: string = 'bathymetry-cache'): BathymetricData | null {
+  loadFromCache(key: string = "bathymetry-cache"): BathymetricData | null {
     try {
       const cached = localStorage.getItem(key);
       if (!cached) return null;
@@ -341,7 +341,7 @@ class BathymetryExporter {
 
       return cacheData.data;
     } catch (error) {
-      console.error('Failed to load bathymetry data from cache:', error);
+      console.error("Failed to load bathymetry data from cache:", error);
       return null;
     }
   }
@@ -349,21 +349,21 @@ class BathymetryExporter {
   /**
    * Clear cached data
    */
-  clearCache(key: string = 'bathymetry-cache'): void {
+  clearCache(key: string = "bathymetry-cache"): void {
     localStorage.removeItem(key);
   }
 
   /**
    * Check if cache exists
    */
-  hasCachedData(key: string = 'bathymetry-cache'): boolean {
+  hasCachedData(key: string = "bathymetry-cache"): boolean {
     return localStorage.getItem(key) !== null;
   }
 
   /**
    * Get cache metadata
    */
-  getCacheMetadata(key: string = 'bathymetry-cache'): {
+  getCacheMetadata(key: string = "bathymetry-cache"): {
     timestamp: string;
     version: string;
     size: number;

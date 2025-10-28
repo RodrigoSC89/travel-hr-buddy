@@ -38,7 +38,7 @@ class EventTrackingService {
         this.organizationId = user.id;
       }
     } catch (error) {
-      console.error('Error initializing organization:', error);
+      console.error("Error initializing organization:", error);
     }
   }
 
@@ -54,7 +54,7 @@ class EventTrackingService {
         organization_id: this.organizationId,
         session_id: this.sessionId,
         event_name: options.eventName,
-        event_category: options.eventCategory || 'user_interaction',
+        event_category: options.eventCategory || "user_interaction",
         properties: options.properties || {},
         page_url: options.pageUrl || window.location.href,
         referrer: options.referrer || document.referrer,
@@ -65,14 +65,14 @@ class EventTrackingService {
       };
 
       const { error } = await supabase
-        .from('analytics_events')
+        .from("analytics_events")
         .insert([eventData]);
 
       if (error) {
-        console.error('Error tracking event:', error);
+        console.error("Error tracking event:", error);
       }
     } catch (error) {
-      console.error('Error in trackEvent:', error);
+      console.error("Error in trackEvent:", error);
     }
   }
 
@@ -81,8 +81,8 @@ class EventTrackingService {
    */
   async trackPageView(pageName?: string): Promise<void> {
     await this.trackEvent({
-      eventName: 'page_view',
-      eventCategory: 'navigation',
+      eventName: "page_view",
+      eventCategory: "navigation",
       properties: {
         page_name: pageName || document.title,
         path: window.location.pathname
@@ -95,8 +95,8 @@ class EventTrackingService {
    */
   async trackClick(buttonName: string, properties?: Record<string, any>): Promise<void> {
     await this.trackEvent({
-      eventName: 'button_click',
-      eventCategory: 'interaction',
+      eventName: "button_click",
+      eventCategory: "interaction",
       properties: {
         button_name: buttonName,
         ...properties
@@ -109,8 +109,8 @@ class EventTrackingService {
    */
   async trackFormSubmit(formName: string, properties?: Record<string, any>): Promise<void> {
     await this.trackEvent({
-      eventName: 'form_submit',
-      eventCategory: 'interaction',
+      eventName: "form_submit",
+      eventCategory: "interaction",
       properties: {
         form_name: formName,
         ...properties
@@ -123,8 +123,8 @@ class EventTrackingService {
    */
   async trackSearch(query: string, resultsCount?: number): Promise<void> {
     await this.trackEvent({
-      eventName: 'search',
-      eventCategory: 'interaction',
+      eventName: "search",
+      eventCategory: "interaction",
       properties: {
         query,
         results_count: resultsCount
@@ -137,8 +137,8 @@ class EventTrackingService {
    */
   async trackFeatureUse(featureName: string, properties?: Record<string, any>): Promise<void> {
     await this.trackEvent({
-      eventName: 'feature_use',
-      eventCategory: 'engagement',
+      eventName: "feature_use",
+      eventCategory: "engagement",
       properties: {
         feature_name: featureName,
         ...properties
@@ -151,8 +151,8 @@ class EventTrackingService {
    */
   async trackError(errorMessage: string, errorStack?: string): Promise<void> {
     await this.trackEvent({
-      eventName: 'error',
-      eventCategory: 'system',
+      eventName: "error",
+      eventCategory: "system",
       properties: {
         error_message: errorMessage,
         error_stack: errorStack
@@ -166,12 +166,12 @@ class EventTrackingService {
   private getDeviceType(): string {
     const ua = navigator.userAgent;
     if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-      return 'tablet';
+      return "tablet";
     }
     if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
-      return 'mobile';
+      return "mobile";
     }
-    return 'desktop';
+    return "desktop";
   }
 
   /**
@@ -179,12 +179,12 @@ class EventTrackingService {
    */
   private getBrowser(): string {
     const ua = navigator.userAgent;
-    if (ua.includes('Firefox')) return 'Firefox';
-    if (ua.includes('Chrome')) return 'Chrome';
-    if (ua.includes('Safari')) return 'Safari';
-    if (ua.includes('Edge')) return 'Edge';
-    if (ua.includes('Opera')) return 'Opera';
-    return 'Unknown';
+    if (ua.includes("Firefox")) return "Firefox";
+    if (ua.includes("Chrome")) return "Chrome";
+    if (ua.includes("Safari")) return "Safari";
+    if (ua.includes("Edge")) return "Edge";
+    if (ua.includes("Opera")) return "Opera";
+    return "Unknown";
   }
 
   /**
@@ -192,12 +192,12 @@ class EventTrackingService {
    */
   private getOS(): string {
     const ua = navigator.userAgent;
-    if (ua.includes('Win')) return 'Windows';
-    if (ua.includes('Mac')) return 'MacOS';
-    if (ua.includes('Linux')) return 'Linux';
-    if (ua.includes('Android')) return 'Android';
-    if (ua.includes('iOS')) return 'iOS';
-    return 'Unknown';
+    if (ua.includes("Win")) return "Windows";
+    if (ua.includes("Mac")) return "MacOS";
+    if (ua.includes("Linux")) return "Linux";
+    if (ua.includes("Android")) return "Android";
+    if (ua.includes("iOS")) return "iOS";
+    return "Unknown";
   }
 }
 

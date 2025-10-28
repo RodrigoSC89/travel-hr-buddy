@@ -85,31 +85,31 @@ const MissionControl: React.FC = () => {
 
   const getStatusColor = (status: ModuleStatus["status"]) => {
     switch (status) {
-      case "operational":
-        return "text-green-500 bg-green-500/10";
-      case "warning":
-        return "text-yellow-500 bg-yellow-500/10";
-      case "critical":
-        return "text-red-500 bg-red-500/10";
-      case "offline":
-        return "text-gray-500 bg-gray-500/10";
-      default:
-        return "text-gray-500 bg-gray-500/10";
+    case "operational":
+      return "text-green-500 bg-green-500/10";
+    case "warning":
+      return "text-yellow-500 bg-yellow-500/10";
+    case "critical":
+      return "text-red-500 bg-red-500/10";
+    case "offline":
+      return "text-gray-500 bg-gray-500/10";
+    default:
+      return "text-gray-500 bg-gray-500/10";
     }
   };
 
   const getStatusIcon = (moduleId: string) => {
     switch (moduleId) {
-      case "fleet":
-        return <Ship className="w-5 h-5" />;
-      case "emergency":
-        return <AlertTriangle className="w-5 h-5" />;
-      case "satellite":
-        return <Satellite className="w-5 h-5" />;
-      case "weather":
-        return <Cloud className="w-5 h-5" />;
-      default:
-        return <Activity className="w-5 h-5" />;
+    case "fleet":
+      return <Ship className="w-5 h-5" />;
+    case "emergency":
+      return <AlertTriangle className="w-5 h-5" />;
+    case "satellite":
+      return <Satellite className="w-5 h-5" />;
+    case "weather":
+      return <Cloud className="w-5 h-5" />;
+    default:
+      return <Activity className="w-5 h-5" />;
     }
   };
 
@@ -163,9 +163,9 @@ const MissionControl: React.FC = () => {
                   <div className="w-full bg-zinc-700 rounded-full h-2">
                     <div 
                       className={`h-2 rounded-full transition-all ${
-                        module.health >= 90 ? 'bg-green-500' : 
-                        module.health >= 70 ? 'bg-yellow-500' : 
-                        'bg-red-500'
+                        module.health >= 90 ? "bg-green-500" : 
+                          module.health >= 70 ? "bg-yellow-500" : 
+                            "bg-red-500"
                       }`}
                       style={{ width: `${module.health}%` }}
                     />
@@ -173,7 +173,7 @@ const MissionControl: React.FC = () => {
                   {module.alerts > 0 && (
                     <div className="flex items-center gap-2 text-xs text-yellow-400 mt-2">
                       <AlertTriangle className="w-3 h-3" />
-                      <span>{module.alerts} active alert{module.alerts > 1 ? 's' : ''}</span>
+                      <span>{module.alerts} active alert{module.alerts > 1 ? "s" : ""}</span>
                     </div>
                   )}
                 </div>

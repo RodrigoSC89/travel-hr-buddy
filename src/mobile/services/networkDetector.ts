@@ -3,7 +3,7 @@
  * Detects network status and quality
  */
 
-import { NetworkStatus } from '../types';
+import { NetworkStatus } from "../types";
 
 type NetworkChangeCallback = (status: NetworkStatus) => void;
 
@@ -20,7 +20,7 @@ class NetworkDetector {
    * Get current network status
    */
   private getCurrentStatus(): NetworkStatus {
-    if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+    if (typeof window === "undefined" || typeof navigator === "undefined") {
       return { isOnline: true };
     }
 
@@ -40,11 +40,11 @@ class NetworkDetector {
    * Initialize event listeners
    */
   private initializeListeners(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // Listen for online/offline events
-    window.addEventListener('online', () => this.handleStatusChange());
-    window.addEventListener('offline', () => this.handleStatusChange());
+    window.addEventListener("online", () => this.handleStatusChange());
+    window.addEventListener("offline", () => this.handleStatusChange());
 
     // Listen for connection quality changes
     const connection = (navigator as any).connection || 
@@ -52,7 +52,7 @@ class NetworkDetector {
                       (navigator as any).webkitConnection;
 
     if (connection) {
-      connection.addEventListener('change', () => this.handleStatusChange());
+      connection.addEventListener("change", () => this.handleStatusChange());
     }
   }
 
@@ -113,7 +113,7 @@ class NetworkDetector {
       try {
         callback(status);
       } catch (error) {
-        console.error('Error in network status callback:', error);
+        console.error("Error in network status callback:", error);
       }
     });
   }
@@ -136,7 +136,7 @@ class NetworkDetector {
     // Consider 3g and better as good
     if (!effectiveType) return true; // Assume good if we can't detect
     
-    return ['3g', '4g'].includes(effectiveType);
+    return ["3g", "4g"].includes(effectiveType);
   }
 
   /**

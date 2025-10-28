@@ -3,8 +3,8 @@
  * Provides real-time network connectivity status
  */
 
-import { useState, useEffect } from 'react';
-import { syncEngine } from '@/lib/syncEngine';
+import { useState, useEffect } from "react";
+import { syncEngine } from "@/lib/syncEngine";
 
 export interface NetworkStatus {
   isOnline: boolean;
@@ -14,7 +14,7 @@ export interface NetworkStatus {
 
 export const useNetworkStatus = () => {
   const [status, setStatus] = useState<NetworkStatus>({
-    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+    isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
     wasOffline: false,
     pendingChanges: 0
   });
@@ -30,7 +30,7 @@ export const useNetworkStatus = () => {
 
     // Handle online event
     const handleOnline = async () => {
-      console.log('Network: Online');
+      console.log("Network: Online");
       setStatus(prev => ({
         isOnline: true,
         wasOffline: prev.wasOffline || !prev.isOnline,
@@ -43,7 +43,7 @@ export const useNetworkStatus = () => {
 
     // Handle offline event
     const handleOffline = () => {
-      console.log('Network: Offline');
+      console.log("Network: Offline");
       setStatus(prev => ({
         ...prev,
         isOnline: false,
@@ -52,8 +52,8 @@ export const useNetworkStatus = () => {
     };
 
     // Add event listeners
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     // Listen for sync progress
     const unsubscribe = syncEngine.onSyncProgress((stats) => {
@@ -78,8 +78,8 @@ export const useNetworkStatus = () => {
 
     // Cleanup
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
       unsubscribe();
       clearInterval(interval);
     };

@@ -6,7 +6,7 @@ export interface Agent {
   agent_id: string;
   name: string;
   capabilities: string[];
-  status: 'idle' | 'active' | 'offline' | 'error';
+  status: "idle" | "active" | "offline" | "error";
   last_heartbeat?: string;
   metadata?: Record<string, any>;
 }
@@ -27,18 +27,18 @@ export interface TaskResult {
 }
 
 // Register a new agent
-export async function registerAgent(agent: Omit<Agent, 'id' | 'created_at' | 'updated_at'>): Promise<string> {
+export async function registerAgent(agent: Omit<Agent, "id" | "created_at" | "updated_at">): Promise<string> {
   const { data, error } = await supabase
-    .from('agent_registry')
+    .from("agent_registry")
     .insert({
       agent_id: agent.agent_id,
       name: agent.name,
       capabilities: agent.capabilities,
-      status: agent.status || 'idle',
+      status: agent.status || "idle",
       last_heartbeat: new Date().toISOString(),
       metadata: agent.metadata || {}
     })
-    .select('agent_id')
+    .select("agent_id")
     .single();
 
   if (error) throw error;
@@ -48,12 +48,12 @@ export async function registerAgent(agent: Omit<Agent, 'id' | 'created_at' | 'up
 // List all agents
 export async function listAgents(status?: string) {
   let query = supabase
-    .from('agent_registry')
-    .select('*')
-    .order('created_at', { ascending: false });
+    .from("agent_registry")
+    .select("*")
+    .order("created_at", { ascending: false });
 
   if (status) {
-    query = query.eq('status', status);
+    query = query.eq("status", status);
   }
 
   const { data, error } = await query;
@@ -73,9 +73,9 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
     try {
       // Update agent status
       await supabase
-        .from('agent_registry')
-        .update({ status: 'active', last_heartbeat: new Date().toISOString() })
-        .eq('agent_id', agentId);
+        .from("agent_registry")
+        .update({ status: "active", last_heartbeat: new Date().toISOString() })
+        .eq("agent_id", agentId);
 
       // Simulate task execution
       await new Promise(resolve => setTimeout(resolve, Math.random() * 1000));
@@ -87,14 +87,14 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
 
       // Update agent status back to idle
       await supabase
-        .from('agent_registry')
-        .update({ status: 'idle' })
-        .eq('agent_id', agentId);
+        .from("agent_registry")
+        .update({ status: "idle" })
+        .eq("agent_id", agentId);
 
       return {
         agent_id: agentId,
         task_id: task.task_id,
-        result: { status: 'completed', data: task.payload },
+        result: { status: "completed", data: task.payload },
         duration_ms: duration,
         success: true
       };
@@ -102,9 +102,9 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
       await updateAgentMetrics(agentId, false, Date.now() - taskStartTime);
       
       await supabase
-        .from('agent_registry')
-        .update({ status: 'error' })
-        .eq('agent_id', agentId);
+        .from("agent_registry")
+        .update({ status: "error" })
+        .eq("agent_id", agentId);
 
       return {
         agent_id: agentId,
@@ -123,9 +123,9 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
 // Update agent metrics
 async function updateAgentMetrics(agentId: string, success: boolean, durationMs: number) {
   const { data: existing } = await supabase
-    .from('agent_swarm_metrics')
-    .select('*')
-    .eq('agent_id', agentId)
+    .from("agent_swarm_metrics")
+    .select("*")
+    .eq("agent_id", agentId)
     .single();
 
   if (existing) {
@@ -137,7 +137,7 @@ async function updateAgentMetrics(agentId: string, success: boolean, durationMs:
     );
 
     await supabase
-      .from('agent_swarm_metrics')
+      .from("agent_swarm_metrics")
       .update({
         task_count: newTaskCount,
         success_count: newSuccessCount,
@@ -145,9 +145,9 @@ async function updateAgentMetrics(agentId: string, success: boolean, durationMs:
         avg_response_time_ms: newAvgResponseTime,
         last_task_at: new Date().toISOString()
       })
-      .eq('agent_id', agentId);
+      .eq("agent_id", agentId);
   } else {
-    await supabase.from('agent_swarm_metrics').insert({
+    await supabase.from("agent_swarm_metrics").insert({
       agent_id: agentId,
       task_count: 1,
       success_count: success ? 1 : 0,
@@ -160,10 +160,10 @@ async function updateAgentMetrics(agentId: string, success: boolean, durationMs:
 
 // Get agent metrics
 export async function getAgentMetrics(agentId?: string) {
-  let query = supabase.from('agent_swarm_metrics').select('*');
+  let query = supabase.from("agent_swarm_metrics").select("*");
   
   if (agentId) {
-    query = query.eq('agent_id', agentId);
+    query = query.eq("agent_id", agentId);
   }
 
   const { data, error } = await query;

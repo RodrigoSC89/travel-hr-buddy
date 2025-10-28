@@ -1,8 +1,8 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Box, Sphere, Cylinder, Cone } from '@react-three/drei';
-import * as THREE from 'three';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useRef, useState, useEffect } from "react";
+import { useFrame } from "@react-three/fiber";
+import { Box, Sphere, Cylinder, Cone } from "@react-three/drei";
+import * as THREE from "three";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AIAction {
   id: string;
@@ -82,7 +82,7 @@ function DroneModel({
       
       // Rotate propellers
       droneRef.current.children.forEach((child, index) => {
-        if (child.name === 'propeller') {
+        if (child.name === "propeller") {
           child.rotation.y += isActive ? 0.5 : 0.1;
         }
       });
@@ -200,27 +200,27 @@ export function Scenario3D({ onAIAction, autoSimulate = false }: Scenario3DProps
   const simulateAIAction = async () => {
     const actions = [
       {
-        action: 'scan_environment',
-        target: 'drone_1',
-        result: 'Environment scanned successfully',
+        action: "scan_environment",
+        target: "drone_1",
+        result: "Environment scanned successfully",
         confidence: 0.95,
       },
       {
-        action: 'analyze_vessel_status',
-        target: 'ship',
-        result: 'All systems normal',
+        action: "analyze_vessel_status",
+        target: "ship",
+        result: "All systems normal",
         confidence: 0.92,
       },
       {
-        action: 'monitor_crew_activity',
-        target: 'bridge',
-        result: 'Crew activity within normal parameters',
+        action: "monitor_crew_activity",
+        target: "bridge",
+        result: "Crew activity within normal parameters",
         confidence: 0.88,
       },
       {
-        action: 'check_navigation',
-        target: 'navigation_system',
-        result: 'Course optimal',
+        action: "check_navigation",
+        target: "navigation_system",
+        result: "Course optimal",
         confidence: 0.90,
       },
     ];
@@ -237,8 +237,8 @@ export function Scenario3D({ onAIAction, autoSimulate = false }: Scenario3DProps
     setAiLogs(prev => [aiAction, ...prev.slice(0, 9)]);
     
     // Activate corresponding drone
-    if (randomAction.target.includes('drone')) {
-      setActiveDrone(parseInt(randomAction.target.split('_')[1]));
+    if (randomAction.target.includes("drone")) {
+      setActiveDrone(parseInt(randomAction.target.split("_")[1]));
       setTimeout(() => setActiveDrone(null), 2000);
     }
 
@@ -253,9 +253,9 @@ export function Scenario3D({ onAIAction, autoSimulate = false }: Scenario3DProps
 
   const logAIAction = async (action: AIAction) => {
     try {
-      await (supabase as any).from('ia_performance_log').insert({
-        module_name: 'scenario_simulator',
-        operation_type: 'simulated_action',
+      await (supabase as any).from("ia_performance_log").insert({
+        module_name: "scenario_simulator",
+        operation_type: "simulated_action",
         precision_score: action.confidence,
         recall_score: action.confidence,
         response_time_ms: Math.random() * 100 + 50,
@@ -267,7 +267,7 @@ export function Scenario3D({ onAIAction, autoSimulate = false }: Scenario3DProps
         },
       });
     } catch (error) {
-      console.error('Failed to log AI action:', error);
+      console.error("Failed to log AI action:", error);
     }
   };
 

@@ -3,9 +3,9 @@
  * Handles synchronization of local changes when connection is restored
  */
 
-import { localSync, type OfflineRecord } from './localSync';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { localSync, type OfflineRecord } from "./localSync";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export interface SyncStats {
   total: number;
@@ -23,7 +23,7 @@ class SyncEngine {
    */
   async pushLocalChanges(): Promise<SyncStats> {
     if (this.isSyncing) {
-      console.log('Sync already in progress');
+      console.log("Sync already in progress");
       return { total: 0, synced: 0, failed: 0, pending: 0 };
     }
 
@@ -74,8 +74,8 @@ class SyncEngine {
 
       return stats;
     } catch (error) {
-      console.error('Error during sync:', error);
-      toast.error('Sync failed. Will retry later.');
+      console.error("Error during sync:", error);
+      toast.error("Sync failed. Will retry later.");
       return stats;
     } finally {
       this.isSyncing = false;
@@ -92,30 +92,30 @@ class SyncEngine {
     const supabaseAny = supabase as any;
 
     switch (action) {
-      case 'create':
-        const { error: createError } = await supabaseAny.from(table).insert(data);
-        if (createError) throw createError;
-        break;
+    case "create":
+      const { error: createError } = await supabaseAny.from(table).insert(data);
+      if (createError) throw createError;
+      break;
 
-      case 'update':
-        const { id, ...updateData } = data;
-        const { error: updateError } = await supabaseAny
-          .from(table)
-          .update(updateData)
-          .eq('id', id);
-        if (updateError) throw updateError;
-        break;
+    case "update":
+      const { id, ...updateData } = data;
+      const { error: updateError } = await supabaseAny
+        .from(table)
+        .update(updateData)
+        .eq("id", id);
+      if (updateError) throw updateError;
+      break;
 
-      case 'delete':
-        const { error: deleteError } = await supabaseAny
-          .from(table)
-          .delete()
-          .eq('id', data.id);
-        if (deleteError) throw deleteError;
-        break;
+    case "delete":
+      const { error: deleteError } = await supabaseAny
+        .from(table)
+        .delete()
+        .eq("id", data.id);
+      if (deleteError) throw deleteError;
+      break;
 
-      default:
-        throw new Error(`Unknown action: ${action}`);
+    default:
+      throw new Error(`Unknown action: ${action}`);
     }
   }
 
@@ -157,7 +157,7 @@ class SyncEngine {
   async saveOffline(
     table: string,
     data: any,
-    action: 'create' | 'update' | 'delete' = 'create'
+    action: "create" | "update" | "delete" = "create"
   ): Promise<void> {
     // Try to save online first
     if (navigator.onLine) {
@@ -165,13 +165,13 @@ class SyncEngine {
         await this.syncRecord({ table, action, data, timestamp: Date.now(), synced: false });
         return;
       } catch (error) {
-        console.log('Online save failed, saving locally:', error);
+        console.log("Online save failed, saving locally:", error);
       }
     }
 
     // Save locally if offline or online save failed
     await localSync.saveLocally(data, table, action);
-    toast.info('Changes saved offline. Will sync when online.');
+    toast.info("Changes saved offline. Will sync when online.");
   }
 }
 
@@ -181,9 +181,9 @@ export const syncEngine = new SyncEngine();
 /**
  * Auto-sync when connection is restored
  */
-if (typeof window !== 'undefined') {
-  window.addEventListener('online', async () => {
-    console.log('Connection restored, starting sync...');
+if (typeof window !== "undefined") {
+  window.addEventListener("online", async () => {
+    console.log("Connection restored, starting sync...");
     const hasPending = await syncEngine.hasPendingChanges();
     if (hasPending) {
       await syncEngine.pushLocalChanges();
@@ -194,12 +194,12 @@ if (typeof window !== 'undefined') {
 /**
  * Periodic sync every 5 minutes if online
  */
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   setInterval(async () => {
     if (navigator.onLine) {
       const hasPending = await syncEngine.hasPendingChanges();
       if (hasPending) {
-        console.log('Periodic sync check: syncing pending changes...');
+        console.log("Periodic sync check: syncing pending changes...");
         await syncEngine.pushLocalChanges();
       }
     }

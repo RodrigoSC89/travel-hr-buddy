@@ -21,7 +21,7 @@ export interface SurveyArea {
   };
   minDepth: number; // meters
   maxDepth: number;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
 }
 
 export interface EnvironmentalParams {
@@ -42,15 +42,15 @@ export interface AutoMissionPlan {
     lat: number;
     lon: number;
     depth: number;
-    action: 'survey' | 'sample' | 'scan' | 'observe' | 'transit';
+    action: "survey" | "sample" | "scan" | "observe" | "transit";
     duration: number; // seconds
     order: number;
   }>;
   environmental: EnvironmentalParams;
   estimatedDuration: number; // minutes
   estimatedDistance: number; // nautical miles
-  riskLevel: 'low' | 'medium' | 'high';
-  status: 'draft' | 'approved' | 'active' | 'completed' | 'aborted';
+  riskLevel: "low" | "medium" | "high";
+  status: "draft" | "approved" | "active" | "completed" | "aborted";
   createdAt: string;
   updatedAt?: string;
 }
@@ -58,7 +58,7 @@ export interface AutoMissionPlan {
 export interface MissionFeedback {
   missionId: string;
   timestamp: string;
-  type: 'progress' | 'warning' | 'error' | 'completion' | 'abort';
+  type: "progress" | "warning" | "error" | "completion" | "abort";
   waypoint?: string;
   progress: number; // 0-100
   message: string;
@@ -77,7 +77,7 @@ class MissionPlanner {
     area: SurveyArea,
     objectives: string[],
     environmental: EnvironmentalParams,
-    scanPattern: 'grid' | 'spiral' | 'random' = 'grid'
+    scanPattern: "grid" | "spiral" | "random" = "grid"
   ): AutoMissionPlan {
     const waypoints = this.generateWaypoints(area, scanPattern);
     const estimatedDuration = this.estimateDuration(waypoints, environmental);
@@ -94,7 +94,7 @@ class MissionPlanner {
       estimatedDuration,
       estimatedDistance,
       riskLevel,
-      status: 'draft',
+      status: "draft",
       createdAt: new Date().toISOString(),
     };
 
@@ -107,20 +107,20 @@ class MissionPlanner {
    */
   private generateWaypoints(
     area: SurveyArea,
-    pattern: 'grid' | 'spiral' | 'random'
-  ): AutoMissionPlan['waypoints'] {
-    const waypoints: AutoMissionPlan['waypoints'] = [];
+    pattern: "grid" | "spiral" | "random"
+  ): AutoMissionPlan["waypoints"] {
+    const waypoints: AutoMissionPlan["waypoints"] = [];
     
     switch (pattern) {
-      case 'grid':
-        waypoints.push(...this.generateGridPattern(area));
-        break;
-      case 'spiral':
-        waypoints.push(...this.generateSpiralPattern(area));
-        break;
-      case 'random':
-        waypoints.push(...this.generateRandomPattern(area));
-        break;
+    case "grid":
+      waypoints.push(...this.generateGridPattern(area));
+      break;
+    case "spiral":
+      waypoints.push(...this.generateSpiralPattern(area));
+      break;
+    case "random":
+      waypoints.push(...this.generateRandomPattern(area));
+      break;
     }
 
     return waypoints;
@@ -129,8 +129,8 @@ class MissionPlanner {
   /**
    * Generate grid pattern waypoints
    */
-  private generateGridPattern(area: SurveyArea): AutoMissionPlan['waypoints'] {
-    const waypoints: AutoMissionPlan['waypoints'] = [];
+  private generateGridPattern(area: SurveyArea): AutoMissionPlan["waypoints"] {
+    const waypoints: AutoMissionPlan["waypoints"] = [];
     const gridSize = 5; // 5x5 grid
     
     const latStep = (area.bounds.north - area.bounds.south) / gridSize;
@@ -155,7 +155,7 @@ class MissionPlanner {
           lat,
           lon,
           depth,
-          action: j === 0 || j === gridSize ? 'transit' : 'survey',
+          action: j === 0 || j === gridSize ? "transit" : "survey",
           duration: j === 0 || j === gridSize ? 10 : 30,
           order: order++,
         });
@@ -168,8 +168,8 @@ class MissionPlanner {
   /**
    * Generate spiral pattern waypoints
    */
-  private generateSpiralPattern(area: SurveyArea): AutoMissionPlan['waypoints'] {
-    const waypoints: AutoMissionPlan['waypoints'] = [];
+  private generateSpiralPattern(area: SurveyArea): AutoMissionPlan["waypoints"] {
+    const waypoints: AutoMissionPlan["waypoints"] = [];
     const centerLat = (area.bounds.north + area.bounds.south) / 2;
     const centerLon = (area.bounds.east + area.bounds.west) / 2;
     const maxRadius = Math.max(
@@ -193,7 +193,7 @@ class MissionPlanner {
         lat,
         lon,
         depth,
-        action: i < 3 ? 'transit' : 'survey',
+        action: i < 3 ? "transit" : "survey",
         duration: i < 3 ? 10 : 30,
         order: i,
       });
@@ -205,8 +205,8 @@ class MissionPlanner {
   /**
    * Generate random pattern waypoints
    */
-  private generateRandomPattern(area: SurveyArea): AutoMissionPlan['waypoints'] {
-    const waypoints: AutoMissionPlan['waypoints'] = [];
+  private generateRandomPattern(area: SurveyArea): AutoMissionPlan["waypoints"] {
+    const waypoints: AutoMissionPlan["waypoints"] = [];
     const numPoints = 20;
     
     for (let i = 0; i < numPoints; i++) {
@@ -219,7 +219,7 @@ class MissionPlanner {
         lat,
         lon,
         depth,
-        action: 'survey',
+        action: "survey",
         duration: 30,
         order: i,
       });
@@ -232,7 +232,7 @@ class MissionPlanner {
    * Estimate mission duration
    */
   private estimateDuration(
-    waypoints: AutoMissionPlan['waypoints'],
+    waypoints: AutoMissionPlan["waypoints"],
     environmental: EnvironmentalParams
   ): number {
     let totalTime = 0;
@@ -260,7 +260,7 @@ class MissionPlanner {
   /**
    * Estimate total distance
    */
-  private estimateDistance(waypoints: AutoMissionPlan['waypoints']): number {
+  private estimateDistance(waypoints: AutoMissionPlan["waypoints"]): number {
     let totalDistance = 0;
     
     for (let i = 0; i < waypoints.length - 1; i++) {
@@ -299,7 +299,7 @@ class MissionPlanner {
   /**
    * Assess mission risk
    */
-  private assessRisk(area: SurveyArea, environmental: EnvironmentalParams): 'low' | 'medium' | 'high' {
+  private assessRisk(area: SurveyArea, environmental: EnvironmentalParams): "low" | "medium" | "high" {
     let riskScore = 0;
     
     // Depth risk
@@ -318,9 +318,9 @@ class MissionPlanner {
     if (environmental.minVisibility < 5) riskScore += 2;
     else if (environmental.minVisibility < 10) riskScore += 1;
     
-    if (riskScore >= 5) return 'high';
-    if (riskScore >= 2) return 'medium';
-    return 'low';
+    if (riskScore >= 5) return "high";
+    if (riskScore >= 2) return "medium";
+    return "low";
   }
 
   /**
@@ -328,16 +328,16 @@ class MissionPlanner {
    */
   approveMission(missionId: string): boolean {
     const mission = this.activeMissions.get(missionId);
-    if (!mission || mission.status !== 'draft') return false;
+    if (!mission || mission.status !== "draft") return false;
     
-    mission.status = 'approved';
+    mission.status = "approved";
     mission.updatedAt = new Date().toISOString();
     
     this.addFeedback({
       missionId,
-      type: 'progress',
+      type: "progress",
       progress: 0,
-      message: 'Mission approved and ready for execution',
+      message: "Mission approved and ready for execution",
     });
     
     return true;
@@ -348,16 +348,16 @@ class MissionPlanner {
    */
   startMission(missionId: string): boolean {
     const mission = this.activeMissions.get(missionId);
-    if (!mission || mission.status !== 'approved') return false;
+    if (!mission || mission.status !== "approved") return false;
     
-    mission.status = 'active';
+    mission.status = "active";
     mission.updatedAt = new Date().toISOString();
     
     this.addFeedback({
       missionId,
-      type: 'progress',
+      type: "progress",
       progress: 0,
-      message: 'Mission started - executing autonomous operations',
+      message: "Mission started - executing autonomous operations",
     });
     
     return true;
@@ -368,11 +368,11 @@ class MissionPlanner {
    */
   updateProgress(missionId: string, waypointId: string, progress: number): void {
     const mission = this.activeMissions.get(missionId);
-    if (!mission || mission.status !== 'active') return;
+    if (!mission || mission.status !== "active") return;
     
     this.addFeedback({
       missionId,
-      type: 'progress',
+      type: "progress",
       waypoint: waypointId,
       progress,
       message: `Waypoint ${waypointId} - ${progress}% complete`,
@@ -384,16 +384,16 @@ class MissionPlanner {
    */
   completeMission(missionId: string): boolean {
     const mission = this.activeMissions.get(missionId);
-    if (!mission || mission.status !== 'active') return false;
+    if (!mission || mission.status !== "active") return false;
     
-    mission.status = 'completed';
+    mission.status = "completed";
     mission.updatedAt = new Date().toISOString();
     
     this.addFeedback({
       missionId,
-      type: 'completion',
+      type: "completion",
       progress: 100,
-      message: 'Mission completed successfully',
+      message: "Mission completed successfully",
     });
     
     return true;
@@ -406,12 +406,12 @@ class MissionPlanner {
     const mission = this.activeMissions.get(missionId);
     if (!mission) return false;
     
-    mission.status = 'aborted';
+    mission.status = "aborted";
     mission.updatedAt = new Date().toISOString();
     
     this.addFeedback({
       missionId,
-      type: 'abort',
+      type: "abort",
       progress: 0,
       message: `Mission aborted: ${reason}`,
     });
@@ -453,7 +453,7 @@ class MissionPlanner {
   /**
    * Add feedback
    */
-  private addFeedback(partial: Omit<MissionFeedback, 'timestamp'>): void {
+  private addFeedback(partial: Omit<MissionFeedback, "timestamp">): void {
     const feedback: MissionFeedback = {
       timestamp: new Date().toISOString(),
       ...partial,
@@ -476,7 +476,7 @@ class MissionPlanner {
    */
   exportMissionPlan(missionId: string): string {
     const mission = this.activeMissions.get(missionId);
-    if (!mission) throw new Error('Mission not found');
+    if (!mission) throw new Error("Mission not found");
     
     return JSON.stringify(mission, null, 2);
   }

@@ -1,14 +1,14 @@
 // @ts-nocheck
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { CheckCircle, Brain, Heart, Moon, Battery, AlertCircle } from 'lucide-react';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { CheckCircle, Brain, Heart, Moon, Battery, AlertCircle } from "lucide-react";
 
 export const WeeklyAssessment: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -20,8 +20,8 @@ export const WeeklyAssessment: React.FC = () => {
     nutrition_rating: 3,
     exercise_minutes: 0,
     water_intake_liters: 2.0,
-    notes: '',
-    concerns: '',
+    notes: "",
+    concerns: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
@@ -34,18 +34,18 @@ export const WeeklyAssessment: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: 'Error',
-          description: 'You must be logged in to submit an assessment',
-          variant: 'destructive',
+          title: "Error",
+          description: "You must be logged in to submit an assessment",
+          variant: "destructive",
         });
         return;
       }
 
       const concerns = formData.concerns
-        ? formData.concerns.split(',').map((c) => c.trim()).filter((c) => c)
+        ? formData.concerns.split(",").map((c) => c.trim()).filter((c) => c)
         : [];
 
-      const { error } = await supabase.from('health_checkins').insert({
+      const { error } = await supabase.from("health_checkins").insert({
         user_id: user.id,
         sleep_hours: formData.sleep_hours,
         sleep_quality: formData.sleep_quality,
@@ -62,8 +62,8 @@ export const WeeklyAssessment: React.FC = () => {
       if (error) throw error;
 
       toast({
-        title: 'Success',
-        description: 'Your weekly assessment has been submitted',
+        title: "Success",
+        description: "Your weekly assessment has been submitted",
       });
 
       // Reset form
@@ -76,15 +76,15 @@ export const WeeklyAssessment: React.FC = () => {
         nutrition_rating: 3,
         exercise_minutes: 0,
         water_intake_liters: 2.0,
-        notes: '',
-        concerns: '',
+        notes: "",
+        concerns: "",
       });
     } catch (error) {
-      console.error('Error submitting assessment:', error);
+      console.error("Error submitting assessment:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to submit assessment. Please try again.',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to submit assessment. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setSubmitting(false);
@@ -93,18 +93,18 @@ export const WeeklyAssessment: React.FC = () => {
 
   const getRatingLabel = (value: number) => {
     switch (value) {
-      case 1:
-        return 'Very Poor';
-      case 2:
-        return 'Poor';
-      case 3:
-        return 'Fair';
-      case 4:
-        return 'Good';
-      case 5:
-        return 'Excellent';
-      default:
-        return '';
+    case 1:
+      return "Very Poor";
+    case 2:
+      return "Poor";
+    case 3:
+      return "Fair";
+    case 4:
+      return "Good";
+    case 5:
+      return "Excellent";
+    default:
+      return "";
     }
   };
 
@@ -282,15 +282,15 @@ export const WeeklyAssessment: React.FC = () => {
                   nutrition_rating: 3,
                   exercise_minutes: 0,
                   water_intake_liters: 2.0,
-                  notes: '',
-                  concerns: '',
+                  notes: "",
+                  concerns: "",
                 });
               }}
             >
               Reset
             </Button>
             <Button type="submit" disabled={submitting}>
-              {submitting ? 'Submitting...' : 'Submit Assessment'}
+              {submitting ? "Submitting..." : "Submit Assessment"}
             </Button>
           </div>
         </form>

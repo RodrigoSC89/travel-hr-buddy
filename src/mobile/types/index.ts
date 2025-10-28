@@ -5,11 +5,11 @@
 export interface MobileChecklist {
   id: string;
   title: string;
-  category: 'operational' | 'safety' | 'maintenance' | 'inspection';
+  category: "operational" | "safety" | "maintenance" | "inspection";
   items: ChecklistItem[];
   completed: boolean;
   lastModified: number;
-  syncStatus: 'synced' | 'pending' | 'failed';
+  syncStatus: "synced" | "pending" | "failed";
 }
 
 export interface ChecklistItem {
@@ -23,7 +23,7 @@ export interface ChecklistItem {
 export interface MissionDashboard {
   missionId: string;
   missionName: string;
-  status: 'active' | 'completed' | 'pending';
+  status: "active" | "completed" | "pending";
   progress: number;
   checklistsCompleted: number;
   checklistsTotal: number;
@@ -35,9 +35,9 @@ export interface MissionDashboard {
 export interface SyncQueueItem {
   id: string;
   table: string;
-  action: 'create' | 'update' | 'delete';
+  action: "create" | "update" | "delete";
   data: any;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
   timestamp: number;
   retryCount: number;
   synced: boolean;
@@ -62,7 +62,7 @@ export interface MobileAppState {
 
 export interface NetworkStatus {
   isOnline: boolean;
-  effectiveType?: 'slow-2g' | '2g' | '3g' | '4g';
+  effectiveType?: "slow-2g" | "2g" | "3g" | "4g";
   downlink?: number;
   rtt?: number;
 }

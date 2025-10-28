@@ -8,9 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
 // Agent Types
-export type AgentType = 'llm' | 'copilot' | 'sensor' | 'drone' | 'analyzer' | 'executor' | 'coordinator';
-export type AgentStatus = 'registered' | 'active' | 'idle' | 'busy' | 'offline' | 'error' | 'deregistered';
-export type TaskStatus = 'pending' | 'assigned' | 'processing' | 'completed' | 'failed' | 'timeout';
+export type AgentType = "llm" | "copilot" | "sensor" | "drone" | "analyzer" | "executor" | "coordinator";
+export type AgentStatus = "registered" | "active" | "idle" | "busy" | "offline" | "error" | "deregistered";
+export type TaskStatus = "pending" | "assigned" | "processing" | "completed" | "failed" | "timeout";
 
 // Agent Interface
 export interface Agent {
@@ -69,7 +69,7 @@ class AgentRegistry {
   register(agent: Agent): void {
     this.agents.set(agent.id, {
       ...agent,
-      status: 'registered',
+      status: "registered",
       currentTasks: 0,
     });
   }
@@ -77,7 +77,7 @@ class AgentRegistry {
   deregister(agentId: string): void {
     const agent = this.agents.get(agentId);
     if (agent) {
-      agent.status = 'deregistered';
+      agent.status = "deregistered";
     }
   }
 
@@ -87,7 +87,7 @@ class AgentRegistry {
 
   getActiveAgents(): Agent[] {
     return Array.from(this.agents.values()).filter(
-      agent => agent.status === 'active' || agent.status === 'idle'
+      agent => agent.status === "active" || agent.status === "idle"
     );
   }
 
@@ -109,9 +109,9 @@ class AgentRegistry {
     if (agent) {
       agent.currentTasks = (agent.currentTasks || 0) + 1;
       if (agent.currentTasks >= (agent.maxConcurrentTasks || 5)) {
-        agent.status = 'busy';
+        agent.status = "busy";
       } else {
-        agent.status = 'active';
+        agent.status = "active";
       }
     }
   }
@@ -121,9 +121,9 @@ class AgentRegistry {
     if (agent && agent.currentTasks) {
       agent.currentTasks = Math.max(0, agent.currentTasks - 1);
       if (agent.currentTasks === 0) {
-        agent.status = 'idle';
+        agent.status = "idle";
       } else {
-        agent.status = 'active';
+        agent.status = "active";
       }
     }
   }
@@ -146,7 +146,7 @@ export async function registerAgent(agent: Agent): Promise<{ success: boolean; e
       agent_id: agent.id,
       agent_type: agent.type,
       agent_name: agent.name,
-      status: 'registered',
+      status: "registered",
       capabilities: agent.capabilities,
       metadata: agent.metadata || {},
     });
@@ -155,7 +155,7 @@ export async function registerAgent(agent: Agent): Promise<{ success: boolean; e
     return { success: true };
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error);
-    logger.error('[AgentSwarmBridge] Failed to register agent:', error);
+    logger.error("[AgentSwarmBridge] Failed to register agent:", error);
     return { success: false, error: errorMsg };
   }
 }
@@ -171,16 +171,16 @@ export async function deregisterAgent(agentId: string): Promise<{ success: boole
 
     await logAgentMetrics({
       agent_id: agentId,
-      agent_type: 'coordinator', // Default type for deregistration
+      agent_type: "coordinator", // Default type for deregistration
       agent_name: agentId,
-      status: 'deregistered',
+      status: "deregistered",
       capabilities: [],
       metadata: {},
     });
 
     return { success: true };
   } catch (error) {
-    logger.error('[AgentSwarmBridge] Failed to deregister agent:', error);
+    logger.error("[AgentSwarmBridge] Failed to deregister agent:", error);
     return { success: false };
   }
 }
@@ -199,10 +199,10 @@ export async function distributeTask(task: SwarmTask): Promise<DistributionResul
       logger.warn(`[AgentSwarmBridge] No capable agents found for task ${task.id}`);
       return {
         taskId: task.id,
-        assignedTo: 'none',
-        agentType: 'coordinator',
+        assignedTo: "none",
+        agentType: "coordinator",
         success: false,
-        error: 'No capable agents available',
+        error: "No capable agents available",
       };
     }
 
@@ -213,7 +213,7 @@ export async function distributeTask(task: SwarmTask): Promise<DistributionResul
 
     // Assign task
     task.assignedAgentId = selectedAgent.id;
-    task.status = 'assigned';
+    task.status = "assigned";
     task.startTime = new Date();
 
     registry.incrementTaskCount(selectedAgent.id);
@@ -227,7 +227,7 @@ export async function distributeTask(task: SwarmTask): Promise<DistributionResul
       capabilities: selectedAgent.capabilities,
       task_id: task.id,
       task_payload: task.payload,
-      task_status: 'assigned',
+      task_status: "assigned",
       metadata: {},
     });
 
@@ -241,11 +241,11 @@ export async function distributeTask(task: SwarmTask): Promise<DistributionResul
     };
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error);
-    logger.error('[AgentSwarmBridge] Failed to distribute task:', error);
+    logger.error("[AgentSwarmBridge] Failed to distribute task:", error);
     return {
       taskId: task.id,
-      assignedTo: 'error',
-      agentType: 'coordinator',
+      assignedTo: "error",
+      agentType: "coordinator",
       success: false,
       error: errorMsg,
     };
@@ -269,17 +269,17 @@ export async function executeParallel(tasks: SwarmTask[]): Promise<SwarmTask[]> 
       const distribution = distributions[index];
       
       if (!distribution.success) {
-        task.status = 'failed';
+        task.status = "failed";
         task.error = distribution.error;
         return task;
       }
 
       try {
         // Simulate agent processing
-        task.status = 'processing';
+        task.status = "processing";
         const result = await simulateAgentProcessing(task, distribution.assignedTo);
         
-        task.status = 'completed';
+        task.status = "completed";
         task.result = result;
         task.endTime = new Date();
 
@@ -297,7 +297,7 @@ export async function executeParallel(tasks: SwarmTask[]): Promise<SwarmTask[]> 
             status: agent.status,
             capabilities: agent.capabilities,
             task_id: task.id,
-            task_status: 'completed',
+            task_status: "completed",
             result_data: result,
             processing_time_ms: processingTime,
             metadata: {},
@@ -306,7 +306,7 @@ export async function executeParallel(tasks: SwarmTask[]): Promise<SwarmTask[]> 
 
         return task;
       } catch (error) {
-        task.status = 'failed';
+        task.status = "failed";
         task.error = error instanceof Error ? error.message : String(error);
         task.endTime = new Date();
 
@@ -324,7 +324,7 @@ export async function executeParallel(tasks: SwarmTask[]): Promise<SwarmTask[]> 
     
     return results;
   } catch (error) {
-    logger.error('[AgentSwarmBridge] Error in parallel execution:', error);
+    logger.error("[AgentSwarmBridge] Error in parallel execution:", error);
     throw error;
   }
 }
@@ -335,8 +335,8 @@ export async function executeParallel(tasks: SwarmTask[]): Promise<SwarmTask[]> 
 export async function consolidateResults(tasks: SwarmTask[]): Promise<ConsolidatedResult> {
   logger.info(`[AgentSwarmBridge] Consolidating results from ${tasks.length} tasks`);
 
-  const successful = tasks.filter(t => t.status === 'completed').length;
-  const failed = tasks.filter(t => t.status === 'failed').length;
+  const successful = tasks.filter(t => t.status === "completed").length;
+  const failed = tasks.filter(t => t.status === "failed").length;
   const results = tasks.filter(t => t.result).map(t => t.result);
   const errors = tasks.filter(t => t.error).map(t => t.error!);
 
@@ -359,7 +359,7 @@ export async function consolidateResults(tasks: SwarmTask[]): Promise<Consolidat
     errors: errors,
     metadata: {
       consolidatedAt: new Date().toISOString(),
-      strategy: 'merge',
+      strategy: "merge",
     },
   };
 
@@ -404,7 +404,7 @@ async function simulateAgentProcessing(task: SwarmTask, agentId: string): Promis
     agentId,
     processedAt: new Date().toISOString(),
     output: {
-      status: 'success',
+      status: "success",
       data: `Processed by agent ${agentId}`,
       confidence: Math.random() * 0.3 + 0.7, // 0.7-1.0
     },
@@ -428,7 +428,7 @@ async function logAgentMetrics(metrics: {
   metadata: Record<string, any>;
 }): Promise<void> {
   try {
-    const { error } = await supabase.from('agent_swarm_metrics').insert({
+    const { error } = await supabase.from("agent_swarm_metrics").insert({
       agent_id: metrics.agent_id,
       agent_type: metrics.agent_type,
       agent_name: metrics.agent_name,
@@ -444,10 +444,10 @@ async function logAgentMetrics(metrics: {
     });
 
     if (error) {
-      logger.error('[AgentSwarmBridge] Failed to log metrics:', error);
+      logger.error("[AgentSwarmBridge] Failed to log metrics:", error);
     }
   } catch (error) {
-    logger.error('[AgentSwarmBridge] Error logging metrics:', error);
+    logger.error("[AgentSwarmBridge] Error logging metrics:", error);
   }
 }
 

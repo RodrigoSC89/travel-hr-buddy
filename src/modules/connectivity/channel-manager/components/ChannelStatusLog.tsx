@@ -37,27 +37,27 @@ export function ChannelStatusLog({ channelId }: ChannelStatusLogProps) {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "online":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "offline":
-        return <XCircle className="h-4 w-4 text-gray-500" />;
-      case "error":
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      default:
-        return <Activity className="h-4 w-4 text-blue-500" />;
+    case "online":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "offline":
+      return <XCircle className="h-4 w-4 text-gray-500" />;
+    case "error":
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    default:
+      return <Activity className="h-4 w-4 text-blue-500" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "online":
-        return <Badge variant="default">Online</Badge>;
-      case "offline":
-        return <Badge variant="secondary">Offline</Badge>;
-      case "error":
-        return <Badge variant="destructive">Error</Badge>;
-      default:
-        return <Badge variant="outline">Unknown</Badge>;
+    case "online":
+      return <Badge variant="default">Online</Badge>;
+    case "offline":
+      return <Badge variant="secondary">Offline</Badge>;
+    case "error":
+      return <Badge variant="destructive">Error</Badge>;
+    default:
+      return <Badge variant="outline">Unknown</Badge>;
     }
   };
 

@@ -9,8 +9,8 @@ export interface SonarReading {
   latitude: number;
   longitude: number;
   depth: number; // meters
-  terrain: 'shallow' | 'moderate' | 'deep' | 'trench';
-  riskLevel: 'safe' | 'caution' | 'danger';
+  terrain: "shallow" | "moderate" | "deep" | "trench";
+  riskLevel: "safe" | "caution" | "danger";
   obstacles: string[];
 }
 
@@ -102,43 +102,43 @@ export class SonarEngine {
   /**
    * Classify terrain based on depth
    */
-  private classifyTerrain(depth: number): SonarReading['terrain'] {
-    if (depth < 50) return 'shallow';
-    if (depth < 200) return 'moderate';
-    if (depth < 1000) return 'deep';
-    return 'trench';
+  private classifyTerrain(depth: number): SonarReading["terrain"] {
+    if (depth < 50) return "shallow";
+    if (depth < 200) return "moderate";
+    if (depth < 1000) return "deep";
+    return "trench";
   }
 
   /**
    * Assess navigation risk based on depth and terrain
    */
-  private assessRisk(depth: number, terrain: SonarReading['terrain']): SonarReading['riskLevel'] {
-    if (depth < 30) return 'danger'; // Too shallow
-    if (depth < 50) return 'caution'; // Shallow
-    if (terrain === 'trench') return 'caution'; // Very deep
-    return 'safe';
+  private assessRisk(depth: number, terrain: SonarReading["terrain"]): SonarReading["riskLevel"] {
+    if (depth < 30) return "danger"; // Too shallow
+    if (depth < 50) return "caution"; // Shallow
+    if (terrain === "trench") return "caution"; // Very deep
+    return "safe";
   }
 
   /**
    * Detect potential obstacles
    */
-  private detectObstacles(depth: number, terrain: SonarReading['terrain']): string[] {
+  private detectObstacles(depth: number, terrain: SonarReading["terrain"]): string[] {
     const obstacles: string[] = [];
 
     if (depth < 30) {
-      obstacles.push('Shallow water - risk of grounding');
+      obstacles.push("Shallow water - risk of grounding");
     }
 
-    if (terrain === 'shallow' && Math.random() > 0.7) {
-      obstacles.push('Possible reef structure detected');
+    if (terrain === "shallow" && Math.random() > 0.7) {
+      obstacles.push("Possible reef structure detected");
     }
 
-    if (terrain === 'moderate' && Math.random() > 0.85) {
-      obstacles.push('Underwater formation detected');
+    if (terrain === "moderate" && Math.random() > 0.85) {
+      obstacles.push("Underwater formation detected");
     }
 
     if (depth < 50 && Math.random() > 0.9) {
-      obstacles.push('Possible wreckage signature');
+      obstacles.push("Possible wreckage signature");
     }
 
     return obstacles;
@@ -155,8 +155,8 @@ export class SonarEngine {
     const warnings: string[] = [];
 
     // Check for danger zones
-    const dangerZones = data.readings.filter(r => r.riskLevel === 'danger');
-    const cautionZones = data.readings.filter(r => r.riskLevel === 'caution');
+    const dangerZones = data.readings.filter(r => r.riskLevel === "danger");
+    const cautionZones = data.readings.filter(r => r.riskLevel === "caution");
 
     if (dangerZones.length > 0) {
       warnings.push(`⚠️ ${dangerZones.length} danger zones detected - avoid shallow areas`);
@@ -167,7 +167,7 @@ export class SonarEngine {
     }
 
     // Generate safe path (simplified - just avoid danger zones)
-    const safeReadings = data.readings.filter(r => r.riskLevel === 'safe');
+    const safeReadings = data.readings.filter(r => r.riskLevel === "safe");
     const safePath = safeReadings.slice(0, 10).map(r => ({
       lat: r.latitude,
       lon: r.longitude
@@ -199,13 +199,13 @@ export class SonarEngine {
    * Get depth color for visualization
    */
   getDepthColor(depth: number): string {
-    if (depth < 30) return '#8B0000'; // Dark red - danger
-    if (depth < 50) return '#FF4500'; // Orange red - shallow
-    if (depth < 100) return '#FFA500'; // Orange
-    if (depth < 200) return '#FFD700'; // Gold
-    if (depth < 500) return '#4169E1'; // Royal blue
-    if (depth < 1000) return '#000080'; // Navy
-    return '#191970'; // Midnight blue - deep
+    if (depth < 30) return "#8B0000"; // Dark red - danger
+    if (depth < 50) return "#FF4500"; // Orange red - shallow
+    if (depth < 100) return "#FFA500"; // Orange
+    if (depth < 200) return "#FFD700"; // Gold
+    if (depth < 500) return "#4169E1"; // Royal blue
+    if (depth < 1000) return "#000080"; // Navy
+    return "#191970"; // Midnight blue - deep
   }
 
   /**
@@ -213,13 +213,13 @@ export class SonarEngine {
    */
   getColorLegend(): Array<{ depth: string; color: string; label: string }> {
     return [
-      { depth: '< 30m', color: '#8B0000', label: 'Danger - Shallow' },
-      { depth: '30-50m', color: '#FF4500', label: 'Caution - Shallow' },
-      { depth: '50-100m', color: '#FFA500', label: 'Safe - Moderate' },
-      { depth: '100-200m', color: '#FFD700', label: 'Safe - Deep' },
-      { depth: '200-500m', color: '#4169E1', label: 'Safe - Very Deep' },
-      { depth: '500-1000m', color: '#000080', label: 'Safe - Extreme Depth' },
-      { depth: '> 1000m', color: '#191970', label: 'Trench' }
+      { depth: "< 30m", color: "#8B0000", label: "Danger - Shallow" },
+      { depth: "30-50m", color: "#FF4500", label: "Caution - Shallow" },
+      { depth: "50-100m", color: "#FFA500", label: "Safe - Moderate" },
+      { depth: "100-200m", color: "#FFD700", label: "Safe - Deep" },
+      { depth: "200-500m", color: "#4169E1", label: "Safe - Very Deep" },
+      { depth: "500-1000m", color: "#000080", label: "Safe - Extreme Depth" },
+      { depth: "> 1000m", color: "#191970", label: "Trench" }
     ];
   }
 }

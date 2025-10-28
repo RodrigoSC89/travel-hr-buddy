@@ -5,7 +5,7 @@
 
 export interface DigitalCertificate {
   id: string;
-  type: 'ICP-Brasil' | 'OpenCert' | 'Custom';
+  type: "ICP-Brasil" | "OpenCert" | "Custom";
   name: string;
   issuer: string;
   subject: string;

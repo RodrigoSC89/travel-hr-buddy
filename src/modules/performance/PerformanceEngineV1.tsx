@@ -1,14 +1,14 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { TrendingUp, TrendingDown, Minus, AlertTriangle, Ship, Users } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { TrendingUp, TrendingDown, Minus, AlertTriangle, Ship, Users } from "lucide-react";
 
 interface VesselPerformance {
   id: string;
@@ -33,8 +33,8 @@ interface CrewPerformance {
 }
 
 export const PerformanceEngineV1: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [periodFilter, setPeriodFilter] = useState('7');
+  const [activeTab, setActiveTab] = useState("overview");
+  const [periodFilter, setPeriodFilter] = useState("7");
   const [vesselPerformance, setVesselPerformance] = useState<VesselPerformance[]>([]);
   const [crewPerformance, setCrewPerformance] = useState<CrewPerformance[]>([]);
   const [outliers, setOutliers] = useState<any[]>([]);
@@ -54,28 +54,28 @@ export const PerformanceEngineV1: React.FC = () => {
 
       // Fetch vessel performance
       const { data: vesselData, error: vesselError } = await supabase
-        .from('vessel_performance')
-        .select('*')
-        .gte('evaluation_period_end', startDate.toISOString().split('T')[0])
-        .order('overall_performance_rating', { ascending: false });
+        .from("vessel_performance")
+        .select("*")
+        .gte("evaluation_period_end", startDate.toISOString().split("T")[0])
+        .order("overall_performance_rating", { ascending: false });
 
       if (vesselError) throw vesselError;
 
       // Fetch crew performance
       const { data: crewData, error: crewError } = await supabase
-        .from('crew_performance')
-        .select('*')
-        .gte('evaluation_period_end', startDate.toISOString().split('T')[0])
-        .order('overall_performance_rating', { ascending: false });
+        .from("crew_performance")
+        .select("*")
+        .gte("evaluation_period_end", startDate.toISOString().split("T")[0])
+        .order("overall_performance_rating", { ascending: false });
 
       if (crewError) throw crewError;
 
       // Fetch outliers
       const { data: outliersData, error: outliersError } = await supabase
-        .from('performance_outliers')
-        .select('*')
-        .eq('is_resolved', false)
-        .order('severity', { ascending: false })
+        .from("performance_outliers")
+        .select("*")
+        .eq("is_resolved", false)
+        .order("severity", { ascending: false })
         .limit(10);
 
       if (outliersError) throw outliersError;
@@ -84,11 +84,11 @@ export const PerformanceEngineV1: React.FC = () => {
       setCrewPerformance(crewData || []);
       setOutliers(outliersData || []);
     } catch (error) {
-      console.error('Error fetching performance data:', error);
+      console.error("Error fetching performance data:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load performance data',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load performance data",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -97,22 +97,22 @@ export const PerformanceEngineV1: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving':
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'declining':
-        return <TrendingDown className="h-4 w-4 text-red-500" />;
-      default:
-        return <Minus className="h-4 w-4 text-gray-500" />;
+    case "improving":
+      return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "declining":
+      return <TrendingDown className="h-4 w-4 text-red-500" />;
+    default:
+      return <Minus className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-500';
-      case 'major': return 'bg-orange-500';
-      case 'moderate': return 'bg-yellow-500';
-      case 'minor': return 'bg-blue-500';
-      default: return 'bg-gray-500';
+    case "critical": return "bg-red-500";
+    case "major": return "bg-orange-500";
+    case "moderate": return "bg-yellow-500";
+    case "minor": return "bg-blue-500";
+    default: return "bg-gray-500";
     }
   };
 

@@ -13,9 +13,9 @@ import { supabase } from "@/integrations/supabase/client";
 export interface AIAgent {
   id: string;
   name: string;
-  type: 'llm' | 'classifier' | 'analyzer' | 'predictor' | 'optimizer';
+  type: "llm" | "classifier" | "analyzer" | "predictor" | "optimizer";
   model_name: string;
-  status: 'active' | 'standby' | 'failed' | 'maintenance';
+  status: "active" | "standby" | "failed" | "maintenance";
   version: string;
 }
 
@@ -36,7 +36,7 @@ export interface AgentRanking {
   rank: number;
   overall_score: number;
   metrics: AgentMetrics;
-  trending: 'up' | 'down' | 'stable';
+  trending: "up" | "down" | "stable";
 }
 
 export interface FailoverEvent {
@@ -56,52 +56,52 @@ class MultiAgentScanner {
    * Initialize the multi-agent scanner
    */
   async initialize(): Promise<void> {
-    console.log('[AgentScanner] Initializing');
+    console.log("[AgentScanner] Initializing");
     
     // Register default agents
     this.registerAgent({
-      id: 'agent-gemini-flash',
-      name: 'Gemini 2.5 Flash',
-      type: 'llm',
-      model_name: 'google/gemini-2.5-flash',
-      status: 'active',
-      version: '2.5.0'
+      id: "agent-gemini-flash",
+      name: "Gemini 2.5 Flash",
+      type: "llm",
+      model_name: "google/gemini-2.5-flash",
+      status: "active",
+      version: "2.5.0"
     });
 
     this.registerAgent({
-      id: 'agent-gemini-pro',
-      name: 'Gemini 2.5 Pro',
-      type: 'llm',
-      model_name: 'google/gemini-2.5-pro',
-      status: 'standby',
-      version: '2.5.0'
+      id: "agent-gemini-pro",
+      name: "Gemini 2.5 Pro",
+      type: "llm",
+      model_name: "google/gemini-2.5-pro",
+      status: "standby",
+      version: "2.5.0"
     });
 
     this.registerAgent({
-      id: 'agent-gpt5',
-      name: 'GPT-5',
-      type: 'llm',
-      model_name: 'openai/gpt-5',
-      status: 'standby',
-      version: '5.0.0'
+      id: "agent-gpt5",
+      name: "GPT-5",
+      type: "llm",
+      model_name: "openai/gpt-5",
+      status: "standby",
+      version: "5.0.0"
     });
 
     this.registerAgent({
-      id: 'agent-tactical-ai',
-      name: 'Tactical AI',
-      type: 'analyzer',
-      model_name: 'nautilus-tactical-v1',
-      status: 'active',
-      version: '1.0.0'
+      id: "agent-tactical-ai",
+      name: "Tactical AI",
+      type: "analyzer",
+      model_name: "nautilus-tactical-v1",
+      status: "active",
+      version: "1.0.0"
     });
 
     this.registerAgent({
-      id: 'agent-predictive',
-      name: 'Predictive Engine',
-      type: 'predictor',
-      model_name: 'nautilus-predictive-v1',
-      status: 'active',
-      version: '1.0.0'
+      id: "agent-predictive",
+      name: "Predictive Engine",
+      type: "predictor",
+      model_name: "nautilus-predictive-v1",
+      status: "active",
+      version: "1.0.0"
     });
 
     this.startScanning();
@@ -125,7 +125,7 @@ class MultiAgentScanner {
       last_updated: new Date().toISOString()
     });
 
-    console.log('[AgentScanner] Registered agent:', agent.name);
+    console.log("[AgentScanner] Registered agent:", agent.name);
   }
 
   /**
@@ -133,11 +133,11 @@ class MultiAgentScanner {
    */
   startScanning(intervalMs: number = 10000): void {
     if (this.scanInterval) {
-      console.warn('[AgentScanner] Already scanning');
+      console.warn("[AgentScanner] Already scanning");
       return;
     }
 
-    console.log('[AgentScanner] Started scanning');
+    console.log("[AgentScanner] Started scanning");
     this.scanInterval = window.setInterval(() => {
       this.scanAllAgents();
     }, intervalMs);
@@ -150,7 +150,7 @@ class MultiAgentScanner {
     if (this.scanInterval) {
       clearInterval(this.scanInterval);
       this.scanInterval = null;
-      console.log('[AgentScanner] Stopped scanning');
+      console.log("[AgentScanner] Stopped scanning");
     }
   }
 
@@ -159,7 +159,7 @@ class MultiAgentScanner {
    */
   async scanAllAgents(): Promise<void> {
     for (const [agentId, agent] of this.agents.entries()) {
-      if (agent.status === 'active') {
+      if (agent.status === "active") {
         await this.updateAgentMetrics(agentId);
       }
     }
@@ -202,16 +202,16 @@ class MultiAgentScanner {
     const failedAgent = this.agents.get(agentId);
     if (!failedAgent) return;
 
-    console.warn('[AgentScanner] Agent failure detected:', failedAgent.name);
+    console.warn("[AgentScanner] Agent failure detected:", failedAgent.name);
 
     // Mark agent as failed
-    failedAgent.status = 'failed';
+    failedAgent.status = "failed";
     this.agents.set(agentId, failedAgent);
 
     // Find replacement agent of same type
     const replacement = Array.from(this.agents.values()).find(
       a => a.type === failedAgent.type && 
-           a.status === 'standby' && 
+           a.status === "standby" && 
            a.id !== agentId
     );
 
@@ -229,17 +229,17 @@ class MultiAgentScanner {
 
     if (!fromAgent || !toAgent) return;
 
-    console.log('[AgentScanner] Failing over from', fromAgent.name, 'to', toAgent.name);
+    console.log("[AgentScanner] Failing over from", fromAgent.name, "to", toAgent.name);
 
     // Update statuses
-    toAgent.status = 'active';
+    toAgent.status = "active";
     this.agents.set(toAgentId, toAgent);
 
     // Log failover event
     const event: FailoverEvent = {
       from_agent_id: fromAgentId,
       to_agent_id: toAgentId,
-      reason: 'Performance degradation detected',
+      reason: "Performance degradation detected",
       timestamp: new Date().toISOString(),
       success: true
     };
@@ -271,7 +271,7 @@ class MultiAgentScanner {
         rank: 0, // Will be set after sorting
         overall_score: score,
         metrics: metrics,
-        trending: 'stable'
+        trending: "stable"
       });
     }
 
@@ -279,7 +279,7 @@ class MultiAgentScanner {
     rankings.sort((a, b) => b.overall_score - a.overall_score);
     rankings.forEach((r, idx) => r.rank = idx + 1);
 
-    console.log('[AgentScanner] Rankings updated:', rankings.map(r => `${r.rank}. ${r.agent_name} (${r.overall_score.toFixed(1)})`).join(', '));
+    console.log("[AgentScanner] Rankings updated:", rankings.map(r => `${r.rank}. ${r.agent_name} (${r.overall_score.toFixed(1)})`).join(", "));
 
     return rankings;
   }
@@ -289,7 +289,7 @@ class MultiAgentScanner {
    */
   private async logFailoverEvent(event: FailoverEvent): Promise<void> {
     try {
-      await supabase.from('agent_failover_log').insert({
+      await supabase.from("agent_failover_log").insert({
         from_agent_id: event.from_agent_id,
         to_agent_id: event.to_agent_id,
         reason: event.reason,
@@ -297,7 +297,7 @@ class MultiAgentScanner {
         success: event.success
       });
     } catch (error) {
-      console.error('[AgentScanner] Failed to log failover:', error);
+      console.error("[AgentScanner] Failed to log failover:", error);
     }
   }
 

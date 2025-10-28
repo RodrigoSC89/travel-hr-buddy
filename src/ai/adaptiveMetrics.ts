@@ -48,52 +48,52 @@ class AdaptiveMetricsEngine {
   private initializeParameters(): void {
     const defaults: AdaptiveParameter[] = [
       {
-        name: 'latencyThreshold',
+        name: "latencyThreshold",
         currentValue: 1000,
         defaultValue: 1000,
         minValue: 200,
         maxValue: 5000,
-        unit: 'ms',
+        unit: "ms",
         lastAdjusted: new Date(),
         adjustmentCount: 0,
       },
       {
-        name: 'retryAttempts',
+        name: "retryAttempts",
         currentValue: 3,
         defaultValue: 3,
         minValue: 1,
         maxValue: 10,
-        unit: 'attempts',
+        unit: "attempts",
         lastAdjusted: new Date(),
         adjustmentCount: 0,
       },
       {
-        name: 'timeoutDuration',
+        name: "timeoutDuration",
         currentValue: 30000,
         defaultValue: 30000,
         minValue: 5000,
         maxValue: 120000,
-        unit: 'ms',
+        unit: "ms",
         lastAdjusted: new Date(),
         adjustmentCount: 0,
       },
       {
-        name: 'cacheExpiry',
+        name: "cacheExpiry",
         currentValue: 300,
         defaultValue: 300,
         minValue: 60,
         maxValue: 3600,
-        unit: 'seconds',
+        unit: "seconds",
         lastAdjusted: new Date(),
         adjustmentCount: 0,
       },
       {
-        name: 'maxConcurrency',
+        name: "maxConcurrency",
         currentValue: 10,
         defaultValue: 10,
         minValue: 1,
         maxValue: 50,
-        unit: 'connections',
+        unit: "connections",
         lastAdjusted: new Date(),
         adjustmentCount: 0,
       },
@@ -109,12 +109,12 @@ class AdaptiveMetricsEngine {
    */
   start(): void {
     if (this.isActive) {
-      logger.warn('[AdaptiveMetrics] Already running');
+      logger.warn("[AdaptiveMetrics] Already running");
       return;
     }
 
     this.isActive = true;
-    logger.info('[AdaptiveMetrics] Starting Adaptive Metrics Engine...');
+    logger.info("[AdaptiveMetrics] Starting Adaptive Metrics Engine...");
 
     // Load saved parameters from database
     this.loadParameters();
@@ -124,7 +124,7 @@ class AdaptiveMetricsEngine {
       this.evaluateAndAdjust();
     }, 60000); // Every minute
 
-    logger.info('[AdaptiveMetrics] Adaptive Metrics Engine is active');
+    logger.info("[AdaptiveMetrics] Adaptive Metrics Engine is active");
   }
 
   /**
@@ -139,7 +139,7 @@ class AdaptiveMetricsEngine {
       this.adjustmentInterval = null;
     }
 
-    logger.info('[AdaptiveMetrics] Adaptive Metrics Engine stopped');
+    logger.info("[AdaptiveMetrics] Adaptive Metrics Engine stopped");
   }
 
   /**
@@ -148,9 +148,9 @@ class AdaptiveMetricsEngine {
   private async loadParameters(): Promise<void> {
     try {
       const { data } = await supabase
-        .from('adaptive_parameters')
-        .select('*')
-        .order('updated_at', { ascending: false });
+        .from("adaptive_parameters")
+        .select("*")
+        .order("updated_at", { ascending: false });
 
       if (data) {
         data.forEach((param: any) => {
@@ -161,10 +161,10 @@ class AdaptiveMetricsEngine {
             existing.lastAdjusted = new Date(param.updated_at);
           }
         });
-        logger.info('[AdaptiveMetrics] Loaded parameters from database');
+        logger.info("[AdaptiveMetrics] Loaded parameters from database");
       }
     } catch (error) {
-      logger.error('[AdaptiveMetrics] Failed to load parameters:', error);
+      logger.error("[AdaptiveMetrics] Failed to load parameters:", error);
     }
   }
 
@@ -174,7 +174,7 @@ class AdaptiveMetricsEngine {
   private async evaluateAndAdjust(): Promise<void> {
     if (!this.isActive) return;
 
-    logger.info('[AdaptiveMetrics] Evaluating parameters for adjustment...');
+    logger.info("[AdaptiveMetrics] Evaluating parameters for adjustment...");
 
     for (const [name, param] of this.parameters) {
       try {
@@ -229,10 +229,10 @@ class AdaptiveMetricsEngine {
   private async fetchMetricHistory(paramName: string): Promise<MetricHistory[]> {
     try {
       const { data } = await supabase
-        .from('metric_history')
-        .select('*')
-        .eq('parameter_name', paramName)
-        .order('timestamp', { ascending: false })
+        .from("metric_history")
+        .select("*")
+        .eq("parameter_name", paramName)
+        .order("timestamp", { ascending: false })
         .limit(this.historySize);
 
       return (data || []).map((d: any) => ({
@@ -264,49 +264,49 @@ class AdaptiveMetricsEngine {
     let recommended: number;
 
     switch (name) {
-      case 'latencyThreshold':
-        // Increase threshold if performance is poor
-        recommended = avgPerformance < 0.7 
-          ? Math.min(param.currentValue * 1.2, param.maxValue)
-          : Math.max(param.currentValue * 0.9, param.minValue);
-        break;
+    case "latencyThreshold":
+      // Increase threshold if performance is poor
+      recommended = avgPerformance < 0.7 
+        ? Math.min(param.currentValue * 1.2, param.maxValue)
+        : Math.max(param.currentValue * 0.9, param.minValue);
+      break;
 
-      case 'retryAttempts':
-        // Adjust retries based on success rate
-        recommended = avgPerformance < 0.8
-          ? Math.min(param.currentValue + 1, param.maxValue)
-          : Math.max(param.currentValue - 1, param.minValue);
-        break;
+    case "retryAttempts":
+      // Adjust retries based on success rate
+      recommended = avgPerformance < 0.8
+        ? Math.min(param.currentValue + 1, param.maxValue)
+        : Math.max(param.currentValue - 1, param.minValue);
+      break;
 
-      case 'timeoutDuration':
-        // Increase timeout if many timeouts occur
-        const recentTimeouts = history.filter(h => h.performance < 0.5).length;
-        const timeoutRate = recentTimeouts / history.length;
-        recommended = timeoutRate > 0.2
-          ? Math.min(param.currentValue * 1.3, param.maxValue)
-          : Math.max(param.currentValue * 0.85, param.minValue);
-        break;
+    case "timeoutDuration":
+      // Increase timeout if many timeouts occur
+      const recentTimeouts = history.filter(h => h.performance < 0.5).length;
+      const timeoutRate = recentTimeouts / history.length;
+      recommended = timeoutRate > 0.2
+        ? Math.min(param.currentValue * 1.3, param.maxValue)
+        : Math.max(param.currentValue * 0.85, param.minValue);
+      break;
 
-      case 'cacheExpiry':
-        // Adjust based on cache hit rate (performance)
-        recommended = avgPerformance > 0.9
-          ? Math.min(param.currentValue * 1.2, param.maxValue)
-          : Math.max(param.currentValue * 0.8, param.minValue);
-        break;
+    case "cacheExpiry":
+      // Adjust based on cache hit rate (performance)
+      recommended = avgPerformance > 0.9
+        ? Math.min(param.currentValue * 1.2, param.maxValue)
+        : Math.max(param.currentValue * 0.8, param.minValue);
+      break;
 
-      case 'maxConcurrency':
-        // Adjust based on load and performance
-        if (avgPerformance < 0.7 && avgValue > param.currentValue * 0.8) {
-          recommended = Math.min(param.currentValue + 2, param.maxValue);
-        } else if (avgPerformance > 0.95 && avgValue < param.currentValue * 0.5) {
-          recommended = Math.max(param.currentValue - 2, param.minValue);
-        } else {
-          recommended = param.currentValue;
-        }
-        break;
-
-      default:
+    case "maxConcurrency":
+      // Adjust based on load and performance
+      if (avgPerformance < 0.7 && avgValue > param.currentValue * 0.8) {
+        recommended = Math.min(param.currentValue + 2, param.maxValue);
+      } else if (avgPerformance > 0.95 && avgValue < param.currentValue * 0.5) {
+        recommended = Math.max(param.currentValue - 2, param.minValue);
+      } else {
         recommended = param.currentValue;
+      }
+      break;
+
+    default:
+      recommended = param.currentValue;
     }
 
     // Ensure within bounds
@@ -319,20 +319,20 @@ class AdaptiveMetricsEngine {
   private async saveParameter(param: AdaptiveParameter): Promise<void> {
     try {
       const { error } = await supabase
-        .from('adaptive_parameters')
+        .from("adaptive_parameters")
         .upsert({
           parameter_name: param.name,
-          module_name: 'adaptive_metrics',
+          module_name: "adaptive_metrics",
           current_value: param.currentValue,
           baseline_value: param.defaultValue,
           updated_at: param.lastAdjusted.toISOString(),
         });
 
       if (error) {
-        logger.error('[AdaptiveMetrics] Failed to save parameter:', error);
+        logger.error("[AdaptiveMetrics] Failed to save parameter:", error);
       }
     } catch (error) {
-      logger.error('[AdaptiveMetrics] Error saving parameter:', error);
+      logger.error("[AdaptiveMetrics] Error saving parameter:", error);
     }
   }
 
@@ -346,17 +346,17 @@ class AdaptiveMetricsEngine {
   ): Promise<void> {
     try {
       await supabase
-        .from('parameter_adjustments')
+        .from("parameter_adjustments")
         .insert({
           parameter_name: paramName,
-          module_name: 'adaptive_metrics',
+          module_name: "adaptive_metrics",
           old_value: oldValue,
           new_value: newValue,
           delta_percent: oldValue === 0 ? 0 : ((newValue - oldValue) / oldValue) * 100,
           created_at: new Date().toISOString(),
         });
     } catch (error) {
-      logger.error('[AdaptiveMetrics] Failed to track adjustment:', error);
+      logger.error("[AdaptiveMetrics] Failed to track adjustment:", error);
     }
   }
 
@@ -370,16 +370,16 @@ class AdaptiveMetricsEngine {
   ): Promise<void> {
     try {
       await supabase
-        .from('metric_history')
+        .from("metric_history")
         .insert({
-          module_name: 'adaptive_metrics',
+          module_name: "adaptive_metrics",
           parameter_name: paramName,
           value,
           performance_score: Math.max(0, Math.min(1, performanceScore)),
           timestamp: new Date().toISOString(),
         });
     } catch (error) {
-      logger.error('[AdaptiveMetrics] Failed to record metric:', error);
+      logger.error("[AdaptiveMetrics] Failed to record metric:", error);
     }
   }
 
@@ -395,11 +395,11 @@ class AdaptiveMetricsEngine {
    */
   getAllParameters(): ParameterConfig {
     return {
-      latencyThreshold: this.parameters.get('latencyThreshold')!,
-      retryAttempts: this.parameters.get('retryAttempts')!,
-      timeoutDuration: this.parameters.get('timeoutDuration')!,
-      cacheExpiry: this.parameters.get('cacheExpiry')!,
-      maxConcurrency: this.parameters.get('maxConcurrency')!,
+      latencyThreshold: this.parameters.get("latencyThreshold")!,
+      retryAttempts: this.parameters.get("retryAttempts")!,
+      timeoutDuration: this.parameters.get("timeoutDuration")!,
+      cacheExpiry: this.parameters.get("cacheExpiry")!,
+      maxConcurrency: this.parameters.get("maxConcurrency")!,
     };
   }
 
@@ -427,15 +427,15 @@ class AdaptiveMetricsEngine {
   async getAdjustmentHistory(limit = 50): Promise<any[]> {
     try {
       const { data, error } = await supabase
-        .from('parameter_adjustments')
-        .select('*')
-        .order('adjusted_at', { ascending: false })
+        .from("parameter_adjustments")
+        .select("*")
+        .order("adjusted_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
       return data || [];
     } catch (error) {
-      logger.error('[AdaptiveMetrics] Failed to fetch adjustment history:', error);
+      logger.error("[AdaptiveMetrics] Failed to fetch adjustment history:", error);
       return [];
     }
   }

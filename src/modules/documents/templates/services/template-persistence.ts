@@ -31,7 +31,7 @@ export class TemplatePersistence {
       }
 
       const { data, error } = await supabase
-        .from('document_templates')
+        .from("document_templates")
         .insert({
           user_id: user.id,
           organization_id: template.organizationId,
@@ -51,7 +51,7 @@ export class TemplatePersistence {
 
       return this.mapToTemplate(data);
     } catch (error) {
-      console.error('Error saving template:', error);
+      console.error("Error saving template:", error);
       throw error;
     }
   }
@@ -70,9 +70,9 @@ export class TemplatePersistence {
       if (template.metadata !== undefined) updateData.metadata = template.metadata;
 
       const { data, error } = await supabase
-        .from('document_templates')
+        .from("document_templates")
         .update(updateData)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
@@ -80,7 +80,7 @@ export class TemplatePersistence {
 
       return this.mapToTemplate(data);
     } catch (error) {
-      console.error('Error updating template:', error);
+      console.error("Error updating template:", error);
       throw error;
     }
   }
@@ -88,13 +88,13 @@ export class TemplatePersistence {
   async deleteTemplate(id: string): Promise<void> {
     try {
       const { error } = await supabase
-        .from('document_templates')
+        .from("document_templates")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error deleting template:', error);
+      console.error("Error deleting template:", error);
       throw error;
     }
   }
@@ -102,15 +102,15 @@ export class TemplatePersistence {
   async getTemplates(): Promise<DocumentTemplate[]> {
     try {
       const { data, error } = await supabase
-        .from('document_templates')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("document_templates")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       return (data || []).map(this.mapToTemplate);
     } catch (error) {
-      console.error('Error fetching templates:', error);
+      console.error("Error fetching templates:", error);
       return [];
     }
   }
@@ -118,16 +118,16 @@ export class TemplatePersistence {
   async getTemplate(id: string): Promise<DocumentTemplate | null> {
     try {
       const { data, error } = await supabase
-        .from('document_templates')
-        .select('*')
-        .eq('id', id)
+        .from("document_templates")
+        .select("*")
+        .eq("id", id)
         .single();
 
       if (error) throw error;
 
       return data ? this.mapToTemplate(data) : null;
     } catch (error) {
-      console.error('Error fetching template:', error);
+      console.error("Error fetching template:", error);
       return null;
     }
   }

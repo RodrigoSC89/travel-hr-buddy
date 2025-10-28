@@ -6,7 +6,7 @@
 export interface RegulatoryAuthority {
   id: string;
   name: string;
-  type: 'Marinha' | 'ANTAQ' | 'Port Authority' | 'Other';
+  type: "Marinha" | "ANTAQ" | "Port Authority" | "Other";
   email: string;
   phone?: string;
   whatsapp?: string;
@@ -19,8 +19,8 @@ export interface SecureSubmission {
   submittedBy: string;
   subject: string;
   description: string;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  status: 'pending' | 'sent' | 'acknowledged' | 'responded' | 'closed';
+  priority: "low" | "medium" | "high" | "urgent";
+  status: "pending" | "sent" | "acknowledged" | "responded" | "closed";
   documents: SecureDocument[];
   encryptedData: string;
   encryptionKey: string;
@@ -42,7 +42,7 @@ export interface SecureDocument {
 export interface NotificationLog {
   id: string;
   submissionId: string;
-  channel: 'email' | 'whatsapp' | 'sms';
+  channel: "email" | "whatsapp" | "sms";
   recipient: string;
   message: string;
   sentAt: string;

@@ -1,24 +1,24 @@
 // @ts-nocheck
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface CreateIncidentDialogProps {
   open: boolean;
@@ -32,11 +32,11 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
   onSuccess,
 }) => {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    severity: 'medium',
-    category: 'operational',
-    incident_location: '',
+    title: "",
+    description: "",
+    severity: "medium",
+    category: "operational",
+    incident_location: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
@@ -47,37 +47,37 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      if (!user) throw new Error("Not authenticated");
 
-      const { error } = await supabase.from('incident_reports').insert({
+      const { error } = await supabase.from("incident_reports").insert({
         ...formData,
         reported_by: user.id,
         incident_date: new Date().toISOString(),
-        status: 'pending',
+        status: "pending",
       });
 
       if (error) throw error;
 
       toast({
-        title: 'Success',
-        description: 'Incident report created successfully',
+        title: "Success",
+        description: "Incident report created successfully",
       });
 
       onSuccess();
       onOpenChange(false);
       setFormData({
-        title: '',
-        description: '',
-        severity: 'medium',
-        category: 'operational',
-        incident_location: '',
+        title: "",
+        description: "",
+        severity: "medium",
+        category: "operational",
+        incident_location: "",
       });
     } catch (error) {
-      console.error('Error creating incident:', error);
+      console.error("Error creating incident:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to create incident report',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to create incident report",
+        variant: "destructive",
       });
     } finally {
       setSubmitting(false);
@@ -165,7 +165,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
               Cancel
             </Button>
             <Button type="submit" disabled={submitting}>
-              {submitting ? 'Creating...' : 'Create Incident'}
+              {submitting ? "Creating..." : "Create Incident"}
             </Button>
           </div>
         </form>

@@ -10,7 +10,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-export type Priority = 'low' | 'medium' | 'high' | 'critical';
+export type Priority = "low" | "medium" | "high" | "critical";
 
 export interface Task {
   id: string;
@@ -50,11 +50,11 @@ class AutoPriorityBalancer {
    */
   startBalancing(intervalMs: number = 60000): void {
     if (this.balancingInterval) {
-      console.warn('[PriorityBalancer] Already running');
+      console.warn("[PriorityBalancer] Already running");
       return;
     }
 
-    console.log('[PriorityBalancer] Starting automatic balancing');
+    console.log("[PriorityBalancer] Starting automatic balancing");
     this.balancingInterval = window.setInterval(() => {
       this.rebalancePriorities();
     }, intervalMs);
@@ -67,7 +67,7 @@ class AutoPriorityBalancer {
     if (this.balancingInterval) {
       clearInterval(this.balancingInterval);
       this.balancingInterval = null;
-      console.log('[PriorityBalancer] Stopped');
+      console.log("[PriorityBalancer] Stopped");
     }
   }
 
@@ -76,7 +76,7 @@ class AutoPriorityBalancer {
    */
   registerTask(task: Task): void {
     this.tasks.set(task.id, task);
-    console.log('[PriorityBalancer] Registered task:', task.name);
+    console.log("[PriorityBalancer] Registered task:", task.name);
   }
 
   /**
@@ -90,7 +90,7 @@ class AutoPriorityBalancer {
       time_pressure: Math.random() * 100
     };
 
-    console.log('[PriorityBalancer] Rebalancing with context:', ctx);
+    console.log("[PriorityBalancer] Rebalancing with context:", ctx);
 
     const shifts: PriorityShift[] = [];
 
@@ -161,10 +161,10 @@ class AutoPriorityBalancer {
     }
 
     // Map score to priority
-    if (score >= 80) return 'critical';
-    if (score >= 60) return 'high';
-    if (score >= 40) return 'medium';
-    return 'low';
+    if (score >= 80) return "critical";
+    if (score >= 60) return "high";
+    if (score >= 40) return "medium";
+    return "low";
   }
 
   /**
@@ -175,18 +175,18 @@ class AutoPriorityBalancer {
 
     if (task.deadline) {
       const daysLeft = (new Date(task.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24);
-      if (daysLeft < 1) reasons.push('deadline approaching (< 1 day)');
-      else if (daysLeft < 3) reasons.push('deadline near (< 3 days)');
+      if (daysLeft < 1) reasons.push("deadline approaching (< 1 day)");
+      else if (daysLeft < 3) reasons.push("deadline near (< 3 days)");
     }
 
-    if (task.urgency_score > 70) reasons.push('high urgency score');
-    if (task.impact_score > 70) reasons.push('high impact score');
-    if (task.dependencies.length > 2) reasons.push('multiple dependencies');
-    if (context.system_load > 80) reasons.push('high system load');
-    if (context.time_pressure > context.critical_threshold) reasons.push('time pressure');
+    if (task.urgency_score > 70) reasons.push("high urgency score");
+    if (task.impact_score > 70) reasons.push("high impact score");
+    if (task.dependencies.length > 2) reasons.push("multiple dependencies");
+    if (context.system_load > 80) reasons.push("high system load");
+    if (context.time_pressure > context.critical_threshold) reasons.push("time pressure");
 
     return reasons.length > 0 
-      ? `Priority adjusted to ${newPriority}: ${reasons.join(', ')}`
+      ? `Priority adjusted to ${newPriority}: ${reasons.join(", ")}`
       : `Priority adjusted to ${newPriority} based on overall context`;
   }
 
@@ -195,7 +195,7 @@ class AutoPriorityBalancer {
    */
   private async logPriorityShift(shift: PriorityShift): Promise<void> {
     try {
-      await supabase.from('priority_shifts').insert({
+      await supabase.from("priority_shifts").insert({
         task_id: shift.task_id,
         task_name: shift.task_name,
         old_priority: shift.old_priority,
@@ -205,7 +205,7 @@ class AutoPriorityBalancer {
         timestamp: shift.timestamp
       });
     } catch (error) {
-      console.error('[PriorityBalancer] Failed to log shift:', error);
+      console.error("[PriorityBalancer] Failed to log shift:", error);
     }
   }
 
@@ -215,20 +215,20 @@ class AutoPriorityBalancer {
   async getPriorityShifts(taskId?: string, limit: number = 100): Promise<any[]> {
     try {
       let query = supabase
-        .from('priority_shifts')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("priority_shifts")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (taskId) {
-        query = query.eq('task_id', taskId);
+        query = query.eq("task_id", taskId);
       }
 
       const { data, error } = await query;
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('[PriorityBalancer] Failed to fetch shifts:', error);
+      console.error("[PriorityBalancer] Failed to fetch shifts:", error);
       return [];
     }
   }

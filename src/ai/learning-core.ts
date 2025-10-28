@@ -16,13 +16,13 @@ export interface LearningConfig {
 
 export interface LearningEvent {
   id?: string;
-  event_type: 'interaction' | 'system_event' | 'module_error' | 'decision' | 'user_action';
+  event_type: "interaction" | "system_event" | "module_error" | "decision" | "user_action";
   module_name: string;
   user_id?: string | null;
   tenant_id?: string | null;
   event_data: Record<string, any>;
   context: Record<string, any>;
-  outcome?: 'success' | 'failure' | 'partial' | null;
+  outcome?: "success" | "failure" | "partial" | null;
   timestamp?: string;
   metadata?: Record<string, any>;
   created_at?: string;
@@ -92,7 +92,7 @@ class LearningCore {
     if (!this.config.learning_enabled) return;
 
     const event: LearningEvent = {
-      event_type: 'interaction',
+      event_type: "interaction",
       module_name: moduleName,
       user_id: userId || null,
       event_data: {
@@ -117,12 +117,12 @@ class LearningCore {
     eventName: string,
     moduleName: string,
     eventData: Record<string, any>,
-    outcome?: 'success' | 'failure'
+    outcome?: "success" | "failure"
   ): Promise<void> {
     if (!this.config.learning_enabled) return;
 
     const event: LearningEvent = {
-      event_type: 'system_event',
+      event_type: "system_event",
       module_name: moduleName,
       event_data: {
         event_name: eventName,
@@ -150,7 +150,7 @@ class LearningCore {
     if (!this.config.learning_enabled) return;
 
     const event: LearningEvent = {
-      event_type: 'module_error',
+      event_type: "module_error",
       module_name: moduleName,
       user_id: userId || null,
       event_data: {
@@ -161,7 +161,7 @@ class LearningCore {
         timestamp: new Date().toISOString(),
         url: window.location.href,
       },
-      outcome: 'failure',
+      outcome: "failure",
       timestamp: new Date().toISOString(),
     };
 
@@ -186,7 +186,7 @@ class LearningCore {
     if (!this.config.learning_enabled) return;
 
     const event: LearningEvent = {
-      event_type: 'decision',
+      event_type: "decision",
       module_name: moduleName,
       event_data: {
         decision_type: decisionType,
@@ -231,7 +231,7 @@ class LearningCore {
 
     try {
       const { error } = await supabase
-        .from('learning_events')
+        .from("learning_events")
         .insert(eventsToFlush);
 
       if (error) {
@@ -261,15 +261,15 @@ class LearningCore {
       logger.info("[LearningCore] Generating training data", { startDate, endDate });
 
       let query = supabase
-        .from('learning_events')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("learning_events")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (startDate) {
-        query = query.gte('created_at', startDate);
+        query = query.gte("created_at", startDate);
       }
       if (endDate) {
-        query = query.lte('created_at', endDate);
+        query = query.lte("created_at", endDate);
       }
 
       const { data: events, error } = await query;
@@ -289,7 +289,7 @@ class LearningCore {
       const eventTypeCounts = this.countEventTypes(events);
 
       const dataset: TrainingDataset = {
-        version: '1.0',
+        version: "1.0",
         generated_at: new Date().toISOString(),
         total_events: events.length,
         event_types: eventTypeCounts,
@@ -329,7 +329,7 @@ class LearningCore {
       const actionFrequency: Record<string, number> = {};
 
       moduleEvents.forEach(event => {
-        const action = event.event_data?.action || 'unknown';
+        const action = event.event_data?.action || "unknown";
         actionFrequency[action] = (actionFrequency[action] || 0) + 1;
       });
 
@@ -339,7 +339,7 @@ class LearningCore {
         .slice(0, 5)
         .forEach(([action, count]) => {
           patterns.push({
-            pattern_type: 'frequent_action',
+            pattern_type: "frequent_action",
             frequency: count,
             module,
             confidence: count / moduleEvents.length,
@@ -362,7 +362,7 @@ class LearningCore {
     const counts: Record<string, number> = {};
     
     events.forEach(event => {
-      const type = event.event_type || 'unknown';
+      const type = event.event_type || "unknown";
       counts[type] = (counts[type] || 0) + 1;
     });
 
@@ -384,11 +384,11 @@ class LearningCore {
     }
 
     const json = JSON.stringify(dataset, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
+    const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
 
     // Create download link
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = filename || `training-data-${new Date().toISOString()}.json`;
     document.body.appendChild(link);
@@ -410,9 +410,9 @@ class LearningCore {
       retentionDate.setDate(retentionDate.getDate() - this.config.retention_days);
 
       const { data, error } = await supabase
-        .from('learning_events')
+        .from("learning_events")
         .delete()
-        .lt('created_at', retentionDate.toISOString())
+        .lt("created_at", retentionDate.toISOString())
         .select();
 
       if (error) {

@@ -85,7 +85,7 @@ class CoordinationAI {
     activeTasks: number;
     completedTasks: number;
     timestamp: Date;
-  } {
+    } {
     const drones = droneCommander.listDrones();
     const bots = surfaceBotCore.listBots();
 

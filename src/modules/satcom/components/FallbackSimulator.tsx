@@ -76,8 +76,8 @@ export const FallbackSimulator: React.FC<FallbackSimulatorProps> = ({
                       conn.status === "connected"
                         ? "bg-green-500"
                         : conn.status === "degraded"
-                        ? "bg-yellow-500"
-                        : "bg-red-500"
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
                     }`}
                   />
                   <div>
@@ -127,12 +127,12 @@ export const FallbackSimulator: React.FC<FallbackSimulatorProps> = ({
             {simulationEvents.map((event, index) => (
               <div key={index} className="text-xs font-mono">
                 <span className="text-muted-foreground">
-                  [{new Date(event.timestamp).toLocaleTimeString('pt-BR')}]
-                </span>{' '}
+                  [{new Date(event.timestamp).toLocaleTimeString("pt-BR")}]
+                </span>{" "}
                 <span className={
                   event.type === "disconnect" ? "text-red-500" :
-                  event.type === "fallback_activated" ? "text-orange-500" :
-                  "text-green-500"
+                    event.type === "fallback_activated" ? "text-orange-500" :
+                      "text-green-500"
                 }>
                   {event.message}
                 </span>

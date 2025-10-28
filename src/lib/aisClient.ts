@@ -13,7 +13,7 @@ export interface VesselPosition {
   course: number;
   heading: number;
   timestamp: string;
-  status: 'underway' | 'at_anchor' | 'moored' | 'not_under_command' | 'restricted_maneuverability';
+  status: "underway" | "at_anchor" | "moored" | "not_under_command" | "restricted_maneuverability";
   type: string;
 }
 
@@ -32,8 +32,8 @@ export class AISClient {
 
   constructor(config: AISClientConfig = {}) {
     this.config = {
-      apiKey: config.apiKey || '',
-      baseUrl: config.baseUrl || 'https://api.marinetraffic.com/api/exportvessel/v:5',
+      apiKey: config.apiKey || "",
+      baseUrl: config.baseUrl || "https://api.marinetraffic.com/api/exportvessel/v:5",
       timeout: config.timeout || 10000,
     };
   }
@@ -63,7 +63,7 @@ export class AISClient {
       const response = await fetch(url, {
         signal: controller.signal,
         headers: {
-          'Accept': 'application/json',
+          "Accept": "application/json",
         },
       });
 
@@ -76,7 +76,7 @@ export class AISClient {
       const data = await response.json();
       return this.parseVesselData(data);
     } catch (error) {
-      console.error('Error fetching AIS data:', error);
+      console.error("Error fetching AIS data:", error);
       // Fallback to mock data on error
       return this.getMockVessels(bounds);
     }
@@ -106,7 +106,7 @@ export class AISClient {
       const response = await fetch(url, {
         signal: controller.signal,
         headers: {
-          'Accept': 'application/json',
+          "Accept": "application/json",
         },
       });
 
@@ -120,7 +120,7 @@ export class AISClient {
       const vessels = this.parseVesselData(data);
       return vessels[0] || null;
     } catch (error) {
-      console.error('Error fetching vessel by MMSI:', error);
+      console.error("Error fetching vessel by MMSI:", error);
       return null;
     }
   }
@@ -134,8 +134,8 @@ export class AISClient {
     }
 
     return data.map((vessel: any) => ({
-      mmsi: vessel.MMSI || vessel.mmsi || '',
-      name: vessel.SHIPNAME || vessel.shipname || 'Unknown Vessel',
+      mmsi: vessel.MMSI || vessel.mmsi || "",
+      name: vessel.SHIPNAME || vessel.shipname || "Unknown Vessel",
       latitude: parseFloat(vessel.LAT || vessel.latitude || 0),
       longitude: parseFloat(vessel.LON || vessel.longitude || 0),
       speed: parseFloat(vessel.SPEED || vessel.speed || 0),
@@ -143,23 +143,23 @@ export class AISClient {
       heading: parseFloat(vessel.HEADING || vessel.heading || 0),
       timestamp: vessel.TIMESTAMP || vessel.timestamp || new Date().toISOString(),
       status: this.parseStatus(vessel.STATUS || vessel.status || 0),
-      type: vessel.TYPE || vessel.type || 'Unknown',
+      type: vessel.TYPE || vessel.type || "Unknown",
     }));
   }
 
   /**
    * Converts numeric status codes to readable status
    */
-  private parseStatus(statusCode: number | string): VesselPosition['status'] {
-    const code = typeof statusCode === 'string' ? parseInt(statusCode) : statusCode;
+  private parseStatus(statusCode: number | string): VesselPosition["status"] {
+    const code = typeof statusCode === "string" ? parseInt(statusCode) : statusCode;
     
-    if (code === 0 || code === 5) return 'underway';
-    if (code === 1 || code === 5) return 'at_anchor';
-    if (code === 2) return 'not_under_command';
-    if (code === 3) return 'restricted_maneuverability';
-    if (code === 5) return 'moored';
+    if (code === 0 || code === 5) return "underway";
+    if (code === 1 || code === 5) return "at_anchor";
+    if (code === 2) return "not_under_command";
+    if (code === 3) return "restricted_maneuverability";
+    if (code === 5) return "moored";
     
-    return 'underway';
+    return "underway";
   }
 
   /**
@@ -176,52 +176,52 @@ export class AISClient {
     
     return [
       {
-        mmsi: '211234567',
-        name: 'MV Atlantic Pioneer',
+        mmsi: "211234567",
+        name: "MV Atlantic Pioneer",
         latitude: centerLat + 0.5,
         longitude: centerLon + 0.5,
         speed: 12.5,
         course: 45,
         heading: 45,
         timestamp: new Date().toISOString(),
-        status: 'underway',
-        type: 'Cargo',
+        status: "underway",
+        type: "Cargo",
       },
       {
-        mmsi: '211234568',
-        name: 'Pacific Explorer',
+        mmsi: "211234568",
+        name: "Pacific Explorer",
         latitude: centerLat - 0.3,
         longitude: centerLon + 0.8,
         speed: 8.2,
         course: 180,
         heading: 180,
         timestamp: new Date().toISOString(),
-        status: 'underway',
-        type: 'Tanker',
+        status: "underway",
+        type: "Tanker",
       },
       {
-        mmsi: '211234569',
-        name: 'Ocean Spirit',
+        mmsi: "211234569",
+        name: "Ocean Spirit",
         latitude: centerLat + 0.8,
         longitude: centerLon - 0.4,
         speed: 0,
         course: 0,
         heading: 270,
         timestamp: new Date().toISOString(),
-        status: 'at_anchor',
-        type: 'Passenger',
+        status: "at_anchor",
+        type: "Passenger",
       },
       {
-        mmsi: '211234570',
-        name: 'Coastal Guardian',
+        mmsi: "211234570",
+        name: "Coastal Guardian",
         latitude: centerLat - 0.6,
         longitude: centerLon - 0.7,
         speed: 15.8,
         course: 315,
         heading: 315,
         timestamp: new Date().toISOString(),
-        status: 'underway',
-        type: 'Service Vessel',
+        status: "underway",
+        type: "Service Vessel",
       },
     ];
   }

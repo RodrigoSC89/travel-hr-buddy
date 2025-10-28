@@ -11,12 +11,12 @@
 
 import { logger } from "@/lib/logger";
 
-export type DistanceUnit = 'km' | 'mi' | 'nm' | 'm' | 'ft';
-export type TemperatureUnit = 'C' | 'F' | 'K';
-export type VolumeUnit = 'L' | 'gal_us' | 'gal_uk' | 'ml' | 'm3';
-export type SpeedUnit = 'knots' | 'kmh' | 'mph' | 'ms';
-export type PressureUnit = 'bar' | 'psi' | 'atm' | 'pa';
-export type WeightUnit = 'kg' | 'lb' | 'ton' | 'g';
+export type DistanceUnit = "km" | "mi" | "nm" | "m" | "ft";
+export type TemperatureUnit = "C" | "F" | "K";
+export type VolumeUnit = "L" | "gal_us" | "gal_uk" | "ml" | "m3";
+export type SpeedUnit = "knots" | "kmh" | "mph" | "ms";
+export type PressureUnit = "bar" | "psi" | "atm" | "pa";
+export type WeightUnit = "kg" | "lb" | "ton" | "g";
 
 export interface ConversionOptions {
   precision?: number;
@@ -87,30 +87,30 @@ class UnitConverter {
     let celsius: number;
     
     switch (from) {
-      case 'C':
-        celsius = value;
-        break;
-      case 'F':
-        celsius = (value - 32) * 5 / 9;
-        break;
-      case 'K':
-        celsius = value - 273.15;
-        break;
+    case "C":
+      celsius = value;
+      break;
+    case "F":
+      celsius = (value - 32) * 5 / 9;
+      break;
+    case "K":
+      celsius = value - 273.15;
+      break;
     }
     
     // Convert from Celsius to target unit
     let result: number;
     
     switch (to) {
-      case 'C':
-        result = celsius;
-        break;
-      case 'F':
-        result = celsius * 9 / 5 + 32;
-        break;
-      case 'K':
-        result = celsius + 273.15;
-        break;
+    case "C":
+      result = celsius;
+      break;
+    case "F":
+      result = celsius * 9 / 5 + 32;
+      break;
+    case "K":
+      result = celsius + 273.15;
+      break;
     }
     
     return this.round(result, precision);
@@ -305,41 +305,41 @@ class UnitConverter {
   ): string {
     const unitLabels: Record<string, string> = {
       // Distance
-      km: 'km',
-      mi: 'mi',
-      nm: 'NM',
-      m: 'm',
-      ft: 'ft',
+      km: "km",
+      mi: "mi",
+      nm: "NM",
+      m: "m",
+      ft: "ft",
       
       // Temperature
-      C: '°C',
-      F: '°F',
-      K: 'K',
+      C: "°C",
+      F: "°F",
+      K: "K",
       
       // Volume
-      L: 'L',
-      gal_us: 'gal (US)',
-      gal_uk: 'gal (UK)',
-      ml: 'ml',
-      m3: 'm³',
+      L: "L",
+      gal_us: "gal (US)",
+      gal_uk: "gal (UK)",
+      ml: "ml",
+      m3: "m³",
       
       // Speed
-      knots: 'kn',
-      kmh: 'km/h',
-      mph: 'mph',
-      ms: 'm/s',
+      knots: "kn",
+      kmh: "km/h",
+      mph: "mph",
+      ms: "m/s",
       
       // Pressure
-      bar: 'bar',
-      psi: 'psi',
-      atm: 'atm',
-      pa: 'Pa',
+      bar: "bar",
+      psi: "psi",
+      atm: "atm",
+      pa: "Pa",
       
       // Weight
-      kg: 'kg',
-      lb: 'lb',
-      ton: 't',
-      g: 'g',
+      kg: "kg",
+      lb: "lb",
+      ton: "t",
+      g: "g",
     };
     
     return `${value} ${unitLabels[unit] || unit}`;
@@ -351,21 +351,21 @@ class UnitConverter {
   autoConvert(
     value: number,
     unit: DistanceUnit | TemperatureUnit | VolumeUnit,
-    userLocale: 'metric' | 'imperial' = 'metric'
+    userLocale: "metric" | "imperial" = "metric"
   ): { value: number; unit: string; formatted: string } {
     try {
       // Determine target unit based on user preference
       let targetUnit: any;
       let convertedValue: number;
       
-      if (unit === 'km' || unit === 'mi') {
-        targetUnit = userLocale === 'imperial' ? 'mi' : 'km';
+      if (unit === "km" || unit === "mi") {
+        targetUnit = userLocale === "imperial" ? "mi" : "km";
         convertedValue = this.convertDistance(value, unit as DistanceUnit, targetUnit);
-      } else if (unit === 'C' || unit === 'F') {
-        targetUnit = userLocale === 'imperial' ? 'F' : 'C';
+      } else if (unit === "C" || unit === "F") {
+        targetUnit = userLocale === "imperial" ? "F" : "C";
         convertedValue = this.convertTemperature(value, unit as TemperatureUnit, targetUnit);
-      } else if (unit === 'L' || unit === 'gal_us') {
-        targetUnit = userLocale === 'imperial' ? 'gal_us' : 'L';
+      } else if (unit === "L" || unit === "gal_us") {
+        targetUnit = userLocale === "imperial" ? "gal_us" : "L";
         convertedValue = this.convertVolume(value, unit as VolumeUnit, targetUnit);
       } else {
         return { value, unit, formatted: this.formatWithUnit(value, unit) };
@@ -377,7 +377,7 @@ class UnitConverter {
         formatted: this.formatWithUnit(convertedValue, targetUnit),
       };
     } catch (error) {
-      logger.error('Error in autoConvert:', error);
+      logger.error("Error in autoConvert:", error);
       return { value, unit, formatted: this.formatWithUnit(value, unit) };
     }
   }

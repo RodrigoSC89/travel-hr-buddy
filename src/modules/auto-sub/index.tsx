@@ -54,7 +54,7 @@ const AutoSub: React.FC = () => {
   const [maxWaves, setMaxWaves] = useState(1.5);
   const [minVisibility, setMinVisibility] = useState(10);
 
-  const [scanPattern, setScanPattern] = useState<'grid' | 'spiral' | 'random'>('grid');
+  const [scanPattern, setScanPattern] = useState<"grid" | "spiral" | "random">("grid");
 
   useEffect(() => {
     planner.onFeedback((fb) => {
@@ -74,7 +74,7 @@ const AutoSub: React.FC = () => {
       },
       minDepth,
       maxDepth,
-      priority: 'medium',
+      priority: "medium",
     };
 
     const environmental: EnvironmentalParams = {
@@ -87,7 +87,7 @@ const AutoSub: React.FC = () => {
 
     const plan = planner.generateMissionPlan(
       area,
-      ['Bathymetric survey', 'Obstacle detection', 'Environmental monitoring'],
+      ["Bathymetric survey", "Obstacle detection", "Environmental monitoring"],
       environmental,
       scanPattern
     );
@@ -112,9 +112,9 @@ const AutoSub: React.FC = () => {
   const handleExportPlan = () => {
     if (currentPlan) {
       const json = planner.exportMissionPlan(currentPlan.id);
-      const blob = new Blob([json], { type: 'application/json' });
+      const blob = new Blob([json], { type: "application/json" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.download = `mission-${currentPlan.id}.json`;
       link.click();
@@ -124,22 +124,22 @@ const AutoSub: React.FC = () => {
 
   const getRiskBadge = (risk: string) => {
     const colors = {
-      low: 'bg-green-500',
-      medium: 'bg-yellow-500',
-      high: 'bg-red-500',
+      low: "bg-green-500",
+      medium: "bg-yellow-500",
+      high: "bg-red-500",
     };
-    return colors[risk as keyof typeof colors] || 'bg-gray-500';
+    return colors[risk as keyof typeof colors] || "bg-gray-500";
   };
 
   const getStatusBadge = (status: string) => {
     const colors = {
-      draft: 'bg-gray-500',
-      approved: 'bg-blue-500',
-      active: 'bg-green-500 animate-pulse',
-      completed: 'bg-cyan-500',
-      aborted: 'bg-red-500',
+      draft: "bg-gray-500",
+      approved: "bg-blue-500",
+      active: "bg-green-500 animate-pulse",
+      completed: "bg-cyan-500",
+      aborted: "bg-red-500",
     };
-    return colors[status as keyof typeof colors] || 'bg-gray-500';
+    return colors[status as keyof typeof colors] || "bg-gray-500";
   };
 
   return (
@@ -342,13 +342,13 @@ const AutoSub: React.FC = () => {
                 <Separator className="bg-zinc-700" />
 
                 <div className="flex flex-wrap gap-2">
-                  {currentPlan.status === 'draft' && (
+                  {currentPlan.status === "draft" && (
                     <Button onClick={handleApprovePlan} className="bg-blue-600 hover:bg-blue-700">
                       <CheckCircle className="w-4 h-4 mr-2" />
                       Approve Plan
                     </Button>
                   )}
-                  {currentPlan.status === 'approved' && (
+                  {currentPlan.status === "approved" && (
                     <Button onClick={handleStartMission} className="bg-green-600 hover:bg-green-700">
                       <PlayCircle className="w-4 h-4 mr-2" />
                       Start Mission
@@ -385,10 +385,10 @@ const AutoSub: React.FC = () => {
                       >
                         <div className="flex justify-between items-start mb-1">
                           <Badge className={
-                            fb.type === 'completion' ? 'bg-green-500' :
-                            fb.type === 'error' || fb.type === 'abort' ? 'bg-red-500' :
-                            fb.type === 'warning' ? 'bg-yellow-500' :
-                            'bg-blue-500'
+                            fb.type === "completion" ? "bg-green-500" :
+                              fb.type === "error" || fb.type === "abort" ? "bg-red-500" :
+                                fb.type === "warning" ? "bg-yellow-500" :
+                                  "bg-blue-500"
                           }>
                             {fb.type.toUpperCase()}
                           </Badge>

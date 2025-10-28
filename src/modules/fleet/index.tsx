@@ -82,42 +82,42 @@ const FleetModule = () => {
 
       // Load vessels
       const { data: vesselsData, error: vesselsError } = await supabase
-        .from('vessels')
-        .select('*')
-        .order('name');
+        .from("vessels")
+        .select("*")
+        .order("name");
 
       if (vesselsError) {
-        console.error('Error loading vessels:', vesselsError);
+        console.error("Error loading vessels:", vesselsError);
       } else {
         setVessels((vesselsData as any[]) || []);
       }
 
       // Load maintenance records
       const { data: maintenanceData, error: maintenanceError } = await supabase
-        .from('maintenance' as any)
-        .select('*')
-        .order('scheduled_date', { ascending: false });
+        .from("maintenance" as any)
+        .select("*")
+        .order("scheduled_date", { ascending: false });
 
       if (maintenanceError) {
-        console.error('Error loading maintenance:', maintenanceError);
+        console.error("Error loading maintenance:", maintenanceError);
       } else {
         setMaintenance((maintenanceData as any[]) || []);
       }
 
       // Load crew assignments
       const { data: crewData, error: crewError } = await supabase
-        .from('crew_assignments' as any)
-        .select('*')
-        .order('start_date', { ascending: false });
+        .from("crew_assignments" as any)
+        .select("*")
+        .order("start_date", { ascending: false });
 
       if (crewError) {
-        console.error('Error loading crew assignments:', crewError);
+        console.error("Error loading crew assignments:", crewError);
       } else {
         setCrewAssignments((crewData as any[]) || []);
       }
 
     } catch (error) {
-      console.error('Error loading fleet data:', error);
+      console.error("Error loading fleet data:", error);
       toast({
         title: "Error",
         description: "Failed to load fleet data. Please try again.",
@@ -128,8 +128,8 @@ const FleetModule = () => {
     }
   };
 
-  const activeVessels = vessels.filter(v => v.status === 'active').length;
-  const pendingMaintenance = maintenance.filter(m => m.status === 'pending').length;
+  const activeVessels = vessels.filter(v => v.status === "active").length;
+  const pendingMaintenance = maintenance.filter(m => m.status === "pending").length;
   const totalCrew = crewAssignments.length;
 
   if (loading) {
@@ -244,7 +244,7 @@ const FleetModule = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge variant={vessel.status === 'active' ? 'default' : 'secondary'}>
+                        <Badge variant={vessel.status === "active" ? "default" : "secondary"}>
                           {vessel.status}
                         </Badge>
                         <Button variant="outline" size="sm">Details</Button>
@@ -280,7 +280,7 @@ const FleetModule = () => {
                           <p className="text-sm text-muted-foreground">{item.scheduled_date}</p>
                         </div>
                       </div>
-                      <Badge variant={item.status === 'pending' ? 'destructive' : 'default'}>
+                      <Badge variant={item.status === "pending" ? "destructive" : "default"}>
                         {item.status}
                       </Badge>
                     </div>

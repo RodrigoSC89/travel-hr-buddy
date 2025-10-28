@@ -3,13 +3,13 @@
  * Types for autonomous task management and decision engine
  */
 
-export type TaskType = 'maintenance' | 'logistics' | 'satellite' | 'mission';
-export type TaskStatus = 'pending' | 'approved' | 'executing' | 'completed' | 'failed' | 'cancelled';
-export type TaskPriority = 'low' | 'medium' | 'high' | 'critical';
-export type RuleType = 'threshold' | 'pattern' | 'prediction' | 'schedule';
-export type DecisionType = 'create' | 'approve' | 'reject' | 'execute' | 'complete';
-export type DecisionMaker = 'system' | 'user' | 'ai';
-export type EntityType = 'mission' | 'equipment' | 'satellite' | 'global';
+export type TaskType = "maintenance" | "logistics" | "satellite" | "mission";
+export type TaskStatus = "pending" | "approved" | "executing" | "completed" | "failed" | "cancelled";
+export type TaskPriority = "low" | "medium" | "high" | "critical";
+export type RuleType = "threshold" | "pattern" | "prediction" | "schedule";
+export type DecisionType = "create" | "approve" | "reject" | "execute" | "complete";
+export type DecisionMaker = "system" | "user" | "ai";
+export type EntityType = "mission" | "equipment" | "satellite" | "global";
 
 export interface AutonomousTask {
   id: string;
@@ -45,7 +45,7 @@ export interface ExecutionStep {
   step_number: number;
   action: string;
   description: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  status: "pending" | "in_progress" | "completed" | "failed";
   started_at?: string;
   completed_at?: string;
   result?: Record<string, unknown>;
@@ -53,7 +53,7 @@ export interface ExecutionStep {
 
 export interface ExecutionLog {
   timestamp: string;
-  level: 'debug' | 'info' | 'warning' | 'error';
+  level: "debug" | "info" | "warning" | "error";
   message: string;
   data?: Record<string, unknown>;
 }
@@ -80,7 +80,7 @@ export interface AutonomyRule {
 
 export interface RuleConditions {
   metric?: string;
-  operator?: 'greater_than' | 'less_than' | 'equals' | 'not_equals' | 'between';
+  operator?: "greater_than" | "less_than" | "equals" | "not_equals" | "between";
   value?: number | string;
   event?: string;
   duration_minutes?: number;

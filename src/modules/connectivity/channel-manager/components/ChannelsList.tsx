@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Hash, Lock, Radio, Settings } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Hash, Lock, Radio, Settings } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface ChannelsListProps {
   onSelectChannel: (channel: any) => void;
@@ -27,8 +27,8 @@ export const ChannelsList: React.FC<ChannelsListProps> = ({
 
     // Subscribe to real-time channel updates
     const subscription = supabase
-      .channel('channels_changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'communication_channels' }, () => {
+      .channel("channels_changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "communication_channels" }, () => {
         loadChannels();
       })
       .subscribe();
@@ -41,17 +41,17 @@ export const ChannelsList: React.FC<ChannelsListProps> = ({
   const loadChannels = async () => {
     try {
       const { data, error } = await supabase
-        .from('communication_channels')
-        .select('*, channel_members(count)')
-        .order('created_at', { ascending: false });
+        .from("communication_channels")
+        .select("*, channel_members(count)")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setChannels(data || []);
     } catch (error: any) {
       toast({
-        title: 'Error loading channels',
+        title: "Error loading channels",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -61,20 +61,20 @@ export const ChannelsList: React.FC<ChannelsListProps> = ({
   const toggleChannelStatus = async (channelId: string, isActive: boolean) => {
     try {
       const { error } = await supabase
-        .from('communication_channels')
+        .from("communication_channels")
         .update({ is_active: isActive })
-        .eq('id', channelId);
+        .eq("id", channelId);
 
       if (error) throw error;
       toast({
-        title: isActive ? 'Channel activated' : 'Channel deactivated',
+        title: isActive ? "Channel activated" : "Channel deactivated",
       });
       onRefresh();
     } catch (error: any) {
       toast({
-        title: 'Error updating channel',
+        title: "Error updating channel",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -91,7 +91,7 @@ export const ChannelsList: React.FC<ChannelsListProps> = ({
               <div
                 key={channel.id}
                 className={`p-3 rounded-lg cursor-pointer hover:bg-accent transition-colors ${
-                  selectedChannelId === channel.id ? 'bg-accent' : ''
+                  selectedChannelId === channel.id ? "bg-accent" : ""
                 }`}
                 onClick={() => onSelectChannel(channel)}
               >

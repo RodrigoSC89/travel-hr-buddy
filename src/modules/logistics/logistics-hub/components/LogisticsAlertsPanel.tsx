@@ -33,13 +33,13 @@ export const LogisticsAlertsPanel = () => {
     loadAlerts();
     
     const channel = supabase
-      .channel('logistics_alerts_changes')
+      .channel("logistics_alerts_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'logistics_alerts'
+          event: "*",
+          schema: "public",
+          table: "logistics_alerts"
         },
         () => {
           loadAlerts();
@@ -55,16 +55,16 @@ export const LogisticsAlertsPanel = () => {
   const loadAlerts = async () => {
     try {
       const { data, error } = await supabase
-        .from('logistics_alerts')
-        .select('*')
-        .eq('resolved', false)
-        .order('severity', { ascending: false })
-        .order('created_at', { ascending: false });
+        .from("logistics_alerts")
+        .select("*")
+        .eq("resolved", false)
+        .order("severity", { ascending: false })
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setAlerts(data || []);
     } catch (error: any) {
-      console.error('Error loading alerts:', error);
+      console.error("Error loading alerts:", error);
     } finally {
       setLoading(false);
     }
@@ -73,12 +73,12 @@ export const LogisticsAlertsPanel = () => {
   const acknowledgeAlert = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('logistics_alerts')
+        .from("logistics_alerts")
         .update({
           acknowledged: true,
           acknowledged_at: new Date().toISOString()
         })
-        .eq('id', alertId);
+        .eq("id", alertId);
 
       if (error) throw error;
 
@@ -100,12 +100,12 @@ export const LogisticsAlertsPanel = () => {
   const resolveAlert = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('logistics_alerts')
+        .from("logistics_alerts")
         .update({
           resolved: true,
           resolved_at: new Date().toISOString()
         })
-        .eq('id', alertId);
+        .eq("id", alertId);
 
       if (error) throw error;
 
@@ -126,31 +126,31 @@ export const LogisticsAlertsPanel = () => {
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case 'low_stock':
-        return <TrendingUp className="h-5 w-5 text-orange-500" />;
-      case 'shipment_delayed':
-        return <Truck className="h-5 w-5 text-yellow-500" />;
-      case 'supply_request':
-        return <ClipboardList className="h-5 w-5 text-blue-500" />;
-      case 'urgent_need':
-        return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      default:
-        return <AlertTriangle className="h-5 w-5 text-gray-500" />;
+    case "low_stock":
+      return <TrendingUp className="h-5 w-5 text-orange-500" />;
+    case "shipment_delayed":
+      return <Truck className="h-5 w-5 text-yellow-500" />;
+    case "supply_request":
+      return <ClipboardList className="h-5 w-5 text-blue-500" />;
+    case "urgent_need":
+      return <AlertTriangle className="h-5 w-5 text-red-500" />;
+    default:
+      return <AlertTriangle className="h-5 w-5 text-gray-500" />;
     }
   };
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return <Badge variant="destructive">Critical</Badge>;
-      case 'high':
-        return <Badge className="bg-orange-500">High</Badge>;
-      case 'medium':
-        return <Badge variant="secondary">Medium</Badge>;
-      case 'low':
-        return <Badge variant="outline">Low</Badge>;
-      default:
-        return <Badge variant="outline">{severity}</Badge>;
+    case "critical":
+      return <Badge variant="destructive">Critical</Badge>;
+    case "high":
+      return <Badge className="bg-orange-500">High</Badge>;
+    case "medium":
+      return <Badge variant="secondary">Medium</Badge>;
+    case "low":
+      return <Badge variant="outline">Low</Badge>;
+    default:
+      return <Badge variant="outline">{severity}</Badge>;
     }
   };
 
@@ -206,7 +206,7 @@ export const LogisticsAlertsPanel = () => {
                         {alert.message}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        Created {format(new Date(alert.created_at), 'dd/MM/yyyy HH:mm')}
+                        Created {format(new Date(alert.created_at), "dd/MM/yyyy HH:mm")}
                       </p>
                     </div>
                   </div>

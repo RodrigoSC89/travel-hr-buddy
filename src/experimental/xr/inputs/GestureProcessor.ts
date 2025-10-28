@@ -1,5 +1,5 @@
-import { Hands, Results } from '@mediapipe/hands';
-import { Camera } from '@mediapipe/camera_utils';
+import { Hands, Results } from "@mediapipe/hands";
+import { Camera } from "@mediapipe/camera_utils";
 
 export interface GestureData {
   type: string;
@@ -10,19 +10,19 @@ export interface GestureData {
 }
 
 export type GestureType = 
-  | 'pointing'
-  | 'grab'
-  | 'pinch'
-  | 'swipe_left'
-  | 'swipe_right'
-  | 'swipe_up'
-  | 'swipe_down'
-  | 'open_palm'
-  | 'closed_fist'
-  | 'thumbs_up'
-  | 'thumbs_down'
-  | 'peace_sign'
-  | 'unknown';
+  | "pointing"
+  | "grab"
+  | "pinch"
+  | "swipe_left"
+  | "swipe_right"
+  | "swipe_up"
+  | "swipe_down"
+  | "open_palm"
+  | "closed_fist"
+  | "thumbs_up"
+  | "thumbs_down"
+  | "peace_sign"
+  | "unknown";
 
 /**
  * GestureProcessor
@@ -59,9 +59,9 @@ export class GestureProcessor {
       });
 
       this.isInitialized = true;
-      console.log('GestureProcessor initialized');
+      console.log("GestureProcessor initialized");
     } catch (error) {
-      console.error('Failed to initialize GestureProcessor:', error);
+      console.error("Failed to initialize GestureProcessor:", error);
       this.isInitialized = false;
     }
   }
@@ -74,7 +74,7 @@ export class GestureProcessor {
     onGesture: (gesture: GestureData) => void
   ): Promise<void> {
     if (!this.isInitialized || !this.hands) {
-      throw new Error('GestureProcessor not initialized');
+      throw new Error("GestureProcessor not initialized");
     }
 
     this.onGestureCallback = onGesture;
@@ -91,7 +91,7 @@ export class GestureProcessor {
     });
 
     await this.camera.start();
-    console.log('Gesture recognition started');
+    console.log("Gesture recognition started");
   }
 
   /**
@@ -103,7 +103,7 @@ export class GestureProcessor {
       this.camera = null;
     }
     this.onGestureCallback = undefined;
-    console.log('Gesture recognition stopped');
+    console.log("Gesture recognition stopped");
   }
 
   /**
@@ -116,7 +116,7 @@ export class GestureProcessor {
 
     // Process each detected hand
     results.multiHandLandmarks.forEach((landmarks, index) => {
-      const handedness = results.multiHandedness?.[index]?.label || 'Unknown';
+      const handedness = results.multiHandedness?.[index]?.label || "Unknown";
       const gesture = this.recognizeGesture(landmarks);
 
       if (gesture && this.onGestureCallback) {
@@ -195,27 +195,27 @@ export class GestureProcessor {
 
     // Pointing gesture (index finger extended, others folded)
     if (!thumb && index && !middle && !ring && !pinky) {
-      return { type: 'pointing', confidence: 0.9 };
+      return { type: "pointing", confidence: 0.9 };
     }
 
     // Open palm (all fingers extended)
     if (thumb && index && middle && ring && pinky) {
-      return { type: 'open_palm', confidence: 0.95 };
+      return { type: "open_palm", confidence: 0.95 };
     }
 
     // Closed fist (all fingers folded)
     if (!thumb && !index && !middle && !ring && !pinky) {
-      return { type: 'closed_fist', confidence: 0.9 };
+      return { type: "closed_fist", confidence: 0.9 };
     }
 
     // Thumbs up
     if (thumb && !index && !middle && !ring && !pinky) {
-      return { type: 'thumbs_up', confidence: 0.85 };
+      return { type: "thumbs_up", confidence: 0.85 };
     }
 
     // Peace sign (index and middle extended)
     if (!thumb && index && middle && !ring && !pinky) {
-      return { type: 'peace_sign', confidence: 0.85 };
+      return { type: "peace_sign", confidence: 0.85 };
     }
 
     // Pinch gesture (thumb and index close together)
@@ -227,11 +227,11 @@ export class GestureProcessor {
     );
     
     if (distance < 0.05) {
-      return { type: 'pinch', confidence: 0.8 };
+      return { type: "pinch", confidence: 0.8 };
     }
 
     // Unknown gesture
-    return { type: 'unknown', confidence: 0.3 };
+    return { type: "unknown", confidence: 0.3 };
   }
 
   /**

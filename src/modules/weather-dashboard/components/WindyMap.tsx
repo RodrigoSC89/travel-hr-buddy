@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Wind, Waves, CloudRain, Thermometer, Gauge } from "lucide-react";
 import { logger } from "@/lib/logger";
 
-export type WindyOverlay = 'wind' | 'waves' | 'rain' | 'temp' | 'pressure' | 'clouds';
+export type WindyOverlay = "wind" | "waves" | "rain" | "temp" | "pressure" | "clouds";
 
 interface WindyMapProps {
   latitude?: number;
@@ -25,7 +25,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
   latitude = -15,
   longitude = -45,
   zoom = 5,
-  overlay = 'wind',
+  overlay = "wind",
   height = 500,
   onOverlayChange,
 }) => {
@@ -44,8 +44,8 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       setIsScriptLoading(true);
       logger.info("Loading Windy API script");
 
-      const script = document.createElement('script');
-      script.src = 'https://api.windy.com/assets/map-forecast/libBoot.js';
+      const script = document.createElement("script");
+      script.src = "https://api.windy.com/assets/map-forecast/libBoot.js";
       script.async = true;
       scriptRef.current = script;
       
@@ -92,7 +92,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
     if (!containerRef.current) return;
 
     const options = {
-      key: 'windy-demo-key', // In production, use actual API key from env
+      key: "windy-demo-key", // In production, use actual API key from env
       lat: latitude,
       lon: longitude,
       zoom: zoom,
@@ -106,7 +106,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
         windyInstanceRef.current = windyAPI;
         
         // Set initial overlay
-        store.set('overlay', currentOverlay);
+        store.set("overlay", currentOverlay);
         logger.info(`Windy map initialized with ${currentOverlay} overlay`);
       });
     }
@@ -119,17 +119,17 @@ export const WindyMap: React.FC<WindyMapProps> = ({
     // Update Windy overlay if instance exists
     if (windyInstanceRef.current) {
       const { store } = windyInstanceRef.current;
-      store.set('overlay', newOverlay);
+      store.set("overlay", newOverlay);
       logger.debug(`Switched to ${newOverlay} overlay`);
     }
   };
 
   const overlayOptions: Array<{ value: WindyOverlay; label: string; icon: React.ReactNode }> = [
-    { value: 'wind', label: 'Vento', icon: <Wind className="h-4 w-4" /> },
-    { value: 'waves', label: 'Ondas', icon: <Waves className="h-4 w-4" /> },
-    { value: 'rain', label: 'Chuva', icon: <CloudRain className="h-4 w-4" /> },
-    { value: 'temp', label: 'Temperatura', icon: <Thermometer className="h-4 w-4" /> },
-    { value: 'pressure', label: 'Pressão', icon: <Gauge className="h-4 w-4" /> },
+    { value: "wind", label: "Vento", icon: <Wind className="h-4 w-4" /> },
+    { value: "waves", label: "Ondas", icon: <Waves className="h-4 w-4" /> },
+    { value: "rain", label: "Chuva", icon: <CloudRain className="h-4 w-4" /> },
+    { value: "temp", label: "Temperatura", icon: <Thermometer className="h-4 w-4" /> },
+    { value: "pressure", label: "Pressão", icon: <Gauge className="h-4 w-4" /> },
   ];
 
   return (
@@ -144,7 +144,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
             {overlayOptions.map((option) => (
               <Button
                 key={option.value}
-                variant={currentOverlay === option.value ? 'default' : 'outline'}
+                variant={currentOverlay === option.value ? "default" : "outline"}
                 size="sm"
                 onClick={() => handleOverlayChange(option.value)}
                 disabled={!isLoaded}
@@ -170,10 +170,10 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           id="windy"
           style={{ 
             height,
-            width: '100%',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            display: isLoaded ? 'block' : 'none',
+            width: "100%",
+            borderRadius: "8px",
+            overflow: "hidden",
+            display: isLoaded ? "block" : "none",
           }}
         />
         {!isLoaded && !isScriptLoading && (
@@ -202,7 +202,7 @@ export const WindyMapEmbed: React.FC<WindyMapProps> = ({
   latitude = -15,
   longitude = -45,
   zoom = 5,
-  overlay = 'wind',
+  overlay = "wind",
   height = 500,
 }) => {
   const embedUrl = `https://embed.windy.com/embed2.html?lat=${latitude}&lon=${longitude}&detailLat=${latitude}&detailLon=${longitude}&width=100%&height=${height}&zoom=${zoom}&level=surface&overlay=${overlay}&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1`;
@@ -221,7 +221,7 @@ export const WindyMapEmbed: React.FC<WindyMapProps> = ({
           width="100%"
           height={height}
           frameBorder="0"
-          style={{ borderRadius: '8px' }}
+          style={{ borderRadius: "8px" }}
           title="Windy Weather Map"
         />
       </CardContent>

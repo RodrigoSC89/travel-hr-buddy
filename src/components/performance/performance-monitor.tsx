@@ -7,11 +7,11 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Activity, Zap, Clock, Gauge, Download, FileText, TrendingUp, Bell, Settings } from "lucide-react";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -24,7 +24,7 @@ interface PerformanceMetrics {
 }
 
 interface MetricThreshold {
-  metric: 'loadTime' | 'memoryUsage' | 'networkLatency' | 'score';
+  metric: "loadTime" | "memoryUsage" | "networkLatency" | "score";
   threshold: number;
   enabled: boolean;
   label: string;
@@ -52,10 +52,10 @@ export const PerformanceMonitor: React.FC = () => {
   const [historicalData, setHistoricalData] = useState<HistoricalMetric[]>([]);
   const [showSettings, setShowSettings] = useState(false);
   const [thresholds, setThresholds] = useState<MetricThreshold[]>([
-    { metric: 'loadTime', threshold: 3000, enabled: true, label: 'Load Time', unit: 'ms' },
-    { metric: 'memoryUsage', threshold: 80, enabled: true, label: 'Memory Usage', unit: '%' },
-    { metric: 'networkLatency', threshold: 1000, enabled: true, label: 'Network Latency', unit: 'ms' },
-    { metric: 'score', threshold: 70, enabled: true, label: 'Performance Score', unit: '' },
+    { metric: "loadTime", threshold: 3000, enabled: true, label: "Load Time", unit: "ms" },
+    { metric: "memoryUsage", threshold: 80, enabled: true, label: "Memory Usage", unit: "%" },
+    { metric: "networkLatency", threshold: 1000, enabled: true, label: "Network Latency", unit: "ms" },
+    { metric: "score", threshold: 70, enabled: true, label: "Performance Score", unit: "" },
   ]);
 
   useEffect(() => {
@@ -98,14 +98,14 @@ export const PerformanceMonitor: React.FC = () => {
       // Check thresholds and alert
       checkThresholds(newMetrics);
     } catch (error) {
-      console.error('Error measuring performance:', error);
+      console.error("Error measuring performance:", error);
     }
   }, []);
 
   const persistMetrics = async (newMetrics: PerformanceMetrics) => {
     try {
       const { error } = await supabase
-        .from('performance_metrics')
+        .from("performance_metrics")
         .insert({
           load_time: newMetrics.loadTime,
           memory_usage: newMetrics.memoryUsage,
@@ -115,19 +115,19 @@ export const PerformanceMonitor: React.FC = () => {
         });
 
       if (error) {
-        console.error('Error persisting metrics:', error);
+        console.error("Error persisting metrics:", error);
       }
     } catch (error) {
-      console.error('Error in persistMetrics:', error);
+      console.error("Error in persistMetrics:", error);
     }
   };
 
   const loadHistoricalData = async () => {
     try {
       const { data, error } = await supabase
-        .from('performance_metrics')
-        .select('*')
-        .order('measured_at', { ascending: false })
+        .from("performance_metrics")
+        .select("*")
+        .order("measured_at", { ascending: false })
         .limit(20);
 
       if (error) throw error;
@@ -143,7 +143,7 @@ export const PerformanceMonitor: React.FC = () => {
         setHistoricalData(formatted);
       }
     } catch (error) {
-      console.error('Error loading historical data:', error);
+      console.error("Error loading historical data:", error);
     }
   };
 
@@ -152,7 +152,7 @@ export const PerformanceMonitor: React.FC = () => {
       if (!threshold.enabled) return;
 
       const value = newMetrics[threshold.metric];
-      const exceeds = threshold.metric === 'score' 
+      const exceeds = threshold.metric === "score" 
         ? value < threshold.threshold 
         : value > threshold.threshold;
 
@@ -184,7 +184,7 @@ export const PerformanceMonitor: React.FC = () => {
       return;
     }
 
-    const headers = ['Timestamp', 'Load Time (ms)', 'Memory Usage (%)', 'Network Latency (ms)', 'Score'];
+    const headers = ["Timestamp", "Load Time (ms)", "Memory Usage (%)", "Network Latency (ms)", "Score"];
     const rows = historicalData.map(d => [
       d.timestamp,
       d.loadTime,
@@ -194,15 +194,15 @@ export const PerformanceMonitor: React.FC = () => {
     ]);
 
     const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.join(','))
-    ].join('\n');
+      headers.join(","),
+      ...rows.map(row => row.join(","))
+    ].join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `performance-metrics-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `performance-metrics-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -217,7 +217,7 @@ export const PerformanceMonitor: React.FC = () => {
 
     // Title
     doc.setFontSize(18);
-    doc.text('Performance Monitoring Report', 14, 20);
+    doc.text("Performance Monitoring Report", 14, 20);
 
     // Date
     doc.setFontSize(10);
@@ -225,7 +225,7 @@ export const PerformanceMonitor: React.FC = () => {
 
     // Current Metrics
     doc.setFontSize(14);
-    doc.text('Current Performance Metrics', 14, 40);
+    doc.text("Current Performance Metrics", 14, 40);
     doc.setFontSize(10);
     doc.text(`Performance Score: ${metrics.score}`, 14, 48);
     doc.text(`Load Time: ${metrics.loadTime}ms`, 14, 54);
@@ -234,17 +234,17 @@ export const PerformanceMonitor: React.FC = () => {
 
     // Threshold Configuration
     doc.setFontSize(14);
-    doc.text('Alert Thresholds', 14, 80);
+    doc.text("Alert Thresholds", 14, 80);
     const thresholdData = thresholds.map(t => [
       t.label,
       `${t.threshold}${t.unit}`,
-      t.enabled ? 'Enabled' : 'Disabled'
+      t.enabled ? "Enabled" : "Disabled"
     ]);
     (doc as any).autoTable({
       startY: 85,
-      head: [['Metric', 'Threshold', 'Status']],
+      head: [["Metric", "Threshold", "Status"]],
       body: thresholdData,
-      theme: 'striped',
+      theme: "striped",
       headStyles: { fillColor: [59, 130, 246] }
     });
 
@@ -252,7 +252,7 @@ export const PerformanceMonitor: React.FC = () => {
     if (historicalData.length > 0) {
       const finalY = (doc as any).lastAutoTable.finalY || 120;
       doc.setFontSize(14);
-      doc.text('Recent Historical Data', 14, finalY + 15);
+      doc.text("Recent Historical Data", 14, finalY + 15);
 
       const histData = historicalData.slice(-10).map(d => [
         d.timestamp,
@@ -264,14 +264,14 @@ export const PerformanceMonitor: React.FC = () => {
 
       (doc as any).autoTable({
         startY: finalY + 20,
-        head: [['Time', 'Load Time', 'Memory', 'Latency', 'Score']],
+        head: [["Time", "Load Time", "Memory", "Latency", "Score"]],
         body: histData,
-        theme: 'striped',
+        theme: "striped",
         headStyles: { fillColor: [59, 130, 246] }
       });
     }
 
-    doc.save(`performance-report-${new Date().toISOString().split('T')[0]}.pdf`);
+    doc.save(`performance-report-${new Date().toISOString().split("T")[0]}.pdf`);
 
     toast({
       title: "PDF exported",
@@ -284,20 +284,20 @@ export const PerformanceMonitor: React.FC = () => {
       labels: historicalData.map(d => d.timestamp),
       datasets: [
         {
-          label: 'Load Time (ms)',
+          label: "Load Time (ms)",
           data: historicalData.map(d => d.loadTime),
-          borderColor: 'rgb(59, 130, 246)',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: "rgb(59, 130, 246)",
+          backgroundColor: "rgba(59, 130, 246, 0.1)",
           tension: 0.3,
-          yAxisID: 'y',
+          yAxisID: "y",
         },
         {
-          label: 'Memory Usage (%)',
+          label: "Memory Usage (%)",
           data: historicalData.map(d => d.memoryUsage),
-          borderColor: 'rgb(239, 68, 68)',
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          borderColor: "rgb(239, 68, 68)",
+          backgroundColor: "rgba(239, 68, 68, 0.1)",
           tension: 0.3,
-          yAxisID: 'y1',
+          yAxisID: "y1",
         }
       ]
     };
@@ -416,7 +416,7 @@ export const PerformanceMonitor: React.FC = () => {
                   <div className="flex-1">
                     <Label className="font-medium">{threshold.label}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Alert when {threshold.metric === 'score' ? 'below' : 'exceeds'} {threshold.threshold}{threshold.unit}
+                      Alert when {threshold.metric === "score" ? "below" : "exceeds"} {threshold.threshold}{threshold.unit}
                     </p>
                   </div>
                   <Switch
@@ -450,31 +450,31 @@ export const PerformanceMonitor: React.FC = () => {
                   responsive: true,
                   maintainAspectRatio: false,
                   interaction: {
-                    mode: 'index' as const,
+                    mode: "index" as const,
                     intersect: false,
                   },
                   plugins: {
                     legend: {
-                      position: 'top' as const,
+                      position: "top" as const,
                     },
                   },
                   scales: {
                     y: {
-                      type: 'linear' as const,
+                      type: "linear" as const,
                       display: true,
-                      position: 'left' as const,
+                      position: "left" as const,
                       title: {
                         display: true,
-                        text: 'Load Time (ms)'
+                        text: "Load Time (ms)"
                       }
                     },
                     y1: {
-                      type: 'linear' as const,
+                      type: "linear" as const,
                       display: true,
-                      position: 'right' as const,
+                      position: "right" as const,
                       title: {
                         display: true,
-                        text: 'Memory Usage (%)'
+                        text: "Memory Usage (%)"
                       },
                       grid: {
                         drawOnChartArea: false,

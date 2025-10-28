@@ -82,21 +82,21 @@ const SonarAI: React.FC = () => {
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'safe': return 'bg-green-500';
-      case 'caution': return 'bg-yellow-500';
-      case 'dangerous': return 'bg-orange-500';
-      case 'critical': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "safe": return "bg-green-500";
+    case "caution": return "bg-yellow-500";
+    case "dangerous": return "bg-orange-500";
+    case "critical": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'low': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'medium': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'high': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-      case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+    case "low": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    case "medium": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
+    case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
+    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     }
   };
 
@@ -247,7 +247,7 @@ const SonarAI: React.FC = () => {
                   variant={autoScan ? "destructive" : "outline"}
                   className={autoScan ? "" : "border-zinc-600"}
                 >
-                  {autoScan ? 'Stop Auto' : 'Auto Scan'}
+                  {autoScan ? "Stop Auto" : "Auto Scan"}
                 </Button>
               </div>
             </CardContent>
@@ -332,10 +332,10 @@ const SonarAI: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <AlertTriangle className="w-4 h-4" />
                             <span className="font-semibold text-sm capitalize">
-                              {hazard.type.replace('_', ' ')}
+                              {hazard.type.replace("_", " ")}
                             </span>
                           </div>
-                          <Badge className={`${getRiskColor(hazard.severity === 'critical' ? 'critical' : hazard.severity === 'high' ? 'dangerous' : hazard.severity === 'medium' ? 'caution' : 'safe')} text-xs`}>
+                          <Badge className={`${getRiskColor(hazard.severity === "critical" ? "critical" : hazard.severity === "high" ? "dangerous" : hazard.severity === "medium" ? "caution" : "safe")} text-xs`}>
                             {hazard.severity.toUpperCase()}
                           </Badge>
                         </div>
@@ -423,7 +423,7 @@ const SonarAI: React.FC = () => {
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-semibold text-sm capitalize text-purple-400">
-                        {pattern.type.replace('_', ' ')}
+                        {pattern.type.replace("_", " ")}
                       </span>
                       <span className="text-xs text-purple-300">
                         {pattern.confidence.toFixed(0)}% confidence

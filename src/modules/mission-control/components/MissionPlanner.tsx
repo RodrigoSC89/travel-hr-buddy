@@ -44,15 +44,15 @@ export const MissionPlanner: React.FC = () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from('missions')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("missions")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(20);
 
       if (error) throw error;
       setMissions(data || []);
     } catch (error) {
-      console.error('Error fetching missions:', error);
+      console.error("Error fetching missions:", error);
       toast({
         title: "Error",
         description: "Failed to load missions",
@@ -66,7 +66,7 @@ export const MissionPlanner: React.FC = () => {
   const activateMission = async (missionId: string) => {
     setActivating(missionId);
     try {
-      const { data, error } = await supabase.rpc('activate_mission', {
+      const { data, error } = await supabase.rpc("activate_mission", {
         p_mission_id: missionId,
       });
 
@@ -81,10 +81,10 @@ export const MissionPlanner: React.FC = () => {
         });
         fetchMissions(); // Refresh missions list
       } else {
-        throw new Error(result.error || 'Activation failed');
+        throw new Error(result.error || "Activation failed");
       }
     } catch (error) {
-      console.error('Activation error:', error);
+      console.error("Activation error:", error);
       toast({
         title: "Activation Failed",
         description: error.message || "Failed to activate mission",
@@ -97,36 +97,36 @@ export const MissionPlanner: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active':
-        return 'bg-green-600';
-      case 'completed':
-        return 'bg-blue-600';
-      case 'ready':
-        return 'bg-yellow-600';
-      case 'planning':
-        return 'bg-gray-600';
-      case 'paused':
-        return 'bg-orange-600';
-      case 'cancelled':
-      case 'failed':
-        return 'bg-red-600';
-      default:
-        return 'bg-gray-600';
+    case "active":
+      return "bg-green-600";
+    case "completed":
+      return "bg-blue-600";
+    case "ready":
+      return "bg-yellow-600";
+    case "planning":
+      return "bg-gray-600";
+    case "paused":
+      return "bg-orange-600";
+    case "cancelled":
+    case "failed":
+      return "bg-red-600";
+    default:
+      return "bg-gray-600";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical':
-        return 'border-red-600 bg-red-50';
-      case 'high':
-        return 'border-orange-600 bg-orange-50';
-      case 'normal':
-        return 'border-blue-600 bg-blue-50';
-      case 'low':
-        return 'border-gray-600 bg-gray-50';
-      default:
-        return 'border-gray-600 bg-gray-50';
+    case "critical":
+      return "border-red-600 bg-red-50";
+    case "high":
+      return "border-orange-600 bg-orange-50";
+    case "normal":
+      return "border-blue-600 bg-blue-50";
+    case "low":
+      return "border-gray-600 bg-gray-50";
+    default:
+      return "border-gray-600 bg-gray-50";
     }
   };
 
@@ -153,7 +153,7 @@ export const MissionPlanner: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Active Missions</p>
                 <p className="text-2xl font-bold">
-                  {missions.filter(m => m.status === 'active').length}
+                  {missions.filter(m => m.status === "active").length}
                 </p>
               </div>
               <Play className="h-8 w-8 text-green-600" />
@@ -167,7 +167,7 @@ export const MissionPlanner: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">In Planning</p>
                 <p className="text-2xl font-bold">
-                  {missions.filter(m => m.status === 'planning' || m.status === 'ready').length}
+                  {missions.filter(m => m.status === "planning" || m.status === "ready").length}
                 </p>
               </div>
               <Clock className="h-8 w-8 text-yellow-600" />
@@ -181,7 +181,7 @@ export const MissionPlanner: React.FC = () => {
               <div>
                 <p className="text-sm text-muted-foreground">Completed</p>
                 <p className="text-2xl font-bold">
-                  {missions.filter(m => m.status === 'completed').length}
+                  {missions.filter(m => m.status === "completed").length}
                 </p>
               </div>
               <TrendingUp className="h-8 w-8 text-blue-600" />
@@ -225,11 +225,11 @@ export const MissionPlanner: React.FC = () => {
                   </div>
                   <CardTitle className="text-xl">{mission.name}</CardTitle>
                   <CardDescription className="mt-1">
-                    {mission.description || 'No description available'}
+                    {mission.description || "No description available"}
                   </CardDescription>
                 </div>
 
-                {(mission.status === 'ready' || mission.status === 'planning') && (
+                {(mission.status === "ready" || mission.status === "planning") && (
                   <Button
                     size="sm"
                     onClick={() => activateMission(mission.id)}
@@ -245,7 +245,7 @@ export const MissionPlanner: React.FC = () => {
             <CardContent>
               <div className="space-y-3">
                 {/* Progress Bar */}
-                {mission.status === 'active' && (
+                {mission.status === "active" && (
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Progress</span>
@@ -267,7 +267,7 @@ export const MissionPlanner: React.FC = () => {
                     <p className="font-semibold">
                       {mission.estimated_start
                         ? new Date(mission.estimated_start).toLocaleDateString()
-                        : 'Not scheduled'}
+                        : "Not scheduled"}
                     </p>
                   </div>
                   <div>
@@ -275,7 +275,7 @@ export const MissionPlanner: React.FC = () => {
                     <p className="font-semibold">
                       {mission.estimated_end
                         ? new Date(mission.estimated_end).toLocaleDateString()
-                        : 'Not scheduled'}
+                        : "Not scheduled"}
                     </p>
                   </div>
                 </div>

@@ -17,7 +17,7 @@ export interface VoiceMessage {
   id: string;
   conversation_id: string;
   user_id: string;
-  type: 'user' | 'assistant' | 'system';
+  type: "user" | "assistant" | "system";
   content: string;
   audio_url?: string;
   transcript?: string;
@@ -43,12 +43,12 @@ export function useVoiceLogging() {
 
       const sessionId = `session-${Date.now()}`;
       const { data, error } = await supabase
-        .from('voice_conversations')
+        .from("voice_conversations")
         .insert({
           user_id: user.id,
-          title: title || 'Voice Conversation',
+          title: title || "Voice Conversation",
           session_id: sessionId,
-          status: 'active'
+          status: "active"
         })
         .select()
         .single();
@@ -58,7 +58,7 @@ export function useVoiceLogging() {
       setCurrentConversationId(data.id);
       return data.id;
     } catch (error) {
-      console.error('Error starting conversation:', error);
+      console.error("Error starting conversation:", error);
       return null;
     } finally {
       setIsLogging(false);
@@ -72,25 +72,25 @@ export function useVoiceLogging() {
       if (!id) return;
 
       const { error } = await supabase
-        .from('voice_conversations')
+        .from("voice_conversations")
         .update({
           ended_at: new Date().toISOString(),
-          status: 'completed'
+          status: "completed"
         })
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
 
       setCurrentConversationId(null);
     } catch (error) {
-      console.error('Error ending conversation:', error);
+      console.error("Error ending conversation:", error);
     } finally {
       setIsLogging(false);
     }
   }, [currentConversationId]);
 
   const logMessage = useCallback(async (
-    type: 'user' | 'assistant' | 'system',
+    type: "user" | "assistant" | "system",
     content: string,
     options?: {
       conversationId?: string;
@@ -117,7 +117,7 @@ export function useVoiceLogging() {
       }
 
       const { data, error } = await supabase
-        .from('voice_messages')
+        .from("voice_messages")
         .insert({
           conversation_id: conversationId,
           user_id: user.id,
@@ -136,7 +136,7 @@ export function useVoiceLogging() {
 
       return data;
     } catch (error) {
-      console.error('Error logging message:', error);
+      console.error("Error logging message:", error);
       return null;
     }
   }, [currentConversationId]);
@@ -147,16 +147,16 @@ export function useVoiceLogging() {
       if (!id) return [];
 
       const { data, error } = await supabase
-        .from('voice_messages')
-        .select('*')
-        .eq('conversation_id', id)
-        .order('created_at', { ascending: true });
+        .from("voice_messages")
+        .select("*")
+        .eq("conversation_id", id)
+        .order("created_at", { ascending: true });
 
       if (error) throw error;
 
       return data as VoiceMessage[];
     } catch (error) {
-      console.error('Error getting conversation history:', error);
+      console.error("Error getting conversation history:", error);
       return [];
     }
   }, [currentConversationId]);
@@ -168,17 +168,17 @@ export function useVoiceLogging() {
       if (!user) return [];
 
       const { data, error } = await supabase
-        .from('voice_conversations')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('started_at', { ascending: false })
+        .from("voice_conversations")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("started_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
 
       return data as VoiceConversation[];
     } catch (error) {
-      console.error('Error getting recent conversations:', error);
+      console.error("Error getting recent conversations:", error);
       return [];
     }
   }, []);

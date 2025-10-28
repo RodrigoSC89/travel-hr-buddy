@@ -80,15 +80,15 @@ const ApiGatewayEnhanced = () => {
   const [showNewRoute, setShowNewRoute] = useState(false);
 
   const [keyFormData, setKeyFormData] = useState({
-    key_name: '',
-    tier: 'basic'
+    key_name: "",
+    tier: "basic"
   });
 
   const [routeFormData, setRouteFormData] = useState({
-    route_path: '',
-    route_name: '',
-    method: 'GET',
-    description: '',
+    route_path: "",
+    route_name: "",
+    method: "GET",
+    description: "",
     requires_auth: true,
     is_public: false
   });
@@ -97,13 +97,13 @@ const ApiGatewayEnhanced = () => {
     loadData();
     
     const routesChannel = supabase
-      .channel('api_routes_changes')
+      .channel("api_routes_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'api_routes'
+          event: "*",
+          schema: "public",
+          table: "api_routes"
         },
         () => {
           loadRoutes();
@@ -112,13 +112,13 @@ const ApiGatewayEnhanced = () => {
       .subscribe();
 
     const keysChannel = supabase
-      .channel('api_keys_changes')
+      .channel("api_keys_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'api_keys'
+          event: "*",
+          schema: "public",
+          table: "api_keys"
         },
         () => {
           loadKeys();
@@ -140,43 +140,43 @@ const ApiGatewayEnhanced = () => {
   const loadRoutes = async () => {
     try {
       const { data, error } = await supabase
-        .from('api_routes')
-        .select('*')
-        .order('route_path', { ascending: true });
+        .from("api_routes")
+        .select("*")
+        .order("route_path", { ascending: true });
 
       if (error) throw error;
       setRoutes(data || []);
     } catch (error: unknown) {
-      console.error('Error loading routes:', error);
+      console.error("Error loading routes:", error);
     }
   };
 
   const loadKeys = async () => {
     try {
       const { data, error } = await supabase
-        .from('api_keys')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("api_keys")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setApiKeys(data || []);
     } catch (error: unknown) {
-      console.error('Error loading API keys:', error);
+      console.error("Error loading API keys:", error);
     }
   };
 
   const loadRateLimits = async () => {
     try {
       const { data, error } = await supabase
-        .from('api_rate_limits')
-        .select('*')
-        .eq('route_path', '*')
-        .order('tier', { ascending: true });
+        .from("api_rate_limits")
+        .select("*")
+        .eq("route_path", "*")
+        .order("tier", { ascending: true });
 
       if (error) throw error;
       setRateLimits(data || []);
     } catch (error: unknown) {
-      console.error('Error loading rate limits:', error);
+      console.error("Error loading rate limits:", error);
     }
   };
 
@@ -185,15 +185,15 @@ const ApiGatewayEnhanced = () => {
       // Generate a cryptographically secure random API key
       const array = new Uint8Array(32);
       crypto.getRandomValues(array);
-      const apiKey = 'sk_' + Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+      const apiKey = "sk_" + Array.from(array, byte => byte.toString(16).padStart(2, "0")).join("");
 
       const { error } = await supabase
-        .from('api_keys')
+        .from("api_keys")
         .insert({
           key_name: keyFormData.key_name,
           api_key: apiKey,
           tier: keyFormData.tier,
-          status: 'active'
+          status: "active"
         });
 
       if (error) throw error;
@@ -204,12 +204,12 @@ const ApiGatewayEnhanced = () => {
       });
 
       setShowNewKey(false);
-      setKeyFormData({ key_name: '', tier: 'basic' });
+      setKeyFormData({ key_name: "", tier: "basic" });
       loadKeys();
     } catch (error: unknown) {
       toast({
         title: "Error creating API key",
-        description: error instanceof Error ? error.message : 'Unknown error',
+        description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
       });
     }
@@ -218,11 +218,11 @@ const ApiGatewayEnhanced = () => {
   const createRoute = async () => {
     try {
       const { error } = await supabase
-        .from('api_routes')
+        .from("api_routes")
         .insert({
           ...routeFormData,
-          status: 'active',
-          version: 'v1'
+          status: "active",
+          version: "v1"
         });
 
       if (error) throw error;
@@ -234,10 +234,10 @@ const ApiGatewayEnhanced = () => {
 
       setShowNewRoute(false);
       setRouteFormData({
-        route_path: '',
-        route_name: '',
-        method: 'GET',
-        description: '',
+        route_path: "",
+        route_name: "",
+        method: "GET",
+        description: "",
         requires_auth: true,
         is_public: false
       });
@@ -245,7 +245,7 @@ const ApiGatewayEnhanced = () => {
     } catch (error: unknown) {
       toast({
         title: "Error creating route",
-        description: error instanceof Error ? error.message : 'Unknown error',
+        description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
       });
     }
@@ -254,9 +254,9 @@ const ApiGatewayEnhanced = () => {
   const revokeKey = async (keyId: string) => {
     try {
       const { error } = await supabase
-        .from('api_keys')
-        .update({ status: 'revoked' })
-        .eq('id', keyId);
+        .from("api_keys")
+        .update({ status: "revoked" })
+        .eq("id", keyId);
 
       if (error) throw error;
 
@@ -269,7 +269,7 @@ const ApiGatewayEnhanced = () => {
     } catch (error: unknown) {
       toast({
         title: "Error revoking key",
-        description: error instanceof Error ? error.message : 'Unknown error',
+        description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
       });
     }
@@ -277,14 +277,14 @@ const ApiGatewayEnhanced = () => {
 
   const generateDocumentation = async () => {
     try {
-      const { data, error } = await supabase.rpc('generate_api_documentation');
+      const { data, error } = await supabase.rpc("generate_api_documentation");
 
       if (error) throw error;
 
       // Generate Markdown documentation
-      let markdown = '# API Documentation\n\n';
+      let markdown = "# API Documentation\n\n";
       markdown += `Generated: ${new Date().toLocaleString()}\n\n`;
-      markdown += '## Available Endpoints\n\n';
+      markdown += "## Available Endpoints\n\n";
 
       interface RouteDoc {
         route_path: string;
@@ -296,22 +296,22 @@ const ApiGatewayEnhanced = () => {
 
       (data as RouteDoc[]).forEach((route) => {
         markdown += `### ${route.method} ${route.route_path}\n\n`;
-        markdown += `**Description:** ${route.description || 'No description'}\n\n`;
+        markdown += `**Description:** ${route.description || "No description"}\n\n`;
         markdown += `**Version:** ${route.version}\n\n`;
         
         if (route.schema) {
-          markdown += '**Schema:**\n```json\n';
+          markdown += "**Schema:**\n```json\n";
           markdown += JSON.stringify(route.schema, null, 2);
-          markdown += '\n```\n\n';
+          markdown += "\n```\n\n";
         }
         
-        markdown += '---\n\n';
+        markdown += "---\n\n";
       });
 
       // Download as markdown file
-      const blob = new Blob([markdown], { type: 'text/markdown' });
+      const blob = new Blob([markdown], { type: "text/markdown" });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `api-documentation-${Date.now()}.md`;
       document.body.appendChild(a);
@@ -326,7 +326,7 @@ const ApiGatewayEnhanced = () => {
     } catch (error: unknown) {
       toast({
         title: "Error generating documentation",
-        description: error instanceof Error ? error.message : 'Unknown error',
+        description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
       });
     }
@@ -342,38 +342,38 @@ const ApiGatewayEnhanced = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active':
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case 'revoked':
-      case 'disabled':
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      case 'suspended':
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      default:
-        return <Activity className="h-4 w-4 text-gray-500" />;
+    case "active":
+      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+    case "revoked":
+    case "disabled":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    case "suspended":
+      return <Clock className="h-4 w-4 text-yellow-500" />;
+    default:
+      return <Activity className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getMethodBadge = (method: string) => {
     const colors: Record<string, string> = {
-      GET: 'bg-blue-500',
-      POST: 'bg-green-500',
-      PUT: 'bg-yellow-500',
-      PATCH: 'bg-orange-500',
-      DELETE: 'bg-red-500',
-      OPTIONS: 'bg-gray-500'
+      GET: "bg-blue-500",
+      POST: "bg-green-500",
+      PUT: "bg-yellow-500",
+      PATCH: "bg-orange-500",
+      DELETE: "bg-red-500",
+      OPTIONS: "bg-gray-500"
     };
-    return <Badge className={colors[method] || 'bg-gray-500'}>{method}</Badge>;
+    return <Badge className={colors[method] || "bg-gray-500"}>{method}</Badge>;
   };
 
   const getTierBadge = (tier: string) => {
     const colors: Record<string, string> = {
-      basic: 'bg-gray-500',
-      standard: 'bg-blue-500',
-      premium: 'bg-purple-500',
-      unlimited: 'bg-green-500'
+      basic: "bg-gray-500",
+      standard: "bg-blue-500",
+      premium: "bg-purple-500",
+      unlimited: "bg-green-500"
     };
-    return <Badge className={colors[tier] || 'bg-gray-500'}>{tier}</Badge>;
+    return <Badge className={colors[tier] || "bg-gray-500"}>{tier}</Badge>;
   };
 
   return (
@@ -506,7 +506,7 @@ const ApiGatewayEnhanced = () => {
                     No routes found. Create your first API route!
                   </p>
                 ) : (
-                  routes.filter(r => r.status === 'active').map((route) => (
+                  routes.filter(r => r.status === "active").map((route) => (
                     <Card key={route.id} className="border-l-4 border-l-blue-500">
                       <CardContent className="pt-6">
                         <div className="flex items-start justify-between">
@@ -522,7 +522,7 @@ const ApiGatewayEnhanced = () => {
                               </div>
                               <p className="text-sm font-semibold">{route.route_name}</p>
                               <p className="text-sm text-muted-foreground mt-1">
-                                {route.description || 'No description'}
+                                {route.description || "No description"}
                               </p>
                               {route.tags && route.tags.length > 0 && (
                                 <div className="flex items-center gap-2 mt-2">
@@ -614,7 +614,7 @@ const ApiGatewayEnhanced = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {apiKeys.filter(k => k.status !== 'revoked').map((key) => (
+                {apiKeys.filter(k => k.status !== "revoked").map((key) => (
                   <Card key={key.id} className="border-l-4 border-l-green-500">
                     <CardContent className="pt-6">
                       <div className="flex items-start justify-between">
@@ -744,12 +744,12 @@ const ApiGatewayEnhanced = () => {
                     Documentation will be generated from the active API routes with their schemas and descriptions.
                   </p>
                   <p className="text-sm font-semibold">
-                    Total Routes: {routes.filter(r => r.status === 'active').length}
+                    Total Routes: {routes.filter(r => r.status === "active").length}
                   </p>
                 </div>
                 
                 <div className="space-y-2">
-                  {routes.filter(r => r.status === 'active').slice(0, 5).map((route) => (
+                  {routes.filter(r => r.status === "active").slice(0, 5).map((route) => (
                     <div key={route.id} className="p-3 border rounded-md">
                       <div className="flex items-center gap-2 mb-1">
                         {getMethodBadge(route.method)}
@@ -758,9 +758,9 @@ const ApiGatewayEnhanced = () => {
                       <p className="text-xs text-muted-foreground">{route.description}</p>
                     </div>
                   ))}
-                  {routes.filter(r => r.status === 'active').length > 5 && (
+                  {routes.filter(r => r.status === "active").length > 5 && (
                     <p className="text-sm text-muted-foreground text-center">
-                      And {routes.filter(r => r.status === 'active').length - 5} more routes...
+                      And {routes.filter(r => r.status === "active").length - 5} more routes...
                     </p>
                   )}
                 </div>

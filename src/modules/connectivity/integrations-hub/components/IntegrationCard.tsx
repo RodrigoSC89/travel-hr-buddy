@@ -1,14 +1,14 @@
 // @ts-nocheck
-import React, { useState } from 'react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React, { useState } from "react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,7 +18,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 import {
   MoreVertical,
   Key,
@@ -30,10 +30,10 @@ import {
   TestTube,
   CheckCircle,
   XCircle,
-} from 'lucide-react';
-import { Integration } from '../index';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { Integration } from "../index";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface IntegrationCardProps {
   integration: Integration;
@@ -54,48 +54,48 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({
 
   const getTypeIcon = () => {
     switch (integration.type) {
-      case 'oauth2':
-        return <Key className="h-4 w-4" />;
-      case 'webhook':
-        return <Webhook className="h-4 w-4" />;
-      default:
-        return <Link2 className="h-4 w-4" />;
+    case "oauth2":
+      return <Key className="h-4 w-4" />;
+    case "webhook":
+      return <Webhook className="h-4 w-4" />;
+    default:
+      return <Link2 className="h-4 w-4" />;
     }
   };
 
   const handleTestIntegration = async () => {
     setIsTesting(true);
     try {
-      if (integration.type === 'webhook') {
+      if (integration.type === "webhook") {
         // Test webhook by sending a test payload
         const webhookUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/webhook-handler?integration_id=${integration.id}`;
         
         const response = await fetch(webhookUrl, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             test: true,
             timestamp: new Date().toISOString(),
-            message: 'Test webhook from Integrations Hub',
+            message: "Test webhook from Integrations Hub",
           }),
         });
 
         if (response.ok) {
           toast({
-            title: 'Webhook test successful',
-            description: 'Test payload sent successfully',
+            title: "Webhook test successful",
+            description: "Test payload sent successfully",
           });
         } else {
-          throw new Error('Webhook test failed');
+          throw new Error("Webhook test failed");
         }
-      } else if (integration.type === 'oauth2') {
+      } else if (integration.type === "oauth2") {
         // Check OAuth token validity
         const { data, error } = await supabase
-          .from('integrations_registry')
-          .select('oauth_token_expires_at')
-          .eq('id', integration.id)
+          .from("integrations_registry")
+          .select("oauth_token_expires_at")
+          .eq("id", integration.id)
           .single();
 
         if (error) throw error;
@@ -105,14 +105,14 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({
 
         if (expiresAt > now) {
           toast({
-            title: 'OAuth token valid',
+            title: "OAuth token valid",
             description: `Token expires on ${expiresAt.toLocaleString()}`,
           });
         } else {
           toast({
-            title: 'OAuth token expired',
-            description: 'Please re-authenticate',
-            variant: 'destructive',
+            title: "OAuth token expired",
+            description: "Please re-authenticate",
+            variant: "destructive",
           });
         }
       }
@@ -120,9 +120,9 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({
       onRefresh();
     } catch (error: any) {
       toast({
-        title: 'Test failed',
+        title: "Test failed",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsTesting(false);
@@ -152,7 +152,7 @@ export const IntegrationCard: React.FC<IntegrationCardProps> = ({
                 onClick={() => onToggle(integration.id, !integration.is_active)}
               >
                 <Power className="h-4 w-4 mr-2" />
-                {integration.is_active ? 'Deactivate' : 'Activate'}
+                {integration.is_active ? "Deactivate" : "Activate"}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => setShowDeleteDialog(true)}

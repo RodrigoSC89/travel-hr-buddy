@@ -1,5 +1,5 @@
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export interface SGSOPlan {
   id: string;
@@ -40,39 +40,39 @@ export const generateSgsoReportPDF = async (
 
   // Header
   doc.setFontSize(20);
-  doc.setFont('helvetica', 'bold');
-  doc.text('SGSO - Safety Management System Report', pageWidth / 2, yPosition, {
-    align: 'center',
+  doc.setFont("helvetica", "bold");
+  doc.text("SGSO - Safety Management System Report", pageWidth / 2, yPosition, {
+    align: "center",
   });
   yPosition += 15;
 
   // Plan Information
   doc.setFontSize(16);
-  doc.text('Plan Information', 14, yPosition);
+  doc.text("Plan Information", 14, yPosition);
   yPosition += 10;
 
   doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
+  doc.setFont("helvetica", "normal");
 
   const planInfo = [
-    ['Plan Title:', plan.title],
-    ['Status:', plan.status.toUpperCase()],
-    ['Version:', `v${plan.version}`],
-    ['Vessel:', vesselName || 'N/A'],
-    ['Start Date:', plan.start_date ? new Date(plan.start_date).toLocaleDateString() : 'N/A'],
-    ['End Date:', plan.end_date ? new Date(plan.end_date).toLocaleDateString() : 'N/A'],
-    ['Created:', new Date(plan.created_at).toLocaleDateString()],
-    ['Last Updated:', new Date(plan.updated_at).toLocaleDateString()],
+    ["Plan Title:", plan.title],
+    ["Status:", plan.status.toUpperCase()],
+    ["Version:", `v${plan.version}`],
+    ["Vessel:", vesselName || "N/A"],
+    ["Start Date:", plan.start_date ? new Date(plan.start_date).toLocaleDateString() : "N/A"],
+    ["End Date:", plan.end_date ? new Date(plan.end_date).toLocaleDateString() : "N/A"],
+    ["Created:", new Date(plan.created_at).toLocaleDateString()],
+    ["Last Updated:", new Date(plan.updated_at).toLocaleDateString()],
   ];
 
   autoTable(doc, {
     startY: yPosition,
     body: planInfo,
-    theme: 'plain',
+    theme: "plain",
     styles: { fontSize: 10 },
     columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 40 },
-      1: { cellWidth: 'auto' },
+      0: { fontStyle: "bold", cellWidth: 40 },
+      1: { cellWidth: "auto" },
     },
   });
 
@@ -81,12 +81,12 @@ export const generateSgsoReportPDF = async (
   // Description
   if (plan.description) {
     doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Description:', 14, yPosition);
+    doc.setFont("helvetica", "bold");
+    doc.text("Description:", 14, yPosition);
     yPosition += 7;
 
     doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     const splitDescription = doc.splitTextToSize(plan.description, pageWidth - 28);
     doc.text(splitDescription, 14, yPosition);
     yPosition += splitDescription.length * 5 + 10;
@@ -94,8 +94,8 @@ export const generateSgsoReportPDF = async (
 
   // Actions Summary
   doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Actions Summary', 14, yPosition);
+  doc.setFont("helvetica", "bold");
+  doc.text("Actions Summary", 14, yPosition);
   yPosition += 10;
 
   const actionsByStatus = actions.reduce((acc, action) => {
@@ -109,22 +109,22 @@ export const generateSgsoReportPDF = async (
   }, {} as Record<string, number>);
 
   const summaryData = [
-    ['Total Actions:', actions.length.toString()],
-    ['Pending:', (actionsByStatus['pending'] || 0).toString()],
-    ['In Progress:', (actionsByStatus['in_progress'] || 0).toString()],
-    ['Completed:', (actionsByStatus['completed'] || 0).toString()],
-    ['Critical Priority:', (actionsByPriority['critical'] || 0).toString()],
-    ['High Priority:', (actionsByPriority['high'] || 0).toString()],
+    ["Total Actions:", actions.length.toString()],
+    ["Pending:", (actionsByStatus["pending"] || 0).toString()],
+    ["In Progress:", (actionsByStatus["in_progress"] || 0).toString()],
+    ["Completed:", (actionsByStatus["completed"] || 0).toString()],
+    ["Critical Priority:", (actionsByPriority["critical"] || 0).toString()],
+    ["High Priority:", (actionsByPriority["high"] || 0).toString()],
   ];
 
   autoTable(doc, {
     startY: yPosition,
     body: summaryData,
-    theme: 'plain',
+    theme: "plain",
     styles: { fontSize: 10 },
     columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 50 },
-      1: { cellWidth: 'auto' },
+      0: { fontStyle: "bold", cellWidth: 50 },
+      1: { cellWidth: "auto" },
     },
   });
 
@@ -138,8 +138,8 @@ export const generateSgsoReportPDF = async (
 
   // Actions Detail Table
   doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Corrective Actions Detail', 14, yPosition);
+  doc.setFont("helvetica", "bold");
+  doc.text("Corrective Actions Detail", 14, yPosition);
   yPosition += 10;
 
   const actionsTableData = actions.map((action) => [
@@ -147,17 +147,17 @@ export const generateSgsoReportPDF = async (
     action.action_type,
     action.priority,
     action.status,
-    action.due_date ? new Date(action.due_date).toLocaleDateString() : 'N/A',
+    action.due_date ? new Date(action.due_date).toLocaleDateString() : "N/A",
     action.responsible_user_id && responsibleUsers
-      ? responsibleUsers[action.responsible_user_id] || 'Unassigned'
-      : 'Unassigned',
+      ? responsibleUsers[action.responsible_user_id] || "Unassigned"
+      : "Unassigned",
   ]);
 
   autoTable(doc, {
     startY: yPosition,
-    head: [['Action', 'Type', 'Priority', 'Status', 'Due Date', 'Responsible']],
+    head: [["Action", "Type", "Priority", "Status", "Due Date", "Responsible"]],
     body: actionsTableData,
-    theme: 'striped',
+    theme: "striped",
     styles: { fontSize: 8 },
     headStyles: { fillColor: [41, 128, 185], textColor: 255 },
     columnStyles: {
@@ -178,8 +178,8 @@ export const generateSgsoReportPDF = async (
     yPosition = 20;
 
     doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Actions Detail', 14, yPosition);
+    doc.setFont("helvetica", "bold");
+    doc.text("Actions Detail", 14, yPosition);
     yPosition += 10;
 
     actions.forEach((action, index) => {
@@ -190,18 +190,18 @@ export const generateSgsoReportPDF = async (
       }
 
       doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
+      doc.setFont("helvetica", "bold");
       doc.text(`${index + 1}. ${action.title}`, 14, yPosition);
       yPosition += 7;
 
       doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
+      doc.setFont("helvetica", "normal");
 
       const actionDetails = [
         `Type: ${action.action_type}`,
         `Priority: ${action.priority}`,
         `Status: ${action.status}`,
-        `Due Date: ${action.due_date ? new Date(action.due_date).toLocaleDateString() : 'N/A'}`,
+        `Due Date: ${action.due_date ? new Date(action.due_date).toLocaleDateString() : "N/A"}`,
       ];
 
       actionDetails.forEach((detail) => {
@@ -211,22 +211,22 @@ export const generateSgsoReportPDF = async (
 
       if (action.description) {
         yPosition += 2;
-        doc.setFont('helvetica', 'italic');
-        doc.text('Description:', 20, yPosition);
+        doc.setFont("helvetica", "italic");
+        doc.text("Description:", 20, yPosition);
         yPosition += 5;
         const splitDesc = doc.splitTextToSize(action.description, pageWidth - 35);
-        doc.setFont('helvetica', 'normal');
+        doc.setFont("helvetica", "normal");
         doc.text(splitDesc, 20, yPosition);
         yPosition += splitDesc.length * 5;
       }
 
       if (action.completion_notes) {
         yPosition += 2;
-        doc.setFont('helvetica', 'italic');
-        doc.text('Completion Notes:', 20, yPosition);
+        doc.setFont("helvetica", "italic");
+        doc.text("Completion Notes:", 20, yPosition);
         yPosition += 5;
         const splitNotes = doc.splitTextToSize(action.completion_notes, pageWidth - 35);
-        doc.setFont('helvetica', 'normal');
+        doc.setFont("helvetica", "normal");
         doc.text(splitNotes, 20, yPosition);
         yPosition += splitNotes.length * 5;
       }
@@ -240,14 +240,14 @@ export const generateSgsoReportPDF = async (
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
     doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     doc.text(
       `Generated on ${new Date().toLocaleDateString()} - Page ${i} of ${pageCount}`,
       pageWidth / 2,
       doc.internal.pageSize.height - 10,
-      { align: 'center' }
+      { align: "center" }
     );
   }
 
-  return doc.output('blob');
+  return doc.output("blob");
 };

@@ -18,7 +18,7 @@ export interface Strategy {
   reasoning: string;
   parameters: Record<string, any>;
   estimated_impact: number;
-  risk_level: 'low' | 'medium' | 'high';
+  risk_level: "low" | "medium" | "high";
   complexity: number;
 }
 
@@ -27,7 +27,7 @@ export interface StrategyContext {
   constraints: Record<string, any>;
   current_state: Record<string, any>;
   available_resources: string[];
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
 }
 
 export interface StrategySelection {
@@ -44,75 +44,75 @@ class MetaStrategyEngine {
    * Generate multiple strategic alternatives for a given context
    */
   async generateStrategies(context: StrategyContext): Promise<Strategy[]> {
-    console.log('[MetaStrategy] Generating strategies for:', context.goal);
+    console.log("[MetaStrategy] Generating strategies for:", context.goal);
 
     const strategies: Strategy[] = [];
 
     // Strategy 1: Conservative approach
     strategies.push({
       id: `strat-conservative-${Date.now()}`,
-      name: 'Conservative Approach',
-      description: 'Minimize risk with proven methods',
-      score: this.calculateScore(context, 'conservative'),
-      reasoning: 'Low risk, proven track record, slower results',
+      name: "Conservative Approach",
+      description: "Minimize risk with proven methods",
+      score: this.calculateScore(context, "conservative"),
+      reasoning: "Low risk, proven track record, slower results",
       parameters: {
         risk_tolerance: 0.2,
         innovation_level: 0.3,
         resource_usage: 0.5
       },
       estimated_impact: 0.6,
-      risk_level: 'low',
+      risk_level: "low",
       complexity: 0.4
     });
 
     // Strategy 2: Balanced approach
     strategies.push({
       id: `strat-balanced-${Date.now() + 1}`,
-      name: 'Balanced Approach',
-      description: 'Balance innovation with stability',
-      score: this.calculateScore(context, 'balanced'),
-      reasoning: 'Moderate risk, balanced innovation, steady results',
+      name: "Balanced Approach",
+      description: "Balance innovation with stability",
+      score: this.calculateScore(context, "balanced"),
+      reasoning: "Moderate risk, balanced innovation, steady results",
       parameters: {
         risk_tolerance: 0.5,
         innovation_level: 0.6,
         resource_usage: 0.7
       },
       estimated_impact: 0.75,
-      risk_level: 'medium',
+      risk_level: "medium",
       complexity: 0.6
     });
 
     // Strategy 3: Aggressive approach
     strategies.push({
       id: `strat-aggressive-${Date.now() + 2}`,
-      name: 'Aggressive Approach',
-      description: 'Maximize impact with innovative methods',
-      score: this.calculateScore(context, 'aggressive'),
-      reasoning: 'High risk, high reward, fast results, innovative',
+      name: "Aggressive Approach",
+      description: "Maximize impact with innovative methods",
+      score: this.calculateScore(context, "aggressive"),
+      reasoning: "High risk, high reward, fast results, innovative",
       parameters: {
         risk_tolerance: 0.8,
         innovation_level: 0.9,
         resource_usage: 0.9
       },
       estimated_impact: 0.9,
-      risk_level: 'high',
+      risk_level: "high",
       complexity: 0.8
     });
 
     // Strategy 4: Resource-optimized
     strategies.push({
       id: `strat-optimized-${Date.now() + 3}`,
-      name: 'Resource-Optimized',
-      description: 'Maximize efficiency with minimal resources',
-      score: this.calculateScore(context, 'optimized'),
-      reasoning: 'Low resource usage, efficient, moderate impact',
+      name: "Resource-Optimized",
+      description: "Maximize efficiency with minimal resources",
+      score: this.calculateScore(context, "optimized"),
+      reasoning: "Low resource usage, efficient, moderate impact",
       parameters: {
         risk_tolerance: 0.4,
         innovation_level: 0.5,
         resource_usage: 0.3
       },
       estimated_impact: 0.65,
-      risk_level: 'low',
+      risk_level: "low",
       complexity: 0.5
     });
 
@@ -132,20 +132,20 @@ class MetaStrategyEngine {
     let score = 50;
 
     // Adjust based on priority
-    if (context.priority === 'critical') {
-      if (approach === 'aggressive') score += 30;
-      if (approach === 'balanced') score += 20;
-    } else if (context.priority === 'low') {
-      if (approach === 'conservative') score += 25;
-      if (approach === 'optimized') score += 30;
+    if (context.priority === "critical") {
+      if (approach === "aggressive") score += 30;
+      if (approach === "balanced") score += 20;
+    } else if (context.priority === "low") {
+      if (approach === "conservative") score += 25;
+      if (approach === "optimized") score += 30;
     } else {
-      if (approach === 'balanced') score += 30;
+      if (approach === "balanced") score += 30;
     }
 
     // Adjust based on available resources
     if (context.available_resources.length < 3) {
-      if (approach === 'optimized') score += 20;
-      if (approach === 'aggressive') score -= 15;
+      if (approach === "optimized") score += 20;
+      if (approach === "aggressive") score -= 15;
     }
 
     // Add randomness for variation
@@ -162,7 +162,7 @@ class MetaStrategyEngine {
     context: StrategyContext
   ): Promise<StrategySelection> {
     if (strategies.length === 0) {
-      throw new Error('No strategies available for selection');
+      throw new Error("No strategies available for selection");
     }
 
     // Sort by score
@@ -177,7 +177,7 @@ class MetaStrategyEngine {
       timestamp: new Date().toISOString()
     };
 
-    console.log('[MetaStrategy] Selected strategy:', selected.name, 'Score:', selected.score);
+    console.log("[MetaStrategy] Selected strategy:", selected.name, "Score:", selected.score);
 
     // Log selection
     await this.logStrategySelection(selection);
@@ -193,8 +193,8 @@ class MetaStrategyEngine {
     strategies: Strategy[]
   ): Promise<void> {
     try {
-      await supabase.from('meta_strategy_log').insert({
-        event_type: 'generation',
+      await supabase.from("meta_strategy_log").insert({
+        event_type: "generation",
         context: context,
         strategies: strategies.map(s => ({
           id: s.id,
@@ -209,7 +209,7 @@ class MetaStrategyEngine {
         }
       });
     } catch (error) {
-      console.error('[MetaStrategy] Failed to log generation:', error);
+      console.error("[MetaStrategy] Failed to log generation:", error);
     }
   }
 
@@ -218,8 +218,8 @@ class MetaStrategyEngine {
    */
   private async logStrategySelection(selection: StrategySelection): Promise<void> {
     try {
-      await supabase.from('meta_strategy_log').insert({
-        event_type: 'selection',
+      await supabase.from("meta_strategy_log").insert({
+        event_type: "selection",
         context: selection.context,
         strategies: [selection.selected_strategy, ...selection.alternatives].map(s => ({
           id: s.id,
@@ -234,7 +234,7 @@ class MetaStrategyEngine {
         }
       });
     } catch (error) {
-      console.error('[MetaStrategy] Failed to log selection:', error);
+      console.error("[MetaStrategy] Failed to log selection:", error);
     }
   }
 
@@ -251,15 +251,15 @@ class MetaStrategyEngine {
   async getStrategyLogs(limit: number = 50): Promise<any[]> {
     try {
       const { data, error } = await supabase
-        .from('meta_strategy_log')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("meta_strategy_log")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('[MetaStrategy] Failed to fetch logs:', error);
+      console.error("[MetaStrategy] Failed to fetch logs:", error);
       return [];
     }
   }

@@ -3,13 +3,13 @@
  * PATCH 153.0 - ICP-Brasil & OpenCert Integration
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileSignature, Shield, Upload } from 'lucide-react';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileSignature, Shield, Upload } from "lucide-react";
 
 export const DigitalSignature: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('sign');
+  const [activeTab, setActiveTab] = useState("sign");
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -89,5 +89,5 @@ export const DigitalSignature: React.FC = () => {
 };
 
 export default DigitalSignature;
-export * from './types';
-export * from './services/signature-service';
+export * from "./types";
+export * from "./services/signature-service";

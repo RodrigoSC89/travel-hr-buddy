@@ -26,12 +26,12 @@ class RulesManager {
    */
   private initializeTemplates() {
     // Error threshold template
-    this.templates.set('error-threshold', {
-      name: 'Error Threshold',
-      description: 'Trigger action when error count exceeds threshold',
+    this.templates.set("error-threshold", {
+      name: "Error Threshold",
+      description: "Trigger action when error count exceeds threshold",
       conditionBuilder: (params) => (event) => {
         return (
-          event.type === 'error_threshold' &&
+          event.type === "error_threshold" &&
           event.data.error_count >= (params.threshold || 5)
         );
       },
@@ -44,19 +44,19 @@ class RulesManager {
 
         return {
           success: true,
-          action: params.action || 'notify',
+          action: params.action || "notify",
           description: `Error threshold exceeded: ${event.data.error_count} errors`,
         };
       },
     });
 
     // Latency threshold template
-    this.templates.set('latency-threshold', {
-      name: 'Latency Threshold',
-      description: 'Trigger action when latency exceeds threshold',
+    this.templates.set("latency-threshold", {
+      name: "Latency Threshold",
+      description: "Trigger action when latency exceeds threshold",
       conditionBuilder: (params) => (event) => {
         return (
-          event.type === 'high_latency' &&
+          event.type === "high_latency" &&
           event.data.latency >= (params.threshold_ms || 3000)
         );
       },
@@ -69,20 +69,20 @@ class RulesManager {
 
         return {
           success: true,
-          action: params.action || 'notify',
+          action: params.action || "notify",
           description: `Latency threshold exceeded: ${event.data.latency}ms`,
         };
       },
     });
 
     // Memory threshold template
-    this.templates.set('memory-threshold', {
-      name: 'Memory Threshold',
-      description: 'Trigger action when memory usage exceeds threshold',
+    this.templates.set("memory-threshold", {
+      name: "Memory Threshold",
+      description: "Trigger action when memory usage exceeds threshold",
       conditionBuilder: (params) => (event) => {
         return (
-          event.type === 'custom' &&
-          event.data.metric === 'memory' &&
+          event.type === "custom" &&
+          event.data.metric === "memory" &&
           event.data.usage >= (params.threshold_mb || 512)
         );
       },
@@ -95,20 +95,20 @@ class RulesManager {
 
         return {
           success: true,
-          action: params.action || 'cleanup',
+          action: params.action || "cleanup",
           description: `Memory threshold exceeded: ${event.data.usage}MB`,
         };
       },
     });
 
     // Rate limit template
-    this.templates.set('rate-limit', {
-      name: 'Rate Limit',
-      description: 'Trigger action when request rate exceeds threshold',
+    this.templates.set("rate-limit", {
+      name: "Rate Limit",
+      description: "Trigger action when request rate exceeds threshold",
       conditionBuilder: (params) => (event) => {
         return (
-          event.type === 'custom' &&
-          event.data.metric === 'request_rate' &&
+          event.type === "custom" &&
+          event.data.metric === "request_rate" &&
           event.data.rate >= (params.max_requests_per_minute || 100)
         );
       },
@@ -121,7 +121,7 @@ class RulesManager {
 
         return {
           success: true,
-          action: params.action || 'throttle',
+          action: params.action || "throttle",
           description: `Rate limit exceeded: ${event.data.rate} req/min`,
         };
       },

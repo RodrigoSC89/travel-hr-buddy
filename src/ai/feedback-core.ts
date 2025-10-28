@@ -12,18 +12,18 @@ export interface CognitiveFeedbackEntry {
   id?: string;
   
   // Decision tracking
-  decision_type: 'suggestion' | 'automation' | 'recommendation' | 'prediction' | 'analysis';
+  decision_type: "suggestion" | "automation" | "recommendation" | "prediction" | "analysis";
   module_name: string;
   decision_context: Record<string, any>;
   ai_decision: Record<string, any>;
   
   // Operator interaction
-  operator_action?: 'accepted' | 'rejected' | 'modified' | 'ignored';
+  operator_action?: "accepted" | "rejected" | "modified" | "ignored";
   operator_change?: Record<string, any>;
   operator_feedback?: string;
   
   // Outcome tracking
-  result?: 'success' | 'failure' | 'partial';
+  result?: "success" | "failure" | "partial";
   result_metrics?: Record<string, any>;
   
   // Pattern detection metadata
@@ -81,37 +81,37 @@ class CognitiveFeedbackCore {
   /**
    * Log an AI decision for tracking
    */
-  async logDecision(decision: Omit<CognitiveFeedbackEntry, 'id' | 'created_at' | 'updated_at'>): Promise<string | null> {
+  async logDecision(decision: Omit<CognitiveFeedbackEntry, "id" | "created_at" | "updated_at">): Promise<string | null> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
       const entry: CognitiveFeedbackEntry = {
         ...decision,
         user_id: user?.id,
-        operator_action: decision.operator_action || 'accepted',
+        operator_action: decision.operator_action || "accepted",
         confidence_score: decision.confidence_score || 0.5,
         created_at: new Date().toISOString(),
       };
 
       const { data, error } = await (supabase as any)
-        .from('cognitive_feedback')
+        .from("cognitive_feedback")
         .insert([entry])
         .select()
         .single();
 
       if (error) {
-        logger.error('Failed to log cognitive feedback:', error);
+        logger.error("Failed to log cognitive feedback:", error);
         return null;
       }
 
-      logger.info('Cognitive feedback logged:', { id: data.id, module: decision.module_name });
+      logger.info("Cognitive feedback logged:", { id: data.id, module: decision.module_name });
       
       // Trigger pattern detection asynchronously
       this.detectPatternsAsync(decision.module_name, decision.decision_type);
       
       return data.id;
     } catch (error) {
-      logger.error('Error logging cognitive feedback:', error);
+      logger.error("Error logging cognitive feedback:", error);
       return null;
     }
   }
@@ -122,32 +122,32 @@ class CognitiveFeedbackCore {
   async updateFeedback(
     feedbackId: string,
     update: {
-      operator_action?: CognitiveFeedbackEntry['operator_action'];
+      operator_action?: CognitiveFeedbackEntry["operator_action"];
       operator_change?: Record<string, any>;
       operator_feedback?: string;
-      result?: 'success' | 'failure' | 'partial';
+      result?: "success" | "failure" | "partial";
       result_metrics?: Record<string, any>;
     }
   ): Promise<boolean> {
     try {
       const { error } = await (supabase as any)
-        .from('cognitive_feedback')
+        .from("cognitive_feedback")
         .update(update)
-        .eq('id', feedbackId);
+        .eq("id", feedbackId);
 
       if (error) {
-        logger.error('Failed to update cognitive feedback:', error);
+        logger.error("Failed to update cognitive feedback:", error);
         return false;
       }
 
-      logger.info('Cognitive feedback updated:', { id: feedbackId });
+      logger.info("Cognitive feedback updated:", { id: feedbackId });
       
       // Regenerate insights based on updated data
       this.generateInsightsAsync(feedbackId);
       
       return true;
     } catch (error) {
-      logger.error('Error updating cognitive feedback:', error);
+      logger.error("Error updating cognitive feedback:", error);
       return false;
     }
   }
@@ -162,7 +162,7 @@ class CognitiveFeedbackCore {
   ): Promise<FeedbackPattern[]> {
     try {
       // Check cache first
-      const cacheKey = `${module || 'all'}_${decision_type || 'all'}_${days}`;
+      const cacheKey = `${module || "all"}_${decision_type || "all"}_${days}`;
       const now = Date.now();
       
       if (this.patternCache.has(cacheKey) && (now - this.lastCacheUpdate) < this.CACHE_TTL) {
@@ -170,21 +170,21 @@ class CognitiveFeedbackCore {
       }
 
       let query = supabase
-        .from('cognitive_feedback')
-        .select('*')
-        .gte('created_at', new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString());
+        .from("cognitive_feedback")
+        .select("*")
+        .gte("created_at", new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString());
 
       if (module) {
-        query = query.eq('module_name', module);
+        query = query.eq("module_name", module);
       }
       if (decision_type) {
-        query = query.eq('decision_type', decision_type);
+        query = query.eq("decision_type", decision_type);
       }
 
       const { data, error } = await query;
 
       if (error) {
-        logger.error('Failed to fetch feedback for pattern detection:', error);
+        logger.error("Failed to fetch feedback for pattern detection:", error);
         return [];
       }
 
@@ -197,7 +197,7 @@ class CognitiveFeedbackCore {
       
       return patterns;
     } catch (error) {
-      logger.error('Error detecting patterns:', error);
+      logger.error("Error detecting patterns:", error);
       return [];
     }
   }
@@ -220,7 +220,7 @@ class CognitiveFeedbackCore {
 
     // Identify patterns
     Object.entries(grouped).forEach(([key, entries]) => {
-      const [module, action] = key.split('_');
+      const [module, action] = key.split("_");
       
       if (entries.length >= 3) { // Minimum 3 occurrences to form a pattern
         const contextSimilarities = this.findContextSimilarities(entries);
@@ -265,7 +265,7 @@ class CognitiveFeedbackCore {
       const contextSignature = contextKeys
         .map(key => `${key}:${JSON.stringify(entry.decision_context[key])}`)
         .sort()
-        .join('|');
+        .join("|");
 
       if (similarities.has(contextSignature)) {
         const existing = similarities.get(contextSignature)!;
@@ -298,13 +298,13 @@ class CognitiveFeedbackCore {
   ): string {
     const contextStr = Object.entries(context)
       .map(([key, value]) => `${key}=${JSON.stringify(value)}`)
-      .join(', ');
+      .join(", ");
 
     const actionDescriptions = {
-      accepted: 'accepts',
-      rejected: 'rejects',
-      modified: 'modifies',
-      ignored: 'ignores',
+      accepted: "accepts",
+      rejected: "rejects",
+      modified: "modifies",
+      ignored: "ignores",
     };
 
     return `Operator ${actionDescriptions[action as keyof typeof actionDescriptions] || action} ${module} suggestions when ${contextStr}`;
@@ -319,12 +319,12 @@ class CognitiveFeedbackCore {
       const insights: FeedbackInsight[] = [];
 
       // Analyze rejection patterns
-      const rejectionPatterns = patterns.filter(p => p.pattern_type === 'rejected');
+      const rejectionPatterns = patterns.filter(p => p.pattern_type === "rejected");
       if (rejectionPatterns.length > 0) {
         const topRejection = rejectionPatterns[0];
         insights.push({
           insight: `Operators frequently reject ${topRejection.module} suggestions in specific contexts`,
-          category: 'rejection_pattern',
+          category: "rejection_pattern",
           confidence: topRejection.confidence,
           evidence_count: topRejection.frequency,
           recommendation: `Review ${topRejection.module} decision logic for: ${topRejection.description}`,
@@ -332,12 +332,12 @@ class CognitiveFeedbackCore {
       }
 
       // Analyze modification patterns
-      const modificationPatterns = patterns.filter(p => p.pattern_type === 'modified');
+      const modificationPatterns = patterns.filter(p => p.pattern_type === "modified");
       if (modificationPatterns.length > 0) {
         const topModification = modificationPatterns[0];
         insights.push({
           insight: `Operators consistently modify ${topModification.module} outputs`,
-          category: 'modification_pattern',
+          category: "modification_pattern",
           confidence: topModification.confidence,
           evidence_count: topModification.frequency,
           recommendation: `Adjust ${topModification.module} output format or parameters based on common modifications`,
@@ -345,12 +345,12 @@ class CognitiveFeedbackCore {
       }
 
       // Analyze acceptance patterns (positive feedback)
-      const acceptancePatterns = patterns.filter(p => p.pattern_type === 'accepted');
+      const acceptancePatterns = patterns.filter(p => p.pattern_type === "accepted");
       if (acceptancePatterns.length > 0) {
         const topAcceptance = acceptancePatterns[0];
         insights.push({
           insight: `${topAcceptance.module} performs well in specific scenarios`,
-          category: 'success_pattern',
+          category: "success_pattern",
           confidence: topAcceptance.confidence,
           evidence_count: topAcceptance.frequency,
           recommendation: `Expand ${topAcceptance.module} capabilities to similar contexts`,
@@ -359,7 +359,7 @@ class CognitiveFeedbackCore {
 
       return insights.sort((a, b) => (b.confidence * b.evidence_count) - (a.confidence * a.evidence_count));
     } catch (error) {
-      logger.error('Error generating insights:', error);
+      logger.error("Error generating insights:", error);
       return [];
     }
   }
@@ -373,31 +373,31 @@ class CognitiveFeedbackCore {
       weekStart.setDate(weekStart.getDate() - 7);
 
       let query = supabase
-        .from('cognitive_feedback')
-        .select('*')
-        .gte('created_at', weekStart.toISOString());
+        .from("cognitive_feedback")
+        .select("*")
+        .gte("created_at", weekStart.toISOString());
 
       if (vesselId) {
-        query = query.eq('vessel_id', vesselId);
+        query = query.eq("vessel_id", vesselId);
       }
 
       const { data, error } = await query;
 
       if (error || !data) {
-        logger.error('Failed to fetch weekly feedback:', error);
+        logger.error("Failed to fetch weekly feedback:", error);
         return null;
       }
 
       // Calculate statistics
       const totalDecisions = data.length;
-      const accepted = data.filter(d => d.operator_action === 'accepted').length;
-      const rejected = data.filter(d => d.operator_action === 'rejected').length;
-      const modified = data.filter(d => d.operator_action === 'modified').length;
+      const accepted = data.filter(d => d.operator_action === "accepted").length;
+      const rejected = data.filter(d => d.operator_action === "rejected").length;
+      const modified = data.filter(d => d.operator_action === "modified").length;
 
       // Module performance
       const modulePerformance: Record<string, any> = {};
       data.forEach(entry => {
-        const moduleKey = entry.module_name || 'unknown';
+        const moduleKey = entry.module_name || "unknown";
         if (!modulePerformance[moduleKey]) {
           modulePerformance[moduleKey] = {
             total: 0,
@@ -408,10 +408,10 @@ class CognitiveFeedbackCore {
         }
         
         modulePerformance[moduleKey].total++;
-        if (entry.operator_action === 'accepted') {
+        if (entry.operator_action === "accepted") {
           modulePerformance[moduleKey].accepted++;
         }
-        if (entry.operator_action === 'rejected') {
+        if (entry.operator_action === "rejected") {
           modulePerformance[moduleKey].rejected++;
         }
       });
@@ -437,7 +437,7 @@ class CognitiveFeedbackCore {
         module_performance: modulePerformance,
       };
     } catch (error) {
-      logger.error('Error generating weekly report:', error);
+      logger.error("Error generating weekly report:", error);
       return null;
     }
   }
@@ -450,7 +450,7 @@ class CognitiveFeedbackCore {
       try {
         await this.detectPatterns(module, decisionType, 30);
       } catch (error) {
-        logger.error('Error in async pattern detection:', error);
+        logger.error("Error in async pattern detection:", error);
       }
     }, 100);
   }
@@ -463,9 +463,9 @@ class CognitiveFeedbackCore {
       try {
         // Fetch the updated feedback entry
         const { data, error } = await supabase
-          .from('cognitive_feedback')
-          .select('module_name')
-          .eq('id', feedbackId)
+          .from("cognitive_feedback")
+          .select("module_name")
+          .eq("id", feedbackId)
           .single();
 
         if (!error && data) {
@@ -474,17 +474,17 @@ class CognitiveFeedbackCore {
           if (insights.length > 0) {
             // Update the feedback entry with the best insight
             await (supabase as any)
-              .from('cognitive_feedback')
+              .from("cognitive_feedback")
               .update({
                 insight_generated: insights[0].insight,
                 pattern_category: insights[0].category,
                 confidence_score: insights[0].confidence,
               })
-              .eq('id', feedbackId);
+              .eq("id", feedbackId);
           }
         }
       } catch (error) {
-        logger.error('Error in async insight generation:', error);
+        logger.error("Error in async insight generation:", error);
       }
     }, 500);
   }
@@ -495,7 +495,7 @@ class CognitiveFeedbackCore {
   clearCache(): void {
     this.patternCache.clear();
     this.lastCacheUpdate = 0;
-    logger.info('Cognitive feedback cache cleared');
+    logger.info("Cognitive feedback cache cleared");
   }
 }
 
@@ -503,7 +503,7 @@ class CognitiveFeedbackCore {
 export const cognitiveFeedback = new CognitiveFeedbackCore();
 
 // Export type-safe helper functions
-export const logAIDecision = (decision: Omit<CognitiveFeedbackEntry, 'id' | 'created_at' | 'updated_at'>) => 
+export const logAIDecision = (decision: Omit<CognitiveFeedbackEntry, "id" | "created_at" | "updated_at">) => 
   cognitiveFeedback.logDecision(decision);
 
 export const updateOperatorFeedback = (feedbackId: string, update: Parameters<typeof cognitiveFeedback.updateFeedback>[1]) =>

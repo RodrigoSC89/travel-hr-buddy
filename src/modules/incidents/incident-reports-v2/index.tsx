@@ -1,50 +1,50 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertTriangle, FileText, Upload, Download, Clock, CheckCircle2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AlertTriangle, FileText, Upload, Download, Clock, CheckCircle2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const IncidentReportsV2 = () => {
   const { toast } = useToast();
   const [incidents, setIncidents] = useState([
     {
-      id: '1',
-      title: 'Falha no sistema DP',
-      category: 'Técnico',
-      status: 'em_analise',
-      severity: 'alta',
-      created_at: '2025-01-15T10:30:00',
+      id: "1",
+      title: "Falha no sistema DP",
+      category: "Técnico",
+      status: "em_analise",
+      severity: "alta",
+      created_at: "2025-01-15T10:30:00",
       attachments: 2,
     },
     {
-      id: '2',
-      title: 'Não conformidade ambiental',
-      category: 'Compliance',
-      status: 'resolvido',
-      severity: 'media',
-      created_at: '2025-01-10T14:20:00',
+      id: "2",
+      title: "Não conformidade ambiental",
+      category: "Compliance",
+      status: "resolvido",
+      severity: "media",
+      created_at: "2025-01-10T14:20:00",
       attachments: 1,
     }
   ]);
 
   const [showForm, setShowForm] = useState(false);
   const [newIncident, setNewIncident] = useState({
-    title: '',
-    description: '',
-    category: '',
-    severity: ''
+    title: "",
+    description: "",
+    category: "",
+    severity: ""
   });
 
   const handleCreateIncident = () => {
     if (!newIncident.title || !newIncident.category || !newIncident.severity) {
       toast({
-        title: 'Campos obrigatórios',
-        description: 'Preencha todos os campos necessários',
-        variant: 'destructive'
+        title: "Campos obrigatórios",
+        description: "Preencha todos os campos necessários",
+        variant: "destructive"
       });
       return;
     }
@@ -52,18 +52,18 @@ const IncidentReportsV2 = () => {
     const incident = {
       id: Date.now().toString(),
       ...newIncident,
-      status: 'aberto',
+      status: "aberto",
       created_at: new Date().toISOString(),
       attachments: 0
     };
 
     setIncidents([incident, ...incidents]);
     setShowForm(false);
-    setNewIncident({ title: '', description: '', category: '', severity: '' });
+    setNewIncident({ title: "", description: "", category: "", severity: "" });
     
     toast({
-      title: 'Incidente criado',
-      description: 'Incidente registrado com sucesso'
+      title: "Incidente criado",
+      description: "Incidente registrado com sucesso"
     });
   };
 
@@ -73,34 +73,34 @@ const IncidentReportsV2 = () => {
     ));
     
     toast({
-      title: 'Status atualizado',
+      title: "Status atualizado",
       description: `Incidente movido para: ${newStatus}`
     });
   };
 
   const generatePDF = (incident: any) => {
     toast({
-      title: 'Gerando relatório',
-      description: 'PDF será baixado em instantes'
+      title: "Gerando relatório",
+      description: "PDF será baixado em instantes"
     });
   };
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      aberto: 'bg-amber-500',
-      em_analise: 'bg-blue-500',
-      resolvido: 'bg-green-500'
+      aberto: "bg-amber-500",
+      em_analise: "bg-blue-500",
+      resolvido: "bg-green-500"
     };
-    return colors[status] || 'bg-muted';
+    return colors[status] || "bg-muted";
   };
 
   const getSeverityColor = (severity: string) => {
     const colors: Record<string, string> = {
-      alta: 'bg-destructive',
-      media: 'bg-amber-500',
-      baixa: 'bg-green-500'
+      alta: "bg-destructive",
+      media: "bg-amber-500",
+      baixa: "bg-green-500"
     };
-    return colors[severity] || 'bg-muted';
+    return colors[severity] || "bg-muted";
   };
 
   return (
@@ -126,7 +126,7 @@ const IncidentReportsV2 = () => {
             <CardTitle className="text-sm font-medium">Total Abertos</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{incidents.filter(i => i.status === 'aberto').length}</div>
+            <div className="text-2xl font-bold">{incidents.filter(i => i.status === "aberto").length}</div>
           </CardContent>
         </Card>
         <Card>
@@ -134,7 +134,7 @@ const IncidentReportsV2 = () => {
             <CardTitle className="text-sm font-medium">Em Análise</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{incidents.filter(i => i.status === 'em_analise').length}</div>
+            <div className="text-2xl font-bold">{incidents.filter(i => i.status === "em_analise").length}</div>
           </CardContent>
         </Card>
         <Card>
@@ -142,7 +142,7 @@ const IncidentReportsV2 = () => {
             <CardTitle className="text-sm font-medium">Resolvidos</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{incidents.filter(i => i.status === 'resolvido').length}</div>
+            <div className="text-2xl font-bold">{incidents.filter(i => i.status === "resolvido").length}</div>
           </CardContent>
         </Card>
         <Card>
@@ -151,7 +151,7 @@ const IncidentReportsV2 = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {incidents.length > 0 ? Math.round((incidents.filter(i => i.status === 'resolvido').length / incidents.length) * 100) : 0}%
+              {incidents.length > 0 ? Math.round((incidents.filter(i => i.status === "resolvido").length / incidents.length) * 100) : 0}%
             </div>
           </CardContent>
         </Card>
@@ -228,7 +228,7 @@ const IncidentReportsV2 = () => {
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{incident.title}</h3>
                     <Badge className={getStatusColor(incident.status)}>
-                      {incident.status.replace('_', ' ')}
+                      {incident.status.replace("_", " ")}
                     </Badge>
                     <Badge className={getSeverityColor(incident.severity)}>
                       {incident.severity}
@@ -237,7 +237,7 @@ const IncidentReportsV2 = () => {
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
-                      {new Date(incident.created_at).toLocaleDateString('pt-BR')}
+                      {new Date(incident.created_at).toLocaleDateString("pt-BR")}
                     </span>
                     <span>{incident.category}</span>
                     <span className="flex items-center gap-1">

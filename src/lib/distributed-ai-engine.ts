@@ -33,7 +33,7 @@ export interface AIDecision {
   confidence: number;
   reasoning: string;
   timestamp: string;
-  model_used: 'local' | 'global' | 'fallback';
+  model_used: "local" | "global" | "fallback";
 }
 
 /**
@@ -57,13 +57,13 @@ export class DistributedAIEngine {
 
       // Try to fetch from database
       const { data, error } = await supabase
-        .from('vessel_ai_contexts')
-        .select('*')
-        .eq('vessel_id', vesselId)
+        .from("vessel_ai_contexts")
+        .select("*")
+        .eq("vessel_id", vesselId)
         .single();
 
-      if (error && error.code !== 'PGRST116') {
-        logger.error('Error fetching vessel context:', error);
+      if (error && error.code !== "PGRST116") {
+        logger.error("Error fetching vessel context:", error);
         return null;
       }
 
@@ -75,7 +75,7 @@ export class DistributedAIEngine {
       // Create new context if doesn't exist
       return await this.createVesselContext(vesselId);
     } catch (error) {
-      logger.error('Error in getVesselContext:', error);
+      logger.error("Error in getVesselContext:", error);
       return null;
     }
   }
@@ -91,18 +91,18 @@ export class DistributedAIEngine {
         local_data: {},
         global_data: {},
         last_sync: new Date().toISOString(),
-        model_version: '1.0.0',
+        model_version: "1.0.0",
         interaction_count: 0
       };
 
       const { data, error } = await supabase
-        .from('vessel_ai_contexts')
+        .from("vessel_ai_contexts")
         .insert(context)
         .select()
         .single();
 
       if (error) {
-        logger.error('Error creating vessel context:', error);
+        logger.error("Error creating vessel context:", error);
         return null;
       }
 
@@ -110,7 +110,7 @@ export class DistributedAIEngine {
       logger.info(`Created AI context for vessel ${vesselId}`);
       return data;
     } catch (error) {
-      logger.error('Error in createVesselContext:', error);
+      logger.error("Error in createVesselContext:", error);
       return null;
     }
   }
@@ -135,14 +135,14 @@ export class DistributedAIEngine {
 
       // Prepare AI request with vessel-specific context
       const aiRequest: AIEngineRequest = {
-        model: 'gpt-4o-mini',
+        model: "gpt-4o-mini",
         messages: [
           {
-            role: 'system',
+            role: "system",
             content: this.buildSystemPrompt(vesselId, vesselContext)
           },
           {
-            role: 'user',
+            role: "user",
             content: request.prompt
           }
         ],
@@ -152,20 +152,20 @@ export class DistributedAIEngine {
 
       // Try local AI first (using OpenAI as central for now)
       let response: AIEngineResponse;
-      let modelUsed: 'local' | 'global' | 'fallback' = 'local';
+      let modelUsed: "local" | "global" | "fallback" = "local";
 
       try {
         response = await runOpenAI(aiRequest);
       } catch (error) {
-        logger.warn('Local AI failed, falling back to central AI:', error);
-        modelUsed = 'fallback';
+        logger.warn("Local AI failed, falling back to central AI:", error);
+        modelUsed = "fallback";
         response = await this.centralAIFallback(aiRequest);
       }
 
       // Parse AI response and extract confidence
       const decision: AIDecision = {
         vessel_id: vesselId,
-        decision_type: request.decision_type || 'general',
+        decision_type: request.decision_type || "general",
         input_data: {
           prompt: request.prompt,
           context: request.context || {}
@@ -190,7 +190,7 @@ export class DistributedAIEngine {
 
       return decision;
     } catch (error) {
-      logger.error('Error in runInference:', error);
+      logger.error("Error in runInference:", error);
       return null;
     }
   }
@@ -214,7 +214,7 @@ ${JSON.stringify(context.local_data, null, 2)}
 
 Global Fleet Knowledge:
 ${JSON.stringify(context.global_data, null, 2)}
-` : '\n\nNo specific vessel context available. Providing general guidance.';
+` : "\n\nNo specific vessel context available. Providing general guidance.";
 
     const behaviorPrompt = `
 
@@ -239,8 +239,8 @@ Expected Behavior:
         ...request,
         messages: [
           {
-            role: 'system' as const,
-            content: 'You are a central AI providing fallback support. Provide general guidance based on available information.'
+            role: "system" as const,
+            content: "You are a central AI providing fallback support. Provide general guidance based on available information."
           },
           ...request.messages.slice(1)
         ]
@@ -248,11 +248,11 @@ Expected Behavior:
 
       return await runOpenAI(fallbackRequest);
     } catch (error) {
-      logger.error('Central AI fallback failed:', error);
+      logger.error("Central AI fallback failed:", error);
       // Return mock response as last resort
       return {
-        content: 'AI services temporarily unavailable. Please use manual procedures or contact fleet operations.',
-        model: 'fallback-mock',
+        content: "AI services temporarily unavailable. Please use manual procedures or contact fleet operations.",
+        model: "fallback-mock",
         timestamp: new Date()
       };
     }
@@ -269,8 +269,8 @@ Expected Behavior:
     }
 
     // Look for certainty words
-    const certainWords = ['certain', 'confident', 'sure', 'definitely'];
-    const uncertainWords = ['uncertain', 'maybe', 'possibly', 'might'];
+    const certainWords = ["certain", "confident", "sure", "definitely"];
+    const uncertainWords = ["uncertain", "maybe", "possibly", "might"];
     
     const lowerResponse = response.toLowerCase();
     const certainCount = certainWords.filter(word => lowerResponse.includes(word)).length;
@@ -288,7 +288,7 @@ Expected Behavior:
   private static async storeDecision(decision: AIDecision): Promise<void> {
     try {
       const { error } = await supabase
-        .from('ai_decisions')
+        .from("ai_decisions")
         .insert({
           vessel_id: decision.vessel_id,
           decision_type: decision.decision_type,
@@ -301,10 +301,10 @@ Expected Behavior:
         });
 
       if (error) {
-        logger.error('Error storing AI decision:', error);
+        logger.error("Error storing AI decision:", error);
       }
     } catch (error) {
-      logger.error('Error in storeDecision:', error);
+      logger.error("Error in storeDecision:", error);
     }
   }
 
@@ -313,7 +313,7 @@ Expected Behavior:
    */
   private static async incrementInteractionCount(vesselId: string): Promise<void> {
     try {
-      const { error } = await supabase.rpc('increment_vessel_context_interactions', {
+      const { error } = await supabase.rpc("increment_vessel_context_interactions", {
         p_vessel_id: vesselId
       });
 
@@ -322,16 +322,16 @@ Expected Behavior:
         const context = this.CONTEXT_CACHE.get(vesselId);
         if (context) {
           await supabase
-            .from('vessel_ai_contexts')
+            .from("vessel_ai_contexts")
             .update({
               interaction_count: (context.interaction_count || 0) + 1,
               updated_at: new Date().toISOString()
             })
-            .eq('vessel_id', vesselId);
+            .eq("vessel_id", vesselId);
         }
       }
     } catch (error) {
-      logger.error('Error incrementing interaction count:', error);
+      logger.error("Error incrementing interaction count:", error);
     }
   }
 
@@ -341,7 +341,7 @@ Expected Behavior:
    */
   static async syncAIContexts(): Promise<{ synced: number; errors: number }> {
     try {
-      logger.info('Starting global AI context synchronization...');
+      logger.info("Starting global AI context synchronization...");
 
       // Check if sync is needed
       if (this.lastGlobalSync) {
@@ -354,16 +354,16 @@ Expected Behavior:
 
       // Fetch all vessel contexts
       const { data: contexts, error } = await supabase
-        .from('vessel_ai_contexts')
-        .select('*');
+        .from("vessel_ai_contexts")
+        .select("*");
 
       if (error) {
-        logger.error('Error fetching contexts for sync:', error);
+        logger.error("Error fetching contexts for sync:", error);
         return { synced: 0, errors: 1 };
       }
 
       if (!contexts || contexts.length === 0) {
-        logger.info('No contexts to sync');
+        logger.info("No contexts to sync");
         return { synced: 0, errors: 0 };
       }
 
@@ -377,13 +377,13 @@ Expected Behavior:
       for (const context of contexts) {
         try {
           const { error: updateError } = await supabase
-            .from('vessel_ai_contexts')
+            .from("vessel_ai_contexts")
             .update({
               global_data: globalData,
               last_sync: new Date().toISOString(),
               updated_at: new Date().toISOString()
             })
-            .eq('vessel_id', context.vessel_id);
+            .eq("vessel_id", context.vessel_id);
 
           if (updateError) {
             logger.error(`Error updating context for vessel ${context.vessel_id}:`, updateError);
@@ -408,7 +408,7 @@ Expected Behavior:
 
       return { synced, errors };
     } catch (error) {
-      logger.error('Error in syncAIContexts:', error);
+      logger.error("Error in syncAIContexts:", error);
       return { synced: 0, errors: 1 };
     }
   }
@@ -426,12 +426,12 @@ Expected Behavior:
 
     // Aggregate common patterns and insights
     for (const context of contexts) {
-      if (context.local_data && typeof context.local_data === 'object') {
+      if (context.local_data && typeof context.local_data === "object") {
         // Extract insights that should be shared fleet-wide
         if (context.local_data.maintenance_patterns) {
           globalData.shared_insights.push({
             vessel_id: context.vessel_id,
-            type: 'maintenance',
+            type: "maintenance",
             data: context.local_data.maintenance_patterns
           });
         }
@@ -439,7 +439,7 @@ Expected Behavior:
         if (context.local_data.weather_observations) {
           globalData.shared_insights.push({
             vessel_id: context.vessel_id,
-            type: 'weather',
+            type: "weather",
             data: context.local_data.weather_observations
           });
         }
@@ -454,7 +454,7 @@ Expected Behavior:
    */
   static clearCache(): void {
     this.CONTEXT_CACHE.clear();
-    logger.info('AI context cache cleared');
+    logger.info("AI context cache cleared");
   }
 
   /**
@@ -464,7 +464,7 @@ Expected Behavior:
     lastSync: Date | null;
     nextSync: Date | null;
     cacheSize: number;
-  } {
+    } {
     const nextSync = this.lastGlobalSync
       ? new Date(this.lastGlobalSync.getTime() + this.SYNC_INTERVAL_HOURS * 60 * 60 * 1000)
       : null;
@@ -478,11 +478,11 @@ Expected Behavior:
 }
 
 // Auto-start sync scheduler if in production
-if (typeof window !== 'undefined' && import.meta.env.PROD) {
+if (typeof window !== "undefined" && import.meta.env.PROD) {
   // Sync every 12 hours
   setInterval(() => {
     DistributedAIEngine.syncAIContexts().catch(error => {
-      logger.error('Auto-sync failed:', error);
+      logger.error("Auto-sync failed:", error);
     });
-  }, DistributedAIEngine['SYNC_INTERVAL_HOURS'] * 60 * 60 * 1000);
+  }, DistributedAIEngine["SYNC_INTERVAL_HOURS"] * 60 * 60 * 1000);
 }

@@ -1,16 +1,16 @@
 // @ts-nocheck
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MessageCircle, Users, Send, Plus, Hash } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { CreateChannelDialog } from './components/CreateChannelDialog';
-import { ChannelMessages } from './components/ChannelMessages';
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MessageCircle, Users, Send, Plus, Hash } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { CreateChannelDialog } from "./components/CreateChannelDialog";
+import { ChannelMessages } from "./components/ChannelMessages";
 
 interface Channel {
   id: string;
@@ -47,10 +47,10 @@ export const ChannelManager: React.FC = () => {
 
       // Get public channels and user's private channels
       const { data, error } = await supabase
-        .from('communication_channels')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
+        .from("communication_channels")
+        .select("*")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
@@ -59,11 +59,11 @@ export const ChannelManager: React.FC = () => {
         setSelectedChannel(data[0]);
       }
     } catch (error) {
-      console.error('Error fetching channels:', error);
+      console.error("Error fetching channels:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load channels',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load channels",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -73,16 +73,16 @@ export const ChannelManager: React.FC = () => {
   const setupRealtimeSubscription = async () => {
     // Subscribe to channel updates
     realtimeChannelRef.current = supabase
-      .channel('channel-manager-realtime')
+      .channel("channel-manager-realtime")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'communication_channels',
+          event: "*",
+          schema: "public",
+          table: "communication_channels",
         },
         (payload) => {
-          console.log('Channel change detected', payload);
+          console.log("Channel change detected", payload);
           fetchChannels();
         }
       )
@@ -134,7 +134,7 @@ export const ChannelManager: React.FC = () => {
                 {channels.map((channel) => (
                   <Button
                     key={channel.id}
-                    variant={selectedChannel?.id === channel.id ? 'default' : 'ghost'}
+                    variant={selectedChannel?.id === channel.id ? "default" : "ghost"}
                     className="w-full justify-start"
                     onClick={() => setSelectedChannel(channel)}
                   >

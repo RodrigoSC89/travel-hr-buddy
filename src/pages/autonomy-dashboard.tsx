@@ -3,24 +3,24 @@
  * Autonomous task management and monitoring
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Check, X, Play, Settings, Brain } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { AutonomyService } from '@/services/autonomy.service';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Check, X, Play, Settings, Brain } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { AutonomyService } from "@/services/autonomy.service";
 
 export const AutonomyDashboard = () => {
   const queryClient = useQueryClient();
 
   const { data: stats } = useQuery({
-    queryKey: ['autonomy-stats'],
+    queryKey: ["autonomy-stats"],
     queryFn: () => AutonomyService.getDashboardStats(),
     refetchInterval: 10000,
   });
 
   const { data: pendingTasks = [] } = useQuery({
-    queryKey: ['pending-tasks'],
+    queryKey: ["pending-tasks"],
     queryFn: () => AutonomyService.getPendingTasks(),
   });
 
@@ -28,8 +28,8 @@ export const AutonomyDashboard = () => {
     mutationFn: (data: { task_id: string; approved: boolean }) =>
       AutonomyService.approveTask(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['pending-tasks'] });
-      queryClient.invalidateQueries({ queryKey: ['autonomy-stats'] });
+      queryClient.invalidateQueries({ queryKey: ["pending-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["autonomy-stats"] });
     },
   });
 
@@ -118,8 +118,8 @@ export const AutonomyDashboard = () => {
                       <h3 className="font-medium">{task.task_name}</h3>
                       <Badge>{task.task_type}</Badge>
                       <Badge variant={
-                        task.priority === 'critical' ? 'destructive' :
-                        task.priority === 'high' ? 'default' : 'secondary'
+                        task.priority === "critical" ? "destructive" :
+                          task.priority === "high" ? "default" : "secondary"
                       }>
                         {task.priority}
                       </Badge>
@@ -180,16 +180,16 @@ export const AutonomyDashboard = () => {
                 <div>
                   <p className="font-medium text-sm">{task.task_name}</p>
                   <p className="text-xs text-muted-foreground">
-                    {new Date(task.created_at).toLocaleString('pt-BR')}
+                    {new Date(task.created_at).toLocaleString("pt-BR")}
                   </p>
                 </div>
                 <Badge
                   variant={
-                    task.status === 'completed'
-                      ? 'default'
-                      : task.status === 'failed'
-                        ? 'destructive'
-                        : 'secondary'
+                    task.status === "completed"
+                      ? "default"
+                      : task.status === "failed"
+                        ? "destructive"
+                        : "secondary"
                   }
                 >
                   {task.status}

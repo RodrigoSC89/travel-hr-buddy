@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   GraduationCap, 
   BookOpen, 
@@ -14,7 +14,7 @@ import {
   CheckCircle,
   Download,
   Star
-} from 'lucide-react';
+} from "lucide-react";
 
 interface Course {
   id: string;
@@ -39,58 +39,58 @@ interface Certificate {
 }
 
 const TrainingAcademy: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('courses');
+  const [activeTab, setActiveTab] = useState("courses");
 
   // Mock data
   const courses: Course[] = [
     {
-      id: '1',
-      title: 'Maritime Safety Fundamentals',
-      description: 'Essential safety procedures and protocols for maritime operations',
-      category: 'Safety',
-      difficulty_level: 'beginner',
+      id: "1",
+      title: "Maritime Safety Fundamentals",
+      description: "Essential safety procedures and protocols for maritime operations",
+      category: "Safety",
+      difficulty_level: "beginner",
       duration_hours: 8,
       progress: 60,
-      instructor_name: 'Capt. John Smith',
+      instructor_name: "Capt. John Smith",
       is_enrolled: true
     },
     {
-      id: '2',
-      title: 'Advanced Navigation Systems',
-      description: 'Master modern navigation equipment and techniques',
-      category: 'Navigation',
-      difficulty_level: 'advanced',
+      id: "2",
+      title: "Advanced Navigation Systems",
+      description: "Master modern navigation equipment and techniques",
+      category: "Navigation",
+      difficulty_level: "advanced",
       duration_hours: 12,
-      instructor_name: 'Nav. Officer Maria Santos',
+      instructor_name: "Nav. Officer Maria Santos",
       is_enrolled: false
     },
     {
-      id: '3',
-      title: 'Emergency Response Procedures',
-      description: 'Comprehensive emergency handling and crisis management',
-      category: 'Safety',
-      difficulty_level: 'intermediate',
+      id: "3",
+      title: "Emergency Response Procedures",
+      description: "Comprehensive emergency handling and crisis management",
+      category: "Safety",
+      difficulty_level: "intermediate",
       duration_hours: 10,
       progress: 100,
-      instructor_name: 'Chief Officer David Brown',
+      instructor_name: "Chief Officer David Brown",
       is_enrolled: true
     }
   ];
 
   const certificates: Certificate[] = [
     {
-      id: '1',
-      course_title: 'Maritime Safety Fundamentals',
-      certificate_number: 'CERT-2025-123456',
-      issued_date: '2025-10-15',
+      id: "1",
+      course_title: "Maritime Safety Fundamentals",
+      certificate_number: "CERT-2025-123456",
+      issued_date: "2025-10-15",
       final_score: 92,
       is_valid: true
     },
     {
-      id: '2',
-      course_title: 'Emergency Response Procedures',
-      certificate_number: 'CERT-2025-123457',
-      issued_date: '2025-10-20',
+      id: "2",
+      course_title: "Emergency Response Procedures",
+      certificate_number: "CERT-2025-123457",
+      issued_date: "2025-10-20",
       final_score: 88,
       is_valid: true
     }
@@ -98,11 +98,11 @@ const TrainingAcademy: React.FC = () => {
 
   const getDifficultyColor = (level: string) => {
     switch (level) {
-      case 'beginner': return 'bg-green-500';
-      case 'intermediate': return 'bg-yellow-500';
-      case 'advanced': return 'bg-orange-500';
-      case 'expert': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "beginner": return "bg-green-500";
+    case "intermediate": return "bg-yellow-500";
+    case "advanced": return "bg-orange-500";
+    case "expert": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
@@ -208,14 +208,14 @@ const TrainingAcademy: React.FC = () => {
                       <Progress value={course.progress} />
                     </div>
                   )}
-                  <Button className="w-full" variant={course.is_enrolled ? 'default' : 'outline'}>
+                  <Button className="w-full" variant={course.is_enrolled ? "default" : "outline"}>
                     {course.is_enrolled ? (
                       <>
                         <Play className="mr-2 h-4 w-4" />
                         Continue
                       </>
                     ) : (
-                      'Enroll Now'
+                      "Enroll Now"
                     )}
                   </Button>
                 </CardContent>

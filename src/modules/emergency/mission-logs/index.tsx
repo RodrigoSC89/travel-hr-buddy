@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import { 
   FileText, 
   Download, 
@@ -22,12 +22,12 @@ import {
   CheckCircle,
   XCircle,
   Clock
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MissionLog {
   id: string;
-  log_type: 'info' | 'warning' | 'error' | 'critical' | 'success';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  log_type: "info" | "warning" | "error" | "critical" | "success";
+  severity: "low" | "medium" | "high" | "critical";
   title: string;
   message: string;
   category: string;
@@ -36,106 +36,106 @@ interface MissionLog {
 }
 
 const MissionLogs: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('logs');
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [selectedSeverity, setSelectedSeverity] = useState<string>('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState("logs");
+  const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedSeverity, setSelectedSeverity] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Mock data
   const logs: MissionLog[] = [
     {
-      id: '1',
-      log_type: 'info',
-      severity: 'low',
-      title: 'Navigation system update',
-      message: 'GPS coordinates updated successfully',
-      category: 'Navigation',
-      source_module: 'Navigation Copilot',
-      event_timestamp: '2025-10-27T10:30:00Z'
+      id: "1",
+      log_type: "info",
+      severity: "low",
+      title: "Navigation system update",
+      message: "GPS coordinates updated successfully",
+      category: "Navigation",
+      source_module: "Navigation Copilot",
+      event_timestamp: "2025-10-27T10:30:00Z"
     },
     {
-      id: '2',
-      log_type: 'warning',
-      severity: 'medium',
-      title: 'Weather alert received',
-      message: 'Approaching storm system detected 50nm ahead',
-      category: 'Weather',
-      source_module: 'Weather Dashboard',
-      event_timestamp: '2025-10-27T10:15:00Z'
+      id: "2",
+      log_type: "warning",
+      severity: "medium",
+      title: "Weather alert received",
+      message: "Approaching storm system detected 50nm ahead",
+      category: "Weather",
+      source_module: "Weather Dashboard",
+      event_timestamp: "2025-10-27T10:15:00Z"
     },
     {
-      id: '3',
-      log_type: 'error',
-      severity: 'high',
-      title: 'Communication interruption',
-      message: 'Satellite communication lost for 2 minutes',
-      category: 'Communications',
-      source_module: 'Satellite Tracking',
-      event_timestamp: '2025-10-27T10:00:00Z'
+      id: "3",
+      log_type: "error",
+      severity: "high",
+      title: "Communication interruption",
+      message: "Satellite communication lost for 2 minutes",
+      category: "Communications",
+      source_module: "Satellite Tracking",
+      event_timestamp: "2025-10-27T10:00:00Z"
     },
     {
-      id: '4',
-      log_type: 'success',
-      severity: 'low',
-      title: 'Route optimization complete',
-      message: 'New route calculated, ETA improved by 3 hours',
-      category: 'Navigation',
-      source_module: 'Route Planner',
-      event_timestamp: '2025-10-27T09:45:00Z'
+      id: "4",
+      log_type: "success",
+      severity: "low",
+      title: "Route optimization complete",
+      message: "New route calculated, ETA improved by 3 hours",
+      category: "Navigation",
+      source_module: "Route Planner",
+      event_timestamp: "2025-10-27T09:45:00Z"
     },
     {
-      id: '5',
-      log_type: 'critical',
-      severity: 'critical',
-      title: 'Emergency beacon activated',
-      message: 'Vessel distress signal detected in sector B-12',
-      category: 'Emergency',
-      source_module: 'Emergency Response',
-      event_timestamp: '2025-10-27T09:30:00Z'
+      id: "5",
+      log_type: "critical",
+      severity: "critical",
+      title: "Emergency beacon activated",
+      message: "Vessel distress signal detected in sector B-12",
+      category: "Emergency",
+      source_module: "Emergency Response",
+      event_timestamp: "2025-10-27T09:30:00Z"
     }
   ];
 
   const getLogIcon = (type: string) => {
     switch (type) {
-      case 'info':
-        return <Info className="h-4 w-4 text-blue-500" />;
-      case 'warning':
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'error':
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'critical':
-        return <AlertCircle className="h-4 w-4 text-red-700" />;
-      case 'success':
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      default:
-        return <Info className="h-4 w-4" />;
+    case "info":
+      return <Info className="h-4 w-4 text-blue-500" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "error":
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    case "critical":
+      return <AlertCircle className="h-4 w-4 text-red-700" />;
+    case "success":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    default:
+      return <Info className="h-4 w-4" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return 'bg-red-500';
-      case 'high':
-        return 'bg-orange-500';
-      case 'medium':
-        return 'bg-yellow-500';
-      case 'low':
-        return 'bg-green-500';
-      default:
-        return 'bg-gray-500';
+    case "critical":
+      return "bg-red-500";
+    case "high":
+      return "bg-orange-500";
+    case "medium":
+      return "bg-yellow-500";
+    case "low":
+      return "bg-green-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
-  const exportLogs = (format: 'csv' | 'json' | 'pdf') => {
+  const exportLogs = (format: "csv" | "json" | "pdf") => {
     console.log(`Exporting logs as ${format}`);
     // TODO: Implement actual export logic
   };
 
   const filteredLogs = logs.filter(log => {
-    const matchesType = selectedType === 'all' || log.log_type === selectedType;
-    const matchesSeverity = selectedSeverity === 'all' || log.severity === selectedSeverity;
-    const matchesSearch = searchTerm === '' || 
+    const matchesType = selectedType === "all" || log.log_type === selectedType;
+    const matchesSeverity = selectedSeverity === "all" || log.severity === selectedSeverity;
+    const matchesSearch = searchTerm === "" || 
       log.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.message.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesType && matchesSeverity && matchesSearch;
@@ -152,15 +152,15 @@ const MissionLogs: React.FC = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => exportLogs('csv')}>
+          <Button variant="outline" onClick={() => exportLogs("csv")}>
             <Download className="mr-2 h-4 w-4" />
             Export CSV
           </Button>
-          <Button variant="outline" onClick={() => exportLogs('json')}>
+          <Button variant="outline" onClick={() => exportLogs("json")}>
             <Download className="mr-2 h-4 w-4" />
             Export JSON
           </Button>
-          <Button variant="outline" onClick={() => exportLogs('pdf')}>
+          <Button variant="outline" onClick={() => exportLogs("pdf")}>
             <Download className="mr-2 h-4 w-4" />
             Export PDF
           </Button>
@@ -186,7 +186,7 @@ const MissionLogs: React.FC = () => {
             <Info className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{logs.filter(l => l.log_type === 'info').length}</div>
+            <div className="text-2xl font-bold">{logs.filter(l => l.log_type === "info").length}</div>
           </CardContent>
         </Card>
 
@@ -196,7 +196,7 @@ const MissionLogs: React.FC = () => {
             <AlertTriangle className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{logs.filter(l => l.log_type === 'warning').length}</div>
+            <div className="text-2xl font-bold">{logs.filter(l => l.log_type === "warning").length}</div>
           </CardContent>
         </Card>
 
@@ -206,7 +206,7 @@ const MissionLogs: React.FC = () => {
             <XCircle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{logs.filter(l => l.log_type === 'error').length}</div>
+            <div className="text-2xl font-bold">{logs.filter(l => l.log_type === "error").length}</div>
           </CardContent>
         </Card>
 
@@ -216,7 +216,7 @@ const MissionLogs: React.FC = () => {
             <AlertCircle className="h-4 w-4 text-red-700" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{logs.filter(l => l.log_type === 'critical').length}</div>
+            <div className="text-2xl font-bold">{logs.filter(l => l.log_type === "critical").length}</div>
           </CardContent>
         </Card>
       </div>

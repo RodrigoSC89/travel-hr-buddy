@@ -25,8 +25,8 @@ export type { AlertConfig, SatcomAlert } from "./alertHandler";
 export interface SatcomConnection {
   id: string;
   name: string;
-  provider: 'Iridium' | 'Starlink' | 'Inmarsat' | 'Thuraya';
-  status: 'connected' | 'degraded' | 'disconnected';
+  provider: "Iridium" | "Starlink" | "Inmarsat" | "Thuraya";
+  status: "connected" | "degraded" | "disconnected";
   signalStrength: number;
   latency: number;
   bandwidth: number;
@@ -36,7 +36,7 @@ export interface SatcomConnection {
 export interface SignalEvent {
   timestamp: string;
   provider: string;
-  type: 'connection_lost' | 'connection_restored' | 'degraded' | 'maintenance';
+  type: "connection_lost" | "connection_restored" | "degraded" | "maintenance";
   duration?: number;
   reason?: string;
 }
@@ -44,30 +44,30 @@ export interface SignalEvent {
 const SatcomDashboard = () => {
   const [connections, setConnections] = useState<SatcomConnection[]>([
     {
-      id: 'conn-1',
-      name: 'Iridium Certus 700',
-      provider: 'Iridium',
-      status: 'connected',
+      id: "conn-1",
+      name: "Iridium Certus 700",
+      provider: "Iridium",
+      status: "connected",
       signalStrength: 92,
       latency: 680,
       bandwidth: 700,
       lastSeen: new Date().toISOString(),
     },
     {
-      id: 'conn-2',
-      name: 'Starlink Maritime',
-      provider: 'Starlink',
-      status: 'connected',
+      id: "conn-2",
+      name: "Starlink Maritime",
+      provider: "Starlink",
+      status: "connected",
       signalStrength: 88,
       latency: 35,
       bandwidth: 150000,
       lastSeen: new Date().toISOString(),
     },
     {
-      id: 'conn-3',
-      name: 'Inmarsat FleetBroadband',
-      provider: 'Inmarsat',
-      status: 'degraded',
+      id: "conn-3",
+      name: "Inmarsat FleetBroadband",
+      provider: "Inmarsat",
+      status: "degraded",
       signalStrength: 45,
       latency: 720,
       bandwidth: 432,
@@ -78,22 +78,22 @@ const SatcomDashboard = () => {
   const [signalHistory, setSignalHistory] = useState<SignalEvent[]>([
     {
       timestamp: new Date(Date.now() - 2 * 60 * 60000).toISOString(),
-      provider: 'Inmarsat',
-      type: 'connection_lost',
+      provider: "Inmarsat",
+      type: "connection_lost",
       duration: 15,
-      reason: 'Storm interference',
+      reason: "Storm interference",
     },
     {
       timestamp: new Date(Date.now() - 1 * 60 * 60000).toISOString(),
-      provider: 'Inmarsat',
-      type: 'connection_restored',
+      provider: "Inmarsat",
+      type: "connection_restored",
     },
     {
       timestamp: new Date(Date.now() - 45 * 60000).toISOString(),
-      provider: 'Iridium',
-      type: 'degraded',
+      provider: "Iridium",
+      type: "degraded",
       duration: 10,
-      reason: 'Satellite handover',
+      reason: "Satellite handover",
     },
   ]);
 
@@ -121,7 +121,7 @@ const SatcomDashboard = () => {
   });
 
   // Calculate active connections
-  const activeConnections = monitoredConnections.filter(c => c.status === 'connected').length;
+  const activeConnections = monitoredConnections.filter(c => c.status === "connected").length;
   const averageSignal = monitoredConnections.reduce((acc, c) => acc + c.signalStrength, 0) / monitoredConnections.length;
 
   // Simulate real-time updates (in production, this would come from WebSocket/API)

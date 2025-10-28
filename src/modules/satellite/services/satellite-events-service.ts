@@ -8,7 +8,7 @@ export interface SatelliteEvent {
   id?: string;
   satelliteId: string;
   noradId: number;
-  eventType: 'position_update' | 'orbit_change' | 'signal_loss' | 'signal_restore' | 'anomaly';
+  eventType: "position_update" | "orbit_change" | "signal_loss" | "signal_restore" | "anomaly";
   eventData: Record<string, any>;
   latitude?: number;
   longitude?: number;
@@ -21,7 +21,7 @@ export class SatelliteEventsService {
   async logEvent(event: SatelliteEvent): Promise<SatelliteEvent | null> {
     try {
       const { data, error } = await supabase
-        .from('satellite_events')
+        .from("satellite_events")
         .insert({
           satellite_id: event.satelliteId,
           norad_id: event.noradId,
@@ -37,7 +37,7 @@ export class SatelliteEventsService {
       if (error) throw error;
       return this.mapToEvent(data);
     } catch (error) {
-      console.error('Error logging satellite event:', error);
+      console.error("Error logging satellite event:", error);
       return null;
     }
   }
@@ -45,13 +45,13 @@ export class SatelliteEventsService {
   async getEvents(satelliteId?: string, limit: number = 100): Promise<SatelliteEvent[]> {
     try {
       let query = supabase
-        .from('satellite_events')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("satellite_events")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(limit);
 
       if (satelliteId) {
-        query = query.eq('satellite_id', satelliteId);
+        query = query.eq("satellite_id", satelliteId);
       }
 
       const { data, error } = await query;
@@ -59,7 +59,7 @@ export class SatelliteEventsService {
 
       return (data || []).map(this.mapToEvent);
     } catch (error) {
-      console.error('Error fetching satellite events:', error);
+      console.error("Error fetching satellite events:", error);
       return [];
     }
   }
@@ -67,16 +67,16 @@ export class SatelliteEventsService {
   async getEventsByNoradId(noradId: number, limit: number = 50): Promise<SatelliteEvent[]> {
     try {
       const { data, error } = await supabase
-        .from('satellite_events')
-        .select('*')
-        .eq('norad_id', noradId)
-        .order('timestamp', { ascending: false })
+        .from("satellite_events")
+        .select("*")
+        .eq("norad_id", noradId)
+        .order("timestamp", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
       return (data || []).map(this.mapToEvent);
     } catch (error) {
-      console.error('Error fetching events by NORAD ID:', error);
+      console.error("Error fetching events by NORAD ID:", error);
       return [];
     }
   }
@@ -84,16 +84,16 @@ export class SatelliteEventsService {
   async getEventsByType(eventType: string, limit: number = 100): Promise<SatelliteEvent[]> {
     try {
       const { data, error } = await supabase
-        .from('satellite_events')
-        .select('*')
-        .eq('event_type', eventType)
-        .order('timestamp', { ascending: false })
+        .from("satellite_events")
+        .select("*")
+        .eq("event_type", eventType)
+        .order("timestamp", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
       return (data || []).map(this.mapToEvent);
     } catch (error) {
-      console.error('Error fetching events by type:', error);
+      console.error("Error fetching events by type:", error);
       return [];
     }
   }

@@ -1,11 +1,11 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { TrendingUp, Calendar } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { TrendingUp, Calendar } from "lucide-react";
 
 interface HistoryData {
   date: string;
@@ -32,20 +32,20 @@ export const WellbeingHistory: React.FC = () => {
 
       // Fetch health check-ins for the last 30 days
       const { data: checkins, error } = await supabase
-        .from('health_checkins')
-        .select('*')
-        .eq('user_id', user.id)
-        .gte('checkin_date', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
-        .order('checkin_date', { ascending: true });
+        .from("health_checkins")
+        .select("*")
+        .eq("user_id", user.id)
+        .gte("checkin_date", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+        .order("checkin_date", { ascending: true });
 
       if (error) throw error;
 
       // Fetch wellbeing logs
       const { data: logs } = await supabase
-        .from('crew_wellbeing_logs')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: true })
+        .from("crew_wellbeing_logs")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: true })
         .limit(30);
 
       // Transform data for chart
@@ -56,9 +56,9 @@ export const WellbeingHistory: React.FC = () => {
         );
 
         return {
-          date: new Date(checkin.checkin_date).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
+          date: new Date(checkin.checkin_date).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
           }),
           mood: checkin.mood_rating || 0,
           stress: 6 - (checkin.stress_level || 3), // Invert stress so higher is better
@@ -70,11 +70,11 @@ export const WellbeingHistory: React.FC = () => {
 
       setHistoryData(chartData);
     } catch (error) {
-      console.error('Error fetching history:', error);
+      console.error("Error fetching history:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load wellbeing history',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load wellbeing history",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);

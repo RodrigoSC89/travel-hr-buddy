@@ -30,7 +30,7 @@ export interface AISData {
 
 export interface SatelliteTelemetry {
   satellite_id: string;
-  source: 'NOAA' | 'Starlink';
+  source: "NOAA" | "Starlink";
   latitude: number;
   longitude: number;
   data: any;
@@ -40,7 +40,7 @@ export interface SatelliteTelemetry {
 export interface SyncStatus {
   source: string;
   last_sync: Date;
-  status: 'active' | 'error' | 'idle';
+  status: "active" | "error" | "idle";
   records_synced: number;
   error_message?: string;
 }
@@ -61,12 +61,12 @@ class SatelliteSyncEngine {
    * Initialize sync status for all sources
    */
   private initializeSyncStatus(): void {
-    const sources = ['Windy', 'AIS', 'NOAA', 'Starlink'];
+    const sources = ["Windy", "AIS", "NOAA", "Starlink"];
     sources.forEach(source => {
       this.syncStatus.set(source, {
         source,
         last_sync: new Date(),
-        status: 'idle',
+        status: "idle",
         records_synced: 0,
       });
     });
@@ -121,12 +121,12 @@ class SatelliteSyncEngine {
    * Sync Windy weather forecast API
    */
   async syncWindyData(): Promise<void> {
-    const source = 'Windy';
+    const source = "Windy";
     try {
       logger.info("[SatelliteSyncEngine] Syncing Windy data");
 
       // Check cache first
-      const cached = this.getFromCache('windy');
+      const cached = this.getFromCache("windy");
       if (cached) {
         logger.info("[SatelliteSyncEngine] Using cached Windy data");
         return;
@@ -137,8 +137,8 @@ class SatelliteSyncEngine {
 
       // Normalize and save to Supabase
       const normalizedData = forecastData.map(data => ({
-        source: 'Windy',
-        location_name: 'Maritime Region',
+        source: "Windy",
+        location_name: "Maritime Region",
         latitude: data.latitude,
         longitude: data.longitude,
         temperature: data.temperature,
@@ -151,23 +151,23 @@ class SatelliteSyncEngine {
       }));
 
       const { error } = await supabase
-        .from('weather_feed')
+        .from("weather_feed")
         .insert(normalizedData);
 
       if (error) throw error;
 
       // Update cache
-      this.setCache('windy', forecastData);
+      this.setCache("windy", forecastData);
 
       // Update sync status
-      this.updateSyncStatus(source, 'active', normalizedData.length);
+      this.updateSyncStatus(source, "active", normalizedData.length);
 
       logger.info("[SatelliteSyncEngine] Windy data synced", {
         records: normalizedData.length,
       });
     } catch (error) {
       logger.error("[SatelliteSyncEngine] Failed to sync Windy data", { error });
-      this.updateSyncStatus(source, 'error', 0, String(error));
+      this.updateSyncStatus(source, "error", 0, String(error));
     }
   }
 
@@ -175,12 +175,12 @@ class SatelliteSyncEngine {
    * Sync AIS (Automatic Identification System) data
    */
   async syncAISData(): Promise<void> {
-    const source = 'AIS';
+    const source = "AIS";
     try {
       logger.info("[SatelliteSyncEngine] Syncing AIS data");
 
       // Check cache first
-      const cached = this.getFromCache('ais');
+      const cached = this.getFromCache("ais");
       if (cached) {
         logger.info("[SatelliteSyncEngine] Using cached AIS data");
         return;
@@ -191,8 +191,8 @@ class SatelliteSyncEngine {
 
       // Normalize and save to Supabase
       const normalizedData = aisData.map(data => ({
-        source: 'AIS',
-        data_type: 'position',
+        source: "AIS",
+        data_type: "position",
         raw_data: data,
         normalized_data: {
           mmsi: data.mmsi,
@@ -206,23 +206,23 @@ class SatelliteSyncEngine {
       }));
 
       const { error } = await supabase
-        .from('satellite_data')
+        .from("satellite_data")
         .insert(normalizedData);
 
       if (error) throw error;
 
       // Update cache
-      this.setCache('ais', aisData);
+      this.setCache("ais", aisData);
 
       // Update sync status
-      this.updateSyncStatus(source, 'active', normalizedData.length);
+      this.updateSyncStatus(source, "active", normalizedData.length);
 
       logger.info("[SatelliteSyncEngine] AIS data synced", {
         records: normalizedData.length,
       });
     } catch (error) {
       logger.error("[SatelliteSyncEngine] Failed to sync AIS data", { error });
-      this.updateSyncStatus(source, 'error', 0, String(error));
+      this.updateSyncStatus(source, "error", 0, String(error));
     }
   }
 
@@ -230,12 +230,12 @@ class SatelliteSyncEngine {
    * Sync NOAA satellite telemetry
    */
   async syncNOAAData(): Promise<void> {
-    const source = 'NOAA';
+    const source = "NOAA";
     try {
       logger.info("[SatelliteSyncEngine] Syncing NOAA data");
 
       // Check cache first
-      const cached = this.getFromCache('noaa');
+      const cached = this.getFromCache("noaa");
       if (cached) {
         logger.info("[SatelliteSyncEngine] Using cached NOAA data");
         return;
@@ -246,12 +246,12 @@ class SatelliteSyncEngine {
 
       // Normalize and save to Supabase
       const normalizedData = noaaData.map(data => ({
-        source: 'NOAA',
-        data_type: 'telemetry',
+        source: "NOAA",
+        data_type: "telemetry",
         raw_data: data.data,
         normalized_data: {
           satellite_id: data.satellite_id,
-          reading_type: 'weather',
+          reading_type: "weather",
         },
         latitude: data.latitude,
         longitude: data.longitude,
@@ -259,23 +259,23 @@ class SatelliteSyncEngine {
       }));
 
       const { error } = await supabase
-        .from('satellite_data')
+        .from("satellite_data")
         .insert(normalizedData);
 
       if (error) throw error;
 
       // Update cache
-      this.setCache('noaa', noaaData);
+      this.setCache("noaa", noaaData);
 
       // Update sync status
-      this.updateSyncStatus(source, 'active', normalizedData.length);
+      this.updateSyncStatus(source, "active", normalizedData.length);
 
       logger.info("[SatelliteSyncEngine] NOAA data synced", {
         records: normalizedData.length,
       });
     } catch (error) {
       logger.error("[SatelliteSyncEngine] Failed to sync NOAA data", { error });
-      this.updateSyncStatus(source, 'error', 0, String(error));
+      this.updateSyncStatus(source, "error", 0, String(error));
     }
   }
 
@@ -283,12 +283,12 @@ class SatelliteSyncEngine {
    * Sync Starlink telemetry (placeholder)
    */
   async syncStarlinkData(): Promise<void> {
-    const source = 'Starlink';
+    const source = "Starlink";
     try {
       logger.info("[SatelliteSyncEngine] Syncing Starlink data");
 
       // Check cache first
-      const cached = this.getFromCache('starlink');
+      const cached = this.getFromCache("starlink");
       if (cached) {
         logger.info("[SatelliteSyncEngine] Using cached Starlink data");
         return;
@@ -298,10 +298,10 @@ class SatelliteSyncEngine {
       logger.info("[SatelliteSyncEngine] Starlink integration pending");
       
       // Update sync status
-      this.updateSyncStatus(source, 'idle', 0);
+      this.updateSyncStatus(source, "idle", 0);
     } catch (error) {
       logger.error("[SatelliteSyncEngine] Failed to sync Starlink data", { error });
-      this.updateSyncStatus(source, 'error', 0, String(error));
+      this.updateSyncStatus(source, "error", 0, String(error));
     }
   }
 
@@ -339,8 +339,8 @@ class SatelliteSyncEngine {
     // Mock data - replace with actual AIS API integration
     return [
       {
-        mmsi: '123456789',
-        vessel_name: 'MV Atlantic',
+        mmsi: "123456789",
+        vessel_name: "MV Atlantic",
         latitude: -23.5505,
         longitude: -46.6333,
         speed: 12.5,
@@ -357,8 +357,8 @@ class SatelliteSyncEngine {
     // Mock data - replace with actual NOAA API integration
     return [
       {
-        satellite_id: 'NOAA-20',
-        source: 'NOAA',
+        satellite_id: "NOAA-20",
+        source: "NOAA",
         latitude: -23.5505,
         longitude: -46.6333,
         data: { temperature: 25, humidity: 70 },
@@ -370,11 +370,11 @@ class SatelliteSyncEngine {
   /**
    * Assess weather risk level
    */
-  private assessWeatherRisk(data: WindyForecastData): 'safe' | 'caution' | 'warning' | 'danger' {
-    if (data.wind_speed > 40 || data.visibility < 1000) return 'danger';
-    if (data.wind_speed > 30 || data.visibility < 3000) return 'warning';
-    if (data.wind_speed > 20 || data.visibility < 5000) return 'caution';
-    return 'safe';
+  private assessWeatherRisk(data: WindyForecastData): "safe" | "caution" | "warning" | "danger" {
+    if (data.wind_speed > 40 || data.visibility < 1000) return "danger";
+    if (data.wind_speed > 30 || data.visibility < 3000) return "warning";
+    if (data.wind_speed > 20 || data.visibility < 5000) return "caution";
+    return "safe";
   }
 
   /**
@@ -410,7 +410,7 @@ class SatelliteSyncEngine {
    */
   private updateSyncStatus(
     source: string,
-    status: 'active' | 'error' | 'idle',
+    status: "active" | "error" | "idle",
     records: number,
     error?: string
   ): void {
@@ -444,9 +444,9 @@ class SatelliteSyncEngine {
   async getLatestWeatherData(): Promise<any[]> {
     try {
       const { data, error } = await supabase
-        .from('weather_feed')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("weather_feed")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(100);
 
       if (error) throw error;
@@ -463,9 +463,9 @@ class SatelliteSyncEngine {
   async getLatestSatelliteData(): Promise<any[]> {
     try {
       const { data, error } = await supabase
-        .from('satellite_data')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("satellite_data")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(100);
 
       if (error) throw error;

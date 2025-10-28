@@ -1,13 +1,13 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Download, Award, TrendingUp } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { generateCertificatePDF } from '../services/generateCertificatePDF';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Download, Award, TrendingUp } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { generateCertificatePDF } from "../services/generateCertificatePDF";
 
 export const MyCertificates: React.FC = () => {
   const [certificates, setCertificates] = useState<any[]>([]);
@@ -24,18 +24,18 @@ export const MyCertificates: React.FC = () => {
       if (!user) return;
 
       const { data, error } = await supabase
-        .from('academy_certificates')
-        .select('*, academy_courses(title)')
-        .eq('user_id', user.id)
-        .order('issued_date', { ascending: false });
+        .from("academy_certificates")
+        .select("*, academy_courses(title)")
+        .eq("user_id", user.id)
+        .order("issued_date", { ascending: false });
 
       if (error) throw error;
       setCertificates(data || []);
     } catch (error: any) {
       toast({
-        title: 'Error loading certificates',
+        title: "Error loading certificates",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -45,39 +45,39 @@ export const MyCertificates: React.FC = () => {
   const handleDownload = async (cert: any) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      if (!user) throw new Error("Not authenticated");
 
       const { data: profile } = await supabase
-        .from('profiles')
-        .select('full_name')
-        .eq('id', user.id)
+        .from("profiles")
+        .select("full_name")
+        .eq("id", user.id)
         .single();
 
       const blob = await generateCertificatePDF({
         id: cert.id,
         certificate_number: cert.certificate_number,
-        course_title: cert.academy_courses?.title || 'Course',
+        course_title: cert.academy_courses?.title || "Course",
         issued_date: cert.issued_date,
         final_score: cert.final_score,
-        user_name: profile?.full_name || user.email || 'Student',
+        user_name: profile?.full_name || user.email || "Student",
       });
 
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `certificate-${cert.certificate_number}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
 
       toast({
-        title: 'Certificate downloaded',
-        description: 'Your certificate has been downloaded.',
+        title: "Certificate downloaded",
+        description: "Your certificate has been downloaded.",
       });
     } catch (error: any) {
       toast({
-        title: 'Error downloading certificate',
+        title: "Error downloading certificate",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -93,10 +93,10 @@ export const MyCertificates: React.FC = () => {
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <div className="flex items-center space-x-2">
               <Award className="h-5 w-5 text-yellow-500" />
-              <CardTitle className="text-lg">{cert.academy_courses?.title || 'Course'}</CardTitle>
+              <CardTitle className="text-lg">{cert.academy_courses?.title || "Course"}</CardTitle>
             </div>
-            <Badge variant={cert.is_valid ? 'default' : 'secondary'}>
-              {cert.is_valid ? 'Valid' : 'Expired'}
+            <Badge variant={cert.is_valid ? "default" : "secondary"}>
+              {cert.is_valid ? "Valid" : "Expired"}
             </Badge>
           </CardHeader>
           <CardContent>

@@ -1,11 +1,11 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { AlertCircle, TrendingUp, TrendingDown, Activity } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { AlertCircle, TrendingUp, TrendingDown, Activity } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 export const HealthMetricsDashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<any[]>([]);
@@ -33,11 +33,11 @@ export const HealthMetricsDashboard: React.FC = () => {
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
       const { data: metricsData, error: metricsError } = await supabase
-        .from('crew_health_metrics')
-        .select('*')
-        .eq('user_id', user.id)
-        .gte('recorded_at', thirtyDaysAgo.toISOString())
-        .order('recorded_at', { ascending: true });
+        .from("crew_health_metrics")
+        .select("*")
+        .eq("user_id", user.id)
+        .gte("recorded_at", thirtyDaysAgo.toISOString())
+        .order("recorded_at", { ascending: true });
 
       if (metricsError) throw metricsError;
 
@@ -63,20 +63,20 @@ export const HealthMetricsDashboard: React.FC = () => {
 
       // Load recent anomalies
       const { data: anomaliesData, error: anomaliesError } = await supabase
-        .from('health_anomalies')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('is_resolved', false)
-        .order('created_at', { ascending: false })
+        .from("health_anomalies")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("is_resolved", false)
+        .order("created_at", { ascending: false })
         .limit(5);
 
       if (anomaliesError) throw anomaliesError;
       setAnomalies(anomaliesData || []);
     } catch (error: any) {
       toast({
-        title: 'Error loading health data',
+        title: "Error loading health data",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -93,12 +93,12 @@ export const HealthMetricsDashboard: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return 'destructive';
-      case 'warning':
-        return 'default';
-      default:
-        return 'secondary';
+    case "critical":
+      return "destructive";
+    case "warning":
+      return "default";
+    default:
+      return "secondary";
     }
   };
 
@@ -145,8 +145,8 @@ export const HealthMetricsDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.avgMood}/10</div>
-            <Badge variant={stats.avgMood >= 7 ? 'default' : 'secondary'}>
-              {stats.avgMood >= 7 ? 'Good' : 'Needs Attention'}
+            <Badge variant={stats.avgMood >= 7 ? "default" : "secondary"}>
+              {stats.avgMood >= 7 ? "Good" : "Needs Attention"}
             </Badge>
           </CardContent>
         </Card>
@@ -157,8 +157,8 @@ export const HealthMetricsDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.avgSleep}h</div>
-            <Badge variant={stats.avgSleep >= 7 ? 'default' : 'secondary'}>
-              {stats.avgSleep >= 7 ? 'Healthy' : 'Low'}
+            <Badge variant={stats.avgSleep >= 7 ? "default" : "secondary"}>
+              {stats.avgSleep >= 7 ? "Healthy" : "Low"}
             </Badge>
           </CardContent>
         </Card>
@@ -169,8 +169,8 @@ export const HealthMetricsDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.avgStress}/10</div>
-            <Badge variant={stats.avgStress <= 5 ? 'default' : 'secondary'}>
-              {stats.avgStress <= 5 ? 'Normal' : 'Elevated'}
+            <Badge variant={stats.avgStress <= 5 ? "default" : "secondary"}>
+              {stats.avgStress <= 5 ? "Normal" : "Elevated"}
             </Badge>
           </CardContent>
         </Card>

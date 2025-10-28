@@ -1,82 +1,99 @@
+/**
+ * Weather Dashboard - PATCH 386 Complete
+ * Autonomous weather monitoring with maps, real-time data, and alert system
+ */
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Cloud, Wind, Thermometer, Droplets } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Cloud, Map, Activity, AlertTriangle } from "lucide-react";
 import { WindyMapEmbed, type WindyOverlay } from "./components/WindyMap";
+import { RealTimeWeatherData } from "./components/RealTimeWeatherData";
+import { WeatherAlerts } from "./components/WeatherAlerts";
 
 const WeatherDashboard = () => {
-  const [selectedOverlay, setSelectedOverlay] = useState<WindyOverlay>('wind');
+  const [selectedOverlay, setSelectedOverlay] = useState<WindyOverlay>("wind");
+  const [activeTab, setActiveTab] = useState("overview");
+  
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center gap-3 mb-6">
         <Cloud className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold">Weather Dashboard</h1>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Temperature</CardTitle>
-            <Thermometer className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">24°C</div>
-            <p className="text-xs text-muted-foreground">Average across fleet</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Wind Speed</CardTitle>
-            <Wind className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">12 kn</div>
-            <p className="text-xs text-muted-foreground">Current conditions</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Humidity</CardTitle>
-            <Droplets className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">68%</div>
-            <p className="text-xs text-muted-foreground">Relative humidity</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
-            <Cloud className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground">Weather warnings</p>
-          </CardContent>
-        </Card>
-      </div>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Module Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <div>
+          <h1 className="text-3xl font-bold">Weather Dashboard</h1>
           <p className="text-muted-foreground">
-            Real-time weather monitoring and forecasting with route-specific conditions, 
-            severe weather alerts, and historical weather data analysis.
+            Real-time weather monitoring with maps, alerts, and autonomous data updates
           </p>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <WindyMapEmbed 
-        latitude={-15}
-        longitude={-45}
-        zoom={4}
-        overlay={selectedOverlay}
-        height={600}
-      />
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="overview">
+            <Activity className="mr-2 h-4 w-4" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="map">
+            <Map className="mr-2 h-4 w-4" />
+            Interactive Map
+          </TabsTrigger>
+          <TabsTrigger value="alerts">
+            <AlertTriangle className="mr-2 h-4 w-4" />
+            Alerts
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-6">
+          <RealTimeWeatherData 
+            latitude={-15}
+            longitude={-45}
+            autoRefresh={true}
+            refreshInterval={300000}
+          />
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Module Features</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>✅ Real-time weather data with autonomous updates every 5 minutes</li>
+                <li>✅ Interactive map with multiple layers (wind, pressure, temperature, rain, waves)</li>
+                <li>✅ Active weather alert system with severity levels</li>
+                <li>✅ Browser notifications for critical weather conditions</li>
+                <li>✅ Mobile-responsive design</li>
+                <li>✅ Independent from Forecast Global module</li>
+              </ul>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="map" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Interactive Weather Map</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Select a layer to view different weather conditions. The map updates in real-time
+                and supports wind, waves, rain, temperature, and pressure visualizations.
+              </p>
+            </CardContent>
+          </Card>
+          
+          <WindyMapEmbed 
+            latitude={-15}
+            longitude={-45}
+            zoom={4}
+            overlay={selectedOverlay}
+            height={600}
+          />
+        </TabsContent>
+
+        <TabsContent value="alerts" className="space-y-6">
+          <WeatherAlerts />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

@@ -396,7 +396,7 @@ class MissionUploader {
     activeMissions: number;
     totalRoutes: number;
     averageRoutesPerMission: number;
-  } {
+    } {
     const missions = Array.from(this.missions.values());
     const totalRoutes = missions.reduce((sum, m) => sum + m.routes.length, 0);
 

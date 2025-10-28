@@ -3,7 +3,7 @@
  * AI-powered navigation with weather integration and route optimization
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 export interface Coordinates {
   lat: number;
@@ -24,7 +24,7 @@ export interface WeatherData {
   waveHeight?: number;
   visibility: number;
   conditions: string;
-  severity: 'safe' | 'caution' | 'danger';
+  severity: "safe" | "caution" | "danger";
   forecast?: WeatherForecast[];
 }
 
@@ -33,7 +33,7 @@ export interface WeatherForecast {
   temperature: number;
   windSpeed: number;
   conditions: string;
-  severity: 'safe' | 'caution' | 'danger';
+  severity: "safe" | "caution" | "danger";
 }
 
 export interface NavigationRoute {
@@ -52,8 +52,8 @@ export interface NavigationRoute {
 export interface WeatherAlert {
   id: string;
   location: Coordinates;
-  type: 'storm' | 'high_winds' | 'poor_visibility' | 'high_waves';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "storm" | "high_winds" | "poor_visibility" | "high_waves";
+  severity: "low" | "medium" | "high" | "critical";
   description: string;
   validUntil: number;
 }
@@ -80,7 +80,7 @@ class NavigationCopilot {
    */
   async getWeatherData(location: Coordinates): Promise<WeatherData> {
     if (!this.openWeatherApiKey) {
-      logger.warn('OpenWeather API key not configured');
+      logger.warn("OpenWeather API key not configured");
       return this.getMockWeatherData(location);
     }
 
@@ -90,7 +90,7 @@ class NavigationCopilot {
       );
 
       if (!response.ok) {
-        throw new Error('Weather API request failed');
+        throw new Error("Weather API request failed");
       }
 
       const data = await response.json();
@@ -105,7 +105,7 @@ class NavigationCopilot {
         severity: this.calculateWeatherSeverity(data.wind.speed * 1.94384, data.visibility)
       };
     } catch (error) {
-      logger.error('Failed to fetch weather data:', error);
+      logger.error("Failed to fetch weather data:", error);
       return this.getMockWeatherData(location);
     }
   }
@@ -118,7 +118,7 @@ class NavigationCopilot {
     destination: Coordinates,
     options: RouteOptimizationOptions = {}
   ): Promise<NavigationRoute[]> {
-    logger.info('Calculating routes with weather optimization');
+    logger.info("Calculating routes with weather optimization");
 
     // Get weather data along potential routes
     const weatherAlerts = await this.getWeatherAlertsAlongRoute(origin, destination);
@@ -131,7 +131,7 @@ class NavigationCopilot {
     routes.push(directRoute);
 
     // Alternative routes if storms detected
-    if (options.avoidStorms && weatherAlerts.some(a => a.type === 'storm')) {
+    if (options.avoidStorms && weatherAlerts.some(a => a.type === "storm")) {
       const alternativeRoute = await this.calculateAlternativeRoute(
         origin,
         destination,
@@ -175,7 +175,7 @@ class NavigationCopilot {
     const etaWithAI = this.predictETAWithAI(duration, weatherAlerts);
 
     return {
-      id: 'direct',
+      id: "direct",
       origin,
       destination,
       waypoints,
@@ -200,7 +200,7 @@ class NavigationCopilot {
     options: RouteOptimizationOptions
   ): Promise<NavigationRoute> {
     // Find storm locations
-    const stormAlerts = weatherAlerts.filter(a => a.type === 'storm' || a.severity === 'critical');
+    const stormAlerts = weatherAlerts.filter(a => a.type === "storm" || a.severity === "critical");
 
     // Generate waypoints that avoid storms
     const waypoints = this.generateAvoidanceWaypoints(origin, destination, stormAlerts);
@@ -215,7 +215,7 @@ class NavigationCopilot {
     const etaWithAI = this.predictETAWithAI(duration, weatherAlerts);
 
     return {
-      id: 'alternative',
+      id: "alternative",
       origin,
       destination,
       waypoints,
@@ -245,7 +245,7 @@ class NavigationCopilot {
     for (const point of checkPoints) {
       const weather = await this.getWeatherData(point);
       
-      if (weather.severity !== 'safe') {
+      if (weather.severity !== "safe") {
         alerts.push({
           id: `alert-${point.lat}-${point.lng}`,
           location: point,
@@ -269,18 +269,18 @@ class NavigationCopilot {
     // Adjust for weather conditions
     for (const alert of alerts) {
       switch (alert.severity) {
-        case 'low':
-          adjustedDuration *= 1.05; // 5% delay
-          break;
-        case 'medium':
-          adjustedDuration *= 1.15; // 15% delay
-          break;
-        case 'high':
-          adjustedDuration *= 1.30; // 30% delay
-          break;
-        case 'critical':
-          adjustedDuration *= 1.50; // 50% delay
-          break;
+      case "low":
+        adjustedDuration *= 1.05; // 5% delay
+        break;
+      case "medium":
+        adjustedDuration *= 1.15; // 15% delay
+        break;
+      case "high":
+        adjustedDuration *= 1.30; // 30% delay
+        break;
+      case "critical":
+        adjustedDuration *= 1.50; // 50% delay
+        break;
       }
     }
 
@@ -297,10 +297,10 @@ class NavigationCopilot {
     for (const alert of alerts) {
       if (this.isAlertNearRoute(alert, waypoints)) {
         switch (alert.severity) {
-          case 'low': riskScore += 10; break;
-          case 'medium': riskScore += 25; break;
-          case 'high': riskScore += 50; break;
-          case 'critical': riskScore += 100; break;
+        case "low": riskScore += 10; break;
+        case "medium": riskScore += 25; break;
+        case "high": riskScore += 50; break;
+        case "critical": riskScore += 100; break;
         }
       }
     }
@@ -392,26 +392,26 @@ class NavigationCopilot {
     );
   }
 
-  private calculateWeatherSeverity(windSpeed: number, visibility: number): 'safe' | 'caution' | 'danger' {
-    if (windSpeed > 40 || visibility < 1) return 'danger';
-    if (windSpeed > 25 || visibility < 3) return 'caution';
-    return 'safe';
+  private calculateWeatherSeverity(windSpeed: number, visibility: number): "safe" | "caution" | "danger" {
+    if (windSpeed > 40 || visibility < 1) return "danger";
+    if (windSpeed > 25 || visibility < 3) return "caution";
+    return "safe";
   }
 
-  private getAlertType(weather: WeatherData): WeatherAlert['type'] {
-    if (weather.windSpeed > 40) return 'storm';
-    if (weather.windSpeed > 25) return 'high_winds';
-    if (weather.visibility < 1) return 'poor_visibility';
-    if (weather.waveHeight && weather.waveHeight > 3) return 'high_waves';
-    return 'high_winds';
+  private getAlertType(weather: WeatherData): WeatherAlert["type"] {
+    if (weather.windSpeed > 40) return "storm";
+    if (weather.windSpeed > 25) return "high_winds";
+    if (weather.visibility < 1) return "poor_visibility";
+    if (weather.waveHeight && weather.waveHeight > 3) return "high_waves";
+    return "high_winds";
   }
 
-  private mapSeverity(severity: string): 'low' | 'medium' | 'high' | 'critical' {
+  private mapSeverity(severity: string): "low" | "medium" | "high" | "critical" {
     switch (severity) {
-      case 'safe': return 'low';
-      case 'caution': return 'medium';
-      case 'danger': return 'critical';
-      default: return 'medium';
+    case "safe": return "low";
+    case "caution": return "medium";
+    case "danger": return "critical";
+    default: return "medium";
     }
   }
 
@@ -431,8 +431,8 @@ class NavigationCopilot {
       windSpeed: 10 + windVariance,
       windDirection: Math.floor(Math.random() * 360),
       visibility: 8 + Math.random() * 4,
-      conditions: Math.random() > 0.7 ? 'Partly Cloudy' : 'Clear',
-      severity: 'safe'
+      conditions: Math.random() > 0.7 ? "Partly Cloudy" : "Clear",
+      severity: "safe"
     };
   }
 }

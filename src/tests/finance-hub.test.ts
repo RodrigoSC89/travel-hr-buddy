@@ -3,13 +3,13 @@
  * Tests for financial transaction management, invoices, and budgets
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act, waitFor } from '@testing-library/react';
-import { useFinanceData } from '@/modules/finance-hub/hooks/useFinanceData';
-import { supabase } from '@/integrations/supabase/client';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { renderHook, act, waitFor } from "@testing-library/react";
+import { useFinanceData } from "@/modules/finance-hub/hooks/useFinanceData";
+import { supabase } from "@/integrations/supabase/client";
 
 // Mock Supabase client
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     from: vi.fn(),
     auth: {
@@ -19,38 +19,38 @@ vi.mock('@/integrations/supabase/client', () => ({
 }));
 
 // Mock toast
-vi.mock('@/hooks/use-toast', () => ({
+vi.mock("@/hooks/use-toast", () => ({
   useToast: () => ({
     toast: vi.fn()
   })
 }));
 
-describe('Finance Hub', () => {
+describe("Finance Hub", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('useFinanceData Hook', () => {
-    describe('Data Loading', () => {
-      it('should load financial transactions from Supabase', async () => {
+  describe("useFinanceData Hook", () => {
+    describe("Data Loading", () => {
+      it("should load financial transactions from Supabase", async () => {
         const mockTransactions = [
           {
-            id: '1',
-            transaction_type: 'income',
+            id: "1",
+            transaction_type: "income",
             amount: 1000,
-            currency: 'USD',
-            status: 'completed',
-            transaction_date: '2025-01-01',
-            created_at: '2025-01-01'
+            currency: "USD",
+            status: "completed",
+            transaction_date: "2025-01-01",
+            created_at: "2025-01-01"
           },
           {
-            id: '2',
-            transaction_type: 'expense',
+            id: "2",
+            transaction_type: "expense",
             amount: 500,
-            currency: 'USD',
-            status: 'completed',
-            transaction_date: '2025-01-02',
-            created_at: '2025-01-02'
+            currency: "USD",
+            status: "completed",
+            transaction_date: "2025-01-02",
+            created_at: "2025-01-02"
           }
         ];
 
@@ -74,22 +74,22 @@ describe('Finance Hub', () => {
         });
 
         expect(result.current.transactions).toHaveLength(2);
-        expect(result.current.transactions[0].transaction_type).toBe('income');
+        expect(result.current.transactions[0].transaction_type).toBe("income");
       });
 
-      it('should load budget categories', async () => {
+      it("should load budget categories", async () => {
         const mockCategories = [
           {
-            id: '1',
-            name: 'Operations',
-            category_type: 'expense',
+            id: "1",
+            name: "Operations",
+            category_type: "expense",
             is_active: true,
             budget_allocated: 10000
           },
           {
-            id: '2',
-            name: 'Revenue',
-            category_type: 'income',
+            id: "2",
+            name: "Revenue",
+            category_type: "income",
             is_active: true,
             budget_allocated: 50000
           }
@@ -119,17 +119,17 @@ describe('Finance Hub', () => {
         expect(mockSelect).toHaveBeenCalled();
       });
 
-      it('should load invoices', async () => {
+      it("should load invoices", async () => {
         const mockInvoices = [
           {
-            id: '1',
-            invoice_number: 'INV-001',
-            invoice_type: 'sales',
-            status: 'pending',
+            id: "1",
+            invoice_number: "INV-001",
+            invoice_type: "sales",
+            status: "pending",
             total_amount: 5000,
-            currency: 'USD',
-            issue_date: '2025-01-01',
-            created_at: '2025-01-01'
+            currency: "USD",
+            issue_date: "2025-01-01",
+            created_at: "2025-01-01"
           }
         ];
 
@@ -155,8 +155,8 @@ describe('Finance Hub', () => {
         expect(mockSelect).toHaveBeenCalled();
       });
 
-      it('should handle errors when loading data', async () => {
-        const mockError = { message: 'Database connection error' };
+      it("should handle errors when loading data", async () => {
+        const mockError = { message: "Database connection error" };
 
         (supabase.from as any).mockReturnValue({
           select: vi.fn().mockReturnValue({
@@ -179,31 +179,31 @@ describe('Finance Hub', () => {
       });
     });
 
-    describe('Financial Summary Calculation', () => {
-      it('should calculate total income correctly', async () => {
+    describe("Financial Summary Calculation", () => {
+      it("should calculate total income correctly", async () => {
         const mockTransactions = [
           {
-            id: '1',
-            transaction_type: 'income',
+            id: "1",
+            transaction_type: "income",
             amount: 1000,
-            status: 'completed',
-            currency: 'USD',
-            transaction_date: '2025-01-01',
-            created_at: '2025-01-01'
+            status: "completed",
+            currency: "USD",
+            transaction_date: "2025-01-01",
+            created_at: "2025-01-01"
           },
           {
-            id: '2',
-            transaction_type: 'income',
+            id: "2",
+            transaction_type: "income",
             amount: 2000,
-            status: 'completed',
-            currency: 'USD',
-            transaction_date: '2025-01-02',
-            created_at: '2025-01-02'
+            status: "completed",
+            currency: "USD",
+            transaction_date: "2025-01-02",
+            created_at: "2025-01-02"
           }
         ];
 
         const mockFrom = vi.fn().mockImplementation((table: string) => {
-          if (table === 'financial_transactions') {
+          if (table === "financial_transactions") {
             return {
               select: vi.fn().mockReturnValue({
                 order: vi.fn().mockReturnValue({
@@ -244,25 +244,25 @@ describe('Finance Hub', () => {
         expect(result.current.summary?.totalIncome).toBe(3000);
       });
 
-      it('should calculate total expenses correctly', async () => {
+      it("should calculate total expenses correctly", async () => {
         const mockTransactions = [
           {
-            id: '1',
-            transaction_type: 'expense',
+            id: "1",
+            transaction_type: "expense",
             amount: 500,
-            status: 'completed',
-            currency: 'USD',
-            transaction_date: '2025-01-01',
-            created_at: '2025-01-01'
+            status: "completed",
+            currency: "USD",
+            transaction_date: "2025-01-01",
+            created_at: "2025-01-01"
           },
           {
-            id: '2',
-            transaction_type: 'expense',
+            id: "2",
+            transaction_type: "expense",
             amount: 300,
-            status: 'completed',
-            currency: 'USD',
-            transaction_date: '2025-01-02',
-            created_at: '2025-01-02'
+            status: "completed",
+            currency: "USD",
+            transaction_date: "2025-01-02",
+            created_at: "2025-01-02"
           }
         ];
 
@@ -288,25 +288,25 @@ describe('Finance Hub', () => {
         expect(result.current.summary?.totalExpenses).toBe(800);
       });
 
-      it('should calculate net profit correctly', async () => {
+      it("should calculate net profit correctly", async () => {
         const mockTransactions = [
           {
-            id: '1',
-            transaction_type: 'income',
+            id: "1",
+            transaction_type: "income",
             amount: 5000,
-            status: 'completed',
-            currency: 'USD',
-            transaction_date: '2025-01-01',
-            created_at: '2025-01-01'
+            status: "completed",
+            currency: "USD",
+            transaction_date: "2025-01-01",
+            created_at: "2025-01-01"
           },
           {
-            id: '2',
-            transaction_type: 'expense',
+            id: "2",
+            transaction_type: "expense",
             amount: 2000,
-            status: 'completed',
-            currency: 'USD',
-            transaction_date: '2025-01-02',
-            created_at: '2025-01-02'
+            status: "completed",
+            currency: "USD",
+            transaction_date: "2025-01-02",
+            created_at: "2025-01-02"
           }
         ];
 
@@ -332,37 +332,37 @@ describe('Finance Hub', () => {
         expect(result.current.summary?.netProfit).toBe(3000);
       });
 
-      it('should count pending invoices', async () => {
+      it("should count pending invoices", async () => {
         const mockInvoices = [
           {
-            id: '1',
-            invoice_number: 'INV-001',
-            status: 'pending',
-            invoice_type: 'sales',
+            id: "1",
+            invoice_number: "INV-001",
+            status: "pending",
+            invoice_type: "sales",
             total_amount: 1000,
-            currency: 'USD',
-            issue_date: '2025-01-01',
-            created_at: '2025-01-01'
+            currency: "USD",
+            issue_date: "2025-01-01",
+            created_at: "2025-01-01"
           },
           {
-            id: '2',
-            invoice_number: 'INV-002',
-            status: 'sent',
-            invoice_type: 'sales',
+            id: "2",
+            invoice_number: "INV-002",
+            status: "sent",
+            invoice_type: "sales",
             total_amount: 2000,
-            currency: 'USD',
-            issue_date: '2025-01-02',
-            created_at: '2025-01-02'
+            currency: "USD",
+            issue_date: "2025-01-02",
+            created_at: "2025-01-02"
           },
           {
-            id: '3',
-            invoice_number: 'INV-003',
-            status: 'paid',
-            invoice_type: 'sales',
+            id: "3",
+            invoice_number: "INV-003",
+            status: "paid",
+            invoice_type: "sales",
             total_amount: 3000,
-            currency: 'USD',
-            issue_date: '2025-01-03',
-            created_at: '2025-01-03'
+            currency: "USD",
+            issue_date: "2025-01-03",
+            created_at: "2025-01-03"
           }
         ];
 
@@ -388,27 +388,27 @@ describe('Finance Hub', () => {
         expect(result.current.summary?.pendingInvoices).toBe(2);
       });
 
-      it('should count overdue invoices', async () => {
+      it("should count overdue invoices", async () => {
         const mockInvoices = [
           {
-            id: '1',
-            invoice_number: 'INV-001',
-            status: 'overdue',
-            invoice_type: 'sales',
+            id: "1",
+            invoice_number: "INV-001",
+            status: "overdue",
+            invoice_type: "sales",
             total_amount: 1000,
-            currency: 'USD',
-            issue_date: '2025-01-01',
-            created_at: '2025-01-01'
+            currency: "USD",
+            issue_date: "2025-01-01",
+            created_at: "2025-01-01"
           },
           {
-            id: '2',
-            invoice_number: 'INV-002',
-            status: 'overdue',
-            invoice_type: 'sales',
+            id: "2",
+            invoice_number: "INV-002",
+            status: "overdue",
+            invoice_type: "sales",
             total_amount: 2000,
-            currency: 'USD',
-            issue_date: '2025-01-02',
-            created_at: '2025-01-02'
+            currency: "USD",
+            issue_date: "2025-01-02",
+            created_at: "2025-01-02"
           }
         ];
 
@@ -435,21 +435,21 @@ describe('Finance Hub', () => {
       });
     });
 
-    describe('CRUD Operations - Transactions', () => {
-      it('should create a new transaction', async () => {
+    describe("CRUD Operations - Transactions", () => {
+      it("should create a new transaction", async () => {
         const newTransaction = {
-          transaction_type: 'income' as const,
+          transaction_type: "income" as const,
           amount: 1000,
-          currency: 'USD',
-          description: 'Test income',
-          status: 'pending'
+          currency: "USD",
+          description: "Test income",
+          status: "pending"
         };
 
         const mockTransaction = {
-          id: '123',
+          id: "123",
           ...newTransaction,
-          transaction_date: '2025-01-01',
-          created_at: '2025-01-01'
+          transaction_date: "2025-01-01",
+          created_at: "2025-01-01"
         };
 
         const mockSingle = vi.fn().mockResolvedValue({
@@ -496,14 +496,14 @@ describe('Finance Hub', () => {
         expect(mockInsert).toHaveBeenCalledWith([newTransaction]);
       });
 
-      it('should update an existing transaction', async () => {
+      it("should update an existing transaction", async () => {
         const updates = {
           amount: 1500,
-          status: 'completed'
+          status: "completed"
         };
 
         const mockSingle = vi.fn().mockResolvedValue({
-          data: { id: '123', ...updates },
+          data: { id: "123", ...updates },
           error: null
         });
 
@@ -544,21 +544,21 @@ describe('Finance Hub', () => {
         });
 
         await act(async () => {
-          await result.current.updateTransaction('123', updates);
+          await result.current.updateTransaction("123", updates);
         });
 
         expect(mockUpdate).toHaveBeenCalledWith(updates);
-        expect(mockEq).toHaveBeenCalledWith('id', '123');
+        expect(mockEq).toHaveBeenCalledWith("id", "123");
       });
 
-      it('should handle transaction creation errors', async () => {
+      it("should handle transaction creation errors", async () => {
         const newTransaction = {
-          transaction_type: 'income' as const,
+          transaction_type: "income" as const,
           amount: 1000,
-          currency: 'USD'
+          currency: "USD"
         };
 
-        const mockError = { message: 'Validation error' };
+        const mockError = { message: "Validation error" };
 
         (supabase.from as any).mockReturnValue({
           insert: vi.fn().mockReturnValue({
@@ -597,21 +597,21 @@ describe('Finance Hub', () => {
       });
     });
 
-    describe('CRUD Operations - Invoices', () => {
-      it('should create a new invoice', async () => {
+    describe("CRUD Operations - Invoices", () => {
+      it("should create a new invoice", async () => {
         const newInvoice = {
-          invoice_number: 'INV-TEST-001',
-          invoice_type: 'sales' as const,
-          status: 'draft',
+          invoice_number: "INV-TEST-001",
+          invoice_type: "sales" as const,
+          status: "draft",
           total_amount: 5000,
-          currency: 'USD',
-          issue_date: '2025-01-01'
+          currency: "USD",
+          issue_date: "2025-01-01"
         };
 
         const mockInvoice = {
-          id: '456',
+          id: "456",
           ...newInvoice,
-          created_at: '2025-01-01'
+          created_at: "2025-01-01"
         };
 
         const mockSingle = vi.fn().mockResolvedValue({
@@ -658,14 +658,14 @@ describe('Finance Hub', () => {
         expect(mockInsert).toHaveBeenCalledWith([newInvoice]);
       });
 
-      it('should update an existing invoice', async () => {
+      it("should update an existing invoice", async () => {
         const updates = {
-          status: 'paid',
-          paid_date: '2025-01-10'
+          status: "paid",
+          paid_date: "2025-01-10"
         };
 
         const mockSingle = vi.fn().mockResolvedValue({
-          data: { id: '456', ...updates },
+          data: { id: "456", ...updates },
           error: null
         });
 
@@ -706,22 +706,22 @@ describe('Finance Hub', () => {
         });
 
         await act(async () => {
-          await result.current.updateInvoice('456', updates);
+          await result.current.updateInvoice("456", updates);
         });
 
         expect(mockUpdate).toHaveBeenCalledWith(updates);
-        expect(mockEq).toHaveBeenCalledWith('id', '456');
+        expect(mockEq).toHaveBeenCalledWith("id", "456");
       });
 
-      it('should handle invoice creation errors', async () => {
+      it("should handle invoice creation errors", async () => {
         const newInvoice = {
-          invoice_number: 'INV-TEST-001',
-          invoice_type: 'sales' as const,
+          invoice_number: "INV-TEST-001",
+          invoice_type: "sales" as const,
           total_amount: 5000,
-          currency: 'USD'
+          currency: "USD"
         };
 
-        const mockError = { message: 'Duplicate invoice number' };
+        const mockError = { message: "Duplicate invoice number" };
 
         (supabase.from as any).mockReturnValue({
           insert: vi.fn().mockReturnValue({
@@ -760,8 +760,8 @@ describe('Finance Hub', () => {
       });
     });
 
-    describe('Data Refresh', () => {
-      it('should allow manual data refresh', async () => {
+    describe("Data Refresh", () => {
+      it("should allow manual data refresh", async () => {
         const mockSelect = vi.fn().mockReturnValue({
           order: vi.fn().mockReturnValue({
             limit: vi.fn().mockResolvedValue({
@@ -798,12 +798,12 @@ describe('Finance Hub', () => {
     });
   });
 
-  describe('Data Persistence', () => {
-    it('should persist transactions in Supabase', async () => {
+  describe("Data Persistence", () => {
+    it("should persist transactions in Supabase", async () => {
       const mockInsert = vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
           single: vi.fn().mockResolvedValue({
-            data: { id: '1' },
+            data: { id: "1" },
             error: null
           })
         })
@@ -834,24 +834,24 @@ describe('Finance Hub', () => {
       });
 
       const transaction = {
-        transaction_type: 'expense' as const,
+        transaction_type: "expense" as const,
         amount: 100,
-        currency: 'USD'
+        currency: "USD"
       };
 
       await act(async () => {
         await result.current.createTransaction(transaction);
       });
 
-      expect(supabase.from).toHaveBeenCalledWith('financial_transactions');
+      expect(supabase.from).toHaveBeenCalledWith("financial_transactions");
       expect(mockInsert).toHaveBeenCalled();
     });
 
-    it('should persist invoices in Supabase', async () => {
+    it("should persist invoices in Supabase", async () => {
       const mockInsert = vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
           single: vi.fn().mockResolvedValue({
-            data: { id: '1' },
+            data: { id: "1" },
             error: null
           })
         })
@@ -882,12 +882,12 @@ describe('Finance Hub', () => {
       });
 
       const invoice = {
-        invoice_number: 'INV-001',
-        invoice_type: 'sales' as const,
+        invoice_number: "INV-001",
+        invoice_type: "sales" as const,
         total_amount: 1000,
-        currency: 'USD',
-        status: 'draft',
-        issue_date: '2025-01-01'
+        currency: "USD",
+        status: "draft",
+        issue_date: "2025-01-01"
       };
 
       await act(async () => {

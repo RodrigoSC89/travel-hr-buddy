@@ -3,14 +3,14 @@
  * Speech recognition and synthesis for mobile AI assistant
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
-import { intentParser, Intent } from '../ai/intentParser';
-import { localMemory } from '../ai/localMemory';
-import { toast } from 'sonner';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { intentParser, Intent } from "../ai/intentParser";
+import { localMemory } from "../ai/localMemory";
+import { toast } from "sonner";
 
 // Type declarations for Web Speech API - using any to avoid conflicts with browser types
 interface VoiceSpeechRecognition {
@@ -37,7 +37,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
   isOnline = true
 }) => {
   const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState('');
+  const [transcript, setTranscript] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [detectedIntent, setDetectedIntent] = useState<Intent | null>(null);
   const [isSupported, setIsSupported] = useState(true);
@@ -55,18 +55,18 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     
     if (!SpeechRecognitionClass) {
       setIsSupported(false);
-      console.warn('Speech recognition not supported in this browser');
+      console.warn("Speech recognition not supported in this browser");
       return;
     }
 
     const recognition: VoiceSpeechRecognition = new SpeechRecognitionClass();
     recognition.continuous = false;
     recognition.interimResults = true;
-    recognition.lang = 'en-US';
+    recognition.lang = "en-US";
 
     recognition.onstart = () => {
       setIsListening(true);
-      console.log('Voice recognition started');
+      console.log("Voice recognition started");
     };
 
     recognition.onresult = (event: any) => {
@@ -83,19 +83,19 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     };
 
     recognition.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error);
+      console.error("Speech recognition error:", event.error);
       setIsListening(false);
       
-      if (event.error === 'no-speech') {
-        toast.error('No speech detected. Please try again.');
-      } else if (event.error === 'not-allowed') {
-        toast.error('Microphone access denied. Please enable it in settings.');
+      if (event.error === "no-speech") {
+        toast.error("No speech detected. Please try again.");
+      } else if (event.error === "not-allowed") {
+        toast.error("Microphone access denied. Please enable it in settings.");
       }
     };
 
     recognition.onend = () => {
       setIsListening(false);
-      console.log('Voice recognition ended');
+      console.log("Voice recognition ended");
     };
 
     recognitionRef.current = recognition;
@@ -117,7 +117,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     
     // Store in local memory
     await localMemory.storeMessage({
-      role: 'user',
+      role: "user",
       content: text,
       context: { intent }
     });
@@ -133,51 +133,51 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    * Generate and speak response
    */
   const generateResponse = useCallback(async (intent: Intent, userInput: string) => {
-    let response = '';
+    let response = "";
 
     // Get context for better responses
     const context = await localMemory.getContext();
 
     // Generate contextual response
     switch (intent.action) {
-      case 'get_mission_status':
-        response = `Current mission status: ${context.missionStatus || 'No active mission'}. `;
-        if (context.missionId) {
-          response += `Mission ID: ${context.missionId}. `;
-        }
-        break;
+    case "get_mission_status":
+      response = `Current mission status: ${context.missionStatus || "No active mission"}. `;
+      if (context.missionId) {
+        response += `Mission ID: ${context.missionId}. `;
+      }
+      break;
 
-      case 'get_route_info':
-        if (context.currentLocation) {
-          response = `Current location: latitude ${context.currentLocation.lat.toFixed(2)}, longitude ${context.currentLocation.lng.toFixed(2)}. `;
-        } else {
-          response = 'Location information not available. ';
-        }
-        break;
+    case "get_route_info":
+      if (context.currentLocation) {
+        response = `Current location: latitude ${context.currentLocation.lat.toFixed(2)}, longitude ${context.currentLocation.lng.toFixed(2)}. `;
+      } else {
+        response = "Location information not available. ";
+      }
+      break;
 
-      case 'get_weather':
-        if (context.weatherConditions) {
-          response = `Current weather: ${context.weatherConditions.conditions}. Temperature: ${context.weatherConditions.temperature} degrees. `;
-        } else {
-          response = 'Weather information not available offline. ';
-        }
-        break;
+    case "get_weather":
+      if (context.weatherConditions) {
+        response = `Current weather: ${context.weatherConditions.conditions}. Temperature: ${context.weatherConditions.temperature} degrees. `;
+      } else {
+        response = "Weather information not available offline. ";
+      }
+      break;
 
-      case 'show_checklist':
-        if (context.activeChecklists && context.activeChecklists.length > 0) {
-          response = `You have ${context.activeChecklists.length} active checklists. `;
-        } else {
-          response = 'No active checklists at the moment. ';
-        }
-        break;
+    case "show_checklist":
+      if (context.activeChecklists && context.activeChecklists.length > 0) {
+        response = `You have ${context.activeChecklists.length} active checklists. `;
+      } else {
+        response = "No active checklists at the moment. ";
+      }
+      break;
 
-      default:
-        response = 'I can help you with mission status, route information, weather updates, and checklists. What would you like to know?';
+    default:
+      response = "I can help you with mission status, route information, weather updates, and checklists. What would you like to know?";
     }
 
     // Store assistant response
     await localMemory.storeMessage({
-      role: 'assistant',
+      role: "assistant",
       content: response
     });
 
@@ -189,8 +189,8 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    * Speak text using speech synthesis
    */
   const speak = useCallback(async (text: string) => {
-    if (!('speechSynthesis' in window)) {
-      console.warn('Speech synthesis not supported');
+    if (!("speechSynthesis" in window)) {
+      console.warn("Speech synthesis not supported");
       return;
     }
 
@@ -211,7 +211,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     };
 
     utterance.onerror = (event) => {
-      console.error('Speech synthesis error:', event);
+      console.error("Speech synthesis error:", event);
       setIsSpeaking(false);
     };
 
@@ -226,12 +226,12 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     if (!recognitionRef.current) return;
 
     try {
-      setTranscript('');
+      setTranscript("");
       setDetectedIntent(null);
       recognitionRef.current.start();
     } catch (error) {
-      console.error('Error starting recognition:', error);
-      toast.error('Failed to start voice recognition');
+      console.error("Error starting recognition:", error);
+      toast.error("Failed to start voice recognition");
     }
   }, []);
 
@@ -244,7 +244,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     try {
       recognitionRef.current.stop();
     } catch (error) {
-      console.error('Error stopping recognition:', error);
+      console.error("Error stopping recognition:", error);
     }
   }, []);
 
@@ -252,7 +252,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    * Stop speaking
    */
   const stopSpeaking = useCallback(() => {
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
     }
@@ -275,8 +275,8 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       <CardContent className="p-6 space-y-4">
         {/* Status badges */}
         <div className="flex gap-2">
-          <Badge variant={isListening ? 'default' : 'outline'}>
-            {isListening ? 'Listening...' : 'Ready'}
+          <Badge variant={isListening ? "default" : "outline"}>
+            {isListening ? "Listening..." : "Ready"}
           </Badge>
           {!isOnline && (
             <Badge variant="secondary">Offline Mode</Badge>
@@ -300,7 +300,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
         <div className="flex gap-2">
           <Button
             onClick={isListening ? stopListening : startListening}
-            variant={isListening ? 'destructive' : 'default'}
+            variant={isListening ? "destructive" : "default"}
             className="flex-1"
             size="lg"
           >
@@ -319,7 +319,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
           <Button
             onClick={isSpeaking ? stopSpeaking : () => {}}
-            variant={isSpeaking ? 'destructive' : 'outline'}
+            variant={isSpeaking ? "destructive" : "outline"}
             disabled={!isSpeaking}
             size="lg"
           >
@@ -332,7 +332,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
         </div>
 
         {/* Suggested actions */}
-        {detectedIntent && detectedIntent.type !== 'unknown' && (
+        {detectedIntent && detectedIntent.type !== "unknown" && (
           <div>
             <p className="text-sm font-medium mb-2">Suggested actions:</p>
             <div className="flex flex-wrap gap-2">

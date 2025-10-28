@@ -19,9 +19,9 @@ const LogisticsHubDashboard = () => {
   const loadDeliveryData = async () => {
     // Load shipment data and transform to map format
     const { data: shipments } = await supabase
-      .from('logistics_shipments')
-      .select('*')
-      .in('status', ['in_transit', 'delivered']);
+      .from("logistics_shipments")
+      .select("*")
+      .in("status", ["in_transit", "delivered"]);
 
     if (shipments) {
       // Transform shipments to delivery locations with mock coordinates
@@ -35,7 +35,7 @@ const LogisticsHubDashboard = () => {
         coordinates: {
           origin: [-47 - (idx * 2), -10 - (idx * 1.5)],
           destination: [-43 + (idx * 2), -8 + (idx * 1)],
-          current: shipment.status === 'in_transit' 
+          current: shipment.status === "in_transit" 
             ? [-45 + (idx * 0.5), -9 + (idx * 0.5)] 
             : undefined
         }

@@ -9,8 +9,8 @@ import { Truck, Package, MapPin, Clock, CheckCircle2, Download } from "lucide-re
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 interface Shipment {
   id: string;
@@ -38,9 +38,9 @@ export const ShipmentTracker = () => {
   const loadShipments = async () => {
     try {
       const { data, error } = await supabase
-        .from('logistics_shipments')
-        .select('*')
-        .order('shipped_at', { ascending: false })
+        .from("logistics_shipments")
+        .select("*")
+        .order("shipped_at", { ascending: false })
         .limit(20);
 
       if (error) throw error;
@@ -64,9 +64,9 @@ export const ShipmentTracker = () => {
 
     try {
       const { data, error } = await supabase
-        .from('logistics_shipments')
-        .select('*')
-        .eq('tracking_number', trackingSearch.trim());
+        .from("logistics_shipments")
+        .select("*")
+        .eq("tracking_number", trackingSearch.trim());
 
       if (error) throw error;
 
@@ -96,7 +96,7 @@ export const ShipmentTracker = () => {
     const doc = new jsPDF();
     
     doc.setFontSize(18);
-    doc.text('Shipment Tracking Report', 14, 20);
+    doc.text("Shipment Tracking Report", 14, 20);
     
     doc.setFontSize(10);
     doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 28);
@@ -108,15 +108,15 @@ export const ShipmentTracker = () => {
       s.origin,
       s.destination,
       s.status,
-      s.current_location || '-',
-      s.estimated_delivery ? format(new Date(s.estimated_delivery), 'dd/MM/yyyy') : '-'
+      s.current_location || "-",
+      s.estimated_delivery ? format(new Date(s.estimated_delivery), "dd/MM/yyyy") : "-"
     ]);
 
     (doc as any).autoTable({
       startY: 40,
-      head: [['Tracking', 'Carrier', 'Origin', 'Destination', 'Status', 'Location', 'ETA']],
+      head: [["Tracking", "Carrier", "Origin", "Destination", "Status", "Location", "ETA"]],
       body: tableData,
-      theme: 'striped',
+      theme: "striped",
       headStyles: { fillColor: [59, 130, 246] },
     });
 
@@ -130,23 +130,23 @@ export const ShipmentTracker = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'delivered':
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case 'in_transit':
-        return <Truck className="h-5 w-5 text-blue-500" />;
-      case 'delayed':
-        return <Clock className="h-5 w-5 text-orange-500" />;
-      default:
-        return <Package className="h-5 w-5 text-gray-500" />;
+    case "delivered":
+      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+    case "in_transit":
+      return <Truck className="h-5 w-5 text-blue-500" />;
+    case "delayed":
+      return <Clock className="h-5 w-5 text-orange-500" />;
+    default:
+      return <Package className="h-5 w-5 text-gray-500" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'delivered': return 'default';
-      case 'in_transit': return 'secondary';
-      case 'delayed': return 'destructive';
-      default: return 'outline';
+    case "delivered": return "default";
+    case "in_transit": return "secondary";
+    case "delayed": return "destructive";
+    default: return "outline";
     }
   };
 
@@ -176,7 +176,7 @@ export const ShipmentTracker = () => {
               placeholder="Enter tracking number..."
               value={trackingSearch}
               onChange={(e) => setTrackingSearch(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && searchShipment()}
+              onKeyDown={(e) => e.key === "Enter" && searchShipment()}
             />
             <Button onClick={searchShipment}>Search</Button>
             {trackingSearch && (
@@ -238,7 +238,7 @@ export const ShipmentTracker = () => {
                           <div>
                             <p className="text-muted-foreground">ETA</p>
                             <p className="font-medium">
-                              {format(new Date(shipment.estimated_delivery), 'dd/MM/yyyy')}
+                              {format(new Date(shipment.estimated_delivery), "dd/MM/yyyy")}
                             </p>
                           </div>
                         )}
@@ -246,7 +246,7 @@ export const ShipmentTracker = () => {
                           <div className="mt-2">
                             <p className="text-muted-foreground">Delivered</p>
                             <p className="font-medium text-green-600">
-                              {format(new Date(shipment.actual_delivery), 'dd/MM/yyyy')}
+                              {format(new Date(shipment.actual_delivery), "dd/MM/yyyy")}
                             </p>
                           </div>
                         )}

@@ -4,7 +4,7 @@
  * Service for satellite tracking, alerts, and mission integration
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 import type {
   Satellite,
   SatellitePosition,
@@ -17,26 +17,26 @@ import type {
   SatelliteSearchFilters,
   SatelliteType,
   AlertStatus,
-} from '@/types/satellite';
+} from "@/types/satellite";
 
 export class SatelliteService {
   // Satellites
   static async getSatellites(
     filters?: SatelliteSearchFilters
   ): Promise<Satellite[]> {
-    let query = supabase.from('satellites').select('*').order('satellite_name');
+    let query = supabase.from("satellites").select("*").order("satellite_name");
 
     if (filters?.satellite_type?.length) {
-      query = query.in('satellite_type', filters.satellite_type);
+      query = query.in("satellite_type", filters.satellite_type);
     }
     if (filters?.status?.length) {
-      query = query.in('status', filters.status);
+      query = query.in("status", filters.status);
     }
     if (filters?.orbit_type?.length) {
-      query = query.in('orbit_type', filters.orbit_type);
+      query = query.in("orbit_type", filters.orbit_type);
     }
     if (filters?.is_tracked !== undefined) {
-      query = query.eq('is_tracked', filters.is_tracked);
+      query = query.eq("is_tracked", filters.is_tracked);
     }
 
     const { data, error } = await query;
@@ -46,9 +46,9 @@ export class SatelliteService {
 
   static async getSatellite(satelliteId: string): Promise<Satellite | null> {
     const { data, error } = await supabase
-      .from('satellites')
-      .select('*')
-      .eq('satellite_id', satelliteId)
+      .from("satellites")
+      .select("*")
+      .eq("satellite_id", satelliteId)
       .single();
 
     if (error) throw error;
@@ -63,7 +63,7 @@ export class SatelliteService {
     satellite: Partial<Satellite>
   ): Promise<Satellite> {
     const { data, error } = await supabase
-      .from('satellites')
+      .from("satellites")
       .insert(satellite)
       .select()
       .single();
@@ -77,9 +77,9 @@ export class SatelliteService {
     updates: Partial<Satellite>
   ): Promise<Satellite> {
     const { data, error } = await supabase
-      .from('satellites')
+      .from("satellites")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -89,9 +89,9 @@ export class SatelliteService {
 
   static async toggleTracking(satelliteId: string, tracked: boolean): Promise<void> {
     const { error } = await supabase
-      .from('satellites')
+      .from("satellites")
       .update({ is_tracked: tracked })
-      .eq('satellite_id', satelliteId);
+      .eq("satellite_id", satelliteId);
 
     if (error) throw error;
   }
@@ -99,9 +99,9 @@ export class SatelliteService {
   // Positions
   static async getLatestPositions(limit = 100): Promise<SatellitePosition[]> {
     const { data, error } = await supabase
-      .from('satellite_positions')
-      .select('*')
-      .order('timestamp', { ascending: false })
+      .from("satellite_positions")
+      .select("*")
+      .order("timestamp", { ascending: false })
       .limit(limit);
 
     if (error) throw error;
@@ -112,10 +112,10 @@ export class SatelliteService {
     satelliteId: string
   ): Promise<SatellitePosition | null> {
     const { data, error } = await supabase
-      .from('satellite_positions')
-      .select('*')
-      .eq('satellite_id', satelliteId)
-      .order('timestamp', { ascending: false })
+      .from("satellite_positions")
+      .select("*")
+      .eq("satellite_id", satelliteId)
+      .order("timestamp", { ascending: false })
       .limit(1)
       .maybeSingle();
 
@@ -130,11 +130,11 @@ export class SatelliteService {
     const startTime = new Date(Date.now() - hours * 60 * 60 * 1000);
 
     const { data, error } = await supabase
-      .from('satellite_positions')
-      .select('*')
-      .eq('satellite_id', satelliteId)
-      .gte('timestamp', startTime.toISOString())
-      .order('timestamp', { ascending: true });
+      .from("satellite_positions")
+      .select("*")
+      .eq("satellite_id", satelliteId)
+      .gte("timestamp", startTime.toISOString())
+      .order("timestamp", { ascending: true });
 
     if (error) throw error;
     return data || [];
@@ -149,7 +149,7 @@ export class SatelliteService {
       velocity_kmh?: number;
     }
   ): Promise<string> {
-    const { data, error } = await supabase.rpc('update_satellite_position', {
+    const { data, error } = await supabase.rpc("update_satellite_position", {
       p_satellite_id: satelliteId,
       p_latitude: position.latitude,
       p_longitude: position.longitude,
@@ -164,12 +164,12 @@ export class SatelliteService {
   // Alerts
   static async getAlerts(status?: AlertStatus): Promise<SatelliteAlert[]> {
     let query = supabase
-      .from('satellite_alerts')
-      .select('*')
-      .order('triggered_at', { ascending: false });
+      .from("satellite_alerts")
+      .select("*")
+      .order("triggered_at", { ascending: false });
 
     if (status) {
-      query = query.eq('status', status);
+      query = query.eq("status", status);
     }
 
     const { data, error } = await query;
@@ -178,15 +178,15 @@ export class SatelliteService {
   }
 
   static async getActiveAlerts(): Promise<SatelliteAlert[]> {
-    return this.getAlerts('active');
+    return this.getAlerts("active");
   }
 
   static async getSatelliteAlerts(satelliteId: string): Promise<SatelliteAlert[]> {
     const { data, error } = await supabase
-      .from('satellite_alerts')
-      .select('*')
-      .eq('satellite_id', satelliteId)
-      .order('triggered_at', { ascending: false });
+      .from("satellite_alerts")
+      .select("*")
+      .eq("satellite_id", satelliteId)
+      .order("triggered_at", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -196,7 +196,7 @@ export class SatelliteService {
     alert: Partial<SatelliteAlert>
   ): Promise<SatelliteAlert> {
     const { data, error } = await supabase
-      .from('satellite_alerts')
+      .from("satellite_alerts")
       .insert(alert)
       .select()
       .single();
@@ -210,13 +210,13 @@ export class SatelliteService {
     userId: string
   ): Promise<void> {
     const { error } = await supabase
-      .from('satellite_alerts')
+      .from("satellite_alerts")
       .update({
-        status: 'acknowledged',
+        status: "acknowledged",
         acknowledged_at: new Date().toISOString(),
         acknowledged_by: userId,
       })
-      .eq('id', alertId);
+      .eq("id", alertId);
 
     if (error) throw error;
   }
@@ -227,14 +227,14 @@ export class SatelliteService {
     notes?: string
   ): Promise<void> {
     const { error } = await supabase
-      .from('satellite_alerts')
+      .from("satellite_alerts")
       .update({
-        status: 'resolved',
+        status: "resolved",
         resolved_at: new Date().toISOString(),
         resolved_by: userId,
         resolution_notes: notes,
       })
-      .eq('id', alertId);
+      .eq("id", alertId);
 
     if (error) throw error;
   }
@@ -243,7 +243,7 @@ export class SatelliteService {
     satelliteId: string,
     criticalArea: Record<string, unknown>
   ): Promise<boolean> {
-    const { data, error } = await supabase.rpc('check_satellite_coverage', {
+    const { data, error } = await supabase.rpc("check_satellite_coverage", {
       p_satellite_id: satelliteId,
       p_critical_area: criticalArea,
     });
@@ -258,15 +258,15 @@ export class SatelliteService {
     satelliteId?: string
   ): Promise<SatelliteMissionLink[]> {
     let query = supabase
-      .from('satellite_mission_links')
-      .select('*')
-      .order('priority', { ascending: false });
+      .from("satellite_mission_links")
+      .select("*")
+      .order("priority", { ascending: false });
 
     if (missionId) {
-      query = query.eq('mission_id', missionId);
+      query = query.eq("mission_id", missionId);
     }
     if (satelliteId) {
-      query = query.eq('satellite_id', satelliteId);
+      query = query.eq("satellite_id", satelliteId);
     }
 
     const { data, error } = await query;
@@ -278,7 +278,7 @@ export class SatelliteService {
     link: Partial<SatelliteMissionLink>
   ): Promise<SatelliteMissionLink> {
     const { data, error } = await supabase
-      .from('satellite_mission_links')
+      .from("satellite_mission_links")
       .insert(link)
       .select()
       .single();
@@ -292,9 +292,9 @@ export class SatelliteService {
     updates: Partial<SatelliteMissionLink>
   ): Promise<SatelliteMissionLink> {
     const { data, error } = await supabase
-      .from('satellite_mission_links')
+      .from("satellite_mission_links")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -309,7 +309,7 @@ export class SatelliteService {
     longitude: number,
     hoursAhead = 24
   ): Promise<SatellitePass[]> {
-    const { data, error } = await supabase.rpc('calculate_satellite_passes', {
+    const { data, error } = await supabase.rpc("calculate_satellite_passes", {
       p_satellite_id: satelliteId,
       p_location_lat: latitude,
       p_location_lon: longitude,
@@ -325,11 +325,11 @@ export class SatelliteService {
     limit = 10
   ): Promise<SatellitePass[]> {
     const { data, error } = await supabase
-      .from('satellite_passes')
-      .select('*')
-      .eq('satellite_id', satelliteId)
-      .gte('rise_time', new Date().toISOString())
-      .order('rise_time', { ascending: true })
+      .from("satellite_passes")
+      .select("*")
+      .eq("satellite_id", satelliteId)
+      .gte("rise_time", new Date().toISOString())
+      .order("rise_time", { ascending: true })
       .limit(limit);
 
     if (error) throw error;
@@ -341,10 +341,10 @@ export class SatelliteService {
     satelliteId: string
   ): Promise<SatelliteTelemetry | null> {
     const { data, error } = await supabase
-      .from('satellite_telemetry')
-      .select('*')
-      .eq('satellite_id', satelliteId)
-      .order('timestamp', { ascending: false })
+      .from("satellite_telemetry")
+      .select("*")
+      .eq("satellite_id", satelliteId)
+      .order("timestamp", { ascending: false })
       .limit(1)
       .maybeSingle();
 
@@ -359,11 +359,11 @@ export class SatelliteService {
     const startTime = new Date(Date.now() - hours * 60 * 60 * 1000);
 
     const { data, error } = await supabase
-      .from('satellite_telemetry')
-      .select('*')
-      .eq('satellite_id', satelliteId)
-      .gte('timestamp', startTime.toISOString())
-      .order('timestamp', { ascending: true });
+      .from("satellite_telemetry")
+      .select("*")
+      .eq("satellite_id", satelliteId)
+      .gte("timestamp", startTime.toISOString())
+      .order("timestamp", { ascending: true });
 
     if (error) throw error;
     return data || [];
@@ -373,7 +373,7 @@ export class SatelliteService {
     telemetry: Partial<SatelliteTelemetry>
   ): Promise<SatelliteTelemetry> {
     const { data, error } = await supabase
-      .from('satellite_telemetry')
+      .from("satellite_telemetry")
       .insert(telemetry)
       .select()
       .single();
@@ -398,7 +398,7 @@ export class SatelliteService {
 
     if (!satellite) return null;
 
-    const activeAlerts = alerts.filter((a) => a.status === 'active');
+    const activeAlerts = alerts.filter((a) => a.status === "active");
 
     return {
       satellite,
@@ -428,13 +428,13 @@ export class SatelliteService {
   // Coverage Maps
   static async getCoverageMaps(satelliteId?: string) {
     let query = supabase
-      .from('satellite_coverage_maps')
-      .select('*')
-      .order('timestamp', { ascending: false })
+      .from("satellite_coverage_maps")
+      .select("*")
+      .order("timestamp", { ascending: false })
       .limit(50);
 
     if (satelliteId) {
-      query = query.eq('satellite_id', satelliteId);
+      query = query.eq("satellite_id", satelliteId);
     }
 
     const { data, error } = await query;
@@ -465,7 +465,7 @@ export class SatelliteService {
         altitude_km: 400 + Math.random() * 50,
         velocity_kmh: 27000 + Math.random() * 1000,
         timestamp: new Date(baseTime + i * intervalSeconds * 1000).toISOString(),
-        data_source: 'calculated',
+        data_source: "calculated",
       });
     }
 

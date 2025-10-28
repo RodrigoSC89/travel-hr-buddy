@@ -1,13 +1,13 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { 
   Workflow, 
   Plus, 
@@ -22,13 +22,13 @@ import {
   Save,
   Trash2,
   Bot
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface WorkflowNode {
   id: string;
-  type: 'trigger' | 'action';
+  type: "trigger" | "action";
   config: Record<string, any>;
 }
 
@@ -45,9 +45,9 @@ export const WorkflowBuilder: React.FC = () => {
   const { toast } = useToast();
   const [workflows, setWorkflows] = useState<WorkflowTemplate[]>([]);
   const [workflow, setWorkflow] = useState<WorkflowTemplate>({
-    name: '',
-    description: '',
-    category: 'general',
+    name: "",
+    description: "",
+    category: "general",
     nodes: [],
     is_active: false
   });
@@ -85,13 +85,13 @@ export const WorkflowBuilder: React.FC = () => {
     const formattedWorkflows = (data || []).map(rule => ({
       id: rule.id,
       name: rule.rule_name,
-      description: rule.description || '',
+      description: rule.description || "",
       category: rule.trigger_type,
       nodes: [
-        { id: `trigger_${rule.id}`, type: 'trigger' as const, config: rule.trigger_config },
+        { id: `trigger_${rule.id}`, type: "trigger" as const, config: rule.trigger_config },
         ...(Array.isArray(rule.actions) ? rule.actions.map((action: any, idx: number) => ({
           id: `action_${rule.id}_${idx}`,
-          type: 'action' as const,
+          type: "action" as const,
           config: action
         })) : [])
       ],
@@ -102,25 +102,25 @@ export const WorkflowBuilder: React.FC = () => {
   };
 
   const triggerTypes = [
-    { value: 'schedule', label: 'Schedule (Cron)', icon: Clock, events: ['daily', 'weekly', 'monthly'] },
-    { value: 'event', label: 'Event Trigger', icon: Zap, events: ['task_created', 'task_updated', 'task_completed', 'document_uploaded', 'incident_reported'] },
-    { value: 'webhook', label: 'Webhook', icon: Database, events: ['external_api'] },
-    { value: 'manual', label: 'Manual Trigger', icon: Play, events: ['user_initiated'] }
+    { value: "schedule", label: "Schedule (Cron)", icon: Clock, events: ["daily", "weekly", "monthly"] },
+    { value: "event", label: "Event Trigger", icon: Zap, events: ["task_created", "task_updated", "task_completed", "document_uploaded", "incident_reported"] },
+    { value: "webhook", label: "Webhook", icon: Database, events: ["external_api"] },
+    { value: "manual", label: "Manual Trigger", icon: Play, events: ["user_initiated"] }
   ];
 
   const actionTypes = [
-    { value: 'send_email', label: 'Send Email', icon: Mail },
-    { value: 'send_notification', label: 'Send Notification', icon: Bell },
-    { value: 'create_task', label: 'Create Task', icon: CheckSquare },
-    { value: 'update_record', label: 'Update Record', icon: Database },
-    { value: 'call_ai_agent', label: 'Call AI Agent', icon: Bot },
-    { value: 'log_event', label: 'Log Event', icon: Database }
+    { value: "send_email", label: "Send Email", icon: Mail },
+    { value: "send_notification", label: "Send Notification", icon: Bell },
+    { value: "create_task", label: "Create Task", icon: CheckSquare },
+    { value: "update_record", label: "Update Record", icon: Database },
+    { value: "call_ai_agent", label: "Call AI Agent", icon: Bot },
+    { value: "log_event", label: "Log Event", icon: Database }
   ];
 
   const addTrigger = (triggerType: string) => {
     const newNode: WorkflowNode = {
       id: `trigger_${Date.now()}`,
-      type: 'trigger',
+      type: "trigger",
       config: { trigger_type: triggerType }
     };
     setWorkflow(prev => ({
@@ -128,7 +128,7 @@ export const WorkflowBuilder: React.FC = () => {
       nodes: [...prev.nodes, newNode]
     }));
     toast({
-      title: 'Trigger Added',
+      title: "Trigger Added",
       description: `Added ${triggerType} trigger to workflow`
     });
   };
@@ -136,7 +136,7 @@ export const WorkflowBuilder: React.FC = () => {
   const addAction = (actionType: string) => {
     const newNode: WorkflowNode = {
       id: `action_${Date.now()}`,
-      type: 'action',
+      type: "action",
       config: { action_type: actionType }
     };
     setWorkflow(prev => ({
@@ -144,7 +144,7 @@ export const WorkflowBuilder: React.FC = () => {
       nodes: [...prev.nodes, newNode]
     }));
     toast({
-      title: 'Action Added',
+      title: "Action Added",
       description: `Added ${actionType} action to workflow`
     });
   };
@@ -152,18 +152,18 @@ export const WorkflowBuilder: React.FC = () => {
   const saveWorkflow = async () => {
     if (!workflow.name) {
       toast({
-        title: 'Error',
-        description: 'Please provide a workflow name',
-        variant: 'destructive'
+        title: "Error",
+        description: "Please provide a workflow name",
+        variant: "destructive"
       });
       return;
     }
 
     if (workflow.nodes.length === 0) {
       toast({
-        title: 'Error',
-        description: 'Add at least one trigger and one action',
-        variant: 'destructive'
+        title: "Error",
+        description: "Add at least one trigger and one action",
+        variant: "destructive"
       });
       return;
     }
@@ -180,14 +180,14 @@ export const WorkflowBuilder: React.FC = () => {
 
     if (!orgData) return;
 
-    const triggerNodes = workflow.nodes.filter(n => n.type === 'trigger');
-    const actionNodes = workflow.nodes.filter(n => n.type === 'action');
+    const triggerNodes = workflow.nodes.filter(n => n.type === "trigger");
+    const actionNodes = workflow.nodes.filter(n => n.type === "action");
 
     if (triggerNodes.length === 0 || actionNodes.length === 0) {
       toast({
-        title: 'Error',
-        description: 'Workflow must have at least one trigger and one action',
-        variant: 'destructive'
+        title: "Error",
+        description: "Workflow must have at least one trigger and one action",
+        variant: "destructive"
       });
       return;
     }
@@ -199,7 +199,7 @@ export const WorkflowBuilder: React.FC = () => {
       organization_id: orgData.organization_id,
       rule_name: workflow.name,
       description: workflow.description,
-      trigger_type: triggerConfig.trigger_type || 'event',
+      trigger_type: triggerConfig.trigger_type || "event",
       trigger_config: triggerConfig,
       actions: actions,
       is_active: workflow.is_active,
@@ -224,23 +224,23 @@ export const WorkflowBuilder: React.FC = () => {
 
     if (error) {
       toast({
-        title: 'Error',
+        title: "Error",
         description: error.message,
-        variant: 'destructive'
+        variant: "destructive"
       });
       return;
     }
 
     toast({
-      title: 'Success',
-      description: 'Workflow saved successfully'
+      title: "Success",
+      description: "Workflow saved successfully"
     });
 
     // Reset form and refresh list
     setWorkflow({
-      name: '',
-      description: '',
-      category: 'general',
+      name: "",
+      description: "",
+      category: "general",
       nodes: [],
       is_active: false
     });
@@ -256,10 +256,10 @@ export const WorkflowBuilder: React.FC = () => {
         is_active: !prev.is_active
       }));
       toast({
-        title: workflow.is_active ? 'Workflow Paused' : 'Workflow Activated',
+        title: workflow.is_active ? "Workflow Paused" : "Workflow Activated",
         description: workflow.is_active 
-          ? 'Workflow execution has been paused' 
-          : 'Workflow is now active and will execute on triggers'
+          ? "Workflow execution has been paused" 
+          : "Workflow is now active and will execute on triggers"
       });
       return;
     }
@@ -278,10 +278,10 @@ export const WorkflowBuilder: React.FC = () => {
     }
 
     toast({
-      title: newStatus ? 'Workflow Activated' : 'Workflow Paused',
+      title: newStatus ? "Workflow Activated" : "Workflow Paused",
       description: newStatus 
-        ? 'Workflow is now active and will execute on triggers' 
-        : 'Workflow execution has been paused'
+        ? "Workflow is now active and will execute on triggers" 
+        : "Workflow execution has been paused"
     });
 
     fetchWorkflows();
@@ -309,9 +309,9 @@ export const WorkflowBuilder: React.FC = () => {
 
   const cancelEdit = () => {
     setWorkflow({
-      name: '',
-      description: '',
-      category: 'general',
+      name: "",
+      description: "",
+      category: "general",
       nodes: [],
       is_active: false
     });
@@ -393,9 +393,9 @@ export const WorkflowBuilder: React.FC = () => {
                     >
                       <div className="flex items-center gap-2 flex-1">
                         <div className={`p-2 rounded-full ${
-                          node.type === 'trigger' ? 'bg-blue-500/10 text-blue-500' : 'bg-green-500/10 text-green-500'
+                          node.type === "trigger" ? "bg-blue-500/10 text-blue-500" : "bg-green-500/10 text-green-500"
                         }`}>
-                          {node.type === 'trigger' ? <Zap className="h-4 w-4" /> : <CheckSquare className="h-4 w-4" />}
+                          {node.type === "trigger" ? <Zap className="h-4 w-4" /> : <CheckSquare className="h-4 w-4" />}
                         </div>
                         <div>
                           <div className="font-medium">{node.config.trigger_type || node.config.action_type}</div>
@@ -477,7 +477,7 @@ export const WorkflowBuilder: React.FC = () => {
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{workflow.nodes.filter(n => n.type === 'trigger').length}</div>
+            <div className="text-2xl font-bold">{workflow.nodes.filter(n => n.type === "trigger").length}</div>
             <p className="text-xs text-muted-foreground">In this workflow</p>
           </CardContent>
         </Card>
@@ -488,7 +488,7 @@ export const WorkflowBuilder: React.FC = () => {
             <CheckSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{workflow.nodes.filter(n => n.type === 'action').length}</div>
+            <div className="text-2xl font-bold">{workflow.nodes.filter(n => n.type === "action").length}</div>
             <p className="text-xs text-muted-foreground">In this workflow</p>
           </CardContent>
         </Card>
@@ -499,8 +499,8 @@ export const WorkflowBuilder: React.FC = () => {
             <Play className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${workflow.is_active ? 'text-green-500' : 'text-gray-500'}`}>
-              {workflow.is_active ? 'Active' : 'Inactive'}
+            <div className={`text-2xl font-bold ${workflow.is_active ? "text-green-500" : "text-gray-500"}`}>
+              {workflow.is_active ? "Active" : "Inactive"}
             </div>
             <p className="text-xs text-muted-foreground">Current state</p>
           </CardContent>
@@ -526,15 +526,15 @@ export const WorkflowBuilder: React.FC = () => {
                     <p className="text-sm text-muted-foreground">{wf.description}</p>
                     <div className="flex gap-2 mt-2">
                       <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">
-                        {wf.nodes.filter(n => n.type === 'trigger').length} trigger(s)
+                        {wf.nodes.filter(n => n.type === "trigger").length} trigger(s)
                       </span>
                       <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded">
-                        {wf.nodes.filter(n => n.type === 'action').length} action(s)
+                        {wf.nodes.filter(n => n.type === "action").length} action(s)
                       </span>
                       <span className={`text-xs px-2 py-1 rounded ${
-                        wf.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                        wf.is_active ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
                       }`}>
-                        {wf.is_active ? 'Active' : 'Inactive'}
+                        {wf.is_active ? "Active" : "Inactive"}
                       </span>
                     </div>
                   </div>

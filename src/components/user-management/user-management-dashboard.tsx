@@ -1,13 +1,13 @@
 // @ts-nocheck
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { UserRole, UserAccessLog } from '@/types/modules';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, Shield, Activity, Download, Upload } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { UserRole, UserAccessLog } from "@/types/modules";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Users, Shield, Activity, Download, Upload } from "lucide-react";
+import { toast } from "sonner";
 
 export function UserManagementDashboard() {
   const [roles, setRoles] = useState<UserRole[]>([]);
@@ -27,18 +27,18 @@ export function UserManagementDashboard() {
     try {
       const [rolesRes, logsRes, usersCount] = await Promise.all([
         supabase
-          .from('user_roles')
-          .select('*')
-          .order('hierarchy_level', { ascending: true }),
+          .from("user_roles")
+          .select("*")
+          .order("hierarchy_level", { ascending: true }),
         supabase
-          .from('user_access_logs')
-          .select('*')
-          .order('created_at', { ascending: false })
+          .from("user_access_logs")
+          .select("*")
+          .order("created_at", { ascending: false })
           .limit(50),
         supabase
-          .from('crew_assignments')
-          .select('id', { count: 'exact', head: true })
-          .eq('assignment_status', 'active')
+          .from("crew_assignments")
+          .select("id", { count: "exact", head: true })
+          .eq("assignment_status", "active")
       ]);
 
       if (rolesRes.error) throw rolesRes.error;
@@ -52,22 +52,22 @@ export function UserManagementDashboard() {
         totalRoles: rolesRes.data?.length || 0
       });
     } catch (error) {
-      console.error('Error loading user management data:', error);
-      toast.error('Failed to load user management data');
+      console.error("Error loading user management data:", error);
+      toast.error("Failed to load user management data");
     } finally {
       setLoading(false);
     }
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      success: 'default',
-      failure: 'destructive',
-      blocked: 'destructive'
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      success: "default",
+      failure: "destructive",
+      blocked: "destructive"
     };
 
     return (
-      <Badge variant={variants[status] || 'outline'} className="text-xs">
+      <Badge variant={variants[status] || "outline"} className="text-xs">
         {status.toUpperCase()}
       </Badge>
     );
@@ -75,17 +75,17 @@ export function UserManagementDashboard() {
 
   const getActionIcon = (action: string) => {
     const icons: Record<string, string> = {
-      login: '🔐',
-      logout: '🚪',
-      page_view: '👁️',
-      api_call: '📡',
-      data_access: '📂',
-      data_modify: '✏️',
-      failed_login: '❌',
-      permission_denied: '🚫'
+      login: "🔐",
+      logout: "🚪",
+      page_view: "👁️",
+      api_call: "📡",
+      data_access: "📂",
+      data_modify: "✏️",
+      failed_login: "❌",
+      permission_denied: "🚫"
     };
 
-    return icons[action] || '📝';
+    return icons[action] || "📝";
   };
 
   if (loading) {
@@ -206,7 +206,7 @@ export function UserManagementDashboard() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground mb-4">
-                      {role.role_description || 'No description'}
+                      {role.role_description || "No description"}
                     </p>
                     
                     <div className="mb-4">
@@ -215,7 +215,7 @@ export function UserManagementDashboard() {
                         {role.permissions && Array.isArray(role.permissions) && role.permissions.length > 0 ? (
                           role.permissions.slice(0, 5).map((permission: any, index) => (
                             <Badge key={index} variant="outline" className="text-xs">
-                              {typeof permission === 'string' ? permission : permission.name || 'Permission'}
+                              {typeof permission === "string" ? permission : permission.name || "Permission"}
                             </Badge>
                           ))
                         ) : (
@@ -266,7 +266,7 @@ export function UserManagementDashboard() {
                         <span className="text-2xl">{getActionIcon(log.action)}</span>
                         <div className="flex-1">
                           <p className="text-sm font-medium capitalize">
-                            {log.action.replace('_', ' ')}
+                            {log.action.replace("_", " ")}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {new Date(log.created_at).toLocaleString()}

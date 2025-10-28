@@ -1,10 +1,10 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { Clock, TrendingDown, TrendingUp, AlertTriangle } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { Clock, TrendingDown, TrendingUp, AlertTriangle } from "lucide-react";
 
 interface IncidentMetrics {
   id: string;
@@ -19,7 +19,7 @@ interface IncidentMetrics {
   incidents_by_category: any;
 }
 
-const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6'];
+const COLORS = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6"];
 
 export const IncidentMetricsDashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<IncidentMetrics[]>([]);
@@ -37,21 +37,21 @@ export const IncidentMetricsDashboard: React.FC = () => {
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
       const { data, error } = await supabase
-        .from('incident_metrics')
-        .select('*')
-        .eq('metric_period', 'daily')
-        .gte('metric_date', thirtyDaysAgo.toISOString().split('T')[0])
-        .order('metric_date', { ascending: true });
+        .from("incident_metrics")
+        .select("*")
+        .eq("metric_period", "daily")
+        .gte("metric_date", thirtyDaysAgo.toISOString().split("T")[0])
+        .order("metric_date", { ascending: true });
 
       if (error) throw error;
 
       setMetrics(data || []);
     } catch (error) {
-      console.error('Error fetching metrics:', error);
+      console.error("Error fetching metrics:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load incident metrics',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load incident metrics",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -69,18 +69,18 @@ export const IncidentMetricsDashboard: React.FC = () => {
 
   // Prepare data for severity distribution pie chart
   const severityData = latestMetrics ? [
-    { name: 'Critical', value: latestMetrics.critical_incidents },
-    { name: 'High', value: latestMetrics.high_incidents },
-    { name: 'Medium', value: latestMetrics.medium_incidents },
-    { name: 'Low', value: latestMetrics.low_incidents },
+    { name: "Critical", value: latestMetrics.critical_incidents },
+    { name: "High", value: latestMetrics.high_incidents },
+    { name: "Medium", value: latestMetrics.medium_incidents },
+    { name: "Low", value: latestMetrics.low_incidents },
   ].filter(d => d.value > 0) : [];
 
   // Prepare data for category distribution
   const categoryData = latestMetrics?.incidents_by_category
     ? Object.entries(latestMetrics.incidents_by_category as Record<string, number>).map(([key, value]) => ({
-        name: key,
-        value: value
-      }))
+      name: key,
+      value: value
+    }))
     : [];
 
   if (loading) {

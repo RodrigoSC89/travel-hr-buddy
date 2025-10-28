@@ -1,13 +1,13 @@
 // @ts-nocheck
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { IoTSensorData, ChecklistRecord } from '@/types/modules';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Activity, Thermometer, Gauge, Zap, CheckSquare, AlertCircle } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { IoTSensorData, ChecklistRecord } from "@/types/modules";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Activity, Thermometer, Gauge, Zap, CheckSquare, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 
 export function MaritimeSystemDashboard() {
   const [sensorData, setSensorData] = useState<IoTSensorData[]>([]);
@@ -19,13 +19,13 @@ export function MaritimeSystemDashboard() {
     
     // Real-time subscription for IoT sensor updates
     const channel = supabase
-      .channel('iot_sensor_updates')
+      .channel("iot_sensor_updates")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'iot_sensor_data'
+          event: "*",
+          schema: "public",
+          table: "iot_sensor_data"
         },
         () => {
           loadMaritimeData();
@@ -42,14 +42,14 @@ export function MaritimeSystemDashboard() {
     try {
       const [sensorsRes, checklistsRes] = await Promise.all([
         supabase
-          .from('iot_sensor_data')
-          .select('*')
-          .order('reading_timestamp', { ascending: false })
+          .from("iot_sensor_data")
+          .select("*")
+          .order("reading_timestamp", { ascending: false })
           .limit(50),
         supabase
-          .from('checklist_records')
-          .select('*')
-          .order('created_at', { ascending: false })
+          .from("checklist_records")
+          .select("*")
+          .order("created_at", { ascending: false })
       ]);
 
       if (sensorsRes.error) throw sensorsRes.error;
@@ -58,8 +58,8 @@ export function MaritimeSystemDashboard() {
       setSensorData(sensorsRes.data || []);
       setChecklists(checklistsRes.data || []);
     } catch (error) {
-      console.error('Error loading maritime data:', error);
-      toast.error('Failed to load maritime system data');
+      console.error("Error loading maritime data:", error);
+      toast.error("Failed to load maritime system data");
     } finally {
       setLoading(false);
     }
@@ -79,27 +79,27 @@ export function MaritimeSystemDashboard() {
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      normal: 'text-green-500',
-      warning: 'text-yellow-500',
-      critical: 'text-red-500',
-      offline: 'text-gray-500'
+      normal: "text-green-500",
+      warning: "text-yellow-500",
+      critical: "text-red-500",
+      offline: "text-gray-500"
     };
 
-    return colors[status] || 'text-gray-500';
+    return colors[status] || "text-gray-500";
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-      pending: 'secondary',
-      in_progress: 'default',
-      completed: 'outline',
-      failed: 'destructive',
-      expired: 'destructive'
+    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+      pending: "secondary",
+      in_progress: "default",
+      completed: "outline",
+      failed: "destructive",
+      expired: "destructive"
     };
 
     return (
-      <Badge variant={variants[status] || 'default'}>
-        {status.replace('_', ' ').toUpperCase()}
+      <Badge variant={variants[status] || "default"}>
+        {status.replace("_", " ").toUpperCase()}
       </Badge>
     );
   };
@@ -166,10 +166,10 @@ export function MaritimeSystemDashboard() {
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center capitalize">
                       {getSensorIcon(type)}
-                      <span className="ml-2">{type.replace('_', ' ')}</span>
+                      <span className="ml-2">{type.replace("_", " ")}</span>
                     </CardTitle>
                     <CardDescription>
-                      {sensors.length} sensor{sensors.length !== 1 ? 's' : ''} active
+                      {sensors.length} sensor{sensors.length !== 1 ? "s" : ""} active
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -179,7 +179,7 @@ export function MaritimeSystemDashboard() {
                           <div className="flex-1">
                             <p className="text-sm font-medium">{sensor.sensor_id}</p>
                             <p className="text-xs text-muted-foreground">
-                              {sensor.sensor_location || 'Unknown location'}
+                              {sensor.sensor_location || "Unknown location"}
                             </p>
                           </div>
                           <div className="text-right">
@@ -266,7 +266,7 @@ export function MaritimeSystemDashboard() {
                       {getStatusBadge(checklist.status)}
                     </div>
                     <CardDescription>
-                      {checklist.checklist_type.replace('_', ' ').toUpperCase()}
+                      {checklist.checklist_type.replace("_", " ").toUpperCase()}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -304,14 +304,14 @@ export function MaritimeSystemDashboard() {
                       {checklist.items && Array.isArray(checklist.items) && (
                         <div>
                           <p className="text-sm text-muted-foreground mb-2">
-                            {checklist.items.length} item{checklist.items.length !== 1 ? 's' : ''}
+                            {checklist.items.length} item{checklist.items.length !== 1 ? "s" : ""}
                           </p>
                         </div>
                       )}
 
                       <div className="flex gap-2">
                         <Button size="sm" variant="outline">View Details</Button>
-                        {checklist.status === 'in_progress' && (
+                        {checklist.status === "in_progress" && (
                           <Button size="sm">Continue</Button>
                         )}
                       </div>

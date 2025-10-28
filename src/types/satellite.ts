@@ -3,18 +3,18 @@
  * Types for satellite tracking, orbits, and mission integration
  */
 
-export type SatelliteType = 'communication' | 'navigation' | 'observation' | 'weather';
-export type SatelliteStatus = 'active' | 'inactive' | 'deorbited' | 'lost';
-export type OrbitType = 'LEO' | 'MEO' | 'GEO' | 'HEO'; // Low/Medium/Geostationary/Highly Elliptical
-export type AlertType = 'coverage_lost' | 'low_battery' | 'orbital_decay' | 'collision_risk' | 'malfunction';
-export type AlertSeverity = 'info' | 'warning' | 'critical';
-export type AlertStatus = 'active' | 'acknowledged' | 'resolved';
-export type LinkType = 'primary' | 'backup' | 'relay';
-export type LinkStatus = 'active' | 'standby' | 'inactive';
-export type HealthStatus = 'nominal' | 'degraded' | 'critical';
-export type Visibility = 'visible' | 'daylight' | 'shadow';
-export type PassQuality = 'poor' | 'fair' | 'good' | 'excellent';
-export type DataSource = 'api' | 'manual' | 'calculated';
+export type SatelliteType = "communication" | "navigation" | "observation" | "weather";
+export type SatelliteStatus = "active" | "inactive" | "deorbited" | "lost";
+export type OrbitType = "LEO" | "MEO" | "GEO" | "HEO"; // Low/Medium/Geostationary/Highly Elliptical
+export type AlertType = "coverage_lost" | "low_battery" | "orbital_decay" | "collision_risk" | "malfunction";
+export type AlertSeverity = "info" | "warning" | "critical";
+export type AlertStatus = "active" | "acknowledged" | "resolved";
+export type LinkType = "primary" | "backup" | "relay";
+export type LinkStatus = "active" | "standby" | "inactive";
+export type HealthStatus = "nominal" | "degraded" | "critical";
+export type Visibility = "visible" | "daylight" | "shadow";
+export type PassQuality = "poor" | "fair" | "good" | "excellent";
+export type DataSource = "api" | "manual" | "calculated";
 
 export interface SatellitePosition {
   id: string;
@@ -52,7 +52,7 @@ export interface Satellite {
   frequency_bands?: string[];
   orbit_type: OrbitType;
   is_tracked: boolean;
-  priority: 'low' | 'normal' | 'high' | 'critical';
+  priority: "low" | "normal" | "high" | "critical";
   notes?: string;
   created_at: string;
   updated_at: string;
@@ -60,7 +60,7 @@ export interface Satellite {
 
 export interface CoverageZone {
   name: string;
-  type: 'circle' | 'polygon';
+  type: "circle" | "polygon";
   coordinates: number[][]; // [lat, lon] pairs
   radius_km?: number;
   min_elevation_angle?: number;
@@ -126,7 +126,7 @@ export interface ContactWindow {
   start_time: string;
   end_time: string;
   duration_minutes: number;
-  type: 'scheduled' | 'opportunistic';
+  type: "scheduled" | "opportunistic";
   priority: number;
 }
 

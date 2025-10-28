@@ -32,20 +32,20 @@ export interface CoordinationPlan {
 export interface VesselAssignment {
   vessel_id: string;
   vessel_name?: string;
-  role: 'primary' | 'support' | 'backup' | 'observer';
+  role: "primary" | "support" | "backup" | "observer";
   responsibilities: string[];
   required_capabilities: string[];
   estimated_arrival?: string;
-  status: 'assigned' | 'en-route' | 'on-scene' | 'completed' | 'withdrawn';
+  status: "assigned" | "en-route" | "on-scene" | "completed" | "withdrawn";
 }
 
 export interface TimelineEvent {
   event_id: string;
   timestamp: string;
   vessel_id?: string;
-  event_type: 'departure' | 'arrival' | 'coordination' | 'action' | 'checkpoint';
+  event_type: "departure" | "arrival" | "coordination" | "action" | "checkpoint";
   description: string;
-  status: 'pending' | 'in-progress' | 'completed' | 'delayed';
+  status: "pending" | "in-progress" | "completed" | "delayed";
 }
 
 export interface FallbackPlan {
@@ -55,7 +55,7 @@ export interface FallbackPlan {
 }
 
 export interface RiskAssessment {
-  overall_risk: 'low' | 'medium' | 'high' | 'critical';
+  overall_risk: "low" | "medium" | "high" | "critical";
   factors: {
     weather: number;
     distance: number;
@@ -66,7 +66,7 @@ export interface RiskAssessment {
 }
 
 export interface CoordinationUpdate {
-  update_type: 'status' | 'position' | 'resource' | 'emergency';
+  update_type: "status" | "position" | "resource" | "emergency";
   vessel_id: string;
   data: Record<string, any>;
   timestamp: string;
@@ -92,7 +92,7 @@ export class MultiMissionEngine {
     }
   ): Promise<{ mission: Mission; plan: CoordinationPlan } | null> {
     try {
-      logger.info('Creating coordinated mission:', missionData);
+      logger.info("Creating coordinated mission:", missionData);
 
       // Step 1: Create the mission
       const mission = await MissionEngine.createMission({
@@ -104,7 +104,7 @@ export class MultiMissionEngine {
       });
 
       if (!mission) {
-        logger.error('Failed to create mission');
+        logger.error("Failed to create mission");
         return null;
       }
 
@@ -136,11 +136,11 @@ export class MultiMissionEngine {
       // Step 6: Notify all assigned vessels
       await this.notifyVessels(mission.id, plan);
 
-      logger.info('Coordinated mission created successfully:', mission.id);
+      logger.info("Coordinated mission created successfully:", mission.id);
 
       return { mission, plan };
     } catch (error) {
-      logger.error('Error creating coordinated mission:', error);
+      logger.error("Error creating coordinated mission:", error);
       return null;
     }
   }
@@ -158,8 +158,8 @@ export class MultiMissionEngine {
     
 Mission: ${mission.name}
 Priority: ${mission.priority}
-Description: ${mission.description || 'No description provided'}
-Available Vessels: ${vessels.map(v => `${v.name} (${v.vessel_type})`).join(', ')}
+Description: ${mission.description || "No description provided"}
+Available Vessels: ${vessels.map(v => `${v.name} (${v.vessel_type})`).join(", ")}
 
 Generate a comprehensive coordination plan including:
 1. Vessel assignments with specific roles
@@ -176,11 +176,11 @@ Format the response as structured data.`;
       if (vessels.length > 0) {
         aiResponse = await DistributedAIEngine.runInference(vessels[0].id, {
           prompt: aiPrompt,
-          decision_type: 'mission_coordination'
+          decision_type: "mission_coordination"
         });
       }
     } catch (error) {
-      logger.warn('AI coordination failed, using rule-based fallback:', error);
+      logger.warn("AI coordination failed, using rule-based fallback:", error);
     }
 
     // Create coordination plan (with or without AI assistance)
@@ -189,13 +189,13 @@ Format the response as structured data.`;
       vessels: vessels.map((vessel, index) => ({
         vessel_id: vessel.id,
         vessel_name: vessel.name,
-        role: index === 0 ? 'primary' : 'support',
-        responsibilities: this.getVesselResponsibilities(mission.mission_type, index === 0 ? 'primary' : 'support'),
+        role: index === 0 ? "primary" : "support",
+        responsibilities: this.getVesselResponsibilities(mission.mission_type, index === 0 ? "primary" : "support"),
         required_capabilities: missionData.required_capabilities || [],
-        status: 'assigned'
+        status: "assigned"
       })),
       timeline: this.generateTimeline(mission, vessels),
-      communication_protocol: 'MQTT + HTTP fallback on channel fleet-mission-' + mission.id,
+      communication_protocol: "MQTT + HTTP fallback on channel fleet-mission-" + mission.id,
       fallback_plans: this.generateFallbackPlans(mission),
       success_criteria: this.getSuccessCriteria(mission.mission_type),
       risk_assessment: this.assessRisk(mission, vessels, missionData),
@@ -212,32 +212,32 @@ Format the response as structured data.`;
   private static getVesselResponsibilities(missionType: MissionType, role: string): string[] {
     const responsibilities: Record<MissionType, Record<string, string[]>> = {
       sar: {
-        primary: ['Lead search operations', 'Coordinate with other vessels', 'Maintain communications', 'Report findings'],
-        support: ['Search assigned sector', 'Monitor communications', 'Provide backup support', 'Assist with rescue']
+        primary: ["Lead search operations", "Coordinate with other vessels", "Maintain communications", "Report findings"],
+        support: ["Search assigned sector", "Monitor communications", "Provide backup support", "Assist with rescue"]
       },
       evacuation: {
-        primary: ['Lead evacuation operations', 'Coordinate logistics', 'Manage evacuees', 'Report status'],
-        support: ['Provide transport capacity', 'Medical support', 'Security', 'Communications relay']
+        primary: ["Lead evacuation operations", "Coordinate logistics", "Manage evacuees", "Report status"],
+        support: ["Provide transport capacity", "Medical support", "Security", "Communications relay"]
       },
       transport: {
-        primary: ['Lead convoy', 'Navigation', 'Cargo management', 'Schedule coordination'],
-        support: ['Follow primary vessel', 'Backup navigation', 'Additional cargo capacity']
+        primary: ["Lead convoy", "Navigation", "Cargo management", "Schedule coordination"],
+        support: ["Follow primary vessel", "Backup navigation", "Additional cargo capacity"]
       },
       patrol: {
-        primary: ['Lead patrol route', 'Surveillance', 'Reporting', 'Coordinate responses'],
-        support: ['Follow patrol pattern', 'Secondary surveillance', 'Backup communications']
+        primary: ["Lead patrol route", "Surveillance", "Reporting", "Coordinate responses"],
+        support: ["Follow patrol pattern", "Secondary surveillance", "Backup communications"]
       },
       training: {
-        primary: ['Lead training exercises', 'Instruction', 'Safety oversight', 'Performance evaluation'],
-        support: ['Participate in drills', 'Follow instructions', 'Provide feedback']
+        primary: ["Lead training exercises", "Instruction", "Safety oversight", "Performance evaluation"],
+        support: ["Participate in drills", "Follow instructions", "Provide feedback"]
       },
       emergency: {
-        primary: ['Lead emergency response', 'Coordinate resources', 'Make critical decisions', 'Report to command'],
-        support: ['Provide requested assistance', 'Follow emergency protocols', 'Backup communications']
+        primary: ["Lead emergency response", "Coordinate resources", "Make critical decisions", "Report to command"],
+        support: ["Provide requested assistance", "Follow emergency protocols", "Backup communications"]
       },
       custom: {
-        primary: ['Lead mission operations', 'Coordinate activities', 'Monitor progress'],
-        support: ['Assist primary vessel', 'Follow mission plan', 'Provide support']
+        primary: ["Lead mission operations", "Coordinate activities", "Monitor progress"],
+        support: ["Assist primary vessel", "Follow mission plan", "Provide support"]
       }
     };
 
@@ -257,9 +257,9 @@ Format the response as structured data.`;
         event_id: crypto.randomUUID(),
         timestamp: new Date(startTime.getTime() + index * 300000).toISOString(), // Stagger by 5 minutes
         vessel_id: vessel.id,
-        event_type: 'departure',
+        event_type: "departure",
         description: `${vessel.name} departs for mission`,
-        status: 'pending'
+        status: "pending"
       });
     });
 
@@ -267,18 +267,18 @@ Format the response as structured data.`;
     timeline.push({
       event_id: crypto.randomUUID(),
       timestamp: new Date(startTime.getTime() + 3600000).toISOString(), // 1 hour
-      event_type: 'coordination',
-      description: 'All vessels coordinate and confirm readiness',
-      status: 'pending'
+      event_type: "coordination",
+      description: "All vessels coordinate and confirm readiness",
+      status: "pending"
     });
 
     // Action event
     timeline.push({
       event_id: crypto.randomUUID(),
       timestamp: new Date(startTime.getTime() + 7200000).toISOString(), // 2 hours
-      event_type: 'action',
-      description: 'Begin primary mission objectives',
-      status: 'pending'
+      event_type: "action",
+      description: "Begin primary mission objectives",
+      status: "pending"
     });
 
     return timeline.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
@@ -290,30 +290,30 @@ Format the response as structured data.`;
   private static generateFallbackPlans(mission: Mission): FallbackPlan[] {
     return [
       {
-        trigger_condition: 'Primary vessel unable to continue',
+        trigger_condition: "Primary vessel unable to continue",
         actions: [
-          'Promote support vessel to primary role',
-          'Request additional backup vessel',
-          'Update coordination plan',
-          'Notify all vessels of role changes'
+          "Promote support vessel to primary role",
+          "Request additional backup vessel",
+          "Update coordination plan",
+          "Notify all vessels of role changes"
         ]
       },
       {
-        trigger_condition: 'Weather conditions deteriorate',
+        trigger_condition: "Weather conditions deteriorate",
         actions: [
-          'All vessels move to safe location',
-          'Suspend operations temporarily',
-          'Reassess mission feasibility',
-          'Update estimated completion time'
+          "All vessels move to safe location",
+          "Suspend operations temporarily",
+          "Reassess mission feasibility",
+          "Update estimated completion time"
         ]
       },
       {
-        trigger_condition: 'Loss of communications',
+        trigger_condition: "Loss of communications",
         actions: [
-          'Switch to backup communication channel',
-          'Use pre-defined procedures',
-          'Maintain last known positions',
-          'Attempt reconnection every 15 minutes'
+          "Switch to backup communication channel",
+          "Use pre-defined procedures",
+          "Maintain last known positions",
+          "Attempt reconnection every 15 minutes"
         ]
       }
     ];
@@ -325,46 +325,46 @@ Format the response as structured data.`;
   private static getSuccessCriteria(missionType: MissionType): string[] {
     const criteria: Record<MissionType, string[]> = {
       sar: [
-        'All search sectors covered',
-        'Target located or search area exhausted',
-        'Rescue completed if target found',
-        'All vessels return safely'
+        "All search sectors covered",
+        "Target located or search area exhausted",
+        "Rescue completed if target found",
+        "All vessels return safely"
       ],
       evacuation: [
-        'All personnel evacuated safely',
-        'Medical needs addressed',
-        'Transport to safe location completed',
-        'No casualties during operation'
+        "All personnel evacuated safely",
+        "Medical needs addressed",
+        "Transport to safe location completed",
+        "No casualties during operation"
       ],
       transport: [
-        'Cargo delivered to destination',
-        'No damage to cargo',
-        'On-time delivery',
-        'All vessels accounted for'
+        "Cargo delivered to destination",
+        "No damage to cargo",
+        "On-time delivery",
+        "All vessels accounted for"
       ],
       patrol: [
-        'Patrol route completed',
-        'All checkpoints visited',
-        'No security incidents',
-        'Reports submitted'
+        "Patrol route completed",
+        "All checkpoints visited",
+        "No security incidents",
+        "Reports submitted"
       ],
       training: [
-        'Training objectives met',
-        'All exercises completed',
-        'Performance meets standards',
-        'Safety protocols followed'
+        "Training objectives met",
+        "All exercises completed",
+        "Performance meets standards",
+        "Safety protocols followed"
       ],
       emergency: [
-        'Emergency situation resolved',
-        'All personnel safe',
-        'Damage minimized',
-        'Proper protocols followed'
+        "Emergency situation resolved",
+        "All personnel safe",
+        "Damage minimized",
+        "Proper protocols followed"
       ],
       custom: [
-        'Mission objectives achieved',
-        'All vessels complete assignments',
-        'No major incidents',
-        'Documentation complete'
+        "Mission objectives achieved",
+        "All vessels complete assignments",
+        "No major incidents",
+        "Documentation complete"
       ]
     };
 
@@ -378,16 +378,16 @@ Format the response as structured data.`;
     // Simple risk scoring (can be enhanced with real data)
     const weatherRisk = 0.3; // Would come from weather API
     const distanceRisk = 0.2; // Based on vessel positions
-    const complexityRisk = mission.priority === 'critical' ? 0.8 : mission.priority === 'high' ? 0.6 : 0.3;
+    const complexityRisk = mission.priority === "critical" ? 0.8 : mission.priority === "high" ? 0.6 : 0.3;
     const resourceRisk = vessels.length < 2 ? 0.7 : 0.3;
 
     const avgRisk = (weatherRisk + distanceRisk + complexityRisk + resourceRisk) / 4;
 
-    let overallRisk: RiskAssessment['overall_risk'];
-    if (avgRisk > 0.7) overallRisk = 'critical';
-    else if (avgRisk > 0.5) overallRisk = 'high';
-    else if (avgRisk > 0.3) overallRisk = 'medium';
-    else overallRisk = 'low';
+    let overallRisk: RiskAssessment["overall_risk"];
+    if (avgRisk > 0.7) overallRisk = "critical";
+    else if (avgRisk > 0.5) overallRisk = "high";
+    else if (avgRisk > 0.3) overallRisk = "medium";
+    else overallRisk = "low";
 
     return {
       overall_risk: overallRisk,
@@ -398,10 +398,10 @@ Format the response as structured data.`;
         resource_availability: resourceRisk
       },
       mitigation_strategies: [
-        'Monitor weather conditions continuously',
-        'Maintain regular communication intervals',
-        'Have backup vessels on standby',
-        'Follow established protocols strictly'
+        "Monitor weather conditions continuously",
+        "Maintain regular communication intervals",
+        "Have backup vessels on standby",
+        "Follow established protocols strictly"
       ]
     };
   }
@@ -412,7 +412,7 @@ Format the response as structured data.`;
   private static async saveCoordinationPlan(missionId: string, plan: CoordinationPlan): Promise<void> {
     try {
       const { error } = await supabase
-        .from('mission_coordination_plans')
+        .from("mission_coordination_plans")
         .insert({
           mission_id: missionId,
           plan_data: plan,
@@ -421,10 +421,10 @@ Format the response as structured data.`;
         });
 
       if (error) {
-        logger.error('Error saving coordination plan:', error);
+        logger.error("Error saving coordination plan:", error);
       }
     } catch (error) {
-      logger.error('Error in saveCoordinationPlan:', error);
+      logger.error("Error in saveCoordinationPlan:", error);
     }
   }
 
@@ -435,9 +435,9 @@ Format the response as structured data.`;
     try {
       for (const vessel of plan.vessels) {
         await IntervesselSync.sendAlert({
-          alert_type: 'custom',
-          severity: 'info',
-          title: 'New Mission Assignment',
+          alert_type: "custom",
+          severity: "info",
+          title: "New Mission Assignment",
           message: `You have been assigned to mission with role: ${vessel.role}`,
           metadata: {
             mission_id: missionId,
@@ -449,7 +449,7 @@ Format the response as structured data.`;
 
       logger.info(`Notifications sent to ${plan.vessels.length} vessels for mission ${missionId}`);
     } catch (error) {
-      logger.error('Error notifying vessels:', error);
+      logger.error("Error notifying vessels:", error);
     }
   }
 
@@ -459,21 +459,21 @@ Format the response as structured data.`;
   static async getCoordinationPlan(missionId: string): Promise<CoordinationPlan | null> {
     try {
       const { data, error } = await supabase
-        .from('mission_coordination_plans')
-        .select('*')
-        .eq('mission_id', missionId)
-        .order('created_at', { ascending: false })
+        .from("mission_coordination_plans")
+        .select("*")
+        .eq("mission_id", missionId)
+        .order("created_at", { ascending: false })
         .limit(1)
         .single();
 
       if (error) {
-        logger.error('Error fetching coordination plan:', error);
+        logger.error("Error fetching coordination plan:", error);
         return null;
       }
 
       return data?.plan_data as CoordinationPlan;
     } catch (error) {
-      logger.error('Error in getCoordinationPlan:', error);
+      logger.error("Error in getCoordinationPlan:", error);
       return null;
     }
   }
@@ -489,7 +489,7 @@ Format the response as structured data.`;
     try {
       // Log the update
       await MissionEngine.logMissionEvent(missionId, {
-        log_type: 'coordination',
+        log_type: "coordination",
         message: `Coordination update from vessel: ${update.update_type}`,
         vessel_id: vesselId,
         metadata: update.data
@@ -500,9 +500,9 @@ Format the response as structured data.`;
       for (const vessel of vessels) {
         if (vessel.id !== vesselId) {
           await IntervesselSync.sendAlert({
-            alert_type: 'custom',
-            severity: 'info',
-            title: 'Mission Coordination Update',
+            alert_type: "custom",
+            severity: "info",
+            title: "Mission Coordination Update",
             message: `Update from ${vessel.name}: ${update.update_type}`,
             metadata: {
               mission_id: missionId,
@@ -516,7 +516,7 @@ Format the response as structured data.`;
 
       return true;
     } catch (error) {
-      logger.error('Error updating coordination status:', error);
+      logger.error("Error updating coordination status:", error);
       return false;
     }
   }
@@ -531,11 +531,11 @@ Format the response as structured data.`;
   }): Promise<{ mission: Mission; plan: CoordinationPlan } | null> {
     return await this.createCoordinatedMission({
       name: `SAR Operation - ${new Date().toISOString()}`,
-      mission_type: 'sar',
+      mission_type: "sar",
       priority: params.priority,
       description: `Search and rescue operation at coordinates ${params.target_location.lat}, ${params.target_location.lng}`,
       target_location: params.target_location,
-      required_capabilities: ['rescue_equipment', 'medical_support', 'communications']
+      required_capabilities: ["rescue_equipment", "medical_support", "communications"]
     });
   }
 
@@ -549,13 +549,13 @@ Format the response as structured data.`;
   }): Promise<{ mission: Mission; plan: CoordinationPlan } | null> {
     return await this.createCoordinatedMission({
       name: `Emergency Evacuation - ${new Date().toISOString()}`,
-      mission_type: 'evacuation',
-      priority: 'critical',
-      description: `Emergency evacuation of ${params.personnel_count} personnel${params.medical_needs ? ' with medical needs' : ''}`,
+      mission_type: "evacuation",
+      priority: "critical",
+      description: `Emergency evacuation of ${params.personnel_count} personnel${params.medical_needs ? " with medical needs" : ""}`,
       target_location: params.location,
       required_capabilities: params.medical_needs 
-        ? ['transport_capacity', 'medical_support', 'communications']
-        : ['transport_capacity', 'communications']
+        ? ["transport_capacity", "medical_support", "communications"]
+        : ["transport_capacity", "communications"]
     });
   }
 }

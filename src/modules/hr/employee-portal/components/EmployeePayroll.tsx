@@ -60,15 +60,15 @@ export const EmployeePayroll: React.FC = () => {
       if (!user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('payroll_records')
-        .select('*')
-        .eq('employee_id', user.id)
-        .order('payment_date', { ascending: false });
+        .from("payroll_records")
+        .select("*")
+        .eq("employee_id", user.id)
+        .order("payment_date", { ascending: false });
 
       if (error) throw error;
       setPayrollRecords(data || []);
     } catch (error: any) {
-      console.error('Error loading payroll:', error);
+      console.error("Error loading payroll:", error);
       toast({
         title: "Error loading payroll",
         description: error.message,
@@ -86,7 +86,7 @@ export const EmployeePayroll: React.FC = () => {
 
   const downloadPayslip = async (record: PayrollRecord) => {
     if (record.payslip_url) {
-      window.open(record.payslip_url, '_blank');
+      window.open(record.payslip_url, "_blank");
     } else {
       toast({
         title: "Payslip not available",
@@ -119,7 +119,7 @@ export const EmployeePayroll: React.FC = () => {
     const currentYear = new Date().getFullYear();
     const ytdRecords = payrollRecords.filter(record => 
       new Date(record.payment_date).getFullYear() === currentYear &&
-      record.status === 'paid'
+      record.status === "paid"
     );
 
     return {
@@ -218,11 +218,11 @@ export const EmployeePayroll: React.FC = () => {
                     <TableCell>
                       <div className="text-sm">
                         <div className="font-medium">
-                          {format(new Date(record.pay_period_start), 'MMM dd')} - {format(new Date(record.pay_period_end), 'MMM dd, yyyy')}
+                          {format(new Date(record.pay_period_start), "MMM dd")} - {format(new Date(record.pay_period_end), "MMM dd, yyyy")}
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{format(new Date(record.payment_date), 'MMM dd, yyyy')}</TableCell>
+                    <TableCell>{format(new Date(record.payment_date), "MMM dd, yyyy")}</TableCell>
                     <TableCell className="text-right font-medium">
                       {record.currency} ${record.gross_salary.toLocaleString()}
                     </TableCell>
@@ -261,7 +261,7 @@ export const EmployeePayroll: React.FC = () => {
             <DialogDescription>
               {selectedRecord && (
                 <>
-                  Pay period: {format(new Date(selectedRecord.pay_period_start), 'MMM dd')} - {format(new Date(selectedRecord.pay_period_end), 'MMM dd, yyyy')}
+                  Pay period: {format(new Date(selectedRecord.pay_period_start), "MMM dd")} - {format(new Date(selectedRecord.pay_period_end), "MMM dd, yyyy")}
                 </>
               )}
             </DialogDescription>
@@ -271,7 +271,7 @@ export const EmployeePayroll: React.FC = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-sm text-muted-foreground">Payment Date</div>
-                  <div className="text-lg font-medium">{format(new Date(selectedRecord.payment_date), 'MMMM dd, yyyy')}</div>
+                  <div className="text-lg font-medium">{format(new Date(selectedRecord.payment_date), "MMMM dd, yyyy")}</div>
                 </div>
                 <div>
                   <div className="text-sm text-muted-foreground">Status</div>
@@ -308,7 +308,7 @@ export const EmployeePayroll: React.FC = () => {
                   <div className="space-y-2 text-sm">
                     {Object.entries(selectedRecord.breakdown).map(([key, value]) => (
                       <div key={key} className="flex justify-between">
-                        <span className="text-muted-foreground capitalize">{key.replace(/_/g, ' ')}</span>
+                        <span className="text-muted-foreground capitalize">{key.replace(/_/g, " ")}</span>
                         <span>${(value as number).toLocaleString()}</span>
                       </div>
                     ))}

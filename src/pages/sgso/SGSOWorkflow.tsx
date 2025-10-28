@@ -46,28 +46,28 @@ export default function SGSOWorkflow() {
 
       // Get audit statistics
       const { data: audits, error: auditsError } = await supabase
-        .from('sgso_audits')
-        .select('status');
+        .from("sgso_audits")
+        .select("status");
 
       if (auditsError) throw auditsError;
 
       const auditStats = {
         total_audits: audits?.length || 0,
-        pending_audits: audits?.filter(a => a.status === 'planned' || a.status === 'in_progress').length || 0,
-        approved_audits: audits?.filter(a => a.status === 'completed' || a.status === 'closed').length || 0,
+        pending_audits: audits?.filter(a => a.status === "planned" || a.status === "in_progress").length || 0,
+        approved_audits: audits?.filter(a => a.status === "completed" || a.status === "closed").length || 0,
         rejected_audits: 0
       };
 
       // Get findings statistics
       const { data: findings, error: findingsError } = await supabase
-        .from('non_conformities')
-        .select('status');
+        .from("non_conformities")
+        .select("status");
 
       if (findingsError) throw findingsError;
 
       const findingsStats = {
         total_findings: findings?.length || 0,
-        open_findings: findings?.filter(f => f.status === 'open' || f.status === 'investigating').length || 0
+        open_findings: findings?.filter(f => f.status === "open" || f.status === "investigating").length || 0
       };
 
       setStats({ ...auditStats, ...findingsStats });

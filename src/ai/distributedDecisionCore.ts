@@ -8,9 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { contextMesh, ContextType } from "@/core/context/contextMesh";
 
-export type DecisionLevel = 'local' | 'escalated' | 'delegated' | 'collaborative';
-export type DecisionStatus = 'pending' | 'executing' | 'completed' | 'failed' | 'timeout';
-export type DecisionPriority = 'low' | 'medium' | 'high' | 'critical';
+export type DecisionLevel = "local" | "escalated" | "delegated" | "collaborative";
+export type DecisionStatus = "pending" | "executing" | "completed" | "failed" | "timeout";
+export type DecisionPriority = "low" | "medium" | "high" | "critical";
 
 export interface DecisionContext {
   moduleName: string;
@@ -80,8 +80,8 @@ class DistributedDecisionCore {
 
     // Subscribe to decision-related contexts
     contextMesh.subscribe({
-      moduleName: 'DistributedDecisionCore',
-      contextTypes: ['ai', 'mission', 'risk'],
+      moduleName: "DistributedDecisionCore",
+      contextTypes: ["ai", "mission", "risk"],
       handler: (message) => {
         this.handleContextUpdate(message.contextData);
       }
@@ -140,8 +140,8 @@ class DistributedDecisionCore {
   async executeDecisionWithTimeout(decision: Decision): Promise<Decision> {
     return new Promise((resolve) => {
       const timeoutId = setTimeout(() => {
-        if (decision.status === 'executing') {
-          decision.status = 'timeout';
+        if (decision.status === "executing") {
+          decision.status = "timeout";
           decision.errorMessage = `Decision timed out after ${decision.timeoutMs}ms`;
           logger.warn(`[DistributedDecisionCore] Decision ${decision.id} timed out`);
           resolve(decision);
@@ -156,7 +156,7 @@ class DistributedDecisionCore {
         })
         .catch((error) => {
           clearTimeout(timeoutId);
-          decision.status = 'failed';
+          decision.status = "failed";
           decision.errorMessage = error.message;
           resolve(decision);
         });
@@ -199,7 +199,7 @@ class DistributedDecisionCore {
    */
   async logDecision(decision: Decision): Promise<void> {
     try {
-      const { error } = await supabase.from('decision_history').insert({
+      const { error } = await supabase.from("decision_history").insert({
         decision_id: decision.id,
         module_name: decision.moduleName,
         decision_level: decision.decisionLevel,
@@ -225,7 +225,7 @@ class DistributedDecisionCore {
       // Also publish to context mesh
       await contextMesh.publish({
         moduleName: decision.moduleName,
-        contextType: 'ai' as ContextType,
+        contextType: "ai" as ContextType,
         contextData: {
           decision: {
             id: decision.id,
@@ -235,7 +235,7 @@ class DistributedDecisionCore {
             success: decision.success
           }
         },
-        source: 'DistributedDecisionCore'
+        source: "DistributedDecisionCore"
       });
     } catch (error) {
       logger.error("[DistributedDecisionCore] Error logging decision", error);
@@ -251,13 +251,13 @@ class DistributedDecisionCore {
   ): Promise<Decision[]> {
     try {
       let query = supabase
-        .from('decision_history')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("decision_history")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(limit);
 
       if (moduleName) {
-        query = query.eq('module_name', moduleName);
+        query = query.eq("module_name", moduleName);
       }
 
       const { data, error } = await query;
@@ -310,12 +310,12 @@ class DistributedDecisionCore {
     const decision: Decision = {
       id: decisionId,
       moduleName: context.moduleName,
-      decisionLevel: 'local',
+      decisionLevel: "local",
       decisionType: context.decisionType,
       context,
       action,
       priority: rule.priority,
-      status: 'executing',
+      status: "executing",
       timeoutMs: rule.timeoutMs || 5000,
       executed: false,
       timestamp: new Date()
@@ -347,12 +347,12 @@ class DistributedDecisionCore {
     const decision: Decision = {
       id: decisionId,
       moduleName: context.moduleName,
-      decisionLevel: 'escalated',
+      decisionLevel: "escalated",
       decisionType: context.decisionType,
       context,
-      action: 'escalated_to_collective',
-      priority: 'high',
-      status: 'pending',
+      action: "escalated_to_collective",
+      priority: "high",
+      status: "pending",
       timeoutMs: 30000, // Longer timeout for collaborative decisions
       executed: false,
       simulationResults: simulations,
@@ -363,7 +363,7 @@ class DistributedDecisionCore {
     // Publish escalation to context mesh
     await contextMesh.publish({
       moduleName: context.moduleName,
-      contextType: 'ai' as ContextType,
+      contextType: "ai" as ContextType,
       contextData: {
         escalation: {
           decisionId,
@@ -371,7 +371,7 @@ class DistributedDecisionCore {
           simulations
         }
       },
-      source: 'DistributedDecisionCore'
+      source: "DistributedDecisionCore"
     });
 
     await this.logDecision(decision);
@@ -383,12 +383,12 @@ class DistributedDecisionCore {
     return {
       id: decisionId,
       moduleName: context.moduleName,
-      decisionLevel: 'local',
+      decisionLevel: "local",
       decisionType: context.decisionType,
       context,
-      action: 'no_action',
-      priority: 'low',
-      status: 'completed',
+      action: "no_action",
+      priority: "low",
+      status: "completed",
       timeoutMs: 1000,
       executed: true,
       success: true,
@@ -398,7 +398,7 @@ class DistributedDecisionCore {
   }
 
   private async executeDecision(decision: Decision): Promise<Decision> {
-    decision.status = 'executing';
+    decision.status = "executing";
     decision.executed = true;
     decision.executedAt = new Date();
 
@@ -407,14 +407,14 @@ class DistributedDecisionCore {
       // In real implementation, this would call the actual action handlers
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      decision.status = 'completed';
+      decision.status = "completed";
       decision.success = true;
       
       return decision;
     } catch (error) {
-      decision.status = 'failed';
+      decision.status = "failed";
       decision.success = false;
-      decision.errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      decision.errorMessage = error instanceof Error ? error.message : "Unknown error";
       
       return decision;
     }
@@ -423,11 +423,11 @@ class DistributedDecisionCore {
   private generateScenarios(context: DecisionContext): string[] {
     // Generate different scenario variations
     return [
-      'optimistic',
-      'pessimistic',
-      'balanced',
-      'high_risk',
-      'low_risk'
+      "optimistic",
+      "pessimistic",
+      "balanced",
+      "high_risk",
+      "low_risk"
     ];
   }
 

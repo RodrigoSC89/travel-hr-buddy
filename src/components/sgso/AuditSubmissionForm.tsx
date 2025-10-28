@@ -33,7 +33,7 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
   const [formData, setFormData] = useState({
     audit_type: "internal",
     audit_scope: "",
-    audit_date: new Date().toISOString().split('T')[0],
+    audit_date: new Date().toISOString().split("T")[0],
     status: "planned",
     auditors: "",
     notes: ""
@@ -52,13 +52,13 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
 
       // Parse auditors
       const auditorsArray = formData.auditors
-        .split(',')
+        .split(",")
         .map(a => a.trim())
         .filter(a => a.length > 0)
-        .map(name => ({ name, role: 'auditor' }));
+        .map(name => ({ name, role: "auditor" }));
 
       const { error } = await supabase
-        .from('sgso_audits')
+        .from("sgso_audits")
         .insert({
           audit_number: auditNumber,
           audit_type: formData.audit_type,
@@ -75,9 +75,9 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
       if (error) throw error;
 
       // Log in audit_logs
-      await supabase.from('audit_logs').insert({
-        action: 'audit_created',
-        entity_type: 'sgso_audit',
+      await supabase.from("audit_logs").insert({
+        action: "audit_created",
+        entity_type: "sgso_audit",
         entity_id: auditNumber,
         details: { audit_type: formData.audit_type, scope: formData.audit_scope },
         user_id: user.id

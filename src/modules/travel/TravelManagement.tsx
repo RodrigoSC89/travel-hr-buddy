@@ -30,8 +30,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 interface TravelItinerary {
   id: string;
@@ -82,12 +82,12 @@ const TravelManagement = () => {
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    departure_location: '',
-    arrival_location: '',
-    departure_date: '',
-    arrival_date: '',
-    travel_purpose: '',
-    status: 'pending'
+    departure_location: "",
+    arrival_location: "",
+    departure_date: "",
+    arrival_date: "",
+    travel_purpose: "",
+    status: "pending"
   });
 
   useEffect(() => {
@@ -95,13 +95,13 @@ const TravelManagement = () => {
     loadConflicts();
     
     const itinerariesChannel = supabase
-      .channel('travel_itineraries_changes')
+      .channel("travel_itineraries_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'travel_itineraries'
+          event: "*",
+          schema: "public",
+          table: "travel_itineraries"
         },
         () => {
           loadItineraries();
@@ -110,13 +110,13 @@ const TravelManagement = () => {
       .subscribe();
 
     const conflictsChannel = supabase
-      .channel('travel_conflicts_changes')
+      .channel("travel_conflicts_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'travel_schedule_conflicts'
+          event: "*",
+          schema: "public",
+          table: "travel_schedule_conflicts"
         },
         () => {
           loadConflicts();
@@ -133,18 +133,18 @@ const TravelManagement = () => {
   const loadItineraries = async () => {
     try {
       const { data, error } = await supabase
-        .from('travel_itineraries')
+        .from("travel_itineraries")
         .select(`
           *,
           legs:travel_legs(*)
         `)
-        .order('created_at', { ascending: false })
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
       setItineraries(data || []);
     } catch (error: any) {
-      console.error('Error loading itineraries:', error);
+      console.error("Error loading itineraries:", error);
       toast({
         title: "Error loading itineraries",
         description: error.message,
@@ -158,26 +158,26 @@ const TravelManagement = () => {
   const loadConflicts = async () => {
     try {
       const { data, error } = await supabase
-        .from('travel_schedule_conflicts')
-        .select('*')
-        .eq('resolved', false)
-        .order('severity', { ascending: false })
-        .order('created_at', { ascending: false });
+        .from("travel_schedule_conflicts")
+        .select("*")
+        .eq("resolved", false)
+        .order("severity", { ascending: false })
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setConflicts(data || []);
     } catch (error: any) {
-      console.error('Error loading conflicts:', error);
+      console.error("Error loading conflicts:", error);
     }
   };
 
   const createItinerary = async () => {
     try {
       const { error } = await supabase
-        .from('travel_itineraries')
+        .from("travel_itineraries")
         .insert({
           ...formData,
-          status: 'pending'
+          status: "pending"
         });
 
       if (error) throw error;
@@ -189,12 +189,12 @@ const TravelManagement = () => {
 
       setShowNewItinerary(false);
       setFormData({
-        departure_location: '',
-        arrival_location: '',
-        departure_date: '',
-        arrival_date: '',
-        travel_purpose: '',
-        status: 'pending'
+        departure_location: "",
+        arrival_location: "",
+        departure_date: "",
+        arrival_date: "",
+        travel_purpose: "",
+        status: "pending"
       });
       loadItineraries();
     } catch (error: any) {
@@ -211,41 +211,41 @@ const TravelManagement = () => {
     
     // Header
     doc.setFontSize(20);
-    doc.text('Travel Itinerary', 14, 20);
+    doc.text("Travel Itinerary", 14, 20);
     
     // Itinerary details
     doc.setFontSize(12);
     doc.text(`Itinerary Number: ${itinerary.itinerary_number}`, 14, 35);
     doc.text(`Status: ${itinerary.status}`, 14, 42);
-    doc.text(`Purpose: ${itinerary.travel_purpose || 'N/A'}`, 14, 49);
+    doc.text(`Purpose: ${itinerary.travel_purpose || "N/A"}`, 14, 49);
     
     doc.setFontSize(10);
     doc.text(`Departure: ${itinerary.departure_location}`, 14, 60);
-    doc.text(`Date: ${format(new Date(itinerary.departure_date), 'dd/MM/yyyy HH:mm')}`, 14, 66);
+    doc.text(`Date: ${format(new Date(itinerary.departure_date), "dd/MM/yyyy HH:mm")}`, 14, 66);
     
     doc.text(`Arrival: ${itinerary.arrival_location}`, 14, 76);
-    doc.text(`Date: ${format(new Date(itinerary.arrival_date), 'dd/MM/yyyy HH:mm')}`, 14, 82);
+    doc.text(`Date: ${format(new Date(itinerary.arrival_date), "dd/MM/yyyy HH:mm")}`, 14, 82);
     
     // Legs table
     if (itinerary.legs && itinerary.legs.length > 0) {
       doc.setFontSize(14);
-      doc.text('Travel Legs', 14, 95);
+      doc.text("Travel Legs", 14, 95);
       
       const tableData = itinerary.legs.map((leg: TravelLeg) => [
         leg.leg_number.toString(),
         leg.transport_type,
-        leg.carrier || 'N/A',
+        leg.carrier || "N/A",
         leg.departure_location,
         leg.arrival_location,
-        format(new Date(leg.departure_time), 'dd/MM HH:mm'),
+        format(new Date(leg.departure_time), "dd/MM HH:mm"),
         leg.status
       ]);
 
       (doc as any).autoTable({
         startY: 100,
-        head: [['Leg', 'Type', 'Carrier', 'From', 'To', 'Departure', 'Status']],
+        head: [["Leg", "Type", "Carrier", "From", "To", "Departure", "Status"]],
         body: tableData,
-        theme: 'striped',
+        theme: "striped",
         headStyles: { fillColor: [59, 130, 246] },
       });
     }
@@ -259,8 +259,8 @@ const TravelManagement = () => {
     doc.save(`travel-itinerary-${itinerary.itinerary_number}.pdf`);
     
     // Log export
-    supabase.from('travel_export_history').insert({
-      export_type: 'pdf',
+    supabase.from("travel_export_history").insert({
+      export_type: "pdf",
       itinerary_id: itinerary.id,
       file_name: `travel-itinerary-${itinerary.itinerary_number}.pdf`
     });
@@ -274,12 +274,12 @@ const TravelManagement = () => {
   const resolveConflict = async (conflictId: string) => {
     try {
       const { error } = await supabase
-        .from('travel_schedule_conflicts')
+        .from("travel_schedule_conflicts")
         .update({
           resolved: true,
           resolved_at: new Date().toISOString()
         })
-        .eq('id', conflictId);
+        .eq("id", conflictId);
 
       if (error) throw error;
 
@@ -300,48 +300,48 @@ const TravelManagement = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'confirmed':
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case 'cancelled':
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'in_progress':
-        return <Clock className="h-4 w-4 text-blue-500" />;
-      case 'completed':
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      default:
-        return <Clock className="h-4 w-4 text-gray-500" />;
+    case "confirmed":
+      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+    case "cancelled":
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    case "in_progress":
+      return <Clock className="h-4 w-4 text-blue-500" />;
+    case "completed":
+      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+    default:
+      return <Clock className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'confirmed':
-        return <Badge className="bg-green-500">Confirmed</Badge>;
-      case 'cancelled':
-        return <Badge variant="destructive">Cancelled</Badge>;
-      case 'pending':
-        return <Badge variant="secondary">Pending</Badge>;
-      case 'in_progress':
-        return <Badge className="bg-blue-500">In Progress</Badge>;
-      case 'completed':
-        return <Badge>Completed</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "confirmed":
+      return <Badge className="bg-green-500">Confirmed</Badge>;
+    case "cancelled":
+      return <Badge variant="destructive">Cancelled</Badge>;
+    case "pending":
+      return <Badge variant="secondary">Pending</Badge>;
+    case "in_progress":
+      return <Badge className="bg-blue-500">In Progress</Badge>;
+    case "completed":
+      return <Badge>Completed</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return <Badge variant="destructive">Critical</Badge>;
-      case 'high':
-        return <Badge className="bg-orange-500">High</Badge>;
-      case 'medium':
-        return <Badge variant="secondary">Medium</Badge>;
-      case 'low':
-        return <Badge variant="outline">Low</Badge>;
-      default:
-        return <Badge variant="outline">{severity}</Badge>;
+    case "critical":
+      return <Badge variant="destructive">Critical</Badge>;
+    case "high":
+      return <Badge className="bg-orange-500">High</Badge>;
+    case "medium":
+      return <Badge variant="secondary">Medium</Badge>;
+    case "low":
+      return <Badge variant="outline">Low</Badge>;
+    default:
+      return <Badge variant="outline">{severity}</Badge>;
     }
   };
 
@@ -490,7 +490,7 @@ const TravelManagement = () => {
                                     <p className="text-xs text-muted-foreground">From</p>
                                     <p className="font-medium">{itinerary.departure_location}</p>
                                     <p className="text-xs text-muted-foreground">
-                                      {format(new Date(itinerary.departure_date), 'dd/MM/yyyy HH:mm')}
+                                      {format(new Date(itinerary.departure_date), "dd/MM/yyyy HH:mm")}
                                     </p>
                                   </div>
                                 </div>
@@ -500,7 +500,7 @@ const TravelManagement = () => {
                                     <p className="text-xs text-muted-foreground">To</p>
                                     <p className="font-medium">{itinerary.arrival_location}</p>
                                     <p className="text-xs text-muted-foreground">
-                                      {format(new Date(itinerary.arrival_date), 'dd/MM/yyyy HH:mm')}
+                                      {format(new Date(itinerary.arrival_date), "dd/MM/yyyy HH:mm")}
                                     </p>
                                   </div>
                                 </div>
@@ -515,7 +515,7 @@ const TravelManagement = () => {
                               {itinerary.legs && itinerary.legs.length > 0 && (
                                 <div className="mt-3 p-3 bg-muted rounded-md">
                                   <p className="text-xs font-semibold mb-2">
-                                    {itinerary.legs.length} Travel Leg{itinerary.legs.length > 1 ? 's' : ''}
+                                    {itinerary.legs.length} Travel Leg{itinerary.legs.length > 1 ? "s" : ""}
                                   </p>
                                   <div className="space-y-2">
                                     {itinerary.legs.map((leg: TravelLeg) => (
@@ -584,7 +584,7 @@ const TravelManagement = () => {
                                 {conflict.conflict_description}
                               </p>
                               <p className="text-xs text-muted-foreground">
-                                Detected {format(new Date(conflict.created_at), 'dd/MM/yyyy HH:mm')}
+                                Detected {format(new Date(conflict.created_at), "dd/MM/yyyy HH:mm")}
                               </p>
                             </div>
                           </div>

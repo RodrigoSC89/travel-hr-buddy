@@ -3,26 +3,26 @@
  * PATCH 151.0 - Validate certificates
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
-import { Shield, CheckCircle, XCircle, AlertCircle, Loader2, QrCode } from 'lucide-react';
-import { validateCertificate } from '../services/certification-service';
-import { ValidationResult } from '../types';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { Shield, CheckCircle, XCircle, AlertCircle, Loader2, QrCode } from "lucide-react";
+import { validateCertificate } from "../services/certification-service";
+import { ValidationResult } from "../types";
 
 export const CertificateValidator: React.FC = () => {
-  const [certificateId, setCertificateId] = useState('');
-  const [hash, setHash] = useState('');
+  const [certificateId, setCertificateId] = useState("");
+  const [hash, setHash] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ValidationResult | null>(null);
 
   const handleValidate = async () => {
     if (!certificateId) {
-      toast.error('Please enter a certificate ID');
+      toast.error("Please enter a certificate ID");
       return;
     }
 
@@ -32,21 +32,21 @@ export const CertificateValidator: React.FC = () => {
       setResult(validationResult);
       
       if (validationResult.valid) {
-        toast.success('Certificate is valid!');
+        toast.success("Certificate is valid!");
       } else {
         toast.error(validationResult.message);
       }
     } catch (error) {
-      console.error('Validation error:', error);
-      toast.error('Failed to validate certificate');
+      console.error("Validation error:", error);
+      toast.error("Failed to validate certificate");
     } finally {
       setLoading(false);
     }
   };
 
   const getStatusColor = () => {
-    if (!result) return 'default';
-    return result.valid ? 'success' : 'destructive';
+    if (!result) return "default";
+    return result.valid ? "success" : "destructive";
   };
 
   const getStatusIcon = () => {
@@ -112,8 +112,8 @@ export const CertificateValidator: React.FC = () => {
                 {getStatusIcon()}
                 Validation Result
               </h3>
-              <Badge variant={result.valid ? 'default' : 'destructive'}>
-                {result.valid ? 'VALID' : 'INVALID'}
+              <Badge variant={result.valid ? "default" : "destructive"}>
+                {result.valid ? "VALID" : "INVALID"}
               </Badge>
             </div>
 

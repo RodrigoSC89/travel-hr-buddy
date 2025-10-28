@@ -21,9 +21,9 @@ import {
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import { FuelOptimizationService } from "@/services/fuel-optimization-service";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -68,14 +68,14 @@ export const FuelOptimizer = () => {
       
       const [fuelData, routeData] = await Promise.all([
         supabase
-          .from('fuel_records')
-          .select('*')
-          .order('record_date', { ascending: false })
+          .from("fuel_records")
+          .select("*")
+          .order("record_date", { ascending: false })
           .limit(50),
         supabase
-          .from('route_consumption')
-          .select('*')
-          .order('created_at', { ascending: false })
+          .from("route_consumption")
+          .select("*")
+          .order("created_at", { ascending: false })
           .limit(20)
       ]);
 
@@ -119,7 +119,7 @@ export const FuelOptimizer = () => {
   };
 
   const getFuelTrend = () => {
-    if (fuelRecords.length < 2) return 'stable';
+    if (fuelRecords.length < 2) return "stable";
     const recent = fuelRecords.slice(0, 5);
     const older = fuelRecords.slice(5, 10);
     
@@ -128,17 +128,17 @@ export const FuelOptimizer = () => {
       ? older.reduce((sum, r) => sum + r.quantity_consumed, 0) / older.length 
       : recentAvg;
 
-    if (recentAvg > olderAvg * 1.1) return 'increasing';
-    if (recentAvg < olderAvg * 0.9) return 'decreasing';
-    return 'stable';
+    if (recentAvg > olderAvg * 1.1) return "increasing";
+    if (recentAvg < olderAvg * 0.9) return "decreasing";
+    return "stable";
   };
 
   const runOptimizationAnalysis = async () => {
     try {
       // Fetch sample routes for optimization
       const { data: routes, error } = await supabase
-        .from('vessel_routes')
-        .select('*')
+        .from("vessel_routes")
+        .select("*")
         .limit(5);
       
       if (error) throw error;
@@ -167,7 +167,7 @@ export const FuelOptimizer = () => {
           );
           
           return {
-            route_name: `${route.departure_port || 'Port A'} → ${route.arrival_port || 'Port B'}`,
+            route_name: `${route.departure_port || "Port A"} → ${route.arrival_port || "Port B"}`,
             ...optimization
           };
         });
@@ -175,7 +175,7 @@ export const FuelOptimizer = () => {
         setOptimizationResults(results);
       }
     } catch (error: any) {
-      console.error('Error running optimization:', error);
+      console.error("Error running optimization:", error);
     }
   };
 
@@ -184,7 +184,7 @@ export const FuelOptimizer = () => {
     
     // Title
     doc.setFontSize(18);
-    doc.text('Fuel Optimization Report', 14, 20);
+    doc.text("Fuel Optimization Report", 14, 20);
     
     // Date
     doc.setFontSize(10);
@@ -192,7 +192,7 @@ export const FuelOptimizer = () => {
     
     // Summary Section
     doc.setFontSize(14);
-    doc.text('Summary', 14, 40);
+    doc.text("Summary", 14, 40);
     doc.setFontSize(10);
     doc.text(`Average Fuel Consumption: ${getAverageFuelConsumption().toFixed(1)} MT`, 14, 48);
     doc.text(`Average Efficiency: ${getAverageEfficiency().toFixed(1)}%`, 14, 54);
@@ -202,7 +202,7 @@ export const FuelOptimizer = () => {
     // Optimization Results
     if (optimizationResults.length > 0) {
       doc.setFontSize(14);
-      doc.text('Optimization Recommendations', 14, 80);
+      doc.text("Optimization Recommendations", 14, 80);
       
       const tableData = optimizationResults.map((result, index) => [
         result.route_name,
@@ -215,16 +215,16 @@ export const FuelOptimizer = () => {
       
       (doc as any).autoTable({
         startY: 85,
-        head: [['Route', 'Original', 'Optimized', 'Savings', 'Optimal Speed', 'Confidence']],
+        head: [["Route", "Original", "Optimized", "Savings", "Optimal Speed", "Confidence"]],
         body: tableData,
-        theme: 'striped',
+        theme: "striped",
         headStyles: { fillColor: [59, 130, 246] }
       });
       
       // Recommendations
       const finalY = (doc as any).lastAutoTable.finalY || 120;
       doc.setFontSize(14);
-      doc.text('Key Recommendations', 14, finalY + 15);
+      doc.text("Key Recommendations", 14, finalY + 15);
       
       doc.setFontSize(10);
       let yPos = finalY + 23;
@@ -236,7 +236,7 @@ export const FuelOptimizer = () => {
       });
     }
     
-    doc.save(`fuel-optimization-report-${new Date().toISOString().split('T')[0]}.pdf`);
+    doc.save(`fuel-optimization-report-${new Date().toISOString().split("T")[0]}.pdf`);
     
     toast({
       title: "Report exported",
@@ -247,17 +247,17 @@ export const FuelOptimizer = () => {
   const getOptimizationChartData = () => {
     if (optimizationResults.length === 0) {
       return {
-        labels: ['Route 1', 'Route 2', 'Route 3'],
+        labels: ["Route 1", "Route 2", "Route 3"],
         datasets: [
           {
-            label: 'Planned Consumption (L)',
+            label: "Planned Consumption (L)",
             data: [1200, 1500, 1300],
-            backgroundColor: 'rgba(239, 68, 68, 0.6)',
+            backgroundColor: "rgba(239, 68, 68, 0.6)",
           },
           {
-            label: 'Optimized Consumption (L)',
+            label: "Optimized Consumption (L)",
             data: [1050, 1300, 1150],
-            backgroundColor: 'rgba(34, 197, 94, 0.6)',
+            backgroundColor: "rgba(34, 197, 94, 0.6)",
           }
         ]
       };
@@ -267,14 +267,14 @@ export const FuelOptimizer = () => {
       labels: optimizationResults.map((r, i) => r.route_name || `Route ${i + 1}`),
       datasets: [
         {
-          label: 'Original Consumption (L)',
+          label: "Original Consumption (L)",
           data: optimizationResults.map(r => r.original_consumption),
-          backgroundColor: 'rgba(239, 68, 68, 0.6)',
+          backgroundColor: "rgba(239, 68, 68, 0.6)",
         },
         {
-          label: 'Optimized Consumption (L)',
+          label: "Optimized Consumption (L)",
           data: optimizationResults.map(r => r.optimized_consumption),
-          backgroundColor: 'rgba(34, 197, 94, 0.6)',
+          backgroundColor: "rgba(34, 197, 94, 0.6)",
         }
       ]
     };
@@ -308,9 +308,9 @@ export const FuelOptimizer = () => {
               {getAverageFuelConsumption().toFixed(1)} MT
             </div>
             <div className="flex items-center gap-2 mt-2">
-              {getFuelTrend() === 'decreasing' ? (
+              {getFuelTrend() === "decreasing" ? (
                 <TrendingDown className="h-4 w-4 text-green-500" />
-              ) : getFuelTrend() === 'increasing' ? (
+              ) : getFuelTrend() === "increasing" ? (
                 <TrendingUp className="h-4 w-4 text-red-500" />
               ) : (
                 <div className="h-4 w-4" />
@@ -418,7 +418,7 @@ export const FuelOptimizer = () => {
                 maintainAspectRatio: false,
                 plugins: {
                   legend: {
-                    position: 'top' as const,
+                    position: "top" as const,
                   },
                   title: {
                     display: false,
@@ -429,7 +429,7 @@ export const FuelOptimizer = () => {
                     beginAtZero: true,
                     title: {
                       display: true,
-                      text: 'Fuel Consumption (Liters)'
+                      text: "Fuel Consumption (Liters)"
                     }
                   }
                 }

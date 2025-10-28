@@ -79,25 +79,25 @@ export default function InteropDashboard() {
     
     // Set up real-time subscriptions
     const missionsSubscription = supabase
-      .channel('missions_changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'joint_mission_log' },
+      .channel("missions_changes")
+      .on("postgres_changes", 
+        { event: "*", schema: "public", table: "joint_mission_log" },
         () => loadMissions()
       )
       .subscribe();
 
     const agentsSubscription = supabase
-      .channel('agents_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'agent_swarm_metrics' },
+      .channel("agents_changes")
+      .on("postgres_changes",
+        { event: "*", schema: "public", table: "agent_swarm_metrics" },
         () => loadAgents()
       )
       .subscribe();
 
     const trustSubscription = supabase
-      .channel('trust_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'trust_events' },
+      .channel("trust_changes")
+      .on("postgres_changes",
+        { event: "*", schema: "public", table: "trust_events" },
         () => loadTrustAlerts()
       )
       .subscribe();
@@ -119,7 +119,7 @@ export default function InteropDashboard() {
         loadInteropLogs(),
       ]);
     } catch (error) {
-      logger.error('[InteropDashboard] Error loading data:', error);
+      logger.error("[InteropDashboard] Error loading data:", error);
     } finally {
       setLoading(false);
     }
@@ -128,24 +128,24 @@ export default function InteropDashboard() {
   const loadMissions = async () => {
     try {
       const { data, error } = await supabase
-        .from('joint_mission_log')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("joint_mission_log")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       setMissions(data || []);
     } catch (error) {
-      logger.error('[InteropDashboard] Error loading missions:', error);
+      logger.error("[InteropDashboard] Error loading missions:", error);
     }
   };
 
   const loadAgents = async () => {
     try {
       const { data, error } = await supabase
-        .from('agent_swarm_metrics')
-        .select('*')
-        .order('last_active_at', { ascending: false })
+        .from("agent_swarm_metrics")
+        .select("*")
+        .order("last_active_at", { ascending: false })
         .limit(20);
 
       if (error) throw error;
@@ -160,51 +160,51 @@ export default function InteropDashboard() {
       
       setAgents(uniqueAgents);
     } catch (error) {
-      logger.error('[InteropDashboard] Error loading agents:', error);
+      logger.error("[InteropDashboard] Error loading agents:", error);
     }
   };
 
   const loadTrustAlerts = async () => {
     try {
       const { data, error } = await supabase
-        .from('trust_events')
-        .select('*')
-        .in('alert_level', ['high', 'critical', 'emergency'])
-        .order('timestamp', { ascending: false })
+        .from("trust_events")
+        .select("*")
+        .in("alert_level", ["high", "critical", "emergency"])
+        .order("timestamp", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       setTrustAlerts(data || []);
     } catch (error) {
-      logger.error('[InteropDashboard] Error loading trust alerts:', error);
+      logger.error("[InteropDashboard] Error loading trust alerts:", error);
     }
   };
 
   const loadInteropLogs = async () => {
     try {
       const { data, error } = await supabase
-        .from('interop_log')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("interop_log")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(20);
 
       if (error) throw error;
       setInteropLogs(data || []);
     } catch (error) {
-      logger.error('[InteropDashboard] Error loading interop logs:', error);
+      logger.error("[InteropDashboard] Error loading interop logs:", error);
     }
   };
 
   const activeMissions = missions.filter(m => 
-    ['assigned', 'executing'].includes(m.mission_status)
+    ["assigned", "executing"].includes(m.mission_status)
   );
   
   const activeAgents = agents.filter(a => 
-    ['active', 'busy'].includes(a.status)
+    ["active", "busy"].includes(a.status)
   );
 
   const criticalAlerts = trustAlerts.filter(a => 
-    ['critical', 'emergency'].includes(a.alert_level)
+    ["critical", "emergency"].includes(a.alert_level)
   );
 
   if (loading) {
@@ -256,7 +256,7 @@ export default function InteropDashboard() {
         />
         <SummaryCard
           title="Interop Events"
-          value={interopLogs.filter(l => l.status === 'completed').length}
+          value={interopLogs.filter(l => l.status === "completed").length}
           total={interopLogs.length}
           icon={<Activity className="h-5 w-5" />}
           color="purple"
@@ -387,10 +387,10 @@ function SummaryCard({
   color: string;
 }) {
   const colorClasses = {
-    blue: 'text-blue-500 bg-blue-50 dark:bg-blue-950',
-    green: 'text-green-500 bg-green-50 dark:bg-green-950',
-    red: 'text-red-500 bg-red-50 dark:bg-red-950',
-    purple: 'text-purple-500 bg-purple-50 dark:bg-purple-950',
+    blue: "text-blue-500 bg-blue-50 dark:bg-blue-950",
+    green: "text-green-500 bg-green-50 dark:bg-green-950",
+    red: "text-red-500 bg-red-50 dark:bg-red-950",
+    purple: "text-purple-500 bg-purple-50 dark:bg-purple-950",
   }[color];
 
   return (
@@ -415,20 +415,20 @@ function SummaryCard({
 
 function MissionCard({ mission }: { mission: Mission }) {
   const statusColors = {
-    planning: 'secondary',
-    assigned: 'default',
-    executing: 'default',
-    completed: 'default',
-    failed: 'destructive',
-    cancelled: 'secondary',
+    planning: "secondary",
+    assigned: "default",
+    executing: "default",
+    completed: "default",
+    failed: "destructive",
+    cancelled: "secondary",
   };
 
   const priorityColors = {
-    low: 'secondary',
-    medium: 'default',
-    high: 'default',
-    critical: 'destructive',
-    emergency: 'destructive',
+    low: "secondary",
+    medium: "default",
+    high: "default",
+    critical: "destructive",
+    emergency: "destructive",
   };
 
   return (
@@ -487,11 +487,11 @@ function AgentCard({ agent }: { agent: Agent }) {
 
 function TrustAlertCard({ alert }: { alert: TrustAlert }) {
   const levelColors = {
-    info: 'bg-blue-50 dark:bg-blue-950 border-blue-200',
-    warning: 'bg-yellow-50 dark:bg-yellow-950 border-yellow-200',
-    high: 'bg-orange-50 dark:bg-orange-950 border-orange-200',
-    critical: 'bg-red-50 dark:bg-red-950 border-red-200',
-    emergency: 'bg-red-100 dark:bg-red-900 border-red-300',
+    info: "bg-blue-50 dark:bg-blue-950 border-blue-200",
+    warning: "bg-yellow-50 dark:bg-yellow-950 border-yellow-200",
+    high: "bg-orange-50 dark:bg-orange-950 border-orange-200",
+    critical: "bg-red-50 dark:bg-red-950 border-red-200",
+    emergency: "bg-red-100 dark:bg-red-900 border-red-300",
   };
 
   return (
@@ -516,8 +516,8 @@ function ProtocolStatusMap({ logs }: { logs: InteropLog[] }) {
       acc[log.protocol] = { total: 0, completed: 0, failed: 0, avgLatency: 0 };
     }
     acc[log.protocol].total++;
-    if (log.status === 'completed') acc[log.protocol].completed++;
-    if (log.status === 'failed') acc[log.protocol].failed++;
+    if (log.status === "completed") acc[log.protocol].completed++;
+    if (log.status === "failed") acc[log.protocol].failed++;
     acc[log.protocol].avgLatency += log.latency_ms || 0;
     return acc;
   }, {} as Record<string, { total: number; completed: number; failed: number; avgLatency: number }>);

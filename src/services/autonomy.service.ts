@@ -4,7 +4,7 @@
  * Service for managing autonomous tasks and decision engine
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 import type {
   AutonomousTask,
   AutonomyRule,
@@ -15,18 +15,18 @@ import type {
   ApproveTaskRequest,
   TaskType,
   EntityType,
-} from '@/types/autonomy';
+} from "@/types/autonomy";
 
 export class AutonomyService {
   // Autonomous Tasks
   static async getTasks(status?: string): Promise<AutonomousTask[]> {
     let query = supabase
-      .from('autonomous_tasks')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("autonomous_tasks")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (status) {
-      query = query.eq('status', status);
+      query = query.eq("status", status);
     }
 
     const { data, error } = await query;
@@ -36,9 +36,9 @@ export class AutonomyService {
 
   static async getTask(id: string): Promise<AutonomousTask | null> {
     const { data, error } = await supabase
-      .from('autonomous_tasks')
-      .select('*')
-      .eq('id', id)
+      .from("autonomous_tasks")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) throw error;
@@ -46,15 +46,15 @@ export class AutonomyService {
   }
 
   static async getPendingTasks(): Promise<AutonomousTask[]> {
-    return this.getTasks('pending');
+    return this.getTasks("pending");
   }
 
   static async getTasksByMission(missionId: string): Promise<AutonomousTask[]> {
     const { data, error } = await supabase
-      .from('autonomous_tasks')
-      .select('*')
-      .eq('mission_id', missionId)
-      .order('created_at', { ascending: false });
+      .from("autonomous_tasks")
+      .select("*")
+      .eq("mission_id", missionId)
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -64,20 +64,20 @@ export class AutonomyService {
     equipmentId: string
   ): Promise<AutonomousTask[]> {
     const { data, error } = await supabase
-      .from('autonomous_tasks')
-      .select('*')
-      .eq('equipment_id', equipmentId)
-      .order('created_at', { ascending: false });
+      .from("autonomous_tasks")
+      .select("*")
+      .eq("equipment_id", equipmentId)
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
     return data || [];
   }
 
   static async createTask(request: CreateTaskRequest): Promise<string> {
-    const { data, error } = await supabase.rpc('create_autonomous_task', {
+    const { data, error } = await supabase.rpc("create_autonomous_task", {
       p_task_type: request.task_type,
       p_task_name: request.task_name,
-      p_description: request.description || '',
+      p_description: request.description || "",
       p_decision_logic: request.decision_logic,
       p_autonomy_level: request.autonomy_level || 1,
       p_mission_id: request.mission_id || null,
@@ -89,7 +89,7 @@ export class AutonomyService {
   }
 
   static async approveTask(request: ApproveTaskRequest): Promise<boolean> {
-    const { data, error } = await supabase.rpc('approve_autonomous_task', {
+    const { data, error } = await supabase.rpc("approve_autonomous_task", {
       p_task_id: request.task_id,
       p_approved: request.approved,
     });
@@ -105,9 +105,9 @@ export class AutonomyService {
   ): Promise<void> {
     const updates: Partial<AutonomousTask> = { status };
 
-    if (status === 'executing') {
+    if (status === "executing") {
       updates.started_at = new Date().toISOString();
-    } else if (status === 'completed' || status === 'failed') {
+    } else if (status === "completed" || status === "failed") {
       updates.completed_at = new Date().toISOString();
     }
 
@@ -116,26 +116,26 @@ export class AutonomyService {
     }
 
     const { error } = await supabase
-      .from('autonomous_tasks')
+      .from("autonomous_tasks")
       .update(updates)
-      .eq('id', taskId);
+      .eq("id", taskId);
 
     if (error) throw error;
   }
 
   static async cancelTask(taskId: string): Promise<void> {
-    await this.updateTaskStatus(taskId, 'cancelled');
+    await this.updateTaskStatus(taskId, "cancelled");
   }
 
   // Autonomy Rules
   static async getRules(taskType?: TaskType): Promise<AutonomyRule[]> {
     let query = supabase
-      .from('autonomy_rules')
-      .select('*')
-      .order('priority', { ascending: false });
+      .from("autonomy_rules")
+      .select("*")
+      .order("priority", { ascending: false });
 
     if (taskType) {
-      query = query.eq('task_type', taskType);
+      query = query.eq("task_type", taskType);
     }
 
     const { data, error } = await query;
@@ -145,10 +145,10 @@ export class AutonomyService {
 
   static async getEnabledRules(): Promise<AutonomyRule[]> {
     const { data, error } = await supabase
-      .from('autonomy_rules')
-      .select('*')
-      .eq('is_enabled', true)
-      .order('priority', { ascending: false });
+      .from("autonomy_rules")
+      .select("*")
+      .eq("is_enabled", true)
+      .order("priority", { ascending: false });
 
     if (error) throw error;
     return data || [];
@@ -156,7 +156,7 @@ export class AutonomyService {
 
   static async createRule(rule: Partial<AutonomyRule>): Promise<AutonomyRule> {
     const { data, error } = await supabase
-      .from('autonomy_rules')
+      .from("autonomy_rules")
       .insert(rule)
       .select()
       .single();
@@ -170,9 +170,9 @@ export class AutonomyService {
     updates: Partial<AutonomyRule>
   ): Promise<AutonomyRule> {
     const { data, error } = await supabase
-      .from('autonomy_rules')
+      .from("autonomy_rules")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -186,9 +186,9 @@ export class AutonomyService {
 
   static async deleteRule(id: string): Promise<void> {
     const { error } = await supabase
-      .from('autonomy_rules')
+      .from("autonomy_rules")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) throw error;
   }
@@ -199,14 +199,14 @@ export class AutonomyService {
     entityId?: string
   ): Promise<AutonomyConfig | null> {
     let query = supabase
-      .from('autonomy_configs')
-      .select('*')
-      .eq('entity_type', entityType);
+      .from("autonomy_configs")
+      .select("*")
+      .eq("entity_type", entityType);
 
     if (entityId) {
-      query = query.eq('entity_id', entityId);
+      query = query.eq("entity_id", entityId);
     } else {
-      query = query.is('entity_id', null);
+      query = query.is("entity_id", null);
     }
 
     const { data, error } = await query.maybeSingle();
@@ -215,18 +215,18 @@ export class AutonomyService {
   }
 
   static async getGlobalConfig(): Promise<AutonomyConfig | null> {
-    return this.getConfig('global');
+    return this.getConfig("global");
   }
 
   static async getMissionConfig(missionId: string): Promise<AutonomyConfig | null> {
-    return this.getConfig('mission', missionId);
+    return this.getConfig("mission", missionId);
   }
 
   static async saveConfig(
     config: Partial<AutonomyConfig>
   ): Promise<AutonomyConfig> {
     const { data, error } = await supabase
-      .from('autonomy_configs')
+      .from("autonomy_configs")
       .upsert(config)
       .select()
       .single();
@@ -253,7 +253,7 @@ export class AutonomyService {
         entity_id: entityId,
         is_enabled: enabled,
         autonomy_level: 1,
-        allowed_task_types: ['maintenance', 'logistics'],
+        allowed_task_types: ["maintenance", "logistics"],
         require_approval_threshold: 2,
         auto_approve_low_risk: false,
       });
@@ -263,13 +263,13 @@ export class AutonomyService {
   // Decision Logs
   static async getDecisionLogs(taskId?: string): Promise<AutonomyDecisionLog[]> {
     let query = supabase
-      .from('autonomy_decision_logs')
-      .select('*')
-      .order('timestamp', { ascending: false })
+      .from("autonomy_decision_logs")
+      .select("*")
+      .order("timestamp", { ascending: false })
       .limit(100);
 
     if (taskId) {
-      query = query.eq('task_id', taskId);
+      query = query.eq("task_id", taskId);
     }
 
     const { data, error } = await query;
@@ -280,7 +280,7 @@ export class AutonomyService {
   static async logDecision(
     log: Partial<AutonomyDecisionLog>
   ): Promise<void> {
-    const { error } = await supabase.from('autonomy_decision_logs').insert(log);
+    const { error } = await supabase.from("autonomy_decision_logs").insert(log);
     if (error) throw error;
   }
 
@@ -293,18 +293,18 @@ export class AutonomyService {
     ]);
 
     const activeTasks = allTasks.filter(
-      (t) => t.status === 'executing' || t.status === 'approved'
+      (t) => t.status === "executing" || t.status === "approved"
     );
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const completedToday = allTasks.filter(
       (t) =>
-        t.status === 'completed' &&
-        new Date(t.completed_at || '') >= today
+        t.status === "completed" &&
+        new Date(t.completed_at || "") >= today
     );
 
-    const completed = allTasks.filter((t) => t.status === 'completed');
+    const completed = allTasks.filter((t) => t.status === "completed");
     const successRate =
       allTasks.length > 0
         ? (completed.length / allTasks.length) * 100
@@ -333,10 +333,10 @@ export class AutonomyService {
     startDate.setDate(startDate.getDate() - days);
 
     const { data, error } = await supabase
-      .from('autonomy_metrics')
-      .select('*')
-      .gte('metric_date', startDate.toISOString().split('T')[0])
-      .order('metric_date', { ascending: true });
+      .from("autonomy_metrics")
+      .select("*")
+      .gte("metric_date", startDate.toISOString().split("T")[0])
+      .order("metric_date", { ascending: true });
 
     if (error) throw error;
     return data || [];

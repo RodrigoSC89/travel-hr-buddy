@@ -397,8 +397,8 @@ export default function SatelliteTracker() {
                                   alert.severity === "critical" 
                                     ? "destructive" 
                                     : alert.severity === "warning"
-                                    ? "default"
-                                    : "secondary"
+                                      ? "default"
+                                      : "secondary"
                                 }
                               >
                                 {alert.severity}

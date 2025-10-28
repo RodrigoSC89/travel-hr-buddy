@@ -260,25 +260,25 @@ class AlertHandler {
     const toConn = connections.find(c => c.name === event.toConnection);
 
     switch (event.type) {
-      case "fallback_initiated":
-        if (fromConn && toConn && event.success) {
-          this.alertFallbackActivated(fromConn, toConn, event.reason);
-        }
-        break;
+    case "fallback_initiated":
+      if (fromConn && toConn && event.success) {
+        this.alertFallbackActivated(fromConn, toConn, event.reason);
+      }
+      break;
 
-      case "recovery_completed":
-        if (fromConn && toConn && event.success) {
-          this.alertRecovery(fromConn, toConn);
-        }
-        break;
+    case "recovery_completed":
+      if (fromConn && toConn && event.success) {
+        this.alertRecovery(fromConn, toConn);
+      }
+      break;
 
-      case "fallback_completed":
-        // Already handled by fallback_initiated
-        break;
+    case "fallback_completed":
+      // Already handled by fallback_initiated
+      break;
 
-      case "recovery_initiated":
-        // Don't alert on initiation, only on completion
-        break;
+    case "recovery_initiated":
+      // Don't alert on initiation, only on completion
+      break;
     }
   }
 
@@ -377,7 +377,7 @@ class AlertHandler {
     bySeverity: Record<string, number>;
     dismissed: number;
     active: number;
-  } {
+    } {
     const stats = {
       total: this.alerts.length,
       byType: {} as Record<string, number>,

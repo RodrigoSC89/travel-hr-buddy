@@ -198,59 +198,59 @@ class DroneCommander {
 
     // Update drone status based on command
     switch (command.type) {
-      case "takeoff":
-        drone.status = "takeoff";
-        setTimeout(() => {
-          if (drone.status === "takeoff") {
-            drone.status = "flying";
-            drone.position.altitude = 50; // Default takeoff altitude
-          }
-        }, 3000);
-        break;
-
-      case "land":
-        drone.status = "landing";
-        setTimeout(() => {
-          if (drone.status === "landing") {
-            drone.status = "idle";
-            drone.position.altitude = 0;
-          }
-        }, 3000);
-        break;
-
-      case "hover":
-        drone.status = "hovering";
-        break;
-
-      case "goto":
-        if (command.parameters?.position) {
+    case "takeoff":
+      drone.status = "takeoff";
+      setTimeout(() => {
+        if (drone.status === "takeoff") {
           drone.status = "flying";
-          // In a real implementation, would navigate to position
-          const target = command.parameters.position as DronePosition;
-          drone.position = { ...target };
+          drone.position.altitude = 50; // Default takeoff altitude
         }
-        break;
+      }, 3000);
+      break;
 
-      case "return_home":
+    case "land":
+      drone.status = "landing";
+      setTimeout(() => {
+        if (drone.status === "landing") {
+          drone.status = "idle";
+          drone.position.altitude = 0;
+        }
+      }, 3000);
+      break;
+
+    case "hover":
+      drone.status = "hovering";
+      break;
+
+    case "goto":
+      if (command.parameters?.position) {
         drone.status = "flying";
-        // Would navigate to home position
-        break;
+        // In a real implementation, would navigate to position
+        const target = command.parameters.position as DronePosition;
+        drone.position = { ...target };
+      }
+      break;
 
-      case "emergency_stop":
-        drone.status = "emergency";
-        drone.speed = 0;
-        break;
+    case "return_home":
+      drone.status = "flying";
+      // Would navigate to home position
+      break;
 
-      case "follow_route":
-        if (command.parameters?.routeId) {
-          const route = this.routes.get(command.parameters.routeId);
-          if (route) {
-            drone.activeRoute = route.id;
-            drone.currentWaypoint = 0;
-            drone.status = "flying";
-          }
+    case "emergency_stop":
+      drone.status = "emergency";
+      drone.speed = 0;
+      break;
+
+    case "follow_route":
+      if (command.parameters?.routeId) {
+        const route = this.routes.get(command.parameters.routeId);
+        if (route) {
+          drone.activeRoute = route.id;
+          drone.currentWaypoint = 0;
+          drone.status = "flying";
         }
-        break;
+      }
+      break;
     }
 
     drone.lastUpdate = new Date();
@@ -404,7 +404,7 @@ class DroneCommander {
     emergency: number;
     averageBattery: number;
     averageSignal: number;
-  } {
+    } {
     const drones = Array.from(this.drones.values());
     
     const stats = {

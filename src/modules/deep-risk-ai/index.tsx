@@ -43,11 +43,11 @@ interface RiskScore {
     operational: number;
     communication: number;
   };
-  level: 'minimal' | 'low' | 'moderate' | 'high' | 'severe' | 'critical';
+  level: "minimal" | "low" | "moderate" | "high" | "severe" | "critical";
 }
 
 interface AIRecommendation {
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
   category: string;
   recommendation: string;
   reasoning: string;
@@ -114,13 +114,13 @@ const DeepRiskAI: React.FC = () => {
     const RISK_NORMALIZATION_FACTOR = 1.4;
     const overall = Math.min(100, (envRisk + mechRisk + opRisk + commRisk) / RISK_NORMALIZATION_FACTOR);
     
-    let level: RiskScore['level'];
-    if (overall < 15) level = 'minimal';
-    else if (overall < 30) level = 'low';
-    else if (overall < 50) level = 'moderate';
-    else if (overall < 70) level = 'high';
-    else if (overall < 85) level = 'severe';
-    else level = 'critical';
+    let level: RiskScore["level"];
+    if (overall < 15) level = "minimal";
+    else if (overall < 30) level = "low";
+    else if (overall < 50) level = "moderate";
+    else if (overall < 70) level = "high";
+    else if (overall < 85) level = "severe";
+    else level = "critical";
 
     return {
       overall,
@@ -139,45 +139,45 @@ const DeepRiskAI: React.FC = () => {
 
     if (factors.depth > 200) {
       recs.push({
-        priority: 'critical',
-        category: 'Depth Management',
-        recommendation: 'Reduce operational depth or enhance pressure ratings',
+        priority: "critical",
+        category: "Depth Management",
+        recommendation: "Reduce operational depth or enhance pressure ratings",
         reasoning: `Current depth (${factors.depth}m) exceeds safe operational limits for standard ROVs`,
       });
     }
 
     if (factors.current > 2.5) {
       recs.push({
-        priority: 'high',
-        category: 'Current Mitigation',
-        recommendation: 'Increase thruster power allocation and implement dynamic positioning',
+        priority: "high",
+        category: "Current Mitigation",
+        recommendation: "Increase thruster power allocation and implement dynamic positioning",
         reasoning: `Strong currents (${factors.current} knots) may affect station-keeping capability`,
       });
     }
 
     if (factors.visibility < 10) {
       recs.push({
-        priority: 'medium',
-        category: 'Visibility Enhancement',
-        recommendation: 'Deploy additional lighting and rely more on sonar navigation',
+        priority: "medium",
+        category: "Visibility Enhancement",
+        recommendation: "Deploy additional lighting and rely more on sonar navigation",
         reasoning: `Limited visibility (${factors.visibility}m) reduces visual navigation effectiveness`,
       });
     }
 
     if (factors.sonarQuality < 70) {
       recs.push({
-        priority: 'high',
-        category: 'Communication',
-        recommendation: 'Check sonar transducers and consider acoustic modem backup',
+        priority: "high",
+        category: "Communication",
+        recommendation: "Check sonar transducers and consider acoustic modem backup",
         reasoning: `Poor sonar quality (${factors.sonarQuality}%) may compromise navigation and obstacle detection`,
       });
     }
 
     if (score.overall > 60) {
       recs.push({
-        priority: 'critical',
-        category: 'Mission Planning',
-        recommendation: 'Consider postponing mission or implementing additional safety protocols',
+        priority: "critical",
+        category: "Mission Planning",
+        recommendation: "Consider postponing mission or implementing additional safety protocols",
         reasoning: `Overall risk score (${score.overall.toFixed(0)}) indicates hazardous conditions`,
       });
     }
@@ -193,9 +193,9 @@ const DeepRiskAI: React.FC = () => {
       recommendations,
     };
     
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = `deep-sea-risk-report-${Date.now()}.json`;
     link.click();
@@ -204,24 +204,24 @@ const DeepRiskAI: React.FC = () => {
 
   const getRiskColor = (level: string) => {
     const colors = {
-      minimal: 'bg-green-500',
-      low: 'bg-blue-500',
-      moderate: 'bg-yellow-500',
-      high: 'bg-orange-500',
-      severe: 'bg-red-500',
-      critical: 'bg-red-700',
+      minimal: "bg-green-500",
+      low: "bg-blue-500",
+      moderate: "bg-yellow-500",
+      high: "bg-orange-500",
+      severe: "bg-red-500",
+      critical: "bg-red-700",
     };
-    return colors[level as keyof typeof colors] || 'bg-gray-500';
+    return colors[level as keyof typeof colors] || "bg-gray-500";
   };
 
   const getPriorityColor = (priority: string) => {
     const colors = {
-      low: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-      medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-      high: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-      critical: 'bg-red-500/20 text-red-400 border-red-500/30',
+      low: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+      medium: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+      high: "bg-orange-500/20 text-orange-400 border-orange-500/30",
+      critical: "bg-red-500/20 text-red-400 border-red-500/30",
     };
-    return colors[priority as keyof typeof colors] || 'bg-gray-500/20 text-gray-400';
+    return colors[priority as keyof typeof colors] || "bg-gray-500/20 text-gray-400";
   };
 
   return (
@@ -363,7 +363,7 @@ const DeepRiskAI: React.FC = () => {
                       </div>
                       <div className="h-2 bg-zinc-700 rounded-full overflow-hidden">
                         <div
-                          className={`h-full transition-all ${score > 70 ? 'bg-red-500' : score > 40 ? 'bg-yellow-500' : 'bg-green-500'}`}
+                          className={`h-full transition-all ${score > 70 ? "bg-red-500" : score > 40 ? "bg-yellow-500" : "bg-green-500"}`}
                           style={{ width: `${score}%` }}
                         />
                       </div>
@@ -402,10 +402,10 @@ const DeepRiskAI: React.FC = () => {
                         <span className="font-semibold text-sm">{rec.category}</span>
                       </div>
                       <Badge className={
-                        rec.priority === 'critical' ? 'bg-red-500' :
-                        rec.priority === 'high' ? 'bg-orange-500' :
-                        rec.priority === 'medium' ? 'bg-yellow-500' :
-                        'bg-blue-500'
+                        rec.priority === "critical" ? "bg-red-500" :
+                          rec.priority === "high" ? "bg-orange-500" :
+                            rec.priority === "medium" ? "bg-yellow-500" :
+                              "bg-blue-500"
                       }>
                         {rec.priority.toUpperCase()}
                       </Badge>

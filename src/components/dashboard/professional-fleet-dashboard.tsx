@@ -3,12 +3,12 @@
  * Dashboard de frota com visualizações avançadas e métricas operacionais
  */
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Ship,
   MapPin,
@@ -23,87 +23,87 @@ import {
   Clock,
   TrendingUp,
   BarChart3
-} from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { motion } from 'framer-motion';
-import { ProfessionalHeader } from './professional-header';
-import { ProfessionalKPICard } from './professional-kpi-card';
+} from "lucide-react";
+import { LineChart, Line, AreaChart, Area, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { motion } from "framer-motion";
+import { ProfessionalHeader } from "./professional-header";
+import { ProfessionalKPICard } from "./professional-kpi-card";
 
 const vessels = [
   { 
     id: 1, 
-    name: 'Atlântico I', 
-    status: 'operational', 
-    location: 'Santos, BR',
+    name: "Atlântico I", 
+    status: "operational", 
+    location: "Santos, BR",
     speed: 12.5,
     fuel: 78,
     crew: 24,
-    lastMaintenance: '3 dias',
+    lastMaintenance: "3 dias",
     efficiency: 94,
     coordinates: { lat: -23.96, lng: -46.33 }
   },
   { 
     id: 2, 
-    name: 'Pacífico II', 
-    status: 'in-port', 
-    location: 'Rio de Janeiro, BR',
+    name: "Pacífico II", 
+    status: "in-port", 
+    location: "Rio de Janeiro, BR",
     speed: 0,
     fuel: 92,
     crew: 22,
-    lastMaintenance: '15 dias',
+    lastMaintenance: "15 dias",
     efficiency: 91,
     coordinates: { lat: -22.91, lng: -43.17 }
   },
   { 
     id: 3, 
-    name: 'Índico III', 
-    status: 'operational', 
-    location: 'Salvador, BR',
+    name: "Índico III", 
+    status: "operational", 
+    location: "Salvador, BR",
     speed: 15.8,
     fuel: 65,
     crew: 26,
-    lastMaintenance: '7 dias',
+    lastMaintenance: "7 dias",
     efficiency: 96,
     coordinates: { lat: -12.97, lng: -38.50 }
   },
   { 
     id: 4, 
-    name: 'Ártico IV', 
-    status: 'maintenance', 
-    location: 'Vitória, BR',
+    name: "Ártico IV", 
+    status: "maintenance", 
+    location: "Vitória, BR",
     speed: 0,
     fuel: 45,
     crew: 18,
-    lastMaintenance: '1 dia',
+    lastMaintenance: "1 dia",
     efficiency: 88,
     coordinates: { lat: -20.32, lng: -40.34 }
   }
 ];
 
 const fuelTrend = [
-  { day: 'Seg', consumption: 245, efficiency: 92 },
-  { day: 'Ter', consumption: 238, efficiency: 94 },
-  { day: 'Qua', consumption: 252, efficiency: 90 },
-  { day: 'Qui', consumption: 228, efficiency: 96 },
-  { day: 'Sex', consumption: 235, efficiency: 93 },
-  { day: 'Sáb', consumption: 242, efficiency: 91 },
-  { day: 'Dom', consumption: 230, efficiency: 95 }
+  { day: "Seg", consumption: 245, efficiency: 92 },
+  { day: "Ter", consumption: 238, efficiency: 94 },
+  { day: "Qua", consumption: 252, efficiency: 90 },
+  { day: "Qui", consumption: 228, efficiency: 96 },
+  { day: "Sex", consumption: 235, efficiency: 93 },
+  { day: "Sáb", consumption: 242, efficiency: 91 },
+  { day: "Dom", consumption: 230, efficiency: 95 }
 ];
 
 const performanceMetrics = [
-  { metric: 'Eficiência', value: 93 },
-  { metric: 'Segurança', value: 96 },
-  { metric: 'Pontualidade', value: 89 },
-  { metric: 'Manutenção', value: 91 },
-  { metric: 'Tripulação', value: 94 },
-  { metric: 'Compliance', value: 97 }
+  { metric: "Eficiência", value: 93 },
+  { metric: "Segurança", value: 96 },
+  { metric: "Pontualidade", value: 89 },
+  { metric: "Manutenção", value: 91 },
+  { metric: "Tripulação", value: 94 },
+  { metric: "Compliance", value: 97 }
 ];
 
 const VesselCard = ({ vessel }: any) => {
   const statusConfig = {
-    operational: { color: 'bg-green-500', label: 'Operacional', variant: 'default' as const },
-    'in-port': { color: 'bg-blue-500', label: 'Em Porto', variant: 'secondary' as const },
-    maintenance: { color: 'bg-yellow-500', label: 'Manutenção', variant: 'outline' as const }
+    operational: { color: "bg-green-500", label: "Operacional", variant: "default" as const },
+    "in-port": { color: "bg-blue-500", label: "Em Porto", variant: "secondary" as const },
+    maintenance: { color: "bg-yellow-500", label: "Manutenção", variant: "outline" as const }
   };
 
   const config = statusConfig[vessel.status as keyof typeof statusConfig];
@@ -133,7 +133,7 @@ const VesselCard = ({ vessel }: any) => {
                 {config.label}
               </Badge>
               <span className="text-xs text-muted-foreground">
-                ID: {vessel.id.toString().padStart(4, '0')}
+                ID: {vessel.id.toString().padStart(4, "0")}
               </span>
             </div>
           </div>
@@ -191,10 +191,10 @@ const VesselCard = ({ vessel }: any) => {
 };
 
 export function ProfessionalFleetDashboard() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   const totalVessels = vessels.length;
-  const operationalVessels = vessels.filter(v => v.status === 'operational').length;
+  const operationalVessels = vessels.filter(v => v.status === "operational").length;
   const avgEfficiency = (vessels.reduce((acc, v) => acc + v.efficiency, 0) / totalVessels).toFixed(1);
   const avgFuel = (vessels.reduce((acc, v) => acc + v.fuel, 0) / totalVessels).toFixed(1);
 

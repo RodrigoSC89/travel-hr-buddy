@@ -39,7 +39,7 @@ export const WindyMapLayer: React.FC<WindyMapLayerProps> = ({
   longitude = -45,
   zoom = 5,
   height = 500,
-  defaultOverlay = 'wind',
+  defaultOverlay = "wind",
 }) => {
   const [currentOverlay, setCurrentOverlay] = React.useState<WindyOverlay>(defaultOverlay);
 

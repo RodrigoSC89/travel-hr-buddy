@@ -4,39 +4,39 @@
  * Real-time analytics with streaming metrics and automatic alerts
  */
 
-import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Activity, AlertTriangle, TrendingUp, Users } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { AnalyticsService } from '@/services/analytics.service';
-import type { RealTimeMetrics, TimeSeriesData } from '@/types/analytics';
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Activity, AlertTriangle, TrendingUp, Users } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { AnalyticsService } from "@/services/analytics.service";
+import type { RealTimeMetrics, TimeSeriesData } from "@/types/analytics";
 
 export const AnalyticsDashboardV2 = () => {
   const [timeSeriesData, setTimeSeriesData] = useState<TimeSeriesData[]>([]);
 
   // Real-time metrics (refresh every 5 seconds)
   const { data: metrics, refetch } = useQuery({
-    queryKey: ['realtime-metrics'],
+    queryKey: ["realtime-metrics"],
     queryFn: () => AnalyticsService.getRealTimeMetrics(),
     refetchInterval: 5000,
   });
 
   const { data: alerts = [] } = useQuery({
-    queryKey: ['analytics-alerts'],
+    queryKey: ["analytics-alerts"],
     queryFn: () => AnalyticsService.getActiveAlerts(),
     refetchInterval: 30000,
   });
 
   const { data: alertHistory = [] } = useQuery({
-    queryKey: ['alert-history'],
+    queryKey: ["alert-history"],
     queryFn: () => AnalyticsService.getAlertHistory(),
   });
 
   // Load time series data
   useEffect(() => {
     const loadTimeSeriesData = async () => {
-      const data = await AnalyticsService.getTimeSeriesData('page_view', 60, 5);
+      const data = await AnalyticsService.getTimeSeriesData("page_view", 60, 5);
       setTimeSeriesData(data);
     };
     loadTimeSeriesData();
@@ -46,7 +46,7 @@ export const AnalyticsDashboardV2 = () => {
 
   // Start tracking this page view
   useEffect(() => {
-    AnalyticsService.trackPageView('Analytics Dashboard V2');
+    AnalyticsService.trackPageView("Analytics Dashboard V2");
   }, []);
 
   return (
@@ -135,16 +135,16 @@ export const AnalyticsDashboardV2 = () => {
               <XAxis
                 dataKey="timestamp"
                 tickFormatter={(value) =>
-                  new Date(value).toLocaleTimeString('pt-BR', {
-                    hour: '2-digit',
-                    minute: '2-digit',
+                  new Date(value).toLocaleTimeString("pt-BR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
                   })
                 }
               />
               <YAxis />
               <Tooltip
                 labelFormatter={(value) =>
-                  new Date(value).toLocaleString('pt-BR')
+                  new Date(value).toLocaleString("pt-BR")
                 }
               />
               <Line
@@ -179,11 +179,11 @@ export const AnalyticsDashboardV2 = () => {
                   <div className="flex items-center gap-3">
                     <AlertTriangle
                       className={`w-5 h-5 ${
-                        alert.severity === 'critical'
-                          ? 'text-red-600'
-                          : alert.severity === 'warning'
-                            ? 'text-yellow-600'
-                            : 'text-blue-600'
+                        alert.severity === "critical"
+                          ? "text-red-600"
+                          : alert.severity === "warning"
+                            ? "text-yellow-600"
+                            : "text-blue-600"
                       }`}
                     />
                     <div>
@@ -223,7 +223,7 @@ export const AnalyticsDashboardV2 = () => {
                 <div>
                   <p className="text-sm">{history.message}</p>
                   <p className="text-xs text-muted-foreground">
-                    {new Date(history.triggered_at).toLocaleString('pt-BR')}
+                    {new Date(history.triggered_at).toLocaleString("pt-BR")}
                   </p>
                 </div>
                 <div className="text-right">

@@ -94,7 +94,7 @@ export class NLPService {
         confidence
       };
     } catch (error) {
-      logger.error('Error in NLP analysis:', error);
+      logger.error("Error in NLP analysis:", error);
       throw error;
     }
   }
@@ -109,7 +109,7 @@ export class NLPService {
     const emails = text.match(this.emailRegex) || [];
     emails.forEach(email => {
       entities.push({
-        type: 'email',
+        type: "email",
         value: email,
         confidence: 0.95
       });
@@ -118,9 +118,9 @@ export class NLPService {
     // Extract phone numbers
     const phones = text.match(this.phoneRegex) || [];
     phones.forEach(phone => {
-      if (phone.replace(/\D/g, '').length >= 8) {
+      if (phone.replace(/\D/g, "").length >= 8) {
         entities.push({
-          type: 'phone',
+          type: "phone",
           value: phone.trim(),
           confidence: 0.85
         });
@@ -131,7 +131,7 @@ export class NLPService {
     const amounts = text.match(this.currencyRegex) || [];
     amounts.forEach(amount => {
       entities.push({
-        type: 'amount',
+        type: "amount",
         value: amount.trim(),
         confidence: 0.9
       });
@@ -141,7 +141,7 @@ export class NLPService {
     const docNumbers = text.match(this.documentNumberRegex) || [];
     docNumbers.forEach(docNum => {
       entities.push({
-        type: 'document_number',
+        type: "document_number",
         value: docNum.trim(),
         confidence: 0.8
       });
@@ -157,7 +157,7 @@ export class NLPService {
       const matches = text.match(pattern) || [];
       matches.forEach(org => {
         entities.push({
-          type: 'organization',
+          type: "organization",
           value: org.trim(),
           confidence: 0.7
         });
@@ -174,21 +174,21 @@ export class NLPService {
         currentSequence.push(word);
       } else {
         if (currentSequence.length >= 2) {
-          capitalizedSequences.push(currentSequence.join(' '));
+          capitalizedSequences.push(currentSequence.join(" "));
         }
         currentSequence = [];
       }
     });
     
     if (currentSequence.length >= 2) {
-      capitalizedSequences.push(currentSequence.join(' '));
+      capitalizedSequences.push(currentSequence.join(" "));
     }
 
     capitalizedSequences.forEach(name => {
       // Filter out common non-name sequences
       if (!name.match(/^(The|For|From|With|About)\s/)) {
         entities.push({
-          type: 'person',
+          type: "person",
           value: name,
           confidence: 0.6
         });
@@ -227,13 +227,13 @@ export class NLPService {
    */
   private detectDateFormat(dateStr: string): string {
     if (/\d{4}[\/\-\.]\d{1,2}[\/\-\.]\d{1,2}/.test(dateStr)) {
-      return 'YYYY-MM-DD';
+      return "YYYY-MM-DD";
     } else if (/\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4}/.test(dateStr)) {
-      return 'DD-MM-YYYY';
+      return "DD-MM-YYYY";
     } else if (/\d{1,2}\s+[A-Za-z]+\s+\d{4}/.test(dateStr)) {
-      return 'DD Month YYYY';
+      return "DD Month YYYY";
     }
-    return 'unknown';
+    return "unknown";
   }
 
   /**
@@ -242,18 +242,18 @@ export class NLPService {
   private extractKeywords(text: string): KeywordExtraction[] {
     // Remove common stop words
     const stopWords = new Set([
-      'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
-      'of', 'with', 'by', 'from', 'as', 'is', 'was', 'are', 'were', 'been',
-      'be', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would',
-      'should', 'could', 'may', 'might', 'must', 'can', 'this', 'that',
-      'these', 'those', 'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me',
-      'him', 'her', 'us', 'them', 'o', 'a', 'e', 'de', 'da', 'do', 'para',
-      'com', 'em', 'por', 'um', 'uma', 'os', 'as', 'dos', 'das'
+      "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
+      "of", "with", "by", "from", "as", "is", "was", "are", "were", "been",
+      "be", "have", "has", "had", "do", "does", "did", "will", "would",
+      "should", "could", "may", "might", "must", "can", "this", "that",
+      "these", "those", "i", "you", "he", "she", "it", "we", "they", "me",
+      "him", "her", "us", "them", "o", "a", "e", "de", "da", "do", "para",
+      "com", "em", "por", "um", "uma", "os", "as", "dos", "das"
     ]);
 
     // Tokenize and clean
     const words = text.toLowerCase()
-      .replace(/[^\w\s]/g, ' ')
+      .replace(/[^\w\s]/g, " ")
       .split(/\s+/)
       .filter(word => word.length > 3 && !stopWords.has(word));
 
@@ -291,45 +291,45 @@ export class NLPService {
     const lowerText = text.toLowerCase();
 
     // Contract indicators
-    if (lowerText.includes('contrato') || lowerText.includes('contract') ||
-        lowerText.includes('acordo') || lowerText.includes('agreement') ||
-        (lowerText.includes('parte') && lowerText.includes('assinatura'))) {
-      return 'contract';
+    if (lowerText.includes("contrato") || lowerText.includes("contract") ||
+        lowerText.includes("acordo") || lowerText.includes("agreement") ||
+        (lowerText.includes("parte") && lowerText.includes("assinatura"))) {
+      return "contract";
     }
 
     // Invoice indicators
-    if (lowerText.includes('fatura') || lowerText.includes('invoice') ||
-        lowerText.includes('nota fiscal') || lowerText.includes('boleto') ||
-        entities.filter(e => e.type === 'amount').length > 2) {
-      return 'invoice';
+    if (lowerText.includes("fatura") || lowerText.includes("invoice") ||
+        lowerText.includes("nota fiscal") || lowerText.includes("boleto") ||
+        entities.filter(e => e.type === "amount").length > 2) {
+      return "invoice";
     }
 
     // Report indicators
-    if (lowerText.includes('relatório') || lowerText.includes('report') ||
-        lowerText.includes('análise') || lowerText.includes('analysis') ||
-        lowerText.includes('resumo') || lowerText.includes('summary')) {
-      return 'report';
+    if (lowerText.includes("relatório") || lowerText.includes("report") ||
+        lowerText.includes("análise") || lowerText.includes("analysis") ||
+        lowerText.includes("resumo") || lowerText.includes("summary")) {
+      return "report";
     }
 
     // Certificate indicators
-    if (lowerText.includes('certificado') || lowerText.includes('certificate') ||
-        lowerText.includes('diploma') || lowerText.includes('atestado')) {
-      return 'certificate';
+    if (lowerText.includes("certificado") || lowerText.includes("certificate") ||
+        lowerText.includes("diploma") || lowerText.includes("atestado")) {
+      return "certificate";
     }
 
     // Letter indicators
-    if (lowerText.includes('prezado') || lowerText.includes('dear') ||
-        lowerText.includes('atenciosamente') || lowerText.includes('sincerely')) {
-      return 'letter';
+    if (lowerText.includes("prezado") || lowerText.includes("dear") ||
+        lowerText.includes("atenciosamente") || lowerText.includes("sincerely")) {
+      return "letter";
     }
 
     // Form indicators
-    if (lowerText.includes('formulário') || lowerText.includes('form') ||
-        lowerText.includes('cadastro') || lowerText.includes('registration')) {
-      return 'form';
+    if (lowerText.includes("formulário") || lowerText.includes("form") ||
+        lowerText.includes("cadastro") || lowerText.includes("registration")) {
+      return "form";
     }
 
-    return 'document';
+    return "document";
   }
 
   /**
@@ -337,8 +337,8 @@ export class NLPService {
    */
   private detectLanguage(text: string): string {
     // Simple language detection based on common words
-    const portugueseIndicators = ['de', 'da', 'do', 'para', 'com', 'em', 'por', 'que', 'não', 'ser', 'está'];
-    const englishIndicators = ['the', 'is', 'at', 'which', 'on', 'be', 'are', 'with', 'for', 'this'];
+    const portugueseIndicators = ["de", "da", "do", "para", "com", "em", "por", "que", "não", "ser", "está"];
+    const englishIndicators = ["the", "is", "at", "which", "on", "be", "are", "with", "for", "this"];
 
     const lowerText = text.toLowerCase();
     const words = lowerText.split(/\s+/);
@@ -352,12 +352,12 @@ export class NLPService {
     });
 
     if (portugueseScore > englishScore) {
-      return 'por';
+      return "por";
     } else if (englishScore > portugueseScore) {
-      return 'eng';
+      return "eng";
     }
 
-    return 'unknown';
+    return "unknown";
   }
 
   /**
@@ -371,11 +371,11 @@ export class NLPService {
       .filter(s => s.length > 20);
 
     if (sentences.length === 0) {
-      return text.substring(0, 200) + (text.length > 200 ? '...' : '');
+      return text.substring(0, 200) + (text.length > 200 ? "..." : "");
     }
 
     if (sentences.length <= maxSentences) {
-      return sentences.join('. ') + '.';
+      return sentences.join(". ") + ".";
     }
 
     // Score sentences by length and position (first sentences are often more important)
@@ -390,7 +390,7 @@ export class NLPService {
       .slice(0, maxSentences)
       .sort((a, b) => sentences.indexOf(a.sentence) - sentences.indexOf(b.sentence));
 
-    return topSentences.map(s => s.sentence).join('. ') + '.';
+    return topSentences.map(s => s.sentence).join(". ") + ".";
   }
 
   /**
@@ -409,7 +409,7 @@ export class NLPService {
     confidence += avgEntityConfidence * 0.2;
 
     // Specific classification (not 'document') increases confidence
-    if (classification !== 'document') {
+    if (classification !== "document") {
       confidence += 0.1;
     }
 
@@ -424,7 +424,7 @@ export class NLPService {
     
     // Look for patterns that indicate tables
     // This is a simplified implementation
-    const lines = text.split('\n');
+    const lines = text.split("\n");
     let currentTable: string[] = [];
     let inTable = false;
 
@@ -439,7 +439,7 @@ export class NLPService {
       } else if (inTable && line.trim().length === 0) {
         if (currentTable.length > 0) {
           tables.push({
-            raw: currentTable.join('\n'),
+            raw: currentTable.join("\n"),
             rows: currentTable.length
           });
           currentTable = [];
@@ -452,7 +452,7 @@ export class NLPService {
 
     if (currentTable.length > 0) {
       tables.push({
-        raw: currentTable.join('\n'),
+        raw: currentTable.join("\n"),
         rows: currentTable.length
       });
     }

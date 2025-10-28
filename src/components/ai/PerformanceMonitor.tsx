@@ -1,11 +1,11 @@
 // @ts-nocheck
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { supabase } from '@/integrations/supabase/client';
-import { Activity, TrendingUp, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
-import { toast } from 'sonner';
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
+import { Activity, TrendingUp, Clock, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
+import { toast } from "sonner";
 
 interface PerformanceMetrics {
   module_name: string;
@@ -46,17 +46,17 @@ export function PerformanceMonitor() {
     
     // Set up real-time subscriptions
     const performanceChannel = supabase
-      .channel('ia_performance_updates')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'ia_performance_log' },
+      .channel("ia_performance_updates")
+      .on("postgres_changes", 
+        { event: "*", schema: "public", table: "ia_performance_log" },
         () => fetchPerformanceData()
       )
       .subscribe();
 
     const alertsChannel = supabase
-      .channel('watchdog_alerts_updates')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'watchdog_behavior_alerts' },
+      .channel("watchdog_alerts_updates")
+      .on("postgres_changes",
+        { event: "*", schema: "public", table: "watchdog_behavior_alerts" },
         () => fetchWatchdogAlerts()
       )
       .subscribe();
@@ -71,9 +71,9 @@ export function PerformanceMonitor() {
     try {
       // Fetch aggregated performance metrics
       const { data: perfData, error: perfError } = await supabase
-        .from('ia_performance_log')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("ia_performance_log")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(1000);
 
       if (perfError) throw perfError;
@@ -84,9 +84,9 @@ export function PerformanceMonitor() {
 
       // Fetch suggestion metrics
       const { data: suggData, error: suggError } = await supabase
-        .from('ia_suggestions_log')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("ia_suggestions_log")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(1000);
 
       if (suggError) throw suggError;
@@ -98,8 +98,8 @@ export function PerformanceMonitor() {
       await fetchWatchdogAlerts();
 
     } catch (error) {
-      console.error('Error fetching performance data:', error);
-      toast.error('Failed to load performance metrics');
+      console.error("Error fetching performance data:", error);
+      toast.error("Failed to load performance metrics");
     } finally {
       setLoading(false);
     }
@@ -107,10 +107,10 @@ export function PerformanceMonitor() {
 
   const fetchWatchdogAlerts = async () => {
     const { data, error } = await supabase
-      .from('watchdog_behavior_alerts')
-      .select('*')
-      .eq('resolved', false)
-      .order('created_at', { ascending: false })
+      .from("watchdog_behavior_alerts")
+      .select("*")
+      .eq("resolved", false)
+      .order("created_at", { ascending: false })
       .limit(50);
 
     if (!error && data) {
@@ -181,11 +181,11 @@ export function PerformanceMonitor() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'destructive';
-      case 'high': return 'destructive';
-      case 'medium': return 'default';
-      case 'low': return 'secondary';
-      default: return 'default';
+    case "critical": return "destructive";
+    case "high": return "destructive";
+    case "medium": return "default";
+    case "low": return "secondary";
+    default: return "default";
     }
   };
 
@@ -326,11 +326,11 @@ export function PerformanceMonitor() {
             <div className="space-y-4">
               {watchdogAlerts.map((alert) => (
                 <Card key={alert.id} className="border-l-4" style={{
-                  borderLeftColor: alert.severity === 'critical' || alert.severity === 'high' 
-                    ? 'rgb(239, 68, 68)' 
-                    : alert.severity === 'medium' 
-                    ? 'rgb(234, 179, 8)' 
-                    : 'rgb(59, 130, 246)'
+                  borderLeftColor: alert.severity === "critical" || alert.severity === "high" 
+                    ? "rgb(239, 68, 68)" 
+                    : alert.severity === "medium" 
+                      ? "rgb(234, 179, 8)" 
+                      : "rgb(59, 130, 246)"
                 }}>
                   <CardHeader>
                     <div className="flex items-start justify-between">

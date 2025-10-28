@@ -73,15 +73,15 @@ export const EmployeePersonalDocuments: React.FC = () => {
       if (!user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('employee_personal_documents')
-        .select('*')
-        .eq('employee_id', user.id)
-        .order('created_at', { ascending: false });
+        .from("employee_personal_documents")
+        .select("*")
+        .eq("employee_id", user.id)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setDocuments(data || []);
     } catch (error: any) {
-      console.error('Error loading documents:', error);
+      console.error("Error loading documents:", error);
       toast({
         title: "Error loading documents",
         description: error.message,
@@ -106,13 +106,13 @@ export const EmployeePersonalDocuments: React.FC = () => {
       if (formData.file) {
         const fileName = `${user.id}/${Date.now()}_${formData.file.name}`;
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('employee_documents')
+          .from("employee_documents")
           .upload(fileName, formData.file);
 
         if (uploadError) throw uploadError;
 
         const { data: { publicUrl } } = supabase.storage
-          .from('employee_documents')
+          .from("employee_documents")
           .getPublicUrl(fileName);
 
         fileUrl = publicUrl;
@@ -121,18 +121,18 @@ export const EmployeePersonalDocuments: React.FC = () => {
       }
 
       // Calculate status based on expiry date
-      let status = 'valid';
+      let status = "valid";
       if (formData.expiry_date) {
         const daysUntilExpiry = differenceInDays(new Date(formData.expiry_date), new Date());
         if (daysUntilExpiry < 0) {
-          status = 'expired';
+          status = "expired";
         } else if (daysUntilExpiry <= 30) {
-          status = 'expiring_soon';
+          status = "expiring_soon";
         }
       }
 
       const { error } = await supabase
-        .from('employee_personal_documents')
+        .from("employee_personal_documents")
         .insert({
           employee_id: user.id,
           document_type: formData.document_type,
@@ -173,9 +173,9 @@ export const EmployeePersonalDocuments: React.FC = () => {
 
     try {
       const { error } = await supabase
-        .from('employee_personal_documents')
+        .from("employee_personal_documents")
         .delete()
-        .eq('id', documentId);
+        .eq("id", documentId);
 
       if (error) throw error;
 
@@ -222,7 +222,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       <Badge className={statusConfig.className}>
         <Icon className="h-3 w-3 mr-1" />
         {statusConfig.label}
-        {status === 'expiring_soon' && expiryDate && (
+        {status === "expiring_soon" && expiryDate && (
           <> ({differenceInDays(new Date(expiryDate), new Date())}d)</>
         )}
       </Badge>
@@ -407,19 +407,19 @@ export const EmployeePersonalDocuments: React.FC = () => {
                       <Badge variant="outline">{getDocumentTypeLabel(doc.document_type)}</Badge>
                     </TableCell>
                     <TableCell className="font-medium">{doc.document_name}</TableCell>
-                    <TableCell className="font-mono text-sm">{doc.document_number || '-'}</TableCell>
+                    <TableCell className="font-mono text-sm">{doc.document_number || "-"}</TableCell>
                     <TableCell>
-                      {doc.expiry_date ? format(new Date(doc.expiry_date), 'MMM dd, yyyy') : '-'}
+                      {doc.expiry_date ? format(new Date(doc.expiry_date), "MMM dd, yyyy") : "-"}
                     </TableCell>
                     <TableCell>{getStatusBadge(doc.status, doc.expiry_date || undefined)}</TableCell>
                     <TableCell>
                       <div className="flex items-center justify-end gap-2">
                         {doc.file_url && (
                           <>
-                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, '_blank')}>
+                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, "_blank")}>
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, '_blank')}>
+                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, "_blank")}>
                               <Download className="h-4 w-4" />
                             </Button>
                           </>

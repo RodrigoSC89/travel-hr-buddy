@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Slider } from '@/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Heart, Activity, Brain, Moon } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Heart, Activity, Brain, Moon } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
-    mood: 'neutral',
+    mood: "neutral",
     mood_score: 5,
     sleep_hours: 7,
-    sleep_quality: 'good',
-    blood_pressure_systolic: '',
-    blood_pressure_diastolic: '',
-    heart_rate: '',
+    sleep_quality: "good",
+    blood_pressure_systolic: "",
+    blood_pressure_diastolic: "",
+    heart_rate: "",
     stress_level: 5,
     energy_level: 5,
-    notes: '',
+    notes: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -32,9 +32,9 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      if (!user) throw new Error("Not authenticated");
 
-      const { error } = await supabase.from('crew_health_metrics').insert([
+      const { error } = await supabase.from("crew_health_metrics").insert([
         {
           user_id: user.id,
           ...formData,
@@ -47,30 +47,30 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
       if (error) throw error;
 
       toast({
-        title: 'Health check-in recorded',
-        description: 'Your health data has been saved successfully.',
+        title: "Health check-in recorded",
+        description: "Your health data has been saved successfully.",
       });
 
       // Reset form
       setFormData({
-        mood: 'neutral',
+        mood: "neutral",
         mood_score: 5,
         sleep_hours: 7,
-        sleep_quality: 'good',
-        blood_pressure_systolic: '',
-        blood_pressure_diastolic: '',
-        heart_rate: '',
+        sleep_quality: "good",
+        blood_pressure_systolic: "",
+        blood_pressure_diastolic: "",
+        heart_rate: "",
         stress_level: 5,
         energy_level: 5,
-        notes: '',
+        notes: "",
       });
 
       onSuccess();
     } catch (error: any) {
       toast({
-        title: 'Error recording health data',
+        title: "Error recording health data",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -234,7 +234,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
           </div>
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? 'Saving...' : 'Submit Check-In'}
+            {isSubmitting ? "Saving..." : "Submit Check-In"}
           </Button>
         </form>
       </CardContent>

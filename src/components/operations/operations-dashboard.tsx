@@ -1,11 +1,11 @@
 // @ts-nocheck
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Activity, Ship, Users, AlertTriangle, TrendingUp, Gauge } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Activity, Ship, Users, AlertTriangle, TrendingUp, Gauge } from "lucide-react";
+import { toast } from "sonner";
 
 interface OperationalMetrics {
   total_vessels: number;
@@ -38,8 +38,8 @@ export function OperationsDashboard() {
 
     // Set up real-time updates
     const channel = supabase
-      .channel('operations_updates')
-      .on('postgres_changes', { event: '*', schema: 'public' }, () => {
+      .channel("operations_updates")
+      .on("postgres_changes", { event: "*", schema: "public" }, () => {
         loadOperationalData();
       })
       .subscribe();
@@ -62,14 +62,14 @@ export function OperationsDashboard() {
         fuelRes,
         voyagesRes
       ] = await Promise.all([
-        supabase.from('vessels').select('id', { count: 'exact', head: true }),
-        supabase.from('vessel_status').select('id', { count: 'exact', head: true }).in('status', ['underway', 'at_anchor']),
-        supabase.from('crew_assignments').select('id', { count: 'exact', head: true }).eq('assignment_status', 'active'),
-        supabase.from('crew_rotations').select('id', { count: 'exact', head: true }).eq('status', 'scheduled'),
-        supabase.from('checklist_records').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-        supabase.from('maintenance_alerts').select('id', { count: 'exact', head: true }).eq('status', 'active'),
-        supabase.from('fuel_usage').select('efficiency_rating').order('recorded_at', { ascending: false }).limit(10),
-        supabase.from('voyage_plans').select('id', { count: 'exact', head: true }).eq('status', 'active')
+        supabase.from("vessels").select("id", { count: "exact", head: true }),
+        supabase.from("vessel_status").select("id", { count: "exact", head: true }).in("status", ["underway", "at_anchor"]),
+        supabase.from("crew_assignments").select("id", { count: "exact", head: true }).eq("assignment_status", "active"),
+        supabase.from("crew_rotations").select("id", { count: "exact", head: true }).eq("status", "scheduled"),
+        supabase.from("checklist_records").select("id", { count: "exact", head: true }).eq("status", "pending"),
+        supabase.from("maintenance_alerts").select("id", { count: "exact", head: true }).eq("status", "active"),
+        supabase.from("fuel_usage").select("efficiency_rating").order("recorded_at", { ascending: false }).limit(10),
+        supabase.from("voyage_plans").select("id", { count: "exact", head: true }).eq("status", "active")
       ]);
 
       // Calculate average fuel efficiency
@@ -88,8 +88,8 @@ export function OperationsDashboard() {
         total_voyages: voyagesRes.count || 0
       });
     } catch (error) {
-      console.error('Error loading operational data:', error);
-      toast.error('Failed to load operational metrics');
+      console.error("Error loading operational data:", error);
+      toast.error("Failed to load operational metrics");
     } finally {
       setLoading(false);
     }
@@ -99,11 +99,11 @@ export function OperationsDashboard() {
     // AI-powered operational suggestions
     // In a real implementation, this would call an AI service
     const suggestions = [
-      'Consider rerouting Vessel A to avoid upcoming storm system',
-      'Schedule maintenance for Vessel B - fuel efficiency below threshold',
-      'Crew rotation due in 3 days - confirm travel arrangements',
-      'Optimize fuel consumption on Route C - potential 15% savings',
-      'Review pending safety checklists before next departure'
+      "Consider rerouting Vessel A to avoid upcoming storm system",
+      "Schedule maintenance for Vessel B - fuel efficiency below threshold",
+      "Crew rotation due in 3 days - confirm travel arrangements",
+      "Optimize fuel consumption on Route C - potential 15% savings",
+      "Review pending safety checklists before next departure"
     ];
 
     setAiSuggestions(suggestions);
@@ -111,9 +111,9 @@ export function OperationsDashboard() {
 
   const getMetricColor = (value: number, threshold: number, reverse = false) => {
     if (reverse) {
-      return value <= threshold ? 'text-green-500' : 'text-red-500';
+      return value <= threshold ? "text-green-500" : "text-red-500";
     }
-    return value >= threshold ? 'text-green-500' : 'text-yellow-500';
+    return value >= threshold ? "text-green-500" : "text-yellow-500";
   };
 
   if (loading) {

@@ -7,7 +7,7 @@
  * with AI-powered justification.
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface Strategy {
   id: string;
@@ -17,7 +17,7 @@ export interface Strategy {
   estimatedCost: number;
   estimatedBenefit: number;
   estimatedDuration: number;
-  riskLevel: 'low' | 'medium' | 'high';
+  riskLevel: "low" | "medium" | "high";
   requiredResources: string[];
 }
 
@@ -68,39 +68,39 @@ export class MetaStrategyEngine {
     // Strategy 1: Conservative approach - low risk, moderate benefit
     strategies.push({
       id: `${missionId}-conservative`,
-      name: 'Conservative Approach',
-      description: 'Prioritizes safety and stability over speed',
+      name: "Conservative Approach",
+      description: "Prioritizes safety and stability over speed",
       actions: this.generateConservativeActions(context),
       estimatedCost: context.budget * 0.6,
       estimatedBenefit: context.expectedValue * 0.7,
       estimatedDuration: context.timeline * 1.3,
-      riskLevel: 'low',
+      riskLevel: "low",
       requiredResources: this.getMinimalResources(context),
     });
 
     // Strategy 2: Aggressive approach - high risk, high benefit
     strategies.push({
       id: `${missionId}-aggressive`,
-      name: 'Aggressive Approach',
-      description: 'Maximizes speed and results with calculated risks',
+      name: "Aggressive Approach",
+      description: "Maximizes speed and results with calculated risks",
       actions: this.generateAggressiveActions(context),
       estimatedCost: context.budget * 0.9,
       estimatedBenefit: context.expectedValue * 1.4,
       estimatedDuration: context.timeline * 0.7,
-      riskLevel: 'high',
+      riskLevel: "high",
       requiredResources: this.getExtendedResources(context),
     });
 
     // Strategy 3: Balanced approach - moderate risk, balanced benefit
     strategies.push({
       id: `${missionId}-balanced`,
-      name: 'Balanced Approach',
-      description: 'Optimizes risk-reward ratio with flexibility',
+      name: "Balanced Approach",
+      description: "Optimizes risk-reward ratio with flexibility",
       actions: this.generateBalancedActions(context),
       estimatedCost: context.budget * 0.75,
       estimatedBenefit: context.expectedValue * 1.0,
       estimatedDuration: context.timeline * 1.0,
-      riskLevel: 'medium',
+      riskLevel: "medium",
       requiredResources: this.getStandardResources(context),
     });
 
@@ -108,13 +108,13 @@ export class MetaStrategyEngine {
     if (context.allowInnovation) {
       strategies.push({
         id: `${missionId}-innovative`,
-        name: 'Innovative Approach',
-        description: 'Leverages new methods and emerging technologies',
+        name: "Innovative Approach",
+        description: "Leverages new methods and emerging technologies",
         actions: this.generateInnovativeActions(context),
         estimatedCost: context.budget * 0.85,
         estimatedBenefit: context.expectedValue * 1.6,
         estimatedDuration: context.timeline * 0.9,
-        riskLevel: 'high',
+        riskLevel: "high",
         requiredResources: this.getSpecializedResources(context),
       });
     }
@@ -202,7 +202,7 @@ export class MetaStrategyEngine {
     evaluations: StrategyEvaluation[]
   ): Promise<void> {
     try {
-      await supabase.from('meta_strategy_log').insert({
+      await supabase.from("meta_strategy_log").insert({
         strategy_id: strategy.id,
         strategy_name: strategy.name,
         decision_data: {
@@ -215,61 +215,61 @@ export class MetaStrategyEngine {
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      console.error('Failed to log meta strategy decision:', error);
+      console.error("Failed to log meta strategy decision:", error);
     }
   }
 
   // Helper methods for strategy generation
   private generateConservativeActions(context: Record<string, any>): StrategyAction[] {
     return [
-      { step: 1, action: 'Comprehensive risk assessment', duration: 120, dependencies: [], resources: ['analyst'] },
-      { step: 2, action: 'Detailed planning phase', duration: 180, dependencies: [1], resources: ['planner'] },
-      { step: 3, action: 'Staged execution with checkpoints', duration: 300, dependencies: [2], resources: ['executor'] },
-      { step: 4, action: 'Validation and review', duration: 90, dependencies: [3], resources: ['validator'] },
+      { step: 1, action: "Comprehensive risk assessment", duration: 120, dependencies: [], resources: ["analyst"] },
+      { step: 2, action: "Detailed planning phase", duration: 180, dependencies: [1], resources: ["planner"] },
+      { step: 3, action: "Staged execution with checkpoints", duration: 300, dependencies: [2], resources: ["executor"] },
+      { step: 4, action: "Validation and review", duration: 90, dependencies: [3], resources: ["validator"] },
     ];
   }
 
   private generateAggressiveActions(context: Record<string, any>): StrategyAction[] {
     return [
-      { step: 1, action: 'Rapid assessment', duration: 30, dependencies: [], resources: ['analyst'] },
-      { step: 2, action: 'Parallel execution streams', duration: 150, dependencies: [1], resources: ['executor', 'specialist'] },
-      { step: 3, action: 'Quick validation', duration: 30, dependencies: [2], resources: ['validator'] },
+      { step: 1, action: "Rapid assessment", duration: 30, dependencies: [], resources: ["analyst"] },
+      { step: 2, action: "Parallel execution streams", duration: 150, dependencies: [1], resources: ["executor", "specialist"] },
+      { step: 3, action: "Quick validation", duration: 30, dependencies: [2], resources: ["validator"] },
     ];
   }
 
   private generateBalancedActions(context: Record<string, any>): StrategyAction[] {
     return [
-      { step: 1, action: 'Standard risk assessment', duration: 60, dependencies: [], resources: ['analyst'] },
-      { step: 2, action: 'Adaptive planning', duration: 90, dependencies: [1], resources: ['planner'] },
-      { step: 3, action: 'Phased execution', duration: 200, dependencies: [2], resources: ['executor'] },
-      { step: 4, action: 'Iterative validation', duration: 60, dependencies: [3], resources: ['validator'] },
+      { step: 1, action: "Standard risk assessment", duration: 60, dependencies: [], resources: ["analyst"] },
+      { step: 2, action: "Adaptive planning", duration: 90, dependencies: [1], resources: ["planner"] },
+      { step: 3, action: "Phased execution", duration: 200, dependencies: [2], resources: ["executor"] },
+      { step: 4, action: "Iterative validation", duration: 60, dependencies: [3], resources: ["validator"] },
     ];
   }
 
   private generateInnovativeActions(context: Record<string, any>): StrategyAction[] {
     return [
-      { step: 1, action: 'Technology scan', duration: 45, dependencies: [], resources: ['researcher'] },
-      { step: 2, action: 'Prototype development', duration: 120, dependencies: [1], resources: ['developer', 'specialist'] },
-      { step: 3, action: 'Pilot testing', duration: 90, dependencies: [2], resources: ['tester'] },
-      { step: 4, action: 'Scale deployment', duration: 150, dependencies: [3], resources: ['executor'] },
+      { step: 1, action: "Technology scan", duration: 45, dependencies: [], resources: ["researcher"] },
+      { step: 2, action: "Prototype development", duration: 120, dependencies: [1], resources: ["developer", "specialist"] },
+      { step: 3, action: "Pilot testing", duration: 90, dependencies: [2], resources: ["tester"] },
+      { step: 4, action: "Scale deployment", duration: 150, dependencies: [3], resources: ["executor"] },
     ];
   }
 
   // Resource allocation helpers
   private getMinimalResources(context: Record<string, any>): string[] {
-    return ['basic_equipment', 'standard_team'];
+    return ["basic_equipment", "standard_team"];
   }
 
   private getExtendedResources(context: Record<string, any>): string[] {
-    return ['basic_equipment', 'standard_team', 'advanced_tools', 'specialist_support'];
+    return ["basic_equipment", "standard_team", "advanced_tools", "specialist_support"];
   }
 
   private getStandardResources(context: Record<string, any>): string[] {
-    return ['basic_equipment', 'standard_team', 'advanced_tools'];
+    return ["basic_equipment", "standard_team", "advanced_tools"];
   }
 
   private getSpecializedResources(context: Record<string, any>): string[] {
-    return ['advanced_equipment', 'specialized_team', 'cutting_edge_tools', 'research_support'];
+    return ["advanced_equipment", "specialized_team", "cutting_edge_tools", "research_support"];
   }
 
   // Simulation and scoring
@@ -277,7 +277,7 @@ export class MetaStrategyEngine {
     strategy: Strategy,
     context: Record<string, any>
   ): Promise<SimulationResult[]> {
-    const scenarios = ['optimal', 'normal', 'degraded', 'crisis'];
+    const scenarios = ["optimal", "normal", "degraded", "crisis"];
     return scenarios.map(scenario => ({
       scenario,
       successProbability: this.calculateSuccessProbability(strategy, scenario),
@@ -333,24 +333,24 @@ export class MetaStrategyEngine {
   private predictOutcome(strategy: Strategy, scenario: string): string {
     const outcomes: Record<string, Record<string, string>> = {
       optimal: {
-        low: 'Full success with minimal issues',
-        medium: 'Strong success with expected challenges',
-        high: 'Breakthrough success or significant setback',
+        low: "Full success with minimal issues",
+        medium: "Strong success with expected challenges",
+        high: "Breakthrough success or significant setback",
       },
       normal: {
-        low: 'Steady progress toward goals',
-        medium: 'Mixed results requiring adaptation',
-        high: 'High variance in outcomes',
+        low: "Steady progress toward goals",
+        medium: "Mixed results requiring adaptation",
+        high: "High variance in outcomes",
       },
       degraded: {
-        low: 'Slower progress but maintainable',
-        medium: 'Significant challenges requiring replanning',
-        high: 'High risk of failure',
+        low: "Slower progress but maintainable",
+        medium: "Significant challenges requiring replanning",
+        high: "High risk of failure",
       },
       crisis: {
-        low: 'Survival mode but recoverable',
-        medium: 'Major setbacks likely',
-        high: 'Critical failure probable',
+        low: "Survival mode but recoverable",
+        medium: "Major setbacks likely",
+        high: "Critical failure probable",
       },
     };
     
@@ -360,15 +360,15 @@ export class MetaStrategyEngine {
   private identifyIssues(strategy: Strategy, scenario: string): string[] {
     const issues: string[] = [];
     
-    if (scenario === 'degraded' || scenario === 'crisis') {
-      if (strategy.riskLevel === 'high') {
-        issues.push('High-risk approach vulnerable to adverse conditions');
+    if (scenario === "degraded" || scenario === "crisis") {
+      if (strategy.riskLevel === "high") {
+        issues.push("High-risk approach vulnerable to adverse conditions");
       }
-      issues.push('Resource constraints may become critical');
+      issues.push("Resource constraints may become critical");
     }
     
     if (strategy.estimatedDuration < 100) {
-      issues.push('Aggressive timeline may compromise quality');
+      issues.push("Aggressive timeline may compromise quality");
     }
     
     return issues;
@@ -388,9 +388,9 @@ export class MetaStrategyEngine {
   private explainRejection(rejected: StrategyEvaluation, selected: StrategyEvaluation): string {
     const scoreDiff = selected.score - rejected.score;
     return `Score ${scoreDiff.toFixed(2)} points lower due to ` +
-      (rejected.costBenefitRatio < selected.costBenefitRatio ? 'inferior cost-benefit ratio, ' : '') +
-      (rejected.feasibilityScore < selected.feasibilityScore ? 'lower feasibility, ' : '') +
-      (rejected.riskScore > selected.riskScore ? 'higher risk profile' : '');
+      (rejected.costBenefitRatio < selected.costBenefitRatio ? "inferior cost-benefit ratio, " : "") +
+      (rejected.feasibilityScore < selected.feasibilityScore ? "lower feasibility, " : "") +
+      (rejected.riskScore > selected.riskScore ? "higher risk profile" : "");
   }
 
   private calculateConfidence(best: StrategyEvaluation, secondBest: StrategyEvaluation | undefined): number {

@@ -152,19 +152,19 @@ export default function TemplatesPanel() {
     // Sanitize content to prevent XSS
     // Replace script tags and dangerous attributes
     content = content
-      .replace(/<script[^>]*>.*?<\/script>/gi, '')
-      .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
-      .replace(/javascript:/gi, '');
+      .replace(/<script[^>]*>.*?<\/script>/gi, "")
+      .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "")
+      .replace(/javascript:/gi, "");
     
     // Replace variables with values
     Object.entries(previewVariables).forEach(([key, value]) => {
       // Escape HTML in user input to prevent XSS
       const escapedValue = value
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
       
       content = content.replace(
         new RegExp(`\\{\\{${key}\\}\\}`, "g"), 
@@ -178,16 +178,16 @@ export default function TemplatesPanel() {
   const handleExportPDF = async (template: Template) => {
     try {
       const content = renderPreview();
-      const element = document.createElement('div');
+      const element = document.createElement("div");
       element.innerHTML = content;
-      element.style.padding = '20px';
+      element.style.padding = "20px";
       
       const opt = {
         margin: 1,
-        filename: `${template.name.replace(/\s+/g, '_')}.pdf`,
-        image: { type: 'jpeg' as const, quality: 0.98 },
+        filename: `${template.name.replace(/\s+/g, "_")}.pdf`,
+        image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' as const }
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" as const }
       };
 
       await html2pdf().set(opt).from(element).save();
@@ -200,11 +200,11 @@ export default function TemplatesPanel() {
 
   const handleExportHTML = (template: Template) => {
     const content = renderPreview();
-    const blob = new Blob([content], { type: 'text/html' });
+    const blob = new Blob([content], { type: "text/html" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `${template.name.replace(/\s+/g, '_')}.html`;
+    a.download = `${template.name.replace(/\s+/g, "_")}.html`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -235,7 +235,7 @@ export default function TemplatesPanel() {
             <DialogHeader>
               <DialogTitle>Criar Novo Template</DialogTitle>
               <DialogDescription>
-                Use variáveis no formato {`{{nome}}`}, {`{{data}}`}, etc.
+                Use variáveis no formato {"{{nome}}"}, {"{{data}}"}, etc.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -261,7 +261,7 @@ export default function TemplatesPanel() {
                 <Label htmlFor="content">Conteúdo HTML *</Label>
                 <Textarea
                   id="content"
-                  placeholder={`<h1>Título</h1>\n<p>{{nome}}</p>\n<p>{{data}}</p>`}
+                  placeholder={"<h1>Título</h1>\n<p>{{nome}}</p>\n<p>{{data}}</p>"}
                   value={newTemplate.content}
                   onChange={(e) => setNewTemplate({ ...newTemplate, content: e.target.value })}
                   rows={15}

@@ -154,8 +154,8 @@ export const GanttChart = () => {
     const { error } = await supabase
       .from("project_tasks")
       .update({
-        start_date: format(newStartDate, 'yyyy-MM-dd'),
-        end_date: format(newEndDate, 'yyyy-MM-dd')
+        start_date: format(newStartDate, "yyyy-MM-dd"),
+        end_date: format(newEndDate, "yyyy-MM-dd")
       })
       .eq("id", draggedTask.id);
 
@@ -279,7 +279,7 @@ export const GanttChart = () => {
       <div key={task.id}>
         <div 
           className={`mb-2 flex items-center gap-4 group hover:bg-accent/50 p-2 rounded ${
-            dependencyMode && dependencySource?.id === task.id ? 'bg-blue-100' : ''
+            dependencyMode && dependencySource?.id === task.id ? "bg-blue-100" : ""
           }`}
           draggable
           onDragStart={() => handleDragStart(task)}
@@ -288,11 +288,11 @@ export const GanttChart = () => {
           <div className="w-56 shrink-0" style={{ paddingLeft: `${indent}px` }}>
             <Input
               value={task.task_name}
-              onChange={(e) => handleInlineEdit(task.id, 'task_name', e.target.value)}
+              onChange={(e) => handleInlineEdit(task.id, "task_name", e.target.value)}
               className="font-medium text-sm border-0 p-1 h-7 bg-transparent hover:bg-white focus:bg-white"
             />
             <p className="text-xs text-muted-foreground">{task.project_name}</p>
-            <Badge variant={task.priority === 'critical' ? 'destructive' : task.priority === 'high' ? 'default' : 'secondary'} className="text-xs mt-1">
+            <Badge variant={task.priority === "critical" ? "destructive" : task.priority === "high" ? "default" : "secondary"} className="text-xs mt-1">
               {task.priority}
             </Badge>
           </div>
@@ -303,7 +303,7 @@ export const GanttChart = () => {
               style={{
                 left: `${calculatePosition(task.start_date)}px`,
                 width: `${calculateWidth(task.start_date, task.end_date)}px`,
-                minWidth: '40px'
+                minWidth: "40px"
               }}
             >
               <span className="text-xs text-white font-medium">
@@ -316,14 +316,14 @@ export const GanttChart = () => {
             <Input
               type="date"
               value={task.start_date}
-              onChange={(e) => handleInlineEdit(task.id, 'start_date', e.target.value)}
+              onChange={(e) => handleInlineEdit(task.id, "start_date", e.target.value)}
               className="w-32 h-8 text-xs"
             />
             <ArrowRight className="h-4 w-4 text-muted-foreground" />
             <Input
               type="date"
               value={task.end_date}
-              onChange={(e) => handleInlineEdit(task.id, 'end_date', e.target.value)}
+              onChange={(e) => handleInlineEdit(task.id, "end_date", e.target.value)}
               className="w-32 h-8 text-xs"
             />
           </div>

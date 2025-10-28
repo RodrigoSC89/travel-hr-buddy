@@ -6,15 +6,15 @@
 interface StorageRecord {
   id: string;
   table: string;
-  action: 'create' | 'update' | 'delete';
+  action: "create" | "update" | "delete";
   data: any;
   timestamp: number;
   synced: boolean;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
 }
 
 class SQLiteStorage {
-  private dbName = 'nautilus_mobile.db';
+  private dbName = "nautilus_mobile.db";
   private isInitialized = false;
 
   /**
@@ -27,7 +27,7 @@ class SQLiteStorage {
     // Using IndexedDB for cross-platform compatibility
     // In production mobile apps, this can be replaced with native SQLite plugin
     this.isInitialized = true;
-    console.log('Storage initialized (IndexedDB)');
+    console.log("Storage initialized (IndexedDB)");
   }
 
   /**
@@ -36,8 +36,8 @@ class SQLiteStorage {
   async save(
     table: string,
     data: any,
-    action: 'create' | 'update' | 'delete' = 'create',
-    priority: 'high' | 'medium' | 'low' = 'medium'
+    action: "create" | "update" | "delete" = "create",
+    priority: "high" | "medium" | "low" = "medium"
   ): Promise<string> {
     await this.initialize();
 
@@ -52,7 +52,7 @@ class SQLiteStorage {
     };
 
     // Store in IndexedDB for web compatibility
-    await this.storeInIndexedDB('offline_queue', record);
+    await this.storeInIndexedDB("offline_queue", record);
     
     return record.id;
   }
@@ -63,7 +63,7 @@ class SQLiteStorage {
   async getUnsyncedRecords(): Promise<StorageRecord[]> {
     await this.initialize();
 
-    const records = await this.getAllFromIndexedDB('offline_queue');
+    const records = await this.getAllFromIndexedDB("offline_queue");
     return records
       .filter((r: StorageRecord) => !r.synced)
       .sort((a: StorageRecord, b: StorageRecord) => {
@@ -81,10 +81,10 @@ class SQLiteStorage {
   async markAsSynced(id: string): Promise<void> {
     await this.initialize();
 
-    const record = await this.getFromIndexedDB('offline_queue', id);
+    const record = await this.getFromIndexedDB("offline_queue", id);
     if (record) {
       record.synced = true;
-      await this.storeInIndexedDB('offline_queue', record);
+      await this.storeInIndexedDB("offline_queue", record);
     }
   }
 
@@ -93,7 +93,7 @@ class SQLiteStorage {
    */
   async deleteSyncedRecord(id: string): Promise<void> {
     await this.initialize();
-    await this.deleteFromIndexedDB('offline_queue', id);
+    await this.deleteFromIndexedDB("offline_queue", id);
   }
 
   /**
@@ -110,11 +110,11 @@ class SQLiteStorage {
    */
   async clearSyncedRecords(): Promise<void> {
     await this.initialize();
-    const records = await this.getAllFromIndexedDB('offline_queue');
+    const records = await this.getAllFromIndexedDB("offline_queue");
     
     for (const record of records) {
       if (record.synced) {
-        await this.deleteFromIndexedDB('offline_queue', record.id);
+        await this.deleteFromIndexedDB("offline_queue", record.id);
       }
     }
   }
@@ -122,12 +122,12 @@ class SQLiteStorage {
   // IndexedDB helper methods for web compatibility
   private async storeInIndexedDB(storeName: string, data: any): Promise<void> {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('NautilusMobileDB', 1);
+      const request = indexedDB.open("NautilusMobileDB", 1);
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction([storeName], 'readwrite');
+        const transaction = db.transaction([storeName], "readwrite");
         const store = transaction.objectStore(storeName);
         
         store.put(data);
@@ -138,7 +138,7 @@ class SQLiteStorage {
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
         if (!db.objectStoreNames.contains(storeName)) {
-          db.createObjectStore(storeName, { keyPath: 'id' });
+          db.createObjectStore(storeName, { keyPath: "id" });
         }
       };
     });
@@ -146,12 +146,12 @@ class SQLiteStorage {
 
   private async getFromIndexedDB(storeName: string, key: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('NautilusMobileDB', 1);
+      const request = indexedDB.open("NautilusMobileDB", 1);
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction([storeName], 'readonly');
+        const transaction = db.transaction([storeName], "readonly");
         const store = transaction.objectStore(storeName);
         
         const getRequest = store.get(key);
@@ -163,12 +163,12 @@ class SQLiteStorage {
 
   private async getAllFromIndexedDB(storeName: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('NautilusMobileDB', 1);
+      const request = indexedDB.open("NautilusMobileDB", 1);
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction([storeName], 'readonly');
+        const transaction = db.transaction([storeName], "readonly");
         const store = transaction.objectStore(storeName);
         
         const getAllRequest = store.getAll();
@@ -180,12 +180,12 @@ class SQLiteStorage {
 
   private async deleteFromIndexedDB(storeName: string, key: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('NautilusMobileDB', 1);
+      const request = indexedDB.open("NautilusMobileDB", 1);
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction([storeName], 'readwrite');
+        const transaction = db.transaction([storeName], "readwrite");
         const store = transaction.objectStore(storeName);
         
         store.delete(key);

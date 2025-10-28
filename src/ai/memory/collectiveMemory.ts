@@ -6,7 +6,7 @@
  * replication, and rollback capabilities.
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface KnowledgeEntry {
   id: string;
@@ -41,7 +41,7 @@ export interface KnowledgeConflict {
   key: string;
   localEntry: KnowledgeEntry;
   remoteEntry: KnowledgeEntry;
-  resolution: 'local' | 'remote' | 'merge' | 'manual';
+  resolution: "local" | "remote" | "merge" | "manual";
 }
 
 export interface RollbackRequest {
@@ -74,7 +74,7 @@ export class CollectiveMemoryHub {
     const version = existingEntry ? existingEntry.version + 1 : 1;
     const hash = await this.computeHash(category, key, value, version);
 
-    const entry: Omit<KnowledgeEntry, 'id' | 'createdAt' | 'updatedAt'> = {
+    const entry: Omit<KnowledgeEntry, "id" | "createdAt" | "updatedAt"> = {
       category,
       key,
       value,
@@ -88,7 +88,7 @@ export class CollectiveMemoryHub {
 
     try {
       const { data, error } = await supabase
-        .from('collective_knowledge')
+        .from("collective_knowledge")
         .insert({
           category: entry.category,
           key: entry.key,
@@ -107,7 +107,7 @@ export class CollectiveMemoryHub {
 
       return this.mapFromDatabase(data);
     } catch (error) {
-      console.error('Failed to store knowledge:', error);
+      console.error("Failed to store knowledge:", error);
       throw error;
     }
   }
@@ -118,22 +118,22 @@ export class CollectiveMemoryHub {
   async get(category: string, key: string): Promise<KnowledgeEntry | null> {
     try {
       const { data, error } = await supabase
-        .from('collective_knowledge')
-        .select('*')
-        .eq('category', category)
-        .eq('key', key)
-        .order('version', { ascending: false })
+        .from("collective_knowledge")
+        .select("*")
+        .eq("category", category)
+        .eq("key", key)
+        .order("version", { ascending: false })
         .limit(1)
         .single();
 
       if (error) {
-        if (error.code === 'PGRST116') return null; // Not found
+        if (error.code === "PGRST116") return null; // Not found
         throw error;
       }
 
       return this.mapFromDatabase(data);
     } catch (error) {
-      console.error('Failed to retrieve knowledge:', error);
+      console.error("Failed to retrieve knowledge:", error);
       return null;
     }
   }
@@ -151,20 +151,20 @@ export class CollectiveMemoryHub {
   ): Promise<KnowledgeEntry[]> {
     try {
       let query = supabase
-        .from('collective_knowledge')
-        .select('*')
-        .eq('category', category);
+        .from("collective_knowledge")
+        .select("*")
+        .eq("category", category);
 
       if (options.minConfidence) {
-        query = query.gte('confidence', options.minConfidence);
+        query = query.gte("confidence", options.minConfidence);
       }
 
       if (options.tags && options.tags.length > 0) {
-        query = query.contains('tags', options.tags);
+        query = query.contains("tags", options.tags);
       }
 
       query = query
-        .order('version', { ascending: false })
+        .order("version", { ascending: false })
         .limit(options.limit ?? 100);
 
       const { data, error } = await query;
@@ -173,7 +173,7 @@ export class CollectiveMemoryHub {
 
       return (data || []).map(d => this.mapFromDatabase(d));
     } catch (error) {
-      console.error('Failed to query knowledge:', error);
+      console.error("Failed to query knowledge:", error);
       return [];
     }
   }
@@ -227,7 +227,7 @@ export class CollectiveMemoryHub {
 
       return result;
     } catch (error) {
-      console.error('Sync failed:', error);
+      console.error("Sync failed:", error);
       throw error;
     }
   }
@@ -242,13 +242,13 @@ export class CollectiveMemoryHub {
     try {
       // Find entries to rollback
       let query = supabase
-        .from('collective_knowledge')
-        .select('*')
-        .eq('source_instance_id', request.instanceId)
-        .lte('version', request.targetVersion);
+        .from("collective_knowledge")
+        .select("*")
+        .eq("source_instance_id", request.instanceId)
+        .lte("version", request.targetVersion);
 
       if (request.categories) {
-        query = query.in('category', request.categories);
+        query = query.in("category", request.categories);
       }
 
       const { data: targetEntries, error } = await query;
@@ -270,7 +270,7 @@ export class CollectiveMemoryHub {
         affectedCategories: Array.from(affectedCategories),
       };
     } catch (error) {
-      console.error('Rollback failed:', error);
+      console.error("Rollback failed:", error);
       throw error;
     }
   }
@@ -285,18 +285,18 @@ export class CollectiveMemoryHub {
   ): Promise<KnowledgeEntry[]> {
     try {
       const { data, error } = await supabase
-        .from('collective_knowledge')
-        .select('*')
-        .eq('category', category)
-        .eq('key', key)
-        .order('version', { ascending: false })
+        .from("collective_knowledge")
+        .select("*")
+        .eq("category", category)
+        .eq("key", key)
+        .order("version", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
 
       return (data || []).map(d => this.mapFromDatabase(d));
     } catch (error) {
-      console.error('Failed to fetch history:', error);
+      console.error("Failed to fetch history:", error);
       return [];
     }
   }
@@ -308,9 +308,9 @@ export class CollectiveMemoryHub {
     const content = JSON.stringify({ category, key, value, version });
     const encoder = new TextEncoder();
     const data = encoder.encode(content);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
     return hashHex;
   }
 
@@ -324,22 +324,22 @@ export class CollectiveMemoryHub {
   ): Promise<KnowledgeEntry[]> {
     try {
       let query = supabase
-        .from('collective_knowledge')
-        .select('*')
-        .eq('source_instance_id', instanceId)
-        .in('category', categories);
+        .from("collective_knowledge")
+        .select("*")
+        .eq("source_instance_id", instanceId)
+        .in("category", categories);
 
       if (sinceVersion) {
-        query = query.gt('version', sinceVersion);
+        query = query.gt("version", sinceVersion);
       }
 
-      const { data, error } = await query.order('version', { ascending: true });
+      const { data, error } = await query.order("version", { ascending: true });
 
       if (error) throw error;
 
       return (data || []).map(d => this.mapFromDatabase(d));
     } catch (error) {
-      console.error('Failed to fetch from instance:', error);
+      console.error("Failed to fetch from instance:", error);
       return [];
     }
   }
@@ -349,7 +349,7 @@ export class CollectiveMemoryHub {
    */
   private async replicateEntry(entry: KnowledgeEntry): Promise<void> {
     try {
-      await supabase.from('collective_knowledge').upsert({
+      await supabase.from("collective_knowledge").upsert({
         category: entry.category,
         key: entry.key,
         value: entry.value,
@@ -361,7 +361,7 @@ export class CollectiveMemoryHub {
         metadata: entry.metadata,
       });
     } catch (error) {
-      console.error('Failed to replicate entry:', error);
+      console.error("Failed to replicate entry:", error);
       throw error;
     }
   }
@@ -392,19 +392,19 @@ export class CollectiveMemoryHub {
   private autoResolve(
     local: KnowledgeEntry,
     remote: KnowledgeEntry
-  ): 'local' | 'remote' | 'merge' | 'manual' {
+  ): "local" | "remote" | "merge" | "manual" {
     // Prefer higher confidence
-    if (local.confidence > remote.confidence + 0.1) return 'local';
-    if (remote.confidence > local.confidence + 0.1) return 'remote';
+    if (local.confidence > remote.confidence + 0.1) return "local";
+    if (remote.confidence > local.confidence + 0.1) return "remote";
 
     // Prefer more recent
     const localTime = new Date(local.updatedAt).getTime();
     const remoteTime = new Date(remote.updatedAt).getTime();
-    if (localTime > remoteTime) return 'local';
-    if (remoteTime > localTime) return 'remote';
+    if (localTime > remoteTime) return "local";
+    if (remoteTime > localTime) return "remote";
 
     // Default to manual resolution
-    return 'manual';
+    return "manual";
   }
 
   /**
@@ -412,19 +412,19 @@ export class CollectiveMemoryHub {
    */
   private async resolveConflict(conflict: KnowledgeConflict): Promise<void> {
     const winner =
-      conflict.resolution === 'local'
+      conflict.resolution === "local"
         ? conflict.localEntry
-        : conflict.resolution === 'remote'
-        ? conflict.remoteEntry
-        : null;
+        : conflict.resolution === "remote"
+          ? conflict.remoteEntry
+          : null;
 
     if (winner) {
       await this.replicateEntry(winner);
     }
 
     // Log conflict for manual review if needed
-    if (conflict.resolution === 'manual') {
-      console.warn('Manual conflict resolution required:', conflict);
+    if (conflict.resolution === "manual") {
+      console.warn("Manual conflict resolution required:", conflict);
     }
   }
 
@@ -433,12 +433,12 @@ export class CollectiveMemoryHub {
    */
   private async logSync(request: SyncRequest, result: SyncResult): Promise<void> {
     try {
-      await supabase.from('clone_sync_log').insert({
+      await supabase.from("clone_sync_log").insert({
         source_instance_id: request.sourceInstanceId,
         target_instance_id: request.targetInstanceId,
-        direction: 'pull',
+        direction: "pull",
         data_categories: request.categories,
-        status: result.conflictCount > 0 ? 'completed' : 'completed',
+        status: result.conflictCount > 0 ? "completed" : "completed",
         progress: 100,
         items_synced: result.syncedCount + result.updatedCount,
         total_items: result.syncedCount + result.updatedCount + result.conflictCount,
@@ -446,7 +446,7 @@ export class CollectiveMemoryHub {
         completed_at: new Date().toISOString(),
       });
     } catch (error) {
-      console.error('Failed to log sync:', error);
+      console.error("Failed to log sync:", error);
     }
   }
 

@@ -2,7 +2,7 @@
  * PATCH 164.0 - Navigation Copilot Export
  */
 
-export { navigationCopilot } from './index';
+export { navigationCopilot } from "./index";
 
 export type {
   Coordinates,
@@ -12,4 +12,4 @@ export type {
   NavigationRoute,
   WeatherAlert,
   RouteOptimizationOptions
-} from './index';
+} from "./index";

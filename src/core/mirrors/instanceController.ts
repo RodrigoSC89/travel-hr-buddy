@@ -8,9 +8,9 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
-export type InstanceStatus = 'active' | 'inactive' | 'syncing' | 'error' | 'offline';
-export type SyncDirection = 'pull' | 'push' | 'bidirectional';
-export type DataCategory = 'config' | 'ai_memory' | 'logs' | 'user_data' | 'all';
+export type InstanceStatus = "active" | "inactive" | "syncing" | "error" | "offline";
+export type SyncDirection = "pull" | "push" | "bidirectional";
+export type DataCategory = "config" | "ai_memory" | "logs" | "user_data" | "all";
 
 export interface MirrorInstance {
   id: string;
@@ -46,7 +46,7 @@ export interface SyncOperation {
   targetInstanceId: string;
   direction: SyncDirection;
   dataCategories: DataCategory[];
-  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  status: "pending" | "in_progress" | "completed" | "failed";
   progress: number; // 0-100
   startedAt?: Date;
   completedAt?: Date;
@@ -84,7 +84,7 @@ class InstanceController {
    * Initialize instance controller
    */
   async initialize(): Promise<void> {
-    logger.info('[InstanceController] Initializing Mirror Instance Controller...');
+    logger.info("[InstanceController] Initializing Mirror Instance Controller...");
 
     try {
       // Load existing instances
@@ -99,9 +99,9 @@ class InstanceController {
       // Start monitoring
       this.startMonitoring();
 
-      logger.info('[InstanceController] Instance Controller initialized');
+      logger.info("[InstanceController] Instance Controller initialized");
     } catch (error) {
-      logger.error('[InstanceController] Initialization failed:', error);
+      logger.error("[InstanceController] Initialization failed:", error);
       throw error;
     }
   }
@@ -112,9 +112,9 @@ class InstanceController {
   private async loadInstances(): Promise<void> {
     try {
       const { data: instances, error } = await supabase
-        .from('mirror_instances')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("mirror_instances")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
@@ -125,7 +125,7 @@ class InstanceController {
         logger.info(`[InstanceController] Loaded ${instances.length} instances`);
       }
     } catch (error) {
-      logger.error('[InstanceController] Failed to load instances:', error);
+      logger.error("[InstanceController] Failed to load instances:", error);
     }
   }
 
@@ -145,7 +145,7 @@ class InstanceController {
         id: this.generateId(),
         name,
         endpoint,
-        status: 'active',
+        status: "active",
         lastSeen: new Date(),
         syncStatus: {
           percentage: 0,
@@ -160,7 +160,7 @@ class InstanceController {
           memoryUsage: 0,
           storageUsage: 0,
         },
-        version: '1.0.0',
+        version: "1.0.0",
         parentInstanceId: this.getMainInstanceId(),
       };
 
@@ -173,7 +173,7 @@ class InstanceController {
       logger.info(`[InstanceController] Instance registered: ${instance.id}`);
       return instance;
     } catch (error) {
-      logger.error('[InstanceController] Failed to register instance:', error);
+      logger.error("[InstanceController] Failed to register instance:", error);
       throw error;
     }
   }
@@ -217,7 +217,7 @@ class InstanceController {
   /**
    * Get sync status for instance
    */
-  getSyncStatus(instanceId: string): MirrorInstance['syncStatus'] | null {
+  getSyncStatus(instanceId: string): MirrorInstance["syncStatus"] | null {
     const instance = this.instances.get(instanceId);
     return instance ? instance.syncStatus : null;
   }
@@ -227,14 +227,14 @@ class InstanceController {
    */
   async forcePull(
     instanceId: string,
-    dataCategories: DataCategory[] = ['all']
+    dataCategories: DataCategory[] = ["all"]
   ): Promise<SyncOperation> {
     logger.info(`[InstanceController] Forcing pull from instance: ${instanceId}`);
 
     const operation = await this.createSyncOperation(
       instanceId,
       this.getMainInstanceId(),
-      'pull',
+      "pull",
       dataCategories
     );
 
@@ -248,14 +248,14 @@ class InstanceController {
    */
   async forcePush(
     instanceId: string,
-    dataCategories: DataCategory[] = ['all']
+    dataCategories: DataCategory[] = ["all"]
   ): Promise<SyncOperation> {
     logger.info(`[InstanceController] Forcing push to instance: ${instanceId}`);
 
     const operation = await this.createSyncOperation(
       this.getMainInstanceId(),
       instanceId,
-      'push',
+      "push",
       dataCategories
     );
 
@@ -271,9 +271,9 @@ class InstanceController {
     sourceId: string,
     targetId: string,
     dataCategories: DataCategory[],
-    direction: SyncDirection = 'bidirectional'
+    direction: SyncDirection = "bidirectional"
   ): Promise<SyncOperation> {
-    logger.info(`[InstanceController] Syncing selective data: ${dataCategories.join(', ')}`);
+    logger.info(`[InstanceController] Syncing selective data: ${dataCategories.join(", ")}`);
 
     const operation = await this.createSyncOperation(
       sourceId,
@@ -302,7 +302,7 @@ class InstanceController {
       targetInstanceId: targetId,
       direction,
       dataCategories,
-      status: 'pending',
+      status: "pending",
       progress: 0,
       itemsSynced: 0,
       totalItems: 0,
@@ -319,20 +319,20 @@ class InstanceController {
     logger.info(`[InstanceController] Executing sync operation: ${operation.id}`);
 
     try {
-      operation.status = 'in_progress';
+      operation.status = "in_progress";
       operation.startedAt = new Date();
 
       // Update instance sync status
       const targetInstance = this.instances.get(operation.targetInstanceId);
       if (targetInstance) {
         targetInstance.syncStatus.inProgress = true;
-        targetInstance.status = 'syncing';
+        targetInstance.status = "syncing";
       }
 
       // Simulate sync process
       await this.performSync(operation);
 
-      operation.status = 'completed';
+      operation.status = "completed";
       operation.completedAt = new Date();
       operation.progress = 100;
 
@@ -341,7 +341,7 @@ class InstanceController {
         targetInstance.syncStatus.inProgress = false;
         targetInstance.syncStatus.lastSync = new Date();
         targetInstance.syncStatus.percentage = 100;
-        targetInstance.status = 'active';
+        targetInstance.status = "active";
       }
 
       // Log sync operation
@@ -349,9 +349,9 @@ class InstanceController {
 
       logger.info(`[InstanceController] Sync operation completed: ${operation.id}`);
     } catch (error) {
-      operation.status = 'failed';
-      operation.error = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('[InstanceController] Sync operation failed:', error);
+      operation.status = "failed";
+      operation.error = error instanceof Error ? error.message : "Unknown error";
+      logger.error("[InstanceController] Sync operation failed:", error);
       throw error;
     }
   }
@@ -360,8 +360,8 @@ class InstanceController {
    * Perform actual sync
    */
   private async performSync(operation: SyncOperation): Promise<void> {
-    const categories = operation.dataCategories.includes('all')
-      ? ['config', 'ai_memory', 'logs', 'user_data']
+    const categories = operation.dataCategories.includes("all")
+      ? ["config", "ai_memory", "logs", "user_data"]
       : operation.dataCategories;
 
     let totalItems = 0;
@@ -404,7 +404,7 @@ class InstanceController {
    */
   private async logSyncOperation(operation: SyncOperation): Promise<void> {
     try {
-      await supabase.from('clone_sync_log').insert({
+      await supabase.from("clone_sync_log").insert({
         id: operation.id,
         source_instance_id: operation.sourceInstanceId,
         target_instance_id: operation.targetInstanceId,
@@ -419,7 +419,7 @@ class InstanceController {
         error: operation.error,
       });
     } catch (error) {
-      logger.error('[InstanceController] Failed to log sync operation:', error);
+      logger.error("[InstanceController] Failed to log sync operation:", error);
     }
   }
 
@@ -427,25 +427,25 @@ class InstanceController {
    * Connect to telemetry system
    */
   private async connectTelemetry(): Promise<void> {
-    logger.info('[InstanceController] Connecting to telemetry...');
+    logger.info("[InstanceController] Connecting to telemetry...");
     this.telemetryConnected = true;
-    logger.info('[InstanceController] Connected to telemetry');
+    logger.info("[InstanceController] Connected to telemetry");
   }
 
   /**
    * Connect to context mesh
    */
   private async connectContextMesh(): Promise<void> {
-    logger.info('[InstanceController] Connecting to contextMesh...');
+    logger.info("[InstanceController] Connecting to contextMesh...");
     this.contextMeshConnected = true;
-    logger.info('[InstanceController] Connected to contextMesh');
+    logger.info("[InstanceController] Connected to contextMesh");
   }
 
   /**
    * Start monitoring instances
    */
   private startMonitoring(): void {
-    logger.info('[InstanceController] Starting instance monitoring...');
+    logger.info("[InstanceController] Starting instance monitoring...");
 
     this.monitoringInterval = setInterval(async () => {
       await this.checkInstancesHealth();
@@ -460,7 +460,7 @@ class InstanceController {
       clearInterval(this.monitoringInterval);
       this.monitoringInterval = null;
     }
-    logger.info('[InstanceController] Monitoring stopped');
+    logger.info("[InstanceController] Monitoring stopped");
   }
 
   /**
@@ -472,12 +472,12 @@ class InstanceController {
         // Simulate health check
         const isHealthy = await this.pingInstance(instance.id);
 
-        if (!isHealthy && instance.status === 'active') {
-          instance.status = 'offline';
+        if (!isHealthy && instance.status === "active") {
+          instance.status = "offline";
           await this.saveInstance(instance);
           logger.warn(`[InstanceController] Instance offline: ${instance.id}`);
-        } else if (isHealthy && instance.status === 'offline') {
-          instance.status = 'active';
+        } else if (isHealthy && instance.status === "offline") {
+          instance.status = "active";
           instance.lastSeen = new Date();
           await this.saveInstance(instance);
           logger.info(`[InstanceController] Instance back online: ${instance.id}`);
@@ -502,7 +502,7 @@ class InstanceController {
   private async saveInstance(instance: MirrorInstance): Promise<void> {
     try {
       const { error } = await supabase
-        .from('mirror_instances')
+        .from("mirror_instances")
         .upsert({
           id: instance.id,
           name: instance.name,
@@ -520,7 +520,7 @@ class InstanceController {
 
       if (error) throw error;
     } catch (error) {
-      logger.error('[InstanceController] Failed to save instance:', error);
+      logger.error("[InstanceController] Failed to save instance:", error);
     }
   }
 
@@ -532,7 +532,7 @@ class InstanceController {
   }
 
   private getMainInstanceId(): string {
-    return localStorage.getItem('instance_id') || 'main-instance';
+    return localStorage.getItem("instance_id") || "main-instance";
   }
 
   private deserializeInstance(data: any): MirrorInstance {
@@ -546,7 +546,7 @@ class InstanceController {
       capabilities: data.capabilities || [],
       location: data.location,
       metrics: data.metrics || { latency: 0, uptime: 0, memoryUsage: 0, storageUsage: 0 },
-      version: data.version || '1.0.0',
+      version: data.version || "1.0.0",
       parentInstanceId: data.parent_instance_id,
     };
   }
@@ -557,11 +557,11 @@ class InstanceController {
   getStats() {
     return {
       totalInstances: this.instances.size,
-      activeInstances: this.listInstances({ status: 'active' }).length,
-      syncingInstances: this.listInstances({ status: 'syncing' }).length,
-      offlineInstances: this.listInstances({ status: 'offline' }).length,
+      activeInstances: this.listInstances({ status: "active" }).length,
+      syncingInstances: this.listInstances({ status: "syncing" }).length,
+      offlineInstances: this.listInstances({ status: "offline" }).length,
       activeSyncOperations: Array.from(this.syncOperations.values()).filter(
-        op => op.status === 'in_progress'
+        op => op.status === "in_progress"
       ).length,
       telemetryConnected: this.telemetryConnected,
       contextMeshConnected: this.contextMeshConnected,

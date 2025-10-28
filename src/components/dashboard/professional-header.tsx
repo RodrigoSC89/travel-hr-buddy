@@ -3,11 +3,11 @@
  * Header profissional reutilizável com logomarca Nautilus
  */
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Clock, Download, RefreshCw } from 'lucide-react';
-import { motion } from 'framer-motion';
-import nautilusLogo from '@/assets/nautilus-logo.png';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Clock, Download, RefreshCw } from "lucide-react";
+import { motion } from "framer-motion";
+import nautilusLogo from "@/assets/nautilus-logo.png";
 
 interface ProfessionalHeaderProps {
   title: string;
