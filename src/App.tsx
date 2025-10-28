@@ -205,6 +205,8 @@ const ProjectTimeline = React.lazy(() => import("@/modules/project-timeline"));
 const UserManagement = React.lazy(() => import("@/modules/user-management"));
 // PATCH 426-430: Consolidated Mission Engine
 const MissionEngine = React.lazy(() => import("@/modules/mission-engine"));
+// PATCH 427: Drone Commander
+const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
 const MissionControl = React.lazy(() => import("@/modules/emergency/mission-control"));
 const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insight-dashboard"));
 const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
@@ -559,6 +561,8 @@ function App() {
                       <Route path="/mission-control/workflows" element={<WorkflowEngine />} />
                       <Route path="/mission-control/llm" element={<NautilusLLM />} />
                       <Route path="/mission-control/thought-chain" element={<ThoughtChain />} />
+                      {/* PATCH 427: Drone Commander */}
+                      <Route path="/drone-commander" element={<DroneCommander />} />
                       <Route path="/nautilus-os" element={<NautilusOS />} />
                       <Route path="/finance-hub" element={<FinanceHub />} />
                       <Route path="/finance" element={<FinanceHub />} />

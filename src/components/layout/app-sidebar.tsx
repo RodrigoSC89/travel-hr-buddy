@@ -469,6 +469,11 @@ const navigationItems = [
         icon: Target,
       },
       {
+        title: "Drone Commander",
+        url: "/drone-commander",
+        icon: Plane,
+      },
+      {
         title: "Hub Financeiro",
         url: "/finance-hub",
         icon: BarChart3,
