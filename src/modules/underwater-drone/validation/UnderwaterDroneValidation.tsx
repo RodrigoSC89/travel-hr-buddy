@@ -1,5 +1,5 @@
 /**
- * PATCH 424 - Underwater Drone Validation
+ * PATCH 436 - Underwater Drone Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,7 +24,7 @@ export default function UnderwaterDroneValidation() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Anchor className="h-8 w-8 text-primary" />
-            PATCH 424 - Underwater Drone
+            PATCH 436 - Underwater Drone
           </h1>
           <p className="text-muted-foreground mt-2">
             Validação do drone submarino
