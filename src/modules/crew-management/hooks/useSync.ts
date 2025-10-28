@@ -176,7 +176,7 @@ export const useSync = (options: UseSyncOptions = {}): UseSyncReturn => {
           acc[item.type] = [];
         }
         acc[item.type].push(item);
-        return {};
+        return acc;
       }, {} as Record<string, SyncableData[]>);
 
       // Sync each type
