@@ -8,16 +8,11 @@
 
 CREATE TABLE IF NOT EXISTS voice_interaction_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id TEXT,
+  session_id TEXT NOT NULL,
   event_type TEXT NOT NULL,
   event_data JSONB,
   timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  
-  CONSTRAINT fk_voice_session 
-    FOREIGN KEY (session_id) 
-    REFERENCES voice_sessions(session_id) 
-    ON DELETE CASCADE
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_voice_interaction_logs_session ON voice_interaction_logs(session_id);
@@ -46,12 +41,7 @@ CREATE TABLE IF NOT EXISTS satellite_orbital_events (
   event_type TEXT NOT NULL,
   event_data JSONB,
   timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  
-  CONSTRAINT fk_satellite 
-    FOREIGN KEY (satellite_id) 
-    REFERENCES satellites(satellite_id) 
-    ON DELETE CASCADE
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_satellite_orbital_events_satellite ON satellite_orbital_events(satellite_id);
@@ -59,8 +49,13 @@ CREATE INDEX idx_satellite_orbital_events_timestamp ON satellite_orbital_events(
 CREATE INDEX idx_satellite_orbital_events_type ON satellite_orbital_events(event_type);
 
 -- Add TLE fields to satellites table if not exists
-ALTER TABLE satellites ADD COLUMN IF NOT EXISTS tle_line1 TEXT;
-ALTER TABLE satellites ADD COLUMN IF NOT EXISTS tle_line2 TEXT;
+DO $$ 
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'satellites') THEN
+    ALTER TABLE satellites ADD COLUMN IF NOT EXISTS tle_line1 TEXT;
+    ALTER TABLE satellites ADD COLUMN IF NOT EXISTS tle_line2 TEXT;
+  END IF;
+END $$;
 
 -- Add RLS policies
 ALTER TABLE satellite_orbital_events ENABLE ROW LEVEL SECURITY;
@@ -265,28 +260,6 @@ CREATE POLICY "Authenticated users can view budgets"
 -- ============================================================================
 -- Helper Functions
 -- ============================================================================
-
--- Function to update mission progress based on objectives
-CREATE OR REPLACE FUNCTION update_mission_progress()
-RETURNS TRIGGER AS $$
-BEGIN
-  UPDATE missions
-  SET 
-    progress_percentage = (
-      SELECT COALESCE(
-        ROUND(
-          (COUNT(*) FILTER (WHERE (obj->>'status') = 'completed')::NUMERIC / 
-           NULLIF(COUNT(*), 0)) * 100
-        ), 0
-      )
-      FROM jsonb_array_elements(objectives) AS obj
-    ),
-    updated_at = NOW()
-  WHERE mission_id = NEW.mission_id;
-  
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
 
 -- Function to update budget remaining
 CREATE OR REPLACE FUNCTION update_budget_remaining()
