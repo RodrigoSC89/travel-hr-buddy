@@ -108,7 +108,7 @@ function App() {
 ## 📚 Related Documentation
 
 - [Maritime System README](../../pages/Maritime/README.md)
-- [Crew Management README](./operations/crew/README.md)
+- [Crew Management README](../operations/crew/README.md)
 - [Module Overview](/dev/docs/MODULES_OVERVIEW.md)
 
 ---
