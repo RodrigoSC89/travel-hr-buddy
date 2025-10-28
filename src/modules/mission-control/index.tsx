@@ -17,9 +17,14 @@ import { AICommander } from "./components/AICommander";
 import { KPIDashboard } from "./components/KPIDashboard";
 import { SystemLogs } from "./components/SystemLogs";
 import { MissionManager } from "./components/MissionManager";
+// PATCH 410: Submodules
+import { MissionPlanning } from "./submodules/planning";
+import { MissionExecution } from "./submodules/execution";
+import { MissionLogs } from "./submodules/logs";
+import { MissionAutonomy } from "./submodules/autonomy";
 
 /**
- * PATCH 177.0 + 272.0 - Mission Control Consolidation & AI Commander
+ * PATCH 177.0 + 272.0 + 410.0 - Mission Control Consolidation & Submodules
  * 
  * Unified operational hub consolidating:
  * - Fleet Management
@@ -27,6 +32,7 @@ import { MissionManager } from "./components/MissionManager";
  * - Satellite Communications
  * - Weather Monitoring
  * - Mission Management (PATCH 272)
+ * - Mission Planning, Execution, Logs, Autonomy (PATCH 410)
  * 
  * Features:
  * - AI Commander for contextual commands and queries
@@ -34,6 +40,7 @@ import { MissionManager } from "./components/MissionManager";
  * - Integrated logs, alerts, and status per module
  * - Tactical operational overview
  * - Mission creation and agent assignment (PATCH 272)
+ * - Four integrated submodules for complete mission lifecycle (PATCH 410)
  */
 
 interface ModuleStatus {
