@@ -275,6 +275,59 @@ export class DroneCommanderService {
       metadata: data.metadata || {}
     };
   }
+
+  // ==================== Fleet Logs (PATCH 451) ====================
+
+  async logFleetEvent(event: {
+    droneId: string;
+    eventType: string;
+    severity: "info" | "warning" | "error" | "critical";
+    message: string;
+    metadata?: Record<string, any>;
+  }): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from("drone_fleet_logs")
+        .insert({
+          drone_id: event.droneId,
+          event_type: event.eventType,
+          severity: event.severity,
+          message: event.message,
+          timestamp: new Date().toISOString(),
+          metadata: event.metadata || {}
+        });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error("Error logging fleet event:", error);
+      throw error;
+    }
+  }
+
+  async getFleetLogs(filters?: {
+    droneId?: string;
+    severity?: string;
+    limit?: number;
+  }): Promise<any[]> {
+    try {
+      let query = supabase
+        .from("drone_fleet_logs")
+        .select("*")
+        .order("timestamp", { ascending: false });
+
+      if (filters?.droneId) query = query.eq("drone_id", filters.droneId);
+      if (filters?.severity) query = query.eq("severity", filters.severity);
+      if (filters?.limit) query = query.limit(filters.limit);
+
+      const { data, error } = await query;
+      if (error) throw error;
+
+      return data || [];
+    } catch (error) {
+      console.error("Error fetching fleet logs:", error);
+      return [];
+    }
+  }
 }
 
 export const droneCommanderService = new DroneCommanderService();
