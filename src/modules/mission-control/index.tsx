@@ -17,9 +17,10 @@ import { AICommander } from "./components/AICommander";
 import { KPIDashboard } from "./components/KPIDashboard";
 import { SystemLogs } from "./components/SystemLogs";
 import { MissionManager } from "./components/MissionManager";
+import { RealTimeMissionDashboard } from "./components/RealTimeMissionDashboard";
 
 /**
- * PATCH 177.0 + 272.0 - Mission Control Consolidation & AI Commander
+ * PATCH 177.0 + 272.0 + 419.0 - Mission Control Consolidation & AI Commander & Real-Time Execution
  * 
  * Unified operational hub consolidating:
  * - Fleet Management
@@ -27,13 +28,15 @@ import { MissionManager } from "./components/MissionManager";
  * - Satellite Communications
  * - Weather Monitoring
  * - Mission Management (PATCH 272)
+ * - Real-Time Execution Tracking (PATCH 419)
  * 
  * Features:
  * - AI Commander for contextual commands and queries
- * - Live KPI dashboard with real-time status
+ * - Live KPI dashboard with real-time status (5s polling)
  * - Integrated logs, alerts, and status per module
  * - Tactical operational overview
  * - Mission creation and agent assignment (PATCH 272)
+ * - Real-time mission execution with status tracking (PATCH 419)
  */
 
 interface ModuleStatus {
@@ -223,7 +226,7 @@ const MissionControl: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="missions" className="mt-4">
-            <MissionManager />
+            <RealTimeMissionDashboard />
           </TabsContent>
 
           <TabsContent value="fleet" className="mt-4">

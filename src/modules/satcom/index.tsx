@@ -2,6 +2,7 @@
  * SATCOM Dashboard - Main Component
  * Monitors satellite communication connectivity (Iridium, Starlink, etc.)
  * PATCH 171.0 - Enhanced with redundancy engine, fallback management, and alert handling
+ * PATCH 420.0 - Interactive simulation with terminal interface and communication logging
  */
 
 import React, { useState, useEffect } from "react";
@@ -11,6 +12,8 @@ import { SatcomStatus } from "./components/SatcomStatus";
 import { SignalHistory } from "./components/SignalHistory";
 import { FallbackSimulator } from "./components/FallbackSimulator";
 import { FallbackStatus } from "./components/FallbackStatus";
+import { SatcomTerminal } from "./components/SatcomTerminal";
+import { CommunicationHistory } from "./components/CommunicationHistory";
 import { useSatcomMonitor } from "./hooks/useSatcomMonitor";
 
 // Export new PATCH 171.0 modules
@@ -203,6 +206,16 @@ const SatcomDashboard = () => {
         fallbackConnection={fallbackConnection}
         isFallbackActive={isFallbackActive}
       />
+
+      {/* PATCH 420: Interactive Terminal and History */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SatcomTerminal
+          vesselId="vessel-001"
+          activeProvider={primaryConnection?.provider || "Iridium"}
+          signalStrength={primaryConnection?.signalStrength || 0}
+        />
+        <CommunicationHistory vesselId="vessel-001" limit={50} />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <SignalHistory events={signalHistory} />
