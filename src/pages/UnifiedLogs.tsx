@@ -3,7 +3,7 @@
  * Central dashboard for all system logs
  */
 
-import { UnifiedLogsPanel } from "@/components/logs/unified-logs-panel";
+import { UnifiedLogsPanel } from "@/components/unified-logs-panel";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Database, Shield, Brain, Activity } from "lucide-react";
