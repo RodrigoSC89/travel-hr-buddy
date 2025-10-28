@@ -35,7 +35,8 @@ import {
   TestTube,
   MapPin,
   CheckCircle,
-  Scan
+  Scan,
+  Satellite
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import nautilusLogo from "@/assets/nautilus-logo.png";
@@ -472,6 +473,16 @@ const navigationItems = [
         title: "Drone Commander",
         url: "/drone-commander",
         icon: Plane,
+      },
+      {
+        title: "Sensors Hub",
+        url: "/sensors-hub",
+        icon: Activity,
+      },
+      {
+        title: "Satcom",
+        url: "/satcom",
+        icon: Satellite,
       },
       {
         title: "Hub Financeiro",

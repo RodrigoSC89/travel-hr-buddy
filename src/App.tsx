@@ -207,6 +207,10 @@ const UserManagement = React.lazy(() => import("@/modules/user-management"));
 const MissionEngine = React.lazy(() => import("@/modules/mission-engine"));
 // PATCH 427: Drone Commander
 const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
+// PATCH 428: Sensors Hub
+const SensorsHubPage = React.lazy(() => import("@/pages/SensorsHub"));
+// PATCH 429: Satcom
+const SatcomPage = React.lazy(() => import("@/pages/Satcom"));
 const MissionControl = React.lazy(() => import("@/modules/emergency/mission-control"));
 const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insight-dashboard"));
 const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
@@ -563,6 +567,10 @@ function App() {
                       <Route path="/mission-control/thought-chain" element={<ThoughtChain />} />
                       {/* PATCH 427: Drone Commander */}
                       <Route path="/drone-commander" element={<DroneCommander />} />
+                      {/* PATCH 428: Sensors Hub */}
+                      <Route path="/sensors-hub" element={<SensorsHubPage />} />
+                      {/* PATCH 429: Satcom */}
+                      <Route path="/satcom" element={<SatcomPage />} />
                       <Route path="/nautilus-os" element={<NautilusOS />} />
                       <Route path="/finance-hub" element={<FinanceHub />} />
                       <Route path="/finance" element={<FinanceHub />} />
