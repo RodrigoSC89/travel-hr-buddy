@@ -130,6 +130,7 @@ const Simulations = React.lazy(() => import("@/pages/admin/simulations"));
 const CronMonitor = React.lazy(() => import("@/pages/admin/cron-monitor"));
 const TrainingManagement = React.lazy(() => import("@/pages/admin/training"));
 const TrainingAcademyAdmin = React.lazy(() => import("@/pages/admin/training-academy"));
+const TrainingAcademyEnhanced = React.lazy(() => import("@/pages/admin/training-academy-enhanced"));
 const IncidentsPage = React.lazy(() => import("@/pages/admin/incidents"));
 const IncidentReportsComplete = React.lazy(() => import("@/pages/admin/incident-reports-complete"));
 const PerformanceDashboard = React.lazy(() => import("@/pages/admin/performance-dashboard"));
@@ -406,6 +407,7 @@ function App() {
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
                       <Route path="/admin/training-academy" element={<TrainingAcademyAdmin />} />
+                      <Route path="/admin/training-progress" element={<TrainingAcademyEnhanced />} />
                       <Route path="/admin/incidents" element={<IncidentsPage />} />
                       <Route path="/admin/incident-reports" element={<IncidentReportsComplete />} />
                       <Route path="/admin/performance-dashboard" element={<PerformanceDashboard />} />
