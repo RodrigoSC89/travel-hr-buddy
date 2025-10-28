@@ -247,3 +247,5 @@ export function VaultVectorSearch() {
     </div>
   );
 }
+
+export default VaultVectorSearch;

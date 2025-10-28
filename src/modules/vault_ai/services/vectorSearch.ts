@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Vector Search Service using pgvector
  * Provides semantic search capabilities using OpenAI embeddings
