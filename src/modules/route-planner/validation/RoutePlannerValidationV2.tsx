@@ -1,19 +1,19 @@
 /**
- * PATCH 447 - Navigation Copilot Validation
+ * PATCH 449 - Route Planner v2 Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Map, Route, Cloud, Database } from "lucide-react";
+import { CheckCircle2, Map, Clock, Link2, Database } from "lucide-react";
 import { useState } from "react";
 
-export default function NavigationCopilotValidation() {
+export default function RoutePlannerValidationV2() {
   const [checks, setChecks] = useState({
-    map: false,
-    suggestions: false,
-    weather: false,
-    logs: false,
+    ui: false,
+    eta: false,
+    integration: false,
+    persistence: false,
   });
 
   const allChecked = Object.values(checks).every(Boolean);
@@ -24,10 +24,10 @@ export default function NavigationCopilotValidation() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Map className="h-8 w-8 text-primary" />
-            PATCH 447 - Navigation Copilot
+            PATCH 449 - Route Planner v2
           </h1>
           <p className="text-muted-foreground mt-2">
-            Validação do sistema de navegação assistida por IA
+            Validação do planejador de rotas inteligente
           </p>
         </div>
         {allChecked && (
@@ -48,88 +48,88 @@ export default function NavigationCopilotValidation() {
         <CardContent className="space-y-4">
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="map"
-              checked={checks.map}
+              id="ui"
+              checked={checks.ui}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, map: checked as boolean })
+                setChecks({ ...checks, ui: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="map"
+                htmlFor="ui"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
                 <Map className="inline h-4 w-4 mr-1" />
-                Mapa de navegação renderizado
+                UI interativa funcionando
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Interface de mapa interativo funcionando corretamente
+                Interface de planejamento responsiva e intuitiva
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="suggestions"
-              checked={checks.suggestions}
+              id="eta"
+              checked={checks.eta}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, suggestions: checked as boolean })
+                setChecks({ ...checks, eta: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="suggestions"
+                htmlFor="eta"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Route className="inline h-4 w-4 mr-1" />
-                Sugestões de rota geradas
+                <Clock className="inline h-4 w-4 mr-1" />
+                ETA calculado dinamicamente
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                IA gerando recomendações inteligentes de rotas
+                Tempo estimado de chegada sendo calculado automaticamente
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="weather"
-              checked={checks.weather}
+              id="integration"
+              checked={checks.integration}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, weather: checked as boolean })
+                setChecks({ ...checks, integration: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="weather"
+                htmlFor="integration"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Cloud className="inline h-4 w-4 mr-1" />
-                Dados climáticos considerados
+                <Link2 className="inline h-4 w-4 mr-1" />
+                Integração com copiloto validada
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Integração com dados meteorológicos ativa
+                Comunicação ativa com Navigation Copilot
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="logs"
-              checked={checks.logs}
+              id="persistence"
+              checked={checks.persistence}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, logs: checked as boolean })
+                setChecks({ ...checks, persistence: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="logs"
+                htmlFor="persistence"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
                 <Database className="inline h-4 w-4 mr-1" />
-                Logs de rota no banco
+                Dados salvos em planned_routes
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Histórico de navegação persistido corretamente
+                Rotas planejadas persistidas no banco de dados
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function NavigationCopilotValidation() {
         </CardHeader>
         <CardContent>
           <p className="font-medium">
-            ✅ Navegação assistida com AI operante
+            ✅ Planejador de rota inteligente concluído
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             Todos os checkboxes acima devem estar marcados para aprovação

@@ -1,19 +1,19 @@
 /**
- * PATCH 447 - Navigation Copilot Validation
+ * PATCH 450 - Underwater Drone Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Map, Route, Cloud, Database } from "lucide-react";
+import { CheckCircle2, Anchor, Gauge, Map, Database } from "lucide-react";
 import { useState } from "react";
 
-export default function NavigationCopilotValidation() {
+export default function UnderwaterDroneValidationV2() {
   const [checks, setChecks] = useState({
+    control: false,
+    telemetry: false,
     map: false,
-    suggestions: false,
-    weather: false,
-    logs: false,
+    missions: false,
   });
 
   const allChecked = Object.values(checks).every(Boolean);
@@ -23,11 +23,11 @@ export default function NavigationCopilotValidation() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Map className="h-8 w-8 text-primary" />
-            PATCH 447 - Navigation Copilot
+            <Anchor className="h-8 w-8 text-primary" />
+            PATCH 450 - Underwater Drone
           </h1>
           <p className="text-muted-foreground mt-2">
-            Validação do sistema de navegação assistida por IA
+            Validação do sistema de controle de drone submarino
           </p>
         </div>
         {allChecked && (
@@ -48,6 +48,50 @@ export default function NavigationCopilotValidation() {
         <CardContent className="space-y-4">
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
+              id="control"
+              checked={checks.control}
+              onCheckedChange={(checked) =>
+                setChecks({ ...checks, control: checked as boolean })
+              }
+            />
+            <div className="flex-1">
+              <label
+                htmlFor="control"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+              >
+                <Anchor className="inline h-4 w-4 mr-1" />
+                Interface de controle ativa
+              </label>
+              <p className="text-sm text-muted-foreground mt-1">
+                Painel de controle do drone operacional
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+            <Checkbox
+              id="telemetry"
+              checked={checks.telemetry}
+              onCheckedChange={(checked) =>
+                setChecks({ ...checks, telemetry: checked as boolean })
+              }
+            />
+            <div className="flex-1">
+              <label
+                htmlFor="telemetry"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+              >
+                <Gauge className="inline h-4 w-4 mr-1" />
+                Telemetria recebida (mesmo simulada)
+              </label>
+              <p className="text-sm text-muted-foreground mt-1">
+                Dados de telemetria sendo exibidos em tempo real
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+            <Checkbox
               id="map"
               checked={checks.map}
               onCheckedChange={(checked) =>
@@ -60,76 +104,32 @@ export default function NavigationCopilotValidation() {
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
                 <Map className="inline h-4 w-4 mr-1" />
-                Mapa de navegação renderizado
+                Mapa 2D exibido
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Interface de mapa interativo funcionando corretamente
+                Visualização 2D da posição e trajetória do drone
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="suggestions"
-              checked={checks.suggestions}
+              id="missions"
+              checked={checks.missions}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, suggestions: checked as boolean })
+                setChecks({ ...checks, missions: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="suggestions"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-              >
-                <Route className="inline h-4 w-4 mr-1" />
-                Sugestões de rota geradas
-              </label>
-              <p className="text-sm text-muted-foreground mt-1">
-                IA gerando recomendações inteligentes de rotas
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
-            <Checkbox
-              id="weather"
-              checked={checks.weather}
-              onCheckedChange={(checked) =>
-                setChecks({ ...checks, weather: checked as boolean })
-              }
-            />
-            <div className="flex-1">
-              <label
-                htmlFor="weather"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-              >
-                <Cloud className="inline h-4 w-4 mr-1" />
-                Dados climáticos considerados
-              </label>
-              <p className="text-sm text-muted-foreground mt-1">
-                Integração com dados meteorológicos ativa
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
-            <Checkbox
-              id="logs"
-              checked={checks.logs}
-              onCheckedChange={(checked) =>
-                setChecks({ ...checks, logs: checked as boolean })
-              }
-            />
-            <div className="flex-1">
-              <label
-                htmlFor="logs"
+                htmlFor="missions"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
                 <Database className="inline h-4 w-4 mr-1" />
-                Logs de rota no banco
+                Missões e logs persistidos
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Histórico de navegação persistido corretamente
+                Histórico de missões salvo no banco de dados
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function NavigationCopilotValidation() {
         </CardHeader>
         <CardContent>
           <p className="font-medium">
-            ✅ Navegação assistida com AI operante
+            ✅ Controle operacional do drone submarino
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             Todos os checkboxes acima devem estar marcados para aprovação

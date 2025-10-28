@@ -1,19 +1,19 @@
 /**
- * PATCH 447 - Navigation Copilot Validation
+ * PATCH 448 - Sonar AI Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Map, Route, Cloud, Database } from "lucide-react";
+import { CheckCircle2, Waves, Brain, BarChart3, Database } from "lucide-react";
 import { useState } from "react";
 
-export default function NavigationCopilotValidation() {
+export default function SonarAIValidationV3() {
   const [checks, setChecks] = useState({
-    map: false,
-    suggestions: false,
-    weather: false,
-    logs: false,
+    model: false,
+    processing: false,
+    classification: false,
+    persistence: false,
   });
 
   const allChecked = Object.values(checks).every(Boolean);
@@ -23,11 +23,11 @@ export default function NavigationCopilotValidation() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Map className="h-8 w-8 text-primary" />
-            PATCH 447 - Navigation Copilot
+            <Waves className="h-8 w-8 text-primary" />
+            PATCH 448 - Sonar AI
           </h1>
           <p className="text-muted-foreground mt-2">
-            Validação do sistema de navegação assistida por IA
+            Validação do sistema de classificação inteligente de sinais sonar
           </p>
         </div>
         {allChecked && (
@@ -48,88 +48,88 @@ export default function NavigationCopilotValidation() {
         <CardContent className="space-y-4">
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="map"
-              checked={checks.map}
+              id="model"
+              checked={checks.model}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, map: checked as boolean })
+                setChecks({ ...checks, model: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="map"
+                htmlFor="model"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Map className="inline h-4 w-4 mr-1" />
-                Mapa de navegação renderizado
+                <Brain className="inline h-4 w-4 mr-1" />
+                Modelo de IA carregado (simulado ou ONNX)
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Interface de mapa interativo funcionando corretamente
+                Sistema de IA inicializado e pronto para uso
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="suggestions"
-              checked={checks.suggestions}
+              id="processing"
+              checked={checks.processing}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, suggestions: checked as boolean })
+                setChecks({ ...checks, processing: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="suggestions"
+                htmlFor="processing"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Route className="inline h-4 w-4 mr-1" />
-                Sugestões de rota geradas
+                <Waves className="inline h-4 w-4 mr-1" />
+                Sinais processados corretamente
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                IA gerando recomendações inteligentes de rotas
+                Dados sonar sendo analisados pelo sistema
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="weather"
-              checked={checks.weather}
+              id="classification"
+              checked={checks.classification}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, weather: checked as boolean })
+                setChecks({ ...checks, classification: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="weather"
+                htmlFor="classification"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Cloud className="inline h-4 w-4 mr-1" />
-                Dados climáticos considerados
+                <BarChart3 className="inline h-4 w-4 mr-1" />
+                Classificações exibidas
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Integração com dados meteorológicos ativa
+                Resultados de classificação visíveis na interface
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="logs"
-              checked={checks.logs}
+              id="persistence"
+              checked={checks.persistence}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, logs: checked as boolean })
+                setChecks({ ...checks, persistence: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="logs"
+                htmlFor="persistence"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
                 <Database className="inline h-4 w-4 mr-1" />
-                Logs de rota no banco
+                Resultados salvos
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Histórico de navegação persistido corretamente
+                Classificações persistidas no banco de dados
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function NavigationCopilotValidation() {
         </CardHeader>
         <CardContent>
           <p className="font-medium">
-            ✅ Navegação assistida com AI operante
+            ✅ Classificação inteligente ativa
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             Todos os checkboxes acima devem estar marcados para aprovação

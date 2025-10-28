@@ -1,19 +1,19 @@
 /**
- * PATCH 447 - Navigation Copilot Validation
+ * PATCH 446 - Crew Consolidation Validation
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Map, Route, Cloud, Database } from "lucide-react";
+import { CheckCircle2, Users, Award, Calendar, FileText } from "lucide-react";
 import { useState } from "react";
 
-export default function NavigationCopilotValidation() {
+export default function CrewConsolidationValidation() {
   const [checks, setChecks] = useState({
-    map: false,
-    suggestions: false,
-    weather: false,
-    logs: false,
+    unified: false,
+    certifications: false,
+    reviews: false,
+    noDuplicates: false,
   });
 
   const allChecked = Object.values(checks).every(Boolean);
@@ -23,11 +23,11 @@ export default function NavigationCopilotValidation() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Map className="h-8 w-8 text-primary" />
-            PATCH 447 - Navigation Copilot
+            <Users className="h-8 w-8 text-primary" />
+            PATCH 446 - Crew Consolidation
           </h1>
           <p className="text-muted-foreground mt-2">
-            Validação do sistema de navegação assistida por IA
+            Validação do módulo unificado de gestão de tripulação
           </p>
         </div>
         {allChecked && (
@@ -48,88 +48,88 @@ export default function NavigationCopilotValidation() {
         <CardContent className="space-y-4">
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="map"
-              checked={checks.map}
+              id="unified"
+              checked={checks.unified}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, map: checked as boolean })
+                setChecks({ ...checks, unified: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="map"
+                htmlFor="unified"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Map className="inline h-4 w-4 mr-1" />
-                Mapa de navegação renderizado
+                <Users className="inline h-4 w-4 mr-1" />
+                Apenas um módulo /crew-management ativo
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Interface de mapa interativo funcionando corretamente
+                Módulo único consolidado sem duplicações
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="suggestions"
-              checked={checks.suggestions}
+              id="certifications"
+              checked={checks.certifications}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, suggestions: checked as boolean })
+                setChecks({ ...checks, certifications: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="suggestions"
+                htmlFor="certifications"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Route className="inline h-4 w-4 mr-1" />
-                Sugestões de rota geradas
+                <Award className="inline h-4 w-4 mr-1" />
+                Certificações e escalas funcionando
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                IA gerando recomendações inteligentes de rotas
+                Sistema de certificações e rotações operacional
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="weather"
-              checked={checks.weather}
+              id="reviews"
+              checked={checks.reviews}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, weather: checked as boolean })
+                setChecks({ ...checks, reviews: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="weather"
+                htmlFor="reviews"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Cloud className="inline h-4 w-4 mr-1" />
-                Dados climáticos considerados
+                <Calendar className="inline h-4 w-4 mr-1" />
+                Histórico de reviews disponível
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Integração com dados meteorológicos ativa
+                Avaliações de performance acessíveis e organizadas
               </p>
             </div>
           </div>
 
           <div className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors">
             <Checkbox
-              id="logs"
-              checked={checks.logs}
+              id="noDuplicates"
+              checked={checks.noDuplicates}
               onCheckedChange={(checked) =>
-                setChecks({ ...checks, logs: checked as boolean })
+                setChecks({ ...checks, noDuplicates: checked as boolean })
               }
             />
             <div className="flex-1">
               <label
-                htmlFor="logs"
+                htmlFor="noDuplicates"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
               >
-                <Database className="inline h-4 w-4 mr-1" />
-                Logs de rota no banco
+                <FileText className="inline h-4 w-4 mr-1" />
+                Nenhum código duplicado
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Histórico de navegação persistido corretamente
+                Código limpo sem duplicações ou redundâncias
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function NavigationCopilotValidation() {
         </CardHeader>
         <CardContent>
           <p className="font-medium">
-            ✅ Navegação assistida com AI operante
+            ✅ Módulo unificado e funcional
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             Todos os checkboxes acima devem estar marcados para aprovação
