@@ -220,6 +220,10 @@ const AnalyticsCoreModule = React.lazy(() => import("@/modules/intelligence/anal
 const VoiceAssistantModule = React.lazy(() => import("@/modules/assistants/voice-assistant"));
 const NotificationsCenterModule = React.lazy(() => import("@/modules/connectivity/notifications-center"));
 const AIModulesStatus = React.lazy(() => import("@/pages/AIModulesStatus"));
+// PATCH 406: Consolidated Crew Management
+const CrewManagement = React.lazy(() => import("@/modules/crew-management"));
+// PATCH 407: Sonar AI Module
+const SonarAI = React.lazy(() => import("@/modules/sonar-ai"));
 
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
@@ -564,6 +568,15 @@ function App() {
                       <Route path="/voice-assistant" element={<VoiceAssistantModule />} />
                       <Route path="/notifications-center" element={<NotificationsCenterModule />} />
                       <Route path="/notifications" element={<NotificationsCenterModule />} />
+                      
+                      {/* PATCH 406: Consolidated Crew Management */}
+                      <Route path="/crew-management" element={<CrewManagement />} />
+                      {/* Legacy crew redirects */}
+                      <Route path="/crew" element={<CrewManagement />} />
+                      <Route path="/operations/crew" element={<CrewManagement />} />
+                      
+                      {/* PATCH 407: Sonar AI Module */}
+                      <Route path="/sonar-ai" element={<SonarAI />} />
                       
                       {/* Portuguese Module Routes with English Aliases */}
                       <Route path="/comunicacao" element={<Communication />} />
