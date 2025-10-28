@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Eye, FileDown, FileText } from "lucide-react";
 import jsPDF from "jspdf";
 import { useToast } from "@/hooks/use-toast";
+import { escapeRegexSpecialChars } from "../services/template-utils";
 
 interface TemplatePreviewProps {
   templateContent: string;
@@ -31,9 +32,10 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
   const updatePreview = () => {
     let content = templateContent;
     
-    // Replace all variables with their values
+    // Replace all variables with their values using utility function
     Object.entries(variableValues).forEach(([key, value]) => {
-      const regex = new RegExp(`{{${key}}}`, "g");
+      const escapedKey = escapeRegexSpecialChars(key);
+      const regex = new RegExp(`{{${escapedKey}}}`, "g");
       content = content.replace(regex, value || `<span style="color: red;">{{${key}}}</span>`);
     });
     
@@ -44,10 +46,10 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
     try {
       const doc = new jsPDF();
       
-      // Convert HTML to plain text for PDF (simple version)
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = previewContent;
-      const text = tempDiv.textContent || tempDiv.innerText || "";
+      // Use DOMParser to safely parse HTML
+      const parser = new DOMParser();
+      const htmlDoc = parser.parseFromString(previewContent, "text/html");
+      const text = htmlDoc.body.textContent || "";
       
       // Split text into lines that fit the PDF page
       const lines = doc.splitTextToSize(text, 180);

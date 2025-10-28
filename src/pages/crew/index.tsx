@@ -3,7 +3,7 @@
  * Unified crew management with performance, certifications, and mobile support
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -130,6 +130,21 @@ export const ConsolidatedCrewManagement = () => {
   };
 
   const stats = getCrewStats();
+
+  // Memoize certification expiry data to avoid recalculation
+  const certificationsWithExpiry = useMemo(() => {
+    return certifications.map(cert => {
+      const daysUntilExpiry = Math.floor(
+        (new Date(cert.expiry_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+      );
+      return {
+        ...cert,
+        daysUntilExpiry,
+        isExpiring: daysUntilExpiry <= 30 && daysUntilExpiry > 0,
+        isExpired: daysUntilExpiry <= 0
+      };
+    });
+  }, [certifications]);
 
   const filteredCrew = crewMembers.filter(member =>
     member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -290,46 +305,38 @@ export const ConsolidatedCrewManagement = () => {
                   <p>No certifications found</p>
                 </div>
               ) : (
-                certifications.map((cert) => {
-                  const daysUntilExpiry = Math.floor(
-                    (new Date(cert.expiry_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-                  );
-                  const isExpiring = daysUntilExpiry <= 30 && daysUntilExpiry > 0;
-                  const isExpired = daysUntilExpiry <= 0;
-
-                  return (
-                    <Card key={cert.id}>
-                      <CardContent className="pt-6">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h3 className="font-semibold">{cert.certification_name}</h3>
-                            <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                              <span>
-                                <Calendar className="inline w-3 h-3 mr-1" />
-                                Issued: {new Date(cert.issue_date).toLocaleDateString()}
-                              </span>
-                              <span>
-                                Expires: {new Date(cert.expiry_date).toLocaleDateString()}
-                              </span>
-                            </div>
+                certificationsWithExpiry.map((cert) => (
+                  <Card key={cert.id}>
+                    <CardContent className="pt-6">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-semibold">{cert.certification_name}</h3>
+                          <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                            <span>
+                              <Calendar className="inline w-3 h-3 mr-1" />
+                              Issued: {new Date(cert.issue_date).toLocaleDateString()}
+                            </span>
+                            <span>
+                              Expires: {new Date(cert.expiry_date).toLocaleDateString()}
+                            </span>
                           </div>
-                          <Badge
-                            variant="outline"
-                            className={
-                              isExpired
-                                ? "bg-red-500/20 text-red-400 border-red-500/30"
-                                : isExpiring
-                                ? "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
-                                : "bg-green-500/20 text-green-400 border-green-500/30"
-                            }
-                          >
-                            {isExpired ? "Expired" : isExpiring ? "Expiring Soon" : "Valid"}
-                          </Badge>
                         </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })
+                        <Badge
+                          variant="outline"
+                          className={
+                            cert.isExpired
+                              ? "bg-red-500/20 text-red-400 border-red-500/30"
+                              : cert.isExpiring
+                              ? "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+                              : "bg-green-500/20 text-green-400 border-green-500/30"
+                          }
+                        >
+                          {cert.isExpired ? "Expired" : cert.isExpiring ? "Expiring Soon" : "Valid"}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
               )}
             </div>
           </ScrollArea>

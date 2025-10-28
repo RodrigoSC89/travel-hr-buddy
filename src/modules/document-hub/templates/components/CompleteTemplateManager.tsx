@@ -15,6 +15,7 @@ import { TemplateEditor } from "./TemplateEditor";
 import { TemplatePreview } from "./TemplatePreview";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { extractTemplateVariables } from "../services/template-utils";
 
 const commonVariables = [
   "company_name",
@@ -55,9 +56,8 @@ export const CompleteTemplateManager = () => {
 
     setSaving(true);
     try {
-      // Extract variables from content
-      const variableMatches = templateContent.match(/{{([^}]+)}}/g) || [];
-      const variables = variableMatches.map(v => v.replace(/{{|}}/g, ""));
+      // Extract variables from content using utility function
+      const variables = extractTemplateVariables(templateContent);
 
       const { error } = await supabase.from("templates").insert({
         name: templateName,

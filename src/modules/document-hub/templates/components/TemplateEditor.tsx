@@ -41,6 +41,8 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   placeholder = "Start typing your template...",
   variables = []
 }) => {
+  const [charCount, setCharCount] = useState({ characters: 0, words: 0 });
+  
   const editor = useEditor({
     extensions: [StarterKit],
     content: initialContent,
@@ -48,6 +50,12 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       if (onChange) {
         onChange(editor.getHTML());
       }
+      // Update character and word count manually
+      const text = editor.getText();
+      setCharCount({
+        characters: text.length,
+        words: text.split(/\s+/).filter(word => word.length > 0).length
+      });
     },
     editorProps: {
       attributes: {
@@ -224,12 +232,8 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 
         {/* Editor Info */}
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div>
-            {editor.storage.characterCount?.characters() || 0} characters
-          </div>
-          <div>
-            {editor.storage.characterCount?.words() || 0} words
-          </div>
+          <div>{charCount.characters} characters</div>
+          <div>{charCount.words} words</div>
         </div>
       </CardContent>
     </Card>
