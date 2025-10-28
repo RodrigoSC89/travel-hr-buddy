@@ -258,8 +258,7 @@ function App() {
     // PATCH 85.0 - Iniciar System Watchdog automaticamente
     systemWatchdog.start();
     
-    // PATCH 371 - Initialize Web Vitals monitoring
-    webVitalsService.getInstance();
+    // PATCH 371 - Web Vitals monitoring initialized via service export
     
     return () => {
       systemWatchdog.stop();

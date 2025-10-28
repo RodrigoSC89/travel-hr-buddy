@@ -63,21 +63,11 @@ export class WebVitalsService {
       const { error } = await supabase
         .from('performance_metrics')
         .insert({
-          system_name: 'web_vitals',
+          category: 'web_vitals',
           metric_name: metric.name,
           metric_value: metric.value,
           metric_unit: this.getMetricUnit(metric.name),
           status: this.getStatusFromRating(metric.rating),
-          source: 'browser',
-          metadata: {
-            session_id: this.sessionId,
-            page_url: this.pageUrl,
-            rating: metric.rating,
-            delta: metric.delta,
-            navigation_type: metric.navigationType,
-            metric_id: metric.id,
-            timestamp: new Date().toISOString()
-          }
         });
       
       if (error) {
@@ -116,38 +106,11 @@ export class WebVitalsService {
   }
   
   private checkForDegradation(metric: WebVitalsData) {
+    // Log warnings for degraded performance
     if (metric.rating === 'poor') {
-      this.createAlert(metric, 'critical');
+      console.warn(`🔴 Critical performance issue: ${metric.name} = ${metric.value.toFixed(2)}${this.getMetricUnit(metric.name)} on ${this.pageUrl}`);
     } else if (metric.rating === 'needs-improvement') {
-      this.createAlert(metric, 'warning');
-    }
-  }
-  
-  private async createAlert(metric: WebVitalsData, severity: 'warning' | 'critical') {
-    try {
-      const message = `${metric.name} performance ${severity === 'critical' ? 'critically degraded' : 'needs improvement'}: ${metric.value.toFixed(2)}${this.getMetricUnit(metric.name)} on ${this.pageUrl}`;
-      
-      const { error } = await supabase
-        .from('performance_alerts')
-        .insert({
-          system_name: 'web_vitals',
-          alert_type: 'threshold_exceeded',
-          severity,
-          message,
-          metadata: {
-            metric_name: metric.name,
-            metric_value: metric.value,
-            rating: metric.rating,
-            page_url: this.pageUrl,
-            session_id: this.sessionId
-          }
-        });
-      
-      if (error) {
-        console.error('Error creating performance alert:', error);
-      }
-    } catch (error) {
-      console.error('Failed to create alert:', error);
+      console.warn(`🟡 Performance needs improvement: ${metric.name} = ${metric.value.toFixed(2)}${this.getMetricUnit(metric.name)} on ${this.pageUrl}`);
     }
   }
   
