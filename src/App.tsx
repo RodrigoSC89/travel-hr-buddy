@@ -166,6 +166,7 @@ const CrewDossierPage = React.lazy(() => import("@/pages/CrewDossier"));
 const ChannelManagerHub = React.lazy(() => import("@/components/channel-manager/ChannelManagerHub"));
 const TrainingAcademyHub = React.lazy(() => import("@/components/academy/TrainingAcademy"));
 const CrewWellbeingNew = React.lazy(() => import("@/components/crew-wellbeing/CrewWellbeingHub"));
+const ConsolidatedCrew = React.lazy(() => import("@/pages/crew"));
 const SGSOManagerPage = React.lazy(() => import("@/components/sgso/SGSOManager"));
 
 // New Module Imports - PATCH 66.0 Updated Paths
@@ -397,6 +398,8 @@ function App() {
                       <Route path="/voice" element={<Voice />} />
                       <Route path="/portal" element={<Portal />} />
                       <Route path="/crew-dossier" element={<CrewDossierPage />} />
+                      <Route path="/crew" element={<ConsolidatedCrew />} />
+                      <Route path="/hr/crew" element={<ConsolidatedCrew />} />
                       <Route path="/channel-manager-new" element={<ChannelManagerHub />} />
                       <Route path="/academy-new" element={<TrainingAcademyHub />} />
                       <Route path="/crew-wellbeing-new" element={<CrewWellbeingNew />} />
