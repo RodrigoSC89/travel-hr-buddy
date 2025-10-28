@@ -316,9 +316,9 @@ Risk Score: 0-100
 
 ### Security
 - Row Level Security (RLS) enabled on all tables
-- Policies for authenticated users
-- Read, insert, and update permissions
-- User-based access control ready for refinement
+- Policies for authenticated users (read, insert, and update permissions)
+- **Production Note**: Current policies allow all authenticated users broad access. These should be refined with proper user-based restrictions (e.g., based on roles, ownership, team membership) before production deployment for enhanced security.
+- User-based access control framework ready for refinement
 
 ### Performance
 - Indexes on frequently queried columns
