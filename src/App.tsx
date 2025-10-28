@@ -23,6 +23,9 @@ const Travel = lazyWithPreload(() => import("@/pages/Travel"));
 // Páginas secundárias - carregamento normal
 const PriceAlerts = React.lazy(() => import("@/modules/features/price-alerts"));
 const PriceAlertsValidation = React.lazy(() => import("@/pages/admin/price-alerts/validation"));
+const CrewValidation = React.lazy(() => import("@/pages/admin/crew/validation"));
+const IntegrationsValidation = React.lazy(() => import("@/pages/admin/integrations/validation"));
+const AnalyticsValidation = React.lazy(() => import("@/pages/admin/analytics/validation"));
 const Reports = React.lazy(() => import("@/pages/Reports"));
 const Reservations = React.lazy(() => import("@/pages/Reservations"));
 const ChecklistsInteligentes = React.lazy(() => import("@/pages/ChecklistsInteligentes"));
@@ -437,6 +440,10 @@ function App() {
                       <Route path="/admin/templates/editor" element={<TemplateEditorPage />} />
                       <Route path="/admin/templates/validation" element={<TemplateValidationPage />} />
                       <Route path="/admin/crew/consolidation-validation" element={<CrewConsolidationValidationPage />} />
+                      <Route path="/admin/crew/validation" element={<CrewValidation />} />
+                      <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidation />} />
+                      <Route path="/admin/integrations/validation" element={<IntegrationsValidation />} />
+                      <Route path="/admin/analytics/validation" element={<AnalyticsValidation />} />
                       <Route path="/admin/document-hub/validation" element={<DocumentHubValidationPage />} />
                       <Route path="/admin/mission-control/validation" element={<MissionControlValidationPage />} />
                       <Route path="/admin/documentation/validation" element={<DocumentationValidationPage />} />
