@@ -210,9 +210,10 @@ const NotificationsCenterModule = React.lazy(() => import("@/modules/connectivit
 const AIModulesStatus = React.lazy(() => import("@/pages/AIModulesStatus"));
 
 // Loading component otimizado para offshore
-const LoadingSpinner = () => (
-  <OffshoreLoader module="Sistema" />
-);
+const LoadingSpinner = () => {
+  console.log("🔄 LoadingSpinner renderizado");
+  return <OffshoreLoader module="Sistema" />;
+};
 
 // Create QueryClient com configurações otimizadas para offshore
 const queryClient = new QueryClient({
@@ -262,18 +263,43 @@ const RedirectHandler = () => {
 function App() {
   // Initialize monitoring systems on app start
   useEffect(() => {
-    initializeMonitoring();
+    console.log("🚀 Nautilus One - Inicializando sistema...");
+    
+    try {
+      initializeMonitoring();
+      console.log("✅ Monitoring inicializado");
+    } catch (error) {
+      console.error("❌ Erro ao inicializar monitoring:", error);
+    }
     
     // PATCH 85.0 - Iniciar System Watchdog automaticamente
-    systemWatchdog.start();
+    try {
+      systemWatchdog.start();
+      console.log("✅ System Watchdog iniciado");
+    } catch (error) {
+      console.error("❌ Erro ao iniciar watchdog:", error);
+    }
     
-    // Preload módulos críticos durante idle time
-    preloadStrategy.idle(async () => {
-      await Dashboard.preload();
-      await Travel.preload();
-    });
+    // Preload módulos críticos durante idle time (simplificado)
+    try {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          console.log("⏳ Iniciando preload de módulos críticos...");
+          Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
+          Travel.preload().then(() => console.log("✅ Travel preloaded"));
+        });
+      } else {
+        setTimeout(() => {
+          console.log("⏳ Iniciando preload de módulos críticos (fallback)...");
+          Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
+          Travel.preload().then(() => console.log("✅ Travel preloaded"));
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("❌ Erro no preload:", error);
+    }
     
-    // PATCH 371 - Web Vitals monitoring initialized via service export
+    console.log("✅ App inicializado com sucesso");
     
     return () => {
       systemWatchdog.stop();
