@@ -56,7 +56,7 @@
     {
       "id": "documents",
       "name": "Documents AI",
-      "path": "/modules/documents/documents-ai",
+      "path": "/modules/document-hub",
       "route": "/documents",
       "status": "active",
       "category": "documents",
