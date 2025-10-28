@@ -3,6 +3,7 @@
  * Monitors satellite communication connectivity (Iridium, Starlink, etc.)
  * PATCH 171.0 - Enhanced with redundancy engine, fallback management, and alert handling
  * PATCH 420.0 - Interactive simulation with terminal interface and communication logging
+ * PATCH 442 - Added failover logging and diagnostic panel
  */
 
 import React, { useState, useEffect } from "react";
@@ -14,6 +15,7 @@ import { FallbackSimulator } from "./components/FallbackSimulator";
 import { FallbackStatus } from "./components/FallbackStatus";
 import { SatcomTerminal } from "./components/SatcomTerminal";
 import { CommunicationHistory } from "./components/CommunicationHistory";
+import { DiagnosticPanel } from "./components/DiagnosticPanel";
 import { useSatcomMonitor } from "./hooks/useSatcomMonitor";
 
 // Export new PATCH 171.0 modules
@@ -24,6 +26,10 @@ export { satcomWatchdogIntegration } from "./watchdog-integration";
 export type { SatcomStatusReport, SatcomHealthStatus } from "./satcom-status";
 export type { FallbackPolicy, FallbackEvent, FallbackState } from "./linkFallbackManager";
 export type { AlertConfig, SatcomAlert } from "./alertHandler";
+
+// Export PATCH 442 modules
+export { satcomFailoverService } from "./services/failover-service";
+export type { FailoverLogEntry, ConnectionStatus, CommunicationLog } from "./services/failover-service";
 
 export interface SatcomConnection {
   id: string;
@@ -205,6 +211,16 @@ const SatcomDashboard = () => {
         primaryConnection={primaryConnection}
         fallbackConnection={fallbackConnection}
         isFallbackActive={isFallbackActive}
+      />
+
+      {/* PATCH 442: Diagnostic Panel */}
+      <DiagnosticPanel
+        connections={monitoredConnections}
+        vesselId="vessel-001"
+        onTestComplete={() => {
+          // Reload any necessary data after test
+          console.log("Diagnostic test completed");
+        }}
       />
 
       {/* PATCH 420: Interactive Terminal and History */}
