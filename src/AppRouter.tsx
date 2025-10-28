@@ -60,6 +60,12 @@ const SGSOWorkflow = React.lazy(() => import("@/pages/sgso/SGSOWorkflow"));
 const LogisticsHub = React.lazy(() => import("@/pages/LogisticsHub"));
 const ChannelManager = React.lazy(() => import("@/pages/ChannelManager"));
 
+// 🔹 PATCH 331-335 - SGSO Audits, Vault AI, Weather, User Management, Logistics Hub
+const SGSOAudits = React.lazy(() => import("@/pages/admin/sgso/audits"));
+const VaultAI = React.lazy(() => import("@/modules/vault_ai/components/VaultVectorSearch"));
+const UserManagement = React.lazy(() => import("@/pages/admin/user-management"));
+const LogisticsHubAdmin = React.lazy(() => import("@/pages/admin/logistics-hub"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -104,6 +110,12 @@ export default function AppRouter() {
         <Route path="/fuel/optimize" element={<FuelOptimizer />} />
         <Route path="/logistics-hub" element={<LogisticsHub />} />
         <Route path="/channel-manager" element={<ChannelManager />} />
+        
+        {/* PATCH 331-335 Routes */}
+        <Route path="/admin/sgso/audits" element={<SGSOAudits />} />
+        <Route path="/vault-ai" element={<VaultAI />} />
+        <Route path="/admin/user-management" element={<UserManagement />} />
+        <Route path="/admin/logistics-hub" element={<LogisticsHubAdmin />} />
       </Routes>
     </Router>
   );
