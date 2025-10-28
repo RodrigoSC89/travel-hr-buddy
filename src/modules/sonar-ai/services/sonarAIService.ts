@@ -364,6 +364,90 @@ class SonarAIService {
       throw error;
     }
   }
+
+  /**
+   * Save AI analysis results to sonar_ai_results table (PATCH 448)
+   */
+  async saveAIAnalysis(
+    analysis: SonarAnalysis,
+    missionId?: string,
+    userId?: string
+  ): Promise<void> {
+    try {
+      const hazards = analysis.patterns
+        .filter((p) => p.type === "object" || p.type === "anomaly")
+        .map((p) => ({
+          type: p.type,
+          location: p.location,
+          confidence: p.confidence,
+          description: p.description,
+        }));
+
+      const safeZones = analysis.patterns
+        .filter((p) => p.type === "clear" && p.confidence > 70)
+        .map((p) => ({
+          location: p.location,
+          radius: 50, // meters
+        }));
+
+      const acousticSignatures = analysis.returns.slice(0, 20).map((ret) => ({
+        angle: ret.ping.angle,
+        distance: ret.ping.distance,
+        intensity: ret.ping.intensity,
+        material: ret.material,
+        echo_delay: ret.ping.echoDelay,
+      }));
+
+      const bathymetricData = analysis.returns.map((ret) => ({
+        angle: ret.ping.angle,
+        depth: ret.depth,
+        confidence: ret.confidence,
+      }));
+
+      const { error } = await supabase.from("sonar_ai_results").insert({
+        mission_id: missionId,
+        analysis_type: "acoustic_pattern_detection",
+        detected_patterns: analysis.patterns,
+        hazards_detected: hazards,
+        safe_zones: safeZones,
+        acoustic_signatures: acousticSignatures,
+        confidence_level: analysis.confidence || 80,
+        ai_model_version: "1.0.0",
+        processing_time_ms: 150,
+        recommendations: this.generateRecommendations(analysis),
+        bathymetric_data: bathymetricData,
+        scan_timestamp: new Date(analysis.timestamp).toISOString(),
+        user_id: userId,
+      });
+
+      if (error) throw error;
+
+      logger.info("AI analysis saved to sonar_ai_results", { missionId });
+    } catch (error) {
+      logger.error("Failed to save AI analysis", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Generate recommendations based on analysis
+   */
+  private generateRecommendations(analysis: SonarAnalysis): string {
+    const hazards = analysis.patterns.filter(
+      (p) => p.type === "object" || p.type === "anomaly"
+    );
+    const clearAreas = analysis.patterns.filter((p) => p.type === "clear");
+
+    if (hazards.length > 3) {
+      return "High hazard density detected. Recommend reducing speed and increasing scan frequency. Consider alternative route.";
+    } else if (hazards.length > 0) {
+      return `${hazards.length} potential hazard(s) detected. Monitor closely and maintain safe distance.`;
+    } else if (clearAreas.length > 10) {
+      return "Clear navigation area confirmed. Safe to proceed at planned speed.";
+    }
+
+    return "Normal sonar returns. Continue standard monitoring procedures.";
+  }
 }
 
 export const sonarAIService = new SonarAIService();
