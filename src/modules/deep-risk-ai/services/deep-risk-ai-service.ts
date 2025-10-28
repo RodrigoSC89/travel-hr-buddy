@@ -128,11 +128,17 @@ export class DeepRiskAIService {
     }
   }
 
-  async getHistoricalData(source: string, days: number = 30): Promise<any[]> {
+  async getHistoricalData(source: string, days: number = 30): Promise<HistoricalDataPoint[]> {
     // Simulate fetching historical data from performance-monitor
     console.log(`Fetching ${days} days of data from ${source}`);
     return [];
   }
+}
+
+interface HistoricalDataPoint {
+  timestamp: string;
+  value: number;
+  metadata?: Record<string, any>;
 }
 
 export const deepRiskAIService = new DeepRiskAIService();

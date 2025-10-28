@@ -2,7 +2,7 @@
  * PATCH 455 - Risk Timeline Component
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Anomaly, RiskPrediction } from "../types";
@@ -13,10 +13,12 @@ interface Props {
 }
 
 export const RiskTimeline: React.FC<Props> = ({ anomalies, predictions }) => {
-  const events = [
-    ...anomalies.map(a => ({ type: "anomaly", time: a.detectedAt, data: a })),
-    ...predictions.map(p => ({ type: "prediction", time: p.predictedAt, data: p }))
-  ].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+  const events = useMemo(() => {
+    return [
+      ...anomalies.map(a => ({ type: "anomaly" as const, time: a.detectedAt, data: a })),
+      ...predictions.map(p => ({ type: "prediction" as const, time: p.predictedAt, data: p }))
+    ].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+  }, [anomalies, predictions]);
 
   return (
     <Card>

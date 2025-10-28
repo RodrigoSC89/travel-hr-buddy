@@ -10,7 +10,6 @@ import type { Anomaly } from "../types";
 
 interface Props {
   anomalies: Anomaly[];
-  onRefresh: () => void;
 }
 
 export const AnomalyDetection: React.FC<Props> = ({ anomalies }) => {

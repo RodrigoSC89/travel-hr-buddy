@@ -10,7 +10,6 @@ import type { RiskPrediction } from "../types";
 
 interface Props {
   predictions: RiskPrediction[];
-  onRefresh: () => void;
 }
 
 export const RiskPredictions: React.FC<Props> = ({ predictions }) => {

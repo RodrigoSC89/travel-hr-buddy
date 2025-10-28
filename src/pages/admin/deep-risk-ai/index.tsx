@@ -163,7 +163,6 @@ const DeepRiskAIPage: React.FC = () => {
         <TabsContent value="anomalies" className="space-y-4">
           <AnomalyDetection 
             anomalies={anomalies}
-            onRefresh={loadData}
           />
         </TabsContent>
 
@@ -177,7 +176,6 @@ const DeepRiskAIPage: React.FC = () => {
         <TabsContent value="predictions" className="space-y-4">
           <RiskPredictions 
             predictions={predictions}
-            onRefresh={loadData}
           />
         </TabsContent>
       </Tabs>
