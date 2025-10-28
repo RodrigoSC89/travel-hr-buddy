@@ -77,6 +77,9 @@ const Documents = React.lazy(() => import("@/pages/Documents"));
 const UnderwaterDrone = React.lazy(() => import("@/modules/underwater-drone"));
 const NavigationCopilotPage = React.lazy(() => import("@/pages/NavigationCopilot"));
 
+// 🔹 PATCH 467 - Drone Commander (Experimental)
+const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -138,6 +141,9 @@ export default function AppRouter() {
         <Route path="/documents" element={<Documents />} />
         <Route path="/underwater-drone" element={<UnderwaterDrone />} />
         <Route path="/navigation-copilot" element={<NavigationCopilotPage />} />
+        
+        {/* PATCH 467 Route - Drone Commander */}
+        <Route path="/drone-commander" element={<DroneCommander />} />
       </Routes>
     </Router>
   );
