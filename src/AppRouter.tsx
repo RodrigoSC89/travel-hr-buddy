@@ -66,6 +66,12 @@ const VaultAI = React.lazy(() => import("@/modules/vault_ai/components/VaultVect
 const UserManagement = React.lazy(() => import("@/pages/admin/user-management"));
 const LogisticsHubAdmin = React.lazy(() => import("@/pages/admin/logistics-hub"));
 
+// 🔹 PATCH 411-415 - Price Alerts, Unified Logs, Coordination AI, Experimental Modules
+const PriceAlerts = React.lazy(() => import("@/pages/PriceAlerts"));
+const UnifiedLogs = React.lazy(() => import("@/pages/UnifiedLogs"));
+const CoordinationAI = React.lazy(() => import("@/pages/CoordinationAI"));
+const ExperimentalModules = React.lazy(() => import("@/pages/ExperimentalModules"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -116,6 +122,12 @@ export default function AppRouter() {
         <Route path="/vault-ai" element={<VaultAI />} />
         <Route path="/admin/user-management" element={<UserManagement />} />
         <Route path="/admin/logistics-hub" element={<LogisticsHubAdmin />} />
+        
+        {/* PATCH 411-415 Routes */}
+        <Route path="/price-alerts" element={<PriceAlerts />} />
+        <Route path="/unified-logs" element={<UnifiedLogs />} />
+        <Route path="/coordination-ai" element={<CoordinationAI />} />
+        <Route path="/experimental-modules" element={<ExperimentalModules />} />
       </Routes>
     </Router>
   );
