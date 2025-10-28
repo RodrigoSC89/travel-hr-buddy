@@ -19,12 +19,12 @@ import {
   TrendingUp,
   RefreshCw
 } from "lucide-react";
-import { SensorPanel } from "./components/SensorPanel";
-import { SensorAlerts } from "./components/SensorAlerts";
-import { SensorHistory } from "./components/SensorHistory";
-import { sensorsService } from "./services/sensors-service";
-import { sensorSimulator } from "./services/sensor-simulator";
-import type { SensorReading, SensorAlert } from "./types";
+import { SensorPanel } from "@/modules/sensors-hub/components/SensorPanel";
+import { SensorAlerts } from "@/modules/sensors-hub/components/SensorAlerts";
+import { SensorHistory } from "@/modules/sensors-hub/components/SensorHistory";
+import { sensorsService } from "@/modules/sensors-hub/services/sensors-service";
+import { sensorSimulator } from "@/modules/sensors-hub/services/sensor-simulator";
+import type { SensorReading, SensorAlert } from "@/modules/sensors-hub/types";
 
 const SensorsHubPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -91,7 +91,10 @@ const SensorsHubPage: React.FC = () => {
     if (reading.value > reading.maxThreshold || reading.value < reading.minThreshold) {
       return "critical";
     }
-    if (reading.value > reading.maxThreshold * 0.9 || reading.value < reading.minThreshold * 1.1) {
+    // Warning if approaching thresholds (within 10% margin)
+    const upperWarning = reading.maxThreshold * 0.9;
+    const lowerWarning = reading.minThreshold * 1.1;
+    if (reading.value > upperWarning || reading.value < lowerWarning) {
       return "warning";
     }
     return "normal";
