@@ -11,6 +11,7 @@ import { initializeMonitoring } from "@/lib/monitoring/init";
 import { CommandPalette } from "@/components/CommandPalette";
 import { OfflineBanner } from "@/components/OfflineBanner";
 import { systemWatchdog } from "@/ai/watchdog";
+import { webVitalsService } from "@/services/web-vitals-service";
 // Removed safeLazyImport - using React.lazy directly
 
 // Lazy load all pages
@@ -128,6 +129,9 @@ const IMCAAudit = React.lazy(() => import("@/pages/IMCAAudit"));
 const Simulations = React.lazy(() => import("@/pages/admin/simulations"));
 const CronMonitor = React.lazy(() => import("@/pages/admin/cron-monitor"));
 const TrainingManagement = React.lazy(() => import("@/pages/admin/training"));
+const TrainingAcademyAdmin = React.lazy(() => import("@/pages/admin/training-academy"));
+const IncidentsPage = React.lazy(() => import("@/pages/admin/incidents"));
+const PerformanceDashboard = React.lazy(() => import("@/pages/admin/performance-dashboard"));
 const BackupAudit = React.lazy(() => import("@/pages/BackupAudit"));
 const RiskAudit = React.lazy(() => import("@/pages/admin/risk-audit"));
 const CertViewer = React.lazy(() => import("@/components/cert/CertViewer"));
@@ -249,6 +253,9 @@ function App() {
     
     // PATCH 85.0 - Iniciar System Watchdog automaticamente
     systemWatchdog.start();
+    
+    // PATCH 371 - Initialize Web Vitals monitoring
+    webVitalsService.getInstance();
     
     return () => {
       systemWatchdog.stop();
@@ -397,6 +404,9 @@ function App() {
                       <Route path="/admin/simulations" element={<Simulations />} />
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
+                      <Route path="/admin/training-academy" element={<TrainingAcademyAdmin />} />
+                      <Route path="/admin/incidents" element={<IncidentsPage />} />
+                      <Route path="/admin/performance-dashboard" element={<PerformanceDashboard />} />
                       <Route path="/developer/module-health" element={<ModuleHealth />} />
                       <Route path="/developer/watchdog" element={<WatchdogMonitor />} />
                       <Route path="/developer/ai-modules-status" element={<AIModulesStatus />} />
