@@ -21,11 +21,11 @@ import {
   AlertTriangle,
   Calendar
 } from "lucide-react";
-import { DroneControlPanel } from "./components/DroneControlPanel";
-import { DroneMap } from "./components/DroneMap";
-import { FlightScheduler } from "./components/FlightScheduler";
-import { droneCommanderService } from "./services/drone-service";
-import type { DroneStatus, DroneFlight } from "./types";
+import { DroneControlPanel } from "@/modules/drone-commander/components/DroneControlPanel";
+import { DroneMap } from "@/modules/drone-commander/components/DroneMap";
+import { FlightScheduler } from "@/modules/drone-commander/components/FlightScheduler";
+import { droneCommanderService } from "@/modules/drone-commander/services/drone-service";
+import type { DroneStatus, DroneFlight } from "@/modules/drone-commander/types";
 
 const DroneCommanderPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("control");
