@@ -126,7 +126,6 @@ export const AnalyticsDashboardV2 = () => {
       <Card>
         <CardHeader>
           <CardTitle>Visualizações de Página - Últimos 60 Minutos</CardTitle>
-        </CardTitle>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>

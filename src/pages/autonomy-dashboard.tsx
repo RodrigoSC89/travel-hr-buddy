@@ -3,7 +3,8 @@
  * Autonomous task management and monitoring
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tantml:function_calls>import { Check, X, Play, Settings, Brain } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Check, X, Play, Settings, Brain } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
