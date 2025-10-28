@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, X, AlertCircle, FileText, Download, Database, Variable } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { templateVariablesService } from "../services/template-variables-service";
+import { templateVariablesService } from "@/modules/document-hub/templates/services/template-variables-service";
 import html2pdf from "html2pdf.js";
 
 interface ValidationResult {
