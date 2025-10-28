@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -38,7 +37,7 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
     );
 
-    // Get user email
+    // Get user email and preferences
     const { data: userData, error: userError } = await supabaseClient.auth.admin.getUserById(user_id);
     
     if (userError || !userData) {
@@ -47,6 +46,10 @@ serve(async (req) => {
 
     const userEmail = userData.user.email;
     const savings = target_price - current_price;
+    
+    // Get currency from user metadata or default to BRL
+    const currency = userData.user.user_metadata?.currency || "BRL";
+    const currencySymbol = currency === "BRL" ? "R$" : currency === "USD" ? "$" : "€";
 
     // Send email notification if requested
     if (notification_type === "email" || notification_type === "both") {
@@ -84,15 +87,15 @@ serve(async (req) => {
                     <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
                       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                         <span style="color: #666;">Current Price:</span>
-                        <span style="font-size: 24px; font-weight: bold; color: #10b981;">R$ ${current_price.toFixed(2)}</span>
+                        <span style="font-size: 24px; font-weight: bold; color: #10b981;">${currencySymbol} ${current_price.toFixed(2)}</span>
                       </div>
                       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                         <span style="color: #666;">Target Price:</span>
-                        <span style="font-size: 18px; color: #6b7280;">R$ ${target_price.toFixed(2)}</span>
+                        <span style="font-size: 18px; color: #6b7280;">${currencySymbol} ${target_price.toFixed(2)}</span>
                       </div>
                       <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 2px solid #e5e7eb;">
                         <span style="color: #666; font-weight: bold;">Your Savings:</span>
-                        <span style="font-size: 20px; font-weight: bold; color: #10b981;">R$ ${savings.toFixed(2)}</span>
+                        <span style="font-size: 20px; font-weight: bold; color: #10b981;">${currencySymbol} ${savings.toFixed(2)}</span>
                       </div>
                     </div>
                     
@@ -138,7 +141,7 @@ serve(async (req) => {
       console.log("Push notification would be sent:", {
         user_id,
         title: `🎯 Price Alert: ${product_name}`,
-        body: `Price dropped to R$ ${current_price.toFixed(2)}! You save R$ ${savings.toFixed(2)}`,
+        body: `Price dropped to ${currencySymbol} ${current_price.toFixed(2)}! You save ${currencySymbol} ${savings.toFixed(2)}`,
         data: {
           alert_id,
           product_url,
@@ -146,13 +149,8 @@ serve(async (req) => {
         },
       });
 
-      // Create a notification record in the database
-      await supabaseClient.from("price_notifications").insert({
-        user_id,
-        alert_id,
-        message: `Price Alert: ${product_name} is now R$ ${current_price.toFixed(2)} (target: R$ ${target_price.toFixed(2)}). Save R$ ${savings.toFixed(2)}!`,
-        is_read: false,
-      });
+      // NOTE: In-app notification is already created by the database trigger
+      // We don't create it here to avoid duplicates
     }
 
     return new Response(

@@ -1,82 +1,7 @@
 -- Enhanced price alert notification trigger with email/push integration
+-- Uses queue-based approach for reliability
 
--- Update the notify_on_price_change function to call the edge function
-CREATE OR REPLACE FUNCTION notify_on_price_change_enhanced()
-RETURNS TRIGGER
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-DECLARE
-  alert_info RECORD;
-  notification_message TEXT;
-  notification_type TEXT;
-BEGIN
-  -- Get alert information
-  SELECT * INTO alert_info FROM public.price_alerts WHERE id = NEW.alert_id;
-  
-  -- Check if alert is active and price meets criteria
-  IF alert_info.is_active AND NEW.price <= alert_info.target_price THEN
-    notification_message := format(
-      'Price dropped! %s is now $%s (target: $%s)',
-      alert_info.product_name,
-      NEW.price::TEXT,
-      alert_info.target_price::TEXT
-    );
-    
-    -- Insert notification in database
-    INSERT INTO public.price_notifications (
-      user_id,
-      alert_id,
-      message,
-      is_read
-    ) VALUES (
-      alert_info.user_id,
-      alert_info.id,
-      notification_message,
-      false
-    );
-
-    -- Determine notification type based on user preferences
-    IF alert_info.notification_email AND alert_info.notification_push THEN
-      notification_type := 'both';
-    ELSIF alert_info.notification_email THEN
-      notification_type := 'email';
-    ELSIF alert_info.notification_push THEN
-      notification_type := 'push';
-    ELSE
-      notification_type := 'both'; -- Default to both if neither is explicitly set
-    END IF;
-
-    -- Call edge function to send email/push notifications (async, don't wait for result)
-    -- This uses pg_net extension if available, or stores in a queue table for processing
-    PERFORM net.http_post(
-      url := current_setting('app.settings.supabase_url', true) || '/functions/v1/send-price-alert-notification',
-      headers := jsonb_build_object(
-        'Content-Type', 'application/json',
-        'Authorization', 'Bearer ' || current_setting('app.settings.service_role_key', true)
-      ),
-      body := jsonb_build_object(
-        'alert_id', alert_info.id,
-        'user_id', alert_info.user_id,
-        'product_name', alert_info.product_name,
-        'current_price', NEW.price,
-        'target_price', alert_info.target_price,
-        'product_url', alert_info.product_url,
-        'notification_type', notification_type
-      )
-    );
-  END IF;
-  
-  RETURN NEW;
-EXCEPTION
-  WHEN OTHERS THEN
-    -- Log error but don't fail the transaction
-    RAISE WARNING 'Error in notify_on_price_change_enhanced: %', SQLERRM;
-    RETURN NEW;
-END;
-$$;
-
--- Alternative simpler version without pg_net (stores in queue table instead)
+-- Create queue table for async notification processing
 CREATE TABLE IF NOT EXISTS public.price_alert_notification_queue (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   alert_id UUID NOT NULL REFERENCES public.price_alerts(id) ON DELETE CASCADE,
@@ -101,7 +26,7 @@ FOR ALL
 TO service_role
 USING (true);
 
--- Simpler trigger function that uses queue table
+-- Trigger function that uses queue table for reliable async processing
 CREATE OR REPLACE FUNCTION notify_on_price_change_with_queue()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -138,6 +63,7 @@ BEGIN
     );
 
     -- Determine notification type based on user preferences
+    -- Only send if user has explicitly enabled at least one notification type
     IF alert_info.notification_email AND alert_info.notification_push THEN
       notification_type := 'both';
     ELSIF alert_info.notification_email THEN
@@ -145,10 +71,11 @@ BEGIN
     ELSIF alert_info.notification_push THEN
       notification_type := 'push';
     ELSE
-      notification_type := 'both'; -- Default to both
+      -- If user hasn't enabled any notifications, skip queueing
+      RETURN NEW;
     END IF;
 
-    -- Queue notification for async processing
+    -- Queue notification for async processing by edge function
     INSERT INTO public.price_alert_notification_queue (
       alert_id,
       user_id,
@@ -183,4 +110,4 @@ CREATE TRIGGER trigger_notify_on_price_change
 GRANT EXECUTE ON FUNCTION notify_on_price_change_with_queue() TO authenticated;
 
 COMMENT ON FUNCTION notify_on_price_change_with_queue() IS 'Queues email/push notifications when price alerts are triggered';
-COMMENT ON TABLE public.price_alert_notification_queue IS 'Queue for processing email and push notifications for price alerts';
+COMMENT ON TABLE public.price_alert_notification_queue IS 'Queue for processing email and push notifications for price alerts. Processed by edge function send-price-alert-notification';
