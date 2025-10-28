@@ -7,13 +7,8 @@
  * This file now redirects to the unified crew management module
  */
 
-// Redirect to consolidated crew module
-export { default } from "@/modules/crew";
-
-// Re-export for backward compatibility
-export { default as CrewModule } from "@/modules/crew";
-export { default as CrewManagement } from "@/modules/crew";
-export { default as CrewOperations } from "@/modules/crew";
+// Re-export named exports for backward compatibility
+export * from "@/modules/crew";
 
 /**
  * Migration Notice:
@@ -24,10 +19,10 @@ export { default as CrewOperations } from "@/modules/crew";
  * Please update your imports:
  * 
  * OLD (deprecated):
- *   import CrewModule from '@/modules/operations/crew'
+ *   import { ConsentScreen } from '@/modules/operations/crew'
  * 
  * NEW (recommended):
- *   import CrewManagement from '@/modules/crew'
+ *   import { ConsentScreen } from '@/modules/crew'
  * 
  * All functionality remains available through the consolidated module including:
  * - Crew member management and performance tracking
