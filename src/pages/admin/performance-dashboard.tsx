@@ -171,7 +171,7 @@ export default function PerformanceDashboard() {
     };
   };
 
-  const webVitalsMetrics = ['CLS', 'FID', 'FCP', 'LCP', 'TTFB', 'INP'];
+  const webVitalsMetrics = ['CLS', 'FCP', 'LCP', 'TTFB', 'INP'];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -339,7 +339,7 @@ export default function PerformanceDashboard() {
 
       {/* Charts */}
       <Tabs defaultValue="CLS">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-5">
           {webVitalsMetrics.map(metric => (
             <TabsTrigger key={metric} value={metric}>{metric}</TabsTrigger>
           ))}

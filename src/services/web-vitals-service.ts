@@ -1,5 +1,5 @@
 // Web Vitals Service - Collects and reports Web Vitals metrics
-import { onCLS, onFID, onFCP, onLCP, onTTFB, onINP, Metric } from 'web-vitals';
+import { onCLS, onFCP, onLCP, onTTFB, onINP, Metric } from 'web-vitals';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface WebVitalsData {
@@ -37,7 +37,6 @@ export class WebVitalsService {
   private initializeVitals() {
     // Collect all Web Vitals metrics
     onCLS(this.handleMetric.bind(this));
-    onFID(this.handleMetric.bind(this));
     onFCP(this.handleMetric.bind(this));
     onLCP(this.handleMetric.bind(this));
     onTTFB(this.handleMetric.bind(this));
@@ -93,7 +92,6 @@ export class WebVitalsService {
     switch (metricName) {
       case 'CLS':
         return 'score';
-      case 'FID':
       case 'FCP':
       case 'LCP':
       case 'TTFB':
