@@ -66,6 +66,11 @@ const VaultAI = React.lazy(() => import("@/modules/vault_ai/components/VaultVect
 const UserManagement = React.lazy(() => import("@/pages/admin/user-management"));
 const LogisticsHubAdmin = React.lazy(() => import("@/pages/admin/logistics-hub"));
 
+// 🔹 PATCH 401-405 - Templates Editor, Price Alerts, Sensor Hub
+const TemplatesEditor = React.lazy(() => import("@/pages/admin/templates"));
+const PriceAlerts = React.lazy(() => import("@/pages/admin/price-alerts"));
+const SensorsHub = React.lazy(() => import("@/pages/admin/sensors-hub"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -116,6 +121,11 @@ export default function AppRouter() {
         <Route path="/vault-ai" element={<VaultAI />} />
         <Route path="/admin/user-management" element={<UserManagement />} />
         <Route path="/admin/logistics-hub" element={<LogisticsHubAdmin />} />
+        
+        {/* PATCH 401-405 Routes */}
+        <Route path="/templates" element={<TemplatesEditor />} />
+        <Route path="/price-alerts" element={<PriceAlerts />} />
+        <Route path="/sensors-hub" element={<SensorsHub />} />
       </Routes>
     </Router>
   );
