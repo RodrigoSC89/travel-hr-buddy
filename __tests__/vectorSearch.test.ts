@@ -184,9 +184,13 @@ describe("Vector Search Service", () => {
       (supabase.from as any).mockImplementation(() => ({
         insert: vi.fn().mockReturnValue({
           select: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({
-              data: callCount++ === 0 ? { id: "success" } : null,
-              error: callCount > 1 ? new Error("Failed") : null,
+            single: vi.fn().mockImplementation(() => {
+              const isSuccess = callCount === 0;
+              callCount++;
+              return Promise.resolve({
+                data: isSuccess ? { id: `success-${callCount}` } : null,
+                error: isSuccess ? null : new Error("Failed"),
+              });
             }),
           }),
         }),
@@ -199,8 +203,9 @@ describe("Vector Search Service", () => {
 
       const ids = await vectorSearch.batchIndexDocuments(documents);
 
-      // Should continue even if one fails
-      expect(ids.length).toBeGreaterThanOrEqual(0);
+      // Should continue even if one fails (first succeeds, second fails)
+      expect(ids.length).toBe(1);
+      expect(ids[0]).toContain("success");
     });
   });
 });
