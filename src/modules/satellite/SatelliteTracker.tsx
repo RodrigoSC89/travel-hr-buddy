@@ -85,15 +85,23 @@ const SatelliteTracker = () => {
     fetchVessels();
     fetchSatelliteOrbits();
     
-    // Refresh every 5 minutes
+    // PATCH 495: Refresh every 15 seconds for real-time tracking
     const vesselInterval = setInterval(fetchVessels, 5 * 60 * 1000);
-    const satelliteInterval = setInterval(fetchSatelliteOrbits, 10 * 60 * 1000); // 10 minutes
+    const satelliteInterval = setInterval(fetchSatelliteOrbits, 15 * 1000); // 15 seconds
     
     return () => {
       clearInterval(vesselInterval);
       clearInterval(satelliteInterval);
     };
   }, []);
+
+  // PATCH 495: Filter state
+  const [typeFilter, setTypeFilter] = useState<string>("all");
+
+  // PATCH 495: Filter satellites by type
+  const filteredSatellites = typeFilter === "all" 
+    ? satelliteOrbits 
+    : satelliteOrbits.filter(sat => sat.type === typeFilter);
   const satelliteData = [
     {
       id: "sat-1",
@@ -243,8 +251,33 @@ const SatelliteTracker = () => {
         </Card>
       </div>
 
+      {/* PATCH 495: Satellite Type Filter */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Filtrar por Tipo</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-2 flex-wrap">
+            <Button
+              variant={typeFilter === "all" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setTypeFilter("all")}
+            >
+              Todos ({satelliteOrbits.length})
+            </Button>
+            <Button
+              variant={typeFilter === "communication" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setTypeFilter("communication")}
+            >
+              Comunicação ({satelliteOrbits.filter(s => s.type === "communication").length})
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Orbital Data Display */}
-      {satelliteOrbits.length > 0 && (
+      {filteredSatellites.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
