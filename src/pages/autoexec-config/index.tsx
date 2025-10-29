@@ -33,6 +33,7 @@ const AutoExecConfigDashboard: React.FC = () => {
     
     // Add example rules
     autoExecEngine.addRule({
+      enabled: true,
       triggerId: "trigger-failure",
       actionType: "restart_service",
       priority: 9,
@@ -49,6 +50,7 @@ const AutoExecConfigDashboard: React.FC = () => {
     });
 
     autoExecEngine.addRule({
+      enabled: true,
       triggerId: "trigger-threshold",
       actionType: "scale_resources",
       priority: 7,

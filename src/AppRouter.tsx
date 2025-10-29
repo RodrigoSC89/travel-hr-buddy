@@ -89,7 +89,7 @@ const Patches506510Validation = React.lazy(() => import("@/pages/admin/Patches50
 // 🔹 PATCH 511-515 - Observability, AI Supervision, Unified Logging, Auto-Execution, Governance
 const TelemetryDashboard = React.lazy(() => import("@/pages/telemetry-dashboard"));
 const SupervisorAI = React.lazy(() => import("@/pages/supervisor-ai"));
-const CentralLogs = React.lazy(() => import("@/pages/logs/central"));
+// const CentralLogs = React.lazy(() => import("@/pages/logs/central")); // TODO: Create this file
 const AutoExecConfig = React.lazy(() => import("@/pages/autoexec-config"));
 const GovernanceAI = React.lazy(() => import("@/pages/governance-ai"));
 
@@ -119,6 +119,11 @@ const Patch517CoordinationAI = React.lazy(() => import("@/pages/admin/Patch517Co
 const Patch518MissionEngine = React.lazy(() => import("@/pages/admin/Patch518MissionEngine"));
 const Patch519DeepRiskAI = React.lazy(() => import("@/pages/admin/Patch519DeepRiskAI"));
 const Patch520AIReplay = React.lazy(() => import("@/pages/admin/Patch520AIReplay"));
+const Patch511SatelliteTracker = React.lazy(() => import("@/pages/admin/Patch511SatelliteTracker"));
+const Patch512Satcom = React.lazy(() => import("@/pages/admin/Patch512Satcom"));
+const Patch513OceanSonar = React.lazy(() => import("@/pages/admin/Patch513OceanSonar"));
+const Patch514NavigationCopilot = React.lazy(() => import("@/pages/admin/Patch514NavigationCopilot"));
+const Patch515SensorsIntegration = React.lazy(() => import("@/pages/admin/Patch515SensorsIntegration"));
 const Patch526Communication = React.lazy(() => import("@/pages/admin/Patch526Communication"));
 const Patch527IncidentReports = React.lazy(() => import("@/pages/admin/Patch527IncidentReports"));
 const Patch528DocumentTemplates = React.lazy(() => import("@/pages/admin/Patch528DocumentTemplates"));
@@ -214,7 +219,7 @@ export default function AppRouter() {
         {/* PATCH 511-515 Routes - Observability & Governance */}
         <Route path="/telemetry-dashboard" element={<TelemetryDashboard />} />
         <Route path="/supervisor-ai" element={<SupervisorAI />} />
-        <Route path="/logs/central" element={<CentralLogs />} />
+        {/* <Route path="/logs/central" element={<CentralLogs />} /> */}
         <Route path="/autoexec-config" element={<AutoExecConfig />} />
         <Route path="/governance-ai" element={<GovernanceAI />} />
         
@@ -251,6 +256,11 @@ export default function AppRouter() {
             <Route path="/admin/patch-528/document-templates" element={<Patch528DocumentTemplates />} />
             <Route path="/admin/patch-529/price-alerts" element={<Patch529PriceAlerts />} />
             <Route path="/admin/patch-530/mission-control-v2" element={<Patch530MissionControlV2 />} />
+            <Route path="/admin/patch-511-satellite-tracker" element={<Patch511SatelliteTracker />} />
+            <Route path="/admin/patch-512-satcom" element={<Patch512Satcom />} />
+            <Route path="/admin/patch-513-ocean-sonar" element={<Patch513OceanSonar />} />
+            <Route path="/admin/patch-514-navigation-copilot" element={<Patch514NavigationCopilot />} />
+            <Route path="/admin/patch-515-sensors-integration" element={<Patch515SensorsIntegration />} />
       </Routes>
     </Router>
   );
