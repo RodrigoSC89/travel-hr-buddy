@@ -348,6 +348,13 @@ jobs:
 Health Score = (Test Success Rate × 0.4) + (Coverage × 0.3) + (User Satisfaction × 0.3)
 ```
 
+**Note**: All inputs are normalized to percentages (0-100%):
+- Test Success Rate: percentage of tests that passed (0-100%)
+- Coverage: percentage of modules covered (0-100%)
+- User Satisfaction: average rating converted to percentage (rating/5 × 100%)
+
+**Result**: Health score ranges from 0-100%
+
 - **Excellent**: 90-100%
 - **Good**: 70-89%
 - **Warning**: 50-69%
@@ -362,6 +369,12 @@ Health Score = (Test Success Rate × 0.4) + (Coverage × 0.3) + (User Satisfacti
 ```
 Confidence = (Test Success Rate × 0.5) + (User Satisfaction × 0.5)
 ```
+
+**Note**: All inputs are normalized to percentages (0-100%):
+- Test Success Rate: percentage of tests that passed (0-100%)
+- User Satisfaction: average rating converted to percentage (rating/5 × 100%)
+
+**Result**: Confidence level ranges from 0-100%
 
 ---
 

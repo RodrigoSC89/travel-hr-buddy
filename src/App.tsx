@@ -174,7 +174,8 @@ const TrainingAcademyHub = safeLazyImport(() => import("@/components/academy/Tra
 const CrewWellbeingNew = safeLazyImport(() => import("@/components/crew-wellbeing/CrewWellbeingHub"));
 const ConsolidatedCrew = safeLazyImport(() => import("@/pages/crew"));
 const SGSOManagerPage = safeLazyImport(() => import("@/components/sgso/SGSOManager"));
-// PATCH 565: Quality Dashboard
+
+// PATCH 565 - Quality Dashboard Integration
 const QualityDashboard = safeLazyImport(() => import("@/pages/dashboard/QualityDashboard"));
 
 // New Module Imports - PATCH 66.0 Updated Paths
