@@ -1,18 +1,16 @@
 /**
- * PATCH 428 - Sensors Hub Types
+ * PATCH 428 + 453 - Sensors Hub Types
  */
 
 export interface SensorReading {
   id: string;
-  sensorId: string;
-  sensorName: string;
-  sensorType: "temperature" | "pressure" | "depth" | "humidity" | "flow";
+  name: string;
+  type: "temperature" | "pressure" | "depth" | "humidity" | "flow" | "wind" | "sonar";
   value: number;
-  unit: string;
-  minThreshold: number;
-  maxThreshold: number;
+  unit?: string;
+  status: "active" | "inactive" | "warning" | "error";
+  location: string;
   timestamp: string;
-  location?: string;
   metadata?: Record<string, any>;
 }
 
@@ -20,20 +18,17 @@ export interface SensorAlert {
   id: string;
   sensorId: string;
   sensorName: string;
-  severity: "low" | "medium" | "high" | "critical";
+  severity: "info" | "warning" | "critical";
   message: string;
-  value: number;
-  threshold: number;
-  acknowledged: boolean;
-  acknowledgedAt?: string;
-  acknowledgedBy?: string;
-  createdAt: string;
+  timestamp: string;
+  acknowledged?: boolean;
+  metadata?: Record<string, any>;
 }
 
 export interface Sensor {
   id: string;
   name: string;
-  type: "temperature" | "pressure" | "depth" | "humidity" | "flow";
+  type: "temperature" | "pressure" | "depth" | "humidity" | "flow" | "wind" | "sonar";
   location: string;
   minThreshold: number;
   maxThreshold: number;
@@ -41,4 +36,14 @@ export interface Sensor {
   status: "active" | "inactive" | "maintenance";
   lastReading?: number;
   lastUpdate?: string;
+}
+
+export interface SensorEvent {
+  id: string;
+  sensorId: string;
+  eventType: string;
+  severity: "info" | "warning" | "error" | "critical";
+  message: string;
+  timestamp: string;
+  metadata?: Record<string, any>;
 }
