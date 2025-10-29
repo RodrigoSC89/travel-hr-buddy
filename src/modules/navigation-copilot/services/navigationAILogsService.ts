@@ -7,6 +7,7 @@
 import { supabase } from "@/lib/supabase";
 import { logger } from "@/lib/logger";
 import type { NavigationRoute, Coordinates, WeatherAlert } from "../index";
+import type { ParsedCommand } from "./naturalLanguageParser";
 
 export interface NavigationLogInput {
   origin: Coordinates;
@@ -167,6 +168,78 @@ class NavigationAILogsService {
     } catch (error) {
       logger.error("Error fetching navigation stats:", error);
       return null;
+    }
+  }
+
+  /**
+   * PATCH 531 - Save copilot command and decision log
+   */
+  async saveCopilotDecision(command: ParsedCommand, response: string, success: boolean): Promise<void> {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        logger.warn("No authenticated user, skipping copilot decision log");
+        return;
+      }
+
+      const logData = {
+        user_id: user.id,
+        command_text: command.originalText,
+        command_action: command.action,
+        command_parameters: command.parameters,
+        command_confidence: command.confidence,
+        response_text: response,
+        success,
+        timestamp: new Date().toISOString(),
+        metadata: {
+          processedAt: new Date().toISOString(),
+          commandTimestamp: command.timestamp,
+        },
+      };
+
+      const { error } = await supabase
+        .from("copilot_decision_logs")
+        .insert(logData);
+
+      if (error) {
+        logger.error("Failed to save copilot decision log:", error);
+        return;
+      }
+
+      logger.info("Copilot decision logged successfully");
+    } catch (error) {
+      logger.error("Error saving copilot decision log:", error);
+    }
+  }
+
+  /**
+   * PATCH 531 - Get recent copilot commands
+   */
+  async getRecentCopilotCommands(limit: number = 20): Promise<any[]> {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        return [];
+      }
+
+      const { data, error } = await supabase
+        .from("copilot_decision_logs")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("timestamp", { ascending: false })
+        .limit(limit);
+
+      if (error) {
+        logger.error("Failed to fetch copilot commands:", error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      logger.error("Error fetching copilot commands:", error);
+      return [];
     }
   }
 }
