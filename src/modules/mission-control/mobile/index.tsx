@@ -45,7 +45,10 @@ export const MobileMissionDashboard: React.FC<
 > = ({ userId }) => {
   const [missions, setMissions] = useState<Mission[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // Use safe SSR-compatible initialization for online state
+  const [isOnline, setIsOnline] = useState(() => 
+    typeof window !== 'undefined' ? navigator.onLine : true
+  );
   const [lastSync, setLastSync] = useState<Date | null>(null);
   const [db, setDb] = useState<IDBDatabase | null>(null);
 

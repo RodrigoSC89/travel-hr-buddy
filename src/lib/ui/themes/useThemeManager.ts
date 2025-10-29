@@ -61,10 +61,17 @@ export function useThemeManager(): ThemeConfig {
     setThemeState(newTheme);
   };
 
+  /**
+   * Toggle between light and dark themes only
+   * (excludes mission theme for simple binary toggle)
+   */
   const toggleTheme = () => {
     setThemeState((current) => (current === "dark" ? "light" : "dark"));
   };
 
+  /**
+   * Cycle through all available themes: light -> dark -> mission -> light
+   */
   const cycleTheme = () => {
     setThemeState((current) => {
       const themes: Theme[] = ["light", "dark", "mission"];
