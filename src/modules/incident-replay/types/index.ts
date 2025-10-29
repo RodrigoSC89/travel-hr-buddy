@@ -43,3 +43,5 @@ export interface ReplayState {
   totalDuration: number;
   currentTime: number;
 }
+
+export type { TelemetrySnapshot as TelemetrySnapshotType };

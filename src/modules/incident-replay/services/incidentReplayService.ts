@@ -161,7 +161,7 @@ class IncidentReplayService {
   /**
    * Mock persistence - In real app, would save to Supabase incident_logs table
    */
-  async saveReplaySession(incidentId: string, sessionData: any): Promise<void> {
+  async saveReplaySession(incidentId: string, sessionData: Record<string, unknown>): Promise<void> {
     console.log("Mock: Saving replay session to incident_logs", { incidentId, sessionData });
     // Would integrate with Supabase here:
     // await supabase.from('incident_logs').insert({ ... })

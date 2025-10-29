@@ -782,7 +782,7 @@ function App() {
                       {/* PATCH 525: AI Visual Recognition Core Module */}
                       <Route path="/ai-vision-core" element={<AIVisionCore />} />
                       
-                      {/* Validation Routes - Patches 401-410 */
+                      {/* Validation Routes - Patches 401-410 */}
                       <Route path="/admin/template-editor/validation" element={<TemplateEditorValidation />} />
                       <Route path="/admin/documents-consolidation/validation" element={<DocumentsConsolidationValidation />} />
                       <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidation />} />

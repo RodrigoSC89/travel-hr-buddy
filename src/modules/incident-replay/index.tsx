@@ -14,7 +14,6 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -29,7 +28,6 @@ import {
   Thermometer,
   Activity,
   Brain,
-  AlertTriangle,
   Clock,
   Navigation,
   Waves,
