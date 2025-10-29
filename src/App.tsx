@@ -174,6 +174,8 @@ const TrainingAcademyHub = safeLazyImport(() => import("@/components/academy/Tra
 const CrewWellbeingNew = safeLazyImport(() => import("@/components/crew-wellbeing/CrewWellbeingHub"));
 const ConsolidatedCrew = safeLazyImport(() => import("@/pages/crew"));
 const SGSOManagerPage = safeLazyImport(() => import("@/components/sgso/SGSOManager"));
+// PATCH 565: Quality Dashboard
+const QualityDashboard = safeLazyImport(() => import("@/pages/dashboard/QualityDashboard"));
 
 // New Module Imports - PATCH 66.0 Updated Paths
 const FeedbackModule = React.lazy(() => import("@/modules/operations/feedback"));
@@ -478,6 +480,7 @@ function App() {
                     <Route element={<SmartLayout />}>
                       <Route path="/" element={<Index />} />
                       <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/dashboard/quality" element={<QualityDashboard />} />
                       <Route path="/price-alerts" element={<PriceAlerts />} />
                       <Route path="/sensors-hub" element={<SensorsHub />} />
                       <Route path="/reports" element={<Reports />} />
