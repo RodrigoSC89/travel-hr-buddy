@@ -69,6 +69,11 @@ performance_metrics/
 performance_metrics/*.json
 performance_metrics/*.txt
 
+# Feedback exports (PATCH 562)
+feedback/beta-phase-1/feedback-export-*.csv
+feedback/beta-phase-1/feedback-export-*.json
+feedback/beta-phase-1/ai-analyzer-input-*.json
+
 # Vercel
 .vercel
 .vercel_cache
