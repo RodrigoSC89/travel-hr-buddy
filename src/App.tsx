@@ -340,6 +340,9 @@ const Patch531TestValidation = safeLazyImport(() => import("@/pages/admin/Patch5
 // PATCH 551-555: Validation Dashboard
 const Patches551to555ValidationPage = safeLazyImport(() => import("@/pages/validation/patches-551-555"));
 
+// PATCH 546-550: Validation Dashboard (Incident Timeline, Trust Analysis, Mission Mobile, AutoDocs, Theme)
+const Patches546to550ValidationPage = safeLazyImport(() => import("@/pages/validation/patches-546-550"));
+
 // PATCH 561-565: Validation Dashboard (Stress Test, Beta, Audit, Regression, Quality)
 const Patches561to565ValidationPage = safeLazyImport(() => import("@/pages/validation/patches-561-565"));
 
@@ -850,6 +853,7 @@ function App() {
                       
                       {/* Master Validation Dashboard */}
                       <Route path="/validation/master-validation" element={<Suspense fallback={<PageSkeleton />}>{React.createElement(safeLazyImport(() => import("@/pages/validation/master-validation")))}</Suspense>} />
+                      <Route path="/validation/patches-546-550" element={<Patches546to550ValidationPage />} />
                       <Route path="/validation/patches-551-555" element={<Patches551to555ValidationPage />} />
                       <Route path="/validation/patches-561-565" element={<Patches561to565ValidationPage />} />
                       

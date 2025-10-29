@@ -79,13 +79,13 @@ export async function calculateTrustScore(input: TrustInput): Promise<TrustScore
 
       // Compliance record (compliance-related events)
       const complianceEvents = historicalEvents.filter(e => 
-        e.compliance_status === "compliant" || e.event_type === "audit_passed"
+        (e.details as any)?.compliance_status === "compliant" || e.event_type === "audit_passed"
       );
       complianceRecord = Math.round((complianceEvents.length / historicalEvents.length) * 100);
 
       // Incident history (incident-related events)
       const incidentEvents = historicalEvents.filter(e => 
-        e.event_type === "breach_detected" || e.incident_created
+        e.event_type === "breach_detected" || (e.details as any)?.incident_created
       );
       const resolvedIncidents = historicalEvents.filter(e => 
         e.event_type === "incident_resolved"
@@ -132,24 +132,26 @@ export async function calculateTrustScore(input: TrustInput): Promise<TrustScore
     const { error: insertError } = await supabase
       .from("trust_events")
       .insert({
+        entity_id: entityId,
         event_type: eventType === "incident_resolved" || eventType === "incident_created" ? "audit" : "validation",
-        source_system: sourceSystem || entityId,
-        trust_score: finalScore,
-        compliance_status: finalScore >= 60 ? "compliant" : finalScore >= 40 ? "pending" : "non_compliant",
-        validation_results: {
+        severity: finalScore < 40 ? "high" : finalScore < 60 ? "medium" : "low",
+        trust_score_before: null,
+        trust_score_after: finalScore,
+        details: {
           entityType,
-          entityId,
           eventType,
+          sourceSystem: sourceSystem || entityId,
+          compliance_status: finalScore >= 60 ? "compliant" : finalScore >= 40 ? "pending" : "non_compliant",
+          validation_results: {
+            recentActivity,
+            historicalPerformance,
+            complianceRecord,
+            incidentHistory,
+          },
+          alert_level: finalScore < 40 ? "high" : finalScore < 60 ? "warning" : "info",
+          alert_message: `Trust score calculated for ${entityType} ${entityId}: ${finalScore}/100 (${level})`,
+          metadata: metadata || {},
         },
-        checks_performed: {
-          recentActivity,
-          historicalPerformance,
-          complianceRecord,
-          incidentHistory,
-        },
-        alert_level: finalScore < 40 ? "high" : finalScore < 60 ? "warning" : "info",
-        alert_message: `Trust score calculated for ${entityType} ${entityId}: ${finalScore}/100 (${level})`,
-        metadata: metadata || {},
       });
 
     if (insertError) {
@@ -194,9 +196,9 @@ export async function getTrustScoreHistory(
   try {
     const { data, error } = await supabase
       .from("trust_events")
-      .select("timestamp, trust_score, event_type")
-      .eq("source_system", entityId)
-      .order("timestamp", { ascending: false })
+      .select("created_at, trust_score_after, event_type")
+      .eq("entity_id", entityId)
+      .order("created_at", { ascending: false })
       .limit(limit);
 
     if (error) {
@@ -205,8 +207,8 @@ export async function getTrustScoreHistory(
     }
 
     return (data || []).map((event) => ({
-      timestamp: event.timestamp,
-      score: event.trust_score,
+      timestamp: event.created_at,
+      score: event.trust_score_after,
       event_type: event.event_type,
     }));
   } catch (error) {
