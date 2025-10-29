@@ -16,6 +16,7 @@ import { FallbackStatus } from "./components/FallbackStatus";
 import { SatcomTerminal } from "./components/SatcomTerminal";
 import { CommunicationHistory } from "./components/CommunicationHistory";
 import { DiagnosticPanel } from "./components/DiagnosticPanel";
+import { ConnectivityPanel } from "./components/ConnectivityPanel";
 import { useSatcomMonitor } from "./hooks/useSatcomMonitor";
 
 // Export new PATCH 171.0 modules
@@ -30,6 +31,11 @@ export type { AlertConfig, SatcomAlert } from "./alertHandler";
 // Export PATCH 442 modules
 export { satcomFailoverService } from "./services/failover-service";
 export type { FailoverLogEntry, ConnectionStatus, CommunicationLog } from "./services/failover-service";
+
+// Export PATCH 476 modules
+export { satcomPingService } from "./services/ping-service";
+export type { SatcomLink, PingResult, SatcomLog } from "./services/ping-service";
+export { ConnectivityPanel } from "./components/ConnectivityPanel";
 
 export interface SatcomConnection {
   id: string;
@@ -203,6 +209,9 @@ const SatcomDashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* PATCH 476: Enhanced Connectivity Panel with Ping Simulation */}
+      <ConnectivityPanel />
 
       <SatcomStatus connections={monitoredConnections} />
 
