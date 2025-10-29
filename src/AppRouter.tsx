@@ -86,6 +86,13 @@ const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
 // 🔹 PATCH 506-510 Validation
 const Patches506510Validation = React.lazy(() => import("@/pages/admin/Patches506510Validation"));
 
+// 🔹 PATCH 511-515 - Observability, AI Supervision, Unified Logging, Auto-Execution, Governance
+const TelemetryDashboard = React.lazy(() => import("@/pages/telemetry-dashboard"));
+const SupervisorAI = React.lazy(() => import("@/pages/supervisor-ai"));
+const CentralLogs = React.lazy(() => import("@/pages/logs/central"));
+const AutoExecConfig = React.lazy(() => import("@/pages/autoexec-config"));
+const GovernanceAI = React.lazy(() => import("@/pages/governance-ai"));
+
 // 🔹 PATCH 486-490 Management Pages
 const Patch486Communication = React.lazy(() => import("@/pages/admin/Patch486Communication"));
 const Patch487DroneCommander = React.lazy(() => import("@/pages/admin/Patch487DroneCommander"));
@@ -193,6 +200,13 @@ export default function AppRouter() {
         
         {/* PATCH 506-510 Validation Route */}
         <Route path="/admin/patches-506-510/validation" element={<Patches506510Validation />} />
+        
+        {/* PATCH 511-515 Routes - Observability & Governance */}
+        <Route path="/telemetry-dashboard" element={<TelemetryDashboard />} />
+        <Route path="/supervisor-ai" element={<SupervisorAI />} />
+        <Route path="/logs/central" element={<CentralLogs />} />
+        <Route path="/autoexec-config" element={<AutoExecConfig />} />
+        <Route path="/governance-ai" element={<GovernanceAI />} />
         
         {/* PATCH 486-490 Management Routes */}
         <Route path="/admin/patch-486/communication" element={<Patch486Communication />} />
