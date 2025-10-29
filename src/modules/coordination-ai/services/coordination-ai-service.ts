@@ -47,8 +47,8 @@ export class CoordinationAIService {
         throw new Error("Failed to create coordination log");
       }
 
-      // Make AI decision
-      const decision = await this.makeAIDecision(event);
+      // Make AI decision (pass logId for tracking)
+      const decision = await this.makeAIDecision(event, logData.id);
 
       // Execute coordination actions
       const actions = await this.executeCoordinationActions(
@@ -83,7 +83,8 @@ export class CoordinationAIService {
    * Make AI decision based on event data
    */
   private async makeAIDecision(
-    event: CoordinationEvent
+    event: CoordinationEvent,
+    logId: string
   ): Promise<CoordinationDecision> {
     // Simulate AI decision-making process
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -141,6 +142,7 @@ export class CoordinationAIService {
 
     // Store AI decision
     await supabase.from("ai_coordination_decisions").insert({
+      coordination_log_id: logId,
       decision_type: decision.decisionType,
       confidence_score: decision.confidenceScore,
       recommended_actions: decision.recommendedActions,
@@ -218,10 +220,19 @@ export class CoordinationAIService {
     const results = [];
     
     for (const target of targets) {
-      await supabase.from("module_status").update({
-        pending_events: supabase.raw("pending_events + 1"),
-        updated_at: new Date().toISOString()
-      }).eq("module_name", target);
+      // Update pending events count
+      const { data: currentStatus } = await supabase
+        .from("module_status")
+        .select("pending_events")
+        .eq("module_name", target)
+        .single();
+      
+      if (currentStatus) {
+        await supabase.from("module_status").update({
+          pending_events: (currentStatus.pending_events || 0) + 1,
+          updated_at: new Date().toISOString()
+        }).eq("module_name", target);
+      }
       
       results.push({ target, notified: true });
     }

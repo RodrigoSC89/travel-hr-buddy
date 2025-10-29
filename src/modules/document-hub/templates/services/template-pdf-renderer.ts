@@ -134,10 +134,13 @@ export class TemplatePDFRenderer {
     content: string,
     options: PDFRenderOptions
   ): Promise<jsPDF> {
+    // Ensure format is lowercase for jsPDF
+    const format = options.pageSize?.toLowerCase() as "a4" | "letter" | "legal";
+    
     const pdf = new jsPDF({
       orientation: options.orientation,
       unit: "mm",
-      format: options.pageSize?.toLowerCase()
+      format: format || "a4"
     });
 
     const margins = options.margins!;
@@ -250,10 +253,10 @@ export class TemplatePDFRenderer {
       
       if (!user) return;
 
-      // Upload PDF to storage
+      // Upload PDF to storage - using workspace_files bucket (existing bucket)
       const fileName = `rendered-${Date.now()}.pdf`;
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("documents")
+        .from("workspace_files")
         .upload(fileName, pdfBlob);
 
       if (uploadError) {
@@ -262,7 +265,7 @@ export class TemplatePDFRenderer {
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
-        .from("documents")
+        .from("workspace_files")
         .getPublicUrl(fileName);
 
       // Save record
