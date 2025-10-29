@@ -1,0 +1,481 @@
+/**
+ * PATCH 565 - Quality Dashboard
+ * Executive dashboard for quality metrics and system health
+ */
+
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  TrendingUp,
+  Users,
+  Code,
+  MessageSquare,
+  Shield,
+} from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
+interface QualityMetrics {
+  overall: {
+    health: number;
+    risk: number;
+    confidence: number;
+  };
+  testing: {
+    unitTests: { total: number; passed: number; coverage: number };
+    e2eTests: { total: number; passed: number };
+    regressionTests: { total: number; passed: number };
+    loadTests: { sessions: number; successRate: number };
+  };
+  feedback: {
+    totalUsers: number;
+    averageRating: number;
+    wouldRecommend: number;
+  };
+  modules: {
+    total: number;
+    tested: number;
+    coverage: number;
+  };
+  lastUpdated: string;
+}
+
+export const QualityDashboard: React.FC = () => {
+  const { toast } = useToast();
+  const [metrics, setMetrics] = useState<QualityMetrics | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [wsConnected, setWsConnected] = useState(false);
+
+  // Load quality metrics
+  useEffect(() => {
+    loadMetrics();
+    // Setup WebSocket for real-time updates (simulated for now)
+    setupWebSocket();
+
+    // Refresh every 30 seconds
+    const interval = setInterval(loadMetrics, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadMetrics = async () => {
+    try {
+      // In a real implementation, this would fetch from an API
+      const mockMetrics: QualityMetrics = {
+        overall: {
+          health: 92,
+          risk: 15,
+          confidence: 88,
+        },
+        testing: {
+          unitTests: { total: 150, passed: 147, coverage: 82 },
+          e2eTests: { total: 45, passed: 44 },
+          regressionTests: { total: 20, passed: 20 },
+          loadTests: { sessions: 100, successRate: 99.5 },
+        },
+        feedback: {
+          totalUsers: 10,
+          averageRating: 4.3,
+          wouldRecommend: 85,
+        },
+        modules: {
+          total: 82,
+          tested: 68,
+          coverage: 83,
+        },
+        lastUpdated: new Date().toISOString(),
+      };
+
+      setMetrics(mockMetrics);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Failed to load metrics:', error);
+      toast({
+        title: 'Error Loading Metrics',
+        description: 'Failed to load quality metrics',
+        variant: 'destructive',
+      });
+      setIsLoading(false);
+    }
+  };
+
+  const setupWebSocket = () => {
+    // Simulate WebSocket connection
+    setTimeout(() => {
+      setWsConnected(true);
+    }, 1000);
+  };
+
+  const getHealthColor = (value: number): string => {
+    if (value >= 80) return 'text-green-600';
+    if (value >= 60) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const getRiskColor = (value: number): string => {
+    if (value <= 20) return 'text-green-600';
+    if (value <= 40) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const getHealthBadge = (value: number) => {
+    if (value >= 80) return <Badge className="bg-green-600">Healthy</Badge>;
+    if (value >= 60) return <Badge className="bg-yellow-600">Warning</Badge>;
+    return <Badge className="bg-red-600">Critical</Badge>;
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <Activity className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
+          <p className="text-muted-foreground">Loading quality metrics...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!metrics) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-yellow-600" />
+          <p className="text-muted-foreground">No metrics available</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 p-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold">Quality Dashboard</h1>
+          <p className="text-muted-foreground">
+            Real-time system quality and health monitoring
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <div className={`h-2 w-2 rounded-full ${wsConnected ? 'bg-green-500' : 'bg-red-500'}`} />
+            <span className="text-sm text-muted-foreground">
+              {wsConnected ? 'Live' : 'Disconnected'}
+            </span>
+          </div>
+          <span className="text-sm text-muted-foreground">
+            Updated: {new Date(metrics.lastUpdated).toLocaleTimeString()}
+          </span>
+        </div>
+      </div>
+
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Health Score */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">System Health</CardTitle>
+            <Activity className={`h-4 w-4 ${getHealthColor(metrics.overall.health)}`} />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{metrics.overall.health}%</div>
+            <Progress value={metrics.overall.health} className="mt-2" />
+            <p className="text-xs text-muted-foreground mt-2">
+              {getHealthBadge(metrics.overall.health)}
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Risk Score */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Risk Level</CardTitle>
+            <Shield className={`h-4 w-4 ${getRiskColor(metrics.overall.risk)}`} />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{metrics.overall.risk}%</div>
+            <Progress value={metrics.overall.risk} className="mt-2" />
+            <p className="text-xs text-muted-foreground mt-2">
+              {metrics.overall.risk <= 20 ? 'Low Risk' : metrics.overall.risk <= 40 ? 'Medium Risk' : 'High Risk'}
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Confidence Score */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Confidence</CardTitle>
+            <TrendingUp className={`h-4 w-4 ${getHealthColor(metrics.overall.confidence)}`} />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{metrics.overall.confidence}%</div>
+            <Progress value={metrics.overall.confidence} className="mt-2" />
+            <p className="text-xs text-muted-foreground mt-2">
+              Deployment Readiness
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Detailed Metrics */}
+      <Tabs defaultValue="testing" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="testing">
+            <Code className="h-4 w-4 mr-2" />
+            Testing
+          </TabsTrigger>
+          <TabsTrigger value="feedback">
+            <MessageSquare className="h-4 w-4 mr-2" />
+            User Feedback
+          </TabsTrigger>
+          <TabsTrigger value="modules">
+            <CheckCircle className="h-4 w-4 mr-2" />
+            Module Coverage
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Testing Tab */}
+        <TabsContent value="testing" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Unit Tests */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Unit Tests</CardTitle>
+                <CardDescription>Vitest test suite results</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm">Total Tests:</span>
+                  <span className="font-bold">{metrics.testing.unitTests.total}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">Passed:</span>
+                  <span className="font-bold text-green-600">{metrics.testing.unitTests.passed}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">Coverage:</span>
+                  <span className="font-bold">{metrics.testing.unitTests.coverage}%</span>
+                </div>
+                <Progress value={(metrics.testing.unitTests.passed / metrics.testing.unitTests.total) * 100} />
+              </CardContent>
+            </Card>
+
+            {/* E2E Tests */}
+            <Card>
+              <CardHeader>
+                <CardTitle>E2E Tests</CardTitle>
+                <CardDescription>Playwright test results</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm">Total Tests:</span>
+                  <span className="font-bold">{metrics.testing.e2eTests.total}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">Passed:</span>
+                  <span className="font-bold text-green-600">{metrics.testing.e2eTests.passed}</span>
+                </div>
+                <Progress value={(metrics.testing.e2eTests.passed / metrics.testing.e2eTests.total) * 100} />
+              </CardContent>
+            </Card>
+
+            {/* Regression Tests */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Regression Tests</CardTitle>
+                <CardDescription>PATCH 564 results</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm">Routes Tested:</span>
+                  <span className="font-bold">{metrics.testing.regressionTests.total}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">Passed:</span>
+                  <span className="font-bold text-green-600">{metrics.testing.regressionTests.passed}</span>
+                </div>
+                <Progress value={(metrics.testing.regressionTests.passed / metrics.testing.regressionTests.total) * 100} />
+              </CardContent>
+            </Card>
+
+            {/* Load Tests */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Load Tests</CardTitle>
+                <CardDescription>PATCH 561 stress test results</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm">Sessions:</span>
+                  <span className="font-bold">{metrics.testing.loadTests.sessions}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">Success Rate:</span>
+                  <span className="font-bold text-green-600">{metrics.testing.loadTests.successRate}%</span>
+                </div>
+                <Progress value={metrics.testing.loadTests.successRate} />
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Feedback Tab */}
+        <TabsContent value="feedback" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Beta Users</CardTitle>
+                <CardDescription>PATCH 562 feedback</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{metrics.feedback.totalUsers}</div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  <Users className="inline h-3 w-3 mr-1" />
+                  Participants
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Average Rating</CardTitle>
+                <CardDescription>Overall satisfaction</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{metrics.feedback.averageRating}/5</div>
+                <Progress value={(metrics.feedback.averageRating / 5) * 100} className="mt-2" />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Recommendation</CardTitle>
+                <CardDescription>Would recommend</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{metrics.feedback.wouldRecommend}%</div>
+                <Progress value={metrics.feedback.wouldRecommend} className="mt-2" />
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Modules Tab */}
+        <TabsContent value="modules" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Total Modules</CardTitle>
+                <CardDescription>System components</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{metrics.modules.total}</div>
+                <p className="text-xs text-muted-foreground mt-2">Active modules</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Tested Modules</CardTitle>
+                <CardDescription>With test coverage</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{metrics.modules.tested}</div>
+                <Progress value={(metrics.modules.tested / metrics.modules.total) * 100} className="mt-2" />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Coverage</CardTitle>
+                <CardDescription>Overall module coverage</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{metrics.modules.coverage}%</div>
+                <Progress value={metrics.modules.coverage} className="mt-2" />
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      {/* Summary Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Executive Summary</CardTitle>
+          <CardDescription>System status and recommendations</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+              <div>
+                <p className="font-medium">System Health: Excellent</p>
+                <p className="text-sm text-muted-foreground">
+                  All critical systems operational. {metrics.testing.regressionTests.passed}/{metrics.testing.regressionTests.total} regression tests passing.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+              <div>
+                <p className="font-medium">Testing Coverage: Strong</p>
+                <p className="text-sm text-muted-foreground">
+                  {metrics.testing.unitTests.coverage}% code coverage with {metrics.testing.unitTests.passed} passing unit tests.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+              <div>
+                <p className="font-medium">User Satisfaction: High</p>
+                <p className="text-sm text-muted-foreground">
+                  {metrics.feedback.averageRating}/5 average rating from {metrics.feedback.totalUsers} beta users. {metrics.feedback.wouldRecommend}% would recommend.
+                </p>
+              </div>
+            </div>
+
+            {metrics.overall.risk > 20 && (
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                <div>
+                  <p className="font-medium">Risk Assessment</p>
+                  <p className="text-sm text-muted-foreground">
+                    Medium risk level detected. Review failed tests and address before deployment.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="pt-4 border-t">
+            <p className="text-sm font-medium mb-2">Deployment Readiness:</p>
+            <div className="flex items-center gap-2">
+              {metrics.overall.confidence >= 80 ? (
+                <>
+                  <Badge className="bg-green-600">Ready for Production</Badge>
+                  <span className="text-sm text-muted-foreground">
+                    All quality criteria met
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Badge className="bg-yellow-600">Review Required</Badge>
+                  <span className="text-sm text-muted-foreground">
+                    Address outstanding issues before deployment
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};

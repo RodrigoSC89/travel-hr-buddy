@@ -63,6 +63,7 @@
     "stress:all": "npm run stress:ai && npm run stress:dashboard && npm run stress:core",
     "feedback:export": "tsx feedback/beta-phase-1/export-feedback.ts",
     "audit:package": "tsx release/v3.5/generate-audit-package.ts",
+    "quality:metrics": "tsx src/components/quality-dashboard/quality-metrics-service.ts",
     "generate:docs": "tsx scripts/generate-docs.ts",
     "export:build": "tsx scripts/export-build.ts",
     "verify:postbuild": "tsx scripts/verify-postbuild.ts",
