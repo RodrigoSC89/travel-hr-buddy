@@ -42,4 +42,4 @@ document-hub/
 ---
 
 **Gerado automaticamente por**: `scripts/generateModuleDocs.ts`  
-**Data**: 10/29/2025, 6:06:24 PM
+**Data**: 10/29/2025, 7:01:05 PM

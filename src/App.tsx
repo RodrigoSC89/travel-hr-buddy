@@ -117,12 +117,12 @@ const TemplateValidationPage = safeLazyImport(() => import("@/pages/admin/templa
 const CrewConsolidationValidationPage = safeLazyImport(() => import("@/pages/admin/crew/consolidation-validation"));
 const DocumentHubValidationPage = safeLazyImport(() => import("@/pages/admin/document-hub/validation"));
 const MissionControlValidationPage = safeLazyImport(() => import("@/pages/admin/mission-control/validation"));
-const DocumentationValidationPage = safeLazyImport(() => import("@/pages/admin/documentation/validation"));
+
 const DocumentTemplatesValidationPage = safeLazyImport(() => import("@/pages/admin/document-templates/validation"));
 const SatelliteTrackerValidationPage = safeLazyImport(() => import("@/pages/admin/satellite-tracker/validation"));
 const NavigationCopilotValidationPage = safeLazyImport(() => import("@/pages/admin/navigation-copilot/validation"));
 const TemplateEditorValidationPage = safeLazyImport(() => import("@/pages/admin/template-editor/validation"));
-const DocumentsConsolidationValidationPage = safeLazyImport(() => import("@/pages/admin/documents-consolidation/validation"));
+
 const PriceAlertsValidationPage = safeLazyImport(() => import("@/pages/admin/price-alerts/validation"));
 const IncidentsConsolidationValidationPage = safeLazyImport(() => import("@/pages/admin/incidents-consolidation/validation"));
 const SensorHubValidationPage = safeLazyImport(() => import("@/pages/admin/sensor-hub/validation"));
@@ -245,36 +245,36 @@ const IncidentReplayAI = React.lazy(() => import("@/modules/incident-replay"));
 const AIVisionCore = React.lazy(() => import("@/modules/ai-vision-core"));
 // Validation Pages - Patches 401-410
 const TemplateEditorValidation = safeLazyImport(() => import("@/pages/admin/template-editor/validation"));
-const DocumentsConsolidationValidation = safeLazyImport(() => import("@/pages/admin/documents-consolidation/validation"));
+
 const PriceAlertsValidation = safeLazyImport(() => import("@/pages/admin/price-alerts/validation"));
 const IncidentsConsolidationValidation = safeLazyImport(() => import("@/pages/admin/incidents-consolidation/validation"));
 const SensorHubValidation = safeLazyImport(() => import("@/pages/admin/sensor-hub/validation"));
-const CrewConsolidationValidation = safeLazyImport(() => import("@/pages/admin/crew-consolidation/validation"));
+
 const SonarAIValidation = safeLazyImport(() => import("@/pages/admin/sonar-ai/validation"));
 const TestAutomationValidation = safeLazyImport(() => import("@/pages/admin/test-automation/validation"));
 const TemplatesApplicationValidation = safeLazyImport(() => import("@/pages/admin/templates-application/validation"));
-const MissionControlConsolidationValidation = safeLazyImport(() => import("@/pages/admin/mission-control-consolidation/validation"));
+
 // PATCH 411-415 Validation Pages
 const PriceAlertsFinalizadoValidation = safeLazyImport(() => import("@/pages/admin/price-alerts-finalizado/validation"));
-const DocumentsConsolidadoValidation = safeLazyImport(() => import("@/pages/admin/documents-consolidado/validation"));
+
 const UnifiedLogsPanelValidation = safeLazyImport(() => import("@/pages/admin/unified-logs-panel/validation"));
 const CoordinationAIValidation = safeLazyImport(() => import("@/pages/admin/coordination-ai/validation"));
 const ExperimentalModulesValidation = safeLazyImport(() => import("@/pages/admin/experimental-modules/validation"));
 // PATCH 416-420 Validation Pages
-const CrewConsolidadoValidation = safeLazyImport(() => import("@/pages/admin/crew-consolidado/validation"));
+
 const TemplatesEditorValidation = safeLazyImport(() => import("@/pages/admin/templates-editor/validation"));
 const PriceAlertsNotificationValidation = safeLazyImport(() => import("@/pages/admin/price-alerts-notification/validation"));
-const MissionControlRealtimeValidation = safeLazyImport(() => import("@/pages/admin/mission-control-realtime/validation"));
+
 const SatcomSimulationValidation = safeLazyImport(() => import("@/pages/admin/satcom-simulation/validation"));
 // PATCH 421-425 Validation Pages
-const DocumentsConsolidatedValidation = safeLazyImport(() => import("@/pages/admin/documents-consolidated/validation"));
+
 const OceanSonarValidation = safeLazyImport(() => import("@/pages/admin/ocean-sonar/validation"));
 const UnderwaterDroneValidation = safeLazyImport(() => import("@/pages/admin/underwater-drone/validation"));
 // PATCH 426-430 Validation Pages
 const MissionEngineValidation = safeLazyImport(() => import("@/pages/admin/mission-engine/validation"));
 const DroneCommanderValidation = safeLazyImport(() => import("@/pages/admin/drone-commander/validation"));
 const SatcomValidation = safeLazyImport(() => import("@/pages/admin/satcom/validation"));
-const MissionConsolidationValidation = safeLazyImport(() => import("@/pages/admin/mission-consolidation/validation"));
+
 // PATCH 431-435 Validation Pages
 const RoutePlannerValidation = safeLazyImport(() => import("@/pages/admin/route-planner/validation"));
 const NavigationCopilotV2Validation = safeLazyImport(() => import("@/pages/admin/navigation-copilot-v2/validation"));
@@ -283,7 +283,7 @@ const DeepRiskAIValidation = safeLazyImport(() => import("@/pages/admin/deep-ris
 const TemplatesSystemValidation = safeLazyImport(() => import("@/pages/admin/templates-system/validation"));
 const SonarAIValidationV2 = safeLazyImport(() => import("@/pages/admin/sonar-ai/validation"));
 // PATCH 436-440 Validation Pages
-const CrewConsolidationValidationPatch437 = safeLazyImport(() => import("@/pages/admin/crew-consolidation/validation"));
+
 const PriceAlertsValidationPatch438 = safeLazyImport(() => import("@/pages/admin/price-alerts/validation"));
 const IncidentReportsV2Validation = safeLazyImport(() => import("@/pages/admin/incident-reports-v2/validation"));
 const AICoordinationValidation = safeLazyImport(() => import("@/pages/admin/ai-coordination/validation"));
@@ -291,17 +291,17 @@ const AICoordinationValidation = safeLazyImport(() => import("@/pages/admin/ai-c
 const SensorHubV2Validation = safeLazyImport(() => import("@/pages/admin/sensor-hub-v2/validation"));
 const SATCOMv2Validation = safeLazyImport(() => import("@/pages/admin/satcom-v2/validation"));
 const OceanSonarV3Validation = safeLazyImport(() => import("@/pages/admin/ocean-sonar-v3/validation"));
-const DocumentsUnificationValidation = safeLazyImport(() => import("@/pages/admin/documents-unification/validation"));
-const MissionEngineV2Validation = safeLazyImport(() => import("@/pages/admin/mission-engine-v2/validation"));
+
+
 // PATCH 471-480 Validation Pages
 const IncidentReplayAIValidation = safeLazyImport(() => import("@/pages/admin/incident-replay-ai/validation"));
 const IncidentsConsolidationV2Validation = safeLazyImport(() => import("@/pages/admin/incidents-consolidation-v2/validation"));
 const RoutePlannerV1Validation = safeLazyImport(() => import("@/pages/admin/route-planner-v1/validation"));
 const SatcomV1Validation = safeLazyImport(() => import("@/pages/admin/satcom-v1/validation"));
-const MissionEngineValidationPage = safeLazyImport(() => import("@/pages/admin/mission-engine-validation/validation"));
-const CrewModuleConsolidationValidation = safeLazyImport(() => import("@/pages/admin/crew-module-consolidation/validation"));
+
+
 const SonarAIDetailedValidation = safeLazyImport(() => import("@/pages/admin/sonar-ai-detailed/validation"));
-const DocumentUnificationValidation = safeLazyImport(() => import("@/pages/admin/document-unification/validation"));
+
 // PATCH 481-485 Validation Page
 const Patches481485Validation = safeLazyImport(() => import("@/modules/validation/Patches481485Validation"));
 // PATCH 491-495 Validation Page
@@ -495,8 +495,9 @@ function App() {
                       <Route path="/sgso/report" element={<SGSOReportPage />} />
                       <Route path="/sgso/audit" element={<SGSOAuditPage />} />
                       <Route path="/settings" element={<Settings />} />
-                      <Route path="/documents" element={<Documents />} />
-                      <Route path="/intelligent-documents" element={<Documents />} />
+                      <Route path="/documents" element={<DocumentHub />} />
+                      <Route path="/intelligent-documents" element={<DocumentHub />} />
+                      <Route path="/document-hub" element={<DocumentHub />} />
                       <Route path="/dashboard/document-hub" element={<DocumentHub />} />
                       <Route path="/ai-assistant" element={<AIAssistant />} />
                       <Route path="/travel" element={<Travel />} />
@@ -591,23 +592,19 @@ function App() {
                       <Route path="/admin/analytics/validation" element={<AnalyticsValidation />} />
                       <Route path="/admin/document-hub/validation" element={<DocumentHubValidationPage />} />
                       <Route path="/admin/mission-control/validation" element={<MissionControlValidationPage />} />
-                      <Route path="/admin/documentation/validation" element={<DocumentationValidationPage />} />
                       <Route path="/admin/document-templates/validation" element={<DocumentTemplatesValidationPage />} />
                       <Route path="/admin/satellite-tracker/validation" element={<SatelliteTrackerValidationPage />} />
                       <Route path="/admin/navigation-copilot/validation" element={<NavigationCopilotValidationPage />} />
                       <Route path="/admin/template-editor/validation" element={<TemplateEditorValidationPage />} />
-                      <Route path="/admin/documents-consolidation/validation" element={<DocumentsConsolidationValidationPage />} />
                       <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidationPage />} />
                       <Route path="/admin/incidents-consolidation/validation" element={<IncidentsConsolidationValidationPage />} />
                       <Route path="/admin/sensor-hub/validation" element={<SensorHubValidationPage />} />
                       <Route path="/admin/tests/validation" element={<TestsValidationPage />} />
-                      <Route path="/admin/documents-consolidated/validation" element={<DocumentsConsolidatedValidation />} />
                       <Route path="/admin/ocean-sonar/validation" element={<OceanSonarValidation />} />
                       <Route path="/admin/underwater-drone/validation" element={<UnderwaterDroneValidation />} />
                       <Route path="/admin/mission-engine/validation" element={<MissionEngineValidation />} />
                       <Route path="/admin/drone-commander/validation" element={<DroneCommanderValidation />} />
                       <Route path="/admin/satcom/validation" element={<SatcomValidation />} />
-                      <Route path="/admin/mission-consolidation/validation" element={<MissionConsolidationValidation />} />
                       <Route path="/admin/route-planner/validation" element={<RoutePlannerValidation />} />
                       <Route path="/admin/navigation-copilot-v2/validation" element={<NavigationCopilotV2Validation />} />
                       <Route path="/validation" element={<SystemValidationHub />} />
@@ -618,7 +615,6 @@ function App() {
                       
                       {/* Validation Routes - Patches 436-440 */}
                       <Route path="/admin/underwater-drone/validation" element={<UnderwaterDroneValidation />} />
-                      <Route path="/admin/crew-consolidation/validation" element={<CrewConsolidationValidationPatch437 />} />
                       <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidationPatch438 />} />
                       <Route path="/admin/incident-reports-v2/validation" element={<IncidentReportsV2Validation />} />
                       <Route path="/admin/ai-coordination/validation" element={<AICoordinationValidation />} />
@@ -627,18 +623,13 @@ function App() {
                       <Route path="/admin/sensor-hub-v2/validation" element={<SensorHubV2Validation />} />
                       <Route path="/admin/satcom-v2/validation" element={<SATCOMv2Validation />} />
                       <Route path="/admin/ocean-sonar-v3/validation" element={<OceanSonarV3Validation />} />
-                      <Route path="/admin/documents-unification/validation" element={<DocumentsUnificationValidation />} />
-                      <Route path="/admin/mission-engine-v2/validation" element={<MissionEngineV2Validation />} />
                       
                       {/* Validation Routes - Patches 471-480 */}
                       <Route path="/admin/incident-replay-ai/validation" element={<IncidentReplayAIValidation />} />
                       <Route path="/admin/incidents-consolidation-v2/validation" element={<IncidentsConsolidationV2Validation />} />
                       <Route path="/admin/route-planner-v1/validation" element={<RoutePlannerV1Validation />} />
                       <Route path="/admin/satcom-v1/validation" element={<SatcomV1Validation />} />
-                      <Route path="/admin/mission-engine-validation/validation" element={<MissionEngineValidationPage />} />
-                      <Route path="/admin/crew-module-consolidation/validation" element={<CrewModuleConsolidationValidation />} />
                       <Route path="/admin/sonar-ai-detailed/validation" element={<SonarAIDetailedValidation />} />
-                      <Route path="/admin/document-unification/validation" element={<DocumentUnificationValidation />} />
                       
                       {/* Validation Route - Patches 481-485 */}
                       <Route path="/admin/patches-481-485/validation" element={<Patches481485Validation />} />
@@ -791,28 +782,22 @@ function App() {
                       
                       {/* Validation Routes - Patches 401-410 */}
                       <Route path="/admin/template-editor/validation" element={<TemplateEditorValidation />} />
-                      <Route path="/admin/documents-consolidation/validation" element={<DocumentsConsolidationValidation />} />
                       <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidation />} />
                       <Route path="/admin/incidents-consolidation/validation" element={<IncidentsConsolidationValidation />} />
                       <Route path="/admin/sensor-hub/validation" element={<SensorHubValidation />} />
-                      <Route path="/admin/crew-consolidation/validation" element={<CrewConsolidationValidation />} />
                       <Route path="/admin/sonar-ai/validation" element={<SonarAIValidation />} />
                       <Route path="/admin/test-automation/validation" element={<TestAutomationValidation />} />
                       <Route path="/admin/templates-application/validation" element={<TemplatesApplicationValidation />} />
-                      <Route path="/admin/mission-control-consolidation/validation" element={<MissionControlConsolidationValidation />} />
                       
                       {/* Validation Routes - Patches 411-415 */}
                       <Route path="/admin/price-alerts-finalizado/validation" element={<PriceAlertsFinalizadoValidation />} />
-                      <Route path="/admin/documents-consolidado/validation" element={<DocumentsConsolidadoValidation />} />
                       <Route path="/admin/unified-logs-panel/validation" element={<UnifiedLogsPanelValidation />} />
                       <Route path="/admin/coordination-ai/validation" element={<CoordinationAIValidation />} />
                       <Route path="/admin/experimental-modules/validation" element={<ExperimentalModulesValidation />} />
                       
                       {/* Validation Routes - Patches 416-420 */}
-                      <Route path="/admin/crew-consolidado/validation" element={<CrewConsolidadoValidation />} />
                       <Route path="/admin/templates-editor/validation" element={<TemplatesEditorValidation />} />
                       <Route path="/admin/price-alerts-notification/validation" element={<PriceAlertsNotificationValidation />} />
-                      <Route path="/admin/mission-control-realtime/validation" element={<MissionControlRealtimeValidation />} />
                       <Route path="/admin/satcom-simulation/validation" element={<SatcomSimulationValidation />} />
                       
                       {/* Portuguese Module Routes with English Aliases */}
