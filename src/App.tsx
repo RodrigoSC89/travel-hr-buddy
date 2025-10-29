@@ -269,6 +269,12 @@ const TemplatesEditorValidation = safeLazyImport(() => import("@/pages/admin/tem
 const PriceAlertsNotificationValidation = safeLazyImport(() => import("@/pages/admin/price-alerts-notification/validation"));
 
 const SatcomSimulationValidation = safeLazyImport(() => import("@/pages/admin/satcom-simulation/validation"));
+
+// PATCH 566-570: Copilot Presenter, AI Auto-Tuning, Evolution Dashboard, Changelog, Evolution Trigger
+const CopilotPresenterPage = safeLazyImport(() => import("@/pages/CopilotPresenterPage"));
+const AIEvolutionPage = safeLazyImport(() => import("@/pages/dashboard/AIEvolutionPage"));
+const ReleaseNotesV35 = safeLazyImport(() => import("@/pages/release-notes/ReleaseNotesV35"));
+
 // PATCH 421-425 Validation Pages
 
 const OceanSonarValidation = safeLazyImport(() => import("@/pages/admin/ocean-sonar/validation"));
@@ -850,6 +856,11 @@ function App() {
                       <Route path="/admin/patch-533/underwater-drone-v2" element={<Patch533UnderwaterDroneV2 />} />
                       <Route path="/admin/patch-534/drone-commander-ai" element={<Patch534DroneCommanderAI />} />
                       <Route path="/admin/patch-535/mission-consolidation" element={<Patch535MissionConsolidation />} />
+                      
+                      {/* PATCH 566-570: Copilot Presenter, AI Evolution, Changelog v3.5 */}
+                      <Route path="/demo/copilot-presenter" element={<CopilotPresenterPage />} />
+                      <Route path="/dashboard/ai-evolution" element={<AIEvolutionPage />} />
+                      <Route path="/release-notes/v3.5" element={<ReleaseNotesV35 />} />
                       
                       {/* Master Validation Dashboard */}
                       <Route path="/validation/master-validation" element={<Suspense fallback={<PageSkeleton />}>{React.createElement(safeLazyImport(() => import("@/pages/validation/master-validation")))}</Suspense>} />
