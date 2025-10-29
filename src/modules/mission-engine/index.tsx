@@ -1,6 +1,7 @@
 /**
  * PATCH 426-430 - Mission Engine
  * Consolidated mission control, logs, and execution engine
+ * PATCH 477 - Added step-by-step mission execution with progress tracking
  */
 
 import React, { useState, useEffect } from "react";
@@ -22,8 +23,14 @@ import { MissionDashboard } from "./components/MissionDashboard";
 import { MissionLogs } from "./components/MissionLogs";
 import { MissionExecutor } from "./components/MissionExecutor";
 import { MissionCreator } from "./components/MissionCreator";
+import { MissionExecutionPanel } from "./components/MissionExecutionPanel";
 import { missionEngineService } from "./services/mission-service";
 import type { Mission, MissionLog, ModuleStatus } from "./types";
+
+// Export PATCH 477 modules
+export { missionExecutionService } from "./services/execution-service";
+export type { ExecutedMission, MissionStep, MissionDefinition } from "./services/execution-service";
+export { MissionExecutionPanel } from "./components/MissionExecutionPanel";
 
 const MissionEngine: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -183,7 +190,7 @@ const MissionEngine: React.FC = () => {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="dashboard">
             <Activity className="mr-2 h-4 w-4" />
             Dashboard
@@ -191,6 +198,10 @@ const MissionEngine: React.FC = () => {
           <TabsTrigger value="missions">
             <Target className="mr-2 h-4 w-4" />
             Missions
+          </TabsTrigger>
+          <TabsTrigger value="execution">
+            <Rocket className="mr-2 h-4 w-4" />
+            Execution
           </TabsTrigger>
           <TabsTrigger value="logs">
             <FileText className="mr-2 h-4 w-4" />
@@ -208,6 +219,10 @@ const MissionEngine: React.FC = () => {
             moduleStatuses={moduleStatuses}
             onRefresh={loadData}
           />
+        </TabsContent>
+
+        <TabsContent value="execution" className="space-y-4">
+          <MissionExecutionPanel />
         </TabsContent>
 
         <TabsContent value="missions" className="space-y-4">
