@@ -503,9 +503,11 @@ function App() {
                       <Route path="/travel" element={<Travel />} />
                       <Route path="/analytics" element={<Analytics />} />
                       <Route path="/hr" element={<HumanResources />} />
-                      <Route path="/communication" element={<Communication />} />
-                      {/* PATCH 486: Communication Center (unified) */}
+                      {/* PATCH 551: Communication Center Consolidation - Unified communication route */}
                       <Route path="/communication-center" element={<CommunicationCenter />} />
+                      {/* Legacy communication routes - redirect to unified center */}
+                      <Route path="/communication" element={<CommunicationCenter />} />
+                      <Route path="/communications" element={<CommunicationCenter />} />
                       <Route path="/intelligence" element={<Intelligence />} />
                       {/* PATCH 191.0: Deprecated - Consolidated into /modules/fleet */}
                       {/* <Route path="/maritime" element={<Maritime />} /> */}
@@ -538,8 +540,11 @@ function App() {
                       <Route path="/voice" element={<Voice />} />
                       <Route path="/portal" element={<Portal />} />
                       <Route path="/crew-dossier" element={<CrewDossierPage />} />
-                      <Route path="/crew" element={<ConsolidatedCrew />} />
-                      <Route path="/hr/crew" element={<ConsolidatedCrew />} />
+                      {/* PATCH 553: Crew Consolidation - unified crew management */}
+                      <Route path="/crew-management" element={<CrewManagement />} />
+                      <Route path="/crew" element={<CrewManagement />} />
+                      <Route path="/hr/crew" element={<CrewManagement />} />
+                      <Route path="/operations/crew" element={<CrewManagement />} />
                       <Route path="/channel-manager-new" element={<ChannelManagerHub />} />
                       <Route path="/academy-new" element={<TrainingAcademyHub />} />
                       <Route path="/crew-wellbeing-new" element={<CrewWellbeingNew />} />
@@ -699,7 +704,9 @@ function App() {
                       <Route path="/maintenance-planner" element={<MaintenancePlanner />} />
                       <Route path="/mission-logs" element={<MissionLogs />} />
                       <Route path="/travel" element={<TravelManagementPage />} />
+                      {/* PATCH 552: Incident Reports Consolidation - Unified route */}
                       <Route path="/incident-reports" element={<IncidentReports />} />
+                      <Route path="/incidents" element={<IncidentReports />} /> {/* Legacy redirect */}
                       <Route path="/fuel-optimizer" element={<FuelOptimizer />} />
                       <Route path="/weather-dashboard" element={<WeatherDashboard />} />
                       <Route path="/weather" element={<WeatherDashboard />} />
@@ -764,12 +771,6 @@ function App() {
                       <Route path="/voice-assistant" element={<VoiceAssistantModule />} />
                       <Route path="/notifications-center" element={<NotificationsCenterModule />} />
                       <Route path="/notifications" element={<NotificationsCenterModule />} />
-                      
-                      {/* PATCH 406: Consolidated Crew Management */}
-                      <Route path="/crew-management" element={<CrewManagement />} />
-                      {/* Legacy crew redirects */}
-                      <Route path="/crew" element={<CrewManagement />} />
-                      <Route path="/operations/crew" element={<CrewManagement />} />
                       
                       {/* PATCH 407: Sonar AI Module */}
                       <Route path="/sonar-ai" element={<SonarAI />} />

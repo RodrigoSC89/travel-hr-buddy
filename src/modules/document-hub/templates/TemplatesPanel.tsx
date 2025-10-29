@@ -3,12 +3,18 @@
  * Create and manage document templates with variable support
  */
 
+/**
+ * PATCH 554 - Document Templates Completion
+ * Enhanced with WYSIWYG editor, variable placeholders, and PDF export
+ */
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   FileText, 
   Plus, 
@@ -32,6 +38,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import html2pdf from "html2pdf.js";
+import { TemplateWYSIWYGEditor } from "./components/TemplateWYSIWYGEditor";
 
 interface Template {
   id: string;
@@ -67,6 +74,7 @@ export default function TemplatesPanel() {
   const [editingTemplate, setEditingTemplate] = useState<Template | null>(null);
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [previewVariables, setPreviewVariables] = useState<Record<string, string>>({});
+  const [editorMode, setEditorMode] = useState<"wysiwyg" | "html">("wysiwyg");
   
   const [newTemplate, setNewTemplate] = useState({
     name: "",
@@ -258,13 +266,32 @@ export default function TemplatesPanel() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="content">Conteúdo HTML *</Label>
-                <Textarea
-                  id="content"
-                  placeholder={"<h1>Título</h1>\n<p>{{nome}}</p>\n<p>{{data}}</p>"}
-                  value={newTemplate.content}
-                  onChange={(e) => setNewTemplate({ ...newTemplate, content: e.target.value })}
-                  rows={15}
+                <div className="flex items-center justify-between mb-2">
+                  <Label htmlFor="content">Conteúdo *</Label>
+                  <Tabs value={editorMode} onValueChange={(v) => setEditorMode(v as "wysiwyg" | "html")}>
+                    <TabsList className="h-8">
+                      <TabsTrigger value="wysiwyg" className="text-xs">Editor</TabsTrigger>
+                      <TabsTrigger value="html" className="text-xs">HTML</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+                
+                {editorMode === "wysiwyg" ? (
+                  <TemplateWYSIWYGEditor
+                    content={newTemplate.content}
+                    onChange={(content) => setNewTemplate({ ...newTemplate, content })}
+                  />
+                ) : (
+                  <Textarea
+                    id="content"
+                    placeholder={"<h1>Título</h1>\n<p>{{nome}}</p>\n<p>{{data}}</p>"}
+                    value={newTemplate.content}
+                    onChange={(e) => setNewTemplate({ ...newTemplate, content: e.target.value })}
+                    rows={15}
+                    className="font-mono text-sm"
+                  />
+                )}
+                
                   className="font-mono text-sm"
                 />
                 <p className="text-xs text-muted-foreground">
