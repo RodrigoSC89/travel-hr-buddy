@@ -595,8 +595,9 @@ function App() {
                       <Route path="/admin/training" element={<TrainingManagement />} />
                       <Route path="/admin/training-academy" element={<TrainingAcademyAdmin />} />
                       <Route path="/admin/training-progress" element={<TrainingAcademyEnhanced />} />
-                      <Route path="/admin/incidents" element={<IncidentsPage />} />
-                      <Route path="/admin/incident-reports" element={<IncidentReportsComplete />} />
+                      {/* PATCH 491: Consolidated Incident Reports - single route */}
+                      <Route path="/admin/incident-reports" element={<IncidentReports />} />
+                      <Route path="/admin/incidents" element={<IncidentReports />} /> {/* Redirect old route */}
                       <Route path="/admin/performance-dashboard" element={<PerformanceDashboard />} />
                       <Route path="/developer/module-health" element={<ModuleHealth />} />
                       <Route path="/developer/watchdog" element={<WatchdogMonitor />} />

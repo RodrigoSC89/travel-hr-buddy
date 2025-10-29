@@ -1,4 +1,10 @@
 // @ts-nocheck
+/**
+ * PATCH 491 - Consolidated Incident Reports Module
+ * Consolidates incident-reports/ and incidents/ into one unified system
+ * Features: Detection, Documentation, Closure workflows + Full CRUD
+ */
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +20,9 @@ import {
   Upload,
   Download,
   Plus,
-  AlertCircle
+  AlertCircle,
+  Eye,
+  Edit
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -31,6 +39,13 @@ interface Incident {
   incident_date: string;
   impact_level: string;
   description?: string;
+  reported_by?: string;
+  assigned_to?: string;
+  incident_location?: string;
+  root_cause?: string;
+  immediate_actions?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 const IncidentReports = () => {
@@ -169,11 +184,12 @@ const IncidentReports = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="incidents">All Incidents</TabsTrigger>
-          <TabsTrigger value="investigations">Investigations</TabsTrigger>
-          <TabsTrigger value="actions">Corrective Actions</TabsTrigger>
+          <TabsTrigger value="detection"><Search className="mr-2 h-4 w-4" />Detection</TabsTrigger>
+          <TabsTrigger value="documentation"><FileText className="mr-2 h-4 w-4" />Documentation</TabsTrigger>
+          <TabsTrigger value="closure"><CheckCircle className="mr-2 h-4 w-4" />Closure</TabsTrigger>
+          <TabsTrigger value="all">All Incidents</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-6">
@@ -218,7 +234,130 @@ const IncidentReports = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="incidents" className="mt-6">
+        {/* Detection Tab - Open incidents requiring attention */}
+        <TabsContent value="detection" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Incident Detection</CardTitle>
+              <CardDescription>Open incidents requiring immediate attention</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {incidents.filter(i => i.status === "pending" || i.status === "under_analysis").length === 0 ? (
+                  <p className="text-center py-8 text-muted-foreground">No open incidents detected</p>
+                ) : (
+                  incidents.filter(i => i.status === "pending" || i.status === "under_analysis").map(incident => (
+                    <Card key={incident.id} className="p-4 hover:bg-muted/50 transition-colors cursor-pointer"
+                      onClick={() => setSelectedIncident(incident)}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <AlertTriangle className="h-4 w-4 text-red-500" />
+                            <span className="font-semibold">{incident.title}</span>
+                            <Badge variant="outline">{incident.incident_number}</Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground">{incident.description}</p>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            {incident.incident_location || "Location N/A"} • {new Date(incident.incident_date).toLocaleString()}
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <Badge className={incident.severity === "critical" ? "bg-red-500/20 text-red-500" : "bg-yellow-500/20 text-yellow-500"}>
+                            {incident.severity}
+                          </Badge>
+                          <Button size="sm" variant="outline"><Eye className="h-3 w-3" /></Button>
+                        </div>
+                      </div>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Documentation Tab - All incidents for documentation */}
+        <TabsContent value="documentation" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Incident Documentation</CardTitle>
+              <CardDescription>Document and export incident reports</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {incidents.map(incident => (
+                  <Card key={incident.id} className="p-4 hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <FileText className="h-4 w-4" />
+                          <span className="font-semibold">{incident.title}</span>
+                          <Badge>{incident.category}</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{incident.description}</p>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Status: {incident.status.replace("_", " ")} • {new Date(incident.incident_date).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline" onClick={() => setSelectedIncident(incident)}>
+                          <Edit className="h-3 w-3 mr-1" />
+                          Edit
+                        </Button>
+                        <Button size="sm" variant="outline">
+                          <Download className="h-3 w-3 mr-1" />
+                          PDF
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Closure Tab - Resolved and closed incidents */}
+        <TabsContent value="closure" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Incident Closure</CardTitle>
+              <CardDescription>Resolved and closed incidents</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {incidents.filter(i => i.status === "resolved" || i.status === "closed").length === 0 ? (
+                  <p className="text-center py-8 text-muted-foreground">No closed incidents</p>
+                ) : (
+                  incidents.filter(i => i.status === "resolved" || i.status === "closed").map(incident => (
+                    <Card key={incident.id} className="p-4 hover:bg-muted/50 transition-colors cursor-pointer"
+                      onClick={() => setSelectedIncident(incident)}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <span className="font-semibold">{incident.title}</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground">{incident.description}</p>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            Closed: {new Date(incident.updated_at || incident.incident_date).toLocaleDateString()}
+                            {incident.root_cause && ` • Root cause: ${incident.root_cause.substring(0, 50)}...`}
+                          </div>
+                        </div>
+                        <Badge variant="outline" className="text-green-600">
+                          {incident.status}
+                        </Badge>
+                      </div>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* All Incidents Tab */}
+        <TabsContent value="all" className="mt-6">
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -241,7 +380,8 @@ const IncidentReports = () => {
             <CardContent>
               <div className="space-y-3">
                 {incidents.map(incident => (
-                  <div key={incident.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+                  <div key={incident.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+                    onClick={() => setSelectedIncident(incident)}>
                     <div className="flex items-center gap-4 flex-1">
                       <div className={`w-1.5 h-16 rounded ${getSeverityColor(incident.severity)}`} />
                       <div className="flex-1">
@@ -260,85 +400,11 @@ const IncidentReports = () => {
                         {incident.status.replace("_", " ")}
                       </Badge>
                       <div className="text-xs text-muted-foreground mt-2">
-                        {new Date(incident.reported_date).toLocaleDateString()}
+                        {new Date(incident.incident_date).toLocaleDateString()}
                       </div>
                     </div>
                   </div>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="investigations" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Active Investigations</CardTitle>
-              <CardDescription>Ongoing incident investigations</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="font-medium">Equipment Malfunction Investigation</div>
-                    <Badge>In Progress</Badge>
-                  </div>
-                  <div className="text-sm text-muted-foreground space-y-1">
-                    <div>Lead: Chief Engineer Johnson</div>
-                    <div>Started: Oct 26, 2025</div>
-                    <div>Evidence: 5 items collected</div>
-                  </div>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="font-medium">Safety Protocol Review</div>
-                    <Badge variant="outline">Completed</Badge>
-                  </div>
-                  <div className="text-sm text-muted-foreground space-y-1">
-                    <div>Lead: Safety Officer Smith</div>
-                    <div>Completed: Oct 25, 2025</div>
-                    <div>Root cause identified</div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="actions" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Corrective Actions</CardTitle>
-              <CardDescription>Track corrective and preventive actions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <div className="font-medium">Update maintenance schedule</div>
-                      <div className="text-sm text-muted-foreground mt-1">Preventive action for equipment failure</div>
-                    </div>
-                    <Badge className="bg-orange-500">High Priority</Badge>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Assigned to: Maintenance Team</span>
-                    <span className="text-muted-foreground">Due: Oct 30, 2025</span>
-                  </div>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <div className="font-medium">Conduct safety refresher training</div>
-                      <div className="text-sm text-muted-foreground mt-1">Corrective action for protocol violation</div>
-                    </div>
-                    <Badge className="bg-green-500">Completed</Badge>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Completed by: Training Dept.</span>
-                    <span className="text-muted-foreground">Oct 27, 2025</span>
-                  </div>
-                </div>
               </div>
             </CardContent>
           </Card>
