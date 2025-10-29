@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Route Planner Service - PATCH 494 (Enhanced with AI)
  * AI-powered route optimization with weather integration

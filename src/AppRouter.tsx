@@ -155,6 +155,11 @@ export default function AppRouter() {
         <Route path="/admin/patches-481-485/validation" element={
           React.createElement(React.lazy(() => import("@/modules/validation/Patches481485Validation")))
         } />
+        
+        {/* PATCH 491-495 Validation Route */}
+        <Route path="/admin/patches-491-495/validation" element={
+          React.createElement(React.lazy(() => import("@/modules/validation/Patches491495Validation")))
+        } />
       </Routes>
     </Router>
   );

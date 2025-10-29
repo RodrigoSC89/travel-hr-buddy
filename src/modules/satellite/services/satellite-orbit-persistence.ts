@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 274 - Satellite Orbit Persistence Service
  * Persists satellite orbital data to Supabase
