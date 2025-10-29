@@ -76,6 +76,28 @@ const MissionEngine: React.FC = () => {
 
   useEffect(() => {
     loadData();
+    
+    // PATCH 492: Real-time subscriptions for missions and logs
+    const missionsChannel = missionEngineService.subscribeMissions((updatedMissions) => {
+      setMissions(updatedMissions);
+    });
+
+    const logsChannel = missionEngineService.subscribeLogs((updatedLogs) => {
+      setLogs(updatedLogs);
+      // Show toast for new critical logs
+      const newCriticalLogs = updatedLogs.filter(l => l.severity === "critical");
+      if (newCriticalLogs.length > 0) {
+        const latestLog = newCriticalLogs[0];
+        toast.error(`Critical Alert: ${latestLog.title}`, {
+          description: latestLog.message
+        });
+      }
+    });
+
+    return () => {
+      if (missionsChannel) missionsChannel.unsubscribe();
+      if (logsChannel) logsChannel.unsubscribe();
+    };
   }, []);
 
   const loadData = async () => {
@@ -115,6 +137,40 @@ const MissionEngine: React.FC = () => {
     } catch (error) {
       console.error("Error executing mission:", error);
       toast.error("Failed to start mission execution");
+    }
+  };
+
+  // PATCH 492: New workflow handlers
+  const handleAssignMission = async (missionId: string, vesselId: string, agentIds: string[]) => {
+    try {
+      await missionEngineService.assignMission(missionId, vesselId, agentIds);
+      toast.success("Mission assigned successfully");
+      loadData();
+    } catch (error) {
+      console.error("Error assigning mission:", error);
+      toast.error("Failed to assign mission");
+    }
+  };
+
+  const handleCloseMission = async (missionId: string, summary: string, outcome: "success" | "partial" | "failed") => {
+    try {
+      await missionEngineService.closeMission(missionId, summary, outcome);
+      toast.success(`Mission closed with outcome: ${outcome}`);
+      loadData();
+    } catch (error) {
+      console.error("Error closing mission:", error);
+      toast.error("Failed to close mission");
+    }
+  };
+
+  const handleReportIncident = async (missionId: string, incident: any) => {
+    try {
+      await missionEngineService.reportMissionIncident(missionId, incident);
+      toast.success("Incident reported and logged");
+      loadData();
+    } catch (error) {
+      console.error("Error reporting incident:", error);
+      toast.error("Failed to report incident");
     }
   };
 

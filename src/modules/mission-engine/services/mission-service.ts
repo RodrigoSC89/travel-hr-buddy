@@ -1,13 +1,254 @@
 // @ts-nocheck
 /**
- * PATCH 426-430 - Mission Engine Service
- * Consolidated service for mission and log management
+ * PATCH 492 - Mission Engine Service (Enhanced with Real Logic)
+ * Real mission flow: create → assign → monitor → close
+ * Integrated with mission-control and task-automation
+ * Real-time log streaming and incident support
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import type { Mission, MissionLog, MissionExecution, MissionAlert } from "../types";
 
 export class MissionEngineService {
+  
+  // ==================== Real-time Subscriptions ====================
+  
+  /**
+   * Subscribe to mission updates in real-time
+   */
+  subscribeMissions(callback: (missions: Mission[]) => void) {
+    const channel = supabase
+      .channel('mission-updates')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'missions'
+      }, async () => {
+        const missions = await this.getMissions();
+        callback(missions);
+      })
+      .subscribe();
+    
+    return channel;
+  }
+
+  /**
+   * Subscribe to mission logs in real-time
+   */
+  subscribeLogs(callback: (logs: MissionLog[]) => void, missionId?: string) {
+    const channel = supabase
+      .channel('mission-logs-updates')
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'mission_logs',
+        filter: missionId ? `mission_id=eq.${missionId}` : undefined
+      }, async () => {
+        const logs = await this.getLogs(missionId ? { missionId } : undefined);
+        callback(logs);
+      })
+      .subscribe();
+    
+    return channel;
+  }
+
+  // ==================== Mission Workflow (Real Flow) ====================
+  
+  /**
+   * STEP 1: Create Mission
+   */
+  async createMission(mission: Omit<Mission, "id" | "createdAt">): Promise<Mission> {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
+      const { data, error } = await supabase
+        .from("missions")
+        .insert({
+          code: mission.code,
+          name: mission.name,
+          type: mission.type,
+          status: "planned", // Start as planned
+          priority: mission.priority,
+          description: mission.description,
+          location_lat: mission.location?.lat,
+          location_lng: mission.location?.lng,
+          assigned_vessel_id: mission.assignedVesselId,
+          assigned_agents: mission.assignedAgents || [],
+          start_time: mission.startTime,
+          end_time: mission.endTime,
+          metadata: mission.metadata || {},
+          created_by: user.id
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      
+      // Log mission creation
+      await this.createLog({
+        missionId: data.id,
+        logType: "info",
+        severity: "low",
+        title: "Mission Created",
+        message: `Mission "${mission.name}" has been created and is now in planning phase`,
+        category: "Lifecycle",
+        sourceModule: "Mission Engine",
+        eventTimestamp: new Date().toISOString()
+      });
+      
+      return this.mapToMission(data);
+    } catch (error) {
+      console.error("Error creating mission:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * STEP 2: Assign Mission to Vessel/Team
+   */
+  async assignMission(missionId: string, vesselId: string, agentIds: string[]): Promise<Mission> {
+    try {
+      const mission = await this.updateMission(missionId, {
+        assignedVesselId: vesselId,
+        assignedAgents: agentIds,
+        status: "assigned"
+      });
+
+      // Log assignment
+      await this.createLog({
+        missionId,
+        logType: "info",
+        severity: "medium",
+        title: "Mission Assigned",
+        message: `Mission assigned to vessel ${vesselId} with ${agentIds.length} agents`,
+        category: "Assignment",
+        sourceModule: "Mission Engine",
+        eventTimestamp: new Date().toISOString(),
+        metadata: { vesselId, agentIds }
+      });
+
+      return mission;
+    } catch (error) {
+      console.error("Error assigning mission:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * STEP 3: Monitor Mission (Real-time status updates)
+   */
+  async monitorMission(missionId: string): Promise<{
+    mission: Mission;
+    logs: MissionLog[];
+    alerts: MissionAlert[];
+  }> {
+    try {
+      const [mission, logs, alerts] = await Promise.all([
+        this.getMission(missionId),
+        this.getLogs({ missionId }),
+        this.getAlerts(missionId)
+      ]);
+
+      if (!mission) throw new Error("Mission not found");
+
+      return { mission, logs, alerts };
+    } catch (error) {
+      console.error("Error monitoring mission:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * STEP 4: Close Mission
+   */
+  async closeMission(missionId: string, summary: string, outcome: "success" | "partial" | "failed"): Promise<Mission> {
+    try {
+      const mission = await this.updateMission(missionId, {
+        status: "completed",
+        endTime: new Date().toISOString(),
+        metadata: { outcome, summary }
+      });
+
+      // Log mission closure
+      await this.createLog({
+        missionId,
+        logType: "info",
+        severity: "medium",
+        title: "Mission Closed",
+        message: `Mission completed with outcome: ${outcome}. ${summary}`,
+        category: "Lifecycle",
+        sourceModule: "Mission Engine",
+        eventTimestamp: new Date().toISOString(),
+        metadata: { outcome, summary }
+      });
+
+      return mission;
+    } catch (error) {
+      console.error("Error closing mission:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Handle incidents during mission
+   */
+  async reportMissionIncident(missionId: string, incident: {
+    title: string;
+    description: string;
+    severity: "low" | "medium" | "high" | "critical";
+    category: string;
+  }): Promise<void> {
+    try {
+      // Create incident report
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const { data: incidentData, error: incidentError } = await supabase
+        .from("incident_reports")
+        .insert({
+          incident_number: `INC-${Date.now()}`,
+          title: incident.title,
+          description: incident.description,
+          severity: incident.severity,
+          category: incident.category,
+          status: "pending",
+          incident_date: new Date().toISOString(),
+          incident_location: "Mission Site",
+          impact_level: incident.severity,
+          reported_by: user?.email || "System",
+          assigned_to: "Mission Commander"
+        })
+        .select()
+        .single();
+
+      if (incidentError) throw incidentError;
+
+      // Log incident in mission logs
+      await this.createLog({
+        missionId,
+        logType: "error",
+        severity: incident.severity,
+        title: `Incident: ${incident.title}`,
+        message: incident.description,
+        category: "Incident",
+        sourceModule: "Incident Reports",
+        eventTimestamp: new Date().toISOString(),
+        metadata: { incidentId: incidentData.id, incidentNumber: incidentData.incident_number }
+      });
+
+      // Create mission alert
+      await this.createAlert({
+        missionId,
+        severity: incident.severity,
+        message: `Incident reported: ${incident.title}`,
+        acknowledged: false
+      });
+
+    } catch (error) {
+      console.error("Error reporting mission incident:", error);
+      throw error;
+    }
+  }
   
   // ==================== Mission Management ====================
   
@@ -262,6 +503,22 @@ export class MissionEngineService {
   }
 
   // ==================== Alerts ====================
+
+  async getAlerts(missionId: string): Promise<MissionAlert[]> {
+    try {
+      const { data, error } = await supabase
+        .from("mission_alerts")
+        .select("*")
+        .eq("mission_id", missionId)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      return (data || []).map(this.mapToAlert);
+    } catch (error) {
+      console.error("Error fetching alerts:", error);
+      return [];
+    }
+  }
 
   async createAlert(alert: Omit<MissionAlert, "id" | "createdAt">): Promise<MissionAlert> {
     try {

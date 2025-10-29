@@ -115,6 +115,43 @@ const RoutePlanner = () => {
     }
   };
 
+  // PATCH 494: AI-powered route suggestion
+  const suggestOptimalRoute = async () => {
+    setIsCalculating(true);
+    try {
+      const optimalRoute = await routePlannerService.suggestOptimalRoute(origin, destination, 12, 50);
+      
+      setCalculatedRoutes([optimalRoute]);
+      
+      // Convert to map format
+      const mapRoute: RouteData = {
+        id: optimalRoute.id || 'ai-optimized',
+        name: optimalRoute.name,
+        type: "planned",
+        color: "#10b981", // Green for AI optimized
+        distance: optimalRoute.distance * 1852,
+        duration: optimalRoute.estimatedDuration,
+        points: optimalRoute.waypoints.map((wp) => ({
+          longitude: wp.longitude,
+          latitude: wp.latitude,
+          name: wp.name,
+        })),
+      };
+      
+      setRoutes([mapRoute]);
+      
+      toast.success(
+        `AI Route: ${optimalRoute.timeSavings?.toFixed(1)}h faster, ${optimalRoute.fuelSavings?.toFixed(1)}% fuel savings`,
+        { duration: 5000 }
+      );
+    } catch (error) {
+      console.error("AI route suggestion failed:", error);
+      toast.error("Falha ao sugerir rota otimizada");
+    } finally {
+      setIsCalculating(false);
+    }
+  };
+
   const saveRoute = async (route: Route) => {
     if (!user) {
       toast.error("Faça login para salvar rotas");
@@ -211,23 +248,44 @@ const RoutePlanner = () => {
               </div>
             </div>
           </div>
-          <Button 
-            onClick={calculateRoutes} 
-            disabled={isCalculating}
-            className="w-full"
-          >
-            {isCalculating ? (
-              <>
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                Calculando rotas com análise meteorológica...
-              </>
-            ) : (
-              <>
-                <Navigation className="h-4 w-4 mr-2" />
-                Calcular Rotas Otimizadas
-              </>
-            )}
-          </Button>
+          <div className="grid grid-cols-2 gap-2">
+            <Button 
+              onClick={calculateRoutes} 
+              disabled={isCalculating}
+              variant="outline"
+              className="w-full"
+            >
+              {isCalculating ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Calculando...
+                </>
+              ) : (
+                <>
+                  <Navigation className="h-4 w-4 mr-2" />
+                  Calcular Rotas
+                </>
+              )}
+            </Button>
+            {/* PATCH 494: AI Suggestion Button */}
+            <Button 
+              onClick={suggestOptimalRoute} 
+              disabled={isCalculating}
+              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+            >
+              {isCalculating ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  AI Processando...
+                </>
+              ) : (
+                <>
+                  <TrendingUp className="h-4 w-4 mr-2" />
+                  Sugerir Rota AI
+                </>
+              )}
+            </Button>
+          </div>
         </CardContent>
       </Card>
 

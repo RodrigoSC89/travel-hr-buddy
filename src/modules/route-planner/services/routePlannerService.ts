@@ -1,6 +1,7 @@
 /**
- * Route Planner Service - PATCH 431
- * Integrates route planning with weather, forecast, and risk assessment
+ * Route Planner Service - PATCH 494 (Enhanced with AI)
+ * AI-powered route optimization with weather integration
+ * Optimizes for minimum time and fuel consumption
  */
 
 import { navigationCopilot, type Coordinates, type WeatherData } from "@/modules/navigation-copilot/index";
@@ -27,11 +28,16 @@ export interface Route {
   waypoints: Waypoint[];
   distance: number; // nautical miles
   estimatedDuration: number; // hours
+  estimatedFuelConsumption?: number; // liters - PATCH 494
+  fuelSavings?: number; // percentage - PATCH 494
+  timeSavings?: number; // hours - PATCH 494
   etaArrival: string;
   weatherAlerts: WeatherAlert[];
   riskScore: number;
   status: "draft" | "planned" | "active" | "completed";
   recommended?: boolean;
+  aiOptimized?: boolean; // PATCH 494
+  optimizationReason?: string; // PATCH 494
   createdAt?: string;
   updatedAt?: string;
   userId?: string;
@@ -55,6 +61,127 @@ export interface RouteCalculationOptions {
 }
 
 class RoutePlannerService {
+  /**
+   * PATCH 494: AI-powered route optimization
+   * Suggests optimal route considering time and fuel efficiency
+   */
+  async suggestOptimalRoute(
+    origin: Coordinates,
+    destination: Coordinates,
+    vesselSpeed: number = 12, // knots
+    fuelConsumptionRate: number = 50 // liters per hour
+  ): Promise<Route> {
+    try {
+      logger.info("Calculating AI-optimized route", { origin, destination });
+
+      // Calculate multiple routes
+      const routes = await this.calculateRoutes(origin, destination, {
+        avoidStorms: true,
+        considerFuelEfficiency: true,
+      });
+
+      if (routes.length === 0) {
+        throw new Error("No routes available");
+      }
+
+      // AI optimization: score routes based on multiple factors
+      const scoredRoutes = routes.map(route => {
+        // Calculate fuel consumption
+        const fuelConsumption = route.estimatedDuration * fuelConsumptionRate;
+        
+        // Scoring factors (normalized 0-100)
+        const timeScore = 100 - (route.estimatedDuration / 168) * 100; // Lower time = higher score
+        const fuelScore = 100 - (fuelConsumption / 10000) * 100; // Lower fuel = higher score
+        const safetyScore = 100 - route.riskScore; // Lower risk = higher score
+        const weatherScore = route.weatherAlerts.length === 0 ? 100 : 
+          Math.max(0, 100 - (route.weatherAlerts.length * 20));
+        
+        // Weighted scoring (time and fuel are most important)
+        const totalScore = (
+          timeScore * 0.35 +
+          fuelScore * 0.35 +
+          safetyScore * 0.20 +
+          weatherScore * 0.10
+        );
+
+        return {
+          ...route,
+          aiScore: totalScore,
+          estimatedFuelConsumption: fuelConsumption,
+        };
+      });
+
+      // Sort by AI score and get the best route
+      const bestRoute = scoredRoutes.sort((a, b) => b.aiScore - a.aiScore)[0];
+      
+      // Calculate savings compared to the longest route
+      const longestRoute = routes.reduce((prev, current) => 
+        current.estimatedDuration > prev.estimatedDuration ? current : prev
+      );
+      
+      const timeSavings = longestRoute.estimatedDuration - bestRoute.estimatedDuration;
+      const fuelSavings = ((longestRoute.estimatedDuration - bestRoute.estimatedDuration) * 
+        fuelConsumptionRate / (longestRoute.estimatedDuration * fuelConsumptionRate)) * 100;
+
+      // Save AI suggestion log
+      await this.saveAISuggestionLog({
+        origin,
+        destination,
+        suggestedRoute: bestRoute.name,
+        timeSavings,
+        fuelSavings,
+        weatherConditions: bestRoute.weatherAlerts.length,
+        riskScore: bestRoute.riskScore
+      });
+
+      return {
+        ...bestRoute,
+        aiOptimized: true,
+        recommended: true,
+        timeSavings,
+        fuelSavings,
+        optimizationReason: `AI suggests this route for ${timeSavings.toFixed(1)}h time savings and ${fuelSavings.toFixed(1)}% fuel savings`,
+      };
+    } catch (error) {
+      logger.error("Failed to calculate AI-optimized route", error);
+      throw error;
+    }
+  }
+
+  /**
+   * PATCH 494: Save AI suggestion log for tracking
+   */
+  async saveAISuggestionLog(data: {
+    origin: Coordinates;
+    destination: Coordinates;
+    suggestedRoute: string;
+    timeSavings: number;
+    fuelSavings: number;
+    weatherConditions: number;
+    riskScore: number;
+  }): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('route_ai_suggestions')
+        .insert({
+          origin: data.origin,
+          destination: data.destination,
+          suggested_route: data.suggestedRoute,
+          time_savings_hours: data.timeSavings,
+          fuel_savings_percentage: data.fuelSavings,
+          weather_alerts_count: data.weatherConditions,
+          risk_score: data.riskScore,
+          created_at: new Date().toISOString()
+        });
+
+      if (error) {
+        logger.error("Failed to save AI suggestion log", error);
+      }
+    } catch (error) {
+      logger.error("Error saving AI suggestion log", error);
+    }
+  }
+
   /**
    * Calculate optimized routes with weather integration
    */

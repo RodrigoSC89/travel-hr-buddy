@@ -51,6 +51,8 @@ import {
   Trash2,
 } from "lucide-react";
 import jsPDF from "jspdf";
+import { Document, Packer, Paragraph, TextRun } from "docx"; // PATCH 493: Add Word export
+import { saveAs } from "file-saver"; // PATCH 493: For downloading files
 
 interface Template {
   id: string;
@@ -78,6 +80,12 @@ const AVAILABLE_PLACEHOLDERS = [
   { key: "{{address}}", label: "Address", icon: MapPin },
   { key: "{{vessel_name}}", label: "Vessel Name", icon: Building },
   { key: "{{port}}", label: "Port", icon: MapPin },
+  // PATCH 493: Additional maritime placeholders
+  { key: "{{crew_name}}", label: "Crew Name", icon: User },
+  { key: "{{crew_position}}", label: "Crew Position", icon: Type },
+  { key: "{{vessel_imo}}", label: "Vessel IMO", icon: Hash },
+  { key: "{{departure_port}}", label: "Departure Port", icon: MapPin },
+  { key: "{{arrival_port}}", label: "Arrival Port", icon: MapPin },
 ];
 
 export const CompleteTemplateEditor: React.FC = () => {
@@ -87,6 +95,8 @@ export const CompleteTemplateEditor: React.FC = () => {
   const [placeholderValues, setPlaceholderValues] = useState<PlaceholderValue>({});
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showFillDialog, setShowFillDialog] = useState(false);
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false); // PATCH 493: Preview dialog
+  const [previewContent, setPreviewContent] = useState(""); // PATCH 493: Preview content
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
 
@@ -234,7 +244,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     toast.success("Template filled with values");
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     if (!editor) return;
 
     try {
@@ -248,6 +258,9 @@ export const CompleteTemplateEditor: React.FC = () => {
       const filename = `${templateTitle || 'document'}_${new Date().toISOString().split('T')[0]}.pdf`;
       doc.save(filename);
       
+      // PATCH 493: Save to history
+      await saveExportHistory('PDF', filename);
+      
       toast.success("PDF exported successfully");
     } catch (error) {
       console.error("Error exporting PDF:", error);
@@ -255,7 +268,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     }
   };
 
-  const exportToHTML = () => {
+  const exportToHTML = async () => {
     if (!editor) return;
 
     try {
@@ -268,10 +281,87 @@ export const CompleteTemplateEditor: React.FC = () => {
       link.click();
       URL.revokeObjectURL(url);
       
+      // PATCH 493: Save to history
+      await saveExportHistory('HTML', link.download);
+      
       toast.success("HTML exported successfully");
     } catch (error) {
       console.error("Error exporting HTML:", error);
       toast.error("Failed to export HTML");
+    }
+  };
+
+  // PATCH 493: New Word/DOCX export
+  const exportToWord = async () => {
+    if (!editor) return;
+
+    try {
+      const content = editor.getText();
+      const paragraphs = content.split('\n').map(line => 
+        new Paragraph({
+          children: [new TextRun(line)]
+        })
+      );
+
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: paragraphs
+        }]
+      });
+
+      const blob = await Packer.toBlob(doc);
+      const filename = `${templateTitle || 'document'}_${new Date().toISOString().split('T')[0]}.docx`;
+      saveAs(blob, filename);
+      
+      // PATCH 493: Save to history
+      await saveExportHistory('DOCX', filename);
+      
+      toast.success("Word document exported successfully");
+    } catch (error) {
+      console.error("Error exporting Word:", error);
+      toast.error("Failed to export Word document");
+    }
+  };
+
+  // PATCH 493: Preview before export
+  const showPreview = () => {
+    if (!editor) return;
+    
+    let content = editor.getHTML();
+    
+    // Replace placeholders with values for preview
+    Object.entries(placeholderValues).forEach(([key, value]) => {
+      const regex = new RegExp(key.replace(/[{}]/g, '\\$&'), 'g');
+      content = content.replace(regex, value || `<span class="text-orange-500">${key}</span>`);
+    });
+    
+    setPreviewContent(content);
+    setShowPreviewDialog(true);
+  };
+
+  // PATCH 493: Save export history to Supabase
+  const saveExportHistory = async (format: string, filename: string) => {
+    try {
+      if (!user) return;
+      
+      const { error } = await supabase
+        .from('template_export_history')
+        .insert({
+          template_id: selectedTemplate?.id,
+          template_title: templateTitle || 'Untitled',
+          export_format: format,
+          filename: filename,
+          exported_by: user.id,
+          exported_at: new Date().toISOString(),
+          placeholder_values: placeholderValues
+        });
+      
+      if (error) {
+        console.error('Error saving export history:', error);
+      }
+    } catch (error) {
+      console.error('Error saving export history:', error);
     }
   };
 
@@ -414,6 +504,10 @@ export const CompleteTemplateEditor: React.FC = () => {
                   </CardDescription>
                 </div>
                 <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={showPreview}>
+                    <Eye className="h-4 w-4 mr-2" />
+                    Preview
+                  </Button>
                   <Button variant="outline" size="sm" onClick={exportToHTML}>
                     <FileDown className="h-4 w-4 mr-2" />
                     HTML
@@ -421,6 +515,10 @@ export const CompleteTemplateEditor: React.FC = () => {
                   <Button variant="outline" size="sm" onClick={exportToPDF}>
                     <Download className="h-4 w-4 mr-2" />
                     PDF
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={exportToWord}>
+                    <FileText className="h-4 w-4 mr-2" />
+                    Word
                   </Button>
                 </div>
               </div>
@@ -431,6 +529,36 @@ export const CompleteTemplateEditor: React.FC = () => {
           </Card>
         </div>
       </div>
+
+      {/* Preview Dialog - PATCH 493 */}
+      <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Template Preview</DialogTitle>
+          </DialogHeader>
+          <div 
+            className="prose prose-sm max-w-none border rounded-md p-4 bg-white"
+            dangerouslySetInnerHTML={{ __html: previewContent }}
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowPreviewDialog(false)}>
+              Close
+            </Button>
+            <Button onClick={() => {
+              setShowPreviewDialog(false);
+              exportToPDF();
+            }}>
+              Export as PDF
+            </Button>
+            <Button onClick={() => {
+              setShowPreviewDialog(false);
+              exportToWord();
+            }}>
+              Export as Word
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Save Dialog */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
