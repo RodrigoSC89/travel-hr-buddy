@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { 
-  Drone, 
+  Plane, 
   PlayCircle, 
   StopCircle, 
   Navigation, 
@@ -107,7 +107,7 @@ export default function DroneCommanderV1() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Drone className="h-8 w-8" />
+            <Plane className="h-8 w-8" />
             Drone Commander v1
           </h1>
           <p className="text-muted-foreground">

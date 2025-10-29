@@ -12,7 +12,7 @@ import {
   FileText, 
   AlertCircle, 
   Activity, 
-  FileContract, 
+  FileCheck, 
   ClipboardCopy, 
   Eye, 
   CheckCircle,
@@ -31,7 +31,7 @@ export default function TemplateLibraryPage() {
     document: FileText,
     incident: AlertCircle,
     fmea: Activity,
-    contract: FileContract,
+    contract: FileCheck,
     report: FileText,
     checklist: CheckCircle,
   };
