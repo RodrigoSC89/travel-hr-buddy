@@ -99,22 +99,8 @@ describe("calculateTrustScore", () => {
   });
 
   it("handles errors gracefully and returns default score", async () => {
-    // Mock error
-    mockSupabase.from = vi.fn(() => ({
-      select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          order: vi.fn(() => ({
-            limit: vi.fn(() => ({
-              data: null,
-              error: new Error("Database error"),
-            })),
-          })),
-        })),
-      })),
-      insert: vi.fn(() => ({
-        error: null,
-      })),
-    }));
+    // Use helper to mock error
+    mockSupabaseError();
 
     const input = {
       entityId: "test-user-123",
@@ -139,22 +125,30 @@ describe("getTrustScoreHistory", () => {
   });
 
   it("returns empty array on error", async () => {
-    // Mock error
-    mockSupabase.from = vi.fn(() => ({
-      select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          order: vi.fn(() => ({
-            limit: vi.fn(() => ({
-              data: null,
-              error: new Error("Database error"),
-            })),
-          })),
-        })),
-      })),
-    }));
+    // Use helper to mock error
+    mockSupabaseError();
 
     const result = await getTrustScoreHistory("test-entity-123");
 
     expect(result).toEqual([]);
   });
 });
+
+// Helper function to mock Supabase errors
+function mockSupabaseError() {
+  mockSupabase.from = vi.fn(() => ({
+    select: vi.fn(() => ({
+      eq: vi.fn(() => ({
+        order: vi.fn(() => ({
+          limit: vi.fn(() => ({
+            data: null,
+            error: new Error("Database error"),
+          })),
+        })),
+      })),
+    })),
+    insert: vi.fn(() => ({
+      error: null,
+    })),
+  }));
+}
