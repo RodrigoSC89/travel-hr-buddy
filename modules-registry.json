@@ -81,56 +81,145 @@
       "lastModified": "2025-10-28"
     },
     {
-      "id": "navigation-copilot",
-      "name": "Navigation Copilot",
-      "path": "/modules/navigation-copilot",
-      "route": "/navigation-copilot",
+      "id": "navigation-copilot-v2",
+      "name": "Navigation Copilot v2",
+      "path": "/pages/admin/navigation-copilot-v2",
+      "route": "/navigation-copilot-v2",
       "status": "active",
       "category": "intelligence",
-      "description": "AI-powered navigation with weather integration and route optimization - PATCH 447",
+      "description": "PATCH 531 - AI-powered navigation with multimodal commands (voice + text), weather integration and route optimization",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "531.0",
+      "lastModified": "2025-10-29"
+    },
+    {
+      "id": "route-planner-v2",
+      "name": "Route Planner v2",
+      "path": "/pages/admin/route-planner-v2",
+      "route": "/route-planner-v2",
+      "status": "active",
+      "category": "planning",
+      "description": "PATCH 532 - AI geospatial integration with weather analysis, multiple route suggestions, and mission logging",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "532.0",
+      "lastModified": "2025-10-29"
+    },
+    {
+      "id": "underwater-drone-v2",
+      "name": "Underwater Drone v2",
+      "path": "/pages/admin/underwater-drone-v2",
+      "route": "/underwater-drone-v2",
+      "status": "active",
+      "category": "operations",
+      "description": "PATCH 533 - Enhanced ROV/AUV control with mission recording, replay, and analysis features",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "533.0",
+      "lastModified": "2025-10-29"
+    },
+    {
+      "id": "drone-commander-v2",
+      "name": "Drone Commander v2",
+      "path": "/pages/admin/drone-commander-v2",
+      "route": "/drone-commander-v2",
+      "status": "active",
+      "category": "operations",
+      "description": "PATCH 534 - AI-powered fleet control with intelligent task assignment and mission simulation",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "534.0",
+      "lastModified": "2025-10-29"
+    },
+    {
+      "id": "navigation-copilot",
+      "name": "Navigation Copilot (Legacy)",
+      "path": "/modules/navigation-copilot",
+      "route": "/navigation-copilot",
+      "status": "deprecated",
+      "category": "intelligence",
+      "description": "Replaced by Navigation Copilot v2 with multimodal support",
       "hasDatabase": true,
       "hasMockData": false,
       "version": "447.0",
-      "lastModified": "2025-10-28"
+      "deprecatedIn": "531.0",
+      "replacedBy": "navigation-copilot-v2"
     },
     {
       "id": "route-planner",
-      "name": "Route Planner v2",
+      "name": "Route Planner (Legacy)",
       "path": "/modules/route-planner",
       "route": "/route-planner",
-      "status": "active",
+      "status": "deprecated",
       "category": "planning",
-      "description": "Enhanced route planning with dynamic ETA and weather integration - PATCH 449",
+      "description": "Replaced by Route Planner v2 with AI geospatial integration",
       "hasDatabase": true,
       "hasMockData": false,
       "version": "449.0",
-      "lastModified": "2025-10-28"
+      "deprecatedIn": "532.0",
+      "replacedBy": "route-planner-v2"
     },
     {
       "id": "underwater-drone",
-      "name": "Underwater Drone Control",
+      "name": "Underwater Drone (Legacy)",
       "path": "/modules/underwater-drone",
       "route": "/underwater-drone",
-      "status": "active",
+      "status": "deprecated",
       "category": "operations",
-      "description": "ROV/AUV control system with mission planning and telemetry tracking - PATCH 450",
+      "description": "Replaced by Underwater Drone v2 with replay and analysis",
       "hasDatabase": true,
       "hasMockData": false,
       "version": "450.0",
-      "lastModified": "2025-10-28"
+      "deprecatedIn": "533.0",
+      "replacedBy": "underwater-drone-v2"
+    },
+    {
+      "id": "drone-commander",
+      "name": "Drone Commander (Legacy)",
+      "path": "/pages/admin/drone-commander",
+      "route": "/drone-commander",
+      "status": "deprecated",
+      "category": "operations",
+      "description": "Replaced by Drone Commander v2 with AI task assignment",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "451.0",
+      "deprecatedIn": "534.0",
+      "replacedBy": "drone-commander-v2"
     },
     {
       "id": "mission-control",
-      "name": "Mission Control",
+      "name": "Mission Control Unified",
       "path": "/modules/mission-control",
       "route": "/mission-control",
       "status": "active",
       "category": "operations",
-      "description": "Unified mission control with planning, execution, logs, and autonomy submodules",
+      "description": "PATCH 535 - Unified mission control consolidating mission-engine, mission-logs, and mission-control with autonomy, ai-command, and logs submodules",
       "hasDatabase": true,
       "hasMockData": false,
-      "version": "410.0",
-      "lastModified": "2025-10-28"
+      "version": "535.0",
+      "lastModified": "2025-10-29",
+      "submodules": [
+        {
+          "id": "autonomy",
+          "name": "Autonomous Mission Planning",
+          "path": "/modules/mission-control/submodules/autonomy",
+          "description": "AI-powered autonomous mission planning and execution"
+        },
+        {
+          "id": "ai-command",
+          "name": "AI Command Center",
+          "path": "/modules/mission-control/submodules/ai-command",
+          "description": "Intelligent command processing and decision support"
+        },
+        {
+          "id": "logs",
+          "name": "Mission Logs",
+          "path": "/modules/mission-control/submodules/logs",
+          "description": "Comprehensive mission logging and analysis"
+        }
+      ]
     },
     {
       "id": "documents",
@@ -262,10 +351,10 @@
     }
   ],
   "statistics": {
-    "totalModules": 11,
-    "activeModules": 10,
-    "deprecatedModules": 3,
-    "modulesWithRealData": 9,
+    "totalModules": 21,
+    "activeModules": 14,
+    "deprecatedModules": 7,
+    "modulesWithRealData": 13,
     "modulesWithMockData": 0
   }
 }
