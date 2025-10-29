@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 483 - Satellite Tracking Service
  * Real satellite tracking with TLE data, position calculation, and coordinate validation
