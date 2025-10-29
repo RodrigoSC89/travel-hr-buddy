@@ -119,7 +119,7 @@ export const MissionExecutionPanel: React.FC = () => {
               return { 
                 navigation_started: true, 
                 current_speed_knots: 15,
-                heading: 045
+                heading: 45
               };
             },
           },
