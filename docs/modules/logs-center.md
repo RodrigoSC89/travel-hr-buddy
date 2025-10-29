@@ -1,135 +1,59 @@
-# Logs Center Module
+# Logs center
 
-## Visão Geral
+## Descrição
 
-O Logs Center é o módulo centralizado para visualização, busca e análise de logs de todas as operações do sistema, com capacidades avançadas de filtragem e alertas em tempo real.
+Centralized technical logs module with filtering, AI-powered audit, and PDF export capabilities.
 
-**Categoria**: Core  
-**Rota**: `/logs-center`  
-**Status**: Ativo  
-**Versão**: 2.0
+## Localização
 
-## Componentes Principais
+- **Caminho**: `src/modules/logs-center`
+- **Tipo**: Módulo de serviço
 
-### LogViewer
-- Visualização em tempo real de logs
-- Filtros por tipo, severidade e módulo de origem
-- Busca full-text nos logs
-- Export para CSV/JSON
+## Banco de Dados
 
-### LogFilters
-- Filtros por data/hora
-- Filtros por severity (info, warning, error, critical)
-- Filtros por tipo de log (system, mission, audit, security)
-- Filtros por módulo de origem
+### Tabelas
 
-### LogDetails
-- Visualização detalhada de um log específico
-- Metadata e context information
-- Stack traces para erros
-- Related logs (correlação automática)
+- `voice_interaction_logs`
+- `mission_logs`
+- `restore_report_logs`
+- `assistant_logs`
+- `dashboard_report_logs`
+- `compliance_audit_logs`
+- `maintenance_logs`
+- `logs`
+- `access_logs`
+- `replicated_logs`
+- `financial_logs`
+- `fleet_logs`
+- `crew_rotation_logs`
+- `user_access_logs`
+- `integration_logs`
+- `communication_logs`
+- `fuel_consumption_logs`
+- `vault_search_logs`
+- `voice_logs`
+- `api_request_logs`
+- `weather_logs`
+- `sensor_logs`
+- `satcom_failover_logs`
+- `satcom_communication_logs`
+- `autonomy_decision_logs`
+- `navigation_ai_logs`
+- `central_logs`
+- `satellite_api_sync_logs`
 
-### AlertsPanel
-- Alertas críticos não resolvidos
-- Configuração de regras de alerta
-- Notificações em tempo real
-- Escalação automática
+## Integração
 
-## Banco de Dados Utilizado
+Para usar este módulo:
 
-### Tabelas Principais
-- `system_logs` - Logs gerais do sistema
-- `mission_logs` - Logs relacionados a missões
-- `audit_logs` - Logs de auditoria e compliance
-- `security_logs` - Logs de segurança e acesso
-- `log_alerts` - Alertas baseados em logs
-
-### Schema Exemplo
-```sql
-CREATE TABLE system_logs (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  log_type VARCHAR(50) NOT NULL,
-  severity VARCHAR(20) NOT NULL,
-  title VARCHAR(255) NOT NULL,
-  message TEXT NOT NULL,
-  category VARCHAR(100),
-  source_module VARCHAR(100) NOT NULL,
-  user_id UUID REFERENCES auth.users(id),
-  metadata JSONB DEFAULT '{}',
-  event_timestamp TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE INDEX idx_logs_timestamp ON system_logs(event_timestamp DESC);
-CREATE INDEX idx_logs_severity ON system_logs(severity);
-CREATE INDEX idx_logs_source ON system_logs(source_module);
+```typescript
+import { /* componentes */ } from '@/modules/logs-center';
 ```
 
-## Requisições API Envolvidas
+## Referências Cruzadas
 
-### GET /api/logs
-Lista logs com paginação e filtros
-- **Query Params**: 
-  - type, severity, source_module
-  - start_date, end_date
-  - limit (default: 50), offset
-  - search (full-text search)
-- **Response**: Array de Log objects + pagination metadata
-- **Cache**: Sem cache (dados em tempo real)
+- [Índice de Módulos](./README.md)
+- [Arquitetura do Sistema](../architecture.md)
 
-### GET /api/logs/:id
-Retorna detalhes de um log específico
-- **Response**: Log object completo com metadata
-
-### POST /api/logs
-Cria novo log (usado por outros módulos)
-- **Body**: LogCreateInput
-- **Response**: Log object criado
-
-### GET /api/logs/alerts
-Lista alertas ativos
-- **Query Params**: resolved (boolean), severity
-- **Response**: Array de Alert objects
-
-### WebSocket: /ws/logs
-Stream de logs em tempo real
-- **Events**: 
-  - new_log: Novo log criado
-  - log_updated: Log atualizado
-  - new_alert: Novo alerta criado
-
-## Integrações
-
-- **Mission Engine**: Logs de missões
-- **Security Module**: Logs de segurança
-- **Audit Center**: Logs de auditoria
-- **Performance Monitor**: Logs de performance
-- **All Modules**: Todos os módulos enviam logs
-
-## Recursos Avançados
-
-### Log Correlation
-- Agrupa logs relacionados automaticamente
-- Identifica padrões e anomalias
-- Rastreamento distribuído (distributed tracing)
-
-### Alerting Rules
-- Regras configuráveis de alerta
-- Threshold-based alerts
-- Pattern matching
-- Rate-based alerting
-
-### Log Retention
-- Retention policy configurável (padrão: 90 dias)
-- Archive para cold storage
-- Compliance com regulamentações
-
-## Testes
-
-Localização: `tests/patch-408-logs-center.test.tsx`
-
-## Última Atualização
-
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Patch**: PATCH 408
+---
+*Documentação gerada automaticamente em 2025-10-29T18:32:24.953Z*

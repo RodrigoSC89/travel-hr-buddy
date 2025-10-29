@@ -1,61 +1,53 @@
-# Weather Dashboard Module
+# Weather dashboard
 
-## Visão Geral
+## Descrição
 
-O Weather Dashboard fornece dados meteorológicos em tempo real, previsões e alertas para operações marítimas, com integração de múltiplas fontes de dados meteorológicos.
+Weather Dashboard - PATCH 386 Complete
 
-**Categoria**: Specialized / Environment  
-**Rota**: `/weather-dashboard`  
-**Status**: Ativo  
-**Versão**: 2.0
+## Localização
 
-## Componentes Principais
+- **Caminho**: `src/modules/weather-dashboard`
+- **Tipo**: Módulo com UI
 
-### WeatherMap
-- Interactive weather map
-- Multiple layers (wind, precipitation, temperature, pressure)
-- Storm tracking
-- Historical data visualization
+## Rotas
 
-### ForecastPanel
-- Short-term forecast (24-72h)
-- Extended forecast (7-14 days)
-- Sea state forecast
-- Wind and wave predictions
+- `/weather-dashboard`
 
-### AlertsPanel
-- Storm warnings
-- Severe weather alerts
-- Small craft advisories
-- Marine warnings
+## Componentes
 
-### HistoricalData
-- Historical weather patterns
-- Trend analysis
-- Climate data
-- Seasonal variations
+- **RealTimeWeatherData**
+- **WeatherAlerts**
+- **WindyMap**
+- **WindyMapLayer**
 
-## Requisições API Envolvidas
+## Banco de Dados
 
-### Current Weather
-- **GET /api/weather/current** - Current conditions
-- **GET /api/weather/location** - Weather for specific location
-- **GET /api/weather/route** - Weather along route
+### Tabelas
 
-### Forecast
-- **GET /api/weather/forecast** - Weather forecast
-- **GET /api/weather/forecast/marine** - Marine forecast
-- **GET /api/weather/alerts** - Weather alerts
+- `dashboard_report_logs`
+- `weather_data`
+- `weather_alerts`
+- `weather_forecast`
+- `weather_feed`
+- `weather_logs`
+- `weather_predictions`
+- `weather_events`
+- `weather_stations`
+- `analytics_dashboards`
+- `navigation_weather_alerts`
 
-## Integrações
+## Integração
 
-- **Navigation Copilot**: Weather-aware navigation
-- **Route Planner**: Weather-optimized routing
-- **Mission Control**: Weather impact on missions
-- **Fleet Management**: Operational planning
+Para usar este módulo:
 
-## Última Atualização
+```typescript
+import { /* componentes */ } from '@/modules/weather-dashboard';
+```
 
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Features**: Real-time data, Forecasts, Alerts
+## Referências Cruzadas
+
+- [Índice de Módulos](./README.md)
+- [Arquitetura do Sistema](../architecture.md)
+
+---
+*Documentação gerada automaticamente em 2025-10-29T18:32:25.004Z*

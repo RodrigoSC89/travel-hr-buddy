@@ -1,42 +1,31 @@
-# Mission control
+# Mission engine
 
 ## Descrição
 
-**Category**: Emergency
+**Category**: Operations
 
 ## Localização
 
-- **Caminho**: `src/modules/mission-control`
+- **Caminho**: `src/modules/mission-engine`
 - **Tipo**: Módulo com UI
 
 ## Rotas
 
-- `/admin/mission-control/validation`
-- `/mission-control/insight-dashboard`
-- `/mission-control/ai-command`
-- `/mission-control/llm`
-- `/admin/mission-control-consolidation/validation`
-- `/admin/patch-530/mission-control-v2`
+- `/admin/mission-engine/validation`
+- `/admin/mission-engine-validation/validation`
 
 ## Componentes
 
-- **AICommander**
-- **KPIDashboard**
-- **MissionControlConsolidation**
-- **MissionExecution**
+- **MissionCreator**
+- **MissionDashboard**
+- **MissionExecutionPanel**
+- **MissionExecutor**
 - **MissionLogs**
-- **MissionManager**
-- **MissionPlanner**
-- **MissionPlanning**
-- **RealTimeMissionDashboard**
-- **SystemLogs**
 
 ## Serviços
 
-- `jointTasking`
-- `mission-control-service`
-- `mission-logging`
-- `mission-logs-service`
+- `execution-service`
+- `mission-service`
 
 ## Banco de Dados
 
@@ -74,7 +63,7 @@
 Para usar este módulo:
 
 ```typescript
-import { /* componentes */ } from '@/modules/mission-control';
+import { /* componentes */ } from '@/modules/mission-engine';
 ```
 
 ## Referências Cruzadas
@@ -83,4 +72,4 @@ import { /* componentes */ } from '@/modules/mission-control';
 - [Arquitetura do Sistema](../architecture.md)
 
 ---
-*Documentação gerada automaticamente em 2025-10-29T18:32:24.852Z*
+*Documentação gerada automaticamente em 2025-10-29T18:32:24.864Z*

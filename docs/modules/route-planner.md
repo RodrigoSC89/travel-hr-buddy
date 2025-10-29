@@ -1,86 +1,52 @@
-# Route Planner Module
+# Route planner
 
-## Visão Geral
+## Descrição
 
-O Route Planner v2 é o módulo avançado de planejamento de rotas marítimas com cálculo dinâmico de ETA, integração meteorológica e otimização de combustível.
+Route Planner Module - PATCH 431
 
-**Categoria**: Specialized / Navigation  
-**Rota**: `/route-planner`  
-**Status**: Ativo  
-**Versão**: 449.0
+## Localização
 
-## Componentes Principais
+- **Caminho**: `src/modules/route-planner`
+- **Tipo**: Módulo com UI
 
-### RouteMap
-- Interactive map with route visualization
-- Multiple route options display
-- Real-time vessel position
-- Weather overlay
-- Traffic information
+## Rotas
 
-### RouteOptimizer
-- Fuel-efficient routing
-- Time-optimized routing
-- Weather-aware routing
-- Multi-waypoint optimization
-- Cost comparison
+- `/admin/route-planner/validation`
 
-### ETACalculator
-- Dynamic ETA calculation
-- Real-time updates
-- Weather impact consideration
-- Speed profile optimization
-- Arrival window prediction
+## Componentes
 
-### WeatherIntegration
-- Weather forecast along route
-- Storm avoidance
-- Sea state prediction
-- Wind and current analysis
-- Safe passage windows
+- **RoutePlannerMap**
 
-## Banco de Dados Utilizado
+## Serviços
 
-### Tabelas Principais
-```sql
-CREATE TABLE planned_routes (
-  id UUID PRIMARY KEY,
-  vessel_id UUID REFERENCES vessels(id),
-  route_name VARCHAR(255),
-  origin GEOGRAPHY(POINT),
-  destination GEOGRAPHY(POINT),
-  waypoints JSONB,
-  distance_nm DECIMAL(10, 2),
-  estimated_duration INTEGER,
-  estimated_fuel DECIMAL(10, 2),
-  optimization_type VARCHAR(50),
-  weather_data JSONB,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+- `plannedRoutesService`
+- `routeAIService`
+- `routePlannerService`
+
+## Banco de Dados
+
+### Tabelas
+
+- `routes`
+- `route_forecasts`
+- `route_consumption`
+- `fuel_routes`
+- `api_routes`
+- `planned_routes`
+- `route_optimization_history`
+
+## Integração
+
+Para usar este módulo:
+
+```typescript
+import { /* componentes */ } from '@/modules/route-planner';
 ```
 
-## Requisições API Envolvidas
+## Referências Cruzadas
 
-### Route Planning
-- **POST /api/routes/plan** - Plan new route
-- **POST /api/routes/optimize** - Optimize existing route
-- **GET /api/routes/:id/eta** - Calculate ETA
-- **POST /api/routes/compare** - Compare multiple routes
+- [Índice de Módulos](./README.md)
+- [Arquitetura do Sistema](../architecture.md)
 
-### Weather Integration
-- **GET /api/routes/:id/weather** - Weather forecast for route
-- **GET /api/routes/safe-passage** - Safe passage windows
-- **POST /api/routes/weather-reroute** - Weather-based rerouting
-
-## Integrações
-
-- **Navigation Copilot**: AI-assisted navigation
-- **Weather Dashboard**: Weather data
-- **Fleet Management**: Vessel data
-- **Satellite Tracking**: Real-time position
-
-## Última Atualização
-
-**Data**: 2025-10-29  
-**Versão**: 449.0  
-**Features**: Dynamic ETA, Weather integration, Route optimization
+---
+*Documentação gerada automaticamente em 2025-10-29T18:32:24.982Z*
