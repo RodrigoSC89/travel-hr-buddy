@@ -1,6 +1,7 @@
 /**
  * PATCH 435 - Sonar AI Enhancement
  * Enhanced AI sonar data interpretation with risk detection
+ * PATCH 479 - Added ONNX classification and detailed dashboard
  * 
  * Features:
  * - Real-time sonar data analysis with enhanced mock data
@@ -11,6 +12,9 @@
  * - Risk assessment and hazard detection
  * - AI-powered navigation recommendations
  * - Bathymetric depth mapping
+ * - ONNX-based classification
+ * - Spectrogram visualization
+ * - Risk-level alerts dashboard
  */
 
 import React, { useState, useEffect } from "react";
@@ -19,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Radar,
   Brain,
@@ -35,8 +40,14 @@ import {
 import DataAnalyzer, { SonarAnalysis } from "./dataAnalyzer";
 import RiskInterpreter, { RiskAssessment, Hazard } from "./riskInterpreter";
 import { sonarAIService, type SonarDetection } from "./services/sonarAIService";
+import { SonarAIDashboard } from "./components/SonarAIDashboard";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+
+// Export PATCH 479 modules
+export { enhancedSonarAIService } from "./services/enhanced-ai-service";
+export type { SonarEvent, SonarRisk, SpectrogramData } from "./services/enhanced-ai-service";
+export { SonarAIDashboard } from "./components/SonarAIDashboard";
 
 const SonarAI: React.FC = () => {
   const { user } = useAuth();
@@ -565,6 +576,11 @@ const SonarAI: React.FC = () => {
             </CardContent>
           </Card>
         )}
+
+        {/* PATCH 479: Enhanced AI Dashboard */}
+        <div className="mt-8">
+          <SonarAIDashboard />
+        </div>
       </div>
     </div>
   );
