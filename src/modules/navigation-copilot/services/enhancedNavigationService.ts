@@ -181,7 +181,14 @@ class EnhancedNavigationService {
         return;
       }
 
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      // TypeScript doesn't have built-in types for Speech Recognition API
+      // Using type assertion for browser APIs
+      const SpeechRecognition = (window as typeof window & {
+        webkitSpeechRecognition?: any;
+        SpeechRecognition?: any;
+      }).webkitSpeechRecognition || (window as typeof window & {
+        SpeechRecognition?: any;
+      }).SpeechRecognition;
       const recognition = new SpeechRecognition();
       
       recognition.lang = 'pt-BR';

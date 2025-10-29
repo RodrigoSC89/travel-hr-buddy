@@ -23,9 +23,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const marker = useRef<mapboxgl.Marker | null>(null);
-  const [mapboxToken] = useState(
-    import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_MAPBOX_TOKEN || ''
-  );
+  const mapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_MAPBOX_TOKEN || '';
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
@@ -43,7 +41,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
       style: 'mapbox://styles/mapbox/satellite-streets-v12',
       center: [initialPosition.longitude, initialPosition.latitude],
       zoom: 3,
-      projection: 'globe' as any
+      projection: { name: 'globe' }
     });
 
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
@@ -66,7 +64,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
       if (marker.current) marker.current.remove();
       if (map.current) map.current.remove();
     };
-  }, []);
+  }, [mapboxToken]);
 
   useEffect(() => {
     if (!map.current || !satellite.position) return;

@@ -21,11 +21,14 @@ class RouteAIService {
   private openai: OpenAI | null = null;
 
   constructor() {
+    // NOTE: In production, OpenAI API calls should be made from a secure backend service
+    // This is a demonstration implementation. For production use, create an API route:
+    // e.g., /api/route-suggestions that calls OpenAI server-side
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
     if (apiKey) {
       this.openai = new OpenAI({
         apiKey,
-        dangerouslyAllowBrowser: true
+        dangerouslyAllowBrowser: true // SECURITY WARNING: Only for development/demo
       });
     }
   }
