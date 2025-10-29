@@ -6,6 +6,12 @@
 -- PATCH 483: Activate Satellite Tracker
 -- PATCH 484: Finalize Price Alerts
 -- PATCH 485: Activate Coordination AI
+--
+-- Dependencies:
+-- - patch_363_satellite_tracker.sql (satellite functions)
+-- - patch_440_ai_coordination_logs.sql (coordination logs table)
+-- - price_history table (from earlier migration)
+-- =====================================================
 
 -- =====================================================
 -- PATCH 481: Incident Reports Consolidation
