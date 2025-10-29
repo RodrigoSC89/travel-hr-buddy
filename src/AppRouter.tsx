@@ -113,6 +113,12 @@ const Patch518MissionEngine = React.lazy(() => import("@/pages/admin/Patch518Mis
 const Patch519DeepRiskAI = React.lazy(() => import("@/pages/admin/Patch519DeepRiskAI"));
 const Patch520AIReplay = React.lazy(() => import("@/pages/admin/Patch520AIReplay"));
 
+// 🔹 PATCH 521-525 - Advanced AI Systems: Sonar, Risk Analysis, Drone Camera, Incident Replay, and Vision Recognition
+const SonarAI = React.lazy(() => import("@/pages/SonarAI"));
+const DeepRiskAI = React.lazy(() => import("@/pages/DeepRiskAI"));
+const IncidentReplayAI = React.lazy(() => import("@/pages/IncidentReplayAI"));
+const AIVisionCore = React.lazy(() => import("@/pages/AIVisionCore"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -227,6 +233,12 @@ export default function AppRouter() {
             <Route path="/admin/patch-518/mission-engine" element={<Patch518MissionEngine />} />
             <Route path="/admin/patch-519/deep-risk-ai" element={<Patch519DeepRiskAI />} />
             <Route path="/admin/patch-520/ai-replay" element={<Patch520AIReplay />} />
+        
+        {/* PATCH 521-525 Routes - Advanced AI Systems */}
+        <Route path="/sonar-ai" element={<SonarAI />} />
+        <Route path="/deep-risk-ai" element={<DeepRiskAI />} />
+        <Route path="/incident-replay-ai" element={<IncidentReplayAI />} />
+        <Route path="/ai-vision-core" element={<AIVisionCore />} />
       </Routes>
     </Router>
   );
