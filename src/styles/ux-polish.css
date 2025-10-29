@@ -28,12 +28,14 @@
 
 /* Card hover effect with scale and shadow */
 .card-hover {
-  @apply transition-all duration-200 hover:shadow-lg hover:scale-[1.02];
+  transition: transform 200ms ease-in-out, box-shadow 200ms ease-in-out;
+  @apply hover:shadow-lg hover:scale-[1.02];
 }
 
 /* Button hover with slight scale */
 .button-hover {
-  @apply transition-all duration-150 hover:scale-105 active:scale-95;
+  transition: transform 150ms ease-in-out;
+  @apply hover:scale-105 active:scale-95;
 }
 
 /* Subtle row hover for tables */
@@ -218,16 +220,8 @@
    ACCESSIBILITY
    ======================================== */
 
-/* Respect reduced motion preferences */
+/* Respect reduced motion preferences - Additional specific overrides */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-
   .pulse-slow,
   .pulse-medium,
   .skeleton,
@@ -235,6 +229,8 @@
   .breathe {
     animation: none !important;
   }
+  
+  /* Global reduced motion is handled in theme.css */
 }
 
 /* Focus visible for keyboard navigation */
