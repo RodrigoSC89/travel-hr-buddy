@@ -99,7 +99,10 @@ supabase/migrations/
 import { supervisorAI } from "@/ai/supervisor/SupervisorAI";
 
 const validation = await supervisorAI.validateDecision(decision);
-console.log(validation.approved, validation.explanation);
+// Use validation.approved and validation.explanation in your logic
+if (!validation.approved) {
+  // Handle rejected decision
+}
 ```
 
 ### Using Auto-Exec Engine
@@ -108,6 +111,7 @@ import { autoExecEngine } from "@/modules/autoexec/AutoExecEngine";
 
 const triggers = await autoExecEngine.checkTriggers(event);
 const executions = await autoExecEngine.executeTriggeredRules(triggers, context);
+// Process execution results
 ```
 
 ### Using Governance Engine
@@ -115,20 +119,24 @@ const executions = await autoExecEngine.executeTriggeredRules(triggers, context)
 import { governanceEngine } from "@/modules/governance/GovernanceEngine";
 
 const decision = await governanceEngine.evaluateRequest(context);
-console.log(decision.decision, decision.ethicsScore);
+// Use decision.decision and decision.ethicsScore in governance logic
 ```
 
 ### Query Central Logs
 ```sql
--- Get logs from last 24 hours
-SELECT * FROM central_logs 
+-- Get logs from last 24 hours (specify columns for better performance)
+SELECT id, origin, type, severity, module, message, timestamp 
+FROM central_logs 
 WHERE timestamp >= NOW() - INTERVAL '24 hours'
-ORDER BY timestamp DESC;
+ORDER BY timestamp DESC
+LIMIT 100;
 
--- Get critical logs
-SELECT * FROM central_logs 
+-- Get critical logs (optimized)
+SELECT id, origin, module, message, timestamp
+FROM central_logs 
 WHERE severity = 'critical'
-ORDER BY timestamp DESC;
+ORDER BY timestamp DESC
+LIMIT 50;
 
 -- Get stats
 SELECT * FROM get_central_log_stats('24h');
