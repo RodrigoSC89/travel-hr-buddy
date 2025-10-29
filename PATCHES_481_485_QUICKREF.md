@@ -176,16 +176,19 @@ Check all 15 validation points across 5 patches.
 ## 🐛 Troubleshooting
 
 **Satellite functions not found?**
-→ Ensure `patch_363_satellite_tracker.sql` migration is applied
+→ Migration `20251028030000_patch_363_satellite_tracker.sql` provides these functions
 
 **Coordination logs error?**
-→ Ensure `patch_440_ai_coordination_logs.sql` migration is applied
+→ Migration `20251028210000_patch_440_ai_coordination_logs.sql` creates this table
 
 **Price history not recording?**
-→ Verify `price_history` table exists
+→ Verify `price_history` table exists (created in earlier migration)
 
 **PDF rendering fails?**
 → Check workspace_files bucket permissions
+
+**Module status not updating?**
+→ Verify migration `20251029020000_patches_481_485_consolidation.sql` is applied
 
 ---
 

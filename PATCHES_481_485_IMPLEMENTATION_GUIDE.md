@@ -364,19 +364,19 @@ Test complete workflows through UI
 ### Common Issues
 
 **Issue**: Satellite functions not found
-**Solution**: Ensure migration `patch_363_satellite_tracker.sql` is applied
+**Solution**: Migration `20251028030000_patch_363_satellite_tracker.sql` provides these functions
 
 **Issue**: Coordination logs table not found
-**Solution**: Ensure migration `patch_440_ai_coordination_logs.sql` is applied
+**Solution**: Migration `20251028210000_patch_440_ai_coordination_logs.sql` creates this table
 
 **Issue**: Price history not recording
-**Solution**: Verify `price_history` table exists and trigger is active
+**Solution**: Verify `price_history` table exists (created in earlier migration)
 
 **Issue**: PDF rendering fails
 **Solution**: Check workspace_files storage bucket permissions
 
 **Issue**: Module heartbeat not updating
-**Solution**: Verify `update_module_heartbeat()` function exists
+**Solution**: Verify migration `20251029020000_patches_481_485_consolidation.sql` is applied and `update_module_heartbeat()` function exists
 
 ---
 
