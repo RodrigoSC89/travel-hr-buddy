@@ -837,6 +837,9 @@ function App() {
                       <Route path="/admin/patch-534/drone-commander-ai" element={<Patch534DroneCommanderAI />} />
                       <Route path="/admin/patch-535/mission-consolidation" element={<Patch535MissionConsolidation />} />
                       
+                      {/* Master Validation Dashboard */}
+                      <Route path="/validation/master-validation" element={<Suspense fallback={<PageSkeleton />}>{React.createElement(safeLazyImport(() => import("@/pages/validation/master-validation")))}</Suspense>} />
+                      
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (
                         <Route key={path} path={path} element={<Suspense fallback={SuspenseFallback}><Component /></Suspense>} />

@@ -349,6 +349,60 @@ export type Database = {
           },
         ]
       }
+      ai_commands: {
+        Row: {
+          command_hash: string
+          command_text: string
+          command_type: string
+          completed_at: string | null
+          created_at: string
+          error_details: string | null
+          execution_status: string
+          execution_time_ms: number | null
+          id: string
+          mission_id: string | null
+          parameters: Json | null
+          result: Json | null
+          source_module: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          command_hash: string
+          command_text: string
+          command_type: string
+          completed_at?: string | null
+          created_at?: string
+          error_details?: string | null
+          execution_status: string
+          execution_time_ms?: number | null
+          id?: string
+          mission_id?: string | null
+          parameters?: Json | null
+          result?: Json | null
+          source_module: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          command_hash?: string
+          command_text?: string
+          command_type?: string
+          completed_at?: string | null
+          created_at?: string
+          error_details?: string | null
+          execution_status?: string
+          execution_time_ms?: number | null
+          id?: string
+          mission_id?: string | null
+          parameters?: Json | null
+          result?: Json | null
+          source_module?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ai_document_templates: {
         Row: {
           content: string
@@ -546,6 +600,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ai_logs: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          model: string | null
+          prompt_hash: string
+          prompt_length: number
+          response_length: number | null
+          response_time_ms: number | null
+          service: string
+          status: string
+          tokens_used: number | null
+          user_id_hash: string | null
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          model?: string | null
+          prompt_hash: string
+          prompt_length: number
+          response_length?: number | null
+          response_time_ms?: number | null
+          service: string
+          status: string
+          tokens_used?: number | null
+          user_id_hash?: string | null
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          model?: string | null
+          prompt_hash?: string
+          prompt_length?: number
+          response_length?: number | null
+          response_time_ms?: number | null
+          service?: string
+          status?: string
+          tokens_used?: number | null
+          user_id_hash?: string | null
+        }
+        Relationships: []
       }
       ai_memory_events: {
         Row: {
