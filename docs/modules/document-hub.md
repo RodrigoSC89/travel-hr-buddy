@@ -1,6 +1,6 @@
-# finance-hub
+# document-hub
 
-**Category**: finance-hub
+**Category**: document-hub
 **Last Updated**: 2025-10-29
 
 ---
@@ -11,24 +11,26 @@
 
 ## 🧩 Componentes
 
-### InvoiceManager
+### DocumentsAI
 
-InvoiceManager component
+DocumentsAI component
 
-## 🪝 Custom Hooks
+### TemplateLibrary
 
-- `useFinanceData`
+TemplateLibrary component
 
 ## 📦 Dependências
 
 **Externas:**
 
 - `react`
+- `lucide-react`
+- `sonner`
 
 ## 📁 Estrutura de Dados
 
 ```
-finance-hub/
+document-hub/
 ├── components/       # Componentes React
 ├── hooks/            # Custom hooks
 ├── services/         # Lógica de negócio e API

@@ -1,6 +1,6 @@
-# finance-hub
+# analytics
 
-**Category**: finance-hub
+**Category**: analytics
 **Last Updated**: 2025-10-29
 
 ---
@@ -11,24 +11,18 @@
 
 ## 🧩 Componentes
 
-### InvoiceManager
+### AnalyticsQueryBuilder
 
-InvoiceManager component
+AnalyticsQueryBuilder component
 
 ## 🪝 Custom Hooks
 
-- `useFinanceData`
-
-## 📦 Dependências
-
-**Externas:**
-
-- `react`
+- `useRealtimeAnalytics`
 
 ## 📁 Estrutura de Dados
 
 ```
-finance-hub/
+analytics/
 ├── components/       # Componentes React
 ├── hooks/            # Custom hooks
 ├── services/         # Lógica de negócio e API

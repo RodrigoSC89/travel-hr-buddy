@@ -1,34 +1,18 @@
-# finance-hub
+# core
 
-**Category**: finance-hub
+**Category**: core
 **Last Updated**: 2025-10-29
 
 ---
 
 ## 📝 Descrição
 
-## 📋 Overview
-
-## 🧩 Componentes
-
-### InvoiceManager
-
-InvoiceManager component
-
-## 🪝 Custom Hooks
-
-- `useFinanceData`
-
-## 📦 Dependências
-
-**Externas:**
-
-- `react`
+core module
 
 ## 📁 Estrutura de Dados
 
 ```
-finance-hub/
+core/
 ├── components/       # Componentes React
 ├── hooks/            # Custom hooks
 ├── services/         # Lógica de negócio e API
