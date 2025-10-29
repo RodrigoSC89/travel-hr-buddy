@@ -62,7 +62,7 @@ function checkRLS(): SecurityIndicator {
   }
   
   const migrationFiles = fs.readdirSync(migrationsDir);
-  let rlsTablesFound = 0;
+  const tablesWithRLS = new Set<string>(); // Use Set to avoid duplicates
   
   // Search for RLS policies in migration files
   migrationFiles.forEach(file => {
@@ -75,13 +75,18 @@ function checkRLS(): SecurityIndicator {
         const policyPattern = new RegExp(`CREATE POLICY.*ON.*${table}`, 'i');
         
         if (rlsPattern.test(content) || policyPattern.test(content)) {
-          rlsTablesFound++;
-          details.push(`✅ ${table}: RLS enabled`);
+          tablesWithRLS.add(table);
         }
       });
     }
   });
   
+  // Add details only once per table
+  tablesWithRLS.forEach(table => {
+    details.push(`✅ ${table}: RLS enabled`);
+  });
+  
+  const rlsTablesFound = tablesWithRLS.size;
   const coverage = (rlsTablesFound / SENSITIVE_TABLES.length) * 100;
   
   if (rlsTablesFound === 0) {
@@ -120,7 +125,7 @@ function checkLogging(): SecurityIndicator {
   }
   
   const migrationFiles = fs.readdirSync(migrationsDir);
-  let loggingTablesFound = 0;
+  const loggingTablesFound = new Set<string>(); // Use Set to avoid duplicates
   const requiredTables = ['access_logs', 'audit_logs', 'ai_commands'];
   
   migrationFiles.forEach(file => {
@@ -132,22 +137,24 @@ function checkLogging(): SecurityIndicator {
         const createPattern = new RegExp(`CREATE TABLE.*${table}`, 'i');
         
         if (createPattern.test(content)) {
-          loggingTablesFound++;
-          details.push(`✅ ${table} table present`);
+          loggingTablesFound.add(table);
         }
       });
     }
   });
   
-  const coverage = (loggingTablesFound / requiredTables.length) * 100;
+  // Add details only once per table
+  loggingTablesFound.forEach(table => {
+    details.push(`✅ ${table} table present`);
+  });
   
-  if (loggingTablesFound === 0) {
+  const coverage = (loggingTablesFound.size / requiredTables.length) * 100;
+  
+  if (loggingTablesFound.size === 0) {
     issues.push('No logging tables found');
-  } else if (loggingTablesFound < requiredTables.length) {
-    issues.push(`Only ${loggingTablesFound}/${requiredTables.length} logging tables found`);
-    const missing = requiredTables.filter(table => {
-      return !details.some(d => d.includes(table));
-    });
+  } else if (loggingTablesFound.size < requiredTables.length) {
+    issues.push(`Only ${loggingTablesFound.size}/${requiredTables.length} logging tables found`);
+    const missing = requiredTables.filter(table => !loggingTablesFound.has(table));
     if (missing.length > 0) {
       issues.push(`Missing tables: ${missing.join(', ')}`);
     }

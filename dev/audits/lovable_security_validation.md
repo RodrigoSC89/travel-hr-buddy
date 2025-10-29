@@ -1,51 +1,33 @@
 # 🔒 Lovable Security Validation Report
 
-**Generated**: 2025-10-29T19:02:50.285Z
-**Overall Status**: GREEN (193%)
+**Generated**: 2025-10-29T19:06:09.609Z
+**Overall Status**: YELLOW (56%)
 
 ---
 
 ## 📊 Security Indicators
 
-### ⚠️ RLS Protection - YELLOW (271%)
+### ⚠️ RLS Protection - YELLOW (57%)
 
 **Details:**
 - ✅ crew_members: RLS enabled
-- ✅ audit_logs: RLS enabled
 - ✅ audit_logs: RLS enabled
 - ✅ crew_performance_reviews: RLS enabled
-- ✅ audit_logs: RLS enabled
-- ✅ crew_members: RLS enabled
 - ✅ access_logs: RLS enabled
-- ✅ access_logs: RLS enabled
-- ✅ access_logs: RLS enabled
-- ✅ access_logs: RLS enabled
-- ✅ crew_members: RLS enabled
-- ✅ audit_logs: RLS enabled
-- ✅ access_logs: RLS enabled
-- ✅ audit_logs: RLS enabled
-- ✅ audit_logs: RLS enabled
-- ✅ access_logs: RLS enabled
-- ✅ crew_members: RLS enabled
-- ✅ access_logs: RLS enabled
-- ✅ crew_members: RLS enabled
-- Coverage: 271% (19/7 tables)
+- Coverage: 57% (4/7 tables)
 
-### ⚠️ Logging Infrastructure - YELLOW (400%)
+**Issues:**
+- ⚠️ Only 4/7 sensitive tables protected
+
+### ⚠️ Logging Infrastructure - YELLOW (67%)
 
 **Details:**
 - ✅ audit_logs table present
-- ✅ audit_logs table present
-- ✅ audit_logs table present
 - ✅ access_logs table present
-- ✅ access_logs table present
-- ✅ access_logs table present
-- ✅ access_logs table present
-- ✅ access_logs table present
-- ✅ audit_logs table present
-- ✅ audit_logs table present
-- ✅ access_logs table present
-- ✅ access_logs table present
+
+**Issues:**
+- ⚠️ Only 2/3 logging tables found
+- ⚠️ Missing tables: ai_commands
 
 ### ❌ AI Transparency - RED (0%)
 
@@ -64,16 +46,16 @@
 
 ## 📋 Summary
 
-Overall security audit status: GREEN (193%)
+Overall security audit status: YELLOW (56%)
 
 ✅ 1/4 indicators passed (25%)
 
-- RLS Protection: YELLOW (271%)
-- Logging Infrastructure: YELLOW (400%)
+- RLS Protection: YELLOW (57%)
+- Logging Infrastructure: YELLOW (67%)
 - AI Transparency: RED (0%)
 - LGPD Compliance: GREEN (100%)
 
-🎉 System meets security requirements!
+⚠️ Some security improvements recommended.
 
 ---
 
