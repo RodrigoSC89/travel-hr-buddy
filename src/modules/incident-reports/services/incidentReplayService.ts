@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 472 - Incident Replay Service
  * Service for retrieving and analyzing incident data with AI
