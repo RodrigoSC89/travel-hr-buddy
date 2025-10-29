@@ -62,7 +62,7 @@
     "stress:core": "tsx tests/load-tests/stress-core.ts",
     "feedback:export": "tsx feedback/beta-phase-1/export-feedback.ts",
     "audit:package": "tsx release/v3.5/prepare-audit-package.ts",
-    "test:regression": "vitest run tests/regression-suite.ts",
+    "test:regression": "vitest run --config vitest.config.ts tests/regression-suite.test.tsx",
     "quality:metrics": "tsx scripts/generate-quality-metrics.ts",
     "generate:docs": "tsx scripts/generate-docs.ts",
     "export:build": "tsx scripts/export-build.ts",

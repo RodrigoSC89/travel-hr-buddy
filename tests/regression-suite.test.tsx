@@ -8,6 +8,7 @@
  * Run with: npm run test:unit -- tests/regression-suite.ts
  */
 
+import React from 'react';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
