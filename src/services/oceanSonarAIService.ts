@@ -59,7 +59,7 @@ class OceanSonarAIService {
   /**
    * AI analysis of sonar data (simulated LLM interpretation)
    */
-  private async analyzeWithAI(sonarDataId: string, scanId: string, rawData: any): Promise<void> {
+  private async analyzeWithAI(sonarDataId: string, scanId: string, rawData: Record<string, any>): Promise<void> {
     const startTime = performance.now();
 
     // Simulate AI pattern detection
@@ -98,7 +98,12 @@ class OceanSonarAIService {
   /**
    * Detect patterns in sonar data
    */
-  private detectPatterns(rawData: any): any[] {
+  private detectPatterns(rawData: Record<string, any>): Array<{
+    pattern_type: string;
+    confidence: number;
+    location: { bearing: number; range: number };
+    characteristics: Record<string, any>;
+  }> {
     const patterns = [];
     const numPatterns = Math.floor(Math.random() * 3) + 1;
 
@@ -123,7 +128,13 @@ class OceanSonarAIService {
   /**
    * Detect anomalies in sonar data
    */
-  private detectAnomalies(rawData: any): any[] {
+  private detectAnomalies(rawData: Record<string, any>): Array<{
+    anomaly_type: string;
+    severity: string;
+    confidence: number;
+    location: { bearing: number; range: number };
+    description: string;
+  }> {
     const anomalies = [];
     const numAnomalies = Math.floor(Math.random() * 2);
 
@@ -147,7 +158,10 @@ class OceanSonarAIService {
   /**
    * Identify zones of interest
    */
-  private identifyZones(patterns: any[], anomalies: any[]): any[] {
+  private identifyZones(
+    patterns: Array<{ pattern_type: string; confidence: number; location: any; characteristics: any }>,
+    anomalies: Array<{ anomaly_type: string; severity: string; confidence: number; location: any; description: string }>
+  ): Array<{ zone_id: string; priority: string; area: any; reason: string }> {
     const zones = [];
 
     // Create zones around anomalies
@@ -169,7 +183,10 @@ class OceanSonarAIService {
   /**
    * Generate AI interpretation
    */
-  private generateInterpretation(patterns: any[], anomalies: any[]): string {
+  private generateInterpretation(
+    patterns: Array<{ pattern_type: string; confidence: number; location: any; characteristics: any }>,
+    anomalies: Array<{ anomaly_type: string; severity: string; confidence: number; location: any; description: string }>
+  ): string {
     const parts = [];
 
     if (patterns.length > 0) {
@@ -190,7 +207,9 @@ class OceanSonarAIService {
   /**
    * Generate recommendations
    */
-  private generateRecommendations(anomalies: any[]): string {
+  private generateRecommendations(
+    anomalies: Array<{ anomaly_type: string; severity: string; confidence: number; location: any; description: string }>
+  ): string {
     if (anomalies.length === 0) {
       return "Continue normal operations. Maintain regular scanning schedule.";
     }
@@ -207,7 +226,10 @@ class OceanSonarAIService {
   /**
    * Log detection for tracking
    */
-  private async logDetection(scanId: string, anomaly: any): Promise<void> {
+  private async logDetection(
+    scanId: string,
+    anomaly: { anomaly_type: string; severity: string; confidence: number; location: any; description: string }
+  ): Promise<void> {
     await supabase.from('sonar_detection_logs').insert([{
       scan_id: scanId,
       detection_type: anomaly.anomaly_type,

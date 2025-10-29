@@ -127,7 +127,14 @@ class SensorsHubService {
   /**
    * Create alert for abnormal sensor reading
    */
-  private async createAlert(log: any): Promise<void> {
+  private async createAlert(log: {
+    sensor_id: string;
+    sensor_name: string;
+    sensor_type: SensorType;
+    reading_value: number;
+    reading_unit: string;
+    status: SensorStatus;
+  }): Promise<void> {
     const { data: existingAlert } = await supabase
       .from('sensor_alerts')
       .select('*')

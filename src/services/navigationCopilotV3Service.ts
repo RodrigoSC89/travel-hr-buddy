@@ -139,7 +139,7 @@ class NavigationCopilotV3Service {
   /**
    * Check environmental conditions
    */
-  private async checkEnvironment(routeId: string, route: any): Promise<NavigationEnvironment> {
+  private async checkEnvironment(routeId: string, route: AutonomousRoute): Promise<NavigationEnvironment> {
     const weatherConditions = {
       condition: ['clear', 'cloudy', 'rainy', 'stormy'][Math.floor(Math.random() * 4)],
       temperature: 15 + Math.random() * 15,
@@ -181,7 +181,11 @@ class NavigationCopilotV3Service {
   /**
    * Assess environmental risk
    */
-  private assessEnvironmentalRisk(weather: any, seaState: any, windSpeed: number): any {
+  private assessEnvironmentalRisk(
+    weather: { condition: string; temperature: number; humidity: number; precipitation: number },
+    seaState: { state: string; wave_height: number; wave_period: number; swell_direction: number },
+    windSpeed: number
+  ): { overall_risk: string; risk_factors: Array<{ factor: string; level: string }> } {
     const factors = [];
     let overallRisk = 'low';
 
@@ -256,7 +260,7 @@ class NavigationCopilotV3Service {
   /**
    * Trigger autonomous replanning
    */
-  private async triggerReplan(routeId: string, currentRoute: any, reason: string): Promise<void> {
+  private async triggerReplan(routeId: string, currentRoute: AutonomousRoute, reason: string): Promise<void> {
     // Mark route as replanning
     await supabase
       .from('autonomous_routes')
@@ -301,7 +305,12 @@ class NavigationCopilotV3Service {
   /**
    * Generate alternative waypoints
    */
-  private generateAlternativeWaypoints(route: any): any[] {
+  private generateAlternativeWaypoints(route: AutonomousRoute): Array<{
+    lat: number;
+    lon: number;
+    order: number;
+    name?: string;
+  }> {
     // Simplified: add small offset to existing waypoints
     return (route.waypoints || []).map((wp: any) => ({
       ...wp,
@@ -313,7 +322,7 @@ class NavigationCopilotV3Service {
   /**
    * Update route progress
    */
-  private async updateProgress(routeId: string, route: any): Promise<void> {
+  private async updateProgress(routeId: string, route: AutonomousRoute): Promise<void> {
     // Simulate progress towards destination
     const currentPos = route.current_position;
     const dest = route.destination;
