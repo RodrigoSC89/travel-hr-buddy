@@ -21,6 +21,9 @@ import Index from "@/pages/Index";
 const Dashboard = lazyWithPreload(() => import("@/pages/Dashboard"));
 const Travel = lazyWithPreload(() => import("@/pages/Travel"));
 
+// PATCH 565: Quality Dashboard
+const QualityDashboard = safeLazyImport(() => import("@/pages/QualityDashboard"));
+
 // Páginas secundárias - carregamento normal
 const PriceAlerts = safeLazyImport(() => import("@/modules/features/price-alerts"));
 const SensorsHub = safeLazyImport(() => import("@/modules/sensors-hub"));
@@ -478,6 +481,7 @@ function App() {
                     <Route element={<SmartLayout />}>
                       <Route path="/" element={<Index />} />
                       <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/dashboard/quality" element={<QualityDashboard />} />
                       <Route path="/price-alerts" element={<PriceAlerts />} />
                       <Route path="/sensors-hub" element={<SensorsHub />} />
                       <Route path="/reports" element={<Reports />} />
