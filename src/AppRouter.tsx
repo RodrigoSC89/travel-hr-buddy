@@ -107,6 +107,11 @@ const Patch502Routing = React.lazy(() => import("@/pages/admin/Patch502Routing")
 const Patch503DroneSimulation = React.lazy(() => import("@/pages/admin/Patch503DroneSimulation"));
 const Patch504AiCopilot = React.lazy(() => import("@/pages/admin/Patch504AiCopilot"));
 const Patch505MissionControl = React.lazy(() => import("@/pages/admin/Patch505MissionControl"));
+const Patch516UnderwaterDrone = React.lazy(() => import("@/pages/admin/Patch516UnderwaterDrone"));
+const Patch517CoordinationAI = React.lazy(() => import("@/pages/admin/Patch517CoordinationAI"));
+const Patch518MissionEngine = React.lazy(() => import("@/pages/admin/Patch518MissionEngine"));
+const Patch519DeepRiskAI = React.lazy(() => import("@/pages/admin/Patch519DeepRiskAI"));
+const Patch520AIReplay = React.lazy(() => import("@/pages/admin/Patch520AIReplay"));
 
 export default function AppRouter() {
   return (
@@ -217,6 +222,11 @@ export default function AppRouter() {
             <Route path="/admin/patch-503/drone-simulation" element={<Patch503DroneSimulation />} />
             <Route path="/admin/patch-504/ai-copilot" element={<Patch504AiCopilot />} />
             <Route path="/admin/patch-505/mission-control" element={<Patch505MissionControl />} />
+            <Route path="/admin/patch-516/underwater-drone" element={<Patch516UnderwaterDrone />} />
+            <Route path="/admin/patch-517/coordination-ai" element={<Patch517CoordinationAI />} />
+            <Route path="/admin/patch-518/mission-engine" element={<Patch518MissionEngine />} />
+            <Route path="/admin/patch-519/deep-risk-ai" element={<Patch519DeepRiskAI />} />
+            <Route path="/admin/patch-520/ai-replay" element={<Patch520AIReplay />} />
       </Routes>
     </Router>
   );
