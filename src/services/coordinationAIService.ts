@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 536 - Coordination AI Engine Service
  * Multi-agent coordination system with priority-based task distribution

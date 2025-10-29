@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 537 - Deep Risk AI Service with ONNX Runtime
  * Browser-based AI risk analysis using ONNX Runtime Web

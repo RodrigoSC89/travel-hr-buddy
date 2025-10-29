@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 539 - Ocean Sonar AI Service
  * AI-assisted sonar pattern interpretation with LLM

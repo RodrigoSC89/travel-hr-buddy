@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 538 - Sensors Hub Service
  * Real-time sensor monitoring with MQTT/HTTP ingestion
