@@ -87,6 +87,8 @@ const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
 const TelemetryDashboard = React.lazy(() => import("@/pages/telemetry-dashboard"));
 const SupervisorAI = React.lazy(() => import("@/pages/supervisor-ai"));
 const CentralLogs = React.lazy(() => import("@/pages/logs/central"));
+const AutoExecConfig = React.lazy(() => import("@/pages/autoexec-config"));
+const GovernanceAI = React.lazy(() => import("@/pages/governance-ai"));
 
 export default function AppRouter() {
   return (
@@ -175,6 +177,8 @@ export default function AppRouter() {
         <Route path="/telemetry-dashboard" element={<TelemetryDashboard />} />
         <Route path="/supervisor-ai" element={<SupervisorAI />} />
         <Route path="/logs/central" element={<CentralLogs />} />
+        <Route path="/autoexec-config" element={<AutoExecConfig />} />
+        <Route path="/governance-ai" element={<GovernanceAI />} />
       </Routes>
     </Router>
   );
