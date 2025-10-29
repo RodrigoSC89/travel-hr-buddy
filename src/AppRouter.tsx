@@ -112,6 +112,11 @@ const Patch517CoordinationAI = React.lazy(() => import("@/pages/admin/Patch517Co
 const Patch518MissionEngine = React.lazy(() => import("@/pages/admin/Patch518MissionEngine"));
 const Patch519DeepRiskAI = React.lazy(() => import("@/pages/admin/Patch519DeepRiskAI"));
 const Patch520AIReplay = React.lazy(() => import("@/pages/admin/Patch520AIReplay"));
+const Patch526Communication = React.lazy(() => import("@/pages/admin/Patch526Communication"));
+const Patch527IncidentReports = React.lazy(() => import("@/pages/admin/Patch527IncidentReports"));
+const Patch528DocumentTemplates = React.lazy(() => import("@/pages/admin/Patch528DocumentTemplates"));
+const Patch529PriceAlerts = React.lazy(() => import("@/pages/admin/Patch529PriceAlerts"));
+const Patch530MissionControlV2 = React.lazy(() => import("@/pages/admin/Patch530MissionControlV2"));
 
 export default function AppRouter() {
   return (
@@ -227,6 +232,11 @@ export default function AppRouter() {
             <Route path="/admin/patch-518/mission-engine" element={<Patch518MissionEngine />} />
             <Route path="/admin/patch-519/deep-risk-ai" element={<Patch519DeepRiskAI />} />
             <Route path="/admin/patch-520/ai-replay" element={<Patch520AIReplay />} />
+            <Route path="/admin/patch-526/communication" element={<Patch526Communication />} />
+            <Route path="/admin/patch-527/incident-reports" element={<Patch527IncidentReports />} />
+            <Route path="/admin/patch-528/document-templates" element={<Patch528DocumentTemplates />} />
+            <Route path="/admin/patch-529/price-alerts" element={<Patch529PriceAlerts />} />
+            <Route path="/admin/patch-530/mission-control-v2" element={<Patch530MissionControlV2 />} />
       </Routes>
     </Router>
   );
