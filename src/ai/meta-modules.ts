@@ -21,7 +21,7 @@ export {
   type DecisionLevel,
 } from "./coordination/multi-level-engine";
 
-// PATCH 587: IA Reflective Core
+// PATCH 587: AI Reflective Core
 export {
   ReflectiveCore,
   reflectiveCore,

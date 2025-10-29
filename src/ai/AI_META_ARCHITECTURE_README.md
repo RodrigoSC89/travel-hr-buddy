@@ -77,7 +77,7 @@ console.log(result.conflicts);
 
 ---
 
-### PATCH 587: IA Reflective Core
+### PATCH 587: AI Reflective Core
 
 **Purpose:** Enables AI self-reflection based on previous decisions to improve future performance.
 
