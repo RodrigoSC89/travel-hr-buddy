@@ -1,13 +1,15 @@
 /**
  * PATCH 433 - Deep Sea Risk Analysis AI
+ * PATCH 522 - Enhanced with ONNX Runtime LSTM/Transformer predictions
  * Comprehensive AI-powered risk assessment for deep sea operations
  * Integrated with analytics-core, incident logs, and forecast data
  * 
  * Features:
  * - Multi-factor risk scoring with historical analysis
+ * - ONNX-based deep learning predictions
  * - AI-powered insights and recommendations
- * - Predictive analysis with trend detection
- * - Real-time risk dashboard
+ * - Predictive analysis with trend detection and timeline
+ * - Real-time risk dashboard with automated alerts
  * - Event logging and tracking
  * - JSON report export
  */
@@ -31,8 +33,11 @@ import {
   Activity,
   Clock,
   Database,
+  Bell,
 } from "lucide-react";
 import { deepRiskAIService, type RiskFactors, type RiskScore, type RiskRecommendation } from "./services/deepRiskAIService";
+import { onnxRiskPredictor } from "./services/onnxRiskPredictor";
+import { RiskTimeline } from "./components/RiskTimeline";
 import { toast } from "sonner";
 
 
@@ -51,6 +56,18 @@ const DeepRiskAI: React.FC = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [prediction, setPrediction] = useState<any>(null);
   const [eventHistory, setEventHistory] = useState<any[]>([]);
+  
+  // PATCH 522: ONNX prediction and timeline state
+  const [onnxPrediction, setOnnxPrediction] = useState<any>(null);
+  const [riskTimeline, setRiskTimeline] = useState<any[]>([]);
+  const [autoAlerts, setAutoAlerts] = useState(true);
+  const [alertHistory, setAlertHistory] = useState<any[]>([]);
+  
+  // Historical data for LSTM input (simulated)
+  const [depthHistory, setDepthHistory] = useState<number[]>([]);
+  const [pressureHistory, setPressureHistory] = useState<number[]>([]);
+  const [temperatureHistory, setTemperatureHistory] = useState<number[]>([]);
+  const [currentHistory, setCurrentHistory] = useState<number[]>([]);
 
   // Load event history on mount
   useEffect(() => {
@@ -81,6 +98,12 @@ const DeepRiskAI: React.FC = () => {
         waveHeight,
       };
       
+      // Update historical data
+      setDepthHistory(prev => [...prev, depth].slice(-10));
+      setPressureHistory(prev => [...prev, pressure].slice(-10));
+      setTemperatureHistory(prev => [...prev, temperature].slice(-10));
+      setCurrentHistory(prev => [...prev, current].slice(-10));
+      
       // Calculate risk score with full integration
       const score = await deepRiskAIService.calculateRiskScore(factors);
       const recs = await deepRiskAIService.generateRecommendations(factors, score);
@@ -89,6 +112,45 @@ const DeepRiskAI: React.FC = () => {
       setRiskScore(score);
       setRecommendations(recs);
       setPrediction(pred);
+      
+      // PATCH 522: ONNX deep learning prediction
+      try {
+        const onnxInput = {
+          depthHistory: depthHistory.length > 0 ? depthHistory : [depth],
+          pressureHistory: pressureHistory.length > 0 ? pressureHistory : [pressure],
+          temperatureHistory: temperatureHistory.length > 0 ? temperatureHistory : [temperature],
+          currentHistory: currentHistory.length > 0 ? currentHistory : [current],
+          depth,
+          pressure,
+          temperature,
+          current,
+          visibility,
+          windSpeed,
+          waveHeight,
+        };
+        
+        const onnxResult = await onnxRiskPredictor.predictRisk(onnxInput);
+        setOnnxPrediction(onnxResult);
+        
+        // Generate timeline
+        const timeline = await onnxRiskPredictor.predictTimeline(onnxInput, 4);
+        setRiskTimeline(timeline);
+        
+        // Auto-alert if high risk
+        if (autoAlerts && (onnxResult.riskCategory === 'severe' || onnxResult.riskCategory === 'critical')) {
+          const alert = {
+            id: Date.now(),
+            timestamp: new Date().toISOString(),
+            level: onnxResult.riskCategory,
+            message: `⚠️ ${onnxResult.riskCategory.toUpperCase()} RISK: ${onnxResult.recommendation}`,
+          };
+          setAlertHistory(prev => [alert, ...prev].slice(0, 20));
+          toast.error(alert.message, { duration: 10000 });
+        }
+      } catch (onnxError) {
+        console.error("ONNX prediction failed:", onnxError);
+        // Continue with traditional prediction
+      }
 
       // Log the risk event
       await deepRiskAIService.logRiskEvent({
@@ -428,6 +490,62 @@ const DeepRiskAI: React.FC = () => {
                     <p className="text-zinc-300 mt-1">{prediction.recommendation}</p>
                   </div>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* PATCH 522: ONNX Risk Timeline */}
+        {riskTimeline.length > 0 && onnxPrediction && (
+          <RiskTimeline
+            timeline={riskTimeline}
+            currentRisk={onnxPrediction.predictedRiskScore}
+            trendDirection={onnxPrediction.trendDirection}
+          />
+        )}
+        
+        {/* PATCH 522: Alert History */}
+        {alertHistory.length > 0 && (
+          <Card className="bg-zinc-800/50 border-red-500/30">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Bell className="w-5 h-5 text-red-400" />
+                  Alertas Automáticos ({alertHistory.length})
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setAutoAlerts(!autoAlerts)}
+                  className={autoAlerts ? "border-green-500 text-green-400" : "border-zinc-600"}
+                >
+                  {autoAlerts ? "Alertas ON" : "Alertas OFF"}
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {alertHistory.map((alert) => (
+                  <div
+                    key={alert.id}
+                    className={`p-3 rounded border ${
+                      alert.level === 'critical' ? 'bg-red-500/20 border-red-500/50' :
+                      alert.level === 'severe' ? 'bg-orange-500/20 border-orange-500/50' :
+                      'bg-yellow-500/20 border-yellow-500/50'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4 text-red-400" />
+                        <span className="text-sm font-semibold uppercase">{alert.level}</span>
+                      </div>
+                      <span className="text-xs text-zinc-400">
+                        {new Date(alert.timestamp).toLocaleTimeString()}
+                      </span>
+                    </div>
+                    <p className="text-sm">{alert.message}</p>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
