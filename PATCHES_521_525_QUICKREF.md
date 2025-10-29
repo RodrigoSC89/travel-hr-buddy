@@ -4,11 +4,11 @@
 
 | Patch | Module | URL | Status |
 |-------|--------|-----|--------|
-| 521 | Sonar AI Processor | `/sonar-ai` | ✅ Active |
-| 522 | Deep Risk AI | `/deep-risk-ai` | ✅ Active |
-| 523 | Underwater Drone | `/underwater-drone` | ✅ Active |
-| 524 | Incident Replay AI | `/incident-replay` | ✅ Active |
-| 525 | AI Vision Core | `/ai-vision-core` | ✅ Active |
+| 521 | Sonar AI Processor | `/sonar-ai` | ✅ Pre-existing, Verified |
+| 522 | Deep Risk AI | `/deep-risk-ai` | ✅ Pre-existing, Verified |
+| 523 | Underwater Drone | `/underwater-drone` | ✅ Pre-existing, Verified |
+| 524 | Incident Replay AI | `/incident-replay` | ✅ Created in PR |
+| 525 | AI Vision Core | `/ai-vision-core` | ✅ Created in PR |
 
 ---
 
