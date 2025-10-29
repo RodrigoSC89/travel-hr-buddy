@@ -16,3 +16,7 @@ functions:
     schedule: '0 6 * * *' # Daily at 06:00 UTC - Automated tactical risk forecasting
     endpoint: '/forecast-risks-cron'
     method: POST
+  weekly-backup:
+    schedule: '0 2 * * 0' # Every Sunday at 02:00 UTC - PATCH 507: Weekly automated backup
+    endpoint: '/weekly-backup'
+    method: POST
