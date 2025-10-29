@@ -114,6 +114,7 @@ const RestoreChartEmbed = React.lazy(() => import("@/pages/embed/RestoreChartEmb
 const TVWallLogs = React.lazy(() => import("@/pages/tv/LogsPage"));
 const TemplateEditorPage = React.lazy(() => import("@/pages/admin/templates/editor"));
 const TemplateValidationPage = React.lazy(() => import("@/pages/admin/templates/validation"));
+const TemplateLibraryGallery = React.lazy(() => import("@/pages/admin/template-library"));
 const CrewConsolidationValidationPage = React.lazy(() => import("@/pages/admin/crew/consolidation-validation"));
 const DocumentHubValidationPage = React.lazy(() => import("@/pages/admin/document-hub/validation"));
 const MissionControlValidationPage = React.lazy(() => import("@/pages/admin/mission-control/validation"));
@@ -530,6 +531,7 @@ function App() {
                       <Route path="/admin/templates/edit/:id" element={<EditTemplatePage />} />
                       <Route path="/admin/documents/demo" element={<DocumentEditorDemo />} />
                       <Route path="/admin/templates/editor" element={<TemplateEditorPage />} />
+                      <Route path="/admin/templates/library" element={<TemplateLibraryGallery />} />
                       <Route path="/admin/templates/validation" element={<TemplateValidationPage />} />
                       <Route path="/admin/crew/consolidation-validation" element={<CrewConsolidationValidationPage />} />
                       <Route path="/admin/crew/validation" element={<CrewValidation />} />
