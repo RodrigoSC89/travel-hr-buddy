@@ -93,6 +93,12 @@ const Patch488Templates = React.lazy(() => import("@/pages/admin/Patch488Templat
 const Patch489Navigation = React.lazy(() => import("@/pages/admin/Patch489Navigation"));
 const Patch490PriceAlerts = React.lazy(() => import("@/pages/admin/Patch490PriceAlerts"));
 
+// 🔹 PATCH 521-525 - Advanced AI Systems
+const SonarAI = React.lazy(() => import("@/modules/sonar-ai"));
+const DeepRiskAI = React.lazy(() => import("@/modules/deep-risk-ai"));
+const IncidentReplayAI = React.lazy(() => import("@/modules/incident-reports/IncidentReplayAI"));
+const AIVisionCore = React.lazy(() => import("@/modules/ai-vision-core"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -185,6 +191,12 @@ export default function AppRouter() {
         <Route path="/admin/patch-488/templates" element={<Patch488Templates />} />
         <Route path="/admin/patch-489/navigation" element={<Patch489Navigation />} />
         <Route path="/admin/patch-490/price-alerts" element={<Patch490PriceAlerts />} />
+        
+        {/* PATCH 521-525 Routes - Advanced AI Systems */}
+        <Route path="/sonar-ai" element={<SonarAI />} />
+        <Route path="/deep-risk-ai" element={<DeepRiskAI />} />
+        <Route path="/incident-replay-ai" element={<IncidentReplayAI />} />
+        <Route path="/ai-vision-core" element={<AIVisionCore />} />
       </Routes>
     </Router>
   );
