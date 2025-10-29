@@ -83,6 +83,11 @@ const TechnicalValidation = React.lazy(() => import("@/pages/admin/technical-val
 // 🔹 PATCH 467 - Drone Commander Experimental
 const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
 
+// 🔹 PATCH 511-515 - Observability, AI Supervision, Unified Logs, Auto-Execution, AI Governance
+const TelemetryDashboard = React.lazy(() => import("@/pages/telemetry-dashboard"));
+const SupervisorAI = React.lazy(() => import("@/pages/supervisor-ai"));
+const CentralLogs = React.lazy(() => import("@/pages/logs/central"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -165,6 +170,11 @@ export default function AppRouter() {
         <Route path="/admin/patches-501-505/validation" element={
           React.createElement(React.lazy(() => import("@/pages/admin/Patches501505Validation")))
         } />
+        
+        {/* PATCH 511-515 Routes - Observability & AI Governance */}
+        <Route path="/telemetry-dashboard" element={<TelemetryDashboard />} />
+        <Route path="/supervisor-ai" element={<SupervisorAI />} />
+        <Route path="/logs/central" element={<CentralLogs />} />
       </Routes>
     </Router>
   );
