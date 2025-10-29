@@ -334,6 +334,9 @@ const Patch529PriceAlerts = safeLazyImport(() => import("@/pages/admin/Patch529P
 const Patch530MissionControlV2 = safeLazyImport(() => import("@/pages/admin/Patch530MissionControlV2"));
 const Patch531TestValidation = safeLazyImport(() => import("@/pages/admin/Patch531TestValidation"));
 
+// PATCH 551-555: Validation Dashboard
+const Patches551to555ValidationPage = safeLazyImport(() => import("@/pages/validation/patches-551-555"));
+
 // PATCH 531-535: Navigation Copilot v2, Route Planner, Underwater Drone, Drone Commander, Mission Consolidation
 const Patch531NavigationCopilotV2 = safeLazyImport(() => import("@/pages/admin/Patch531NavigationCopilotV2"));
 const Patch532RoutePlannerAI = safeLazyImport(() => import("@/pages/admin/Patch532RoutePlannerAI"));
@@ -840,6 +843,7 @@ function App() {
                       
                       {/* Master Validation Dashboard */}
                       <Route path="/validation/master-validation" element={<Suspense fallback={<PageSkeleton />}>{React.createElement(safeLazyImport(() => import("@/pages/validation/master-validation")))}</Suspense>} />
+                      <Route path="/validation/patches-551-555" element={<Patches551to555ValidationPage />} />
                       
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (

@@ -291,9 +291,6 @@ export default function TemplatesPanel() {
                     className="font-mono text-sm"
                   />
                 )}
-                
-                  className="font-mono text-sm"
-                />
                 <p className="text-xs text-muted-foreground">
                   Variáveis detectadas: {extractVariables(newTemplate.content).join(", ") || "Nenhuma"}
                 </p>
