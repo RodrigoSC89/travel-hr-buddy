@@ -315,6 +315,21 @@ const DroneCommanderV1 = safeLazyImport(() => import("@/pages/admin/drone-comman
 const TemplateLibrary = safeLazyImport(() => import("@/pages/admin/template-library"));
 const NavigationCopilotV2 = safeLazyImport(() => import("@/pages/admin/navigation-copilot-v2"));
 
+// PATCH 511-515: Satellite, Satcom, Ocean Sonar, Navigation Copilot, Sensors Integration
+const Patch511SatelliteTracker = safeLazyImport(() => import("@/pages/admin/Patch511SatelliteTracker"));
+const Patch512Satcom = safeLazyImport(() => import("@/pages/admin/Patch512Satcom"));
+const Patch513OceanSonar = safeLazyImport(() => import("@/pages/admin/Patch513OceanSonar"));
+const Patch514NavigationCopilot = safeLazyImport(() => import("@/pages/admin/Patch514NavigationCopilot"));
+const Patch515SensorsIntegration = safeLazyImport(() => import("@/pages/admin/Patch515SensorsIntegration"));
+
+// PATCH 526-531: Communication, Incidents, Templates, Price Alerts, Mission Control, Tests
+const Patch526Communication = safeLazyImport(() => import("@/pages/admin/Patch526Communication"));
+const Patch527IncidentReports = safeLazyImport(() => import("@/pages/admin/Patch527IncidentReports"));
+const Patch528DocumentTemplates = safeLazyImport(() => import("@/pages/admin/Patch528DocumentTemplates"));
+const Patch529PriceAlerts = safeLazyImport(() => import("@/pages/admin/Patch529PriceAlerts"));
+const Patch530MissionControlV2 = safeLazyImport(() => import("@/pages/admin/Patch530MissionControlV2"));
+const Patch531TestValidation = safeLazyImport(() => import("@/pages/admin/Patch531TestValidation"));
+
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
   console.log("🔄 LoadingSpinner renderizado");
@@ -797,6 +812,21 @@ function App() {
                       <Route path="/satellite-live" element={<SatelliteLive />} />
                       <Route path="/joint-missions" element={<JointMissions />} />
                       <Route path="/interop-grid" element={<InteropGridAI />} />
+                      
+                      {/* PATCH 511-515: Validation Routes */}
+                      <Route path="/admin/patch-511-satellite-tracker" element={<Patch511SatelliteTracker />} />
+                      <Route path="/admin/patch-512-satcom" element={<Patch512Satcom />} />
+                      <Route path="/admin/patch-513-ocean-sonar" element={<Patch513OceanSonar />} />
+                      <Route path="/admin/patch-514-navigation-copilot" element={<Patch514NavigationCopilot />} />
+                      <Route path="/admin/patch-515-sensors-integration" element={<Patch515SensorsIntegration />} />
+                      
+                      {/* PATCH 526-531: Validation Routes */}
+                      <Route path="/admin/patch-526/communication" element={<Patch526Communication />} />
+                      <Route path="/admin/patch-527/incident-reports" element={<Patch527IncidentReports />} />
+                      <Route path="/admin/patch-528/document-templates" element={<Patch528DocumentTemplates />} />
+                      <Route path="/admin/patch-529/price-alerts" element={<Patch529PriceAlerts />} />
+                      <Route path="/admin/patch-530/mission-control-v2" element={<Patch530MissionControlV2 />} />
+                      <Route path="/admin/patch-531/test-validation" element={<Patch531TestValidation />} />
                       
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (
