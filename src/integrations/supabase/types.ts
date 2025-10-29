@@ -4040,6 +4040,140 @@ export type Database = {
           },
         ]
       }
+      drone_missions: {
+        Row: {
+          actual_trajectory: Json | null
+          completion_percentage: number | null
+          created_at: string
+          drone_id: string
+          end_time: string | null
+          id: string
+          max_depth_meters: number | null
+          metadata: Json | null
+          mission_name: string
+          mission_objectives: Json | null
+          mission_type: string
+          organization_id: string | null
+          planned_waypoints: Json | null
+          start_time: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          actual_trajectory?: Json | null
+          completion_percentage?: number | null
+          created_at?: string
+          drone_id: string
+          end_time?: string | null
+          id?: string
+          max_depth_meters?: number | null
+          metadata?: Json | null
+          mission_name: string
+          mission_objectives?: Json | null
+          mission_type: string
+          organization_id?: string | null
+          planned_waypoints?: Json | null
+          start_time?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          actual_trajectory?: Json | null
+          completion_percentage?: number | null
+          created_at?: string
+          drone_id?: string
+          end_time?: string | null
+          id?: string
+          max_depth_meters?: number | null
+          metadata?: Json | null
+          mission_name?: string
+          mission_objectives?: Json | null
+          mission_type?: string
+          organization_id?: string | null
+          planned_waypoints?: Json | null
+          start_time?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      drone_telemetry: {
+        Row: {
+          battery_percentage: number | null
+          created_at: string
+          depth_meters: number | null
+          drone_id: string
+          heading_degrees: number | null
+          id: string
+          metadata: Json | null
+          mission_id: string | null
+          pitch_degrees: number | null
+          position_x: number | null
+          position_y: number | null
+          position_z: number | null
+          pressure_bar: number | null
+          roll_degrees: number | null
+          signal_strength_dbm: number | null
+          status: string | null
+          timestamp: string
+          velocity_ms: number | null
+          water_temperature_celsius: number | null
+        }
+        Insert: {
+          battery_percentage?: number | null
+          created_at?: string
+          depth_meters?: number | null
+          drone_id: string
+          heading_degrees?: number | null
+          id?: string
+          metadata?: Json | null
+          mission_id?: string | null
+          pitch_degrees?: number | null
+          position_x?: number | null
+          position_y?: number | null
+          position_z?: number | null
+          pressure_bar?: number | null
+          roll_degrees?: number | null
+          signal_strength_dbm?: number | null
+          status?: string | null
+          timestamp?: string
+          velocity_ms?: number | null
+          water_temperature_celsius?: number | null
+        }
+        Update: {
+          battery_percentage?: number | null
+          created_at?: string
+          depth_meters?: number | null
+          drone_id?: string
+          heading_degrees?: number | null
+          id?: string
+          metadata?: Json | null
+          mission_id?: string | null
+          pitch_degrees?: number | null
+          position_x?: number | null
+          position_y?: number | null
+          position_z?: number | null
+          pressure_bar?: number | null
+          roll_degrees?: number | null
+          signal_strength_dbm?: number | null
+          status?: string | null
+          timestamp?: string
+          velocity_ms?: number | null
+          water_temperature_celsius?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drone_telemetry_mission_id_fkey"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "drone_missions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       emergency_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -6457,6 +6591,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mission_tasks: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          metadata: Json | null
+          mission_id: string
+          name: string
+          priority: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          mission_id: string
+          name: string
+          priority?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          mission_id?: string
+          name?: string
+          priority?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       mission_timeline: {
         Row: {
@@ -12203,4 +12379,4 @@ export const Constants = {
       ],
     },
   },
-} as const;
+} as const
