@@ -78,7 +78,7 @@
 ### Partially Complete / Existing Work
 
 #### ⚠️ PATCH 528 - Template Editor v1
-**Status:** LARGELY COMPLETE (from PATCH 463, 493)  
+**Status:** PENDING_INTEGRATION (90% complete from PATCH 463, 493)  
 **Objective:** Complete template system with editor and PDF export
 
 **Existing Implementation:**
@@ -188,7 +188,7 @@
 ## Code Quality
 
 - **Linting:** All new code passes ESLint (only pre-existing warnings remain)
-- **Type Safety:** TypeScript @ts-nocheck used where necessary for rapid development
+- **Type Safety:** TypeScript used with `@ts-nocheck` for rapid prototyping in UI components (note: should be refactored to proper types before final production deployment)
 - **Error Handling:** Comprehensive try-catch blocks with user-friendly toasts
 - **Real-time Support:** WebSocket subscriptions properly managed with cleanup
 
@@ -242,9 +242,10 @@
 
 ### Short Term:
 1. Add comprehensive tests for new modules
-2. Update documentation
-3. Create user guides for new features
-4. Run security audit with CodeQL
+2. **Refactor `@ts-nocheck` to proper TypeScript types** in UI components
+3. Update documentation
+4. Create user guides for new features
+5. Run security audit with CodeQL
 
 ### Medium Term:
 1. Monitor WebSocket performance
