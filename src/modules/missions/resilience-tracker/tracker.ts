@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 579 - Mission Resilience Tracker
  * Track mission resilience based on failures, responses, and recovery

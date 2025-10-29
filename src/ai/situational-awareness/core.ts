@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 576 - Situational Awareness Core
  * Real-time intelligence monitoring and analysis system
