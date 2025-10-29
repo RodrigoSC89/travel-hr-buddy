@@ -273,6 +273,7 @@ const MissionConsolidationValidation = React.lazy(() => import("@/pages/admin/mi
 // PATCH 431-435 Validation Pages
 const RoutePlannerValidation = React.lazy(() => import("@/pages/admin/route-planner/validation"));
 const NavigationCopilotV2Validation = React.lazy(() => import("@/pages/admin/navigation-copilot-v2/validation"));
+const SystemValidationHub = React.lazy(() => import("@/pages/SystemValidationHub"));
 const DeepRiskAIValidation = React.lazy(() => import("@/pages/admin/deep-risk-ai/validation"));
 const TemplatesSystemValidation = React.lazy(() => import("@/pages/admin/templates-system/validation"));
 const SonarAIValidationV2 = React.lazy(() => import("@/pages/admin/sonar-ai/validation"));
@@ -553,6 +554,8 @@ function App() {
                       <Route path="/admin/mission-consolidation/validation" element={<MissionConsolidationValidation />} />
                       <Route path="/admin/route-planner/validation" element={<RoutePlannerValidation />} />
                       <Route path="/admin/navigation-copilot-v2/validation" element={<NavigationCopilotV2Validation />} />
+                      <Route path="/validation" element={<SystemValidationHub />} />
+                      <Route path="/system-validation" element={<SystemValidationHub />} />
                       <Route path="/admin/deep-risk-ai/validation" element={<DeepRiskAIValidation />} />
                       <Route path="/admin/templates-system/validation" element={<TemplatesSystemValidation />} />
                       <Route path="/admin/sonar-ai-v2/validation" element={<SonarAIValidationV2 />} />
