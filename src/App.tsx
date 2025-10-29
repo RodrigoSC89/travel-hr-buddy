@@ -234,8 +234,8 @@ const AnalyticsCoreModule = React.lazy(() => import("@/modules/intelligence/anal
 const VoiceAssistantModule = React.lazy(() => import("@/modules/assistants/voice-assistant"));
 const NotificationsCenterModule = React.lazy(() => import("@/modules/connectivity/notifications-center"));
 const AIModulesStatus = React.lazy(() => import("@/pages/AIModulesStatus"));
-// PATCH 406: Consolidated Crew Management
-const CrewManagement = React.lazy(() => import("@/modules/crew-management"));
+// PATCH 466: Consolidated Crew Management (crew-management → crew)
+const CrewManagement = React.lazy(() => import("@/modules/crew"));
 // PATCH 407: Sonar AI Module
 const SonarAI = React.lazy(() => import("@/modules/sonar-ai"));
 // Validation Pages - Patches 401-410
