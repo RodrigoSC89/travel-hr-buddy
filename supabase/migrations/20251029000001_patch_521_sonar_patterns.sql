@@ -100,4 +100,3 @@ CREATE TRIGGER update_sonar_patterns_updated_at_trigger
 
 -- Grant permissions
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.sonar_patterns TO authenticated;
-GRANT USAGE ON SEQUENCE sonar_patterns_id_seq TO authenticated;

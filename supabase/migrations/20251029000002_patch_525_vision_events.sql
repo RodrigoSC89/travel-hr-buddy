@@ -124,7 +124,6 @@ CREATE TRIGGER update_vision_events_updated_at_trigger
 
 -- Grant permissions
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.vision_events TO authenticated;
-GRANT USAGE ON SEQUENCE vision_events_id_seq TO authenticated;
 
 -- Create a view for high-confidence detections
 CREATE OR REPLACE VIEW public.high_confidence_detections AS
