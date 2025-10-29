@@ -45,11 +45,17 @@ User session view: `/user/profile`
 ### AI Memory
 ```sql
 -- Search similar memories
+-- embedding_vector: 1536-dimension array from OpenAI ada-002
+-- Generate using: generateEmbedding(text) from openai.ts service
 SELECT * FROM search_similar_ai_memories(
-  embedding_vector,
-  0.7,  -- threshold
-  5     -- count
+  embedding_vector,  -- vector(1536) type, e.g., '[0.1, 0.2, ...]'
+  0.7,  -- threshold: 0.0-1.0, higher = more similar
+  5     -- count: max results to return
 );
+
+-- Example with actual embedding:
+-- First generate: const embedding = await generateEmbedding("search text");
+-- Then query: search_similar_ai_memories(embedding, 0.7, 5);
 
 -- Update access stats
 SELECT update_ai_memory_access(memory_id);
@@ -130,11 +136,25 @@ function ProfilePage() {
 ```
 
 ### AI Learning Dashboard
+```tsx
+// Direct route access
+import { useNavigate } from 'react-router-dom';
+
+function NavigateToLearning() {
+  const navigate = useNavigate();
+  navigate('/ai/learning-dashboard');
+}
+
+// Or use as a page component
+import AILearningDashboard from '@/pages/ai/learning-dashboard';
+```
+
 Available at: `/ai/learning-dashboard`
-- View learning insights
-- See improvement suggestions
-- Track progress over time
-- Export learning data
+- View learning insights by action type
+- See improvement suggestions with priorities
+- Track progress over time with charts
+- Export learning data as JSON
+- Filter by time range (7, 30, 90 days)
 
 ### Backup Admin Panel
 Available at: `/admin/backups`
@@ -168,16 +188,24 @@ npm run test
 
 ### 1. Database Setup
 ```sql
--- Run migrations in order
+-- Run migrations in order (CRITICAL: Run in sequence)
 \i supabase/migrations/20251029_patch_506_ai_memory.sql
 \i supabase/migrations/20251029_patch_507_backup_system.sql
 \i supabase/migrations/20251029_patch_508_rls_reinforcement.sql
 \i supabase/migrations/20251029_patch_509_ai_reflection.sql
+
+-- Note: PATCH 510 (Enhanced Auth) has no migration file
+-- It's implemented entirely in the frontend service layer
 ```
 
 ### 2. Enable PGVector
 ```sql
+-- Requires pgvector extension >= 0.5.0
+-- Compatible with Supabase and PostgreSQL 14+
 CREATE EXTENSION IF NOT EXISTS vector;
+
+-- Verify installation
+SELECT * FROM pg_extension WHERE extname = 'vector';
 ```
 
 ### 3. Create Storage Bucket
@@ -194,8 +222,13 @@ supabase functions deploy weekly-backup
 ### 5. Environment Variables
 Required:
 - `VITE_OPENAI_API_KEY` - For embeddings
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_PUBLISHABLE_KEY`
+  - ⚠️ **Security Warning**: In production, API calls to OpenAI should be made from server-side (edge functions) to keep keys secure
+  - For development only: Can use VITE_ prefix for client-side
+  - Best practice: Move to server-side edge function for production
+- `VITE_SUPABASE_URL` - Your Supabase project URL
+- `VITE_SUPABASE_PUBLISHABLE_KEY` - Public anon key (safe for client-side)
+
+**Security Note**: The `VITE_` prefix exposes variables to client-side. Never use this prefix for sensitive keys in production.
 
 ---
 
