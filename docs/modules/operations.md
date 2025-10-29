@@ -1,34 +1,18 @@
-# finance-hub
+# operations
 
-**Category**: finance-hub
+**Category**: operations
 **Last Updated**: 2025-10-29
 
 ---
 
 ## 📝 Descrição
 
-## 📋 Overview
-
-## 🧩 Componentes
-
-### InvoiceManager
-
-InvoiceManager component
-
-## 🪝 Custom Hooks
-
-- `useFinanceData`
-
-## 📦 Dependências
-
-**Externas:**
-
-- `react`
+operations module
 
 ## 📁 Estrutura de Dados
 
 ```
-finance-hub/
+operations/
 ├── components/       # Componentes React
 ├── hooks/            # Custom hooks
 ├── services/         # Lógica de negócio e API

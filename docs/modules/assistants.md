@@ -1,34 +1,18 @@
-# finance-hub
+# assistants
 
-**Category**: finance-hub
+**Category**: assistants
 **Last Updated**: 2025-10-29
 
 ---
 
 ## 📝 Descrição
 
-## 📋 Overview
-
-## 🧩 Componentes
-
-### InvoiceManager
-
-InvoiceManager component
-
-## 🪝 Custom Hooks
-
-- `useFinanceData`
-
-## 📦 Dependências
-
-**Externas:**
-
-- `react`
+assistants module
 
 ## 📁 Estrutura de Dados
 
 ```
-finance-hub/
+assistants/
 ├── components/       # Componentes React
 ├── hooks/            # Custom hooks
 ├── services/         # Lógica de negócio e API

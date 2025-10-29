@@ -1,34 +1,28 @@
-# finance-hub
+# performance
 
-**Category**: finance-hub
+**Category**: performance
 **Last Updated**: 2025-10-29
 
 ---
 
 ## 📝 Descrição
 
-## 📋 Overview
+## 📊 Overview
 
 ## 🧩 Componentes
 
-### InvoiceManager
+### AlertsSystem
 
-InvoiceManager component
+AlertsSystem component
 
 ## 🪝 Custom Hooks
 
-- `useFinanceData`
-
-## 📦 Dependências
-
-**Externas:**
-
-- `react`
+- `usePerformanceData`
 
 ## 📁 Estrutura de Dados
 
 ```
-finance-hub/
+performance/
 ├── components/       # Componentes React
 ├── hooks/            # Custom hooks
 ├── services/         # Lógica de negócio e API
