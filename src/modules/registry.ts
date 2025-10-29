@@ -835,6 +835,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Radio",
     lazy: true,
     version: "487.0",
+  },
+
+  "planning.navigation-copilot-v2": {
+    id: "planning.navigation-copilot-v2",
+    name: "Navigation Copilot v2",
+    category: "planning",
+    path: "pages/admin/navigation-copilot-v2",
+    description: "PATCH 489 - AI-powered navigation with route overlay, contextual AI suggestions (wind/weather adjustments), simulated mode with decision logs, and real-time route optimization",
+    status: "active",
+    completeness: "100%",
+    route: "/admin/navigation-copilot-v2",
+    icon: "Navigation",
+    lazy: true,
+    version: "489.0",
   }
 };
 

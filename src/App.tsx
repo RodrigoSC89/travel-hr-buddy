@@ -122,6 +122,7 @@ const DocumentationValidationPage = React.lazy(() => import("@/pages/admin/docum
 const DocumentTemplatesValidationPage = React.lazy(() => import("@/pages/admin/document-templates/validation"));
 const SatelliteTrackerValidationPage = React.lazy(() => import("@/pages/admin/satellite-tracker/validation"));
 const NavigationCopilotValidationPage = React.lazy(() => import("@/pages/admin/navigation-copilot/validation"));
+const NavigationCopilotV2 = React.lazy(() => import("@/pages/admin/navigation-copilot-v2"));
 const TemplateEditorValidationPage = React.lazy(() => import("@/pages/admin/template-editor/validation"));
 const DocumentsConsolidationValidationPage = React.lazy(() => import("@/pages/admin/documents-consolidation/validation"));
 const PriceAlertsValidationPage = React.lazy(() => import("@/pages/admin/price-alerts/validation"));
@@ -543,6 +544,7 @@ function App() {
                       <Route path="/admin/document-templates/validation" element={<DocumentTemplatesValidationPage />} />
                       <Route path="/admin/satellite-tracker/validation" element={<SatelliteTrackerValidationPage />} />
                       <Route path="/admin/navigation-copilot/validation" element={<NavigationCopilotValidationPage />} />
+                      <Route path="/admin/navigation-copilot-v2" element={<NavigationCopilotV2 />} />
                       <Route path="/admin/template-editor/validation" element={<TemplateEditorValidationPage />} />
                       <Route path="/admin/documents-consolidation/validation" element={<DocumentsConsolidationValidationPage />} />
                       <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidationPage />} />
