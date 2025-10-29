@@ -73,19 +73,25 @@ export {
 
 /**
  * Convenience function to initialize all AI Strategic Decision modules
+ * @throws {Error} If any module fails to initialize
  */
 export async function initializeAIStrategicSystem(): Promise<void> {
-  const { predictiveStrategyEngine } = await import("./strategy/predictive-engine");
-  const { decisionSimulatorCore } = await import("./decision-simulator");
-  const { neuralGovernance } = await import("./governance/neural-governance");
-  const { strategicConsensusBuilder } = await import("./agents/consensus-builder");
+  try {
+    const { predictiveStrategyEngine } = await import("./strategy/predictive-engine");
+    const { decisionSimulatorCore } = await import("./decision-simulator");
+    const { neuralGovernance } = await import("./governance/neural-governance");
+    const { strategicConsensusBuilder } = await import("./agents/consensus-builder");
 
-  await Promise.all([
-    predictiveStrategyEngine.initialize(),
-    decisionSimulatorCore.initialize(),
-    neuralGovernance.initialize(),
-    strategicConsensusBuilder.initialize()
-  ]);
+    await Promise.all([
+      predictiveStrategyEngine.initialize(),
+      decisionSimulatorCore.initialize(),
+      neuralGovernance.initialize(),
+      strategicConsensusBuilder.initialize()
+    ]);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to initialize AI Strategic System: ${message}`);
+  }
 }
 
 /**
