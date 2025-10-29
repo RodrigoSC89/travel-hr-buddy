@@ -43,6 +43,11 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  
+  // PATCH 524: Enhanced replay controls
+  const [playbackSpeed, setPlaybackSpeed] = useState(1.0); // 0.5x, 1x, 2x, 4x
+  const [showAIInsights, setShowAIInsights] = useState(true);
+  const [eventInsights, setEventInsights] = useState<Record<number, string>>({});
 
   useEffect(() => {
     loadIncidentData();
@@ -87,6 +92,10 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
     setIsPlaying(true);
     setCurrentEventIndex(0);
 
+    // PATCH 524: Adjustable playback speed
+    const baseDelay = 2000;
+    const delay = baseDelay / playbackSpeed;
+
     const interval = setInterval(() => {
       setCurrentEventIndex((prev) => {
         if (prev >= timeline.length - 1) {
@@ -96,7 +105,20 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
         }
         return prev + 1;
       });
-    }, 2000);
+    }, delay);
+  };
+  
+  // PATCH 524: Generate AI insights for each event
+  const generateEventInsight = (event: TimelineEvent, index: number): string => {
+    // Simulated AI insight generation
+    const insights = [
+      `Este evento marca um ponto crítico na sequência de incidente`,
+      `Ação realizada alinha-se com procedimentos padrão`,
+      `Possível ponto de intervenção para prevenir escalada`,
+      `Decisão tomada sob pressão, avaliar alternativas`,
+      `Comunicação efetiva neste momento crucial`,
+    ];
+    return insights[index % insights.length];
   };
 
   const exportToPDF = async () => {
@@ -288,11 +310,39 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
         </CardHeader>
         <CardContent>
           <p className="text-sm">{incident.description}</p>
-          <div className="mt-4 flex gap-2">
+          <div className="mt-4 flex gap-2 items-center flex-wrap">
             <Button onClick={playReplay} disabled={isPlaying || timeline.length === 0}>
               <Play className="w-4 h-4 mr-2" />
               {isPlaying ? "Reproduzindo..." : "Reproduzir Timeline"}
             </Button>
+            
+            {/* PATCH 524: Playback Speed Controls */}
+            <div className="flex items-center gap-1 border rounded-md p-1">
+              {[0.5, 1, 2, 4].map((speed) => (
+                <Button
+                  key={speed}
+                  variant={playbackSpeed === speed ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setPlaybackSpeed(speed)}
+                  disabled={isPlaying}
+                  className="h-7 px-2 text-xs"
+                >
+                  {speed}x
+                </Button>
+              ))}
+            </div>
+            
+            {/* PATCH 524: AI Insights Toggle */}
+            <Button
+              variant={showAIInsights ? "default" : "outline"}
+              size="sm"
+              onClick={() => setShowAIInsights(!showAIInsights)}
+              className="ml-auto"
+            >
+              <Brain className="w-4 h-4 mr-1" />
+              AI Insights
+            </Button>
+            
             <Button onClick={exportToPDF} variant="outline" disabled={!analysis}>
               <Download className="w-4 h-4 mr-2" />
               Exportar PDF
@@ -342,6 +392,18 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
                       </div>
                       <p className="text-sm font-medium">{event.description}</p>
                       <p className="text-xs text-muted-foreground">por {event.actor}</p>
+                      
+                      {/* PATCH 524: AI Insight per event */}
+                      {showAIInsights && index <= currentEventIndex && (
+                        <div className="mt-2 p-2 bg-purple-500/10 border border-purple-500/30 rounded text-xs">
+                          <div className="flex items-start gap-1">
+                            <Brain className="w-3 h-3 text-purple-400 mt-0.5 flex-shrink-0" />
+                            <span className="text-purple-300">
+                              {generateEventInsight(event, index)}
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
