@@ -258,7 +258,7 @@ const updated = aiTaskAssignmentService.updateSimulation(simulation);
 ## 📊 Statistics
 
 ### Module Count
-- **Total Modules:** 19 (+8)
+- **Total Modules:** 21 (+10)
 - **Active Modules:** 14 (+4)
 - **Deprecated Modules:** 7 (+4)
 - **With Real Data:** 13 (+4)

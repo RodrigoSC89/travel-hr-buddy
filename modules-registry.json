@@ -109,7 +109,7 @@
     {
       "id": "underwater-drone-v2",
       "name": "Underwater Drone v2",
-      "path": "/modules/underwater-drone",
+      "path": "/pages/admin/underwater-drone-v2",
       "route": "/underwater-drone-v2",
       "status": "active",
       "category": "operations",
@@ -351,7 +351,7 @@
     }
   ],
   "statistics": {
-    "totalModules": 19,
+    "totalModules": 21,
     "activeModules": 14,
     "deprecatedModules": 7,
     "modulesWithRealData": 13,

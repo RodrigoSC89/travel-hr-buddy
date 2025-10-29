@@ -107,6 +107,9 @@ The following modules have been deprecated and replaced:
 | Route Planner | v449.0 | v532.0 | Route Planner v2 |
 | Underwater Drone | v450.0 | v533.0 | Underwater Drone v2 |
 | Drone Commander | v451.0 | v534.0 | Drone Commander v2 |
+| Mission Engine | v410.0 | v535.0 | Mission Control Unified |
+| Mission Engine v2 | v420.0 | v535.0 | Mission Control Unified |
+| Mission Control Realtime | v430.0 | v535.0 | Mission Control Unified |
 
 ## Routes Updated
 
@@ -144,7 +147,7 @@ The following modules have been deprecated and replaced:
 
 | Metric | Before | After |
 |--------|--------|-------|
-| Total Modules | 11 | 19 |
+| Total Modules | 11 | 21 |
 | Active Modules | 10 | 14 |
 | Deprecated Modules | 3 | 7 |
 | Modules with Real Data | 9 | 13 |
