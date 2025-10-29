@@ -1,7 +1,7 @@
 // @ts-nocheck
-// PATCH 486.0 - Communication Center (Unified)
-// Consolidates communication/ and communications/ modules
-// Features: Real-time messaging, radio/satellite monitoring, system status
+// PATCH 526 - Communication Center (Consolidated & Enhanced)
+// Unified communication hub with messageService integration
+// Features: Real-time messaging, WebSocket, persistent history, groups, radio/satellite monitoring
 
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,30 +22,11 @@ import {
   AlertTriangle, 
   CheckCircle2,
   TrendingUp,
-  Zap
+  Zap,
+  Search
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
-interface Channel {
-  id: string;
-  name: string;
-  description: string | null;
-  channel_type: string;
-  is_private: boolean;
-  created_at: string;
-}
-
-interface Message {
-  id: string;
-  channel_id: string;
-  user_id?: string;
-  content: string;
-  created_at: string;
-  user?: {
-    email?: string;
-  };
-}
+import messageService, { Channel, Message } from "@/services/messageService";
 
 interface RadioChannel {
   id: string;
@@ -62,9 +43,10 @@ export const CommunicationCenter: React.FC = () => {
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const realtimeChannelRef = useRef<any>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Radio/Satellite channels (from communications module)
   const [radioChannels] = useState<RadioChannel[]>([
@@ -106,65 +88,37 @@ export const CommunicationCenter: React.FC = () => {
   });
 
   useEffect(() => {
-    fetchChannels();
+    loadChannels();
     setupRealtimeSubscription();
 
     return () => {
-      if (realtimeChannelRef.current) {
-        supabase.removeChannel(realtimeChannelRef.current);
-      }
+      messageService.unsubscribeFromRealtime();
     };
   }, []);
 
   useEffect(() => {
     if (selectedChannel) {
-      fetchMessages(selectedChannel.id);
+      loadMessages(selectedChannel.id);
     }
   }, [selectedChannel]);
 
-  const fetchChannels = async () => {
+  useEffect(() => {
+    // Auto-scroll to bottom when new messages arrive
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const loadChannels = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        // Use demo channels if not authenticated
-        const demoChannels: Channel[] = [
-          {
-            id: "demo-1",
-            name: "general",
-            description: "General communication channel",
-            channel_type: "public",
-            is_private: false,
-            created_at: new Date().toISOString()
-          },
-          {
-            id: "demo-2",
-            name: "bridge",
-            description: "Bridge team communications",
-            channel_type: "public",
-            is_private: false,
-            created_at: new Date().toISOString()
-          }
-        ];
-        setChannels(demoChannels);
-        setSelectedChannel(demoChannels[0]);
-        setLoading(false);
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from("communication_channels")
-        .select("*")
-        .eq("is_active", true)
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-
-      setChannels(data || []);
-      if (data && data.length > 0 && !selectedChannel) {
+      setLoading(true);
+      const data = await messageService.getChannels();
+      setChannels(data);
+      if (data.length > 0 && !selectedChannel) {
         setSelectedChannel(data[0]);
       }
     } catch (error) {
-      console.error("Error fetching channels:", error);
+      console.error("Error loading channels:", error);
       toast({
         title: "Error",
         description: "Failed to load channels",
@@ -175,99 +129,47 @@ export const CommunicationCenter: React.FC = () => {
     }
   };
 
-  const fetchMessages = async (channelId: string) => {
+  const loadMessages = async (channelId: string) => {
     try {
-      const { data, error } = await supabase
-        .from("channel_messages")
-        .select("*, user:profiles(email)")
-        .eq("channel_id", channelId)
-        .order("created_at", { ascending: true })
-        .limit(50);
-
-      if (error) throw error;
-      setMessages(data || []);
+      const data = await messageService.getMessages({ channelId, limit: 100 });
+      setMessages(data);
     } catch (error) {
-      console.error("Error fetching messages:", error);
-      // Use demo messages for demo channels
-      if (channelId.startsWith("demo-")) {
-        setMessages([
-          {
-            id: "msg-1",
-            channel_id: channelId,
-            content: "Welcome to the communication center!",
-            created_at: new Date(Date.now() - 300000).toISOString(),
-            user: { email: "system@nautilus.ai" }
-          }
-        ]);
-      }
+      console.error("Error loading messages:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load messages",
+        variant: "destructive",
+      });
     }
   };
 
-  const setupRealtimeSubscription = async () => {
-    realtimeChannelRef.current = supabase
-      .channel("communication-center-realtime")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "communication_channels",
-        },
-        (payload) => {
-          console.log("Channel change detected", payload);
-          fetchChannels();
-        }
-      )
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "channel_messages",
-        },
-        (payload) => {
-          if (selectedChannel && payload.new.channel_id === selectedChannel.id) {
-            setMessages((prev) => [...prev, payload.new as Message]);
-          }
-        }
-      )
-      .subscribe();
+  const setupRealtimeSubscription = () => {
+    // Subscribe to real-time updates
+    messageService.subscribeToRealtime();
+
+    // Handle new messages
+    const unsubscribeMessage = messageService.onMessage((message) => {
+      if (selectedChannel && message.channel_id === selectedChannel.id) {
+        setMessages((prev) => [...prev, message]);
+      }
+    });
+
+    // Handle channel changes
+    const unsubscribeChannel = messageService.onChannelChange(() => {
+      loadChannels();
+    });
+
+    return () => {
+      unsubscribeMessage();
+      unsubscribeChannel();
+    };
   };
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedChannel) return;
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      // Demo mode
-      if (!user || selectedChannel.id.startsWith("demo-")) {
-        const demoMessage: Message = {
-          id: `msg-${Date.now()}`,
-          channel_id: selectedChannel.id,
-          content: newMessage,
-          created_at: new Date().toISOString(),
-          user: { email: "demo@nautilus.ai" }
-        };
-        setMessages((prev) => [...prev, demoMessage]);
-        setNewMessage("");
-        toast({
-          title: "Message sent (Demo)",
-          description: `Sent to ${selectedChannel.name}`,
-        });
-        return;
-      }
-
-      const { error } = await supabase
-        .from("channel_messages")
-        .insert({
-          channel_id: selectedChannel.id,
-          user_id: user.id,
-          content: newMessage,
-        });
-
-      if (error) throw error;
-
+      await messageService.sendMessage(selectedChannel.id, newMessage.trim());
       setNewMessage("");
       toast({
         title: "Message sent",
@@ -278,6 +180,32 @@ export const CommunicationCenter: React.FC = () => {
       toast({
         title: "Error",
         description: "Failed to send message",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      if (selectedChannel) {
+        await loadMessages(selectedChannel.id);
+      }
+      return;
+    }
+
+    try {
+      const channelIds = selectedChannel ? [selectedChannel.id] : undefined;
+      const results = await messageService.searchMessages(searchQuery, channelIds);
+      setMessages(results);
+      toast({
+        title: "Search complete",
+        description: `Found ${results.length} messages`,
+      });
+    } catch (error) {
+      console.error("Error searching messages:", error);
+      toast({
+        title: "Error",
+        description: "Search failed",
         variant: "destructive",
       });
     }
@@ -326,7 +254,7 @@ export const CommunicationCenter: React.FC = () => {
           </p>
         </div>
         <Badge variant="outline" className="text-xs">
-          PATCH 486.0
+          PATCH 526
         </Badge>
       </div>
 
@@ -458,7 +386,21 @@ export const CommunicationCenter: React.FC = () => {
                 )}
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-[300px] mb-4 p-4 border rounded-lg">
+                {/* Search Messages */}
+                <div className="flex gap-2 mb-4">
+                  <Input
+                    placeholder="Search messages..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                    className="flex-1"
+                  />
+                  <Button onClick={handleSearch} variant="outline" size="icon">
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <ScrollArea ref={scrollRef} className="h-[300px] mb-4 p-4 border rounded-lg">
                   <div className="space-y-4">
                     {messages.map((message) => (
                       <div key={message.id} className="flex flex-col gap-1">
