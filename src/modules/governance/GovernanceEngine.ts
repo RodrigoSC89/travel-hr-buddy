@@ -313,14 +313,14 @@ class GovernanceEngine {
    * Generate unique request ID
    */
   private generateRequestId(): string {
-    return `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `req-${Date.now()}-${crypto.randomUUID()}`;
   }
 
   /**
    * Generate unique audit ID
    */
   private generateAuditId(): string {
-    return `audit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `audit-${Date.now()}-${crypto.randomUUID()}`;
   }
 
   /**

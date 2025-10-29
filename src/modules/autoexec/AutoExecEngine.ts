@@ -111,7 +111,7 @@ class AutoExecEngine {
    * Add a new execution rule
    */
   addRule(rule: Omit<AutoExecRule, "id"> & { id?: string }): void {
-    const ruleId = rule.id || `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const ruleId = rule.id || `rule-${Date.now()}-${crypto.randomUUID()}`;
     const fullRule: AutoExecRule = {
       ...rule,
       id: ruleId,
@@ -171,7 +171,7 @@ class AutoExecEngine {
     rule: AutoExecRule,
     context: any
   ): Promise<ExecutionRecord> {
-    const executionId = `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const executionId = `exec-${Date.now()}-${crypto.randomUUID()}`;
     
     const record: ExecutionRecord = {
       id: executionId,
