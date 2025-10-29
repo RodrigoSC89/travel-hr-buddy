@@ -178,6 +178,10 @@ const SGSOManagerPage = safeLazyImport(() => import("@/components/sgso/SGSOManag
 // PATCH 565 - Quality Dashboard Integration
 const QualityDashboard = safeLazyImport(() => import("@/pages/dashboard/QualityDashboard"));
 
+// PATCH 574 - i18n Dashboard
+const I18nDashboard = safeLazyImport(() => import("@/pages/dashboard/i18n"));
+const I18nDemo = safeLazyImport(() => import("@/pages/i18n-demo"));
+
 // New Module Imports - PATCH 66.0 Updated Paths
 const FeedbackModule = React.lazy(() => import("@/modules/operations/feedback"));
 // PATCH 191.0: Consolidated Fleet Module
@@ -485,6 +489,8 @@ function App() {
                       <Route path="/" element={<Index />} />
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/dashboard/quality" element={<QualityDashboard />} />
+                      <Route path="/dashboard/i18n" element={<I18nDashboard />} />
+                      <Route path="/i18n-demo" element={<I18nDemo />} />
                       <Route path="/price-alerts" element={<PriceAlerts />} />
                       <Route path="/sensors-hub" element={<SensorsHub />} />
                       <Route path="/reports" element={<Reports />} />
