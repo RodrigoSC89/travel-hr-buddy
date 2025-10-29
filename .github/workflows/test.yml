@@ -38,13 +38,16 @@ jobs:
         run: npm run type-check
       
       - name: Run unit tests
-        run: npm run test
+        run: npm run test:unit
         env:
           CI: true
           NODE_ENV: test
       
-      - name: Run integration tests
-        run: npm run test:integration
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Run E2E tests
+        run: npm run test:e2e
         env:
           CI: true
           NODE_ENV: test
@@ -78,6 +81,7 @@ jobs:
           path: |
             coverage/
             test-results/
+            playwright-report/
           retention-days: 30
       
       - name: Comment PR with coverage
