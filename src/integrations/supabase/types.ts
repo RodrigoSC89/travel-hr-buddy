@@ -5177,6 +5177,69 @@ export type Database = {
         }
         Relationships: []
       }
+      incident_reports: {
+        Row: {
+          ai_analysis: Json | null
+          assigned_to: string | null
+          closed_at: string | null
+          code: string
+          created_at: string | null
+          description: string
+          evidence: Json | null
+          id: string
+          location: string
+          metadata: Json | null
+          replay_status: string | null
+          reported_at: string
+          reported_by: string | null
+          severity: string
+          status: string
+          title: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          assigned_to?: string | null
+          closed_at?: string | null
+          code: string
+          created_at?: string | null
+          description: string
+          evidence?: Json | null
+          id?: string
+          location: string
+          metadata?: Json | null
+          replay_status?: string | null
+          reported_at?: string
+          reported_by?: string | null
+          severity: string
+          status?: string
+          title: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          assigned_to?: string | null
+          closed_at?: string | null
+          code?: string
+          created_at?: string | null
+          description?: string
+          evidence?: Json | null
+          id?: string
+          location?: string
+          metadata?: Json | null
+          replay_status?: string | null
+          reported_at?: string
+          reported_by?: string | null
+          severity?: string
+          status?: string
+          title?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       incidents: {
         Row: {
           created_at: string
@@ -6736,66 +6799,90 @@ export type Database = {
         Row: {
           actual_end: string | null
           actual_start: string | null
+          assigned_agents: Json | null
+          assigned_vessel_id: string | null
+          code: string | null
           created_at: string | null
           created_by: string | null
           description: string | null
           end_date: string | null
+          end_time: string | null
           id: string
+          location: Json | null
           metadata: Json | null
           mission_code: string
           mission_name: string
           mission_type: string
+          name: string | null
           notes: string | null
           objectives: string[] | null
           organization_id: string | null
           priority: string
           progress_percent: number | null
           start_date: string | null
+          start_time: string | null
           status: string
+          type: string | null
           updated_at: string | null
           vessel_id: string | null
         }
         Insert: {
           actual_end?: string | null
           actual_start?: string | null
+          assigned_agents?: Json | null
+          assigned_vessel_id?: string | null
+          code?: string | null
           created_at?: string | null
           created_by?: string | null
           description?: string | null
           end_date?: string | null
+          end_time?: string | null
           id?: string
+          location?: Json | null
           metadata?: Json | null
           mission_code: string
           mission_name: string
           mission_type: string
+          name?: string | null
           notes?: string | null
           objectives?: string[] | null
           organization_id?: string | null
           priority?: string
           progress_percent?: number | null
           start_date?: string | null
+          start_time?: string | null
           status?: string
+          type?: string | null
           updated_at?: string | null
           vessel_id?: string | null
         }
         Update: {
           actual_end?: string | null
           actual_start?: string | null
+          assigned_agents?: Json | null
+          assigned_vessel_id?: string | null
+          code?: string | null
           created_at?: string | null
           created_by?: string | null
           description?: string | null
           end_date?: string | null
+          end_time?: string | null
           id?: string
+          location?: Json | null
           metadata?: Json | null
           mission_code?: string
           mission_name?: string
           mission_type?: string
+          name?: string | null
           notes?: string | null
           objectives?: string[] | null
           organization_id?: string | null
           priority?: string
           progress_percent?: number | null
           start_date?: string | null
+          start_time?: string | null
           status?: string
+          type?: string | null
           updated_at?: string | null
           vessel_id?: string | null
         }
@@ -8704,6 +8791,45 @@ export type Database = {
           },
         ]
       }
+      rendered_documents: {
+        Row: {
+          created_at: string | null
+          format: string
+          html_content: string | null
+          id: string
+          pdf_url: string | null
+          rendered_at: string | null
+          rendered_by: string | null
+          template_id: string
+          title: string
+          variables: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          format: string
+          html_content?: string | null
+          id?: string
+          pdf_url?: string | null
+          rendered_at?: string | null
+          rendered_by?: string | null
+          template_id: string
+          title: string
+          variables?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          format?: string
+          html_content?: string | null
+          id?: string
+          pdf_url?: string | null
+          rendered_at?: string | null
+          rendered_by?: string | null
+          template_id?: string
+          title?: string
+          variables?: Json | null
+        }
+        Relationships: []
+      }
       reservation_attachments: {
         Row: {
           created_at: string
@@ -8880,6 +9006,48 @@ export type Database = {
           id?: string
           permission_name?: string
           role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: []
+      }
+      route_ai_suggestions: {
+        Row: {
+          ai_reasoning: string | null
+          created_at: string | null
+          created_by: string | null
+          destination: Json
+          fuel_estimate: number | null
+          id: string
+          origin: Json
+          risk_score: number | null
+          suggested_route: Json
+          time_estimate_hours: number | null
+          weather_data: Json | null
+        }
+        Insert: {
+          ai_reasoning?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          destination: Json
+          fuel_estimate?: number | null
+          id?: string
+          origin: Json
+          risk_score?: number | null
+          suggested_route: Json
+          time_estimate_hours?: number | null
+          weather_data?: Json | null
+        }
+        Update: {
+          ai_reasoning?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          destination?: Json
+          fuel_estimate?: number | null
+          id?: string
+          origin?: Json
+          risk_score?: number | null
+          suggested_route?: Json
+          time_estimate_hours?: number | null
+          weather_data?: Json | null
         }
         Relationships: []
       }
@@ -9192,6 +9360,60 @@ export type Database = {
           name?: string
           norad_id?: number
           orbital_period?: number | null
+          tle_line1?: string | null
+          tle_line2?: string | null
+          velocity?: number
+        }
+        Relationships: []
+      }
+      satellite_positions: {
+        Row: {
+          altitude: number
+          created_at: string | null
+          eccentricity: number | null
+          id: string
+          inclination: number | null
+          last_updated: string | null
+          latitude: number
+          longitude: number
+          name: string
+          norad_id: string
+          orbital_period: number | null
+          status: string | null
+          tle_line1: string | null
+          tle_line2: string | null
+          velocity: number
+        }
+        Insert: {
+          altitude: number
+          created_at?: string | null
+          eccentricity?: number | null
+          id?: string
+          inclination?: number | null
+          last_updated?: string | null
+          latitude: number
+          longitude: number
+          name: string
+          norad_id: string
+          orbital_period?: number | null
+          status?: string | null
+          tle_line1?: string | null
+          tle_line2?: string | null
+          velocity: number
+        }
+        Update: {
+          altitude?: number
+          created_at?: string | null
+          eccentricity?: number | null
+          id?: string
+          inclination?: number | null
+          last_updated?: string | null
+          latitude?: number
+          longitude?: number
+          name?: string
+          norad_id?: string
+          orbital_period?: number | null
+          status?: string | null
           tle_line1?: string | null
           tle_line2?: string | null
           velocity?: number
@@ -9668,6 +9890,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      template_placeholders: {
+        Row: {
+          created_at: string | null
+          default_value: string | null
+          id: string
+          is_required: boolean | null
+          options: Json | null
+          placeholder_key: string
+          placeholder_label: string
+          placeholder_type: string
+          template_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          default_value?: string | null
+          id?: string
+          is_required?: boolean | null
+          options?: Json | null
+          placeholder_key: string
+          placeholder_label: string
+          placeholder_type?: string
+          template_id: string
+        }
+        Update: {
+          created_at?: string | null
+          default_value?: string | null
+          id?: string
+          is_required?: boolean | null
+          options?: Json | null
+          placeholder_key?: string
+          placeholder_label?: string
+          placeholder_type?: string
+          template_id?: string
+        }
+        Relationships: []
       }
       template_variables: {
         Row: {
