@@ -102,6 +102,11 @@ const Patch497Documentation = React.lazy(() => import("@/pages/admin/Patch497Doc
 const Patch498Testing = React.lazy(() => import("@/pages/admin/Patch498Testing"));
 const Patch499Telemetry = React.lazy(() => import("@/pages/admin/Patch499Telemetry"));
 const Patch500UxPolish = React.lazy(() => import("@/pages/admin/Patch500UxPolish"));
+const Patch501Satellite = React.lazy(() => import("@/pages/admin/Patch501Satellite"));
+const Patch502Routing = React.lazy(() => import("@/pages/admin/Patch502Routing"));
+const Patch503DroneSimulation = React.lazy(() => import("@/pages/admin/Patch503DroneSimulation"));
+const Patch504AiCopilot = React.lazy(() => import("@/pages/admin/Patch504AiCopilot"));
+const Patch505MissionControl = React.lazy(() => import("@/pages/admin/Patch505MissionControl"));
 
 export default function AppRouter() {
   return (
@@ -206,7 +211,12 @@ export default function AppRouter() {
               <Route path="/admin/patch-497/documentation" element={<Patch497Documentation />} />
               <Route path="/admin/patch-498/testing" element={<Patch498Testing />} />
               <Route path="/admin/patch-499/telemetry" element={<Patch499Telemetry />} />
-              <Route path="/admin/patch-500/ux-polish" element={<Patch500UxPolish />} />
+            <Route path="/admin/patch-500/ux-polish" element={<Patch500UxPolish />} />
+            <Route path="/admin/patch-501/satellite" element={<Patch501Satellite />} />
+            <Route path="/admin/patch-502/routing" element={<Patch502Routing />} />
+            <Route path="/admin/patch-503/drone-simulation" element={<Patch503DroneSimulation />} />
+            <Route path="/admin/patch-504/ai-copilot" element={<Patch504AiCopilot />} />
+            <Route path="/admin/patch-505/mission-control" element={<Patch505MissionControl />} />
       </Routes>
     </Router>
   );

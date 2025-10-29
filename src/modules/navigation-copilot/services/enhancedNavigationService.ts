@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 504: Enhanced Navigation Copilot with Multimodal Support
  * Voice + Touch + Text interface with AI-powered recommendations

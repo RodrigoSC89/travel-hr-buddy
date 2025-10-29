@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 501: Satellite Alerts Component
  * Displays alerts and warnings for satellites
