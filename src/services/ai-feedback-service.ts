@@ -4,7 +4,7 @@ import { Logger } from "@/lib/utils/logger";
 
 export interface AIFeedbackScore {
   id?: string;
-  user_id?: string;
+  user_id?: string | null;
   command_type: string;
   command_data: Record<string, any>;
   self_score: number;
@@ -69,7 +69,16 @@ export class AIFeedbackService {
         return [];
       }
 
-      return data || [];
+      return (data || []).map(d => ({
+        id: d.id,
+        user_id: d.user_id || undefined,
+        command_type: d.command_type,
+        command_data: (d.command_data as any) || {},
+        self_score: d.self_score,
+        feedback_data: (d.feedback_data as any) || {},
+        improvements: (d.improvements as any) || [],
+        created_at: d.created_at
+      }));
     } catch (error) {
       Logger.error("Exception fetching AI feedback scores", error, "AIFeedbackService");
       return [];
@@ -114,7 +123,16 @@ export class AIFeedbackService {
         return [];
       }
 
-      return data || [];
+      return (data || []).map(d => ({
+        id: d.id,
+        user_id: d.user_id || undefined,
+        command_type: d.command_type,
+        command_data: (d.command_data as any) || {},
+        self_score: d.self_score,
+        feedback_data: (d.feedback_data as any) || {},
+        improvements: (d.improvements as any) || [],
+        created_at: d.created_at
+      }));
     } catch (error) {
       Logger.error("Exception fetching all AI feedback scores", error, "AIFeedbackService");
       return [];

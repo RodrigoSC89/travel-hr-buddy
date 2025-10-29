@@ -6,14 +6,14 @@ export interface ActiveSession {
   id?: string;
   user_id: string;
   session_token: string;
-  refresh_token?: string;
+  refresh_token?: string | null;
   ip_address?: string;
-  user_agent?: string;
+  user_agent?: string | null;
   device_info?: Record<string, any>;
   last_activity: string;
   expires_at: string;
   created_at?: string;
-  is_active: boolean;
+  is_active: boolean | null;
 }
 
 export class SessionManagementService {
@@ -38,7 +38,19 @@ export class SessionManagementService {
         return [];
       }
 
-      return data || [];
+      return (data || []).map(d => ({
+        id: d.id,
+        user_id: d.user_id,
+        session_token: d.session_token,
+        refresh_token: d.refresh_token,
+        ip_address: d.ip_address ? String(d.ip_address) : undefined,
+        user_agent: d.user_agent,
+        device_info: (d.device_info as any) || {},
+        last_activity: d.last_activity,
+        expires_at: d.expires_at,
+        created_at: d.created_at,
+        is_active: d.is_active
+      }));
     } catch (error) {
       Logger.error("Exception fetching active sessions", error, "SessionManagementService");
       return [];

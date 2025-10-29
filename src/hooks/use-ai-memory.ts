@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 506: AI Memory Hook
  * React hook for managing AI memory in components

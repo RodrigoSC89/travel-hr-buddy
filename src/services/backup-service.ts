@@ -6,13 +6,13 @@ export interface SystemBackup {
   id?: string;
   backup_type: string;
   file_path: string;
-  file_size?: number;
+  file_size?: number | null;
   backup_status: string;
   metadata?: Record<string, any>;
-  created_by?: string;
+  created_by?: string | null;
   created_at?: string;
-  completed_at?: string;
-  error_message?: string;
+  completed_at?: string | null;
+  error_message?: string | null;
 }
 
 export class BackupService {
@@ -31,7 +31,18 @@ export class BackupService {
         return [];
       }
 
-      return data || [];
+      return (data || []).map(d => ({
+        id: d.id,
+        backup_type: d.backup_type,
+        file_path: d.file_path,
+        file_size: d.file_size,
+        backup_status: d.backup_status,
+        metadata: (d.metadata as any) || {},
+        created_by: d.created_by,
+        created_at: d.created_at,
+        completed_at: d.completed_at,
+        error_message: d.error_message
+      }));
     } catch (error) {
       Logger.error("Exception fetching backups", error, "BackupService");
       return [];
@@ -88,7 +99,18 @@ export class BackupService {
         return null;
       }
 
-      return data;
+      return data ? {
+        id: data.id,
+        backup_type: data.backup_type,
+        file_path: data.file_path,
+        file_size: data.file_size,
+        backup_status: data.backup_status,
+        metadata: (data.metadata as any) || {},
+        created_by: data.created_by,
+        created_at: data.created_at,
+        completed_at: data.completed_at,
+        error_message: data.error_message
+      } : null;
     } catch (error) {
       Logger.error("Exception fetching backup", error, "BackupService");
       return null;
@@ -105,7 +127,7 @@ export class BackupService {
       if (allBackups.length <= keepCount) return 0;
 
       const toDelete = allBackups.slice(keepCount);
-      const deleteIds = toDelete.map(b => b.id).filter(Boolean);
+      const deleteIds = toDelete.map(b => b.id).filter(Boolean) as string[];
 
       if (deleteIds.length === 0) return 0;
 

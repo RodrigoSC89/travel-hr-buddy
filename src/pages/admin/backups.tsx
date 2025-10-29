@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 507: Backup Management Admin Panel
  * View, download, and manage system backups

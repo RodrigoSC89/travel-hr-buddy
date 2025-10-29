@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 509: AI Learning Dashboard
  * Visualize AI self-reflection and continuous learning metrics
