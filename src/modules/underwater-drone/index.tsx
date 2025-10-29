@@ -1,5 +1,6 @@
 /**
  * PATCH 181.0 - Underwater Drone Control Module
+ * PATCH 523 - Enhanced with camera feed and improved mission logging
  * Main component for ROV/AUV control and monitoring
  * 
  * Features:
@@ -7,6 +8,8 @@
  * - Real-time telemetry display
  * - Mission waypoint navigation
  * - System health monitoring
+ * - Live camera feed (simulated)
+ * - Mission logging to database
  */
 
 import React, { useState, useEffect } from "react";
@@ -35,6 +38,7 @@ import {
 import DroneSubCore, { DronePosition, MovementCommand } from "./droneSubCore";
 import TelemetrySub, { TelemetryAlert } from "./telemetrySub";
 import MissionUploadSub, { Mission, MissionEvent } from "./missionUploadSub";
+import { DroneCameraFeed } from "./components/DroneCameraFeed";
 
 const UnderwaterDrone: React.FC = () => {
   // Initialize subsystems
@@ -67,6 +71,9 @@ const UnderwaterDrone: React.FC = () => {
   const [targetDepth, setTargetDepth] = useState(10);
   const [targetLat, setTargetLat] = useState(-23.5505);
   const [targetLon, setTargetLon] = useState(-46.6333);
+  
+  // PATCH 523: Camera state
+  const [isCameraRecording, setIsCameraRecording] = useState(false);
 
   // Initialize
   useEffect(() => {
@@ -419,6 +426,14 @@ const UnderwaterDrone: React.FC = () => {
             </CardContent>
           </Card>
         </div>
+        
+        {/* PATCH 523: Camera Feed */}
+        <DroneCameraFeed
+          isRecording={isCameraRecording}
+          depth={droneState.position.depth}
+          visibility={telemetryData.environmental.visibility}
+          temperature={telemetryData.temperature}
+        />
 
         {/* Mission Control */}
         <Card className="bg-zinc-800/50 border-zinc-700">
