@@ -44,6 +44,7 @@ const AIAssistant = React.lazy(() => import("@/pages/AIAssistant"));
 const Analytics = React.lazy(() => import("@/pages/Analytics"));
 const HumanResources = React.lazy(() => import("@/pages/HumanResources"));
 const Communication = React.lazy(() => import("@/modules/connectivity/communication"));
+const CommunicationCenter = React.lazy(() => import("@/modules/communication-center"));
 const Intelligence = React.lazy(() => import("@/pages/Intelligence"));
 const Maritime = React.lazy(() => import("@/pages/Maritime"));
 const MaritimeSupremo = React.lazy(() => import("@/pages/MaritimeSupremo"));
@@ -450,6 +451,7 @@ function App() {
                       <Route path="/analytics" element={<Analytics />} />
                       <Route path="/hr" element={<HumanResources />} />
                       <Route path="/communication" element={<Communication />} />
+                      <Route path="/communication-center" element={<CommunicationCenter />} />
                       <Route path="/intelligence" element={<Intelligence />} />
                       {/* PATCH 191.0: Deprecated - Consolidated into /modules/fleet */}
                       {/* <Route path="/maritime" element={<Maritime />} /> */}

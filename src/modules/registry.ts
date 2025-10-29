@@ -457,12 +457,26 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "Communication",
     category: "connectivity",
     path: "modules/connectivity/communication",
-    description: "Communication hub",
-    status: "incomplete", // PATCH 96.0 – UI exists but no database/AI integration, no route in AppRouter
+    description: "Communication hub (Legacy - use communication-center)",
+    status: "deprecated", // PATCH 486.0 – Replaced by communication-center
     completeness: "partial",
     route: "/communication",
     icon: "MessageSquare",
     lazy: true,
+  },
+
+  "connectivity.communication-center": {
+    id: "connectivity.communication-center",
+    name: "Communication Center",
+    category: "connectivity",
+    path: "modules/communication-center",
+    description: "PATCH 486 - Unified communication center with WebSocket, channels, radio/satellite links",
+    status: "active",
+    completeness: "100%",
+    route: "/communication-center",
+    icon: "MessageCircle",
+    lazy: true,
+    version: "486.0",
   },
 
   "connectivity.integrations-hub": {
