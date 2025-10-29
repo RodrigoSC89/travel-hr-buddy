@@ -239,6 +239,10 @@ const AIModulesStatus = React.lazy(() => import("@/pages/AIModulesStatus"));
 const CrewManagement = React.lazy(() => import("@/modules/crew"));
 // PATCH 407: Sonar AI Module
 const SonarAI = React.lazy(() => import("@/modules/sonar-ai"));
+// PATCH 524: Incident Replay AI Module
+const IncidentReplayAI = React.lazy(() => import("@/modules/incident-replay"));
+// PATCH 525: AI Visual Recognition Core Module
+const AIVisionCore = React.lazy(() => import("@/modules/ai-vision-core"));
 // Validation Pages - Patches 401-410
 const TemplateEditorValidation = safeLazyImport(() => import("@/pages/admin/template-editor/validation"));
 const DocumentsConsolidationValidation = safeLazyImport(() => import("@/pages/admin/documents-consolidation/validation"));
@@ -772,7 +776,13 @@ function App() {
                       {/* PATCH 407: Sonar AI Module */}
                       <Route path="/sonar-ai" element={<SonarAI />} />
                       
-                      {/* Validation Routes - Patches 401-410 */}
+                      {/* PATCH 524: Incident Replay AI Module */}
+                      <Route path="/incident-replay" element={<IncidentReplayAI />} />
+                      
+                      {/* PATCH 525: AI Visual Recognition Core Module */}
+                      <Route path="/ai-vision-core" element={<AIVisionCore />} />
+                      
+                      {/* Validation Routes - Patches 401-410 */
                       <Route path="/admin/template-editor/validation" element={<TemplateEditorValidation />} />
                       <Route path="/admin/documents-consolidation/validation" element={<DocumentsConsolidationValidation />} />
                       <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidation />} />
