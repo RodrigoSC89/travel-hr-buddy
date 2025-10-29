@@ -54,7 +54,7 @@ describe('PATCH 535 - RLS Security Validation', () => {
         policyName: 'Finance admins can view all transactions',
         command: 'SELECT',
         roles: ['authenticated'],
-        using: 'role IN (admin, finance_manager)',
+        using: "role IN ('admin', 'finance_manager')",
       };
 
       expect(policy.command).toBe('SELECT');
@@ -122,7 +122,7 @@ describe('PATCH 535 - RLS Security Validation', () => {
         policyName: 'HR managers can manage all crew members',
         command: 'ALL',
         roles: ['authenticated'],
-        using: 'role IN (admin, hr_manager)',
+        using: "role IN ('admin', 'hr_manager')",
       };
 
       expect(policy.command).toBe('ALL');
@@ -174,7 +174,7 @@ describe('PATCH 535 - RLS Security Validation', () => {
         policyName: 'Admins can view all logs',
         command: 'SELECT',
         roles: ['authenticated'],
-        using: 'role IN (admin, system_admin)',
+        using: "role IN ('admin', 'system_admin')",
       };
 
       expect(policy.using).toContain('admin');
