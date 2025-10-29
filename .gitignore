@@ -78,6 +78,11 @@ feedback/beta-phase-1/ai-analyzer-input-*.json
 release/v3.5/audit-package/
 release/v3.5/*.zip
 
+# Test results (PATCH 564)
+tests/results/*.json
+tests/results/*.txt
+!tests/results/.gitkeep
+
 # Vercel
 .vercel
 .vercel_cache
