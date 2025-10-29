@@ -191,3 +191,64 @@ export {
   type AgentRanking,
   type FailoverEvent
 } from "./multiAgentScanner";
+
+// PATCH 591 - SocioCognitive Interaction Layer
+export {
+  socioCognitiveLayer,
+  type UrgencyLevel,
+  type ToneType,
+  type OperationalLoad,
+  type CommandInput,
+  type CommandInterpretation,
+  type SocialContext
+} from "./interface/sociocognitive-layer";
+
+// PATCH 592 - Empathy Core Engine
+export {
+  empathyCore,
+  type EmotionalState,
+  type StressLevel,
+  type BiometricSource,
+  type BiometricData,
+  type EmotionalContext,
+  type EmpathyResponse,
+  type CognitiveReliefAction
+} from "./emotion/empathy-core";
+
+// PATCH 593 - Neuro-Human Interface Adapter
+export {
+  neuroHumanAdapter,
+  type InputType,
+  type InteractionState,
+  type AdaptiveReaction,
+  type UserInput,
+  type HumanContext,
+  type AdaptiveReactionOutput,
+  type HesitationDetection
+} from "./interface/neuro-adapter";
+
+// PATCH 594 - Adaptive Joint Decision Engine
+export {
+  adaptiveJointDecision,
+  type DecisionType,
+  type DecisionStatus,
+  type ConfidenceLevel,
+  type DecisionOption,
+  type DecisionProposal,
+  type OperatorReview,
+  type DecisionResult,
+  type AIConfidenceAdjustment
+} from "./decision/adaptive-joint-decision";
+
+// PATCH 595 - Emotion-Aware Feedback System
+export {
+  feedbackResponder,
+  type EmotionType,
+  type InputModality,
+  type FeedbackAdjustmentType,
+  type EmotionDetection,
+  type UserFeedback,
+  type FeedbackAdjustment,
+  type EmotionAwareResponse,
+  type EmotionStats
+} from "./emotion/feedback-responder";
