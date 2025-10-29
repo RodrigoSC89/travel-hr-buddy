@@ -1,0 +1,461 @@
+{
+  "version": "1.0",
+  "settings": {
+    "maxConcurrentExecutions": 10,
+    "defaultTimeout": 5000,
+    "enableMetrics": true
+  },
+  "rules": [
+    {
+      "id": "critical-alert-escalation",
+      "name": "Critical Alert Escalation",
+      "description": "Escalate critical alerts to command center immediately",
+      "type": "reactive",
+      "enabled": true,
+      "priority": 10,
+      "eventTypes": ["alert", "mission_critical"],
+      "conditions": [
+        {
+          "field": "severity",
+          "operator": "equals",
+          "value": "critical"
+        }
+      ],
+      "actions": [
+        {
+          "id": "escalate-critical",
+          "type": "escalation",
+          "description": "Escalate to command center",
+          "parameters": {
+            "level": "command",
+            "immediate": true
+          },
+          "priority": 10
+        },
+        {
+          "id": "notify-crew-critical",
+          "type": "crew_notification",
+          "description": "Notify all senior crew members",
+          "parameters": {
+            "crew": "senior",
+            "channel": "emergency"
+          },
+          "priority": 9
+        },
+        {
+          "id": "report-critical",
+          "type": "report_generation",
+          "description": "Generate incident report",
+          "parameters": {
+            "reportType": "critical_incident"
+          },
+          "priority": 8
+        }
+      ],
+      "cooldown": 300000,
+      "maxExecutions": 10
+    },
+    {
+      "id": "system-failure-response",
+      "name": "System Failure Response",
+      "description": "Automated response to system failures",
+      "type": "reactive",
+      "enabled": true,
+      "priority": 9,
+      "eventTypes": ["failure", "system_degradation"],
+      "conditions": [],
+      "actions": [
+        {
+          "id": "diagnostic-failure",
+          "type": "diagnostic_run",
+          "description": "Run comprehensive system diagnostics",
+          "parameters": {
+            "diagnosticType": "full",
+            "includeHistory": true
+          },
+          "priority": 10
+        },
+        {
+          "id": "collect-failure-data",
+          "type": "data_collection",
+          "description": "Collect failure telemetry",
+          "parameters": {
+            "sources": ["system_logs", "sensors", "monitoring"]
+          },
+          "priority": 9
+        },
+        {
+          "id": "alert-operations",
+          "type": "alert",
+          "description": "Alert operations team",
+          "parameters": {
+            "alertType": "system_failure",
+            "priority": "high"
+          },
+          "priority": 8
+        }
+      ],
+      "cooldown": 60000,
+      "maxExecutions": 20
+    },
+    {
+      "id": "weather-adaptation",
+      "name": "Weather Condition Adaptation",
+      "description": "Adapt operations to weather changes",
+      "type": "predictive",
+      "enabled": true,
+      "priority": 7,
+      "eventTypes": ["weather_change"],
+      "conditions": [
+        {
+          "field": "severity",
+          "operator": "greater_than",
+          "value": 5
+        }
+      ],
+      "actions": [
+        {
+          "id": "adjust-operations",
+          "type": "system_adjustment",
+          "description": "Adjust operational parameters",
+          "parameters": {
+            "adjustments": {
+              "speed": "reduce",
+              "monitoring": "increase"
+            }
+          },
+          "priority": 8
+        },
+        {
+          "id": "notify-weather",
+          "type": "notification",
+          "description": "Notify crew of weather changes",
+          "parameters": {
+            "channels": ["bridge", "deck"]
+          },
+          "priority": 7
+        }
+      ],
+      "cooldown": 900000,
+      "maxExecutions": 5
+    },
+    {
+      "id": "navigation-issue-correction",
+      "name": "Navigation Issue Correction",
+      "description": "Automated correction for navigation issues",
+      "type": "reactive",
+      "enabled": true,
+      "priority": 8,
+      "eventTypes": ["navigation_issue"],
+      "conditions": [],
+      "actions": [
+        {
+          "id": "diagnose-navigation",
+          "type": "diagnostic_run",
+          "description": "Run navigation system diagnostics",
+          "parameters": {
+            "diagnosticType": "navigation",
+            "checkGPS": true,
+            "checkCompass": true
+          },
+          "priority": 10
+        },
+        {
+          "id": "correct-navigation",
+          "type": "automated_correction",
+          "description": "Attempt automated correction",
+          "parameters": {
+            "correctionType": "navigation",
+            "fallbackToManual": true
+          },
+          "priority": 9
+        },
+        {
+          "id": "alert-bridge",
+          "type": "crew_notification",
+          "description": "Alert bridge crew",
+          "parameters": {
+            "crew": "bridge",
+            "urgency": "high"
+          },
+          "priority": 8
+        }
+      ],
+      "cooldown": 120000,
+      "maxExecutions": 15
+    },
+    {
+      "id": "sensor-anomaly-investigation",
+      "name": "Sensor Anomaly Investigation",
+      "description": "Investigate and respond to sensor anomalies",
+      "type": "reactive",
+      "enabled": true,
+      "priority": 6,
+      "eventTypes": ["sensor_anomaly"],
+      "conditions": [],
+      "actions": [
+        {
+          "id": "collect-sensor-data",
+          "type": "data_collection",
+          "description": "Collect additional sensor data",
+          "parameters": {
+            "sources": ["all_sensors"],
+            "duration": 300
+          },
+          "priority": 9
+        },
+        {
+          "id": "cross-reference",
+          "type": "diagnostic_run",
+          "description": "Cross-reference with other sensors",
+          "parameters": {
+            "diagnosticType": "sensor_validation"
+          },
+          "priority": 8
+        },
+        {
+          "id": "notify-maintenance",
+          "type": "notification",
+          "description": "Notify maintenance team",
+          "parameters": {
+            "team": "maintenance",
+            "priority": "medium"
+          },
+          "priority": 7
+        }
+      ],
+      "cooldown": 180000,
+      "maxExecutions": 10
+    },
+    {
+      "id": "crew-change-optimization",
+      "name": "Crew Change Optimization",
+      "description": "Optimize operations during crew changes",
+      "type": "predictive",
+      "enabled": true,
+      "priority": 5,
+      "eventTypes": ["crew_change"],
+      "conditions": [],
+      "actions": [
+        {
+          "id": "adjust-watchkeeping",
+          "type": "system_adjustment",
+          "description": "Adjust watchkeeping schedule",
+          "parameters": {
+            "adjustments": {
+              "overlap": "increase",
+              "monitoring": "enhance"
+            }
+          },
+          "priority": 7
+        },
+        {
+          "id": "briefing-notification",
+          "type": "crew_notification",
+          "description": "Schedule handover briefing",
+          "parameters": {
+            "crew": "all",
+            "briefingType": "handover"
+          },
+          "priority": 6
+        }
+      ],
+      "cooldown": 3600000,
+      "maxExecutions": 3
+    },
+    {
+      "id": "compliance-violation-response",
+      "name": "Compliance Violation Response",
+      "description": "Respond to detected compliance violations",
+      "type": "reactive",
+      "enabled": true,
+      "priority": 8,
+      "eventTypes": ["compliance_violation"],
+      "conditions": [],
+      "actions": [
+        {
+          "id": "document-violation",
+          "type": "report_generation",
+          "description": "Document compliance violation",
+          "parameters": {
+            "reportType": "compliance_violation",
+            "includeEvidence": true
+          },
+          "priority": 10
+        },
+        {
+          "id": "notify-compliance",
+          "type": "crew_notification",
+          "description": "Notify compliance officer",
+          "parameters": {
+            "crew": "compliance",
+            "urgency": "high"
+          },
+          "priority": 9
+        },
+        {
+          "id": "initiate-correction",
+          "type": "automated_correction",
+          "description": "Initiate corrective measures",
+          "parameters": {
+            "correctionType": "compliance"
+          },
+          "priority": 8
+        }
+      ],
+      "cooldown": 600000,
+      "maxExecutions": 8
+    },
+    {
+      "id": "resource-shortage-mitigation",
+      "name": "Resource Shortage Mitigation",
+      "description": "Mitigate resource shortage situations",
+      "type": "predictive",
+      "enabled": true,
+      "priority": 7,
+      "eventTypes": ["resource_shortage"],
+      "conditions": [
+        {
+          "field": "level",
+          "operator": "less_than",
+          "value": 0.2
+        }
+      ],
+      "actions": [
+        {
+          "id": "optimize-usage",
+          "type": "system_adjustment",
+          "description": "Optimize resource usage",
+          "parameters": {
+            "adjustments": {
+              "consumption": "reduce",
+              "efficiency": "maximize"
+            }
+          },
+          "priority": 9
+        },
+        {
+          "id": "alert-logistics",
+          "type": "notification",
+          "description": "Alert logistics team",
+          "parameters": {
+            "team": "logistics",
+            "priority": "high"
+          },
+          "priority": 8
+        },
+        {
+          "id": "generate-requisition",
+          "type": "report_generation",
+          "description": "Generate supply requisition",
+          "parameters": {
+            "reportType": "supply_requisition"
+          },
+          "priority": 7
+        }
+      ],
+      "cooldown": 1800000,
+      "maxExecutions": 5
+    },
+    {
+      "id": "performance-degradation-optimization",
+      "name": "Performance Degradation Optimization",
+      "description": "Optimize system performance when degradation detected",
+      "type": "reactive",
+      "enabled": true,
+      "priority": 6,
+      "eventTypes": ["performance_degradation", "optimization"],
+      "conditions": [],
+      "actions": [
+        {
+          "id": "analyze-performance",
+          "type": "diagnostic_run",
+          "description": "Analyze performance metrics",
+          "parameters": {
+            "diagnosticType": "performance",
+            "includeHistory": true
+          },
+          "priority": 9
+        },
+        {
+          "id": "optimize-resources",
+          "type": "system_adjustment",
+          "description": "Optimize resource allocation",
+          "parameters": {
+            "adjustments": {
+              "resources": "rebalance",
+              "priority": "adjust"
+            }
+          },
+          "priority": 8
+        },
+        {
+          "id": "notify-it",
+          "type": "notification",
+          "description": "Notify IT support",
+          "parameters": {
+            "team": "it",
+            "priority": "medium"
+          },
+          "priority": 7
+        }
+      ],
+      "cooldown": 300000,
+      "maxExecutions": 12
+    },
+    {
+      "id": "security-threat-response",
+      "name": "Security Threat Response",
+      "description": "Respond to security threats immediately",
+      "type": "reactive",
+      "enabled": true,
+      "priority": 10,
+      "eventTypes": ["security_threat"],
+      "conditions": [],
+      "actions": [
+        {
+          "id": "escalate-security",
+          "type": "escalation",
+          "description": "Escalate to security team",
+          "parameters": {
+            "level": "security",
+            "immediate": true
+          },
+          "priority": 10
+        },
+        {
+          "id": "lockdown-systems",
+          "type": "system_adjustment",
+          "description": "Initiate security lockdown",
+          "parameters": {
+            "adjustments": {
+              "accessControl": "restrict",
+              "monitoring": "maximum"
+            }
+          },
+          "priority": 9
+        },
+        {
+          "id": "collect-evidence",
+          "type": "data_collection",
+          "description": "Collect security evidence",
+          "parameters": {
+            "sources": ["access_logs", "security_cameras", "system_logs"]
+          },
+          "priority": 8
+        },
+        {
+          "id": "generate-security-report",
+          "type": "report_generation",
+          "description": "Generate security incident report",
+          "parameters": {
+            "reportType": "security_incident"
+          },
+          "priority": 7
+        }
+      ],
+      "cooldown": 600000,
+      "maxExecutions": 5
+    }
+  ]
+}
