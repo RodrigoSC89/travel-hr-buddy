@@ -448,12 +448,21 @@ Tests cover:
 
 ## Future Enhancements
 
-1. **Video Export**: Full video replay generation (placeholder implemented)
-2. **PDF Reports**: Enhanced PDF reports with charts (placeholder implemented)
+### Partially Implemented (Placeholders)
+1. **Video Export**: Structure and API implemented, video generation pending
+   - Status: Placeholder returns message, requires video encoding library
+2. **PDF Reports**: Structure and API implemented, PDF generation pending
+   - Status: Placeholder returns message, requires jsPDF or similar library
+
+### Planned (Not Yet Implemented)
 3. **Machine Learning**: Pattern recognition for failure prediction
+   - Status: Not implemented, requires ML model training infrastructure
 4. **Real-time Collaboration**: Multi-user scenario simulation
+   - Status: Not implemented, requires WebSocket/WebRTC infrastructure
 5. **Mobile Support**: Native mobile apps for field use
+   - Status: Not implemented, requires Capacitor/React Native integration
 6. **Advanced Visualizations**: 3D reaction maps and AR overlays
+   - Status: Not implemented, requires Three.js or AR framework
 
 ---
 
