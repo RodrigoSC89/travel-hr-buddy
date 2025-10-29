@@ -17,6 +17,10 @@ build
 *.local
 .vite-cache
 
+# Export packages (PATCH 504)
+exports/*.zip
+exports/build-*
+
 # Environment files
 .env
 .env.local
@@ -52,6 +56,7 @@ test-results/
 playwright-report/
 playwright-report-preview/
 playwright/.cache/
+e2e-results/
 
 # Reports - keep these for tracking
 !reports/
