@@ -112,7 +112,7 @@ class NaturalLanguageParser {
       case 'reroute':
         if (match[1]) {
           const destination = this.resolveLocation(match[1]);
-          command.parameters.destination = destination;
+          command.parameters.destination = destination || undefined;
           command.confidence = destination ? 0.9 : 0.6;
         }
         break;
