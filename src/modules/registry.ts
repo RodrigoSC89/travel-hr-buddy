@@ -807,6 +807,63 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Brain",
     lazy: true,
     version: "185.0",
+  },
+
+  // PATCH 486-489: New Maritime System Enhancements
+  "connectivity.communication-center": {
+    id: "connectivity.communication-center",
+    name: "Communication Center",
+    category: "connectivity",
+    path: "modules/communication-center",
+    description: "PATCH 486.0 - Unified communication hub with real-time messaging, radio/satellite monitoring, and system status",
+    status: "active",
+    completeness: "100%",
+    route: "/communication-center",
+    icon: "Radio",
+    lazy: true,
+    version: "486.0",
+  },
+
+  "operations.drone-commander": {
+    id: "operations.drone-commander",
+    name: "Drone Commander",
+    category: "operations",
+    path: "pages/admin/drone-commander-v1",
+    description: "PATCH 487.0 - UAV fleet control with simulator-backed operations, command history, and MQTT integration",
+    status: "active",
+    completeness: "100%",
+    route: "/drone-commander-v1",
+    icon: "Drone",
+    lazy: true,
+    version: "487.0",
+  },
+
+  "documents.template-library": {
+    id: "documents.template-library",
+    name: "Template Library",
+    category: "documents",
+    path: "pages/admin/template-library",
+    description: "PATCH 488.0 - Maritime document templates with type filtering, preview, and Supabase integration",
+    status: "active",
+    completeness: "100%",
+    route: "/admin/templates/library",
+    icon: "FileText",
+    lazy: true,
+    version: "488.0",
+  },
+
+  "planning.navigation-copilot-v2": {
+    id: "planning.navigation-copilot-v2",
+    name: "Navigation Copilot v2",
+    category: "planning",
+    path: "pages/admin/navigation-copilot-v2",
+    description: "PATCH 489.0 - AI-powered navigation with contextual suggestions, decision logging, and simulation mode",
+    status: "active",
+    completeness: "100%",
+    route: "/admin/navigation-copilot-v2",
+    icon: "Navigation",
+    lazy: true,
+    version: "489.0",
   }
 };
 
