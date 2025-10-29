@@ -1,5 +1,5 @@
 /**
- * PATCH 454 - Incident Types
+ * PATCH 481 - Incident Types (Consolidated)
  */
 
 export interface Incident {
@@ -17,6 +17,8 @@ export interface Incident {
   location: string;
   evidence: IncidentEvidence[];
   metadata: Record<string, any>;
+  aiAnalysis?: any; // AI-generated analysis
+  replayStatus?: "pending" | "in_progress" | "completed" | "failed"; // AI replay status
 }
 
 export interface IncidentEvidence {
