@@ -10,11 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertTriangle, FileText, CheckCircle, Search } from "lucide-react";
 import { toast } from "sonner";
-import { IncidentDetection } from "@/modules/incidents/components/IncidentDetection";
-import { IncidentDocumentation } from "@/modules/incidents/components/IncidentDocumentation";
-import { IncidentClosure } from "@/modules/incidents/components/IncidentClosure";
-import { incidentService } from "@/modules/incidents/services/incident-service";
-import type { Incident } from "@/modules/incidents/types";
+import { IncidentDetection } from "@/modules/incident-reports/components/IncidentDetection";
+import { IncidentDocumentation } from "@/modules/incident-reports/components/IncidentDocumentation";
+import { IncidentClosure } from "@/modules/incident-reports/components/IncidentClosure";
+import { incidentService } from "@/modules/incident-reports/services/incident-service";
+import type { Incident } from "@/modules/incident-reports/types";
 
 const IncidentsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("detection");
