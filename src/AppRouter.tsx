@@ -83,6 +83,9 @@ const TechnicalValidation = React.lazy(() => import("@/pages/admin/technical-val
 // 🔹 PATCH 467 - Drone Commander Experimental
 const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
 
+// 🔹 PATCH 506-510 Validation
+const Patches506510Validation = React.lazy(() => import("@/pages/admin/Patches506510Validation"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -165,6 +168,9 @@ export default function AppRouter() {
         <Route path="/admin/patches-501-505/validation" element={
           React.createElement(React.lazy(() => import("@/pages/admin/Patches501505Validation")))
         } />
+        
+        {/* PATCH 506-510 Validation Route */}
+        <Route path="/admin/patches-506-510/validation" element={<Patches506510Validation />} />
       </Routes>
     </Router>
   );

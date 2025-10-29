@@ -174,6 +174,48 @@ export type Database = {
         }
         Relationships: []
       }
+      active_sessions: {
+        Row: {
+          created_at: string
+          device_info: Json | null
+          expires_at: string
+          id: string
+          ip_address: unknown
+          is_active: boolean | null
+          last_activity: string
+          refresh_token: string | null
+          session_token: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          device_info?: Json | null
+          expires_at: string
+          id?: string
+          ip_address?: unknown
+          is_active?: boolean | null
+          last_activity?: string
+          refresh_token?: string | null
+          session_token: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          device_info?: Json | null
+          expires_at?: string
+          id?: string
+          ip_address?: unknown
+          is_active?: boolean | null
+          last_activity?: string
+          refresh_token?: string | null
+          session_token?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       adaptive_parameters: {
         Row: {
           auto_adjust: boolean | null
@@ -410,6 +452,39 @@ export type Database = {
           },
         ]
       }
+      ai_feedback_scores: {
+        Row: {
+          command_data: Json
+          command_type: string
+          created_at: string
+          feedback_data: Json | null
+          id: string
+          improvements: Json | null
+          self_score: number
+          user_id: string | null
+        }
+        Insert: {
+          command_data?: Json
+          command_type: string
+          created_at?: string
+          feedback_data?: Json | null
+          id?: string
+          improvements?: Json | null
+          self_score: number
+          user_id?: string | null
+        }
+        Update: {
+          command_data?: Json
+          command_type?: string
+          created_at?: string
+          feedback_data?: Json | null
+          id?: string
+          improvements?: Json | null
+          self_score?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ai_insights: {
         Row: {
           actionable: boolean
@@ -471,6 +546,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ai_memory_events: {
+        Row: {
+          confidence: number | null
+          context: string | null
+          created_at: string
+          embedding: string | null
+          event_data: Json
+          event_type: string
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          confidence?: number | null
+          context?: string | null
+          created_at?: string
+          embedding?: string | null
+          event_data?: Json
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          confidence?: number | null
+          context?: string | null
+          created_at?: string
+          embedding?: string | null
+          event_data?: Json
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       ai_performance_metrics: {
         Row: {
@@ -8976,6 +9093,42 @@ export type Database = {
         }
         Relationships: []
       }
+      rls_access_logs: {
+        Row: {
+          access_granted: boolean
+          created_at: string
+          id: string
+          metadata: Json | null
+          operation: string
+          policy_name: string | null
+          row_data: Json | null
+          table_name: string
+          user_id: string | null
+        }
+        Insert: {
+          access_granted: boolean
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          operation: string
+          policy_name?: string | null
+          row_data?: Json | null
+          table_name: string
+          user_id?: string | null
+        }
+        Update: {
+          access_granted?: boolean
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          operation?: string
+          policy_name?: string | null
+          row_data?: Json | null
+          table_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       role_permissions: {
         Row: {
           can_delete: boolean | null
@@ -9687,6 +9840,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      system_backups: {
+        Row: {
+          backup_status: string
+          backup_type: string
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          error_message: string | null
+          file_path: string
+          file_size: number | null
+          id: string
+          metadata: Json | null
+        }
+        Insert: {
+          backup_status?: string
+          backup_type?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          file_path: string
+          file_size?: number | null
+          id?: string
+          metadata?: Json | null
+        }
+        Update: {
+          backup_status?: string
+          backup_type?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          metadata?: Json | null
+        }
+        Relationships: []
       }
       system_context_snapshots: {
         Row: {
