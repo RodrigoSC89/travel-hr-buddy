@@ -303,6 +303,12 @@ const Patches481485Validation = safeLazyImport(() => import("@/modules/validatio
 // PATCH 491-495 Validation Page
 const Patches491495Validation = safeLazyImport(() => import("@/modules/validation/Patches491495Validation"));
 
+// PATCH 486-489: New module pages
+const CommunicationCenter = safeLazyImport(() => import("@/modules/communication-center"));
+const DroneCommanderV1 = safeLazyImport(() => import("@/pages/admin/drone-commander-v1"));
+const TemplateLibrary = safeLazyImport(() => import("@/pages/admin/template-library"));
+const NavigationCopilotV2 = safeLazyImport(() => import("@/pages/admin/navigation-copilot-v2"));
+
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
   console.log("🔄 LoadingSpinner renderizado");
@@ -465,6 +471,8 @@ function App() {
                       <Route path="/analytics" element={<Analytics />} />
                       <Route path="/hr" element={<HumanResources />} />
                       <Route path="/communication" element={<Communication />} />
+                      {/* PATCH 486: Communication Center (unified) */}
+                      <Route path="/communication-center" element={<CommunicationCenter />} />
                       <Route path="/intelligence" element={<Intelligence />} />
                       {/* PATCH 191.0: Deprecated - Consolidated into /modules/fleet */}
                       {/* <Route path="/maritime" element={<Maritime />} /> */}
@@ -539,6 +547,8 @@ function App() {
                       <Route path="/admin/documents/ai" element={<DocumentAIEditor />} />
                       <Route path="/admin/documents/editor" element={<DocumentEditorPage />} />
                       <Route path="/admin/templates" element={<Templates />} />
+                      {/* PATCH 488: Template Library */}
+                      <Route path="/admin/templates/library" element={<TemplateLibrary />} />
                       <Route path="/admin/templates/edit/:id" element={<EditTemplatePage />} />
                       <Route path="/admin/documents/demo" element={<DocumentEditorDemo />} />
                       <Route path="/admin/templates/editor" element={<TemplateEditorPage />} />
@@ -633,6 +643,10 @@ function App() {
                       <Route path="/admin/incident-reports" element={<IncidentReports />} />
                       <Route path="/admin/incidents" element={<IncidentReports />} /> {/* Redirect old route */}
                       <Route path="/admin/performance-dashboard" element={<PerformanceDashboard />} />
+                      {/* PATCH 487: Drone Commander v1 */}
+                      <Route path="/drone-commander-v1" element={<DroneCommanderV1 />} />
+                      {/* PATCH 489: Navigation Copilot v2 */}
+                      <Route path="/admin/navigation-copilot-v2" element={<NavigationCopilotV2 />} />
                       <Route path="/developer/module-health" element={<ModuleHealth />} />
                       <Route path="/developer/watchdog" element={<WatchdogMonitor />} />
                       <Route path="/developer/ai-modules-status" element={<AIModulesStatus />} />
