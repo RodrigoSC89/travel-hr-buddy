@@ -298,6 +298,8 @@ const MissionEngineValidationPage = safeLazyImport(() => import("@/pages/admin/m
 const CrewModuleConsolidationValidation = safeLazyImport(() => import("@/pages/admin/crew-module-consolidation/validation"));
 const SonarAIDetailedValidation = safeLazyImport(() => import("@/pages/admin/sonar-ai-detailed/validation"));
 const DocumentUnificationValidation = safeLazyImport(() => import("@/pages/admin/document-unification/validation"));
+// PATCH 481-485 Validation Page
+const Patches481485Validation = safeLazyImport(() => import("@/modules/validation/Patches481485Validation"));
 
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
@@ -593,6 +595,9 @@ function App() {
                       <Route path="/admin/crew-module-consolidation/validation" element={<CrewModuleConsolidationValidation />} />
                       <Route path="/admin/sonar-ai-detailed/validation" element={<SonarAIDetailedValidation />} />
                       <Route path="/admin/document-unification/validation" element={<DocumentUnificationValidation />} />
+                      
+                      {/* Validation Route - Patches 481-485 */}
+                      <Route path="/admin/patches-481-485/validation" element={<Patches481485Validation />} />
                       
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
