@@ -44,6 +44,15 @@ Location: `src/components/quality-dashboard/QualityDashboard.tsx`
 ### 2. Quality Metrics Service
 Location: `src/components/quality-dashboard/quality-metrics-service.ts`
 
+**Note**: This is a Node.js-only script for generating metrics snapshots. It uses file system operations and is NOT imported by browser components.
+
+**Architecture**:
+1. Run the script to generate metrics: `npm run quality:metrics`
+2. Script reads test results from file system
+3. Aggregates data and calculates scores
+4. Saves to `public/api/quality-metrics.json`
+5. Dashboard fetches metrics via HTTP from static JSON file
+
 **Functions:**
 - `aggregateQualityMetrics()` - Compile all metrics
 - `saveMetricsSnapshot()` - Export to JSON

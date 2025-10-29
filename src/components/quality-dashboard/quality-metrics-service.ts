@@ -1,6 +1,11 @@
 /**
  * PATCH 565 - Quality Metrics Service
  * Aggregates metrics from various sources for the quality dashboard
+ * 
+ * NOTE: This is a Node.js-only script for generating the metrics snapshot.
+ * Run with: npx tsx src/components/quality-dashboard/quality-metrics-service.ts
+ * 
+ * The dashboard component loads metrics from the generated JSON file via HTTP.
  */
 
 import * as fs from 'fs';
