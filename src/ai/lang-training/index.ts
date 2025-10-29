@@ -62,11 +62,11 @@ class LangTrainingEngine {
     const datasets: TrainingDataset[] = [];
     for (const source of sources) {
       try {
-        logger.info(\`[LangTraining] Importing dataset from \${source}\`);
+        logger.info(`[LangTraining] Importing dataset from ${source}`);
         const dataset = await this.fetchDataset(source);
         datasets.push(dataset);
       } catch (error) {
-        logger.error(\`[LangTraining] Failed to import dataset from \${source}\`, error);
+        logger.error(`[LangTraining] Failed to import dataset from ${source}`, error);
       }
     }
     return datasets;
@@ -89,11 +89,11 @@ class LangTrainingEngine {
         quality_score: 0.95,
       };
     }
-    throw new Error(\`Unknown dataset source: \${source}\`);
+    throw new Error(`Unknown dataset source: ${source}`);
   }
 
   async adjustTokenizer(languages: SupportedLanguage[]): Promise<void> {
-    logger.info(\`[LangTraining] Adjusting tokenizer for: \${languages.join(", ")}\`);
+    logger.info(`[LangTraining] Adjusting tokenizer for: ${languages.join(", ")}`);
   }
 
   async applyFineTuning(datasets: TrainingDataset[], config: TrainingConfig): Promise<TrainingMetrics[]> {
