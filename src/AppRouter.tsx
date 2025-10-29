@@ -129,6 +129,7 @@ const Patch527IncidentReports = React.lazy(() => import("@/pages/admin/Patch527I
 const Patch528DocumentTemplates = React.lazy(() => import("@/pages/admin/Patch528DocumentTemplates"));
 const Patch529PriceAlerts = React.lazy(() => import("@/pages/admin/Patch529PriceAlerts"));
 const Patch530MissionControlV2 = React.lazy(() => import("@/pages/admin/Patch530MissionControlV2"));
+const Patch531TestValidation = React.lazy(() => import("@/pages/admin/Patch531TestValidation"));
 
 export default function AppRouter() {
   return (
@@ -256,6 +257,7 @@ export default function AppRouter() {
             <Route path="/admin/patch-528/document-templates" element={<Patch528DocumentTemplates />} />
             <Route path="/admin/patch-529/price-alerts" element={<Patch529PriceAlerts />} />
             <Route path="/admin/patch-530/mission-control-v2" element={<Patch530MissionControlV2 />} />
+            <Route path="/admin/patch-531/test-validation" element={<Patch531TestValidation />} />
             <Route path="/admin/patch-511-satellite-tracker" element={<Patch511SatelliteTracker />} />
             <Route path="/admin/patch-512-satcom" element={<Patch512Satcom />} />
             <Route path="/admin/patch-513-ocean-sonar" element={<Patch513OceanSonar />} />
