@@ -1,52 +1,34 @@
-# Underwater Drone Control Module
+# underwater-drone
 
-## Visão Geral
+> PATCH 181.0 - Underwater Drone Control Module
 
-O Underwater Drone Control é o módulo especializado para controle e monitoramento de ROVs (Remotely Operated Vehicles) e AUVs (Autonomous Underwater Vehicles), incluindo planejamento de missões, telemetria e análise de dados.
+## 📁 Estrutura
 
-**Categoria**: Specialized / Operations  
-**Rota**: `/underwater-drone`  
-**Status**: Ativo  
-**Versão**: 450.0
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/underwater-drone`
 
-## Componentes Principais
+### Diretórios
 
-### DroneControlPanel
-- Real-time drone control interface
-- Video feed visualization
-- Sensor data display
-- Command interface
-- Emergency controls
+- `components/`
+- `services/`
+- `validation/`
 
-### MissionPlanner
-- Underwater mission planning
-- Waypoint management
-- Depth profiling
-- Survey area definition
-- Mission simulation
+### Arquivos Principais
 
-### TelemetryMonitor
-- Position tracking (GPS/USBL)
-- Depth and altitude
-- Speed and heading
-- Battery status
-- System health
+- `droneSubCore.ts`
+- `index.tsx`
+- `missionUploadSub.ts`
+- `telemetrySub.ts`
 
-### DataAnalyzer
-- Video analysis
-- Sonar data processing
-- Environmental data
-- Object detection
-- Mission reports
+## 🗄️ Tabelas do Banco
 
-## Integrações
+- `drone_missions`
+- `drone_telemetry`
+- `mission_events`
+- `underwater_missions`
 
-- **Mission Control**: Mission planning and execution
-- **Sonar AI**: Underwater object detection
-- **Fleet Management**: ROV asset management
+## 🔧 PATCHES Aplicados
 
-## Última Atualização
+- 20251028000300_patch_445_mission_engine_v2.sql
 
-**Data**: 2025-10-29  
-**Versão**: 450.0  
-**Features**: ROV/AUV control, Mission planning, Telemetry
+---
+*Documentação gerada automaticamente em 29/10/2025*

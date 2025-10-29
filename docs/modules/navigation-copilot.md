@@ -1,100 +1,36 @@
-# Navigation Copilot Module
+# navigation-copilot
 
-## Visão Geral
+> PATCH 164.0 - Navigation Copilot
 
-O Navigation Copilot é um assistente de navegação com IA que integra dados meteorológicos, rotas otimizadas e alertas de segurança para navegação marítima inteligente.
+## 📁 Estrutura
 
-**Categoria**: AI / Navigation  
-**Rota**: `/navigation-copilot`  
-**Status**: Ativo  
-**Versão**: 447.0
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/navigation-copilot`
 
-## Componentes Principais
+### Diretórios
 
-### NavigationMap
-- Mapa interativo com rota atual
-- Weather overlay
-- Traffic information
-- Hazard warnings
+- `components/`
+- `services/`
+- `validation/`
 
-### RouteOptimizer
-- AI-powered route optimization
-- Weather-aware routing
-- Fuel efficiency calculation
-- ETA prediction
+### Arquivos Principais
 
-### SafetyAdvisor
-- Real-time safety alerts
-- Collision avoidance
-- Weather warnings
-- Restricted area alerts
+- `NavigationCopilotPage.tsx`
+- `exports.ts`
+- `index.ts`
 
-### AutoPilotAssist
-- Autopilot recommendations
-- Course corrections
-- Speed adjustments
-- Emergency procedures
+## 🗄️ Tabelas do Banco
 
-## Banco de Dados Utilizado
+- `ai_commands`
+- `copilot_decision_logs`
+- `missions`
+- `navigation_ai_logs`
+- `navigation_decisions`
+- `route_suggestions`
 
-### Tabelas Principais
-```sql
-CREATE TABLE navigation_routes (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  vessel_id UUID REFERENCES vessels(id),
-  route_name VARCHAR(255),
-  origin_lat DECIMAL(10, 8),
-  origin_lng DECIMAL(11, 8),
-  destination_lat DECIMAL(10, 8),
-  destination_lng DECIMAL(11, 8),
-  waypoints JSONB,
-  optimized_route JSONB,
-  estimated_duration INTEGER,
-  estimated_fuel DECIMAL(10, 2),
-  status VARCHAR(20) DEFAULT 'planned',
-  created_at TIMESTAMP DEFAULT NOW()
-);
+## 🔧 PATCHES Aplicados
 
-CREATE TABLE navigation_alerts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  vessel_id UUID REFERENCES vessels(id),
-  alert_type VARCHAR(100) NOT NULL,
-  severity VARCHAR(20) NOT NULL,
-  message TEXT NOT NULL,
-  location_lat DECIMAL(10, 8),
-  location_lng DECIMAL(11, 8),
-  acknowledged BOOLEAN DEFAULT FALSE,
-  alert_timestamp TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
+- 20251028000300_patch_445_mission_engine_v2.sql
+- 20251029040100_patch_517_navigation_copilot_ai.sql
 
-## Requisições API Envolvidas
-
-### Route Management
-- **GET /api/navigation/routes** - Lista rotas
-- **POST /api/navigation/routes** - Cria rota
-- **POST /api/navigation/optimize** - Otimiza rota
-- **GET /api/navigation/eta** - Calcula ETA
-
-### Safety
-- **GET /api/navigation/alerts** - Lista alertas
-- **POST /api/navigation/check-safety** - Verifica segurança
-- **GET /api/navigation/traffic** - Traffic information
-
-### Weather Integration
-- **GET /api/navigation/weather** - Weather ao longo da rota
-- **GET /api/navigation/forecast** - Forecast para rota
-
-## Integrações
-
-- **Weather Dashboard**: Dados meteorológicos
-- **Route Planner**: Planejamento de rotas
-- **Fleet Management**: Status de embarcações
-- **Satellite Tracking**: Posição em tempo real
-
-## Última Atualização
-
-**Data**: 2025-10-29  
-**Versão**: 447.0  
-**Features**: AI optimization, Weather integration
+---
+*Documentação gerada automaticamente em 29/10/2025*

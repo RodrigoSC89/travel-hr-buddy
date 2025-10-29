@@ -1,80 +1,39 @@
-# Price Alerts Module
+# price-alerts
 
-## Visão Geral
+> PATCH 464 - Complete Price Alerts UI
 
-O Price Alerts é um módulo de monitoramento de preços e alertas para commodities, combustível e serviços relevantes para operações marítimas, com análise de tendências e recomendações de compra.
+## 📁 Estrutura
 
-**Categoria**: Specialized / Finance  
-**Rota**: `/price-alerts`  
-**Status**: Ativo  
-**Versão**: 2.0
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/price-alerts`
 
-## Componentes Principais
+### Diretórios
 
-### PriceMonitor
-- Real-time price tracking
-- Multiple commodities
-- Currency conversion
-- Historical comparisons
+- `services/`
+- `validation/`
 
-### AlertManager
-- Custom price alerts
-- Threshold-based notifications
-- Trend alerts
-- Opportunity alerts
+### Arquivos Principais
 
-### TrendAnalyzer
-- Price trend analysis
-- Predictive analytics
-- Seasonal patterns
-- Market insights
+- `index.tsx`
 
-### RecommendationEngine
-- Buy/hold/sell recommendations
-- Optimal purchase timing
-- Volume optimization
-- Cost savings analysis
+## 🗄️ Tabelas do Banco
 
-## Commodities Tracked
+- `price_alert_notifications`
+- `price_alerts`
+- `price_history`
+- `travel_price_history`
 
-### Fuel
-- Bunker fuel (HFO, VLSFO)
-- Marine gas oil (MGO)
-- LNG prices
-- Regional price variations
+## 🔧 PATCHES Aplicados
 
-### Services
-- Port fees
-- Pilotage services
-- Tug services
-- Supply services
+- 20250922225107_495407b8-ddf3-4029-9aa6-697b55387118.sql
+- 20250922230244_e94bd56b-fa71-4c59-8d19-e0d3e31a2c6e.sql
+- 20250922230310_1c3e7f47-74df-4e4c-815b-fd0cb05699a5.sql
+- 20250922230328_83e1c9f6-3581-45c6-91c9-2f437baf6a17.sql
+- 20250926025715_19576550-5f84-486c-9cdf-d9b14dd9dbe5.sql
+- 20250926203513_ef48718d-719d-4556-8c59-252e296138f0.sql
+- 20251027182511_00fc48be-f107-4659-890f-6d32f6eef521.sql
+- 20251028060000_price_alerts_enhancements.sql
+- 20251028070000_price_alerts_notifications.sql
+- 20251028080000_price_alerts_notification_queue.sql
 
-### Supplies
-- Spare parts
-- Provisions
-- Safety equipment
-- Maintenance materials
-
-## Requisições API Envolvidas
-
-### Price Data
-- **GET /api/prices/current** - Current prices
-- **GET /api/prices/history** - Historical prices
-- **GET /api/prices/forecast** - Price forecast
-
-### Alerts
-- **GET /api/price-alerts** - Lista alertas
-- **POST /api/price-alerts** - Cria alerta
-- **PUT /api/price-alerts/:id** - Atualiza alerta
-
-## Integrações
-
-- **Finance Hub**: Cost management
-- **Fleet Management**: Fueling decisions
-- **Mission Control**: Operation cost planning
-
-## Última Atualização
-
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Features**: Price tracking, Alerts, Trend analysis
+---
+*Documentação gerada automaticamente em 29/10/2025*

@@ -1,81 +1,26 @@
 # maintenance-planner
 
-**Category**: maintenance-planner
-**Last Updated**: 2025-10-29
+> No description available
+
+## 📁 Estrutura
+
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/maintenance-planner`
+
+### Diretórios
+
+- `components/`
+
+### Arquivos Principais
+
+- `index.tsx`
+
+## 🗄️ Tabelas do Banco
+
+- `maintenance_tasks`
+
+## 🔧 PATCHES Aplicados
+
+- 20251027200000_patch_321_maintenance_planner.sql
 
 ---
-
-## 📝 Descrição
-
-maintenance-planner module
-
-## 🧩 Componentes
-
-### CreateMaintenancePlanDialog
-
-CreateMaintenancePlanDialog component
-
-**Props:**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| open | `boolean` | ✅ | - |
-| onOpenChange | `(open: boolean) => void` | ✅ | - |
-| onSuccess | `() => void` | ✅ | - |
-
-### MMIIntegration
-
-MMIIntegration component
-
-### MaintenanceAlertsPanel
-
-MaintenanceAlertsPanel component
-
-**Props:**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| open | `boolean` | ✅ | - |
-| onOpenChange | `(open: boolean) => void` | ✅ | - |
-
-### MaintenanceCalendarView
-
-MaintenanceCalendarView component
-
-### MaintenanceTasksTable
-
-MaintenanceTasksTable component
-
-**Props:**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| onRefresh | `() => void` | ✅ | - |
-
-### MaintenanceTimelineView
-
-MaintenanceTimelineView component
-
-## 📦 Dependências
-
-**Externas:**
-
-- `react`
-- `lucide-react`
-
-## 📁 Estrutura de Dados
-
-```
-maintenance-planner/
-├── components/       # Componentes React
-├── hooks/            # Custom hooks
-├── services/         # Lógica de negócio e API
-├── types/            # Definições TypeScript
-├── validation/       # Validações
-└── index.tsx         # Exportação principal
-```
-
----
-
-**Gerado automaticamente por**: `scripts/generateModuleDocs.ts`  
-**Data**: 10/29/2025, 6:06:24 PM
+*Documentação gerada automaticamente em 29/10/2025*

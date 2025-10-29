@@ -1,95 +1,43 @@
-# Sonar AI Module
+# sonar-ai
 
-## Visão Geral
+> PATCH 435 - Sonar AI Enhancement
 
-O Sonar AI é um módulo de análise inteligente de dados de sonar submarino, utilizando AI para detecção de objetos, classificação de alvos e mapeamento do fundo oceânico.
+## 📁 Estrutura
 
-**Categoria**: AI / Ocean Technology  
-**Rota**: `/sonar-ai`  
-**Status**: Ativo  
-**Versão**: 448.0
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/sonar-ai`
 
-## Componentes Principais
+### Diretórios
 
-### SonarViewer
-- Visualização de dados de sonar em tempo real
-- Waterfall display
-- Sector scan visualization
-- 3D ocean floor mapping
+- `components/`
+- `services/`
+- `validation/`
 
-### ObjectDetector
-- AI-powered object detection
-- Target classification
-- Size estimation
-- Movement tracking
+### Arquivos Principais
 
-### PatternAnalyzer
-- Pattern recognition no fundo oceânico
-- Geological feature identification
-- Anomaly detection
-- Historical comparison
+- `dataAnalyzer.ts`
+- `index.tsx`
+- `riskInterpreter.ts`
+- `sonar-service.ts`
 
-### DataProcessor
-- Real-time sonar data processing
-- Noise filtering
-- Signal enhancement
-- Data compression
+## 🗄️ Tabelas do Banco
 
-## Banco de Dados Utilizado
+- `sonar_ai_results`
+- `sonar_alerts`
+- `sonar_alerts_stats`
+- `sonar_analysis`
+- `sonar_detections`
+- `sonar_events`
+- `sonar_inputs`
+- `sonar_risks`
+- `sonar_scans`
 
-### Tabelas Principais
-```sql
-CREATE TABLE sonar_scans (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  vessel_id UUID REFERENCES vessels(id),
-  scan_type VARCHAR(50) NOT NULL,
-  location_lat DECIMAL(10, 8),
-  location_lng DECIMAL(11, 8),
-  depth DECIMAL(8, 2),
-  scan_data JSONB,
-  processed_data JSONB,
-  detected_objects INTEGER DEFAULT 0,
-  scan_timestamp TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+## 🔧 PATCHES Aplicados
 
-CREATE TABLE detected_objects (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  scan_id UUID REFERENCES sonar_scans(id),
-  object_type VARCHAR(100),
-  classification VARCHAR(100),
-  confidence DECIMAL(5, 4),
-  position_x DECIMAL(10, 2),
-  position_y DECIMAL(10, 2),
-  position_z DECIMAL(10, 2),
-  size_estimate JSONB,
-  metadata JSONB DEFAULT '{}',
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
+- 20251028200000_patches_446_450_maritime_operations.sql
+- 20251028220100_patch_457_sonar_readings.sql
+- 20251028_patch_407_sonar_ai.sql
+- 20251029010200_create_sonar_ai_tables.sql
+- 20251029174600_patches_536_540.sql
 
-## Requisições API Envolvidas
-
-### Sonar Data
-- **GET /api/sonar/scans** - Lista scans
-- **POST /api/sonar/scans** - Upload scan data
-- **GET /api/sonar/scans/:id** - Detalhes do scan
-- **POST /api/sonar/analyze** - Análise AI
-- **WebSocket /ws/sonar** - Stream de dados
-
-### Object Detection
-- **GET /api/sonar/objects** - Lista objetos detectados
-- **GET /api/sonar/objects/:id** - Detalhes do objeto
-- **POST /api/sonar/classify** - Classificação de objeto
-
-## Integrações
-
-- **Underwater Drone**: Dados de ROV/AUV
-- **Mission Control**: Missões de inspeção
-- **Ocean Sonar**: Dados de sonar legacy
-
-## Última Atualização
-
-**Data**: 2025-10-29  
-**Versão**: 448.0  
-**Features**: Object detection, AI classification
+---
+*Documentação gerada automaticamente em 29/10/2025*

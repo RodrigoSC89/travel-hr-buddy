@@ -1,27 +1,18 @@
 # assistants
 
-**Category**: assistants
-**Last Updated**: 2025-10-29
+> No description available
+
+## 📁 Estrutura
+
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/assistants`
+
+### Diretórios
+
+- `voice-assistant/`
+
+### Arquivos Principais
+
+- `.gitkeep`
 
 ---
-
-## 📝 Descrição
-
-assistants module
-
-## 📁 Estrutura de Dados
-
-```
-assistants/
-├── components/       # Componentes React
-├── hooks/            # Custom hooks
-├── services/         # Lógica de negócio e API
-├── types/            # Definições TypeScript
-├── validation/       # Validações
-└── index.tsx         # Exportação principal
-```
-
----
-
-**Gerado automaticamente por**: `scripts/generateModuleDocs.ts`  
-**Data**: 10/29/2025, 6:06:24 PM
+*Documentação gerada automaticamente em 29/10/2025*

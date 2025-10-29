@@ -1,27 +1,31 @@
 # connectivity
 
-**Category**: connectivity
-**Last Updated**: 2025-10-29
+> No description available
+
+## 📁 Estrutura
+
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/connectivity`
+
+### Diretórios
+
+- `api-gateway/`
+- `channel-manager/`
+- `communication/`
+- `integrations-hub/`
+- `notifications-center/`
+- `satcom/`
+
+### Arquivos Principais
+
+- `.gitkeep`
+
+## 🗄️ Tabelas do Banco
+
+- `channel_messages`
+- `channel_status_log`
+- `communication_channels`
+- `integration_logs`
+- `integrations_registry`
 
 ---
-
-## 📝 Descrição
-
-connectivity module
-
-## 📁 Estrutura de Dados
-
-```
-connectivity/
-├── components/       # Componentes React
-├── hooks/            # Custom hooks
-├── services/         # Lógica de negócio e API
-├── types/            # Definições TypeScript
-├── validation/       # Validações
-└── index.tsx         # Exportação principal
-```
-
----
-
-**Gerado automaticamente por**: `scripts/generateModuleDocs.ts`  
-**Data**: 10/29/2025, 6:06:24 PM
+*Documentação gerada automaticamente em 29/10/2025*

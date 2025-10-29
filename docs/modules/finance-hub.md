@@ -1,43 +1,29 @@
 # finance-hub
 
-**Category**: finance-hub
-**Last Updated**: 2025-10-29
+> Finance Hub Module
+
+## 📁 Estrutura
+
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/finance-hub`
+
+### Diretórios
+
+- `components/`
+- `hooks/`
+- `services/`
+
+### Arquivos Principais
+
+- `README.md`
+- `index.tsx`
+
+## 🗄️ Tabelas do Banco
+
+- `financial_transactions`
+
+## 🔧 PATCHES Aplicados
+
+- 20251026000100_finance_hub_schema.sql
 
 ---
-
-## 📝 Descrição
-
-## 📋 Overview
-
-## 🧩 Componentes
-
-### InvoiceManager
-
-InvoiceManager component
-
-## 🪝 Custom Hooks
-
-- `useFinanceData`
-
-## 📦 Dependências
-
-**Externas:**
-
-- `react`
-
-## 📁 Estrutura de Dados
-
-```
-finance-hub/
-├── components/       # Componentes React
-├── hooks/            # Custom hooks
-├── services/         # Lógica de negócio e API
-├── types/            # Definições TypeScript
-├── validation/       # Validações
-└── index.tsx         # Exportação principal
-```
-
----
-
-**Gerado automaticamente por**: `scripts/generateModuleDocs.ts`  
-**Data**: 10/29/2025, 6:06:24 PM
+*Documentação gerada automaticamente em 29/10/2025*

@@ -1,48 +1,37 @@
-# Drone Commander Module
+# drone-commander
 
-## Visão Geral
+> PATCH 172.0 - Drone Commander Module
 
-O Drone Commander é o módulo de controle e coordenação de frotas de drones aéreos para inspeção, vigilância e operações de reconhecimento marítimo.
+## 📁 Estrutura
 
-**Categoria**: Specialized / Operations  
-**Rota**: `/drone-commander`  
-**Status**: Ativo  
-**Versão**: 2.0
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/drone-commander`
 
-## Componentes Principais
+### Diretórios
 
-### FleetControl
-- Multi-drone coordination
-- Fleet status overview
-- Swarm operations
-- Mission assignment
+- `components/`
+- `services/`
+- `simulator/`
+- `types/`
+- `validation/`
 
-### FlightPlanner
-- Flight path planning
-- No-fly zone management
-- Weather integration
-- Battery optimization
+### Arquivos Principais
 
-### VideoStream
-- Live video feeds
-- Multi-camera view
-- Recording and playback
-- AI-powered analysis
+- `droneCommander.ts`
+- `droneTelemetryStream.tsx`
+- `index.ts`
+- `missionUploader.ts`
 
-### DataCollection
-- Aerial photography
-- Thermal imaging
-- Sensor data collection
-- Automated reporting
+## 🗄️ Tabelas do Banco
 
-## Integrações
+- `drone_commands`
+- `drone_fleet_logs`
+- `drone_flights`
+- `drone_tasks`
+- `drones`
 
-- **Mission Control**: Mission coordination
-- **Weather Dashboard**: Weather data for flight planning
-- **Fleet Management**: Asset tracking
+## 🔧 PATCHES Aplicados
 
-## Última Atualização
+- 20251028_drone_commander_schema.sql
 
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Features**: Fleet control, Flight planning, Video streaming
+---
+*Documentação gerada automaticamente em 29/10/2025*

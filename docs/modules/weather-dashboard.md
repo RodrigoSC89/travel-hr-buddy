@@ -1,61 +1,26 @@
-# Weather Dashboard Module
+# weather-dashboard
 
-## Visão Geral
+> Weather Dashboard - PATCH 386 Complete
 
-O Weather Dashboard fornece dados meteorológicos em tempo real, previsões e alertas para operações marítimas, com integração de múltiplas fontes de dados meteorológicos.
+## 📁 Estrutura
 
-**Categoria**: Specialized / Environment  
-**Rota**: `/weather-dashboard`  
-**Status**: Ativo  
-**Versão**: 2.0
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/weather-dashboard`
 
-## Componentes Principais
+### Diretórios
 
-### WeatherMap
-- Interactive weather map
-- Multiple layers (wind, precipitation, temperature, pressure)
-- Storm tracking
-- Historical data visualization
+- `components/`
 
-### ForecastPanel
-- Short-term forecast (24-72h)
-- Extended forecast (7-14 days)
-- Sea state forecast
-- Wind and wave predictions
+### Arquivos Principais
 
-### AlertsPanel
-- Storm warnings
-- Severe weather alerts
-- Small craft advisories
-- Marine warnings
+- `index.tsx`
 
-### HistoricalData
-- Historical weather patterns
-- Trend analysis
-- Climate data
-- Seasonal variations
+## 🗄️ Tabelas do Banco
 
-## Requisições API Envolvidas
+- `weather_alerts`
 
-### Current Weather
-- **GET /api/weather/current** - Current conditions
-- **GET /api/weather/location** - Weather for specific location
-- **GET /api/weather/route** - Weather along route
+## 🔧 PATCHES Aplicados
 
-### Forecast
-- **GET /api/weather/forecast** - Weather forecast
-- **GET /api/weather/forecast/marine** - Marine forecast
-- **GET /api/weather/alerts** - Weather alerts
+- 20251027201000_patch_320_weather_dashboard.sql
 
-## Integrações
-
-- **Navigation Copilot**: Weather-aware navigation
-- **Route Planner**: Weather-optimized routing
-- **Mission Control**: Weather impact on missions
-- **Fleet Management**: Operational planning
-
-## Última Atualização
-
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Features**: Real-time data, Forecasts, Alerts
+---
+*Documentação gerada automaticamente em 29/10/2025*

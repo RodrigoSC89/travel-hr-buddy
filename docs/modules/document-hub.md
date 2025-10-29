@@ -1,45 +1,35 @@
 # document-hub
 
-**Category**: document-hub
-**Last Updated**: 2025-10-29
+> Document Hub Module
+
+## 📁 Estrutura
+
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/document-hub`
+
+### Diretórios
+
+- `components/`
+- `templates/`
+- `validation/`
+
+### Arquivos Principais
+
+- `README.md`
+- `index.tsx`
+
+## 🗄️ Tabelas do Banco
+
+- `document_templates`
+- `documents`
+- `generated_documents`
+- `itinerary_exports`
+- `rendered_documents`
+- `template_placeholders`
+- `template_usage_log`
+- `template_variables`
+- `template_versions`
+- `templates`
+- `workspace_files`
 
 ---
-
-## 📝 Descrição
-
-## 📋 Overview
-
-## 🧩 Componentes
-
-### DocumentsAI
-
-DocumentsAI component
-
-### TemplateLibrary
-
-TemplateLibrary component
-
-## 📦 Dependências
-
-**Externas:**
-
-- `react`
-- `lucide-react`
-- `sonner`
-
-## 📁 Estrutura de Dados
-
-```
-document-hub/
-├── components/       # Componentes React
-├── hooks/            # Custom hooks
-├── services/         # Lógica de negócio e API
-├── types/            # Definições TypeScript
-├── validation/       # Validações
-└── index.tsx         # Exportação principal
-```
-
----
-
-**Gerado automaticamente por**: `scripts/generateModuleDocs.ts`  
-**Data**: 10/29/2025, 6:06:24 PM
+*Documentação gerada automaticamente em 29/10/2025*

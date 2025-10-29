@@ -1,184 +1,32 @@
-# Fleet Management Module
+# fleet
 
-## Visão Geral
+> Fleet Management Module
 
-O Fleet Management é o módulo central para gerenciamento de embarcações, incluindo tracking em tempo real, manutenção, performance e operações marítimas unificadas.
+## 📁 Estrutura
 
-**Categoria**: Core / Operations  
-**Rota**: `/fleet` ou `/maritime`  
-**Status**: Ativo  
-**Versão**: 191.0 (consolidado)
+**Caminho:** `/home/runner/work/travel-hr-buddy/travel-hr-buddy/src/modules/fleet`
 
-## Componentes Principais
+### Arquivos Principais
 
-### FleetOverview
-- Lista de todas as embarcações
-- Status em tempo real (active, maintenance, docked)
-- Localização no mapa
-- Quick stats (fuel, crew, next maintenance)
+- `README.md`
+- `index.tsx`
 
-### VesselDetails
-- Informações detalhadas da embarcação
-- Especificações técnicas
-- Histórico de manutenção
-- Crew assignment
-- Mission history
+## 🗄️ Tabelas do Banco
 
-### VesselTracking
-- Rastreamento GPS em tempo real
-- AIS integration
-- Route history
-- Geofencing alerts
+- `vessels`
 
-### MaintenancePlanner
-- Scheduled maintenance
-- Preventive maintenance tracking
-- Maintenance history
-- Spare parts inventory
+## 🔧 PATCHES Aplicados
 
-### PerformanceMetrics
-- Fuel consumption
-- Speed and efficiency
-- Operational hours
-- Performance trends
+- 20250926025715_19576550-5f84-486c-9cdf-d9b14dd9dbe5.sql
+- 20250926194434_1b4cee6e-e528-4492-94d8-3dc44b617faf.sql
+- 20250926214122_02fc6e9d-3ca7-4c6f-89da-97449b2478a4.sql
+- 20250926220120_40baf15a-6531-42e6-8cc7-0ecbead69bf1.sql
+- 20250926221822_8da008dd-9c40-4630-a8d0-2cf170728486.sql
+- 20250927022451_f091d8f6-8a59-4f2e-93a9-021ccd513448.sql
+- 20250928163811_8e496e3f-ff8e-4ee7-88d0-3ee40d04e865.sql
+- 20251025014300_create_vessels_table.sql
+- 20251025022200_create_access_control_system.sql
+- 20251025030400_create_workflow_rules_table.sql
 
-## Banco de Dados Utilizado
-
-### Tabelas Principais
-```sql
-CREATE TABLE vessels (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(255) NOT NULL,
-  imo_number VARCHAR(20) UNIQUE,
-  flag VARCHAR(10),
-  vessel_type VARCHAR(50),
-  status VARCHAR(20) DEFAULT 'active',
-  current_location_lat DECIMAL(10, 8),
-  current_location_lng DECIMAL(11, 8),
-  current_speed DECIMAL(5, 2),
-  heading DECIMAL(5, 2),
-  last_update TIMESTAMP,
-  specifications JSONB DEFAULT '{}',
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE vessel_maintenance (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  vessel_id UUID REFERENCES vessels(id),
-  maintenance_type VARCHAR(100) NOT NULL,
-  scheduled_date DATE NOT NULL,
-  completed_date DATE,
-  status VARCHAR(20) DEFAULT 'scheduled',
-  description TEXT,
-  cost DECIMAL(10, 2),
-  performed_by VARCHAR(255),
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE vessel_tracking (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  vessel_id UUID REFERENCES vessels(id),
-  latitude DECIMAL(10, 8) NOT NULL,
-  longitude DECIMAL(11, 8) NOT NULL,
-  speed DECIMAL(5, 2),
-  heading DECIMAL(5, 2),
-  recorded_at TIMESTAMP NOT NULL,
-  source VARCHAR(50),
-  metadata JSONB DEFAULT '{}'
-);
-```
-
-## Requisições API Envolvidas
-
-### Vessel Management
-- **GET /api/vessels** - Lista embarcações
-- **POST /api/vessels** - Adiciona embarcação
-- **GET /api/vessels/:id** - Detalhes da embarcação
-- **PUT /api/vessels/:id** - Atualiza embarcação
-- **DELETE /api/vessels/:id** - Remove embarcação
-
-### Tracking
-- **GET /api/vessels/:id/tracking** - Histórico de posições
-- **POST /api/vessels/:id/position** - Atualiza posição
-- **GET /api/vessels/:id/current-position** - Posição atual
-- **WebSocket /ws/vessels/tracking** - Stream de posições
-
-### Maintenance
-- **GET /api/vessels/:id/maintenance** - Manutenções da embarcação
-- **POST /api/vessels/:id/maintenance** - Agenda manutenção
-- **PUT /api/maintenance/:id** - Atualiza manutenção
-- **PUT /api/maintenance/:id/complete** - Completa manutenção
-
-### Performance
-- **GET /api/vessels/:id/performance** - Métricas de performance
-- **GET /api/vessels/:id/fuel-consumption** - Consumo de combustível
-- **GET /api/vessels/:id/operational-hours** - Horas operacionais
-
-## Integrações
-
-### AIS Integration
-- Automatic Identification System
-- Real-time vessel tracking
-- Collision avoidance
-- Traffic monitoring
-
-### Satellite Tracking
-- Backup tracking via satellite
-- Coverage em áreas remotas
-- Integração com `/satellite-tracker`
-
-### Mission Control
-- Vessel assignment para missões
-- Mission-based routing
-- Resource allocation
-
-### Crew Management
-- Crew assignment para vessels
-- Certification tracking
-- Onboard crew status
-
-### Weather Dashboard
-- Weather overlay em tracking
-- Weather-aware routing
-- Safety alerts
-
-## Recursos Avançados
-
-### Geofencing
-- Define geographic boundaries
-- Entry/exit alerts
-- Compliance monitoring
-- Automatic notifications
-
-### Route Optimization
-- Fuel-efficient routing
-- Weather-aware routing
-- ETA calculation
-- Multi-waypoint planning
-
-### Predictive Maintenance
-- AI-powered maintenance prediction
-- Failure pattern recognition
-- Cost optimization
-- Downtime reduction
-
-## Testes
-
-Localização: 
-- `tests/fleet-manager.spec.ts`
-- `tests/fleet-ai.test.ts`
-
-## Consolidação
-
-**PATCH 191**: Consolidou módulos `maritime` e `maritime-supremo` em `fleet`
-
-Redirects configurados:
-- `/maritime` → `/fleet`
-- `/maritime-supremo` → `/fleet`
-
-## Última Atualização
-
-**Data**: 2025-10-29  
-**Versão**: 191.0  
-**Status**: Consolidado e Ativo
+---
+*Documentação gerada automaticamente em 29/10/2025*
