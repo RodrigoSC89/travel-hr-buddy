@@ -104,4 +104,4 @@ CREATE POLICY "Allow authenticated users to manage satellite_orbital_elements" O
 CREATE TRIGGER satellite_orbital_elements_updated_at
   BEFORE UPDATE ON satellite_orbital_elements
   FOR EACH ROW
-  EXECUTE FUNCTION update_sensor_config_updated_at();
+  EXECUTE FUNCTION update_updated_at_column();

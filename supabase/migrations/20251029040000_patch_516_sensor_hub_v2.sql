@@ -84,8 +84,8 @@ CREATE POLICY "Allow authenticated users to insert sensor_readings" ON sensor_re
 CREATE POLICY "Allow public read access to sensor_alerts" ON sensor_alerts FOR SELECT USING (true);
 CREATE POLICY "Allow authenticated users to manage sensor_alerts" ON sensor_alerts FOR ALL USING (auth.role() = 'authenticated');
 
--- Function to update updated_at timestamp
-CREATE OR REPLACE FUNCTION update_sensor_config_updated_at()
+-- Function to update updated_at timestamp (reusable across patches)
+CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
   NEW.updated_at = now();
@@ -96,4 +96,4 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER sensor_config_updated_at
   BEFORE UPDATE ON sensor_config
   FOR EACH ROW
-  EXECUTE FUNCTION update_sensor_config_updated_at();
+  EXECUTE FUNCTION update_updated_at_column();

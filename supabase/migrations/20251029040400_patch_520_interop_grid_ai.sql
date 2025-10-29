@@ -147,17 +147,17 @@ CREATE POLICY "Allow authenticated users to insert ai_decision_audit_trail" ON a
 CREATE TRIGGER ai_instances_updated_at
   BEFORE UPDATE ON ai_instances
   FOR EACH ROW
-  EXECUTE FUNCTION update_sensor_config_updated_at();
+  EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER ai_event_subscriptions_updated_at
   BEFORE UPDATE ON ai_event_subscriptions
   FOR EACH ROW
-  EXECUTE FUNCTION update_sensor_config_updated_at();
+  EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER ai_knowledge_graph_updated_at
   BEFORE UPDATE ON ai_knowledge_graph
   FOR EACH ROW
-  EXECUTE FUNCTION update_sensor_config_updated_at();
+  EXECUTE FUNCTION update_updated_at_column();
 
 -- Insert sample AI instances
 INSERT INTO ai_instances (instance_name, instance_type, version, capabilities) VALUES

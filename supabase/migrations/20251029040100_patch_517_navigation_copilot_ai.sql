@@ -92,8 +92,17 @@ CREATE POLICY "Allow authenticated users to manage navigation_weather_alerts" ON
 CREATE POLICY "Allow public read access to route_optimization_history" ON route_optimization_history FOR SELECT USING (true);
 CREATE POLICY "Allow authenticated users to insert route_optimization_history" ON route_optimization_history FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 
+-- Function to update updated_at timestamp (reusable across patches)
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 -- Trigger for updated_at
 CREATE TRIGGER planned_routes_updated_at
   BEFORE UPDATE ON planned_routes
   FOR EACH ROW
-  EXECUTE FUNCTION update_sensor_config_updated_at();
+  EXECUTE FUNCTION update_updated_at_column();

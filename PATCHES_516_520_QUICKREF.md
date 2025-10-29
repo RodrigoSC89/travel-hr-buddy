@@ -14,17 +14,21 @@
 
 ### 1. Run Database Migrations
 
+**IMPORTANT:** Migrations must be run in sequential order as they depend on shared functions.
+
 ```bash
-# Execute migrations in Supabase
+# Execute migrations in Supabase (in order)
 supabase migration up
 ```
 
-Or manually run these files in order:
-1. `supabase/migrations/20251029040000_patch_516_sensor_hub_v2.sql`
+Or manually run these files **in this exact order**:
+1. `supabase/migrations/20251029040000_patch_516_sensor_hub_v2.sql` (creates shared function)
 2. `supabase/migrations/20251029040100_patch_517_navigation_copilot_ai.sql`
 3. `supabase/migrations/20251029040200_patch_518_satellite_live_integrator.sql`
 4. `supabase/migrations/20251029040300_patch_519_joint_missions_v2.sql`
 5. `supabase/migrations/20251029040400_patch_520_interop_grid_ai.sql`
+
+**Note:** All patches use a shared `update_updated_at_column()` function created in PATCH 516. Running migrations out of order may cause errors.
 
 ### 2. Access the Features
 

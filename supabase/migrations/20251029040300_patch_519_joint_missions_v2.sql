@@ -127,14 +127,14 @@ CREATE POLICY "Allow authenticated users to insert mission_activity_log" ON miss
 CREATE TRIGGER external_entities_updated_at
   BEFORE UPDATE ON external_entities
   FOR EACH ROW
-  EXECUTE FUNCTION update_sensor_config_updated_at();
+  EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER joint_missions_updated_at
   BEFORE UPDATE ON joint_missions
   FOR EACH ROW
-  EXECUTE FUNCTION update_sensor_config_updated_at();
+  EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER mission_participants_updated_at
   BEFORE UPDATE ON mission_participants
   FOR EACH ROW
-  EXECUTE FUNCTION update_sensor_config_updated_at();
+  EXECUTE FUNCTION update_updated_at_column();
