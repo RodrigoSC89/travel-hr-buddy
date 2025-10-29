@@ -1,14 +1,17 @@
 /**
  * PATCH 407: Sonar Data Upload Component
- * Upload files (JSON/CSV/TXT) with mock streaming visualization
+ * PATCH 521: Added WAV file support with TensorFlow.js processing
+ * Upload files (JSON/CSV/TXT/WAV) with AI-powered acoustic analysis
  */
 
 import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, FileJson, FileText, Table, Loader2 } from "lucide-react";
+import { Upload, FileJson, FileText, Table, Loader2, Music } from "lucide-react";
 import { SonarAIService } from "../sonar-service";
+import { wavProcessor } from "../services/wavProcessor";
+import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
 export function SonarDataUpload() {
@@ -21,10 +24,10 @@ export function SonarDataUpload() {
     if (!file) return;
 
     const fileType = file.name.split('.').pop()?.toUpperCase();
-    if (!['JSON', 'CSV', 'TXT'].includes(fileType || '')) {
+    if (!['JSON', 'CSV', 'TXT', 'WAV'].includes(fileType || '')) {
       toast({
         title: "Invalid file type",
-        description: "Please upload a JSON, CSV, or TXT file",
+        description: "Please upload a JSON, CSV, TXT, or WAV file",
         variant: "destructive",
       });
       return;
@@ -34,7 +37,66 @@ export function SonarDataUpload() {
     setProgress(0);
 
     try {
-      // Read file content
+      // Handle WAV files with special processing
+      if (fileType === 'WAV') {
+        // Parse WAV file
+        setProgress(10);
+        const wavInfo = await wavProcessor.parseWavFile(file);
+        
+        setProgress(30);
+        // Analyze acoustics
+        const acousticAnalysis = await wavProcessor.analyzeAcoustics(wavInfo);
+        
+        setProgress(60);
+        // Detect patterns
+        const patterns = await wavProcessor.detectPatterns(wavInfo, acousticAnalysis);
+        
+        setProgress(80);
+        // Detect objects
+        const objects = await wavProcessor.detectObjects(wavInfo, acousticAnalysis);
+        
+        // Save to database
+        const sessionId = crypto.randomUUID();
+        const { data: userData } = await supabase.auth.getUser();
+        
+        const { error } = await supabase.from('sonar_patterns').insert({
+          user_id: userData?.user?.id,
+          session_id: sessionId,
+          file_name: file.name,
+          file_type: 'wav',
+          file_size: file.size,
+          sample_rate: wavInfo.sampleRate,
+          duration_seconds: wavInfo.duration,
+          frequency_range: {
+            min: Math.min(...acousticAnalysis.dominantFrequencies),
+            max: Math.max(...acousticAnalysis.dominantFrequencies),
+          },
+          patterns_detected: patterns,
+          object_detections: objects,
+          ai_model: 'tensorflow-sonar-v1',
+          confidence_score: patterns.reduce((sum, p) => sum + p.confidence, 0) / patterns.length,
+          risk_level: objects.length > 2 ? 'warning' : objects.length > 0 ? 'caution' : 'safe',
+          metadata: {
+            acousticAnalysis,
+          },
+        });
+        
+        if (error) throw error;
+        
+        toast({
+          title: "WAV Analysis Complete",
+          description: `Found ${patterns.length} patterns and ${objects.length} objects`,
+        });
+        
+        setProgress(100);
+        setTimeout(() => {
+          setIsUploading(false);
+          setProgress(0);
+        }, 1000);
+        return;
+      }
+      
+      // Original processing for JSON/CSV/TXT files
       const content = await file.text();
       
       // Simulate streaming with progress
@@ -146,6 +208,8 @@ export function SonarDataUpload() {
         return <Table className="h-6 w-6" />;
       case 'TXT':
         return <FileText className="h-6 w-6" />;
+      case 'WAV':
+        return <Music className="h-6 w-6" />;
       default:
         return <Upload className="h-6 w-6" />;
     }
@@ -161,7 +225,7 @@ export function SonarDataUpload() {
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary transition-colors">
             <input
               type="file"
-              accept=".json,.csv,.txt"
+              accept=".json,.csv,.txt,.wav"
               onChange={handleFileUpload}
               disabled={isUploading}
               className="hidden"
@@ -184,7 +248,7 @@ export function SonarDataUpload() {
                   {isUploading ? 'Processing...' : 'Click to upload or drag and drop'}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  JSON, CSV, or TXT files (max 10MB)
+                  JSON, CSV, TXT, or WAV files (max 10MB)
                 </p>
               </div>
             </label>
@@ -205,7 +269,11 @@ export function SonarDataUpload() {
             </div>
           )}
 
-          <div className="grid grid-cols-3 gap-4 pt-4 border-t">
+          <div className="grid grid-cols-4 gap-4 pt-4 border-t">
+            <div className="flex items-center gap-2 text-sm">
+              <Music className="h-5 w-5 text-purple-600" />
+              <span>WAV</span>
+            </div>
             <div className="flex items-center gap-2 text-sm">
               <FileJson className="h-5 w-5 text-blue-600" />
               <span>JSON</span>
