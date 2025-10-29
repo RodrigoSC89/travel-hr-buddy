@@ -91,9 +91,9 @@ const DroneCommanderPage: React.FC = () => {
     }
   };
 
-  const activeDrones = drones.filter(d => d.status === "active" || d.status === "in-mission");
+  const activeDrones = drones.filter(d => d.status === "flying" || d.status === "hovering");
   const idleDrones = drones.filter(d => d.status === "idle");
-  const offlineDrones = drones.filter(d => d.status === "offline" || d.status === "error");
+  const offlineDrones = drones.filter(d => d.status === "offline" || d.status === "emergency");
   const averageBattery = drones.length > 0 
     ? drones.reduce((sum, d) => sum + d.battery, 0) / drones.length 
     : 0;
