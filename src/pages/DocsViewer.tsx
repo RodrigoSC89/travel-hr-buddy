@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { BookOpen, Home, FileText } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
 
 /**
  * Documentation Viewer Component
@@ -162,7 +161,7 @@ export default function DocsViewer() {
                 </div>
               ) : (
                 <div className="prose prose-sm dark:prose-invert max-w-none">
-                  <ReactMarkdown>{content}</ReactMarkdown>
+                  <pre className="whitespace-pre-wrap font-mono text-sm">{content}</pre>
                 </div>
               )}
             </CardContent>
