@@ -13,14 +13,18 @@ import {
   MapPin,
   Download,
   Save,
-  FolderOpen
+  FolderOpen,
+  Database
 } from "lucide-react";
 import SonarEngine, { BathymetricData, SonarReading } from "./services/sonarEngine";
 import BathymetryExporter from "./services/bathymetryExporter";
+import { sonarPersistenceService } from "./services/sonarPersistenceService";
+import { toast } from "sonner";
 
 /**
  * PATCH 180.0 - Sonar AI & Bathymetric Scanner
  * PATCH 183.0 - Enhanced with export and offline capabilities
+ * PATCH 457 - Enhanced with database persistence and AI predictions
  * 
  * Features:
  * - Real-time bathymetric scanning simulation
@@ -30,6 +34,7 @@ import BathymetryExporter from "./services/bathymetryExporter";
  * - Obstacle detection and warnings
  * - GeoJSON and PNG export
  * - Offline data caching
+ * - Database persistence (sonar_readings, sonar_ai_predictions)
  */
 
 const OceanSonar: React.FC = () => {
@@ -46,18 +51,34 @@ const OceanSonar: React.FC = () => {
     safePath: { lat: number; lon: number }[];
     warnings: string[];
   } | null>(null);
+  const [sonarStats, setSonarStats] = useState({
+    totalReadings: 0,
+    safeReadings: 0,
+    cautionReadings: 0,
+    dangerReadings: 0,
+    avgDepth: 0,
+    totalPredictions: 0,
+  });
 
-  // Check for cached data on mount
+  // Check for cached data and load stats on mount
   useEffect(() => {
     setHasCachedData(exporter.hasCachedData());
+    loadSonarStats();
   }, [exporter]);
 
-  const startScan = () => {
+  const loadSonarStats = async () => {
+    const stats = await sonarPersistenceService.getSonarStats();
+    if (stats) {
+      setSonarStats(stats);
+    }
+  };
+
+  const startScan = async () => {
     setIsScanning(true);
     setAiAnalysis(null);
 
     // Simulate scanning delay
-    setTimeout(() => {
+    setTimeout(async () => {
       const data = sonarEngine.generateBathymetricData(centerLat, centerLon, radiusKm);
       setBathymetricData(data);
       
@@ -68,6 +89,24 @@ const OceanSonar: React.FC = () => {
       // Generate AI analysis
       const analysis = sonarEngine.analyzeSafeRoute(data, centerLat + 0.1, centerLon + 0.1);
       setAiAnalysis(analysis);
+      
+      // PATCH 457: Save to database
+      const saveResult = await sonarPersistenceService.saveBathymetricScan(data);
+      if (saveResult.success) {
+        toast.success(`Scan saved: ${saveResult.readingsCount} readings persisted`);
+      }
+
+      // Save AI prediction
+      await sonarPersistenceService.saveAIPrediction(
+        analysis.recommendation,
+        analysis.safePath,
+        analysis.warnings,
+        { lat: centerLat, lon: centerLon },
+        90
+      );
+
+      // Reload stats
+      await loadSonarStats();
       
       setIsScanning(false);
     }, 2000);
@@ -134,7 +173,7 @@ const OceanSonar: React.FC = () => {
               Sonar AI & Bathymetric Scanner
             </h1>
             <p className="text-zinc-400 mt-1">
-              Ocean reconnaissance and underwater depth analysis - PATCH 180.0
+              Ocean reconnaissance and underwater depth analysis - PATCH 180.0 / PATCH 457
             </p>
           </div>
           <div className="flex items-center gap-2 text-sm">
@@ -150,6 +189,57 @@ const OceanSonar: React.FC = () => {
               </>
             )}
           </div>
+        </div>
+
+        {/* PATCH 457: Statistics Panel */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Card className="bg-zinc-800/50 border-blue-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Database className="w-4 h-4 text-blue-400" />
+                <span className="text-xs text-zinc-400">Total Scans</span>
+              </div>
+              <div className="text-2xl font-bold text-blue-400">
+                {sonarStats.totalReadings}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-zinc-800/50 border-green-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <CheckCircle className="w-4 h-4 text-green-400" />
+                <span className="text-xs text-zinc-400">Safe Areas</span>
+              </div>
+              <div className="text-2xl font-bold text-green-400">
+                {sonarStats.safeReadings}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-zinc-800/50 border-orange-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="w-4 h-4 text-orange-400" />
+                <span className="text-xs text-zinc-400">Caution Areas</span>
+              </div>
+              <div className="text-2xl font-bold text-orange-400">
+                {sonarStats.cautionReadings}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-zinc-800/50 border-purple-500/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Brain className="w-4 h-4 text-purple-400" />
+                <span className="text-xs text-zinc-400">AI Predictions</span>
+              </div>
+              <div className="text-2xl font-bold text-purple-400">
+                {sonarStats.totalPredictions}
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Scan Controls */}

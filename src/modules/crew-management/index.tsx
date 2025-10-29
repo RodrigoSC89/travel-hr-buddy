@@ -1,8 +1,13 @@
 /**
- * PATCH 406: Consolidated Crew Management Module
+ * PATCH 406 / PATCH 460: Consolidated Crew Management Module
  * Unifies src/modules/crew/ and src/modules/operations/crew/
  * Route: /crew-management with redirects from legacy paths
  * Mobile-responsive tabs: overview, members, certifications, rotations, performance
+ * 
+ * PATCH 460 additions:
+ * - Integrated ethics-guard from crew/
+ * - Integrated copilot functionality from crew/
+ * - Integrated useSync hook from crew/
  */
 
 import React, { useState } from "react";
@@ -14,6 +19,11 @@ import { CrewMembers } from "./components/CrewMembers";
 import { CrewCertifications } from "./components/CrewCertifications";
 import { CrewRotations } from "./components/CrewRotations";
 import { CrewPerformance } from "./components/CrewPerformance";
+
+// PATCH 460: Export consolidated features
+export * from "./ethics-guard";
+export * from "./copilot";
+export { useSync } from "./hooks/useSync";
 
 export default function CrewManagement() {
   const [activeTab, setActiveTab] = useState("overview");
