@@ -97,6 +97,11 @@ const Patch492MaintenanceScheduler = React.lazy(() => import("@/pages/admin/Patc
 const Patch493ComplianceTracker = React.lazy(() => import("@/pages/admin/Patch493ComplianceTracker"));
 const Patch494CrewManagement = React.lazy(() => import("@/pages/admin/Patch494CrewManagement"));
 const Patch495InventoryControl = React.lazy(() => import("@/pages/admin/Patch495InventoryControl"));
+const Patch496ModuleConsolidation = React.lazy(() => import("@/pages/admin/Patch496ModuleConsolidation"));
+const Patch497Documentation = React.lazy(() => import("@/pages/admin/Patch497Documentation"));
+const Patch498Testing = React.lazy(() => import("@/pages/admin/Patch498Testing"));
+const Patch499Telemetry = React.lazy(() => import("@/pages/admin/Patch499Telemetry"));
+const Patch500UxPolish = React.lazy(() => import("@/pages/admin/Patch500UxPolish"));
 
 export default function AppRouter() {
   return (
@@ -196,7 +201,12 @@ export default function AppRouter() {
         <Route path="/admin/patch-492/maintenance" element={<Patch492MaintenanceScheduler />} />
         <Route path="/admin/patch-493/compliance" element={<Patch493ComplianceTracker />} />
         <Route path="/admin/patch-494/crew" element={<Patch494CrewManagement />} />
-        <Route path="/admin/patch-495/inventory" element={<Patch495InventoryControl />} />
+              <Route path="/admin/patch-495/inventory" element={<Patch495InventoryControl />} />
+              <Route path="/admin/patch-496/consolidation" element={<Patch496ModuleConsolidation />} />
+              <Route path="/admin/patch-497/documentation" element={<Patch497Documentation />} />
+              <Route path="/admin/patch-498/testing" element={<Patch498Testing />} />
+              <Route path="/admin/patch-499/telemetry" element={<Patch499Telemetry />} />
+              <Route path="/admin/patch-500/ux-polish" element={<Patch500UxPolish />} />
       </Routes>
     </Router>
   );
