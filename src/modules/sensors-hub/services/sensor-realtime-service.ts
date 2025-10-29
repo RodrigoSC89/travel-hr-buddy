@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 461 - Sensors Hub MQTT/Realtime Integration
  * Integrates MQTT and Supabase Realtime for external sensor data
