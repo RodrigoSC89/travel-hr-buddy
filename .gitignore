@@ -122,3 +122,13 @@ src/modules/registry.backup.ts
 # PATCH 136.0 - Capacitor mobile platforms
 android/
 ios/
+
+# PATCH 561-565 - Quality Assurance & Release artifacts
+performance_metrics/*.json
+performance_metrics/*.txt
+tests/results/*.json
+feedback/beta-phase-1/exports/*.csv
+feedback/beta-phase-1/exports/*.json
+release/*.zip
+release/v3.5/*.zip
+reports/stress-screenshots/*.png
