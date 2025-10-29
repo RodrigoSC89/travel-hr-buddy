@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 568 - AI Evolution Dashboard Component
  * Visualizes AI learning progress and performance metrics

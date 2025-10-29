@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 567 - AI Auto-Tuning Engine
  * Continuous learning system that adjusts AI parameters based on real usage

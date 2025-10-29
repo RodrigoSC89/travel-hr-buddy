@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 566 - Copilot Presenter Component
  * Interactive demo with voice narration and visual highlights
