@@ -214,6 +214,7 @@ const UserManagement = React.lazy(() => import("@/modules/user-management"));
 const MissionEngine = React.lazy(() => import("@/modules/mission-engine"));
 // PATCH 427: Drone Commander
 const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
+const DroneCommanderV1 = React.lazy(() => import("@/pages/admin/drone-commander-v1"));
 // PATCH 428: Sensors Hub
 const SensorsHubPage = React.lazy(() => import("@/pages/SensorsHub"));
 // PATCH 429: Satcom
@@ -678,6 +679,8 @@ function App() {
                       <Route path="/mission-control/thought-chain" element={<ThoughtChain />} />
                       {/* PATCH 427: Drone Commander */}
                       <Route path="/drone-commander" element={<DroneCommander />} />
+                      {/* PATCH 487: Drone Commander v1 with Simulator */}
+                      <Route path="/drone-commander-v1" element={<DroneCommanderV1 />} />
                       {/* PATCH 428: Sensors Hub */}
                       <Route path="/sensors-hub" element={<SensorsHubPage />} />
                       {/* PATCH 429: Satcom */}

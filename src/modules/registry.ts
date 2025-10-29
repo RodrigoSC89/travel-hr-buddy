@@ -821,6 +821,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Brain",
     lazy: true,
     version: "185.0",
+  },
+
+  "operations.drone-commander": {
+    id: "operations.drone-commander",
+    name: "Drone Commander v1",
+    category: "operations",
+    path: "pages/admin/drone-commander-v1",
+    description: "PATCH 487 - Autonomous UAV fleet control with drone simulator, MQTT/WebSocket integration, multi-drone support, command interface and real-time status monitoring",
+    status: "active",
+    completeness: "100%",
+    route: "/drone-commander-v1",
+    icon: "Radio",
+    lazy: true,
+    version: "487.0",
   }
 };
 
