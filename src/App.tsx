@@ -288,6 +288,15 @@ const SATCOMv2Validation = React.lazy(() => import("@/pages/admin/satcom-v2/vali
 const OceanSonarV3Validation = React.lazy(() => import("@/pages/admin/ocean-sonar-v3/validation"));
 const DocumentsUnificationValidation = React.lazy(() => import("@/pages/admin/documents-unification/validation"));
 const MissionEngineV2Validation = React.lazy(() => import("@/pages/admin/mission-engine-v2/validation"));
+// PATCH 471-480 Validation Pages
+const IncidentReplayAIValidation = React.lazy(() => import("@/pages/admin/incident-replay-ai/validation"));
+const IncidentsConsolidationV2Validation = React.lazy(() => import("@/pages/admin/incidents-consolidation-v2/validation"));
+const RoutePlannerV1Validation = React.lazy(() => import("@/pages/admin/route-planner-v1/validation"));
+const SatcomV1Validation = React.lazy(() => import("@/pages/admin/satcom-v1/validation"));
+const MissionEngineValidationPage = React.lazy(() => import("@/pages/admin/mission-engine-validation/validation"));
+const CrewModuleConsolidationValidation = React.lazy(() => import("@/pages/admin/crew-module-consolidation/validation"));
+const SonarAIDetailedValidation = React.lazy(() => import("@/pages/admin/sonar-ai-detailed/validation"));
+const DocumentUnificationValidation = React.lazy(() => import("@/pages/admin/document-unification/validation"));
 
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
@@ -573,6 +582,17 @@ function App() {
                       <Route path="/admin/ocean-sonar-v3/validation" element={<OceanSonarV3Validation />} />
                       <Route path="/admin/documents-unification/validation" element={<DocumentsUnificationValidation />} />
                       <Route path="/admin/mission-engine-v2/validation" element={<MissionEngineV2Validation />} />
+                      
+                      {/* Validation Routes - Patches 471-480 */}
+                      <Route path="/admin/incident-replay-ai/validation" element={<IncidentReplayAIValidation />} />
+                      <Route path="/admin/incidents-consolidation-v2/validation" element={<IncidentsConsolidationV2Validation />} />
+                      <Route path="/admin/route-planner-v1/validation" element={<RoutePlannerV1Validation />} />
+                      <Route path="/admin/satcom-v1/validation" element={<SatcomV1Validation />} />
+                      <Route path="/admin/mission-engine-validation/validation" element={<MissionEngineValidationPage />} />
+                      <Route path="/admin/crew-module-consolidation/validation" element={<CrewModuleConsolidationValidation />} />
+                      <Route path="/admin/sonar-ai-detailed/validation" element={<SonarAIDetailedValidation />} />
+                      <Route path="/admin/document-unification/validation" element={<DocumentUnificationValidation />} />
+                      
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />
