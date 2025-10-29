@@ -302,6 +302,12 @@ const DocumentUnificationValidation = safeLazyImport(() => import("@/pages/admin
 const Patches481485Validation = safeLazyImport(() => import("@/modules/validation/Patches481485Validation"));
 // PATCH 491-495 Validation Page
 const Patches491495Validation = safeLazyImport(() => import("@/modules/validation/Patches491495Validation"));
+// PATCH 516-520: Advanced Sensor and Navigation Systems
+const SensorsHubAdvanced = React.lazy(() => import("@/pages/sensors-hub"));
+const NavigationCopilotAI = React.lazy(() => import("@/pages/navigation-copilot"));
+const SatelliteLive = React.lazy(() => import("@/pages/satellite-live"));
+const JointMissions = React.lazy(() => import("@/pages/joint-missions"));
+const InteropGridAI = React.lazy(() => import("@/pages/interop-grid"));
 
 // PATCH 486-489: New module pages
 const CommunicationCenter = safeLazyImport(() => import("@/modules/communication-center"));
@@ -784,6 +790,13 @@ function App() {
                       <Route path="/checklists-inteligentes" element={<ChecklistsInteligentes />} />
                       <Route path="/real-time-workspace" element={<RealTimeWorkspace />} />
                       <Route path="/voice-assistant-new" element={<VoiceAssistantModule />} />
+                      
+                      {/* PATCH 516-520: Advanced Sensor and Navigation Systems */}
+                      <Route path="/sensors-hub" element={<SensorsHubAdvanced />} />
+                      <Route path="/navigation-copilot" element={<NavigationCopilotAI />} />
+                      <Route path="/satellite-live" element={<SatelliteLive />} />
+                      <Route path="/joint-missions" element={<JointMissions />} />
+                      <Route path="/interop-grid" element={<InteropGridAI />} />
                       
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (
