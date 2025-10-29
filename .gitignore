@@ -64,6 +64,11 @@ e2e-results/
 !reports/*.json
 reports/*.log
 
+# Performance metrics (PATCH 561)
+performance_metrics/
+performance_metrics/*.json
+performance_metrics/*.txt
+
 # Vercel
 .vercel
 .vercel_cache
