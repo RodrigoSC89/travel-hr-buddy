@@ -93,6 +93,12 @@ const SupervisorAI = React.lazy(() => import("@/pages/supervisor-ai"));
 const AutoExecConfig = React.lazy(() => import("@/pages/autoexec-config"));
 const GovernanceAI = React.lazy(() => import("@/pages/governance-ai"));
 
+// 🔹 PATCH 521-525 - Maritime AI Operations
+const SonarAI = React.lazy(() => import("@/modules/sonar-ai"));
+const DeepRiskAI = React.lazy(() => import("@/modules/deep-risk-ai"));
+const IncidentReplayAI = React.lazy(() => import("@/modules/incident-replay"));
+const AIVisionCore = React.lazy(() => import("@/modules/ai-vision-core"));
+
 // 🔹 PATCH 486-490 Management Pages
 const Patch486Communication = React.lazy(() => import("@/pages/admin/Patch486Communication"));
 const Patch487DroneCommander = React.lazy(() => import("@/pages/admin/Patch487DroneCommander"));
@@ -222,6 +228,12 @@ export default function AppRouter() {
         {/* <Route path="/logs/central" element={<CentralLogs />} /> */}
         <Route path="/autoexec-config" element={<AutoExecConfig />} />
         <Route path="/governance-ai" element={<GovernanceAI />} />
+        
+        {/* PATCH 521-525 Routes - Maritime AI Operations */}
+        <Route path="/sonar-ai" element={<SonarAI />} />
+        <Route path="/deep-risk-ai" element={<DeepRiskAI />} />
+        <Route path="/incident-replay" element={<IncidentReplayAI />} />
+        <Route path="/ai-vision-core" element={<AIVisionCore />} />
         
         {/* PATCH 486-490 Management Routes */}
         <Route path="/admin/patch-486/communication" element={<Patch486Communication />} />
