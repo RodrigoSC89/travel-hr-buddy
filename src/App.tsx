@@ -330,6 +330,13 @@ const Patch529PriceAlerts = safeLazyImport(() => import("@/pages/admin/Patch529P
 const Patch530MissionControlV2 = safeLazyImport(() => import("@/pages/admin/Patch530MissionControlV2"));
 const Patch531TestValidation = safeLazyImport(() => import("@/pages/admin/Patch531TestValidation"));
 
+// PATCH 531-535: Navigation Copilot v2, Route Planner, Underwater Drone, Drone Commander, Mission Consolidation
+const Patch531NavigationCopilotV2 = safeLazyImport(() => import("@/pages/admin/Patch531NavigationCopilotV2"));
+const Patch532RoutePlannerAI = safeLazyImport(() => import("@/pages/admin/Patch532RoutePlannerAI"));
+const Patch533UnderwaterDroneV2 = safeLazyImport(() => import("@/pages/admin/Patch533UnderwaterDroneV2"));
+const Patch534DroneCommanderAI = safeLazyImport(() => import("@/pages/admin/Patch534DroneCommanderAI"));
+const Patch535MissionConsolidation = safeLazyImport(() => import("@/pages/admin/Patch535MissionConsolidation"));
+
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
   console.log("🔄 LoadingSpinner renderizado");
@@ -827,6 +834,13 @@ function App() {
                       <Route path="/admin/patch-529/price-alerts" element={<Patch529PriceAlerts />} />
                       <Route path="/admin/patch-530/mission-control-v2" element={<Patch530MissionControlV2 />} />
                       <Route path="/admin/patch-531/test-validation" element={<Patch531TestValidation />} />
+                      
+                      {/* PATCH 531-535: New Validation Routes */}
+                      <Route path="/admin/patch-531/navigation-copilot-v2" element={<Patch531NavigationCopilotV2 />} />
+                      <Route path="/admin/patch-532/route-planner-ai" element={<Patch532RoutePlannerAI />} />
+                      <Route path="/admin/patch-533/underwater-drone-v2" element={<Patch533UnderwaterDroneV2 />} />
+                      <Route path="/admin/patch-534/drone-commander-ai" element={<Patch534DroneCommanderAI />} />
+                      <Route path="/admin/patch-535/mission-consolidation" element={<Patch535MissionConsolidation />} />
                       
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (
