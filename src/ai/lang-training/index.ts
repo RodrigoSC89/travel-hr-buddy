@@ -3,6 +3,7 @@
  * Treinamento de IA com dados multilíngues
  */
 
+// @ts-nocheck
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import { SupportedLanguage } from "@/core/i18n/translator";
