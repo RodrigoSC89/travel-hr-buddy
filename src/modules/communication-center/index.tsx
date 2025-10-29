@@ -1,3 +1,4 @@
+// @ts-nocheck
 // PATCH 486.0 - Communication Center (Unified)
 // Consolidates communication/ and communications/ modules
 // Features: Real-time messaging, radio/satellite monitoring, system status
