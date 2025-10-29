@@ -6,8 +6,8 @@
 
 import { logger } from '@/lib/logger';
 import { supabase } from '@/integrations/supabase/client';
-import { graphInferenceEngine } from '../inference/graph-engine';
-import { contextualThreatMonitor } from '../security/context-threat-monitor';
+import { graphInferenceEngine } from '@/ai/inference/graph-engine';
+import { contextualThreatMonitor } from '@/ai/security/context-threat-monitor';
 
 export type CopilotType = 'voice' | 'navigation' | 'mission' | 'tactical';
 

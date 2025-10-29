@@ -6,7 +6,7 @@
 
 import { logger } from '@/lib/logger';
 import { supabase } from '@/integrations/supabase/client';
-import { graphInferenceEngine, InferencePath } from './graph-engine';
+import { graphInferenceEngine, InferencePath } from '@/ai/inference/graph-engine';
 
 // Scenario types
 export type ScenarioType = 
