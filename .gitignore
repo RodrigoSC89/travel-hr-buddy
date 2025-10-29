@@ -131,4 +131,7 @@ feedback/beta-phase-1/exports/*.csv
 feedback/beta-phase-1/exports/*.json
 release/*.zip
 release/v3.5/*.zip
+release/v3.5/*.md
+release/v3.5/*.txt
+public/api/quality-metrics.json
 reports/stress-screenshots/*.png

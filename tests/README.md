@@ -13,8 +13,32 @@ tests/
 ├── audit.test.tsx         # Auditoria Técnica - Audit system
 ├── system-health.test.tsx # System Health - E2E health checks
 ├── protected-routes.test.tsx # Protected Routes - Auth validation
+├── regression-suite.test.tsx # PATCH 564 - Regression test suite
+├── load-tests/            # PATCH 561 - Load & stress tests
+│   └── stress-core.ts    # 100 concurrent sessions test
+├── results/               # Test results output (git-ignored)
 └── README.md              # Este arquivo
 ```
+
+## 🎯 QA Infrastructure (PATCH 561-565)
+
+### PATCH 561 - Load Testing Infrastructure
+**Script**: `npm run stress:core`
+- Simulates 100 concurrent sessions across core modules
+- Monitors CPU, memory, and latency
+- Outputs to: `performance_metrics/stress-core-{timestamp}.json`
+
+### PATCH 564 - Automated Regression Suite
+**Script**: `npm run test:regression`
+- Tests 27 primary routes (navigation, CRUD, API, UI)
+- Validates page loads, console errors, expected DOM elements
+- Outputs to: `tests/results/regression-561.json`
+
+### Integration with Quality Dashboard
+All test results feed into the **Quality Dashboard** (PATCH 565):
+- View at: `/dashboard/quality`
+- Aggregates metrics with: `npm run quality:metrics`
+- Shows health, risk, and confidence scores
 
 ## 🎯 Objetivo dos Testes
 
@@ -196,6 +220,45 @@ Para adicionar novos testes neste diretório:
 - [Vitest Documentation](https://vitest.dev/)
 - [Testing Library React](https://testing-library.com/docs/react-testing-library/intro/)
 - [Guia de Testes do Projeto](../TESTING_LIBRARY_QUICKREF.md)
+
+## 🎯 Quality Assurance Scripts (PATCH 561-565)
+
+### Pre-Deployment Quality Gate
+Run comprehensive QA checks before deployment:
+
+```bash
+# Run all QA checks
+npm run test:regression && npm run stress:core && npm run quality:metrics
+
+# Check confidence score (should be >= 80)
+confidence=$(cat public/api/quality-metrics.json | grep -o '"confidence":[0-9]*' | grep -o '[0-9]*')
+[[ $confidence -ge 80 ]] && echo "✅ Ready to deploy!" || echo "❌ Quality gate failed"
+```
+
+### Individual QA Commands
+```bash
+# Load testing (requires Playwright browsers)
+npm run stress:core
+
+# Regression testing
+npm run test:regression
+
+# Export beta feedback
+npm run feedback:export
+
+# Generate audit package
+npm run audit:package
+
+# Aggregate quality metrics
+npm run quality:metrics
+```
+
+### Quality Dashboard
+Access the executive quality dashboard at:
+- **URL**: `/dashboard/quality`
+- **Real-time updates**: Refreshes every 30 seconds
+- **Metrics**: Health score, risk level, confidence score
+- **Data sources**: Test results, performance metrics, user feedback
 
 ## ✅ Benefícios
 
