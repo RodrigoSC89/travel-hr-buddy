@@ -113,11 +113,44 @@ Cada módulo documentado contém:
 
 ## 🔄 Histórico de Patches
 
+- **PATCH 531-535**: Consolidação de Módulos, Documentação Automática e Auditoria de Segurança
 - **PATCH 497**: Documentação Técnica Base (20 módulos principais)
 - **PATCH 496**: Consolidação Final de Módulos Duplicados
 - **PATCH 67.x**: Testing Framework e CI/CD
 - **PATCH 68.5**: Features e melhorias
 - **PATCH 66**: Estrutura de Módulos
+
+### 🆕 PATCH 531-535 (Outubro 2025)
+
+**Consolidação e Documentação Completa**
+
+✅ **PATCH 531**: Consolidação crew/ + crew-app/
+- Removidas duplicatas de validação
+- Módulo crew unificado
+- 8 tabelas de banco de dados documentadas
+
+✅ **PATCH 532**: Consolidação document-hub/ + documents/
+- 6 diretórios duplicados removidos
+- Rotas /documents redirecionadas para /document-hub
+- Integração Supabase Storage mantida
+
+✅ **PATCH 533**: Consolidação mission-control/ + mission-engine/
+- 5 diretórios duplicados removidos
+- Estrutura de submodules implementada
+- 26 tabelas de missão unificadas
+
+✅ **PATCH 534**: Geração Automática de Documentação
+- Script `generate-module-docs.ts` criado
+- 20 módulos documentados automaticamente
+- Índice categorizado gerado
+
+✅ **PATCH 535**: Auditoria Lovable - Segurança e Ética
+- Script `security-audit.ts` criado
+- RLS: 7/7 tabelas protegidas (100%)
+- Status: 3/4 indicadores VERDES (75%)
+- Relatório em `dev/audits/lovable_security_validation.md`
+
+📄 **Relatório Completo**: Ver `PATCHES_531_535_FINAL_REPORT.md`
 
 ---
 
@@ -170,6 +203,6 @@ docs/
 ---
 
 **Última Atualização**: 2025-10-29  
-**Versão da Documentação**: 2.0  
+**Versão da Documentação**: 2.1  
 **Total de Módulos Documentados**: 20  
-**Status**: ✅ PATCH 497 Completo
+**Status**: ✅ PATCHES 531-535 Completo
