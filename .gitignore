@@ -74,6 +74,10 @@ feedback/beta-phase-1/feedback-export-*.csv
 feedback/beta-phase-1/feedback-export-*.json
 feedback/beta-phase-1/ai-analyzer-input-*.json
 
+# Audit packages (PATCH 563)
+release/v3.5/audit-package/
+release/v3.5/*.zip
+
 # Vercel
 .vercel
 .vercel_cache
