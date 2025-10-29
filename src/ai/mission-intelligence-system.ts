@@ -173,7 +173,7 @@ export async function runCompleteWorkflow(missionId: string) {
   // Step 6: Generate alerts
   console.log("🚨 Step 6: Generating preventive alerts...");
   
-  const alerts: any[] = [];
+  const alerts: PatternAlert[] = [];
   for (const pattern of patterns) {
     if (pattern.confidence_score > 0.7) {
       const alert = await patternEngine.emitAlert(pattern);
@@ -229,7 +229,7 @@ export async function runCompleteWorkflow(missionId: string) {
   console.log();
 
   // Summary
-  console.log("=" .repeat(60));
+  console.log("=".repeat(60));
   console.log("✅ WORKFLOW COMPLETE - Mission Intelligence System Active");
   console.log("=" .repeat(60));
   console.log(`Mission ID: ${missionId}`);
@@ -239,7 +239,7 @@ export async function runCompleteWorkflow(missionId: string) {
   console.log(`Patterns Detected: ${patterns.length}`);
   console.log(`Alerts Generated: ${alerts.length}`);
   console.log(`Replay Events: ${replay?.events.length || 0}`);
-  console.log("=" .repeat(60));
+  console.log("=".repeat(60));
 
   return {
     context,
@@ -333,9 +333,9 @@ export async function systemHealthCheck() {
     console.log("❌ Replay Annotator: Error");
   }
   
-  const allHealthy = Object.values(results).every((r) => r);
+  const allSystemsHealthy = Object.values(results).every((r) => r);
   console.log("\n" + "=".repeat(60));
-  console.log(allHealthy ? "✅ All Systems Operational" : "⚠️ Some Systems Have Issues");
+  console.log(allSystemsHealthy ? "✅ All Systems Operational" : "⚠️ Some Systems Have Issues");
   console.log("=".repeat(60));
   
   return results;

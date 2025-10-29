@@ -299,59 +299,79 @@ if (replay) {
 
 ### mission_intelligence
 ```sql
-- id: UUID (PK)
-- mission_id: TEXT (Unique)
-- context: JSONB
-- decisions: JSONB[]
-- patterns_learned: JSONB[]
-- session_count: INTEGER
-- last_session_at: TIMESTAMPTZ
+CREATE TABLE mission_intelligence (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  mission_id TEXT UNIQUE NOT NULL,
+  context JSONB NOT NULL DEFAULT '{}',
+  decisions JSONB NOT NULL DEFAULT '[]',
+  patterns_learned JSONB NOT NULL DEFAULT '[]',
+  session_count INTEGER DEFAULT 1,
+  last_session_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
 ```
 
 ### situational_signals
 ```sql
-- id: UUID (PK)
-- mission_id: TEXT
-- signal_type: TEXT (voice|climate|sensor|navigation)
-- raw_data: JSONB
-- normalized_data: JSONB
-- timestamp: TIMESTAMPTZ
-- metadata: JSONB
+CREATE TABLE situational_signals (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  mission_id TEXT NOT NULL,
+  signal_type TEXT NOT NULL, -- voice|climate|sensor|navigation
+  raw_data JSONB NOT NULL,
+  normalized_data JSONB NOT NULL,
+  timestamp TIMESTAMPTZ DEFAULT NOW(),
+  metadata JSONB DEFAULT '{}'
+);
 ```
 
 ### mission_patterns
 ```sql
-- id: UUID (PK)
-- pattern_type: TEXT (failure|success|anomaly|warning)
-- pattern_data: JSONB
-- mission_types: TEXT[]
-- occurrences: INTEGER
-- confidence_score: NUMERIC(3,2)
-- preventive_actions: JSONB[]
+CREATE TABLE mission_patterns (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  pattern_type TEXT NOT NULL, -- failure|success|anomaly|warning
+  pattern_data JSONB NOT NULL,
+  mission_types TEXT[] DEFAULT '{}',
+  occurrences INTEGER DEFAULT 1,
+  confidence_score NUMERIC(3,2) DEFAULT 0.5,
+  preventive_actions JSONB DEFAULT '[]',
+  first_detected_at TIMESTAMPTZ DEFAULT NOW(),
+  last_detected_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 ```
 
 ### mission_replay_events
 ```sql
-- id: UUID (PK)
-- mission_id: TEXT
-- event_type: TEXT (critical|warning|info|success)
-- event_data: JSONB
-- ai_annotation: TEXT
-- ai_insights: JSONB[]
-- timestamp: TIMESTAMPTZ
+CREATE TABLE mission_replay_events (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  mission_id TEXT NOT NULL,
+  event_type TEXT NOT NULL, -- critical|warning|info|success
+  event_data JSONB NOT NULL,
+  ai_annotation TEXT,
+  ai_insights JSONB DEFAULT '[]',
+  timestamp TIMESTAMPTZ NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 ```
 
 ### global_mission_status
 ```sql
-- id: UUID (PK)
-- mission_id: TEXT (Unique)
-- mission_name: TEXT
-- status: TEXT (active|completed|failed|paused)
-- mission_type: TEXT
-- region: TEXT
-- location_data: JSONB
-- metrics: JSONB
-- alerts: JSONB[]
+CREATE TABLE global_mission_status (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  mission_id TEXT UNIQUE NOT NULL,
+  mission_name TEXT NOT NULL,
+  status TEXT NOT NULL, -- active|completed|failed|paused
+  mission_type TEXT NOT NULL,
+  region TEXT,
+  location_data JSONB,
+  metrics JSONB DEFAULT '{}',
+  alerts JSONB DEFAULT '[]',
+  start_time TIMESTAMPTZ NOT NULL,
+  end_time TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
 ```
 
 ## API Reference
