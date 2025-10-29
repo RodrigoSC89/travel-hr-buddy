@@ -80,6 +80,9 @@ const NavigationCopilotPage = React.lazy(() => import("@/pages/NavigationCopilot
 // 🔹 PATCH 461-465 - Sensors Hub, Missions Consolidation, Templates, Price Alerts, Technical Validation
 const TechnicalValidation = React.lazy(() => import("@/pages/admin/technical-validation"));
 
+// 🔹 PATCH 467 - Drone Commander Experimental
+const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
+
 export default function AppRouter() {
   return (
     <Router>
@@ -144,6 +147,9 @@ export default function AppRouter() {
         
         {/* PATCH 461-465 Routes */}
         <Route path="/admin/technical-validation" element={<TechnicalValidation />} />
+        
+        {/* PATCH 467 Route - Drone Commander */}
+        <Route path="/drone-commander" element={<DroneCommander />} />
       </Routes>
     </Router>
   );
