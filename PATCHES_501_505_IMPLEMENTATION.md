@@ -31,6 +31,14 @@ Documentation is available at:
 - File system: `/dev/docs/*.md`
 - Web viewer (if integrated): `/docs/:moduleName`
 
+**Note on Markdown Rendering:**
+The current DocsViewer component displays raw markdown for simplicity and to avoid external dependencies. To enable proper markdown rendering:
+- Install `react-markdown`: `npm install react-markdown`
+- Update the import in `src/pages/DocsViewer.tsx`
+- Replace `<pre>` with `<ReactMarkdown>{content}</ReactMarkdown>`
+
+Or keep it as-is for a lightweight, dependency-free viewer.
+
 #### Documentation Structure
 Each module documentation includes:
 - **Overview**: Module description and purpose
