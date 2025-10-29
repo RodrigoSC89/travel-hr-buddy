@@ -3,7 +3,7 @@
  * Tests for mission planning, execution, completion workflow
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 // Mock Supabase
 vi.mock("@/integrations/supabase/client", () => ({
@@ -186,7 +186,7 @@ class MissionControlService {
     const objective = mission.objectives.find(o => o.id === objectiveId);
     if (!objective) return false;
 
-    objective.status = status as any;
+    objective.status = status as MissionObjective['status'];
     objective.completionPercentage = percentage;
 
     // Update overall mission progress
@@ -495,7 +495,12 @@ describe("Mission Control Tests", () => {
 
       const mission = await service.createMission(missionData);
       await service.startMission(mission.id);
-      await new Promise(resolve => setTimeout(resolve, 10)); // Simulate some time passing
+      
+      // Use fake timers to simulate time passing
+      vi.useFakeTimers();
+      vi.advanceTimersByTime(10);
+      vi.useRealTimers();
+      
       const completed = await service.completeMission(mission.id);
 
       expect(completed).toBe(true);
@@ -540,10 +545,16 @@ describe("Mission Control Tests", () => {
         estimatedDuration: 60
       };
 
+      vi.useFakeTimers();
+      
       const mission = await service.createMission(missionData);
       await service.startMission(mission.id);
-      await new Promise(resolve => setTimeout(resolve, 100)); // Simulate 100ms
+      
+      vi.advanceTimersByTime(60000); // Advance 60 seconds
+      
       await service.completeMission(mission.id);
+
+      vi.useRealTimers();
 
       const updatedMission = service.getMission(mission.id);
       expect(updatedMission?.actualDuration).toBeDefined();
