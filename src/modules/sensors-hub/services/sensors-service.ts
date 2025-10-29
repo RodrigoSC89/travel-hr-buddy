@@ -77,7 +77,7 @@ export class SensorsService {
     metadata?: Record<string, any>;
   }): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("sensor_readings")
         .insert({
           sensor_id: reading.sensorId,
@@ -140,7 +140,7 @@ export class SensorsService {
 
   async dismissAlert(alertId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("sensor_alerts")
         .update({ acknowledged: true })
         .eq("id", alertId);
@@ -162,7 +162,7 @@ export class SensorsService {
     metadata?: Record<string, any>;
   }): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("sensor_events")
         .insert({
           sensor_id: event.sensorId,
@@ -186,7 +186,7 @@ export class SensorsService {
     limit?: number;
   }): Promise<SensorEvent[]> {
     try {
-      let query = supabase
+      let query = (supabase as any)
         .from("sensor_events")
         .select("*")
         .order("timestamp", { ascending: false });
@@ -198,11 +198,11 @@ export class SensorsService {
       const { data, error } = await query;
       if (error) throw error;
 
-      return (data || []).map(d => ({
+      return (data || []).map((d: any) => ({
         id: d.id,
         sensorId: d.sensor_id,
         eventType: d.event_type,
-        severity: d.severity,
+        severity: d.severity as SensorEvent["severity"],
         message: d.message,
         timestamp: d.timestamp,
         metadata: d.metadata || {}

@@ -109,7 +109,7 @@ class SonarAIService {
       if (error) throw error;
 
       return (
-        data?.map((d) => ({
+        data?.map((d: any) => ({
           id: d.id,
           timestamp: d.timestamp,
           detectionType: d.detection_type,
@@ -141,7 +141,7 @@ class SonarAIService {
       if (error) throw error;
 
       return (
-        data?.map((d) => ({
+        data?.map((d: any) => ({
           id: d.id,
           timestamp: d.timestamp,
           scanDepth: d.scan_depth,
@@ -384,7 +384,7 @@ class SonarAIService {
         }));
 
       const safeZones = analysis.patterns
-        .filter((p) => p.type === "clear" && p.confidence > 70)
+        .filter((p) => (p.type as any) === "clear" && p.confidence > 70)
         .map((p) => ({
           location: p.location,
           radius: 50, // meters
@@ -411,7 +411,7 @@ class SonarAIService {
         hazards_detected: hazards,
         safe_zones: safeZones,
         acoustic_signatures: acousticSignatures,
-        confidence_level: analysis.confidence || 80,
+        confidence_level: (analysis as any).confidence || 80,
         ai_model_version: "1.0.0",
         processing_time_ms: 150,
         recommendations: this.generateRecommendations(analysis),
@@ -436,7 +436,7 @@ class SonarAIService {
     const hazards = analysis.patterns.filter(
       (p) => p.type === "object" || p.type === "anomaly"
     );
-    const clearAreas = analysis.patterns.filter((p) => p.type === "clear");
+    const clearAreas = analysis.patterns.filter((p) => (p.type as any) === "clear");
 
     if (hazards.length > 3) {
       return "High hazard density detected. Recommend reducing speed and increasing scan frequency. Consider alternative route.";

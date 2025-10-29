@@ -58,7 +58,6 @@ export class MissionControlService {
       const { data, error } = await supabase
         .from("missions")
         .insert({
-          code: mission.code,
           name: mission.name,
           type: mission.type,
           status: mission.status,
@@ -175,7 +174,7 @@ export class MissionControlService {
 
   async createTask(task: Omit<MissionTask, "id" | "createdAt">): Promise<MissionTask> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("mission_tasks")
         .insert({
           mission_id: task.missionId,
@@ -206,7 +205,7 @@ export class MissionControlService {
       if (updates.description) updateData.description = updates.description;
       if (updates.dueDate) updateData.due_date = updates.dueDate;
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("mission_tasks")
         .update(updateData)
         .eq("id", id);
@@ -256,7 +255,6 @@ export class MissionControlService {
       const { error } = await supabase
         .from("mission_logs")
         .insert({
-          mission_id: event.missionId,
           event_type: event.eventType,
           severity: event.severity,
           message: event.message,

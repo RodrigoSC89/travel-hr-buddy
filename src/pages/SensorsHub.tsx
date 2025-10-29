@@ -50,7 +50,7 @@ const SensorsHubPage: React.FC = () => {
     try {
       const [sensorsData, alertsData] = await Promise.all([
         sensorsService.getLatestReadings(),
-        sensorsService.getAlerts({ acknowledged: false })
+        sensorsService.getActiveAlerts()
       ]);
       setSensors(sensorsData);
       setAlerts(alertsData);
@@ -73,7 +73,7 @@ const SensorsHubPage: React.FC = () => {
 
   const handleAcknowledgeAlert = async (alertId: string) => {
     try {
-      await sensorsService.acknowledgeAlert(alertId);
+      await sensorsService.dismissAlert(alertId);
       toast.success("Alert acknowledged");
       loadData();
     } catch (error) {
@@ -82,21 +82,15 @@ const SensorsHubPage: React.FC = () => {
   };
 
   // Group sensors by type
-  const temperatureSensors = sensors.filter(s => s.sensorType === "temperature");
-  const pressureSensors = sensors.filter(s => s.sensorType === "pressure");
-  const depthSensors = sensors.filter(s => s.sensorType === "depth");
+  const temperatureSensors = sensors.filter(s => s.type === "temperature");
+  const pressureSensors = sensors.filter(s => s.type === "pressure");
+  const depthSensors = sensors.filter(s => s.type === "depth");
   const criticalAlerts = alerts.filter(a => a.severity === "critical");
 
   const getSensorStatus = (reading: SensorReading) => {
-    if (reading.value > reading.maxThreshold || reading.value < reading.minThreshold) {
-      return "critical";
-    }
-    // Warning if approaching thresholds (within 10% margin)
-    const upperWarning = reading.maxThreshold * 0.9;
-    const lowerWarning = reading.minThreshold * 1.1;
-    if (reading.value > upperWarning || reading.value < lowerWarning) {
-      return "warning";
-    }
+    // Basic status based on reading status
+    if (reading.status === "error") return "critical";
+    if (reading.status === "warning") return "warning";
     return "normal";
   };
 

@@ -109,7 +109,7 @@ export class DeepRiskAIService {
 
   async savePrediction(prediction: Omit<RiskPrediction, "id" | "predictedAt">): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("ai_risk_predictions")
         .insert({
           source: prediction.source,

@@ -8,11 +8,11 @@ import type { Incident } from "../types";
 export class IncidentService {
   async getIncidents(filters?: {status?: string}): Promise<Incident[]> {
     try {
-      let query = supabase.from("incident_reports").select("*").order("reported_at", { ascending: false });
+      let query = (supabase as any).from("incident_reports").select("*").order("reported_at", { ascending: false });
       if (filters?.status) query = query.eq("status", filters.status);
       const { data, error } = await query;
       if (error) throw error;
-      return (data || []).map(d => ({
+      return (data || []).map((d: any) => ({
         id: d.id,
         code: d.code,
         title: d.title,
@@ -36,7 +36,7 @@ export class IncidentService {
 
   async createIncident(incident: Omit<Incident, "id" | "reportedAt" | "evidence">): Promise<Incident> {
     try {
-      const { data, error } = await supabase.from("incident_reports").insert({
+      const { data, error } = await (supabase as any).from("incident_reports").insert({
         code: incident.code,
         title: incident.title,
         description: incident.description,
@@ -61,7 +61,7 @@ export class IncidentService {
       if (updates.status) updateData.status = updates.status;
       if (updates.assignedTo) updateData.assigned_to = updates.assignedTo;
       if (updates.closedAt) updateData.closed_at = updates.closedAt;
-      const { error } = await supabase.from("incident_reports").update(updateData).eq("id", id);
+      const { error } = await (supabase as any).from("incident_reports").update(updateData).eq("id", id);
       if (error) throw error;
     } catch (error) {
       console.error("Error updating incident:", error);

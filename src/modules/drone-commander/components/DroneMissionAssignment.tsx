@@ -54,13 +54,13 @@ export const DroneMissionAssignment: React.FC<DroneMissionAssignmentProps> = ({
       // Create task for the drone
       await droneCommanderService.createTask({
         droneId: selectedDrone,
-        flightId: null,
-        type: "mission",
+        flightId: undefined,
+        type: "patrol",
         priority: "high",
-        status: "assigned",
+        status: "pending",
         assignedAt: new Date().toISOString(),
-        completedAt: null,
-        result: null,
+        completedAt: undefined,
+        result: undefined,
         metadata: {
           missionId: selectedMission
         }
