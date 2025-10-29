@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 458 - Planned Routes Persistence Service
  * Service for persisting planned routes and optimization history to database

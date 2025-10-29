@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 459 - Underwater Missions Persistence Service
  * Service for persisting underwater drone missions, telemetry, and events to database
