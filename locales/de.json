@@ -1,0 +1,65 @@
+{
+  "common": {
+    "welcome": "Willkommen",
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "submit": "Absenden",
+    "clear": "Löschen"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "reports": "Berichte",
+    "settings": "Einstellungen",
+    "profile": "Profil",
+    "logout": "Abmelden",
+    "help": "Hilfe"
+  },
+  "ai": {
+    "cognitive_feedback": "Kognitives Feedback",
+    "weekly_report": "Wochenbericht",
+    "insights": "Einblicke",
+    "patterns": "Muster",
+    "acceptance_rate": "Akzeptanzrate",
+    "rejection_rate": "Ablehnungsrate",
+    "module_performance": "Modulleistung"
+  },
+  "maritime": {
+    "vessel": "Schiff",
+    "fleet": "Flotte",
+    "compliance": "Konformität",
+    "mission_control": "Missionskontrolle",
+    "logs_center": "Protokollzentrum",
+    "notifications": "Benachrichtigungen"
+  },
+  "units": {
+    "distance": "Entfernung",
+    "temperature": "Temperatur",
+    "volume": "Volumen",
+    "kilometers": "Kilometer",
+    "miles": "Meilen",
+    "celsius": "Celsius",
+    "fahrenheit": "Fahrenheit",
+    "liters": "Liter",
+    "gallons": "Gallonen"
+  },
+  "time": {
+    "timezone": "Zeitzone",
+    "date": "Datum",
+    "time": "Uhrzeit",
+    "datetime": "Datum & Uhrzeit"
+  }
+}
