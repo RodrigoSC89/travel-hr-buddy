@@ -1,7 +1,85 @@
 {
-  "version": "1.0.0",
-  "lastUpdated": "2025-10-28T20:00:00.000Z",
+  "version": "1.1.0",
+  "lastUpdated": "2025-10-29T19:06:00.000Z",
   "modules": [
+    {
+      "id": "communication-center",
+      "name": "Communication Center (Unified)",
+      "path": "/modules/communication-center",
+      "route": "/communication-center",
+      "status": "active",
+      "category": "communication",
+      "description": "PATCH 551 - Unified communication hub with real-time messaging, WebSocket, persistent history, groups, radio/satellite monitoring",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "551.0",
+      "lastModified": "2025-10-29"
+    },
+    {
+      "id": "communication",
+      "name": "Communication (Legacy)",
+      "path": "/modules/connectivity/communication",
+      "route": "/communication",
+      "status": "deprecated",
+      "category": "communication",
+      "description": "PATCH 551 - Consolidated into communication-center module",
+      "hasDatabase": false,
+      "hasMockData": false,
+      "deprecatedIn": "551.0",
+      "replacedBy": "communication-center"
+    },
+    {
+      "id": "incident-reports",
+      "name": "Incident Reports (Unified)",
+      "path": "/modules/incident-reports",
+      "route": "/incident-reports",
+      "status": "active",
+      "category": "safety",
+      "description": "PATCH 552 - Unified incident management with detection, documentation, closure workflows, full CRUD, and AI analysis",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "552.0",
+      "lastModified": "2025-10-29"
+    },
+    {
+      "id": "incidents",
+      "name": "Incidents (Legacy)",
+      "path": "/modules/incident-center",
+      "route": "/incidents",
+      "status": "deprecated",
+      "category": "safety",
+      "description": "PATCH 552 - Consolidated into incident-reports module",
+      "hasDatabase": false,
+      "hasMockData": false,
+      "deprecatedIn": "552.0",
+      "replacedBy": "incident-reports"
+    },
+    {
+      "id": "document-templates",
+      "name": "Document Templates",
+      "path": "/modules/document-hub/templates",
+      "route": "/admin/templates",
+      "status": "active",
+      "category": "documents",
+      "description": "PATCH 554 - Complete template editor with WYSIWYG, variable placeholders, and PDF export",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "554.0",
+      "lastModified": "2025-10-29"
+    },
+    {
+      "id": "price-alerts",
+      "name": "Price Alerts",
+      "path": "/modules/price-alerts",
+      "route": "/price-alerts",
+      "status": "active",
+      "category": "travel",
+      "description": "PATCH 555 - Complete price monitoring system with dashboard, real-time data, and notifications",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "555.0",
+      "lastModified": "2025-10-29"
+    },
     {
       "id": "fleet",
       "name": "Fleet Management",
@@ -44,27 +122,27 @@
     {
       "id": "crew-management",
       "name": "Crew Management (Consolidated)",
-      "path": "/modules/crew-management",
+      "path": "/modules/crew",
       "route": "/crew-management",
       "status": "active",
       "category": "operations",
-      "description": "Unified crew management with personnel, certifications, rotations, and performance tracking - PATCH 446",
+      "description": "PATCH 553 - Unified crew management with personnel, certifications, rotations, and performance tracking",
       "hasDatabase": true,
       "hasMockData": false,
-      "version": "446.0",
-      "lastModified": "2025-10-28"
+      "version": "553.0",
+      "lastModified": "2025-10-29"
     },
     {
       "id": "crew",
-      "name": "Crew Management (Legacy)",
-      "path": "/modules/operations/crew",
+      "name": "Crew (Legacy)",
+      "path": "/pages/crew",
       "route": "/crew",
       "status": "deprecated",
       "category": "hr",
-      "description": "Consolidated into crew-management module",
+      "description": "PATCH 553 - Consolidated into crew-management module",
       "hasDatabase": false,
       "hasMockData": false,
-      "deprecatedIn": "406.0",
+      "deprecatedIn": "553.0",
       "replacedBy": "crew-management"
     },
     {
@@ -262,6 +340,78 @@
   ],
   "routes": [
     {
+      "path": "/communication-center",
+      "module": "communication-center",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/communication",
+      "module": "communication-center",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/communication-center"
+    },
+    {
+      "path": "/communications",
+      "module": "communication-center",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/communication-center"
+    },
+    {
+      "path": "/incident-reports",
+      "module": "incident-reports",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/incidents",
+      "module": "incident-reports",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/incident-reports"
+    },
+    {
+      "path": "/crew-management",
+      "module": "crew-management",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/crew",
+      "module": "crew-management",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/crew-management"
+    },
+    {
+      "path": "/hr/crew",
+      "module": "crew-management",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/crew-management"
+    },
+    {
+      "path": "/operations/crew",
+      "module": "crew-management",
+      "status": "redirect",
+      "type": "redirect",
+      "redirectTo": "/crew-management"
+    },
+    {
+      "path": "/admin/templates",
+      "module": "document-templates",
+      "status": "active",
+      "type": "module"
+    },
+    {
+      "path": "/price-alerts",
+      "module": "price-alerts",
+      "status": "active",
+      "type": "module"
+    },
+    {
       "path": "/fleet",
       "module": "fleet",
       "status": "active",
@@ -284,26 +434,6 @@
       "module": "performance",
       "status": "active",
       "type": "module"
-    },
-    {
-      "path": "/crew-management",
-      "module": "crew-management",
-      "status": "active",
-      "type": "module"
-    },
-    {
-      "path": "/crew",
-      "module": "crew-management",
-      "status": "redirect",
-      "type": "redirect",
-      "redirectTo": "/crew-management"
-    },
-    {
-      "path": "/operations/crew",
-      "module": "crew-management",
-      "status": "redirect",
-      "type": "redirect",
-      "redirectTo": "/crew-management"
     },
     {
       "path": "/sonar-ai",
@@ -351,10 +481,11 @@
     }
   ],
   "statistics": {
-    "totalModules": 21,
-    "activeModules": 14,
+    "totalModules": 27,
+    "activeModules": 20,
     "deprecatedModules": 7,
-    "modulesWithRealData": 13,
-    "modulesWithMockData": 0
+    "modulesWithRealData": 19,
+    "modulesWithMockData": 0,
+    "lastPatches": ["551", "552", "553", "554", "555"]
   }
 }
