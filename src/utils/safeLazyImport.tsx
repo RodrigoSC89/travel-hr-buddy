@@ -25,7 +25,7 @@ import React from "react";
  */
 export const safeLazyImport = (
   importer: () => Promise<{ default: React.ComponentType<any> }>,
-  name: string,
+  name = "Módulo",
   retries = 3,
   initialInterval = 1000
 ) => {
