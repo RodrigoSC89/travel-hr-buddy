@@ -175,6 +175,9 @@ const CrewWellbeingNew = safeLazyImport(() => import("@/components/crew-wellbein
 const ConsolidatedCrew = safeLazyImport(() => import("@/pages/crew"));
 const SGSOManagerPage = safeLazyImport(() => import("@/components/sgso/SGSOManager"));
 
+// PATCH 565 - Quality Dashboard Integration
+const QualityDashboard = safeLazyImport(() => import("@/pages/dashboard/QualityDashboard"));
+
 // New Module Imports - PATCH 66.0 Updated Paths
 const FeedbackModule = React.lazy(() => import("@/modules/operations/feedback"));
 // PATCH 191.0: Consolidated Fleet Module
@@ -481,6 +484,7 @@ function App() {
                     <Route element={<SmartLayout />}>
                       <Route path="/" element={<Index />} />
                       <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/dashboard/quality" element={<QualityDashboard />} />
                       <Route path="/price-alerts" element={<PriceAlerts />} />
                       <Route path="/sensors-hub" element={<SensorsHub />} />
                       <Route path="/reports" element={<Reports />} />
