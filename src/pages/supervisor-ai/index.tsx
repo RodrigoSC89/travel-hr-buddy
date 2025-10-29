@@ -3,11 +3,11 @@
  * Monitor and validate AI decisions with explanations
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { supervisorAI, type AIDecision, type ValidationResult } from '@/ai/supervisor/SupervisorAI';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { supervisorAI, type AIDecision, type ValidationResult } from "@/ai/supervisor/SupervisorAI";
 import {
   CheckCircle,
   XCircle,
@@ -17,8 +17,8 @@ import {
   Activity,
   TrendingUp,
   Shield
-} from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
+} from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 const SupervisorAIDashboard: React.FC = () => {
   const [validations, setValidations] = useState<ValidationResult[]>([]);
@@ -35,28 +35,28 @@ const SupervisorAIDashboard: React.FC = () => {
 
     const mockDecisions: AIDecision[] = [
       {
-        sourceAI: 'PredictiveEngine',
-        action: 'scale_resources',
+        sourceAI: "PredictiveEngine",
+        action: "scale_resources",
         confidence: 0.95,
-        parameters: { from: 2, to: 5, resource: 'compute' },
+        parameters: { from: 2, to: 5, resource: "compute" },
       },
       {
-        sourceAI: 'NavigationAI',
-        action: 'adjust_route',
+        sourceAI: "NavigationAI",
+        action: "adjust_route",
         confidence: 0.65,
-        parameters: { newCourse: 180, reason: 'weather' },
+        parameters: { newCourse: 180, reason: "weather" },
       },
       {
-        sourceAI: 'SafetyMonitor',
-        action: 'emergency_stop',
+        sourceAI: "SafetyMonitor",
+        action: "emergency_stop",
         confidence: 0.88,
-        parameters: { reason: 'obstacle_detected' },
+        parameters: { reason: "obstacle_detected" },
       },
       {
-        sourceAI: 'MaintenanceAI',
-        action: 'schedule_maintenance',
+        sourceAI: "MaintenanceAI",
+        action: "schedule_maintenance",
         confidence: 0.75,
-        parameters: { component: 'engine', priority: 'high' },
+        parameters: { component: "engine", priority: "high" },
       },
     ];
 
@@ -109,7 +109,7 @@ const SupervisorAIDashboard: React.FC = () => {
           </p>
         </div>
         <Button onClick={simulateAIDecisions} disabled={isProcessing}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${isProcessing ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 mr-2 ${isProcessing ? "animate-spin" : ""}`} />
           Test Decisions
         </Button>
       </div>
@@ -224,7 +224,7 @@ const SupervisorAIDashboard: React.FC = () => {
                       <div
                         key={rule}
                         className={`flex items-center gap-2 text-xs p-2 rounded ${
-                          passed ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+                          passed ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
                         }`}
                       >
                         {passed ? (
@@ -233,7 +233,7 @@ const SupervisorAIDashboard: React.FC = () => {
                           <XCircle className="h-3 w-3" />
                         )}
                         <span className="capitalize">
-                          {rule.replace('Check', '')}
+                          {rule.replace("Check", "")}
                         </span>
                       </div>
                     ))}

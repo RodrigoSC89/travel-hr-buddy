@@ -3,8 +3,8 @@
  * Event-driven execution system with automatic rollback and retry logic
  */
 
-export type TriggerType = 'failure' | 'anomaly' | 'deadline' | 'threshold';
-export type ActionType = 'restart_service' | 'scale_resources' | 'alert' | 'rollback' | 'custom';
+export type TriggerType = "failure" | "anomaly" | "deadline" | "threshold";
+export type ActionType = "restart_service" | "scale_resources" | "alert" | "rollback" | "custom";
 
 export interface AutoExecTrigger {
   id: string;
@@ -34,7 +34,7 @@ export interface ExecutionRecord {
   triggerId: string;
   startTime: Date;
   endTime?: Date;
-  status: 'pending' | 'running' | 'success' | 'failed' | 'rolled_back';
+  status: "pending" | "running" | "success" | "failed" | "rolled_back";
   attempts: number;
   result?: any;
   error?: string;
@@ -64,25 +64,25 @@ class AutoExecEngine {
    */
   private initializeDefaultTriggers(): void {
     this.addTrigger({
-      id: 'trigger-failure',
-      type: 'failure',
-      name: 'Service Failure',
-      condition: (event) => event.type === 'error' && event.severity === 'critical',
+      id: "trigger-failure",
+      type: "failure",
+      name: "Service Failure",
+      condition: (event) => event.type === "error" && event.severity === "critical",
       enabled: true,
     });
 
     this.addTrigger({
-      id: 'trigger-anomaly',
-      type: 'anomaly',
-      name: 'Anomaly Detection',
+      id: "trigger-anomaly",
+      type: "anomaly",
+      name: "Anomaly Detection",
       condition: (event) => event.anomalyScore > 0.8,
       enabled: true,
     });
 
     this.addTrigger({
-      id: 'trigger-deadline',
-      type: 'deadline',
-      name: 'Deadline Approaching',
+      id: "trigger-deadline",
+      type: "deadline",
+      name: "Deadline Approaching",
       condition: (event) => {
         if (!event.deadline) return false;
         const timeLeft = new Date(event.deadline).getTime() - Date.now();
@@ -92,9 +92,9 @@ class AutoExecEngine {
     });
 
     this.addTrigger({
-      id: 'trigger-threshold',
-      type: 'threshold',
-      name: 'Threshold Exceeded',
+      id: "trigger-threshold",
+      type: "threshold",
+      name: "Threshold Exceeded",
       condition: (event) => event.value > event.threshold,
       enabled: true,
     });
@@ -110,7 +110,7 @@ class AutoExecEngine {
   /**
    * Add a new execution rule
    */
-  addRule(rule: Omit<AutoExecRule, 'id'> & { id?: string }): void {
+  addRule(rule: Omit<AutoExecRule, "id"> & { id?: string }): void {
     const ruleId = rule.id || `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const fullRule: AutoExecRule = {
       ...rule,
@@ -178,7 +178,7 @@ class AutoExecEngine {
       ruleId: rule.id,
       triggerId: rule.triggerId,
       startTime: new Date(),
-      status: 'pending',
+      status: "pending",
       attempts: 0,
       context,
     };
@@ -186,7 +186,7 @@ class AutoExecEngine {
     this.activeExecutions.set(executionId, record);
 
     try {
-      record.status = 'running';
+      record.status = "running";
       let lastError: Error | null = null;
 
       // Retry loop
@@ -196,7 +196,7 @@ class AutoExecEngine {
         try {
           const result = await rule.action(context);
           record.result = result;
-          record.status = 'success';
+          record.status = "success";
           record.endTime = new Date();
           break;
         } catch (error) {
@@ -210,23 +210,23 @@ class AutoExecEngine {
       }
 
       // If all attempts failed
-      if (record.status === 'running') {
-        record.status = 'failed';
-        record.error = lastError?.message || 'Unknown error';
+      if (record.status === "running") {
+        record.status = "failed";
+        record.error = lastError?.message || "Unknown error";
         record.endTime = new Date();
 
         // Attempt rollback if enabled
         if (rule.rollbackEnabled && rule.rollback) {
           try {
             await rule.rollback(context);
-            record.status = 'rolled_back';
+            record.status = "rolled_back";
           } catch (rollbackError) {
-            console.error('Rollback failed:', rollbackError);
+            console.error("Rollback failed:", rollbackError);
           }
         }
       }
     } catch (error) {
-      record.status = 'failed';
+      record.status = "failed";
       record.error = (error as Error).message;
       record.endTime = new Date();
     }

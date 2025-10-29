@@ -3,8 +3,8 @@
  * Ethics-based decision governance with comprehensive audit trail
  */
 
-export type DecisionType = 'approve' | 'reject' | 'escalate' | 'modify';
-export type GovernanceCategory = 'ethics' | 'compliance' | 'security' | 'performance';
+export type DecisionType = "approve" | "reject" | "escalate" | "modify";
+export type GovernanceCategory = "ethics" | "compliance" | "security" | "performance";
 
 export interface GovernanceRequest {
   id?: string;
@@ -12,7 +12,7 @@ export interface GovernanceRequest {
   hasConsent: boolean;
   securityRisk: number; // 0-1 scale
   transparencyLevel: number; // 0-1 scale
-  impactLevel?: 'low' | 'medium' | 'high' | 'critical';
+  impactLevel?: "low" | "medium" | "high" | "critical";
   stakeholders?: string[];
   description?: string;
   metadata?: Record<string, any>;
@@ -106,7 +106,7 @@ class GovernanceEngine {
       decision,
       ethicsScore,
       justification,
-      evaluator: 'GovernanceEngine',
+      evaluator: "GovernanceEngine",
       metadata: {
         ...request,
         impactAssessment,
@@ -174,31 +174,31 @@ class GovernanceEngine {
   ): DecisionType {
     // Automatic reject if critical issues
     if (request.involvesPersonalData && !request.hasConsent) {
-      return 'reject';
+      return "reject";
     }
 
     if (request.securityRisk >= this.HIGH_RISK_THRESHOLD) {
-      return 'escalate';
+      return "escalate";
     }
 
     // Score-based decision
     if (ethicsScore >= this.APPROVE_THRESHOLD) {
-      return 'approve';
+      return "approve";
     } else if (ethicsScore < this.REJECT_THRESHOLD) {
-      return 'reject';
+      return "reject";
     } else {
       // Mid-range scores
       if (request.securityRisk > 0.5 || request.transparencyLevel < 0.5) {
-        return 'modify';
+        return "modify";
       }
-      return 'escalate';
+      return "escalate";
     }
   }
 
   /**
    * Assess impact across multiple dimensions
    */
-  private assessImpact(request: GovernanceRequest): GovernanceDecision['impactAssessment'] {
+  private assessImpact(request: GovernanceRequest): GovernanceDecision["impactAssessment"] {
     return {
       dataPrivacy: request.involvesPersonalData ? 
         (request.hasConsent ? 0.5 : 1.0) : 0.0,
@@ -219,7 +219,7 @@ class GovernanceEngine {
     const reasons: string[] = [];
 
     if (request.involvesPersonalData && !request.hasConsent) {
-      reasons.push('Personal data involved without proper consent');
+      reasons.push("Personal data involved without proper consent");
     }
 
     if (request.securityRisk >= this.HIGH_RISK_THRESHOLD) {
@@ -227,19 +227,19 @@ class GovernanceEngine {
     }
 
     if (request.transparencyLevel < 0.5) {
-      reasons.push('Insufficient transparency level');
+      reasons.push("Insufficient transparency level");
     }
 
     if (ethicsScore >= this.APPROVE_THRESHOLD) {
-      reasons.push('Meets all ethical guidelines');
+      reasons.push("Meets all ethical guidelines");
     } else if (ethicsScore < this.REJECT_THRESHOLD) {
-      reasons.push('Does not meet minimum ethical standards');
+      reasons.push("Does not meet minimum ethical standards");
     }
 
     const baseJustification = `Decision: ${decision.toUpperCase()}. Ethics Score: ${ethicsScore}/100.`;
     
     return reasons.length > 0
-      ? `${baseJustification} ${reasons.join('. ')}.`
+      ? `${baseJustification} ${reasons.join(". ")}.`
       : baseJustification;
   }
 
@@ -253,23 +253,23 @@ class GovernanceEngine {
     const recommendations: string[] = [];
 
     if (request.involvesPersonalData && !request.hasConsent) {
-      recommendations.push('Obtain explicit user consent before processing personal data');
+      recommendations.push("Obtain explicit user consent before processing personal data");
     }
 
     if (request.securityRisk > 0.5) {
-      recommendations.push('Implement additional security measures to reduce risk');
+      recommendations.push("Implement additional security measures to reduce risk");
     }
 
     if (request.transparencyLevel < 0.7) {
-      recommendations.push('Improve transparency by providing clear documentation and explanations');
+      recommendations.push("Improve transparency by providing clear documentation and explanations");
     }
 
     if (ethicsScore < this.APPROVE_THRESHOLD && recommendations.length === 0) {
-      recommendations.push('Review and enhance ethical considerations in the request');
+      recommendations.push("Review and enhance ethical considerations in the request");
     }
 
-    if (request.impactLevel === 'critical') {
-      recommendations.push('Require human oversight for critical impact decisions');
+    if (request.impactLevel === "critical") {
+      recommendations.push("Require human oversight for critical impact decisions");
     }
 
     return recommendations;
@@ -283,7 +283,7 @@ class GovernanceEngine {
     ethicsScore: number
   ): boolean {
     return (
-      request.impactLevel === 'critical' ||
+      request.impactLevel === "critical" ||
       request.securityRisk >= this.HIGH_RISK_THRESHOLD ||
       ethicsScore < this.REJECT_THRESHOLD ||
       (request.involvesPersonalData && !request.hasConsent)
@@ -295,18 +295,18 @@ class GovernanceEngine {
    */
   private determineCategory(request: GovernanceRequest): GovernanceCategory {
     if (request.securityRisk >= 0.6) {
-      return 'security';
+      return "security";
     }
     
     if (request.involvesPersonalData) {
-      return 'compliance';
+      return "compliance";
     }
 
     if (request.transparencyLevel < 0.5) {
-      return 'ethics';
+      return "ethics";
     }
 
-    return 'performance';
+    return "performance";
   }
 
   /**
@@ -351,12 +351,12 @@ class GovernanceEngine {
     escalated: number;
     modified: number;
     averageEthicsScore: number;
-  } {
+    } {
     const total = this.auditLog.length;
-    const approved = this.auditLog.filter(e => e.decision === 'approve').length;
-    const rejected = this.auditLog.filter(e => e.decision === 'reject').length;
-    const escalated = this.auditLog.filter(e => e.decision === 'escalate').length;
-    const modified = this.auditLog.filter(e => e.decision === 'modify').length;
+    const approved = this.auditLog.filter(e => e.decision === "approve").length;
+    const rejected = this.auditLog.filter(e => e.decision === "reject").length;
+    const escalated = this.auditLog.filter(e => e.decision === "escalate").length;
+    const modified = this.auditLog.filter(e => e.decision === "modify").length;
     
     const averageEthicsScore = total > 0
       ? this.auditLog.reduce((sum, e) => sum + e.ethicsScore, 0) / total

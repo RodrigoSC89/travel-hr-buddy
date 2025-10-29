@@ -3,12 +3,12 @@
  * Event-driven execution engine configuration and monitoring
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { autoExecEngine, type AutoExecTrigger, type AutoExecRule, type ExecutionRecord } from '@/modules/autoexec/AutoExecEngine';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { autoExecEngine, type AutoExecTrigger, type AutoExecRule, type ExecutionRecord } from "@/modules/autoexec/AutoExecEngine";
 import {
   Play,
   Pause,
@@ -19,8 +19,8 @@ import {
   XCircle,
   RotateCcw,
   Zap
-} from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
+} from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 const AutoExecConfigDashboard: React.FC = () => {
   const [triggers, setTriggers] = useState<AutoExecTrigger[]>([]);
@@ -33,30 +33,30 @@ const AutoExecConfigDashboard: React.FC = () => {
     
     // Add example rules
     autoExecEngine.addRule({
-      triggerId: 'trigger-failure',
-      actionType: 'restart_service',
+      triggerId: "trigger-failure",
+      actionType: "restart_service",
       priority: 9,
       rollbackEnabled: true,
       maxRetries: 3,
       retryDelay: 1000,
       action: async (context) => {
-        console.log('Restarting service:', context);
+        console.log("Restarting service:", context);
         return { success: true };
       },
       rollback: async (context) => {
-        console.log('Rolling back:', context);
+        console.log("Rolling back:", context);
       },
     });
 
     autoExecEngine.addRule({
-      triggerId: 'trigger-threshold',
-      actionType: 'scale_resources',
+      triggerId: "trigger-threshold",
+      actionType: "scale_resources",
       priority: 7,
       rollbackEnabled: true,
       maxRetries: 2,
       retryDelay: 2000,
       action: async (context) => {
-        console.log('Scaling resources:', context);
+        console.log("Scaling resources:", context);
         return { success: true };
       },
     });
@@ -84,9 +84,9 @@ const AutoExecConfigDashboard: React.FC = () => {
   const testExecution = async () => {
     // Simulate an event
     const event = {
-      type: 'error',
-      severity: 'critical',
-      service: 'navigation',
+      type: "error",
+      severity: "critical",
+      service: "navigation",
       timestamp: new Date(),
     };
 
@@ -98,17 +98,17 @@ const AutoExecConfigDashboard: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, any> = {
-      pending: 'secondary',
-      running: 'default',
-      success: 'default',
-      failed: 'destructive',
-      rolled_back: 'secondary',
+      pending: "secondary",
+      running: "default",
+      success: "default",
+      failed: "destructive",
+      rolled_back: "secondary",
     };
     const colors: Record<string, string> = {
-      success: 'bg-green-600',
+      success: "bg-green-600",
     };
     return (
-      <Badge variant={variants[status] || 'default'} className={colors[status]}>
+      <Badge variant={variants[status] || "default"} className={colors[status]}>
         {status}
       </Badge>
     );
@@ -116,22 +116,22 @@ const AutoExecConfigDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'failed': return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'rolled_back': return <RotateCcw className="h-4 w-4 text-yellow-500" />;
-      case 'running': return <Activity className="h-4 w-4 text-blue-500 animate-pulse" />;
-      default: return <Clock className="h-4 w-4 text-gray-500" />;
+    case "success": return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "failed": return <XCircle className="h-4 w-4 text-red-500" />;
+    case "rolled_back": return <RotateCcw className="h-4 w-4 text-yellow-500" />;
+    case "running": return <Activity className="h-4 w-4 text-blue-500 animate-pulse" />;
+    default: return <Clock className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getPriorityColor = (priority: number) => {
-    if (priority >= 8) return 'text-red-500';
-    if (priority >= 5) return 'text-yellow-500';
-    return 'text-green-500';
+    if (priority >= 8) return "text-red-500";
+    if (priority >= 5) return "text-yellow-500";
+    return "text-green-500";
   };
 
   const successRate = executions.length > 0
-    ? (executions.filter(e => e.status === 'success').length / executions.length) * 100
+    ? (executions.filter(e => e.status === "success").length / executions.length) * 100
     : 0;
 
   return (
@@ -191,7 +191,7 @@ const AutoExecConfigDashboard: React.FC = () => {
             <div className="text-3xl font-bold">{successRate.toFixed(0)}%</div>
             <Progress value={successRate} className="mt-2" />
             <p className="text-xs text-muted-foreground mt-1">
-              {executions.filter(e => e.status === 'success').length} of {executions.length} executions
+              {executions.filter(e => e.status === "success").length} of {executions.length} executions
             </p>
           </CardContent>
         </Card>

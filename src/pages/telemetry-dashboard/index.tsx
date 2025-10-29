@@ -3,10 +3,10 @@
  * Real-time metrics aggregation with historical trends and alerting
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   Activity, 
   Server, 
@@ -18,17 +18,17 @@ import {
   RefreshCw,
   TrendingUp,
   TrendingDown
-} from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+} from "lucide-react";
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface TelemetryMetric {
   system: string;
   metric: string;
   value: number;
   unit: string;
-  status: 'normal' | 'warning' | 'critical';
+  status: "normal" | "warning" | "critical";
   threshold?: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
 }
 
 interface HistoricalData {
@@ -63,83 +63,83 @@ const TelemetryDashboard: React.FC = () => {
     // Generate current metrics
     const newMetrics: TelemetryMetric[] = [
       {
-        system: 'Fleet',
-        metric: 'Active Vessels',
+        system: "Fleet",
+        metric: "Active Vessels",
         value: Math.floor(Math.random() * 5) + 15,
-        unit: 'vessels',
-        status: 'normal',
+        unit: "vessels",
+        status: "normal",
         threshold: 10,
-        trend: Math.random() > 0.5 ? 'up' : 'stable',
+        trend: Math.random() > 0.5 ? "up" : "stable",
       },
       {
-        system: 'Fleet',
-        metric: 'Average Speed',
+        system: "Fleet",
+        metric: "Average Speed",
         value: Math.random() * 5 + 10,
-        unit: 'knots',
-        status: 'normal',
-        trend: 'stable',
+        unit: "knots",
+        status: "normal",
+        trend: "stable",
       },
       {
-        system: 'AI',
-        metric: 'Active Agents',
+        system: "AI",
+        metric: "Active Agents",
         value: Math.floor(Math.random() * 3) + 8,
-        unit: 'agents',
-        status: 'normal',
+        unit: "agents",
+        status: "normal",
         threshold: 5,
-        trend: 'up',
+        trend: "up",
       },
       {
-        system: 'AI',
-        metric: 'Decision Accuracy',
+        system: "AI",
+        metric: "Decision Accuracy",
         value: Math.random() * 10 + 85,
-        unit: '%',
-        status: Math.random() > 0.7 ? 'warning' : 'normal',
+        unit: "%",
+        status: Math.random() > 0.7 ? "warning" : "normal",
         threshold: 80,
-        trend: 'up',
+        trend: "up",
       },
       {
-        system: 'Infrastructure',
-        metric: 'CPU Usage',
+        system: "Infrastructure",
+        metric: "CPU Usage",
         value: Math.random() * 30 + 50,
-        unit: '%',
-        status: Math.random() > 0.8 ? 'warning' : 'normal',
+        unit: "%",
+        status: Math.random() > 0.8 ? "warning" : "normal",
         threshold: 85,
-        trend: Math.random() > 0.6 ? 'up' : 'down',
+        trend: Math.random() > 0.6 ? "up" : "down",
       },
       {
-        system: 'Infrastructure',
-        metric: 'Memory Usage',
+        system: "Infrastructure",
+        metric: "Memory Usage",
         value: Math.random() * 20 + 60,
-        unit: '%',
-        status: 'normal',
+        unit: "%",
+        status: "normal",
         threshold: 90,
-        trend: 'stable',
+        trend: "stable",
       },
       {
-        system: 'Infrastructure',
-        metric: 'Disk I/O',
+        system: "Infrastructure",
+        metric: "Disk I/O",
         value: Math.random() * 100 + 200,
-        unit: 'MB/s',
-        status: 'normal',
-        trend: 'down',
+        unit: "MB/s",
+        status: "normal",
+        trend: "down",
       },
       {
-        system: 'Missions',
-        metric: 'Active Missions',
+        system: "Missions",
+        metric: "Active Missions",
         value: Math.floor(Math.random() * 5) + 12,
-        unit: 'missions',
-        status: 'normal',
+        unit: "missions",
+        status: "normal",
         threshold: 20,
-        trend: 'stable',
+        trend: "stable",
       },
       {
-        system: 'Missions',
-        metric: 'Success Rate',
+        system: "Missions",
+        metric: "Success Rate",
         value: Math.random() * 5 + 94,
-        unit: '%',
-        status: 'normal',
+        unit: "%",
+        status: "normal",
         threshold: 90,
-        trend: 'up',
+        trend: "up",
       },
     ];
 
@@ -152,7 +152,7 @@ const TelemetryDashboard: React.FC = () => {
     for (let i = 11; i >= 0; i--) {
       const time = new Date(now - i * 5 * 60 * 1000); // 5-minute intervals
       historical.push({
-        timestamp: time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        timestamp: time.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
         fleet: Math.random() * 20 + 70,
         ai: Math.random() * 15 + 80,
         infrastructure: Math.random() * 30 + 60,
@@ -164,37 +164,37 @@ const TelemetryDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'normal': return 'bg-green-500';
-      case 'warning': return 'bg-yellow-500';
-      case 'critical': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "normal": return "bg-green-500";
+    case "warning": return "bg-yellow-500";
+    case "critical": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'normal': return <CheckCircle className="h-4 w-4" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4" />;
-      case 'critical': return <AlertTriangle className="h-4 w-4" />;
-      default: return <Activity className="h-4 w-4" />;
+    case "normal": return <CheckCircle className="h-4 w-4" />;
+    case "warning": return <AlertTriangle className="h-4 w-4" />;
+    case "critical": return <AlertTriangle className="h-4 w-4" />;
+    default: return <Activity className="h-4 w-4" />;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'down': return <TrendingDown className="h-4 w-4 text-red-500" />;
-      default: return null;
+    case "up": return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "down": return <TrendingDown className="h-4 w-4 text-red-500" />;
+    default: return null;
     }
   };
 
   const getSystemIcon = (system: string) => {
     switch (system) {
-      case 'Fleet': return <Server className="h-5 w-5" />;
-      case 'AI': return <Zap className="h-5 w-5" />;
-      case 'Infrastructure': return <Cpu className="h-5 w-5" />;
-      case 'Missions': return <Activity className="h-5 w-5" />;
-      default: return <HardDrive className="h-5 w-5" />;
+    case "Fleet": return <Server className="h-5 w-5" />;
+    case "AI": return <Zap className="h-5 w-5" />;
+    case "Infrastructure": return <Cpu className="h-5 w-5" />;
+    case "Missions": return <Activity className="h-5 w-5" />;
+    default: return <HardDrive className="h-5 w-5" />;
     }
   };
 
@@ -206,7 +206,7 @@ const TelemetryDashboard: React.FC = () => {
     return acc;
   }, {} as Record<string, TelemetryMetric[]>);
 
-  const alertCount = metrics.filter(m => m.status === 'warning' || m.status === 'critical').length;
+  const alertCount = metrics.filter(m => m.status === "warning" || m.status === "critical").length;
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -227,8 +227,8 @@ const TelemetryDashboard: React.FC = () => {
             size="sm"
             onClick={() => setAutoRefresh(!autoRefresh)}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
-            {autoRefresh ? 'Auto' : 'Manual'}
+            <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? "animate-spin" : ""}`} />
+            {autoRefresh ? "Auto" : "Manual"}
           </Button>
           <span className="text-sm text-muted-foreground">
             Updated: {lastUpdate.toLocaleTimeString()}
@@ -285,7 +285,7 @@ const TelemetryDashboard: React.FC = () => {
                     </div>
                     <div className="flex items-baseline gap-1 mt-1">
                       <span className="text-2xl font-bold">
-                        {typeof metric.value === 'number' ? metric.value.toFixed(1) : metric.value}
+                        {typeof metric.value === "number" ? metric.value.toFixed(1) : metric.value}
                       </span>
                       <span className="text-sm text-muted-foreground">{metric.unit}</span>
                     </div>
@@ -313,17 +313,17 @@ const TelemetryDashboard: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {Object.entries(groupedMetrics).map(([system, systemMetrics]) => {
-              const hasWarnings = systemMetrics.some(m => m.status === 'warning' || m.status === 'critical');
+              const hasWarnings = systemMetrics.some(m => m.status === "warning" || m.status === "critical");
               return (
                 <div key={system} className="flex items-center gap-3 p-4 border rounded-lg">
                   {getSystemIcon(system)}
                   <div className="flex-1">
                     <h3 className="font-semibold">{system}</h3>
                     <p className="text-sm text-muted-foreground">
-                      {hasWarnings ? 'Requires Attention' : 'Operational'}
+                      {hasWarnings ? "Requires Attention" : "Operational"}
                     </p>
                   </div>
-                  <div className={`w-3 h-3 rounded-full ${hasWarnings ? 'bg-yellow-500' : 'bg-green-500'}`} />
+                  <div className={`w-3 h-3 rounded-full ${hasWarnings ? "bg-yellow-500" : "bg-green-500"}`} />
                 </div>
               );
             })}

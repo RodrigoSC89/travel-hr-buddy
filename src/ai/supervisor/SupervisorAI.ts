@@ -86,7 +86,7 @@ class SupervisorAI {
         corrected: false,
         blocked: false,
         confidence: decision.confidence,
-        explanation: `Decision approved. All validation rules passed.`,
+        explanation: "Decision approved. All validation rules passed.",
         originalDecision: decision,
         validationRules,
       };
@@ -134,7 +134,7 @@ class SupervisorAI {
    * Validate decision parameters
    */
   private checkParameters(parameters: Record<string, any>): boolean {
-    if (!parameters || typeof parameters !== 'object') {
+    if (!parameters || typeof parameters !== "object") {
       return false;
     }
 
@@ -145,7 +145,7 @@ class SupervisorAI {
       }
       
       // Check for reasonable numeric values
-      if (typeof value === 'number') {
+      if (typeof value === "number") {
         if (!isFinite(value) || value < 0 || value > 1000000) {
           return false;
         }
@@ -159,7 +159,7 @@ class SupervisorAI {
    * Safety check for critical actions
    */
   private checkSafety(action: string, parameters: Record<string, any>): boolean {
-    const criticalActions = ['delete', 'shutdown', 'terminate', 'emergency_stop'];
+    const criticalActions = ["delete", "shutdown", "terminate", "emergency_stop"];
     
     if (criticalActions.some(critical => action.toLowerCase().includes(critical))) {
       // Critical actions require explicit confirmation parameter
@@ -177,7 +177,7 @@ class SupervisorAI {
     const { action, parameters } = decision;
 
     // Example: scaling down when already at minimum
-    if (action === 'scale_resources' && parameters.to <= parameters.from) {
+    if (action === "scale_resources" && parameters.to <= parameters.from) {
       if (parameters.to === 0) return false; // Don't scale to zero
     }
 
@@ -198,23 +198,23 @@ class SupervisorAI {
   /**
    * Get explanation for blocked decisions
    */
-  private getBlockReason(validationRules: ValidationResult['validationRules']): string {
+  private getBlockReason(validationRules: ValidationResult["validationRules"]): string {
     const failures = [];
     
     if (!validationRules.confidenceCheck) {
-      failures.push('confidence too low');
+      failures.push("confidence too low");
     }
     if (!validationRules.parameterCheck) {
-      failures.push('invalid parameters');
+      failures.push("invalid parameters");
     }
     if (!validationRules.safetyCheck) {
-      failures.push('safety check failed');
+      failures.push("safety check failed");
     }
     if (!validationRules.logicCheck) {
-      failures.push('logic inconsistency detected');
+      failures.push("logic inconsistency detected");
     }
 
-    return `Decision blocked: ${failures.join(', ')}`;
+    return `Decision blocked: ${failures.join(", ")}`;
   }
 
   /**

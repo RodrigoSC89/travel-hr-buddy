@@ -3,15 +3,15 @@
  * Ethics-based decision governance with audit trail
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { governanceEngine, type GovernanceRequest, type GovernanceDecision } from '@/modules/governance/GovernanceEngine';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { governanceEngine, type GovernanceRequest, type GovernanceDecision } from "@/modules/governance/GovernanceEngine";
 import {
   Shield,
   CheckCircle,
@@ -24,8 +24,8 @@ import {
   Eye,
   TrendingUp,
   BarChart3
-} from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
+} from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 const GovernanceAIDashboard: React.FC = () => {
   const [decisions, setDecisions] = useState<GovernanceDecision[]>([]);
@@ -37,7 +37,7 @@ const GovernanceAIDashboard: React.FC = () => {
     hasConsent: false,
     securityRisk: 0.3,
     transparencyLevel: 0.9,
-    impactLevel: 'medium',
+    impactLevel: "medium",
   });
 
   useEffect(() => {
@@ -52,32 +52,32 @@ const GovernanceAIDashboard: React.FC = () => {
         hasConsent: true,
         securityRisk: 0.2,
         transparencyLevel: 0.9,
-        impactLevel: 'low',
-        description: 'User profile update',
+        impactLevel: "low",
+        description: "User profile update",
       },
       {
         involvesPersonalData: true,
         hasConsent: false,
         securityRisk: 0.4,
         transparencyLevel: 0.7,
-        impactLevel: 'high',
-        description: 'Data processing without consent',
+        impactLevel: "high",
+        description: "Data processing without consent",
       },
       {
         involvesPersonalData: false,
         hasConsent: false,
         securityRisk: 0.8,
         transparencyLevel: 0.5,
-        impactLevel: 'critical',
-        description: 'High-risk system modification',
+        impactLevel: "critical",
+        description: "High-risk system modification",
       },
       {
         involvesPersonalData: false,
         hasConsent: false,
         securityRisk: 0.1,
         transparencyLevel: 0.95,
-        impactLevel: 'low',
-        description: 'Standard operation',
+        impactLevel: "low",
+        description: "Standard operation",
       },
     ];
 
@@ -99,26 +99,26 @@ const GovernanceAIDashboard: React.FC = () => {
 
   const getDecisionIcon = (decision: string) => {
     switch (decision) {
-      case 'approve': return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'reject': return <XCircle className="h-5 w-5 text-red-500" />;
-      case 'escalate': return <ArrowUpRight className="h-5 w-5 text-yellow-500" />;
-      case 'modify': return <FileEdit className="h-5 w-5 text-blue-500" />;
-      default: return <Shield className="h-5 w-5" />;
+    case "approve": return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "reject": return <XCircle className="h-5 w-5 text-red-500" />;
+    case "escalate": return <ArrowUpRight className="h-5 w-5 text-yellow-500" />;
+    case "modify": return <FileEdit className="h-5 w-5 text-blue-500" />;
+    default: return <Shield className="h-5 w-5" />;
     }
   };
 
   const getDecisionBadge = (decision: string) => {
     const variants: Record<string, any> = {
-      approve: 'default',
-      reject: 'destructive',
-      escalate: 'secondary',
-      modify: 'outline',
+      approve: "default",
+      reject: "destructive",
+      escalate: "secondary",
+      modify: "outline",
     };
     const colors: Record<string, string> = {
-      approve: 'bg-green-600',
+      approve: "bg-green-600",
     };
     return (
-      <Badge variant={variants[decision] || 'default'} className={colors[decision]}>
+      <Badge variant={variants[decision] || "default"} className={colors[decision]}>
         {decision}
       </Badge>
     );
@@ -126,18 +126,18 @@ const GovernanceAIDashboard: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'ethics': return <Scale className="h-4 w-4" />;
-      case 'compliance': return <FileEdit className="h-4 w-4" />;
-      case 'security': return <Lock className="h-4 w-4" />;
-      case 'performance': return <TrendingUp className="h-4 w-4" />;
-      default: return <Shield className="h-4 w-4" />;
+    case "ethics": return <Scale className="h-4 w-4" />;
+    case "compliance": return <FileEdit className="h-4 w-4" />;
+    case "security": return <Lock className="h-4 w-4" />;
+    case "performance": return <TrendingUp className="h-4 w-4" />;
+    default: return <Shield className="h-4 w-4" />;
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 75) return 'text-green-600';
-    if (score >= 50) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 75) return "text-green-600";
+    if (score >= 50) return "text-yellow-600";
+    return "text-red-600";
   };
 
   return (
@@ -335,7 +335,7 @@ const GovernanceAIDashboard: React.FC = () => {
                     {Object.entries(decision.impactAssessment).map(([key, value]) => (
                       <div key={key} className="bg-muted/50 rounded p-2">
                         <div className="text-xs text-muted-foreground capitalize">
-                          {key.replace(/([A-Z])/g, ' $1').trim()}
+                          {key.replace(/([A-Z])/g, " $1").trim()}
                         </div>
                         <Progress value={value * 100} className="mt-1 h-1" />
                         <div className="text-xs font-medium mt-1">
