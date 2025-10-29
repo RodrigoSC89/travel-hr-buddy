@@ -322,7 +322,7 @@ function generateIndexDoc(modules: ModuleInfo[]): string {
  */
 function main() {
   const baseDir = process.cwd();
-  const docsDir = path.join(baseDir, 'dev', 'docs');
+  const docsDir = path.join(baseDir, 'docs', 'modules');
 
   console.log('🔍 Scanning modules...');
   const modules = scanModules(baseDir);
@@ -348,23 +348,24 @@ function main() {
   fs.writeFileSync(path.join(docsDir, 'INDEX.md'), indexDoc);
   console.log('✅ Generated INDEX.md');
 
-  // Generate documentation for top 20 modules
-  const topModules = modules
+  // Generate documentation for all modules (not just top 20)
+  const allModules = modules
     .sort((a, b) => {
       const scoreA = a.components.length + a.services.length + a.routes.length;
       const scoreB = b.components.length + b.services.length + b.routes.length;
       return scoreB - scoreA;
-    })
-    .slice(0, 20);
+    });
 
-  topModules.forEach(module => {
+  console.log(`📊 Generating documentation for ${allModules.length} modules...`);
+
+  allModules.forEach(module => {
     const doc = generateModuleDoc(module, routes, tables);
     fs.writeFileSync(path.join(docsDir, `${module.name}.md`), doc);
     console.log(`✅ Generated ${module.name}.md`);
   });
 
   console.log(`\n🎉 Documentation generated successfully in ${docsDir}`);
-  console.log(`📊 Generated ${topModules.length} module documentation files`);
+  console.log(`📊 Generated ${allModules.length} module documentation files`);
 }
 
 // Run main function
