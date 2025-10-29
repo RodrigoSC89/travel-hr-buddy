@@ -1,6 +1,6 @@
 /**
  * OpenAI Service Integration
- * Test chat completion functionality
+ * Test chat completion functionality and embeddings generation
  */
 
 export interface OpenAITestResult {
@@ -9,6 +9,50 @@ export interface OpenAITestResult {
   responseTime?: number;
   data?: Record<string, unknown>;
   error?: string;
+}
+
+/**
+ * Generate embeddings using OpenAI ada-002 model
+ * Used for AI Memory vector similarity search
+ */
+export async function generateEmbedding(text: string): Promise<number[] | null> {
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+
+  if (!apiKey) {
+    console.error('OpenAI API key not configured');
+    return null;
+  }
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/embeddings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'text-embedding-ada-002',
+        input: text,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('OpenAI embedding error:', errorData);
+      return null;
+    }
+
+    const data = await response.json();
+
+    if (data.data && data.data.length > 0) {
+      return data.data[0].embedding;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Exception generating embedding:', error);
+    return null;
+  }
 }
 
 /**
