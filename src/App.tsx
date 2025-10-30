@@ -16,12 +16,44 @@ import { OffshoreLoader, PageSkeleton } from "@/components/LoadingStates";
 import { lazyWithPreload, preloadStrategy } from "@/lib/performance/lazy-with-preload";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 
-// Detect Lovable preview environment
+// Detect Lovable preview environment and force ultra-light mode
 const isLovablePreview = typeof window !== "undefined" && (
   window.location.host.includes("lovable.dev") || 
   window.location.host.includes("lovableproject.com") ||
-  window.location.host.includes("gptengineer.app")
+  window.location.host.includes("gptengineer.app") ||
+  window.location.hash.includes("#/") ||
+  process.env.NODE_ENV === "development"
 );
+
+// Ultra-Light Preview Component - removes all heavy processing
+const PreviewLandingPage = () => (
+  <div className="min-h-screen p-6 flex items-center justify-center bg-background">
+    <div className="max-w-2xl w-full shadow-lg border rounded-lg p-6 space-y-4">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold">🧭 Nautilus One - Preview Safe Mode</h1>
+        <p className="text-muted-foreground mt-2">Editor Lovable detectado. Renderização ultra-leve ativada.</p>
+      </div>
+      <div className="grid sm:grid-cols-2 gap-3">
+        <a href="/dashboard" className="w-full">
+          <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
+            📊 Dashboard Principal
+          </div>
+        </a>
+        <a href="/validation/preview-lite" className="w-full">
+          <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
+            ✅ Preview de Patches
+          </div>
+        </a>
+      </div>
+      <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
+        <p>💡 <strong>Dica:</strong> O Preview Safe Mode usa navegação direta (sem React Router) para máxima estabilidade.</p>
+        <p className="mt-2">Use <code className="bg-background px-1 rounded">/validation/preview-lite</code> para teste de funcionalidades.</p>
+      </div>
+    </div>
+  </div>
+);
+
+// Full App only for production/development
 
 // Páginas mais usadas - carregamento prioritário
 import Index from "@/pages/Index";
@@ -460,6 +492,9 @@ const RedirectHandler = () => {
 let isInitialized = false;
 
 function App() {
+  if (isLovablePreview) {
+    return <PreviewLandingPage />;
+  }
   // Initialize monitoring systems on app start
   useEffect(() => {
     // Evita dupla inicialização causada por React StrictMode
