@@ -523,6 +523,7 @@ function App() {
                     <Route path="/tv/logs" element={<TVWallLogs />} />
                     <Route path="/cert/:token" element={<CertViewer />} />
                     <Route path="/unauthorized" element={<Unauthorized />} />
+                    <Route path="/validation/preview-lite" element={<PatchesPreview />} />
                     
                     {/* All routes wrapped in SmartLayout */}
                     <Route element={<SmartLayout />}>
