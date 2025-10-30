@@ -34,12 +34,12 @@ const PreviewLandingPage = () => (
         <p className="text-muted-foreground mt-2">Editor Lovable detectado. Renderização ultra-leve ativada.</p>
       </div>
       <div className="grid sm:grid-cols-2 gap-3">
-        <a href="/dashboard" className="w-full">
+        <a href="/#/dashboard" className="w-full" onClick={(e) => { e.preventDefault(); window.location.href = '/#/dashboard'; window.location.reload(); }}>
           <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
             📊 Dashboard Principal
           </div>
         </a>
-        <a href="/validation/preview-lite" className="w-full">
+        <a href="/#/validation/preview-lite" className="w-full" onClick={(e) => { e.preventDefault(); window.location.href = '/#/validation/preview-lite'; window.location.reload(); }}>
           <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
             ✅ Preview de Patches
           </div>
@@ -492,7 +492,9 @@ const RedirectHandler = () => {
 let isInitialized = false;
 
 function App() {
-  if (isLovablePreview) {
+  const atRoot = typeof window !== "undefined" && (window.location.pathname === "/" || window.location.pathname === "");
+  const hasHashRoute = typeof window !== "undefined" && window.location.hash?.startsWith("#/");
+  if (isLovablePreview && atRoot && !hasHashRoute) {
     return <PreviewLandingPage />;
   }
   // Initialize monitoring systems on app start
