@@ -64,14 +64,16 @@ export class MissionEngineService {
       const { data, error } = await supabase
         .from("missions")
         .insert({
+          mission_code: mission.code,
+          mission_name: mission.name,
+          mission_type: mission.type,
           code: mission.code,
           name: mission.name,
           type: mission.type,
-          status: "planned", // Start as planned
-          priority: mission.priority,
+          status: "planned",
+          priority: mission.priority || "medium",
           description: mission.description,
-          location_lat: mission.location?.lat,
-          location_lng: mission.location?.lng,
+          location: mission.location,
           assigned_vessel_id: mission.assignedVesselId,
           assigned_agents: mission.assignedAgents || [],
           start_time: mission.startTime,
@@ -111,7 +113,7 @@ export class MissionEngineService {
       const mission = await this.updateMission(missionId, {
         assignedVesselId: vesselId,
         assignedAgents: agentIds,
-        status: "assigned"
+        status: "in-progress"
       });
 
       // Log assignment
@@ -202,18 +204,18 @@ export class MissionEngineService {
       // Create incident report
       const { data: { user } } = await supabase.auth.getUser();
       
+      const incidentCode = `INC-${Date.now()}`;
       const { data: incidentData, error: incidentError } = await supabase
         .from("incident_reports")
         .insert({
-          incident_number: `INC-${Date.now()}`,
+          code: incidentCode,
           title: incident.title,
           description: incident.description,
           severity: incident.severity,
-          category: incident.category,
+          type: incident.category,
           status: "pending",
-          incident_date: new Date().toISOString(),
-          incident_location: "Mission Site",
-          impact_level: incident.severity,
+          reported_at: new Date().toISOString(),
+          location: "Mission Site",
           reported_by: user?.email || "System",
           assigned_to: "Mission Commander"
         })
@@ -222,17 +224,19 @@ export class MissionEngineService {
 
       if (incidentError) throw incidentError;
 
-      // Log incident in mission logs
-      await this.createLog({
-        missionId,
-        logType: "error",
-        severity: incident.severity,
-        title: `Incident: ${incident.title}`,
-        message: incident.description,
-        category: "Incident",
-        sourceModule: "Incident Reports",
-        eventTimestamp: new Date().toISOString(),
-        metadata: { incidentId: incidentData.id, incidentNumber: incidentData.incident_number }
+      // Create mission log entry (simplified structure)
+      await supabase.from("mission_logs").insert({
+        mission_id: missionId,
+        mission_name: `Mission ${missionId}`,
+        mission_date: new Date().toISOString().split('T')[0],
+        description: `Incident: ${incident.title} - ${incident.description}`,
+        status: "incident",
+        crew_members: [],
+        metadata: { 
+          incidentId: incidentData.id, 
+          incidentCode: incidentCode,
+          severity: incident.severity 
+        }
       });
 
       // Create mission alert
@@ -351,14 +355,20 @@ export class MissionEngineService {
         .from("mission_logs")
         .insert({
           mission_id: log.missionId,
-          log_type: log.logType,
-          severity: log.severity,
-          title: log.title,
-          message: log.message,
-          category: log.category,
-          source_module: log.sourceModule,
-          event_timestamp: log.eventTimestamp,
-          metadata: log.metadata || {}
+          mission_name: log.title || `Mission ${log.missionId}`,
+          mission_date: new Date(log.eventTimestamp).toISOString().split('T')[0],
+          description: log.message,
+          status: log.logType || "info",
+          crew_members: [],
+          metadata: {
+            logType: log.logType,
+            severity: log.severity,
+            title: log.title,
+            category: log.category,
+            sourceModule: log.sourceModule,
+            eventTimestamp: log.eventTimestamp,
+            ...log.metadata
+          }
         })
         .select()
         .single();
@@ -468,17 +478,42 @@ export class MissionEngineService {
   }
 
   // ==================== Alerts ====================
+  // Note: mission_alerts table doesn't exist in current schema
+  // Using mission_logs for alerts functionality
 
   async getAlerts(missionId: string): Promise<MissionAlert[]> {
     try {
+      // Get high-severity logs as alerts
       const { data, error } = await supabase
-        .from("mission_alerts")
+        .from("mission_logs")
         .select("*")
         .eq("mission_id", missionId)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(50);
 
       if (error) throw error;
-      return (data || []).map(this.mapToAlert);
+      
+      // Filter logs that represent alerts (high severity or error status)
+      return (data || [])
+        .filter(log => {
+          const meta = log.metadata as any;
+          return meta?.severity === "high" || 
+                 meta?.severity === "critical" ||
+                 log.status === "error";
+        })
+        .map(log => {
+          const meta = (log.metadata as any) || {};
+          return {
+            id: log.id,
+            missionId: log.mission_id || missionId,
+            severity: meta.severity || "medium",
+            message: log.description || "",
+            acknowledged: meta.acknowledged || false,
+            acknowledgedAt: meta.acknowledgedAt,
+            acknowledgedBy: meta.acknowledgedBy,
+            createdAt: log.created_at
+          };
+        }) as MissionAlert[];
     } catch (error) {
       console.error("Error fetching alerts:", error);
       return [];
@@ -487,19 +522,36 @@ export class MissionEngineService {
 
   async createAlert(alert: Omit<MissionAlert, "id" | "createdAt">): Promise<MissionAlert> {
     try {
+      // Create alert as a high-severity log entry
       const { data, error } = await supabase
-        .from("mission_alerts")
+        .from("mission_logs")
         .insert({
           mission_id: alert.missionId,
-          severity: alert.severity,
-          message: alert.message,
-          acknowledged: alert.acknowledged
+          mission_name: `Mission ${alert.missionId}`,
+          mission_date: new Date().toISOString().split('T')[0],
+          description: alert.message,
+          status: "alert",
+          crew_members: [],
+          metadata: {
+            severity: alert.severity,
+            message: alert.message,
+            acknowledged: alert.acknowledged,
+            isAlert: true
+          }
         })
         .select()
         .single();
 
       if (error) throw error;
-      return this.mapToAlert(data);
+      
+      return {
+        id: data.id,
+        missionId: data.mission_id || alert.missionId,
+        severity: alert.severity,
+        message: alert.message,
+        acknowledged: alert.acknowledged,
+        createdAt: data.created_at
+      } as MissionAlert;
     } catch (error) {
       console.error("Error creating alert:", error);
       throw error;
@@ -511,16 +563,29 @@ export class MissionEngineService {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      const { error } = await supabase
-        .from("mission_alerts")
-        .update({
-          acknowledged: true,
-          acknowledged_at: new Date().toISOString(),
-          acknowledged_by: user.id
-        })
-        .eq("id", alertId);
+      // Update the log entry metadata
+      const { data: log } = await supabase
+        .from("mission_logs")
+        .select("metadata")
+        .eq("id", alertId)
+        .single();
 
-      if (error) throw error;
+      if (log) {
+        const currentMeta = (log.metadata as any) || {};
+        const updatedMetadata = {
+          ...currentMeta,
+          acknowledged: true,
+          acknowledgedAt: new Date().toISOString(),
+          acknowledgedBy: user.id
+        };
+
+        const { error } = await supabase
+          .from("mission_logs")
+          .update({ metadata: updatedMetadata })
+          .eq("id", alertId);
+
+        if (error) throw error;
+      }
     } catch (error) {
       console.error("Error acknowledging alert:", error);
       throw error;
@@ -555,17 +620,18 @@ export class MissionEngineService {
   }
 
   private mapToLog(data: any): MissionLog {
+    const metadata = data.metadata || {};
     return {
       id: data.id,
       missionId: data.mission_id,
-      logType: data.log_type,
-      severity: data.severity,
-      title: data.title,
-      message: data.message,
-      category: data.category,
-      sourceModule: data.source_module,
-      eventTimestamp: data.event_timestamp,
-      metadata: data.metadata || {},
+      logType: metadata.logType || data.status || "info",
+      severity: metadata.severity || "low",
+      title: metadata.title || data.mission_name,
+      message: data.description || "",
+      category: metadata.category || "General",
+      sourceModule: metadata.sourceModule || "Mission System",
+      eventTimestamp: metadata.eventTimestamp || data.created_at,
+      metadata: metadata,
       createdAt: data.created_at
     };
   }
