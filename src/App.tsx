@@ -75,6 +75,7 @@ const SensorsHub = safeLazyImport(() => import("@/modules/sensors-hub"));
 const CrewValidation = safeLazyImport(() => import("@/pages/admin/crew/validation"));
 const IntegrationsValidation = safeLazyImport(() => import("@/pages/admin/integrations/validation"));
 const AnalyticsValidation = safeLazyImport(() => import("@/pages/admin/analytics/validation"));
+const ValidationPatches622_626 = safeLazyImport(() => import("@/pages/ValidationPatches622_626"));
 const Reports = safeLazyImport(() => import("@/pages/Reports"));
 const Reservations = safeLazyImport(() => import("@/pages/Reservations"));
 const ChecklistsInteligentes = safeLazyImport(() => import("@/pages/ChecklistsInteligentes"));
@@ -595,6 +596,7 @@ function App() {
                     <Route path="/unauthorized" element={<Unauthorized />} />
                     <Route path="/validation/preview-lite" element={<PatchesPreview />} />
                     <Route path="/preview-lite" element={<PatchesPreview />} />
+                    <Route path="/validation/patches-622-626" element={<ValidationPatches622_626 />} />
                     
                     {/* All routes wrapped in SmartLayout */}
                     <Route element={<SmartLayout />}>

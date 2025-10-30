@@ -230,20 +230,19 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
 }
 
 /**
- * Log watchdog event to database
+ * Log watchdog event (console only for now)
  */
 async function logWatchdogEvent(data: Record<string, any>) {
   try {
-    const { error } = await supabase.from('watchdog_logs').insert({
-      ...data,
-      component: 'dashboard',
-      timestamp: new Date().toISOString(),
-      user_agent: navigator.userAgent,
-      url: window.location.href
-    });
-
-    if (error) {
-      console.error('[Watchdog] Failed to log event:', error);
+    console.log('[Watchdog Event]', JSON.stringify(data, null, 2));
+    
+    // Store in localStorage for debugging
+    try {
+      const logs = JSON.parse(localStorage.getItem('watchdog_events') || '[]');
+      logs.push({ ...data, timestamp: new Date().toISOString() });
+      localStorage.setItem('watchdog_events', JSON.stringify(logs.slice(-50))); // Keep last 50
+    } catch (e) {
+      // Ignore localStorage errors
     }
   } catch (error) {
     console.error('[Watchdog] Error logging event:', error);
