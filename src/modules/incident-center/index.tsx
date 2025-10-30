@@ -95,15 +95,15 @@ export const IncidentCenter: React.FC = () => {
       const filterDate = new Date();
       
       switch (dateFilter) {
-        case "today":
-          filterDate.setHours(0, 0, 0, 0);
-          break;
-        case "week":
-          filterDate.setDate(now.getDate() - 7);
-          break;
-        case "month":
-          filterDate.setMonth(now.getMonth() - 1);
-          break;
+      case "today":
+        filterDate.setHours(0, 0, 0, 0);
+        break;
+      case "week":
+        filterDate.setDate(now.getDate() - 7);
+        break;
+      case "month":
+        filterDate.setMonth(now.getMonth() - 1);
+        break;
       }
 
       if (dateFilter !== "all") {

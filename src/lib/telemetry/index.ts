@@ -3,14 +3,14 @@
  * Centralized telemetry tracking with PostHog
  */
 
-import posthog from 'posthog-js';
-import type { TelemetryEvent, TelemetryEventName } from './events';
-import { ConsentManager } from './consent';
-import { OfflineQueue } from './offline-queue';
+import posthog from "posthog-js";
+import type { TelemetryEvent, TelemetryEventName } from "./events";
+import { ConsentManager } from "./consent";
+import { OfflineQueue } from "./offline-queue";
 
-const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY || '';
-const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || 'https://app.posthog.com';
-const TELEMETRY_ENABLED = import.meta.env.VITE_TELEMETRY_ENABLED === 'true';
+const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY || "";
+const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || "https://app.posthog.com";
+const TELEMETRY_ENABLED = import.meta.env.VITE_TELEMETRY_ENABLED === "true";
 
 class TelemetryService {
   private initialized = false;
@@ -18,12 +18,12 @@ class TelemetryService {
 
   constructor() {
     // Monitor online/offline status
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.online = true;
       this.syncOfflineEvents();
     });
 
-    window.addEventListener('offline', () => {
+    window.addEventListener("offline", () => {
       this.online = false;
     });
   }
@@ -50,18 +50,18 @@ class TelemetryService {
         disable_session_recording: false,
         session_recording: {
           maskAllInputs: true, // Mask sensitive inputs
-          maskTextSelector: '.sensitive', // Mask elements with sensitive class
+          maskTextSelector: ".sensitive", // Mask elements with sensitive class
         },
-        persistence: 'localStorage',
+        persistence: "localStorage",
         opt_out_capturing_by_default: false,
         loaded: (posthog) => {
-          console.log('PostHog initialized');
+          console.log("PostHog initialized");
           this.initialized = true;
           this.syncOfflineEvents();
         },
       });
     } catch (error) {
-      console.error('Failed to initialize PostHog:', error);
+      console.error("Failed to initialize PostHog:", error);
     }
   }
 
@@ -75,7 +75,7 @@ class TelemetryService {
 
     // Check consent
     if (!ConsentManager.hasConsent()) {
-      console.log('Telemetry tracking skipped - no consent');
+      console.log("Telemetry tracking skipped - no consent");
       return;
     }
 
@@ -97,7 +97,7 @@ class TelemetryService {
     try {
       posthog.capture(name, event.properties);
     } catch (error) {
-      console.error('Failed to track event:', error);
+      console.error("Failed to track event:", error);
       // Queue for retry
       OfflineQueue.enqueue(event);
     }
@@ -114,7 +114,7 @@ class TelemetryService {
     try {
       posthog.identify(userId, properties);
     } catch (error) {
-      console.error('Failed to identify user:', error);
+      console.error("Failed to identify user:", error);
     }
   }
 
@@ -129,7 +129,7 @@ class TelemetryService {
     try {
       posthog.reset();
     } catch (error) {
-      console.error('Failed to reset telemetry:', error);
+      console.error("Failed to reset telemetry:", error);
     }
   }
 
@@ -145,9 +145,9 @@ class TelemetryService {
       await OfflineQueue.processQueue(async (event) => {
         posthog.capture(event.name, event.properties);
       });
-      console.log('Offline events synced successfully');
+      console.log("Offline events synced successfully");
     } catch (error) {
-      console.error('Failed to sync offline events:', error);
+      console.error("Failed to sync offline events:", error);
     }
   }
 

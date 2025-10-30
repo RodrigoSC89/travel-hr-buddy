@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -22,7 +22,7 @@ interface PerformanceMetric {
   metric_name: string;
   metric_value: number;
   metric_unit: string;
-  status: 'normal' | 'warning' | 'critical';
+  status: "normal" | "warning" | "critical";
   metadata: any;
   created_at: string;
 }
@@ -31,7 +31,7 @@ interface PerformanceAlert {
   id: string;
   system_name: string;
   alert_type: string;
-  severity: 'info' | 'warning' | 'critical';
+  severity: "info" | "warning" | "critical";
   message: string;
   is_resolved: boolean;
   created_at: string;
@@ -42,28 +42,28 @@ export default function PerformanceDashboard() {
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [alerts, setAlerts] = useState<PerformanceAlert[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPage, setSelectedPage] = useState<string>('all');
-  const [selectedMetric, setSelectedMetric] = useState<string>('all');
-  const [timeRange, setTimeRange] = useState<string>('24h');
+  const [selectedPage, setSelectedPage] = useState<string>("all");
+  const [selectedMetric, setSelectedMetric] = useState<string>("all");
+  const [timeRange, setTimeRange] = useState<string>("24h");
 
   useEffect(() => {
     loadDashboardData();
     
     // Subscribe to real-time updates
     const metricsChannel = supabase
-      .channel('performance-metrics-changes')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'performance_metrics' }, (payload) => {
+      .channel("performance-metrics-changes")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "performance_metrics" }, (payload) => {
         setMetrics(prev => [payload.new as PerformanceMetric, ...prev].slice(0, 100));
       })
       .subscribe();
 
     const alertsChannel = supabase
-      .channel('performance-alerts-changes')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'performance_alerts' }, (payload) => {
+      .channel("performance-alerts-changes")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "performance_alerts" }, (payload) => {
         const newAlert = payload.new as PerformanceAlert;
         setAlerts(prev => [newAlert, ...prev]);
         
-        if (newAlert.severity === 'critical') {
+        if (newAlert.severity === "critical") {
           toast({
             title: "⚠️ Performance Alert",
             description: newAlert.message,
@@ -82,23 +82,23 @@ export default function PerformanceDashboard() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const hoursBack = timeRange === '1h' ? 1 : timeRange === '24h' ? 24 : timeRange === '7d' ? 168 : 720;
+      const hoursBack = timeRange === "1h" ? 1 : timeRange === "24h" ? 24 : timeRange === "7d" ? 168 : 720;
       const timeFilter = new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString();
 
       const [metricsResult, alertsResult] = await Promise.all([
         supabase
-          .from('performance_metrics')
-          .select('*')
-          .eq('system_name', 'web_vitals')
-          .gte('created_at', timeFilter)
-          .order('created_at', { ascending: false })
+          .from("performance_metrics")
+          .select("*")
+          .eq("system_name", "web_vitals")
+          .gte("created_at", timeFilter)
+          .order("created_at", { ascending: false })
           .limit(1000),
         supabase
-          .from('performance_alerts')
-          .select('*')
-          .eq('system_name', 'web_vitals')
-          .gte('created_at', timeFilter)
-          .order('created_at', { ascending: false })
+          .from("performance_alerts")
+          .select("*")
+          .eq("system_name", "web_vitals")
+          .gte("created_at", timeFilter)
+          .order("created_at", { ascending: false })
           .limit(100)
       ]);
 
@@ -108,7 +108,7 @@ export default function PerformanceDashboard() {
       setMetrics(metricsResult.data || []);
       setAlerts(alertsResult.data || []);
     } catch (error) {
-      console.error('Error loading dashboard data:', error);
+      console.error("Error loading dashboard data:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados de performance",
@@ -122,11 +122,11 @@ export default function PerformanceDashboard() {
   const getFilteredMetrics = () => {
     let filtered = metrics;
     
-    if (selectedPage !== 'all') {
+    if (selectedPage !== "all") {
       filtered = filtered.filter(m => m.metadata?.page_url === selectedPage);
     }
     
-    if (selectedMetric !== 'all') {
+    if (selectedMetric !== "all") {
       filtered = filtered.filter(m => m.metric_name === selectedMetric);
     }
     
@@ -163,40 +163,40 @@ export default function PerformanceDashboard() {
         {
           label: metricName,
           data: metricData.map(m => m.metric_value),
-          borderColor: 'rgb(75, 192, 192)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: "rgb(75, 192, 192)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
           tension: 0.1
         }
       ]
     };
   };
 
-  const webVitalsMetrics = ['CLS', 'FCP', 'LCP', 'TTFB', 'INP'];
+  const webVitalsMetrics = ["CLS", "FCP", "LCP", "TTFB", "INP"];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'critical':
-        return <Badge variant="destructive">Critical</Badge>;
-      case 'warning':
-        return <Badge variant="secondary">Warning</Badge>;
-      default:
-        return <Badge variant="default">Normal</Badge>;
+    case "critical":
+      return <Badge variant="destructive">Critical</Badge>;
+    case "warning":
+      return <Badge variant="secondary">Warning</Badge>;
+    default:
+      return <Badge variant="default">Normal</Badge>;
     }
   };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case 'warning':
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      default:
-        return <Activity className="h-5 w-5 text-blue-500" />;
+    case "critical":
+      return <AlertTriangle className="h-5 w-5 text-red-500" />;
+    case "warning":
+      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    default:
+      return <Activity className="h-5 w-5 text-blue-500" />;
     }
   };
 
   const unresolvedAlerts = alerts.filter(a => !a.is_resolved);
-  const criticalAlerts = unresolvedAlerts.filter(a => a.severity === 'critical');
+  const criticalAlerts = unresolvedAlerts.filter(a => a.severity === "critical");
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -387,7 +387,7 @@ export default function PerformanceDashboard() {
                       {getStatusBadge(metric.status)}
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {metric.metadata?.page_url || 'Unknown page'}
+                      {metric.metadata?.page_url || "Unknown page"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {formatDistanceToNow(new Date(metric.created_at), { addSuffix: true, locale: ptBR })}

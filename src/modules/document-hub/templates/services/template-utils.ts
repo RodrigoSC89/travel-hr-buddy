@@ -16,7 +16,7 @@ export const extractTemplateVariables = (content: string): string[] => {
  * Escapes special regex characters in a string
  */
 export const escapeRegexSpecialChars = (str: string): string => {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 };
 
 /**

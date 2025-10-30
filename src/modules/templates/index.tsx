@@ -235,7 +235,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     
     // Replace placeholders with values
     Object.entries(placeholderValues).forEach(([key, value]) => {
-      const regex = new RegExp(key.replace(/[{}]/g, '\\$&'), 'g');
+      const regex = new RegExp(key.replace(/[{}]/g, "\\$&"), "g");
       content = content.replace(regex, value || key);
     });
 
@@ -255,11 +255,11 @@ export const CompleteTemplateEditor: React.FC = () => {
       doc.setFontSize(12);
       doc.text(lines, 15, 15);
       
-      const filename = `${templateTitle || 'document'}_${new Date().toISOString().split('T')[0]}.pdf`;
+      const filename = `${templateTitle || "document"}_${new Date().toISOString().split("T")[0]}.pdf`;
       doc.save(filename);
       
       // PATCH 493: Save to history
-      await saveExportHistory('PDF', filename);
+      await saveExportHistory("PDF", filename);
       
       toast.success("PDF exported successfully");
     } catch (error) {
@@ -273,16 +273,16 @@ export const CompleteTemplateEditor: React.FC = () => {
 
     try {
       const html = editor.getHTML();
-      const blob = new Blob([html], { type: 'text/html' });
+      const blob = new Blob([html], { type: "text/html" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `${templateTitle || 'document'}_${new Date().toISOString().split('T')[0]}.html`;
+      link.download = `${templateTitle || "document"}_${new Date().toISOString().split("T")[0]}.html`;
       link.click();
       URL.revokeObjectURL(url);
       
       // PATCH 493: Save to history
-      await saveExportHistory('HTML', link.download);
+      await saveExportHistory("HTML", link.download);
       
       toast.success("HTML exported successfully");
     } catch (error) {
@@ -297,7 +297,7 @@ export const CompleteTemplateEditor: React.FC = () => {
 
     try {
       const content = editor.getText();
-      const paragraphs = content.split('\n').map(line => 
+      const paragraphs = content.split("\n").map(line => 
         new Paragraph({
           children: [new TextRun(line)]
         })
@@ -311,11 +311,11 @@ export const CompleteTemplateEditor: React.FC = () => {
       });
 
       const blob = await Packer.toBlob(doc);
-      const filename = `${templateTitle || 'document'}_${new Date().toISOString().split('T')[0]}.docx`;
+      const filename = `${templateTitle || "document"}_${new Date().toISOString().split("T")[0]}.docx`;
       saveAs(blob, filename);
       
       // PATCH 493: Save to history
-      await saveExportHistory('DOCX', filename);
+      await saveExportHistory("DOCX", filename);
       
       toast.success("Word document exported successfully");
     } catch (error) {
@@ -332,7 +332,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     
     // Replace placeholders with values for preview
     Object.entries(placeholderValues).forEach(([key, value]) => {
-      const regex = new RegExp(key.replace(/[{}]/g, '\\$&'), 'g');
+      const regex = new RegExp(key.replace(/[{}]/g, "\\$&"), "g");
       content = content.replace(regex, value || `<span class="text-orange-500">${key}</span>`);
     });
     
@@ -346,10 +346,10 @@ export const CompleteTemplateEditor: React.FC = () => {
       if (!user) return;
       
       const { error } = await supabase
-        .from('template_export_history')
+        .from("template_export_history")
         .insert({
           template_id: selectedTemplate?.id,
-          template_title: templateTitle || 'Untitled',
+          template_title: templateTitle || "Untitled",
           export_format: format,
           filename: filename,
           exported_by: user.id,
@@ -358,10 +358,10 @@ export const CompleteTemplateEditor: React.FC = () => {
         });
       
       if (error) {
-        console.error('Error saving export history:', error);
+        console.error("Error saving export history:", error);
       }
     } catch (error) {
-      console.error('Error saving export history:', error);
+      console.error("Error saving export history:", error);
     }
   };
 

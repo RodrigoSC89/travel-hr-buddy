@@ -278,7 +278,7 @@ class AdaptiveMetricsEngine {
         : Math.max(param.currentValue - 1, param.minValue);
       break;
 
-    case "timeoutDuration":
+    case "timeoutDuration": {
       // Increase timeout if many timeouts occur
       const recentTimeouts = history.filter(h => h.performance < 0.5).length;
       const timeoutRate = recentTimeouts / history.length;
@@ -286,6 +286,7 @@ class AdaptiveMetricsEngine {
         ? Math.min(param.currentValue * 1.3, param.maxValue)
         : Math.max(param.currentValue * 0.85, param.minValue);
       break;
+    }
 
     case "cacheExpiry":
       // Adjust based on cache hit rate (performance)

@@ -410,12 +410,12 @@ const DeepRiskAI: React.FC = () => {
                 <div className="text-center">
                   <Badge className={
                     prediction.trendDirection === "increasing" ? "bg-red-500" :
-                    prediction.trendDirection === "decreasing" ? "bg-green-500" :
-                    "bg-blue-500"
+                      prediction.trendDirection === "decreasing" ? "bg-green-500" :
+                        "bg-blue-500"
                   }>
                     {prediction.trendDirection === "increasing" ? "↗ AUMENTANDO" :
-                     prediction.trendDirection === "decreasing" ? "↘ DIMINUINDO" :
-                     "→ ESTÁVEL"}
+                      prediction.trendDirection === "decreasing" ? "↘ DIMINUINDO" :
+                        "→ ESTÁVEL"}
                   </Badge>
                   <div className="text-xs text-zinc-400 mt-1">Tendência</div>
                 </div>

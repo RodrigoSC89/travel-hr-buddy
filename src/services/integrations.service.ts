@@ -266,31 +266,31 @@ export class IntegrationsService {
 
   // PATCH 385: Enhanced OAuth Flows (Google, Slack, Notion)
   static async initiateGoogleOAuth(redirectUri: string): Promise<string> {
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
     const scope = [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/calendar',
-      'https://www.googleapis.com/auth/drive.readonly',
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/calendar",
+      "https://www.googleapis.com/auth/drive.readonly",
     ];
     
-    return this.getOAuthUrl('google', clientId, redirectUri, scope);
+    return this.getOAuthUrl("google", clientId, redirectUri, scope);
   }
 
   static async initiateSlackOAuth(redirectUri: string): Promise<string> {
-    const clientId = import.meta.env.VITE_SLACK_CLIENT_ID || '';
+    const clientId = import.meta.env.VITE_SLACK_CLIENT_ID || "";
     const scope = [
-      'channels:read',
-      'chat:write',
-      'users:read',
-      'team:read',
+      "channels:read",
+      "chat:write",
+      "users:read",
+      "team:read",
     ];
     
-    return this.getOAuthUrl('slack', clientId, redirectUri, scope);
+    return this.getOAuthUrl("slack", clientId, redirectUri, scope);
   }
 
   static async initiateNotionOAuth(redirectUri: string): Promise<string> {
-    const clientId = import.meta.env.VITE_NOTION_CLIENT_ID || '';
+    const clientId = import.meta.env.VITE_NOTION_CLIENT_ID || "";
     const state = Math.random().toString(36).substring(7);
     
     return `https://api.notion.com/v1/oauth/authorize?client_id=${clientId}&response_type=code&owner=user&redirect_uri=${redirectUri}&state=${state}`;
@@ -304,7 +304,7 @@ export class IntegrationsService {
     // This would typically call your backend to exchange the code for tokens
     // For security, OAuth token exchange should happen server-side
     
-    const { data, error } = await supabase.functions.invoke('oauth-exchange', {
+    const { data, error } = await supabase.functions.invoke("oauth-exchange", {
       body: { provider, code, redirectUri },
     });
 
@@ -318,12 +318,12 @@ export class IntegrationsService {
       token_type: data.token_type,
       expires_at: data.expires_at,
       scope: data.scope,
-      status: 'connected',
+      status: "connected",
       provider_user_id: data.user_id,
     });
 
     await this.createLog({
-      level: 'info',
+      level: "info",
       message: `OAuth connection established for ${provider}`,
       context: { provider },
     });
@@ -344,11 +344,11 @@ export class IntegrationsService {
       events,
       headers: headers || {},
       secret_key: secretKey,
-      status: 'active',
+      status: "active",
     });
 
     await this.createLog({
-      level: 'info',
+      level: "info",
       message: `Webhook configured: ${integration.name}`,
       context: { integration_id: webhookIntegration.id, events },
     });
@@ -357,8 +357,8 @@ export class IntegrationsService {
   }
 
   static generateWebhookSecret(): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let secret = 'whsec_';
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let secret = "whsec_";
     for (let i = 0; i < 32; i++) {
       secret += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -369,20 +369,20 @@ export class IntegrationsService {
     try {
       const integration = await this.getIntegration(integrationId);
       if (!integration) {
-        throw new Error('Integration not found');
+        throw new Error("Integration not found");
       }
 
       const testPayload = {
-        event: 'test',
+        event: "test",
         timestamp: new Date().toISOString(),
-        data: { message: 'This is a test webhook event' },
+        data: { message: "This is a test webhook event" },
       };
 
-      await this.dispatchWebhookEvent(integrationId, 'test', testPayload);
+      await this.dispatchWebhookEvent(integrationId, "test", testPayload);
       
       return true;
     } catch (error) {
-      console.error('Webhook test failed:', error);
+      console.error("Webhook test failed:", error);
       return false;
     }
   }
@@ -390,11 +390,11 @@ export class IntegrationsService {
   // PATCH 385: Modular Plugin System
   static async installPlugin(plugin: Partial<IntegrationPlugin>): Promise<IntegrationPlugin> {
     const { data, error } = await supabase
-      .from('integration_plugins')
+      .from("integration_plugins")
       .insert({
         ...plugin,
         is_enabled: true,
-        version: plugin.version || '1.0.0',
+        version: plugin.version || "1.0.0",
       })
       .select()
       .single();
@@ -402,7 +402,7 @@ export class IntegrationsService {
     if (error) throw error;
 
     await this.createLog({
-      level: 'info',
+      level: "info",
       message: `Plugin installed: ${plugin.display_name}`,
       context: { plugin_id: data.id },
     });
@@ -412,14 +412,14 @@ export class IntegrationsService {
 
   static async uninstallPlugin(pluginId: string): Promise<void> {
     const { error } = await supabase
-      .from('integration_plugins')
+      .from("integration_plugins")
       .delete()
-      .eq('id', pluginId);
+      .eq("id", pluginId);
 
     if (error) throw error;
 
     await this.createLog({
-      level: 'info',
+      level: "info",
       message: `Plugin uninstalled: ${pluginId}`,
       context: { plugin_id: pluginId },
     });
@@ -431,7 +431,7 @@ export class IntegrationsService {
   ): Promise<void> {
     const plugin = await this.getPluginById(pluginId);
     if (!plugin) {
-      throw new Error('Plugin not found');
+      throw new Error("Plugin not found");
     }
 
     // Validate config against schema if available
@@ -440,17 +440,17 @@ export class IntegrationsService {
     }
 
     const { error } = await supabase
-      .from('integration_plugins')
+      .from("integration_plugins")
       .update({ 
         metadata: { ...plugin.metadata, config },
         updated_at: new Date().toISOString(),
       })
-      .eq('id', pluginId);
+      .eq("id", pluginId);
 
     if (error) throw error;
 
     await this.createLog({
-      level: 'info',
+      level: "info",
       message: `Plugin configured: ${plugin.display_name}`,
       context: { plugin_id: pluginId },
     });
@@ -458,9 +458,9 @@ export class IntegrationsService {
 
   static async getPluginById(pluginId: string): Promise<IntegrationPlugin | null> {
     const { data, error } = await supabase
-      .from('integration_plugins')
-      .select('*')
-      .eq('id', pluginId)
+      .from("integration_plugins")
+      .select("*")
+      .eq("id", pluginId)
       .single();
 
     if (error) throw error;
@@ -487,17 +487,17 @@ export class IntegrationsService {
   ): Promise<any> {
     const plugin = await this.getPluginById(pluginId);
     if (!plugin || !plugin.is_enabled) {
-      throw new Error('Plugin not available');
+      throw new Error("Plugin not available");
     }
 
     await this.createLog({
-      level: 'info',
+      level: "info",
       message: `Plugin execution: ${plugin.display_name} - ${action}`,
       context: { plugin_id: pluginId, action, params },
     });
 
     // In production, this would delegate to plugin execution engine
-    return { success: true, result: 'Plugin executed successfully' };
+    return { success: true, result: "Plugin executed successfully" };
   }
 
   // PATCH 385: Integration Status Dashboard
@@ -508,7 +508,7 @@ export class IntegrationsService {
 
     const oauthStatus = connections.reduce((acc, conn) => {
       acc[conn.provider] = {
-        connected: conn.status === 'connected',
+        connected: conn.status === "connected",
         last_sync: conn.last_sync_at,
         expires_at: conn.expires_at,
       };
@@ -538,9 +538,9 @@ export class IntegrationsService {
   }
 
   static calculateHealthStatus(stats: IntegrationDashboardStats): string {
-    if (stats.success_rate >= 95) return 'healthy';
-    if (stats.success_rate >= 80) return 'degraded';
-    return 'critical';
+    if (stats.success_rate >= 95) return "healthy";
+    if (stats.success_rate >= 80) return "degraded";
+    return "critical";
   }
 
   // PATCH 385: Metrics and Monitoring
@@ -549,19 +549,19 @@ export class IntegrationsService {
     startDate.setDate(startDate.getDate() - days);
 
     const { data: events, error } = await supabase
-      .from('webhook_events')
-      .select('*')
-      .gte('triggered_at', startDate.toISOString());
+      .from("webhook_events")
+      .select("*")
+      .gte("triggered_at", startDate.toISOString());
 
     if (error) throw error;
 
     const eventsByDay = new Map<string, { success: number; failed: number }>();
     
     for (const event of events || []) {
-      const day = event.triggered_at.split('T')[0];
+      const day = event.triggered_at.split("T")[0];
       const current = eventsByDay.get(day) || { success: 0, failed: 0 };
       
-      if (event.status === 'success') {
+      if (event.status === "success") {
         current.success++;
       } else {
         current.failed++;
@@ -578,8 +578,8 @@ export class IntegrationsService {
 
     return {
       total_events: events?.length || 0,
-      success_count: events?.filter(e => e.status === 'success').length || 0,
-      failure_count: events?.filter(e => e.status === 'failed').length || 0,
+      success_count: events?.filter(e => e.status === "success").length || 0,
+      failure_count: events?.filter(e => e.status === "failed").length || 0,
       by_day: Array.from(eventsByDay.entries()).map(([day, stats]) => ({
         date: day,
         ...stats,

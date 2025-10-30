@@ -7,18 +7,18 @@
  * @created 2025-01-24
  */
 
-export type DecisionType = 'strategic' | 'tactical' | 'operational' | 'critical';
-export type DecisionStatus = 'proposed' | 'under_review' | 'accepted' | 'rejected' | 'modified';
-export type ConfidenceLevel = 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
+export type DecisionType = "strategic" | "tactical" | "operational" | "critical";
+export type DecisionStatus = "proposed" | "under_review" | "accepted" | "rejected" | "modified";
+export type ConfidenceLevel = "very_low" | "low" | "medium" | "high" | "very_high";
 
 export interface DecisionOption {
   id: string;
   description: string;
   pros: string[];
   cons: string[];
-  riskLevel: 'low' | 'medium' | 'high';
+  riskLevel: "low" | "medium" | "high";
   estimatedImpact: number; // 0-1 scale
-  recommendedBy: 'ai' | 'human' | 'both';
+  recommendedBy: "ai" | "human" | "both";
 }
 
 export interface DecisionProposal {
@@ -46,7 +46,7 @@ export interface OperatorReview {
 export interface DecisionResult {
   proposal: DecisionProposal;
   review: OperatorReview;
-  executionStatus: 'pending' | 'executing' | 'completed' | 'failed';
+  executionStatus: "pending" | "executing" | "completed" | "failed";
   executionTime?: Date;
   outcome?: string;
 }
@@ -63,10 +63,10 @@ export interface AIConfidenceAdjustment {
 class AdaptiveJointDecision {
   private decisionHistory: DecisionResult[] = [];
   private confidenceLevels: Map<DecisionType, ConfidenceLevel> = new Map([
-    ['strategic', 'medium'],
-    ['tactical', 'medium'],
-    ['operational', 'high'],
-    ['critical', 'low']
+    ["strategic", "medium"],
+    ["tactical", "medium"],
+    ["operational", "high"],
+    ["critical", "low"]
   ]);
   private feedbackStats: Map<DecisionType, { accepted: number; rejected: number }> = new Map();
 
@@ -76,7 +76,7 @@ class AdaptiveJointDecision {
   proposeDecision(
     type: DecisionType,
     context: string,
-    options: Omit<DecisionOption, 'id'>[],
+    options: Omit<DecisionOption, "id">[],
     deadline?: Date
   ): DecisionProposal {
     // Gera IDs para as opções
@@ -87,12 +87,12 @@ class AdaptiveJointDecision {
 
     // Determina recomendação da IA
     const aiRecommendation = this.generateAIRecommendation(optionsWithIds);
-    const aiConfidence = this.confidenceLevels.get(type) || 'medium';
+    const aiConfidence = this.confidenceLevels.get(type) || "medium";
 
     // Decisões críticas sempre requerem aprovação humana
-    const requiresHumanApproval = type === 'critical' || 
-                                   aiConfidence === 'low' || 
-                                   aiConfidence === 'very_low';
+    const requiresHumanApproval = type === "critical" || 
+                                   aiConfidence === "low" || 
+                                   aiConfidence === "very_low";
 
     const proposal: DecisionProposal = {
       id: `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -106,7 +106,7 @@ class AdaptiveJointDecision {
       deadline
     };
 
-    console.log('[AdaptiveJointDecision] Decision proposed:', {
+    console.log("[AdaptiveJointDecision] Decision proposed:", {
       id: proposal.id,
       type,
       optionsCount: optionsWithIds.length,
@@ -133,7 +133,7 @@ class AdaptiveJointDecision {
       decisionId: proposal.id,
       status,
       selectedOptionId,
-      feedback: feedback || '',
+      feedback: feedback || "",
       modifiedDecision,
       reviewTime: new Date(),
       operator
@@ -143,17 +143,17 @@ class AdaptiveJointDecision {
     const result: DecisionResult = {
       proposal,
       review,
-      executionStatus: status === 'accepted' ? 'pending' : 'completed'
+      executionStatus: status === "accepted" ? "pending" : "completed"
     };
 
     this.decisionHistory.push(result);
 
     // Ajusta confiança baseado no feedback
-    if (status === 'accepted' || status === 'rejected') {
-      this.adjustAIConfidence(proposal.type, status === 'accepted');
+    if (status === "accepted" || status === "rejected") {
+      this.adjustAIConfidence(proposal.type, status === "accepted");
     }
 
-    console.log('[AdaptiveJointDecision] Decision reviewed:', {
+    console.log("[AdaptiveJointDecision] Decision reviewed:", {
       decisionId: proposal.id,
       status,
       operator,
@@ -182,27 +182,27 @@ class AdaptiveJointDecision {
     const successRate = stats.accepted / total;
 
     // Confiança anterior
-    const previousConfidence = this.confidenceLevels.get(type) || 'medium';
+    const previousConfidence = this.confidenceLevels.get(type) || "medium";
     let newConfidence: ConfidenceLevel = previousConfidence;
-    let reason = '';
+    let reason = "";
 
     // Ajusta confiança baseado na taxa de sucesso
     if (total >= 5) { // Mínimo de 5 decisões para ajuste
       if (successRate >= 0.9) {
-        newConfidence = 'very_high';
-        reason = 'High success rate (>90%)';
+        newConfidence = "very_high";
+        reason = "High success rate (>90%)";
       } else if (successRate >= 0.7) {
-        newConfidence = 'high';
-        reason = 'Good success rate (70-90%)';
+        newConfidence = "high";
+        reason = "Good success rate (70-90%)";
       } else if (successRate >= 0.5) {
-        newConfidence = 'medium';
-        reason = 'Average success rate (50-70%)';
+        newConfidence = "medium";
+        reason = "Average success rate (50-70%)";
       } else if (successRate >= 0.3) {
-        newConfidence = 'low';
-        reason = 'Below average success rate (30-50%)';
+        newConfidence = "low";
+        reason = "Below average success rate (30-50%)";
       } else {
-        newConfidence = 'very_low';
-        reason = 'Poor success rate (<30%)';
+        newConfidence = "very_low";
+        reason = "Poor success rate (<30%)";
       }
 
       this.confidenceLevels.set(type, newConfidence);
@@ -212,16 +212,16 @@ class AdaptiveJointDecision {
       decisionType: type,
       previousConfidence,
       newConfidence,
-      reason: reason || 'Insufficient data for adjustment',
+      reason: reason || "Insufficient data for adjustment",
       feedbackCount: total,
       successRate
     };
 
-    console.log('[AdaptiveJointDecision] AI confidence adjusted:', {
+    console.log("[AdaptiveJointDecision] AI confidence adjusted:", {
       type,
       previousConfidence,
       newConfidence,
-      successRate: (successRate * 100).toFixed(1) + '%',
+      successRate: (successRate * 100).toFixed(1) + "%",
       totalFeedback: total
     });
 
@@ -233,7 +233,7 @@ class AdaptiveJointDecision {
    */
   private generateAIRecommendation(options: DecisionOption[]): string {
     if (options.length === 0) {
-      return 'Nenhuma opção disponível';
+      return "Nenhuma opção disponível";
     }
 
     // Pontua cada opção
@@ -242,7 +242,7 @@ class AdaptiveJointDecision {
       
       // Pontos positivos
       score += opt.pros.length * 2;
-      const riskScore = opt.riskLevel === 'low' ? 0 : opt.riskLevel === 'medium' ? 0.5 : 1;
+      const riskScore = opt.riskLevel === "low" ? 0 : opt.riskLevel === "medium" ? 0.5 : 1;
       score -= riskScore * 3; // Subtract for higher risk
       score += opt.estimatedImpact * 5;
       
@@ -258,7 +258,7 @@ class AdaptiveJointDecision {
 
     return `Recomendo: "${bestOption.description}" (ID: ${bestOption.id}). ` +
            `Risco: ${bestOption.riskLevel}, Impacto: ${(bestOption.estimatedImpact * 100).toFixed(0)}%. ` +
-           `Principais vantagens: ${bestOption.pros.slice(0, 2).join(', ')}.`;
+           `Principais vantagens: ${bestOption.pros.slice(0, 2).join(", ")}.`;
   }
 
   /**
@@ -285,7 +285,7 @@ class AdaptiveJointDecision {
    * Obtém nível de confiança atual
    */
   getConfidenceLevel(type: DecisionType): ConfidenceLevel {
-    return this.confidenceLevels.get(type) || 'medium';
+    return this.confidenceLevels.get(type) || "medium";
   }
 
   /**
@@ -294,10 +294,10 @@ class AdaptiveJointDecision {
   executeDecision(decisionId: string): void {
     const result = this.decisionHistory.find(d => d.proposal.id === decisionId);
     if (result) {
-      result.executionStatus = 'executing';
+      result.executionStatus = "executing";
       result.executionTime = new Date();
       
-      console.log('[AdaptiveJointDecision] Decision execution started:', {
+      console.log("[AdaptiveJointDecision] Decision execution started:", {
         decisionId,
         type: result.proposal.type
       });
@@ -310,10 +310,10 @@ class AdaptiveJointDecision {
   completeDecision(decisionId: string, outcome: string): void {
     const result = this.decisionHistory.find(d => d.proposal.id === decisionId);
     if (result) {
-      result.executionStatus = 'completed';
+      result.executionStatus = "completed";
       result.outcome = outcome;
       
-      console.log('[AdaptiveJointDecision] Decision execution completed:', {
+      console.log("[AdaptiveJointDecision] Decision execution completed:", {
         decisionId,
         outcome
       });
@@ -326,13 +326,13 @@ class AdaptiveJointDecision {
   failDecision(decisionId: string, outcome: string): void {
     const result = this.decisionHistory.find(d => d.proposal.id === decisionId);
     if (result) {
-      result.executionStatus = 'failed';
+      result.executionStatus = "failed";
       result.outcome = outcome;
       
       // Ajusta confiança para baixo em caso de falha
       this.adjustAIConfidence(result.proposal.type, false);
       
-      console.log('[AdaptiveJointDecision] Decision execution failed:', {
+      console.log("[AdaptiveJointDecision] Decision execution failed:", {
         decisionId,
         outcome
       });

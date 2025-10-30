@@ -318,26 +318,26 @@ export default function FleetTelemetryModule() {
                     <div className="flex items-center gap-4 flex-1">
                       <div className={`p-2 rounded-full ${
                         sensor.status === "normal" ? "bg-green-100" :
-                        sensor.status === "warning" ? "bg-yellow-100" :
-                        "bg-red-100"
+                          sensor.status === "warning" ? "bg-yellow-100" :
+                            "bg-red-100"
                       }`}>
                         {sensor.sensor_type.includes("temperature") ? (
                           <Thermometer className={`h-5 w-5 ${
                             sensor.status === "normal" ? "text-green-600" :
-                            sensor.status === "warning" ? "text-yellow-600" :
-                            "text-red-600"
+                              sensor.status === "warning" ? "text-yellow-600" :
+                                "text-red-600"
                           }`} />
                         ) : sensor.sensor_type.includes("fuel") ? (
                           <Droplets className={`h-5 w-5 ${
                             sensor.status === "normal" ? "text-green-600" :
-                            sensor.status === "warning" ? "text-yellow-600" :
-                            "text-red-600"
+                              sensor.status === "warning" ? "text-yellow-600" :
+                                "text-red-600"
                           }`} />
                         ) : (
                           <Zap className={`h-5 w-5 ${
                             sensor.status === "normal" ? "text-green-600" :
-                            sensor.status === "warning" ? "text-yellow-600" :
-                            "text-red-600"
+                              sensor.status === "warning" ? "text-yellow-600" :
+                                "text-red-600"
                           }`} />
                         )}
                       </div>
@@ -364,8 +364,8 @@ export default function FleetTelemetryModule() {
 
                     <Badge variant={
                       sensor.status === "normal" ? "default" :
-                      sensor.status === "warning" ? "secondary" :
-                      "destructive"
+                        sensor.status === "warning" ? "secondary" :
+                          "destructive"
                     }>
                       {sensor.status.toUpperCase()}
                     </Badge>
@@ -399,9 +399,9 @@ export default function FleetTelemetryModule() {
                         <div className="flex items-start gap-3">
                           <AlertTriangle className={`h-5 w-5 mt-0.5 ${
                             alert.severity === "critical" ? "text-destructive" :
-                            alert.severity === "high" ? "text-orange-500" :
-                            alert.severity === "medium" ? "text-yellow-500" :
-                            "text-blue-500"
+                              alert.severity === "high" ? "text-orange-500" :
+                                alert.severity === "medium" ? "text-yellow-500" :
+                                  "text-blue-500"
                           }`} />
                           <div>
                             <div className="flex items-center gap-2 mb-2">
@@ -409,8 +409,8 @@ export default function FleetTelemetryModule() {
                               <Badge variant="outline">{alert.vessel_name}</Badge>
                               <Badge variant={
                                 alert.alert_type === "emergency" ? "destructive" :
-                                alert.alert_type === "predictive" ? "secondary" :
-                                "default"
+                                  alert.alert_type === "predictive" ? "secondary" :
+                                    "default"
                               }>
                                 {alert.alert_type}
                               </Badge>
@@ -425,8 +425,8 @@ export default function FleetTelemetryModule() {
                         </div>
                         <Badge variant={
                           alert.severity === "critical" ? "destructive" :
-                          alert.severity === "high" ? "secondary" :
-                          "outline"
+                            alert.severity === "high" ? "secondary" :
+                              "outline"
                         }>
                           {alert.severity.toUpperCase()}
                         </Badge>

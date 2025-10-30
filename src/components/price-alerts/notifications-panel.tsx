@@ -1,11 +1,11 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bell, BellRing, Check, CheckCheck } from 'lucide-react';
-import { format } from 'date-fns';
-import { PriceNotification } from '@/services/price-alerts-service';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Bell, BellRing, Check, CheckCheck } from "lucide-react";
+import { format } from "date-fns";
+import { PriceNotification } from "@/services/price-alerts-service";
 
 interface NotificationsPanelProps {
   notifications: PriceNotification[];
@@ -63,15 +63,15 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
                   key={notification.id}
                   className={`p-4 rounded-lg border transition-colors ${
                     notification.is_read
-                      ? 'bg-background'
-                      : 'bg-primary/5 border-primary/20'
+                      ? "bg-background"
+                      : "bg-primary/5 border-primary/20"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 space-y-1">
                       <p className="text-sm">{notification.message}</p>
                       <p className="text-xs text-muted-foreground">
-                        {format(new Date(notification.created_at), 'MMM dd, yyyy HH:mm')}
+                        {format(new Date(notification.created_at), "MMM dd, yyyy HH:mm")}
                       </p>
                     </div>
                     {!notification.is_read && (

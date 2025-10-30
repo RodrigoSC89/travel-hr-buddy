@@ -1,32 +1,32 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
-import Patch521Validation from '@/modules/route-planner/validation/Patch521Validation';
-import Patch522Validation from '@/modules/price-predictor/validation/Patch522Validation';
-import Patch523Validation from '@/modules/travel-system/validation/Patch523Validation';
-import Patch524Validation from '@/modules/task-automation/validation/Patch524Validation';
-import Patch525Validation from '@/modules/forecast-engine/validation/Patch525Validation';
-import Patch535Validation from '@/modules/security-validation/Patch535Validation';
-import Patch536Validation from '@/modules/testing/validation/Patch536Validation';
-import Patch537Validation from '@/modules/audit/validation/Patch537Validation';
-import Patch538Validation from '@/modules/adaptive-ui/validation/Patch538Validation';
-import Patch539Validation from '@/modules/ai-logging/validation/Patch539Validation';
-import Patch540Validation from '@/modules/system-status/validation/Patch540Validation';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CheckCircle2, XCircle, AlertCircle } from "lucide-react";
+import Patch521Validation from "@/modules/route-planner/validation/Patch521Validation";
+import Patch522Validation from "@/modules/price-predictor/validation/Patch522Validation";
+import Patch523Validation from "@/modules/travel-system/validation/Patch523Validation";
+import Patch524Validation from "@/modules/task-automation/validation/Patch524Validation";
+import Patch525Validation from "@/modules/forecast-engine/validation/Patch525Validation";
+import Patch535Validation from "@/modules/security-validation/Patch535Validation";
+import Patch536Validation from "@/modules/testing/validation/Patch536Validation";
+import Patch537Validation from "@/modules/audit/validation/Patch537Validation";
+import Patch538Validation from "@/modules/adaptive-ui/validation/Patch538Validation";
+import Patch539Validation from "@/modules/ai-logging/validation/Patch539Validation";
+import Patch540Validation from "@/modules/system-status/validation/Patch540Validation";
 
 export default function MasterValidationDashboard() {
   const patches = [
-    { id: 521, name: 'AI Route Planner', status: 'pending', category: 'AI Features' },
-    { id: 522, name: 'Price Predictor', status: 'pending', category: 'AI Features' },
-    { id: 523, name: 'Travel System + Forecast', status: 'pending', category: 'Core Features' },
-    { id: 524, name: 'Task Automation Rules', status: 'pending', category: 'Automation' },
-    { id: 525, name: 'Forecast AI Engine v2', status: 'pending', category: 'AI Features' },
-    { id: 535, name: 'Security Audit (Lovable)', status: 'active', category: 'Security' },
-    { id: 536, name: 'Automated Testing', status: 'pending', category: 'Quality' },
-    { id: 537, name: 'Audit Dashboard', status: 'active', category: 'Security' },
-    { id: 538, name: 'Adaptive UI Engine', status: 'pending', category: 'UI/UX' },
-    { id: 539, name: 'AI Logging', status: 'active', category: 'Security' },
-    { id: 540, name: 'System Status Panel', status: 'pending', category: 'Operations' },
+    { id: 521, name: "AI Route Planner", status: "pending", category: "AI Features" },
+    { id: 522, name: "Price Predictor", status: "pending", category: "AI Features" },
+    { id: 523, name: "Travel System + Forecast", status: "pending", category: "Core Features" },
+    { id: 524, name: "Task Automation Rules", status: "pending", category: "Automation" },
+    { id: 525, name: "Forecast AI Engine v2", status: "pending", category: "AI Features" },
+    { id: 535, name: "Security Audit (Lovable)", status: "active", category: "Security" },
+    { id: 536, name: "Automated Testing", status: "pending", category: "Quality" },
+    { id: 537, name: "Audit Dashboard", status: "active", category: "Security" },
+    { id: 538, name: "Adaptive UI Engine", status: "pending", category: "UI/UX" },
+    { id: 539, name: "AI Logging", status: "active", category: "Security" },
+    { id: 540, name: "System Status Panel", status: "pending", category: "Operations" },
   ];
 
   return (
@@ -54,7 +54,7 @@ export default function MasterValidationDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-yellow-600">
-              {patches.filter(p => p.status === 'active').length}
+              {patches.filter(p => p.status === "active").length}
             </div>
           </CardContent>
         </Card>
@@ -64,7 +64,7 @@ export default function MasterValidationDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-muted-foreground">
-              {patches.filter(p => p.status === 'pending').length}
+              {patches.filter(p => p.status === "pending").length}
             </div>
           </CardContent>
         </Card>
@@ -83,7 +83,7 @@ export default function MasterValidationDashboard() {
                 className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  {patch.status === 'active' ? (
+                  {patch.status === "active" ? (
                     <AlertCircle className="h-5 w-5 text-yellow-600" />
                   ) : (
                     <XCircle className="h-5 w-5 text-muted-foreground" />
@@ -93,8 +93,8 @@ export default function MasterValidationDashboard() {
                     <p className="text-xs text-muted-foreground">{patch.category}</p>
                   </div>
                 </div>
-                <Badge variant={patch.status === 'active' ? 'default' : 'secondary'}>
-                  {patch.status === 'active' ? 'Em Validação' : 'Pendente'}
+                <Badge variant={patch.status === "active" ? "default" : "secondary"}>
+                  {patch.status === "active" ? "Em Validação" : "Pendente"}
                 </Badge>
               </div>
             ))}

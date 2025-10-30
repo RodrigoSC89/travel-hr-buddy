@@ -69,27 +69,27 @@ export const ConnectivityPanel: React.FC = () => {
 
   const getStatusColor = (status: SatcomLink["status"]) => {
     switch (status) {
-      case "online":
-        return "bg-green-500";
-      case "degraded":
-        return "bg-yellow-500";
-      case "offline":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
+    case "online":
+      return "bg-green-500";
+    case "degraded":
+      return "bg-yellow-500";
+    case "offline":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusLabel = (status: SatcomLink["status"]) => {
     switch (status) {
-      case "online":
-        return "Online";
-      case "degraded":
-        return "Degradado";
-      case "offline":
-        return "Offline";
-      default:
-        return "Desconhecido";
+    case "online":
+      return "Online";
+    case "degraded":
+      return "Degradado";
+    case "offline":
+      return "Offline";
+    default:
+      return "Desconhecido";
     }
   };
 

@@ -6,15 +6,15 @@
  * during the closed beta testing phase
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FeedbackData {
   userId: string;
@@ -37,15 +37,15 @@ export function BetaFeedbackForm() {
   const [sessionStart] = useState(Date.now());
   
   const [formData, setFormData] = useState({
-    userName: '',
-    email: '',
-    rating: '',
-    module: '',
-    usabilityRating: '',
-    performanceRating: '',
-    comments: '',
-    suggestions: '',
-    bugs: '',
+    userName: "",
+    email: "",
+    rating: "",
+    module: "",
+    usabilityRating: "",
+    performanceRating: "",
+    comments: "",
+    suggestions: "",
+    bugs: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,47 +64,47 @@ export function BetaFeedbackForm() {
 
       // Store in Supabase
       const { error } = await supabase
-        .from('beta_feedback')
+        .from("beta_feedback")
         .insert([feedbackData]);
 
       if (error) throw error;
 
       // Also store locally for CSV/JSON export
-      await fetch('/api/feedback/store', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/feedback/store", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(feedbackData),
       }).catch(() => {
         // Local storage fallback
-        const existing = localStorage.getItem('beta_feedback') || '[]';
+        const existing = localStorage.getItem("beta_feedback") || "[]";
         const feedbacks = JSON.parse(existing);
         feedbacks.push(feedbackData);
-        localStorage.setItem('beta_feedback', JSON.stringify(feedbacks));
+        localStorage.setItem("beta_feedback", JSON.stringify(feedbacks));
       });
 
       toast({
-        title: 'Feedback Enviado!',
-        description: 'Obrigado por sua contribuição ao Travel HR Buddy Beta.',
+        title: "Feedback Enviado!",
+        description: "Obrigado por sua contribuição ao Travel HR Buddy Beta.",
       });
 
       // Reset form
       setFormData({
-        userName: '',
-        email: '',
-        rating: '',
-        module: '',
-        usabilityRating: '',
-        performanceRating: '',
-        comments: '',
-        suggestions: '',
-        bugs: '',
+        userName: "",
+        email: "",
+        rating: "",
+        module: "",
+        usabilityRating: "",
+        performanceRating: "",
+        comments: "",
+        suggestions: "",
+        bugs: "",
       });
     } catch (error) {
-      console.error('Error submitting feedback:', error);
+      console.error("Error submitting feedback:", error);
       toast({
-        title: 'Erro',
-        description: 'Não foi possível enviar o feedback. Tente novamente.',
-        variant: 'destructive',
+        title: "Erro",
+        description: "Não foi possível enviar o feedback. Tente novamente.",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -273,7 +273,7 @@ export function BetaFeedbackForm() {
           </div>
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? 'Enviando...' : 'Enviar Feedback'}
+            {isSubmitting ? "Enviando..." : "Enviar Feedback"}
           </Button>
         </form>
       </CardContent>

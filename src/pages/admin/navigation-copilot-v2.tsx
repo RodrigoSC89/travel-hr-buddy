@@ -269,8 +269,8 @@ export default function NavigationCopilotV2() {
                               suggestion.priority === "high"
                                 ? "destructive"
                                 : suggestion.priority === "medium"
-                                ? "default"
-                                : "secondary"
+                                  ? "default"
+                                  : "secondary"
                             }
                             className="text-xs"
                           >

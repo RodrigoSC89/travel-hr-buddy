@@ -4,10 +4,10 @@
  * Unified dashboard integrating all mission control sub-modules
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { 
   Target, 
   FileText, 
@@ -15,14 +15,14 @@ import {
   BarChart3, 
   Download,
   Plus
-} from 'lucide-react';
-import { MissionPlanner } from '../components/MissionPlanner';
-import { MissionLogs } from '../components/MissionLogs';
-import { AICommander } from '../components/AICommander';
-import { KPIDashboard } from '../components/KPIDashboard';
-import { toast } from 'sonner';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+} from "lucide-react";
+import { MissionPlanner } from "../components/MissionPlanner";
+import { MissionLogs } from "../components/MissionLogs";
+import { AICommander } from "../components/AICommander";
+import { KPIDashboard } from "../components/KPIDashboard";
+import { toast } from "sonner";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 interface MissionStats {
   total: number;
@@ -38,7 +38,7 @@ export const MissionControlConsolidation: React.FC = () => {
     completed: 0,
     failed: 0
   });
-  const [activeTab, setActiveTab] = useState('workflows');
+  const [activeTab, setActiveTab] = useState("workflows");
 
   useEffect(() => {
     loadMissionStats();
@@ -60,14 +60,14 @@ export const MissionControlConsolidation: React.FC = () => {
       
       // Header
       doc.setFontSize(20);
-      doc.text('Mission Control Report', 20, 20);
+      doc.text("Mission Control Report", 20, 20);
       
       doc.setFontSize(12);
       doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 30);
       
       // Statistics
       doc.setFontSize(14);
-      doc.text('Mission Statistics', 20, 45);
+      doc.text("Mission Statistics", 20, 45);
       doc.setFontSize(10);
       doc.text(`Total Missions: ${stats.total}`, 20, 55);
       doc.text(`Active: ${stats.active}`, 20, 62);
@@ -80,10 +80,10 @@ export const MissionControlConsolidation: React.FC = () => {
       
       // Save PDF
       doc.save(`mission-report-${Date.now()}.pdf`);
-      toast.success('Relatório exportado com sucesso');
+      toast.success("Relatório exportado com sucesso");
     } catch (error) {
-      console.error('Failed to export report:', error);
-      toast.error('Falha ao exportar relatório');
+      console.error("Failed to export report:", error);
+      toast.error("Falha ao exportar relatório");
     }
   };
 

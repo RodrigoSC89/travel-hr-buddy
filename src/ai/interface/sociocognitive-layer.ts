@@ -7,14 +7,14 @@
  * @created 2025-01-24
  */
 
-export type UrgencyLevel = 'low' | 'medium' | 'high' | 'critical';
-export type ToneType = 'calm' | 'neutral' | 'urgent' | 'stressed' | 'confident';
-export type OperationalLoad = 'minimal' | 'normal' | 'high' | 'overload';
+export type UrgencyLevel = "low" | "medium" | "high" | "critical";
+export type ToneType = "calm" | "neutral" | "urgent" | "stressed" | "confident";
+export type OperationalLoad = "minimal" | "normal" | "high" | "overload";
 
 export interface CommandInput {
   text: string;
   timestamp: Date;
-  source?: 'text' | 'voice';
+  source?: "text" | "voice";
   metadata?: Record<string, unknown>;
 }
 
@@ -40,7 +40,7 @@ export interface SocialContext {
 
 class SocioCognitiveLayer {
   private contextLog: SocialContext[] = [];
-  private currentOperationalLoad: OperationalLoad = 'normal';
+  private currentOperationalLoad: OperationalLoad = "normal";
 
   /**
    * Interpreta comando com base em urgência e tom
@@ -73,24 +73,24 @@ class SocioCognitiveLayer {
     let response = baseResponse;
 
     // Adapta resposta com base na urgência
-    if (interpretation.urgency === 'critical') {
+    if (interpretation.urgency === "critical") {
       response = `🚨 URGENTE: ${response}`;
-      adaptations.push('urgency-indicator-added');
+      adaptations.push("urgency-indicator-added");
     }
 
     // Adapta resposta com base na carga operacional
-    if (interpretation.context.operationalLoad === 'overload') {
-      response += '\n\n💡 Sugestão: Priorize tarefas críticas. Posso ajudar a reorganizar.';
-      adaptations.push('workload-suggestion-added');
-    } else if (interpretation.context.operationalLoad === 'high') {
-      response += '\n\n📊 Carga alta detectada. Mantenha foco nas prioridades.';
-      adaptations.push('focus-reminder-added');
+    if (interpretation.context.operationalLoad === "overload") {
+      response += "\n\n💡 Sugestão: Priorize tarefas críticas. Posso ajudar a reorganizar.";
+      adaptations.push("workload-suggestion-added");
+    } else if (interpretation.context.operationalLoad === "high") {
+      response += "\n\n📊 Carga alta detectada. Mantenha foco nas prioridades.";
+      adaptations.push("focus-reminder-added");
     }
 
     // Adapta resposta com base no tom
-    if (interpretation.tone === 'stressed') {
-      response += '\n\n🧘 Respire fundo. Estou aqui para ajudar.';
-      adaptations.push('stress-support-added');
+    if (interpretation.tone === "stressed") {
+      response += "\n\n🧘 Respire fundo. Estou aqui para ajudar.";
+      adaptations.push("stress-support-added");
     }
 
     // Log contexto social
@@ -136,7 +136,7 @@ class SocioCognitiveLayer {
       this.contextLog.shift();
     }
 
-    console.log('[SocioCognitive] Context logged:', {
+    console.log("[SocioCognitive] Context logged:", {
       commandId: context.commandId,
       urgency: interpretation.urgency,
       tone: interpretation.tone,
@@ -166,21 +166,21 @@ class SocioCognitiveLayer {
   private detectUrgency(text: string): UrgencyLevel {
     const lowerText = text.toLowerCase();
     
-    const criticalKeywords = ['emergência', 'urgente', 'crítico', 'agora', 'imediatamente', 'socorro'];
-    const highKeywords = ['rápido', 'importante', 'prioridade', 'logo'];
-    const mediumKeywords = ['quando possível', 'assim que', 'favor'];
+    const criticalKeywords = ["emergência", "urgente", "crítico", "agora", "imediatamente", "socorro"];
+    const highKeywords = ["rápido", "importante", "prioridade", "logo"];
+    const mediumKeywords = ["quando possível", "assim que", "favor"];
     
     if (criticalKeywords.some(keyword => lowerText.includes(keyword))) {
-      return 'critical';
+      return "critical";
     }
     if (highKeywords.some(keyword => lowerText.includes(keyword))) {
-      return 'high';
+      return "high";
     }
     if (mediumKeywords.some(keyword => lowerText.includes(keyword))) {
-      return 'medium';
+      return "medium";
     }
     
-    return 'low';
+    return "low";
   }
 
   /**
@@ -189,25 +189,25 @@ class SocioCognitiveLayer {
   private detectTone(text: string): ToneType {
     const lowerText = text.toLowerCase();
     
-    const stressedKeywords = ['não aguento', 'difícil', 'problema', 'ajuda', 'preciso urgente'];
-    const urgentKeywords = ['urgente', 'rápido', 'agora'];
-    const calmKeywords = ['por favor', 'quando puder', 'obrigado'];
-    const confidentKeywords = ['sei', 'vou', 'farei', 'certeza'];
+    const stressedKeywords = ["não aguento", "difícil", "problema", "ajuda", "preciso urgente"];
+    const urgentKeywords = ["urgente", "rápido", "agora"];
+    const calmKeywords = ["por favor", "quando puder", "obrigado"];
+    const confidentKeywords = ["sei", "vou", "farei", "certeza"];
     
     if (stressedKeywords.some(keyword => lowerText.includes(keyword))) {
-      return 'stressed';
+      return "stressed";
     }
     if (urgentKeywords.some(keyword => lowerText.includes(keyword))) {
-      return 'urgent';
+      return "urgent";
     }
     if (calmKeywords.some(keyword => lowerText.includes(keyword))) {
-      return 'calm';
+      return "calm";
     }
     if (confidentKeywords.some(keyword => lowerText.includes(keyword))) {
-      return 'confident';
+      return "confident";
     }
     
-    return 'neutral';
+    return "neutral";
   }
 
   /**
@@ -216,26 +216,26 @@ class SocioCognitiveLayer {
   private extractIntent(text: string): string {
     const lowerText = text.toLowerCase();
     
-    if (lowerText.includes('criar') || lowerText.includes('novo')) {
-      return 'create';
+    if (lowerText.includes("criar") || lowerText.includes("novo")) {
+      return "create";
     }
-    if (lowerText.includes('deletar') || lowerText.includes('remover')) {
-      return 'delete';
+    if (lowerText.includes("deletar") || lowerText.includes("remover")) {
+      return "delete";
     }
-    if (lowerText.includes('atualizar') || lowerText.includes('modificar')) {
-      return 'update';
+    if (lowerText.includes("atualizar") || lowerText.includes("modificar")) {
+      return "update";
     }
-    if (lowerText.includes('buscar') || lowerText.includes('encontrar') || lowerText.includes('procurar')) {
-      return 'search';
+    if (lowerText.includes("buscar") || lowerText.includes("encontrar") || lowerText.includes("procurar")) {
+      return "search";
     }
-    if (lowerText.includes('ajuda') || lowerText.includes('como')) {
-      return 'help';
+    if (lowerText.includes("ajuda") || lowerText.includes("como")) {
+      return "help";
     }
-    if (lowerText.includes('status') || lowerText.includes('situação')) {
-      return 'status';
+    if (lowerText.includes("status") || lowerText.includes("situação")) {
+      return "status";
     }
     
-    return 'general';
+    return "general";
   }
 
   /**
@@ -245,11 +245,11 @@ class SocioCognitiveLayer {
     let confidence = 0.7; // Base confidence
     
     // Aumenta confiança se urgência e tom são consistentes
-    if ((urgency === 'critical' && tone === 'urgent') ||
-        (urgency === 'critical' && tone === 'stressed')) {
+    if ((urgency === "critical" && tone === "urgent") ||
+        (urgency === "critical" && tone === "stressed")) {
       confidence = 0.95;
-    } else if ((urgency === 'high' && tone === 'urgent') ||
-               (urgency === 'medium' && tone === 'calm')) {
+    } else if ((urgency === "high" && tone === "urgent") ||
+               (urgency === "medium" && tone === "calm")) {
       confidence = 0.85;
     }
     

@@ -4,12 +4,12 @@
  * Voice + Touch + Text interface with AI-powered recommendations
  */
 
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface NavigationCommand {
   command: string;
-  type: 'voice' | 'text' | 'touch';
+  type: "voice" | "text" | "touch";
   timestamp: Date;
   context?: Record<string, any>;
 }
@@ -17,7 +17,7 @@ interface NavigationCommand {
 interface NavigationResponse {
   text: string;
   action?: {
-    type: 'navigate' | 'display' | 'execute';
+    type: "navigate" | "display" | "execute";
     target: string;
     params?: Record<string, any>;
   };
@@ -41,12 +41,12 @@ class EnhancedNavigationService {
       
       return response;
     } catch (error) {
-      console.error('Failed to process command:', error);
+      console.error("Failed to process command:", error);
       return {
-        text: 'Desculpe, não consegui processar este comando.',
+        text: "Desculpe, não consegui processar este comando.",
         voice: {
-          text: 'Desculpe, não consegui processar este comando.',
-          language: 'pt-BR'
+          text: "Desculpe, não consegui processar este comando.",
+          language: "pt-BR"
         }
       };
     }
@@ -59,76 +59,76 @@ class EnhancedNavigationService {
     const lowerCommand = command.toLowerCase();
 
     // Route planning commands
-    if (lowerCommand.includes('planej') && lowerCommand.includes('rota')) {
+    if (lowerCommand.includes("planej") && lowerCommand.includes("rota")) {
       return {
-        text: 'Abrindo planejador de rotas. Por favor, especifique origem e destino.',
+        text: "Abrindo planejador de rotas. Por favor, especifique origem e destino.",
         action: {
-          type: 'navigate',
-          target: '/route-planner'
+          type: "navigate",
+          target: "/route-planner"
         },
         voice: {
-          text: 'Abrindo planejador de rotas',
-          language: 'pt-BR'
+          text: "Abrindo planejador de rotas",
+          language: "pt-BR"
         }
       };
     }
 
     // Weather forecast commands
-    if (lowerCommand.includes('previsão') || lowerCommand.includes('clima')) {
+    if (lowerCommand.includes("previsão") || lowerCommand.includes("clima")) {
       return {
-        text: 'Exibindo previsão climática para a rota atual.',
+        text: "Exibindo previsão climática para a rota atual.",
         action: {
-          type: 'display',
-          target: 'weather-forecast'
+          type: "display",
+          target: "weather-forecast"
         },
         voice: {
-          text: 'Exibindo previsão climática',
-          language: 'pt-BR'
+          text: "Exibindo previsão climática",
+          language: "pt-BR"
         }
       };
     }
 
     // Satellite tracking commands
-    if (lowerCommand.includes('satélite') || lowerCommand.includes('satelite')) {
+    if (lowerCommand.includes("satélite") || lowerCommand.includes("satelite")) {
       return {
-        text: 'Abrindo rastreador de satélites.',
+        text: "Abrindo rastreador de satélites.",
         action: {
-          type: 'navigate',
-          target: '/satellite-tracker'
+          type: "navigate",
+          target: "/satellite-tracker"
         },
         voice: {
-          text: 'Abrindo rastreador de satélites',
-          language: 'pt-BR'
+          text: "Abrindo rastreador de satélites",
+          language: "pt-BR"
         }
       };
     }
 
     // Mission control commands
-    if (lowerCommand.includes('missão') || lowerCommand.includes('missao')) {
+    if (lowerCommand.includes("missão") || lowerCommand.includes("missao")) {
       return {
-        text: 'Abrindo centro de controle de missões.',
+        text: "Abrindo centro de controle de missões.",
         action: {
-          type: 'navigate',
-          target: '/mission-control'
+          type: "navigate",
+          target: "/mission-control"
         },
         voice: {
-          text: 'Abrindo centro de controle de missões',
-          language: 'pt-BR'
+          text: "Abrindo centro de controle de missões",
+          language: "pt-BR"
         }
       };
     }
 
     // Drone commands
-    if (lowerCommand.includes('drone')) {
+    if (lowerCommand.includes("drone")) {
       return {
-        text: 'Abrindo comandante de drones.',
+        text: "Abrindo comandante de drones.",
         action: {
-          type: 'navigate',
-          target: '/drone-commander'
+          type: "navigate",
+          target: "/drone-commander"
         },
         voice: {
-          text: 'Abrindo comandante de drones',
-          language: 'pt-BR'
+          text: "Abrindo comandante de drones",
+          language: "pt-BR"
         }
       };
     }
@@ -137,8 +137,8 @@ class EnhancedNavigationService {
     return {
       text: `Comando reconhecido: "${command}". Você pode pedir para planejar rotas, verificar previsão climática, ou acessar controle de missões.`,
       voice: {
-        text: 'Comando reconhecido. Como posso ajudar?',
-        language: 'pt-BR'
+        text: "Comando reconhecido. Como posso ajudar?",
+        language: "pt-BR"
       }
     };
   }
@@ -148,22 +148,22 @@ class EnhancedNavigationService {
    */
   private async logCommand(command: NavigationCommand): Promise<void> {
     try {
-      await supabase.from('ai_commands').insert({
+      await supabase.from("ai_commands").insert({
         command_text: command.command,
         command_type: command.type,
         context: command.context || {},
         executed_at: command.timestamp.toISOString()
       });
     } catch (error) {
-      console.error('Failed to log command:', error);
+      console.error("Failed to log command:", error);
     }
   }
 
   /**
    * Text-to-speech for voice responses
    */
-  async speakResponse(text: string, language: string = 'pt-BR'): Promise<void> {
-    if ('speechSynthesis' in window) {
+  async speakResponse(text: string, language: string = "pt-BR"): Promise<void> {
+    if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = language;
       utterance.rate = 0.9;
@@ -177,8 +177,8 @@ class EnhancedNavigationService {
    */
   async startVoiceRecognition(): Promise<string> {
     return new Promise((resolve, reject) => {
-      if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-        reject(new Error('Speech recognition not supported'));
+      if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+        reject(new Error("Speech recognition not supported"));
         return;
       }
 
@@ -192,7 +192,7 @@ class EnhancedNavigationService {
       }).SpeechRecognition;
       const recognition = new SpeechRecognition();
       
-      recognition.lang = 'pt-BR';
+      recognition.lang = "pt-BR";
       recognition.continuous = false;
       recognition.interimResults = false;
 
@@ -206,7 +206,7 @@ class EnhancedNavigationService {
       };
 
       recognition.start();
-      toast.info('Ouvindo... Fale seu comando.');
+      toast.info("Ouvindo... Fale seu comando.");
     });
   }
 }

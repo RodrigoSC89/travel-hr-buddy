@@ -135,15 +135,15 @@ export default function I18nDashboard() {
   const getStartDate = (range: "day" | "week" | "month"): string => {
     const date = new Date();
     switch (range) {
-      case "day":
-        date.setDate(date.getDate() - 1);
-        break;
-      case "week":
-        date.setDate(date.getDate() - 7);
-        break;
-      case "month":
-        date.setMonth(date.getMonth() - 1);
-        break;
+    case "day":
+      date.setDate(date.getDate() - 1);
+      break;
+    case "week":
+      date.setDate(date.getDate() - 7);
+      break;
+    case "month":
+      date.setMonth(date.getMonth() - 1);
+      break;
     }
     return date.toISOString();
   };
@@ -190,8 +190,8 @@ export default function I18nDashboard() {
   const avgResponseTime =
     logs.length > 0
       ? (
-          logs.reduce((sum, log) => sum + log.response_time_ms, 0) / logs.length
-        ).toFixed(0)
+        logs.reduce((sum, log) => sum + log.response_time_ms, 0) / logs.length
+      ).toFixed(0)
       : "0";
 
   const failedTranslations = logs.filter((log) => !log.success);
@@ -413,8 +413,8 @@ export default function I18nDashboard() {
                         item.status === "approved"
                           ? "default"
                           : item.status === "pending"
-                          ? "secondary"
-                          : "outline"
+                            ? "secondary"
+                            : "outline"
                       }
                     >
                       {item.status}

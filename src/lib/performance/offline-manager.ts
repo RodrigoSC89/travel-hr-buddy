@@ -5,7 +5,7 @@
 
 interface CacheConfig {
   maxAge: number; // em segundos
-  strategy: 'cache-first' | 'network-first' | 'cache-only';
+  strategy: "cache-first" | "network-first" | "cache-only";
 }
 
 interface CacheEntry<T> {
@@ -16,7 +16,7 @@ interface CacheEntry<T> {
 
 class OfflineManager {
   private storage: Map<string, CacheEntry<any>> = new Map();
-  private readonly STORAGE_KEY = 'nautilus-offline-cache';
+  private readonly STORAGE_KEY = "nautilus-offline-cache";
 
   constructor() {
     this.loadFromStorage();
@@ -89,7 +89,7 @@ class OfflineManager {
       const data = Array.from(this.storage.entries());
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
-      console.warn('Failed to save cache to localStorage:', error);
+      console.warn("Failed to save cache to localStorage:", error);
     }
   }
 
@@ -107,7 +107,7 @@ class OfflineManager {
         this.cleanExpiredEntries();
       }
     } catch (error) {
-      console.warn('Failed to load cache from localStorage:', error);
+      console.warn("Failed to load cache from localStorage:", error);
     }
   }
 
@@ -153,19 +153,19 @@ export const offlineManager = new OfflineManager();
 export async function cachedFetch<T>(
   url: string,
   options?: RequestInit,
-  cacheConfig: CacheConfig = { maxAge: 300, strategy: 'network-first' }
+  cacheConfig: CacheConfig = { maxAge: 300, strategy: "network-first" }
 ): Promise<T> {
   const cacheKey = `fetch:${url}`;
 
   // Cache-only: retorna apenas do cache
-  if (cacheConfig.strategy === 'cache-only') {
+  if (cacheConfig.strategy === "cache-only") {
     const cached = offlineManager.get<T>(cacheKey);
     if (cached) return cached;
-    throw new Error('No cached data available');
+    throw new Error("No cached data available");
   }
 
   // Cache-first: tenta cache primeiro
-  if (cacheConfig.strategy === 'cache-first') {
+  if (cacheConfig.strategy === "cache-first") {
     const cached = offlineManager.get<T>(cacheKey);
     if (cached) return cached;
   }
@@ -188,7 +188,7 @@ export async function cachedFetch<T>(
     // Em caso de erro de rede, tenta cache
     const cached = offlineManager.get<T>(cacheKey);
     if (cached) {
-      console.warn('Network failed, using cached data:', url);
+      console.warn("Network failed, using cached data:", url);
       return cached;
     }
     throw error;

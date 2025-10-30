@@ -4,16 +4,16 @@
  * Complete reservation system with payment processing and calendar sync
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Calendar,
   CreditCard,
@@ -31,11 +31,11 @@ import {
   FileText,
   Link as LinkIcon,
   X
-} from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { format, parseISO } from 'date-fns';
+} from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { format, parseISO } from "date-fns";
 
 interface Reservation {
   id: string;
@@ -46,10 +46,10 @@ interface Reservation {
   start_date: string;
   end_date: string;
   location?: string;
-  status: 'pending' | 'confirmed' | 'cancelled';
+  status: "pending" | "confirmed" | "cancelled";
   total_amount?: number;
   currency?: string;
-  payment_status?: 'pending' | 'paid' | 'refunded' | 'failed';
+  payment_status?: "pending" | "paid" | "refunded" | "failed";
   payment_method?: string;
   payment_transaction_id?: string;
   confirmation_number?: string;
@@ -61,12 +61,12 @@ interface Reservation {
 interface PaymentIntent {
   amount: number;
   currency: string;
-  payment_method: 'stripe' | 'paypal' | 'credit_card';
+  payment_method: "stripe" | "paypal" | "credit_card";
   reservation_id: string;
 }
 
 interface CalendarSyncConfig {
-  provider: 'google' | 'outlook' | 'ical';
+  provider: "google" | "outlook" | "ical";
   auto_sync: boolean;
   send_reminders: boolean;
 }
@@ -79,7 +79,7 @@ export const ReservationPaymentSystem: React.FC = () => {
   const [isCalendarDialogOpen, setIsCalendarDialogOpen] = useState(false);
   const [paymentIntent, setPaymentIntent] = useState<PaymentIntent | null>(null);
   const [calendarSync, setCalendarSync] = useState<CalendarSyncConfig>({
-    provider: 'google',
+    provider: "google",
     auto_sync: true,
     send_reminders: true,
   });
@@ -93,15 +93,15 @@ export const ReservationPaymentSystem: React.FC = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('reservations')
-        .select('*')
-        .order('start_date', { ascending: true });
+        .from("reservations")
+        .select("*")
+        .order("start_date", { ascending: true });
 
       if (error) throw error;
       setReservations(data || []);
     } catch (error) {
-      console.error('Error loading reservations:', error);
-      toast.error('Failed to load reservations');
+      console.error("Error loading reservations:", error);
+      toast.error("Failed to load reservations");
     } finally {
       setLoading(false);
     }
@@ -111,8 +111,8 @@ export const ReservationPaymentSystem: React.FC = () => {
     setSelectedReservation(reservation);
     setPaymentIntent({
       amount: reservation.total_amount || 0,
-      currency: reservation.currency || 'USD',
-      payment_method: 'stripe',
+      currency: reservation.currency || "USD",
+      payment_method: "stripe",
       reservation_id: reservation.id,
     });
     setIsPaymentDialogOpen(true);
@@ -129,19 +129,19 @@ export const ReservationPaymentSystem: React.FC = () => {
 
       // Update reservation with payment info
       const { error } = await supabase
-        .from('reservations')
+        .from("reservations")
         .update({
-          payment_status: 'paid',
+          payment_status: "paid",
           payment_method: paymentIntent.payment_method,
           payment_transaction_id: transactionId,
-          status: 'confirmed',
+          status: "confirmed",
           confirmation_number: `CONF-${Date.now()}`,
         })
-        .eq('id', selectedReservation.id);
+        .eq("id", selectedReservation.id);
 
       if (error) throw error;
 
-      toast.success('Payment processed successfully!');
+      toast.success("Payment processed successfully!");
       
       // Send confirmation email
       await sendConfirmationEmail(selectedReservation.id);
@@ -152,13 +152,13 @@ export const ReservationPaymentSystem: React.FC = () => {
       }
       
       // Send push notification
-      await sendPushNotification(selectedReservation.id, 'Reservation confirmed and paid');
+      await sendPushNotification(selectedReservation.id, "Reservation confirmed and paid");
 
       setIsPaymentDialogOpen(false);
       loadReservations();
     } catch (error) {
-      console.error('Error processing payment:', error);
-      toast.error('Payment failed. Please try again.');
+      console.error("Error processing payment:", error);
+      toast.error("Payment failed. Please try again.");
     } finally {
       setProcessingPayment(false);
     }
@@ -167,39 +167,39 @@ export const ReservationPaymentSystem: React.FC = () => {
   const sendConfirmationEmail = async (reservationId: string) => {
     try {
       // In production, integrate with email service (SendGrid, AWS SES, etc.)
-      console.log('Sending confirmation email for reservation:', reservationId);
+      console.log("Sending confirmation email for reservation:", reservationId);
       
       // Log notification
-      await supabase.from('notifications').insert({
+      await supabase.from("notifications").insert({
         user_id: selectedReservation?.user_id,
-        title: 'Reservation Confirmed',
+        title: "Reservation Confirmed",
         message: `Your reservation ${selectedReservation?.title} has been confirmed and paid.`,
-        type: 'reservation_confirmation',
-        priority: 'high',
-        status: 'sent',
+        type: "reservation_confirmation",
+        priority: "high",
+        status: "sent",
       });
 
-      toast.info('Confirmation email sent');
+      toast.info("Confirmation email sent");
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error("Error sending email:", error);
     }
   };
 
   const sendPushNotification = async (reservationId: string, message: string) => {
     try {
       // In production, integrate with push notification service (Firebase, OneSignal, etc.)
-      console.log('Sending push notification:', message);
+      console.log("Sending push notification:", message);
       
-      await supabase.from('notifications').insert({
+      await supabase.from("notifications").insert({
         user_id: selectedReservation?.user_id,
-        title: 'Reservation Update',
+        title: "Reservation Update",
         message,
-        type: 'push_notification',
-        priority: 'medium',
-        status: 'sent',
+        type: "push_notification",
+        priority: "medium",
+        status: "sent",
       });
     } catch (error) {
-      console.error('Error sending push notification:', error);
+      console.error("Error sending push notification:", error);
     }
   };
 
@@ -207,10 +207,10 @@ export const ReservationPaymentSystem: React.FC = () => {
     try {
       const calendarEvent = {
         title: reservation.title,
-        description: reservation.description || '',
+        description: reservation.description || "",
         start: reservation.start_date,
         end: reservation.end_date,
-        location: reservation.location || '',
+        location: reservation.location || "",
       };
 
       // Generate iCal format
@@ -235,25 +235,25 @@ END:VEVENT
 END:VCALENDAR`;
 
       // For Google Calendar
-      if (calendarSync.provider === 'google') {
+      if (calendarSync.provider === "google") {
         const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(calendarEvent.title)}&dates=${format(parseISO(reservation.start_date), "yyyyMMdd'T'HHmmss")}/${format(parseISO(reservation.end_date), "yyyyMMdd'T'HHmmss")}&details=${encodeURIComponent(calendarEvent.description)}&location=${encodeURIComponent(calendarEvent.location)}`;
         
         // Open in new window
-        window.open(googleCalendarUrl, '_blank');
+        window.open(googleCalendarUrl, "_blank");
       }
 
       // For Outlook Calendar
-      if (calendarSync.provider === 'outlook') {
+      if (calendarSync.provider === "outlook") {
         const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(calendarEvent.title)}&startdt=${reservation.start_date}&enddt=${reservation.end_date}&body=${encodeURIComponent(calendarEvent.description)}&location=${encodeURIComponent(calendarEvent.location)}`;
         
-        window.open(outlookUrl, '_blank');
+        window.open(outlookUrl, "_blank");
       }
 
       // For iCal download
-      if (calendarSync.provider === 'ical') {
-        const blob = new Blob([icalContent], { type: 'text/calendar' });
+      if (calendarSync.provider === "ical") {
+        const blob = new Blob([icalContent], { type: "text/calendar" });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
         a.download = `reservation-${reservation.id}.ics`;
         a.click();
@@ -261,14 +261,14 @@ END:VCALENDAR`;
 
       // Update reservation with calendar sync info
       await supabase
-        .from('reservations')
+        .from("reservations")
         .update({ calendar_event_id: reservation.id })
-        .eq('id', reservation.id);
+        .eq("id", reservation.id);
 
-      toast.success('Synced to calendar');
+      toast.success("Synced to calendar");
     } catch (error) {
-      console.error('Error syncing to calendar:', error);
-      toast.error('Failed to sync calendar');
+      console.error("Error syncing to calendar:", error);
+      toast.error("Failed to sync calendar");
     }
   };
 
@@ -276,20 +276,20 @@ END:VCALENDAR`;
     try {
       // Simulate refund processing
       const { error } = await supabase
-        .from('reservations')
+        .from("reservations")
         .update({
-          payment_status: 'refunded',
-          status: 'cancelled',
+          payment_status: "refunded",
+          status: "cancelled",
         })
-        .eq('id', reservationId);
+        .eq("id", reservationId);
 
       if (error) throw error;
 
-      toast.success('Refund processed successfully');
+      toast.success("Refund processed successfully");
       loadReservations();
     } catch (error) {
-      console.error('Error processing refund:', error);
-      toast.error('Failed to process refund');
+      console.error("Error processing refund:", error);
+      toast.error("Failed to process refund");
     }
   };
 
@@ -297,24 +297,24 @@ END:VCALENDAR`;
     try {
       const reservation = reservations.find((r) => r.id === reservationId);
       
-      if (reservation?.payment_status === 'paid') {
+      if (reservation?.payment_status === "paid") {
         // Process refund if paid
         await processRefund(reservationId);
       } else {
         // Just cancel
         const { error } = await supabase
-          .from('reservations')
-          .update({ status: 'cancelled' })
-          .eq('id', reservationId);
+          .from("reservations")
+          .update({ status: "cancelled" })
+          .eq("id", reservationId);
 
         if (error) throw error;
-        toast.success('Reservation cancelled');
+        toast.success("Reservation cancelled");
       }
 
       loadReservations();
     } catch (error) {
-      console.error('Error cancelling reservation:', error);
-      toast.error('Failed to cancel reservation');
+      console.error("Error cancelling reservation:", error);
+      toast.error("Failed to cancel reservation");
     }
   };
 
@@ -326,49 +326,49 @@ END:VCALENDAR`;
       start_date: r.start_date,
       end_date: r.end_date,
       status: r.status,
-      payment_status: r.payment_status || 'N/A',
+      payment_status: r.payment_status || "N/A",
       amount: r.total_amount || 0,
-      currency: r.currency || 'USD',
-      confirmation: r.confirmation_number || 'N/A',
+      currency: r.currency || "USD",
+      confirmation: r.confirmation_number || "N/A",
     }));
 
     const csv = [
-      Object.keys(csvData[0]).join(','),
-      ...csvData.map((row) => Object.values(row).join(',')),
-    ].join('\n');
+      Object.keys(csvData[0]).join(","),
+      ...csvData.map((row) => Object.values(row).join(",")),
+    ].join("\n");
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `reservations-${format(new Date(), 'yyyy-MM-dd')}.csv`;
+    a.download = `reservations-${format(new Date(), "yyyy-MM-dd")}.csv`;
     a.click();
 
-    toast.success('Reservation history exported');
+    toast.success("Reservation history exported");
   };
 
   const getPaymentStatusBadge = (status: string) => {
     const variants = {
-      paid: 'default',
-      pending: 'secondary',
-      refunded: 'outline',
-      failed: 'destructive',
+      paid: "default",
+      pending: "secondary",
+      refunded: "outline",
+      failed: "destructive",
     };
     return (
-      <Badge variant={variants[status] || 'secondary'}>
-        {status?.toUpperCase() || 'PENDING'}
+      <Badge variant={variants[status] || "secondary"}>
+        {status?.toUpperCase() || "PENDING"}
       </Badge>
     );
   };
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      confirmed: 'default',
-      pending: 'secondary',
-      cancelled: 'destructive',
+      confirmed: "default",
+      pending: "secondary",
+      cancelled: "destructive",
     };
     return (
-      <Badge variant={variants[status] || 'secondary'}>
+      <Badge variant={variants[status] || "secondary"}>
         {status.toUpperCase()}
       </Badge>
     );
@@ -417,7 +417,7 @@ END:VCALENDAR`;
           <CardContent>
             <div className="text-2xl font-bold">{reservations.length}</div>
             <p className="text-xs text-muted-foreground">
-              {reservations.filter((r) => r.status === 'confirmed').length} confirmed
+              {reservations.filter((r) => r.status === "confirmed").length} confirmed
             </p>
           </CardContent>
         </Card>
@@ -429,7 +429,7 @@ END:VCALENDAR`;
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {reservations.filter((r) => r.payment_status === 'paid').length}
+              {reservations.filter((r) => r.payment_status === "paid").length}
             </div>
             <p className="text-xs text-muted-foreground">Successfully processed</p>
           </CardContent>
@@ -442,7 +442,7 @@ END:VCALENDAR`;
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {reservations.filter((r) => r.payment_status === 'pending').length}
+              {reservations.filter((r) => r.payment_status === "pending").length}
             </div>
             <p className="text-xs text-muted-foreground">Awaiting payment</p>
           </CardContent>
@@ -456,7 +456,7 @@ END:VCALENDAR`;
           <CardContent>
             <div className="text-2xl font-bold">
               ${reservations
-                .filter((r) => r.payment_status === 'paid')
+                .filter((r) => r.payment_status === "paid")
                 .reduce((sum, r) => sum + (r.total_amount || 0), 0)
                 .toLocaleString()}
             </div>
@@ -482,13 +482,13 @@ END:VCALENDAR`;
                   <div>
                     <CardTitle className="text-lg">{reservation.title}</CardTitle>
                     <CardDescription>
-                      {format(parseISO(reservation.start_date), 'PPP')} -{' '}
-                      {format(parseISO(reservation.end_date), 'PPP')}
+                      {format(parseISO(reservation.start_date), "PPP")} -{" "}
+                      {format(parseISO(reservation.end_date), "PPP")}
                     </CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
                     {getStatusBadge(reservation.status)}
-                    {getPaymentStatusBadge(reservation.payment_status || 'pending')}
+                    {getPaymentStatusBadge(reservation.payment_status || "pending")}
                   </div>
                 </div>
               </CardHeader>
@@ -502,23 +502,23 @@ END:VCALENDAR`;
                     <p className="text-muted-foreground">Location</p>
                     <p className="font-medium flex items-center gap-1">
                       <MapPin className="h-3 w-3" />
-                      {reservation.location || 'N/A'}
+                      {reservation.location || "N/A"}
                     </p>
                   </div>
                   <div>
                     <p className="text-muted-foreground">Amount</p>
                     <p className="font-medium">
-                      {reservation.currency || 'USD'} ${reservation.total_amount || 0}
+                      {reservation.currency || "USD"} ${reservation.total_amount || 0}
                     </p>
                   </div>
                   <div>
                     <p className="text-muted-foreground">Confirmation</p>
-                    <p className="font-medium">{reservation.confirmation_number || 'N/A'}</p>
+                    <p className="font-medium">{reservation.confirmation_number || "N/A"}</p>
                   </div>
                 </div>
 
                 <div className="flex gap-2">
-                  {reservation.payment_status !== 'paid' && reservation.status !== 'cancelled' && (
+                  {reservation.payment_status !== "paid" && reservation.status !== "cancelled" && (
                     <Button
                       size="sm"
                       onClick={() => initiatePayment(reservation)}
@@ -528,7 +528,7 @@ END:VCALENDAR`;
                     </Button>
                   )}
                   
-                  {reservation.payment_status === 'paid' && (
+                  {reservation.payment_status === "paid" && (
                     <>
                       <Button
                         size="sm"
@@ -553,7 +553,7 @@ END:VCALENDAR`;
                     </>
                   )}
 
-                  {reservation.status !== 'cancelled' && (
+                  {reservation.status !== "cancelled" && (
                     <Button
                       size="sm"
                       variant="destructive"
@@ -570,12 +570,12 @@ END:VCALENDAR`;
         </TabsContent>
 
         <TabsContent value="paid">
-          {reservations.filter((r) => r.payment_status === 'paid').map((reservation) => (
+          {reservations.filter((r) => r.payment_status === "paid").map((reservation) => (
             <Card key={reservation.id}>
               <CardHeader>
                 <CardTitle>{reservation.title}</CardTitle>
                 <CardDescription>
-                  Paid on {format(new Date(reservation.created_at), 'PPP')}
+                  Paid on {format(new Date(reservation.created_at), "PPP")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -597,7 +597,7 @@ END:VCALENDAR`;
         </TabsContent>
 
         <TabsContent value="pending">
-          {reservations.filter((r) => r.payment_status === 'pending').map((reservation) => (
+          {reservations.filter((r) => r.payment_status === "pending").map((reservation) => (
             <Card key={reservation.id}>
               <CardHeader>
                 <CardTitle>{reservation.title}</CardTitle>
@@ -613,12 +613,12 @@ END:VCALENDAR`;
         </TabsContent>
 
         <TabsContent value="cancelled">
-          {reservations.filter((r) => r.status === 'cancelled').map((reservation) => (
+          {reservations.filter((r) => r.status === "cancelled").map((reservation) => (
             <Card key={reservation.id}>
               <CardHeader>
                 <CardTitle className="text-muted-foreground">{reservation.title}</CardTitle>
                 <CardDescription>
-                  Cancelled {reservation.payment_status === 'refunded' && '(Refunded)'}
+                  Cancelled {reservation.payment_status === "refunded" && "(Refunded)"}
                 </CardDescription>
               </CardHeader>
             </Card>

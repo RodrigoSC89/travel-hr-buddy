@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 /**
  * Analytics Core Module Tests
@@ -17,21 +17,21 @@ const mockSupabaseClient = {
   rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
 };
 
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock("@/integrations/supabase/client", () => ({
   supabase: mockSupabaseClient,
 }));
 
-describe('Analytics Core Module', () => {
+describe("Analytics Core Module", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Event Tracking', () => {
-    it('should track user events', async () => {
+  describe("Event Tracking", () => {
+    it("should track user events", async () => {
       const event = {
-        type: 'page_view',
-        user_id: 'user123',
-        metadata: { page: '/dashboard' },
+        type: "page_view",
+        user_id: "user123",
+        metadata: { page: "/dashboard" },
         timestamp: new Date().toISOString(),
       };
 
@@ -40,37 +40,37 @@ describe('Analytics Core Module', () => {
         select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from('analytics_events').insert(event);
+      const result = await mockSupabaseClient.from("analytics_events").insert(event);
 
       expect(result.data).toEqual(event);
       expect(result.error).toBeNull();
     });
 
-    it('should batch multiple events', () => {
+    it("should batch multiple events", () => {
       const events = [
-        { type: 'click', target: 'button1' },
-        { type: 'click', target: 'button2' },
-        { type: 'navigation', target: '/settings' },
+        { type: "click", target: "button1" },
+        { type: "click", target: "button2" },
+        { type: "navigation", target: "/settings" },
       ];
 
       const batch = events.map(event => ({
         ...event,
         timestamp: new Date().toISOString(),
-        session_id: 'session123',
+        session_id: "session123",
       }));
 
       expect(batch).toHaveLength(3);
-      expect(batch.every(e => e.session_id === 'session123')).toBe(true);
+      expect(batch.every(e => e.session_id === "session123")).toBe(true);
     });
   });
 
-  describe('Metrics Aggregation', () => {
-    it('should calculate daily active users', () => {
+  describe("Metrics Aggregation", () => {
+    it("should calculate daily active users", () => {
       const events = [
-        { user_id: 'user1', date: '2025-10-29' },
-        { user_id: 'user2', date: '2025-10-29' },
-        { user_id: 'user1', date: '2025-10-29' }, // duplicate
-        { user_id: 'user3', date: '2025-10-29' },
+        { user_id: "user1", date: "2025-10-29" },
+        { user_id: "user2", date: "2025-10-29" },
+        { user_id: "user1", date: "2025-10-29" }, // duplicate
+        { user_id: "user3", date: "2025-10-29" },
       ];
 
       const uniqueUsers = new Set(events.map(e => e.user_id));
@@ -79,13 +79,13 @@ describe('Analytics Core Module', () => {
       expect(dau).toBe(3);
     });
 
-    it('should group events by type', () => {
+    it("should group events by type", () => {
       const events = [
-        { type: 'click' },
-        { type: 'navigation' },
-        { type: 'click' },
-        { type: 'click' },
-        { type: 'error' },
+        { type: "click" },
+        { type: "navigation" },
+        { type: "click" },
+        { type: "click" },
+        { type: "error" },
       ];
 
       const grouped = events.reduce((acc, event) => {
@@ -99,12 +99,12 @@ describe('Analytics Core Module', () => {
     });
   });
 
-  describe('Performance Metrics', () => {
-    it('should track page load times', () => {
+  describe("Performance Metrics", () => {
+    it("should track page load times", () => {
       const pageLoads = [
-        { page: '/dashboard', duration: 1200 },
-        { page: '/dashboard', duration: 1500 },
-        { page: '/dashboard', duration: 1100 },
+        { page: "/dashboard", duration: 1200 },
+        { page: "/dashboard", duration: 1500 },
+        { page: "/dashboard", duration: 1100 },
       ];
 
       const avgLoadTime = pageLoads.reduce((sum, load) => sum + load.duration, 0) / pageLoads.length;
@@ -112,23 +112,23 @@ describe('Analytics Core Module', () => {
       expect(avgLoadTime).toBeCloseTo(1266.67, 0);
     });
 
-    it('should identify slow pages', () => {
+    it("should identify slow pages", () => {
       const pageLoads = [
-        { page: '/dashboard', duration: 1200 },
-        { page: '/reports', duration: 3500 },
-        { page: '/settings', duration: 800 },
+        { page: "/dashboard", duration: 1200 },
+        { page: "/reports", duration: 3500 },
+        { page: "/settings", duration: 800 },
       ];
 
       const threshold = 2000;
       const slowPages = pageLoads.filter(load => load.duration > threshold);
 
       expect(slowPages).toHaveLength(1);
-      expect(slowPages[0].page).toBe('/reports');
+      expect(slowPages[0].page).toBe("/reports");
     });
   });
 
-  describe('Conversion Tracking', () => {
-    it('should calculate conversion funnel', () => {
+  describe("Conversion Tracking", () => {
+    it("should calculate conversion funnel", () => {
       const funnel = {
         landing: 1000,
         signup: 300,
@@ -148,8 +148,8 @@ describe('Analytics Core Module', () => {
     });
   });
 
-  describe('User Segmentation', () => {
-    it('should segment users by activity level', () => {
+  describe("User Segmentation", () => {
+    it("should segment users by activity level", () => {
       const users = [
         { id: 1, event_count: 50 },
         { id: 2, event_count: 5 },
@@ -169,8 +169,8 @@ describe('Analytics Core Module', () => {
     });
   });
 
-  describe('Data Retention', () => {
-    it('should calculate retention rate', () => {
+  describe("Data Retention", () => {
+    it("should calculate retention rate", () => {
       const cohort = {
         day0: 100,
         day1: 40,

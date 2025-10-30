@@ -202,8 +202,8 @@ export const MMIIntegration: React.FC = () => {
                       {prediction.probability >= 0.7
                         ? "High Risk"
                         : prediction.probability >= 0.5
-                        ? "Medium Risk"
-                        : "Low Risk"}
+                          ? "Medium Risk"
+                          : "Low Risk"}
                     </Badge>
                     <Button
                       size="sm"

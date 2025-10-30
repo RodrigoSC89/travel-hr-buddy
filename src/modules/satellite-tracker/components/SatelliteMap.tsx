@@ -3,9 +3,9 @@
  * Displays satellite position on interactive map
  */
 
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import React, { useEffect, useRef, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 interface SatelliteMapProps {
   satellite: {
@@ -23,12 +23,12 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const marker = useRef<mapboxgl.Marker | null>(null);
-  const mapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_MAPBOX_TOKEN || '';
+  const mapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || import.meta.env.VITE_MAPBOX_TOKEN || "";
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
     if (!mapboxToken) {
-      console.warn('Mapbox token not configured');
+      console.warn("Mapbox token not configured");
       return;
     }
 
@@ -38,24 +38,24 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/satellite-streets-v12',
+      style: "mapbox://styles/mapbox/satellite-streets-v12",
       center: [initialPosition.longitude, initialPosition.latitude],
       zoom: 3,
-      projection: { name: 'globe' }
+      projection: { name: "globe" }
     });
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-    map.current.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+    map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
+    map.current.addControl(new mapboxgl.FullscreenControl(), "top-right");
 
     // Enable fog and atmosphere
-    map.current.on('style.load', () => {
+    map.current.on("style.load", () => {
       if (map.current) {
         map.current.setFog({
-          color: 'rgb(186, 210, 235)',
-          'high-color': 'rgb(36, 92, 223)',
-          'horizon-blend': 0.02,
-          'space-color': 'rgb(11, 11, 25)',
-          'star-intensity': 0.6
+          color: "rgb(186, 210, 235)",
+          "high-color": "rgb(36, 92, 223)",
+          "horizon-blend": 0.02,
+          "space-color": "rgb(11, 11, 25)",
+          "star-intensity": 0.6
         });
       }
     });
@@ -77,13 +77,13 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
     }
 
     // Create custom marker element
-    const el = document.createElement('div');
-    el.className = 'satellite-marker';
-    el.style.backgroundImage = 'url(/satellite-icon.svg)';
-    el.style.width = '40px';
-    el.style.height = '40px';
-    el.style.backgroundSize = '100%';
-    el.style.cursor = 'pointer';
+    const el = document.createElement("div");
+    el.className = "satellite-marker";
+    el.style.backgroundImage = "url(/satellite-icon.svg)";
+    el.style.width = "40px";
+    el.style.height = "40px";
+    el.style.backgroundSize = "100%";
+    el.style.cursor = "pointer";
 
     // Create popup
     const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`

@@ -1,13 +1,13 @@
 // @ts-nocheck
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { supabase } from '@/integrations/supabase/client';
-import { Download, Filter, Search, RefreshCw } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { supabase } from "@/integrations/supabase/client";
+import { Download, Filter, Search, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
 
 interface AccessLog {
   id: string;
@@ -28,11 +28,11 @@ export default function AuditDashboard() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState({
-    user_id: '',
-    ip_address: '',
-    module_accessed: '',
-    result: '',
-    severity: '',
+    user_id: "",
+    ip_address: "",
+    module_accessed: "",
+    result: "",
+    severity: "",
   });
 
   const pageSize = 50;
@@ -45,26 +45,26 @@ export default function AuditDashboard() {
     setLoading(true);
     try {
       let query = supabase
-        .from('access_logs')
-        .select('*', { count: 'exact' })
-        .order('timestamp', { ascending: false })
+        .from("access_logs")
+        .select("*", { count: "exact" })
+        .order("timestamp", { ascending: false })
         .range((page - 1) * pageSize, page * pageSize - 1);
 
       // Apply filters
       if (filters.user_id) {
-        query = query.eq('user_id', filters.user_id);
+        query = query.eq("user_id", filters.user_id);
       }
       if (filters.ip_address) {
-        query = query.eq('ip_address', filters.ip_address);
+        query = query.eq("ip_address", filters.ip_address);
       }
       if (filters.module_accessed) {
-        query = query.ilike('module_accessed', `%${filters.module_accessed}%`);
+        query = query.ilike("module_accessed", `%${filters.module_accessed}%`);
       }
       if (filters.result) {
-        query = query.eq('result', filters.result);
+        query = query.eq("result", filters.result);
       }
       if (filters.severity) {
-        query = query.eq('severity', filters.severity);
+        query = query.eq("severity", filters.severity);
       }
 
       const { data, error, count } = await query;
@@ -76,8 +76,8 @@ export default function AuditDashboard() {
         setTotalPages(Math.ceil(count / pageSize));
       }
     } catch (error: any) {
-      console.error('Error fetching logs:', error);
-      toast.error('Failed to fetch audit logs');
+      console.error("Error fetching logs:", error);
+      toast.error("Failed to fetch audit logs");
     } finally {
       setLoading(false);
     }
@@ -87,16 +87,16 @@ export default function AuditDashboard() {
     try {
       // Fetch all logs matching current filters
       let query = supabase
-        .from('access_logs')
-        .select('*')
-        .order('timestamp', { ascending: false });
+        .from("access_logs")
+        .select("*")
+        .order("timestamp", { ascending: false });
 
       // Apply same filters
-      if (filters.user_id) query = query.eq('user_id', filters.user_id);
-      if (filters.ip_address) query = query.eq('ip_address', filters.ip_address);
-      if (filters.module_accessed) query = query.ilike('module_accessed', `%${filters.module_accessed}%`);
-      if (filters.result) query = query.eq('result', filters.result);
-      if (filters.severity) query = query.eq('severity', filters.severity);
+      if (filters.user_id) query = query.eq("user_id", filters.user_id);
+      if (filters.ip_address) query = query.eq("ip_address", filters.ip_address);
+      if (filters.module_accessed) query = query.ilike("module_accessed", `%${filters.module_accessed}%`);
+      if (filters.result) query = query.eq("result", filters.result);
+      if (filters.severity) query = query.eq("severity", filters.severity);
 
       const { data, error } = await query;
       if (error) throw error;
@@ -104,35 +104,35 @@ export default function AuditDashboard() {
       // Convert to CSV
       const csvContent = [
         // Header
-        ['ID', 'User ID', 'Module', 'Timestamp', 'Action', 'Result', 'IP Address', 'Severity'].join(','),
+        ["ID", "User ID", "Module", "Timestamp", "Action", "Result", "IP Address", "Severity"].join(","),
         // Data rows
         ...(data || []).map(log =>
           [
             log.id,
-            log.user_id || 'N/A',
+            log.user_id || "N/A",
             log.module_accessed,
             new Date(log.timestamp).toISOString(),
             log.action,
             log.result,
-            log.ip_address || 'N/A',
+            log.ip_address || "N/A",
             log.severity,
-          ].join(',')
+          ].join(",")
         ),
-      ].join('\n');
+      ].join("\n");
 
       // Download
-      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const blob = new Blob([csvContent], { type: "text/csv" });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `audit_logs_${new Date().toISOString().split('T')[0]}.csv`;
+      a.download = `audit_logs_${new Date().toISOString().split("T")[0]}.csv`;
       a.click();
       window.URL.revokeObjectURL(url);
 
-      toast.success('Logs exported successfully');
+      toast.success("Logs exported successfully");
     } catch (error: any) {
-      console.error('Error exporting logs:', error);
-      toast.error('Failed to export logs');
+      console.error("Error exporting logs:", error);
+      toast.error("Failed to export logs");
     }
   }
 
@@ -143,37 +143,37 @@ export default function AuditDashboard() {
 
   function clearFilters() {
     setFilters({
-      user_id: '',
-      ip_address: '',
-      module_accessed: '',
-      result: '',
-      severity: '',
+      user_id: "",
+      ip_address: "",
+      module_accessed: "",
+      result: "",
+      severity: "",
     });
     setPage(1);
   }
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return 'text-red-600 bg-red-50';
-      case 'warning':
-        return 'text-yellow-600 bg-yellow-50';
-      default:
-        return 'text-blue-600 bg-blue-50';
+    case "critical":
+      return "text-red-600 bg-red-50";
+    case "warning":
+      return "text-yellow-600 bg-yellow-50";
+    default:
+      return "text-blue-600 bg-blue-50";
     }
   };
 
   const getResultColor = (result: string) => {
     switch (result) {
-      case 'success':
-        return 'text-green-600 bg-green-50';
-      case 'failure':
-      case 'error':
-        return 'text-red-600 bg-red-50';
-      case 'denied':
-        return 'text-orange-600 bg-orange-50';
-      default:
-        return 'text-gray-600 bg-gray-50';
+    case "success":
+      return "text-green-600 bg-green-50";
+    case "failure":
+    case "error":
+      return "text-red-600 bg-red-50";
+    case "denied":
+      return "text-orange-600 bg-orange-50";
+    default:
+      return "text-gray-600 bg-gray-50";
     }
   };
 
@@ -206,19 +206,19 @@ export default function AuditDashboard() {
             <Input
               placeholder="User ID"
               value={filters.user_id}
-              onChange={(e) => handleFilterChange('user_id', e.target.value)}
+              onChange={(e) => handleFilterChange("user_id", e.target.value)}
             />
             <Input
               placeholder="IP Address"
               value={filters.ip_address}
-              onChange={(e) => handleFilterChange('ip_address', e.target.value)}
+              onChange={(e) => handleFilterChange("ip_address", e.target.value)}
             />
             <Input
               placeholder="Module/Route"
               value={filters.module_accessed}
-              onChange={(e) => handleFilterChange('module_accessed', e.target.value)}
+              onChange={(e) => handleFilterChange("module_accessed", e.target.value)}
             />
-            <Select value={filters.result} onValueChange={(value) => handleFilterChange('result', value)}>
+            <Select value={filters.result} onValueChange={(value) => handleFilterChange("result", value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Result" />
               </SelectTrigger>
@@ -230,7 +230,7 @@ export default function AuditDashboard() {
                 <SelectItem value="error">Error</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={filters.severity} onValueChange={(value) => handleFilterChange('severity', value)}>
+            <Select value={filters.severity} onValueChange={(value) => handleFilterChange("severity", value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Severity" />
               </SelectTrigger>
@@ -285,7 +285,7 @@ export default function AuditDashboard() {
                             {new Date(log.timestamp).toLocaleString()}
                           </TableCell>
                           <TableCell className="font-mono text-xs">
-                            {log.user_id ? log.user_id.slice(0, 8) : 'N/A'}
+                            {log.user_id ? log.user_id.slice(0, 8) : "N/A"}
                           </TableCell>
                           <TableCell>{log.module_accessed}</TableCell>
                           <TableCell>{log.action}</TableCell>
@@ -294,7 +294,7 @@ export default function AuditDashboard() {
                               {log.result}
                             </span>
                           </TableCell>
-                          <TableCell className="font-mono text-xs">{log.ip_address || 'N/A'}</TableCell>
+                          <TableCell className="font-mono text-xs">{log.ip_address || "N/A"}</TableCell>
                           <TableCell>
                             <span className={`px-2 py-1 rounded text-xs font-medium ${getSeverityColor(log.severity)}`}>
                               {log.severity}

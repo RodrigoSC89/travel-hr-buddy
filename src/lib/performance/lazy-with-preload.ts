@@ -3,7 +3,7 @@
  * Otimiza carregamento de módulos em conexões lentas
  */
 
-import { lazy, ComponentType } from 'react';
+import { lazy, ComponentType } from "react";
 
 interface PreloadableComponent<T extends ComponentType<any>> extends React.LazyExoticComponent<T> {
   preload: () => Promise<{ default: T }>;
@@ -28,7 +28,7 @@ export function lazyWithPreload<T extends ComponentType<any>>(
 export const preloadStrategy = {
   // Precarrega durante idle time
   idle: (preloadFn: () => Promise<any>) => {
-    if ('requestIdleCallback' in window) {
+    if ("requestIdleCallback" in window) {
       requestIdleCallback(() => preloadFn());
     } else {
       // Fallback para navegadores sem requestIdleCallback
@@ -45,14 +45,14 @@ export const preloadStrategy = {
   hover: (element: HTMLElement, preloadFn: () => Promise<any>) => {
     const handleMouseEnter = () => {
       preloadFn();
-      element.removeEventListener('mouseenter', handleMouseEnter);
+      element.removeEventListener("mouseenter", handleMouseEnter);
     };
-    element.addEventListener('mouseenter', handleMouseEnter);
+    element.addEventListener("mouseenter", handleMouseEnter);
   },
 
   // Precarrega quando visível no viewport
   visible: (element: HTMLElement, preloadFn: () => Promise<any>) => {
-    if ('IntersectionObserver' in window) {
+    if ("IntersectionObserver" in window) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {

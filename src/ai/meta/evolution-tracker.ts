@@ -413,7 +413,7 @@ export class EvolutionTracker {
       currentVersion: string;
       overallImprovement: number;
     };
-  } {
+    } {
     const versions = Array.from(this.versions.values());
     const metricsData: Record<string, PerformanceMetrics[]> = {};
     const progressData: Record<string, CognitiveProgress[]> = {};

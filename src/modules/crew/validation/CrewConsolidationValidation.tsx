@@ -100,12 +100,12 @@ export const CrewConsolidationValidation = () => {
 
   const getStatusIcon = (status: "pass" | "fail" | "warn") => {
     switch (status) {
-      case "pass":
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case "fail":
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      case "warn":
-        return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+    case "pass":
+      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+    case "fail":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    case "warn":
+      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
     }
   };
 

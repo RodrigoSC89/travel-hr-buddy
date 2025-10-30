@@ -34,18 +34,18 @@
 // Route consolidation mappings
 export const ROUTE_CONSOLIDATION = {
   crew: {
-    primary: '/crew-management',
+    primary: "/crew-management",
     legacy: [
-      '/crew',
-      '/hr/crew',
-      '/operations/crew'
+      "/crew",
+      "/hr/crew",
+      "/operations/crew"
     ]
   },
   documents: {
-    primary: '/document-hub',
+    primary: "/document-hub",
     legacy: [
-      '/documents',
-      '/documents/ai'
+      "/documents",
+      "/documents/ai"
     ]
   }
 };
@@ -53,19 +53,19 @@ export const ROUTE_CONSOLIDATION = {
 // Module consolidation mappings
 export const MODULE_CONSOLIDATION = {
   crew: {
-    primary: 'src/modules/crew-management',
-    legacy: 'src/modules/crew',
+    primary: "src/modules/crew-management",
+    legacy: "src/modules/crew",
     features_to_migrate: [
-      'ethics-guard.ts',
-      'copilot/*',
-      'hooks/useSync.ts'
+      "ethics-guard.ts",
+      "copilot/*",
+      "hooks/useSync.ts"
     ]
   },
   documents: {
-    primary: 'src/modules/document-hub',
-    legacy: 'src/modules/documents',
+    primary: "src/modules/document-hub",
+    legacy: "src/modules/documents",
     features_to_migrate: [
-      'templates/*'
+      "templates/*"
     ]
   }
 };
@@ -86,13 +86,13 @@ export const CONSOLIDATION_STATUS = {
   crew: {
     analyzed: true,
     routes_identified: true,
-    primary_module: 'crew-management',
-    features_preserved: ['ethics-guard', 'copilot', 'sync'],
+    primary_module: "crew-management",
+    features_preserved: ["ethics-guard", "copilot", "sync"],
   },
   documents: {
     analyzed: true,
     routes_identified: true,
-    primary_module: 'document-hub',
-    features_preserved: ['templates', 'AI documents'],
+    primary_module: "document-hub",
+    features_preserved: ["templates", "AI documents"],
   }
 };

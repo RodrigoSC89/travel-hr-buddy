@@ -545,30 +545,30 @@ class NeuralGovernance {
 
   private categorizeViolation(policyCategory: string): ViolationType {
     switch (policyCategory) {
-      case "safety":
-        return "safety";
-      case "ethical":
-        return "ethical";
-      case "financial":
-      case "compliance":
-        return "compliance";
-      default:
-        return "policy";
+    case "safety":
+      return "safety";
+    case "ethical":
+      return "ethical";
+    case "financial":
+    case "compliance":
+      return "compliance";
+    default:
+      return "policy";
     }
   }
 
   private suggestRemediation(rule: GovernanceRule, strategy: Strategy): string {
     switch (rule.action) {
-      case "block":
-        return "This strategy cannot proceed. Consider alternative approaches that reduce risk.";
-      case "escalate":
-        return "Escalate to senior management for review and approval.";
-      case "require_approval":
-        return "Obtain necessary approvals before proceeding with execution.";
-      case "warn":
-        return "Proceed with caution and implement additional monitoring.";
-      default:
-        return "Review and address the identified concerns.";
+    case "block":
+      return "This strategy cannot proceed. Consider alternative approaches that reduce risk.";
+    case "escalate":
+      return "Escalate to senior management for review and approval.";
+    case "require_approval":
+      return "Obtain necessary approvals before proceeding with execution.";
+    case "warn":
+      return "Proceed with caution and implement additional monitoring.";
+    default:
+      return "Review and address the identified concerns.";
     }
   }
 

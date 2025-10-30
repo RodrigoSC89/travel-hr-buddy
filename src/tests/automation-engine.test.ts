@@ -27,7 +27,7 @@ interface AutomationRule {
   id: string;
   name: string;
   trigger: {
-    type: 'event' | 'schedule' | 'condition';
+    type: "event" | "schedule" | "condition";
     config: any;
   };
   actions: Array<{
@@ -94,7 +94,7 @@ class AutomationEngine {
         executedActions: 0,
         failedActions: 0,
         duration: 0,
-        error: 'Rule not found'
+        error: "Rule not found"
       };
     }
 
@@ -105,7 +105,7 @@ class AutomationEngine {
         executedActions: 0,
         failedActions: 0,
         duration: 0,
-        error: 'Rule is disabled'
+        error: "Rule is disabled"
       };
     }
 
@@ -140,7 +140,7 @@ class AutomationEngine {
 
     // Simulate some actions failing based on config
     if (action.config?.shouldFail) {
-      throw new Error('Action failed');
+      throw new Error("Action failed");
     }
   }
 
@@ -157,11 +157,11 @@ class AutomationEngine {
   }
 
   async evaluateTrigger(rule: AutomationRule, event: any): Promise<boolean> {
-    if (rule.trigger.type === 'event') {
+    if (rule.trigger.type === "event") {
       return event.type === rule.trigger.config.eventType;
     }
 
-    if (rule.trigger.type === 'condition') {
+    if (rule.trigger.type === "condition") {
       return this.evaluateCondition(rule.trigger.config.condition, event);
     }
 
@@ -174,16 +174,16 @@ class AutomationEngine {
     const actualValue = data[field];
 
     switch (operator) {
-      case 'equals':
-        return actualValue === value;
-      case 'greaterThan':
-        return actualValue > value;
-      case 'lessThan':
-        return actualValue < value;
-      case 'contains':
-        return String(actualValue).includes(value);
-      default:
-        return false;
+    case "equals":
+      return actualValue === value;
+    case "greaterThan":
+      return actualValue > value;
+    case "lessThan":
+      return actualValue < value;
+    case "contains":
+      return String(actualValue).includes(value);
+    default:
+      return false;
     }
   }
 
@@ -228,52 +228,52 @@ describe("Automation Engine Tests", () => {
   describe("Rule Management", () => {
     it("should add a new automation rule", () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Test Rule',
-        trigger: { type: 'event', config: { eventType: 'incident_created' } },
-        actions: [{ type: 'notify', config: { recipients: ['admin@example.com'] } }],
+        id: "rule-1",
+        name: "Test Rule",
+        trigger: { type: "event", config: { eventType: "incident_created" } },
+        actions: [{ type: "notify", config: { recipients: ["admin@example.com"] } }],
         enabled: true,
         priority: 1
       };
 
       engine.addRule(rule);
 
-      const retrieved = engine.getRule('rule-1');
+      const retrieved = engine.getRule("rule-1");
       expect(retrieved).toBeDefined();
-      expect(retrieved?.name).toBe('Test Rule');
+      expect(retrieved?.name).toBe("Test Rule");
     });
 
     it("should remove an automation rule", () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Test Rule',
-        trigger: { type: 'event', config: {} },
+        id: "rule-1",
+        name: "Test Rule",
+        trigger: { type: "event", config: {} },
         actions: [],
         enabled: true,
         priority: 1
       };
 
       engine.addRule(rule);
-      engine.removeRule('rule-1');
+      engine.removeRule("rule-1");
 
-      const retrieved = engine.getRule('rule-1');
+      const retrieved = engine.getRule("rule-1");
       expect(retrieved).toBeUndefined();
     });
 
     it("should retrieve all rules", () => {
       const rule1: AutomationRule = {
-        id: 'rule-1',
-        name: 'Rule 1',
-        trigger: { type: 'event', config: {} },
+        id: "rule-1",
+        name: "Rule 1",
+        trigger: { type: "event", config: {} },
         actions: [],
         enabled: true,
         priority: 1
       };
 
       const rule2: AutomationRule = {
-        id: 'rule-2',
-        name: 'Rule 2',
-        trigger: { type: 'schedule', config: {} },
+        id: "rule-2",
+        name: "Rule 2",
+        trigger: { type: "schedule", config: {} },
         actions: [],
         enabled: true,
         priority: 2
@@ -288,39 +288,39 @@ describe("Automation Engine Tests", () => {
 
     it("should enable and disable rules", () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Test Rule',
-        trigger: { type: 'event', config: {} },
+        id: "rule-1",
+        name: "Test Rule",
+        trigger: { type: "event", config: {} },
         actions: [],
         enabled: true,
         priority: 1
       };
 
       engine.addRule(rule);
-      engine.disableRule('rule-1');
+      engine.disableRule("rule-1");
 
-      let retrieved = engine.getRule('rule-1');
+      let retrieved = engine.getRule("rule-1");
       expect(retrieved?.enabled).toBe(false);
 
-      engine.enableRule('rule-1');
-      retrieved = engine.getRule('rule-1');
+      engine.enableRule("rule-1");
+      retrieved = engine.getRule("rule-1");
       expect(retrieved?.enabled).toBe(true);
     });
 
     it("should update existing rule when adding with same ID", () => {
       const rule1: AutomationRule = {
-        id: 'rule-1',
-        name: 'Original',
-        trigger: { type: 'event', config: {} },
+        id: "rule-1",
+        name: "Original",
+        trigger: { type: "event", config: {} },
         actions: [],
         enabled: true,
         priority: 1
       };
 
       const rule2: AutomationRule = {
-        id: 'rule-1',
-        name: 'Updated',
-        trigger: { type: 'event', config: {} },
+        id: "rule-1",
+        name: "Updated",
+        trigger: { type: "event", config: {} },
         actions: [],
         enabled: true,
         priority: 2
@@ -329,20 +329,20 @@ describe("Automation Engine Tests", () => {
       engine.addRule(rule1);
       engine.addRule(rule2);
 
-      const retrieved = engine.getRule('rule-1');
-      expect(retrieved?.name).toBe('Updated');
+      const retrieved = engine.getRule("rule-1");
+      expect(retrieved?.name).toBe("Updated");
     });
   });
 
   describe("Rule Execution", () => {
     it("should execute a rule successfully", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Test Rule',
-        trigger: { type: 'event', config: {} },
+        id: "rule-1",
+        name: "Test Rule",
+        trigger: { type: "event", config: {} },
         actions: [
-          { type: 'log', config: { message: 'Test' } },
-          { type: 'notify', config: { recipient: 'user' } }
+          { type: "log", config: { message: "Test" } },
+          { type: "notify", config: { recipient: "user" } }
         ],
         enabled: true,
         priority: 1
@@ -350,7 +350,7 @@ describe("Automation Engine Tests", () => {
 
       engine.addRule(rule);
 
-      const result = await engine.executeRule('rule-1');
+      const result = await engine.executeRule("rule-1");
 
       expect(result.success).toBe(true);
       expect(result.executedActions).toBe(2);
@@ -359,31 +359,31 @@ describe("Automation Engine Tests", () => {
 
     it("should not execute disabled rules", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Test Rule',
-        trigger: { type: 'event', config: {} },
-        actions: [{ type: 'log', config: {} }],
+        id: "rule-1",
+        name: "Test Rule",
+        trigger: { type: "event", config: {} },
+        actions: [{ type: "log", config: {} }],
         enabled: false,
         priority: 1
       };
 
       engine.addRule(rule);
 
-      const result = await engine.executeRule('rule-1');
+      const result = await engine.executeRule("rule-1");
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('disabled');
+      expect(result.error).toContain("disabled");
     });
 
     it("should handle rule execution errors", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Test Rule',
-        trigger: { type: 'event', config: {} },
+        id: "rule-1",
+        name: "Test Rule",
+        trigger: { type: "event", config: {} },
         actions: [
-          { type: 'action1', config: {} },
-          { type: 'action2', config: { shouldFail: true } },
-          { type: 'action3', config: {} }
+          { type: "action1", config: {} },
+          { type: "action2", config: { shouldFail: true } },
+          { type: "action3", config: {} }
         ],
         enabled: true,
         priority: 1
@@ -391,7 +391,7 @@ describe("Automation Engine Tests", () => {
 
       engine.addRule(rule);
 
-      const result = await engine.executeRule('rule-1');
+      const result = await engine.executeRule("rule-1");
 
       expect(result.executedActions).toBe(2);
       expect(result.failedActions).toBe(1);
@@ -400,42 +400,42 @@ describe("Automation Engine Tests", () => {
 
     it("should measure execution duration", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Test Rule',
-        trigger: { type: 'event', config: {} },
-        actions: [{ type: 'log', config: {} }],
+        id: "rule-1",
+        name: "Test Rule",
+        trigger: { type: "event", config: {} },
+        actions: [{ type: "log", config: {} }],
         enabled: true,
         priority: 1
       };
 
       engine.addRule(rule);
 
-      const result = await engine.executeRule('rule-1');
+      const result = await engine.executeRule("rule-1");
 
       expect(result.duration).toBeGreaterThan(0);
     });
 
     it("should return error for non-existent rule", async () => {
-      const result = await engine.executeRule('non-existent');
+      const result = await engine.executeRule("non-existent");
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('not found');
+      expect(result.error).toContain("not found");
     });
 
     it("should track execution history", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Test Rule',
-        trigger: { type: 'event', config: {} },
-        actions: [{ type: 'log', config: {} }],
+        id: "rule-1",
+        name: "Test Rule",
+        trigger: { type: "event", config: {} },
+        actions: [{ type: "log", config: {} }],
         enabled: true,
         priority: 1
       };
 
       engine.addRule(rule);
 
-      await engine.executeRule('rule-1');
-      await engine.executeRule('rule-1');
+      await engine.executeRule("rule-1");
+      await engine.executeRule("rule-1");
 
       const history = engine.getExecutionHistory();
       expect(history).toHaveLength(2);
@@ -445,19 +445,19 @@ describe("Automation Engine Tests", () => {
   describe("Trigger Evaluation", () => {
     it("should evaluate event-based triggers", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Event Rule',
+        id: "rule-1",
+        name: "Event Rule",
         trigger: {
-          type: 'event',
-          config: { eventType: 'incident_created' }
+          type: "event",
+          config: { eventType: "incident_created" }
         },
         actions: [],
         enabled: true,
         priority: 1
       };
 
-      const matchingEvent = { type: 'incident_created', data: {} };
-      const nonMatchingEvent = { type: 'incident_resolved', data: {} };
+      const matchingEvent = { type: "incident_created", data: {} };
+      const nonMatchingEvent = { type: "incident_resolved", data: {} };
 
       expect(await engine.evaluateTrigger(rule, matchingEvent)).toBe(true);
       expect(await engine.evaluateTrigger(rule, nonMatchingEvent)).toBe(false);
@@ -465,12 +465,12 @@ describe("Automation Engine Tests", () => {
 
     it("should evaluate condition-based triggers with equals operator", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Condition Rule',
+        id: "rule-1",
+        name: "Condition Rule",
         trigger: {
-          type: 'condition',
+          type: "condition",
           config: {
-            condition: { field: 'severity', operator: 'equals', value: 'critical' }
+            condition: { field: "severity", operator: "equals", value: "critical" }
           }
         },
         actions: [],
@@ -478,8 +478,8 @@ describe("Automation Engine Tests", () => {
         priority: 1
       };
 
-      const matchingData = { severity: 'critical' };
-      const nonMatchingData = { severity: 'low' };
+      const matchingData = { severity: "critical" };
+      const nonMatchingData = { severity: "low" };
 
       expect(await engine.evaluateTrigger(rule, matchingData)).toBe(true);
       expect(await engine.evaluateTrigger(rule, nonMatchingData)).toBe(false);
@@ -487,12 +487,12 @@ describe("Automation Engine Tests", () => {
 
     it("should evaluate condition-based triggers with comparison operators", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Threshold Rule',
+        id: "rule-1",
+        name: "Threshold Rule",
         trigger: {
-          type: 'condition',
+          type: "condition",
           config: {
-            condition: { field: 'temperature', operator: 'greaterThan', value: 80 }
+            condition: { field: "temperature", operator: "greaterThan", value: 80 }
           }
         },
         actions: [],
@@ -509,12 +509,12 @@ describe("Automation Engine Tests", () => {
 
     it("should evaluate condition-based triggers with contains operator", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Contains Rule',
+        id: "rule-1",
+        name: "Contains Rule",
         trigger: {
-          type: 'condition',
+          type: "condition",
           config: {
-            condition: { field: 'message', operator: 'contains', value: 'alarm' }
+            condition: { field: "message", operator: "contains", value: "alarm" }
           }
         },
         actions: [],
@@ -522,8 +522,8 @@ describe("Automation Engine Tests", () => {
         priority: 1
       };
 
-      const matchingData = { message: 'System alarm detected' };
-      const nonMatchingData = { message: 'System normal' };
+      const matchingData = { message: "System alarm detected" };
+      const nonMatchingData = { message: "System normal" };
 
       expect(await engine.evaluateTrigger(rule, matchingData)).toBe(true);
       expect(await engine.evaluateTrigger(rule, nonMatchingData)).toBe(false);
@@ -533,27 +533,27 @@ describe("Automation Engine Tests", () => {
   describe("Event Processing", () => {
     it("should process events and execute matching rules", async () => {
       const rule1: AutomationRule = {
-        id: 'rule-1',
-        name: 'Critical Alert',
+        id: "rule-1",
+        name: "Critical Alert",
         trigger: {
-          type: 'condition',
+          type: "condition",
           config: {
-            condition: { field: 'severity', operator: 'equals', value: 'critical' }
+            condition: { field: "severity", operator: "equals", value: "critical" }
           }
         },
-        actions: [{ type: 'alert', config: {} }],
+        actions: [{ type: "alert", config: {} }],
         enabled: true,
         priority: 10
       };
 
       const rule2: AutomationRule = {
-        id: 'rule-2',
-        name: 'All Incidents',
+        id: "rule-2",
+        name: "All Incidents",
         trigger: {
-          type: 'event',
-          config: { eventType: 'incident' }
+          type: "event",
+          config: { eventType: "incident" }
         },
-        actions: [{ type: 'log', config: {} }],
+        actions: [{ type: "log", config: {} }],
         enabled: true,
         priority: 5
       };
@@ -561,7 +561,7 @@ describe("Automation Engine Tests", () => {
       engine.addRule(rule1);
       engine.addRule(rule2);
 
-      const event = { type: 'incident', severity: 'critical' };
+      const event = { type: "incident", severity: "critical" };
       const results = await engine.processEvent(event);
 
       expect(results.length).toBeGreaterThan(0);
@@ -571,18 +571,18 @@ describe("Automation Engine Tests", () => {
       const executionOrder: string[] = [];
 
       const rule1: AutomationRule = {
-        id: 'rule-1',
-        name: 'Low Priority',
-        trigger: { type: 'event', config: { eventType: 'test' } },
+        id: "rule-1",
+        name: "Low Priority",
+        trigger: { type: "event", config: { eventType: "test" } },
         actions: [],
         enabled: true,
         priority: 1
       };
 
       const rule2: AutomationRule = {
-        id: 'rule-2',
-        name: 'High Priority',
-        trigger: { type: 'event', config: { eventType: 'test' } },
+        id: "rule-2",
+        name: "High Priority",
+        trigger: { type: "event", config: { eventType: "test" } },
         actions: [],
         enabled: true,
         priority: 10
@@ -591,29 +591,29 @@ describe("Automation Engine Tests", () => {
       engine.addRule(rule1);
       engine.addRule(rule2);
 
-      const event = { type: 'test' };
+      const event = { type: "test" };
       await engine.processEvent(event);
 
       const history = engine.getExecutionHistory();
-      expect(history[0].ruleId).toBe('rule-2'); // Higher priority executes first
-      expect(history[1].ruleId).toBe('rule-1');
+      expect(history[0].ruleId).toBe("rule-2"); // Higher priority executes first
+      expect(history[1].ruleId).toBe("rule-1");
     });
 
     it("should skip disabled rules during event processing", async () => {
       const rule1: AutomationRule = {
-        id: 'rule-1',
-        name: 'Enabled Rule',
-        trigger: { type: 'event', config: { eventType: 'test' } },
-        actions: [{ type: 'log', config: {} }],
+        id: "rule-1",
+        name: "Enabled Rule",
+        trigger: { type: "event", config: { eventType: "test" } },
+        actions: [{ type: "log", config: {} }],
         enabled: true,
         priority: 1
       };
 
       const rule2: AutomationRule = {
-        id: 'rule-2',
-        name: 'Disabled Rule',
-        trigger: { type: 'event', config: { eventType: 'test' } },
-        actions: [{ type: 'log', config: {} }],
+        id: "rule-2",
+        name: "Disabled Rule",
+        trigger: { type: "event", config: { eventType: "test" } },
+        actions: [{ type: "log", config: {} }],
         enabled: false,
         priority: 1
       };
@@ -621,18 +621,18 @@ describe("Automation Engine Tests", () => {
       engine.addRule(rule1);
       engine.addRule(rule2);
 
-      const event = { type: 'test' };
+      const event = { type: "test" };
       const results = await engine.processEvent(event);
 
       expect(results).toHaveLength(1);
-      expect(results[0].ruleId).toBe('rule-1');
+      expect(results[0].ruleId).toBe("rule-1");
     });
 
     it("should handle events with no matching rules", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Specific Rule',
-        trigger: { type: 'event', config: { eventType: 'specific' } },
+        id: "rule-1",
+        name: "Specific Rule",
+        trigger: { type: "event", config: { eventType: "specific" } },
         actions: [],
         enabled: true,
         priority: 1
@@ -640,7 +640,7 @@ describe("Automation Engine Tests", () => {
 
       engine.addRule(rule);
 
-      const event = { type: 'unmatched' };
+      const event = { type: "unmatched" };
       const results = await engine.processEvent(event);
 
       expect(results).toHaveLength(0);
@@ -650,19 +650,19 @@ describe("Automation Engine Tests", () => {
   describe("Event Listeners", () => {
     it("should register event listeners", () => {
       let called = false;
-      engine.on('test-event', () => { called = true; });
+      engine.on("test-event", () => { called = true; });
 
-      engine.emit('test-event');
+      engine.emit("test-event");
 
       expect(called).toBe(true);
     });
 
     it("should support multiple listeners for same event", () => {
       let count = 0;
-      engine.on('test-event', () => { count++; });
-      engine.on('test-event', () => { count++; });
+      engine.on("test-event", () => { count++; });
+      engine.on("test-event", () => { count++; });
 
-      engine.emit('test-event');
+      engine.emit("test-event");
 
       expect(count).toBe(2);
     });
@@ -674,8 +674,8 @@ describe("Automation Engine Tests", () => {
         const rule: AutomationRule = {
           id: `rule-${i}`,
           name: `Rule ${i}`,
-          trigger: { type: 'event', config: { eventType: 'test' } },
-          actions: [{ type: 'log', config: {} }],
+          trigger: { type: "event", config: { eventType: "test" } },
+          actions: [{ type: "log", config: {} }],
           enabled: true,
           priority: i
         };
@@ -683,7 +683,7 @@ describe("Automation Engine Tests", () => {
       }
 
       const start = Date.now();
-      const event = { type: 'test' };
+      const event = { type: "test" };
       await engine.processEvent(event);
       const duration = Date.now() - start;
 
@@ -692,9 +692,9 @@ describe("Automation Engine Tests", () => {
 
     it("should execute actions in parallel when possible", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Multi-action Rule',
-        trigger: { type: 'event', config: {} },
+        id: "rule-1",
+        name: "Multi-action Rule",
+        trigger: { type: "event", config: {} },
         actions: Array(10).fill(null).map((_, i) => ({
           type: `action-${i}`,
           config: {}
@@ -706,7 +706,7 @@ describe("Automation Engine Tests", () => {
       engine.addRule(rule);
 
       const start = Date.now();
-      await engine.executeRule('rule-1');
+      await engine.executeRule("rule-1");
       const duration = Date.now() - start;
 
       // If actions were sequential, it would take 10 * 10ms = 100ms
@@ -718,15 +718,15 @@ describe("Automation Engine Tests", () => {
   describe("Error Recovery", () => {
     it("should continue processing after action failures", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Mixed Actions',
-        trigger: { type: 'event', config: {} },
+        id: "rule-1",
+        name: "Mixed Actions",
+        trigger: { type: "event", config: {} },
         actions: [
-          { type: 'action1', config: {} },
-          { type: 'action2', config: { shouldFail: true } },
-          { type: 'action3', config: {} },
-          { type: 'action4', config: { shouldFail: true } },
-          { type: 'action5', config: {} }
+          { type: "action1", config: {} },
+          { type: "action2", config: { shouldFail: true } },
+          { type: "action3", config: {} },
+          { type: "action4", config: { shouldFail: true } },
+          { type: "action5", config: {} }
         ],
         enabled: true,
         priority: 1
@@ -734,7 +734,7 @@ describe("Automation Engine Tests", () => {
 
       engine.addRule(rule);
 
-      const result = await engine.executeRule('rule-1');
+      const result = await engine.executeRule("rule-1");
 
       expect(result.executedActions).toBe(3);
       expect(result.failedActions).toBe(2);
@@ -742,17 +742,17 @@ describe("Automation Engine Tests", () => {
 
     it("should maintain engine state after errors", async () => {
       const rule: AutomationRule = {
-        id: 'rule-1',
-        name: 'Failing Rule',
-        trigger: { type: 'event', config: {} },
-        actions: [{ type: 'fail', config: { shouldFail: true } }],
+        id: "rule-1",
+        name: "Failing Rule",
+        trigger: { type: "event", config: {} },
+        actions: [{ type: "fail", config: { shouldFail: true } }],
         enabled: true,
         priority: 1
       };
 
       engine.addRule(rule);
 
-      await engine.executeRule('rule-1');
+      await engine.executeRule("rule-1");
 
       // Engine should still be functional
       const allRules = engine.getAllRules();
@@ -760,9 +760,9 @@ describe("Automation Engine Tests", () => {
 
       // Should be able to add new rules
       const rule2: AutomationRule = {
-        id: 'rule-2',
-        name: 'New Rule',
-        trigger: { type: 'event', config: {} },
+        id: "rule-2",
+        name: "New Rule",
+        trigger: { type: "event", config: {} },
         actions: [],
         enabled: true,
         priority: 1

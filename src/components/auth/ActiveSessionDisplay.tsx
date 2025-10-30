@@ -3,11 +3,11 @@
  * Show current session information to users
  */
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Shield, 
   Clock, 
@@ -16,15 +16,15 @@ import {
   AlertTriangle, 
   CheckCircle,
   RefreshCw 
-} from 'lucide-react';
+} from "lucide-react";
 import { 
   getSessionMetadata, 
   secureLogout, 
   TokenRefreshManager,
   initializeTokenRefresh 
-} from '@/services/enhanced-auth-service';
-import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
+} from "@/services/enhanced-auth-service";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface SessionMetadata {
   userId: string;
@@ -63,11 +63,11 @@ export function ActiveSessionDisplay() {
       const metadata = await getSessionMetadata();
       setSession(metadata);
     } catch (error) {
-      console.error('Error loading session:', error);
+      console.error("Error loading session:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load session information',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load session information",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -80,21 +80,21 @@ export function ActiveSessionDisplay() {
       const result = await secureLogout();
 
       if (!result.success) {
-        throw new Error(result.error || 'Logout failed');
+        throw new Error(result.error || "Logout failed");
       }
 
       toast({
-        title: 'Success',
-        description: 'Logged out successfully',
+        title: "Success",
+        description: "Logged out successfully",
       });
 
-      navigate('/auth/login');
+      navigate("/auth/login");
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
       toast({
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to logout',
-        variant: 'destructive',
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to logout",
+        variant: "destructive",
       });
     } finally {
       setLoggingOut(false);
@@ -143,8 +143,8 @@ export function ActiveSessionDisplay() {
               </CardTitle>
               <CardDescription>Your current authentication session</CardDescription>
             </div>
-            <Badge variant={session.isExpiring ? 'destructive' : 'default'}>
-              {session.isExpiring ? 'Expiring Soon' : 'Active'}
+            <Badge variant={session.isExpiring ? "destructive" : "default"}>
+              {session.isExpiring ? "Expiring Soon" : "Active"}
             </Badge>
           </div>
         </CardHeader>
@@ -202,7 +202,7 @@ export function ActiveSessionDisplay() {
                 disabled={loggingOut}
               >
                 <LogOut className="w-4 h-4 mr-2" />
-                {loggingOut ? 'Logging out...' : 'Secure Logout'}
+                {loggingOut ? "Logging out..." : "Secure Logout"}
               </Button>
             </div>
           </div>

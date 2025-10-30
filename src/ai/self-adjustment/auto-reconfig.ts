@@ -275,48 +275,48 @@ export class AutoReconfigurationEngine {
     newConfig.timestamp = new Date().toISOString();
 
     switch (trigger.triggerType) {
-      case "failure_threshold_exceeded":
-        // Switch to more conservative model
-        newConfig.modelName = "gpt-3.5-turbo";
-        newConfig.parameters.temperature = 0.3;
-        newConfig.strategy = "conservative";
-        break;
+    case "failure_threshold_exceeded":
+      // Switch to more conservative model
+      newConfig.modelName = "gpt-3.5-turbo";
+      newConfig.parameters.temperature = 0.3;
+      newConfig.strategy = "conservative";
+      break;
 
-      case "performance_degradation":
-        // Optimize for performance
-        newConfig.parameters.temperature = 0.5;
-        newConfig.parameters.maxTokens = 1500;
-        newConfig.priorities.accuracy = 9;
-        newConfig.priorities.speed = 8;
-        break;
+    case "performance_degradation":
+      // Optimize for performance
+      newConfig.parameters.temperature = 0.5;
+      newConfig.parameters.maxTokens = 1500;
+      newConfig.priorities.accuracy = 9;
+      newConfig.priorities.speed = 8;
+      break;
 
-      case "resource_overload":
-        // Reduce resource allocation
-        newConfig.resourceAllocation.memory = Math.floor(
-          currentConfig.resourceAllocation.memory * 0.75
-        );
-        newConfig.parameters.maxTokens = Math.floor(
-          currentConfig.parameters.maxTokens * 0.8
-        );
-        newConfig.priorities.cost = 9;
-        break;
+    case "resource_overload":
+      // Reduce resource allocation
+      newConfig.resourceAllocation.memory = Math.floor(
+        currentConfig.resourceAllocation.memory * 0.75
+      );
+      newConfig.parameters.maxTokens = Math.floor(
+        currentConfig.parameters.maxTokens * 0.8
+      );
+      newConfig.priorities.cost = 9;
+      break;
 
-      case "repeated_errors":
-        // Switch to fallback model with safer parameters
-        newConfig.modelName = "gpt-3.5-turbo";
-        newConfig.parameters.temperature = 0.2;
-        newConfig.parameters.maxTokens = 1000;
-        newConfig.strategy = "safe";
-        break;
+    case "repeated_errors":
+      // Switch to fallback model with safer parameters
+      newConfig.modelName = "gpt-3.5-turbo";
+      newConfig.parameters.temperature = 0.2;
+      newConfig.parameters.maxTokens = 1000;
+      newConfig.strategy = "safe";
+      break;
 
-      case "manual_override":
-      case "scheduled_optimization":
-        // Keep current config with minor optimizations
-        newConfig.parameters.temperature = Math.min(
-          1.0,
-          currentConfig.parameters.temperature + 0.1
-        );
-        break;
+    case "manual_override":
+    case "scheduled_optimization":
+      // Keep current config with minor optimizations
+      newConfig.parameters.temperature = Math.min(
+        1.0,
+        currentConfig.parameters.temperature + 0.1
+      );
+      break;
     }
 
     return newConfig;
@@ -329,15 +329,15 @@ export class AutoReconfigurationEngine {
     trigger: ReconfigurationTriggerEvent
   ): ConfigurationType {
     switch (trigger.triggerType) {
-      case "failure_threshold_exceeded":
-      case "repeated_errors":
-        return "model_switch";
-      case "performance_degradation":
-        return "parameter_adjustment";
-      case "resource_overload":
-        return "resource_reallocation";
-      default:
-        return "strategy_change";
+    case "failure_threshold_exceeded":
+    case "repeated_errors":
+      return "model_switch";
+    case "performance_degradation":
+      return "parameter_adjustment";
+    case "resource_overload":
+      return "resource_reallocation";
+    default:
+      return "strategy_change";
     }
   }
 
@@ -385,7 +385,7 @@ export class AutoReconfigurationEngine {
           field: `parameters.${key}`,
           oldValue: before.parameters[key],
           newValue: after.parameters[key],
-          reason: `Parameter optimized for better performance`,
+          reason: "Parameter optimized for better performance",
         });
       }
     }
@@ -517,7 +517,7 @@ export class AutoReconfigurationEngine {
     validations: PerformanceValidation[];
     currentConfig: SystemConfiguration | null;
     configHistory: SystemConfiguration[];
-  } {
+    } {
     return {
       triggers: this.triggers,
       actions: this.actions,

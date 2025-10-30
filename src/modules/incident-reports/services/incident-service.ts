@@ -52,7 +52,7 @@ export class IncidentService {
         reported_by: incident.reportedBy,
         location: incident.location,
         metadata: incident.metadata,
-        replay_status: 'pending' // Initialize replay status
+        replay_status: "pending" // Initialize replay status
       }).select().single();
       if (error) throw error;
       return { 

@@ -7,9 +7,9 @@
 // PATCH 536: Coordination AI Engine
 // ============================================================================
 
-export type AgentType = 'llm' | 'copilot' | 'sensor' | 'drone' | 'analyzer' | 'executor' | 'coordinator';
-export type AgentStatus = 'registered' | 'active' | 'idle' | 'busy' | 'offline' | 'error';
-export type TaskStatus = 'pending' | 'assigned' | 'processing' | 'completed' | 'failed' | 'timeout' | 'cancelled';
+export type AgentType = "llm" | "copilot" | "sensor" | "drone" | "analyzer" | "executor" | "coordinator";
+export type AgentStatus = "registered" | "active" | "idle" | "busy" | "offline" | "error";
+export type TaskStatus = "pending" | "assigned" | "processing" | "completed" | "failed" | "timeout" | "cancelled";
 
 export interface CoordinationAgent {
   id: string;
@@ -60,7 +60,7 @@ export interface CoordinationMissionLink {
   id: string;
   mission_id?: string;
   coordination_task_id?: string;
-  integration_status: 'linked' | 'synced' | 'completed' | 'failed';
+  integration_status: "linked" | "synced" | "completed" | "failed";
   sync_data: Record<string, any>;
   created_at: string;
   updated_at: string;
@@ -70,7 +70,7 @@ export interface CoordinationMissionLink {
 // PATCH 537: Deep Risk AI with ONNX
 // ============================================================================
 
-export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
+export type RiskLevel = "low" | "medium" | "high" | "critical";
 
 export interface RiskForecast {
   id: string;
@@ -105,7 +105,7 @@ export interface ONNXModel {
   model_url?: string;
   input_shape?: Record<string, any>;
   output_shape?: Record<string, any>;
-  status: 'active' | 'deprecated' | 'testing';
+  status: "active" | "deprecated" | "testing";
   performance_metrics: {
     avg_inference_time_ms?: number;
     accuracy?: number;
@@ -119,9 +119,9 @@ export interface ONNXModel {
 // PATCH 538: Sensors Hub
 // ============================================================================
 
-export type SensorType = 'temperature' | 'pressure' | 'humidity' | 'motion' | 'gps' | 'depth' | 'speed' | 'wind' | 'wave' | 'current' | 'other';
-export type SensorStatus = 'normal' | 'warning' | 'critical' | 'offline';
-export type AlertSeverity = 'info' | 'warning' | 'critical';
+export type SensorType = "temperature" | "pressure" | "humidity" | "motion" | "gps" | "depth" | "speed" | "wind" | "wave" | "current" | "other";
+export type SensorStatus = "normal" | "warning" | "critical" | "offline";
+export type AlertSeverity = "info" | "warning" | "critical";
 
 export interface SensorLog {
   id: string;
@@ -170,7 +170,7 @@ export interface SensorAlert {
   message: string;
   reading_value?: number;
   threshold_value?: number;
-  status: 'active' | 'acknowledged' | 'resolved';
+  status: "active" | "acknowledged" | "resolved";
   acknowledged_by?: string;
   acknowledged_at?: string;
   resolved_at?: string;
@@ -181,8 +181,8 @@ export interface SensorAlert {
 // PATCH 539: Ocean Sonar AI
 // ============================================================================
 
-export type SonarScanType = 'active' | 'passive' | 'side-scan' | 'multi-beam';
-export type DetectionStatus = 'new' | 'investigating' | 'classified' | 'dismissed';
+export type SonarScanType = "active" | "passive" | "side-scan" | "multi-beam";
+export type DetectionStatus = "new" | "investigating" | "classified" | "dismissed";
 
 export interface SonarData {
   id: string;
@@ -254,10 +254,10 @@ export interface SonarDetectionLog {
 // PATCH 540: Navigation Copilot v3
 // ============================================================================
 
-export type RouteStatus = 'planning' | 'active' | 'paused' | 'completed' | 'cancelled' | 'replanning';
-export type AutonomyLevel = 'manual' | 'assisted' | 'conditional' | 'full';
-export type NavigationAlertType = 'obstacle' | 'weather' | 'traffic' | 'mechanical' | 'route_deviation' | 'fuel' | 'other';
-export type NavigationAlertStatus = 'active' | 'acknowledged' | 'resolved';
+export type RouteStatus = "planning" | "active" | "paused" | "completed" | "cancelled" | "replanning";
+export type AutonomyLevel = "manual" | "assisted" | "conditional" | "full";
+export type NavigationAlertType = "obstacle" | "weather" | "traffic" | "mechanical" | "route_deviation" | "fuel" | "other";
+export type NavigationAlertStatus = "active" | "acknowledged" | "resolved";
 
 export interface AutonomousRoute {
   id: string;
@@ -310,7 +310,7 @@ export interface NavigationAlert {
   id: string;
   route_id?: string;
   alert_type: NavigationAlertType;
-  severity: AlertSeverity | 'emergency';
+  severity: AlertSeverity | "emergency";
   message: string;
   location?: {
     lat: number;

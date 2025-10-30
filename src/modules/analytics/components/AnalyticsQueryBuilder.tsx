@@ -76,21 +76,21 @@ export const AnalyticsQueryBuilder: React.FC = () => {
       queryConfig.filters.forEach((filter) => {
         if (filter.value) {
           switch (filter.operator) {
-            case "equals":
-              query = query.eq(filter.field, filter.value);
-              break;
-            case "not_equals":
-              query = query.neq(filter.field, filter.value);
-              break;
-            case "greater_than":
-              query = query.gt(filter.field, filter.value);
-              break;
-            case "less_than":
-              query = query.lt(filter.field, filter.value);
-              break;
-            case "contains":
-              query = query.ilike(filter.field, `%${filter.value}%`);
-              break;
+          case "equals":
+            query = query.eq(filter.field, filter.value);
+            break;
+          case "not_equals":
+            query = query.neq(filter.field, filter.value);
+            break;
+          case "greater_than":
+            query = query.gt(filter.field, filter.value);
+            break;
+          case "less_than":
+            query = query.lt(filter.field, filter.value);
+            break;
+          case "contains":
+            query = query.ilike(filter.field, `%${filter.value}%`);
+            break;
           }
         }
       });

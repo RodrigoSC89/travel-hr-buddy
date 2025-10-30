@@ -56,7 +56,7 @@ export function PriceRangeConfig() {
         .from("price_alerts")
         .insert({
           route,
-          travel_date: travelDate?.toISOString().split('T')[0],
+          travel_date: travelDate?.toISOString().split("T")[0],
           target_price: targetPrice,
           max_price: parseFloat(maxPrice),
           discount_target: calculatedDiscount,

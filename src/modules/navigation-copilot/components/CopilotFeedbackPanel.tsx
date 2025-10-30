@@ -22,10 +22,10 @@ import type { ParsedCommand } from "../services/naturalLanguageParser";
 
 export interface CopilotMessage {
   id: string;
-  type: 'user' | 'system' | 'command' | 'response';
+  type: "user" | "system" | "command" | "response";
   text: string;
   timestamp: number;
-  status?: 'pending' | 'success' | 'error';
+  status?: "pending" | "success" | "error";
   command?: ParsedCommand;
 }
 
@@ -54,27 +54,27 @@ export const CopilotFeedbackPanel: React.FC<CopilotFeedbackPanelProps> = ({
 
   const getStatusIcon = (status?: string) => {
     switch (status) {
-      case 'success':
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'error':
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      case 'pending':
-        return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />;
-      default:
-        return null;
+    case "success":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "error":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    case "pending":
+      return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />;
+    default:
+      return null;
     }
   };
 
   const getMessageStyle = (type: string) => {
     switch (type) {
-      case 'user':
-        return 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800';
-      case 'command':
-        return 'bg-purple-50 dark:bg-purple-950 border-purple-200 dark:border-purple-800';
-      case 'response':
-        return 'bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800';
-      default:
-        return 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700';
+    case "user":
+      return "bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800";
+    case "command":
+      return "bg-purple-50 dark:bg-purple-950 border-purple-200 dark:border-purple-800";
+    case "response":
+      return "bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800";
+    default:
+      return "bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700";
     }
   };
 

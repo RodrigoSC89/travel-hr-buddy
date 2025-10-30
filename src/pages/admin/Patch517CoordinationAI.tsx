@@ -130,29 +130,29 @@ export default function Patch517CoordinationAI() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pending":
-        return "secondary";
-      case "approved":
-        return "default";
-      case "executed":
-        return "default";
-      case "rejected":
-        return "destructive";
-      default:
-        return "outline";
+    case "pending":
+      return "secondary";
+    case "approved":
+      return "default";
+    case "executed":
+      return "default";
+    case "rejected":
+      return "destructive";
+    default:
+      return "outline";
     }
   };
 
   const getModuleStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "text-green-500";
-      case "idle":
-        return "text-muted-foreground";
-      case "warning":
-        return "text-yellow-500";
-      default:
-        return "text-muted-foreground";
+    case "active":
+      return "text-green-500";
+    case "idle":
+      return "text-muted-foreground";
+    case "warning":
+      return "text-yellow-500";
+    default:
+      return "text-muted-foreground";
     }
   };
 
@@ -183,8 +183,8 @@ export default function Patch517CoordinationAI() {
           <div className="space-y-2">
             {validationChecklist.map((item) => (
               <div key={item.id} className="flex items-center gap-2">
-                <div className={`h-4 w-4 rounded-full ${item.completed ? 'bg-green-500' : 'bg-muted'}`} />
-                <span className={item.completed ? 'text-foreground' : 'text-muted-foreground'}>
+                <div className={`h-4 w-4 rounded-full ${item.completed ? "bg-green-500" : "bg-muted"}`} />
+                <span className={item.completed ? "text-foreground" : "text-muted-foreground"}>
                   {item.label}
                 </span>
               </div>

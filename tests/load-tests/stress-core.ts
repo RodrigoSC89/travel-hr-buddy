@@ -12,22 +12,22 @@
  * Run with: npx tsx tests/load-tests/stress-core.ts
  */
 
-import { chromium, Browser, BrowserContext, Page } from '@playwright/test';
-import * as os from 'os';
-import * as fs from 'fs';
-import * as path from 'path';
+import { chromium, Browser, BrowserContext, Page } from "@playwright/test";
+import * as os from "os";
+import * as fs from "fs";
+import * as path from "path";
 
 // Configuration
 const CONFIG = {
-  BASE_URL: process.env.VITE_APP_URL || 'http://localhost:5173',
+  BASE_URL: process.env.VITE_APP_URL || "http://localhost:5173",
   NUM_SESSIONS: 100,
   CORE_ROUTES: [
-    '/dashboard',
-    '/crew-management',
-    '/control-hub',
+    "/dashboard",
+    "/crew-management",
+    "/control-hub",
   ],
   TIMEOUT: 60000,
-  METRICS_DIR: 'performance_metrics',
+  METRICS_DIR: "performance_metrics",
 };
 
 // Metrics storage
@@ -119,13 +119,13 @@ function getSystemMetrics(): SystemMetrics {
 async function measurePagePerformance(page: Page) {
   try {
     const perfMetrics = await page.evaluate(() => {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      const paint = performance.getEntriesByType('paint');
+      const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+      const paint = performance.getEntriesByType("paint");
       
       return {
         domContentLoaded: navigation?.domContentLoadedEventEnd - navigation?.domContentLoadedEventStart || 0,
         loadComplete: navigation?.loadEventEnd - navigation?.loadEventStart || 0,
-        firstContentfulPaint: paint.find(p => p.name === 'first-contentful-paint')?.startTime || 0,
+        firstContentfulPaint: paint.find(p => p.name === "first-contentful-paint")?.startTime || 0,
       };
     });
     
@@ -183,12 +183,12 @@ async function simulateSession(
     
     // Navigate to route
     const response = await page.goto(`${CONFIG.BASE_URL}${route}`, {
-      waitUntil: 'domcontentloaded',
+      waitUntil: "domcontentloaded",
       timeout: CONFIG.TIMEOUT,
     });
     
     // Wait for network to be idle
-    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {
+    await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {
       // Ignore timeout for networkidle
     });
     
@@ -238,18 +238,18 @@ async function simulateSession(
  * Run stress test with parallel sessions
  */
 async function runStressTest() {
-  console.log('🎯 PATCH 561 - Stress Test Starting...');
+  console.log("🎯 PATCH 561 - Stress Test Starting...");
   console.log(`📊 Simulating ${CONFIG.NUM_SESSIONS} parallel sessions`);
-  console.log(`🎯 Testing routes: ${CONFIG.CORE_ROUTES.join(', ')}`);
-  console.log('');
+  console.log(`🎯 Testing routes: ${CONFIG.CORE_ROUTES.join(", ")}`);
+  console.log("");
   
   // Launch browser
   const browser = await chromium.launch({
     headless: true,
     args: [
-      '--disable-dev-shm-usage',
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
+      "--disable-dev-shm-usage",
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
     ],
   });
   
@@ -313,23 +313,23 @@ function calculateSummary() {
  * Generate and display report
  */
 function generateReport() {
-  console.log('\n' + '='.repeat(80));
-  console.log('🔥 PATCH 561 - STRESS TEST RESULTS');
-  console.log('='.repeat(80));
+  console.log("\n" + "=".repeat(80));
+  console.log("🔥 PATCH 561 - STRESS TEST RESULTS");
+  console.log("=".repeat(80));
   
-  console.log('\n📊 OVERALL SUMMARY:');
+  console.log("\n📊 OVERALL SUMMARY:");
   console.log(`   Total Sessions: ${metrics.summary.totalSessions}`);
   console.log(`   Successful: ${metrics.summary.successfulSessions} ✅`);
   console.log(`   Failed: ${metrics.summary.failedSessions} ❌`);
   console.log(`   Success Rate: ${((metrics.summary.successfulSessions / metrics.summary.totalSessions) * 100).toFixed(2)}%`);
   
-  console.log('\n⏱️  LATENCY METRICS:');
+  console.log("\n⏱️  LATENCY METRICS:");
   console.log(`   Average Duration: ${metrics.summary.avgDuration.toFixed(2)}ms`);
   console.log(`   Min Duration: ${metrics.summary.minDuration.toFixed(2)}ms`);
   console.log(`   Max Duration: ${metrics.summary.maxDuration.toFixed(2)}ms`);
   
   // Route-specific statistics
-  console.log('\n🎯 ROUTE-SPECIFIC METRICS:');
+  console.log("\n🎯 ROUTE-SPECIFIC METRICS:");
   CONFIG.CORE_ROUTES.forEach(route => {
     const routeSessions = metrics.sessions.filter(s => s.route === route);
     const routeSuccess = routeSessions.filter(s => s.success).length;
@@ -353,22 +353,22 @@ function generateReport() {
     const avgMemoryUsed = metrics.systemSnapshots.reduce((acc, snapshot) => 
       acc + snapshot.memoryUsage.percentUsed, 0) / metrics.systemSnapshots.length;
     
-    console.log('\n💻 SYSTEM METRICS:');
+    console.log("\n💻 SYSTEM METRICS:");
     console.log(`   Average CPU Usage: ${avgCpuUsage.toFixed(2)}%`);
     console.log(`   Average Memory Usage: ${avgMemoryUsed.toFixed(2)}%`);
     console.log(`   Total Snapshots: ${metrics.systemSnapshots.length}`);
   }
   
-  console.log('\n' + '='.repeat(80));
+  console.log("\n" + "=".repeat(80));
   
   // Check acceptance criteria
   const acceptanceMet = metrics.summary.failedSessions === 0;
-  console.log('\n✅ ACCEPTANCE CRITERIA:');
-  console.log(`   ✓ System supports 100 sessions: ${acceptanceMet ? 'PASSED ✅' : 'FAILED ❌'}`);
-  console.log(`   ✓ No fatal errors: ${acceptanceMet ? 'PASSED ✅' : 'FAILED ❌'}`);
-  console.log(`   ✓ Performance report generated: PASSED ✅`);
-  console.log(`   ✓ Logs stored in performance_metrics: PASSED ✅`);
-  console.log('');
+  console.log("\n✅ ACCEPTANCE CRITERIA:");
+  console.log(`   ✓ System supports 100 sessions: ${acceptanceMet ? "PASSED ✅" : "FAILED ❌"}`);
+  console.log(`   ✓ No fatal errors: ${acceptanceMet ? "PASSED ✅" : "FAILED ❌"}`);
+  console.log("   ✓ Performance report generated: PASSED ✅");
+  console.log("   ✓ Logs stored in performance_metrics: PASSED ✅");
+  console.log("");
 }
 
 /**
@@ -381,7 +381,7 @@ function saveReport() {
     fs.mkdirSync(metricsDir, { recursive: true });
   }
   
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
   const filename = path.join(metricsDir, `stress-core-${timestamp}.json`);
   
   fs.writeFileSync(filename, JSON.stringify(metrics, null, 2));
@@ -414,7 +414,7 @@ async function main() {
     
     process.exit(metrics.summary.failedSessions > 0 ? 1 : 0);
   } catch (error) {
-    console.error('❌ Stress test failed:', error);
+    console.error("❌ Stress test failed:", error);
     process.exit(1);
   }
 }

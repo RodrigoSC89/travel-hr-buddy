@@ -45,13 +45,13 @@ interface SearchLog {
 
 export default function VaultAIComplete() {
   const { toast } = useToast();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [documents, setDocuments] = useState<VaultDocument[]>([]);
   const [searchLogs, setSearchLogs] = useState<SearchLog[]>([]);
   const [loading, setLoading] = useState(false);
-  const [filterType, setFilterType] = useState<string>('all');
-  const [filterCategory, setFilterCategory] = useState<string>('all');
+  const [filterType, setFilterType] = useState<string>("all");
+  const [filterCategory, setFilterCategory] = useState<string>("all");
   const [similarityThreshold, setSimilarityThreshold] = useState(0.7);
 
   useEffect(() => {
@@ -62,31 +62,31 @@ export default function VaultAIComplete() {
   const loadDocuments = async () => {
     try {
       const { data, error } = await supabase
-        .from('vault_documents')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false })
+        .from("vault_documents")
+        .select("*")
+        .eq("status", "active")
+        .order("created_at", { ascending: false })
         .limit(100);
 
       if (error) throw error;
       setDocuments(data || []);
     } catch (error) {
-      console.error('Error loading documents:', error);
+      console.error("Error loading documents:", error);
     }
   };
 
   const loadSearchLogs = async () => {
     try {
       const { data, error } = await supabase
-        .from('vault_search_logs')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("vault_search_logs")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
       setSearchLogs(data || []);
     } catch (error) {
-      console.error('Error loading search logs:', error);
+      console.error("Error loading search logs:", error);
     }
   };
 
@@ -116,7 +116,7 @@ export default function VaultAIComplete() {
 
       // Log the search
       await supabase
-        .from('vault_search_logs')
+        .from("vault_search_logs")
         .insert({
           query: searchQuery,
           results_count: results.length,
@@ -132,7 +132,7 @@ export default function VaultAIComplete() {
 
       loadSearchLogs();
     } catch (error) {
-      console.error('Error performing search:', error);
+      console.error("Error performing search:", error);
       toast({
         title: "Erro",
         description: "Falha ao realizar busca",
@@ -145,16 +145,16 @@ export default function VaultAIComplete() {
 
   const performMockVectorSearch = (query: string, docs: VaultDocument[]): SearchResult[] => {
     const queryLower = query.toLowerCase();
-    const queryTerms = queryLower.split(' ').filter(t => t.length > 2);
+    const queryTerms = queryLower.split(" ").filter(t => t.length > 2);
 
     const results = docs
       .map(doc => {
-        const contentLower = (doc.title + ' ' + doc.content).toLowerCase();
+        const contentLower = (doc.title + " " + doc.content).toLowerCase();
         
         // Calculate similarity score based on term matching
         let score = 0;
         queryTerms.forEach(term => {
-          const occurrences = (contentLower.match(new RegExp(term, 'g')) || []).length;
+          const occurrences = (contentLower.match(new RegExp(term, "g")) || []).length;
           score += occurrences * 0.1;
         });
 
@@ -185,11 +185,11 @@ export default function VaultAIComplete() {
     // Apply filters
     let filteredResults = results;
     
-    if (filterType !== 'all') {
+    if (filterType !== "all") {
       filteredResults = filteredResults.filter(r => r.document_type === filterType);
     }
     
-    if (filterCategory !== 'all') {
+    if (filterCategory !== "all") {
       filteredResults = filteredResults.filter(r => r.category === filterCategory);
     }
 
@@ -198,13 +198,13 @@ export default function VaultAIComplete() {
 
   const extractHighlightedExcerpt = (content: string, queryTerms: string[]): string => {
     const maxLength = 200;
-    let bestExcerpt = '';
+    let bestExcerpt = "";
     let bestScore = 0;
 
     // Find the excerpt with most query term matches
-    const words = content.split(' ');
+    const words = content.split(" ");
     for (let i = 0; i < words.length - 20; i++) {
-      const excerpt = words.slice(i, i + 30).join(' ');
+      const excerpt = words.slice(i, i + 30).join(" ");
       const excerptLower = excerpt.toLowerCase();
       
       let score = 0;
@@ -221,31 +221,31 @@ export default function VaultAIComplete() {
     // Highlight query terms
     let highlighted = bestExcerpt || content.substring(0, maxLength);
     queryTerms.forEach(term => {
-      const regex = new RegExp(`(${term})`, 'gi');
-      highlighted = highlighted.replace(regex, '<mark>$1</mark>');
+      const regex = new RegExp(`(${term})`, "gi");
+      highlighted = highlighted.replace(regex, "<mark>$1</mark>");
     });
 
     return highlighted.length > maxLength 
-      ? highlighted.substring(0, maxLength) + '...'
+      ? highlighted.substring(0, maxLength) + "..."
       : highlighted;
   };
 
   const getDocumentTypeIcon = (type: string) => {
     switch (type) {
-      case 'policy': return '📋';
-      case 'procedure': return '📝';
-      case 'manual': return '📖';
-      case 'report': return '📊';
-      case 'contract': return '📄';
-      default: return '📁';
+    case "policy": return "📋";
+    case "procedure": return "📝";
+    case "manual": return "📖";
+    case "report": return "📊";
+    case "contract": return "📄";
+    default: return "📁";
     }
   };
 
   const getSimilarityColor = (score: number) => {
-    if (score >= 0.8) return 'text-green-600';
-    if (score >= 0.6) return 'text-blue-600';
-    if (score >= 0.4) return 'text-yellow-600';
-    return 'text-gray-600';
+    if (score >= 0.8) return "text-green-600";
+    if (score >= 0.6) return "text-blue-600";
+    if (score >= 0.4) return "text-yellow-600";
+    return "text-gray-600";
   };
 
   const uniqueTypes = Array.from(new Set(documents.map(d => d.document_type).filter(Boolean)));
@@ -286,11 +286,11 @@ export default function VaultAIComplete() {
               placeholder="Digite sua busca... (ex: procedimentos de segurança, manutenção preventiva)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && performVectorSearch()}
+              onKeyPress={(e) => e.key === "Enter" && performVectorSearch()}
               className="flex-1"
             />
             <Button onClick={performVectorSearch} disabled={loading}>
-              {loading ? 'Buscando...' : 'Buscar'}
+              {loading ? "Buscando..." : "Buscar"}
             </Button>
           </div>
 
@@ -396,7 +396,7 @@ export default function VaultAIComplete() {
           ) : (
             <Card>
               <CardContent className="py-12 text-center text-muted-foreground">
-                {searchQuery ? 'Nenhum resultado encontrado. Tente ajustar sua busca ou filtros.' : 'Digite uma consulta para buscar documentos'}
+                {searchQuery ? "Nenhum resultado encontrado. Tente ajustar sua busca ou filtros." : "Digite uma consulta para buscar documentos"}
               </CardContent>
             </Card>
           )}
@@ -507,7 +507,7 @@ export default function VaultAIComplete() {
           </CardHeader>
           <CardContent>
             <div className="text-sm">
-              {searchLogs[0] ? formatDistanceToNow(new Date(searchLogs[0].created_at), { addSuffix: true, locale: ptBR }) : 'N/A'}
+              {searchLogs[0] ? formatDistanceToNow(new Date(searchLogs[0].created_at), { addSuffix: true, locale: ptBR }) : "N/A"}
             </div>
           </CardContent>
         </Card>

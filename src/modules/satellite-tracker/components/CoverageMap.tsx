@@ -3,9 +3,9 @@
  * Displays satellite coverage area
  */
 
-import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Globe } from 'lucide-react';
+import React from "react";
+import { Card } from "@/components/ui/card";
+import { Globe } from "lucide-react";
 
 interface CoverageMapProps {
   satellite: {
@@ -23,11 +23,11 @@ export const CoverageMap: React.FC<CoverageMapProps> = ({ satellite }) => {
   // Calculate coverage radius (simplified)
   const coverageRadius = position?.altitude 
     ? Math.sqrt(2 * 6371 * position.altitude + position.altitude * position.altitude).toFixed(0)
-    : 'N/A';
+    : "N/A";
 
   const coverageArea = position?.altitude
     ? (Math.PI * Math.pow(parseFloat(coverageRadius), 2) / 1000000).toFixed(2)
-    : 'N/A';
+    : "N/A";
 
   return (
     <div className="space-y-4">

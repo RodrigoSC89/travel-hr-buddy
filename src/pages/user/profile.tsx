@@ -3,10 +3,10 @@
  * Displays user profile and active session information
  */
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ActiveSessionDisplay } from '@/components/auth/ActiveSessionDisplay';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Shield, Settings } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ActiveSessionDisplay } from "@/components/auth/ActiveSessionDisplay";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { User, Shield, Settings } from "lucide-react";
 
 export default function UserProfilePage() {
   return (

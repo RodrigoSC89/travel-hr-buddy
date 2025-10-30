@@ -8,7 +8,7 @@ import { OrbitVisualization } from "@/modules/satellite-tracker/components/Orbit
 import { CoverageMap } from "@/modules/satellite-tracker/components/CoverageMap";
 
 export default function Patch501Satellite() {
-  const [validationStatus, setValidationStatus] = useState<'idle' | 'running' | 'complete'>('idle');
+  const [validationStatus, setValidationStatus] = useState<"idle" | "running" | "complete">("idle");
   const [apiConnected, setApiConnected] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [precisionScore, setPrecisionScore] = useState(0);
@@ -42,7 +42,7 @@ export default function Patch501Satellite() {
     {
       id: "visualization",
       title: "Visualização em Tempo Real",
-      status: validationStatus === 'complete' ? "pass" : "pending",
+      status: validationStatus === "complete" ? "pass" : "pending",
       details: "Renderização 3D e atualização de posições",
       icon: Map,
     },
@@ -56,7 +56,7 @@ export default function Patch501Satellite() {
   ];
 
   const runValidation = async () => {
-    setValidationStatus('running');
+    setValidationStatus("running");
     
     // Simulate API connection check
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -70,7 +70,7 @@ export default function Patch501Satellite() {
     await new Promise(resolve => setTimeout(resolve, 1000));
     setPrecisionScore(92);
     
-    setValidationStatus('complete');
+    setValidationStatus("complete");
   };
 
   const passCount = validationChecks.filter((c) => c.status === "pass").length;
@@ -95,9 +95,9 @@ export default function Patch501Satellite() {
           </Badge>
           <Button 
             onClick={runValidation}
-            disabled={validationStatus === 'running'}
+            disabled={validationStatus === "running"}
           >
-            {validationStatus === 'running' ? 'Validando...' : 'Executar Validação'}
+            {validationStatus === "running" ? "Validando..." : "Executar Validação"}
           </Button>
         </div>
       </div>
@@ -173,7 +173,7 @@ export default function Patch501Satellite() {
         </CardContent>
       </Card>
 
-      {validationStatus === 'complete' && passRate === "100" && (
+      {validationStatus === "complete" && passRate === "100" && (
         <Card className="border-green-200 bg-green-50">
           <CardHeader>
             <CardTitle className="text-green-800 flex items-center gap-2">

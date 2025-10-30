@@ -48,7 +48,7 @@ export default function NavigationCopilotPage() {
   const [isCalculating, setIsCalculating] = useState(false);
   
   const [formData, setFormData] = useState({
-    routeName: '',
+    routeName: "",
     originLat: -23.5505,
     originLng: -46.6333,
     destLat: -22.9068,
@@ -65,16 +65,16 @@ export default function NavigationCopilotPage() {
   const loadRoutes = async () => {
     try {
       const { data, error } = await supabase
-        .from('planned_routes')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("planned_routes")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       setRoutes(data || []);
     } catch (error) {
-      console.error('Error loading routes:', error);
-      toast.error('Failed to load routes');
+      console.error("Error loading routes:", error);
+      toast.error("Failed to load routes");
     }
   };
 
@@ -90,29 +90,29 @@ export default function NavigationCopilotPage() {
       );
 
       const riskScore = Math.random() * 100;
-      const weatherRisk = riskScore > 70 ? 'high' : riskScore > 40 ? 'medium' : 'low';
+      const weatherRisk = riskScore > 70 ? "high" : riskScore > 40 ? "medium" : "low";
 
       // Generate AI recommendations
       const recommendations = [];
       if (formData.avoidStorms) {
         recommendations.push({
-          type: 'weather',
-          message: 'Route optimized to avoid storm systems',
+          type: "weather",
+          message: "Route optimized to avoid storm systems",
           confidence: 0.85
         });
       }
       if (formData.fuelEfficient) {
         recommendations.push({
-          type: 'efficiency',
-          message: 'Fuel-efficient route selected with optimal currents',
+          type: "efficiency",
+          message: "Fuel-efficient route selected with optimal currents",
           confidence: 0.92
         });
       }
 
       const { data, error } = await supabase
-        .from('planned_routes')
+        .from("planned_routes")
         .insert({
-          route_name: formData.routeName || 'Unnamed Route',
+          route_name: formData.routeName || "Unnamed Route",
           origin_lat: formData.originLat,
           origin_lng: formData.originLng,
           destination_lat: formData.destLat,
@@ -127,7 +127,7 @@ export default function NavigationCopilotPage() {
             fuel_efficient: formData.fuelEfficient,
             shorter_distance: formData.shorterDistance
           },
-          status: 'planned'
+          status: "planned"
         })
         .select()
         .single();
@@ -136,23 +136,23 @@ export default function NavigationCopilotPage() {
 
       // Log AI calculation
       await supabase
-        .from('navigation_ai_logs')
+        .from("navigation_ai_logs")
         .insert({
           route_id: data.id,
-          log_type: 'calculation',
-          severity: 'info',
-          message: 'Route calculated successfully with AI optimization',
+          log_type: "calculation",
+          severity: "info",
+          message: "Route calculated successfully with AI optimization",
           data: { recommendations },
-          ai_model: 'navigation-copilot-v2',
+          ai_model: "navigation-copilot-v2",
           processing_time_ms: Math.random() * 1000
         });
 
-      toast.success('Route calculated successfully!');
+      toast.success("Route calculated successfully!");
       setSelectedRoute(data);
       loadRoutes();
     } catch (error) {
-      console.error('Error calculating route:', error);
-      toast.error('Failed to calculate route');
+      console.error("Error calculating route:", error);
+      toast.error("Failed to calculate route");
     } finally {
       setIsCalculating(false);
     }
@@ -174,9 +174,9 @@ export default function NavigationCopilotPage() {
   };
 
   const getRiskColor = (score: number) => {
-    if (score >= 70) return 'text-red-500';
-    if (score >= 40) return 'text-yellow-500';
-    return 'text-green-500';
+    if (score >= 70) return "text-red-500";
+    if (score >= 40) return "text-yellow-500";
+    return "text-green-500";
   };
 
   return (
@@ -358,7 +358,7 @@ export default function NavigationCopilotPage() {
                         <Waves className="h-4 w-4 text-muted-foreground" />
                         <span className="text-xs text-muted-foreground">Weather Risk</span>
                       </div>
-                      <Badge variant={selectedRoute.weather_risk_level === 'high' ? 'destructive' : 'default'}>
+                      <Badge variant={selectedRoute.weather_risk_level === "high" ? "destructive" : "default"}>
                         {selectedRoute.weather_risk_level}
                       </Badge>
                     </CardContent>
@@ -435,7 +435,7 @@ export default function NavigationCopilotPage() {
                             <Clock className="h-3 w-3" />
                             {route.estimated_duration_hours.toFixed(1)} hrs
                           </span>
-                          <Badge variant={route.weather_risk_level === 'high' ? 'destructive' : 'outline'}>
+                          <Badge variant={route.weather_risk_level === "high" ? "destructive" : "outline"}>
                             {route.weather_risk_level} risk
                           </Badge>
                         </div>

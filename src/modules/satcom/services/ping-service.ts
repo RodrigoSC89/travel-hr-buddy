@@ -142,8 +142,8 @@ class SatcomPingService {
   private async updateLinkStatus(linkId: string, result: PingResult): Promise<void> {
     const status: "online" | "offline" | "degraded" = 
       !result.success ? "offline" :
-      (result.signalStrength && result.signalStrength < 50) ? "degraded" :
-      "online";
+        (result.signalStrength && result.signalStrength < 50) ? "degraded" :
+          "online";
 
     const update: Partial<SatcomLink> = {
       status,
@@ -191,16 +191,16 @@ class SatcomPingService {
    */
   private getBaseLatency(provider: string): number {
     switch (provider) {
-      case "Starlink":
-        return 35;
-      case "Iridium":
-        return 680;
-      case "Inmarsat":
-        return 720;
-      case "Thuraya":
-        return 650;
-      default:
-        return 500;
+    case "Starlink":
+      return 35;
+    case "Iridium":
+      return 680;
+    case "Inmarsat":
+      return 720;
+    case "Thuraya":
+      return 650;
+    default:
+      return 500;
     }
   }
 

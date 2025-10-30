@@ -35,10 +35,10 @@ export class SatelliteTrackingService {
   async getActiveSatellites(): Promise<TrackingSatellite[]> {
     try {
       const { data, error } = await supabase
-        .from('satellites')
-        .select('*')
-        .eq('is_active', true)
-        .order('name');
+        .from("satellites")
+        .select("*")
+        .eq("is_active", true)
+        .order("name");
 
       if (error) throw error;
 
@@ -53,7 +53,7 @@ export class SatelliteTrackingService {
         isActive: s.is_active
       }));
     } catch (error) {
-      console.error('Error fetching active satellites:', error);
+      console.error("Error fetching active satellites:", error);
       throw error;
     }
   }
@@ -64,9 +64,9 @@ export class SatelliteTrackingService {
   async getSatellite(satelliteId: string): Promise<TrackingSatellite | null> {
     try {
       const { data, error } = await supabase
-        .from('satellites')
-        .select('*')
-        .eq('id', satelliteId)
+        .from("satellites")
+        .select("*")
+        .eq("id", satelliteId)
         .single();
 
       if (error) throw error;
@@ -83,7 +83,7 @@ export class SatelliteTrackingService {
         isActive: data.is_active
       };
     } catch (error) {
-      console.error('Error fetching satellite:', error);
+      console.error("Error fetching satellite:", error);
       throw error;
     }
   }
@@ -96,7 +96,7 @@ export class SatelliteTrackingService {
     try {
       const satellite = await this.getSatellite(satelliteId);
       if (!satellite) {
-        throw new Error('Satellite not found');
+        throw new Error("Satellite not found");
       }
 
       // Simulate position calculation using TLE data
@@ -111,7 +111,7 @@ export class SatelliteTrackingService {
 
       return position;
     } catch (error) {
-      console.error('Error calculating satellite position:', error);
+      console.error("Error calculating satellite position:", error);
       throw error;
     }
   }
@@ -165,7 +165,7 @@ export class SatelliteTrackingService {
    */
   private async storePosition(position: SatellitePosition) {
     try {
-      await supabase.rpc('record_satellite_position', {
+      await supabase.rpc("record_satellite_position", {
         p_satellite_id: position.satelliteId,
         p_latitude: position.latitude,
         p_longitude: position.longitude,
@@ -175,7 +175,7 @@ export class SatelliteTrackingService {
         p_elevation: position.elevation
       });
     } catch (error) {
-      console.error('Error storing satellite position:', error);
+      console.error("Error storing satellite position:", error);
       throw error;
     }
   }
@@ -186,7 +186,7 @@ export class SatelliteTrackingService {
   async getCurrentPosition(satelliteId: string): Promise<SatellitePosition | null> {
     try {
       const { data, error } = await supabase
-        .rpc('get_satellite_current_position', {
+        .rpc("get_satellite_current_position", {
           p_satellite_id: satelliteId
         })
         .single();
@@ -203,7 +203,7 @@ export class SatelliteTrackingService {
         calculatedAt: data.calculated_at
       };
     } catch (error) {
-      console.error('Error fetching current position:', error);
+      console.error("Error fetching current position:", error);
       return null;
     }
   }
@@ -217,10 +217,10 @@ export class SatelliteTrackingService {
   ): Promise<SatellitePosition[]> {
     try {
       const { data, error } = await supabase
-        .from('satellite_positions')
-        .select('*')
-        .eq('satellite_id', satelliteId)
-        .order('calculated_at', { ascending: false })
+        .from("satellite_positions")
+        .select("*")
+        .eq("satellite_id", satelliteId)
+        .order("calculated_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
@@ -236,7 +236,7 @@ export class SatelliteTrackingService {
         calculatedAt: p.calculated_at
       }));
     } catch (error) {
-      console.error('Error fetching position history:', error);
+      console.error("Error fetching position history:", error);
       throw error;
     }
   }
@@ -246,11 +246,11 @@ export class SatelliteTrackingService {
    */
   async startTrackingSession(
     satelliteId: string,
-    trackingMode: 'real-time' | 'historical' | 'prediction' = 'real-time'
+    trackingMode: "real-time" | "historical" | "prediction" = "real-time"
   ): Promise<string> {
     try {
       const { data, error } = await supabase
-        .rpc('start_tracking_session', {
+        .rpc("start_tracking_session", {
           p_satellite_id: satelliteId,
           p_tracking_mode: trackingMode
         });
@@ -258,7 +258,7 @@ export class SatelliteTrackingService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error starting tracking session:', error);
+      console.error("Error starting tracking session:", error);
       throw error;
     }
   }
@@ -268,12 +268,12 @@ export class SatelliteTrackingService {
    */
   async endTrackingSession(sessionId: string, sessionData?: Record<string, any>) {
     try {
-      await supabase.rpc('end_tracking_session', {
+      await supabase.rpc("end_tracking_session", {
         p_session_id: sessionId,
         p_session_data: sessionData || {}
       });
     } catch (error) {
-      console.error('Error ending tracking session:', error);
+      console.error("Error ending tracking session:", error);
       throw error;
     }
   }
@@ -283,13 +283,13 @@ export class SatelliteTrackingService {
    */
   async createAlert(
     satelliteId: string,
-    alertType: 'proximity' | 'communication_failure' | 'orbit_anomaly' | 'collision_risk' | 'maintenance',
-    severity: 'info' | 'warning' | 'critical',
+    alertType: "proximity" | "communication_failure" | "orbit_anomaly" | "collision_risk" | "maintenance",
+    severity: "info" | "warning" | "critical",
     title: string,
     description?: string
   ) {
     try {
-      const { data, error } = await supabase.rpc('create_satellite_alert', {
+      const { data, error } = await supabase.rpc("create_satellite_alert", {
         p_satellite_id: satelliteId,
         p_alert_type: alertType,
         p_severity: severity,
@@ -300,7 +300,7 @@ export class SatelliteTrackingService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error creating satellite alert:', error);
+      console.error("Error creating satellite alert:", error);
       throw error;
     }
   }
@@ -315,20 +315,20 @@ export class SatelliteTrackingService {
   }) {
     try {
       let query = supabase
-        .from('satellite_alerts')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("satellite_alerts")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (filters?.satelliteId) {
-        query = query.eq('satellite_id', filters.satelliteId);
+        query = query.eq("satellite_id", filters.satelliteId);
       }
 
       if (filters?.severity) {
-        query = query.eq('severity', filters.severity);
+        query = query.eq("severity", filters.severity);
       }
 
       if (filters?.isResolved !== undefined) {
-        query = query.eq('is_resolved', filters.isResolved);
+        query = query.eq("is_resolved", filters.isResolved);
       }
 
       const { data, error } = await query;
@@ -336,7 +336,7 @@ export class SatelliteTrackingService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching satellite alerts:', error);
+      console.error("Error fetching satellite alerts:", error);
       throw error;
     }
   }
@@ -346,11 +346,11 @@ export class SatelliteTrackingService {
    */
   async resolveAlert(alertId: string) {
     try {
-      await supabase.rpc('resolve_satellite_alert', {
+      await supabase.rpc("resolve_satellite_alert", {
         p_alert_id: alertId
       });
     } catch (error) {
-      console.error('Error resolving satellite alert:', error);
+      console.error("Error resolving satellite alert:", error);
       throw error;
     }
   }
@@ -360,9 +360,9 @@ export class SatelliteTrackingService {
    */
   async cleanupOldData() {
     try {
-      await supabase.rpc('cleanup_old_satellite_positions');
+      await supabase.rpc("cleanup_old_satellite_positions");
     } catch (error) {
-      console.error('Error cleaning up old satellite data:', error);
+      console.error("Error cleaning up old satellite data:", error);
       throw error;
     }
   }
@@ -372,7 +372,7 @@ export class SatelliteTrackingService {
    */
   async updateTLE(noradId: number, tleLine1: string, tleLine2: string) {
     try {
-      const { data, error } = await supabase.rpc('update_satellite_tle', {
+      const { data, error } = await supabase.rpc("update_satellite_tle", {
         p_norad_id: noradId,
         p_tle_line1: tleLine1,
         p_tle_line2: tleLine2
@@ -381,7 +381,7 @@ export class SatelliteTrackingService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error updating satellite TLE:', error);
+      console.error("Error updating satellite TLE:", error);
       throw error;
     }
   }

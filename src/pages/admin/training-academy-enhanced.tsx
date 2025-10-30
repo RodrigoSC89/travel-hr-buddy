@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { BookOpen, Award, TrendingUp, Users, CheckCircle, Clock, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import jsPDF from 'jspdf';
+import jsPDF from "jspdf";
 
 interface CourseProgress {
   id: string;
@@ -63,15 +63,15 @@ export default function TrainingAcademyEnhanced() {
     
     // Real-time progress tracking
     const progressChannel = supabase
-      .channel('course-progress-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'course_enrollments' }, (payload) => {
-        if (payload.eventType === 'UPDATE') {
+      .channel("course-progress-changes")
+      .on("postgres_changes", { event: "*", schema: "public", table: "course_enrollments" }, (payload) => {
+        if (payload.eventType === "UPDATE") {
           setCourseProgress(prev => 
             prev.map(cp => cp.id === payload.new.id ? {...cp, ...payload.new} : cp)
           );
           
           // Auto-generate certificate on completion
-          if (payload.new.enrollment_status === 'completed' && payload.old.enrollment_status !== 'completed') {
+          if (payload.new.enrollment_status === "completed" && payload.old.enrollment_status !== "completed") {
             generateCertificate(payload.new);
           }
         }
@@ -87,14 +87,14 @@ export default function TrainingAcademyEnhanced() {
     try {
       const [progressData, certificatesData, historyData] = await Promise.all([
         supabase
-          .from('course_enrollments')
-          .select('*, courses(title, category, estimated_duration_hours)')
-          .order('last_accessed_at', { ascending: false })
+          .from("course_enrollments")
+          .select("*, courses(title, category, estimated_duration_hours)")
+          .order("last_accessed_at", { ascending: false })
           .limit(100),
         supabase
-          .from('certifications')
-          .select('*, courses(title)')
-          .order('issue_date', { ascending: false })
+          .from("certifications")
+          .select("*, courses(title)")
+          .order("issue_date", { ascending: false })
           .limit(100),
         loadLearningHistory()
       ]);
@@ -106,7 +106,7 @@ export default function TrainingAcademyEnhanced() {
       setCertificates(certificatesData.data || []);
       setLearningHistory(historyData);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error("Error loading data:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados",
@@ -121,8 +121,8 @@ export default function TrainingAcademyEnhanced() {
     try {
       // Aggregate user learning data
       const { data, error } = await supabase
-        .from('course_enrollments')
-        .select('user_id, enrollment_status, time_spent_minutes, average_score');
+        .from("course_enrollments")
+        .select("user_id, enrollment_status, time_spent_minutes, average_score");
       
       if (error) throw error;
 
@@ -134,7 +134,7 @@ export default function TrainingAcademyEnhanced() {
         if (!userMap.has(userId)) {
           userMap.set(userId, {
             user_id: userId,
-            user_email: 'user@example.com',
+            user_email: "user@example.com",
             total_courses: 0,
             completed_courses: 0,
             total_time_hours: 0,
@@ -146,7 +146,7 @@ export default function TrainingAcademyEnhanced() {
         
         const userData = userMap.get(userId);
         userData.total_courses++;
-        if (enrollment.enrollment_status === 'completed') {
+        if (enrollment.enrollment_status === "completed") {
           userData.completed_courses++;
         }
         userData.total_time_hours += (enrollment.time_spent_minutes || 0) / 60;
@@ -166,7 +166,7 @@ export default function TrainingAcademyEnhanced() {
 
       return history;
     } catch (error) {
-      console.error('Error loading learning history:', error);
+      console.error("Error loading learning history:", error);
       return [];
     }
   };
@@ -177,7 +177,7 @@ export default function TrainingAcademyEnhanced() {
       const certificateNumber = `CERT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
       
       const { data, error } = await supabase
-        .from('certifications')
+        .from("certifications")
         .insert({
           user_id: enrollment.user_id,
           course_id: enrollment.course_id,
@@ -185,8 +185,8 @@ export default function TrainingAcademyEnhanced() {
           issue_date: new Date().toISOString(),
           expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year
           is_valid: true,
-          certification_type: 'course_completion',
-          issuer: 'Training Academy'
+          certification_type: "course_completion",
+          issuer: "Training Academy"
         })
         .select()
         .single();
@@ -201,7 +201,7 @@ export default function TrainingAcademyEnhanced() {
       // Refresh certificates
       loadData();
     } catch (error) {
-      console.error('Error generating certificate:', error);
+      console.error("Error generating certificate:", error);
       toast({
         title: "Erro",
         description: "Falha ao gerar certificado",
@@ -212,9 +212,9 @@ export default function TrainingAcademyEnhanced() {
 
   const downloadCertificatePDF = (certificate: Certificate) => {
     const doc = new jsPDF({
-      orientation: 'landscape',
-      unit: 'mm',
-      format: 'a4'
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4"
     });
 
     // Certificate border
@@ -225,42 +225,42 @@ export default function TrainingAcademyEnhanced() {
     // Title
     doc.setFontSize(40);
     doc.setTextColor(0, 51, 102);
-    doc.text('CERTIFICADO', 148.5, 50, { align: 'center' });
+    doc.text("CERTIFICADO", 148.5, 50, { align: "center" });
 
     // Subtitle
     doc.setFontSize(16);
     doc.setTextColor(100, 100, 100);
-    doc.text('DE CONCLUSÃO', 148.5, 65, { align: 'center' });
+    doc.text("DE CONCLUSÃO", 148.5, 65, { align: "center" });
 
     // Body text
     doc.setFontSize(14);
     doc.setTextColor(0, 0, 0);
-    doc.text('Certificamos que', 148.5, 85, { align: 'center' });
+    doc.text("Certificamos que", 148.5, 85, { align: "center" });
 
     // Name placeholder
     doc.setFontSize(20);
     doc.setTextColor(0, 51, 102);
-    doc.text('[Nome do Aluno]', 148.5, 100, { align: 'center' });
+    doc.text("[Nome do Aluno]", 148.5, 100, { align: "center" });
 
     // Course info
     doc.setFontSize(14);
     doc.setTextColor(0, 0, 0);
-    doc.text('concluiu com êxito o curso', 148.5, 115, { align: 'center' });
+    doc.text("concluiu com êxito o curso", 148.5, 115, { align: "center" });
 
     doc.setFontSize(18);
     doc.setTextColor(0, 51, 102);
-    doc.text(certificate.courses.title, 148.5, 130, { align: 'center' });
+    doc.text(certificate.courses.title, 148.5, 130, { align: "center" });
 
     // Certificate number and date
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
-    doc.text(`Certificado Nº: ${certificate.certificate_number}`, 148.5, 160, { align: 'center' });
-    doc.text(`Data de Emissão: ${new Date(certificate.issue_date).toLocaleDateString('pt-BR')}`, 148.5, 168, { align: 'center' });
-    doc.text(`Válido até: ${new Date(certificate.expiry_date).toLocaleDateString('pt-BR')}`, 148.5, 176, { align: 'center' });
+    doc.text(`Certificado Nº: ${certificate.certificate_number}`, 148.5, 160, { align: "center" });
+    doc.text(`Data de Emissão: ${new Date(certificate.issue_date).toLocaleDateString("pt-BR")}`, 148.5, 168, { align: "center" });
+    doc.text(`Válido até: ${new Date(certificate.expiry_date).toLocaleDateString("pt-BR")}`, 148.5, 176, { align: "center" });
 
     // Footer
     doc.setFontSize(8);
-    doc.text('Training Academy - Sistema de Gestão de Treinamentos', 148.5, 190, { align: 'center' });
+    doc.text("Training Academy - Sistema de Gestão de Treinamentos", 148.5, 190, { align: "center" });
 
     doc.save(`certificate-${certificate.certificate_number}.pdf`);
     
@@ -273,16 +273,16 @@ export default function TrainingAcademyEnhanced() {
   const updateProgress = async (enrollmentId: string, progress: number) => {
     try {
       const { error } = await supabase
-        .from('course_enrollments')
+        .from("course_enrollments")
         .update({
           overall_progress_percentage: progress,
           last_accessed_at: new Date().toISOString(),
           ...(progress >= 100 && { 
-            enrollment_status: 'completed',
+            enrollment_status: "completed",
             completed_at: new Date().toISOString()
           })
         })
-        .eq('id', enrollmentId);
+        .eq("id", enrollmentId);
 
       if (error) throw error;
 
@@ -291,7 +291,7 @@ export default function TrainingAcademyEnhanced() {
         description: `Progresso salvo: ${progress}%`
       });
     } catch (error) {
-      console.error('Error updating progress:', error);
+      console.error("Error updating progress:", error);
       toast({
         title: "Erro",
         description: "Falha ao atualizar progresso",
@@ -302,15 +302,15 @@ export default function TrainingAcademyEnhanced() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'default';
-      case 'in_progress': return 'secondary';
-      case 'not_started': return 'outline';
-      default: return 'outline';
+    case "completed": return "default";
+    case "in_progress": return "secondary";
+    case "not_started": return "outline";
+    default: return "outline";
     }
   };
 
-  const inProgressCount = courseProgress.filter(cp => cp.enrollment_status === 'in_progress').length;
-  const completedCount = courseProgress.filter(cp => cp.enrollment_status === 'completed').length;
+  const inProgressCount = courseProgress.filter(cp => cp.enrollment_status === "in_progress").length;
+  const completedCount = courseProgress.filter(cp => cp.enrollment_status === "completed").length;
   const avgProgress = courseProgress.length > 0
     ? courseProgress.reduce((sum, cp) => sum + cp.overall_progress_percentage, 0) / courseProgress.length
     : 0;
@@ -435,7 +435,7 @@ export default function TrainingAcademyEnhanced() {
                           <div className="flex items-center justify-between text-xs text-muted-foreground">
                             <span>⏱️ {progress.time_spent_minutes} minutos</span>
                             {progress.completed_at && (
-                              <span>✅ Concluído em {new Date(progress.completed_at).toLocaleDateString('pt-BR')}</span>
+                              <span>✅ Concluído em {new Date(progress.completed_at).toLocaleDateString("pt-BR")}</span>
                             )}
                           </div>
                         </div>
@@ -470,12 +470,12 @@ export default function TrainingAcademyEnhanced() {
                             </div>
                             <div className="space-y-1 text-sm">
                               <p><strong>Certificado:</strong> {cert.certificate_number}</p>
-                              <p><strong>Emissão:</strong> {new Date(cert.issue_date).toLocaleDateString('pt-BR')}</p>
-                              <p><strong>Validade:</strong> {new Date(cert.expiry_date).toLocaleDateString('pt-BR')}</p>
+                              <p><strong>Emissão:</strong> {new Date(cert.issue_date).toLocaleDateString("pt-BR")}</p>
+                              <p><strong>Validade:</strong> {new Date(cert.expiry_date).toLocaleDateString("pt-BR")}</p>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Badge variant={cert.is_valid ? 'default' : 'secondary'}>
-                                {cert.is_valid ? 'Válido' : 'Expirado'}
+                              <Badge variant={cert.is_valid ? "default" : "secondary"}>
+                                {cert.is_valid ? "Válido" : "Expirado"}
                               </Badge>
                             </div>
                           </div>

@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { BookOpen, Home, FileText } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { BookOpen, Home, FileText } from "lucide-react";
 
 /**
  * Documentation Viewer Component
@@ -11,7 +11,7 @@ import { BookOpen, Home, FileText } from 'lucide-react';
  */
 export default function DocsViewer() {
   const { moduleName } = useParams<{ moduleName?: string }>();
-  const [content, setContent] = useState<string>('');
+  const [content, setContent] = useState<string>("");
   const [moduleList, setModuleList] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,30 +33,30 @@ export default function DocsViewer() {
       // In a real implementation, this would fetch from an API
       // For now, we'll use a static list
       const modules = [
-        'analytics',
-        'compliance',
-        'connectivity',
-        'control',
-        'crew',
-        'document-hub',
-        'drone-commander',
-        'emergency',
-        'features',
-        'hr',
-        'incident-reports',
-        'intelligence',
-        'logistics',
-        'mission-control',
-        'mission-engine',
-        'navigation-copilot',
-        'ocean-sonar',
-        'operations',
-        'satcom',
-        'sensors-hub'
+        "analytics",
+        "compliance",
+        "connectivity",
+        "control",
+        "crew",
+        "document-hub",
+        "drone-commander",
+        "emergency",
+        "features",
+        "hr",
+        "incident-reports",
+        "intelligence",
+        "logistics",
+        "mission-control",
+        "mission-engine",
+        "navigation-copilot",
+        "ocean-sonar",
+        "operations",
+        "satcom",
+        "sensors-hub"
       ];
       setModuleList(modules);
     } catch (err) {
-      console.error('Error loading module list:', err);
+      console.error("Error loading module list:", err);
     }
   };
 
@@ -64,15 +64,15 @@ export default function DocsViewer() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/dev/docs/INDEX.md');
+      const response = await fetch("/dev/docs/INDEX.md");
       if (!response.ok) {
-        throw new Error('Failed to load documentation index');
+        throw new Error("Failed to load documentation index");
       }
       const text = await response.text();
       setContent(text);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load documentation');
-      setContent('# Documentation Not Available\n\nPlease run `npm run generate:docs` to generate documentation.');
+      setError(err instanceof Error ? err.message : "Failed to load documentation");
+      setContent("# Documentation Not Available\n\nPlease run `npm run generate:docs` to generate documentation.");
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,7 @@ export default function DocsViewer() {
       const text = await response.text();
       setContent(text);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load documentation');
+      setError(err instanceof Error ? err.message : "Failed to load documentation");
       setContent(`# Documentation Not Available\n\nDocumentation for the **${module}** module is not available.`);
     } finally {
       setLoading(false);
@@ -112,7 +112,7 @@ export default function DocsViewer() {
               <div className="space-y-2">
                 <Link to="/docs">
                   <Button
-                    variant={!moduleName ? 'default' : 'ghost'}
+                    variant={!moduleName ? "default" : "ghost"}
                     className="w-full justify-start"
                   >
                     <Home className="h-4 w-4 mr-2" />
@@ -131,7 +131,7 @@ export default function DocsViewer() {
                     {moduleList.map((module) => (
                       <Link key={module} to={`/docs/${module}`}>
                         <Button
-                          variant={moduleName === module ? 'default' : 'ghost'}
+                          variant={moduleName === module ? "default" : "ghost"}
                           className="w-full justify-start text-sm"
                         >
                           <FileText className="h-4 w-4 mr-2" />
