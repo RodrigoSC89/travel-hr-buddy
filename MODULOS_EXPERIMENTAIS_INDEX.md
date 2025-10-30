@@ -4,6 +4,8 @@
 
 Este documento serve como índice para a documentação completa dos 12 módulos experimentais do ecossistema Nautilus One, focados em operações marítimas e oceânicas com IA embarcada.
 
+**Nota**: Este PR adiciona documentação para 11 módulos novos. O módulo Mission Engine (item 4) já possuía documentação prévia e está incluído neste índice para completude.
+
 ---
 
 ## 📚 Módulos Documentados
