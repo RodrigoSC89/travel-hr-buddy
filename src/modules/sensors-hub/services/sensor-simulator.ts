@@ -99,7 +99,7 @@ export class SensorSimulator {
     const data: SensorData = {
       sensorId: sensor.id,
       type: sensor.type === "temperature" ? "temperature" : 
-            sensor.type === "pressure" ? "pressure" : "motion",
+        sensor.type === "pressure" ? "pressure" : "motion",
       value: Math.max(sensor.minValue, Math.min(sensor.maxValue, value)),
       unit: sensor.unit,
       timestamp: new Date(),

@@ -55,9 +55,9 @@ class SensorDataService {
         location: data.location,
       };
 
-const { error } = await (supabase as any)
-  .from("sensor_data_normalized")
-  .insert(normalizedData);
+      const { error } = await (supabase as any)
+        .from("sensor_data_normalized")
+        .insert(normalizedData);
 
       if (error) {
         logger.error("Failed to store sensor data", { error: error.message });
@@ -88,9 +88,9 @@ const { error } = await (supabase as any)
         location: data.location,
       }));
 
-const { error } = await (supabase as any)
-  .from("sensor_data_normalized")
-  .insert(normalizedDataPoints);
+      const { error } = await (supabase as any)
+        .from("sensor_data_normalized")
+        .insert(normalizedDataPoints);
 
       if (error) {
         logger.error("Failed to store batch sensor data", { error: error.message });
@@ -114,11 +114,11 @@ const { error } = await (supabase as any)
     threshold: number
   ): Promise<boolean> {
     try {
-const { data, error } = await (supabase as any).rpc("detect_sensor_anomaly", {
-  p_sensor_id: sensorId,
-  p_value: value,
-  p_threshold: threshold,
-});
+      const { data, error } = await (supabase as any).rpc("detect_sensor_anomaly", {
+        p_sensor_id: sensorId,
+        p_value: value,
+        p_threshold: threshold,
+      });
 
       if (error) {
         logger.error("Failed to detect anomaly", { error: error.message });
@@ -177,12 +177,12 @@ const { data, error } = await (supabase as any).rpc("detect_sensor_anomaly", {
     limit: number = 100
   ): Promise<NormalizedSensorData[]> {
     try {
-const { data, error } = await (supabase as any)
-  .from("sensor_data_normalized")
-  .select("*")
-  .eq("sensor_id", sensorId)
-  .order("timestamp", { ascending: false })
-  .limit(limit);
+      const { data, error } = await (supabase as any)
+        .from("sensor_data_normalized")
+        .select("*")
+        .eq("sensor_id", sensorId)
+        .order("timestamp", { ascending: false })
+        .limit(limit);
 
       if (error) {
         logger.error("Failed to fetch sensor data", { error: error.message });
@@ -201,12 +201,12 @@ const { data, error } = await (supabase as any)
    */
   async getUnresolvedAlerts(): Promise<SensorAlert[]> {
     try {
-const { data, error } = await (supabase as any)
-  .from("sensor_alerts")
-  .select("*")
-  .eq("resolved", false)
-  .order("timestamp", { ascending: false })
-  .limit(50);
+      const { data, error } = await (supabase as any)
+        .from("sensor_alerts")
+        .select("*")
+        .eq("resolved", false)
+        .order("timestamp", { ascending: false })
+        .limit(50);
 
       if (error) {
         logger.error("Failed to fetch alerts", { error: error.message });

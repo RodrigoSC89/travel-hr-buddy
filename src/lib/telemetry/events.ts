@@ -5,26 +5,26 @@
 
 export type TelemetryEventName =
   // Authentication events
-  | 'user_login'
-  | 'user_logout'
-  | 'user_signup'
-  | 'session_start'
-  | 'session_end'
+  | "user_login"
+  | "user_logout"
+  | "user_signup"
+  | "session_start"
+  | "session_end"
   // Module usage events
-  | 'module_viewed'
-  | 'module_action'
-  | 'module_export'
-  | 'module_share'
+  | "module_viewed"
+  | "module_action"
+  | "module_export"
+  | "module_share"
   // AI interaction events
-  | 'ai_query_submitted'
-  | 'ai_response_received'
-  | 'ai_suggestion_accepted'
-  | 'ai_suggestion_rejected'
+  | "ai_query_submitted"
+  | "ai_response_received"
+  | "ai_suggestion_accepted"
+  | "ai_suggestion_rejected"
   // Feature usage events
-  | 'feature_used'
-  | 'search_performed'
-  | 'filter_applied'
-  | 'report_generated';
+  | "feature_used"
+  | "search_performed"
+  | "filter_applied"
+  | "report_generated";
 
 export interface TelemetryEvent {
   name: TelemetryEventName;
@@ -56,23 +56,23 @@ export interface FeatureUsedEvent {
 // Event validators
 export function isValidEventName(name: string): name is TelemetryEventName {
   const validEvents: TelemetryEventName[] = [
-    'user_login',
-    'user_logout',
-    'user_signup',
-    'session_start',
-    'session_end',
-    'module_viewed',
-    'module_action',
-    'module_export',
-    'module_share',
-    'ai_query_submitted',
-    'ai_response_received',
-    'ai_suggestion_accepted',
-    'ai_suggestion_rejected',
-    'feature_used',
-    'search_performed',
-    'filter_applied',
-    'report_generated',
+    "user_login",
+    "user_logout",
+    "user_signup",
+    "session_start",
+    "session_end",
+    "module_viewed",
+    "module_action",
+    "module_export",
+    "module_share",
+    "ai_query_submitted",
+    "ai_response_received",
+    "ai_suggestion_accepted",
+    "ai_suggestion_rejected",
+    "feature_used",
+    "search_performed",
+    "filter_applied",
+    "report_generated",
   ];
   
   return validEvents.includes(name as TelemetryEventName);

@@ -49,14 +49,14 @@ export class PriceAlertsService {
     currentPrice: number,
     targetPrice: number,
     productUrl?: string,
-    notificationChannels: string[] = ['in_app']
+    notificationChannels: string[] = ["in_app"]
   ): Promise<string> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      if (!user) throw new Error("User not authenticated");
 
       const { data, error } = await supabase
-        .from('price_alerts')
+        .from("price_alerts")
         .insert({
           user_id: user.id,
           product_name: productName,
@@ -72,7 +72,7 @@ export class PriceAlertsService {
       if (error) throw error;
       return data.id;
     } catch (error) {
-      console.error('Error creating price alert:', error);
+      console.error("Error creating price alert:", error);
       throw error;
     }
   }
@@ -85,16 +85,16 @@ export class PriceAlertsService {
   }): Promise<PriceAlert[]> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      if (!user) throw new Error("User not authenticated");
 
       let query = supabase
-        .from('price_alerts')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .from("price_alerts")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
 
       if (filters?.isActive !== undefined) {
-        query = query.eq('is_active', filters.isActive);
+        query = query.eq("is_active", filters.isActive);
       }
 
       const { data, error } = await query;
@@ -109,12 +109,12 @@ export class PriceAlertsService {
         currentPrice: a.current_price,
         targetPrice: a.target_price,
         isActive: a.is_active,
-        notificationChannels: a.notification_channels || ['in_app'],
+        notificationChannels: a.notification_channels || ["in_app"],
         createdAt: a.created_at,
         updatedAt: a.updated_at
       }));
     } catch (error) {
-      console.error('Error fetching price alerts:', error);
+      console.error("Error fetching price alerts:", error);
       throw error;
     }
   }
@@ -148,13 +148,13 @@ export class PriceAlertsService {
       }
 
       const { error } = await supabase
-        .from('price_alerts')
+        .from("price_alerts")
         .update(updateData)
-        .eq('id', alertId);
+        .eq("id", alertId);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error updating price alert:', error);
+      console.error("Error updating price alert:", error);
       throw error;
     }
   }
@@ -165,13 +165,13 @@ export class PriceAlertsService {
   async deletePriceAlert(alertId: string) {
     try {
       const { error } = await supabase
-        .from('price_alerts')
+        .from("price_alerts")
         .delete()
-        .eq('id', alertId);
+        .eq("id", alertId);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error deleting price alert:', error);
+      console.error("Error deleting price alert:", error);
       throw error;
     }
   }
@@ -183,9 +183,9 @@ export class PriceAlertsService {
     try {
       // Get alert details
       const { data: alert, error: alertError } = await supabase
-        .from('price_alerts')
-        .select('*')
-        .eq('id', alertId)
+        .from("price_alerts")
+        .select("*")
+        .eq("id", alertId)
         .single();
 
       if (alertError) throw alertError;
@@ -207,7 +207,7 @@ export class PriceAlertsService {
           newPrice,
           alert.target_price,
           message,
-          alert.notification_channels || ['in_app']
+          alert.notification_channels || ["in_app"]
         );
 
         return true;
@@ -215,7 +215,7 @@ export class PriceAlertsService {
 
       return false;
     } catch (error) {
-      console.error('Error checking price:', error);
+      console.error("Error checking price:", error);
       throw error;
     }
   }
@@ -235,10 +235,10 @@ export class PriceAlertsService {
     try {
       // Check if notification was sent recently (within last hour)
       const { data: recentNotif, error: checkError } = await supabase
-        .from('price_alert_notifications')
-        .select('id')
-        .eq('alert_id', alertId)
-        .gte('sent_at', new Date(Date.now() - 60 * 60 * 1000).toISOString())
+        .from("price_alert_notifications")
+        .select("id")
+        .eq("alert_id", alertId)
+        .gte("sent_at", new Date(Date.now() - 60 * 60 * 1000).toISOString())
         .limit(1);
 
       if (checkError) throw checkError;
@@ -251,7 +251,7 @@ export class PriceAlertsService {
       const priceDifference = targetPrice - currentPrice;
 
       const { error } = await supabase
-        .from('price_alert_notifications')
+        .from("price_alert_notifications")
         .insert({
           user_id: userId,
           alert_id: alertId,
@@ -267,7 +267,7 @@ export class PriceAlertsService {
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error creating notification:', error);
+      console.error("Error creating notification:", error);
       throw error;
     }
   }
@@ -281,20 +281,20 @@ export class PriceAlertsService {
   }): Promise<PriceAlertNotification[]> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      if (!user) throw new Error("User not authenticated");
 
       let query = supabase
-        .from('price_alert_notifications')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('sent_at', { ascending: false });
+        .from("price_alert_notifications")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("sent_at", { ascending: false });
 
       if (filters?.isRead !== undefined) {
-        query = query.eq('is_read', filters.isRead);
+        query = query.eq("is_read", filters.isRead);
       }
 
       if (filters?.isDismissed !== undefined) {
-        query = query.eq('is_dismissed', filters.isDismissed);
+        query = query.eq("is_dismissed", filters.isDismissed);
       }
 
       const { data, error } = await query;
@@ -315,7 +315,7 @@ export class PriceAlertsService {
         sentAt: n.sent_at
       }));
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      console.error("Error fetching notifications:", error);
       throw error;
     }
   }
@@ -326,16 +326,16 @@ export class PriceAlertsService {
   async markNotificationAsRead(notificationId: string) {
     try {
       const { error } = await supabase
-        .from('price_alert_notifications')
+        .from("price_alert_notifications")
         .update({
           is_read: true,
           read_at: new Date().toISOString()
         })
-        .eq('id', notificationId);
+        .eq("id", notificationId);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      console.error("Error marking notification as read:", error);
       throw error;
     }
   }
@@ -346,13 +346,13 @@ export class PriceAlertsService {
   async dismissNotification(notificationId: string) {
     try {
       const { error } = await supabase
-        .from('price_alert_notifications')
+        .from("price_alert_notifications")
         .update({ is_dismissed: true })
-        .eq('id', notificationId);
+        .eq("id", notificationId);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error dismissing notification:', error);
+      console.error("Error dismissing notification:", error);
       throw error;
     }
   }
@@ -363,10 +363,10 @@ export class PriceAlertsService {
   async getPriceHistory(alertId: string, limit: number = 100): Promise<PriceHistory[]> {
     try {
       const { data, error } = await supabase
-        .from('price_history')
-        .select('*')
-        .eq('alert_id', alertId)
-        .order('checked_at', { ascending: false })
+        .from("price_history")
+        .select("*")
+        .eq("alert_id", alertId)
+        .order("checked_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
@@ -378,7 +378,7 @@ export class PriceAlertsService {
         checkedAt: h.checked_at
       }));
     } catch (error) {
-      console.error('Error fetching price history:', error);
+      console.error("Error fetching price history:", error);
       throw error;
     }
   }
@@ -398,9 +398,9 @@ export class PriceAlertsService {
     try {
       // Get alert
       const { data: alert, error: alertError } = await supabase
-        .from('price_alerts')
-        .select('*')
-        .eq('id', alertId)
+        .from("price_alerts")
+        .select("*")
+        .eq("id", alertId)
         .single();
 
       if (alertError) throw alertError;
@@ -408,11 +408,11 @@ export class PriceAlertsService {
       // Get price history for last 24 hours
       const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
       const { data: history, error: historyError } = await supabase
-        .from('price_history')
-        .select('price')
-        .eq('alert_id', alertId)
-        .gte('checked_at', oneDayAgo)
-        .order('checked_at', { ascending: false });
+        .from("price_history")
+        .select("price")
+        .eq("alert_id", alertId)
+        .gte("checked_at", oneDayAgo)
+        .order("checked_at", { ascending: false });
 
       if (historyError) throw historyError;
 
@@ -440,7 +440,7 @@ export class PriceAlertsService {
         targetReached
       };
     } catch (error) {
-      console.error('Error calculating price trends:', error);
+      console.error("Error calculating price trends:", error);
       throw error;
     }
   }

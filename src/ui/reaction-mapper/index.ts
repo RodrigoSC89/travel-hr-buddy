@@ -3,6 +3,6 @@
  * Interactive visualization and simulation of multi-layer reaction system
  */
 
-export * from './types';
-export * from './ReactionMapper';
-export { ReactionMapper as default } from './ReactionMapper';
+export * from "./types";
+export * from "./ReactionMapper";
+export { ReactionMapper as default } from "./ReactionMapper";

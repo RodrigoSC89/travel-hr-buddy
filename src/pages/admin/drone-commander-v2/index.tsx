@@ -47,7 +47,7 @@ const DroneCommanderV2Page: React.FC = () => {
       
       setStats({
         totalDrones: data.length,
-        activeDrones: data.filter(d => d.status === 'flying' || d.status === 'hovering').length,
+        activeDrones: data.filter(d => d.status === "flying" || d.status === "hovering").length,
         totalSimulations: stats.totalSimulations,
       });
     } catch (error) {
@@ -96,7 +96,7 @@ const DroneCommanderV2Page: React.FC = () => {
     const updated = aiTaskAssignmentService.updateSimulation(updatedSimulation);
     setSimulation(updated);
 
-    if (updated.status === 'completed') {
+    if (updated.status === "completed") {
       toast.success("Mission simulation completed!");
     }
   };
@@ -257,9 +257,9 @@ const DroneCommanderV2Page: React.FC = () => {
                         <div className="flex items-center gap-2 mb-1">
                           <h4 className="font-semibold">{drone.name}</h4>
                           <Badge variant={
-                            drone.status === 'flying' ? 'default' :
-                            drone.status === 'idle' ? 'secondary' :
-                            'destructive'
+                            drone.status === "flying" ? "default" :
+                              drone.status === "idle" ? "secondary" :
+                                "destructive"
                           }>
                             {drone.status}
                           </Badge>

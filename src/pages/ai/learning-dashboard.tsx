@@ -4,12 +4,12 @@
  * Visualize AI self-reflection and continuous learning metrics
  */
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -19,10 +19,10 @@ import {
   CheckCircle,
   RefreshCw,
   Download
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface LearningInsight {
   action_type: string;
@@ -65,30 +65,30 @@ export default function AILearningDashboard() {
 
       // Load learning insights
       const { data: insightsData, error: insightsError } = await supabase
-        .rpc('get_ai_learning_insights', { p_days: timeRange });
+        .rpc("get_ai_learning_insights", { p_days: timeRange });
 
       if (insightsError) throw insightsError;
       setInsights(insightsData || []);
 
       // Load improvement suggestions
       const { data: suggestionsData, error: suggestionsError } = await supabase
-        .rpc('get_ai_improvement_suggestions', { p_limit: 10 });
+        .rpc("get_ai_improvement_suggestions", { p_limit: 10 });
 
       if (suggestionsError) throw suggestionsError;
       setSuggestions(suggestionsData || []);
 
       // Load learning progress
       const { data: progressData, error: progressError } = await supabase
-        .rpc('get_ai_learning_progress', { p_days: timeRange });
+        .rpc("get_ai_learning_progress", { p_days: timeRange });
 
       if (progressError) throw progressError;
       setProgress(progressData || []);
     } catch (error) {
-      console.error('Error loading AI learning data:', error);
+      console.error("Error loading AI learning data:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to load learning data',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to load learning data",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -97,38 +97,38 @@ export default function AILearningDashboard() {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'excellent':
-      case 'good':
-        return <TrendingUp className="w-4 h-4 text-green-600" />;
-      case 'needs_improvement':
-        return <AlertCircle className="w-4 h-4 text-yellow-600" />;
-      case 'poor':
-        return <TrendingDown className="w-4 h-4 text-red-600" />;
-      default:
-        return <Target className="w-4 h-4" />;
+    case "excellent":
+    case "good":
+      return <TrendingUp className="w-4 h-4 text-green-600" />;
+    case "needs_improvement":
+      return <AlertCircle className="w-4 h-4 text-yellow-600" />;
+    case "poor":
+      return <TrendingDown className="w-4 h-4 text-red-600" />;
+    default:
+      return <Target className="w-4 h-4" />;
     }
   };
 
   const getTrendBadge = (trend: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive'> = {
-      excellent: 'default',
-      good: 'default',
-      needs_improvement: 'secondary',
-      poor: 'destructive',
+    const variants: Record<string, "default" | "secondary" | "destructive"> = {
+      excellent: "default",
+      good: "default",
+      needs_improvement: "secondary",
+      poor: "destructive",
     };
-    return <Badge variant={variants[trend] || 'secondary'}>{trend.replace('_', ' ')}</Badge>;
+    return <Badge variant={variants[trend] || "secondary"}>{trend.replace("_", " ")}</Badge>;
   };
 
   const getPriorityColor = (priority: number) => {
     switch (priority) {
-      case 1:
-        return 'text-red-600';
-      case 2:
-        return 'text-yellow-600';
-      case 3:
-        return 'text-blue-600';
-      default:
-        return 'text-gray-600';
+    case 1:
+      return "text-red-600";
+    case 2:
+      return "text-yellow-600";
+    case 3:
+      return "text-blue-600";
+    default:
+      return "text-gray-600";
     }
   };
 
@@ -140,19 +140,19 @@ export default function AILearningDashboard() {
       exported_at: new Date().toISOString(),
     };
     
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `ai-learning-report-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `ai-learning-report-${new Date().toISOString().split("T")[0]}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
     toast({
-      title: 'Success',
-      description: 'Learning data exported successfully',
+      title: "Success",
+      description: "Learning data exported successfully",
     });
   };
 
@@ -189,7 +189,7 @@ export default function AILearningDashboard() {
         {[7, 30, 90].map((days) => (
           <Button
             key={days}
-            variant={timeRange === days ? 'default' : 'outline'}
+            variant={timeRange === days ? "default" : "outline"}
             onClick={() => setTimeRange(days)}
             size="sm"
           >
@@ -243,7 +243,7 @@ export default function AILearningDashboard() {
                   <CardHeader>
                     <div className="flex justify-between items-center">
                       <CardTitle className="text-lg capitalize">
-                        {insight.action_type.replace('_', ' ')}
+                        {insight.action_type.replace("_", " ")}
                       </CardTitle>
                       {getTrendBadge(insight.improvement_trend)}
                     </div>
@@ -311,11 +311,11 @@ export default function AILearningDashboard() {
                   <CardContent className="py-4">
                     <div className="flex items-start gap-4">
                       <div className={`font-bold text-lg ${getPriorityColor(suggestion.priority)}`}>
-                        {suggestion.priority === 1 ? '!' : suggestion.priority === 2 ? '⚠' : 'ℹ'}
+                        {suggestion.priority === 1 ? "!" : suggestion.priority === 2 ? "⚠" : "ℹ"}
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold capitalize">
-                          {suggestion.action_type.replace('_', ' ')}
+                          {suggestion.action_type.replace("_", " ")}
                         </h3>
                         <p className="text-sm text-muted-foreground mt-1">
                           {suggestion.suggestion}

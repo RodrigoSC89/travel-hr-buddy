@@ -48,27 +48,27 @@ export function MissionAutonomy() {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high":
-        return "destructive";
-      case "medium":
-        return "outline";
-      case "low":
-        return "secondary";
-      default:
-        return "default";
+    case "high":
+      return "destructive";
+    case "medium":
+      return "outline";
+    case "low":
+      return "secondary";
+    default:
+      return "default";
     }
   };
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "optimization":
-        return <TrendingUp className="h-4 w-4" />;
-      case "risk":
-        return <Shield className="h-4 w-4" />;
-      case "efficiency":
-        return <Zap className="h-4 w-4" />;
-      default:
-        return <Brain className="h-4 w-4" />;
+    case "optimization":
+      return <TrendingUp className="h-4 w-4" />;
+    case "risk":
+      return <Shield className="h-4 w-4" />;
+    case "efficiency":
+      return <Zap className="h-4 w-4" />;
+    default:
+      return <Brain className="h-4 w-4" />;
     }
   };
 

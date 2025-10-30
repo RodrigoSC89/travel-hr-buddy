@@ -3,7 +3,7 @@
  * Enhanced AI-powered route suggestions using OpenAI
  */
 
-import OpenAI from 'openai';
+import OpenAI from "openai";
 
 interface RouteAISuggestion {
   recommendedSpeed: number;
@@ -56,7 +56,7 @@ Velocidade Atual: ${params.currentSpeed} nós
 Consumo de Combustível: ${params.fuelConsumption} L/h
 
 Condições Meteorológicas:
-${params.weatherConditions.map(w => `- ${w.location}: ${w.description}`).join('\n')}
+${params.weatherConditions.map(w => `- ${w.location}: ${w.description}`).join("\n")}
 
 Por favor, forneça:
 1. Velocidade recomendada para otimização de combustível
@@ -81,14 +81,14 @@ Formato JSON:
 `;
 
       const response = await this.openai.chat.completions.create({
-        model: 'gpt-4',
+        model: "gpt-4",
         messages: [
           {
-            role: 'system',
-            content: 'Você é um especialista em navegação marítima e otimização de rotas. Forneça respostas precisas e práticas em português.'
+            role: "system",
+            content: "Você é um especialista em navegação marítima e otimização de rotas. Forneça respostas precisas e práticas em português."
           },
           {
-            role: 'user',
+            role: "user",
             content: prompt
           }
         ],
@@ -109,7 +109,7 @@ Formato JSON:
 
       return this.getFallbackSuggestions(params);
     } catch (error) {
-      console.error('Failed to generate AI suggestions:', error);
+      console.error("Failed to generate AI suggestions:", error);
       return this.getFallbackSuggestions(params);
     }
   }
@@ -128,18 +128,18 @@ Formato JSON:
       recommendedSpeed: optimalSpeed,
       fuelOptimization: `Reduzir velocidade para ${optimalSpeed} nós pode economizar aproximadamente 15% de combustível.`,
       safetyRecommendations: [
-        'Monitore as condições meteorológicas continuamente',
-        'Mantenha comunicação regular com portos de destino',
-        'Verifique sistemas de navegação a cada 4 horas'
+        "Monitore as condições meteorológicas continuamente",
+        "Mantenha comunicação regular com portos de destino",
+        "Verifique sistemas de navegação a cada 4 horas"
       ],
-      weatherConsiderations: 'Condições meteorológicas favoráveis previstas. Monitore previsões atualizadas.',
+      weatherConsiderations: "Condições meteorológicas favoráveis previstas. Monitore previsões atualizadas.",
       estimatedSavings: {
         time: `${timeSavings} horas`,
         fuel: `${fuelSavings} litros`
       },
       alternativeRoutes: [
-        'Rota costeira alternativa (+ 5% distância, - 20% risco)',
-        'Rota direta (- 2% distância, + 10% risco)'
+        "Rota costeira alternativa (+ 5% distância, - 20% risco)",
+        "Rota direta (- 2% distância, + 10% risco)"
       ]
     };
   }
@@ -148,25 +148,25 @@ Formato JSON:
     route: any;
     weatherData: any[];
   }): Promise<{
-    overallRisk: 'low' | 'medium' | 'high' | 'critical';
+    overallRisk: "low" | "medium" | "high" | "critical";
     recommendation: string;
     alternativeTiming?: string;
   }> {
     const criticalWeather = params.weatherData.filter(w => 
-      w.severity === 'high' || w.severity === 'critical'
+      w.severity === "high" || w.severity === "critical"
     );
 
     if (criticalWeather.length > 0) {
       return {
-        overallRisk: 'high',
-        recommendation: 'Considere adiar a viagem ou escolher rota alternativa devido a condições meteorológicas adversas.',
-        alternativeTiming: '12-24 horas'
+        overallRisk: "high",
+        recommendation: "Considere adiar a viagem ou escolher rota alternativa devido a condições meteorológicas adversas.",
+        alternativeTiming: "12-24 horas"
       };
     }
 
     return {
-      overallRisk: 'low',
-      recommendation: 'Condições meteorológicas favoráveis para navegação.'
+      overallRisk: "low",
+      recommendation: "Condições meteorológicas favoráveis para navegação."
     };
   }
 }

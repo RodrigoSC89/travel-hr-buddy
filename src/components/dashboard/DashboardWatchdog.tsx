@@ -35,7 +35,7 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
    * Detect blank screen
    */
   const checkBlankScreen = useCallback(() => {
-    const mainContent = document.querySelector('[data-dashboard-content]');
+    const mainContent = document.querySelector("[data-dashboard-content]");
     const hasVisibleContent = mainContent && mainContent.children.length > 0;
     return !hasVisibleContent;
   }, []);
@@ -57,8 +57,8 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
    * Detect missing critical metrics
    */
   const checkMissingMetrics = useCallback(() => {
-    const kpiCards = document.querySelectorAll('[data-kpi-card]');
-    const loadingCards = document.querySelectorAll('[data-kpi-loading]');
+    const kpiCards = document.querySelectorAll("[data-kpi-card]");
+    const loadingCards = document.querySelectorAll("[data-kpi-loading]");
     
     // If we have KPI containers but all are in loading state for > 10s
     return kpiCards.length > 0 && kpiCards.length === loadingCards.length;
@@ -99,14 +99,14 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
     setIsHealing(true);
     
     try {
-      console.log('[Watchdog] Attempting auto-heal...');
+      console.log("[Watchdog] Attempting auto-heal...");
       
       // Log healing attempt
       await logWatchdogEvent({
         blank_screen: state.hasBlankScreen,
         frozen_ui: state.hasFrozenUI,
         missing_metrics: state.hasMissingMetrics,
-        action: 'auto_heal_attempt',
+        action: "auto_heal_attempt",
         attempt_number: state.autoHealAttempts + 1
       });
 
@@ -126,15 +126,15 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
         const stillHasIssues = runWatchdogChecks();
         
         if (!stillHasIssues) {
-          console.log('[Watchdog] Auto-heal successful');
+          console.log("[Watchdog] Auto-heal successful");
           logWatchdogEvent({
-            action: 'auto_heal_success',
+            action: "auto_heal_success",
             attempt_number: state.autoHealAttempts + 1
           });
         } else {
-          console.warn('[Watchdog] Auto-heal failed, issues persist');
+          console.warn("[Watchdog] Auto-heal failed, issues persist");
           logWatchdogEvent({
-            action: 'auto_heal_failed',
+            action: "auto_heal_failed",
             attempt_number: state.autoHealAttempts + 1
           });
         }
@@ -143,12 +143,12 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
       }, 2000);
 
     } catch (error) {
-      console.error('[Watchdog] Auto-heal error:', error);
+      console.error("[Watchdog] Auto-heal error:", error);
       setIsHealing(false);
       
       await logWatchdogEvent({
-        action: 'auto_heal_error',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        action: "auto_heal_error",
+        error: error instanceof Error ? error.message : "Unknown error"
       });
     }
   }, [state, onHeal, runWatchdogChecks]);
@@ -157,8 +157,8 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
    * Manual heal trigger
    */
   const manualHeal = useCallback(() => {
-    console.log('[Watchdog] Manual heal triggered');
-    logWatchdogEvent({ action: 'manual_heal_trigger' });
+    console.log("[Watchdog] Manual heal triggered");
+    logWatchdogEvent({ action: "manual_heal_trigger" });
     attemptAutoHeal();
   }, [attemptAutoHeal]);
 
@@ -173,15 +173,15 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
       (window as any).__lastInteractionTime = Date.now();
     };
 
-    window.addEventListener('click', updateInteractionTime);
-    window.addEventListener('keydown', updateInteractionTime);
-    window.addEventListener('scroll', updateInteractionTime);
+    window.addEventListener("click", updateInteractionTime);
+    window.addEventListener("keydown", updateInteractionTime);
+    window.addEventListener("scroll", updateInteractionTime);
 
     return () => {
       clearInterval(interval);
-      window.removeEventListener('click', updateInteractionTime);
-      window.removeEventListener('keydown', updateInteractionTime);
-      window.removeEventListener('scroll', updateInteractionTime);
+      window.removeEventListener("click", updateInteractionTime);
+      window.removeEventListener("keydown", updateInteractionTime);
+      window.removeEventListener("scroll", updateInteractionTime);
     };
   }, [runWatchdogChecks]);
 
@@ -202,7 +202,7 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
           {state.hasFrozenUI && <p>• Interface congelada</p>}
           {state.hasMissingMetrics && <p>• Métricas não carregadas</p>}
           <p className="text-xs mt-2">
-            Última verificação: {state.lastCheck.toLocaleTimeString('pt-BR')}
+            Última verificação: {state.lastCheck.toLocaleTimeString("pt-BR")}
           </p>
         </div>
         <Button 
@@ -234,17 +234,17 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
  */
 async function logWatchdogEvent(data: Record<string, any>) {
   try {
-    console.log('[Watchdog Event]', JSON.stringify(data, null, 2));
+    console.log("[Watchdog Event]", JSON.stringify(data, null, 2));
     
     // Store in localStorage for debugging
     try {
-      const logs = JSON.parse(localStorage.getItem('watchdog_events') || '[]');
+      const logs = JSON.parse(localStorage.getItem("watchdog_events") || "[]");
       logs.push({ ...data, timestamp: new Date().toISOString() });
-      localStorage.setItem('watchdog_events', JSON.stringify(logs.slice(-50))); // Keep last 50
+      localStorage.setItem("watchdog_events", JSON.stringify(logs.slice(-50))); // Keep last 50
     } catch (e) {
       // Ignore localStorage errors
     }
   } catch (error) {
-    console.error('[Watchdog] Error logging event:', error);
+    console.error("[Watchdog] Error logging event:", error);
   }
 }

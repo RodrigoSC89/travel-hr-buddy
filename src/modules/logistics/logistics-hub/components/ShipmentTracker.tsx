@@ -66,9 +66,9 @@ export const ShipmentTracker = () => {
     loadShipments();
     // PATCH 391: Real-time monitoring via Supabase subscriptions
     const subscription = supabase
-      .channel('shipments_changes')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'logistics_transports' }, 
+      .channel("shipments_changes")
+      .on("postgres_changes", 
+        { event: "*", schema: "public", table: "logistics_transports" }, 
         () => {
           loadShipments();
         }

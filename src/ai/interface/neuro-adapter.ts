@@ -7,9 +7,9 @@
  * @created 2025-01-24
  */
 
-export type InputType = 'text' | 'voice' | 'gesture' | 'thought';
-export type InteractionState = 'active' | 'paused' | 'hesitating' | 'confirming' | 'idle';
-export type AdaptiveReaction = 'suggest' | 'confirm' | 'wait' | 'clarify' | 'execute';
+export type InputType = "text" | "voice" | "gesture" | "thought";
+export type InteractionState = "active" | "paused" | "hesitating" | "confirming" | "idle";
+export type AdaptiveReaction = "suggest" | "confirm" | "wait" | "clarify" | "execute";
 
 export interface UserInput {
   type: InputType;
@@ -38,7 +38,7 @@ export interface AdaptiveReactionOutput {
 
 export interface HesitationDetection {
   detected: boolean;
-  type: 'pause' | 'repetition' | 'incomplete' | 'correction';
+  type: "pause" | "repetition" | "incomplete" | "correction";
   confidence: number;
   context: string;
 }
@@ -46,12 +46,12 @@ export interface HesitationDetection {
 class NeuroHumanAdapter {
   private humanContext: HumanContext;
   private readonly HESITATION_PAUSE_THRESHOLD = 3000; // 3 seconds
-  private readonly CRITICAL_ACTIONS = ['delete', 'remove', 'cancel', 'stop', 'abort'];
+  private readonly CRITICAL_ACTIONS = ["delete", "remove", "cancel", "stop", "abort"];
   private adaptationLog: Array<{ timestamp: Date; input: UserInput; reaction: AdaptiveReactionOutput }> = [];
 
   constructor() {
     this.humanContext = {
-      currentState: 'idle',
+      currentState: "idle",
       lastInputTime: new Date(),
       hesitationCount: 0,
       confirmationRequired: false,
@@ -75,7 +75,7 @@ class NeuroHumanAdapter {
     // Log da adaptação
     this.logAdaptation(input, reaction);
 
-    console.log('[NeuroAdapter] Input processed:', {
+    console.log("[NeuroAdapter] Input processed:", {
       type: input.type,
       state: this.humanContext.currentState,
       reaction: reaction.reaction,
@@ -97,9 +97,9 @@ class NeuroHumanAdapter {
     if (timeSinceLastInput > this.HESITATION_PAUSE_THRESHOLD) {
       return {
         detected: true,
-        type: 'pause',
+        type: "pause",
         confidence: 0.9,
-        context: 'Long pause detected between inputs'
+        context: "Long pause detected between inputs"
       };
     }
 
@@ -109,38 +109,38 @@ class NeuroHumanAdapter {
     if (repetitionCount >= 2) {
       return {
         detected: true,
-        type: 'repetition',
+        type: "repetition",
         confidence: 0.85,
-        context: 'User repeating the same input'
+        context: "User repeating the same input"
       };
     }
 
     // Detecta entrada incompleta
-    if (content.length < 5 || content.endsWith('...') || content.includes('hmm') || content.includes('err')) {
+    if (content.length < 5 || content.endsWith("...") || content.includes("hmm") || content.includes("err")) {
       return {
         detected: true,
-        type: 'incomplete',
+        type: "incomplete",
         confidence: 0.75,
-        context: 'Input appears incomplete or uncertain'
+        context: "Input appears incomplete or uncertain"
       };
     }
 
     // Detecta correção (palavras como "não", "espera", "melhor")
-    const correctionWords = ['não', 'espera', 'melhor', 'na verdade', 'quer dizer', 'correção'];
+    const correctionWords = ["não", "espera", "melhor", "na verdade", "quer dizer", "correção"];
     if (correctionWords.some(word => content.includes(word))) {
       return {
         detected: true,
-        type: 'correction',
+        type: "correction",
         confidence: 0.8,
-        context: 'User attempting to correct previous input'
+        context: "User attempting to correct previous input"
       };
     }
 
     return {
       detected: false,
-      type: 'pause',
+      type: "pause",
       confidence: 0,
-      context: 'No hesitation detected'
+      context: "No hesitation detected"
     };
   }
 
@@ -159,21 +159,21 @@ class NeuroHumanAdapter {
     // Se é ação crítica, sempre confirmar
     if (isCriticalAction) {
       this.humanContext.confirmationRequired = true;
-      this.humanContext.currentState = 'confirming';
+      this.humanContext.currentState = "confirming";
       
       return {
-        reaction: 'confirm',
-        message: '⚠️ Esta é uma ação crítica. Você confirma que deseja continuar?',
+        reaction: "confirm",
+        message: "⚠️ Esta é uma ação crítica. Você confirma que deseja continuar?",
         requiresConfirmation: true,
-        suggestions: ['Sim, continuar', 'Não, cancelar', 'Revisar antes']
+        suggestions: ["Sim, continuar", "Não, cancelar", "Revisar antes"]
       };
     }
 
     // Entrada normal - executar
-    this.humanContext.currentState = 'active';
+    this.humanContext.currentState = "active";
     return {
-      reaction: 'execute',
-      message: 'Entendido. Processando sua solicitação...',
+      reaction: "execute",
+      message: "Entendido. Processando sua solicitação...",
       requiresConfirmation: false
     };
   }
@@ -183,59 +183,59 @@ class NeuroHumanAdapter {
    */
   private handleHesitation(input: UserInput, hesitation: HesitationDetection): AdaptiveReactionOutput {
     this.humanContext.hesitationCount++;
-    this.humanContext.currentState = 'hesitating';
+    this.humanContext.currentState = "hesitating";
 
     switch (hesitation.type) {
-      case 'pause':
-        return {
-          reaction: 'suggest',
-          message: '🤔 Notei uma pausa. Posso sugerir algumas opções?',
-          requiresConfirmation: false,
-          suggestions: [
-            'Continuar com a última ação',
-            'Ver opções disponíveis',
-            'Cancelar e começar de novo'
-          ]
-        };
+    case "pause":
+      return {
+        reaction: "suggest",
+        message: "🤔 Notei uma pausa. Posso sugerir algumas opções?",
+        requiresConfirmation: false,
+        suggestions: [
+          "Continuar com a última ação",
+          "Ver opções disponíveis",
+          "Cancelar e começar de novo"
+        ]
+      };
 
-      case 'repetition':
-        return {
-          reaction: 'clarify',
-          message: '💭 Parece que você repetiu o comando. Posso esclarecer algo?',
-          requiresConfirmation: false,
-          suggestions: [
-            'Sim, explique melhor',
-            'Não, apenas execute',
-            'Mostrar alternativas'
-          ]
-        };
+    case "repetition":
+      return {
+        reaction: "clarify",
+        message: "💭 Parece que você repetiu o comando. Posso esclarecer algo?",
+        requiresConfirmation: false,
+        suggestions: [
+          "Sim, explique melhor",
+          "Não, apenas execute",
+          "Mostrar alternativas"
+        ]
+      };
 
-      case 'incomplete':
-        return {
-          reaction: 'wait',
-          message: '✋ Aguardando... Complete seu pensamento quando estiver pronto.',
-          requiresConfirmation: false,
-          waitTime: 5000
-        };
+    case "incomplete":
+      return {
+        reaction: "wait",
+        message: "✋ Aguardando... Complete seu pensamento quando estiver pronto.",
+        requiresConfirmation: false,
+        waitTime: 5000
+      };
 
-      case 'correction':
-        return {
-          reaction: 'clarify',
-          message: '🔄 Entendi que você quer corrigir. Qual é a ação correta?',
-          requiresConfirmation: false,
-          suggestions: [
-            'Desfazer última ação',
-            'Começar novamente',
-            'Especificar correção'
-          ]
-        };
+    case "correction":
+      return {
+        reaction: "clarify",
+        message: "🔄 Entendi que você quer corrigir. Qual é a ação correta?",
+        requiresConfirmation: false,
+        suggestions: [
+          "Desfazer última ação",
+          "Começar novamente",
+          "Especificar correção"
+        ]
+      };
 
-      default:
-        return {
-          reaction: 'suggest',
-          message: 'Como posso ajudar?',
-          requiresConfirmation: false
-        };
+    default:
+      return {
+        reaction: "suggest",
+        message: "Como posso ajudar?",
+        requiresConfirmation: false
+      };
     }
   }
 
@@ -244,19 +244,19 @@ class NeuroHumanAdapter {
    */
   confirmCriticalAction(confirmed: boolean): AdaptiveReactionOutput {
     if (confirmed) {
-      this.humanContext.currentState = 'active';
+      this.humanContext.currentState = "active";
       this.humanContext.confirmationRequired = false;
       return {
-        reaction: 'execute',
-        message: '✅ Confirmado. Executando ação...',
+        reaction: "execute",
+        message: "✅ Confirmado. Executando ação...",
         requiresConfirmation: false
       };
     } else {
-      this.humanContext.currentState = 'idle';
+      this.humanContext.currentState = "idle";
       this.humanContext.confirmationRequired = false;
       return {
-        reaction: 'wait',
-        message: '❌ Ação cancelada. Aguardando novos comandos.',
+        reaction: "wait",
+        message: "❌ Ação cancelada. Aguardando novos comandos.",
         requiresConfirmation: false
       };
     }
@@ -295,7 +295,7 @@ class NeuroHumanAdapter {
       this.adaptationLog.shift();
     }
 
-    console.log('[NeuroAdapter] Adaptation with human context:', {
+    console.log("[NeuroAdapter] Adaptation with human context:", {
       inputType: input.type,
       reactionType: reaction.reaction,
       state: this.humanContext.currentState,
@@ -323,7 +323,7 @@ class NeuroHumanAdapter {
    */
   resetContext(): void {
     this.humanContext = {
-      currentState: 'idle',
+      currentState: "idle",
       lastInputTime: new Date(),
       hesitationCount: 0,
       confirmationRequired: false,

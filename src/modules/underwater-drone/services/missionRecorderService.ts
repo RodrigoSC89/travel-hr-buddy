@@ -8,7 +8,7 @@ import type { DronePosition } from "../droneSubCore";
 
 export interface RecordedCommand {
   timestamp: number;
-  type: 'movement' | 'depth_change' | 'orientation' | 'system';
+  type: "movement" | "depth_change" | "orientation" | "system";
   command: string;
   parameters: Record<string, any>;
   position: DronePosition;
@@ -47,7 +47,7 @@ export interface MissionRecording {
     missionType: string;
     droneId: string;
     operator: string;
-    status: 'recording' | 'completed' | 'aborted';
+    status: "recording" | "completed" | "aborted";
   };
   analysis?: MissionAnalysis;
 }
@@ -65,8 +65,8 @@ export interface MissionAnalysis {
 export interface AttentionPoint {
   timestamp: number;
   position: DronePosition;
-  type: 'anomaly' | 'rapid_movement' | 'depth_change' | 'system_warning' | 'poi';
-  severity: 'low' | 'medium' | 'high';
+  type: "anomaly" | "rapid_movement" | "depth_change" | "system_warning" | "poi";
+  severity: "low" | "medium" | "high";
   description: string;
 }
 
@@ -91,10 +91,10 @@ class MissionRecorderService {
       commands: [],
       trajectory: [],
       metadata: {
-        missionType: 'standard',
+        missionType: "standard",
         droneId,
         operator,
-        status: 'recording',
+        status: "recording",
       },
     };
 
@@ -118,7 +118,7 @@ class MissionRecorderService {
     this.currentRecording.endTime = Date.now();
     this.currentRecording.duration = 
       (this.currentRecording.endTime - this.currentRecording.startTime) / 1000; // seconds
-    this.currentRecording.metadata.status = 'completed';
+    this.currentRecording.metadata.status = "completed";
 
     // Analyze the mission
     this.currentRecording.analysis = this.analyzeMission(this.currentRecording);
@@ -139,7 +139,7 @@ class MissionRecorderService {
    * Record a command during the mission
    */
   recordCommand(
-    type: RecordedCommand['type'],
+    type: RecordedCommand["type"],
     command: string,
     parameters: Record<string, any>,
     position: DronePosition
@@ -165,9 +165,9 @@ class MissionRecorderService {
    */
   recordTrajectory(
     position: DronePosition,
-    velocity: RecordedTrajectory['velocity'],
-    orientation: RecordedTrajectory['orientation'],
-    telemetry: RecordedTrajectory['telemetry']
+    velocity: RecordedTrajectory["velocity"],
+    orientation: RecordedTrajectory["orientation"],
+    telemetry: RecordedTrajectory["telemetry"]
   ): void {
     if (!this.isRecording || !this.currentRecording) {
       return;
@@ -283,8 +283,8 @@ class MissionRecorderService {
         points.push({
           timestamp: trajectory[i].timestamp,
           position: trajectory[i].position,
-          type: 'rapid_movement',
-          severity: 'high',
+          type: "rapid_movement",
+          severity: "high",
           description: `Rapid depth change: ${depthRate.toFixed(1)} m/s`,
         });
       }
@@ -296,8 +296,8 @@ class MissionRecorderService {
         points.push({
           timestamp: point.timestamp,
           position: point.position,
-          type: 'system_warning',
-          severity: 'high',
+          type: "system_warning",
+          severity: "high",
           description: `Low battery: ${point.telemetry.battery.toFixed(0)}%`,
         });
       }
@@ -309,8 +309,8 @@ class MissionRecorderService {
         points.push({
           timestamp: point.timestamp,
           position: point.position,
-          type: 'system_warning',
-          severity: 'medium',
+          type: "system_warning",
+          severity: "medium",
           description: `High temperature: ${point.telemetry.temperature.toFixed(1)}°C`,
         });
       }
@@ -322,7 +322,7 @@ class MissionRecorderService {
   /**
    * Generate mission summary
    */
-  private generateMissionSummary(analysis: Omit<MissionAnalysis, 'summary'>): string {
+  private generateMissionSummary(analysis: Omit<MissionAnalysis, "summary">): string {
     const parts = [
       `Mission covered ${analysis.totalDistance.toFixed(0)}m`,
       `Average depth: ${analysis.avgDepth.toFixed(1)}m`,
@@ -335,7 +335,7 @@ class MissionRecorderService {
       parts.push(`${analysis.attentionPoints.length} attention points detected`);
     }
 
-    return parts.join('. ') + '.';
+    return parts.join(". ") + ".";
   }
 
   /**

@@ -126,18 +126,18 @@ export const ScheduledReports: React.FC = () => {
   const calculateNextRun = (frequency: string): string => {
     const now = new Date();
     switch (frequency) {
-      case "daily":
-        now.setDate(now.getDate() + 1);
-        break;
-      case "weekly":
-        now.setDate(now.getDate() + 7);
-        break;
-      case "monthly":
-        now.setMonth(now.getMonth() + 1);
-        break;
-      case "quarterly":
-        now.setMonth(now.getMonth() + 3);
-        break;
+    case "daily":
+      now.setDate(now.getDate() + 1);
+      break;
+    case "weekly":
+      now.setDate(now.getDate() + 7);
+      break;
+    case "monthly":
+      now.setMonth(now.getMonth() + 1);
+      break;
+    case "quarterly":
+      now.setMonth(now.getMonth() + 3);
+      break;
     }
     return now.toISOString();
   };

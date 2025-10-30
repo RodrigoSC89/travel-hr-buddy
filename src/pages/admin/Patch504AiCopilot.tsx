@@ -6,7 +6,7 @@ import { Bot, CheckCircle2, XCircle, MessageSquare, Volume2, Image, Brain } from
 import { useState } from "react";
 
 export default function Patch504AiCopilot() {
-  const [validationStatus, setValidationStatus] = useState<'idle' | 'running' | 'complete'>('idle');
+  const [validationStatus, setValidationStatus] = useState<"idle" | "running" | "complete">("idle");
   const [textUnderstanding, setTextUnderstanding] = useState(false);
   const [voiceOutput, setVoiceOutput] = useState(false);
   const [imageProcessing, setImageProcessing] = useState(false);
@@ -45,7 +45,7 @@ export default function Patch504AiCopilot() {
   ];
 
   const runValidation = async () => {
-    setValidationStatus('running');
+    setValidationStatus("running");
     
     await new Promise(resolve => setTimeout(resolve, 1000));
     setTextUnderstanding(true);
@@ -59,7 +59,7 @@ export default function Patch504AiCopilot() {
     await new Promise(resolve => setTimeout(resolve, 800));
     setComprehensionScore(88);
     
-    setValidationStatus('complete');
+    setValidationStatus("complete");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -93,9 +93,9 @@ export default function Patch504AiCopilot() {
           </Badge>
           <Button 
             onClick={runValidation}
-            disabled={validationStatus === 'running'}
+            disabled={validationStatus === "running"}
           >
-            {validationStatus === 'running' ? 'Validando...' : 'Executar Validação'}
+            {validationStatus === "running" ? "Validando..." : "Executar Validação"}
           </Button>
         </div>
       </div>
@@ -215,7 +215,7 @@ export default function Patch504AiCopilot() {
         </CardContent>
       </Card>
 
-      {validationStatus === 'complete' && passRate === "100" && (
+      {validationStatus === "complete" && passRate === "100" && (
         <Card className="border-green-200 bg-green-50">
           <CardHeader>
             <CardTitle className="text-green-800 flex items-center gap-2">

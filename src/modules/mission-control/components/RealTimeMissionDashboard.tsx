@@ -77,7 +77,7 @@ export const RealTimeMissionDashboard = () => {
             loadMissions();
             toast({
               title: "Mission Updated",
-              description: `Mission status changed`,
+              description: "Mission status changed",
             });
           }
         }
@@ -145,54 +145,54 @@ export const RealTimeMissionDashboard = () => {
 
   const getStatusIcon = (status: Mission["status"]) => {
     switch (status) {
-      case "in_progress":
-        return <Activity className="w-4 h-4 text-blue-400 animate-pulse" />;
-      case "completed":
-        return <CheckCircle2 className="w-4 h-4 text-green-400" />;
-      case "error":
-        return <AlertCircle className="w-4 h-4 text-red-400" />;
-      case "paused":
-        return <Pause className="w-4 h-4 text-yellow-400" />;
-      case "planning":
-        return <Clock className="w-4 h-4 text-gray-400" />;
-      case "cancelled":
-        return <XCircle className="w-4 h-4 text-gray-400" />;
-      default:
-        return <Activity className="w-4 h-4" />;
+    case "in_progress":
+      return <Activity className="w-4 h-4 text-blue-400 animate-pulse" />;
+    case "completed":
+      return <CheckCircle2 className="w-4 h-4 text-green-400" />;
+    case "error":
+      return <AlertCircle className="w-4 h-4 text-red-400" />;
+    case "paused":
+      return <Pause className="w-4 h-4 text-yellow-400" />;
+    case "planning":
+      return <Clock className="w-4 h-4 text-gray-400" />;
+    case "cancelled":
+      return <XCircle className="w-4 h-4 text-gray-400" />;
+    default:
+      return <Activity className="w-4 h-4" />;
     }
   };
 
   const getStatusColor = (status: Mission["status"]) => {
     switch (status) {
-      case "in_progress":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-      case "completed":
-        return "bg-green-500/20 text-green-400 border-green-500/30";
-      case "error":
-        return "bg-red-500/20 text-red-400 border-red-500/30";
-      case "paused":
-        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-      case "planning":
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-      case "cancelled":
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-      default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    case "in_progress":
+      return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    case "completed":
+      return "bg-green-500/20 text-green-400 border-green-500/30";
+    case "error":
+      return "bg-red-500/20 text-red-400 border-red-500/30";
+    case "paused":
+      return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    case "planning":
+      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    case "cancelled":
+      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    default:
+      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     }
   };
 
   const getPriorityColor = (priority: Mission["priority"]) => {
     switch (priority) {
-      case "critical":
-        return "bg-red-500/20 text-red-400 border-red-500/30";
-      case "high":
-        return "bg-orange-500/20 text-orange-400 border-orange-500/30";
-      case "normal":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-      case "low":
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-      default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    case "critical":
+      return "bg-red-500/20 text-red-400 border-red-500/30";
+    case "high":
+      return "bg-orange-500/20 text-orange-400 border-orange-500/30";
+    case "normal":
+      return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    case "low":
+      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    default:
+      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     }
   };
 

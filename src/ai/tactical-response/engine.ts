@@ -58,7 +58,7 @@ export class TacticalResponseEngine {
    */
   public async initialize(config?: RuleConfig): Promise<void> {
     if (this.isInitialized) {
-      console.warn('[TacticalResponse] Engine already initialized');
+      console.warn("[TacticalResponse] Engine already initialized");
       return;
     }
 
@@ -78,12 +78,12 @@ export class TacticalResponseEngine {
     this.setupEventListeners();
 
     this.isInitialized = true;
-    console.log('[TacticalResponse] Engine initialized', {
+    console.log("[TacticalResponse] Engine initialized", {
       rulesLoaded: this.rules.size,
       maxConcurrentExecutions: this.maxConcurrentExecutions,
     });
 
-    BridgeLink.emit('tactical-response:initialized', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:initialized", "TacticalResponse", {
       timestamp: Date.now(),
       rulesCount: this.rules.size,
     });
@@ -127,7 +127,7 @@ export class TacticalResponseEngine {
 
         // Check concurrent execution limit
         if (this.activeExecutions.size >= this.maxConcurrentExecutions) {
-          console.warn('[TacticalResponse] Max concurrent executions reached, queueing');
+          console.warn("[TacticalResponse] Max concurrent executions reached, queueing");
           break;
         }
 
@@ -148,13 +148,13 @@ export class TacticalResponseEngine {
         console.warn(`[TacticalResponse] Performance degraded: ${duration.toFixed(2)}ms`);
       }
 
-      BridgeLink.emit('tactical-response:event-processed', 'TacticalResponse', {
+      BridgeLink.emit("tactical-response:event-processed", "TacticalResponse", {
         eventId: event.id,
         executionsCount: executions.length,
         duration,
       });
     } catch (error) {
-      console.error('[TacticalResponse] Error processing event:', error);
+      console.error("[TacticalResponse] Error processing event:", error);
     }
 
     return executions;
@@ -170,17 +170,17 @@ export class TacticalResponseEngine {
       eventId: event.id,
       timestamp: Date.now(),
       startTime: performance.now(),
-      status: 'pending',
+      status: "pending",
       actions: rule.actions.map(action => ({
         actionId: action.id,
-        status: 'pending',
+        status: "pending",
       })),
       justification: this.generateJustification(rule, event),
       confidence: event.metadata?.confidence || 0.8,
     };
 
     this.activeExecutions.set(execution.id, execution);
-    execution.status = 'running';
+    execution.status = "running";
 
     try {
       // Execute actions sequentially
@@ -189,27 +189,27 @@ export class TacticalResponseEngine {
         const actionExecution = execution.actions[i];
         const actionStartTime = performance.now();
 
-        actionExecution.status = 'running';
+        actionExecution.status = "running";
 
         try {
           const result = await this.executeAction(action, event, rule);
-          actionExecution.status = 'success';
+          actionExecution.status = "success";
           actionExecution.result = result;
           actionExecution.duration = performance.now() - actionStartTime;
         } catch (error) {
-          actionExecution.status = 'failed';
-          actionExecution.error = error instanceof Error ? error.message : 'Unknown error';
+          actionExecution.status = "failed";
+          actionExecution.error = error instanceof Error ? error.message : "Unknown error";
           actionExecution.duration = performance.now() - actionStartTime;
           console.error(`[TacticalResponse] Action ${action.id} failed:`, error);
         }
       }
 
-      execution.status = execution.actions.every(a => a.status === 'success') ? 'success' : 'failed';
+      execution.status = execution.actions.every(a => a.status === "success") ? "success" : "failed";
       execution.endTime = performance.now();
       execution.duration = execution.endTime - execution.startTime;
 
       this.statistics.executedResponses++;
-      if (execution.status === 'success') {
+      if (execution.status === "success") {
         this.statistics.successRate = 
           (this.statistics.successRate * (this.statistics.executedResponses - 1) + 1) / 
           this.statistics.executedResponses;
@@ -225,7 +225,7 @@ export class TacticalResponseEngine {
         duration: execution.duration?.toFixed(2),
       });
     } catch (error) {
-      execution.status = 'failed';
+      execution.status = "failed";
       execution.endTime = performance.now();
       execution.duration = execution.endTime - execution.startTime;
       console.error(`[TacticalResponse] Rule ${rule.id} execution failed:`, error);
@@ -238,7 +238,7 @@ export class TacticalResponseEngine {
         this.executionHistory = this.executionHistory.slice(-5000);
       }
 
-      BridgeLink.emit('tactical-response:execution-complete', 'TacticalResponse', {
+      BridgeLink.emit("tactical-response:execution-complete", "TacticalResponse", {
         executionId: execution.id,
         ruleId: rule.id,
         status: execution.status,
@@ -268,38 +268,38 @@ export class TacticalResponseEngine {
         let result: any;
 
         switch (action.type) {
-          case 'alert':
-            result = this.executeAlertAction(action, event);
-            break;
-          case 'notification':
-            result = this.executeNotificationAction(action, event);
-            break;
-          case 'automated_correction':
-            result = this.executeAutomatedCorrectionAction(action, event);
-            break;
-          case 'escalation':
-            result = this.executeEscalationAction(action, event);
-            break;
-          case 'data_collection':
-            result = this.executeDataCollectionAction(action, event);
-            break;
-          case 'system_adjustment':
-            result = this.executeSystemAdjustmentAction(action, event);
-            break;
-          case 'crew_notification':
-            result = this.executeCrewNotificationAction(action, event);
-            break;
-          case 'report_generation':
-            result = this.executeReportGenerationAction(action, event);
-            break;
-          case 'failover':
-            result = this.executeFailoverAction(action, event);
-            break;
-          case 'diagnostic_run':
-            result = this.executeDiagnosticRunAction(action, event);
-            break;
-          default:
-            result = { status: 'not_implemented', action: action.type };
+        case "alert":
+          result = this.executeAlertAction(action, event);
+          break;
+        case "notification":
+          result = this.executeNotificationAction(action, event);
+          break;
+        case "automated_correction":
+          result = this.executeAutomatedCorrectionAction(action, event);
+          break;
+        case "escalation":
+          result = this.executeEscalationAction(action, event);
+          break;
+        case "data_collection":
+          result = this.executeDataCollectionAction(action, event);
+          break;
+        case "system_adjustment":
+          result = this.executeSystemAdjustmentAction(action, event);
+          break;
+        case "crew_notification":
+          result = this.executeCrewNotificationAction(action, event);
+          break;
+        case "report_generation":
+          result = this.executeReportGenerationAction(action, event);
+          break;
+        case "failover":
+          result = this.executeFailoverAction(action, event);
+          break;
+        case "diagnostic_run":
+          result = this.executeDiagnosticRunAction(action, event);
+          break;
+        default:
+          result = { status: "not_implemented", action: action.type };
         }
 
         clearTimeout(timer);
@@ -375,15 +375,15 @@ export class TacticalResponseEngine {
    */
   private generateJustification(rule: TacticalRule, event: TacticalEvent): string {
     return `Rule "${rule.name}" triggered by ${event.type} event (severity: ${event.severity}). ` +
-      `Conditions: ${rule.conditions.map(c => `${c.field} ${c.operator} ${c.value}`).join(', ')}. ` +
-      `Actions: ${rule.actions.map(a => a.type).join(', ')}.`;
+      `Conditions: ${rule.conditions.map(c => `${c.field} ${c.operator} ${c.value}`).join(", ")}. ` +
+      `Actions: ${rule.actions.map(a => a.type).join(", ")}.`;
   }
 
   /**
    * Get field value from nested object
    */
   private getFieldValue(obj: Record<string, any>, field: string): any {
-    const parts = field.split('.');
+    const parts = field.split(".");
     let value: any = obj;
     for (const part of parts) {
       value = value?.[part];
@@ -396,20 +396,20 @@ export class TacticalResponseEngine {
    */
   private evaluateCondition(fieldValue: any, operator: string, value: any): boolean {
     switch (operator) {
-      case 'equals':
-        return fieldValue === value;
-      case 'not_equals':
-        return fieldValue !== value;
-      case 'greater_than':
-        return fieldValue > value;
-      case 'less_than':
-        return fieldValue < value;
-      case 'contains':
-        return String(fieldValue).includes(String(value));
-      case 'regex':
-        return new RegExp(value).test(String(fieldValue));
-      default:
-        return false;
+    case "equals":
+      return fieldValue === value;
+    case "not_equals":
+      return fieldValue !== value;
+    case "greater_than":
+      return fieldValue > value;
+    case "less_than":
+      return fieldValue < value;
+    case "contains":
+      return String(fieldValue).includes(String(value));
+    case "regex":
+      return new RegExp(value).test(String(fieldValue));
+    default:
+      return false;
     }
   }
 
@@ -417,88 +417,88 @@ export class TacticalResponseEngine {
    * Action implementations
    */
   private executeAlertAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit('tactical-response:alert', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:alert", "TacticalResponse", {
       action: action.description,
       event: event,
       timestamp: Date.now(),
     });
-    return { status: 'alert_sent', parameters: action.parameters };
+    return { status: "alert_sent", parameters: action.parameters };
   }
 
   private executeNotificationAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit('tactical-response:notification', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:notification", "TacticalResponse", {
       message: action.description,
       event: event,
       timestamp: Date.now(),
     });
-    return { status: 'notification_sent' };
+    return { status: "notification_sent" };
   }
 
   private executeAutomatedCorrectionAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit('tactical-response:correction', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:correction", "TacticalResponse", {
       action: action.description,
       event: event,
       parameters: action.parameters,
     });
-    return { status: 'correction_initiated', parameters: action.parameters };
+    return { status: "correction_initiated", parameters: action.parameters };
   }
 
   private executeEscalationAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit('tactical-response:escalation', 'TacticalResponse', {
-      level: action.parameters.level || 'high',
+    BridgeLink.emit("tactical-response:escalation", "TacticalResponse", {
+      level: action.parameters.level || "high",
       event: event,
     });
-    return { status: 'escalated', level: action.parameters.level };
+    return { status: "escalated", level: action.parameters.level };
   }
 
   private executeDataCollectionAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit('tactical-response:data-collection', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:data-collection", "TacticalResponse", {
       sources: action.parameters.sources,
       event: event,
     });
-    return { status: 'data_collection_started', sources: action.parameters.sources };
+    return { status: "data_collection_started", sources: action.parameters.sources };
   }
 
   private executeSystemAdjustmentAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit('tactical-response:system-adjustment', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:system-adjustment", "TacticalResponse", {
       adjustments: action.parameters,
       event: event,
     });
-    return { status: 'system_adjusted', adjustments: action.parameters };
+    return { status: "system_adjusted", adjustments: action.parameters };
   }
 
   private executeCrewNotificationAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit('tactical-response:crew-notification', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:crew-notification", "TacticalResponse", {
       crew: action.parameters.crew,
       message: action.description,
       event: event,
     });
-    return { status: 'crew_notified', crew: action.parameters.crew };
+    return { status: "crew_notified", crew: action.parameters.crew };
   }
 
   private executeReportGenerationAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit('tactical-response:report-generation', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:report-generation", "TacticalResponse", {
       reportType: action.parameters.reportType,
       event: event,
     });
-    return { status: 'report_generated', reportType: action.parameters.reportType };
+    return { status: "report_generated", reportType: action.parameters.reportType };
   }
 
   private executeFailoverAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit('tactical-response:failover', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:failover", "TacticalResponse", {
       target: action.parameters.target,
       backup: action.parameters.backup,
       event: event,
     });
-    return { status: 'failover_initiated', target: action.parameters.target };
+    return { status: "failover_initiated", target: action.parameters.target };
   }
 
   private executeDiagnosticRunAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit('tactical-response:diagnostic', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:diagnostic", "TacticalResponse", {
       diagnosticType: action.parameters.diagnosticType,
       event: event,
     });
-    return { status: 'diagnostic_started', type: action.parameters.diagnosticType };
+    return { status: "diagnostic_started", type: action.parameters.diagnosticType };
   }
 
   /**
@@ -536,29 +536,29 @@ export class TacticalResponseEngine {
   private loadDefaultRules(): void {
     const defaultRules: TacticalRule[] = [
       {
-        id: 'critical-alert-escalation',
-        name: 'Critical Alert Escalation',
-        description: 'Escalate critical alerts to command center',
-        type: 'reactive',
+        id: "critical-alert-escalation",
+        name: "Critical Alert Escalation",
+        description: "Escalate critical alerts to command center",
+        type: "reactive",
         enabled: true,
         priority: 10,
-        eventTypes: ['alert'],
+        eventTypes: ["alert"],
         conditions: [
-          { field: 'severity', operator: 'equals', value: 'critical' },
+          { field: "severity", operator: "equals", value: "critical" },
         ],
         actions: [
           {
-            id: 'escalate-1',
-            type: 'escalation',
-            description: 'Escalate to command center',
-            parameters: { level: 'command' },
+            id: "escalate-1",
+            type: "escalation",
+            description: "Escalate to command center",
+            parameters: { level: "command" },
             priority: 10,
           },
           {
-            id: 'notify-1',
-            type: 'crew_notification',
-            description: 'Notify senior crew',
-            parameters: { crew: 'senior' },
+            id: "notify-1",
+            type: "crew_notification",
+            description: "Notify senior crew",
+            parameters: { crew: "senior" },
             priority: 9,
           },
         ],
@@ -566,27 +566,27 @@ export class TacticalResponseEngine {
         maxExecutions: 10,
       },
       {
-        id: 'system-failure-response',
-        name: 'System Failure Response',
-        description: 'Respond to system failures with diagnostics and failover',
-        type: 'reactive',
+        id: "system-failure-response",
+        name: "System Failure Response",
+        description: "Respond to system failures with diagnostics and failover",
+        type: "reactive",
         enabled: true,
         priority: 9,
-        eventTypes: ['failure', 'system_degradation'],
+        eventTypes: ["failure", "system_degradation"],
         conditions: [],
         actions: [
           {
-            id: 'diagnostic-1',
-            type: 'diagnostic_run',
-            description: 'Run system diagnostics',
-            parameters: { diagnosticType: 'full' },
+            id: "diagnostic-1",
+            type: "diagnostic_run",
+            description: "Run system diagnostics",
+            parameters: { diagnosticType: "full" },
             priority: 10,
           },
           {
-            id: 'alert-1',
-            type: 'alert',
-            description: 'Alert operations team',
-            parameters: { alertType: 'system_failure' },
+            id: "alert-1",
+            type: "alert",
+            description: "Alert operations team",
+            parameters: { alertType: "system_failure" },
             priority: 9,
           },
         ],
@@ -605,17 +605,17 @@ export class TacticalResponseEngine {
    */
   private setupEventListeners(): void {
     // Listen for situational awareness insights
-    BridgeLink.on('situational-awareness:analysis-complete', async (_source, data) => {
+    BridgeLink.on("situational-awareness:analysis-complete", async (_source, data) => {
       // Create events from insights
       const state = situationalAwareness.getCurrentState();
       
       state.activeAlerts.forEach(async alert => {
         const event: TacticalEvent = {
           id: `event-${alert.id}`,
-          type: 'alert',
+          type: "alert",
           timestamp: alert.timestamp,
           severity: alert.severity,
-          source: 'situational-awareness',
+          source: "situational-awareness",
           data: {
             alert,
             severity: alert.severity,
@@ -681,7 +681,7 @@ export class TacticalResponseEngine {
     this.statistics = this.getInitialStatistics();
     this.isInitialized = false;
     
-    BridgeLink.emit('tactical-response:cleanup', 'TacticalResponse', {
+    BridgeLink.emit("tactical-response:cleanup", "TacticalResponse", {
       timestamp: Date.now(),
     });
   }

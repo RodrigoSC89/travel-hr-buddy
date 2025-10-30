@@ -59,7 +59,7 @@ export default function JointMissionsPage() {
   const [missions, setMissions] = useState<JointMission[]>([]);
   const [selectedMission, setSelectedMission] = useState<JointMission | null>(null);
   const [chatMessages, setChatMessages] = useState<MissionChat[]>([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
     loadEntities();
@@ -76,24 +76,24 @@ export default function JointMissionsPage() {
   const loadEntities = async () => {
     try {
       const { data, error } = await supabase
-        .from('external_entities')
-        .select('*')
-        .order('entity_name');
+        .from("external_entities")
+        .select("*")
+        .order("entity_name");
 
       if (error) throw error;
       setEntities(data || []);
     } catch (error) {
-      console.error('Error loading entities:', error);
-      toast.error('Failed to load entities');
+      console.error("Error loading entities:", error);
+      toast.error("Failed to load entities");
     }
   };
 
   const loadMissions = async () => {
     try {
       const { data, error } = await supabase
-        .from('joint_missions')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("joint_missions")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       setMissions(data || []);
@@ -102,35 +102,35 @@ export default function JointMissionsPage() {
         setSelectedMission(data[0]);
       }
     } catch (error) {
-      console.error('Error loading missions:', error);
-      toast.error('Failed to load missions');
+      console.error("Error loading missions:", error);
+      toast.error("Failed to load missions");
     }
   };
 
   const loadChatMessages = async (missionId: string) => {
     try {
       const { data, error } = await supabase
-        .from('mission_chat')
-        .select('*')
-        .eq('mission_id', missionId)
-        .order('timestamp', { ascending: true });
+        .from("mission_chat")
+        .select("*")
+        .eq("mission_id", missionId)
+        .order("timestamp", { ascending: true });
 
       if (error) throw error;
       setChatMessages(data || []);
     } catch (error) {
-      console.error('Error loading chat:', error);
+      console.error("Error loading chat:", error);
     }
   };
 
   const initializeRealtime = () => {
     const channel = supabase
-      .channel('joint-missions-realtime')
+      .channel("joint-missions-realtime")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'mission_chat'
+          event: "*",
+          schema: "public",
+          table: "mission_chat"
         },
         () => {
           if (selectedMission) {
@@ -139,11 +139,11 @@ export default function JointMissionsPage() {
         }
       )
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'joint_missions'
+          event: "*",
+          schema: "public",
+          table: "joint_missions"
         },
         () => {
           loadMissions();
@@ -161,50 +161,50 @@ export default function JointMissionsPage() {
 
     try {
       const { error } = await supabase
-        .from('mission_chat')
+        .from("mission_chat")
         .insert({
           mission_id: selectedMission.id,
           message: newMessage,
-          message_type: 'text',
-          priority: 'normal'
+          message_type: "text",
+          priority: "normal"
         });
 
       if (error) throw error;
 
-      setNewMessage('');
-      toast.success('Message sent');
+      setNewMessage("");
+      toast.success("Message sent");
     } catch (error) {
-      console.error('Error sending message:', error);
-      toast.error('Failed to send message');
+      console.error("Error sending message:", error);
+      toast.error("Failed to send message");
     }
   };
 
   const getEntityIcon = (type: string) => {
     switch (type) {
-      case 'vessel': return Ship;
-      case 'aircraft': return Plane;
-      case 'satellite': return Satellite;
-      default: return Activity;
+    case "vessel": return Ship;
+    case "aircraft": return Plane;
+    case "satellite": return Satellite;
+    default: return Activity;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'planning': return 'bg-blue-500';
-      case 'paused': return 'bg-yellow-500';
-      case 'completed': return 'bg-gray-500';
-      default: return 'bg-gray-500';
+    case "active": return "bg-green-500";
+    case "planning": return "bg-blue-500";
+    case "paused": return "bg-yellow-500";
+    case "completed": return "bg-gray-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-blue-500';
-      default: return 'bg-gray-500';
+    case "critical": return "bg-red-500";
+    case "high": return "bg-orange-500";
+    case "medium": return "bg-yellow-500";
+    case "low": return "bg-blue-500";
+    default: return "bg-gray-500";
     }
   };
 
@@ -245,7 +245,7 @@ export default function JointMissionsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-500">
-              {missions.filter(m => m.status === 'active').length}
+              {missions.filter(m => m.status === "active").length}
             </div>
             <p className="text-xs text-muted-foreground">Currently running</p>
           </CardContent>
@@ -257,7 +257,7 @@ export default function JointMissionsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-500">
-              {entities.filter(e => e.status === 'available').length}
+              {entities.filter(e => e.status === "available").length}
             </div>
             <p className="text-xs text-muted-foreground">Ready to deploy</p>
           </CardContent>
@@ -292,7 +292,7 @@ export default function JointMissionsPage() {
                   <Card
                     key={mission.id}
                     className={`cursor-pointer transition-colors ${
-                      selectedMission?.id === mission.id ? 'border-primary' : 'hover:border-primary'
+                      selectedMission?.id === mission.id ? "border-primary" : "hover:border-primary"
                     }`}
                     onClick={() => setSelectedMission(mission)}
                   >
@@ -329,7 +329,7 @@ export default function JointMissionsPage() {
               Mission Communication
             </CardTitle>
             <CardDescription>
-              {selectedMission ? selectedMission.mission_name : 'Select a mission'}
+              {selectedMission ? selectedMission.mission_name : "Select a mission"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -367,7 +367,7 @@ export default function JointMissionsPage() {
                         <CardContent className="pt-4">
                           <div className="space-y-1">
                             <div className="flex items-center justify-between">
-                              <Badge variant={msg.message_type === 'alert' ? 'destructive' : 'outline'}>
+                              <Badge variant={msg.message_type === "alert" ? "destructive" : "outline"}>
                                 {msg.message_type}
                               </Badge>
                               <span className="text-xs text-muted-foreground">
@@ -388,7 +388,7 @@ export default function JointMissionsPage() {
                     placeholder="Type a message..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                    onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                   />
                   <Button onClick={sendMessage}>
                     <Send className="h-4 w-4" />
@@ -432,8 +432,8 @@ export default function JointMissionsPage() {
                           <Badge variant="outline">{entity.entity_type}</Badge>
                           <p className="text-muted-foreground">{entity.organization}</p>
                           <Badge className={
-                            entity.status === 'available' ? 'bg-green-500' :
-                            entity.status === 'busy' ? 'bg-yellow-500' : 'bg-gray-500'
+                            entity.status === "available" ? "bg-green-500" :
+                              entity.status === "busy" ? "bg-yellow-500" : "bg-gray-500"
                           }>
                             {entity.status}
                           </Badge>

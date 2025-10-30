@@ -30,14 +30,14 @@ class NavigationCopilotV3Service {
     const { data: userData } = await supabase.auth.getUser();
 
     const { data, error } = await supabase
-      .from('autonomous_routes')
+      .from("autonomous_routes")
       .insert([{
         route_name: route.route_name,
         origin: route.origin,
         destination: route.destination,
         waypoints: route.waypoints || [],
-        status: 'planning',
-        autonomy_level: route.autonomy_level || 'full',
+        status: "planning",
+        autonomy_level: route.autonomy_level || "full",
         current_position: route.origin,
         obstacles_detected: [],
         environmental_conditions: {},
@@ -64,9 +64,9 @@ class NavigationCopilotV3Service {
 
     // Update route to active
     await supabase
-      .from('autonomous_routes')
-      .update({ status: 'active' })
-      .eq('id', routeId);
+      .from("autonomous_routes")
+      .update({ status: "active" })
+      .eq("id", routeId);
 
     // Monitor every 5 seconds
     this.monitoringInterval = setInterval(() => {
@@ -89,12 +89,12 @@ class NavigationCopilotV3Service {
    */
   private async monitorRoute(routeId: string): Promise<void> {
     const { data: route } = await supabase
-      .from('autonomous_routes')
-      .select('*')
-      .eq('id', routeId)
+      .from("autonomous_routes")
+      .select("*")
+      .eq("id", routeId)
       .single();
 
-    if (!route || route.status !== 'active') {
+    if (!route || route.status !== "active") {
       this.stopRouteMonitoring();
       return;
     }
@@ -108,29 +108,29 @@ class NavigationCopilotV3Service {
     if (obstacles.length > 0) {
       // Update route with obstacles
       await supabase
-        .from('autonomous_routes')
+        .from("autonomous_routes")
         .update({ obstacles_detected: obstacles })
-        .eq('id', routeId);
+        .eq("id", routeId);
 
       // Create alerts
       for (const obstacle of obstacles) {
-        if (obstacle.severity === 'high' || obstacle.severity === 'critical') {
-          await this.createAlert(routeId, 'obstacle', obstacle.severity, 
+        if (obstacle.severity === "high" || obstacle.severity === "critical") {
+          await this.createAlert(routeId, "obstacle", obstacle.severity, 
             `${obstacle.type} detected at ${obstacle.distance}m`, 
             route.current_position);
         }
       }
 
       // Trigger replanning if needed
-      if (obstacles.some(o => o.severity === 'critical')) {
-        await this.triggerReplan(routeId, route, 'Critical obstacle detected');
+      if (obstacles.some(o => o.severity === "critical")) {
+        await this.triggerReplan(routeId, route, "Critical obstacle detected");
       }
     }
 
     // Check weather conditions
-    if (environment.risk_assessment.overall_risk === 'high') {
-      await this.createAlert(routeId, 'weather', 'warning',
-        'Adverse weather conditions detected', route.current_position);
+    if (environment.risk_assessment.overall_risk === "high") {
+      await this.createAlert(routeId, "weather", "warning",
+        "Adverse weather conditions detected", route.current_position);
     }
 
     // Simulate progress
@@ -142,14 +142,14 @@ class NavigationCopilotV3Service {
    */
   private async checkEnvironment(routeId: string, route: AutonomousRoute): Promise<NavigationEnvironment> {
     const weatherConditions = {
-      condition: ['clear', 'cloudy', 'rainy', 'stormy'][Math.floor(Math.random() * 4)],
+      condition: ["clear", "cloudy", "rainy", "stormy"][Math.floor(Math.random() * 4)],
       temperature: 15 + Math.random() * 15,
       humidity: 50 + Math.random() * 40,
       precipitation: Math.random() * 10,
     };
 
     const seaState = {
-      state: ['calm', 'moderate', 'rough', 'very_rough'][Math.floor(Math.random() * 4)],
+      state: ["calm", "moderate", "rough", "very_rough"][Math.floor(Math.random() * 4)],
       wave_height: Math.random() * 5,
       wave_period: 5 + Math.random() * 10,
       swell_direction: Math.random() * 360,
@@ -174,7 +174,7 @@ class NavigationCopilotV3Service {
       timestamp: new Date().toISOString(),
     };
 
-    await supabase.from('navigation_environment').insert([environment]);
+    await supabase.from("navigation_environment").insert([environment]);
 
     return environment as NavigationEnvironment;
   }
@@ -188,21 +188,21 @@ class NavigationCopilotV3Service {
     windSpeed: number
   ): { overall_risk: string; risk_factors: Array<{ factor: string; level: string }> } {
     const factors = [];
-    let overallRisk = 'low';
+    let overallRisk = "low";
 
-    if (weather.condition === 'stormy') {
-      factors.push({ factor: 'severe_weather', level: 'high' });
-      overallRisk = 'high';
+    if (weather.condition === "stormy") {
+      factors.push({ factor: "severe_weather", level: "high" });
+      overallRisk = "high";
     }
 
     if (seaState.wave_height > 3) {
-      factors.push({ factor: 'high_waves', level: 'medium' });
-      if (overallRisk === 'low') overallRisk = 'medium';
+      factors.push({ factor: "high_waves", level: "medium" });
+      if (overallRisk === "low") overallRisk = "medium";
     }
 
     if (windSpeed > 30) {
-      factors.push({ factor: 'strong_winds', level: 'medium' });
-      if (overallRisk === 'low') overallRisk = 'medium';
+      factors.push({ factor: "strong_winds", level: "medium" });
+      if (overallRisk === "low") overallRisk = "medium";
     }
 
     return {
@@ -226,9 +226,9 @@ class NavigationCopilotV3Service {
     if (Math.random() > 0.8) {
       return [{
         id: `OBS-${Date.now()}`,
-        type: ['vessel', 'debris', 'shallow_water', 'restricted_area'][Math.floor(Math.random() * 4)],
+        type: ["vessel", "debris", "shallow_water", "restricted_area"][Math.floor(Math.random() * 4)],
         location: { lat: 0, lon: 0 },
-        severity: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)],
+        severity: ["low", "medium", "high"][Math.floor(Math.random() * 3)],
         detected_at: new Date().toISOString(),
         distance: Math.random() * 1000,
       }];
@@ -246,15 +246,15 @@ class NavigationCopilotV3Service {
     message: string,
     location: any
   ): Promise<void> {
-    await supabase.from('navigation_alerts').insert([{
+    await supabase.from("navigation_alerts").insert([{
       route_id: routeId,
       alert_type: alertType,
       severity,
       message,
       location,
       visual_notification: true,
-      audio_notification: severity === 'critical',
-      status: 'active',
+      audio_notification: severity === "critical",
+      status: "active",
     }]);
   }
 
@@ -264,9 +264,9 @@ class NavigationCopilotV3Service {
   private async triggerReplan(routeId: string, currentRoute: AutonomousRoute, reason: string): Promise<void> {
     // Mark route as replanning
     await supabase
-      .from('autonomous_routes')
-      .update({ status: 'replanning' })
-      .eq('id', routeId);
+      .from("autonomous_routes")
+      .update({ status: "replanning" })
+      .eq("id", routeId);
 
     // Generate new route (simplified)
     const newRoute = {
@@ -275,7 +275,7 @@ class NavigationCopilotV3Service {
     };
 
     // Save replan history
-    await supabase.from('route_replan_history').insert([{
+    await supabase.from("route_replan_history").insert([{
       route_id: routeId,
       replan_reason: reason,
       original_route: {
@@ -291,15 +291,15 @@ class NavigationCopilotV3Service {
 
     // Update route with new plan
     await supabase
-      .from('autonomous_routes')
+      .from("autonomous_routes")
       .update({
         waypoints: newRoute.waypoints,
-        status: 'active',
+        status: "active",
       })
-      .eq('id', routeId);
+      .eq("id", routeId);
 
     // Create alert about replanning
-    await this.createAlert(routeId, 'route_deviation', 'info',
+    await this.createAlert(routeId, "route_deviation", "info",
       `Route automatically replanned: ${reason}`, currentRoute.current_position);
   }
 
@@ -332,7 +332,7 @@ class NavigationCopilotV3Service {
     const newLon = currentPos.lon + (dest.lon - currentPos.lon) * 0.01;
 
     await supabase
-      .from('autonomous_routes')
+      .from("autonomous_routes")
       .update({
         current_position: {
           lat: newLat,
@@ -341,7 +341,7 @@ class NavigationCopilotV3Service {
           speed: 10 + Math.random() * 10,
         },
       })
-      .eq('id', routeId);
+      .eq("id", routeId);
   }
 
   /**
@@ -349,10 +349,10 @@ class NavigationCopilotV3Service {
    */
   async getActiveRoutes(): Promise<AutonomousRoute[]> {
     const { data, error } = await supabase
-      .from('autonomous_routes')
-      .select('*')
-      .in('status', ['planning', 'active', 'replanning'])
-      .order('created_at', { ascending: false });
+      .from("autonomous_routes")
+      .select("*")
+      .in("status", ["planning", "active", "replanning"])
+      .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching routes:", error);
@@ -367,10 +367,10 @@ class NavigationCopilotV3Service {
    */
   async getRouteAlerts(routeId: string): Promise<NavigationAlert[]> {
     const { data, error } = await supabase
-      .from('navigation_alerts')
-      .select('*')
-      .eq('route_id', routeId)
-      .order('created_at', { ascending: false });
+      .from("navigation_alerts")
+      .select("*")
+      .eq("route_id", routeId)
+      .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching alerts:", error);
@@ -385,10 +385,10 @@ class NavigationCopilotV3Service {
    */
   async getReplanHistory(routeId: string): Promise<RouteReplanHistory[]> {
     const { data, error } = await supabase
-      .from('route_replan_history')
-      .select('*')
-      .eq('route_id', routeId)
-      .order('created_at', { ascending: false });
+      .from("route_replan_history")
+      .select("*")
+      .eq("route_id", routeId)
+      .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching replan history:", error);

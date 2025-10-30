@@ -4,17 +4,17 @@
  * Logs prompts, responses, performance metrics, and user context
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface AILogEntry {
   user_id?: string;
-  service: 'copilot' | 'vault_ai' | 'dp_intelligence' | 'forecast_engine' | 'other';
+  service: "copilot" | "vault_ai" | "dp_intelligence" | "forecast_engine" | "other";
   prompt: string;
   response?: string;
   response_time_ms?: number;
   model?: string;
   tokens_used?: number;
-  status: 'success' | 'error' | 'timeout';
+  status: "success" | "error" | "timeout";
   error_message?: string;
   metadata?: Record<string, any>;
 }
@@ -44,14 +44,14 @@ class AILogger {
       };
 
       const { error } = await supabase
-        .from('ai_logs')
+        .from("ai_logs")
         .insert(logData);
 
       if (error) {
-        console.error('Failed to log AI interaction:', error);
+        console.error("Failed to log AI interaction:", error);
       }
     } catch (error) {
-      console.error('Error in AILogger.log:', error);
+      console.error("Error in AILogger.log:", error);
     }
   }
 
@@ -59,13 +59,13 @@ class AILogger {
    * Log AI interaction with timing wrapper
    */
   async logWithTiming<T>(
-    service: AILogEntry['service'],
+    service: AILogEntry["service"],
     prompt: string,
     aiCall: () => Promise<T>,
     model?: string
   ): Promise<T> {
     const startTime = Date.now();
-    let status: 'success' | 'error' | 'timeout' = 'success';
+    let status: "success" | "error" | "timeout" = "success";
     let errorMessage: string | undefined;
     let response: T;
 
@@ -73,8 +73,8 @@ class AILogger {
       response = await aiCall();
       return response;
     } catch (error: any) {
-      status = 'error';
-      errorMessage = error.message || 'Unknown error';
+      status = "error";
+      errorMessage = error.message || "Unknown error";
       throw error;
     } finally {
       const responseTime = Date.now() - startTime;
@@ -106,7 +106,7 @@ class AILogger {
   private hashSensitiveData(data: string): string {
     // Return first 100 chars + hash of rest
     if (data.length <= 100) return data;
-    return data.slice(0, 100) + '...[' + btoa(data.slice(100)).slice(0, 20) + ']';
+    return data.slice(0, 100) + "...[" + btoa(data.slice(100)).slice(0, 20) + "]";
   }
 
   /**
@@ -121,24 +121,24 @@ class AILogger {
   } = {}) {
     try {
       let query = supabase
-        .from('ai_logs')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("ai_logs")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (filters.service) {
-        query = query.eq('service', filters.service);
+        query = query.eq("service", filters.service);
       }
 
       if (filters.status) {
-        query = query.eq('status', filters.status);
+        query = query.eq("status", filters.status);
       }
 
       if (filters.startDate) {
-        query = query.gte('created_at', filters.startDate.toISOString());
+        query = query.gte("created_at", filters.startDate.toISOString());
       }
 
       if (filters.endDate) {
-        query = query.lte('created_at', filters.endDate.toISOString());
+        query = query.lte("created_at", filters.endDate.toISOString());
       }
 
       if (filters.limit) {
@@ -151,7 +151,7 @@ class AILogger {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching AI logs:', error);
+      console.error("Error fetching AI logs:", error);
       return [];
     }
   }
@@ -162,11 +162,11 @@ class AILogger {
   async getMetrics(service?: string) {
     try {
       let query = supabase
-        .from('ai_logs')
-        .select('response_time_ms, status, tokens_used');
+        .from("ai_logs")
+        .select("response_time_ms, status, tokens_used");
 
       if (service) {
-        query = query.eq('service', service);
+        query = query.eq("service", service);
       }
 
       const { data, error } = await query;
@@ -183,7 +183,7 @@ class AILogger {
       }
 
       const totalCalls = data.length;
-      const successCalls = data.filter(log => log.status === 'success').length;
+      const successCalls = data.filter(log => log.status === "success").length;
       const avgResponseTime = data.reduce((sum, log) => sum + (log.response_time_ms || 0), 0) / totalCalls;
       const avgTokens = data.reduce((sum, log) => sum + (log.tokens_used || 0), 0) / totalCalls;
 
@@ -194,7 +194,7 @@ class AILogger {
         avgTokens: Math.round(avgTokens),
       };
     } catch (error) {
-      console.error('Error fetching AI metrics:', error);
+      console.error("Error fetching AI metrics:", error);
       return {
         avgResponseTime: 0,
         successRate: 0,

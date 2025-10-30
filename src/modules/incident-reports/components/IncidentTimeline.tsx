@@ -87,7 +87,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       setIsLoading(true);
       
       // Try to load from incident_reports table
-      let { data, error } = await supabase
+      const { data, error } = await supabase
         .from("incident_reports")
         .select("*")
         .order("created_at", { ascending: false });

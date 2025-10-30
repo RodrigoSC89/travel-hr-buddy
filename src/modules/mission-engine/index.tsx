@@ -309,9 +309,9 @@ const MissionEngine: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <span className={`px-2 py-1 rounded text-xs ${
                               mission.status === "in-progress" ? "bg-blue-500/20 text-blue-500" :
-                              mission.status === "completed" ? "bg-green-500/20 text-green-500" :
-                              mission.status === "planned" ? "bg-yellow-500/20 text-yellow-500" :
-                              "bg-gray-500/20 text-gray-500"
+                                mission.status === "completed" ? "bg-green-500/20 text-green-500" :
+                                  mission.status === "planned" ? "bg-yellow-500/20 text-yellow-500" :
+                                    "bg-gray-500/20 text-gray-500"
                             }`}>
                               {mission.status}
                             </span>

@@ -3,8 +3,8 @@
  * React provider for PostHog telemetry
  */
 
-import React, { useEffect, createContext, useContext } from 'react';
-import { initTelemetry, getTelemetryStatus } from './index';
+import React, { useEffect, createContext, useContext } from "react";
+import { initTelemetry, getTelemetryStatus } from "./index";
 
 interface TelemetryContextValue {
   isEnabled: boolean;

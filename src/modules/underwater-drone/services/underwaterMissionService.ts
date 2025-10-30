@@ -94,7 +94,7 @@ class UnderwaterMissionService {
         user_id: userId || user.id,
         name: mission.name,
         description: mission.description,
-        mission_type: mission.missionType || 'survey',
+        mission_type: mission.missionType || "survey",
         status: mission.status,
         start_location: mission.waypoints[0]?.position || { lat: 0, lon: 0, depth: 0 },
         waypoints: mission.waypoints.map(wp => ({
@@ -293,8 +293,8 @@ class UnderwaterMissionService {
 
       return {
         totalMissions: missions.length,
-        completedMissions: missions.filter(m => m.status === 'completed').length,
-        activeMissions: missions.filter(m => m.status === 'active').length,
+        completedMissions: missions.filter(m => m.status === "completed").length,
+        activeMissions: missions.filter(m => m.status === "active").length,
         avgProgress: missions.length > 0 
           ? missions.reduce((sum, m) => sum + m.progress, 0) / missions.length 
           : 0,

@@ -19,8 +19,8 @@ export function LayoutGrid({
   columns = { mobile: 1, tablet: 2, desktop: 4 } 
 }: LayoutGridProps) {
   const gridClasses = [
-    'grid',
-    'gap-4',
+    "grid",
+    "gap-4",
     // Mobile
     `grid-cols-${columns.mobile || 1}`,
     // Tablet
@@ -28,16 +28,16 @@ export function LayoutGrid({
     // Desktop
     columns.desktop && `lg:grid-cols-${columns.desktop}`,
     // Performance optimizations
-    'will-change-auto',
+    "will-change-auto",
     // Prevent layout shift
-    'min-h-[120px]',
-  ].filter(Boolean).join(' ');
+    "min-h-[120px]",
+  ].filter(Boolean).join(" ");
 
   return (
     <div className={gridClasses} style={{ 
       // Ensure minimum dimensions to prevent CLS
-      minHeight: 'min-content',
-      contentVisibility: 'auto', // Only render visible items
+      minHeight: "min-content",
+      contentVisibility: "auto", // Only render visible items
     }}>
       {children}
     </div>

@@ -112,41 +112,41 @@ class DroneSimulator {
     // Execute command
     let result: CommandResult;
     switch (command) {
-      case "takeoff":
-        result = await this.executeTakeoff(drone, startTime);
-        break;
-      case "land":
-        result = await this.executeLand(drone, startTime);
-        break;
-      case "hover":
-        result = await this.executeHover(drone, startTime);
-        break;
-      case "return_home":
-        result = await this.executeReturnHome(drone, startTime);
-        break;
-      case "set_altitude":
-        result = await this.executeSetAltitude(drone, params?.altitude || 0, startTime);
-        break;
-      case "emergency_stop":
-        result = await this.executeEmergencyStop(drone, startTime);
-        break;
-      case "go_to_waypoint":
-        result = await this.executeGoToWaypoint(
-          drone,
-          params?.latitude || drone.latitude,
-          params?.longitude || drone.longitude,
-          startTime
-        );
-        break;
-      default:
-        result = {
-          success: false,
-          message: `Unknown command: ${command}`,
-          executionTime: Date.now() - startTime,
-          timestamp: new Date().toISOString(),
-          droneId,
-          command,
-        };
+    case "takeoff":
+      result = await this.executeTakeoff(drone, startTime);
+      break;
+    case "land":
+      result = await this.executeLand(drone, startTime);
+      break;
+    case "hover":
+      result = await this.executeHover(drone, startTime);
+      break;
+    case "return_home":
+      result = await this.executeReturnHome(drone, startTime);
+      break;
+    case "set_altitude":
+      result = await this.executeSetAltitude(drone, params?.altitude || 0, startTime);
+      break;
+    case "emergency_stop":
+      result = await this.executeEmergencyStop(drone, startTime);
+      break;
+    case "go_to_waypoint":
+      result = await this.executeGoToWaypoint(
+        drone,
+        params?.latitude || drone.latitude,
+        params?.longitude || drone.longitude,
+        startTime
+      );
+      break;
+    default:
+      result = {
+        success: false,
+        message: `Unknown command: ${command}`,
+        executionTime: Date.now() - startTime,
+        timestamp: new Date().toISOString(),
+        droneId,
+        command,
+      };
     }
 
     // Update last update time

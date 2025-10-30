@@ -152,7 +152,7 @@ export class BackupService {
    * Simulate backup creation (for testing)
    */
   static async simulateBackup(): Promise<{ success: boolean; backup?: SystemBackup; error?: string }> {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const filePath = `/backups/nautilus_backup_${timestamp}.sql.gz`;
     
     const result = await this.createBackupRecord(filePath, "manual", {

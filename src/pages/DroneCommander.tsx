@@ -171,10 +171,10 @@ const DroneCommanderPage: React.FC = () => {
                           drone.status === "flying" || drone.status === "hovering"
                             ? "bg-green-500/10 text-green-500"
                             : drone.status === "idle"
-                            ? "bg-blue-500/10 text-blue-500"
-                            : drone.status === "emergency"
-                            ? "bg-red-500/10 text-red-500"
-                            : "bg-gray-500/10 text-gray-500"
+                              ? "bg-blue-500/10 text-blue-500"
+                              : drone.status === "emergency"
+                                ? "bg-red-500/10 text-red-500"
+                                : "bg-gray-500/10 text-gray-500"
                         }
                       >
                         {drone.status}

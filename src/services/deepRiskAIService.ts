@@ -4,7 +4,7 @@
  * Browser-based AI risk analysis using ONNX Runtime Web
  */
 
-import * as ort from 'onnxruntime-web';
+import * as ort from "onnxruntime-web";
 import { supabase } from "@/integrations/supabase/client";
 import type { RiskForecast, ONNXModel, RiskLevel } from "@/types/patches-536-540";
 
@@ -52,26 +52,26 @@ class DeepRiskAIService {
   /**
    * Register or update model in database
    */
-  private async registerModel(model: Omit<ONNXModel, 'id' | 'created_at' | 'updated_at'>): Promise<void> {
+  private async registerModel(model: Omit<ONNXModel, "id" | "created_at" | "updated_at">): Promise<void> {
     const { data: existing } = await supabase
-      .from('onnx_models')
-      .select('*')
-      .eq('model_name', model.model_name)
+      .from("onnx_models")
+      .select("*")
+      .eq("model_name", model.model_name)
       .single();
 
     if (existing) {
       await supabase
-        .from('onnx_models')
+        .from("onnx_models")
         .update({
           model_version: model.model_version,
           status: model.status,
           performance_metrics: model.performance_metrics,
           updated_at: new Date().toISOString(),
         })
-        .eq('model_name', model.model_name);
+        .eq("model_name", model.model_name);
     } else {
       await supabase
-        .from('onnx_models')
+        .from("onnx_models")
         .insert([model]);
     }
   }
@@ -247,7 +247,7 @@ class DeepRiskAIService {
       const { data: userData } = await supabase.auth.getUser();
 
       const { data, error } = await supabase
-        .from('risk_forecast')
+        .from("risk_forecast")
         .insert([{
           forecast_name: name,
           risk_score: result.score,
@@ -284,9 +284,9 @@ class DeepRiskAIService {
    */
   async getRiskForecasts(limit = 20): Promise<RiskForecast[]> {
     const { data, error } = await supabase
-      .from('risk_forecast')
-      .select('*')
-      .order('created_at', { ascending: false })
+      .from("risk_forecast")
+      .select("*")
+      .order("created_at", { ascending: false })
       .limit(limit);
 
     if (error) {
@@ -315,10 +315,10 @@ class DeepRiskAIService {
       avgRiskScore: forecasts.length > 0
         ? forecasts.reduce((sum, f) => sum + f.risk_score, 0) / forecasts.length
         : 0,
-      criticalCount: forecasts.filter(f => f.risk_level === 'critical').length,
-      highCount: forecasts.filter(f => f.risk_level === 'high').length,
-      mediumCount: forecasts.filter(f => f.risk_level === 'medium').length,
-      lowCount: forecasts.filter(f => f.risk_level === 'low').length,
+      criticalCount: forecasts.filter(f => f.risk_level === "critical").length,
+      highCount: forecasts.filter(f => f.risk_level === "high").length,
+      mediumCount: forecasts.filter(f => f.risk_level === "medium").length,
+      lowCount: forecasts.filter(f => f.risk_level === "low").length,
     };
 
     return stats;

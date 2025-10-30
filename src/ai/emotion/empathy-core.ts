@@ -7,9 +7,9 @@
  * @created 2025-01-24
  */
 
-export type EmotionalState = 'calm' | 'stressed' | 'anxious' | 'focused' | 'tired' | 'energized';
-export type StressLevel = 'low' | 'moderate' | 'high' | 'critical';
-export type BiometricSource = 'mock' | 'wearable' | 'manual';
+export type EmotionalState = "calm" | "stressed" | "anxious" | "focused" | "tired" | "energized";
+export type StressLevel = "low" | "moderate" | "high" | "critical";
+export type BiometricSource = "mock" | "wearable" | "manual";
 
 export interface BiometricData {
   heartRate?: number; // bpm
@@ -31,15 +31,15 @@ export interface EmotionalContext {
 export interface EmpathyResponse {
   originalMessage: string;
   adjustedMessage: string;
-  tone: 'supportive' | 'neutral' | 'encouraging' | 'calming';
+  tone: "supportive" | "neutral" | "encouraging" | "calming";
   suggestions: string[];
   alerts: string[];
 }
 
 export interface CognitiveReliefAction {
-  type: 'break_suggestion' | 'task_simplification' | 'priority_adjustment' | 'delegation_offer';
+  type: "break_suggestion" | "task_simplification" | "priority_adjustment" | "delegation_offer";
   message: string;
-  priority: 'low' | 'medium' | 'high';
+  priority: "low" | "medium" | "high";
 }
 
 class EmpathyCore {
@@ -70,7 +70,7 @@ class EmpathyCore {
       this.emotionalHistory.shift();
     }
 
-    console.log('[EmpathyCore] Emotional state interpreted:', {
+    console.log("[EmpathyCore] Emotional state interpreted:", {
       emotionalState,
       stressLevel,
       cognitiveLoad: cognitiveLoad.toFixed(2),
@@ -83,16 +83,16 @@ class EmpathyCore {
   /**
    * Simula dados biométricos (mock)
    */
-  generateMockBiometrics(stressScenario: 'normal' | 'moderate' | 'high' = 'normal'): BiometricData {
+  generateMockBiometrics(stressScenario: "normal" | "moderate" | "high" = "normal"): BiometricData {
     let baseHeartRate = 70;
     let baseHRV = 50;
     let baseRespiration = 14;
 
-    if (stressScenario === 'moderate') {
+    if (stressScenario === "moderate") {
       baseHeartRate = 85;
       baseHRV = 35;
       baseRespiration = 18;
-    } else if (stressScenario === 'high') {
+    } else if (stressScenario === "high") {
       baseHeartRate = 100;
       baseHRV = 20;
       baseRespiration = 22;
@@ -104,7 +104,7 @@ class EmpathyCore {
       respirationRate: baseRespiration + Math.random() * 4 - 2,
       skinTemperature: 36.5 + Math.random() * 0.5,
       timestamp: new Date(),
-      source: 'mock'
+      source: "mock"
     };
   }
 
@@ -115,7 +115,7 @@ class EmpathyCore {
     const context = this.currentContext || this.getDefaultContext();
     
     let adjustedMessage = message;
-    let tone: EmpathyResponse['tone'] = 'neutral';
+    let tone: EmpathyResponse["tone"] = "neutral";
     const suggestions: string[] = [];
     const alerts: string[] = [];
 
@@ -125,31 +125,31 @@ class EmpathyCore {
     }
 
     // Ajusta tom com base no estado emocional
-    if (context.emotionalState === 'stressed' || context.stressLevel === 'high' || context.stressLevel === 'critical') {
-      tone = 'calming';
+    if (context.emotionalState === "stressed" || context.stressLevel === "high" || context.stressLevel === "critical") {
+      tone = "calming";
       adjustedMessage = this.applyCalmingTone(message);
-      suggestions.push('Considere fazer uma pausa de 5 minutos');
+      suggestions.push("Considere fazer uma pausa de 5 minutos");
       
-      if (context.stressLevel === 'critical') {
-        alerts.push('⚠️ Nível de stress crítico detectado. Recomendo pausar atividades não-críticas.');
+      if (context.stressLevel === "critical") {
+        alerts.push("⚠️ Nível de stress crítico detectado. Recomendo pausar atividades não-críticas.");
       }
-    } else if (context.emotionalState === 'anxious') {
-      tone = 'supportive';
+    } else if (context.emotionalState === "anxious") {
+      tone = "supportive";
       adjustedMessage = this.applySupportiveTone(message);
-      suggestions.push('Vamos focar em uma tarefa de cada vez');
-    } else if (context.emotionalState === 'tired') {
-      tone = 'encouraging';
+      suggestions.push("Vamos focar em uma tarefa de cada vez");
+    } else if (context.emotionalState === "tired") {
+      tone = "encouraging";
       adjustedMessage = this.applyEncouragingTone(message);
-      suggestions.push('Você está progredindo bem. Uma pausa pode ajudar a recarregar.');
+      suggestions.push("Você está progredindo bem. Uma pausa pode ajudar a recarregar.");
     }
 
     // Adiciona sugestões baseadas em carga cognitiva
     if (context.cognitiveLoad > 0.8) {
-      suggestions.push('Carga cognitiva alta. Sugiro simplificar ou adiar tarefas secundárias.');
-      alerts.push('🧠 Sobrecarga cognitiva detectada');
+      suggestions.push("Carga cognitiva alta. Sugiro simplificar ou adiar tarefas secundárias.");
+      alerts.push("🧠 Sobrecarga cognitiva detectada");
     }
 
-    console.log('[EmpathyCore] Response adjusted:', {
+    console.log("[EmpathyCore] Response adjusted:", {
       emotionalState: context.emotionalState,
       stressLevel: context.stressLevel,
       tone,
@@ -173,36 +173,36 @@ class EmpathyCore {
     const context = this.currentContext || this.getDefaultContext();
     const actions: CognitiveReliefAction[] = [];
 
-    if (context.cognitiveLoad > 0.7 || context.stressLevel === 'high' || context.stressLevel === 'critical') {
+    if (context.cognitiveLoad > 0.7 || context.stressLevel === "high" || context.stressLevel === "critical") {
       // Sugerir pausa
       actions.push({
-        type: 'break_suggestion',
-        message: '🌟 Detectei que você está sobrecarregado. Que tal uma pausa de 10 minutos?',
-        priority: context.stressLevel === 'critical' ? 'high' : 'medium'
+        type: "break_suggestion",
+        message: "🌟 Detectei que você está sobrecarregado. Que tal uma pausa de 10 minutos?",
+        priority: context.stressLevel === "critical" ? "high" : "medium"
       });
 
       // Simplificação de tarefas
       if (context.cognitiveLoad > 0.8) {
         actions.push({
-          type: 'task_simplification',
-          message: '💡 Posso simplificar suas tarefas atuais ou dividir em etapas menores?',
-          priority: 'medium'
+          type: "task_simplification",
+          message: "💡 Posso simplificar suas tarefas atuais ou dividir em etapas menores?",
+          priority: "medium"
         });
       }
 
       // Ajuste de prioridades
       actions.push({
-        type: 'priority_adjustment',
-        message: '📊 Gostaria que eu reorganize suas prioridades baseado na urgência real?',
-        priority: 'medium'
+        type: "priority_adjustment",
+        message: "📊 Gostaria que eu reorganize suas prioridades baseado na urgência real?",
+        priority: "medium"
       });
 
       // Oferta de delegação
-      if (context.stressLevel === 'critical') {
+      if (context.stressLevel === "critical") {
         actions.push({
-          type: 'delegation_offer',
-          message: '🤝 Posso assumir algumas tarefas automatizáveis para reduzir sua carga?',
-          priority: 'high'
+          type: "delegation_offer",
+          message: "🤝 Posso assumir algumas tarefas automatizáveis para reduzir sua carga?",
+          priority: "high"
         });
       }
     }
@@ -236,35 +236,35 @@ class EmpathyCore {
    * Infere estado emocional a partir de dados biométricos
    */
   private inferEmotionalState(data: BiometricData): EmotionalState {
-    if (!data.heartRate) return 'calm';
+    if (!data.heartRate) return "calm";
 
     const hr = data.heartRate;
     const hrv = data.heartRateVariability || 50;
 
     if (hr > 95 && hrv < 30) {
-      return 'stressed';
+      return "stressed";
     }
     if (hr > 85 && hrv < 40) {
-      return 'anxious';
+      return "anxious";
     }
     if (hr < 60 && hrv < 35) {
-      return 'tired';
+      return "tired";
     }
     if (hr > 80 && hrv > 50) {
-      return 'energized';
+      return "energized";
     }
     if (hr >= 60 && hr <= 75 && hrv >= 45) {
-      return 'focused';
+      return "focused";
     }
 
-    return 'calm';
+    return "calm";
   }
 
   /**
    * Calcula nível de stress
    */
   private calculateStressLevel(data: BiometricData): StressLevel {
-    if (!data.heartRate) return 'low';
+    if (!data.heartRate) return "low";
 
     const hr = data.heartRate;
     const hrv = data.heartRateVariability || 50;
@@ -284,10 +284,10 @@ class EmpathyCore {
     if (resp > 20) stressScore += 2;
     else if (resp > 16) stressScore += 1;
 
-    if (stressScore >= 6) return 'critical';
-    if (stressScore >= 4) return 'high';
-    if (stressScore >= 2) return 'moderate';
-    return 'low';
+    if (stressScore >= 6) return "critical";
+    if (stressScore >= 4) return "high";
+    if (stressScore >= 2) return "moderate";
+    return "low";
   }
 
   /**
@@ -296,11 +296,11 @@ class EmpathyCore {
   private estimateCognitiveLoad(data: BiometricData, state: EmotionalState): number {
     let load = 0.5; // Base load
 
-    if (state === 'stressed' || state === 'anxious') {
+    if (state === "stressed" || state === "anxious") {
       load += 0.3;
-    } else if (state === 'tired') {
+    } else if (state === "tired") {
       load += 0.2;
-    } else if (state === 'focused') {
+    } else if (state === "focused") {
       load += 0.1;
     }
 
@@ -318,14 +318,14 @@ class EmpathyCore {
   private processUserFeedback(feedback: string): void {
     const lowerFeedback = feedback.toLowerCase();
     
-    if (lowerFeedback.includes('estressado') || lowerFeedback.includes('cansado')) {
+    if (lowerFeedback.includes("estressado") || lowerFeedback.includes("cansado")) {
       if (this.currentContext) {
         this.currentContext.cognitiveLoad = Math.min(1.0, this.currentContext.cognitiveLoad + 0.2);
-        this.currentContext.stressLevel = 'high';
+        this.currentContext.stressLevel = "high";
       }
     }
     
-    console.log('[EmpathyCore] User feedback processed:', feedback);
+    console.log("[EmpathyCore] User feedback processed:", feedback);
   }
 
   /**
@@ -354,8 +354,8 @@ class EmpathyCore {
    */
   private getDefaultContext(): EmotionalContext {
     return {
-      emotionalState: 'calm',
-      stressLevel: 'low',
+      emotionalState: "calm",
+      stressLevel: "low",
       cognitiveLoad: 0.5,
       timestamp: new Date()
     };

@@ -3,9 +3,9 @@
  * Displays satellite orbit path
  */
 
-import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Activity } from 'lucide-react';
+import React from "react";
+import { Card } from "@/components/ui/card";
+import { Activity } from "lucide-react";
 
 interface OrbitVisualizationProps {
   satellite: {
@@ -24,7 +24,7 @@ export const OrbitVisualization: React.FC<OrbitVisualizationProps> = ({ satellit
   // Calculate orbital parameters
   const orbitalPeriod = position?.altitude 
     ? ((2 * Math.PI * Math.sqrt(Math.pow((6371 + position.altitude), 3) / 398600)) / 60).toFixed(2)
-    : 'N/A';
+    : "N/A";
 
   return (
     <div className="space-y-4">
@@ -53,14 +53,14 @@ export const OrbitVisualization: React.FC<OrbitVisualizationProps> = ({ satellit
           <Card className="p-4">
             <div className="text-sm text-muted-foreground mb-1">Velocidade</div>
             <div className="text-2xl font-bold">
-              {position.velocity?.toFixed(2) || 'N/A'} km/s
+              {position.velocity?.toFixed(2) || "N/A"} km/s
             </div>
           </Card>
           
           <Card className="p-4">
             <div className="text-sm text-muted-foreground mb-1">Tipo de Órbita</div>
             <div className="text-2xl font-bold">
-              {position.altitude < 2000 ? 'LEO' : position.altitude < 35786 ? 'MEO' : 'GEO'}
+              {position.altitude < 2000 ? "LEO" : position.altitude < 35786 ? "MEO" : "GEO"}
             </div>
           </Card>
         </div>

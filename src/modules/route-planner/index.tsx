@@ -125,7 +125,7 @@ const RoutePlanner = () => {
       
       // Convert to map format
       const mapRoute: RouteData = {
-        id: optimalRoute.id || 'ai-optimized',
+        id: optimalRoute.id || "ai-optimized",
         name: optimalRoute.name,
         type: "planned",
         color: "#10b981", // Green for AI optimized
@@ -376,8 +376,8 @@ const RoutePlanner = () => {
                         alert.severity === "critical"
                           ? "destructive"
                           : alert.severity === "high"
-                          ? "destructive"
-                          : "default"
+                            ? "destructive"
+                            : "default"
                       }
                     >
                       {alert.severity}

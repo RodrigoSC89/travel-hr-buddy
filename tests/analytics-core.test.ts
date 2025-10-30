@@ -3,7 +3,7 @@
  * Tests data aggregation, metrics calculation, and analytics functions
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 
 interface AnalyticsData {
   timestamp: string;
@@ -20,47 +20,47 @@ interface MetricSummary {
   count: number;
 }
 
-describe('Analytics Core Module', () => {
-  describe('Data Aggregation', () => {
-    it('should calculate sum of values', () => {
+describe("Analytics Core Module", () => {
+  describe("Data Aggregation", () => {
+    it("should calculate sum of values", () => {
       const data: AnalyticsData[] = [
-        { timestamp: '2025-10-01', metric: 'revenue', value: 1000 },
-        { timestamp: '2025-10-02', metric: 'revenue', value: 1500 },
-        { timestamp: '2025-10-03', metric: 'revenue', value: 2000 },
+        { timestamp: "2025-10-01", metric: "revenue", value: 1000 },
+        { timestamp: "2025-10-02", metric: "revenue", value: 1500 },
+        { timestamp: "2025-10-03", metric: "revenue", value: 2000 },
       ];
 
       const total = data.reduce((sum, item) => sum + item.value, 0);
       expect(total).toBe(4500);
     });
 
-    it('should calculate average of values', () => {
+    it("should calculate average of values", () => {
       const data: AnalyticsData[] = [
-        { timestamp: '2025-10-01', metric: 'score', value: 80 },
-        { timestamp: '2025-10-02', metric: 'score', value: 90 },
-        { timestamp: '2025-10-03', metric: 'score', value: 85 },
+        { timestamp: "2025-10-01", metric: "score", value: 80 },
+        { timestamp: "2025-10-02", metric: "score", value: 90 },
+        { timestamp: "2025-10-03", metric: "score", value: 85 },
       ];
 
       const average = data.reduce((sum, item) => sum + item.value, 0) / data.length;
       expect(average).toBe(85);
     });
 
-    it('should find minimum value', () => {
+    it("should find minimum value", () => {
       const values = [100, 50, 75, 25, 90];
       const min = Math.min(...values);
       expect(min).toBe(25);
     });
 
-    it('should find maximum value', () => {
+    it("should find maximum value", () => {
       const values = [100, 50, 75, 25, 90];
       const max = Math.max(...values);
       expect(max).toBe(100);
     });
 
-    it('should generate metric summary', () => {
+    it("should generate metric summary", () => {
       const data: AnalyticsData[] = [
-        { timestamp: '2025-10-01', metric: 'sales', value: 100 },
-        { timestamp: '2025-10-02', metric: 'sales', value: 150 },
-        { timestamp: '2025-10-03', metric: 'sales', value: 200 },
+        { timestamp: "2025-10-01", metric: "sales", value: 100 },
+        { timestamp: "2025-10-02", metric: "sales", value: 150 },
+        { timestamp: "2025-10-03", metric: "sales", value: 200 },
       ];
 
       const values = data.map(d => d.value);
@@ -80,12 +80,12 @@ describe('Analytics Core Module', () => {
     });
   });
 
-  describe('Time Series Analytics', () => {
-    it('should group data by date', () => {
+  describe("Time Series Analytics", () => {
+    it("should group data by date", () => {
       const data: AnalyticsData[] = [
-        { timestamp: '2025-10-01', metric: 'views', value: 100 },
-        { timestamp: '2025-10-01', metric: 'clicks', value: 50 },
-        { timestamp: '2025-10-02', metric: 'views', value: 150 },
+        { timestamp: "2025-10-01", metric: "views", value: 100 },
+        { timestamp: "2025-10-01", metric: "clicks", value: 50 },
+        { timestamp: "2025-10-02", metric: "views", value: 150 },
       ];
 
       const groupedByDate = data.reduce((acc, item) => {
@@ -96,10 +96,10 @@ describe('Analytics Core Module', () => {
       }, {} as Record<string, AnalyticsData[]>);
 
       expect(Object.keys(groupedByDate)).toHaveLength(2);
-      expect(groupedByDate['2025-10-01']).toHaveLength(2);
+      expect(groupedByDate["2025-10-01"]).toHaveLength(2);
     });
 
-    it('should calculate growth rate', () => {
+    it("should calculate growth rate", () => {
       const previousValue = 1000;
       const currentValue = 1200;
       const growthRate = ((currentValue - previousValue) / previousValue) * 100;
@@ -107,7 +107,7 @@ describe('Analytics Core Module', () => {
       expect(growthRate).toBe(20);
     });
 
-    it('should calculate moving average', () => {
+    it("should calculate moving average", () => {
       const values = [10, 20, 30, 40, 50];
       const windowSize = 3;
       
@@ -119,30 +119,30 @@ describe('Analytics Core Module', () => {
     });
   });
 
-  describe('Category Analytics', () => {
-    it('should group data by category', () => {
+  describe("Category Analytics", () => {
+    it("should group data by category", () => {
       const data: AnalyticsData[] = [
-        { timestamp: '2025-10-01', metric: 'sales', value: 100, category: 'A' },
-        { timestamp: '2025-10-01', metric: 'sales', value: 150, category: 'B' },
-        { timestamp: '2025-10-02', metric: 'sales', value: 200, category: 'A' },
+        { timestamp: "2025-10-01", metric: "sales", value: 100, category: "A" },
+        { timestamp: "2025-10-01", metric: "sales", value: 150, category: "B" },
+        { timestamp: "2025-10-02", metric: "sales", value: 200, category: "A" },
       ];
 
       const groupedByCategory = data.reduce((acc, item) => {
-        const cat = item.category || 'uncategorized';
+        const cat = item.category || "uncategorized";
         if (!acc[cat]) acc[cat] = 0;
         acc[cat] += item.value;
         return acc;
       }, {} as Record<string, number>);
 
-      expect(groupedByCategory['A']).toBe(300);
-      expect(groupedByCategory['B']).toBe(150);
+      expect(groupedByCategory["A"]).toBe(300);
+      expect(groupedByCategory["B"]).toBe(150);
     });
 
-    it('should calculate category percentages', () => {
+    it("should calculate category percentages", () => {
       const categoryTotals = {
-        'A': 300,
-        'B': 200,
-        'C': 500,
+        "A": 300,
+        "B": 200,
+        "C": 500,
       };
 
       const total = Object.values(categoryTotals).reduce((sum, v) => sum + v, 0);
@@ -151,14 +151,14 @@ describe('Analytics Core Module', () => {
         return acc;
       }, {} as Record<string, number>);
 
-      expect(percentages['A']).toBe(30);
-      expect(percentages['B']).toBe(20);
-      expect(percentages['C']).toBe(50);
+      expect(percentages["A"]).toBe(30);
+      expect(percentages["B"]).toBe(20);
+      expect(percentages["C"]).toBe(50);
     });
   });
 
-  describe('Statistical Functions', () => {
-    it('should calculate median', () => {
+  describe("Statistical Functions", () => {
+    it("should calculate median", () => {
       const values = [1, 3, 3, 6, 7, 8, 9];
       const sorted = [...values].sort((a, b) => a - b);
       const median = sorted[Math.floor(sorted.length / 2)];
@@ -166,7 +166,7 @@ describe('Analytics Core Module', () => {
       expect(median).toBe(6);
     });
 
-    it('should calculate standard deviation', () => {
+    it("should calculate standard deviation", () => {
       const values = [2, 4, 4, 4, 5, 5, 7, 9];
       const mean = values.reduce((sum, v) => sum + v, 0) / values.length;
       const squaredDiffs = values.map(v => Math.pow(v - mean, 2));
@@ -177,7 +177,7 @@ describe('Analytics Core Module', () => {
       expect(stdDev).toBeCloseTo(2, 0);
     });
 
-    it('should detect outliers', () => {
+    it("should detect outliers", () => {
       const values = [10, 12, 11, 13, 12, 100]; // 100 is an outlier
       const mean = values.reduce((sum, v) => sum + v, 0) / values.length;
       const threshold = mean * 2; // Simple threshold
@@ -187,8 +187,8 @@ describe('Analytics Core Module', () => {
     });
   });
 
-  describe('Performance Metrics', () => {
-    it('should calculate conversion rate', () => {
+  describe("Performance Metrics", () => {
+    it("should calculate conversion rate", () => {
       const visitors = 1000;
       const conversions = 150;
       const conversionRate = (conversions / visitors) * 100;
@@ -196,7 +196,7 @@ describe('Analytics Core Module', () => {
       expect(conversionRate).toBe(15);
     });
 
-    it('should calculate retention rate', () => {
+    it("should calculate retention rate", () => {
       const initialUsers = 1000;
       const returningUsers = 700;
       const retentionRate = (returningUsers / initialUsers) * 100;
@@ -204,7 +204,7 @@ describe('Analytics Core Module', () => {
       expect(retentionRate).toBe(70);
     });
 
-    it('should calculate churn rate', () => {
+    it("should calculate churn rate", () => {
       const startUsers = 1000;
       const lostUsers = 200;
       const churnRate = (lostUsers / startUsers) * 100;

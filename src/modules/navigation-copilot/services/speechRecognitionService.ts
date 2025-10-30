@@ -29,7 +29,7 @@ class SpeechRecognitionService {
   }
 
   private initializeSpeechRecognition() {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    if (!("webkitSpeechRecognition" in window) && !("SpeechRecognition" in window)) {
       logger.warn("Speech recognition not supported in this browser");
       return;
     }
@@ -39,7 +39,7 @@ class SpeechRecognitionService {
     
     this.recognition.continuous = true;
     this.recognition.interimResults = true;
-    this.recognition.lang = 'pt-BR'; // Portuguese
+    this.recognition.lang = "pt-BR"; // Portuguese
     
     this.recognition.onresult = (event: any) => {
       const last = event.results.length - 1;

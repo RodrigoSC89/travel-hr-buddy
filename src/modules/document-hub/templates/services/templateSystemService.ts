@@ -371,35 +371,35 @@ class TemplateSystemService {
       // Validate based on type
       if (value !== undefined && value !== null) {
         switch (field.type) {
-          case "number":
-            if (isNaN(Number(value))) {
-              throw new Error(`Field "${field.label}" must be a number`);
-            }
-            if (field.validation?.min !== undefined && Number(value) < field.validation.min) {
-              throw new Error(
-                `Field "${field.label}" must be at least ${field.validation.min}`
-              );
-            }
-            if (field.validation?.max !== undefined && Number(value) > field.validation.max) {
-              throw new Error(
-                `Field "${field.label}" must be at most ${field.validation.max}`
-              );
-            }
-            break;
+        case "number":
+          if (isNaN(Number(value))) {
+            throw new Error(`Field "${field.label}" must be a number`);
+          }
+          if (field.validation?.min !== undefined && Number(value) < field.validation.min) {
+            throw new Error(
+              `Field "${field.label}" must be at least ${field.validation.min}`
+            );
+          }
+          if (field.validation?.max !== undefined && Number(value) > field.validation.max) {
+            throw new Error(
+              `Field "${field.label}" must be at most ${field.validation.max}`
+            );
+          }
+          break;
 
-          case "date":
-            if (isNaN(Date.parse(value))) {
-              throw new Error(`Field "${field.label}" must be a valid date`);
-            }
-            break;
+        case "date":
+          if (isNaN(Date.parse(value))) {
+            throw new Error(`Field "${field.label}" must be a valid date`);
+          }
+          break;
 
-          case "select":
-            if (field.options && !field.options.includes(value)) {
-              throw new Error(
-                `Field "${field.label}" must be one of: ${field.options.join(", ")}`
-              );
-            }
-            break;
+        case "select":
+          if (field.options && !field.options.includes(value)) {
+            throw new Error(
+              `Field "${field.label}" must be one of: ${field.options.join(", ")}`
+            );
+          }
+          break;
         }
 
         // Pattern validation

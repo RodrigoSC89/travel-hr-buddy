@@ -30,7 +30,7 @@ const predictIncidentRisk = async (features: number[]): Promise<{ risk: string; 
   const probabilities = [0.8, 0.15, 0.05]; // high, medium, low risk
   const maxProb = Math.max(...probabilities);
   const riskIndex = probabilities.indexOf(maxProb);
-  const riskLevels = ['high', 'medium', 'low'];
+  const riskLevels = ["high", "medium", "low"];
   
   return {
     risk: riskLevels[riskIndex],
@@ -48,21 +48,21 @@ const predictPositionLoss = async (sensorData: any): Promise<{ probability: numb
   // Analyze factors
   if (thrusterStatus < 0.8) {
     probability += 0.3;
-    factors.push('Thruster degradation detected');
+    factors.push("Thruster degradation detected");
   }
   
   if (gpsAccuracy < 0.9) {
     probability += 0.2;
-    factors.push('GPS signal degradation');
+    factors.push("GPS signal degradation");
   }
   
-  if (weatherConditions === 'severe') {
+  if (weatherConditions === "severe") {
     probability += 0.4;
-    factors.push('Adverse weather conditions');
+    factors.push("Adverse weather conditions");
   }
   
   // DP Class affects risk threshold
-  const dpClassMultiplier = dpClass === 'DP-1' ? 1.5 : dpClass === 'DP-2' ? 1.0 : 0.7;
+  const dpClassMultiplier = dpClass === "DP-1" ? 1.5 : dpClass === "DP-2" ? 1.0 : 0.7;
   probability *= dpClassMultiplier;
   
   probability = Math.min(probability, 1.0);
@@ -87,7 +87,7 @@ describe("DP Intelligence - ONNX Prediction Tests", () => {
       
       const prediction = await predictIncidentRisk(criticalFeatures);
       
-      expect(prediction.risk).toBe('high');
+      expect(prediction.risk).toBe("high");
       expect(prediction.confidence).toBeGreaterThan(0.7);
       expect(prediction.probabilities).toHaveLength(3);
     });
@@ -106,9 +106,9 @@ describe("DP Intelligence - ONNX Prediction Tests", () => {
       
       const prediction = await predictIncidentRisk(zeroFeatures);
       
-      expect(prediction).toHaveProperty('risk');
-      expect(prediction).toHaveProperty('confidence');
-      expect(prediction).toHaveProperty('probabilities');
+      expect(prediction).toHaveProperty("risk");
+      expect(prediction).toHaveProperty("confidence");
+      expect(prediction).toHaveProperty("probabilities");
     });
 
     it("should provide probability distribution", async () => {
@@ -126,28 +126,28 @@ describe("DP Intelligence - ONNX Prediction Tests", () => {
       const sensorData = {
         thrusterStatus: 0.5, // 50% thruster capacity
         gpsAccuracy: 0.95,
-        weatherConditions: 'normal',
-        dpClass: 'DP-2'
+        weatherConditions: "normal",
+        dpClass: "DP-2"
       };
       
       const prediction = await predictPositionLoss(sensorData);
       
       expect(prediction.probability).toBeGreaterThan(0.3);
-      expect(prediction.factors).toContain('Thruster degradation detected');
+      expect(prediction.factors).toContain("Thruster degradation detected");
     });
 
     it("should predict high risk in severe weather", async () => {
       const sensorData = {
         thrusterStatus: 0.9,
         gpsAccuracy: 0.95,
-        weatherConditions: 'severe',
-        dpClass: 'DP-2'
+        weatherConditions: "severe",
+        dpClass: "DP-2"
       };
       
       const prediction = await predictPositionLoss(sensorData);
       
       expect(prediction.probability).toBeGreaterThan(0.4);
-      expect(prediction.factors).toContain('Adverse weather conditions');
+      expect(prediction.factors).toContain("Adverse weather conditions");
       expect(prediction.timeToLoss).toBeLessThan(20);
     });
 
@@ -155,12 +155,12 @@ describe("DP Intelligence - ONNX Prediction Tests", () => {
       const baseSensorData = {
         thrusterStatus: 0.7,
         gpsAccuracy: 0.85,
-        weatherConditions: 'moderate',
-        dpClass: 'DP-2'
+        weatherConditions: "moderate",
+        dpClass: "DP-2"
       };
       
-      const dp1Data = { ...baseSensorData, dpClass: 'DP-1' };
-      const dp3Data = { ...baseSensorData, dpClass: 'DP-3' };
+      const dp1Data = { ...baseSensorData, dpClass: "DP-1" };
+      const dp3Data = { ...baseSensorData, dpClass: "DP-3" };
       
       const dp1Prediction = await predictPositionLoss(dp1Data);
       const dp3Prediction = await predictPositionLoss(dp3Data);
@@ -172,8 +172,8 @@ describe("DP Intelligence - ONNX Prediction Tests", () => {
       const criticalData = {
         thrusterStatus: 0.3,
         gpsAccuracy: 0.5,
-        weatherConditions: 'severe',
-        dpClass: 'DP-1'
+        weatherConditions: "severe",
+        dpClass: "DP-1"
       };
       
       const prediction = await predictPositionLoss(criticalData);
@@ -186,8 +186,8 @@ describe("DP Intelligence - ONNX Prediction Tests", () => {
       const multiFactorData = {
         thrusterStatus: 0.6,
         gpsAccuracy: 0.7,
-        weatherConditions: 'severe',
-        dpClass: 'DP-2'
+        weatherConditions: "severe",
+        dpClass: "DP-2"
       };
       
       const prediction = await predictPositionLoss(multiFactorData);
@@ -200,8 +200,8 @@ describe("DP Intelligence - ONNX Prediction Tests", () => {
       const optimalData = {
         thrusterStatus: 1.0,
         gpsAccuracy: 1.0,
-        weatherConditions: 'calm',
-        dpClass: 'DP-3'
+        weatherConditions: "calm",
+        dpClass: "DP-3"
       };
       
       const prediction = await predictPositionLoss(optimalData);
@@ -225,8 +225,8 @@ describe("DP Intelligence - ONNX Prediction Tests", () => {
       
       expect(predictions).toHaveLength(3);
       predictions.forEach(pred => {
-        expect(pred).toHaveProperty('risk');
-        expect(pred).toHaveProperty('confidence');
+        expect(pred).toHaveProperty("risk");
+        expect(pred).toHaveProperty("confidence");
       });
     });
 
@@ -257,15 +257,15 @@ describe("DP Intelligence - ONNX Prediction Tests", () => {
       
       const prediction = await predictIncidentRisk(invalidFeatures);
       
-      expect(prediction).toHaveProperty('risk');
+      expect(prediction).toHaveProperty("risk");
     });
 
     it("should handle NaN values gracefully", async () => {
       const sensorData = {
         thrusterStatus: NaN,
         gpsAccuracy: 0.95,
-        weatherConditions: 'normal',
-        dpClass: 'DP-2'
+        weatherConditions: "normal",
+        dpClass: "DP-2"
       };
       
       const prediction = await predictPositionLoss(sensorData);
@@ -277,13 +277,13 @@ describe("DP Intelligence - ONNX Prediction Tests", () => {
     it("should handle missing sensor data fields", async () => {
       const incompleteSensorData = {
         thrusterStatus: 0.9,
-        dpClass: 'DP-2'
+        dpClass: "DP-2"
       } as any;
       
       const prediction = await predictPositionLoss(incompleteSensorData);
       
-      expect(prediction).toHaveProperty('probability');
-      expect(prediction).toHaveProperty('factors');
+      expect(prediction).toHaveProperty("probability");
+      expect(prediction).toHaveProperty("factors");
     });
   });
 });

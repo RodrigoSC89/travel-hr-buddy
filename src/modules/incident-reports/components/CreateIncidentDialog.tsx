@@ -53,7 +53,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
   // Generate unique incident number: INC-{timestamp}-{random}
   const generateIncidentNumber = () => {
     const timestamp = Date.now();
-    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    const random = Math.floor(Math.random() * 10000).toString().padStart(4, "0");
     return `INC-${timestamp}-${random}`;
   };
 
@@ -117,7 +117,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
     }
 
     // Validate file type
-    const invalidTypes = files.filter(file => !file.type.startsWith('image/'));
+    const invalidTypes = files.filter(file => !file.type.startsWith("image/"));
     if (invalidTypes.length > 0) {
       toast({
         title: "Tipo inválido",
@@ -157,16 +157,16 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         try {
           for (let i = 0; i < photos.length; i++) {
             const photo = photos[i];
-            const fileName = `${incidentNumber}-${i}-${Date.now()}.${photo.name.split('.').pop()}`;
+            const fileName = `${incidentNumber}-${i}-${Date.now()}.${photo.name.split(".").pop()}`;
             const { data: uploadData, error: uploadError } = await supabase.storage
-              .from('incident-reports')
+              .from("incident-reports")
               .upload(fileName, photo);
 
             if (uploadError) {
               console.error("Photo upload error:", uploadError);
             } else if (uploadData) {
               const { data: urlData } = supabase.storage
-                .from('incident-reports')
+                .from("incident-reports")
                 .getPublicUrl(fileName);
               photoUrls.push(urlData.publicUrl);
             }

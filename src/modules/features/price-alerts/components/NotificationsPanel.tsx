@@ -31,20 +31,20 @@ export const NotificationsPanel: React.FC = () => {
   useEffect(() => {
     // Real-time updates for notifications
     const channel = supabase
-      .channel('price-notifications-changes')
+      .channel("price-notifications-changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'price_notifications'
+          event: "*",
+          schema: "public",
+          table: "price_notifications"
         },
         (payload) => {
-          console.log('Notification change:', payload);
+          console.log("Notification change:", payload);
           loadNotifications();
           
           // Show toast for new notifications
-          if (payload.eventType === 'INSERT') {
+          if (payload.eventType === "INSERT") {
             toast.info("Nova notificação de alerta de preço!", {
               description: (payload.new as any).message
             });

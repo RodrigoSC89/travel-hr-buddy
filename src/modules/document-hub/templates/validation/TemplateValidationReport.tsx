@@ -31,7 +31,7 @@ export default function TemplateValidationReport() {
 
     // TEST 1: Editor Component Existence
     try {
-      const editorExists = document.querySelector('[data-testid="template-editor"]') !== null;
+      const editorExists = document.querySelector("[data-testid=\"template-editor\"]") !== null;
       testResults.push({
         test: "Editor Funcional",
         status: editorExists ? "passed" : "warning",
@@ -149,7 +149,7 @@ export default function TemplateValidationReport() {
         message: !error 
           ? "Tabela 'templates' acessível no Supabase" 
           : "Erro ao acessar tabela 'templates'",
-        details: error ? error.message : `Conexão estabelecida com sucesso`
+        details: error ? error.message : "Conexão estabelecida com sucesso"
       });
     } catch (error) {
       testResults.push({
@@ -284,23 +284,23 @@ export default function TemplateValidationReport() {
 
   const getStatusIcon = (status: ValidationResult["status"]) => {
     switch (status) {
-      case "passed":
-        return <Check className="h-5 w-5 text-success" />;
-      case "failed":
-        return <X className="h-5 w-5 text-destructive" />;
-      case "warning":
-        return <AlertCircle className="h-5 w-5 text-warning" />;
+    case "passed":
+      return <Check className="h-5 w-5 text-success" />;
+    case "failed":
+      return <X className="h-5 w-5 text-destructive" />;
+    case "warning":
+      return <AlertCircle className="h-5 w-5 text-warning" />;
     }
   };
 
   const getStatusBadge = (status: ValidationResult["status"]) => {
     switch (status) {
-      case "passed":
-        return <Badge variant="default" className="bg-success">Aprovado</Badge>;
-      case "failed":
-        return <Badge variant="destructive">Falhou</Badge>;
-      case "warning":
-        return <Badge variant="secondary">Aviso</Badge>;
+    case "passed":
+      return <Badge variant="default" className="bg-success">Aprovado</Badge>;
+    case "failed":
+      return <Badge variant="destructive">Falhou</Badge>;
+    case "warning":
+      return <Badge variant="secondary">Aviso</Badge>;
     }
   };
 
@@ -353,8 +353,8 @@ export default function TemplateValidationReport() {
               <Card key={index} className="border-l-4" style={{
                 borderLeftColor: 
                   result.status === "passed" ? "hsl(var(--success))" :
-                  result.status === "failed" ? "hsl(var(--destructive))" :
-                  "hsl(var(--warning))"
+                    result.status === "failed" ? "hsl(var(--destructive))" :
+                      "hsl(var(--warning))"
               }}>
                 <CardContent className="pt-6">
                   <div className="flex items-start justify-between gap-4">

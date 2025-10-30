@@ -18,14 +18,14 @@ vi.mock("@/integrations/supabase/client", () => ({
     }),
     auth: {
       getUser: vi.fn().mockResolvedValue({
-        data: { user: { id: 'test-user-id' } }
+        data: { user: { id: "test-user-id" } }
       })
     }
   }
 }));
 
 interface FeedbackAnalysis {
-  sentiment: 'positive' | 'negative' | 'neutral';
+  sentiment: "positive" | "negative" | "neutral";
   score: number;
   keywords: string[];
   categories: string[];
@@ -46,23 +46,23 @@ const analyzeFeedback = async (text: string): Promise<FeedbackAnalysis> => {
   const words = text.toLowerCase().split(/\s+/);
   
   // Sentiment analysis
-  const positiveWords = ['good', 'great', 'excellent', 'amazing', 'love', 'best', 'perfect', 'happy'];
-  const negativeWords = ['bad', 'terrible', 'awful', 'hate', 'worst', 'poor', 'disappointing', 'sad'];
+  const positiveWords = ["good", "great", "excellent", "amazing", "love", "best", "perfect", "happy"];
+  const negativeWords = ["bad", "terrible", "awful", "hate", "worst", "poor", "disappointing", "sad"];
   
   const positiveCount = words.filter(w => positiveWords.includes(w)).length;
   const negativeCount = words.filter(w => negativeWords.includes(w)).length;
   
-  let sentiment: 'positive' | 'negative' | 'neutral';
+  let sentiment: "positive" | "negative" | "neutral";
   let score: number;
   
   if (positiveCount > negativeCount) {
-    sentiment = 'positive';
+    sentiment = "positive";
     score = 0.5 + (positiveCount - negativeCount) * 0.1;
   } else if (negativeCount > positiveCount) {
-    sentiment = 'negative';
+    sentiment = "negative";
     score = 0.5 - (negativeCount - positiveCount) * 0.1;
   } else {
-    sentiment = 'neutral';
+    sentiment = "neutral";
     score = 0.5;
   }
   
@@ -73,21 +73,21 @@ const analyzeFeedback = async (text: string): Promise<FeedbackAnalysis> => {
   
   // Categorization
   const categories: string[] = [];
-  if (text.toLowerCase().includes('feature')) categories.push('feature_request');
-  if (text.toLowerCase().includes('bug') || text.toLowerCase().includes('issue')) categories.push('bug_report');
-  if (text.toLowerCase().includes('ui') || text.toLowerCase().includes('interface')) categories.push('ui_ux');
-  if (text.toLowerCase().includes('performance') || text.toLowerCase().includes('speed')) categories.push('performance');
-  if (categories.length === 0) categories.push('general');
+  if (text.toLowerCase().includes("feature")) categories.push("feature_request");
+  if (text.toLowerCase().includes("bug") || text.toLowerCase().includes("issue")) categories.push("bug_report");
+  if (text.toLowerCase().includes("ui") || text.toLowerCase().includes("interface")) categories.push("ui_ux");
+  if (text.toLowerCase().includes("performance") || text.toLowerCase().includes("speed")) categories.push("performance");
+  if (categories.length === 0) categories.push("general");
   
   // Topic extraction
   const topics: string[] = [];
-  if (text.toLowerCase().includes('dashboard')) topics.push('dashboard');
-  if (text.toLowerCase().includes('report')) topics.push('reporting');
-  if (text.toLowerCase().includes('notification')) topics.push('notifications');
-  if (text.toLowerCase().includes('data')) topics.push('data');
+  if (text.toLowerCase().includes("dashboard")) topics.push("dashboard");
+  if (text.toLowerCase().includes("report")) topics.push("reporting");
+  if (text.toLowerCase().includes("notification")) topics.push("notifications");
+  if (text.toLowerCase().includes("data")) topics.push("data");
   
   // Generate summary
-  const summary = text.length > 100 ? text.substring(0, 97) + '...' : text;
+  const summary = text.length > 100 ? text.substring(0, 97) + "..." : text;
   
   // Calculate confidence
   const confidence = Math.min(0.95, 0.6 + (keywords.length * 0.05) + (categories.length * 0.05));
@@ -110,10 +110,10 @@ const performSemanticAnalysis = async (text: string): Promise<SemanticAnalysis> 
   const entities: Array<{ text: string; type: string; confidence: number }> = [];
   
   // Look for common entities
-  if (text.includes('DP')) entities.push({ text: 'DP', type: 'system', confidence: 0.9 });
-  if (text.includes('vessel')) entities.push({ text: 'vessel', type: 'object', confidence: 0.85 });
-  if (text.includes('thruster')) entities.push({ text: 'thruster', type: 'equipment', confidence: 0.9 });
-  if (text.includes('incident')) entities.push({ text: 'incident', type: 'event', confidence: 0.95 });
+  if (text.includes("DP")) entities.push({ text: "DP", type: "system", confidence: 0.9 });
+  if (text.includes("vessel")) entities.push({ text: "vessel", type: "object", confidence: 0.85 });
+  if (text.includes("thruster")) entities.push({ text: "thruster", type: "equipment", confidence: 0.9 });
+  if (text.includes("incident")) entities.push({ text: "incident", type: "event", confidence: 0.95 });
   
   // Extract relationships (simple)
   const relationships: Array<{ from: string; to: string; type: string }> = [];
@@ -121,18 +121,18 @@ const performSemanticAnalysis = async (text: string): Promise<SemanticAnalysis> 
     relationships.push({
       from: entities[0].text,
       to: entities[1].text,
-      type: 'related_to'
+      type: "related_to"
     });
   }
   
   // Determine themes
   const themes: string[] = [];
-  if (text.toLowerCase().includes('safety')) themes.push('safety');
-  if (text.toLowerCase().includes('efficiency')) themes.push('efficiency');
-  if (text.toLowerCase().includes('compliance')) themes.push('compliance');
-  if (text.toLowerCase().includes('automation')) themes.push('automation');
+  if (text.toLowerCase().includes("safety")) themes.push("safety");
+  if (text.toLowerCase().includes("efficiency")) themes.push("efficiency");
+  if (text.toLowerCase().includes("compliance")) themes.push("compliance");
+  if (text.toLowerCase().includes("automation")) themes.push("automation");
   
-  const mainTheme = themes[0] || 'general';
+  const mainTheme = themes[0] || "general";
   const subThemes = themes.slice(1);
   
   return {
@@ -171,7 +171,7 @@ describe("AI Feedback Analyzer Tests", () => {
       
       const analysis = await analyzeFeedback(text);
       
-      expect(analysis.sentiment).toBe('positive');
+      expect(analysis.sentiment).toBe("positive");
       expect(analysis.score).toBeGreaterThan(0.5);
     });
 
@@ -180,7 +180,7 @@ describe("AI Feedback Analyzer Tests", () => {
       
       const analysis = await analyzeFeedback(text);
       
-      expect(analysis.sentiment).toBe('negative');
+      expect(analysis.sentiment).toBe("negative");
       expect(analysis.score).toBeLessThan(0.5);
     });
 
@@ -189,7 +189,7 @@ describe("AI Feedback Analyzer Tests", () => {
       
       const analysis = await analyzeFeedback(text);
       
-      expect(analysis.sentiment).toBe('neutral');
+      expect(analysis.sentiment).toBe("neutral");
       expect(analysis.score).toBeCloseTo(0.5, 1);
     });
 
@@ -213,7 +213,7 @@ describe("AI Feedback Analyzer Tests", () => {
       const analysis = await analyzeFeedback(text);
       
       expect(analysis.sentiment).toBeDefined();
-      expect(['positive', 'negative', 'neutral']).toContain(analysis.sentiment);
+      expect(["positive", "negative", "neutral"]).toContain(analysis.sentiment);
     });
   });
 
@@ -260,7 +260,7 @@ describe("AI Feedback Analyzer Tests", () => {
       
       const analysis = await analyzeFeedback(text);
       
-      expect(analysis.categories).toContain('feature_request');
+      expect(analysis.categories).toContain("feature_request");
     });
 
     it("should categorize bug reports", async () => {
@@ -268,7 +268,7 @@ describe("AI Feedback Analyzer Tests", () => {
       
       const analysis = await analyzeFeedback(text);
       
-      expect(analysis.categories).toContain('bug_report');
+      expect(analysis.categories).toContain("bug_report");
     });
 
     it("should categorize UI/UX feedback", async () => {
@@ -276,7 +276,7 @@ describe("AI Feedback Analyzer Tests", () => {
       
       const analysis = await analyzeFeedback(text);
       
-      expect(analysis.categories).toContain('ui_ux');
+      expect(analysis.categories).toContain("ui_ux");
     });
 
     it("should categorize performance feedback", async () => {
@@ -284,7 +284,7 @@ describe("AI Feedback Analyzer Tests", () => {
       
       const analysis = await analyzeFeedback(text);
       
-      expect(analysis.categories).toContain('performance');
+      expect(analysis.categories).toContain("performance");
     });
 
     it("should support multiple categories", async () => {
@@ -300,7 +300,7 @@ describe("AI Feedback Analyzer Tests", () => {
       
       const analysis = await analyzeFeedback(text);
       
-      expect(analysis.categories).toContain('general');
+      expect(analysis.categories).toContain("general");
     });
   });
 
@@ -311,7 +311,7 @@ describe("AI Feedback Analyzer Tests", () => {
       const analysis = await analyzeFeedback(text);
       
       expect(analysis.topics.length).toBeGreaterThan(0);
-      expect(analysis.topics).toContain('dashboard');
+      expect(analysis.topics).toContain("dashboard");
     });
 
     it("should handle text without specific topics", async () => {
@@ -328,7 +328,7 @@ describe("AI Feedback Analyzer Tests", () => {
       
       const analysis = await analyzeFeedback(text);
       
-      const expectedTopics = ['dashboard', 'data', 'reporting', 'notifications'];
+      const expectedTopics = ["dashboard", "data", "reporting", "notifications"];
       const foundTopics = analysis.topics.filter(t => expectedTopics.includes(t));
       
       expect(foundTopics.length).toBeGreaterThan(1);
@@ -342,9 +342,9 @@ describe("AI Feedback Analyzer Tests", () => {
       const semantic = await performSemanticAnalysis(text);
       
       expect(semantic.entities.length).toBeGreaterThan(0);
-      expect(semantic.entities[0]).toHaveProperty('text');
-      expect(semantic.entities[0]).toHaveProperty('type');
-      expect(semantic.entities[0]).toHaveProperty('confidence');
+      expect(semantic.entities[0]).toHaveProperty("text");
+      expect(semantic.entities[0]).toHaveProperty("type");
+      expect(semantic.entities[0]).toHaveProperty("confidence");
     });
 
     it("should extract relationships between entities", async () => {
@@ -354,9 +354,9 @@ describe("AI Feedback Analyzer Tests", () => {
       
       if (semantic.entities.length >= 2) {
         expect(semantic.relationships.length).toBeGreaterThan(0);
-        expect(semantic.relationships[0]).toHaveProperty('from');
-        expect(semantic.relationships[0]).toHaveProperty('to');
-        expect(semantic.relationships[0]).toHaveProperty('type');
+        expect(semantic.relationships[0]).toHaveProperty("from");
+        expect(semantic.relationships[0]).toHaveProperty("to");
+        expect(semantic.relationships[0]).toHaveProperty("type");
       }
     });
 
@@ -366,7 +366,7 @@ describe("AI Feedback Analyzer Tests", () => {
       const semantic = await performSemanticAnalysis(text);
       
       expect(semantic.mainTheme).toBeDefined();
-      expect(typeof semantic.mainTheme).toBe('string');
+      expect(typeof semantic.mainTheme).toBe("string");
     });
 
     it("should identify sub-themes", async () => {
@@ -399,8 +399,8 @@ describe("AI Feedback Analyzer Tests", () => {
       const categorized = await categorizeFeedback(feedbacks);
       
       expect(Object.keys(categorized).length).toBeGreaterThan(0);
-      expect(categorized['bug_report']).toBeDefined();
-      expect(categorized['feature_request']).toBeDefined();
+      expect(categorized["bug_report"]).toBeDefined();
+      expect(categorized["feature_request"]).toBeDefined();
     });
 
     it("should group similar feedbacks together", async () => {
@@ -412,7 +412,7 @@ describe("AI Feedback Analyzer Tests", () => {
       
       const categorized = await categorizeFeedback(feedbacks);
       
-      expect(categorized['bug_report']).toHaveLength(3);
+      expect(categorized["bug_report"]).toHaveLength(3);
     });
 
     it("should handle empty feedback array", async () => {
@@ -439,7 +439,7 @@ describe("AI Feedback Analyzer Tests", () => {
       const analysis = await analyzeFeedback(longText);
       
       expect(analysis.summary.length).toBeLessThan(longText.length);
-      expect(analysis.summary).toContain('...');
+      expect(analysis.summary).toContain("...");
     });
 
     it("should keep short text unchanged", async () => {
@@ -448,7 +448,7 @@ describe("AI Feedback Analyzer Tests", () => {
       const analysis = await analyzeFeedback(shortText);
       
       expect(analysis.summary).toBe(shortText);
-      expect(analysis.summary).not.toContain('...');
+      expect(analysis.summary).not.toContain("...");
     });
   });
 
@@ -498,7 +498,7 @@ describe("AI Feedback Analyzer Tests", () => {
       const analysis = await analyzeFeedback(text);
       
       // Should detect positive words despite special characters
-      expect(['positive', 'neutral']).toContain(analysis.sentiment);
+      expect(["positive", "neutral"]).toContain(analysis.sentiment);
     });
 
     it("should handle non-English characters gracefully", async () => {

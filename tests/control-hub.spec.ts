@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 /**
  * Control Hub Module Tests
@@ -17,23 +17,23 @@ const mockSupabaseClient = {
   rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
 };
 
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock("@/integrations/supabase/client", () => ({
   supabase: mockSupabaseClient,
 }));
 
-describe('Control Hub Module', () => {
+describe("Control Hub Module", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('System Control', () => {
-    it('should fetch system status', async () => {
+  describe("System Control", () => {
+    it("should fetch system status", async () => {
       const mockStatus = {
-        overall: 'operational',
+        overall: "operational",
         services: {
-          api: 'healthy',
-          database: 'healthy',
-          cache: 'healthy',
+          api: "healthy",
+          database: "healthy",
+          cache: "healthy",
         },
         uptime: 99.9,
       };
@@ -44,33 +44,33 @@ describe('Control Hub Module', () => {
         limit: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from('system_status').select('*');
+      const result = await mockSupabaseClient.from("system_status").select("*");
 
       expect(result.data).toHaveLength(1);
-      expect(result.data![0].overall).toBe('operational');
+      expect(result.data![0].overall).toBe("operational");
     });
 
-    it('should execute system command', async () => {
+    it("should execute system command", async () => {
       const command = {
-        action: 'restart_service',
-        target: 'api_gateway',
-        executed_by: 'admin',
+        action: "restart_service",
+        target: "api_gateway",
+        executed_by: "admin",
       };
 
       mockSupabaseClient.rpc.mockResolvedValueOnce({
-        data: { success: true, message: 'Service restarted' },
+        data: { success: true, message: "Service restarted" },
         error: null,
       });
 
-      const result = await mockSupabaseClient.rpc('execute_command', command);
+      const result = await mockSupabaseClient.rpc("execute_command", command);
 
       expect(result.data.success).toBe(true);
-      expect(mockSupabaseClient.rpc).toHaveBeenCalledWith('execute_command', command);
+      expect(mockSupabaseClient.rpc).toHaveBeenCalledWith("execute_command", command);
     });
   });
 
-  describe('Monitoring and Alerts', () => {
-    it('should trigger alert for critical threshold', () => {
+  describe("Monitoring and Alerts", () => {
+    it("should trigger alert for critical threshold", () => {
       const metrics = {
         cpu_usage: 95,
         memory_usage: 88,
@@ -88,15 +88,15 @@ describe('Control Hub Module', () => {
         .map(([key, value]) => ({ metric: key, value, threshold: thresholds[key as keyof typeof thresholds] }));
 
       expect(alerts).toHaveLength(2);
-      expect(alerts.some(a => a.metric === 'cpu_usage')).toBe(true);
-      expect(alerts.some(a => a.metric === 'memory_usage')).toBe(true);
+      expect(alerts.some(a => a.metric === "cpu_usage")).toBe(true);
+      expect(alerts.some(a => a.metric === "memory_usage")).toBe(true);
     });
 
-    it('should log system events', async () => {
+    it("should log system events", async () => {
       const event = {
-        type: 'system_restart',
-        severity: 'info',
-        message: 'System restarted successfully',
+        type: "system_restart",
+        severity: "info",
+        message: "System restarted successfully",
         timestamp: new Date().toISOString(),
       };
 
@@ -105,45 +105,45 @@ describe('Control Hub Module', () => {
         select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from('system_events').insert(event);
+      const result = await mockSupabaseClient.from("system_events").insert(event);
 
       expect(result.data).toEqual(event);
       expect(result.error).toBeNull();
     });
   });
 
-  describe('Access Control', () => {
-    it('should verify admin permissions', () => {
+  describe("Access Control", () => {
+    it("should verify admin permissions", () => {
       const user = {
         id: 1,
-        role: 'admin',
-        permissions: ['read', 'write', 'execute', 'manage'],
+        role: "admin",
+        permissions: ["read", "write", "execute", "manage"],
       };
 
-      const hasAdminAccess = user.role === 'admin' || user.permissions.includes('manage');
+      const hasAdminAccess = user.role === "admin" || user.permissions.includes("manage");
 
       expect(hasAdminAccess).toBe(true);
     });
 
-    it('should deny unauthorized access', () => {
+    it("should deny unauthorized access", () => {
       const user = {
         id: 2,
-        role: 'viewer',
-        permissions: ['read'],
+        role: "viewer",
+        permissions: ["read"],
       };
 
-      const hasExecutePermission = user.permissions.includes('execute');
+      const hasExecutePermission = user.permissions.includes("execute");
 
       expect(hasExecutePermission).toBe(false);
     });
   });
 
-  describe('Configuration Management', () => {
-    it('should update system configuration', async () => {
+  describe("Configuration Management", () => {
+    it("should update system configuration", async () => {
       const config = {
-        key: 'max_connections',
-        value: '100',
-        updated_by: 'admin',
+        key: "max_connections",
+        value: "100",
+        updated_by: "admin",
       };
 
       mockSupabaseClient.from.mockReturnValueOnce({
@@ -152,31 +152,31 @@ describe('Control Hub Module', () => {
         select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from('system_config').update(config);
+      const result = await mockSupabaseClient.from("system_config").update(config);
 
       expect(result.data).toEqual(config);
       expect(result.error).toBeNull();
     });
 
-    it('should validate configuration values', () => {
+    it("should validate configuration values", () => {
       const configs = [
-        { key: 'max_connections', value: '100', type: 'number' },
-        { key: 'api_enabled', value: 'true', type: 'boolean' },
-        { key: 'service_name', value: 'control-hub', type: 'string' },
+        { key: "max_connections", value: "100", type: "number" },
+        { key: "api_enabled", value: "true", type: "boolean" },
+        { key: "service_name", value: "control-hub", type: "string" },
       ];
 
       const isValid = configs.every(config => {
-        if (config.type === 'number') return !isNaN(Number(config.value));
-        if (config.type === 'boolean') return ['true', 'false'].includes(config.value);
-        return typeof config.value === 'string';
+        if (config.type === "number") return !isNaN(Number(config.value));
+        if (config.type === "boolean") return ["true", "false"].includes(config.value);
+        return typeof config.value === "string";
       });
 
       expect(isValid).toBe(true);
     });
   });
 
-  describe('Performance Metrics', () => {
-    it('should calculate response time average', () => {
+  describe("Performance Metrics", () => {
+    it("should calculate response time average", () => {
       const requests = [
         { duration: 100 },
         { duration: 150 },
@@ -189,7 +189,7 @@ describe('Control Hub Module', () => {
       expect(avgDuration).toBe(137.5);
     });
 
-    it('should track error rates', () => {
+    it("should track error rates", () => {
       const requests = [
         { status: 200 },
         { status: 200 },
@@ -205,24 +205,24 @@ describe('Control Hub Module', () => {
     });
   });
 
-  describe('Health Checks', () => {
-    it('should perform service health check', () => {
+  describe("Health Checks", () => {
+    it("should perform service health check", () => {
       const services = [
-        { name: 'api', status: 'healthy', last_check: new Date() },
-        { name: 'database', status: 'healthy', last_check: new Date() },
-        { name: 'cache', status: 'degraded', last_check: new Date() },
+        { name: "api", status: "healthy", last_check: new Date() },
+        { name: "database", status: "healthy", last_check: new Date() },
+        { name: "cache", status: "degraded", last_check: new Date() },
       ];
 
-      const unhealthyServices = services.filter(s => s.status !== 'healthy');
+      const unhealthyServices = services.filter(s => s.status !== "healthy");
 
       expect(unhealthyServices).toHaveLength(1);
-      expect(unhealthyServices[0].name).toBe('cache');
+      expect(unhealthyServices[0].name).toBe("cache");
     });
 
-    it('should detect stale health checks', () => {
+    it("should detect stale health checks", () => {
       const service = {
-        name: 'api',
-        status: 'healthy',
+        name: "api",
+        status: "healthy",
         last_check: new Date(Date.now() - 600000), // 10 minutes ago
       };
 
