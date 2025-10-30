@@ -32,17 +32,22 @@ import {
   Radio
 } from 'lucide-react';
 
-// Mock data generator (to be replaced with real data)
+// Configuration
+const REFRESH_INTERVAL = 5000; // 5 seconds - can be configured via props
+const MEMORY_HISTORY_LENGTH = 20;
+const MQTT_HISTORY_LENGTH = 12;
+
+// Mock data generators (to be replaced with real data from backend)
 const generateMockMemoryData = () => {
   const now = Date.now();
-  return Array.from({ length: 20 }, (_, i) => ({
-    time: new Date(now - (19 - i) * 30000).toLocaleTimeString(),
+  return Array.from({ length: MEMORY_HISTORY_LENGTH }, (_, i) => ({
+    time: new Date(now - (MEMORY_HISTORY_LENGTH - 1 - i) * 30000).toLocaleTimeString(),
     usage: Math.random() * 40 + 30, // 30-70%
   }));
 };
 
 const generateMockMQTTData = () => {
-  return Array.from({ length: 12 }, (_, i) => ({
+  return Array.from({ length: MQTT_HISTORY_LENGTH }, (_, i) => ({
     time: `${i}:00`,
     connections: Math.floor(Math.random() * 50) + 10,
   }));
@@ -91,9 +96,12 @@ const ObservabilityDashboard: React.FC = () => {
       if (Math.random() > 0.95) {
         setWsStatus(prev => prev === 'online' ? 'offline' : 'online');
       }
-    }, 5000);
+    }, REFRESH_INTERVAL);
 
-    return () => clearInterval(interval);
+    // Cleanup interval on unmount
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const getStatusColor = (status: ModuleStatus['status']) => {
@@ -173,16 +181,15 @@ const ObservabilityDashboard: React.FC = () => {
             </CardTitle>
             <CardDescription>Backend CPU utilization</CardDescription>
           </CardHeader>
-          <CardContent className="flex items-center justify-center" style={{ height: 250 }}>
+          <CardContent className="flex items-center justify-center h-64">
             <div className="relative">
               {/* Simple gauge representation */}
               <div className="w-48 h-48 rounded-full border-8 border-gray-200 flex items-center justify-center relative overflow-hidden">
                 <div 
-                  className="absolute bottom-0 left-0 right-0 transition-all duration-1000"
+                  className="absolute bottom-0 left-0 right-0 transition-all duration-1000 opacity-70"
                   style={{ 
                     height: `${cpuUsage}%`, 
-                    backgroundColor: getCPUColor(cpuUsage),
-                    opacity: 0.7
+                    backgroundColor: getCPUColor(cpuUsage)
                   }}
                 />
                 <div className="relative z-10 text-center">
@@ -203,7 +210,7 @@ const ObservabilityDashboard: React.FC = () => {
             </CardTitle>
             <CardDescription>Real-time connection monitoring</CardDescription>
           </CardHeader>
-          <CardContent className="flex items-center justify-center" style={{ height: 250 }}>
+          <CardContent className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className={`w-32 h-32 rounded-full ${wsStatus === 'online' ? 'bg-green-100' : 'bg-red-100'} flex items-center justify-center mb-4`}>
                 {wsStatus === 'online' ? (
