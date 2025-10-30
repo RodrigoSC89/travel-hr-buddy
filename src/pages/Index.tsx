@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { ProfessionalHeader } from "@/components/dashboard/professional-header";
 import { ProfessionalKPICard } from "@/components/dashboard/professional-kpi-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +7,12 @@ import { Ship, TrendingUp, Activity, CheckCircle, DollarSign, Users, Target, Ale
 import { AreaChart, Area, LineChart as RechartsLine, Line, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+
+// Detect Lovable preview environment to avoid heavy initial render
+const isLovablePreview = typeof window !== "undefined" && (window.location.host.includes("lovable.dev") || window.location.host.includes("lovableproject.com"));
+
+// Dados mockados
 
 // Dados mockados
 const revenueData = [
@@ -26,6 +32,31 @@ const fleetData = [
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
+
+  // In Lovable preview, render a lightweight landing to prevent freezes
+  if (isLovablePreview) {
+    return (
+      <div className="min-h-screen p-6 flex items-center justify-center">
+        <Card className="max-w-2xl w-full">
+          <CardHeader>
+            <CardTitle>Modo Preview Leve</CardTitle>
+            <CardDescription>Ambiente de edição detectado. Use as opções abaixo para carregar páginas de forma segura.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="grid sm:grid-cols-2 gap-3">
+              <Link to="/validation/preview-lite" className="w-full">
+                <div className="w-full p-3 rounded-md border text-center hover:bg-accent/50">Abrir Preview de Patches</div>
+              </Link>
+              <Link to="/dashboard" className="w-full">
+                <div className="w-full p-3 rounded-md border text-center hover:bg-accent/50">Abrir Dashboard Completo</div>
+              </Link>
+            </div>
+            <p className="text-xs text-muted-foreground">Dica: use a rota /validation/preview-lite para navegação rápida no editor.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
