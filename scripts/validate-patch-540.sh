@@ -39,6 +39,17 @@ check_dev_server() {
     fi
 }
 
+# Detect OS for proper command usage
+detect_os() {
+    case "$(uname -s)" in
+        Linux*)     echo "Linux";;
+        Darwin*)    echo "Mac";;
+        *)          echo "Unknown";;
+    esac
+}
+
+OS_TYPE=$(detect_os)
+
 # 1. Memory Usage Monitoring
 echo "1. 💾 Monitorando uso de memória do Node.js e Vite..."
 echo "---------------------------------------------------"
@@ -48,13 +59,14 @@ if check_dev_server; then
     if [ -n "$node_pid" ]; then
         echo "PID do processo Vite: $node_pid"
         
-        # Check if top command supports -p flag
-        if top -v 2>&1 | grep -q "procps-ng"; then
-            # Linux version
+        # Use OS-specific commands
+        if [ "$OS_TYPE" = "Linux" ]; then
             top -b -n 1 -p "$node_pid" -o %MEM | head -n 20
-        else
-            # macOS or other BSD-like systems
+        elif [ "$OS_TYPE" = "Mac" ]; then
             ps -p "$node_pid" -o pid,ppid,user,%cpu,%mem,vsz,rss,tty,stat,start,time,command
+        else
+            # Fallback for unknown systems
+            ps -p "$node_pid" -o pid,user,%cpu,%mem,vsz,command
         fi
         
         print_success "Monitoramento de memória concluído"
@@ -72,33 +84,57 @@ echo "2. 🚦 Validando navegação SPA..."
 echo "--------------------------------"
 
 # Find <a href> tags that are not within <Link> components
-spa_violations=$(grep -r "<a href=" ./src --include="*.tsx" --include="*.jsx" | grep -v "<Link" | grep -v "external" | grep -v "http" | wc -l)
+# Exclude: comments, external links (http/https), mailto, tel, #anchor links
+spa_violations=$(grep -r "<a href=" ./src --include="*.tsx" --include="*.jsx" 2>/dev/null | \
+    grep -v "<Link" | \
+    grep -v "external" | \
+    grep -v "http://" | \
+    grep -v "https://" | \
+    grep -v "mailto:" | \
+    grep -v "tel:" | \
+    grep -v 'href="#' | \
+    grep -v "skip-to-main" | \
+    wc -l)
 
 if [ "$spa_violations" -eq 0 ]; then
-    print_success "Nenhum <a href> fora de <Link> encontrado"
+    print_success "Nenhum <a href> fora de <Link> encontrado (excluindo links externos legítimos)"
 else
-    print_warning "Encontrados $spa_violations possíveis usos inadequados de <a href>"
-    echo "Detalhes:"
-    grep -r "<a href=" ./src --include="*.tsx" --include="*.jsx" | grep -v "<Link" | grep -v "external" | grep -v "http" | head -10
+    print_warning "Encontrados $spa_violations possíveis usos inadequados de <a href> para navegação interna"
+    echo "Detalhes (primeiros 10):"
+    grep -r "<a href=" ./src --include="*.tsx" --include="*.jsx" 2>/dev/null | \
+        grep -v "<Link" | \
+        grep -v "external" | \
+        grep -v "http://" | \
+        grep -v "https://" | \
+        grep -v "mailto:" | \
+        grep -v "tel:" | \
+        grep -v 'href="#' | \
+        grep -v "skip-to-main" | \
+        head -10
+    echo ""
+    echo "💡 Links externos (http/https) e âncoras (#) são permitidos"
 fi
 
 echo ""
 
-# 3. Nested .map() Detection
-echo "3. 🧬 Verificando uso excessivo de .map() aninhado..."
-echo "-----------------------------------------------------"
+# 3. Multiple .map() Usage Detection
+echo "3. 🧬 Verificando uso excessivo de .map()..."
+echo "--------------------------------------------"
 
-# Find files with multiple .map() calls (potential performance issues)
-nested_maps=$(grep -r "\.map(" ./src --include="*.tsx" --include="*.jsx" --include="*.ts" --include="*.js" | \
+# Find files with multiple .map() calls (may indicate complex transformations)
+# Note: This detects multiple .map() calls in a file, not necessarily nested ones
+high_map_usage=$(grep -r "\.map(" ./src --include="*.tsx" --include="*.jsx" --include="*.ts" --include="*.js" 2>/dev/null | \
     awk -F: '{print $1}' | sort | uniq -c | awk '$1 >= 3 {print $1, $2}' | wc -l)
 
-if [ "$nested_maps" -eq 0 ]; then
+if [ "$high_map_usage" -eq 0 ]; then
     print_success "Nenhum uso excessivo de .map() detectado"
 else
-    print_warning "Encontrados $nested_maps arquivos com múltiplos .map() (3 ou mais)"
-    echo "Arquivos com alto uso de .map():"
-    grep -r "\.map(" ./src --include="*.tsx" --include="*.jsx" --include="*.ts" --include="*.js" | \
-        awk -F: '{print $1}' | sort | uniq -c | awk '$1 >= 3 {print $1, $2}' | head -10
+    print_warning "Encontrados $high_map_usage arquivos com múltiplos .map() (3 ou mais por arquivo)"
+    echo "Arquivos com alto uso de .map() (top 10):"
+    grep -r "\.map(" ./src --include="*.tsx" --include="*.jsx" --include="*.ts" --include="*.js" 2>/dev/null | \
+        awk -F: '{print $1}' | sort | uniq -c | awk '$1 >= 3 {print $1, $2}' | sort -rn | head -10
+    echo ""
+    echo "💡 Considere refatorar transformações complexas em funções separadas"
 fi
 
 echo ""
@@ -108,7 +144,7 @@ echo "4. 🔍 Verificando qualidade do código..."
 echo "---------------------------------------"
 
 # Check for console.log statements (should be removed in production)
-console_logs=$(grep -r "console\.log" ./src --include="*.tsx" --include="*.jsx" --include="*.ts" --include="*.js" | wc -l)
+console_logs=$(grep -r "console\.log" ./src --include="*.tsx" --include="*.jsx" --include="*.ts" --include="*.js" 2>/dev/null | wc -l)
 if [ "$console_logs" -eq 0 ]; then
     print_success "Nenhum console.log encontrado"
 else
@@ -116,7 +152,7 @@ else
 fi
 
 # Check for TODO/FIXME comments
-todos=$(grep -r "TODO\|FIXME" ./src --include="*.tsx" --include="*.jsx" --include="*.ts" --include="*.js" | wc -l)
+todos=$(grep -r "TODO\|FIXME" ./src --include="*.tsx" --include="*.jsx" --include="*.ts" --include="*.js" 2>/dev/null | wc -l)
 if [ "$todos" -eq 0 ]; then
     print_success "Nenhum TODO/FIXME pendente"
 else
@@ -134,20 +170,19 @@ if command -v lighthouse &> /dev/null; then
     if check_dev_server; then
         echo "Executando Lighthouse no http://localhost:5173..."
         
+        # Create secure temporary file for report
+        lighthouse_report=$(mktemp /tmp/lighthouse-report-XXXXXX.json)
+        
         # Run lighthouse and capture score
-        lighthouse http://localhost:5173 \
+        if lighthouse http://localhost:5173 \
             --quiet \
             --output=json \
-            --output-path=/tmp/lighthouse-report-$(date +%s).json \
-            --chrome-flags="--headless --no-sandbox --disable-gpu" || true
-        
-        # Find the most recent report
-        latest_report=$(ls -t /tmp/lighthouse-report-*.json 2>/dev/null | head -1)
-        
-        if [ -f "$latest_report" ]; then
-            # Extract performance score using jq if available, otherwise use grep/sed
+            --output-path="$lighthouse_report" \
+            --chrome-flags="--headless --no-sandbox --disable-gpu" 2>/dev/null; then
+            
+            # Extract performance score using jq if available
             if command -v jq &> /dev/null; then
-                perf_score=$(jq '.categories.performance.score' "$latest_report" 2>/dev/null || echo "null")
+                perf_score=$(jq '.categories.performance.score' "$lighthouse_report" 2>/dev/null || echo "null")
                 if [ "$perf_score" != "null" ] && [ -n "$perf_score" ]; then
                     perf_percentage=$(echo "$perf_score * 100" | bc 2>/dev/null || echo "N/A")
                     echo "Performance Score: ${perf_percentage}%"
@@ -165,10 +200,14 @@ if command -v lighthouse &> /dev/null; then
                 fi
             else
                 print_warning "jq não está instalado. Instale jq para ver scores detalhados"
-                echo "Relatório salvo em: $latest_report"
+                echo "Relatório salvo em: $lighthouse_report"
             fi
+            
+            # Clean up (keep for user review if they want)
+            echo "💡 Relatório disponível em: $lighthouse_report"
         else
             print_warning "Não foi possível gerar o relatório Lighthouse"
+            rm -f "$lighthouse_report"
         fi
     else
         print_warning "Servidor dev não está rodando. Pulando teste Lighthouse"
@@ -193,12 +232,18 @@ if [ -d "dist" ]; then
     # Optionally run a new build if --build flag is passed
     if [ "$1" = "--build" ] || [ "$1" = "--full" ]; then
         echo "Executando novo build..."
-        if npm run build:ci > /tmp/build-output.log 2>&1; then
+        
+        # Create secure temporary file for build output
+        build_log=$(mktemp /tmp/build-output-XXXXXX.log)
+        
+        if npm run build:ci > "$build_log" 2>&1; then
             print_success "Build executado com sucesso"
         else
-            print_error "Build falhou. Verifique /tmp/build-output.log para detalhes"
-            tail -20 /tmp/build-output.log
+            print_error "Build falhou. Verifique $build_log para detalhes"
+            tail -20 "$build_log"
         fi
+        
+        echo "💡 Log completo disponível em: $build_log"
     else
         echo "💡 Use --build para executar um novo build"
     fi
