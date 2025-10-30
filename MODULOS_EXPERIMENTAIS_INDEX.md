@@ -10,7 +10,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ## 📚 Módulos Documentados
 
-### 1. [Coordination AI](./coordination-ai/README.md)
+### 1. [Coordination AI](./src/modules/coordination-ai/README.md)
 **Status**: 🟢 Ativo e Funcional (PATCH 471)  
 **Categoria**: Coordenação e Orquestração  
 **Objetivo**: Sistema de coordenação multi-agente com capacidade de análise, atribuição automática de tarefas e gestão de frotas de dispositivos (drones, surface bots e sensores).
@@ -23,7 +23,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 2. [Deep Risk AI](./deep-risk-ai/README.md)
+### 2. [Deep Risk AI](./src/modules/deep-risk-ai/README.md)
 **Status**: 🟢 Ativo e Funcional (PATCH 433)  
 **Categoria**: Análise de Risco  
 **Objetivo**: Sistema de análise de risco com IA para operações em águas profundas, capaz de avaliar múltiplos fatores oceanográficos e prever riscos.
@@ -36,7 +36,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 3. [Drone Commander](./drone-commander/README.md)
+### 3. [Drone Commander](./src/modules/drone-commander/README.md)
 **Status**: 🟢 Ativo e Funcional (PATCH 172.0)  
 **Categoria**: Controle de UAVs  
 **Objetivo**: Sistema de controle e coordenação de UAVs para operações aéreas autônomas, incluindo planejamento de missões e telemetria em tempo real.
@@ -49,7 +49,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 4. [Mission Engine](./mission-engine/README.md)
+### 4. [Mission Engine](./src/modules/mission-engine/README.md)
 **Status**: 🟢 Ativo e Funcional (PATCHES 426-430)  
 **Categoria**: Gestão de Missões  
 **Objetivo**: Unified mission control, execution, and logging system consolidating previous mission-control, mission-logs, and missions modules.
@@ -62,7 +62,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 5. [Navigation Copilot](./navigation-copilot/README.md)
+### 5. [Navigation Copilot](./src/modules/navigation-copilot/README.md)
 **Status**: 🟢 Ativo e Funcional (PATCH 164.0)  
 **Categoria**: Navegação  
 **Objetivo**: Copiloto de navegação com IA para otimização de rotas marítimas, integração com dados meteorológicos e análise de riscos.
@@ -75,7 +75,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 6. [Ocean Sonar](./ocean-sonar/README.md)
+### 6. [Ocean Sonar](./src/modules/ocean-sonar/README.md)
 **Status**: 🟢 Ativo e Funcional (PATCH 174.0)  
 **Categoria**: Sensoriamento  
 **Objetivo**: Sistema de processamento e análise de dados de sonar oceanográfico para detecção de objetos subaquáticos e mapeamento do fundo marinho.
@@ -88,7 +88,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 7. [Route Planner](./route-planner/README.md)
+### 7. [Route Planner](./src/modules/route-planner/README.md)
 **Status**: 🟢 Ativo e Funcional  
 **Categoria**: Planejamento  
 **Objetivo**: Sistema avançado de planejamento de rotas marítimas com otimização multi-critério e análise comparativa de alternativas.
@@ -101,7 +101,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 8. [SATCOM](./satcom/README.md)
+### 8. [SATCOM](./src/modules/satcom/README.md)
 **Status**: 🟢 Ativo e Funcional (PATCH 476)  
 **Categoria**: Comunicações  
 **Objetivo**: Sistema de monitoramento e gerenciamento de comunicações via satélite com redundância automática e detecção de falhas.
@@ -114,7 +114,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 9. [Satellite Tracker](./satellite/README.md)
+### 9. [Satellite Tracker](./src/modules/satellite/README.md)
 **Status**: 🟢 Ativo e Funcional  
 **Categoria**: Rastreamento  
 **Objetivo**: Sistema de rastreamento de satélites e veículos via satélite em tempo real com visualização de órbitas.
@@ -127,7 +127,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 10. [Sensors Hub](./sensors-hub/README.md)
+### 10. [Sensors Hub](./src/modules/sensors-hub/README.md)
 **Status**: 🟢 Ativo e Funcional (PATCH 461)  
 **Categoria**: IoT e Sensores  
 **Objetivo**: Hub centralizado de sensores IoT para coleta, normalização e análise de dados com detecção de anomalias.
@@ -140,7 +140,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 11. [Sonar AI](./sonar-ai/README.md)
+### 11. [Sonar AI](./src/modules/sonar-ai/README.md)
 **Status**: 🟢 Ativo e Funcional  
 **Categoria**: Inteligência Artificial  
 **Objetivo**: Sistema de análise inteligente de dados de sonar com IA para interpretação de riscos e classificação de objetos.
@@ -153,7 +153,7 @@ Este documento serve como índice para a documentação completa dos 12 módulos
 
 ---
 
-### 12. [Underwater Drone](./underwater-drone/README.md)
+### 12. [Underwater Drone](./src/modules/underwater-drone/README.md)
 **Status**: 🟢 Ativo e Funcional  
 **Categoria**: Controle de ROVs/AUVs  
 **Objetivo**: Sistema de controle de ROVs/AUVs para operações subaquáticas autônomas com protocolos de segurança rigorosos.
