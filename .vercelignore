@@ -1,0 +1,22 @@
+# Vercel Ignore
+node_modules
+.git
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.log
+.DS_Store
+.vscode
+.idea
+
+# Documentation (não precisa no deploy)
+PATCHES_*.md
+QUICKSTART.md
+DEPLOYMENT_*.md
+PRODUCTION_*.md
+*.README.md
+
+# Scripts não necessários em produção
+scripts/
+playwright.config.ts
