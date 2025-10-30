@@ -45,7 +45,7 @@ const routes = [
 
 for (const route of routes) {
   test(`Rota ${route} deve renderizar corretamente`, async ({ page }) => {
-    await page.goto(`http://localhost:8080${route}`);
+    await page.goto(`http://localhost:4173${route}`);
     await expect(page).toHaveTitle(/Nautilus|DP|Forecast/i);
   });
 }

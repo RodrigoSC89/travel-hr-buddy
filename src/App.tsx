@@ -1,5 +1,5 @@
 import React, { useEffect, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, HashRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "./components/layout/error-boundary";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -16,10 +16,17 @@ import { OffshoreLoader, PageSkeleton } from "@/components/LoadingStates";
 import { lazyWithPreload, preloadStrategy } from "@/lib/performance/lazy-with-preload";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 
+// Detect Lovable preview environment
+const isLovablePreview = typeof window !== "undefined" && (
+  window.location.host.includes("lovable.dev") || 
+  window.location.host.includes("lovableproject.com") ||
+  window.location.host.includes("gptengineer.app")
+);
+
 // Páginas mais usadas - carregamento prioritário
 import Index from "@/pages/Index";
-const Dashboard = lazyWithPreload(() => import("@/pages/Dashboard"));
-const Travel = lazyWithPreload(() => import("@/pages/Travel"));
+const Dashboard = isLovablePreview ? safeLazyImport(() => import("@/pages/Dashboard")) : lazyWithPreload(() => import("@/pages/Dashboard"));
+const Travel = isLovablePreview ? safeLazyImport(() => import("@/pages/Travel")) : lazyWithPreload(() => import("@/pages/Travel"));
 
 // Páginas secundárias - carregamento normal
 const PriceAlerts = safeLazyImport(() => import("@/modules/features/price-alerts"));
@@ -479,23 +486,36 @@ function App() {
       console.error("❌ Erro ao iniciar watchdog:", error);
     }
     
-    // Preload módulos críticos durante idle time (simplificado)
-    try {
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => {
-          console.log("⏳ Iniciando preload de módulos críticos...");
-          Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
-          Travel.preload().then(() => console.log("✅ Travel preloaded"));
-        });
-      } else {
-        setTimeout(() => {
-          console.log("⏳ Iniciando preload de módulos críticos (fallback)...");
-          Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
-          Travel.preload().then(() => console.log("✅ Travel preloaded"));
-        }, 2000);
+    // Skip preload in Lovable preview to avoid freezes
+    if (!isLovablePreview) {
+      // Preload módulos críticos durante idle time (simplificado)
+      try {
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(() => {
+            console.log("⏳ Iniciando preload de módulos críticos...");
+            if ('preload' in Dashboard && typeof Dashboard.preload === 'function') {
+              Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
+            }
+            if ('preload' in Travel && typeof Travel.preload === 'function') {
+              Travel.preload().then(() => console.log("✅ Travel preloaded"));
+            }
+          });
+        } else {
+          setTimeout(() => {
+            console.log("⏳ Iniciando preload de módulos críticos (fallback)...");
+            if ('preload' in Dashboard && typeof Dashboard.preload === 'function') {
+              Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
+            }
+            if ('preload' in Travel && typeof Travel.preload === 'function') {
+              Travel.preload().then(() => console.log("✅ Travel preloaded"));
+            }
+          }, 2000);
+        }
+      } catch (error) {
+        console.error("❌ Erro no preload:", error);
       }
-    } catch (error) {
-      console.error("❌ Erro no preload:", error);
+    } else {
+      console.log("⚡ Preview mode: preload desativado para evitar travamentos");
     }
     
     console.log("✅ App inicializado com sucesso");
@@ -506,13 +526,17 @@ function App() {
     };
   }, []);
 
+  // Use HashRouter in Lovable preview to avoid routing issues
+  const RouterComponent = isLovablePreview ? HashRouter : Router;
+  const routerProps = isLovablePreview ? {} : { future: { v7_startTransition: true, v7_relativeSplatPath: true } };
+
   return (
     <ErrorBoundary>
       <AuthProvider>
         <TenantProvider>
           <OrganizationProvider>
             <QueryClientProvider client={queryClient}>
-              <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <RouterComponent {...routerProps}>
                 <CommandPalette />
                 <OfflineBanner />
                 <RedirectHandler />
@@ -924,7 +948,7 @@ function App() {
                     </Route>
                   </Routes>
                 </React.Suspense>
-              </Router>
+              </RouterComponent>
             </QueryClientProvider>
           </OrganizationProvider>
         </TenantProvider>

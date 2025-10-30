@@ -19,8 +19,8 @@ echo "⚙️ Rodando build de teste (Vite + PWA)..."
 npm run build --verbose || { echo "❌ Falha no build - verificar vite.config.ts ou paths"; exit 1; }
 
 # 5️⃣ Inicia o servidor local do Vite em background
-echo "🌐 Iniciando preview local (porta 5173)..."
-npm run preview -- --port 5173 &
+echo "🌐 Iniciando preview local (porta 4173)..."
+npm run preview -- --port 4173 &
 DEV_PID=$!
 
 # Aguarda servidor iniciar
@@ -52,7 +52,7 @@ const routes = [
 
 for (const route of routes) {
   test(`Rota ${route} deve renderizar corretamente`, async ({ page }) => {
-    await page.goto(`http://localhost:5173${route}`);
+    await page.goto(`http://localhost:4173${route}`);
     await expect(page.locator('main, header, h1')).toBeVisible({ timeout: 10000 });
   });
 }
