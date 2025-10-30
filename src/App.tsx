@@ -373,6 +373,7 @@ const Patches586to590ValidationPage = safeLazyImport(() => import("@/pages/valid
 
 // PATCH 591-595: Validation Dashboard (SocioCognitive Layer, Empathy Core, Neuro-Adapter, Joint Decision, Emotion Feedback)
 const Patches591to595ValidationPage = safeLazyImport(() => import("@/pages/validation/patches-591-595"));
+const Patches596to600ValidationPage = safeLazyImport(() => import("@/pages/validation/patches-596-600"));
 
 // PATCH 531-535: Navigation Copilot v2, Route Planner, Underwater Drone, Drone Commander, Mission Consolidation
 const Patch531NavigationCopilotV2 = safeLazyImport(() => import("@/pages/admin/Patch531NavigationCopilotV2"));
@@ -897,6 +898,7 @@ function App() {
                       <Route path="/validation/patches-581-585" element={<Patches581to585ValidationPage />} />
                       <Route path="/validation/patches-586-590" element={<Patches586to590ValidationPage />} />
                       <Route path="/validation/patches-591-595" element={<Patches591to595ValidationPage />} />
+                      <Route path="/validation/patches-596-600" element={<Patches596to600ValidationPage />} />
                       
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (
