@@ -48,7 +48,7 @@ export default function DashboardAuditorias() {
       if (userId) params.append("userId", userId);
 
       const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-      const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
       const response = await fetch(
         `${SUPABASE_URL}/functions/v1/resumo-auditorias-api?${params.toString()}`,

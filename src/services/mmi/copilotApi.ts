@@ -176,7 +176,7 @@ export const streamCopilotSuggestions = async (
     // Get the function URL from Supabase
     const { data: { session } } = await supabase.auth.getSession();
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
     
     if (!supabaseUrl) {
       throw new Error("Supabase URL not configured");
