@@ -67,7 +67,8 @@
     "generate:docs": "tsx scripts/generate-docs.ts",
     "export:build": "tsx scripts/export-build.ts",
     "verify:postbuild": "tsx scripts/verify-postbuild.ts",
-    "deploy:helper": "tsx scripts/deploy-helper.ts"
+    "deploy:helper": "tsx scripts/deploy-helper.ts",
+    "validate:patch-540": "./scripts/validate-patch-540.sh"
   },
   "engines": {
     "node": ">=20.0.0 <23.0.0",
