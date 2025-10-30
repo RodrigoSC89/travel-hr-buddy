@@ -524,6 +524,7 @@ function App() {
                     <Route path="/cert/:token" element={<CertViewer />} />
                     <Route path="/unauthorized" element={<Unauthorized />} />
                     <Route path="/validation/preview-lite" element={<PatchesPreview />} />
+                    <Route path="/preview-lite" element={<PatchesPreview />} />
                     
                     {/* All routes wrapped in SmartLayout */}
                     <Route element={<SmartLayout />}>
