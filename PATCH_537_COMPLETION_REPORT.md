@@ -60,7 +60,7 @@
 
 ### 1. Diagnóstico Completo ✅
 
-- Escaneamento de 493 arquivos com `@ts-nocheck`
+- Escaneamento de 488 arquivos com `@ts-nocheck`
 - Análise de 1,434 usos de React Hooks
 - Identificação de 2,723 funções async
 - Auditoria de dependências (1 vulnerabilidade high)
@@ -129,7 +129,8 @@
 
 2. ⚠️ **xlsx Vulnerability** (1 high)
    - Impacto: Prototype Pollution & ReDoS
-   - Recomendação: Atualizar ou substituir
+   - Status: Não corrigido neste patch (fora do escopo)
+   - Recomendação: **Priority 3** - Atualizar ou substituir urgentemente
 
 3. ⚠️ **Large Chunks** (3 chunks > 1000 kB)
    - Impacto: Warning, não erro
