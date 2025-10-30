@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { ErrorBoundary } from "@/components/layout/error-boundary";
 import nautilusLogo from "@/assets/nautilus-logo.png";
+import { moduleStats } from "@/lib/data/system-modules";
 
 // Lazy load heavy components for progressive loading
 const SystemArchitecture = lazy(() => 
@@ -51,14 +52,6 @@ const getStatusColor = (status: string) => {
   default:
     return "bg-gray-500";
   }
-};
-
-// Simplified module stats for KPI cards (lightweight, loads immediately)
-const moduleStats = {
-  total: 6,
-  operational: 6,
-  avgUptime: 98.9,
-  performance: "A+"
 };
 
 export function ComprehensiveExecutiveDashboard() {
