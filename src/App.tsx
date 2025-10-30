@@ -16,15 +16,19 @@ import { OffshoreLoader, PageSkeleton } from "@/components/LoadingStates";
 import { lazyWithPreload, preloadStrategy } from "@/lib/performance/lazy-with-preload";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 
-// Detect Lovable preview environment and force ultra-light mode
-const isLovablePreview = typeof window !== "undefined" && (
+// Detect Lovable preview environment and allow full-mode override
+const baseLovablePreview = typeof window !== "undefined" && (
   window.location.host.includes("lovable.dev") || 
   window.location.host.includes("lovableproject.com") ||
   window.location.host.includes("gptengineer.app") ||
   window.location.hash.includes("#/") ||
   process.env.NODE_ENV === "development"
 );
-
+const urlParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+const forceFullMode = typeof window !== "undefined" && (
+  (urlParams?.get("full") === "1") || localStorage.getItem("forceFullMode") === "true"
+);
+const isLovablePreview = baseLovablePreview && !forceFullMode;
 // Ultra-Light Preview Component - removes all heavy processing
 const PreviewLandingPage = () => (
   <div className="min-h-screen p-6 flex items-center justify-center bg-background">
@@ -33,7 +37,7 @@ const PreviewLandingPage = () => (
         <h1 className="text-2xl font-bold">🧭 Nautilus One - Preview Safe Mode</h1>
         <p className="text-muted-foreground mt-2">Editor Lovable detectado. Renderização ultra-leve ativada.</p>
       </div>
-      <div className="grid sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <a href="/#/dashboard" className="w-full" onClick={(e) => { e.preventDefault(); window.location.href = '/#/dashboard'; window.location.reload(); }}>
           <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
             📊 Dashboard Principal
@@ -42,6 +46,11 @@ const PreviewLandingPage = () => (
         <a href="/#/validation/preview-lite" className="w-full" onClick={(e) => { e.preventDefault(); window.location.href = '/#/validation/preview-lite'; window.location.reload(); }}>
           <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
             ✅ Preview de Patches
+          </div>
+        </a>
+        <a href="/#/dashboard?full=1" className="w-full" onClick={(e) => { e.preventDefault(); try { localStorage.setItem('forceFullMode', 'true'); } catch {} window.location.href = '/#/dashboard?full=1'; window.location.reload(); }}>
+          <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
+            🚀 Modo Completo (tudo habilitado)
           </div>
         </a>
       </div>
